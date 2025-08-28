@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckContext,
+  WithPuckProps,
+} from "@measured/puck";
 import {
   useDocument,
   YextEntityField,
@@ -17,10 +22,11 @@ import {
   msg,
   ThemeOptions,
   MaybeLink,
-  getLocationPath,
-  useTemplateProps,
   resolveComponentData,
   Body,
+  resolveUrlTemplate,
+  useTemplateProps,
+  mergeMeta,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -282,26 +288,34 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
 const LocationCard = ({
   cardNumber,
   styles,
-  name,
-  hours,
-  address,
-  timezone,
-  mainPhone,
-  id,
-  slug,
+  locationData,
+  puck,
 }: {
   cardNumber: number;
   styles: NearbyLocationsSectionProps["styles"];
-  name: string;
-  hours: HoursType;
-  address: AddressType;
-  timezone: string;
-  mainPhone: string;
-  id: string;
-  slug?: string;
+  locationData: any;
+  puck: PuckContext;
 }) => {
-  const { relativePrefixToRoot } = useTemplateProps();
-  const { i18n } = useTranslation();
+  const {
+    name,
+    hours,
+    address,
+    timezone,
+    mainPhone,
+  }: {
+    name: string;
+    hours: HoursType;
+    address: AddressType;
+    timezone: string;
+    mainPhone: string;
+  } = locationData;
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+
+  const resolvedUrl = resolveUrlTemplate(
+    mergeMeta(locationData, streamDocument),
+    relativePrefixToRoot,
+    puck.metadata?.resolveUrlTemplate
+  );
 
   return (
     <Background
@@ -313,11 +327,7 @@ const LocationCard = ({
         eventName={`link${cardNumber}`}
         alwaysHideCaret={true}
         className="mb-2"
-        href={getLocationPath(
-          { address, slug, id },
-          i18n.language,
-          relativePrefixToRoot
-        )}
+        href={resolvedUrl}
       >
         <Heading
           level={styles?.cards.headingLevel}
@@ -489,13 +499,8 @@ const NearbyLocationsComponent = ({
                     key={index}
                     cardNumber={index}
                     styles={styles}
-                    id={location.id}
-                    name={location.name}
-                    address={location.address}
-                    hours={location.hours}
-                    timezone={location.timezone}
-                    mainPhone={location.mainPhone}
-                    slug={location.slug}
+                    locationData={location}
+                    puck={puck}
                   />
                 )
               )}

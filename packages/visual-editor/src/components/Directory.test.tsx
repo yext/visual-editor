@@ -17,9 +17,20 @@ import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const rootDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   name: "Location Directory",
   meta: { entityType: { id: "dm_root", uid: 123 }, locale: "en" },
   dm_childEntityIds: ["998877"],
@@ -50,9 +61,20 @@ const rootDocument = {
 };
 
 const countryDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   name: "US",
   meta: { entityType: { id: "dm_country", uid: 123 }, locale: "en" },
   dm_addressCountryDisplayName: "United States",
@@ -95,9 +117,20 @@ const countryDocument = {
 };
 
 const regionDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   name: "VA",
   meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
   dm_addressCountryDisplayName: "United States",
@@ -145,9 +178,20 @@ const regionDocument = {
 };
 
 const cityDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
+  __: {
+    isPrimaryLocale: true,
+  },
+  _pageset: JSON.stringify({
+    config: {
+      urlTemplate: {
+        primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      },
+    },
+  }),
   dm_childEntityIds: ["8725530"],
   dm_directoryChildren: [
     {

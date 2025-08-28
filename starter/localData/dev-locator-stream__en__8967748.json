@@ -2,7 +2,8 @@
   "__": {
     "codeTemplate": "locator",
     "entityPageSet": {},
-    "name": "locations-locator"
+    "name": "locations-locator",
+    "isPrimaryLocale": true
   },
   "_env": {
     "YEXT_CLOUD_CHOICE": "GLOBAL-MULTI",
@@ -13,7 +14,7 @@
     "YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS",
     "YEXT_SEARCH_API_KEY": "REPLACE ME WITH KEY FROM ENV VARS"
   },
-  "_pageset": "{\"name\":\"accounts/2095538/sites/63797/pagesets/locations-locator\",\"uid\":\"0196b2a4-b79f-706b-b64e-79438fa7b7d1\",\"codeTemplate\":\"locator\",\"assignments\":[\"global\"],\"createTime\":\"2025-05-09T01:24:22Z\",\"updateTime\":\"2025-05-09T01:24:22Z\",\"scope\":{\"locales\":[\"en\"],\"savedFilters\":[\"locator-saved-search-63797-locations\"]},\"defaultLayout\":\"accounts/2095538/sites/63797/layouts/locations-locator-default-layout\",\"displayName\":\"Locations Locator\",\"type\":\"LOCATOR\",\"typeConfig\":{\"locatorConfig\":{\"source\":\"accounts/2095538/sites/63797/pagesets/locations\",\"experienceKey\":\"locator-20\",\"entityType\":\"location\"}}}",
+  "_pageset": "{\"name\":\"accounts/2095538/sites/63797/pagesets/locations-locator\",\"uid\":\"0196b2a4-b79f-706b-b64e-79438fa7b7d1\",\"codeTemplate\":\"locator\",\"assignments\":[\"global\"],\"createTime\":\"2025-05-09T01:24:22Z\",\"updateTime\":\"2025-05-09T01:24:22Z\",\"scope\":{\"locales\":[\"en\"],\"savedFilters\":[\"locator-saved-search-63797-locations\"]},\"defaultLayout\":\"accounts/2095538/sites/63797/layouts/locations-locator-default-layout\",\"displayName\":\"Locations Locator\",\"type\":\"LOCATOR\",\"typeConfig\":{\"locatorConfig\":{\"source\":\"accounts/2095538/sites/63797/pagesets/locations\",\"experienceKey\":\"locator-20\",\"entityType\":\"location\"}},\"config\":{\"urlTemplate\":{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}}}",
   "_schema": {
     "@context": "https://schema.org",
     "@type": "Thing",

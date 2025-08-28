@@ -14,13 +14,13 @@ import { mainConfig } from "../ve.config";
 import {
   applyTheme,
   VisualEditorProvider,
-  normalizeSlug,
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
   migrate,
   migrationRegistry,
   filterComponentsFromConfig,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { themeConfig } from "../../theme.config";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -76,17 +76,11 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   };
 };
 
-export const getPath: GetPath<TemplateProps> = ({ document }) => {
-  if (document.slug) {
-    return document.slug;
-  }
-
-  const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  const path = document.address
-    ? `${localePath}${document.address.region}/${document.address.city}/${document.address.line1}-${document.id}`
-    : `${localePath}${document.id}`;
-
-  return normalizeSlug(path);
+export const getPath: GetPath<TemplateProps> = ({
+  document,
+  relativePrefixToRoot,
+}) => {
+  return resolveUrlTemplate(document, relativePrefixToRoot);
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {
