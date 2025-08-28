@@ -28,9 +28,7 @@ export const resolveUrlTemplate = (
   if (!locale) {
     throw new Error(`Could not determine locale from streamDocument`);
   }
-  if (!streamDocument.locale) {
-    streamDocument.locale = locale;
-  }
+
   if (alternateFunction) {
     return alternateFunction(streamDocument, relativePrefixToRoot);
   }
