@@ -288,7 +288,6 @@ const DirectoryCard = ({
 }: {
   cardNumber: number;
   profile: any;
-  locale: string;
   styles: DirectoryProps["styles"];
   puck: PuckContext;
 }) => {
@@ -358,7 +357,6 @@ const DirectoryGrid = ({
   puck,
 }: {
   directoryChildren: any[];
-  locale: string;
   styles: DirectoryProps["styles"];
   puck: PuckContext;
 }) => {
