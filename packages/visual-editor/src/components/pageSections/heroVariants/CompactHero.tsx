@@ -9,11 +9,46 @@ import {
   Background,
   resolveYextStructField,
 } from "@yext/visual-editor";
-import { HeroVariantProps } from "../HeroSection";
+import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
 
+const CompactHeroImage = ({
+  className,
+  resolvedHero,
+  styles,
+  data,
+}: HeroImageProps) => {
+  const { t } = useTranslation();
+
+  return resolvedHero?.image && styles.showImage ? (
+    <div
+      className={themeManagerCn("w-full", className)}
+      role="region"
+      aria-label={t("heroImage", "Hero Image")}
+    >
+      <EntityField
+        displayName={pt("fields.image", "Image")}
+        fieldId={data.hero.field}
+        constantValueEnabled={data.hero.constantValueOverride.image}
+        fullHeight
+      >
+        <Image
+          image={resolvedHero.image}
+          aspectRatio={styles.image.aspectRatio}
+          className={themeManagerCn(
+            "w-full sm:w-fit h-full",
+            styles.desktopImagePosition === "left" ? "mr-auto" : "ml-auto"
+          )}
+        />
+      </EntityField>
+    </div>
+  ) : (
+    <div className="w-full"></div>
+  );
+};
+
 export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
   const resolvedHero = resolveYextStructField(
@@ -21,34 +56,6 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
     data?.hero,
     locale
   );
-
-  const CompactHeroImage = ({ className }: { className: string }) => {
-    return resolvedHero?.image && styles.showImage ? (
-      <div
-        className={themeManagerCn("w-full", className)}
-        role="region"
-        aria-label={t("heroImage", "Hero Image")}
-      >
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.hero.field}
-          constantValueEnabled={data.hero.constantValueOverride.image}
-          fullHeight
-        >
-          <Image
-            image={resolvedHero.image}
-            aspectRatio={styles.image.aspectRatio}
-            className={themeManagerCn(
-              "w-full sm:w-fit h-full",
-              styles.desktopImagePosition === "left" ? "mr-auto" : "ml-auto"
-            )}
-          />
-        </EntityField>
-      </div>
-    ) : (
-      <div className="w-full"></div>
-    );
-  };
 
   return (
     <Background
@@ -61,6 +68,9 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
           styles.mobileImagePosition === "bottom" && "hidden sm:block",
           styles.desktopImagePosition === "right" && "sm:hidden"
         )}
+        resolvedHero={resolvedHero}
+        styles={styles}
+        data={data}
       />
 
       {/* Mobile container styles */}
@@ -104,6 +114,9 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
           styles.mobileImagePosition === "top" && "hidden sm:block",
           styles.desktopImagePosition === "left" && "sm:hidden"
         )}
+        resolvedHero={resolvedHero}
+        styles={styles}
+        data={data}
       />
     </Background>
   );

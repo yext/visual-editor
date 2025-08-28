@@ -165,6 +165,13 @@ export interface HeroSectionProps {
 
 export type HeroVariantProps = Pick<HeroSectionProps, "data" | "styles">;
 
+export type HeroImageProps = {
+  className: string;
+  resolvedHero: HeroSectionType | undefined;
+  styles: HeroStyles;
+  data: HeroData;
+};
+
 const heroSectionFields: Fields<HeroSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
