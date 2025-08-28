@@ -22,7 +22,7 @@ export type StreamDocument = {
     codeTemplate?: string;
     name?: string;
     visualEditorConfig?: string;
-    isPrimaryLocale?: boolean | string;
+    isPrimaryLocale?: boolean;
   };
 };
 

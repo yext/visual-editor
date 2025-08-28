@@ -305,12 +305,10 @@ const LocationCard = ({
   locationData: any;
   puck: PuckContext;
 }) => {
-  const { i18n } = useTranslation();
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
   const documentForUrlTemplate = {
     ...locationData,
-    locale: i18n.language,
     __: {
       isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
     },
@@ -319,7 +317,7 @@ const LocationCard = ({
 
   const resolvedUrl = resolveUrlTemplate(
     documentForUrlTemplate,
-    relativePrefixToRoot ?? "",
+    relativePrefixToRoot,
     puck.metadata?.resolveUrlTemplate
   );
 
