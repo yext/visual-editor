@@ -4,7 +4,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
 import { type Config } from "@measured/puck";
-import "@measured/puck/puck.css";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
