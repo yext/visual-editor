@@ -44,6 +44,7 @@ import {
   YextField,
   useTemplateProps,
   resolveUrlTemplate,
+  mergeMeta,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
@@ -620,16 +621,8 @@ const LocationCard = ({
     "TAP_TO_CALL"
   );
 
-  const documentForLocator = {
-    ...location,
-    __: {
-      isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
-    },
-    _pageset: streamDocument._pageset,
-  };
-
   const resolvedUrl = resolveUrlTemplate(
-    documentForLocator,
+    mergeMeta(location, streamDocument),
     relativePrefixToRoot,
     puck.metadata?.resolveUrlTemplate
   );

@@ -26,6 +26,7 @@ import {
   Body,
   resolveUrlTemplate,
   useTemplateProps,
+  mergeMeta,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -307,16 +308,8 @@ const LocationCard = ({
 }) => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
-  const documentForUrlTemplate = {
-    ...locationData,
-    __: {
-      isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
-    },
-    _pageset: streamDocument._pageset,
-  };
-
   const resolvedUrl = resolveUrlTemplate(
-    documentForUrlTemplate,
+    mergeMeta(locationData, streamDocument),
     relativePrefixToRoot,
     puck.metadata?.resolveUrlTemplate
   );
