@@ -1,3 +1,46 @@
+#### 0.0.56 (2025-08-28)
+
+##### Chores
+
+- update fonts to match platform (#742) (57ad4b63)
+- upgrade to Puck 0.20.1 (#741) (505199d9)
+- ignore flaky footer change (#738) (758c63a2)
+- add Grid test (#725) (243f9e14)
+- continue improving flaky component tests (#722) (8b1d3468)
+
+##### New Features
+
+- use urlTemplate from \_pageset.config (#689) (20a49b83)
+- video assets (#733) (baf30722)
+- add Fixed option for Expanded Header (#737) (8f980987)
+- improve locale deletion warning (#715) (e9223258)
+- add liveVisibility to CustomCodeSection (#724) (5c51a2cd)
+- have BannerSection's text use rich text (#723) (6085fd09)
+- improve open now styling (#712) (5f360683)
+
+##### Bug Fixes
+
+- prevent HeroSection image flickering (#746) (bf66f553)
+- image/video toggle (#745) (22a3ad09)
+- embedded field conversion (#744) (bc51f892)
+- translate select options (#743) (f0a1e74b)
+- emailsComponent constant value crash (#740) (fab98f6c)
+- add CTA Type option in entity field mode (#731) (bf0af512)
+- prevent infinite re-renders with PhoneInput (#736) (80c4ace9)
+- remove "flex-reverse" usage (#730) (c3865e83)
+- live visibility in some sections (#732) (6da5356e)
+- heroSection variants properly resolve struct fields (#729) (94e393db)
+- adjust atoms to match new styling (#726) (2603cb31)
+- use previously selected field for HeroSection and PromoSection (#728) (c389858d)
+
+##### Other Changes
+
+- open image upload drawer for static images (#687)" (#714)" (#716)" (#719)" (#721) (46ad0fa8)
+
+##### Refactors
+
+- additional asset image support (#727) (4f5676c2)
+
 #### 0.0.55 (2025-08-14)
 
 ##### New Features
