@@ -43,13 +43,13 @@ describe("resolveUrlTemplate", () => {
     assert.equal(result, "es/ny/new-york/61-9th-ave");
   });
 
-  it("resolves alternate template for non-primary locale when document.locale is missing and isPrimaryLocale", () => {
+  it("resolves alternate template for non-primary locale when document.locale is missing and isPrimaryLocale is missing", () => {
     const alternateLocaleDoc = {
       ...mockStreamDocument,
       locale: undefined,
       __: {},
       meta: {
-        locale: "zh_hans_hk",
+        locale: "Zh_HANS-hk",
       },
     };
 

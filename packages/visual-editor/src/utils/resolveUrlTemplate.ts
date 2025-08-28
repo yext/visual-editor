@@ -2,7 +2,7 @@ import { StreamDocument } from "./applyTheme";
 import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
 import { normalizeSlug } from "./slugifier";
 import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
-import { normalizeLocale } from "./normalizeLocale.ts";
+import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 
 /**
  * Resolves a URL template using the provided stream document, locale, and relativePrefixToRoot.
@@ -23,9 +23,8 @@ export const resolveUrlTemplate = (
     relativePrefixToRoot: string
   ) => string
 ): string => {
-  const locale = normalizeLocale(
-    streamDocument.locale || streamDocument?.meta?.locale || ""
-  );
+  streamDocument = normalizeLocalesInObject(streamDocument);
+  const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
   if (!locale) {
     throw new Error(`Could not determine locale from streamDocument`);
   }
