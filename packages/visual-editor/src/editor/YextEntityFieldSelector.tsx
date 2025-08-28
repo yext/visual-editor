@@ -340,8 +340,12 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           onChange({
             ...value,
             constantValue: {
-              ...value?.constantValue,
+              ...(typeof value?.constantValue === "object" &&
+              !Array.isArray(value?.constantValue)
+                ? value?.constantValue
+                : {}),
               [locale]: newInputValue,
+              hasLocalizedValue: "true",
             },
           });
         }}
