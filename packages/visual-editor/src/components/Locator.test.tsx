@@ -33,6 +33,7 @@ const tests: ComponentTest[] = [
   {
     name: "default props",
     document: {
+      locale: "en",
       businessId: "4174974",
       __: {
         isPrimaryLocale: true,
@@ -68,6 +69,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 default props",
     document: {
+      locale: "en",
       businessId: "4174974",
       __: {
         isPrimaryLocale: true,
@@ -103,6 +105,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 non-default props",
     document: {
+      locale: "en",
       businessId: "4174974",
       __: {
         isPrimaryLocale: true,
