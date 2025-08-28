@@ -30,6 +30,7 @@ const tests: ComponentTest[] = [
   {
     name: "default props with multiple nearby locations",
     document: {
+      locale: "en",
       id: "1101-wilson-blvd",
       businessId: "4174974",
       __: {
@@ -59,6 +60,7 @@ const tests: ComponentTest[] = [
   {
     name: "default props with no nearby locations",
     document: {
+      locale: "en",
       id: "7751-bird-rd",
       businessId: "4174974",
       __: {
@@ -93,6 +95,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 with multiple nearby locations",
     document: {
+      locale: "en",
       id: "1101-wilson-blvd",
       businessId: "4174974",
       __: {
@@ -168,6 +171,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 with no nearby locations",
     document: {
+      locale: "en",
       id: "7751-bird-rd",
       businessId: "4174974",
       __: {

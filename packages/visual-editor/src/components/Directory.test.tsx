@@ -17,6 +17,7 @@ import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const rootDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
@@ -60,6 +61,7 @@ const rootDocument = {
 };
 
 const countryDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
@@ -115,6 +117,7 @@ const countryDocument = {
 };
 
 const regionDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
@@ -175,6 +178,7 @@ const regionDocument = {
 };
 
 const cityDocument = {
+  locale: "en",
   _site: {
     name: "Example Business",
   },
