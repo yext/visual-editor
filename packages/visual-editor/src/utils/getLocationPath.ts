@@ -12,7 +12,7 @@ export const getLocationPath = (
   location: LocationDocument,
   relativePrefixToRoot: string = ""
 ): string => {
-  if (!location || (!location.slug && !location.address && !location.id)) {
+  if (!location?.slug && !location?.address && !location?.id) {
     throw new Error("Could not resolve location path.");
   }
 

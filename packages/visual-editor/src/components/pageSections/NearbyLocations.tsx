@@ -288,24 +288,27 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
 const LocationCard = ({
   cardNumber,
   styles,
-  name,
-  hours,
-  address,
-  timezone,
-  mainPhone,
   locationData,
   puck,
 }: {
   cardNumber: number;
   styles: NearbyLocationsSectionProps["styles"];
-  name: string;
-  hours: HoursType;
-  address: AddressType;
-  timezone: string;
-  mainPhone: string;
   locationData: any;
   puck: PuckContext;
 }) => {
+  const {
+    name,
+    hours,
+    address,
+    timezone,
+    mainPhone,
+  }: {
+    name: string;
+    hours: HoursType;
+    address: AddressType;
+    timezone: string;
+    mainPhone: string;
+  } = locationData;
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
   const resolvedUrl = resolveUrlTemplate(
@@ -496,11 +499,6 @@ const NearbyLocationsComponent = ({
                     key={index}
                     cardNumber={index}
                     styles={styles}
-                    name={location.name}
-                    address={location.address}
-                    hours={location.hours}
-                    timezone={location.timezone}
-                    mainPhone={location.mainPhone}
                     locationData={location}
                     puck={puck}
                   />
