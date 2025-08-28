@@ -1,6 +1,12 @@
+@import "@measured/puck/no-external.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --puck-font-family:
+    Inter, "SF Pro", "Helvetica Neue", Helvetica, sans-serif !important;
+}
 
 .is-today {
   font-weight: 700;
