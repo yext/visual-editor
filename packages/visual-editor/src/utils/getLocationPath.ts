@@ -16,13 +16,13 @@ export const getLocationPath = (
     throw new Error("Could not resolve location path.");
   }
 
+  if (location.slug) {
+    return `${relativePrefixToRoot}${location.slug}`;
+  }
+
   const locale = location?.locale || location?.meta?.locale;
   if (!locale) {
     throw new Error("Missing locale for getLocationPath");
-  }
-
-  if (location.slug) {
-    return `${relativePrefixToRoot}${location.slug}`;
   }
 
   const isPrimaryLocale =
