@@ -282,11 +282,13 @@ const sortAlphabetically = (directoryChildren: any[], sortBy: string) => {
 const DirectoryCard = ({
   cardNumber,
   profile,
+  locale,
   styles,
   puck,
 }: {
   cardNumber: number;
   profile: any;
+  locale: string;
   styles: DirectoryProps["styles"];
   puck: PuckContext;
 }) => {
@@ -295,6 +297,7 @@ const DirectoryCard = ({
 
   const documentForDirectory = {
     ...profile,
+    locale: locale,
     __: {
       isPrimaryLocale: streamDocument.__?.isPrimaryLocale,
     },
@@ -360,10 +363,12 @@ const DirectoryCard = ({
 // DirectoryGrid uses PageSection's theme config for styling.
 const DirectoryGrid = ({
   directoryChildren,
+  locale,
   styles,
   puck,
 }: {
   directoryChildren: any[];
+  locale: string;
   styles: DirectoryProps["styles"];
   puck: PuckContext;
 }) => {
@@ -382,6 +387,7 @@ const DirectoryGrid = ({
           key={idx}
           cardNumber={idx}
           profile={child}
+          locale={locale}
           styles={styles}
           puck={puck}
         />
@@ -457,6 +463,8 @@ const DirectoryComponent = ({
     streamDocument
   );
 
+  const locale = streamDocument.locale || streamDocument?.meta?.locale;
+
   return (
     <Background background={styles.backgroundColor}>
       <BreadcrumbsComponent
@@ -473,6 +481,7 @@ const DirectoryComponent = ({
         isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryGrid
             directoryChildren={streamDocument.dm_directoryChildren}
+            locale={locale}
             styles={styles}
             puck={puck}
           />

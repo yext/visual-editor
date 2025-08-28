@@ -80,7 +80,7 @@ export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
 }) => {
-  return resolveUrlTemplate(document, relativePrefixToRoot, null);
+  return resolveUrlTemplate(document, relativePrefixToRoot);
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {
