@@ -33,13 +33,19 @@ export const resolveUrlTemplate = (
     return alternateFunction(streamDocument, relativePrefixToRoot);
   }
 
-  const isPrimaryLocale = !!streamDocument.__?.isPrimaryLocale;
+  const isPrimaryLocale = streamDocument.__?.isPrimaryLocale !== false;
 
   const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-  let urlTemplate =
-    pagesetJson?.config?.urlTemplate?.[
-      isPrimaryLocale ? "primary" : "alternate"
-    ];
+  const urlTemplates = pagesetJson?.config?.urlTemplate || {};
+
+  let urlTemplate: string | undefined;
+  if (isPrimaryLocale && urlTemplates.primary) {
+    urlTemplate = urlTemplates.primary;
+  } else if (!isPrimaryLocale && urlTemplates.alternate) {
+    urlTemplate = urlTemplates.alternate;
+  } else {
+    urlTemplate = urlTemplates.primary || urlTemplates.alternate;
+  }
 
   if (!urlTemplate) {
     return getLocationPath(
