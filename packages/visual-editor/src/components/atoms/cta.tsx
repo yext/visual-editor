@@ -63,7 +63,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           return null;
         }
         return {
-          link: props.link ?? "#",
+          link: props.link && props.link.trim() !== "" ? props.link : "#",
           linkType: props.linkType ?? "URL",
           label: presetImageIcons[props.presetImageType],
           ariaLabel:
@@ -76,7 +76,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
       case "textAndLink":
       default:
         return {
-          link: props.link ?? "#",
+          link: props.link && props.link.trim() !== "" ? props.link : "#",
           linkType: props.linkType ?? "URL",
           label: props.label,
           ariaLabel: ariaLabel ?? "",
