@@ -183,6 +183,25 @@ describe("resolveUrlTemplate", () => {
     assert.equal(result, "../es/ny/new-york/61-9th-ave");
   });
 
+  it("use primary if isPrimaryLocale field is missing", () => {
+    const docWithoutAlternateTemplate = {
+      ...mockStreamDocument,
+      __: {},
+      locale: "fr",
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+            alternate:
+              "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    };
+    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "../");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
+  });
+
   it("use alternateFunction when provided to resolve URL template", () => {
     const alternateFunction = (
       streamDocument: StreamDocument,
