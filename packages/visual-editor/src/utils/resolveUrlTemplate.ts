@@ -39,11 +39,12 @@ export const resolveUrlTemplate = (
   const urlTemplates = pagesetJson?.config?.urlTemplate || {};
 
   let urlTemplate: string | undefined;
-
-  if (isPrimaryLocale || !urlTemplates.alternate) {
+  if (isPrimaryLocale && urlTemplates.primary) {
     urlTemplate = urlTemplates.primary;
-  } else {
+  } else if (!isPrimaryLocale && urlTemplates.alternate) {
     urlTemplate = urlTemplates.alternate;
+  } else {
+    urlTemplate = urlTemplates.primary || urlTemplates.alternate;
   }
 
   if (!urlTemplate) {

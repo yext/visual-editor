@@ -47,7 +47,9 @@ describe("resolveUrlTemplate", () => {
     const alternateLocaleDoc = {
       ...mockStreamDocument,
       locale: "Zh_HANS-hk",
-      __: {},
+      __: {
+        isPrimaryLocale: false,
+      },
     };
 
     assert.equal(
@@ -56,11 +58,11 @@ describe("resolveUrlTemplate", () => {
     );
   });
 
-  it("defaults to alternate template if '__' is missing", () => {
+  it("defaults to primary template if '__' is missing", () => {
     // eslint-disable-next-line no-unused-vars
     const { __, ...docWithoutPrimaryInfo } = mockStreamDocument;
     const result = resolveUrlTemplate(docWithoutPrimaryInfo, "");
-    assert.equal(result, "en/ny/new-york/61-9th-ave");
+    assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
   it("gracefully resolves empty fields", () => {
@@ -136,7 +138,7 @@ describe("resolveUrlTemplate", () => {
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
-  it("use fallback if primary template is missing for primary locale", () => {
+  it("use alternate if primary template is missing for primary locale", () => {
     const docWithoutPrimaryTemplate = {
       ...mockStreamDocument,
       _pageset: JSON.stringify({
@@ -148,7 +150,7 @@ describe("resolveUrlTemplate", () => {
       }),
     };
     const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "../");
-    assert.equal(result, "../ny/new-york/61-9th-ave");
+    assert.equal(result, "../en/ny/new-york");
   });
 
   it("use primary template if alternate template is missing for alternate locale", () => {
