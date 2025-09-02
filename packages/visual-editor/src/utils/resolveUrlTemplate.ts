@@ -33,7 +33,7 @@ export const resolveUrlTemplate = (
     return alternateFunction(streamDocument, relativePrefixToRoot);
   }
 
-  const isPrimaryLocale = !!streamDocument.__?.isPrimaryLocale;
+  const isPrimaryLocale = streamDocument.__?.isPrimaryLocale !== false;
 
   const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
   const urlTemplates = pagesetJson?.config?.urlTemplate || {};
