@@ -196,44 +196,46 @@ const EventCard = ({
   return (
     <Background
       background={cardStyles.backgroundColor}
-      className={`flex flex-col md:flex-row rounded-lg overflow-hidden h-fit md:h-64`}
+      className={`flex flex-col md:flex-row rounded-lg overflow-hidden p-6 gap-6 md:items-start`}
     >
-      <div className="lg:w-[45%] w-full h-full">
-        {event.image && (
-          <div className="h-full">
-            <Image
-              image={event.image}
-              aspectRatio={
-                event.image.width && event.image.height
-                  ? event.image.width / event.image.height
-                  : 1.78
-              }
-            />
-          </div>
-        )}
-      </div>
-      <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
-        {event.title && (
-          <Heading
-            level={cardStyles.headingLevel}
-            semanticLevelOverride={
-              sectionHeadingLevel < 6
-                ? ((sectionHeadingLevel + 1) as HeadingLevel)
-                : "span"
+      {event.image && (
+        <div className="md:w-[45%] w-full">
+          <Image
+            image={event.image}
+            aspectRatio={
+              event.image.width && event.image.height
+                ? event.image.width / event.image.height
+                : 1.78
             }
-          >
-            {resolveComponentData(event.title, i18n.language, streamDocument)}
-          </Heading>
-        )}
-        {event.dateTime && (
-          <Timestamp
-            date={event.dateTime}
-            option={TimestampOption.DATE_TIME}
-            hideTimeZone={true}
+            className="rounded-lg w-full object-cover"
           />
-        )}
-        {event.description &&
-          resolveComponentData(event.description, i18n.language)}
+        </div>
+      )}
+      <div className="flex flex-col gap-4 w-full md:w-[55%] my-auto">
+        <div className="flex flex-col gap-2">
+          {event.title && (
+            <Heading
+              level={cardStyles.headingLevel}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+            >
+              {resolveComponentData(event.title, i18n.language, streamDocument)}
+            </Heading>
+          )}
+          {event.dateTime && (
+            <Timestamp
+              date={event.dateTime}
+              option={TimestampOption.DATE_TIME}
+              hideTimeZone={true}
+            />
+          )}
+          {event.description && (
+            <p>{resolveComponentData(event.description, i18n.language)}</p>
+          )}
+        </div>
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
