@@ -36,10 +36,15 @@ export const resolveUrlTemplate = (
   const isPrimaryLocale = !!streamDocument.__?.isPrimaryLocale;
 
   const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-  let urlTemplate =
-    pagesetJson?.config?.urlTemplate?.[
-      isPrimaryLocale ? "primary" : "alternate"
-    ];
+  const urlTemplates = pagesetJson?.config?.urlTemplate || {};
+
+  let urlTemplate: string | undefined;
+
+  if (isPrimaryLocale || !urlTemplates.alternate) {
+    urlTemplate = urlTemplates.primary;
+  } else {
+    urlTemplate = urlTemplates.alternate;
+  }
 
   if (!urlTemplate) {
     return getLocationPath(

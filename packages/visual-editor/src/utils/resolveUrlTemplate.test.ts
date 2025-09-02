@@ -151,7 +151,7 @@ describe("resolveUrlTemplate", () => {
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
-  it("use fallback if alternate template is missing for alternate locale", () => {
+  it("use primary template if alternate template is missing for alternate locale", () => {
     const docWithoutAlternateTemplate = {
       ...mockStreamDocument,
       __: { isPrimaryLocale: false },
@@ -161,6 +161,21 @@ describe("resolveUrlTemplate", () => {
           urlTemplate: {
             primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
           },
+        },
+      }),
+    };
+    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "../");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
+  });
+
+  it("use fallback if all templates are missing", () => {
+    const docWithoutAlternateTemplate = {
+      ...mockStreamDocument,
+      __: { isPrimaryLocale: false },
+      locale: "es",
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {},
         },
       }),
     };
