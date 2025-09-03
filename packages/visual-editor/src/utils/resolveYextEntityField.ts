@@ -52,7 +52,6 @@ export const resolveYextEntityField = <T>(
     console.error("Error in resolveYextEntityField:", e);
   }
 
-  console.warn(`The field ${entityField.field} was not found in the document.`);
   return undefined;
 };
 
