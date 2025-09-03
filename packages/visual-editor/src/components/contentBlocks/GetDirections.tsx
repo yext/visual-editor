@@ -46,6 +46,7 @@ const GetDirectionsComponent = ({
   );
   if (!coordinate) {
     console.warn("yextDisplayCoordinate is not present in the stream");
+    return <></>;
   }
 
   const searchQuery = getDirections(
