@@ -121,7 +121,7 @@ export const updateThemeInEditor = async (
       PUCK_PREVIEW_IFRAME_ID
     ) as HTMLIFrameElement;
     const pagePreviewStyleTag =
-      iframe.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
+      iframe?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
     if (pagePreviewStyleTag) {
       observer.disconnect();
       pagePreviewStyleTag.innerText = newThemeTag;
