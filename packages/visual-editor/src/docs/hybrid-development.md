@@ -86,7 +86,7 @@ In the `other` section, include the following if you want default VLE behavior
 other: [
   applyAnalytics(document), // applies the Google Tag Manager script from Site Configuration
   applyHeaderScript(document), // applies the Header script from Site Configuration
-  applyTheme(document, themeConfig), // applies the theme styles (include default component styling)
+  applyTheme(document, defaultThemeConfig), // applies the theme styles (include default component styling)
   SchemaWrapper(document._schema), // applies the JSON-LD schema to the page
 ].join("\n"),
 ```
@@ -228,3 +228,61 @@ This table shows which metadata fields are used for which components.
 | entityTypeEnvVar        | Locator                                    |
 | experienceKeyEnvVar     | Locator                                    |
 | resolveUrlTemplate      | NearbyLocationsSection, Directory, Locator |
+
+## Theme Configuration
+
+This is the recommended `tailwind.config.ts` to use in your starter:
+
+```
+import type { Config } from "tailwindcss";
+import {
+  themeResolver,
+  defaultThemeTailwindExtensions,
+  defaultThemeConfig,
+  VisualEditorComponentsContentPath,
+} from "@yext/visual-editor";
+import { ComponentsContentPath as SearchUiComponentsContentPath } from "@yext/search-ui-react";
+
+export default {
+  content: [
+    // include files in the starter
+    "./src/**/*.{html,js,jsx,ts,tsx}",
+    // include files in @yext/visual-editor
+    VisualEditorComponentsContentPath,
+    // include files in @yext/search-ui-react (locator)
+    SearchUiComponentsContentPath,
+  ],
+  theme: {
+    extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),
+  },
+  plugins: [],
+} satisfies Config;
+```
+
+#### defaultThemeTailwindExtensions
+
+`defaultThemeTailwindExtensions` defines additional color and font size tailwind utilities that are based on the theme config. If you modify the theme config, you may want to modify `defaultThemeTailwindExtensions`.
+
+#### defaultThemeConfig
+
+`defaultThemeConfig` defines the properties available in the global styles editor. The provided default properties are needed for using the `@yext/visual-editor` components.
+
+### Modifying the theme config
+
+If you want to modify the theme config, create a `theme.config.ts` file and update the usages in
+
+1. `edit.tsx`
+2. All templates
+3. `tailwind.config.ts`
+
+`defaultThemeConfig` is an object, so you can use the spread operator to add on to or modify the defaults.
+
+```
+{
+  ...defaultThemeConfig,
+  newProperty: {
+  }
+}
+```
+
+See the [theme documentation](../utils/README.md#themeconfig) for more information.

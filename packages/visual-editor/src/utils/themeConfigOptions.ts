@@ -367,3 +367,7 @@ export const ThemeOptions = {
   PHONE_OPTIONS: phoneOptions,
   MAX_WIDTH: maxWidthOptions,
 };
+
+// Content path for applying tailwind config to visual-editor components
+export const VisualEditorComponentsContentPath =
+  "node_modules/@yext/visual-editor/dist/**/*.js";
