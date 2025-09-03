@@ -239,6 +239,7 @@ import {
   themeResolver,
   defaultThemeTailwindExtensions,
   defaultThemeConfig,
+  VisualEditorComponentsContentPath,
 } from "@yext/visual-editor";
 import { ComponentsContentPath as SearchUiComponentsContentPath } from "@yext/search-ui-react";
 
@@ -247,7 +248,7 @@ export default {
     // include files in the starter
     "./src/**/*.{html,js,jsx,ts,tsx}",
     // include files in @yext/visual-editor
-    "./node_modules/@yext/visual-editor/dist/**/*.js",
+    VisualEditorComponentsContentPath,
     // include files in @yext/search-ui-react (locator)
     SearchUiComponentsContentPath,
   ],

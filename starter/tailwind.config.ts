@@ -3,12 +3,13 @@ import {
   themeResolver,
   defaultThemeTailwindExtensions,
   defaultThemeConfig,
+  VisualEditorComponentsContentPath,
 } from "@yext/visual-editor";
 
 export default {
   content: [
     "./src/**/*.{html,js,jsx,ts,tsx}",
-    "./node_modules/@yext/visual-editor/dist/**/*.js",
+    VisualEditorComponentsContentPath,
   ],
   theme: {
     extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),

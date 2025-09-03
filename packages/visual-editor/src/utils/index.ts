@@ -31,6 +31,7 @@ export {
   ThemeOptions,
   type BackgroundStyle,
   type HeadingLevel,
+  VisualEditorComponentsContentPath,
 } from "./themeConfigOptions.ts";
 export { type ThemeConfig, themeResolver } from "./themeResolver.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
