@@ -220,6 +220,8 @@
     "mapStyle": "地圖樣式",
     "maxWidth": "最大寬度",
     "media": "媒體",
+    "metaDescription": "元描述",
+    "metaTitle": "元標題",
     "mobileContentAlignment": "移動內容對齊",
     "mobileImagePosition": "移動圖像位置",
     "name": "姓名",

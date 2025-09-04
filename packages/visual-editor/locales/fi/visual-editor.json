@@ -220,6 +220,8 @@
     "mapStyle": "Karttatyyli",
     "maxWidth": "Enimmäisleveys",
     "media": "Media",
+    "metaDescription": "Metakuvaus",
+    "metaTitle": "Metan otsikko",
     "mobileContentAlignment": "Mobiilisisällön kohdistus",
     "mobileImagePosition": "Mobiili kuvan sijainti",
     "name": "Nimi",
