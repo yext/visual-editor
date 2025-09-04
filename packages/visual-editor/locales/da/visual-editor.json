@@ -220,6 +220,8 @@
     "mapStyle": "Kortstil",
     "maxWidth": "Maks. Bredde",
     "media": "Medier",
+    "metaDescription": "Metabeskrivelse",
+    "metaTitle": "Metatitel",
     "mobileContentAlignment": "Mobilindholdsjustering",
     "mobileImagePosition": "Mobil billedposition",
     "name": "Navn",

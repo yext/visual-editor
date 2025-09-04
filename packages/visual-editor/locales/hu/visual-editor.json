@@ -220,6 +220,8 @@
     "mapStyle": "Térképstílus",
     "maxWidth": "Maximális szélesség",
     "media": "Média",
+    "metaDescription": "Metaleírás",
+    "metaTitle": "Meta cím",
     "mobileContentAlignment": "Mobil tartalom igazítása",
     "mobileImagePosition": "Mobil képpozíció",
     "name": "Név",

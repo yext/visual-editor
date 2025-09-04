@@ -166,13 +166,13 @@ export const InternalLayoutEditor = ({
         ...puckConfig.root,
         fields: {
           title: YextEntityFieldSelector<any, string>({
-            label: msg("fields.title", "Title"),
+            label: msg("fields.metaTitle", "Meta Title"),
             filter: {
               types: ["type.string"],
             },
           }),
           description: YextEntityFieldSelector<any, string>({
-            label: msg("fields.description", "Description"),
+            label: msg("fields.metaDescription", "Meta Description"),
             filter: {
               types: ["type.string"],
             },

@@ -1,4 +1,4 @@
-import { resolveYextEntityField } from "./resolveYextEntityField.ts";
+import { resolveComponentData } from "./resolveComponentData.tsx";
 
 export type RootConfig = {
   title?: string;
@@ -12,13 +12,28 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
     return {};
   }
   const layout = JSON.parse(layoutString);
-  const root = layout?.root;
-  if (!root) {
+  const rootProps = layout?.root?.props ?? layout?.root;
+  if (!rootProps) {
     return {};
   }
   const metaData: RootConfig = {};
-  Object.keys(root).forEach((key: string) => {
-    metaData[key] = resolveYextEntityField(document, root[key]) ?? "";
+  Object.keys(rootProps).forEach((key: string) => {
+    metaData[key] = escapeHtml(
+      resolveComponentData(rootProps[key], document.locale, document) ?? ""
+    );
   });
   return metaData;
 }
+
+const escapeHtml = (str: string) => {
+  if (typeof str !== "string") {
+    return "";
+  }
+
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+};

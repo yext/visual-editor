@@ -219,6 +219,8 @@
     "mapStyle": "Kartenstil",
     "maxWidth": "Maximale Breite",
     "media": "Medien",
+    "metaDescription": "Meta Beschreibung",
+    "metaTitle": "Meta -Titel",
     "mobileContentAlignment": "Ausrichtung des mobilen Inhalts",
     "mobileImagePosition": "Mobile Bildposition",
     "name": "Name",
