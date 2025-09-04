@@ -1,3 +1,18 @@
+#### 0.0.57 (2025-09-04)
+
+##### Chores
+
+- remove field not found warnings (#752) (ce9130f4)
+- move theme config to package (#750) (bcc2658b)
+
+##### Bug Fixes
+
+- category filtering (#753) (0209525f)
+- page metadata (#754) (42cd551f)
+- cannot read properties of null error during editor load (#751) (66851806)
+- prevent cta link from crashing when empty (#749) (eda3a461)
+- fallback to primary template if alternate is missing (#747) (13b5a713)
+
 #### 0.0.56 (2025-08-28)
 
 ##### Chores
