@@ -11,7 +11,7 @@ import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
-import { filterComponentsFromConfig } from "../../utils/filterComponents.tsx";
+import { filterComponentsFromConfig } from "../../utils/filterComponents.ts";
 
 const devLogger = new DevLogger();
 
