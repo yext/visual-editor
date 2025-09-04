@@ -53,9 +53,25 @@ export const filterComponentsFromConfig = <C extends Config>(
     }
   );
 
+  // 4. Rebuild the categories object by iterating over all original categories and
+  //    filtering their internal `components` list based on the allowed components.
+  const allowedComponentKeys = new Set(allowedComponents.map(([key]) => key));
+  const updatedCategories = allowedCategories.map(
+    ([categoryKey, categoryValue]) => {
+      const filteredComponents = (categoryValue.components ?? []).filter(
+        (componentName) => allowedComponentKeys.has(componentName)
+      );
+
+      return [
+        categoryKey,
+        { ...categoryValue, components: filteredComponents },
+      ];
+    }
+  );
+
   return {
     ...config,
     components: Object.fromEntries(allowedComponents) as C["components"],
-    categories: Object.fromEntries(allowedCategories) as C["categories"],
+    categories: Object.fromEntries(updatedCategories) as C["categories"],
   };
 };
