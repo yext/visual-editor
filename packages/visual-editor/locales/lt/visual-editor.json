@@ -220,6 +220,8 @@
     "mapStyle": "Žemėlapio stilius",
     "maxWidth": "Maksimalus plotis",
     "media": "Žiniasklaida",
+    "metaDescription": "Meta aprašymas",
+    "metaTitle": "Meta titulas",
     "mobileContentAlignment": "Mobiliojo turinio suderinimas",
     "mobileImagePosition": "Mobiliojo vaizdo padėtis",
     "name": "Vardas",

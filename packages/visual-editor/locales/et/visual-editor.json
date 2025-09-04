@@ -220,6 +220,8 @@
     "mapStyle": "Kaardistiil",
     "maxWidth": "Maksimaalne laius",
     "media": "Meedium",
+    "metaDescription": "Meta kirjeldus",
+    "metaTitle": "Meta pealkiri",
     "mobileContentAlignment": "Mobiilse sisu joondamine",
     "mobileImagePosition": "Mobiilse pildipositsioon",
     "name": "Nimetus",

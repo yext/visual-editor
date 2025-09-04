@@ -220,6 +220,8 @@
     "mapStyle": "Kartstil",
     "maxWidth": "Maxbredd",
     "media": "Media",
+    "metaDescription": "Metabeskrivning",
+    "metaTitle": "Metatitel",
     "mobileContentAlignment": "Mobilt innehållsinriktning",
     "mobileImagePosition": "Mobilbildsposition",
     "name": "Namn",

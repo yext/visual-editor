@@ -219,6 +219,8 @@
     "mapStyle": "Map Style",
     "maxWidth": "Max Width",
     "media": "Media",
+    "metaDescription": "Meta Description",
+    "metaTitle": "Meta Title",
     "mobileContentAlignment": "Mobile Content Alignment",
     "mobileImagePosition": "Mobile Image Position",
     "name": "Name",

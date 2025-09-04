@@ -220,6 +220,8 @@
     "mapStyle": "マップスタイル",
     "maxWidth": "最大幅",
     "media": "メディア",
+    "metaDescription": "メタ説明",
+    "metaTitle": "メタタイトル",
     "mobileContentAlignment": "モバイルコンテンツアライメント",
     "mobileImagePosition": "モバイルイメージの位置",
     "name": "名前",
