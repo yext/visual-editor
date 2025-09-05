@@ -101,7 +101,7 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
           index: localHistoryIndex,
           appendData: false,
         });
-        const layoutToSend = histories[histories.length - 1].state.data;
+        const layoutToSend = histories[histories.length - 1]?.state?.data;
         sendDevLayoutSaveStateData({
           payload: { devSaveStateData: JSON.stringify(layoutToSend) },
         });
