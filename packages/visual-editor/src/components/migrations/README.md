@@ -36,7 +36,7 @@ the number increases sequentially and the rest of the name is a brief descriptio
 In that file, export an object of type `Migration`, which is object mapping component names to
 `MigrationActions` (see [migrate.ts](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/utils/migrate.ts)).
 The component name should be the name the component is registered as in
-`ve.config.ts` or [`_componentCategories.ts`](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/_componentCategories.ts).
+`src/components/categories`.
 
 There are three [`MigrationActions`](https://github.com/yext/visual-editor/blob/1210ee5bae73bff1456563b57506ff163fa59cb6/packages/visual-editor/src/utils/migrate.ts#L11):
 
@@ -53,7 +53,7 @@ Removes a component from all layouts.
 ### Renamed
 
 Renames all existing usages of a component to `newName`.
-This name should be the name of the component as it is registered as in `ve.config.ts` or `_componentCategories.ts`.
+This name should be the name of the component as it is registered as in `src/components/categories`.
 
 ```ts
 { action: "renamed", newName: string }

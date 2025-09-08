@@ -51,11 +51,9 @@ If you want to use a modified template for In-Platform Page Groups,
 create `main.tsx` template with no `TemplateConfig`.
 
 If you want to modify the list of components available for In-Platform Page Groups,
-update the `mainConfig` in `ve.config.tsx`. By default, we use an exported
-object that includes all the default components, but each component is exported
-individually if you want to modify the list. You can also add your own components
-to the list. You may want to modify the default layout stored in the
-`.template-manifest.json` based on your component changes.
+see "Puck Configs" below. The default main config, default categories, and all components
+are exported to allow composability of configs. You may want to modify the default
+layout stored in the `.template-manifest.json` based on your component changes.
 
 ## Adding an In-Repo VLE Page Group
 
@@ -130,7 +128,7 @@ Each template is associated with a Puck [`Config`](https://puckeditor.com/docs/a
 which defines the components available to that template. To associate a config with a template:
 
 1. Use it in the template's Render component `<Render config={} ...`
-2. Register it in the `componentRegistry` of `ve.config.tsx` so it can be used in the editor
+2. Register it in the `componentRegistry` of `edit.tsx` so it can be used in the editor
 
 ```ts
 export const componentRegistry = new Map<string, Config<any>>([
@@ -140,6 +138,58 @@ export const componentRegistry = new Map<string, Config<any>>([
   // configs can be shared between templates
   ["templateName", mainConfig],
 ]);
+```
+
+#### Working with existing Puck Configs
+
+The three default configs are main, directory, and locator.
+To modify the main config, create a new config and copy parts of the
+exported `mainConfig`. Then, use the update config in the
+template file and the `componentRegistry` in `edit.tsx`
+
+```tsx
+// Example: Add a component to the main config under a new category
+interface ModifiedMainConfigProps extends MainConfigProps {
+  NewComponent: NewComponentProps;
+}
+
+const ModifiedMainConfig: Config<ModifiedMainConfigProps> = {
+  components: {
+    ...mainConfig.components,
+    NewComponent,
+  },
+  categories: {
+    ...mainConfig.categories,
+    NewCategory: {
+      name: "New Category",
+      components: ["NewComponent"],
+    },
+  },
+  root: mainConfig.root,
+};
+```
+
+#### Working with existing Component Categories
+
+The categories exported by `visual-editor` are also
+modifiable via a similar process to using an existing config.
+
+```tsx
+// Example: remove a component from the Page Section Category
+interface MyConfigProps extends Omit<PageSectionCategoryProps, "TeamSection"> {}
+
+const { TeamSection, ...filteredComponents } =
+  PageSectionCategoryComponents.Components;
+const filteredCategory = PageSectionCategory.filter((c) => c !== "TeamSection");
+
+const ModifiedMainConfig: Config<MyConfigProps> = {
+  components: filteredComponents,
+  categories: {
+    name: "Components",
+    components: filteredCategory,
+  },
+  root: mainConfig.root,
+};
 ```
 
 ### Working with Existing Components
