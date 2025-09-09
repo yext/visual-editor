@@ -28,6 +28,6 @@ export const devConfig: Config<DevProps> = {
   root: mainConfig.root,
 };
 
-export const componentRegistry = new Map<string, Config<DevProps>>([
-  ["dev", devConfig],
-]);
+export const componentRegistry: Record<string, Config<DevProps>> = {
+  dev: devConfig,
+};

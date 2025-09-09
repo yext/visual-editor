@@ -131,13 +131,13 @@ which defines the components available to that template. To associate a config w
 2. Register it in the `componentRegistry` of `edit.tsx` so it can be used in the editor
 
 ```ts
-export const componentRegistry = new Map<string, Config<any>>([
-  ["main", mainConfig],
-  ["directory", directoryConfig],
+const componentRegistry: Record<string, Config<any>> = {
+  main: mainConfig,
+  directory: directoryConfig,
   // templateName must match the name field of the TemplateConfig
   // configs can be shared between templates
-  ["templateName", mainConfig],
-]);
+  templateName: mainConfig,
+};
 ```
 
 #### Working with existing Puck Configs

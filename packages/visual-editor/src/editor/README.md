@@ -13,17 +13,18 @@ information.
 
 ### Props
 
-| Name              | Type                                                                                   |
-| ----------------- | -------------------------------------------------------------------------------------- |
-| document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))          |
-| componentRegistry | `Map<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
-| themeConfig?      | ThemeConfig                                                                            |
-| metadata?         | Metadata                                                                               |
+| Name              | Type                                                                                      |
+| ----------------- | ----------------------------------------------------------------------------------------- |
+| document          | any (json data from [our hook](../hooks/README.md#usePlatformBridgeDocument))             |
+| componentRegistry | `Record<string, Config<any>>` from [@measuredco/puck](https://github.com/measuredco/puck) |
+| themeConfig?      | ThemeConfig                                                                               |
+| metadata?         | Metadata                                                                                  |
 
 ### Usage
 
 ```tsx
-import { themeConfig } from "../../theme.config"
+import "@yext/visual-editor/style.css";
+import "../index.css";
 import tailwindConfig from "../../tailwind.config";
 
 // All the available components for locations
@@ -32,9 +33,9 @@ const locationConfig: Config<LocationProps> = {
   root: {...},
 };
 
-const componentRegistry = new Map<string, Config<any>>([
-  ["location", locationConfig],
-]);
+const componentRegistry : Record<string, Config<any>> = {
+  "location": locationConfig,
+};
 
 
 const Edit: () => JSX.Element = () => {

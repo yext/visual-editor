@@ -23,13 +23,13 @@ import {
 import { type Config } from "@measured/puck";
 import tailwindConfig from "../../tailwind.config";
 
-export const componentRegistry = new Map<string, Config<any>>([
-  ["main", mainConfig],
-  ["directory", directoryConfig],
-  ["locator", locatorConfig],
-]);
+const componentRegistry: Record<string, Config<any>> = {
+  main: mainConfig,
+  directory: directoryConfig,
+  locator: locatorConfig,
+};
 
-// Editor is avaliable at /edit
+// Editor is available at /edit
 export const getPath: GetPath<TemplateProps> = () => {
   return "edit";
 };
