@@ -41,6 +41,7 @@
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
     "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs",
+    "generate-theme-docs": "vite-node scripts/generateThemeDocs.ts",
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
@@ -146,6 +147,7 @@
     "typescript": "^5.5.4",
     "uuid": "11.0.3",
     "vite": "^5.3.5",
+    "vite-node": "^3.2.4",
     "vitepress": "^1.6.3",
     "vitest": "^3.2.4",
     "zod": "^3.23.8"

@@ -21,11 +21,17 @@ const fontWeightOptions = (fontVariable?: string) => {
     });
 };
 
+/**
+ * The default theme configuration for the global styles editor
+ * @public
+ */
 export const defaultThemeConfig: ThemeConfig = {
   palette: {
     label: msg("theme.colors.colors", "Colors"),
     styles: {
+      /** Primary color */
       primary: {
+        /** Primary color label */
         label: msg("theme.colors.primary", "Primary"),
         type: "color",
         default: "#CF0A2C",

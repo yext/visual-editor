@@ -1,0 +1,176 @@
+
+> @yext/visual-editor@0.0.57 generate-theme-docs /Users/blife/yext-js/visual-editor/packages/visual-editor
+> vite-node scripts/generateThemeDocs.ts
+
+The value of myProperty is: color
+The value of myProperty is: #CF0A2C
+The value of myProperty is: colors
+The value of myProperty is: color
+The value of myProperty is: #737B82
+The value of myProperty is: colors
+The value of myProperty is: color
+The value of myProperty is: #FF7E7E
+The value of myProperty is: colors
+The value of myProperty is: color
+The value of myProperty is: #000000
+The value of myProperty is: colors
+The value of myProperty is: H1
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 48px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 700
+The value of myProperty is: H2
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 40px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 700
+The value of myProperty is: H3
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 32px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 700
+The value of myProperty is: H4
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 24px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 700
+The value of myProperty is: H5
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 20px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 700
+The value of myProperty is: H6
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 18px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 700
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 16px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 400
+The value of myProperty is: select
+The value of myProperty is: maxWidth
+The value of myProperty is: 1024px
+The value of myProperty is: select
+The value of myProperty is: padding
+The value of myProperty is: 32px
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 16px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 400
+The value of myProperty is: select
+The value of myProperty is: borderRadius
+The value of myProperty is: 4px
+The value of myProperty is: select
+The value of myProperty is: textTransform
+The value of myProperty is: none
+The value of myProperty is: select
+The value of myProperty is: letterSpacing
+The value of myProperty is: 0em
+The value of myProperty is: select
+The value of myProperty is: fontFamily
+The value of myProperty is: 'Open Sans', sans-serif
+The value of myProperty is: select
+The value of myProperty is: fontSize
+The value of myProperty is: 16px
+The value of myProperty is: select
+The value of myProperty is: fontWeight
+The value of myProperty is: 400
+The value of myProperty is: select
+The value of myProperty is: textTransform
+The value of myProperty is: none
+The value of myProperty is: select
+The value of myProperty is: letterSpacing
+The value of myProperty is: 0em
+The value of myProperty is: select
+The value of myProperty is: display
+The value of myProperty is: block
+The value of myProperty is: select
+The value of myProperty is: borderRadius
+The value of myProperty is: 0px
+{
+  '--colors-palette-primary': '#CF0A2C',
+  '--colors-palette-secondary': '#737B82',
+  '--colors-palette-tertiary': '#FF7E7E',
+  '--colors-palette-quaternary': '#000000',
+  '--fontFamily-h1-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-h1-fontSize': '48px',
+  '--fontWeight-h1-fontWeight': '700',
+  '--fontFamily-h2-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-h2-fontSize': '40px',
+  '--fontWeight-h2-fontWeight': '700',
+  '--fontFamily-h3-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-h3-fontSize': '32px',
+  '--fontWeight-h3-fontWeight': '700',
+  '--fontFamily-h4-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-h4-fontSize': '24px',
+  '--fontWeight-h4-fontWeight': '700',
+  '--fontFamily-h5-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-h5-fontSize': '20px',
+  '--fontWeight-h5-fontWeight': '700',
+  '--fontFamily-h6-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-h6-fontSize': '18px',
+  '--fontWeight-h6-fontWeight': '700',
+  '--fontFamily-body-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-body-fontSize': '16px',
+  '--fontWeight-body-fontWeight': '400',
+  '--maxWidth-pageSection-contentWidth': '1024px',
+  '--padding-pageSection-verticalPadding': '32px',
+  '--fontFamily-button-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-button-fontSize': '16px',
+  '--fontWeight-button-fontWeight': '400',
+  '--borderRadius-button-borderRadius': '4px',
+  '--textTransform-button-textTransform': 'none',
+  '--letterSpacing-button-letterSpacing': '0em',
+  '--fontFamily-link-fontFamily': "'Open Sans', sans-serif",
+  '--fontSize-link-fontSize': '16px',
+  '--fontWeight-link-fontWeight': '400',
+  '--textTransform-link-textTransform': 'none',
+  '--letterSpacing-link-letterSpacing': '0em',
+  '--display-link-caret': 'block',
+  '--borderRadius-image-borderRadius': '0px'
+}
+{
+  '.palette.styles.primary': 'Primary color',
+  '.palette.styles.primary.label': 'Primary color label'
+}
