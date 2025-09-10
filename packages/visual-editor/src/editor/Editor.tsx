@@ -21,8 +21,8 @@ import { StreamDocument } from "../utils/applyTheme.ts";
 
 const devLogger = new DevLogger();
 
-// For hybrid developement use of existing components
-// See hybrid-development.md for more details
+// For hybrid development use of existing components
+// see hybrid-development.md for more details
 export interface Metadata {
   // The environment variable that stores the content endpoint ID
   contentEndpointIdEnvVar?: string;
@@ -40,7 +40,7 @@ export interface Metadata {
 
 export type EditorProps = {
   document: any;
-  componentRegistry: Map<string, Config<any>>;
+  componentRegistry: Record<string, Config<any>>;
   themeConfig?: ThemeConfig;
   // localDev is used for running VE outside of the platform
   localDev?: boolean;
