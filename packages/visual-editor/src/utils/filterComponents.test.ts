@@ -1,61 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { filterComponentsFromConfig } from "./filterComponents.ts";
-import { Config } from "@measured/puck";
-import {
-  PageSectionCategoryProps,
-  DeprecatedCategoryProps,
-  OtherCategoryProps,
-  AdvancedCoreInfoCategoryProps,
-  PageSectionCategoryComponents,
-  DeprecatedCategoryComponents,
-  OtherCategoryComponents,
-  AdvancedCoreInfoCategoryComponents,
-  PageSectionCategory,
-  AdvancedCoreInfoCategory,
-  OtherCategory,
-  DeprecatedCategory,
-} from "../components/_componentCategories.ts";
-
-// TODO(SUMO-7666): Replace with importing the actual main config from our exported ve.config.tsx
-interface MainProps
-  extends PageSectionCategoryProps,
-    DeprecatedCategoryProps,
-    OtherCategoryProps,
-    AdvancedCoreInfoCategoryProps {}
-
-const components: Config<MainProps>["components"] = {
-  ...PageSectionCategoryComponents,
-  ...DeprecatedCategoryComponents,
-  ...OtherCategoryComponents,
-  ...AdvancedCoreInfoCategoryComponents,
-};
-
-const testConfig: Config<MainProps> = {
-  components,
-  categories: {
-    pageSections: {
-      title: "Page Sections",
-      components: PageSectionCategory,
-    },
-    coreInformation: {
-      title: "Core Information",
-      components: AdvancedCoreInfoCategory,
-    },
-    other: {
-      title: "Other",
-      components: OtherCategory,
-    },
-    deprecatedComponents: {
-      visible: false,
-      components: DeprecatedCategory,
-    },
-  },
-  root: {},
-};
+import { mainConfig } from "../components/configs/mainConfig.tsx";
 
 describe("filterComponentsFromConfig", () => {
   it("filters gated components and categories when no feature flags are enabled", () => {
-    const config = filterComponentsFromConfig(testConfig);
+    const config = filterComponentsFromConfig(mainConfig);
 
     // Test component registry
     expect(Object.keys(config.components)).toContain("BannerSection");
@@ -83,7 +32,7 @@ describe("filterComponentsFromConfig", () => {
   });
 
   it("filters components and categories correctly when the custom code feature flag is enabled", () => {
-    const config = filterComponentsFromConfig(testConfig, [
+    const config = filterComponentsFromConfig(mainConfig, [
       "CustomCodeSection",
     ]);
 
@@ -112,7 +61,7 @@ describe("filterComponentsFromConfig", () => {
 
   it("filters components and categories correctly when the advanced core info section flag is enabled", () => {
     const config = filterComponentsFromConfig(
-      testConfig,
+      mainConfig,
       [],
       ["coreInformation"]
     );

@@ -5,10 +5,9 @@ import {
   backgroundColors,
   themeManagerCn,
   Background,
-  ContentBlockCategory,
   YextField,
   VisibilityWrapper,
-  LayoutBlockCategory,
+  AdvancedCoreInfoCategory,
   msg,
 } from "@yext/visual-editor";
 
@@ -61,7 +60,7 @@ const FlexContainer = React.forwardRef<
             alignItems,
             flexWrap: wrap,
           }}
-          allow={[...ContentBlockCategory, ...LayoutBlockCategory]}
+          allow={[...AdvancedCoreInfoCategory, "Flex"]}
         />
       </Background>
     );
