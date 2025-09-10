@@ -76,7 +76,7 @@ const tests: ComponentTest[] = [
       ...CustomCodeSection.defaultProps,
       html: `
         <button onclick="showName(this)">
-          Show Restaurant Name 
+          Show Name
         </button>
         <ul class="product-list">
           {{#each c_exampleProducts.products}}
@@ -84,7 +84,7 @@ const tests: ComponentTest[] = [
               <strong>{{name}}</strong>
               {{#if image.url}}
                 <br />
-                <img src="{{image.url}}" class="product-img" />
+                <img src="{{image.url}}" class="product-img" alt="{{name}} alt"/>
               {{/if}}
               {{#if description.html}}
                 <div class="product-desc">{{{description.html}}}</div>
@@ -93,15 +93,58 @@ const tests: ComponentTest[] = [
           {{/each}}
         </ul>
       `,
+      css: `
+        .product-list {
+          list-style: none;
+          padding: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 2rem;
+        }
+        .product-item {
+          background: #f8f9fa;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+          padding: 1rem;
+          max-width: 220px;
+          text-align: center;
+          flex: 1 1 180px;
+        }
+        .product-img {
+          width: 100%;
+          max-width: 180px;
+          height: auto;
+          border-radius: 6px;
+          margin: 0.5rem 0;
+        }
+        .product-desc {
+          font-size: 0.95rem;
+          color: #444;
+        }
+        @media (max-width: 600px) {
+          .product-list {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          .product-item {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+          }
+          .product-img {
+            max-width: 100%;
+          }
+        }
+      `,
       javascript: `
         function showName(el) {
-          el.textContent = {{name}};
+          el.textContent = 'Name: [[name]]';
         }
       `,
     },
     version: migrationRegistry.length,
     interactions: async (page) => {
-      await page.getByRole("button", { name: "Show Restaurant Name" }).click();
+      await page.getByRole("button", { name: "Show Name" }).click();
     },
   },
 ];

@@ -11,6 +11,7 @@ import {
   useDocument,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
+import { resolveEmbeddedFieldsInString } from "../utils/resolveYextEntityField";
 
 export interface CustomCodeSectionProps {
   /**
@@ -79,29 +80,33 @@ const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
 /**
  * Compiles and renders a Handlebars template string with the provided data if Handlebars syntax is detected.
  *
- * If the HTML string contains Handlebars expressions (e.g., {{name}}), this function will compile and render
+ * If the customString contains Handlebars expressions (e.g., {{name}}), this function will compile and render
  * the template using the given data (typically the stream document). If compilation or rendering fails, or if
- * no Handlebars expressions are present, the original HTML string is returned.
+ * no Handlebars expressions are present, the original string is returned.
  *
- * @param html - The HTML string, possibly containing Handlebars template syntax.
+ * @param customString - The HTML or javascript string, possibly containing Handlebars template syntax.
  * @param data - The data object to use for template rendering (e.g., streamDocument).
- * @returns The processed HTML string with Handlebars expressions replaced, or the original HTML if not applicable.
+ * @returns The processed string with Handlebars expressions replaced, or the original string if not applicable.
  */
-function processHandlebarsTemplate(html: string, data: StreamDocument): string {
-  if (!html) {
-    return html;
+function processHandlebarsTemplate(
+  customString: string,
+  data: StreamDocument
+): string {
+  if (!customString) {
+    return customString;
   }
 
   // Only process if handlebars syntax is present
-  if (/{{[^}]+}}/.test(html)) {
+  if (/{{[^}]+}}/.test(customString)) {
     try {
-      const template = Handlebars.compile(html);
+      const template = Handlebars.compile(customString);
       return template(data);
     } catch {
-      return html;
+      return customString;
     }
   }
-  return html;
+
+  return customString;
 }
 
 const EmptyCustomCodeSection = () => {
@@ -141,9 +146,8 @@ const CustomCodeSectionWrapper = ({
     [html, stableStreamDoc]
   );
 
-  // Process Handlebars in JavaScript string
   const processedJavascript = React.useMemo(
-    () => processHandlebarsTemplate(javascript, stableStreamDoc),
+    () => resolveEmbeddedFieldsInString(javascript, stableStreamDoc),
     [javascript, stableStreamDoc]
   );
 
@@ -164,7 +168,7 @@ const CustomCodeSectionWrapper = ({
       script.innerHTML = processedJavascript;
       containerRef.current.appendChild(script);
     }
-  }, [javascript, processedHtml]);
+  }, [processedJavascript, processedHtml]);
 
   if (!processedHtml) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;
