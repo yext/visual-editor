@@ -4,7 +4,7 @@ import {
   ComponentTest,
   transformTests,
 } from "./testing/componentTests.setup.ts";
-import { render as reactRender } from "@testing-library/react";
+import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   CustomCodeSection,
   migrate,
@@ -50,6 +50,60 @@ const tests: ComponentTest[] = [
       await page.getByRole("button", { name: "Change Color" }).click();
     },
   },
+  {
+    name: "renders Handlebars template with document data",
+    document: {
+      name: "Galaxy Restaurant",
+      c_exampleProducts: {
+        products: [
+          {
+            name: "Galaxy Burger",
+            image: {
+              url: "https://a.mktgcdn.com/p-dev/2NXFA3zTVNQBcc7LCGNdTHp5SZVHIVTz_X9tLVZI6S8/2048x2048.jpg",
+            },
+            description: { html: "<p>Our signature burger!</p>" },
+          },
+          {
+            name: "Galaxy Salad",
+            image: {
+              url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
+            },
+          },
+        ],
+      },
+    },
+    props: {
+      ...CustomCodeSection.defaultProps,
+      html: `
+        <button onclick="showName(this)">
+          Show Restaurant Name 
+        </button>
+        <ul class="product-list">
+          {{#each c_exampleProducts.products}}
+            <li class="product-item">
+              <strong>{{name}}</strong>
+              {{#if image.url}}
+                <br />
+                <img src="{{image.url}}" class="product-img" />
+              {{/if}}
+              {{#if description.html}}
+                <div class="product-desc">{{{description.html}}}</div>
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      `,
+      javascript: `
+        function showName(el) {
+          el.textContent = {{name}};
+        }
+      `,
+    },
+    version: migrationRegistry.length,
+    interactions: async (page) => {
+      await page.getByRole("button", { name: "Show Restaurant Name" }).click();
+    },
+  },
 ];
 
 describe("CustomCodeSection", async () => {
@@ -61,6 +115,7 @@ describe("CustomCodeSection", async () => {
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
@@ -96,10 +151,14 @@ describe("CustomCodeSection", async () => {
       );
 
       await page.viewport(width, height);
+      const images = Array.from(container.querySelectorAll("img"));
+      await waitFor(() => {
+        expect(images.every((i) => i.complete)).toBe(true);
+      });
 
       await expect(
         `CustomCodeSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ useFullPage: true });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
