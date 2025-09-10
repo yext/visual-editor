@@ -45,10 +45,10 @@ const tests: ComponentTest[] = [
         }
       `,
     },
-    version: migrationRegistry.length,
     interactions: async (page) => {
       await page.getByRole("button", { name: "Change Color" }).click();
     },
+    version: migrationRegistry.length,
   },
   {
     name: "renders Handlebars template with document data",
@@ -142,10 +142,10 @@ const tests: ComponentTest[] = [
         }
       `,
     },
-    version: migrationRegistry.length,
     interactions: async (page) => {
       await page.getByRole("button", { name: "Show Name" }).click();
     },
+    version: migrationRegistry.length,
   },
 ];
 

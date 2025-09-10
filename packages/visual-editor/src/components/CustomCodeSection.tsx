@@ -80,33 +80,29 @@ const customCodeSectionFields: Fields<CustomCodeSectionProps> = {
 /**
  * Compiles and renders a Handlebars template string with the provided data if Handlebars syntax is detected.
  *
- * If the customString contains Handlebars expressions (e.g., {{name}}), this function will compile and render
+ * If the HTML string contains Handlebars expressions (e.g., {{name}}), this function will compile and render
  * the template using the given data (typically the stream document). If compilation or rendering fails, or if
- * no Handlebars expressions are present, the original string is returned.
+ * no Handlebars expressions are present, the original HTML string is returned.
  *
- * @param customString - The HTML or javascript string, possibly containing Handlebars template syntax.
+ * @param html - The HTML string, possibly containing Handlebars template syntax.
  * @param data - The data object to use for template rendering (e.g., streamDocument).
- * @returns The processed string with Handlebars expressions replaced, or the original string if not applicable.
+ * @returns The processed HTML string with Handlebars expressions replaced, or the original HTML if not applicable.
  */
-function processHandlebarsTemplate(
-  customString: string,
-  data: StreamDocument
-): string {
-  if (!customString) {
-    return customString;
+function processHandlebarsTemplate(html: string, data: StreamDocument): string {
+  if (!html) {
+    return html;
   }
 
   // Only process if handlebars syntax is present
-  if (/{{[^}]+}}/.test(customString)) {
+  if (/{{[^}]+}}/.test(html)) {
     try {
-      const template = Handlebars.compile(customString);
+      const template = Handlebars.compile(html);
       return template(data);
     } catch {
-      return customString;
+      return html;
     }
   }
-
-  return customString;
+  return html;
 }
 
 const EmptyCustomCodeSection = () => {
@@ -168,7 +164,7 @@ const CustomCodeSectionWrapper = ({
       script.innerHTML = processedJavascript;
       containerRef.current.appendChild(script);
     }
-  }, [processedJavascript, processedHtml]);
+  }, [processedJavascript]);
 
   if (!processedHtml) {
     return puck.isEditing ? <EmptyCustomCodeSection /> : null;

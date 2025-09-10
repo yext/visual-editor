@@ -1,5 +1,4 @@
 import { CustomField, FieldLabel } from "@measured/puck";
-import DOMPurify from "dompurify";
 import React from "react";
 import {
   TARGET_ORIGINS,
@@ -45,12 +44,7 @@ export const CodeField = ({
         TARGET_ORIGINS,
         (_, payload) => {
           if (pendingMessageId && pendingMessageId === payload?.id) {
-            if (codeLanguage === "html") {
-              const sanitizedValue = DOMPurify.sanitize(payload.value);
-              onChange(sanitizedValue);
-            } else {
-              onChange(payload.value);
-            }
+            onChange(payload.value);
           }
         }
       );
