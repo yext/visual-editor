@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  Body,
   BodyProps,
   useDocument,
   resolveComponentData,
@@ -12,6 +11,7 @@ import {
   pt,
   msg,
   TranslatableRichText,
+  useBackground,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
@@ -50,6 +50,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ data, styles }, ref) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
+    const background = useBackground();
 
     return (
       <EntityField
@@ -57,9 +58,12 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
-        <Body ref={ref} variant={styles.variant}>
+        <div
+          ref={ref}
+          className={`rtf-theme ${background?.isDarkBackground ? "rtf-dark-background" : "rtf-light-background"} ${styles.variant !== "base" && `rtf-body-${styles.variant}`}`}
+        >
           {resolveComponentData(data.text, i18n.language, streamDocument)}
-        </Body>
+        </div>
       </EntityField>
     );
   }
