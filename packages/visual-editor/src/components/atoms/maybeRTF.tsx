@@ -32,7 +32,7 @@ export const MaybeRTF = ({
         <div
           {...props}
           dangerouslySetInnerHTML={{ __html: data.html }}
-          className={`rtf-theme ${background?.textColor == "text-white" ? "rtf-dark-background" : "rtf-light-background"} rtf-body-${bodyVariant}`}
+          className={`rtf-theme ${background?.isDarkBackground ? "rtf-dark-background" : "rtf-light-background"} ${bodyVariant !== "base" && `rtf-body-${bodyVariant}`}`}
         />
       );
     }
