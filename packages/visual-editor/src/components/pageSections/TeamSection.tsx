@@ -22,7 +22,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
-  CTAProps,
+  CTAVariant,
   resolveComponentData,
   CTA,
 } from "@yext/visual-editor";
@@ -61,7 +61,7 @@ export interface TeamStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAProps["variant"];
+    ctaVariant: CTAVariant;
   };
 }
 
@@ -188,7 +188,7 @@ const PersonCard = ({
   person: PersonStruct;
   cardStyles: TeamSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
-  ctaVariant: CTAProps["variant"];
+  ctaVariant: CTAVariant;
 }) => {
   const { i18n } = useTranslation();
 

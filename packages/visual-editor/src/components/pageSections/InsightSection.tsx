@@ -22,7 +22,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
-  CTAProps,
+  CTAVariant,
   resolveComponentData,
   CTA,
 } from "@yext/visual-editor";
@@ -53,15 +53,20 @@ export interface InsightStyles {
 
   /** Styling for the main section heading. */
   heading: {
+    /** The h tag level of the section heading */
     level: HeadingLevel;
+    /** Alignment of the insight section heading */
     align: "left" | "center" | "right";
   };
 
   /** Styling for the individual insight cards. */
   cards: {
+    /** The h tag level of each insight card's title */
     headingLevel: HeadingLevel;
+    /** The background color of each insight card */
     backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAProps["variant"];
+    /** The CTA variant to use in each insight card */
+    ctaVariant: CTAVariant;
   };
 }
 
@@ -188,7 +193,7 @@ const InsightCard = ({
   insight: InsightStruct;
   cardStyles: InsightSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
-  ctaVariant: CTAProps["variant"];
+  ctaVariant: CTAVariant;
 }) => {
   const { i18n } = useTranslation();
   const resolvedCategory = insight.category

@@ -13,14 +13,23 @@ import {
   pt,
 } from "@yext/visual-editor";
 
+/** Props for the HoursTable component. */
 export interface HoursTableProps {
   data: {
+    /** The hours data to display in the table. */
     hours: YextEntityField<HoursType>;
   };
   styles: {
+    /**
+     * The day of week to display at the top of the table.
+     * If set to "today", the current day will dynamically be at the top.
+     */
     startOfWeek: keyof DayOfWeekNames | "today";
+    /** If true, consecutive days that have the same hours will be collapsed into one row. */
     collapseDays: boolean;
+    /** Shows the showAdditionalHoursText subfield from the hours field, if present */
     showAdditionalHoursText: boolean;
+    /** Alignment of the text in the hours table */
     alignment: "items-start" | "items-center";
   };
 }

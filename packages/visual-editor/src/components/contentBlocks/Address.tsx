@@ -15,16 +15,20 @@ import {
   YextField,
   msg,
   resolveComponentData,
-  CTAProps,
+  CTAVariant,
 } from "@yext/visual-editor";
 
+/** Props for the Address component */
 export interface AddressProps {
   data: {
+    /** The address data to display. */
     address: YextEntityField<AddressType>;
   };
   styles: {
+    /** Includes a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
-    ctaVariant: CTAProps["variant"];
+    /** The variant of the get directions button */
+    ctaVariant: CTAVariant;
   };
 }
 
@@ -49,13 +53,10 @@ export const AddressStyleFields = {
       ],
     }
   ),
-  ctaVariant: YextField<CTAProps["variant"]>(
-    msg("fields.ctaVariant", "CTA Variant"),
-    {
-      type: "radio",
-      options: "CTA_VARIANT",
-    }
-  ),
+  ctaVariant: YextField<CTAVariant>(msg("fields.ctaVariant", "CTA Variant"), {
+    type: "radio",
+    options: "CTA_VARIANT",
+  }),
 };
 
 const addressFields: Fields<AddressProps> = {
