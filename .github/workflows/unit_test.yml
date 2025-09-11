@@ -24,7 +24,7 @@ on:
 jobs:
   unit_tests:
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.54.0
+    container: mcr.microsoft.com/playwright:v1.55.0
     strategy:
       matrix:
         node-version: [18.x, 20.x]
