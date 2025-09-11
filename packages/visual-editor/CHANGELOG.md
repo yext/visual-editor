@@ -1,14 +1,3 @@
-#### 0.0.58 (2025-09-10)
-
-##### Chores
-
-- move ve.config to package (#756) (c2a34cc5)
-
-##### Bug Fixes
-
-- locator no results mobile width (#757) (4734b6b1)
-- resolve undefined 'state' error (#755) (db52b5c8)
-
 #### 0.0.57 (2025-09-04)
 
 ##### Chores
