@@ -31,7 +31,7 @@ export type EnhancedTranslatableCTA = TranslatableCTA & {
   presetImageType?: PresetImageType;
 };
 
-/** Preset image types for CTA buttons - app store or food deliver logos */
+/** Preset image types for CTA buttons - app store or food delivery logos */
 export type PresetImageType =
   | "app-store"
   | "google-play"
