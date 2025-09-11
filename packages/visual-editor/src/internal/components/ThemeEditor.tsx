@@ -95,8 +95,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
           // strip ui state
           return { id: h.id, state: { data: { ...h.state.data } } };
         });
+        // @ts-expect-error https://github.com/measuredco/puck/issues/673
         setPuckInitialHistory({
-          // @ts-expect-error https://github.com/measuredco/puck/issues/673
           histories: histories,
           index: localHistoryIndex,
           appendData: false,
