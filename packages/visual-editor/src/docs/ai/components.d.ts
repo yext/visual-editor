@@ -1174,7 +1174,7 @@ interface AddressProps {
     address: YextEntityField<AddressType>;
   };
   styles: {
-    /** Includes a "Get Directions" CTA to Google Maps */
+    /** Whether to included a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
@@ -1456,7 +1456,7 @@ type ImageData = {
 
 type ImageTransformations = Partial<Record<TransformKind, ImageTransformation>>;
 
-/** Preset image types for CTA buttons - app store or food deliver logos */
+/** Preset image types for CTA buttons - app store or food delivery logos */
 type PresetImageType =
   | "app-store"
   | "google-play"
