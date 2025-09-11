@@ -1,3 +1,31 @@
+#### 0.0.58 (2025-09-11)
+
+##### Chores
+
+- move ve.config to package (#756) (c2a34cc5)
+
+##### Continuous Integration
+
+- swap to public npm token (e50af91a)
+- swap to global npm token (#761) (8f892e87)
+
+##### New Features
+
+- handle embedded fields in html component (#758) (722473b3)
+
+##### Bug Fixes
+
+- dark brand colors in RTF (#760) (0a0f3ed6)
+- locator no results mobile width (#757) (4734b6b1)
+- resolve undefined 'state' error (#755) (db52b5c8)
+
+##### Other Changes
+
+- v0.0.58" (fe55aa26)
+- v0.0.58 (b02dedac)
+- v0.0.58" (ba09b6b4)
+- v0.0.58 (bd21958b)
+
 #### 0.0.57 (2025-09-04)
 
 ##### Chores
