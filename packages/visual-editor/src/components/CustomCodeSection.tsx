@@ -128,23 +128,18 @@ const CustomCodeSectionWrapper = ({
 }: WithId<WithPuckProps<CustomCodeSectionProps>>) => {
   const streamDocument = useDocument();
 
-  const stableStreamDoc = React.useMemo(
-    () => streamDocument,
-    [JSON.stringify(streamDocument)]
-  );
-
   const containerRef = React.useRef<HTMLDivElement>(null);
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
   const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
 
   const processedHtml = React.useMemo(
-    () => processHandlebarsTemplate(html, stableStreamDoc),
-    [html, stableStreamDoc]
+    () => processHandlebarsTemplate(html, streamDocument),
+    [html, streamDocument.id]
   );
 
   const processedJavascript = React.useMemo(
-    () => resolveEmbeddedFieldsInString(javascript, stableStreamDoc),
-    [javascript, stableStreamDoc]
+    () => resolveEmbeddedFieldsInString(javascript, streamDocument),
+    [javascript, streamDocument.id]
   );
 
   React.useEffect(() => {
