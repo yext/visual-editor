@@ -132,14 +132,10 @@ const CustomCodeSectionWrapper = ({
   const scriptIdRef = React.useRef<number>(Math.floor(Math.random() * 1e9));
   const scriptTagId = `custom-code-section-script-${scriptIdRef.current}`;
 
-  const processedHtml = React.useMemo(
-    () => processHandlebarsTemplate(html, streamDocument),
-    [html, streamDocument.id]
-  );
-
-  const processedJavascript = React.useMemo(
-    () => resolveEmbeddedFieldsInString(javascript, streamDocument),
-    [javascript, streamDocument.id]
+  const processedHtml = processHandlebarsTemplate(html, streamDocument);
+  const processedJavascript = resolveEmbeddedFieldsInString(
+    javascript,
+    streamDocument
   );
 
   React.useEffect(() => {
