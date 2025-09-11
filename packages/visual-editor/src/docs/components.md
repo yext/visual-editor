@@ -188,11 +188,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                                  | Description                          | Default              |
-| :----------------------- | :---------------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                                     | The background color of the section. | `Background Color 3` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAProps["variant"]; }` | Styling for all the cards.           |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                      | Styling for the heading.             |                      |
+| Prop                     | Type                                                                                         | Description                          | Default              |
+| :----------------------- | :------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                            | The background color of the section. | `Background Color 3` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; }` | Styling for all the cards.           |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                             | Styling for the heading.             |                      |
 
 #### Other Props
 
@@ -245,21 +245,21 @@ The Expanded Header is a two-tiered component for websites with complex navigati
 
 This object contains all the content for both header tiers.
 
-| Prop                   | Type                                                                                                                                                                    | Description                                 | Default |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `data.primaryHeader`   | `{ logo: AssetImageType; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.    |         |
-| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                                  | Content for the secondary header (top bar). |         |
+| Prop                   | Type                                                                                                                                                                    | Description                                               | Default |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :------ |
+| `data.primaryHeader`   | `{ logo: AssetImageType; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.                  |         |
+| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                                  | Content for the secondary header (above the main header). |         |
 
 #### Style Props
 
 This object contains properties for customizing the appearance of both header tiers.
 
-| Prop                     | Type                                                                                                                                                | Description                                 | Default |
-| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `styles.headerPosition`  | `"sticky" \| "fixed" \| "scrollsWithPage"`                                                                                                          | Whether the header is "sticky" or not       |         |
-| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                                      | The maximum width of the header             |         |
-| `styles.primaryHeader`   | `{ logo: ImageStylingProps; backgroundColor?: BackgroundStyle; primaryCtaVariant: CTAProps["variant"]; secondaryCtaVariant: CTAProps["variant"]; }` | Styling for the main, primary header bar.   |         |
-| `styles.secondaryHeader` | `{ backgroundColor?: BackgroundStyle; }`                                                                                                            | Styling for the secondary header (top bar). |         |
+| Prop                     | Type                                                                                                                              | Description                                 | Default |
+| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `styles.headerPosition`  | `"sticky" \| "fixed" \| "scrollsWithPage"`                                                                                        | Whether the header is "sticky" or not       |         |
+| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                    | The maximum width of the header             |         |
+| `styles.primaryHeader`   | `{ logo: ImageStylingProps; backgroundColor?: BackgroundStyle; primaryCtaVariant: CTAVariant; secondaryCtaVariant: CTAVariant; }` | Styling for the main, primary header bar.   |         |
+| `styles.secondaryHeader` | `{ backgroundColor?: BackgroundStyle; }`                                                                                          | Styling for the secondary header (top bar). |         |
 
 ---
 
@@ -366,8 +366,8 @@ This object contains properties for customizing the component's appearance.
 | `styles.localGeoModifierLevel`    | `HeadingLevel`                                         | The HTML heading level for the local geo-modifier.                                                                                                                                                                                                                                                                                                                                                                                         | `1`                  |
 | `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                                                                                                                                                                                                                                                                                                                    | `left`               |
 | `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                                                                                                                                                                                                                                                                                                                     | `top`                |
-| `styles.primaryCTA`               | `CTAProps["variant"]`                                  | The visual style variant for the primary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                            | `primary`            |
-| `styles.secondaryCTA`             | `CTAProps["variant"]`                                  | The visual style variant for the secondary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                          | `secondary`          |
+| `styles.primaryCTA`               | `CTAVariant`                                           | The visual style variant for the primary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                            | `primary`            |
+| `styles.secondaryCTA`             | `CTAVariant`                                           | The visual style variant for the secondary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                          | `secondary`          |
 | `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                                                                                                                                                                                                                                                                                                              | `true`               |
 | `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                                                                                                                                                                                                                                                                                                                   | `classic`            |
 
@@ -402,11 +402,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                                  | Description                                                           | Default              |
-| :----------------------- | :---------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                                     | The background color for the entire section, selected from the theme. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAProps["variant"]; }` | Styling for the individual insight cards.                             |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                      | Styling for the main section heading.                                 |                      |
+| Prop                     | Type                                                                                         | Description                                                           | Default              |
+| :----------------------- | :------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                            | The background color for the entire section, selected from the theme. | `Background Color 2` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; }` | Styling for the individual insight cards.                             |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                             | Styling for the main section heading.                                 |                      |
 
 #### Other Props
 
@@ -535,11 +535,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                                  | Description                                  | Default              |
-| :----------------------- | :---------------------------------------------------------------------------------------------------- | :------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                                     | The background color for the entire section. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAProps["variant"]; }` | Styling for the individual product cards.    |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                      | Styling for the main section heading.        |                      |
+| Prop                     | Type                                                                                         | Description                                  | Default              |
+| :----------------------- | :------------------------------------------------------------------------------------------- | :------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                            | The background color for the entire section. | `Background Color 2` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; }` | Styling for the individual product cards.    |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                             | Styling for the main section heading.        |                      |
 
 #### Other Props
 
@@ -574,7 +574,7 @@ This object contains properties for customizing the component's appearance.
 | Prop                     | Type                                                             | Description                                                   | Default              |
 | :----------------------- | :--------------------------------------------------------------- | :------------------------------------------------------------ | :------------------- |
 | `styles.backgroundColor` | `BackgroundStyle`                                                | The background color for the entire section.                  | `Background Color 1` |
-| `styles.ctaVariant`      | `CTAProps["variant"]`                                            | The visual style variant for the call-to-action button.       | `'primary'`          |
+| `styles.ctaVariant`      | `CTAVariant`                                                     | The visual style variant for the call-to-action button.       | `'primary'`          |
 | `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the promo's title.                                |                      |
 | `styles.image`           | `ImageStylingProps`                                              | Styling options for the promo image, such as aspect ratio.    |                      |
 | `styles.orientation`     | `"left" \| "right"`                                              | Positions the image to the left or right of the text content. | `'left'`             |
