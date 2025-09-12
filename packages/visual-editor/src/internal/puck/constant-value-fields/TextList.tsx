@@ -78,7 +78,6 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
                 variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
-                disabled={localItems.length === 1}
               >
                 <TrashIcon />
               </IconButton>
@@ -149,7 +148,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
         if (fieldsDiv) {
           const observer = new MutationObserver(() => {
             const newField = document.getElementById(
-              `${id}-value-${currentLength}-0`
+              `${id}-value-${currentLength}`
             );
             if (newField) {
               observer.disconnect();
@@ -170,7 +169,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
         {localItems.map((item, index) => (
           <div
             key={index}
-            className="ve-border ve-rounded ve-p-3 ve-mb-3 ve-space-y-2"
+            className="ve-border ve-rounded ve-p-3 ve-mb-3 ve-flex ve-gap-2"
           >
             <AutoField
               key={locale}
@@ -185,7 +184,6 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
                 variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
-                disabled={localItems.length === 1}
               >
                 <TrashIcon />
               </IconButton>
