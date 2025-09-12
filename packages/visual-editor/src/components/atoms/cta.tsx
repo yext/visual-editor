@@ -29,6 +29,17 @@ export type CTAProps = {
   ariaLabel?: string;
 };
 
+/**
+ * The different visual variants for CTA buttons.
+ * "primary": the default button style. A button filled with the primary theme color.
+ * "secondary": an outlined button style. A button with a border in the primary theme color and transparent background.
+ * "link": a text link style. A button with no border or background, just a hyperlink in the link theme color.
+ * "directoryLink": a text link style optimized for directory listings.
+ * "headerFooterMainLink": a text link style optimized for main links in the header and footer.
+ * "headerFooterSecondaryLink": a text link style optimized for secondary links in the header and footer.
+ */
+export type CTAVariant = ButtonProps["variant"];
+
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
 const useResolvedCtaProps = (props: CTAProps) => {
   const {

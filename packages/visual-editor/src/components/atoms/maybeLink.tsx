@@ -1,12 +1,12 @@
 import * as React from "react";
-import { CTAProps, CTA } from "@yext/visual-editor";
+import { CTAVariant, CTA } from "@yext/visual-editor";
 
 export type MaybeLinkProps = {
   href?: string;
   children?: React.ReactNode;
   className?: string;
   eventName?: string;
-  variant?: CTAProps["variant"];
+  variant?: CTAVariant;
   alwaysHideCaret?: boolean;
 };
 

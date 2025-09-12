@@ -9,7 +9,7 @@ import {
   HeadingLevel,
   YextField,
   VisibilityWrapper,
-  CTAProps,
+  CTAVariant,
   YextStructFieldSelector,
   YextStructEntityField,
   ComponentFields,
@@ -90,13 +90,13 @@ export interface HeroStyles {
    * The visual style variant for the primary call-to-action button.
    * @defaultValue primary
    */
-  primaryCTA: CTAProps["variant"];
+  primaryCTA: CTAVariant;
 
   /**
    * The visual style variant for the secondary call-to-action button.
    * @defaultValue secondary
    */
-  secondaryCTA: CTAProps["variant"];
+  secondaryCTA: CTAVariant;
 
   /**
    * Styling options for the hero image.

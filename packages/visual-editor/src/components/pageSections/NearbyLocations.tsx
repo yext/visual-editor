@@ -99,9 +99,12 @@ export interface NearbyLocationsStyles {
 
   /** Styling for the hours display on each card. */
   hours: {
+    /** Whether to display the current status ("Open Now" or "Closed") */
     showCurrentStatus: boolean;
     timeFormat?: "12h" | "24h";
+    /** How to format the days of the week (short:Mon, long:Monday) */
     dayOfWeekFormat?: "short" | "long";
+    /** Whether to include the day of the week */
     showDayNames?: boolean;
   };
 }

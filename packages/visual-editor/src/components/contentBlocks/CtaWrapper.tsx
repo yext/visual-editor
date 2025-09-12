@@ -11,7 +11,7 @@ import {
   resolveComponentData,
   EnhancedTranslatableCTA,
   CTA,
-  CTAProps,
+  CTAVariant,
 } from "@yext/visual-editor";
 import {
   ctaTypeOptions,
@@ -21,8 +21,8 @@ import {
 
 export interface CTAWrapperProps {
   entityField: YextEntityField<EnhancedTranslatableCTA>;
-  variant: CTAProps["variant"];
-  className?: CTAProps["className"];
+  variant: CTAVariant;
+  className?: string;
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {

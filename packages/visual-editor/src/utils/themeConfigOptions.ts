@@ -21,9 +21,23 @@ const getSpacingOptions = () => {
   });
 };
 
+/**
+ * Applies a theme color as the background of a page section
+ * @ai This value MUST be one of the following
+ * { bgColor: "bg-white", textColor: "text-black" }
+ * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
+ * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ */
 export type BackgroundStyle = {
+  /** The tailwind background color class */
   bgColor: string;
+  /** The tailwind text color class */
   textColor: string;
+  /** Whether the background color is dark (for adjusting other styles based on background) */
   isDarkBackground?: boolean;
 };
 
@@ -145,7 +159,7 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
   },
 ];
 
-// Defines the valid levels for the heading element
+/** Corresponds to the different semantic heading levels */
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 // Provides a mapping of label to value for BasicSelector

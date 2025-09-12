@@ -45,7 +45,7 @@
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
-    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs",
+    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs ; tsx scripts/generateComponentTypeDefinitions.ts",
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",

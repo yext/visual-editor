@@ -87,9 +87,17 @@ export interface ExpandedFooterData {
     tiktokLink: string;
     youtubeLink: string;
     xLink: string;
+    /** Small images to show under the main logo */
     utilityImages: { image: AssetImageType; linkTarget?: string }[];
+    /**
+     * Whether to expand the footer to show additional link categories.
+     * expandedFooter: false uses a single row of footerLinks.
+     * expandedFooter: true uses multiple columns of expandedFooterLinks.
+     */
     expandedFooter: boolean;
+    /** Links for the default footer */
     footerLinks: TranslatableCTA[];
+    /** Links for the expanded footer */
     expandedFooterLinks: {
       label: TranslatableString;
       links: TranslatableCTA[];
@@ -97,6 +105,7 @@ export interface ExpandedFooterData {
   };
   /** Content for the secondary header bar. */
   secondaryFooter: {
+    /** Whether to hide or show the secondary footer */
     show: boolean;
     copyrightMessage: TranslatableString;
     secondaryFooterLinks: TranslatableCTA[];
