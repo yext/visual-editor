@@ -1,4 +1,4 @@
-import { args, getPackageInfo, publishPackage, step } from "./releaseUtils.js";
+import { args, getPackageInfo } from "./releaseUtils.js";
 
 const tag = args._[0];
 
@@ -9,7 +9,7 @@ if (!tag) {
 
 const [, version] = tag.split("v");
 
-const { currentVersion, pkgDir } = await getPackageInfo();
+const { currentVersion } = await getPackageInfo();
 if (currentVersion !== version) {
   console.error(
     `Package version from tag "${version}" mismatches with current version "${currentVersion}"`,
@@ -17,7 +17,6 @@ if (currentVersion !== version) {
   process.exit(1);
 }
 
-step("Publishing package...");
 const releaseTag = version.includes("rc")
   ? "rc"
   : version.includes("beta")
@@ -25,4 +24,6 @@ const releaseTag = version.includes("rc")
     : version.includes("alpha")
       ? "alpha"
       : undefined;
-await publishPackage(pkgDir, releaseTag);
+
+// Log the release tag to be picked up by the next GitHub Actions step
+console.log(releaseTag);

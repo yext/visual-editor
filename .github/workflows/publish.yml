@@ -1,3 +1,4 @@
+# This file must be .github/workflows/publish.yml for Trusted Publishing
 name: Publish Package
 
 on:
@@ -6,7 +7,7 @@ on:
       - "*"
 
 permissions:
-  id-token: write
+  id-token: write # Required for OIDC
 
 jobs:
   publish:
@@ -15,27 +16,28 @@ jobs:
     environment: Release
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
       - name: Set node version to 20.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.x
           registry-url: https://registry.npmjs.org/
-          always-auth: true
           cache: "pnpm"
 
       - name: Install deps
         run: pnpm install --ignore-scripts --frozen-lockfile
 
       - name: Update npm
+        # npm version npm 11.5.1 or later needed for Trusted Publishing
         run: npm install -g npm@latest
 
-      # - name: Publish package
-      #   run: pnpm run ci-publish ${{ github.ref_name }}
+      - name: Verify package version and get npm tag
+        id: get_npm_tag
+        run: pnpm run ci-verify-publish ${{ github.ref_name }}
 
-      - name: Publish (temporary)
-        run: cd packages/visual-editor && npm publish --access public
+      - name: Publish
+        run: cd packages/visual-editor && pnpm publish --access public --tag ${{ steps.get_npm_tag.outputs.npm_tag }}
