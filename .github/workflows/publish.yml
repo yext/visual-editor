@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   publish:
-    # prevents this action from running on forks
     if: github.repository == 'yext/visual-editor'
     runs-on: ubuntu-latest
     environment: Release
@@ -31,6 +30,18 @@ jobs:
 
       - name: Install deps
         run: pnpm install --ignore-scripts --frozen-lockfile
+
+      # Debugging/logging section
+      - name: Debug npm auth + registry
+        run: |
+          echo "== npm whoami =="
+          npm whoami --registry=https://registry.npmjs.org/ || echo "❌ whoami failed"
+
+          echo "== npm registry =="
+          npm config get registry
+
+          echo "== npm access for current user =="
+          npm access ls-packages $(npm whoami) || echo "❌ access check failed"
 
       - name: Publish package
         run: pnpm run ci-publish ${{ github.ref_name }}
