@@ -25,7 +25,8 @@
     "./plugin": {
       "default": "./dist/plugin/plugin.js"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/style.css",
+    "./editor.css": "./dist/editor.css"
   },
   "scripts": {
     "build:components": "tsc && vite build",
