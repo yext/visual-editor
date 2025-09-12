@@ -19,6 +19,7 @@ import { heroVariants } from "./0017_hero_variants.ts";
 import { addDirectorySiteNameMigration } from "./0018_add_directory_site_name.ts";
 import { refactorContentBlocks } from "./0019_refactor_content_blocks.ts";
 import { updateFooterForAssetImages } from "./0020_footer_asset_images.ts";
+import { setOpenNowDefault } from "./0021_set_open_now_default.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -46,4 +47,5 @@ export const migrationRegistry: MigrationRegistry = [
   addDirectorySiteNameMigration,
   refactorContentBlocks,
   updateFooterForAssetImages,
+  setOpenNowDefault,
 ];

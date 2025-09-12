@@ -75,7 +75,7 @@ export interface LocatorProps {
    * If 'true', displays a button to filter for locations that are currently open.
    * @defaultValue false
    */
-  openNowButton?: boolean;
+  openNowButton: boolean;
 }
 
 const locatorFields: Fields<LocatorProps> = {
