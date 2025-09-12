@@ -75,7 +75,7 @@ export interface LocatorProps {
    * If 'true', displays a button to filter for locations that are currently open.
    * @defaultValue false
    */
-  openNowButton?: boolean;
+  openNowButton: boolean;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -125,6 +125,9 @@ const locatorFields: Fields<LocatorProps> = {
  */
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
+  defaultProps: {
+    openNowButton: false,
+  },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
 };
