@@ -34,17 +34,8 @@ jobs:
       - name: Update npm
         run: npm install -g npm@latest
 
-      # Debugging/logging section
-      - name: Debug npm auth + registry
-        run: |
-          echo "== npm whoami =="
-          npm whoami --registry=https://registry.npmjs.org/ || echo "❌ whoami failed"
+      # - name: Publish package
+      #   run: pnpm run ci-publish ${{ github.ref_name }}
 
-          echo "== npm registry =="
-          npm config get registry
-
-          echo "== npm access for current user =="
-          npm access ls-packages $(npm whoami) || echo "❌ access check failed"
-
-      - name: Publish package
-        run: pnpm run ci-publish ${{ github.ref_name }}
+      - name: Publish (temporary)
+        run: cd packages/visual-editor && npm publish --access public --tag v0.0.58
