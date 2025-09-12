@@ -40,4 +40,4 @@ jobs:
         run: pnpm run ci-verify-publish ${{ github.ref_name }}
 
       - name: Publish
-        run: cd packages/visual-editor && npm publish --access public --tag ${{ steps.get_npm_tag.outputs.npm_tag }}
+        run: cd packages/visual-editor && pnpm publish --access public --tag ${{ steps.get_npm_tag.outputs.npm_tag }}
