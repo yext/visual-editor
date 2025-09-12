@@ -38,4 +38,4 @@ jobs:
       #   run: pnpm run ci-publish ${{ github.ref_name }}
 
       - name: Publish (temporary)
-        run: cd packages/visual-editor && npm publish --access public --tag v0.0.58
+        run: cd packages/visual-editor && npm publish --access public
