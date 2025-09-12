@@ -37,14 +37,8 @@ const TextListComponent: React.FC<TextListProps> = ({
     streamDocument
   );
 
-  // When constantValueEnabled is true but no constant values have been set yet, show defaults
-  if (
-    textListField.constantValueEnabled &&
-    !textListField.constantValue?.length
-  ) {
-    resolvedTextList = ["Sample text 1", "Sample text 2", "Sample text 3"];
-  } else if (resolvedTextList && !Array.isArray(resolvedTextList)) {
-    // If there's a value but it's not an array, convert it to array
+  // If there's a value but it's not an array, convert it to array
+  if (resolvedTextList && !Array.isArray(resolvedTextList)) {
     resolvedTextList = [resolvedTextList];
   }
 
