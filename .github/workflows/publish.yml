@@ -5,6 +5,9 @@ on:
     tags:
       - "*"
 
+permissions:
+  id-token: write
+
 jobs:
   publish:
     # prevents this action from running on forks
@@ -27,9 +30,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install deps
-        run: pnpm install
+        run: pnpm install --ignore-scripts --frozen-lockfile
 
       - name: Publish package
         run: pnpm run ci-publish ${{ github.ref_name }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_PUBLIC }}
