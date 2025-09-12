@@ -20,16 +20,19 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
 
-      - name: Set node version to 18.x
+      - name: Set node version to 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 20.x
           registry-url: https://registry.npmjs.org/
           always-auth: true
           cache: "pnpm"
 
       - name: Install deps
         run: pnpm install --ignore-scripts --frozen-lockfile
+
+      - name: Update npm
+        run: npm install -g npm@latest
 
       # Debugging/logging section
       - name: Debug npm auth + registry
