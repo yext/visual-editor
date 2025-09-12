@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: 18.x
           registry-url: https://registry.npmjs.org/
+          always-auth: true
           cache: "pnpm"
 
       - name: Install deps
