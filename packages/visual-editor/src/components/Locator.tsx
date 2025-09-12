@@ -125,6 +125,9 @@ const locatorFields: Fields<LocatorProps> = {
  */
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
+  defaultProps: {
+    openNowButton: false,
+  },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
 };
