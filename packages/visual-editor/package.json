@@ -4,6 +4,10 @@
   "version": "0.0.58",
   "type": "module",
   "author": "sumo@yext.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yext/visual-editor.git"
+  },
   "types": "dist/index.d.ts",
   "main": "dist/visual-editor.cjs",
   "module": "dist/visual-editor.js",
