@@ -1,3 +1,4 @@
+import "./hours.css";
 import { HoursTable, HoursTableProps } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { themeManagerCn } from "@yext/visual-editor";
