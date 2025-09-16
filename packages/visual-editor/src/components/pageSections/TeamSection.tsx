@@ -200,15 +200,7 @@ const PersonCard = ({
       >
         <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
           {person.headshot && (
-            <Image
-              image={person.headshot}
-              aspectRatio={
-                person.headshot.width && person.headshot.height
-                  ? person.headshot.width / person.headshot.height
-                  : 1
-              }
-              sizes="80px"
-            />
+            <Image image={person.headshot} aspectRatio={1} sizes="80px" />
           )}
         </div>
         <div className="flex flex-col justify-center gap-1">
