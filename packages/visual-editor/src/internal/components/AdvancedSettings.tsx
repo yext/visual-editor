@@ -8,13 +8,11 @@ export interface AdvancedSettingsProps {
    */
   data: {
     /**
-     * JSON-LD schema markup for SEO and structured data.
      * @defaultValue ""
      */
     schemaMarkup: string;
   };
   /**
-   * Whether the component is visible on the live page.
    * @defaultValue true
    */
   liveVisibility?: boolean;
@@ -49,17 +47,13 @@ export const AdvancedSettings: ComponentConfig<{
     liveVisibility: true,
   },
   render: (props) => {
-    // This component doesn't render anything visible on the page
-    // It's only used for configuration in the editor
     return (
       <VisibilityWrapper
         liveVisibility={props.liveVisibility ?? true}
         isEditing={props.puck.isEditing}
         iconSize="md"
       >
-        <div style={{ display: "none" }}>
-          {/* Schema markup editor - hidden from page but used for configuration */}
-        </div>
+        <div style={{ display: "none" }}>{/* Schema markup editor */}</div>
       </VisibilityWrapper>
     );
   },

@@ -161,13 +161,11 @@ export const InternalLayoutEditor = ({
       }
     );
 
-    // Add the Advanced Settings component back
     translatedComponents["AdvancedSettings"] = {
       ...AdvancedSettings,
       label: pt("advancedSettings", "Advanced Settings"),
     };
 
-    // Add a PageSettings component that will act as parent for breadcrumbs
     translatedComponents["PageSettings"] = {
       label: pt("page", "Page"),
       fields: {},
@@ -196,7 +194,6 @@ export const InternalLayoutEditor = ({
             },
           }),
           ...puckConfig.root?.fields,
-          // Add advanced settings link as a custom field
           __advancedSettingsLink: {
             type: "custom",
             render: () => {
@@ -215,14 +212,10 @@ export const InternalLayoutEditor = ({
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      console.log("Advanced Settings link clicked");
-
                       const { appState, dispatch } = getPuck();
 
-                      // Create a proper component hierarchy for breadcrumbs
                       const advancedSettingsId = `AdvancedSettings-${Date.now()}`;
 
-                      // Create a parent component that will show "Page" in breadcrumb
                       const parentComponent = {
                         type: "PageSettings",
                         props: {
@@ -231,7 +224,6 @@ export const InternalLayoutEditor = ({
                         },
                       };
 
-                      // Create the AdvancedSettings component as a child
                       const advancedSettingsComponent = {
                         type: "AdvancedSettings",
                         props: {
@@ -240,7 +232,6 @@ export const InternalLayoutEditor = ({
                         },
                       };
 
-                      // Add both components to the content
                       const newData = {
                         ...appState.data,
                         content: [
@@ -248,7 +239,6 @@ export const InternalLayoutEditor = ({
                           parentComponent,
                           advancedSettingsComponent,
                         ],
-                        // Create a zone for the AdvancedSettings under the parent
                         zones: {
                           ...appState.data.zones,
                           [`${parentComponent.props.id}:advanced`]: [
@@ -259,7 +249,6 @@ export const InternalLayoutEditor = ({
 
                       dispatch({ type: "setData", data: newData });
 
-                      // Select the AdvancedSettings component
                       setTimeout(() => {
                         dispatch({
                           type: "setUi",
@@ -309,10 +298,8 @@ export const InternalLayoutEditor = ({
     } as Config;
   }, [puckConfig, i18n.language]);
 
-  // Set up the translation effect
   React.useEffect(() => {
     const translatePuckSidebars = () => {
-      // Translate the static left sidebar titles
       const leftSideBarTitles = document.querySelectorAll<HTMLElement>(
         "[class*='PuckLayout-leftSideBar'] h2[class*='_Heading']"
       );
@@ -326,7 +313,6 @@ export const InternalLayoutEditor = ({
         leftSideBarTitles[1].innerText = pt("outline", "Outline");
       }
 
-      // Translate the component category labels
       const componentCategoryTitles = document.querySelectorAll<HTMLElement>(
         "button[class*='ComponentList-title'] > div"
       );
@@ -340,7 +326,6 @@ export const InternalLayoutEditor = ({
         });
       }
 
-      // Handle dynamic translation of right sidebar
       const rightSidebar = document.querySelector(
         "[class*='PuckLayout-rightSideBar']"
       );
@@ -349,7 +334,6 @@ export const InternalLayoutEditor = ({
       }
 
       const observer = new MutationObserver(() => {
-        // Translate main heading
         const fieldListSingleTitle = document.querySelector<HTMLElement>(
           "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-heading']:first-child > h2"
         );
@@ -368,7 +352,6 @@ export const InternalLayoutEditor = ({
           }
         }
 
-        // Translate any existing Puck breadcrumb button text
         const breadcrumbButton = document.querySelector<HTMLElement>(
           "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-breadcrumb'] button"
         );
@@ -382,7 +365,6 @@ export const InternalLayoutEditor = ({
               "Advanced Settings"
             );
           } else if (buttonText.includes(" > ")) {
-            // Handle breadcrumb chains like "Page > Advanced Settings"
             const parts = buttonText.split(" > ");
             const translatedParts = parts.map((part) => {
               if (part.trim() === "Page") {
@@ -395,8 +377,6 @@ export const InternalLayoutEditor = ({
             breadcrumbButton.innerText = translatedParts.join(" > ");
           }
         }
-
-        // Puck's native breadcrumb system will handle the breadcrumbs automatically
       });
 
       observer.observe(rightSidebar, {
@@ -424,7 +404,6 @@ export const InternalLayoutEditor = ({
             const getPuck = useGetPuck();
             const { appState } = getPuck();
 
-            // Check if AdvancedSettings component is selected in the proper hierarchy
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
               appState.ui.itemSelector.zone?.includes(":advanced") &&
@@ -515,14 +494,12 @@ export const InternalLayoutEditor = ({
             const getPuck = useGetPuck();
             const { appState } = getPuck();
 
-            // Check if AdvancedSettings component is selected - hide action bar
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
               appState.ui.itemSelector.zone?.includes(":advanced") &&
               appState.ui.itemSelector.zone !== "root";
 
             if (isAdvancedSettingsSelected) {
-              // Return empty element to hide the action bar for AdvancedSettings
               return <div style={{ display: "none" }} />;
             }
 
