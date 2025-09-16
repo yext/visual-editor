@@ -12,7 +12,7 @@ import {
   PageSection,
   YextField,
   VisibilityWrapper,
-  CTAProps,
+  CTAVariant,
   msg,
   resolveComponentData,
   YextStructEntityField,
@@ -62,7 +62,7 @@ export interface PromoStyles {
    * The visual style variant for the call-to-action button.
    * @defaultValue 'primary'
    */
-  ctaVariant: CTAProps["variant"];
+  ctaVariant: CTAVariant;
 
   /** Styling for the promo's title. */
   heading: {

@@ -51,11 +51,23 @@ const devLogger = new DevLogger();
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
+/** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
+  /** The api name of the Yext field */
   field: string;
+  /** The static value of the field */
   constantValue: T;
+  /** Whether to use the Yext field or the constant value */
   constantValueEnabled?: boolean;
+  /**
+   * Whether the field can be translated or not.
+   * @ai always omit this property
+   */
   disallowTranslation?: boolean;
+  /**
+   * Filter the embedded field input to this type.
+   * @ai always omit this property
+   */
   selectedType?: string;
 };
 
