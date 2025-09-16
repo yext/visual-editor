@@ -210,7 +210,7 @@ const EventCard = ({
                   : 1.78
               }
               sizes={imgSizesHelper({
-                base: "50px",
+                base: "100vw",
                 lg: "calc(maxWidth * 0.45)",
               })}
             />

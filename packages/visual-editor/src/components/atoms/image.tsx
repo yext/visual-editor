@@ -133,9 +133,10 @@ export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
           ?.replace("!important", "");
       }
     } else if (streamDocument?.__?.theme) {
-      maxWidth = JSON.parse(streamDocument.__.theme)?.[
-        "--maxWidth-pageSection-contentWidth"
-      ];
+      maxWidth =
+        JSON.parse(streamDocument.__.theme)?.[
+          "--maxWidth-pageSection-contentWidth"
+        ] ?? "1024px";
     }
   } catch {
     // use fallback max width
