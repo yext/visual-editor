@@ -514,6 +514,18 @@ export const InternalLayoutEditor = ({
           },
           actionBar: ({ children, label }) => {
             const getPuck = useGetPuck();
+            const { appState } = getPuck();
+
+            // Check if AdvancedSettings component is selected - hide action bar
+            const isAdvancedSettingsSelected =
+              appState?.ui?.itemSelector &&
+              appState.ui.itemSelector.zone?.includes(":advanced") &&
+              appState.ui.itemSelector.zone !== "root";
+
+            if (isAdvancedSettingsSelected) {
+              // Return empty element to hide the action bar for AdvancedSettings
+              return <div style={{ display: "none" }} />;
+            }
 
             const copyToClipboard = () => {
               const { appState, getItemBySelector } = getPuck();
