@@ -142,28 +142,33 @@ export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
     // use fallback max width
   }
 
-  const finalSizes = Object.fromEntries(
+  const updatedBreakpointSizes = Object.fromEntries(
     Object.entries(sizes).map(([key, value]) => [
       key,
       value.replace("maxWidth", maxWidth || "1440px"),
     ])
   );
 
-  let s = finalSizes.base;
-  if (finalSizes.sm) {
-    s = `(min-width: 640px) ${finalSizes.sm}, ` + s;
+  let sizesString = updatedBreakpointSizes.base;
+  if (updatedBreakpointSizes.sm) {
+    sizesString =
+      `(min-width: 640px) ${updatedBreakpointSizes.sm}, ` + sizesString;
   }
-  if (finalSizes.md) {
-    s = `(min-width: 768px) ${finalSizes.md}, ` + s;
+  if (updatedBreakpointSizes.md) {
+    sizesString =
+      `(min-width: 768px) ${updatedBreakpointSizes.md}, ` + sizesString;
   }
-  if (finalSizes.lg) {
-    s = `(min-width: 1024px) ${finalSizes.lg}, ` + s;
+  if (updatedBreakpointSizes.lg) {
+    sizesString =
+      `(min-width: 1024px) ${updatedBreakpointSizes.lg}, ` + sizesString;
   }
-  if (finalSizes.xl) {
-    s = `(min-width: 1280px) ${finalSizes.xl}, ` + s;
+  if (updatedBreakpointSizes.xl) {
+    sizesString =
+      `(min-width: 1280px) ${updatedBreakpointSizes.xl}, ` + sizesString;
   }
-  if (finalSizes["2xl"]) {
-    s = `(min-width: 1536px) ${finalSizes["2xl"]}, ` + s;
+  if (updatedBreakpointSizes["2xl"]) {
+    sizesString =
+      `(min-width: 1536px) ${updatedBreakpointSizes["2xl"]}, ` + sizesString;
   }
-  return s;
+  return sizesString;
 };
