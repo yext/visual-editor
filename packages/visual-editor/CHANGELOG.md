@@ -1,3 +1,38 @@
+#### 0.0.58 (2025-09-12)
+
+##### Chores
+
+- move ve.config to package ([#756](https://github.com/yext/visual-editor/pull/756)) ([c2a34cc5](https://github.com/yext/visual-editor/commit/c2a34cc50cdeb8e4c68bc47dff44e7fca999714a))
+
+##### Continuous Integration
+
+- swap to public npm token ([e50af91a](https://github.com/yext/visual-editor/commit/e50af91a16a0d101de4f7693a7910f7ec8cd384b))
+- swap to global npm token ([#761](https://github.com/yext/visual-editor/pull/761)) ([8f892e87](https://github.com/yext/visual-editor/commit/8f892e87ed5436374129d3ec05ec355bdb1cc3d0))
+
+##### New Features
+
+- handle embedded fields in html component ([#758](https://github.com/yext/visual-editor/pull/758)) ([722473b3](https://github.com/yext/visual-editor/commit/722473b377af1e5fbf4495e6640732d72d724029))
+
+##### Bug Fixes
+
+- dark brand colors in RTF ([#760](https://github.com/yext/visual-editor/pull/760)) ([0a0f3ed6](https://github.com/yext/visual-editor/commit/0a0f3ed65879173c5efc7ddcaa07185f031382a1))
+- locator no results mobile width ([#757](https://github.com/yext/visual-editor/pull/757)) ([4734b6b1](https://github.com/yext/visual-editor/commit/4734b6b172d27fe903ccfd4b32053b59afea7cd3))
+- resolve undefined 'state' error ([#755](https://github.com/yext/visual-editor/pull/755)) ([db52b5c8](https://github.com/yext/visual-editor/commit/db52b5c85d9d432506b0a0fd33acf9f0285ca549))
+
+##### Other Changes
+
+- v0.0.58 ([a83e4d23](https://github.com/yext/visual-editor/commit/a83e4d23285612c91518a604b42cc345a6292287))
+- v0.0.58 ([2e1acfe8](https://github.com/yext/visual-editor/commit/2e1acfe86f96f2494914d46df0c08187e0491e18))
+- v0.0.58 ([c88aaaa6](https://github.com/yext/visual-editor/commit/c88aaaa6299ecef7110a299d6bfb175865e79305))
+- v0.0.58 ([409545a4](https://github.com/yext/visual-editor/commit/409545a4f074aea0a052a9a995f30967a47d38c1))
+- v0.0.58 ([aff58b96](https://github.com/yext/visual-editor/commit/aff58b96984bab2ca607556bd8084177cbe21e55))
+- v0.0.58 ([5161276a](https://github.com/yext/visual-editor/commit/5161276a6ab98e2c2f5e1b7a373e9c828dcdae45))
+- v0.0.58 ([275081f6](https://github.com/yext/visual-editor/commit/275081f6de29fe70976d225c7184a53f61f14ac7))
+- v0.0.58" ([fe55aa26](https://github.com/yext/visual-editor/commit/fe55aa26823287ab34a9650287d2d63a8e63a21c))
+- v0.0.58 ([b02dedac](https://github.com/yext/visual-editor/commit/b02dedac7455d558486981c6dc87cc1fd84ff3ca))
+- v0.0.58" ([ba09b6b4](https://github.com/yext/visual-editor/commit/ba09b6b40e620cc551d0b9b1a3cc635a22a711b1))
+- v0.0.58 ([bd21958b](https://github.com/yext/visual-editor/commit/bd21958bf180f6664aa5309f2bfc804fd20e32ba))
+
 #### 0.0.57 (2025-09-04)
 
 ##### Chores

@@ -8,22 +8,6 @@
     Inter, "SF Pro", "Helvetica Neue", Helvetica, sans-serif !important;
 }
 
-.is-today {
-  font-weight: 700;
-}
-
-.HoursTable-row {
-  display: flex;
-  justify-content: space-between;
-  width: 18rem;
-}
-
-.components .HoursTable-intervals {
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-}
-
 /* Custom styling for entity field selection in the Puck sidebar. */
 .entityField {
   margin-top: 5px;

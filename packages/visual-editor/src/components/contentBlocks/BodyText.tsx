@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
-  Body,
   BodyProps,
   useDocument,
   resolveComponentData,
@@ -59,12 +58,12 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
-        <Body
+        <div
           ref={ref}
-          className={`rtf-theme ${background?.textColor == "text-white" ? "rtf-dark-background" : "rtf-light-background"} rtf-body-${styles.variant}`}
+          className={`rtf-theme ${background?.isDarkBackground ? "rtf-dark-background" : "rtf-light-background"} ${styles.variant !== "base" && `rtf-body-${styles.variant}`}`}
         >
           {resolveComponentData(data.text, i18n.language, streamDocument)}
-        </Body>
+        </div>
       </EntityField>
     );
   }
