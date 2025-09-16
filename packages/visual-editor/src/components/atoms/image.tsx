@@ -101,17 +101,17 @@ type ImgSizesByBreakpoint = {
 };
 
 /**
- * Creates a img sizes attribute based on the default Tailwind breakpoints.
+ * Creates an img sizes attribute based on the default Tailwind breakpoints.
  * Replaces `maxWidth` with the current page section max width from the theme.
  * @param sizes - the width of the image at different breakpoints
  * @returns a string for the sizes attribute of an img tag
  */
 export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
-  const { streamDocument } = useDocument();
+  const streamDocument = useDocument();
 
   let maxWidth = undefined;
 
-  // Get the page section max with from the CSS variables (editor)
+  // Get the page section max width from the CSS variables (editor)
   // or the published theme (live page)
   try {
     if (
