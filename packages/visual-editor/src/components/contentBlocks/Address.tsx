@@ -25,7 +25,7 @@ export interface AddressProps {
     address: YextEntityField<AddressType>;
   };
   styles: {
-    /** Whether to included a "Get Directions" CTA to Google Maps */
+    /** Whether to include a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
