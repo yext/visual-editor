@@ -206,7 +206,6 @@ export const InternalLayoutEditor = ({
                 <div
                   style={{
                     padding: "16px",
-                    borderTop: "1px solid #e5e7eb",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
