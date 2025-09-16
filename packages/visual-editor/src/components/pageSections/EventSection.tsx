@@ -25,7 +25,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
-  CTAProps,
+  CTAVariant,
   resolveComponentData,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -54,15 +54,20 @@ export interface EventStyles {
 
   /** Styling for the heading. */
   heading: {
+    /** The h tag level of the section heading */
     level: HeadingLevel;
+    /** Alignment of the event section heading */
     align: "left" | "center" | "right";
   };
 
   /** Styling for all the cards. */
   cards: {
+    /** The h tag level of each event card's title */
     headingLevel: HeadingLevel;
+    /** The background color of each event card */
     backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAProps["variant"];
+    /** The CTA variant to use in each event card */
+    ctaVariant: CTAVariant;
   };
 }
 
@@ -189,7 +194,7 @@ const EventCard = ({
   event: EventStruct;
   cardStyles: EventSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
-  ctaVariant: CTAProps["variant"];
+  ctaVariant: CTAVariant;
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();

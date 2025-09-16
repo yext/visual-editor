@@ -52,21 +52,29 @@ import {
 export interface CoreInfoData {
   /** Content for the "Information" column. */
   info: {
+    /** The heading at the top of the left column */
     headingText: YextEntityField<TranslatableString>;
+    /** The address of the entity */
     address: YextEntityField<AddressType>;
+    /** The phone number for the entity */
     phoneNumbers: Array<PhoneProps["data"]>;
+    /** Emails associated with the entity */
     emails: YextEntityField<string[]>;
   };
 
   /** Content for the "Hours" column. */
   hours: {
+    /** The heading at the top of the middle column */
     headingText: YextEntityField<TranslatableString>;
+    /** The hours for the entity */
     hours: YextEntityField<HoursType>;
   };
 
   /** Content for the "Services" column. */
   services: {
+    /** The heading at the top of the right column */
     headingText: YextEntityField<TranslatableString>;
+    /** A text list, often of services the entity provides */
     servicesList: YextEntityField<TranslatableString[]>;
   };
 }

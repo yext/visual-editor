@@ -12,7 +12,7 @@ import {
   msg,
   YextField,
   BackgroundStyle,
-  CTAProps,
+  CTAVariant,
   TranslatableCTA,
   pt,
   PageSection,
@@ -69,18 +69,27 @@ export const headerWrapper = cva("flex flex-col", {
 export interface ExpandedHeaderData {
   /** Content for the main primary header bar. */
   primaryHeader: {
+    /** The main logo (top left) */
     logo: AssetImageType;
+    /** The links to display in the primary header */
     links: TranslatableCTA[];
+    /** Content for the first CTA (top right) */
     primaryCTA?: TranslatableCTA;
+    /** Whether to show or hide the primary CTA */
     showPrimaryCTA: boolean;
+    /** Content for the second CTA (top right) */
     secondaryCTA?: TranslatableCTA;
+    /** Whether to show or hide the secondary CTA */
     showSecondaryCTA: boolean;
   };
 
-  /** Content for the secondary header (top bar). */
+  /** Content for the secondary header (above the main header). */
   secondaryHeader: {
+    /** Whether to show or hide the secondary header */
     show: boolean;
+    /** Whether to include the locale dropdown for multi-locale pages */
     showLanguageDropdown: boolean;
+    /** The links to display in the secondary header */
     secondaryLinks: TranslatableCTA[];
   };
 }
@@ -90,8 +99,8 @@ export interface ExpandedHeaderStyles {
   primaryHeader: {
     logo: ImageStylingProps;
     backgroundColor?: BackgroundStyle;
-    primaryCtaVariant: CTAProps["variant"];
-    secondaryCtaVariant: CTAProps["variant"];
+    primaryCtaVariant: CTAVariant;
+    secondaryCtaVariant: CTAVariant;
   };
   /** Styling for the secondary header (top bar). */
   secondaryHeader: {
@@ -733,8 +742,8 @@ const HeaderLogo = (props: {
 const HeaderCtas = (props: {
   primaryCTA?: TranslatableCTA;
   secondaryCTA?: TranslatableCTA;
-  primaryVariant: CTAProps["variant"];
-  secondaryVariant: CTAProps["variant"];
+  primaryVariant: CTAVariant;
+  secondaryVariant: CTAVariant;
   showPrimaryCTA: boolean;
   showSecondaryCTA: boolean;
 }) => {
