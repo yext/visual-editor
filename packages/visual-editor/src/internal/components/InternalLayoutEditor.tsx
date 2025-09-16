@@ -61,7 +61,7 @@ export const InternalLayoutEditor = ({
   localDev,
   metadata,
 }: InternalLayoutEditorProps) => {
-  const [canEdit, setCanEdit] = useState<boolean>(false);
+  const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     useState<boolean>(false);
   const historyIndex = useRef<number>(0);
@@ -396,7 +396,7 @@ export const InternalLayoutEditor = ({
     <EntityTooltipsProvider>
       <Puck
         config={translatedPuckConfigWithRootFields}
-        data={{}}
+        data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
         overrides={{
@@ -549,6 +549,7 @@ export const InternalLayoutEditor = ({
                   return;
                 }
 
+                // If the pasted data has children, we need to generate new ids for them
                 const newData = walkTree(pastedData, puckConfig, (contents) =>
                   contents.map((item: ComponentDataOptionalId) => {
                     const id = `${item.type}-${uuidv4()}`;
@@ -558,6 +559,7 @@ export const InternalLayoutEditor = ({
                     };
                   })
                 );
+                // preserve the selected component's id and type
                 newData.props.id = selectedComponent.props.id;
 
                 dispatch({
@@ -607,6 +609,8 @@ export const InternalLayoutEditor = ({
   );
 };
 
+// TranslatePuckFieldLabels recursively walks the React component tree
+// created by Puck fields and replaces labels with their translations.
 const TranslatePuckFieldLabels = ({
   children,
 }: {
@@ -634,6 +638,7 @@ const TranslatePuckFieldLabels = ({
           title: child.props.title ? pt(child.props.title) : undefined,
         };
 
+        // Radio and Select options need to be translated as well
         if (
           child.props.field?.type === "radio" ||
           child.props.field?.type === "select"
@@ -674,6 +679,8 @@ const TranslatePuckFieldLabels = ({
   return <>{React.Children.map(children, replaceText)}</>;
 };
 
+// Array fields are mostly handled by the children
+// field types but need an override for the array label.
 const TranslatePuckArrayFieldLabels = ({
   children,
 }: {
