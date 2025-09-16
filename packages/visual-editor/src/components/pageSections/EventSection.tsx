@@ -27,6 +27,7 @@ import {
   getAnalyticsScopeHash,
   CTAProps,
   resolveComponentData,
+  imgSizesHelper,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
@@ -208,6 +209,10 @@ const EventCard = ({
                   ? event.image.width / event.image.height
                   : 1.78
               }
+              sizes={imgSizesHelper({
+                base: "50px",
+                lg: "calc(maxWidth * 0.45)",
+              })}
             />
           </div>
         )}

@@ -207,6 +207,7 @@ const PersonCard = ({
                   ? person.headshot.width / person.headshot.height
                   : 1
               }
+              sizes="80px"
             />
           )}
         </div>

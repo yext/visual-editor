@@ -725,6 +725,7 @@ const HeaderLogo = (props: {
         aspectRatio={
           props.aspectRatio || props.logo.image.width / props.logo.image.height
         }
+        sizes={`${props.logoWidth}px`}
       />
     </figure>
   );

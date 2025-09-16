@@ -6,6 +6,7 @@ import {
   useDocument,
   themeManagerCn,
   resolveYextStructField,
+  imgSizesHelper,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
@@ -37,6 +38,13 @@ const ClassicHeroImage = ({
             aspectRatio={styles.image.aspectRatio}
             width={styles.image.width}
             className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
+            sizes={imgSizesHelper({
+              base: "100vw",
+              md: "350px",
+              lg: styles.image.width
+                ? `${styles.image.width}px`
+                : "calc(maxWidth / 2)",
+            })}
           />
         </EntityField>
       </div>

@@ -321,6 +321,7 @@ const PhotoGallerySectionComponent = ({
                               aspectRatio={image.aspectRatio}
                               width={image.width}
                               className="rounded-image-borderRadius"
+                              sizes={`min(${styles.image.width || 1000}px, calc(100vw - 6rem))`}
                             />
                           </div>
                         </Slide>
@@ -374,6 +375,7 @@ const PhotoGallerySectionComponent = ({
                             image={image.image}
                             aspectRatio={image.aspectRatio}
                             className="w-full h-auto object-contain"
+                            sizes={`${Math.min(image.width || 1000, 250)}px`}
                           />
                         </div>
                       </div>

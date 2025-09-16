@@ -24,6 +24,7 @@ import {
   CTAProps,
   resolveComponentData,
   CTA,
+  imgSizesHelper,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -200,6 +201,11 @@ const ProductCard = ({
           image={product.image}
           aspectRatio={1.778} // 16:9
           className="h-[200px]"
+          sizes={imgSizesHelper({
+            base: "100vw",
+            md: "calc(maxWidth / 2)",
+            lg: "calc(maxWidth / 3)",
+          })}
         />
       ) : (
         <div className="sm:h-[200px]" />

@@ -758,6 +758,7 @@ const FooterLogo = (props: {
             props.aspectRatio ||
             props.logo.image.width / props.logo.image.height
           }
+          sizes={`${props.logoWidth}px`}
         />
       </div>
     </MaybeLink>
