@@ -20,6 +20,7 @@
     "region": "Staat/regio",
     "sublocality": "Sublocaliteit"
   },
+  "advancedSettings": "Geavanceerde instellingen",
   "altText": "Alt -tekst",
   "applyAll": "Solliciteer op alle locaties",
   "applyAllWithLabel": "Pas {{fieldLabel}} toe op alle locaties",
@@ -113,6 +114,7 @@
     "warning": "Deze actie zal uw lokale wijzigingen verwijderen. Het kan niet ongedaan worden gemaakt."
   },
   "emailList": "E -maillijst",
+  "enterSchemaMarkup": "Voer schemamarkup in ...",
   "entityTypeField": "{{entityType}} veld",
   "event": "Evenement",
   "expandedHeaderDesktop": "Uitgebreide header bureaublad",
@@ -472,6 +474,7 @@
   "reopenDate": "Heropen datum",
   "responseFrom": "Reactie van {{businessName}}",
   "saturday": "Zaterdag",
+  "schemaMarkup": "Schema -aanmelding",
   "search": "Zoekopdracht",
   "searchDropdownHere": "Zoek de vervolgkeuzeveld",
   "searchHere": "Zoek hier ...",

@@ -20,6 +20,7 @@
     "region": "Valstybė/regionas",
     "sublocality": "Subkokalumas"
   },
+  "advancedSettings": "Išplėstiniai nustatymai",
   "altText": "Alt tekstas",
   "applyAll": "Kreipkitės į visas vietas",
   "applyAllWithLabel": "Taikyti {{fieldLabel}} visoms lokalams",
@@ -113,6 +114,7 @@
     "warning": "Šis veiksmas pašalins jūsų vietinius pakeitimus. To negalima panaikinti."
   },
   "emailList": "El. Pašto sąrašas",
+  "enterSchemaMarkup": "Įveskite schemos žymėjimą ...",
   "entityTypeField": "{{entityType}} laukas",
   "event": "Įvykis",
   "expandedHeaderDesktop": "Išplėstas antraštės darbalaukis",
@@ -472,6 +474,7 @@
   "reopenDate": "Atnaujinti datą",
   "responseFrom": "Atsakymas iš {{businessName}}",
   "saturday": "Šeštadienis",
+  "schemaMarkup": "Schemos žymėjimas",
   "search": "Ieškoti",
   "searchDropdownHere": "Paieškos išskleidžiamasis įvestis",
   "searchHere": "Ieškokite čia ...",

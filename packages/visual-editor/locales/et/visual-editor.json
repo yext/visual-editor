@@ -20,6 +20,7 @@
     "region": "Riik/piirkond",
     "sublocality": "Alategusus"
   },
+  "advancedSettings": "Täpsemad seaded",
   "altText": "Alt -tekst",
   "applyAll": "Kandideerige kõigisse paikadesse",
   "applyAllWithLabel": "Rakendage {{fieldLabel}} kõigisse paikadesse",
@@ -113,6 +114,7 @@
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
   "emailList": "E -posti nimekiri",
+  "enterSchemaMarkup": "Sisestage skeemi märgistus ...",
   "entityTypeField": "{{entitytype}} väli",
   "event": "Sündmus",
   "expandedHeaderDesktop": "Laiendatud päise töölaud",
@@ -472,6 +474,7 @@
   "reopenDate": "Taasavamine kuupäev",
   "responseFrom": "Vastus {{businessName}}",
   "saturday": "Laupäev",
+  "schemaMarkup": "Skeemi märgistus",
   "search": "Otsima",
   "searchDropdownHere": "Otsi rippseant",
   "searchHere": "Otsige siit ...",

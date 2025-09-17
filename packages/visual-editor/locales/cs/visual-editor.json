@@ -20,6 +20,7 @@
     "region": "Stát/region",
     "sublocality": "Sublokalita"
   },
+  "advancedSettings": "Pokročilá nastavení",
   "altText": "Alt text",
   "applyAll": "Aplikujte na všechna lokalita",
   "applyAllWithLabel": "Použít {{fieldLabel}} na všechna lokalita",
@@ -113,6 +114,7 @@
     "warning": "Tato akce odstraní vaše místní změny. Nelze to vrátit."
   },
   "emailList": "Seznam e -mailů",
+  "enterSchemaMarkup": "Zadejte značku schématu ...",
   "entityTypeField": "{{entityType}} pole",
   "event": "Událost",
   "expandedHeaderDesktop": "Rozšířená plocha záhlaví",
@@ -473,6 +475,7 @@
   "reopenDate": "Znovu otevřít datum",
   "responseFrom": "Odpověď od {{businessName}}",
   "saturday": "sobota",
+  "schemaMarkup": "Označení schématu",
   "search": "Vyhledávání",
   "searchDropdownHere": "Rozbalovací vstup pro vyhledávání",
   "searchHere": "Hledejte zde ...",

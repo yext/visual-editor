@@ -20,6 +20,7 @@
     "region": "Valtion/alue",
     "sublocality": "Sublocity"
   },
+  "advancedSettings": "Lisäasetukset",
   "altText": "Alt -teksti",
   "applyAll": "Sovelleta kaikkia alueita",
   "applyAllWithLabel": "Levitä {{fieldLabel}} kaikkiin alueisiin",
@@ -113,6 +114,7 @@
     "warning": "Tämä toiminto poistaa paikalliset muutokset. Sitä ei voida peruuttaa."
   },
   "emailList": "Sähköpostiluettelo",
+  "enterSchemaMarkup": "Kirjoita Schema -merkinnät ...",
   "entityTypeField": "{{entityType}}kenttä",
   "event": "Tapahtuma",
   "expandedHeaderDesktop": "Laajennettu otsikkopöytä",
@@ -472,6 +474,7 @@
   "reopenDate": "Avata päivämäärä uudelleen",
   "responseFrom": "Vastaus {{businessName}}}",
   "saturday": "Lauantai",
+  "schemaMarkup": "Kaavio",
   "search": "Haku",
   "searchDropdownHere": "Haku avattavasta tulosta",
   "searchHere": "Etsi täältä ...",

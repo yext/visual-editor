@@ -20,6 +20,7 @@
     "region": "州/地域",
     "sublocality": "サブロカリティ"
   },
+  "advancedSettings": "高度な設定",
   "altText": "altテキスト",
   "applyAll": "すべてのロケールに適用します",
   "applyAllWithLabel": "すべてのロケールに{{fieldLabel}}を適用します",
@@ -113,6 +114,7 @@
     "warning": "このアクションにより、地元の変更が削除されます。元に戻すことはできません。"
   },
   "emailList": "メーリングリスト",
+  "enterSchemaMarkup": "スキーママークアップを入力してください...",
   "entityTypeField": "{{entityType}}フィールド",
   "event": "イベント",
   "expandedHeaderDesktop": "ヘッダーデスクトップの拡張",
@@ -472,6 +474,7 @@
   "reopenDate": "日付を再開します",
   "responseFrom": "{{businessName}}からの応答",
   "saturday": "土曜日",
+  "schemaMarkup": "スキーママークアップ",
   "search": "検索",
   "searchDropdownHere": "ドロップダウン入力を検索します",
   "searchHere": "ここで検索してください...",

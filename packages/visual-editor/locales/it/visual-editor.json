@@ -20,6 +20,7 @@
     "region": "Stato/regione",
     "sublocality": "Sublocalità"
   },
+  "advancedSettings": "Impostazioni avanzate",
   "altText": "Alt text",
   "applyAll": "Applicare a tutti i locali",
   "applyAllWithLabel": "Applica {{fieldLabel}} a tutti i locali",
@@ -113,6 +114,7 @@
     "warning": "Questa azione rimuoverà le modifiche locali. Non può essere annullato."
   },
   "emailList": "Elenco e -mail",
+  "enterSchemaMarkup": "Immettere lo schema markup ...",
   "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
   "expandedHeaderDesktop": "Desktop di intestazione ampliato",
@@ -472,6 +474,7 @@
   "reopenDate": "Rinnova la data",
   "responseFrom": "Risposta da {{businessName}}",
   "saturday": "Sabato",
+  "schemaMarkup": "Markup dello schema",
   "search": "Ricerca",
   "searchDropdownHere": "Ricerca input a discesa",
   "searchHere": "Cerca qui ...",

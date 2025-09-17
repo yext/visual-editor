@@ -20,6 +20,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "advancedSettings": "Avancerede indstillinger",
   "altText": "Alt tekst",
   "applyAll": "Ansøg på alle lokaliteter",
   "applyAllWithLabel": "Anvend {{fieldLabel}} på alle lokaliteter",
@@ -113,6 +114,7 @@
     "warning": "Denne handling fjerner dine lokale ændringer. Det kan ikke fortrydes."
   },
   "emailList": "E -mail -liste",
+  "enterSchemaMarkup": "Indtast skema markering ...",
   "entityTypeField": "{{entityType}} felt",
   "event": "Tilfælde",
   "expandedHeaderDesktop": "Udvidet header Desktop",
@@ -472,6 +474,7 @@
   "reopenDate": "Genåbnet dato",
   "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",
+  "schemaMarkup": "Skema markering",
   "search": "Søge",
   "searchDropdownHere": "Søg rullelinjet",
   "searchHere": "Søg her ...",
