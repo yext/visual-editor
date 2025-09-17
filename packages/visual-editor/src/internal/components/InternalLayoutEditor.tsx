@@ -24,10 +24,88 @@ import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
-import { Link } from "@yext/pages-components";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
+import { cn } from "../../utils/cn.ts";
 
 const devLogger = new DevLogger();
+
+// Advanced Settings link configuration
+const createAdvancedSettingsLink = () => ({
+  type: "custom" as const,
+  render: () => {
+    const getPuck = useGetPuck();
+
+    return (
+      <div className="ve-p-4 ve-flex ve-justify-center ve-items-center">
+        <button
+          onClick={() => {
+            const { appState, dispatch } = getPuck();
+
+            // Create a proper component hierarchy for breadcrumbs
+            const advancedSettingsId = `AdvancedSettings-${Date.now()}`;
+
+            // Create a parent component that will show "Page" in breadcrumb
+            const parentComponent = {
+              type: "PageSettings",
+              props: {
+                id: `PageSettings-${Date.now()}`,
+                data: { title: "Page Settings" },
+              },
+            };
+
+            // Create the AdvancedSettings component as a child
+            const advancedSettingsComponent = {
+              type: "AdvancedSettings",
+              props: {
+                id: advancedSettingsId,
+                data: { schemaMarkup: "" },
+              },
+            };
+
+            // Add both components to the content
+            const newData = {
+              ...appState.data,
+              content: [
+                ...(appState.data.content || []),
+                parentComponent,
+                advancedSettingsComponent,
+              ],
+              // Create a zone for the AdvancedSettings under the parent
+              zones: {
+                ...appState.data.zones,
+                [`${parentComponent.props.id}:advanced`]: [
+                  advancedSettingsComponent,
+                ],
+              },
+            };
+
+            dispatch({ type: "setData", data: newData });
+
+            // Select the AdvancedSettings component
+            setTimeout(() => {
+              dispatch({
+                type: "setUi",
+                ui: {
+                  ...appState.ui,
+                  itemSelector: {
+                    zone: `${parentComponent.props.id}:advanced`,
+                    index: 0,
+                  },
+                  rightSideBarVisible: true,
+                },
+              });
+            }, 100);
+          }}
+          className={cn(
+            "ve-bg-none ve-border-none ve-text-blue-600 ve-no-underline ve-text-sm ve-font-medium ve-cursor-pointer ve-p-0"
+          )}
+        >
+          {pt("advancedSettings", "Advanced Settings")}
+        </button>
+      </div>
+    );
+  },
+});
 
 type InternalLayoutEditorProps = {
   puckConfig: Config;
@@ -172,7 +250,7 @@ export const InternalLayoutEditor = ({
       defaultProps: {
         data: { title: "Page Settings" },
       },
-      render: () => <div style={{ display: "none" }} />, // Hidden component
+      render: () => <></>,
     };
 
     return {
@@ -194,91 +272,7 @@ export const InternalLayoutEditor = ({
             },
           }),
           ...puckConfig.root?.fields,
-          __advancedSettingsLink: {
-            type: "custom",
-            render: () => {
-              const getPuck = useGetPuck();
-
-              return (
-                <div
-                  style={{
-                    padding: "16px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Link
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const { appState, dispatch } = getPuck();
-
-                      const advancedSettingsId = `AdvancedSettings-${Date.now()}`;
-
-                      const parentComponent = {
-                        type: "PageSettings",
-                        props: {
-                          id: `PageSettings-${Date.now()}`,
-                          data: { title: "Page Settings" },
-                        },
-                      };
-
-                      const advancedSettingsComponent = {
-                        type: "AdvancedSettings",
-                        props: {
-                          id: advancedSettingsId,
-                          data: { schemaMarkup: "" },
-                        },
-                      };
-
-                      const newData = {
-                        ...appState.data,
-                        content: [
-                          ...(appState.data.content || []),
-                          parentComponent,
-                          advancedSettingsComponent,
-                        ],
-                        zones: {
-                          ...appState.data.zones,
-                          [`${parentComponent.props.id}:advanced`]: [
-                            advancedSettingsComponent,
-                          ],
-                        },
-                      };
-
-                      dispatch({ type: "setData", data: newData });
-
-                      setTimeout(() => {
-                        dispatch({
-                          type: "setUi",
-                          ui: {
-                            ...appState.ui,
-                            itemSelector: {
-                              zone: `${parentComponent.props.id}:advanced`,
-                              index: 0,
-                            },
-                            rightSideBarVisible: true,
-                          },
-                        });
-                        console.log(
-                          "Advanced Settings created with proper hierarchy"
-                        );
-                      }, 100);
-                    }}
-                    style={{
-                      color: "#3b82f6",
-                      textDecoration: "none",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                    }}
-                  >
-                    {pt("advancedSettings", "Advanced Settings")}
-                  </Link>
-                </div>
-              );
-            },
-          },
+          __advancedSettingsLink: createAdvancedSettingsLink(),
         },
         defaultProps: {
           title: {
@@ -298,100 +292,6 @@ export const InternalLayoutEditor = ({
     } as Config;
   }, [puckConfig, i18n.language]);
 
-  React.useEffect(() => {
-    const translatePuckSidebars = () => {
-      const leftSideBarTitles = document.querySelectorAll<HTMLElement>(
-        "[class*='PuckLayout-leftSideBar'] h2[class*='_Heading']"
-      );
-      if (leftSideBarTitles[0]) {
-        leftSideBarTitles[0].innerText = pt(
-          "components.components",
-          "Components"
-        );
-      }
-      if (leftSideBarTitles[1]) {
-        leftSideBarTitles[1].innerText = pt("outline", "Outline");
-      }
-
-      const componentCategoryTitles = document.querySelectorAll<HTMLElement>(
-        "button[class*='ComponentList-title'] > div"
-      );
-      if (componentCategoryTitles?.length) {
-        componentCategoryTitles.forEach((title) => {
-          if (title.innerText === "PAGE SECTIONS") {
-            title.innerText = pt("categories.pageSections", "PAGE SECTIONS");
-          } else if (title.innerText === "OTHER") {
-            title.innerText = pt("categories.other", "OTHER");
-          }
-        });
-      }
-
-      const rightSidebar = document.querySelector(
-        "[class*='PuckLayout-rightSideBar']"
-      );
-      if (!rightSidebar) {
-        return;
-      }
-
-      const observer = new MutationObserver(() => {
-        const fieldListSingleTitle = document.querySelector<HTMLElement>(
-          "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-heading']:first-child > h2"
-        );
-        if (fieldListSingleTitle) {
-          const currentText = fieldListSingleTitle.innerText;
-          if (currentText === "Page" && currentText !== pt("page", "Page")) {
-            fieldListSingleTitle.innerText = pt("page", "Page");
-          } else if (
-            currentText === "Advanced Settings" &&
-            currentText !== pt("advancedSettings", "Advanced Settings")
-          ) {
-            fieldListSingleTitle.innerText = pt(
-              "advancedSettings",
-              "Advanced Settings"
-            );
-          }
-        }
-
-        const breadcrumbButton = document.querySelector<HTMLElement>(
-          "[class*='PuckLayout-rightSideBar'] div[class*='_SidebarSection-breadcrumb'] button"
-        );
-        if (breadcrumbButton) {
-          const buttonText = breadcrumbButton.innerText.trim();
-          if (buttonText === "Page") {
-            breadcrumbButton.innerText = pt("page", "Page");
-          } else if (buttonText === "Advanced Settings") {
-            breadcrumbButton.innerText = pt(
-              "advancedSettings",
-              "Advanced Settings"
-            );
-          } else if (buttonText.includes(" > ")) {
-            const parts = buttonText.split(" > ");
-            const translatedParts = parts.map((part) => {
-              if (part.trim() === "Page") {
-                return pt("page", "Page");
-              } else if (part.trim() === "Advanced Settings") {
-                return pt("advancedSettings", "Advanced Settings");
-              }
-              return part;
-            });
-            breadcrumbButton.innerText = translatedParts.join(" > ");
-          }
-        }
-      });
-
-      observer.observe(rightSidebar, {
-        childList: true,
-        subtree: true,
-      });
-
-      return () => {
-        observer.disconnect();
-      };
-    };
-
-    return translatePuckSidebars();
-  }, [i18n.language]);
-
   return (
     <EntityTooltipsProvider>
       <Puck
@@ -409,46 +309,19 @@ export const InternalLayoutEditor = ({
               appState.ui.itemSelector.zone?.includes(":advanced") &&
               appState.ui.itemSelector.zone !== "root";
 
-            console.log(
-              "Fields override - isAdvancedSettingsSelected:",
-              isAdvancedSettingsSelected
-            );
-            console.log(
-              "Fields override - current selection:",
-              appState?.ui?.itemSelector
-            );
-            console.log(
-              "Fields override - selected component:",
-              appState?.ui?.itemSelector
-                ? appState.data.content?.[appState.ui.itemSelector.index]
-                : null
-            );
-
             if (isAdvancedSettingsSelected) {
-              console.log("Rendering Advanced Settings fields");
               return (
-                <div style={{ padding: "16px" }}>
-                  <div style={{ marginBottom: "16px" }}>
-                    <label
-                      style={{
-                        display: "block",
-                        marginBottom: "8px",
-                        fontWeight: "500",
-                      }}
-                    >
+                <div className="ve-p-4">
+                  <div className="ve-mb-4">
+                    <label className="ve-block ve-mb-2 ve-font-medium">
                       {pt("schemaMarkup", "Schema Markup")}
                     </label>
                     <textarea
-                      style={{
-                        width: "100%",
-                        minHeight: "120px",
-                        padding: "8px",
-                        border: "1px solid #d1d5db",
-                        borderRadius: "4px",
-                        fontSize: "14px",
-                        fontFamily: "monospace",
-                      }}
-                      placeholder="Enter JSON-LD schema markup..."
+                      className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
+                      placeholder={pt(
+                        "enterSchemaMarkup",
+                        "Enter schema markup..."
+                      )}
                     />
                   </div>
                 </div>
@@ -456,14 +329,8 @@ export const InternalLayoutEditor = ({
             }
 
             return (
-              <div
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <div style={{ flex: 1, overflow: "auto" }}>{children}</div>
+              <div className="ve-h-full ve-flex ve-flex-col">
+                <div className="ve-flex-1 ve-overflow-auto">{children}</div>
               </div>
             );
           },
@@ -500,7 +367,7 @@ export const InternalLayoutEditor = ({
               appState.ui.itemSelector.zone !== "root";
 
             if (isAdvancedSettingsSelected) {
-              return <div style={{ display: "none" }} />;
+              return <></>;
             }
 
             const copyToClipboard = () => {

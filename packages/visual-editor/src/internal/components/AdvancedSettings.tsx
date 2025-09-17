@@ -1,5 +1,5 @@
 import { ComponentConfig, Fields } from "@measured/puck";
-import { pt, VisibilityWrapper } from "@yext/visual-editor";
+import { msg } from "@yext/visual-editor";
 import React from "react";
 
 export interface AdvancedSettingsProps {
@@ -12,10 +12,6 @@ export interface AdvancedSettingsProps {
      */
     schemaMarkup: string;
   };
-  /**
-   * @defaultValue true
-   */
-  liveVisibility?: boolean;
 }
 
 const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
@@ -24,7 +20,7 @@ const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
     objectFields: {
       schemaMarkup: {
         type: "textarea",
-        label: pt("schemaMarkup", "Schema Markup"),
+        label: msg("schemaMarkup", "Schema Markup"),
       },
     },
   },
@@ -38,23 +34,14 @@ const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
 export const AdvancedSettings: ComponentConfig<{
   props: AdvancedSettingsProps;
 }> = {
-  label: pt("advancedSettings", "Advanced Settings"),
+  label: msg("advancedSettings", "Advanced Settings"),
   fields: advancedSettingsFields,
   defaultProps: {
     data: {
       schemaMarkup: "",
     },
-    liveVisibility: true,
   },
-  render: (props) => {
-    return (
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility ?? true}
-        isEditing={props.puck.isEditing}
-        iconSize="md"
-      >
-        <div style={{ display: "none" }}>{/* Schema markup editor */}</div>
-      </VisibilityWrapper>
-    );
+  render: () => {
+    return <></>;
   },
 };
