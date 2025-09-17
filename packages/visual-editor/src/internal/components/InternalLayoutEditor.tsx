@@ -42,13 +42,14 @@ const createAdvancedSettingsLink = () => ({
             const { appState, dispatch } = getPuck();
 
             // Create a proper component hierarchy for breadcrumbs
-            const advancedSettingsId = `AdvancedSettings-${Date.now()}`;
+            const advancedSettingsId = "AdvancedSettings";
+            const pageSettingsId = "PageSettings";
 
             // Create a parent component that will show "Page" in breadcrumb
             const parentComponent = {
               type: "PageSettings",
               props: {
-                id: `PageSettings-${Date.now()}`,
+                id: pageSettingsId,
                 data: { title: "Page Settings" },
               },
             };
@@ -58,7 +59,9 @@ const createAdvancedSettingsLink = () => ({
               type: "AdvancedSettings",
               props: {
                 id: advancedSettingsId,
-                data: { schemaMarkup: "" },
+                data: {
+                  schemaMarkup: appState.data.root?.props?.schemaMarkup || "",
+                },
               },
             };
 
@@ -285,6 +288,7 @@ export const InternalLayoutEditor = ({
             constantValue: "",
             constantValueEnabled: false,
           },
+          schemaMarkup: "",
           ...puckConfig.root?.defaultProps,
           __advancedSettingsLink: null,
         },
@@ -318,21 +322,31 @@ export const InternalLayoutEditor = ({
                     </label>
                     <textarea
                       className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
-                      placeholder={pt(
-                        "enterSchemaMarkup",
-                        "Enter schema markup..."
-                      )}
+                      placeholder="Enter schema markup..."
+                      value={appState.data.root?.props?.schemaMarkup || ""}
+                      onChange={(e) => {
+                        const { dispatch } = getPuck();
+                        dispatch({
+                          type: "setData",
+                          data: {
+                            ...appState.data,
+                            root: {
+                              ...appState.data.root,
+                              props: {
+                                ...appState.data.root?.props,
+                                schemaMarkup: e.target.value,
+                              } as any,
+                            },
+                          },
+                        });
+                      }}
                     />
                   </div>
                 </div>
               );
             }
 
-            return (
-              <div className="ve-h-full ve-flex ve-flex-col">
-                <div className="ve-flex-1 ve-overflow-auto">{children}</div>
-              </div>
-            );
+            return <>{children}</>;
           },
           header: () => (
             <LayoutHeader
