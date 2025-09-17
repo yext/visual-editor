@@ -40,8 +40,6 @@ const createAdvancedSettingsLink = () => ({
         <button
           onClick={() => {
             const { appState, dispatch } = getPuck();
-
-            // Create a proper component hierarchy for breadcrumbs
             const advancedSettingsId = "AdvancedSettings";
             const pageSettingsId = "PageSettings";
 
@@ -53,19 +51,13 @@ const createAdvancedSettingsLink = () => ({
                 data: { title: "Page Settings" },
               },
             };
-
-            // Create the AdvancedSettings component as a child
             const advancedSettingsComponent = {
               type: "AdvancedSettings",
               props: {
                 id: advancedSettingsId,
-                data: {
-                  schemaMarkup: appState.data.root?.props?.schemaMarkup || "",
-                },
+                data: { schemaMarkup: "" },
               },
             };
-
-            // Add both components to the content
             const newData = {
               ...appState.data,
               content: [
@@ -73,7 +65,6 @@ const createAdvancedSettingsLink = () => ({
                 parentComponent,
                 advancedSettingsComponent,
               ],
-              // Create a zone for the AdvancedSettings under the parent
               zones: {
                 ...appState.data.zones,
                 [`${parentComponent.props.id}:advanced`]: [
@@ -83,8 +74,6 @@ const createAdvancedSettingsLink = () => ({
             };
 
             dispatch({ type: "setData", data: newData });
-
-            // Select the AdvancedSettings component
             setTimeout(() => {
               dispatch({
                 type: "setUi",
@@ -307,41 +296,52 @@ export const InternalLayoutEditor = ({
           fields: ({ children }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
+            const [localSchemaValue, setLocalSchemaValue] = React.useState(
+              appState.data.root?.props?.schemaMarkup || ""
+            );
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
               appState.ui.itemSelector.zone?.includes(":advanced") &&
               appState.ui.itemSelector.zone !== "root";
 
+            // Sync local state with root props when component mounts or root changes
+            React.useEffect(() => {
+              setLocalSchemaValue(
+                appState.data.root?.props?.schemaMarkup || ""
+              );
+            }, [appState.data.root?.props?.schemaMarkup]);
+
             if (isAdvancedSettingsSelected) {
               return (
-                <div className="ve-p-4">
-                  <div className="ve-mb-4">
-                    <label className="ve-block ve-mb-2 ve-font-medium">
-                      {pt("schemaMarkup", "Schema Markup")}
-                    </label>
-                    <textarea
-                      className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
-                      placeholder="Enter schema markup..."
-                      value={appState.data.root?.props?.schemaMarkup || ""}
-                      onChange={(e) => {
-                        const { dispatch } = getPuck();
-                        dispatch({
-                          type: "setData",
-                          data: {
-                            ...appState.data,
-                            root: {
-                              ...appState.data.root,
-                              props: {
-                                ...appState.data.root?.props,
-                                schemaMarkup: e.target.value,
-                              } as any,
-                            },
+                <div className="ve-p-4 ve-mb-4">
+                  <label className="ve-block ve-mb-2 ve-font-medium">
+                    {pt("schemaMarkup", "Schema Markup")}
+                  </label>
+                  <textarea
+                    className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
+                    placeholder="Enter schema markup..."
+                    value={localSchemaValue}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setLocalSchemaValue(newValue);
+
+                      const { dispatch } = getPuck();
+                      dispatch({
+                        type: "setData",
+                        data: {
+                          ...appState.data,
+                          root: {
+                            ...appState.data.root,
+                            props: {
+                              ...appState.data.root?.props,
+                              schemaMarkup: newValue,
+                            } as any,
                           },
-                        });
-                      }}
-                    />
-                  </div>
+                        },
+                      });
+                    }}
+                  />
                 </div>
               );
             }
