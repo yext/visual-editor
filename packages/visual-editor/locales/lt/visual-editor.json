@@ -290,7 +290,8 @@
       "two": "Du",
       "wednesday": "Trečiadienis",
       "width": "Plotis",
-      "yes": "Taip"
+      "yes": "Taip",
+      "mapStartingLocation": "Žemėlapio pradžios vieta"
     },
     "phoneFormat": "Telefono formatas",
     "phoneNumber": "Telefono numeris",
@@ -396,6 +397,7 @@
   "loadingReviews": "Įkeliamos apžvalgos ...",
   "loadingVE": "Įkeliamas vaizdinis redaktorius ...",
   "localGeomodifier": "Vietinis geomodiferis",
+  "locations_one": "{{count}} vieta",
   "locationsNear_one": "{{count}} vieta prie \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "FiltRas:",
   "map": "Žemėlapis",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "Pridėkite HTML, kad peržiūrėtumėte komponentą",
   "monday": "Pirmadienis",
   "name": "Vardas",
-  "newYorkCity": "Niujorko miestas, Niujorkas, JAV",
   "noAvailableFields": "Jokių laukų",
   "noAvailableTypes": "Nėra prieinamų tipų",
   "noHeroFieldsMsg": "Norėdami naudoti šio skyriaus subjekto turinį, pridėkite herojaus skyriaus lauką prie savo puslapio grupės subjekto tipo.",

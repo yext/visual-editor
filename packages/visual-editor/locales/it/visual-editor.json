@@ -290,7 +290,8 @@
       "two": "Due",
       "wednesday": "Mercoledì",
       "width": "Larghezza",
-      "yes": "SÌ"
+      "yes": "SÌ",
+      "mapStartingLocation": "Posizione di avvio della mappa"
     },
     "phoneFormat": "Formato del telefono",
     "phoneNumber": "Numero di telefono",
@@ -396,6 +397,7 @@
   "loadingReviews": "Caricamento delle recensioni ...",
   "loadingVE": "Caricamento dell'editor visivo ...",
   "localGeomodifier": "Geomodificatore locale",
+  "locations_one": "{{count}} posizione",
   "locationsNear_one": "{{count}} posizione vicino a \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtro:",
   "map": "Mappa",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "Aggiungi HTML al componente Visualizza",
   "monday": "Lunedi",
   "name": "Nome",
-  "newYorkCity": "New York City, New York, Stati Uniti",
   "noAvailableFields": "Nessun campo disponibile",
   "noAvailableTypes": "Nessun tipo disponibile",
   "noHeroFieldsMsg": "Per utilizzare il contenuto di entità per questa sezione, aggiungi un campo sezione Hero al tipo di entità del gruppo di pagina.",

@@ -289,7 +289,8 @@
       "two": "Two",
       "wednesday": "Wednesday",
       "width": "Width",
-      "yes": "Yes"
+      "yes": "Yes",
+      "mapStartingLocation": "Map Starting Location"
     },
     "phoneFormat": "Phone Format",
     "phoneNumber": "Phone Number",
@@ -395,6 +396,7 @@
   "loadingReviews": "Loading reviews...",
   "loadingVE": "Loading Visual Editor...",
   "localGeomodifier": "Local GeoModifier",
+  "locations_one": "{{count}} location",
   "locationsNear_one": "{{count}} location near \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Map",
@@ -403,7 +405,6 @@
   "missingHtmlWidget": "Add HTML to view component",
   "monday": "Monday",
   "name": "Name",
-  "newYorkCity": "New York City, New York, United States",
   "noAvailableFields": "No available fields",
   "noAvailableTypes": "No available types",
   "noHeroFieldsMsg": "To use entity content for this section, add a Hero Section field to your page group's entity type.",

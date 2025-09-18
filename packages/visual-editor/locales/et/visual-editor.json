@@ -290,7 +290,8 @@
       "two": "Teine",
       "wednesday": "Kolmapäev",
       "width": "Laius",
-      "yes": "Jah"
+      "yes": "Jah",
+      "mapStartingLocation": "Kaardi algusasukoht"
     },
     "phoneFormat": "Telefonivorming",
     "phoneNumber": "Telefoninumber",
@@ -396,6 +397,7 @@
   "loadingReviews": "Ülevaadete laadimine ...",
   "loadingVE": "Visuaalse toimetaja laadimine ...",
   "localGeomodifier": "Kohalik geomodifikaator",
+  "locations_one": "{{count}} asukoht",
   "locationsNear_one": "{{krahv}} asukoht \"{{filterDisplayName}}\"  lähedal",
   "locatorFilterLabel": "Filter:",
   "map": "Kaardistama",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
   "monday": "Esmaspäev",
   "name": "Nimetus",
-  "newYorkCity": "New York City, New York, Ameerika Ühendriigid",
   "noAvailableFields": "Pole saadaval väljad",
   "noAvailableTypes": "Pole saadaval tüüpe",
   "noHeroFieldsMsg": "Selle jaotise olemi sisu kasutamiseks lisage oma lehe grupi olemi tüübile kangelase sektsiooni väli.",

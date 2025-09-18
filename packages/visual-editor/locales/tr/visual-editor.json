@@ -290,7 +290,8 @@
       "two": "İki",
       "wednesday": "Çarşamba",
       "width": "Genişlik",
-      "yes": "Evet"
+      "yes": "Evet",
+      "mapStartingLocation": "Harita Başlangıç ​​Konumu"
     },
     "phoneFormat": "Telefon formatı",
     "phoneNumber": "Telefon numarası",
@@ -396,6 +397,7 @@
   "loadingReviews": "Yükleme İncelemeleri ...",
   "loadingVE": "Görsel Editör Yükleme ...",
   "localGeomodifier": "Yerel Geomodifikatör",
+  "locations_one": "{{count}} konum",
   "locationsNear_one": "{{count}} konum \"{{filterDisplayName}}\" yakınında yer",
   "locatorFilterLabel": "Filtre:",
   "map": "Harita",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "Bileşeni görüntülemek için HTML ekle",
   "monday": "Pazartesi",
   "name": "İsim",
-  "newYorkCity": "New York, New York, Amerika Birleşik Devletleri",
   "noAvailableFields": "Mevcut alan yok",
   "noAvailableTypes": "Mevcut tür yok",
   "noHeroFieldsMsg": "Bu bölüm için varlık içeriğini kullanmak için, sayfa grubunuzun varlık türüne bir kahraman bölümü alanı ekleyin.",

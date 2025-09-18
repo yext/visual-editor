@@ -290,7 +290,8 @@
       "two": "二",
       "wednesday": "周三",
       "width": "宽度",
-      "yes": "是的"
+      "yes": "是的",
+      "mapStartingLocation": "地图启动位置"
     },
     "phoneFormat": "电话格式",
     "phoneNumber": "电话号码",
@@ -396,6 +397,7 @@
   "loadingReviews": "加载评论...",
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
+  "locations_one": "{{count}}位置",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
   "locatorFilterLabel": "筛选：",
   "map": "地图",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "添加HTML以查看组件",
   "monday": "周一",
   "name": "姓名",
-  "newYorkCity": "纽约，纽约，美国",
   "noAvailableFields": "没有可用的字段",
   "noAvailableTypes": "没有可用类型",
   "noHeroFieldsMsg": "要在本节中使用实体内容，请在页面组的实体类型中添加一个英雄部分字段。",

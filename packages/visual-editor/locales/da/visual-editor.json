@@ -290,7 +290,8 @@
       "two": "To",
       "wednesday": "onsdag",
       "width": "Bredde",
-      "yes": "Ja"
+      "yes": "Ja",
+      "mapStartingLocation": "Kortstartplacering"
     },
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -396,6 +397,7 @@
   "loadingReviews": "Indlæser anmeldelser ...",
   "loadingVE": "Indlæser visuel redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
+  "locations_one": "{{count}} placering",
   "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Kort",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "Tilføj HTML for at se komponent",
   "monday": "mandag",
   "name": "Navn",
-  "newYorkCity": "New York City, New York, USA",
   "noAvailableFields": "Ingen tilgængelige felter",
   "noAvailableTypes": "Ingen tilgængelige typer",
   "noHeroFieldsMsg": "For at bruge enhedsindhold til dette afsnit skal du tilføje et heltesektionsfelt til din sidegruppes enhedstype.",

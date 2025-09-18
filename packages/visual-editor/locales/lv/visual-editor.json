@@ -290,7 +290,8 @@
       "two": "Divi",
       "wednesday": "Trešdiena",
       "width": "Platums",
-      "yes": "Jā"
+      "yes": "Jā",
+      "mapStartingLocation": "Kartes sākuma vieta"
     },
     "phoneFormat": "Tālruņa formāts",
     "phoneNumber": "Tālruņa numurs",
@@ -396,6 +397,7 @@
   "loadingReviews": "Atsauksmju ielāde ...",
   "loadingVE": "Vizuālā redaktora ielāde ...",
   "localGeomodifier": "Vietējais ģeomodifieris",
+  "locations_one": "{{count}} atrašanās vieta",
   "locationsNear_one": "{{count}} atrašanās vieta netālu no \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtrs:",
   "map": "Karte",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu",
   "monday": "Pirmdiena",
   "name": "Nosaukt",
-  "newYorkCity": "Ņujorka, Ņujorka, Amerikas Savienotās Valstis",
   "noAvailableFields": "Nav pieejamu lauku",
   "noAvailableTypes": "Nav pieejamo tipu",
   "noHeroFieldsMsg": "Lai šai sadaļai izmantotu entītijas saturu, pievienojiet varoņu sadaļas lauku savas lapas grupas entītijas tipam.",

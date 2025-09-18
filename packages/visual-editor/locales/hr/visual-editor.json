@@ -290,7 +290,8 @@
       "two": "Dva",
       "wednesday": "srijeda",
       "width": "Širina",
-      "yes": "Da"
+      "yes": "Da",
+      "mapStartingLocation": "Početna lokacija karte"
     },
     "phoneFormat": "Format telefona",
     "phoneNumber": "Telefonski broj",
@@ -396,6 +397,7 @@
   "loadingReviews": "Učitavanje recenzija ...",
   "loadingVE": "Učitavanje vizualnog uređivača ...",
   "localGeomodifier": "Lokalni geomodifikator",
+  "locations_one": "{{count}} lokacija",
   "locationsNear_one": "{{count}} Lokacija u blizini \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Karta",
@@ -404,7 +406,6 @@
   "missingHtmlWidget": "Dodajte HTML za pregled komponente",
   "monday": "ponedjeljak",
   "name": "Ime",
-  "newYorkCity": "New York City, New York, Sjedinjene Države",
   "noAvailableFields": "Nema dostupnih polja",
   "noAvailableTypes": "Nema dostupnih vrsta",
   "noHeroFieldsMsg": "Da biste koristili sadržaj entiteta za ovaj odjeljak, dodajte polje odjeljka Hero u vrstu entiteta svoje stranice.",
