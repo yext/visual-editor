@@ -303,7 +303,6 @@ export const InternalLayoutEditor = ({
               appState.ui.itemSelector.zone !== "root";
 
             if (isAdvancedSettingsSelected) {
-              // Use the AdvancedSettings field to render the schema markup section
               const advancedSettingsField = AdvancedSettings.fields?.data;
 
               if (
