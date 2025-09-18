@@ -63,6 +63,7 @@ export interface EventStyles {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
     ctaVariant: CTAProps["variant"];
+    truncateDescription: boolean;
   };
 }
 
@@ -153,6 +154,22 @@ const eventSectionFields: Fields<EventSectionProps> = {
             type: "radio",
             options: "CTA_VARIANT",
           }),
+          truncateDescription: YextField(
+            msg("fields.truncateDescription", "Truncate Description"),
+            {
+              type: "radio",
+              options: [
+                {
+                  label: msg("fields.options.truncate", "Truncate"),
+                  value: true,
+                },
+                {
+                  label: msg("fields.options.showFullText", "Show Full Text"),
+                  value: false,
+                },
+              ],
+            }
+          ),
         },
       }),
     },
@@ -196,10 +213,10 @@ const EventCard = ({
   return (
     <Background
       background={cardStyles.backgroundColor}
-      className={`flex flex-col md:flex-row rounded-lg overflow-hidden p-6 gap-6 md:items-start`}
+      className={`flex flex-col md:flex-row rounded-lg overflow-hidden md:items-start`}
     >
       {event.image && (
-        <div className="md:w-[45%] w-full">
+        <div className="lg:w-[45%] w-full">
           <Image
             image={event.image}
             aspectRatio={
@@ -207,11 +224,11 @@ const EventCard = ({
                 ? event.image.width / event.image.height
                 : 1.78
             }
-            className="rounded-lg w-full object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
       )}
-      <div className="flex flex-col gap-4 w-full md:w-[55%] my-auto">
+      <div className="flex flex-col gap-4 p-6 w-full md:w-[55%] justify-between flex-grow">
         <div className="flex flex-col gap-2">
           {event.title && (
             <Heading
@@ -233,7 +250,9 @@ const EventCard = ({
             />
           )}
           {event.description && (
-            <p>{resolveComponentData(event.description, i18n.language)}</p>
+            <p className={cardStyles.truncateDescription ? "line-clamp-2" : ""}>
+              {resolveComponentData(event.description, i18n.language)}
+            </p>
           )}
         </div>
         {event.cta && (
@@ -359,6 +378,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
         ctaVariant: "primary",
+        truncateDescription: true,
       },
     },
     analytics: {
