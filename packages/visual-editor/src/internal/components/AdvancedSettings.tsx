@@ -1,5 +1,5 @@
 import { ComponentConfig, Fields, CustomField } from "@measured/puck";
-import { msg, YextField } from "@yext/visual-editor";
+import { msg, YextField, useDocument } from "@yext/visual-editor";
 import React from "react";
 import {
   useSendMessageToParent,
@@ -19,7 +19,7 @@ export interface AdvancedSettingsProps {
   };
 }
 
-const DEFAULT_SCHEMA_TEMPLATE = `{
+const LOCAL_BUSINESS_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "[[name]]",
@@ -39,12 +39,53 @@ const DEFAULT_SCHEMA_TEMPLATE = `{
   "hasOfferCatalog": "[[services]]"
 }`;
 
+const DIRECTORY_LIST_ITEM_SCHEMA = `{
+  "@type": "ListItem",
+  "position": "[[index + 1]]",
+  "item": {
+    "@type": "Place",
+    "name": "[[name]]",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "[[address.line1]]",
+      "addressLocality": "[[address.city]]",
+      "addressRegion": "[[address.region]]",
+      "postalCode": "[[address.postalCode]]",
+      "addressCountry": "[[address.countryCode]]"
+    }
+  }
+}`;
+
+const FALLBACK_SCHEMA = `{
+  "@context": "https://schema.org",
+  "@type": "Thing",
+  "name": "[[name]]",
+  "description": "[[description]]",
+  "url": "[[urlWriteback]]"
+}`;
+
+// Function to get the appropriate schema template based on entity type
+const getSchemaTemplate = (entityTypeId?: string): string => {
+  if (!entityTypeId) {
+    return FALLBACK_SCHEMA;
+  }
+
+  if (entityTypeId === "location") {
+    return LOCAL_BUSINESS_SCHEMA;
+  } else if (entityTypeId.startsWith("dm")) {
+    return DIRECTORY_LIST_ITEM_SCHEMA;
+  } else {
+    return FALLBACK_SCHEMA;
+  }
+};
+
 const SCHEMA_MARKUP_FIELD: CustomField<string> = {
   type: "custom",
   render: ({ onChange }) => {
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();
+    const streamDocument = useDocument();
 
     const { sendToParent: openSchemaMarkupDrawer } = useSendMessageToParent(
       "constantValueEditorOpened",
@@ -61,7 +102,10 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       }
     );
 
-    const displayValue = DEFAULT_SCHEMA_TEMPLATE;
+    // Get the appropriate schema template based on the entity type ID
+    const entityTypeId = (streamDocument as any)?.meta?.entityType?.id;
+    const schemaTemplate = getSchemaTemplate(entityTypeId);
+    const displayValue = schemaTemplate;
 
     const codeField = YextField(msg("schemaMarkup", "Schema Markup"), {
       type: "code",
@@ -72,20 +116,12 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       e.stopPropagation();
       e.preventDefault();
 
-      console.log("Schema markup clicked!");
-
       // Clean the schema value to remove newlines and extra whitespace
-      const cleanSchemaValue = DEFAULT_SCHEMA_TEMPLATE.replace(
-        /\n\s*/g,
-        " "
-      ).trim();
+      const cleanSchemaValue = schemaTemplate.replace(/\n\s*/g, " ").trim();
 
       /** Handles local development testing outside of Storm */
       if (window.location.href.includes("http://localhost:5173/dev-location")) {
-        const userInput = prompt(
-          "Enter Schema Markup:",
-          DEFAULT_SCHEMA_TEMPLATE
-        );
+        const userInput = prompt("Enter Schema Markup:", schemaTemplate);
         if (userInput !== null) {
           onChange(userInput);
         }
@@ -100,7 +136,6 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
           id: messageId,
         };
 
-        console.log("Sending schema markup payload:", payload);
         openSchemaMarkupDrawer({ payload });
       }
     };
@@ -155,7 +190,7 @@ export const AdvancedSettings: ComponentConfig<{
   fields: advancedSettingsFields,
   defaultProps: {
     data: {
-      schemaMarkup: DEFAULT_SCHEMA_TEMPLATE,
+      schemaMarkup: "", // Will be populated dynamically based on entity type
     },
   },
   render: () => {
