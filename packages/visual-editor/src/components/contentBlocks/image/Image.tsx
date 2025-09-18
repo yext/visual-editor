@@ -9,6 +9,7 @@ import {
   YextField,
   msg,
   pt,
+  imgSizesHelper,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
@@ -70,6 +71,12 @@ const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
           aspectRatio={styles.aspectRatio}
           width={styles.width}
           className="max-w-full rounded-image-borderRadius w-full"
+          sizes={imgSizesHelper({
+            base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
+            md: styles.width
+              ? `min(${styles.width}px, calc(maxWidth / 2))`
+              : "maxWidth / 2",
+          })}
         />
       </div>
     </EntityField>

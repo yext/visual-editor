@@ -28,6 +28,7 @@ import {
   AssetImageType,
   AssetVideo,
   themeManagerCn,
+  imgSizesHelper,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
@@ -224,6 +225,11 @@ const PromoMedia = ({
               aspectRatio={styles.image.aspectRatio ?? 1.78}
               width={styles.image.width || 640}
               className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
+              sizes={imgSizesHelper({
+                base: "100vw",
+                md: "450px",
+                lg: `${styles.image.width || 640}px`,
+              })}
             />
           )}
         </EntityField>

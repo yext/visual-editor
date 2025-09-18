@@ -8,6 +8,7 @@ import {
   Image,
   Background,
   resolveYextStructField,
+  imgSizesHelper,
 } from "@yext/visual-editor";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
@@ -39,6 +40,10 @@ const CompactHeroImage = ({
             "w-full sm:w-fit h-full",
             styles.desktopImagePosition === "left" ? "mr-auto" : "ml-auto"
           )}
+          sizes={imgSizesHelper({
+            base: "100vw",
+            md: "calc(maxWidth / 2)",
+          })}
         />
       </EntityField>
     </div>
