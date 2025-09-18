@@ -226,7 +226,7 @@ const PromoMedia = ({
               width={styles.image.width || 640}
               className="max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full"
               sizes={imgSizesHelper({
-                base: "100vw",
+                base: "calc(100vw - 34px)",
                 md: "450px",
                 lg: `${styles.image.width || 640}px`,
               })}

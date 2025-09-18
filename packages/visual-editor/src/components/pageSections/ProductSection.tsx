@@ -202,9 +202,9 @@ const ProductCard = ({
           aspectRatio={1.778} // 16:9
           className="h-[200px]"
           sizes={imgSizesHelper({
-            base: "100vw",
-            md: "calc(maxWidth / 2)",
-            lg: "calc(maxWidth / 3)",
+            base: "calc(100vw - 34px)",
+            md: "calc((maxWidth - 32px) / 2)",
+            lg: "calc((maxWidth - 32px) / 3)",
           })}
         />
       ) : (

@@ -39,7 +39,7 @@ const ClassicHeroImage = ({
             width={styles.image.width}
             className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
             sizes={imgSizesHelper({
-              base: "100vw",
+              base: "calc(100vw - 34px)",
               md: "350px",
               lg: styles.image.width
                 ? `${styles.image.width}px`

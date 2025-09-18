@@ -74,7 +74,7 @@ const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
           sizes={imgSizesHelper({
             base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
             md: styles.width
-              ? `min(${styles.width}px, calc(maxWidth / 2))`
+              ? `min(${styles.width}px, calc((maxWidth - 32px) / 2))`
               : "maxWidth / 2",
           })}
         />
