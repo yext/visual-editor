@@ -40,8 +40,6 @@ const createAdvancedSettingsLink = () => ({
         <button
           onClick={() => {
             const { dispatch } = getPuck();
-
-            // Simple approach: just set UI state to show advanced settings
             dispatch({
               type: "setUi",
               ui: {
