@@ -296,7 +296,8 @@
       "two": "Dva",
       "wednesday": "středa",
       "width": "Šířka",
-      "yes": "Ano"
+      "yes": "Ano",
+      "mapStartingLocation": "Počáteční umístění mapy"
     },
     "phoneFormat": "Formát telefonu",
     "phoneNumber": "Telefonní číslo",
@@ -403,6 +404,7 @@
   "loadingReviews": "Načítání recenzí ...",
   "loadingVE": "Načítání vizuálního editoru ...",
   "localGeomodifier": "Místní geomodifikátor",
+  "locations_one": "{{count}} umístění",
   "locationsNear_one": "{{count}} umístění poblíž \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtr:",
   "map": "Mapa",
@@ -411,7 +413,6 @@
   "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty",
   "monday": "pondělí",
   "name": "Jméno",
-  "newYorkCity": "New York City, New York, Spojené státy",
   "noAvailableFields": "Žádná dostupná pole",
   "noAvailableTypes": "Žádné dostupné typy",
   "noHeroFieldsMsg": "Chcete -li použít obsah entity pro tuto sekci, přidejte do pole sekce hrdiny do typu entity skupiny vaší stránky.",

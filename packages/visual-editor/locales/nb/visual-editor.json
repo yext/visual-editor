@@ -295,7 +295,8 @@
       "two": "To",
       "wednesday": "onsdag",
       "width": "Bredde",
-      "yes": "Ja"
+      "yes": "Ja",
+      "mapStartingLocation": "Kartstartsted"
     },
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -402,6 +403,7 @@
   "loadingReviews": "Laster inn anmeldelser ...",
   "loadingVE": "Laster inn visuell redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
+  "locations_one": "{{count}} plassering",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Kart",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Legg til HTML for å se komponent",
   "monday": "mandag",
   "name": "Navn",
-  "newYorkCity": "New York City, New York, USA",
   "noAvailableFields": "Ingen tilgjengelige felt",
   "noAvailableTypes": "Ingen tilgjengelige typer",
   "noHeroFieldsMsg": "For å bruke enhetsinnhold for denne delen, legg til et helte -seksjonsfelt i sidegruppens enhetstype.",

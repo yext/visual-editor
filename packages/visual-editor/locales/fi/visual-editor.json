@@ -295,7 +295,8 @@
       "two": "Kaksi",
       "wednesday": "keskiviikko",
       "width": "Leveys",
-      "yes": "Kyllä"
+      "yes": "Kyllä",
+      "mapStartingLocation": "Kartan lähtöpaikka"
     },
     "phoneFormat": "Puhelinmuoto",
     "phoneNumber": "Puhelinnumero",
@@ -402,6 +403,7 @@
   "loadingReviews": "Ladataan arvosteluja ...",
   "loadingVE": "Visuaalisen editorin lataaminen ...",
   "localGeomodifier": "Paikallinen geomodifoija",
+  "locations_one": "{{count}} sijainti",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Suodattaa:",
   "map": "Kartta",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
   "monday": "maanantai",
   "name": "Nimi",
-  "newYorkCity": "New York City, New York, Yhdysvallat",
   "noAvailableFields": "Ei käytettävissä olevia kenttiä",
   "noAvailableTypes": "Ei käytettävissä olevia tyyppejä",
   "noHeroFieldsMsg": "Jos haluat käyttää Entity -sisältöä tähän osaan, lisää sankari -osiokenttä sivuryhmäsi kokonaisuuteen.",

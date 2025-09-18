@@ -294,7 +294,8 @@
       "two": "Deux",
       "wednesday": "Mercredi",
       "width": "Largeur",
-      "yes": "Oui"
+      "yes": "Oui",
+      "mapStartingLocation": "Emplacement de départ de la carte"
     },
     "phoneFormat": "Format de téléphone",
     "phoneNumber": "Numéro de téléphone",
@@ -401,6 +402,7 @@
   "loadingReviews": "Chargement des critiques ...",
   "loadingVE": "Chargement de l'éditeur visuel ...",
   "localGeomodifier": "Géomodificateur local",
+  "locations_one": "{{count}} emplacement",
   "locationsNear_one": "{{count}} Emplacement près de \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtre:",
   "map": "Carte",
@@ -409,7 +411,6 @@
   "missingHtmlWidget": "Ajouter HTML pour afficher le composant",
   "monday": "Lundi",
   "name": "Nom",
-  "newYorkCity": "New York, New York, États-Unis",
   "noAvailableFields": "Pas de champs disponibles",
   "noAvailableTypes": "Pas de types disponibles",
   "noHeroFieldsMsg": "Pour utiliser le contenu de l'entité pour cette section, ajoutez un champ de section de héros au type d'entité de votre groupe de pages.",

@@ -295,7 +295,8 @@
       "two": "Dwa",
       "wednesday": "Środa",
       "width": "Szerokość",
-      "yes": "Tak"
+      "yes": "Tak",
+      "mapStartingLocation": "Mapa Lokalizacja początkowa"
     },
     "phoneFormat": "Format telefonu",
     "phoneNumber": "Numer telefonu",
@@ -402,6 +403,7 @@
   "loadingReviews": "Ładowanie recenzji ...",
   "loadingVE": "Ładowanie edytora wizualnego ...",
   "localGeomodifier": "Lokalny geomodyfikator",
+  "locations_one": "{{count}} lokalizacja",
   "locationsNear_one": "{{count}} Lokalizacja w pobliżu „{{filterDisplayName}}”",
   "locatorFilterLabel": "Filtr:",
   "map": "Mapa",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Dodaj HTML, aby wyświetlić komponent",
   "monday": "Poniedziałek",
   "name": "Nazwa",
-  "newYorkCity": "Nowy Jork, Nowy Jork, Stany Zjednoczone",
   "noAvailableFields": "Brak dostępnych pól",
   "noAvailableTypes": "Brak dostępnych rodzajów",
   "noHeroFieldsMsg": "Aby użyć treści encji w tej sekcji, dodaj pole sekcji bohatera do typu jednostki grupy strony.",

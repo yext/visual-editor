@@ -294,7 +294,8 @@
       "two": "Dos",
       "wednesday": "Miércoles",
       "width": "Ancho",
-      "yes": "Sí"
+      "yes": "Sí",
+      "mapStartingLocation": "Ubicación de inicio del mapa"
     },
     "phoneFormat": "Formato de teléfono",
     "phoneNumber": "Número de teléfono",
@@ -401,6 +402,7 @@
   "loadingReviews": "Cargando reseñas ...",
   "loadingVE": "Cargando editor visual ...",
   "localGeomodifier": "Geomodificador local",
+  "locations_one": "{{count}} ubicación",
   "locationsNear_one": "{{count}} ubicación cerca de \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtrar:",
   "map": "Mapa",
@@ -409,7 +411,6 @@
   "missingHtmlWidget": "Agregue HTML para ver el componente",
   "monday": "Lunes",
   "name": "Nombre",
-  "newYorkCity": "Ciudad de Nueva York, Nueva York, Estados Unidos",
   "noAvailableFields": "No hay campos disponibles",
   "noAvailableTypes": "No hay tipos disponibles",
   "noHeroFieldsMsg": "Para usar el contenido de entidad para esta sección, agregue un campo de sección de héroe al tipo de entidad de su grupo de páginas.",

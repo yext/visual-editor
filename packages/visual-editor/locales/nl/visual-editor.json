@@ -295,7 +295,8 @@
       "two": "Twee",
       "wednesday": "Woensdag",
       "width": "Breedte",
-      "yes": "Ja"
+      "yes": "Ja",
+      "mapStartingLocation": "Kaart startlocatie"
     },
     "phoneFormat": "Telefoonformaat",
     "phoneNumber": "Telefoonnummer",
@@ -402,6 +403,7 @@
   "loadingReviews": "Beoordelingen laden ...",
   "loadingVE": "Visuele editor laden ...",
   "localGeomodifier": "Lokale geomodifier",
+  "locations_one": "{{count}} locatie",
   "locationsNear_one": "{{count}} locatie nabij \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Kaart",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Voeg HTML toe om component te bekijken",
   "monday": "Maandag",
   "name": "Naam",
-  "newYorkCity": "New York City, New York, Verenigde Staten",
   "noAvailableFields": "Geen beschikbare velden",
   "noAvailableTypes": "Geen beschikbare types",
   "noHeroFieldsMsg": "Als u entiteitsinhoud voor dit gedeelte kunt gebruiken, voegt u een Hero -sectieveld toe aan het entiteitstype van uw paginagroep.",

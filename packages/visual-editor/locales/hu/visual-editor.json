@@ -295,7 +295,8 @@
       "two": "Két",
       "wednesday": "szerda",
       "width": "Szélesség",
-      "yes": "Igen"
+      "yes": "Igen",
+      "mapStartingLocation": "Térkép kiindulási helye"
     },
     "phoneFormat": "Telefonformátum",
     "phoneNumber": "Telefonszám",
@@ -402,6 +403,7 @@
   "loadingReviews": "A vélemények betöltése ...",
   "loadingVE": "Vizuális szerkesztő betöltése ...",
   "localGeomodifier": "Helyi geomodifier",
+  "locations_one": "{{count}} helyszín",
   "locationsNear_one": "{{count}} A hely közelében \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Szűrő:",
   "map": "Térkép",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
   "monday": "hétfő",
   "name": "Név",
-  "newYorkCity": "New York City, New York, Egyesült Államok",
   "noAvailableFields": "Nincs elérhető mezők",
   "noAvailableTypes": "Nincs elérhető típus",
   "noHeroFieldsMsg": "Az entitás tartalmának ehhez a szakaszhoz történő használatához adjon hozzá egy hősszakasz mezőt az oldalcsoport entitás típusához.",

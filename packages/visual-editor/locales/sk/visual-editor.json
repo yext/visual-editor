@@ -295,7 +295,8 @@
       "two": "Druhý",
       "wednesday": "Streda",
       "width": "Šírka",
-      "yes": "Áno"
+      "yes": "Áno",
+      "mapStartingLocation": "MAP NAJVÄČŠIE UMIESTNENIE"
     },
     "phoneFormat": "Formát telefónu",
     "phoneNumber": "Telefónne číslo",
@@ -402,6 +403,7 @@
   "loadingReviews": "Recenzie načítania ...",
   "loadingVE": "Načítava sa vizuálny editor ...",
   "localGeomodifier": "Miestny geomodifikátor",
+  "locations_one": "{{count}} miesto",
   "locationsNear_one": "{{count}} Umiestnenie blízko \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Mapovať",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent",
   "monday": "Pondelok",
   "name": "Menovať",
-  "newYorkCity": "New York, New York, Spojené štáty americké",
   "noAvailableFields": "Žiadne dostupné polia",
   "noAvailableTypes": "Žiadne dostupné typy",
   "noHeroFieldsMsg": "Ak chcete použiť obsah entity pre túto sekciu, pridajte do typu entity svojej skupiny svojej skupiny.",

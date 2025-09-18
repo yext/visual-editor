@@ -295,7 +295,8 @@
       "two": "Dois",
       "wednesday": "Quarta-feira",
       "width": "Largura",
-      "yes": "Sim"
+      "yes": "Sim",
+      "mapStartingLocation": "Localização inicial do mapa"
     },
     "phoneFormat": "Formato de telefone",
     "phoneNumber": "Número de telefone",
@@ -402,6 +403,7 @@
   "loadingReviews": "Revisões de carregamento ...",
   "loadingVE": "Carregando Editor Visual ...",
   "localGeomodifier": "Geomodificador local",
+  "locations_one": "{{count}} localização",
   "locationsNear_one": "{{count}} localização próxima a \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtro:",
   "map": "Mapa",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Adicione HTML para visualizar o componente",
   "monday": "Segunda-feira",
   "name": "Nome",
-  "newYorkCity": "Nova York, Nova York, Estados Unidos",
   "noAvailableFields": "Sem campos disponíveis",
   "noAvailableTypes": "Sem tipos disponíveis",
   "noHeroFieldsMsg": "Para usar o conteúdo da entidade para esta seção, adicione um campo de seção de heróis ao tipo de entidade do seu grupo de páginas.",

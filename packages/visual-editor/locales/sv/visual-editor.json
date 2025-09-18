@@ -295,7 +295,8 @@
       "two": "Två",
       "wednesday": "Onsdag",
       "width": "Bredd",
-      "yes": "Ja"
+      "yes": "Ja",
+      "mapStartingLocation": "Karta startplats"
     },
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -402,6 +403,7 @@
   "loadingReviews": "Laddar recensioner ...",
   "loadingVE": "Laddar visuell redaktör ...",
   "localGeomodifier": "Lokal geomodifierare",
+  "locations_one": "{{count}} plats",
   "locationsNear_one": "{{greve}} Plats nära \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtrera:",
   "map": "Karta",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",
   "monday": "Måndag",
   "name": "Namn",
-  "newYorkCity": "New York City, New York, USA",
   "noAvailableFields": "Inga tillgängliga fält",
   "noAvailableTypes": "Inga tillgängliga typer",
   "noHeroFieldsMsg": "För att använda enhetsinnehåll för det här avsnittet, lägg till ett hjältesektionsfält i din sidgrupps enhetstyp.",

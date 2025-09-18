@@ -295,7 +295,8 @@
       "two": "Două",
       "wednesday": "miercuri",
       "width": "Lăţime",
-      "yes": "Da"
+      "yes": "Da",
+      "mapStartingLocation": "Locația de pornire a hărții"
     },
     "phoneFormat": "Format telefonic",
     "phoneNumber": "Număr de telefon",
@@ -402,6 +403,7 @@
   "loadingReviews": "Încărcarea recenziilor ...",
   "loadingVE": "Încărcarea editorului vizual ...",
   "localGeomodifier": "Geomodificator local",
+  "locations_one": "{{count}} locație",
   "locationsNear_one": "{{count}} locație lângă \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtra:",
   "map": "Hartă",
@@ -410,7 +412,6 @@
   "missingHtmlWidget": "Adăugați HTML pentru a vizualiza componenta",
   "monday": "luni",
   "name": "Nume",
-  "newYorkCity": "New York City, New York, Statele Unite",
   "noAvailableFields": "Nu există câmpuri disponibile",
   "noAvailableTypes": "Nu există tipuri disponibile",
   "noHeroFieldsMsg": "Pentru a utiliza conținutul entității pentru această secțiune, adăugați un câmp de secțiune Hero la tipul de entitate al grupului dvs. de pagini.",
