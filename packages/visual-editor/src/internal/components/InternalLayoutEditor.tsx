@@ -39,54 +39,19 @@ const createAdvancedSettingsLink = () => ({
       <div className="ve-p-4 ve-flex ve-justify-center ve-items-center">
         <button
           onClick={() => {
-            const { appState, dispatch } = getPuck();
-            const advancedSettingsId = "AdvancedSettings";
-            const pageSettingsId = "PageSettings";
+            const { dispatch } = getPuck();
 
-            // Create a parent component that will show "Page" in breadcrumb
-            const parentComponent = {
-              type: "PageSettings",
-              props: {
-                id: pageSettingsId,
-                data: { title: pt("pageSettings", "Page Settings") },
-              },
-            };
-            const advancedSettingsComponent = {
-              type: "AdvancedSettings",
-              props: {
-                id: advancedSettingsId,
-                data: { schemaMarkup: "" },
-              },
-            };
-            const newData = {
-              ...appState.data,
-              content: [
-                ...(appState.data.content || []),
-                parentComponent,
-                advancedSettingsComponent,
-              ],
-              zones: {
-                ...appState.data.zones,
-                [`${parentComponent.props.id}:advanced`]: [
-                  advancedSettingsComponent,
-                ],
-              },
-            };
-
-            dispatch({ type: "setData", data: newData });
-            setTimeout(() => {
-              dispatch({
-                type: "setUi",
-                ui: {
-                  ...appState.ui,
-                  itemSelector: {
-                    zone: `${parentComponent.props.id}:advanced`,
-                    index: 0,
-                  },
-                  rightSideBarVisible: true,
+            // Simple approach: just set UI state to show advanced settings
+            dispatch({
+              type: "setUi",
+              ui: {
+                itemSelector: {
+                  zone: "root:advanced",
+                  index: 0,
                 },
-              });
-            }, 100);
+                rightSideBarVisible: true,
+              },
+            });
           }}
           className={cn(
             "ve-bg-none ve-border-none ve-text-blue-600 ve-no-underline ve-text-sm ve-font-medium ve-cursor-pointer ve-p-0"
@@ -296,57 +261,90 @@ export const InternalLayoutEditor = ({
           fields: ({ children }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
-            const [localSchemaValue, setLocalSchemaValue] = React.useState(
-              appState.data.root?.props?.schemaMarkup || ""
-            );
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
-              appState.ui.itemSelector.zone?.includes(":advanced") &&
-              appState.ui.itemSelector.zone !== "root";
-
-            // Sync local state with root props when component mounts or root changes
-            React.useEffect(() => {
-              setLocalSchemaValue(
-                appState.data.root?.props?.schemaMarkup || ""
-              );
-            }, [appState.data.root?.props?.schemaMarkup]);
+              appState.ui.itemSelector.zone === "root:advanced";
 
             if (isAdvancedSettingsSelected) {
-              return (
-                <div className="ve-p-4 ve-mb-4">
-                  <label className="ve-block ve-mb-2 ve-font-medium">
-                    {pt("schemaMarkup", "Schema Markup")}
-                  </label>
-                  <textarea
-                    className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
-                    placeholder={pt(
-                      "enterSchemaMarkup",
-                      "Enter schema markup..."
-                    )}
-                    value={localSchemaValue}
-                    onChange={(e) => {
-                      const newValue = e.target.value;
-                      setLocalSchemaValue(newValue);
+              const advancedSettingsField = AdvancedSettings.fields?.data;
 
-                      const { dispatch } = getPuck();
-                      dispatch({
-                        type: "setData",
-                        data: {
-                          ...appState.data,
-                          root: {
-                            ...appState.data.root,
-                            props: {
-                              ...appState.data.root?.props,
-                              schemaMarkup: newValue,
-                            } as any,
-                          },
+              if (
+                advancedSettingsField &&
+                advancedSettingsField.type === "object" &&
+                advancedSettingsField.objectFields?.schemaMarkup
+              ) {
+                const schemaField = advancedSettingsField.objectFields
+                  .schemaMarkup as any;
+
+                if (schemaField.type === "custom" && schemaField.render) {
+                  return (
+                    <div className="ve-p-4 ve-mb-4">
+                      {/* Title */}
+                      <div className="ve-mb-4">
+                        <h3 className="ve-text-md ve-font-semibold ve-text-gray-900 ve-mb-2">
+                          {pt("advancedSettings", "Advanced Settings")}
+                        </h3>
+                      </div>
+
+                      {/* Schema markup field */}
+                      {React.createElement(schemaField.render, {
+                        onChange: (newValue: string) => {
+                          const { dispatch } = getPuck();
+                          dispatch({
+                            type: "setData",
+                            data: {
+                              ...appState.data,
+                              root: {
+                                ...appState.data.root,
+                                props: {
+                                  ...appState.data.root?.props,
+                                  schemaMarkup: newValue,
+                                } as any,
+                              },
+                            },
+                          });
                         },
-                      });
-                    }}
-                  />
-                </div>
-              );
+                        value: appState.data.root?.props?.schemaMarkup || "",
+                        field: { label: msg("schemaMarkup", "Schema Markup") },
+                      })}
+
+                      {/* Back button */}
+                      <div className="ve-mt-4">
+                        <button
+                          onClick={() => {
+                            const { dispatch } = getPuck();
+                            dispatch({
+                              type: "setUi",
+                              ui: {
+                                ...appState.ui,
+                                itemSelector: null,
+                                rightSideBarVisible: true,
+                              },
+                            });
+                          }}
+                          className="ve-flex ve-items-center ve-gap-2 ve-text-sm ve-text-blue-600 hover:ve-text-blue-800 ve-bg-none ve-border-none ve-cursor-pointer ve-p-0"
+                        >
+                          <svg
+                            className="ve-w-4 ve-h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 19l-7-7 7-7"
+                            />
+                          </svg>
+                          {pt("backToPage", "Back to Page")}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+              }
             }
 
             return <>{children}</>;
@@ -380,8 +378,7 @@ export const InternalLayoutEditor = ({
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
-              appState.ui.itemSelector.zone?.includes(":advanced") &&
-              appState.ui.itemSelector.zone !== "root";
+              appState.ui.itemSelector.zone === "root:advanced";
 
             if (isAdvancedSettingsSelected) {
               return <></>;
