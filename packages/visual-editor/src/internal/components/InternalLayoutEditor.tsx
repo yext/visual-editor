@@ -296,57 +296,51 @@ export const InternalLayoutEditor = ({
           fields: ({ children }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
-            const [localSchemaValue, setLocalSchemaValue] = React.useState(
-              appState.data.root?.props?.schemaMarkup || ""
-            );
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
               appState.ui.itemSelector.zone?.includes(":advanced") &&
               appState.ui.itemSelector.zone !== "root";
 
-            // Sync local state with root props when component mounts or root changes
-            React.useEffect(() => {
-              setLocalSchemaValue(
-                appState.data.root?.props?.schemaMarkup || ""
-              );
-            }, [appState.data.root?.props?.schemaMarkup]);
-
             if (isAdvancedSettingsSelected) {
-              return (
-                <div className="ve-p-4 ve-mb-4">
-                  <label className="ve-block ve-mb-2 ve-font-medium">
-                    {pt("schemaMarkup", "Schema Markup")}
-                  </label>
-                  <textarea
-                    className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
-                    placeholder={pt(
-                      "enterSchemaMarkup",
-                      "Enter schema markup..."
-                    )}
-                    value={localSchemaValue}
-                    onChange={(e) => {
-                      const newValue = e.target.value;
-                      setLocalSchemaValue(newValue);
+              // Use the AdvancedSettings field to render the schema markup section
+              const advancedSettingsField = AdvancedSettings.fields?.data;
 
-                      const { dispatch } = getPuck();
-                      dispatch({
-                        type: "setData",
-                        data: {
-                          ...appState.data,
-                          root: {
-                            ...appState.data.root,
-                            props: {
-                              ...appState.data.root?.props,
-                              schemaMarkup: newValue,
-                            } as any,
-                          },
+              if (
+                advancedSettingsField &&
+                advancedSettingsField.type === "object" &&
+                advancedSettingsField.objectFields?.schemaMarkup
+              ) {
+                const schemaField = advancedSettingsField.objectFields
+                  .schemaMarkup as any;
+
+                if (schemaField.type === "custom" && schemaField.render) {
+                  return (
+                    <div className="ve-p-4 ve-mb-4">
+                      {React.createElement(schemaField.render, {
+                        onChange: (newValue: string) => {
+                          const { dispatch } = getPuck();
+                          dispatch({
+                            type: "setData",
+                            data: {
+                              ...appState.data,
+                              root: {
+                                ...appState.data.root,
+                                props: {
+                                  ...appState.data.root?.props,
+                                  schemaMarkup: newValue,
+                                } as any,
+                              },
+                            },
+                          });
                         },
-                      });
-                    }}
-                  />
-                </div>
-              );
+                        value: appState.data.root?.props?.schemaMarkup || "",
+                        field: { label: msg("schemaMarkup", "Schema Markup") },
+                      })}
+                    </div>
+                  );
+                }
+              }
             }
 
             return <>{children}</>;
