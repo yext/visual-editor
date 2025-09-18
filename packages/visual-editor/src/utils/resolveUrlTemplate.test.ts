@@ -27,6 +27,27 @@ const mockStreamDocument: StreamDocument = {
   }),
 };
 
+const mockDirectoryDocument: StreamDocument = {
+  name: "Yext",
+  id: "123",
+  locale: "en",
+  address: {
+    line1: "61 9th Ave",
+    city: "New York",
+    region: "NY",
+    country: "USA",
+  },
+  __: {
+    isPrimaryLocale: true,
+    codeTemplate: "directory",
+    entityPageSetUrlTemplates: JSON.stringify({
+      primary: "[[address.region]]/page/[[id]]",
+      alternate: "[[locale]]/[[address.region]]/page/[[id]]",
+    }),
+  },
+  _pageset: JSON.stringify({}),
+};
+
 describe("resolveUrlTemplate", () => {
   it("resolves primary template for primary locale", () => {
     const result = resolveUrlTemplate(mockStreamDocument, "");
@@ -233,5 +254,22 @@ describe("resolveUrlTemplate", () => {
       __: { isPrimaryLocale: false },
     };
     expect(() => resolveUrlTemplate(alternateLocaleDoc, "")).toThrowError();
+  });
+
+  it("handles primary url template on directory pages", () => {
+    expect(resolveUrlTemplate(mockDirectoryDocument, "")).toBe("ny/page/123");
+  });
+
+  it("handles alternate url templates on directory pages", () => {
+    expect(
+      resolveUrlTemplate(
+        {
+          ...mockDirectoryDocument,
+          __: { ...mockDirectoryDocument.__, isPrimaryLocale: false },
+          locale: "es",
+        },
+        ""
+      )
+    ).toBe("es/ny/page/123");
   });
 });
