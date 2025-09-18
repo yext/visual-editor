@@ -11,12 +11,12 @@ import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
-import { filterComponentsFromConfig } from "../../utils/filterComponents.tsx";
+import { filterComponentsFromConfig } from "../../utils/filterComponents.ts";
 
 const devLogger = new DevLogger();
 
 export const useCommonMessageReceivers = (
-  componentRegistry: Map<string, Config<any>>,
+  componentRegistry: Record<string, Config<any>>,
   localDev: boolean
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
@@ -44,7 +44,7 @@ export const useCommonMessageReceivers = (
       const devMetadata = generateTemplateMetadata();
       setTemplateMetadata(devMetadata);
 
-      const puckConfig = componentRegistry.get(devMetadata.templateId);
+      const puckConfig = componentRegistry[devMetadata.templateId];
       if (!puckConfig) {
         throw new Error(
           `Could not find config for template: templateId=${devMetadata.templateId}`
@@ -91,7 +91,7 @@ export const useCommonMessageReceivers = (
   }
 
   useReceiveMessage("getTemplateMetadata", TARGET_ORIGINS, (send, payload) => {
-    let puckConfig = componentRegistry.get(payload.templateId);
+    let puckConfig = componentRegistry[payload.templateId];
     if (puckConfig) {
       puckConfig = filterComponentsFromConfig(
         puckConfig,

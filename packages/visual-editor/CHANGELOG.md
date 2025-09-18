@@ -1,3 +1,96 @@
+#### 0.0.58 (2025-09-12)
+
+##### Chores
+
+- move ve.config to package ([#756](https://github.com/yext/visual-editor/pull/756)) ([c2a34cc5](https://github.com/yext/visual-editor/commit/c2a34cc50cdeb8e4c68bc47dff44e7fca999714a))
+
+##### Continuous Integration
+
+- swap to public npm token ([e50af91a](https://github.com/yext/visual-editor/commit/e50af91a16a0d101de4f7693a7910f7ec8cd384b))
+- swap to global npm token ([#761](https://github.com/yext/visual-editor/pull/761)) ([8f892e87](https://github.com/yext/visual-editor/commit/8f892e87ed5436374129d3ec05ec355bdb1cc3d0))
+
+##### New Features
+
+- handle embedded fields in html component ([#758](https://github.com/yext/visual-editor/pull/758)) ([722473b3](https://github.com/yext/visual-editor/commit/722473b377af1e5fbf4495e6640732d72d724029))
+
+##### Bug Fixes
+
+- dark brand colors in RTF ([#760](https://github.com/yext/visual-editor/pull/760)) ([0a0f3ed6](https://github.com/yext/visual-editor/commit/0a0f3ed65879173c5efc7ddcaa07185f031382a1))
+- locator no results mobile width ([#757](https://github.com/yext/visual-editor/pull/757)) ([4734b6b1](https://github.com/yext/visual-editor/commit/4734b6b172d27fe903ccfd4b32053b59afea7cd3))
+- resolve undefined 'state' error ([#755](https://github.com/yext/visual-editor/pull/755)) ([db52b5c8](https://github.com/yext/visual-editor/commit/db52b5c85d9d432506b0a0fd33acf9f0285ca549))
+
+##### Other Changes
+
+- v0.0.58 ([a83e4d23](https://github.com/yext/visual-editor/commit/a83e4d23285612c91518a604b42cc345a6292287))
+- v0.0.58 ([2e1acfe8](https://github.com/yext/visual-editor/commit/2e1acfe86f96f2494914d46df0c08187e0491e18))
+- v0.0.58 ([c88aaaa6](https://github.com/yext/visual-editor/commit/c88aaaa6299ecef7110a299d6bfb175865e79305))
+- v0.0.58 ([409545a4](https://github.com/yext/visual-editor/commit/409545a4f074aea0a052a9a995f30967a47d38c1))
+- v0.0.58 ([aff58b96](https://github.com/yext/visual-editor/commit/aff58b96984bab2ca607556bd8084177cbe21e55))
+- v0.0.58 ([5161276a](https://github.com/yext/visual-editor/commit/5161276a6ab98e2c2f5e1b7a373e9c828dcdae45))
+- v0.0.58 ([275081f6](https://github.com/yext/visual-editor/commit/275081f6de29fe70976d225c7184a53f61f14ac7))
+- v0.0.58" ([fe55aa26](https://github.com/yext/visual-editor/commit/fe55aa26823287ab34a9650287d2d63a8e63a21c))
+- v0.0.58 ([b02dedac](https://github.com/yext/visual-editor/commit/b02dedac7455d558486981c6dc87cc1fd84ff3ca))
+- v0.0.58" ([ba09b6b4](https://github.com/yext/visual-editor/commit/ba09b6b40e620cc551d0b9b1a3cc635a22a711b1))
+- v0.0.58 ([bd21958b](https://github.com/yext/visual-editor/commit/bd21958bf180f6664aa5309f2bfc804fd20e32ba))
+
+#### 0.0.57 (2025-09-04)
+
+##### Chores
+
+- remove field not found warnings (#752) (ce9130f4)
+- move theme config to package (#750) (bcc2658b)
+
+##### Bug Fixes
+
+- category filtering (#753) (0209525f)
+- page metadata (#754) (42cd551f)
+- cannot read properties of null error during editor load (#751) (66851806)
+- prevent cta link from crashing when empty (#749) (eda3a461)
+- fallback to primary template if alternate is missing (#747) (13b5a713)
+
+#### 0.0.56 (2025-08-28)
+
+##### Chores
+
+- update fonts to match platform (#742) (57ad4b63)
+- upgrade to Puck 0.20.1 (#741) (505199d9)
+- ignore flaky footer change (#738) (758c63a2)
+- add Grid test (#725) (243f9e14)
+- continue improving flaky component tests (#722) (8b1d3468)
+
+##### New Features
+
+- use urlTemplate from \_pageset.config (#689) (20a49b83)
+- video assets (#733) (baf30722)
+- add Fixed option for Expanded Header (#737) (8f980987)
+- improve locale deletion warning (#715) (e9223258)
+- add liveVisibility to CustomCodeSection (#724) (5c51a2cd)
+- have BannerSection's text use rich text (#723) (6085fd09)
+- improve open now styling (#712) (5f360683)
+
+##### Bug Fixes
+
+- prevent HeroSection image flickering (#746) (bf66f553)
+- image/video toggle (#745) (22a3ad09)
+- embedded field conversion (#744) (bc51f892)
+- translate select options (#743) (f0a1e74b)
+- emailsComponent constant value crash (#740) (fab98f6c)
+- add CTA Type option in entity field mode (#731) (bf0af512)
+- prevent infinite re-renders with PhoneInput (#736) (80c4ace9)
+- remove "flex-reverse" usage (#730) (c3865e83)
+- live visibility in some sections (#732) (6da5356e)
+- heroSection variants properly resolve struct fields (#729) (94e393db)
+- adjust atoms to match new styling (#726) (2603cb31)
+- use previously selected field for HeroSection and PromoSection (#728) (c389858d)
+
+##### Other Changes
+
+- open image upload drawer for static images (#687)" (#714)" (#716)" (#719)" (#721) (46ad0fa8)
+
+##### Refactors
+
+- additional asset image support (#727) (4f5676c2)
+
 #### 0.0.55 (2025-08-14)
 
 ##### New Features

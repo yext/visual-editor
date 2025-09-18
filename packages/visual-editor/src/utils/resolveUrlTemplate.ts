@@ -33,13 +33,26 @@ export const resolveUrlTemplate = (
     return alternateFunction(streamDocument, relativePrefixToRoot);
   }
 
-  const isPrimaryLocale = !!streamDocument.__?.isPrimaryLocale;
+  const isPrimaryLocale = streamDocument.__?.isPrimaryLocale !== false;
 
-  const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-  let urlTemplate =
-    pagesetJson?.config?.urlTemplate?.[
-      isPrimaryLocale ? "primary" : "alternate"
-    ];
+  let urlTemplates;
+  if (streamDocument?.__?.codeTemplate === "directory") {
+    urlTemplates = JSON.parse(
+      streamDocument?.__?.entityPageSetUrlTemplates || "{}"
+    );
+  } else {
+    const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
+    urlTemplates = pagesetJson?.config?.urlTemplate || {};
+  }
+
+  let urlTemplate: string | undefined;
+  if (isPrimaryLocale && urlTemplates.primary) {
+    urlTemplate = urlTemplates.primary;
+  } else if (!isPrimaryLocale && urlTemplates.alternate) {
+    urlTemplate = urlTemplates.alternate;
+  } else {
+    urlTemplate = urlTemplates.primary || urlTemplates.alternate;
+  }
 
   if (!urlTemplate) {
     return getLocationPath(

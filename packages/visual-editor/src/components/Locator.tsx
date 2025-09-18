@@ -75,7 +75,7 @@ export interface LocatorProps {
    * If 'true', displays a button to filter for locations that are currently open.
    * @defaultValue false
    */
-  openNowButton?: boolean;
+  openNowButton: boolean;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -125,6 +125,9 @@ const locatorFields: Fields<LocatorProps> = {
  */
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
+  defaultProps: {
+    openNowButton: false,
+  },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
 };
@@ -384,7 +387,7 @@ const LocatorInternal = ({
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div className="h-screen md:w-2/5 lg:w-1/3 flex flex-col">
+      <div className="h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col">
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch

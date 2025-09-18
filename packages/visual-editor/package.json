@@ -1,9 +1,13 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "0.0.55",
+  "version": "0.0.58",
   "type": "module",
   "author": "sumo@yext.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yext/visual-editor.git"
+  },
   "types": "dist/index.d.ts",
   "main": "dist/visual-editor.cjs",
   "module": "dist/visual-editor.js",
@@ -25,7 +29,8 @@
     "./plugin": {
       "default": "./dist/plugin/plugin.js"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/style.css",
+    "./editor.css": "./dist/editor.css"
   },
   "scripts": {
     "build:components": "tsc && vite build",
@@ -40,7 +45,7 @@
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
-    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs",
+    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs ; tsx scripts/generateComponentTypeDefinitions.ts",
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
@@ -78,6 +83,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
+    "handlebars": "^4.7.8",
     "i18next": "^25.2.1",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",
@@ -134,7 +140,7 @@
     "lint-staged": "^15.2.7",
     "minimist": "^1.2.8",
     "pixelmatch": "^7.1.0",
-    "playwright": "^1.54.0",
+    "playwright": "1.55.0",
     "pngjs": "^7.0.0",
     "prettier": "^3.3.3",
     "react-icons": "^5.2.1",

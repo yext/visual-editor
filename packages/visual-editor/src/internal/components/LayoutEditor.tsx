@@ -153,8 +153,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
           },
         }));
         const localHistoryIndex = localHistories.length - 1;
+        // @ts-expect-error https://github.com/measuredco/puck/issues/673
         setPuckInitialHistory({
-          // @ts-expect-error https://github.com/measuredco/puck/issues/673
           histories: localHistories,
           index: localHistoryIndex,
           appendData: false,

@@ -8,9 +8,9 @@ import {
   VisibilityWrapper,
   getAnalyticsScopeHash,
   msg,
+  AdvancedCoreInfoCategory,
 } from "@yext/visual-editor";
 import { layoutProps, layoutVariants } from "../Layout.tsx";
-import { AdvancedCoreInfoCategory } from "../_componentCategories";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
 export interface GridProps extends layoutProps {
