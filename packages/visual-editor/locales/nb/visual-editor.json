@@ -20,6 +20,7 @@
     "region": "Stat/region",
     "sublocality": "Sublocality"
   },
+  "advancedSettings": "Avanserte innstillinger",
   "altText": "ALT -tekst",
   "applyAll": "Bruk på alle lokaliteter",
   "applyAllWithLabel": "Bruk {{fieldLabel}} på alle steder",
@@ -113,6 +114,7 @@
     "warning": "Denne handlingen vil fjerne dine lokale endringer. Det kan ikke angre."
   },
   "emailList": "E -postliste",
+  "enterSchemaMarkup": "Skriv inn skjemadyring ...",
   "entityTypeField": "{{entityType}} felt",
   "event": "Hendelse",
   "expandedHeaderDesktop": "Utvidet topptopp",
@@ -420,6 +422,7 @@
   "optional": "Valgfri",
   "outline": "Skissere",
   "page": "Side",
+  "pageSettings": "Sideinnstillinger",
   "pages": "Sider",
   "phone": "Telefon",
   "photo": "Foto",
@@ -472,6 +475,7 @@
   "reopenDate": "Åpne dato på nytt",
   "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",
+  "schemaMarkup": "Skjema markering",
   "search": "Søk",
   "searchDropdownHere": "Søk i rullegardininngang",
   "searchHere": "Søk her ...",

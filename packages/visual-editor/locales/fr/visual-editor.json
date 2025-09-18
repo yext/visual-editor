@@ -20,6 +20,7 @@
     "region": "État / région",
     "sublocality": "Sublocalité"
   },
+  "advancedSettings": "Paramètres avancés",
   "altText": "Texte alt",
   "applyAll": "Postuler à tous les lieux",
   "applyAllWithLabel": "Appliquer {{fieldLabel}} à tous les endroits",
@@ -112,6 +113,7 @@
     "warning": "Cette action supprimera vos modifications locales. Il ne peut pas être défait."
   },
   "emailList": "Liste de diffusion",
+  "enterSchemaMarkup": "Entrez le balisage du schéma ...",
   "entityTypeField": "Champ de {{entityType}}",
   "event": "Événement",
   "expandedHeaderDesktop": "Desktop en tête élargi",
@@ -419,6 +421,7 @@
   "optional": "Facultatif",
   "outline": "Contour",
   "page": "Page",
+  "pageSettings": "Paramètres de la page",
   "pages": "Pages",
   "phone": "Téléphone",
   "photo": "Photo",
@@ -471,6 +474,7 @@
   "reopenDate": "Rouvrir la date",
   "responseFrom": "Réponse de {{businessName}}",
   "saturday": "Samedi",
+  "schemaMarkup": "Marquage du schéma",
   "search": "Recherche",
   "searchDropdownHere": "Entrée déroulante de recherche",
   "searchHere": "Recherche ici ...",

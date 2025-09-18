@@ -20,6 +20,7 @@
     "region": "Štát/región",
     "sublocality": "Sublokalita"
   },
+  "advancedSettings": "Rozšírené nastavenia",
   "altText": "Alt",
   "applyAll": "Vzťahovať sa na všetky miesta",
   "applyAllWithLabel": "Použite {{fieldLabel}} na všetky lokality",
@@ -113,6 +114,7 @@
     "warning": "Táto akcia odstráni vaše miestne zmeny. Nedá sa to vrátiť späť."
   },
   "emailList": "Zoznam e -mailov",
+  "enterSchemaMarkup": "Zadajte značku schémy ...",
   "entityTypeField": "{{entityType}} pole",
   "event": "Udalosť",
   "expandedHeaderDesktop": "Rozšírená plocha hlavičky",
@@ -420,6 +422,7 @@
   "optional": "Voliteľný",
   "outline": "Obrys",
   "page": "Strana",
+  "pageSettings": "Nastavenia stránky",
   "pages": "Stránky",
   "phone": "Telefonovať",
   "photo": "Fotografia",
@@ -472,6 +475,7 @@
   "reopenDate": "Znovu otvoriť dátum",
   "responseFrom": "Odpoveď z {{businessName}}",
   "saturday": "Sobota",
+  "schemaMarkup": "Označenie schémy",
   "search": "Prehliadka",
   "searchDropdownHere": "Vyhľadajte rozbaľovací vstup",
   "searchHere": "Vyhľadajte tu ...",

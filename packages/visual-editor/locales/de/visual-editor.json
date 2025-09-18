@@ -20,6 +20,7 @@
     "region": "Staat/Region",
     "sublocality": "Sublokalität"
   },
+  "advancedSettings": "Erweiterte Einstellungen",
   "altText": "ALT -Text",
   "applyAll": "Bewerben Sie sich für alle Orte",
   "applyAllWithLabel": "Wenden Sie {{fieldLabel}} auf alle Orte an",
@@ -112,6 +113,7 @@
     "warning": "Diese Aktion entfernen Ihre lokalen Änderungen. Es kann nicht rückgängig gemacht werden."
   },
   "emailList": "E -Mail -Liste",
+  "enterSchemaMarkup": "Geben Sie Schema Markup ein ...",
   "entityTypeField": "{{entityType}} Feld",
   "event": "Ereignis",
   "expandedHeaderDesktop": "Erweiterter Header -Desktop",
@@ -419,6 +421,7 @@
   "optional": "Optional",
   "outline": "Gliederung",
   "page": "Seite",
+  "pageSettings": "Seiteneinstellungen",
   "pages": "Seiten",
   "phone": "Telefon",
   "photo": "Foto",
@@ -471,6 +474,7 @@
   "reopenDate": "Wiedereröffnung Datum",
   "responseFrom": "Antwort von {{businessName}}",
   "saturday": "Samstag",
+  "schemaMarkup": "Schema -Markup",
   "search": "Suchen",
   "searchDropdownHere": "Dropdown -Eingabe suchen",
   "searchHere": "Suche hier ...",

@@ -20,6 +20,7 @@
     "region": "州/地區",
     "sublocality": "子域"
   },
+  "advancedSettings": "進階設定",
   "altText": "Alt文字",
   "applyAll": "申請所有地區",
   "applyAllWithLabel": "將{{fieldLabel}}應用於所有語言",
@@ -113,6 +114,7 @@
     "warning": "此操作將消除您的本地更改。它不能撤消。"
   },
   "emailList": "電子郵件列表",
+  "enterSchemaMarkup": "輸入模式標記...",
   "entityTypeField": "{{entityType}}字段",
   "event": "事件",
   "expandedHeaderDesktop": "擴展的標頭桌面",
@@ -420,6 +422,7 @@
   "optional": "選修的",
   "outline": "大綱",
   "page": "頁",
+  "pageSettings": "頁面設置",
   "pages": "頁面",
   "phone": "電話",
   "photo": "照片",
@@ -472,6 +475,7 @@
   "reopenDate": "重新開放日期",
   "responseFrom": "{{businessName}}的響應",
   "saturday": "週六",
+  "schemaMarkup": "模式標記",
   "search": "搜尋",
   "searchDropdownHere": "搜索下拉輸入",
   "searchHere": "在這裡搜索...",

@@ -24,8 +24,80 @@ import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
+import { AdvancedSettings } from "./AdvancedSettings.tsx";
+import { cn } from "../../utils/cn.ts";
 
 const devLogger = new DevLogger();
+
+// Advanced Settings link configuration
+const createAdvancedSettingsLink = () => ({
+  type: "custom" as const,
+  render: () => {
+    const getPuck = useGetPuck();
+
+    return (
+      <div className="ve-p-4 ve-flex ve-justify-center ve-items-center">
+        <button
+          onClick={() => {
+            const { appState, dispatch } = getPuck();
+            const advancedSettingsId = "AdvancedSettings";
+            const pageSettingsId = "PageSettings";
+
+            // Create a parent component that will show "Page" in breadcrumb
+            const parentComponent = {
+              type: "PageSettings",
+              props: {
+                id: pageSettingsId,
+                data: { title: pt("pageSettings", "Page Settings") },
+              },
+            };
+            const advancedSettingsComponent = {
+              type: "AdvancedSettings",
+              props: {
+                id: advancedSettingsId,
+                data: { schemaMarkup: "" },
+              },
+            };
+            const newData = {
+              ...appState.data,
+              content: [
+                ...(appState.data.content || []),
+                parentComponent,
+                advancedSettingsComponent,
+              ],
+              zones: {
+                ...appState.data.zones,
+                [`${parentComponent.props.id}:advanced`]: [
+                  advancedSettingsComponent,
+                ],
+              },
+            };
+
+            dispatch({ type: "setData", data: newData });
+            setTimeout(() => {
+              dispatch({
+                type: "setUi",
+                ui: {
+                  ...appState.ui,
+                  itemSelector: {
+                    zone: `${parentComponent.props.id}:advanced`,
+                    index: 0,
+                  },
+                  rightSideBarVisible: true,
+                },
+              });
+            }, 100);
+          }}
+          className={cn(
+            "ve-bg-none ve-border-none ve-text-blue-600 ve-no-underline ve-text-sm ve-font-medium ve-cursor-pointer ve-p-0"
+          )}
+        >
+          {pt("advancedSettings", "Advanced Settings")}
+        </button>
+      </div>
+    );
+  },
+});
 
 type InternalLayoutEditorProps = {
   puckConfig: Config;
@@ -159,6 +231,20 @@ export const InternalLayoutEditor = ({
       }
     );
 
+    translatedComponents["AdvancedSettings"] = {
+      ...AdvancedSettings,
+      label: pt("advancedSettings", "Advanced Settings"),
+    };
+
+    translatedComponents["PageSettings"] = {
+      label: pt("page", "Page"),
+      fields: {},
+      defaultProps: {
+        data: { title: "Page Settings" },
+      },
+      render: () => <></>,
+    };
+
     return {
       categories: puckConfig.categories,
       components: translatedComponents,
@@ -178,6 +264,7 @@ export const InternalLayoutEditor = ({
             },
           }),
           ...puckConfig.root?.fields,
+          __advancedSettingsLink: createAdvancedSettingsLink(),
         },
         defaultProps: {
           title: {
@@ -190,7 +277,9 @@ export const InternalLayoutEditor = ({
             constantValue: "",
             constantValueEnabled: false,
           },
+          schemaMarkup: "",
           ...puckConfig.root?.defaultProps,
+          __advancedSettingsLink: null,
         },
       },
     } as Config;
@@ -204,6 +293,64 @@ export const InternalLayoutEditor = ({
         initialHistory={puckInitialHistory}
         onChange={change}
         overrides={{
+          fields: ({ children }) => {
+            const getPuck = useGetPuck();
+            const { appState } = getPuck();
+            const [localSchemaValue, setLocalSchemaValue] = React.useState(
+              appState.data.root?.props?.schemaMarkup || ""
+            );
+
+            const isAdvancedSettingsSelected =
+              appState?.ui?.itemSelector &&
+              appState.ui.itemSelector.zone?.includes(":advanced") &&
+              appState.ui.itemSelector.zone !== "root";
+
+            // Sync local state with root props when component mounts or root changes
+            React.useEffect(() => {
+              setLocalSchemaValue(
+                appState.data.root?.props?.schemaMarkup || ""
+              );
+            }, [appState.data.root?.props?.schemaMarkup]);
+
+            if (isAdvancedSettingsSelected) {
+              return (
+                <div className="ve-p-4 ve-mb-4">
+                  <label className="ve-block ve-mb-2 ve-font-medium">
+                    {pt("schemaMarkup", "Schema Markup")}
+                  </label>
+                  <textarea
+                    className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
+                    placeholder={pt(
+                      "enterSchemaMarkup",
+                      "Enter schema markup..."
+                    )}
+                    value={localSchemaValue}
+                    onChange={(e) => {
+                      const newValue = e.target.value;
+                      setLocalSchemaValue(newValue);
+
+                      const { dispatch } = getPuck();
+                      dispatch({
+                        type: "setData",
+                        data: {
+                          ...appState.data,
+                          root: {
+                            ...appState.data.root,
+                            props: {
+                              ...appState.data.root?.props,
+                              schemaMarkup: newValue,
+                            } as any,
+                          },
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              );
+            }
+
+            return <>{children}</>;
+          },
           header: () => (
             <LayoutHeader
               templateMetadata={templateMetadata}
@@ -229,6 +376,16 @@ export const InternalLayoutEditor = ({
           },
           actionBar: ({ children, label }) => {
             const getPuck = useGetPuck();
+            const { appState } = getPuck();
+
+            const isAdvancedSettingsSelected =
+              appState?.ui?.itemSelector &&
+              appState.ui.itemSelector.zone?.includes(":advanced") &&
+              appState.ui.itemSelector.zone !== "root";
+
+            if (isAdvancedSettingsSelected) {
+              return <></>;
+            }
 
             const copyToClipboard = () => {
               const { appState, getItemBySelector } = getPuck();

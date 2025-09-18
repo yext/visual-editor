@@ -20,6 +20,7 @@
     "region": "Valsts/reģions",
     "sublocality": "Sublocalitāte"
   },
+  "advancedSettings": "Papildu iestatījumi",
   "altText": "Alt teksts",
   "applyAll": "Piesakieties visās vietās",
   "applyAllWithLabel": "Uz visiem lokiem uzklājiet {{fieldLabel}}",
@@ -113,6 +114,7 @@
     "warning": "Šī darbība noņems jūsu vietējās izmaiņas. To nevar atsaukt."
   },
   "emailList": "E -pasta saraksts",
+  "enterSchemaMarkup": "Ievadiet shēmas marķējumu ...",
   "entityTypeField": "{{entityType}} lauks",
   "event": "Notikums",
   "expandedHeaderDesktop": "Paplašināta galvenes darbvirsma",
@@ -420,6 +422,7 @@
   "optional": "Izvēlīgs",
   "outline": "Kontūra",
   "page": "Lappuse",
+  "pageSettings": "Lapas iestatījumi",
   "pages": "Lappuses",
   "phone": "Telefons",
   "photo": "Foto",
@@ -472,6 +475,7 @@
   "reopenDate": "Atkārtoti atvērt datumu",
   "responseFrom": "Atbilde no {{businessName}}",
   "saturday": "Sestdiena",
+  "schemaMarkup": "Shēmas uzcenojums",
   "search": "Meklēšana",
   "searchDropdownHere": "Meklēt nolaižamās ieejas",
   "searchHere": "Meklēt šeit ...",

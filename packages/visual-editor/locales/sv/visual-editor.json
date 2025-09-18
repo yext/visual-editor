@@ -20,6 +20,7 @@
     "region": "Stat/region",
     "sublocality": "Sublokalitet"
   },
+  "advancedSettings": "Avancerade inställningar",
   "altText": "Alt text",
   "applyAll": "Applicera på alla platser",
   "applyAllWithLabel": "Applicera {{fieldLabel}} på alla platser",
@@ -113,6 +114,7 @@
     "warning": "Denna åtgärd kommer att ta bort dina lokala förändringar. Det kan inte ångras."
   },
   "emailList": "E -postlista",
+  "enterSchemaMarkup": "Ange schema markup ...",
   "entityTypeField": "{{entityType}} Fältet",
   "event": "Händelse",
   "expandedHeaderDesktop": "Utökat huvudskrivbord",
@@ -420,6 +422,7 @@
   "optional": "Frivillig",
   "outline": "Skissera",
   "page": "Sida",
+  "pageSettings": "Sidoinställningar",
   "pages": "Sidor",
   "phone": "Telefon",
   "photo": "Bild",
@@ -472,6 +475,7 @@
   "reopenDate": "Öppna datum igen",
   "responseFrom": "Svar från {{businessName}}",
   "saturday": "Lördag",
+  "schemaMarkup": "Schematmarkering",
   "search": "Söka",
   "searchDropdownHere": "Sökrullningsingång",
   "searchHere": "Sök här ...",

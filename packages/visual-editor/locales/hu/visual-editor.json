@@ -20,6 +20,7 @@
     "region": "Állami/régió",
     "sublocality": "Szublokitás"
   },
+  "advancedSettings": "Speciális beállítások",
   "altText": "Alt szöveg",
   "applyAll": "Jelentkezzen az összes helyszínre",
   "applyAllWithLabel": "Alkalmazza a {{fieldLabel}}et minden lokalizációra",
@@ -113,6 +114,7 @@
     "warning": "Ez a művelet eltávolítja a helyi változtatásokat. Nem lehet visszavonni."
   },
   "emailList": "E -mail lista",
+  "enterSchemaMarkup": "Írja be a séma jelölését ...",
   "entityTypeField": "{{entityType}} mező",
   "event": "Esemény",
   "expandedHeaderDesktop": "Kibővített fejléc asztal",
@@ -420,6 +422,7 @@
   "optional": "Választható",
   "outline": "Vázlat",
   "page": "Oldal",
+  "pageSettings": "Oldalbeállítások",
   "pages": "Oldalak",
   "phone": "Telefon",
   "photo": "Fénykép",
@@ -472,6 +475,7 @@
   "reopenDate": "Újra megnyitja a dátumot",
   "responseFrom": "Válasz a {{businessName}}ból",
   "saturday": "szombat",
+  "schemaMarkup": "Séma jelölés",
   "search": "Keresés",
   "searchDropdownHere": "Keresési legördülő bemenet",
   "searchHere": "Keressen itt ...",

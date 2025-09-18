@@ -20,6 +20,7 @@
     "region": "Stat/regiune",
     "sublocality": "Sublociune"
   },
+  "advancedSettings": "Setări avansate",
   "altText": "Alt text",
   "applyAll": "Aplicați la toate localitățile",
   "applyAllWithLabel": "Aplicați {{fieldLabel}} la toate localitățile",
@@ -113,6 +114,7 @@
     "warning": "Această acțiune vă va elimina modificările locale. Nu poate fi anulat."
   },
   "emailList": "Lista de e -mailuri",
+  "enterSchemaMarkup": "Introduceți Schema Markup ...",
   "entityTypeField": "câmp {{entityType}}",
   "event": "Eveniment",
   "expandedHeaderDesktop": "Desktop de antet extins",
@@ -420,6 +422,7 @@
   "optional": "Opțional",
   "outline": "Contur",
   "page": "Pagină",
+  "pageSettings": "Setări de pagină",
   "pages": "Pagini",
   "phone": "Telefon",
   "photo": "Fotografie",
@@ -472,6 +475,7 @@
   "reopenDate": "Data redeschiderii",
   "responseFrom": "Răspuns de la {{businessName}}",
   "saturday": "sâmbătă",
+  "schemaMarkup": "Schema Markup",
   "search": "Căutare",
   "searchDropdownHere": "Căutați intrarea derulantă",
   "searchHere": "Căutați aici ...",
