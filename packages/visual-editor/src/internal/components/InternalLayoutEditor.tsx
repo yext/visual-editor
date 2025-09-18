@@ -48,7 +48,7 @@ const createAdvancedSettingsLink = () => ({
               type: "PageSettings",
               props: {
                 id: pageSettingsId,
-                data: { title: "Page Settings" },
+                data: { title: pt("pageSettings", "Page Settings") },
               },
             };
             const advancedSettingsComponent = {
@@ -320,7 +320,10 @@ export const InternalLayoutEditor = ({
                   </label>
                   <textarea
                     className="ve-w-full ve-min-h-[120px] ve-p-2 ve-border ve-border-gray-300 ve-rounded ve-text-sm ve-font-mono"
-                    placeholder="Enter schema markup..."
+                    placeholder={pt(
+                      "enterSchemaMarkup",
+                      "Enter schema markup..."
+                    )}
                     value={localSchemaValue}
                     onChange={(e) => {
                       const newValue = e.target.value;
