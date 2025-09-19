@@ -65,6 +65,17 @@ export const PhoneStyleFields = {
   ),
 };
 
+export const defaultPhoneDataProps: PhoneProps["data"] = {
+  number: {
+    field: "mainPhone",
+    constantValue: "",
+  },
+  label: {
+    en: "Phone",
+    hasLocalizedValue: "true",
+  },
+};
+
 const PhoneFields: Fields<PhoneProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
@@ -112,16 +123,7 @@ export const Phone: ComponentConfig<{ props: PhoneProps }> = {
   label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {
-    data: {
-      number: {
-        field: "mainPhone",
-        constantValue: "",
-      },
-      label: {
-        en: "Phone",
-        hasLocalizedValue: "true",
-      },
-    },
+    data: defaultPhoneDataProps,
     styles: {
       phoneFormat: "domestic",
       includePhoneHyperlink: true,

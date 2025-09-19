@@ -38,6 +38,7 @@ import {
   AddressStyleFields,
 } from "../contentBlocks/Address.tsx";
 import {
+  defaultPhoneDataProps,
   PhoneDataFields,
   PhoneProps,
   PhoneStyleFields,
@@ -145,6 +146,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           phoneNumbers: YextField(msg("fields.phoneNumbers", "Phone Numbers"), {
             type: "array",
             arrayFields: PhoneDataFields,
+            defaultItemProps: defaultPhoneDataProps,
             getItemSummary: (item): string => {
               const { i18n } = usePlatformTranslation();
               const streamDocument = useDocument();
