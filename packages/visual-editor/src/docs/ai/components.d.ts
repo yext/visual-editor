@@ -621,6 +621,8 @@ interface EventStyles {
     backgroundColor?: BackgroundStyle;
     /** The CTA variant to use in each event card */
     ctaVariant: CTAVariant;
+    /** Whether to truncate the event description text */
+    truncateDescription: boolean;
   };
 }
 
