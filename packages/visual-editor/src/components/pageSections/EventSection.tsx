@@ -256,7 +256,11 @@ const EventCard = ({
             />
           )}
           {event.description && (
-            <p className={cardStyles.truncateDescription ? "line-clamp-2" : ""}>
+            <p
+              className={
+                cardStyles.truncateDescription ? "md:line-clamp-2" : ""
+              }
+            >
               {resolveComponentData(event.description, i18n.language)}
             </p>
           )}
