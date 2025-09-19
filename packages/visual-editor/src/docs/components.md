@@ -188,11 +188,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                         | Description                          | Default              |
-| :----------------------- | :------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                            | The background color of the section. | `Background Color 3` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; }` | Styling for all the cards.           |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                             | Styling for the heading.             |                      |
+| Prop                     | Type                                                                                                                       | Description                          | Default              |
+| :----------------------- | :------------------------------------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`                                                                                                          | The background color of the section. | `Background Color 3` |
+| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; truncateDescription: boolean; }` | Styling for all the cards.           |                      |
+| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                           | Styling for the heading.             |                      |
 
 #### Other Props
 
