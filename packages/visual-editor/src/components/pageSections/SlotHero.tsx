@@ -1,5 +1,10 @@
 import { ComponentConfig, Slot } from "@measured/puck";
-import { YextField, msg, backgroundColors } from "@yext/visual-editor";
+import {
+  YextField,
+  msg,
+  backgroundColors,
+  themeManagerCn,
+} from "@yext/visual-editor";
 import { HeroStyles } from "./HeroSection";
 import {
   AddressProps,
@@ -247,7 +252,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     // Hero Content Container
     const heroContent = await createComponent("SlotFlex", {
       className:
-        "flex-col gap-y-4 w-full sm:w-initial justify-center lg:min-w-[350px]",
+        "flex-col gap-y-6 md:gap-y-8 w-full sm:w-initial justify-center lg:min-w-[350px]",
       items: [businessInformation, hoursStatus, ctaGroup],
     });
 
@@ -276,13 +281,22 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
 
       // Create left image (Desktop left / Mobile top)
       leftImageComponent = await createComponent("SlotFlex", {
-        className: `w-full my-auto ${data.props.styles.mobileImagePosition === "bottom" ? "hidden sm:block" : ""} ${data.props.styles.desktopImagePosition === "right" ? "sm:hidden" : ""}`,
+        className: themeManagerCn(
+          "w-full my-auto max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none",
+          data.props.styles.mobileImagePosition === "bottom" &&
+            "hidden sm:block",
+          data.props.styles.desktopImagePosition === "right" && "sm:hidden"
+        ),
         items: [imageComponent],
       });
 
       // Create right image (Desktop right / Mobile bottom)
       rightImageComponent = await createComponent("SlotFlex", {
-        className: `w-full my-auto ${data.props.styles.mobileImagePosition === "top" ? "hidden sm:block" : ""} ${data.props.styles.desktopImagePosition === "left" ? "sm:hidden" : ""}`,
+        className: themeManagerCn(
+          "w-full my-auto max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none",
+          data.props.styles.mobileImagePosition === "top" && "hidden sm:block",
+          data.props.styles.desktopImagePosition === "left" && "sm:hidden"
+        ),
         items: [imageComponent],
       });
     }
@@ -312,7 +326,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
       background={styles.backgroundColor}
       puck={puck}
       id={id}
-      className="flex flex-col sm:flex-row gap-6 md:gap-10"
+      className={themeManagerCn("flex flex-col sm:flex-row gap-6 md:gap-10")}
     >
       {children}
     </SlottedPageSection>

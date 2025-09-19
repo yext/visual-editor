@@ -51,6 +51,10 @@ const SlotFlexInternal: ComponentConfig<SlotFlexProps> = {
     },
     items: [],
   },
+  permissions: {
+    drag: false,
+    insert: false,
+  },
   render: ({ className, items: Items }) => {
     return (
       <Section style={{ height: "100%" }}>
