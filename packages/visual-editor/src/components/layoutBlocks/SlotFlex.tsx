@@ -28,7 +28,7 @@ const Section = forwardRef<HTMLDivElement, SectionProps>(
   }
 );
 
-export type FlexProps = WithLayout<{
+export type SlotFlexProps = WithLayout<{
   justifyContent: "start" | "center" | "end";
   direction: "row" | "column";
   gap: number;
@@ -36,7 +36,8 @@ export type FlexProps = WithLayout<{
   items: Slot;
 }>;
 
-const FlexInternal: ComponentConfig<FlexProps> = {
+const SlotFlexInternal: ComponentConfig<SlotFlexProps> = {
+  label: "Slot Flex",
   fields: {
     direction: {
       label: "Direction",
@@ -100,4 +101,4 @@ const FlexInternal: ComponentConfig<FlexProps> = {
   },
 };
 
-export const Flex = withLayout(FlexInternal);
+export const SlotFlex = withLayout(SlotFlexInternal);

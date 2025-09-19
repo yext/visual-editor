@@ -1,4 +1,4 @@
-import { ComponentConfig, ComponentDataOptionalId, Slot } from "@measured/puck";
+import { ComponentConfig, Slot } from "@measured/puck";
 import { YextField, msg, backgroundColors } from "@yext/visual-editor";
 import { HeroStyles } from "./HeroSection";
 import {
@@ -30,7 +30,8 @@ import {
   Address,
 } from "../contentBlocks";
 import { SlottedPageSection } from "../atoms/slottedPageSection";
-import { Flex, FlexProps } from "../layoutBlocks/SlotFlex";
+import { SlotFlex, SlotFlexProps } from "../layoutBlocks/SlotFlex";
+import { ComponentDataOptionalId } from "@measured/puck";
 
 export type Components = {
   Address: AddressProps;
@@ -46,7 +47,7 @@ export type Components = {
   MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
   TextList: TextListProps;
-  Flex: FlexProps;
+  SlotFlex: SlotFlexProps;
 };
 
 const contentBlocks = {
@@ -63,7 +64,7 @@ const contentBlocks = {
   MapboxStaticMap: MapboxStaticMap,
   Phone: Phone,
   TextList: TextList,
-  Flex: Flex,
+  SlotFlex: SlotFlex,
 };
 
 async function createComponent<T extends keyof Components>(
@@ -174,34 +175,40 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     const children = [];
 
     // Business Name (H1)
-    children.push(
-      await createComponent("HeadingText", {
-        text: {
-          field: "",
-          constantValue: {
-            en: "Business Name",
-            hasLocalizedValue: "true",
-          },
-          constantValueEnabled: true,
+    const businessName = await createComponent("HeadingText", {
+      text: {
+        field: "",
+        constantValue: {
+          en: "Business Name",
+          hasLocalizedValue: "true",
         },
-        level: 1,
-      })
-    );
+        constantValueEnabled: true,
+      },
+      level: 1,
+    });
 
     // Local Geo Modifier (H3)
-    children.push(
-      await createComponent("HeadingText", {
-        text: {
-          field: "",
-          constantValue: {
-            en: "Geomodifier",
-            hasLocalizedValue: "true",
-          },
-          constantValueEnabled: true,
+    const localGeoModifier = await createComponent("HeadingText", {
+      text: {
+        field: "",
+        constantValue: {
+          en: "Geomodifier",
+          hasLocalizedValue: "true",
         },
-        level: 3,
-      })
-    );
+        constantValueEnabled: true,
+      },
+      level: 3,
+    });
+
+    const businessInformation = await createComponent("SlotFlex", {
+      direction: "column",
+      justifyContent: "start",
+      gap: 0,
+      wrap: "nowrap",
+      items: [businessName, localGeoModifier],
+    });
+
+    children.push(businessInformation);
 
     // Hours Status
     children.push(
@@ -212,29 +219,6 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
         },
       })
     );
-
-    // Image (if showImage is true)
-    if (data.props.styles.showImage) {
-      children.push(
-        await createComponent("ImageWrapper", {
-          data: {
-            image: {
-              field: "",
-              constantValue: {
-                url: "https://placehold.co/640x360",
-                height: 360,
-                width: 640,
-              },
-              constantValueEnabled: true,
-            },
-          },
-          styles: {
-            aspectRatio: 1.78, // 16:9
-            width: 640,
-          },
-        })
-      );
-    }
 
     // CTA Group
     children.push(
@@ -268,6 +252,29 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
       })
     );
 
+    // Add image if showImage is true
+    if (data.props.styles.showImage) {
+      children.push(
+        await createComponent("ImageWrapper", {
+          data: {
+            image: {
+              field: "",
+              constantValue: {
+                url: "https://placehold.co/640x360",
+                height: 360,
+                width: 640,
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            aspectRatio: 1.78, // 16:9
+            width: 640,
+          },
+        })
+      );
+    }
+
     return {
       ...data,
       props: {
@@ -281,7 +288,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
       background={styles.backgroundColor}
       puck={puck}
       id={id}
-      className="flex flex-col sm:flex-row gap-6 md:gap-10"
+      className="flex flex-col gap-y-4 w-full sm:w-initial"
     >
       {children}
     </SlottedPageSection>
