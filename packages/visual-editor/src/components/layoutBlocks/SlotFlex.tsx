@@ -29,71 +29,33 @@ const Section = forwardRef<HTMLDivElement, SectionProps>(
 );
 
 export type SlotFlexProps = WithLayout<{
-  justifyContent: "start" | "center" | "end";
-  direction: "row" | "column";
-  gap: number;
-  wrap: "wrap" | "nowrap";
+  className?: string;
   items: Slot;
 }>;
 
 const SlotFlexInternal: ComponentConfig<SlotFlexProps> = {
   label: "Slot Flex",
   fields: {
-    direction: {
-      label: "Direction",
-      type: "radio",
-      options: [
-        { label: "Row", value: "row" },
-        { label: "Column", value: "column" },
-      ],
-    },
-    justifyContent: {
-      label: "Justify Content",
-      type: "radio",
-      options: [
-        { label: "Start", value: "start" },
-        { label: "Center", value: "center" },
-        { label: "End", value: "end" },
-      ],
-    },
-    gap: {
-      label: "Gap",
-      type: "number",
-      min: 0,
-    },
-    wrap: {
-      label: "Wrap",
-      type: "radio",
-      options: [
-        { label: "true", value: "wrap" },
-        { label: "false", value: "nowrap" },
-      ],
+    className: {
+      label: "CSS Classes",
+      type: "text",
     },
     items: {
       type: "slot",
     },
   },
   defaultProps: {
-    justifyContent: "start",
-    direction: "row",
-    gap: 24,
-    wrap: "wrap",
+    className: "flex w-full flex-wrap",
     layout: {
       grow: true,
     },
     items: [],
   },
-  render: ({ justifyContent, direction, gap, wrap, items: Items }) => {
+  render: ({ className, items: Items }) => {
     return (
       <Section style={{ height: "100%" }}>
         <Items
-          className="flex w-full flex-wrap"
-          style={{
-            justifyContent,
-            flexDirection: direction,
-            gap,
-            flexWrap: wrap,
-          }}
+          className={cn("flex w-full", className)}
           disallow={["Hero", "Stats"]}
         />
       </Section>

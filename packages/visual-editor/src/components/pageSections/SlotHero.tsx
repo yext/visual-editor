@@ -200,80 +200,104 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
       level: 3,
     });
 
+    // Business Information Stack
     const businessInformation = await createComponent("SlotFlex", {
-      direction: "column",
-      justifyContent: "start",
-      gap: 0,
-      wrap: "nowrap",
+      className: "flex-col gap-y-0",
       items: [businessName, localGeoModifier],
     });
 
-    children.push(businessInformation);
-
     // Hours Status
-    children.push(
-      await createComponent("HoursStatus", {
-        hours: {
-          field: "hours",
-          constantValue: {},
-        },
-      })
-    );
+    const hoursStatus = await createComponent("HoursStatus", {
+      hours: {
+        field: "hours",
+        constantValue: {},
+      },
+    });
 
     // CTA Group
-    children.push(
-      await createComponent("CTAGroup", {
-        buttons: [
-          {
-            entityField: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: {
-                ctaType: "textAndLink",
-                label: "Call To Action",
-                link: "#",
-              },
+    const ctaGroup = await createComponent("CTAGroup", {
+      buttons: [
+        {
+          entityField: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              ctaType: "textAndLink",
+              label: "Call To Action",
+              link: "#",
             },
-            variant: "primary",
           },
-          {
-            entityField: {
-              field: "",
-              constantValueEnabled: true,
-              constantValue: {
-                ctaType: "textAndLink",
-                label: "Learn More",
-                link: "#",
-              },
+          variant: "primary",
+        },
+        {
+          entityField: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: {
+              ctaType: "textAndLink",
+              label: "Learn More",
+              link: "#",
             },
-            variant: "secondary",
           },
-        ],
-      })
-    );
+          variant: "secondary",
+        },
+      ],
+    });
 
-    // Add image if showImage is true
+    // Hero Content Container
+    const heroContent = await createComponent("SlotFlex", {
+      className:
+        "flex-col gap-y-4 w-full sm:w-initial justify-center lg:min-w-[350px]",
+      items: [businessInformation, hoursStatus, ctaGroup],
+    });
+
+    // Image if showImage is true
+    let leftImageComponent = null;
+    let rightImageComponent = null;
+
     if (data.props.styles.showImage) {
-      children.push(
-        await createComponent("ImageWrapper", {
-          data: {
-            image: {
-              field: "",
-              constantValue: {
-                url: "https://placehold.co/640x360",
-                height: 360,
-                width: 640,
-              },
-              constantValueEnabled: true,
+      const imageComponent = await createComponent("ImageWrapper", {
+        data: {
+          image: {
+            field: "",
+            constantValue: {
+              url: "https://placehold.co/640x360",
+              height: 360,
+              width: 640,
             },
+            constantValueEnabled: true,
           },
-          styles: {
-            aspectRatio: 1.78, // 16:9
-            width: 640,
-          },
-        })
-      );
+        },
+        styles: {
+          aspectRatio: 1.78, // 16:9
+          width: 640,
+        },
+      });
+
+      // Create left image (Desktop left / Mobile top)
+      leftImageComponent = await createComponent("SlotFlex", {
+        className: `w-full my-auto ${data.props.styles.mobileImagePosition === "bottom" ? "hidden sm:block" : ""} ${data.props.styles.desktopImagePosition === "right" ? "sm:hidden" : ""}`,
+        items: [imageComponent],
+      });
+
+      // Create right image (Desktop right / Mobile bottom)
+      rightImageComponent = await createComponent("SlotFlex", {
+        className: `w-full my-auto ${data.props.styles.mobileImagePosition === "top" ? "hidden sm:block" : ""} ${data.props.styles.desktopImagePosition === "left" ? "sm:hidden" : ""}`,
+        items: [imageComponent],
+      });
     }
+
+    // Main layout container
+    const mainLayout = await createComponent("SlotFlex", {
+      className: "flex flex-col sm:flex-row gap-6 md:gap-10",
+      items: [
+        ...(leftImageComponent ? [leftImageComponent] : []),
+        heroContent,
+        ...(rightImageComponent ? [rightImageComponent] : []),
+      ],
+    });
+
+    children.push(mainLayout);
 
     return {
       ...data,
@@ -288,7 +312,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
       background={styles.backgroundColor}
       puck={puck}
       id={id}
-      className="flex flex-col gap-y-4 w-full sm:w-initial"
+      className="flex flex-col sm:flex-row gap-6 md:gap-10"
     >
       {children}
     </SlottedPageSection>
