@@ -19,18 +19,25 @@ import {
   AdvancedCoreInfoCategoryComponents,
   type AdvancedCoreInfoCategoryProps,
 } from "../categories/AdvancedCoreInfoCategory";
+import {
+  LockedCategory,
+  LockedCategoryComponents,
+  type LockedCategoryProps,
+} from "../categories/LockedCategory";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
-    AdvancedCoreInfoCategoryProps {}
+    AdvancedCoreInfoCategoryProps,
+    LockedCategoryProps {}
 
 const components: Config<MainConfigProps>["components"] = {
   ...PageSectionCategoryComponents,
   ...DeprecatedCategoryComponents,
   ...OtherCategoryComponents,
   ...AdvancedCoreInfoCategoryComponents,
+  ...LockedCategoryComponents,
 };
 
 // The config used for base entities (locations, financial professionals, etc.)
@@ -53,6 +60,11 @@ export const mainConfig: Config<MainConfigProps> = {
     deprecatedComponents: {
       visible: false,
       components: DeprecatedCategory,
+    },
+    // locked components are hidden in the sidebar but still render if used in the page
+    lockedComponents: {
+      visible: false,
+      components: LockedCategory,
     },
   },
   root: {

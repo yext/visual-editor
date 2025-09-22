@@ -129,3 +129,14 @@ export const Phone: ComponentConfig<{ props: PhoneProps }> = {
   },
   render: (props) => <PhoneComponent {...props} />,
 };
+
+export const PhoneLocked: ComponentConfig<{ props: PhoneProps }> = {
+  ...Phone,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

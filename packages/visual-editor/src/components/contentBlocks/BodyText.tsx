@@ -89,3 +89,14 @@ export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
   },
   render: (props) => <BodyTextComponent {...props} />,
 };
+
+export const BodyTextLocked: ComponentConfig<{ props: BodyTextProps }> = {
+  ...BodyText,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

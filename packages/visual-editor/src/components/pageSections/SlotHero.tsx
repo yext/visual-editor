@@ -20,19 +20,19 @@ import {
   ImageWrapperProps,
   PhoneProps,
   TextListProps,
-  Emails,
-  TextList,
-  Phone,
-  MapboxStaticMap,
-  ImageWrapper,
-  GetDirections,
-  HeadingText,
-  HoursStatus,
-  HoursTable,
-  CTAGroup,
-  CTAWrapper,
-  BodyText,
-  Address,
+  EmailsLocked,
+  TextListLocked,
+  PhoneLocked,
+  MapboxStaticMapLocked,
+  ImageWrapperLocked,
+  GetDirectionsLocked,
+  HoursStatusLocked,
+  HoursTableLocked,
+  CTAGroupLocked,
+  CTAWrapperLocked,
+  BodyTextLocked,
+  AddressLocked,
+  HeadingTextLocked,
 } from "../contentBlocks";
 import { SlottedPageSection } from "../atoms/slottedPageSection";
 import { SlotFlex, SlotFlexProps } from "../layoutBlocks/SlotFlex";
@@ -40,35 +40,61 @@ import { ComponentDataOptionalId } from "@measured/puck";
 
 export type Components = {
   Address: AddressProps;
+  AddressLocked: AddressProps;
   BodyText: BodyTextProps;
+  BodyTextLocked: BodyTextProps;
   CTAGroup: CTAGroupProps;
+  CTAGroupLocked: CTAGroupProps;
   CTAWrapper: CTAWrapperProps;
+  CTAWrapperLocked: CTAWrapperProps;
   Emails: EmailsProps;
+  EmailsLocked: EmailsProps;
   GetDirections: GetDirectionsProps;
+  GetDirectionsLocked: GetDirectionsProps;
   HeadingText: HeadingTextProps;
+  HeadingTextLocked: HeadingTextProps;
   HoursStatus: HoursStatusProps;
+  HoursStatusLocked: HoursStatusProps;
   HoursTable: HoursTableProps;
+  HoursTableLocked: HoursTableProps;
   ImageWrapper: ImageWrapperProps;
+  ImageWrapperLocked: ImageWrapperProps;
   MapboxStaticMap: MapboxStaticProps;
+  MapboxStaticMapLocked: MapboxStaticProps;
   Phone: PhoneProps;
+  PhoneLocked: PhoneProps;
   TextList: TextListProps;
+  TextListLocked: TextListProps;
   SlotFlex: SlotFlexProps;
 };
 
 const contentBlocks = {
-  Address: Address,
-  BodyText: BodyText,
-  CTAGroup: CTAGroup,
-  CTAWrapper: CTAWrapper,
-  Emails: Emails,
-  GetDirections: GetDirections,
-  HeadingText: HeadingText,
-  HoursStatus: HoursStatus,
-  HoursTable: HoursTable,
-  ImageWrapper: ImageWrapper,
-  MapboxStaticMap: MapboxStaticMap,
-  Phone: Phone,
-  TextList: TextList,
+  Address: AddressLocked,
+  AddressLocked: AddressLocked,
+  BodyText: BodyTextLocked,
+  BodyTextLocked: BodyTextLocked,
+  CTAGroup: CTAGroupLocked,
+  CTAGroupLocked: CTAGroupLocked,
+  CTAWrapper: CTAWrapperLocked,
+  CTAWrapperLocked: CTAWrapperLocked,
+  Emails: EmailsLocked,
+  EmailsLocked: EmailsLocked,
+  GetDirections: GetDirectionsLocked,
+  GetDirectionsLocked: GetDirectionsLocked,
+  HeadingText: HeadingTextLocked,
+  HeadingTextLocked: HeadingTextLocked,
+  HoursStatus: HoursStatusLocked,
+  HoursStatusLocked: HoursStatusLocked,
+  HoursTable: HoursTableLocked,
+  HoursTableLocked: HoursTableLocked,
+  ImageWrapper: ImageWrapperLocked,
+  ImageWrapperLocked: ImageWrapperLocked,
+  MapboxStaticMap: MapboxStaticMapLocked,
+  MapboxStaticMapLocked: MapboxStaticMapLocked,
+  Phone: PhoneLocked,
+  PhoneLocked: PhoneLocked,
+  TextList: TextListLocked,
+  TextListLocked: TextListLocked,
   SlotFlex: SlotFlex,
 };
 
@@ -180,7 +206,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     const children = [];
 
     // Business Name (H1)
-    const businessName = await createComponent("HeadingText", {
+    const businessName = await createComponent("HeadingTextLocked", {
       text: {
         field: "",
         constantValue: {
@@ -193,7 +219,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     });
 
     // Local Geo Modifier (H3)
-    const localGeoModifier = await createComponent("HeadingText", {
+    const localGeoModifier = await createComponent("HeadingTextLocked", {
       text: {
         field: "",
         constantValue: {
@@ -212,7 +238,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     });
 
     // Hours Status
-    const hoursStatus = await createComponent("HoursStatus", {
+    const hoursStatus = await createComponent("HoursStatusLocked", {
       hours: {
         field: "hours",
         constantValue: {},
@@ -220,7 +246,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     });
 
     // CTA Group
-    const ctaGroup = await createComponent("CTAGroup", {
+    const ctaGroup = await createComponent("CTAGroupLocked", {
       buttons: [
         {
           entityField: {
@@ -261,7 +287,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     let rightImageComponent = null;
 
     if (data.props.styles.showImage) {
-      const imageComponent = await createComponent("ImageWrapper", {
+      const imageComponent = await createComponent("ImageWrapperLocked", {
         data: {
           image: {
             field: "",

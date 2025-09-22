@@ -159,3 +159,14 @@ export const HoursTable: ComponentConfig<{ props: HoursTableProps }> = {
   label: msg("components.hoursTable", "Hours Table"),
   render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
 };
+
+export const HoursTableLocked: ComponentConfig<{ props: HoursTableProps }> = {
+  ...HoursTable,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

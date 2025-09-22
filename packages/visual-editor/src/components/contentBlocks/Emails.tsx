@@ -113,3 +113,14 @@ export const Emails: ComponentConfig<{ props: EmailsProps }> = {
   },
   render: (props) => <EmailsComponent {...props} />,
 };
+
+export const EmailsLocked: ComponentConfig<{ props: EmailsProps }> = {
+  ...Emails,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};
