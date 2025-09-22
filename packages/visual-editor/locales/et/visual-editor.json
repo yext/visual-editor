@@ -30,7 +30,7 @@
     "writeComment": "Kirjutage oma kommentaar siia ..."
   },
   "arrayField": "Massiivi väli",
-  "backToPage": "Tagasi lehele",
+  "back": "Tagurpidi",
   "base": "Alus",
   "basicSelectorNoOptionsLabel": "Valikuid pole saadaval",
   "body": "Keha",

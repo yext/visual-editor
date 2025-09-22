@@ -30,7 +30,7 @@
     "writeComment": "Escribe tu comentario aquí ..."
   },
   "arrayField": "Campo de matriz",
-  "backToPage": "Volver a la página",
+  "back": "Atrás",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "No hay opciones disponibles",
   "body": "Cuerpo",

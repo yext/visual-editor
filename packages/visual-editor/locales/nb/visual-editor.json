@@ -30,7 +30,7 @@
     "writeComment": "Skriv kommentaren din her ..."
   },
   "arrayField": "Array -feltet",
-  "backToPage": "Tilbake til siden",
+  "back": "Tilbake",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Ingen alternativer tilgjengelig",
   "body": "Kropp",

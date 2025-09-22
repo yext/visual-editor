@@ -22,6 +22,7 @@ import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
+import { FaArrowLeft } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
@@ -323,20 +324,8 @@ export const InternalLayoutEditor = ({
                           }}
                           className="ve-flex ve-items-center ve-gap-2 ve-text-sm ve-text-blue-600 hover:ve-text-blue-800 ve-bg-none ve-border-none ve-cursor-pointer ve-p-0"
                         >
-                          <svg
-                            className="ve-w-4 ve-h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 19l-7-7 7-7"
-                            />
-                          </svg>
-                          {pt("backToPage", "Back to Page")}
+                          <FaArrowLeft className="ve-w-4 ve-h-4" />
+                          {pt("back", "Back")}
                         </button>
                       </div>
                     </div>

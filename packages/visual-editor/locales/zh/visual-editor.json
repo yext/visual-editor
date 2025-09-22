@@ -30,7 +30,7 @@
     "writeComment": "在这里写你的评论..."
   },
   "arrayField": "数组字段",
-  "backToPage": "返回页面",
+  "back": "后退",
   "base": "根据",
   "basicSelectorNoOptionsLabel": "没有可用的选项",
   "body": "身体",

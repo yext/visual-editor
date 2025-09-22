@@ -30,7 +30,7 @@
     "writeComment": "Kirjoita kommenttisi tähän ..."
   },
   "arrayField": "Ryhmäkenttä",
-  "backToPage": "Takaisin sivulle",
+  "back": "Takaisin",
   "base": "Pohja",
   "basicSelectorNoOptionsLabel": "Vaihtoehtoja ei ole käytettävissä",
   "body": "Vartalo",

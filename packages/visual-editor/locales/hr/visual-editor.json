@@ -30,7 +30,7 @@
     "writeComment": "Napišite svoj komentar ovdje ..."
   },
   "arrayField": "Polje",
-  "backToPage": "Povratak na stranicu",
+  "back": "Nazad",
   "base": "Baza",
   "basicSelectorNoOptionsLabel": "Nema dostupnih opcija",
   "body": "Tijelo",

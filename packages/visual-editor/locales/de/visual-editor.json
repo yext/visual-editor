@@ -30,7 +30,7 @@
     "writeComment": "Schreiben Sie Ihren Kommentar hier ..."
   },
   "arrayField": "Array -Feld",
-  "backToPage": "Zurück zur Seite",
+  "back": "Zurück",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Keine Optionen verfügbar",
   "body": "Körper",

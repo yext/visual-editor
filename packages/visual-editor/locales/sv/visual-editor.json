@@ -30,7 +30,7 @@
     "writeComment": "Skriv din kommentar här ..."
   },
   "arrayField": "Matrisfält",
-  "backToPage": "Tillbaka till sidan",
+  "back": "Tillbaka",
   "base": "Bas",
   "basicSelectorNoOptionsLabel": "Inga alternativ tillgängliga",
   "body": "Kropp",
