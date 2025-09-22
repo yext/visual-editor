@@ -68,6 +68,8 @@ export interface EventStyles {
     backgroundColor?: BackgroundStyle;
     /** The CTA variant to use in each event card */
     ctaVariant: CTAVariant;
+    /** Whether to truncate the event description text */
+    truncateDescription: boolean;
   };
 }
 
@@ -158,6 +160,22 @@ const eventSectionFields: Fields<EventSectionProps> = {
             type: "radio",
             options: "CTA_VARIANT",
           }),
+          truncateDescription: YextField(
+            msg("fields.truncateDescription", "Truncate Description"),
+            {
+              type: "radio",
+              options: [
+                {
+                  label: msg("fields.options.truncate", "Truncate"),
+                  value: true,
+                },
+                {
+                  label: msg("fields.options.showFullText", "Show Full Text"),
+                  value: false,
+                },
+              ],
+            }
+          ),
         },
       }),
     },
@@ -201,44 +219,52 @@ const EventCard = ({
   return (
     <Background
       background={cardStyles.backgroundColor}
-      className={`flex flex-col md:flex-row rounded-lg overflow-hidden h-fit md:h-64`}
+      className={`flex flex-col md:flex-row rounded-lg overflow-hidden md:items-start`}
     >
-      <div className="lg:w-[45%] w-full h-full">
-        {event.image && (
-          <div className="h-full">
-            <Image
-              image={event.image}
-              aspectRatio={
-                event.image.width && event.image.height
-                  ? event.image.width / event.image.height
-                  : 1.78
-              }
-            />
-          </div>
-        )}
-      </div>
-      <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
-        {event.title && (
-          <Heading
-            level={cardStyles.headingLevel}
-            semanticLevelOverride={
-              sectionHeadingLevel < 6
-                ? ((sectionHeadingLevel + 1) as HeadingLevel)
-                : "span"
+      {event.image && (
+        <div className="lg:w-[45%] w-full">
+          <Image
+            image={event.image}
+            aspectRatio={
+              event.image.width && event.image.height
+                ? event.image.width / event.image.height
+                : 1.78
             }
-          >
-            {resolveComponentData(event.title, i18n.language, streamDocument)}
-          </Heading>
-        )}
-        {event.dateTime && (
-          <Timestamp
-            date={event.dateTime}
-            option={TimestampOption.DATE_TIME}
-            hideTimeZone={true}
+            className="w-full h-full object-cover"
           />
-        )}
-        {event.description &&
-          resolveComponentData(event.description, i18n.language)}
+        </div>
+      )}
+      <div className="flex flex-col gap-4 p-6 w-full md:w-[55%] justify-between flex-grow">
+        <div className="flex flex-col gap-2">
+          {event.title && (
+            <Heading
+              level={cardStyles.headingLevel}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+            >
+              {resolveComponentData(event.title, i18n.language, streamDocument)}
+            </Heading>
+          )}
+          {event.dateTime && (
+            <Timestamp
+              date={event.dateTime}
+              option={TimestampOption.DATE_TIME}
+              hideTimeZone={true}
+            />
+          )}
+          {event.description && (
+            <p
+              className={
+                cardStyles.truncateDescription ? "md:line-clamp-2" : ""
+              }
+            >
+              {resolveComponentData(event.description, i18n.language)}
+            </p>
+          )}
+        </div>
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
@@ -362,6 +388,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
         ctaVariant: "primary",
+        truncateDescription: true,
       },
     },
     analytics: {
