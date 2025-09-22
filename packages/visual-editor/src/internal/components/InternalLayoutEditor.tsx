@@ -281,9 +281,9 @@ export const InternalLayoutEditor = ({
                     <div className="ve-p-4 ve-mb-4">
                       {/* Title */}
                       <div className="ve-mb-4">
-                        <h3 className="ve-text-md ve-font-semibold ve-text-gray-900 ve-mb-2">
+                        <div className="ve-text-md ve-font-semibold ve-text-gray-900 ve-mb-2">
                           {pt("advancedSettings", "Advanced Settings")}
-                        </h3>
+                        </div>
                       </div>
 
                       {/* Schema markup field */}
