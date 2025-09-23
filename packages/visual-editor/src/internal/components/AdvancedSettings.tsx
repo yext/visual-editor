@@ -1,5 +1,5 @@
 import { ComponentConfig, Fields, CustomField } from "@measured/puck";
-import { msg, YextField } from "@yext/visual-editor";
+import { msg, YextField, useDocument } from "@yext/visual-editor";
 import React from "react";
 import {
   useSendMessageToParent,
@@ -19,12 +19,96 @@ export interface AdvancedSettingsProps {
   };
 }
 
+const LOCAL_BUSINESS_SCHEMA = `{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "[[name]]",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "[[address.line1]]",
+    "addressLocality": "[[address.city]]",
+    "addressRegion": "[[address.region]]",
+    "postalCode": "[[address.postalCode]]",
+    "addressCountry": "[[address.countryCode]]"
+  },
+  "openingHours": "[[hours]]",
+  "image": "[[photoGallery]]",
+  "description": "[[description]]",
+  "telephone": "[[mainPhone]]",
+  "paymentAccepted": "[[paymentOptions]]",
+  "hasOfferCatalog": "[[services]]"
+}`;
+
+const DIRECTORY_LIST_ITEM_SCHEMA = `{
+  "@type": "ListItem",
+  "position": "[[position]]",
+  "item": {
+    "@type": "Place",
+    "name": "[[name]]",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "[[address.line1]]",
+      "addressLocality": "[[address.city]]",
+      "addressRegion": "[[address.region]]",
+      "postalCode": "[[address.postalCode]]",
+      "addressCountry": "[[address.countryCode]]"
+    }
+  }
+}`;
+
+// TODO: get produtionDomain/slug to populated urlWriteback
+const FALLBACK_SCHEMA = `{
+  "@context": "https://schema.org",
+  "@type": "Thing",
+  "name": "[[name]]",
+  "description": "[[description]]",
+  "url": "[[urlWriteback]]"
+}`;
+
+// Function to get the appropriate schema template based on entity type
+const getSchemaTemplate = (entityTypeId?: string): string => {
+  if (!entityTypeId) {
+    return FALLBACK_SCHEMA;
+  }
+
+  if (
+    entityTypeId === "location" ||
+    entityTypeId === "financialProfessional" ||
+    entityTypeId === "healthcareProfessional"
+  ) {
+    return LOCAL_BUSINESS_SCHEMA;
+  } else if (entityTypeId.startsWith("dm")) {
+    // Determine position based on entity type
+    let position = 1; // default for dm_root
+    if (entityTypeId === "dm_root") {
+      position = 1;
+    } else if (entityTypeId === "dm_country") {
+      position = 2;
+    } else if (entityTypeId === "dm_region") {
+      position = 3;
+    } else if (entityTypeId === "dm_city") {
+      position = 4;
+    }
+
+    // Replace the position placeholder with the actual value
+    return DIRECTORY_LIST_ITEM_SCHEMA.replace(
+      "[[position]]",
+      position.toString()
+    );
+  } else {
+    return FALLBACK_SCHEMA;
+  }
+};
+
 const SCHEMA_MARKUP_FIELD: CustomField<string> = {
   type: "custom",
   render: ({ onChange, value }) => {
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();
+
+    const streamDocument = useDocument();
+    const entityTypeId = (streamDocument as any)?.meta?.entityType?.id;
 
     const { sendToParent: openSchemaMarkupDrawer } = useSendMessageToParent(
       "constantValueEditorOpened",
@@ -41,8 +125,9 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       }
     );
 
-    // Use the schema value from root, default to empty string if not set
-    const displayValue = value || "";
+    // Use the schema value from root, or default schema if not set
+    const displayValue =
+      value || (entityTypeId ? getSchemaTemplate(entityTypeId) : "");
 
     const codeField = YextField(msg("schemaMarkup", "Schema Markup"), {
       type: "code",
@@ -53,8 +138,10 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       e.stopPropagation();
       e.preventDefault();
 
+      const schemaToSend = displayValue;
+
       // Clean the schema value to remove newlines and extra whitespace
-      const cleanSchemaValue = displayValue.replace(/\n\s*/g, " ").trim();
+      const cleanSchemaValue = schemaToSend.replace(/\n\s*/g, " ").trim();
 
       /** Handles local development testing outside of Storm */
       if (window.location.href.includes("http://localhost:5173/dev-location")) {
