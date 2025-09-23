@@ -96,7 +96,7 @@ const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
     >
       <MapboxStaticMapComponent
         apiKey={data.apiKey}
-        aspectRatio="sm:aspect-square aspect-video"
+        aspectRatio="sm:aspect-video aspect-square"
         coordinate={{
           field: "yextDisplayCoordinate",
           constantValue: {
