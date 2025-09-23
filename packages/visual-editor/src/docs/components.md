@@ -426,12 +426,13 @@ Available on Locator templates.
 
 #### Other Props
 
-The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.
+If starting location for the map.
 
-| Prop            | Type      | Description                                                                         | Default                                |
-| :-------------- | :-------- | :---------------------------------------------------------------------------------- | :------------------------------------- |
-| `mapStyle`      | `string`  | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
-| `openNowButton` | `boolean` | If 'true', displays a button to filter for locations that are currently open.       | `false`                                |
+| Prop                  | Type                                       | Description                                                                         | Default                                |
+| :-------------------- | :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `mapStartingLocation` | `{ latitude: string; longitude: string; }` | If starting location for the map.                                                   |                                        |
+| `mapStyle`            | `string`                                   | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
+| `openNowButton`       | `boolean`                                  | If 'true', displays a button to filter for locations that are currently open.       | `false`                                |
 
 ---
 
