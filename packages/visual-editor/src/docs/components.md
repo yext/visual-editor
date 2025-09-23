@@ -426,11 +426,11 @@ Available on Locator templates.
 
 #### Other Props
 
-If starting location for the map.
+The starting location for the map.
 
 | Prop                  | Type                                       | Description                                                                         | Default                                |
 | :-------------------- | :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------- |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }` | If starting location for the map.                                                   |                                        |
+| `mapStartingLocation` | `{ latitude: string; longitude: string; }` | The starting location for the map.                                                  |                                        |
 | `mapStyle`            | `string`                                   | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
 | `openNowButton`       | `boolean`                                  | If 'true', displays a button to filter for locations that are currently open.       | `false`                                |
 
