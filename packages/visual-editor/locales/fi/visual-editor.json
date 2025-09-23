@@ -265,6 +265,7 @@
       "left_direction": "Vasen",
       "light": "Valaistus",
       "long": "Pitkä",
+      "mapStartingLocation": "Kartan lähtöpaikka",
       "matchOtherSections": "Vastaa muita osia ({{value}})",
       "monday": "maanantai",
       "navigationDay": "Navigointi (päivä)",
@@ -295,8 +296,7 @@
       "two": "Kaksi",
       "wednesday": "keskiviikko",
       "width": "Leveys",
-      "yes": "Kyllä",
-      "mapStartingLocation": "Kartan lähtöpaikka"
+      "yes": "Kyllä"
     },
     "phoneFormat": "Puhelinmuoto",
     "phoneNumber": "Puhelinnumero",
@@ -403,7 +403,8 @@
   "loadingReviews": "Ladataan arvosteluja ...",
   "loadingVE": "Visuaalisen editorin lataaminen ...",
   "localGeomodifier": "Paikallinen geomodifoija",
-  "locations_one": "{{count}} sijainti",
+  "locationWithCount_one": "{{count}} sijainti",
+  "locationWithCount_other": "{{count}} sijainnit",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Suodattaa:",
   "map": "Kartta",

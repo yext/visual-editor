@@ -266,6 +266,7 @@
       "left_direction": "Vlevo",
       "light": "Světlo",
       "long": "Dlouho",
+      "mapStartingLocation": "Počáteční umístění mapy",
       "matchOtherSections": "Porovnejte jiné sekce ({{value}})",
       "monday": "pondělí",
       "navigationDay": "Navigace (den)",
@@ -296,8 +297,7 @@
       "two": "Dva",
       "wednesday": "středa",
       "width": "Šířka",
-      "yes": "Ano",
-      "mapStartingLocation": "Počáteční umístění mapy"
+      "yes": "Ano"
     },
     "phoneFormat": "Formát telefonu",
     "phoneNumber": "Telefonní číslo",
@@ -404,7 +404,8 @@
   "loadingReviews": "Načítání recenzí ...",
   "loadingVE": "Načítání vizuálního editoru ...",
   "localGeomodifier": "Místní geomodifikátor",
-  "locations_one": "{{count}} umístění",
+  "locationWithCount_one": "{{Count}} umístění",
+  "locationWithCount_other": "{{Count}} umístění",
   "locationsNear_one": "{{count}} umístění poblíž \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtr:",
   "map": "Mapa",

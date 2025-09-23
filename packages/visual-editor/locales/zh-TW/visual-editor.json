@@ -265,6 +265,7 @@
       "left_direction": "左",
       "light": "光",
       "long": "長的",
+      "mapStartingLocation": "地圖啟動位置",
       "matchOtherSections": "匹配其他部分（{{value}}）",
       "monday": "週一",
       "navigationDay": "導航（日）",
@@ -295,8 +296,7 @@
       "two": "二",
       "wednesday": "週三",
       "width": "寬度",
-      "yes": "是的",
-      "mapStartingLocation": "地圖啟動位置"
+      "yes": "是的"
     },
     "phoneFormat": "電話格式",
     "phoneNumber": "電話號碼",
@@ -403,7 +403,8 @@
   "loadingReviews": "加載評論...",
   "loadingVE": "加載視覺編輯器...",
   "localGeomodifier": "當地的土工改裝劑",
-  "locations_one": "{{count}}位置",
+  "locationWithCount_one": "{{count}}位置",
+  "locationWithCount_other": "{{count}}位置",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
   "locatorFilterLabel": "篩選：",
   "map": "地圖",

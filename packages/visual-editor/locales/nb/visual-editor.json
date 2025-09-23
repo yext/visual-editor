@@ -265,6 +265,7 @@
       "left_direction": "Venstre",
       "light": "Lys",
       "long": "Lang",
+      "mapStartingLocation": "Kartstartsted",
       "matchOtherSections": "Match andre seksjoner ({{value}})",
       "monday": "mandag",
       "navigationDay": "Navigasjon (dag)",
@@ -295,8 +296,7 @@
       "two": "To",
       "wednesday": "onsdag",
       "width": "Bredde",
-      "yes": "Ja",
-      "mapStartingLocation": "Kartstartsted"
+      "yes": "Ja"
     },
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -403,7 +403,8 @@
   "loadingReviews": "Laster inn anmeldelser ...",
   "loadingVE": "Laster inn visuell redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
-  "locations_one": "{{count}} plassering",
+  "locationWithCount_one": "{{count}} plassering",
+  "locationWithCount_other": "{{count}} lokasjoner",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Kart",

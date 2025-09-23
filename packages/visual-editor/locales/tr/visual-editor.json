@@ -265,6 +265,7 @@
       "left_direction": "Sol",
       "light": "Işık",
       "long": "Uzun",
+      "mapStartingLocation": "Harita Başlangıç ​​Konumu",
       "matchOtherSections": "Diğer bölümleri eşleştirin ({{value}})",
       "monday": "Pazartesi",
       "navigationDay": "Navigasyon (gün)",
@@ -295,8 +296,7 @@
       "two": "İki",
       "wednesday": "Çarşamba",
       "width": "Genişlik",
-      "yes": "Evet",
-      "mapStartingLocation": "Harita Başlangıç ​​Konumu"
+      "yes": "Evet"
     },
     "phoneFormat": "Telefon formatı",
     "phoneNumber": "Telefon numarası",
@@ -403,7 +403,8 @@
   "loadingReviews": "Yükleme İncelemeleri ...",
   "loadingVE": "Görsel Editör Yükleme ...",
   "localGeomodifier": "Yerel Geomodifikatör",
-  "locations_one": "{{count}} konum",
+  "locationWithCount_one": "{{count}} Konum",
+  "locationWithCount_other": "{{count}} konumlar",
   "locationsNear_one": "{{count}} konum \"{{filterDisplayName}}\" yakınında yer",
   "locatorFilterLabel": "Filtre:",
   "map": "Harita",

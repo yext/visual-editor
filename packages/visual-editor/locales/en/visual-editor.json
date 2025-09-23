@@ -264,6 +264,7 @@
       "left_direction": "Left",
       "light": "Light",
       "long": "Long",
+      "mapStartingLocation": "Map Starting Location",
       "matchOtherSections": "Match Other Sections ({{value}})",
       "monday": "Monday",
       "navigationDay": "Navigation (Day)",
@@ -294,8 +295,7 @@
       "two": "Two",
       "wednesday": "Wednesday",
       "width": "Width",
-      "yes": "Yes",
-      "mapStartingLocation": "Map Starting Location"
+      "yes": "Yes"
     },
     "phoneFormat": "Phone Format",
     "phoneNumber": "Phone Number",
@@ -402,7 +402,8 @@
   "loadingReviews": "Loading reviews...",
   "loadingVE": "Loading Visual Editor...",
   "localGeomodifier": "Local GeoModifier",
-  "locations_one": "{{count}} location",
+  "locationWithCount_one": "{{count}} location",
+  "locationWithCount_other": "{{count}} locations",
   "locationsNear_one": "{{count}} location near \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Map",

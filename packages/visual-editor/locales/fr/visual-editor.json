@@ -264,6 +264,7 @@
       "left_direction": "Gauche",
       "light": "Lumière",
       "long": "Long",
+      "mapStartingLocation": "Emplacement de départ de la carte",
       "matchOtherSections": "Faire correspondre d'autres sections ({{value}})",
       "monday": "Lundi",
       "navigationDay": "Navigation (jour)",
@@ -294,8 +295,7 @@
       "two": "Deux",
       "wednesday": "Mercredi",
       "width": "Largeur",
-      "yes": "Oui",
-      "mapStartingLocation": "Emplacement de départ de la carte"
+      "yes": "Oui"
     },
     "phoneFormat": "Format de téléphone",
     "phoneNumber": "Numéro de téléphone",
@@ -402,7 +402,8 @@
   "loadingReviews": "Chargement des critiques ...",
   "loadingVE": "Chargement de l'éditeur visuel ...",
   "localGeomodifier": "Géomodificateur local",
-  "locations_one": "{{count}} emplacement",
+  "locationWithCount_one": "{{count}} emplacement",
+  "locationWithCount_other": "{{count}} emplacements",
   "locationsNear_one": "{{count}} Emplacement près de \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtre:",
   "map": "Carte",

@@ -265,6 +265,7 @@
       "left_direction": "Lijevo",
       "light": "Svjetlo",
       "long": "Dugačak",
+      "mapStartingLocation": "Početna lokacija karte",
       "matchOtherSections": "Uskladite ostale odjeljke ({{value}})",
       "monday": "ponedjeljak",
       "navigationDay": "Navigacija (dan)",
@@ -295,8 +296,7 @@
       "two": "Dva",
       "wednesday": "srijeda",
       "width": "Širina",
-      "yes": "Da",
-      "mapStartingLocation": "Početna lokacija karte"
+      "yes": "Da"
     },
     "phoneFormat": "Format telefona",
     "phoneNumber": "Telefonski broj",
@@ -403,7 +403,8 @@
   "loadingReviews": "Učitavanje recenzija ...",
   "loadingVE": "Učitavanje vizualnog uređivača ...",
   "localGeomodifier": "Lokalni geomodifikator",
-  "locations_one": "{{count}} lokacija",
+  "locationWithCount_one": "{{count}} lokacija",
+  "locationWithCount_other": "{{count}} Lokacije",
   "locationsNear_one": "{{count}} Lokacija u blizini \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Karta",

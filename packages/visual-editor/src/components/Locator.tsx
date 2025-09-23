@@ -462,7 +462,7 @@ const LocatorInternal = ({
                     filterDisplayName,
                   }
                 )
-              : t("locations", `${resultCount} locations`, {
+              : t("locationWithCount", `${resultCount} locations`, {
                   count: resultCount,
                 }))}
         </div>

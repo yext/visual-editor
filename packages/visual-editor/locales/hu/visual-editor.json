@@ -265,6 +265,7 @@
       "left_direction": "Balra",
       "light": "Fény",
       "long": "Hosszú",
+      "mapStartingLocation": "Térkép kiindulási helye",
       "matchOtherSections": "Illeszkedjen a többi szakaszhoz ({{value}})",
       "monday": "hétfő",
       "navigationDay": "Navigáció (nap)",
@@ -295,8 +296,7 @@
       "two": "Két",
       "wednesday": "szerda",
       "width": "Szélesség",
-      "yes": "Igen",
-      "mapStartingLocation": "Térkép kiindulási helye"
+      "yes": "Igen"
     },
     "phoneFormat": "Telefonformátum",
     "phoneNumber": "Telefonszám",
@@ -403,7 +403,8 @@
   "loadingReviews": "A vélemények betöltése ...",
   "loadingVE": "Vizuális szerkesztő betöltése ...",
   "localGeomodifier": "Helyi geomodifier",
-  "locations_one": "{{count}} helyszín",
+  "locationWithCount_one": "{{count}} hely",
+  "locationWithCount_other": "{{count}} helyek",
   "locationsNear_one": "{{count}} A hely közelében \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Szűrő:",
   "map": "Térkép",

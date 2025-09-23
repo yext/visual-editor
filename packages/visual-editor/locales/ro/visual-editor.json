@@ -265,6 +265,7 @@
       "left_direction": "Stânga",
       "light": "Aprinde",
       "long": "Lung",
+      "mapStartingLocation": "Locația de pornire a hărții",
       "matchOtherSections": "Potriviți alte secțiuni ({{value}})",
       "monday": "luni",
       "navigationDay": "Navigare (zi)",
@@ -295,8 +296,7 @@
       "two": "Două",
       "wednesday": "miercuri",
       "width": "Lăţime",
-      "yes": "Da",
-      "mapStartingLocation": "Locația de pornire a hărții"
+      "yes": "Da"
     },
     "phoneFormat": "Format telefonic",
     "phoneNumber": "Număr de telefon",
@@ -403,7 +403,8 @@
   "loadingReviews": "Încărcarea recenziilor ...",
   "loadingVE": "Încărcarea editorului vizual ...",
   "localGeomodifier": "Geomodificator local",
-  "locations_one": "{{count}} locație",
+  "locationWithCount_one": "{{count}} locație",
+  "locationWithCount_other": "{{count}} locații",
   "locationsNear_one": "{{count}} locație lângă \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtra:",
   "map": "Hartă",

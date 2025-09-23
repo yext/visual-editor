@@ -265,6 +265,7 @@
       "left_direction": "Kreisais",
       "light": "Gaisma",
       "long": "Ilgs",
+      "mapStartingLocation": "Kartes sākuma vieta",
       "matchOtherSections": "Saskaņojiet citas sadaļas ({{value}})",
       "monday": "Pirmdiena",
       "navigationDay": "Navigācija (diena)",
@@ -295,8 +296,7 @@
       "two": "Divi",
       "wednesday": "Trešdiena",
       "width": "Platums",
-      "yes": "Jā",
-      "mapStartingLocation": "Kartes sākuma vieta"
+      "yes": "Jā"
     },
     "phoneFormat": "Tālruņa formāts",
     "phoneNumber": "Tālruņa numurs",
@@ -403,7 +403,8 @@
   "loadingReviews": "Atsauksmju ielāde ...",
   "loadingVE": "Vizuālā redaktora ielāde ...",
   "localGeomodifier": "Vietējais ģeomodifieris",
-  "locations_one": "{{count}} atrašanās vieta",
+  "locationWithCount_one": "{{count}} atrašanās vieta",
+  "locationWithCount_other": "{{count}} vietas",
   "locationsNear_one": "{{count}} atrašanās vieta netālu no \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtrs:",
   "map": "Karte",

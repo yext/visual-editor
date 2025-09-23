@@ -265,6 +265,7 @@
       "left_direction": "Venstre",
       "light": "Lys",
       "long": "Lang",
+      "mapStartingLocation": "Kortstartplacering",
       "matchOtherSections": "Match andre sektioner ({{value}})",
       "monday": "mandag",
       "navigationDay": "Navigation (dag)",
@@ -295,8 +296,7 @@
       "two": "To",
       "wednesday": "onsdag",
       "width": "Bredde",
-      "yes": "Ja",
-      "mapStartingLocation": "Kortstartplacering"
+      "yes": "Ja"
     },
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -403,7 +403,8 @@
   "loadingReviews": "Indlæser anmeldelser ...",
   "loadingVE": "Indlæser visuel redaktør ...",
   "localGeomodifier": "Lokal geomodifier",
-  "locations_one": "{{count}} placering",
+  "locationWithCount_one": "{{count}} placering",
+  "locationWithCount_other": "{{count}} placeringer",
   "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Kort",

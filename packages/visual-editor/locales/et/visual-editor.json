@@ -265,6 +265,7 @@
       "left_direction": "Vasakule",
       "light": "Hele",
       "long": "Pikk",
+      "mapStartingLocation": "Kaardi algusasukoht",
       "matchOtherSections": "Sobitada teisi sektsioone ({{{value}})",
       "monday": "Esmaspäev",
       "navigationDay": "Navigeerimine (päev)",
@@ -295,8 +296,7 @@
       "two": "Teine",
       "wednesday": "Kolmapäev",
       "width": "Laius",
-      "yes": "Jah",
-      "mapStartingLocation": "Kaardi algusasukoht"
+      "yes": "Jah"
     },
     "phoneFormat": "Telefonivorming",
     "phoneNumber": "Telefoninumber",
@@ -403,7 +403,8 @@
   "loadingReviews": "Ülevaadete laadimine ...",
   "loadingVE": "Visuaalse toimetaja laadimine ...",
   "localGeomodifier": "Kohalik geomodifikaator",
-  "locations_one": "{{count}} asukoht",
+  "locationWithCount_one": "{{krahv}} asukoht",
+  "locationWithCount_other": "{{krahv}} asukohad",
   "locationsNear_one": "{{krahv}} asukoht \"{{filterDisplayName}}\"  lähedal",
   "locatorFilterLabel": "Filter:",
   "map": "Kaardistama",

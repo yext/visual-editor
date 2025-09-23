@@ -265,6 +265,7 @@
       "left_direction": "Links",
       "light": "Licht",
       "long": "Lang",
+      "mapStartingLocation": "Kaart startlocatie",
       "matchOtherSections": "Match andere secties ({{value}}))",
       "monday": "Maandag",
       "navigationDay": "Navigatie (dag)",
@@ -295,8 +296,7 @@
       "two": "Twee",
       "wednesday": "Woensdag",
       "width": "Breedte",
-      "yes": "Ja",
-      "mapStartingLocation": "Kaart startlocatie"
+      "yes": "Ja"
     },
     "phoneFormat": "Telefoonformaat",
     "phoneNumber": "Telefoonnummer",
@@ -403,7 +403,8 @@
   "loadingReviews": "Beoordelingen laden ...",
   "loadingVE": "Visuele editor laden ...",
   "localGeomodifier": "Lokale geomodifier",
-  "locations_one": "{{count}} locatie",
+  "locationWithCount_one": "{{count}} locatie",
+  "locationWithCount_other": "{{count}} locaties",
   "locationsNear_one": "{{count}} locatie nabij \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
   "map": "Kaart",

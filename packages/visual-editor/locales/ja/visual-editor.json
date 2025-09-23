@@ -265,6 +265,7 @@
       "left_direction": "左",
       "light": "ライト",
       "long": "長さ",
+      "mapStartingLocation": "場所の開始場所",
       "matchOtherSections": "他のセクションを一致させる（{{value}}）",
       "monday": "月曜日",
       "navigationDay": "ナビゲーション（日）",
@@ -295,8 +296,7 @@
       "two": "二",
       "wednesday": "水曜日",
       "width": "幅",
-      "yes": "はい",
-      "mapStartingLocation": "場所の開始場所"
+      "yes": "はい"
     },
     "phoneFormat": "電話形式",
     "phoneNumber": "電話番号",
@@ -403,7 +403,8 @@
   "loadingReviews": "レビューの読み込み...",
   "loadingVE": "ビジュアルエディターの読み込み...",
   "localGeomodifier": "ローカルジオモジファイア",
-  "locations_one": "{{count}}か所",
+  "locationWithCount_one": "{{count}}場所",
+  "locationWithCount_other": "{{count}}場所",
   "locationsNear_one": "{{count}}近くの場所 \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "フィルター：",
   "map": "地図",

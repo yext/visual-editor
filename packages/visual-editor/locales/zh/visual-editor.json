@@ -265,6 +265,7 @@
       "left_direction": "左",
       "light": "光",
       "long": "长的",
+      "mapStartingLocation": "地图启动位置",
       "matchOtherSections": "匹配其他部分（{{value}}）",
       "monday": "周一",
       "navigationDay": "导航（日）",
@@ -295,8 +296,7 @@
       "two": "二",
       "wednesday": "周三",
       "width": "宽度",
-      "yes": "是的",
-      "mapStartingLocation": "地图启动位置"
+      "yes": "是的"
     },
     "phoneFormat": "电话格式",
     "phoneNumber": "电话号码",
@@ -403,7 +403,8 @@
   "loadingReviews": "加载评论...",
   "loadingVE": "加载视觉编辑器...",
   "localGeomodifier": "当地的土工改装剂",
-  "locations_one": "{{count}}位置",
+  "locationWithCount_one": "{{count}}位置",
+  "locationWithCount_other": "{{count}}位置",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
   "locatorFilterLabel": "筛选：",
   "map": "地图",
