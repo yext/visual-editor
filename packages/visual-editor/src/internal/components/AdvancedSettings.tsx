@@ -137,10 +137,8 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       e.stopPropagation();
       e.preventDefault();
 
-      const schemaToSend = displayValue;
-
       // Clean the schema value to remove newlines and extra whitespace
-      const cleanSchemaValue = schemaToSend.replace(/\n\s*/g, " ").trim();
+      const cleanSchemaValue = displayValue.replace(/\n\s*/g, " ").trim();
 
       /** Handles local development testing outside of Storm */
       if (window.location.href.includes("http://localhost:5173/dev-location")) {
