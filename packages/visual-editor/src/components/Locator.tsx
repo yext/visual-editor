@@ -78,7 +78,7 @@ export interface LocatorProps {
   openNowButton: boolean;
 
   /**
-   * If starting location for the map.
+   * The starting location for the map.
    */
   mapStartingLocation?: {
     latitude: string;
