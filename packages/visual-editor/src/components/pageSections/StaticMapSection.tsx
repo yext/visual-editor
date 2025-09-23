@@ -6,7 +6,10 @@ import {
   VisibilityWrapper,
   YextField,
 } from "@yext/visual-editor";
-import { MapboxStaticMapComponent } from "../contentBlocks/MapboxStaticMap.tsx";
+import {
+  MapboxStaticMapComponent,
+  mapStyleField,
+} from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields } from "@measured/puck";
 
 export interface StaticMapData {
@@ -23,6 +26,12 @@ export interface StaticMapStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * The style of the map to be displayed.
+   * @defaultValue Default (streets-v12)
+   */
+  mapStyle: string;
 }
 
 export interface StaticMapSectionProps {
@@ -74,6 +83,7 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      mapStyle: mapStyleField,
     },
   }),
 };
@@ -81,11 +91,12 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
 const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
   return (
     <PageSection
-      background={styles?.backgroundColor}
+      background={styles.backgroundColor}
       className={`flex items-center`}
     >
       <MapboxStaticMapComponent
         apiKey={data.apiKey}
+        aspectRatio="sm:aspect-square aspect-video"
         coordinate={{
           field: "yextDisplayCoordinate",
           constantValue: {
@@ -93,6 +104,7 @@ const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
             longitude: 0,
           },
         }}
+        mapStyle={styles.mapStyle}
       />
     </PageSection>
   );
@@ -114,6 +126,7 @@ export const StaticMapSection: ComponentConfig<{
     liveVisibility: true,
     styles: {
       backgroundColor: backgroundColors.background1.value,
+      mapStyle: "streets-v12",
     },
   },
   render: (props) => (

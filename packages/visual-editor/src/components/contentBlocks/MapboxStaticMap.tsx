@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
 import { Coordinate } from "@yext/pages-components";
 import {
   EntityField,
@@ -10,17 +9,42 @@ import {
   msg,
   pt,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Field, Fields } from "@measured/puck";
 import { StreamDocument } from "../../utils/applyTheme";
 
-type Size = { width: number; height: number };
+const SIZE = 512;
 
 export type MapboxStaticProps = {
   apiKey: string;
   coordinate: YextEntityField<Coordinate>;
+  mapStyle: string;
   zoom?: number;
-  mapStyle?: string;
+  aspectRatio?: string;
 };
+
+export const mapStyleField: Field<string> = YextField(
+  msg("fields.mapStyle", "Map Style"),
+  {
+    type: "radio",
+    options: [
+      { value: "streets-v12", label: msg("fields.options.default", "Default") },
+      {
+        value: "satellite-streets-v12",
+        label: msg("fields.options.satellite", "Satellite"),
+      },
+      { value: "light-v11", label: msg("fields.options.light", "Light") },
+      { value: "dark-v11", label: msg("fields.options.dark", "Dark") },
+      {
+        value: "navigation-day-v1",
+        label: msg("fields.options.navigationDay", "Navigation (Day)"),
+      },
+      {
+        value: "navigation-night-v1",
+        label: msg("fields.options.navigationNight", "Navigation (Night)"),
+      },
+    ],
+  }
+);
 
 const mapboxFields: Fields<MapboxStaticProps> = {
   apiKey: YextField(msg("fields.apiKey", "API Key"), {
@@ -33,12 +57,8 @@ const mapboxFields: Fields<MapboxStaticProps> = {
       filter: { types: ["type.coordinate"] },
     }
   ),
+  mapStyle: mapStyleField,
 };
-
-const DEFAULT_WIDTH = 1024;
-const MIN_WIDTH = 100;
-const MAX_WIDTH = 1280;
-const HEIGHT = 300;
 
 const getPrimaryColor = (streamDocument: StreamDocument) => {
   if (streamDocument?.__?.theme) {
@@ -60,85 +80,15 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
   }
 };
 
-export function useGrandparentSize<T extends HTMLElement = HTMLElement>(): [
-  React.RefObject<T>,
-  Size,
-] {
-  const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [updateTrigger, setUpdateTrigger] = React.useState(0);
-  const selfRef = React.useRef<T>(null);
-  const [size, setSize] = React.useState<Size>({
-    width: DEFAULT_WIDTH,
-    height: HEIGHT,
-  });
-
-  React.useEffect(() => {
-    let node: HTMLElement | null = selfRef.current;
-    if (!node) return;
-
-    // climb up 2 levels
-    for (let i = 0; i < 2; i++) {
-      node = node?.parentElement;
-      if (!node) return;
-    }
-
-    // if it’s hidden, bail
-    const style = window.getComputedStyle(node);
-    if (style.display === "none") return;
-
-    // measure
-    const rect = node.getBoundingClientRect();
-    setSize({
-      width: Math.max(
-        MIN_WIDTH,
-        Math.min(rect.width || node.clientWidth, MAX_WIDTH)
-      ),
-      height: HEIGHT,
-    });
-  }, [updateTrigger]);
-
-  const updateEvents: string[] = [
-    "resize",
-    "load",
-    "visibilitychange",
-    "focus",
-    "deviceorientation",
-  ];
-
-  const handleEvent = React.useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      setUpdateTrigger((prev) => prev + 1); // Trigger re-run
-    }, 1000);
-  }, [setUpdateTrigger]);
-
-  // Listen for window resize
-  React.useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    updateEvents.forEach((event: string) => {
-      window.addEventListener(event, handleEvent, { signal });
-    });
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  return [selfRef, size];
-}
-
 export const MapboxStaticMapComponent = ({
   apiKey,
   coordinate: coordinateField,
   zoom = 14,
   mapStyle = "light-v11",
+  aspectRatio = "aspect-square",
 }: MapboxStaticProps) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
-
-  const [imgRef, grandparentSize] = useGrandparentSize<HTMLImageElement>();
 
   const coordinate = resolveComponentData(
     coordinateField,
@@ -156,18 +106,21 @@ export const MapboxStaticMapComponent = ({
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
+  const mapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${SIZE * 2}x${SIZE}?access_token=${apiKey}`;
+
   return (
     <EntityField
       displayName={pt("coordinate", "Coordinate")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
     >
-      <img
-        ref={imgRef}
-        alt={t("map", "Map")}
-        className="components w-full h-full object-cover"
-        src={`https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${grandparentSize.width.toFixed(0)}x${grandparentSize.height.toFixed(0)}?access_token=${apiKey}`}
-      />
+      <div className={`h-full overflow-hidden ${aspectRatio}`}>
+        <img
+          alt={t("map", "Map")}
+          className="components h-full object-cover"
+          src={mapUrl}
+        />
+      </div>
     </EntityField>
   );
 };
@@ -184,6 +137,7 @@ export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
         longitude: 0,
       },
     },
+    mapStyle: "streets-v12",
   },
   render: (props: MapboxStaticProps) => <MapboxStaticMapComponent {...props} />,
 };
