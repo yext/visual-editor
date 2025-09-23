@@ -4,98 +4,19 @@ import {
   msg,
   backgroundColors,
   themeManagerCn,
+  PageSection,
 } from "@yext/visual-editor";
 import { HeroStyles } from "./HeroSection";
-import {
-  AddressProps,
-  BodyTextProps,
-  MapboxStaticProps,
-  HoursTableProps,
-  HoursStatusProps,
-  GetDirectionsProps,
-  EmailsProps,
-  CTAGroupProps,
-  CTAWrapperProps,
-  HeadingTextProps,
-  ImageWrapperProps,
-  PhoneProps,
-  TextListProps,
-  EmailsLocked,
-  TextListLocked,
-  PhoneLocked,
-  MapboxStaticMapLocked,
-  ImageWrapperLocked,
-  GetDirectionsLocked,
-  HoursStatusLocked,
-  HoursTableLocked,
-  CTAGroupLocked,
-  CTAWrapperLocked,
-  BodyTextLocked,
-  AddressLocked,
-  HeadingTextLocked,
-} from "../contentBlocks";
-import { SlottedPageSection } from "../atoms/slottedPageSection";
-import { SlotFlex, SlotFlexProps } from "../layoutBlocks/SlotFlex";
 import { ComponentDataOptionalId } from "@measured/puck";
+import {
+  LockedCategoryProps,
+  LockedCategoryComponents,
+} from "../categories/LockedCategory";
 
-export type Components = {
-  Address: AddressProps;
-  AddressLocked: AddressProps;
-  BodyText: BodyTextProps;
-  BodyTextLocked: BodyTextProps;
-  CTAGroup: CTAGroupProps;
-  CTAGroupLocked: CTAGroupProps;
-  CTAWrapper: CTAWrapperProps;
-  CTAWrapperLocked: CTAWrapperProps;
-  Emails: EmailsProps;
-  EmailsLocked: EmailsProps;
-  GetDirections: GetDirectionsProps;
-  GetDirectionsLocked: GetDirectionsProps;
-  HeadingText: HeadingTextProps;
-  HeadingTextLocked: HeadingTextProps;
-  HoursStatus: HoursStatusProps;
-  HoursStatusLocked: HoursStatusProps;
-  HoursTable: HoursTableProps;
-  HoursTableLocked: HoursTableProps;
-  ImageWrapper: ImageWrapperProps;
-  ImageWrapperLocked: ImageWrapperProps;
-  MapboxStaticMap: MapboxStaticProps;
-  MapboxStaticMapLocked: MapboxStaticProps;
-  Phone: PhoneProps;
-  PhoneLocked: PhoneProps;
-  TextList: TextListProps;
-  TextListLocked: TextListProps;
-  SlotFlex: SlotFlexProps;
-};
+export type Components = LockedCategoryProps;
 
 const contentBlocks = {
-  Address: AddressLocked,
-  AddressLocked: AddressLocked,
-  BodyText: BodyTextLocked,
-  BodyTextLocked: BodyTextLocked,
-  CTAGroup: CTAGroupLocked,
-  CTAGroupLocked: CTAGroupLocked,
-  CTAWrapper: CTAWrapperLocked,
-  CTAWrapperLocked: CTAWrapperLocked,
-  Emails: EmailsLocked,
-  EmailsLocked: EmailsLocked,
-  GetDirections: GetDirectionsLocked,
-  GetDirectionsLocked: GetDirectionsLocked,
-  HeadingText: HeadingTextLocked,
-  HeadingTextLocked: HeadingTextLocked,
-  HoursStatus: HoursStatusLocked,
-  HoursStatusLocked: HoursStatusLocked,
-  HoursTable: HoursTableLocked,
-  HoursTableLocked: HoursTableLocked,
-  ImageWrapper: ImageWrapperLocked,
-  ImageWrapperLocked: ImageWrapperLocked,
-  MapboxStaticMap: MapboxStaticMapLocked,
-  MapboxStaticMapLocked: MapboxStaticMapLocked,
-  Phone: PhoneLocked,
-  PhoneLocked: PhoneLocked,
-  TextList: TextListLocked,
-  TextListLocked: TextListLocked,
-  SlotFlex: SlotFlex,
+  ...LockedCategoryComponents,
 };
 
 async function createComponent<T extends keyof Components>(
@@ -112,7 +33,13 @@ async function createComponent<T extends keyof Components>(
 }
 
 export type SlotHeroProps = {
-  children: Slot;
+  slots: {
+    BusinessName: Slot;
+    GeoModifier: Slot;
+    HoursStatus: Slot;
+    CTAGroup: Slot;
+    Image: Slot;
+  };
   styles: Pick<
     HeroStyles,
     | "backgroundColor"
@@ -125,8 +52,16 @@ export type SlotHeroProps = {
 export const SlotHero: ComponentConfig<SlotHeroProps> = {
   label: "Slot Hero",
   fields: {
-    children: {
-      type: "slot",
+    slots: {
+      type: "object",
+      objectFields: {
+        BusinessName: { type: "slot" },
+        GeoModifier: { type: "slot" },
+        HoursStatus: { type: "slot" },
+        CTAGroup: { type: "slot" },
+        Image: { type: "slot" },
+      },
+      visible: false,
     },
     styles: YextField(msg("fields.styles", "Styles"), {
       type: "object",
@@ -191,7 +126,13 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     }),
   },
   defaultProps: {
-    children: [],
+    slots: {
+      BusinessName: [],
+      GeoModifier: [],
+      HoursStatus: [],
+      CTAGroup: [],
+      Image: [],
+    },
     styles: {
       backgroundColor: backgroundColors.background1.value,
       showImage: true,
@@ -200,10 +141,17 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     },
   },
   resolveData: async (data, { changed, trigger }) => {
-    if (!changed.children || trigger === "load") return data;
+    // Initialize slots with default content when component is first created
+    const slotsAreEmpty =
+      data.props.slots.BusinessName.length === 0 &&
+      data.props.slots.GeoModifier.length === 0 &&
+      data.props.slots.HoursStatus.length === 0 &&
+      data.props.slots.CTAGroup.length === 0 &&
+      data.props.slots.Image.length === 0;
 
-    // Create initial content blocks similar to ClassicHero layout
-    const children = [];
+    // Only create default content if slots are empty or on first load
+    if (!slotsAreEmpty && trigger === "load") return data;
+    if (!slotsAreEmpty && !changed.slots) return data;
 
     // Business Name (H1)
     const businessName = await createComponent("HeadingTextLocked", {
@@ -219,7 +167,7 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
     });
 
     // Local Geo Modifier (H3)
-    const localGeoModifier = await createComponent("HeadingTextLocked", {
+    const geoModifier = await createComponent("HeadingTextLocked", {
       text: {
         field: "",
         constantValue: {
@@ -229,12 +177,6 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
         constantValueEnabled: true,
       },
       level: 3,
-    });
-
-    // Business Information Stack
-    const businessInformation = await createComponent("SlotFlex", {
-      className: "flex-col gap-y-0",
-      items: [businessName, localGeoModifier],
     });
 
     // Hours Status
@@ -275,86 +217,96 @@ export const SlotHero: ComponentConfig<SlotHeroProps> = {
       ],
     });
 
-    // Hero Content Container
-    const heroContent = await createComponent("SlotFlex", {
-      className:
-        "flex-col gap-y-6 md:gap-y-8 w-full sm:w-initial justify-center lg:min-w-[350px]",
-      items: [businessInformation, hoursStatus, ctaGroup],
-    });
-
-    // Image if showImage is true
-    let leftImageComponent = null;
-    let rightImageComponent = null;
-
-    if (data.props.styles.showImage) {
-      const imageComponent = await createComponent("ImageWrapperLocked", {
-        data: {
-          image: {
-            field: "",
-            constantValue: {
-              url: "https://placehold.co/640x360",
-              height: 360,
-              width: 640,
-            },
-            constantValueEnabled: true,
+    // Image component
+    const imageComponent = await createComponent("ImageWrapperLocked", {
+      data: {
+        image: {
+          field: "",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
           },
+          constantValueEnabled: true,
         },
-        styles: {
-          aspectRatio: 1.78, // 16:9
-          width: 640,
-        },
-      });
-
-      // Create left image (Desktop left / Mobile top)
-      leftImageComponent = await createComponent("SlotFlex", {
-        className: themeManagerCn(
-          "w-full my-auto max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none",
-          data.props.styles.mobileImagePosition === "bottom" &&
-            "hidden sm:block",
-          data.props.styles.desktopImagePosition === "right" && "sm:hidden"
-        ),
-        items: [imageComponent],
-      });
-
-      // Create right image (Desktop right / Mobile bottom)
-      rightImageComponent = await createComponent("SlotFlex", {
-        className: themeManagerCn(
-          "w-full my-auto max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none",
-          data.props.styles.mobileImagePosition === "top" && "hidden sm:block",
-          data.props.styles.desktopImagePosition === "left" && "sm:hidden"
-        ),
-        items: [imageComponent],
-      });
-    }
-
-    // Main layout container
-    const mainLayout = await createComponent("SlotFlex", {
-      className: "flex flex-col sm:flex-row gap-6 md:gap-10",
-      items: [
-        ...(leftImageComponent ? [leftImageComponent] : []),
-        heroContent,
-        ...(rightImageComponent ? [rightImageComponent] : []),
-      ],
+      },
+      styles: {
+        aspectRatio: 1.78, // 16:9
+        width: 640,
+      },
     });
-
-    children.push(mainLayout);
 
     return {
       ...data,
       props: {
         ...data.props,
-        children,
+        slots: {
+          BusinessName: [businessName],
+          GeoModifier: [geoModifier],
+          HoursStatus: [hoursStatus],
+          CTAGroup: [ctaGroup],
+          Image: [imageComponent],
+        },
       },
     };
   },
-  render: ({ children, styles, puck, id }) => (
-    <SlottedPageSection
-      background={styles.backgroundColor}
-      puck={puck}
-      id={id}
-      className={themeManagerCn("flex flex-col sm:flex-row gap-6 md:gap-10")}
-    >
-      {children}
-    </SlottedPageSection>
-  ),
+  render: ({ slots, styles }) => {
+    const { desktopImagePosition, mobileImagePosition, showImage } = styles;
+
+    return (
+      <PageSection
+        background={styles.backgroundColor}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 items-center"
+      >
+        {/* Content Area */}
+        <div
+          className={themeManagerCn(
+            "flex flex-col w-full justify-center",
+            !showImage && "sm:col-span-2",
+            showImage && desktopImagePosition === "left" && "sm:order-2",
+            showImage &&
+              mobileImagePosition === "bottom" &&
+              "order-1 sm:order-none"
+          )}
+        >
+          {/* Business Information Group - tight spacing between business name and geomodifier */}
+          <div className="flex flex-col gap-y-0 mb-6 md:mb-8">
+            {slots.BusinessName.length > 0 && (
+              <slots.BusinessName allow={["HeadingTextLocked"]} />
+            )}
+
+            {slots.GeoModifier.length > 0 && (
+              <slots.GeoModifier allow={["HeadingTextLocked"]} />
+            )}
+          </div>
+
+          {/* Hours Status */}
+          <div className="mb-6 md:mb-8">
+            {slots.HoursStatus.length > 0 && (
+              <slots.HoursStatus allow={["HoursStatusLocked"]} />
+            )}
+          </div>
+
+          {/* CTA Group */}
+          {slots.CTAGroup.length > 0 && (
+            <slots.CTAGroup allow={["CTAGroupLocked"]} />
+          )}
+        </div>
+
+        {/* Image Area */}
+        {showImage && slots.Image.length > 0 && (
+          <div
+            className={themeManagerCn(
+              "w-full my-auto max-w-full",
+              desktopImagePosition === "left" && "sm:order-1",
+              mobileImagePosition === "top" && "order-0 sm:order-none",
+              mobileImagePosition === "bottom" && "order-2 sm:order-none"
+            )}
+          >
+            <slots.Image allow={["ImageWrapperLocked"]} className="w-full" />
+          </div>
+        )}
+      </PageSection>
+    );
+  },
 };
