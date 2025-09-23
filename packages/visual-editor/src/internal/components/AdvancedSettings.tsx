@@ -90,7 +90,6 @@ const getSchemaTemplate = (entityTypeId?: string): string => {
       position = 4;
     }
 
-    // Replace the position placeholder with the actual value
     return DIRECTORY_LIST_ITEM_SCHEMA.replace(
       "[[position]]",
       position.toString()
