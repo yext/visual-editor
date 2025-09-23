@@ -12,8 +12,6 @@ import {
 import { ComponentConfig, Field, Fields } from "@measured/puck";
 import { StreamDocument } from "../../utils/applyTheme";
 
-const SIZE = 512;
-
 export type MapboxStaticProps = {
   apiKey: string;
   coordinate: YextEntityField<Coordinate>;
@@ -106,7 +104,9 @@ export const MapboxStaticMapComponent = ({
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
-  const mapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${SIZE * 2}x${SIZE}?access_token=${apiKey}`;
+  const largeMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/1280x720?access_token=${apiKey}`;
+  const mediumMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/960x540?access_token=${apiKey}`;
+  const smallMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/640x360?access_token=${apiKey}`;
 
   return (
     <EntityField
@@ -118,7 +118,9 @@ export const MapboxStaticMapComponent = ({
         <img
           alt={t("map", "Map")}
           className="components h-full object-cover"
-          src={mapUrl}
+          srcSet={`${smallMapUrl} 640w, ${mediumMapUrl} 960w, ${largeMapUrl} 1280w`}
+          sizes="(max-width: 640px) 640px, (max-width: 960px) 960px, 1280px"
+          src={largeMapUrl}
         />
       </div>
     </EntityField>
