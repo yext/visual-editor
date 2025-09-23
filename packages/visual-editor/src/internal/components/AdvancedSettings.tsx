@@ -77,7 +77,7 @@ const getSchemaTemplate = (entityTypeId?: string): string => {
     entityTypeId === "healthcareProfessional"
   ) {
     return LOCAL_BUSINESS_SCHEMA;
-  } else if (entityTypeId.startsWith("dm")) {
+  } else if (entityTypeId.startsWith("dm_")) {
     // Determine position based on entity type
     let position = 1; // default for dm_root
     if (entityTypeId === "dm_root") {
