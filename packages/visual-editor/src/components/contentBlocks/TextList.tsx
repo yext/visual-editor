@@ -72,3 +72,14 @@ export const TextList: ComponentConfig<{ props: TextListProps }> = {
   },
   render: (props) => <TextListComponent {...props} />,
 };
+
+export const TextListLocked: ComponentConfig<{ props: TextListProps }> = {
+  ...TextList,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

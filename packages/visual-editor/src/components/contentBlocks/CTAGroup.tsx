@@ -112,3 +112,14 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   },
   render: (props: CTAGroupProps) => <CTAGroupComponent {...props} />,
 };
+
+export const CTAGroupLocked: ComponentConfig<{ props: CTAGroupProps }> = {
+  ...CTAGroup,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

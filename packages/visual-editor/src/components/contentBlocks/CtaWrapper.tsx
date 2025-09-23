@@ -93,3 +93,14 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   },
   render: (props: CTAWrapperProps) => <CTAWrapperComponent {...props} />,
 };
+
+export const CTAWrapperLocked: ComponentConfig<{ props: CTAWrapperProps }> = {
+  ...CTAWrapper,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

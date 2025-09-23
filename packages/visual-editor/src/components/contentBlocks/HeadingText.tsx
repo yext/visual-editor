@@ -55,7 +55,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
   }),
 };
 
-export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
+export const HeadingText: ComponentConfig<HeadingTextProps> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
   defaultProps: {
@@ -70,4 +70,15 @@ export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
     level: 2,
   },
   render: (props) => <HeadingTextWrapper {...props} />,
+};
+
+export const HeadingTextLocked: ComponentConfig<HeadingTextProps> = {
+  ...HeadingText,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
 };

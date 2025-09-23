@@ -187,3 +187,16 @@ export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
   },
   render: (props: MapboxStaticProps) => <MapboxStaticMapComponent {...props} />,
 };
+
+export const MapboxStaticMapLocked: ComponentConfig<{
+  props: MapboxStaticProps;
+}> = {
+  ...MapboxStaticMap,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

@@ -1,4 +1,18 @@
 import {
+  Config,
+  Data,
+  DefaultComponentProps,
+  DefaultRootProps,
+  Field,
+  CustomField,
+  ComponentConfig,
+  ArrayField,
+  BaseField,
+  ObjectField,
+  NumberField,
+  Slot,
+} from "@measured/puck";
+import {
   ImageType,
   CTA as CTA$1,
   LinkType,
@@ -28,6 +42,7 @@ interface PageSectionCategoryProps {
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
+  SlotHero: SlotHeroProps;
 }
 
 interface ExpandedHeaderProps {
@@ -400,6 +415,23 @@ interface VideoSectionProps {
    */
   liveVisibility: boolean;
 }
+
+type SlotHeroProps = {
+  slots: {
+    BusinessName: Slot;
+    GeoModifier: Slot;
+    HoursStatus: Slot;
+    CTAGroup: Slot;
+    Image: Slot;
+  };
+  styles: Pick<
+    HeroStyles,
+    | "backgroundColor"
+    | "desktopImagePosition"
+    | "mobileImagePosition"
+    | "showImage"
+  >;
+};
 
 interface ExpandedHeaderData {
   /** Content for the main primary header bar. */

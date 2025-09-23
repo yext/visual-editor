@@ -115,3 +115,14 @@ export const HoursStatus: ComponentConfig<{ props: HoursStatusProps }> = {
   },
   render: (props) => <HoursStatusWrapper {...props} />,
 };
+
+export const HoursStatusLocked: ComponentConfig<{ props: HoursStatusProps }> = {
+  ...HoursStatus,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

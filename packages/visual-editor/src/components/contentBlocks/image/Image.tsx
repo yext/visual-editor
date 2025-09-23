@@ -98,3 +98,15 @@ export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   },
   render: (props) => <ImageWrapperComponent {...props} />,
 };
+
+export const ImageWrapperLocked: ComponentConfig<{ props: ImageWrapperProps }> =
+  {
+    ...ImageWrapper,
+    permissions: {
+      drag: false,
+      duplicate: false,
+      delete: false,
+      edit: true,
+      insert: false,
+    },
+  };

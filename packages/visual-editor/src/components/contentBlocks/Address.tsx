@@ -147,3 +147,16 @@ export const Address: ComponentConfig<{
   },
   render: (props) => <AddressComponent {...props} />,
 };
+
+export const AddressLocked: ComponentConfig<{
+  props: AddressProps;
+}> = {
+  ...Address,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

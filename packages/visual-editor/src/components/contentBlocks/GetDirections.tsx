@@ -90,3 +90,16 @@ export const GetDirections: ComponentConfig<{ props: GetDirectionsProps }> = {
   },
   render: (props) => <GetDirectionsComponent {...props} />,
 };
+
+export const GetDirectionsLocked: ComponentConfig<{
+  props: GetDirectionsProps;
+}> = {
+  ...GetDirections,
+  permissions: {
+    drag: false,
+    duplicate: false,
+    delete: false,
+    edit: true,
+    insert: false,
+  },
+};

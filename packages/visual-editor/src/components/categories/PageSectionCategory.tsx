@@ -50,6 +50,7 @@ import {
   VideoSection,
   VideoSectionProps,
 } from "../pageSections/VideoSection.tsx";
+import { SlotHero, SlotHeroProps } from "../pageSections/SlotHero.tsx";
 
 export interface PageSectionCategoryProps {
   BannerSection: BannerSectionProps;
@@ -68,6 +69,7 @@ export interface PageSectionCategoryProps {
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
+  SlotHero: SlotHeroProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -87,6 +89,7 @@ export const PageSectionCategoryComponents = {
   TeamSection,
   TestimonialSection,
   VideoSection,
+  SlotHero,
 };
 
 export const PageSectionCategory = Object.keys(
