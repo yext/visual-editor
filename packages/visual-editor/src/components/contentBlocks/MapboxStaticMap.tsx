@@ -11,6 +11,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Field, Fields } from "@measured/puck";
 import { StreamDocument } from "../../utils/applyTheme";
+import mapboxLogo from "../assets/mapbox-logo-black.svg";
 
 export type MapboxStaticProps = {
   apiKey: string;
@@ -148,8 +149,13 @@ export const MapboxStaticMapComponent = ({
         </picture>
         {/* Mapbox requires attribution when using their static maps, https://docs.mapbox.com/help/dive-deeper/attribution/#static--print */}
         <span className="absolute bottom-0 right-0 bg-gray-400/50 text-[8px] text-black">
-          © <a href="https://www.mapbox.com/about/maps">Mapbox</a> ©
+          © <a href="https://www.mapbox.com/about/maps">Mapbox</a>©{" "}
           <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>
+        </span>
+        <span className="absolute bottom-0 left-0">
+          <a href="https://www.mapbox.com/">
+            <img src={mapboxLogo} alt="Mapbox" className="w-10" />
+          </a>
         </span>
       </div>
     </EntityField>
