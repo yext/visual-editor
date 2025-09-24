@@ -102,12 +102,24 @@ export const MapboxStaticMapComponent = ({
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
+  const staticImageSizes = {
+    large: "1280x720",
+    medium: "960x540",
+    small: "412x412",
+  } as const;
+
+  type StaticImageSize = keyof typeof staticImageSizes;
+
+  const getMapboxStaticImageUrl = (size: StaticImageSize) => {
+    return `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${staticImageSizes[size]}?access_token=${apiKey}&logo=false&attribution=false`;
+  };
+
   // For use on Desktop (1280x720)
-  const largeMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/1280x720?access_token=${apiKey}`;
+  const largeMapUrl = getMapboxStaticImageUrl("large");
   // For use on Desktop or Tablet (960x540)
-  const mediumMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/960x540?access_token=${apiKey}`;
+  const mediumMapUrl = getMapboxStaticImageUrl("medium");
   // For use on Desktop, Tablet, or Mobile (412x412)
-  const smallMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/412x412?access_token=${apiKey}`;
+  const smallMapUrl = getMapboxStaticImageUrl("small");
 
   return (
     <EntityField
@@ -116,7 +128,7 @@ export const MapboxStaticMapComponent = ({
       constantValueEnabled={coordinateField.constantValueEnabled}
       className="w-full"
     >
-      <div className={`h-[300px] w-full overflow-hidden`}>
+      <div className="relative h-[300px] w-full overflow-hidden">
         <picture>
           <source
             media="(max-width: 412px)"
@@ -134,6 +146,11 @@ export const MapboxStaticMapComponent = ({
             alt={t("map", "Map")}
           />
         </picture>
+        {/* Mapbox requires attribution when using their static maps, https://docs.mapbox.com/help/dive-deeper/attribution/#static--print */}
+        <span className="absolute bottom-0 right-0 bg-gray-400/50 text-[8px] text-black">
+          © <a href="https://www.mapbox.com/about/maps">Mapbox</a> ©
+          <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>
+        </span>
       </div>
     </EntityField>
   );
