@@ -63,7 +63,33 @@ export const applyTheme = (
       reason: !publishedTheme ? "no_published_theme" : "theme_parse_failed",
     });
   } else {
+    // Add comprehensive debugging here
+    console.log("🔍 ==> FONT EXTRACTION DEBUG <== 🔍");
+    console.log("🔍 Theme overrides:", overrides);
+    console.log(
+      "🔍 Available fonts keys (first 20):",
+      Object.keys(defaultFonts).slice(0, 20)
+    );
+    console.log(
+      "🔍 Font family keys in theme:",
+      Object.keys(overrides).filter((key) => key.includes("fontFamily"))
+    );
+
+    // Extract font values for easier inspection
+    const fontFamilyValues: Record<string, string> = {};
+    Object.keys(overrides)
+      .filter((key) => key.includes("fontFamily"))
+      .forEach((key) => {
+        fontFamilyValues[key] = overrides[key];
+      });
+    console.log("🔍 Font family values in theme:", fontFamilyValues);
+
     const inUseFonts = extractInUseFontFamilies(overrides, defaultFonts);
+
+    console.log("🔍 Extracted fonts:", Object.keys(inUseFonts));
+    console.log("🔍 Extracted font details:", inUseFonts);
+    console.log("🔍 Font count:", Object.keys(inUseFonts).length);
+
     devLogger.logData("THEME_DATA", {
       extractedFonts: inUseFonts,
       fontCount: Object.keys(inUseFonts).length,
@@ -73,13 +99,52 @@ export const applyTheme = (
     });
 
     if (Object.keys(inUseFonts).length === 0) {
+      console.log("🔍 No fonts extracted - falling back to all fonts");
       fontLinkTags = googleFontLinkTags;
       devLogger.logData("THEME_DATA", {
         usingAllFonts: true,
         reason: "no_fonts_extracted_from_theme",
       });
     } else {
+      console.log(
+        "🔍 Constructing Google Font link tags for extracted fonts..."
+      );
       fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
+
+      console.log("🔍 Generated font link tags:");
+      console.log(fontLinkTags);
+
+      // Extract the actual Google Fonts URLs
+      console.log("🔍 Font URLs in the generated tags:");
+      const matches = fontLinkTags.match(
+        /https:\/\/fonts\.googleapis\.com\/css2\?[^"]+/g
+      );
+      if (matches) {
+        matches.forEach((url, index) => {
+          console.log(`🔍 Font URL ${index + 1}:`, decodeURIComponent(url));
+        });
+      } else {
+        console.log("🔍 No Google Fonts URLs found in generated tags");
+      }
+
+      // Also check if both fonts are actually in the registry
+      const fontNames = Object.keys(inUseFonts);
+      fontNames.forEach((fontName) => {
+        const registryEntry = defaultFonts[fontName];
+        console.log(
+          `🔍 Font "${fontName}" in registry:`,
+          registryEntry ? "✅ YES" : "❌ NO"
+        );
+        if (registryEntry) {
+          console.log(`🔍   - Fallback: ${registryEntry.fallback}`);
+          console.log(
+            `🔍   - Weights: ${"weights" in registryEntry ? registryEntry.weights : `${registryEntry.minWeight}-${registryEntry.maxWeight}`}`
+          );
+          console.log(`🔍   - Italics: ${registryEntry.italics}`);
+        }
+      });
+
+      console.log("🔍 ==> END FONT EXTRACTION DEBUG <== 🔍");
     }
   }
 
