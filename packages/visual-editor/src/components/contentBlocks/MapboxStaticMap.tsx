@@ -121,17 +121,17 @@ export const MapboxStaticMapComponent = ({
         <picture>
           <source
             media="(max-width: 400px)"
-            className="components h-full object-cover"
+            className="components h-full w-full object-cover"
             srcSet={smallMapUrl}
           />
           <source
             media="(max-width: 960px)"
-            className="components h-full object-cover"
+            className="components h-full w-full object-cover"
             srcSet={mediumMapUrl}
           />
           <img
             src={largeMapUrl}
-            className="components h-full object-cover"
+            className="components h-full w-full object-cover"
             alt={t("map", "Map")}
           />
         </picture>
