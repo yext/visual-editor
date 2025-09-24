@@ -23,6 +23,7 @@ type EntityFieldProps = {
   constantValueEnabled?: boolean;
   children: React.ReactNode;
   fullHeight?: boolean;
+  className?: string;
 };
 
 export const EntityField = ({
@@ -31,6 +32,7 @@ export const EntityField = ({
   constantValueEnabled,
   children,
   fullHeight,
+  className,
 }: EntityFieldProps) => {
   const tooltipsContext = useEntityTooltips();
 
@@ -52,7 +54,7 @@ export const EntityField = ({
   }
 
   return (
-    <div className={fullHeight ? "h-full" : ""}>
+    <div className={fullHeight ? `h-full ${className}` : `${className}`}>
       <TooltipProvider>
         <Tooltip open={!!tooltipContent && tooltipsVisible}>
           <TooltipTrigger asChild>

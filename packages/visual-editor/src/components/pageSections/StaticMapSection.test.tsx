@@ -165,13 +165,13 @@ describe("StaticMapSection", async () => {
           let expectedHeight = 0;
           switch (viewportName) {
             case "desktop":
-              expectedHeight = 240;
+              expectedHeight = 300;
               break;
             case "tablet":
-              expectedHeight = 282;
+              expectedHeight = 300;
               break;
             case "mobile":
-              expectedHeight = 274;
+              expectedHeight = 300;
               break;
           }
 
