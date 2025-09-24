@@ -233,7 +233,7 @@ const PersonCard = ({
       <hr className="border" />
       <Background
         background={backgroundColors.background1.value}
-        className="p-8"
+        className="flex flex-grow p-8"
       >
         <div className="flex flex-col gap-4">
           {person.phoneNumber && (
@@ -265,7 +265,7 @@ const PersonCard = ({
             </div>
           )}
           {person.cta && (
-            <div className="flex justify-start gap-2">
+            <div className="flex justify-start mt-auto gap-2">
               <CTA
                 eventName={`cta${cardNumber}`}
                 label={
