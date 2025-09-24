@@ -1,5 +1,8 @@
 import { ThemeData } from "../internal/types/themeData.ts";
-import { internalThemeResolver } from "../internal/utils/internalThemeResolver.ts";
+import {
+  internalThemeResolver,
+  generateCssVariablesFromThemeConfig,
+} from "../internal/utils/internalThemeResolver.ts";
 import { DevLogger } from "./devLogger.ts";
 import {
   constructGoogleFontLinkTags,
@@ -63,11 +66,22 @@ export const applyTheme = (
       reason: !publishedTheme ? "no_published_theme" : "theme_parse_failed",
     });
   } else {
-    const inUseFonts = extractInUseFontFamilies(overrides, defaultFonts);
+    // Extract fonts from both published theme data AND default theme values
+    // This ensures we get all fonts that are actually used, not just the ones that were explicitly changed
+    const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
+    const mergedThemeData = { ...defaultThemeValues, ...overrides };
+
+    const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
     devLogger.logData("THEME_DATA", {
       extractedFonts: inUseFonts,
       fontCount: Object.keys(inUseFonts).length,
       themeKeys: Object.keys(overrides).filter((key) =>
+        key.includes("fontFamily")
+      ),
+      defaultThemeKeys: Object.keys(defaultThemeValues).filter((key) =>
+        key.includes("fontFamily")
+      ),
+      mergedThemeKeys: Object.keys(mergedThemeData).filter((key) =>
         key.includes("fontFamily")
       ),
     });
