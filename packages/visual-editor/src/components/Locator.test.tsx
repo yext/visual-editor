@@ -2,7 +2,6 @@ import * as React from "react";
 import { describe, it, expect } from "vitest";
 import {
   axe,
-  delay,
   ComponentTest,
   transformTests,
 } from "./testing/componentTests.setup.ts";
@@ -204,7 +203,6 @@ describe("Locator", async () => {
 
       // Unless testing empty state, wait for search to load
       if (!name.includes("empty document")) {
-        await delay(3000);
         await waitFor(() => {
           screen.getAllByText("Galaxy Grill");
           const opacityContainer = container.querySelector("#innerDiv div");
