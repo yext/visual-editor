@@ -51,13 +51,12 @@ export const applyTheme = (
         parseError: true,
         themeData: publishedTheme,
       });
-      overrides = undefined;
     }
   }
 
   // Load only fonts that are actually used in the theme
   let fontLinkTags: string;
-  if (!publishedTheme || !overrides) {
+  if (!overrides) {
     fontLinkTags = googleFontLinkTags;
     devLogger.logData("THEME_DATA", {
       usingAllFonts: true,
