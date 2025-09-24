@@ -17,7 +17,6 @@ export type MapboxStaticProps = {
   coordinate: YextEntityField<Coordinate>;
   mapStyle: string;
   zoom?: number;
-  aspectRatio?: string;
 };
 
 export const mapStyleField: Field<string> = YextField(
@@ -83,7 +82,6 @@ export const MapboxStaticMapComponent = ({
   coordinate: coordinateField,
   zoom = 14,
   mapStyle = "light-v11",
-  aspectRatio = "aspect-square",
 }: MapboxStaticProps) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
@@ -104,11 +102,11 @@ export const MapboxStaticMapComponent = ({
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
-  // For use on Desktop
+  // For use on Desktop (1280x720)
   const largeMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/1280x720?access_token=${apiKey}`;
-  // For use on Desktop or Tablet
+  // For use on Desktop or Tablet (960x540)
   const mediumMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/960x540?access_token=${apiKey}`;
-  // For use on Desktop, Tablet, or Mobile
+  // For use on Desktop, Tablet, or Mobile (400x400)
   const smallMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/400x400?access_token=${apiKey}`;
 
   return (
@@ -116,8 +114,9 @@ export const MapboxStaticMapComponent = ({
       displayName={pt("coordinate", "Coordinate")}
       fieldId={coordinateField.field}
       constantValueEnabled={coordinateField.constantValueEnabled}
+      className="w-full"
     >
-      <div className={`h-full overflow-hidden ${aspectRatio}`}>
+      <div className={`h-[300px] overflow-hidden`}>
         <picture>
           <source
             media="(max-width: 400px)"
