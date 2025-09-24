@@ -106,8 +106,8 @@ export const MapboxStaticMapComponent = ({
   const largeMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/1280x720?access_token=${apiKey}`;
   // For use on Desktop or Tablet (960x540)
   const mediumMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/960x540?access_token=${apiKey}`;
-  // For use on Desktop, Tablet, or Mobile (400x400)
-  const smallMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/400x400?access_token=${apiKey}`;
+  // For use on Desktop, Tablet, or Mobile (412x412)
+  const smallMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/412x412?access_token=${apiKey}`;
 
   return (
     <EntityField
@@ -119,7 +119,7 @@ export const MapboxStaticMapComponent = ({
       <div className={`h-[300px] w-full overflow-hidden`}>
         <picture>
           <source
-            media="(max-width: 400px)"
+            media="(max-width: 412px)"
             className="components h-full w-full object-cover"
             srcSet={smallMapUrl}
           />
