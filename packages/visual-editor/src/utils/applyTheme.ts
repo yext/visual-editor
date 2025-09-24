@@ -39,17 +39,58 @@ export const applyTheme = (
   devLogger.logFunc("applyTheme");
 
   const publishedTheme = document?.__?.theme;
-  const overrides = publishedTheme ? JSON.parse(publishedTheme) : undefined;
+  let overrides: ThemeData | undefined;
 
-  // In the editor with no published theme, inject all the google font tags, else only inject the in-use font tags
-  const fontLinkTags = !publishedTheme
-    ? googleFontLinkTags
-    : constructGoogleFontLinkTags(
-        extractInUseFontFamilies(overrides, defaultFonts)
-      );
+  // Safely parse the published theme with error handling
+  if (publishedTheme) {
+    try {
+      overrides = JSON.parse(publishedTheme);
+      devLogger.logData("THEME_DATA", overrides);
+    } catch (error) {
+      console.warn("Failed to parse published theme data:", error);
+      devLogger.logData("THEME_DATA", {
+        parseError: true,
+        themeData: publishedTheme,
+      });
+      // If parsing fails, treat as if there's no published theme to ensure fonts still load
+      overrides = undefined;
+    }
+  }
+
+  // Load only fonts that are actually used in the theme
+  let fontLinkTags: string;
+  if (!publishedTheme || !overrides) {
+    // No published theme or parsing failed - load all fonts as fallback
+    fontLinkTags = googleFontLinkTags;
+    devLogger.logData("THEME_DATA", {
+      usingAllFonts: true,
+      reason: !publishedTheme ? "no_published_theme" : "theme_parse_failed",
+    });
+  } else {
+    // Extract fonts from published theme data
+    const inUseFonts = extractInUseFontFamilies(overrides, defaultFonts);
+    devLogger.logData("THEME_DATA", {
+      extractedFonts: inUseFonts,
+      fontCount: Object.keys(inUseFonts).length,
+      themeKeys: Object.keys(overrides).filter((key) =>
+        key.includes("fontFamily")
+      ),
+    });
+
+    // If no fonts were extracted from theme data, fall back to all fonts
+    if (Object.keys(inUseFonts).length === 0) {
+      fontLinkTags = googleFontLinkTags;
+      devLogger.logData("THEME_DATA", {
+        usingAllFonts: true,
+        reason: "no_fonts_extracted_from_theme",
+      });
+    } else {
+      fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
+    }
+  }
 
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
+    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
   }
   return base ?? "";
 };

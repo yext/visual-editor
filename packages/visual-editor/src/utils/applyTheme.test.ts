@@ -64,7 +64,7 @@ describe("buildCssOverridesStyle", () => {
     );
   });
 
-  it("should return font style tag only for fonts in theme", () => {
+  it("should always load all fonts regardless of theme", () => {
     const streamDocument: StreamDocument = {
       siteId: 123,
       __: {
@@ -76,17 +76,10 @@ describe("buildCssOverridesStyle", () => {
 
     const result = applyTheme(streamDocument, themeConfig);
 
-    expect(result).toBe(
-      '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-        '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-palette-text:black !important;" +
-        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
-        "}</style>"
+    // Should always include all Google fonts
+    expect(result).toContain(defaultGoogleFontsLinkTags);
+    expect(result).toContain(
+      '<style id="visual-editor-theme" type="text/css">'
     );
   });
 
@@ -141,6 +134,21 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary:#7ED321 !important;" +
         "--colors-palette-primary-contrast:#FFFFFF !important" +
         "}</style>"
+    );
+  });
+
+  it("should fallback to all fonts when theme JSON is malformed", () => {
+    const streamDocument: StreamDocument = {
+      __: {
+        theme: '{"--fontFamily-h1-fontFamily": "Montserrat", "invalid": json}', // malformed JSON
+      },
+    };
+    const result = applyTheme(streamDocument, themeConfig);
+
+    // Should include all Google fonts when JSON parsing fails
+    expect(result).toContain(defaultGoogleFontsLinkTags);
+    expect(result).toContain(
+      '<style id="visual-editor-theme" type="text/css">'
     );
   });
 });
