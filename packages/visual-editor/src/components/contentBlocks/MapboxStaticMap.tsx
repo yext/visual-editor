@@ -22,7 +22,7 @@ export type MapboxStaticProps = {
 export const mapStyleField: Field<string> = YextField(
   msg("fields.mapStyle", "Map Style"),
   {
-    type: "radio",
+    type: "select",
     options: [
       { value: "streets-v12", label: msg("fields.options.default", "Default") },
       {
