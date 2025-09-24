@@ -985,6 +985,11 @@ interface StaticMapStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+  /**
+   * The style of the map to be displayed.
+   * @defaultValue Default (streets-v12)
+   */
+  mapStyle: string;
 }
 
 interface TeamData {

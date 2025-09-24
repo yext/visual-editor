@@ -610,9 +610,10 @@ This object contains the configuration needed to generate the map.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                          | Default              |
-| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 1` |
+| Prop                     | Type              | Description                           | Default                 |
+| :----------------------- | :---------------- | :------------------------------------ | :---------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section.  | `Background Color 1`    |
+| `styles.mapStyle`        | `string`          | The style of the map to be displayed. | `Default (streets-v12)` |
 
 #### Other Props
 
