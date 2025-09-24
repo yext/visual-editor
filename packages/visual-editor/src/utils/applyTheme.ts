@@ -41,7 +41,6 @@ export const applyTheme = (
   const publishedTheme = document?.__?.theme;
   let overrides: ThemeData | undefined;
 
-  // Safely parse the published theme with error handling
   if (publishedTheme) {
     try {
       overrides = JSON.parse(publishedTheme);
@@ -52,7 +51,6 @@ export const applyTheme = (
         parseError: true,
         themeData: publishedTheme,
       });
-      // If parsing fails, treat as if there's no published theme to ensure fonts still load
       overrides = undefined;
     }
   }
@@ -60,14 +58,12 @@ export const applyTheme = (
   // Load only fonts that are actually used in the theme
   let fontLinkTags: string;
   if (!publishedTheme || !overrides) {
-    // No published theme or parsing failed - load all fonts as fallback
     fontLinkTags = googleFontLinkTags;
     devLogger.logData("THEME_DATA", {
       usingAllFonts: true,
       reason: !publishedTheme ? "no_published_theme" : "theme_parse_failed",
     });
   } else {
-    // Extract fonts from published theme data
     const inUseFonts = extractInUseFontFamilies(overrides, defaultFonts);
     devLogger.logData("THEME_DATA", {
       extractedFonts: inUseFonts,
@@ -77,7 +73,6 @@ export const applyTheme = (
       ),
     });
 
-    // If no fonts were extracted from theme data, fall back to all fonts
     if (Object.keys(inUseFonts).length === 0) {
       fontLinkTags = googleFontLinkTags;
       devLogger.logData("THEME_DATA", {

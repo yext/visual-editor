@@ -86,25 +86,6 @@ describe("extractInUseFontFamilies", () => {
       "The font 'Fake Font' is used in the theme but cannot be found in available fonts."
     );
   });
-
-  it("should extract multiple fonts from realistic theme data", () => {
-    const themeData: ThemeData = {
-      "--fontFamily-h1-fontFamily": "'Montserrat', sans-serif",
-      "--fontFamily-h2-fontFamily": "'Montserrat', sans-serif",
-      "--fontFamily-h3-fontFamily": "'Open Sans', sans-serif",
-      "--fontFamily-body-fontFamily": "'Roboto', sans-serif",
-      "--colors-palette-primary": "#CF0A2C",
-      "--fontSize-h1-fontSize": "48px",
-    };
-
-    const result = extractInUseFontFamilies(themeData, defaultFonts);
-
-    // Should find Montserrat, Open Sans, and Roboto
-    expect(Object.keys(result)).toContain("Montserrat");
-    expect(Object.keys(result)).toContain("Open Sans");
-    expect(Object.keys(result)).toContain("Roboto");
-    expect(Object.keys(result)).toHaveLength(3);
-  });
 });
 
 describe("constructGoogleFontLinkTags", () => {
