@@ -158,6 +158,26 @@ describe("StaticMapSection", async () => {
       });
 
       await act(async () => await delay(500));
+      await act(async () => await delay(500));
+
+      await waitFor(async () => {
+        if (images.length) {
+          let expectedHeight = 0;
+          switch (viewportName) {
+            case "desktop":
+              expectedHeight = 300;
+              break;
+            case "tablet":
+              expectedHeight = 300;
+              break;
+            case "mobile":
+              expectedHeight = 300;
+              break;
+          }
+
+          expect(images[0]?.height).toBe(expectedHeight);
+        }
+      });
 
       // The static image returned by mapbox can vary slightly
       const threshold =
