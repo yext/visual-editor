@@ -91,7 +91,7 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
 const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
   return (
     <PageSection
-      background={styles.backgroundColor}
+      background={styles?.backgroundColor}
       className={`flex items-center`}
     >
       <MapboxStaticMapComponent
@@ -104,7 +104,7 @@ const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
             longitude: 0,
           },
         }}
-        mapStyle={styles.mapStyle}
+        mapStyle={styles?.mapStyle}
       />
     </PageSection>
   );
