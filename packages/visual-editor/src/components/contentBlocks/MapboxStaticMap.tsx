@@ -104,8 +104,11 @@ export const MapboxStaticMapComponent = ({
 
   const marker = `pin-l+${getPrimaryColor(streamDocument)}(${coordinate.longitude},${coordinate.latitude})`;
 
+  // For use on Desktop
   const largeMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/1280x720?access_token=${apiKey}`;
+  // For use on Desktop or Tablet
   const mediumMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/960x540?access_token=${apiKey}`;
+  // For use on Desktop, Tablet, or Mobile
   const smallMapUrl = `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/360x360?access_token=${apiKey}`;
 
   return (
@@ -118,8 +121,8 @@ export const MapboxStaticMapComponent = ({
         <img
           alt={t("map", "Map")}
           className="components h-full object-cover"
-          srcSet={`${smallMapUrl} 640w, ${mediumMapUrl} 960w, ${largeMapUrl} 1280w`}
-          sizes="(max-width: 640px) 640px, (max-width: 960px) 960px, 1280px"
+          srcSet={`${smallMapUrl} 360w, ${mediumMapUrl} 960w, ${largeMapUrl} 1280w`}
+          sizes="(max-width: 360px) 360px, (max-width: 960px) 960px, 1280px"
           src={largeMapUrl}
         />
       </div>
