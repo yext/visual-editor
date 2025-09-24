@@ -116,7 +116,7 @@ export const MapboxStaticMapComponent = ({
       constantValueEnabled={coordinateField.constantValueEnabled}
       className="w-full"
     >
-      <div className={`h-[300px] overflow-hidden`}>
+      <div className={`h-[300px] w-full overflow-hidden`}>
         <picture>
           <source
             media="(max-width: 400px)"
