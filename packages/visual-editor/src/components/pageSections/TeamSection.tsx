@@ -235,7 +235,7 @@ const PersonCard = ({
         background={backgroundColors.background1.value}
         className="flex flex-grow p-8"
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col flex-grow gap-4">
           {person.phoneNumber && (
             <PhoneAtom
               eventName={`phone${cardNumber}`}
