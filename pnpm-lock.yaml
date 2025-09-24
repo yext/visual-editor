@@ -137,8 +137,8 @@ importers:
         specifier: ^5.71.5
         version: 5.85.5(react@18.3.1)
       "@yext/pages-components":
-        specifier: ^1.1.9
-        version: 1.1.12(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.24)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.27)
+        specifier: ^1.1.13
+        version: 1.1.13(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.24)(encoding@0.1.13)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.27)
       "@yext/search-headless-react":
         specifier: ^2.5.4
         version: 2.5.4(encoding@0.1.13)(react@18.3.1)
@@ -466,8 +466,8 @@ importers:
         specifier: 1.2.5
         version: 1.2.5(@algolia/client-search@5.35.0)(@types/node@20.19.11)(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.17.3)(typescript@5.9.2)(vite@5.4.19(@types/node@20.19.11))
       "@yext/pages-components":
-        specifier: ^1.1.9
-        version: 1.1.12(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.24)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.27)
+        specifier: ^1.1.13
+        version: 1.1.13(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.24)(encoding@0.1.13)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.27)
       autoprefixer:
         specifier: ^10.4.8
         version: 10.4.21(postcss@8.5.6)
@@ -5164,13 +5164,14 @@ packages:
         integrity: sha512-k0mlQTnv8+E+vYjaI3goM2hEgtR9sYvUbAjhq3Qie14bT5F/6FQCLf8AUj/NyiZnsUQQe+vCxUZXSxvUSZ/JMA==,
       }
 
-  "@yext/pages-components@1.1.12":
+  "@yext/pages-components@1.1.13":
     resolution:
       {
-        integrity: sha512-TYbJYpYRME7O0EhBBvGs1VYg/XMPrHF9CvEIngNx8ieKuMcD5hPIjZikMGPbg6HCXGuB+6/9osao96NN9Ehyqw==,
+        integrity: sha512-vg8kd7T0lk0YoWosEs5T2KHhGBpllkjmmI1fENbS8dvZjAVUqVWJ0kyzuQ4gvoJ3EMSiUKC/gVD2bFJAKaIbPA==,
       }
     engines: { node: ^18 || ^20 || ^22 }
     peerDependencies:
+      mapbox-gl: ^2.9.2
       react: ^17.0.2 || ^18.2.0
       react-dom: ^17.0.2 || ^18.2.0
 
@@ -15859,7 +15860,7 @@ snapshots:
     dependencies:
       ulidx: 2.4.1
 
-  "@yext/pages-components@1.1.12(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.24)(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.27)":
+  "@yext/pages-components@1.1.13(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.24)(encoding@0.1.13)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.27)":
     dependencies:
       "@lexical/code": 0.12.6(lexical@0.12.6)
       "@lexical/hashtag": 0.12.6(lexical@0.12.6)
@@ -15874,6 +15875,7 @@ snapshots:
       classnames: 2.5.1
       cross-fetch: 4.1.0(encoding@0.1.13)
       lexical: 0.12.6
+      mapbox-gl: 2.15.0
       mdast-util-from-markdown: 1.2.0
       mdast-util-to-hast: 12.3.0
       micromark-util-chunked: 1.0.0
