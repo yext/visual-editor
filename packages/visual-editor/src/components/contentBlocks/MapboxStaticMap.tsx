@@ -115,13 +115,6 @@ export const MapboxStaticMapComponent = ({
     return `https://api.mapbox.com/styles/v1/mapbox/${mapStyle}/static/${marker}/${coordinate.longitude},${coordinate.latitude},${zoom}/${staticImageSizes[size]}?access_token=${apiKey}&logo=false&attribution=false`;
   };
 
-  // For use on Desktop (1280x720)
-  const largeMapUrl = getMapboxStaticImageUrl("large");
-  // For use on Desktop or Tablet (960x540)
-  const mediumMapUrl = getMapboxStaticImageUrl("medium");
-  // For use on Desktop, Tablet, or Mobile (412x412)
-  const smallMapUrl = getMapboxStaticImageUrl("small");
-
   return (
     <EntityField
       displayName={pt("coordinate", "Coordinate")}
@@ -134,15 +127,15 @@ export const MapboxStaticMapComponent = ({
           <source
             media="(max-width: 412px)"
             className="components h-full w-full object-cover"
-            srcSet={smallMapUrl}
+            srcSet={getMapboxStaticImageUrl("small")}
           />
           <source
             media="(max-width: 960px)"
             className="components h-full w-full object-cover"
-            srcSet={mediumMapUrl}
+            srcSet={getMapboxStaticImageUrl("medium")}
           />
           <img
-            src={largeMapUrl}
+            src={getMapboxStaticImageUrl("large")}
             className="components h-full w-full object-cover"
             alt={t("map", "Map")}
           />
