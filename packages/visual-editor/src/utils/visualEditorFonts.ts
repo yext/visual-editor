@@ -52,57 +52,50 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
 
-  const prefix = '<link href="https://fonts.googleapis.com/css2?';
-  const postfix = 'display=swap" rel="stylesheet">';
-
   const fontEntries = Object.entries(fonts);
   console.log("🟣 Font entries to process:", fontEntries.length);
-  const chunkSize = 7;
   const linkTags: string[] = [];
 
-  for (let i = 0; i < fontEntries.length; i += chunkSize) {
-    const chunk = fontEntries.slice(i, i + chunkSize);
+  // Create a separate link tag for each font
+  for (const [fontName, fontDetails] of fontEntries) {
+    console.log("🟣 Processing font:", fontName);
+
+    const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
+
+    let weightParam;
+    if ("weights" in fontDetails) {
+      // static font, use enumerated weights
+      if (fontDetails.italics) {
+        weightParam =
+          fontDetails.weights.map((w) => `0,${w};`).join("") +
+          fontDetails.weights.map((w) => `1,${w};`).join("");
+        // remove trailing semicolon
+        weightParam = weightParam.slice(0, -1);
+      } else {
+        weightParam = fontDetails.weights.join(";");
+      }
+    } else {
+      // variable font, use range of weights
+      const weightRange =
+        fontDetails.minWeight === fontDetails.maxWeight
+          ? `${fontDetails.minWeight}`
+          : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+      weightParam = fontDetails.italics
+        ? `0,${weightRange};1,${weightRange}`
+        : weightRange;
+    }
+
+    const param =
+      "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
+    console.log("🟣 Generated param for", fontName, ":", param);
+
+    const linkTag = `<link href="https://fonts.googleapis.com/css2?${param}&display=swap" rel="stylesheet">`;
     console.log(
-      "🟣 Processing chunk:",
-      chunk.map(([name]) => name)
+      "🟣 Generated link tag for",
+      fontName,
+      ":",
+      linkTag.substring(0, 100) + "..."
     );
-
-    const params = chunk
-      .map(([fontName, fontDetails]) => {
-        const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
-
-        let weightParam;
-        if ("weights" in fontDetails) {
-          // static font, use enumerated weights
-          if (fontDetails.italics) {
-            weightParam =
-              fontDetails.weights.map((w) => `0,${w};`).join("") +
-              fontDetails.weights.map((w) => `1,${w};`).join("");
-            // remove trailing semicolon
-            weightParam = weightParam.slice(0, -1);
-          } else {
-            weightParam = fontDetails.weights.join(";");
-          }
-        } else {
-          // variable font, use range of weights
-          const weightRange =
-            fontDetails.minWeight === fontDetails.maxWeight
-              ? `${fontDetails.minWeight}`
-              : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
-          weightParam = fontDetails.italics
-            ? `0,${weightRange};1,${weightRange}`
-            : weightRange;
-        }
-
-        const param =
-          "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
-        console.log("🟣 Generated param for", fontName, ":", param);
-        return param;
-      })
-      .join("&");
-
-    const linkTag = `${prefix}${params}&${postfix}`;
-    console.log("🟣 Generated link tag:", linkTag.substring(0, 100) + "...");
     linkTags.push(linkTag);
   }
 
