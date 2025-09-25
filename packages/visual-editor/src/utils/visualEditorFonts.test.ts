@@ -163,7 +163,7 @@ describe("constructGoogleFontLinkTags", () => {
     expect(constructGoogleFontLinkTags(fonts)).toBe(expected);
   });
 
-  it("should combine multiple fonts into a single link tag", () => {
+  it("should create separate link tags for multiple fonts", () => {
     const fonts: FontRegistry = {
       Roboto: { weights: [400], italics: false, fallback: "sans-serif" },
       Lato: {
@@ -175,11 +175,12 @@ describe("constructGoogleFontLinkTags", () => {
     };
     const expected =
       preconnectTags +
-      '<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&family=Lato:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">';
+      '<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">';
     expect(constructGoogleFontLinkTags(fonts)).toBe(expected);
   });
 
-  it("should create multiple link tags when the number of fonts exceeds the chunk size", () => {
+  it("should create separate link tags for many fonts", () => {
     const fonts: FontRegistry = {
       Font1: { weights: [400], italics: false, fallback: "sans-serif" },
       Font2: { weights: [400], italics: false, fallback: "sans-serif" },
@@ -191,14 +192,17 @@ describe("constructGoogleFontLinkTags", () => {
       Font8: { weights: [400], italics: false, fallback: "sans-serif" },
     };
 
-    const link1Params =
-      "family=Font1:wght@400&family=Font2:wght@400&family=Font3:wght@400&family=Font4:wght@400&family=Font5:wght@400&family=Font6:wght@400&family=Font7:wght@400";
-    const link2Params = "family=Font8:wght@400";
+    const expected =
+      preconnectTags +
+      '<link href="https://fonts.googleapis.com/css2?family=Font1:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Font2:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Font3:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Font4:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Font5:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Font6:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Font7:wght@400&display=swap" rel="stylesheet">\n' +
+      '<link href="https://fonts.googleapis.com/css2?family=Font8:wght@400&display=swap" rel="stylesheet">';
 
-    const link1 = `<link href="https://fonts.googleapis.com/css2?${link1Params}&display=swap" rel="stylesheet">`;
-    const link2 = `<link href="https://fonts.googleapis.com/css2?${link2Params}&display=swap" rel="stylesheet">`;
-
-    const expected = `${preconnectTags}${link1}\n${link2}`;
     expect(constructGoogleFontLinkTags(fonts)).toBe(expected);
   });
 });
