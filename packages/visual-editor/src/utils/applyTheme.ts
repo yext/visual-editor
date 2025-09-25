@@ -47,6 +47,10 @@ export const applyTheme = (
   if (publishedTheme) {
     try {
       overrides = JSON.parse(publishedTheme);
+      if (typeof document !== "undefined") {
+        document.title = `Parsed theme: ${Object.keys(overrides || {}).length} keys | ${document.title}`;
+      }
+      devLogger.logData("THEME_DATA", overrides);
       devLogger.logData("THEME_DATA", overrides);
     } catch (error) {
       console.warn("Failed to parse published theme data:", error);
