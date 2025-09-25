@@ -213,20 +213,23 @@ const filterFontWeights = (
   }
 };
 
+// Returns FontRegistry only containing fonts used in ThemeData
 export const extractInUseFontFamilies = (
   data: ThemeData,
   availableFonts: FontRegistry
 ): FontRegistry => {
   const fontFamilies = new Set<string>();
 
+  // Iterate over all the keys in the theme data to find font names.
   for (const key in data) {
+    // searches for keys with "fontFamily" like "--fontFamily-h1-fontFamily"
     if (typeof key === "string" && key.includes("fontFamily")) {
       const value = data[key];
+      // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
+      // parses fontName from the value
       if (typeof value === "string" && value.length > 0) {
         const firstFont = value.split(",")[0];
-        const cleanedFontName = firstFont
-          .trim()
-          .replace(/^["'](.*)["']$/, "$1");
+        const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
         fontFamilies.add(cleanedFontName);
       }
     }
@@ -234,6 +237,7 @@ export const extractInUseFontFamilies = (
 
   const inUseFonts: FontRegistry = {};
 
+  // For each unique font family found, look it up in the availableFonts map.
   for (const fontName of fontFamilies) {
     if (availableFonts[fontName]) {
       inUseFonts[fontName] = availableFonts[fontName];

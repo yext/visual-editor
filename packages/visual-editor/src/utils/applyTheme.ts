@@ -11,7 +11,6 @@ import {
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
-import { googleFontLinkTags } from "./visualEditorFonts";
 
 export type StreamDocument = {
   [key: string]: any;
@@ -58,38 +57,21 @@ export const applyTheme = (
   // Load only fonts that are actually used in the theme
   let fontLinkTags: string;
   if (!overrides) {
-    fontLinkTags = googleFontLinkTags;
-    devLogger.logData("THEME_DATA", {
-      usingAllFonts: true,
-      reason: !publishedTheme ? "no_published_theme" : "theme_parse_failed",
+    // No theme overrides, use only Open Sans (the default font)
+    fontLinkTags = constructGoogleFontLinkTags({
+      "Open Sans": defaultFonts["Open Sans"],
     });
   } else {
     // Extract fonts from both published theme data AND default theme values
     // This ensures we get all fonts that are actually used, not just the ones that were explicitly changed
     const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
     const mergedThemeData = { ...defaultThemeValues, ...overrides };
-
     const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
 
-    devLogger.logData("THEME_DATA", {
-      extractedFonts: inUseFonts,
-      fontCount: Object.keys(inUseFonts).length,
-      themeKeys: Object.keys(overrides).filter((key) =>
-        key.includes("fontFamily")
-      ),
-      defaultThemeKeys: Object.keys(defaultThemeValues).filter((key) =>
-        key.includes("fontFamily")
-      ),
-      mergedThemeKeys: Object.keys(mergedThemeData).filter((key) =>
-        key.includes("fontFamily")
-      ),
-    });
-
     if (Object.keys(inUseFonts).length === 0) {
-      fontLinkTags = googleFontLinkTags;
-      devLogger.logData("THEME_DATA", {
-        usingAllFonts: true,
-        reason: "no_fonts_extracted_from_theme",
+      // No fonts found in theme data, use only Open Sans
+      fontLinkTags = constructGoogleFontLinkTags({
+        "Open Sans": defaultFonts["Open Sans"],
       });
     } else {
       fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
@@ -97,8 +79,7 @@ export const applyTheme = (
   }
 
   if (Object.keys(themeConfig).length > 0) {
-    const result = `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
-    return result;
+    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
   }
   return base ?? "";
 };
