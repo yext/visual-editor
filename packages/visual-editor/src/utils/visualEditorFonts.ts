@@ -48,7 +48,7 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
 
   const prefix = '<link href="https://fonts.googleapis.com/css2?';
-  const postfix = 'display=swap" rel="stylesheet">';
+  const postfix = '&display=swap" rel="stylesheet">';
 
   const fontEntries = Object.entries(fonts);
   const chunkSize = 7;
