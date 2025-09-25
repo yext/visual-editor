@@ -134,6 +134,12 @@ export const applyTheme = (
       "🔴 applyTheme fontLinkTags preview:",
       fontLinkTags.substring(0, 200) + "..."
     );
+    console.log("🔴 applyTheme FULL fontLinkTags:", fontLinkTags);
+    console.log("🔴 applyTheme FULL result:", result);
+    console.log(
+      "🔴 applyTheme result includes Google Fonts:",
+      result.includes("fonts.googleapis.com")
+    );
     return result;
   }
   return base ?? "";
