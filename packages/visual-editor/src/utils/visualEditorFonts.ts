@@ -43,6 +43,11 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
  * fall outside of the font's supported values
  */
 export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
+  console.log(
+    "🟣 constructGoogleFontLinkTags called with fonts:",
+    Object.keys(fonts)
+  );
+
   const preconnectTags =
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
@@ -51,11 +56,16 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
   const postfix = 'display=swap" rel="stylesheet">';
 
   const fontEntries = Object.entries(fonts);
+  console.log("🟣 Font entries to process:", fontEntries.length);
   const chunkSize = 7;
   const linkTags: string[] = [];
 
   for (let i = 0; i < fontEntries.length; i += chunkSize) {
     const chunk = fontEntries.slice(i, i + chunkSize);
+    console.log(
+      "🟣 Processing chunk:",
+      chunk.map(([name]) => name)
+    );
 
     const params = chunk
       .map(([fontName, fontDetails]) => {
@@ -84,14 +94,21 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
             : weightRange;
         }
 
-        return "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
+        const param =
+          "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
+        console.log("🟣 Generated param for", fontName, ":", param);
+        return param;
       })
       .join("&");
 
-    linkTags.push(`${prefix}${params}&${postfix}`);
+    const linkTag = `${prefix}${params}&${postfix}`;
+    console.log("🟣 Generated link tag:", linkTag.substring(0, 100) + "...");
+    linkTags.push(linkTag);
   }
 
-  return linkTags.length ? preconnectTags + linkTags.join("\n") : "";
+  const result = linkTags.length ? preconnectTags + linkTags.join("\n") : "";
+  console.log("🟣 Final Google Fonts link tags length:", result.length);
+  return result;
 };
 
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
@@ -223,12 +240,19 @@ export const extractInUseFontFamilies = (
   data: ThemeData,
   availableFonts: FontRegistry
 ): FontRegistry => {
-  // Debug: show what data we're actually receiving
-  if (typeof document !== "undefined") {
-    const keys = Object.keys(data);
-    const fontKeys = keys.filter((key) => key.includes("fontFamily"));
-    document.title = `Keys: ${keys.length} total, ${fontKeys.length} font keys | ${document.title}`;
-  }
+  console.log(
+    "🟠 extractInUseFontFamilies called with data:",
+    Object.keys(data).length,
+    "keys"
+  );
+
+  const fontKeys = Object.keys(data).filter((key) =>
+    key.includes("fontFamily")
+  );
+  console.log("🟠 Font family keys found:", fontKeys);
+
+  const fontValues = fontKeys.map((key) => data[key]);
+  console.log("🟠 Font family values:", fontValues);
 
   const fontFamilies = new Set<string>();
 
@@ -241,17 +265,34 @@ export const extractInUseFontFamilies = (
           .trim()
           .replace(/^["'](.*)["']$/, "$1");
         fontFamilies.add(cleanedFontName);
+        console.log(
+          "🟠 Extracted font name:",
+          cleanedFontName,
+          "from value:",
+          value
+        );
       }
     }
   }
+
+  console.log("🟠 All extracted font families:", Array.from(fontFamilies));
 
   const inUseFonts: FontRegistry = {};
 
   for (const fontName of fontFamilies) {
     if (availableFonts[fontName]) {
       inUseFonts[fontName] = availableFonts[fontName];
+      console.log(
+        "🟠 Added font to inUseFonts:",
+        fontName,
+        "with spec:",
+        availableFonts[fontName]
+      );
+    } else {
+      console.log("🟠 Font not found in availableFonts:", fontName);
     }
   }
 
+  console.log("🟠 Final inUseFonts:", Object.keys(inUseFonts));
   return inUseFonts;
 };

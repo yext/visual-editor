@@ -44,27 +44,15 @@ export const applyTheme = (
     document?.__?.theme ? "HAS THEME" : "NO THEME"
   );
 
-  // Debug: create visible indicator
-  if (typeof window !== "undefined" && window.document) {
-    const debugDiv = window.document.createElement("div");
-    debugDiv.style.cssText =
-      "position:fixed;top:10px;left:10px;background:red;color:white;padding:10px;z-index:9999;";
-    debugDiv.innerHTML = "applyTheme called";
-    window.document.body?.appendChild(debugDiv);
-  }
+  // Debug: function called
+  console.log("🔴 applyTheme function called");
 
   devLogger.logFunc("applyTheme");
 
   const publishedTheme = document?.__?.theme;
 
   // Debug: check if we have theme data
-  if (typeof window !== "undefined" && window.document) {
-    const debugDiv2 = window.document.createElement("div");
-    debugDiv2.style.cssText =
-      "position:fixed;top:50px;left:10px;background:blue;color:white;padding:10px;z-index:9999;";
-    debugDiv2.innerHTML = `publishedTheme: ${publishedTheme ? "EXISTS" : "NULL"}`;
-    window.document.body?.appendChild(debugDiv2);
-  }
+  console.log("🔵 publishedTheme:", publishedTheme ? "EXISTS" : "NULL");
 
   let overrides: ThemeData | undefined;
 
@@ -73,13 +61,11 @@ export const applyTheme = (
       overrides = JSON.parse(publishedTheme);
 
       // Debug: show parsed data
-      if (typeof window !== "undefined" && window.document) {
-        const debugDiv3 = window.document.createElement("div");
-        debugDiv3.style.cssText =
-          "position:fixed;top:90px;left:10px;background:green;color:white;padding:10px;z-index:9999;";
-        debugDiv3.innerHTML = `Parsed: ${Object.keys(overrides || {}).length} keys`;
-        window.document.body?.appendChild(debugDiv3);
-      }
+      console.log(
+        "🟢 Parsed theme data:",
+        Object.keys(overrides || {}).length,
+        "keys"
+      );
 
       devLogger.logData("THEME_DATA", overrides);
     } catch (error) {
@@ -104,13 +90,7 @@ export const applyTheme = (
     const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
 
     // Debug: show extracted fonts
-    if (typeof window !== "undefined" && window.document) {
-      const debugDiv4 = window.document.createElement("div");
-      debugDiv4.style.cssText =
-        "position:fixed;top:120px;left:10px;background:blue;color:white;padding:10px;z-index:9999;";
-      debugDiv4.innerHTML = `Extracted: ${Object.keys(inUseFonts).join(", ")}`;
-      window.document.body?.appendChild(debugDiv4);
-    }
+    console.log("🔵 Extracted fonts:", Object.keys(inUseFonts).join(", "));
 
     devLogger.logData("THEME_DATA", {
       extractedFonts: inUseFonts,
@@ -136,13 +116,10 @@ export const applyTheme = (
       fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
 
       // Debug: show Google Fonts URL
-      if (typeof window !== "undefined" && window.document) {
-        const debugDiv5 = window.document.createElement("div");
-        debugDiv5.style.cssText =
-          "position:fixed;top:150px;left:10px;background:purple;color:white;padding:10px;z-index:9999;max-width:400px;word-break:break-all;";
-        debugDiv5.innerHTML = `Font URL: ${fontLinkTags.substring(0, 200)}...`;
-        window.document.body?.appendChild(debugDiv5);
-      }
+      console.log(
+        "🟣 Google Fonts URL:",
+        fontLinkTags.substring(0, 200) + "..."
+      );
     }
   }
 
