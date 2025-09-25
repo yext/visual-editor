@@ -39,33 +39,15 @@ export const applyTheme = (
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
-  console.log(
-    "🔴 applyTheme called with document:",
-    document?.__?.theme ? "HAS THEME" : "NO THEME"
-  );
-
-  // Debug: function called
-  console.log("🔴 applyTheme function called");
-
   devLogger.logFunc("applyTheme");
 
   const publishedTheme = document?.__?.theme;
-
-  // Debug: check if we have theme data
-  console.log("🔵 publishedTheme:", publishedTheme ? "EXISTS" : "NULL");
 
   let overrides: ThemeData | undefined;
 
   if (publishedTheme) {
     try {
       overrides = JSON.parse(publishedTheme);
-
-      // Debug: show parsed data
-      console.log(
-        "🟢 Parsed theme data:",
-        Object.keys(overrides || {}).length,
-        "keys"
-      );
 
       devLogger.logData("THEME_DATA", overrides);
     } catch (error) {
@@ -89,9 +71,6 @@ export const applyTheme = (
 
     const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
 
-    // Debug: show extracted fonts
-    console.log("🔵 Extracted fonts:", Object.keys(inUseFonts).join(", "));
-
     devLogger.logData("THEME_DATA", {
       extractedFonts: inUseFonts,
       fontCount: Object.keys(inUseFonts).length,
@@ -114,32 +93,11 @@ export const applyTheme = (
       });
     } else {
       fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
-
-      // Debug: show Google Fonts URL
-      console.log(
-        "🟣 Google Fonts URL:",
-        fontLinkTags.substring(0, 200) + "..."
-      );
     }
   }
 
   if (Object.keys(themeConfig).length > 0) {
     const result = `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
-    console.log(
-      "🔴 applyTheme returning HTML with fontLinkTags length:",
-      fontLinkTags.length
-    );
-    console.log("🔴 applyTheme returning HTML total length:", result.length);
-    console.log(
-      "🔴 applyTheme fontLinkTags preview:",
-      fontLinkTags.substring(0, 200) + "..."
-    );
-    console.log("🔴 applyTheme FULL fontLinkTags:", fontLinkTags);
-    console.log("🔴 applyTheme FULL result:", result);
-    console.log(
-      "🔴 applyTheme result includes Google Fonts:",
-      result.includes("fonts.googleapis.com")
-    );
     return result;
   }
   return base ?? "";

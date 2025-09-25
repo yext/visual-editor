@@ -43,23 +43,15 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
  * fall outside of the font's supported values
  */
 export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
-  console.log(
-    "🟣 constructGoogleFontLinkTags called with fonts:",
-    Object.keys(fonts)
-  );
-
   const preconnectTags =
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
 
   const fontEntries = Object.entries(fonts);
-  console.log("🟣 Font entries to process:", fontEntries.length);
   const linkTags: string[] = [];
 
   // Create a separate link tag for each font
   for (const [fontName, fontDetails] of fontEntries) {
-    console.log("🟣 Processing font:", fontName);
-
     const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
 
     let weightParam;
@@ -87,20 +79,12 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
 
     const param =
       "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
-    console.log("🟣 Generated param for", fontName, ":", param);
 
     const linkTag = `<link href="https://fonts.googleapis.com/css2?${param}&display=swap" rel="stylesheet">`;
-    console.log(
-      "🟣 Generated link tag for",
-      fontName,
-      ":",
-      linkTag.substring(0, 100) + "..."
-    );
     linkTags.push(linkTag);
   }
 
   const result = linkTags.length ? preconnectTags + linkTags.join("\n") : "";
-  console.log("🟣 Final Google Fonts link tags length:", result.length);
   return result;
 };
 
@@ -233,20 +217,6 @@ export const extractInUseFontFamilies = (
   data: ThemeData,
   availableFonts: FontRegistry
 ): FontRegistry => {
-  console.log(
-    "🟠 extractInUseFontFamilies called with data:",
-    Object.keys(data).length,
-    "keys"
-  );
-
-  const fontKeys = Object.keys(data).filter((key) =>
-    key.includes("fontFamily")
-  );
-  console.log("🟠 Font family keys found:", fontKeys);
-
-  const fontValues = fontKeys.map((key) => data[key]);
-  console.log("🟠 Font family values:", fontValues);
-
   const fontFamilies = new Set<string>();
 
   for (const key in data) {
@@ -258,34 +228,21 @@ export const extractInUseFontFamilies = (
           .trim()
           .replace(/^["'](.*)["']$/, "$1");
         fontFamilies.add(cleanedFontName);
-        console.log(
-          "🟠 Extracted font name:",
-          cleanedFontName,
-          "from value:",
-          value
-        );
       }
     }
   }
-
-  console.log("🟠 All extracted font families:", Array.from(fontFamilies));
 
   const inUseFonts: FontRegistry = {};
 
   for (const fontName of fontFamilies) {
     if (availableFonts[fontName]) {
       inUseFonts[fontName] = availableFonts[fontName];
-      console.log(
-        "🟠 Added font to inUseFonts:",
-        fontName,
-        "with spec:",
-        availableFonts[fontName]
-      );
     } else {
-      console.log("🟠 Font not found in availableFonts:", fontName);
+      console.warn(
+        `The font '${fontName}' is used in the theme but cannot be found in available fonts.`
+      );
     }
   }
 
-  console.log("🟠 Final inUseFonts:", Object.keys(inUseFonts));
   return inUseFonts;
 };

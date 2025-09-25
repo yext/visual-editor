@@ -68,23 +68,12 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
           ]
         : []),
     ],
-    other: (() => {
-      const analytics = applyAnalytics(document);
-      const headerScript = applyHeaderScript(document);
-      const theme = applyTheme(document, defaultThemeConfig);
-      const schema = SchemaWrapper(document._schema);
-      const result = [analytics, headerScript, theme, schema].join("\n");
-      console.log("🔵 getHeadConfig other field length:", result.length);
-      console.log(
-        "🔵 getHeadConfig other field includes Google Fonts:",
-        result.includes("fonts.googleapis.com")
-      );
-      console.log(
-        "🔵 getHeadConfig other field preview:",
-        result.substring(0, 300) + "..."
-      );
-      return result;
-    })(),
+    other: [
+      applyAnalytics(document),
+      applyHeaderScript(document),
+      applyTheme(document, defaultThemeConfig),
+      SchemaWrapper(document._schema),
+    ].join("\n"),
   };
 };
 

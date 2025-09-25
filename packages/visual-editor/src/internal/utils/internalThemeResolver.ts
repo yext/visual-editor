@@ -9,31 +9,15 @@ export const internalThemeResolver = (
   themeConfig: ThemeConfig,
   savedTheme: ThemeData | undefined
 ): ThemeData => {
-  console.log(
-    "🟡 internalThemeResolver called with savedTheme:",
-    savedTheme ? Object.keys(savedTheme).length + " keys" : "undefined"
-  );
-
   const themeValues = generateCssVariablesFromThemeConfig(themeConfig);
-  console.log(
-    "🟡 Generated default theme values:",
-    Object.keys(themeValues).length,
-    "keys"
-  );
 
   if (!savedTheme) {
-    console.log("🟡 No saved theme, returning default values");
     return themeValues;
   }
 
   // Apply all saved theme values, not just the ones that exist in the default theme
   // This ensures that all overrides are applied, including ones that might not be in the default theme
   const merged = { ...themeValues, ...savedTheme };
-  console.log("🟡 Merged theme values:", Object.keys(merged).length, "keys");
-  console.log(
-    "🟡 Font family keys in merged:",
-    Object.keys(merged).filter((key) => key.includes("fontFamily"))
-  );
 
   return merged;
 };
