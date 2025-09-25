@@ -39,25 +39,46 @@ export const applyTheme = (
   themeConfig: ThemeConfig,
   base?: string
 ): string => {
+  // Debug: create visible indicator
+  if (typeof window !== "undefined" && window.document) {
+    const debugDiv = document.createElement("div");
+    debugDiv.style.cssText =
+      "position:fixed;top:10px;left:10px;background:red;color:white;padding:10px;z-index:9999;";
+    debugDiv.innerHTML = "applyTheme called";
+    window.document.body?.appendChild(debugDiv);
+  }
+
   devLogger.logFunc("applyTheme");
 
   const publishedTheme = document?.__?.theme;
+
+  // Debug: check if we have theme data
+  if (typeof window !== "undefined" && window.document) {
+    const debugDiv2 = document.createElement("div");
+    debugDiv2.style.cssText =
+      "position:fixed;top:50px;left:10px;background:blue;color:white;padding:10px;z-index:9999;";
+    debugDiv2.innerHTML = `publishedTheme: ${publishedTheme ? "EXISTS" : "NULL"}`;
+    window.document.body?.appendChild(debugDiv2);
+  }
+
   let overrides: ThemeData | undefined;
 
   if (publishedTheme) {
     try {
       overrides = JSON.parse(publishedTheme);
-      if (typeof document !== "undefined") {
-        document.title = `Parsed theme: ${Object.keys(overrides || {}).length} keys | ${document.title}`;
+
+      // Debug: show parsed data
+      if (typeof window !== "undefined" && window.document) {
+        const debugDiv3 = document.createElement("div");
+        debugDiv3.style.cssText =
+          "position:fixed;top:90px;left:10px;background:green;color:white;padding:10px;z-index:9999;";
+        debugDiv3.innerHTML = `Parsed: ${Object.keys(overrides || {}).length} keys`;
+        window.document.body?.appendChild(debugDiv3);
       }
-      devLogger.logData("THEME_DATA", overrides);
+
       devLogger.logData("THEME_DATA", overrides);
     } catch (error) {
       console.warn("Failed to parse published theme data:", error);
-      devLogger.logData("THEME_DATA", {
-        parseError: true,
-        themeData: publishedTheme,
-      });
     }
   }
 
