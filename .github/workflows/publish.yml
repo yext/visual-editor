@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
@@ -37,7 +39,9 @@ jobs:
 
       - name: Verify package version and get npm tag
         id: get_npm_tag
-        run: pnpm run ci-verify-publish ${{ github.ref_name }}
+        run: |
+          TAG=$(pnpm run ci-verify-publish ${{ github.ref_name }} | tail -n 1)
+          echo "npm_tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Publish
         run: cd packages/visual-editor && pnpm publish --access public --tag ${{ steps.get_npm_tag.outputs.npm_tag }}

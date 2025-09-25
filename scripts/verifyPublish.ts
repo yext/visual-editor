@@ -23,7 +23,7 @@ const releaseTag = version.includes("rc")
     ? "beta"
     : version.includes("alpha")
       ? "alpha"
-      : undefined;
+      : "latest";
 
 // Log the release tag to be picked up by the next GitHub Actions step
 console.log(releaseTag);
