@@ -235,35 +235,31 @@ export const extractInUseFontFamilies = (
 ): FontRegistry => {
   const fontFamilies = new Set<string>();
 
-  // Iterate over all the keys in the theme data to find font names.
   for (const key in data) {
-    // searches for keys with "fontFamily" like "--fontFamily-h1-fontFamily"
     if (typeof key === "string" && key.includes("fontFamily")) {
       const value = data[key];
-      // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
-      // parses fontName from the value
       if (typeof value === "string" && value.length > 0) {
         const firstFont = value.split(",")[0];
-        const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
+        // Better quote removal - handles both single and double quotes properly
+        const cleanedFontName = firstFont
+          .trim()
+          .replace(/^["'](.*)["']$/, "$1");
         fontFamilies.add(cleanedFontName);
       }
     }
   }
 
   const inUseFonts: FontRegistry = {};
-  const notFoundFonts: string[] = [];
 
-  // For each unique font family found, look it up in the availableFonts map.
+  // Debug: show extracted font names in page title
+  if (typeof document !== "undefined") {
+    document.title = `Fonts: ${Array.from(fontFamilies).join(", ")} | ${document.title}`;
+  }
+
   for (const fontName of fontFamilies) {
     if (availableFonts[fontName]) {
       inUseFonts[fontName] = availableFonts[fontName];
-    } else {
-      notFoundFonts.push(fontName);
     }
-  }
-
-  if (notFoundFonts.length > 0) {
-    document.title = `Missing fonts: ${notFoundFonts.join(", ")} - ${document.title}`;
   }
 
   return inUseFonts;
