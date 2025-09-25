@@ -1,3 +1,4 @@
+import { StreamDocument } from "@yext/visual-editor";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
 
@@ -227,7 +228,7 @@ const stringifyResolvedField = (fieldValue: any): string => {
 };
 
 export const resolveSchemaJson = (
-  streamDocument: any,
+  streamDocument: StreamDocument,
   schema: string
 ): string => {
   return schema.replace(embeddedFieldRegex, (_, fieldName) => {
