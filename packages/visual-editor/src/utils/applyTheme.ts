@@ -124,7 +124,17 @@ export const applyTheme = (
   }
 
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
+    const result = `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
+    console.log(
+      "🔴 applyTheme returning HTML with fontLinkTags length:",
+      fontLinkTags.length
+    );
+    console.log("🔴 applyTheme returning HTML total length:", result.length);
+    console.log(
+      "🔴 applyTheme fontLinkTags preview:",
+      fontLinkTags.substring(0, 200) + "..."
+    );
+    return result;
   }
   return base ?? "";
 };
