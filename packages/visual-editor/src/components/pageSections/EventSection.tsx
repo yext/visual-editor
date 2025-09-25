@@ -226,7 +226,11 @@ const EventCard = ({
         <div className="lg:w-[45%] w-full">
           <Image
             image={event.image}
-            aspectRatio={1.78}
+            aspectRatio={
+              event.image.width && event.image.height
+                ? event.image.width / event.image.height
+                : 1.78
+            }
             sizes={imgSizesHelper({
               base: "calc(100vw - 34px)",
               lg: "calc(maxWidth * 0.45)",
