@@ -66,7 +66,7 @@ const FALLBACK_SCHEMA = `{
 }`;
 
 // Function to get the appropriate schema template based on entity type
-const getSchemaTemplate = (entityTypeId?: string): string => {
+export const getSchemaTemplate = (entityTypeId?: string): string => {
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   }

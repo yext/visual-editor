@@ -16,8 +16,10 @@ describe("getSchema", () => {
           },
         }),
       },
-      _schema: {
-        name: "Old Name",
+      meta: {
+        entityType: {
+          id: "location",
+        },
       },
     };
     const schema = getSchema(testDocument);
@@ -27,7 +29,7 @@ describe("getSchema", () => {
     });
   });
 
-  it("works with old schema ", async () => {
+  it("works with default schema ", async () => {
     const testDocument = {
       name: "Test Name",
       __: {
@@ -39,14 +41,32 @@ describe("getSchema", () => {
           },
         }),
       },
-      _schema: {
-        name: "Old Name",
+      meta: {
+        entityType: {
+          id: "location",
+        },
       },
     };
     const schema = getSchema(testDocument);
 
     expect(schema).toMatchObject({
-      name: "Old Name",
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: "Test Name",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "[[address.line1]]",
+        addressLocality: "[[address.city]]",
+        addressRegion: "[[address.region]]",
+        postalCode: "[[address.postalCode]]",
+        addressCountry: "[[address.countryCode]]",
+      },
+      openingHours: "[[hours]]",
+      image: "[[photoGallery]]",
+      description: "[[description]]",
+      telephone: "[[mainPhone]]",
+      paymentAccepted: "[[paymentOptions]]",
+      hasOfferCatalog: "[[services]]",
     });
   });
 });
