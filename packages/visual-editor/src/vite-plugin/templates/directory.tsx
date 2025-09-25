@@ -10,7 +10,7 @@ import {
   HeadConfig,
   TagType,
 } from "@yext/pages";
-import { Render, useGetPuck } from "@measured/puck";
+import { Render } from "@measured/puck";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -22,16 +22,15 @@ import {
   migrationRegistry,
   defaultThemeConfig,
   directoryConfig,
-  resolveSchemaJson,
+  getSchema,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
-  const getPuck = useGetPuck();
-  const { appState } = getPuck();
   const { title, description } = getPageMetadata(document);
+  const schema = getSchema(document);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
 
   return {
@@ -74,11 +73,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       applyAnalytics(document),
       applyHeaderScript(document),
       applyTheme(document, defaultThemeConfig),
-      SchemaWrapper(
-        appState.data.root?.props?.schemaMarkup
-          ? resolveSchemaJson(document, appState.data.root?.props?.schemaMarkup)
-          : document._schema
-      ),
+      SchemaWrapper(schema),
     ].join("\n"),
   };
 };
