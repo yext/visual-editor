@@ -15,12 +15,9 @@ export const internalThemeResolver = (
     return themeValues;
   }
 
-  Object.entries(themeValues).forEach(([cssVariable]) => {
-    if (savedTheme[cssVariable]) {
-      themeValues[cssVariable] = savedTheme[cssVariable];
-    }
-  });
-  return themeValues;
+  // Apply all saved theme values, not just the ones that exist in the default theme
+  // This ensures that all overrides are applied, including ones that might not be in the default theme
+  return { ...themeValues, ...savedTheme };
 };
 
 // generateCssVariablesFromThemeConfig flattens the themeConfig, creating an object
