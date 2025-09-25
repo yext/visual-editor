@@ -13,13 +13,18 @@ import {
   backgroundColors,
 } from "@yext/visual-editor";
 
+/** The props for the Phone component */
 export interface PhoneProps {
   data: {
+    /** The phone number data to display */
     number: YextEntityField<string>;
+    /** The text to display before the phone number */
     label: TranslatableString;
   };
   styles: {
+    /** Whether to format the phone number like a domestic or international number */
     phoneFormat: "domestic" | "international";
+    /** Whether to make the phone number a clickable link */
     includePhoneHyperlink: boolean;
   };
 }
@@ -58,6 +63,17 @@ export const PhoneStyleFields = {
       ],
     }
   ),
+};
+
+export const defaultPhoneDataProps: PhoneProps["data"] = {
+  number: {
+    field: "mainPhone",
+    constantValue: "",
+  },
+  label: {
+    en: "Phone",
+    hasLocalizedValue: "true",
+  },
 };
 
 const PhoneFields: Fields<PhoneProps> = {
@@ -107,16 +123,7 @@ export const Phone: ComponentConfig<{ props: PhoneProps }> = {
   label: msg("components.phone", "Phone"),
   fields: PhoneFields,
   defaultProps: {
-    data: {
-      number: {
-        field: "mainPhone",
-        constantValue: "",
-      },
-      label: {
-        en: "Phone",
-        hasLocalizedValue: "true",
-      },
-    },
+    data: defaultPhoneDataProps,
     styles: {
       phoneFormat: "domestic",
       includePhoneHyperlink: true,

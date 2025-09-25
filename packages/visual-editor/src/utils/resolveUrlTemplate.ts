@@ -35,8 +35,15 @@ export const resolveUrlTemplate = (
 
   const isPrimaryLocale = streamDocument.__?.isPrimaryLocale !== false;
 
-  const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-  const urlTemplates = pagesetJson?.config?.urlTemplate || {};
+  let urlTemplates;
+  if (streamDocument?.__?.codeTemplate === "directory") {
+    urlTemplates = JSON.parse(
+      streamDocument?.__?.entityPageSetUrlTemplates || "{}"
+    );
+  } else {
+    const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
+    urlTemplates = pagesetJson?.config?.urlTemplate || {};
+  }
 
   let urlTemplate: string | undefined;
   if (isPrimaryLocale && urlTemplates.primary) {

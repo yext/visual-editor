@@ -25,7 +25,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
-  CTAProps,
+  CTAVariant,
   resolveComponentData,
   imgSizesHelper,
 } from "@yext/visual-editor";
@@ -55,15 +55,22 @@ export interface EventStyles {
 
   /** Styling for the heading. */
   heading: {
+    /** The h tag level of the section heading */
     level: HeadingLevel;
+    /** Alignment of the event section heading */
     align: "left" | "center" | "right";
   };
 
   /** Styling for all the cards. */
   cards: {
+    /** The h tag level of each event card's title */
     headingLevel: HeadingLevel;
+    /** The background color of each event card */
     backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAProps["variant"];
+    /** The CTA variant to use in each event card */
+    ctaVariant: CTAVariant;
+    /** Whether to truncate the event description text */
+    truncateDescription: boolean;
   };
 }
 
@@ -154,6 +161,22 @@ const eventSectionFields: Fields<EventSectionProps> = {
             type: "radio",
             options: "CTA_VARIANT",
           }),
+          truncateDescription: YextField(
+            msg("fields.truncateDescription", "Truncate Description"),
+            {
+              type: "radio",
+              options: [
+                {
+                  label: msg("fields.options.truncate", "Truncate"),
+                  value: true,
+                },
+                {
+                  label: msg("fields.options.showFullText", "Show Full Text"),
+                  value: false,
+                },
+              ],
+            }
+          ),
         },
       }),
     },
@@ -190,51 +213,59 @@ const EventCard = ({
   event: EventStruct;
   cardStyles: EventSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
-  ctaVariant: CTAProps["variant"];
+  ctaVariant: CTAVariant;
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   return (
     <Background
       background={cardStyles.backgroundColor}
-      className={`flex flex-col md:flex-row rounded-lg overflow-hidden h-fit md:h-64`}
+      className={`flex flex-col md:flex-row rounded-lg overflow-hidden md:items-start`}
     >
-      <div className="lg:w-[45%] w-full h-full">
-        {event.image && (
-          <div className="h-full">
-            <Image
-              image={event.image}
-              aspectRatio={1.78}
-              sizes={imgSizesHelper({
-                base: "calc(100vw - 34px)",
-                lg: "calc(maxWidth * 0.45)",
-              })}
-            />
-          </div>
-        )}
-      </div>
-      <div className="flex flex-col gap-2 p-6 w-full md:w-[55%]">
-        {event.title && (
-          <Heading
-            level={cardStyles.headingLevel}
-            semanticLevelOverride={
-              sectionHeadingLevel < 6
-                ? ((sectionHeadingLevel + 1) as HeadingLevel)
-                : "span"
-            }
-          >
-            {resolveComponentData(event.title, i18n.language, streamDocument)}
-          </Heading>
-        )}
-        {event.dateTime && (
-          <Timestamp
-            date={event.dateTime}
-            option={TimestampOption.DATE_TIME}
-            hideTimeZone={true}
+      {event.image && (
+        <div className="lg:w-[45%] w-full">
+          <Image
+            image={event.image}
+            aspectRatio={1.78}
+            sizes={imgSizesHelper({
+              base: "calc(100vw - 34px)",
+              lg: "calc(maxWidth * 0.45)",
+            })}
+            className="w-full h-full object-cover"
           />
-        )}
-        {event.description &&
-          resolveComponentData(event.description, i18n.language)}
+        </div>
+      )}
+      <div className="flex flex-col gap-4 p-6 w-full md:w-[55%] justify-between flex-grow">
+        <div className="flex flex-col gap-2">
+          {event.title && (
+            <Heading
+              level={cardStyles.headingLevel}
+              semanticLevelOverride={
+                sectionHeadingLevel < 6
+                  ? ((sectionHeadingLevel + 1) as HeadingLevel)
+                  : "span"
+              }
+            >
+              {resolveComponentData(event.title, i18n.language, streamDocument)}
+            </Heading>
+          )}
+          {event.dateTime && (
+            <Timestamp
+              date={event.dateTime}
+              option={TimestampOption.DATE_TIME}
+              hideTimeZone={true}
+            />
+          )}
+          {event.description && (
+            <p
+              className={
+                cardStyles.truncateDescription ? "md:line-clamp-2" : ""
+              }
+            >
+              {resolveComponentData(event.description, i18n.language)}
+            </p>
+          )}
+        </div>
         {event.cta && (
           <CTA
             eventName={`cta${cardNumber}`}
@@ -358,6 +389,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
         ctaVariant: "primary",
+        truncateDescription: true,
       },
     },
     analytics: {

@@ -7,7 +7,7 @@ import {
   useDocument,
   EntityField,
   CTA,
-  CTAProps,
+  CTAVariant,
   YextField,
   pt,
   msg,
@@ -16,7 +16,7 @@ import {
 
 export type GetDirectionsProps = {
   coordinate: YextEntityField<Coordinate>;
-  variant: CTAProps["variant"];
+  variant: CTAVariant;
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {

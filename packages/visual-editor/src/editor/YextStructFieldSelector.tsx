@@ -24,11 +24,15 @@ export const supportedStructEntityFieldTypes = [
   "type.promo_section",
 ];
 
-// YextStructEntityField keeps track of which fields we are allowing individual overriding for using constantValueOverride
+/** Represents a Yext struct entity field (hero or promo) with support for static values and overrides. */
 export type YextStructEntityField<T extends Record<string, any> = any> = {
+  /** The Yext Knowledge Graph field api name */
   field: string;
+  /** The static value for the field */
   constantValue: T;
+  /** Whether to use the static value instead of the entity field value */
   constantValueEnabled?: boolean;
+  /** A map of subfield names to whether to use the static value for that subfield */
   constantValueOverride: {
     [K in keyof T]: boolean;
   };

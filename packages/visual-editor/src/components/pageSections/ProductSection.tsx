@@ -21,7 +21,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
-  CTAProps,
+  CTAVariant,
   resolveComponentData,
   CTA,
   imgSizesHelper,
@@ -58,9 +58,12 @@ export interface ProductStyles {
 
   /** Styling for the individual product cards. */
   cards: {
+    /** The h tag level of each product card's title */
     headingLevel: HeadingLevel;
+    /** The background color of each product card */
     backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAProps["variant"];
+    /** The CTA variant to use in each product card */
+    ctaVariant: CTAVariant;
   };
 }
 
@@ -187,7 +190,7 @@ const ProductCard = ({
   product: ProductStruct;
   cardStyles: ProductSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
-  ctaVariant: CTAProps["variant"];
+  ctaVariant: CTAVariant;
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -321,7 +324,7 @@ const ProductSectionWrapper = ({ data, styles }: ProductSectionProps) => {
           fieldId={data.products.field}
           constantValueEnabled={data.products.constantValueEnabled}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch">
             {resolvedProducts.products.map((product, index) => (
               <ProductCard
                 key={index}

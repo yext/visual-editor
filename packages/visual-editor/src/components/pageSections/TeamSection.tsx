@@ -22,7 +22,7 @@ import {
   pt,
   ThemeOptions,
   getAnalyticsScopeHash,
-  CTAProps,
+  CTAVariant,
   resolveComponentData,
   CTA,
 } from "@yext/visual-editor";
@@ -61,7 +61,7 @@ export interface TeamStyles {
   cards: {
     headingLevel: HeadingLevel;
     backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAProps["variant"];
+    ctaVariant: CTAVariant;
   };
 }
 
@@ -188,7 +188,7 @@ const PersonCard = ({
   person: PersonStruct;
   cardStyles: TeamSectionProps["styles"]["cards"];
   sectionHeadingLevel: HeadingLevel;
-  ctaVariant: CTAProps["variant"];
+  ctaVariant: CTAVariant;
 }) => {
   const { i18n } = useTranslation();
 
@@ -226,9 +226,9 @@ const PersonCard = ({
       <hr className="border" />
       <Background
         background={backgroundColors.background1.value}
-        className="p-8"
+        className="flex flex-grow p-8"
       >
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col flex-grow gap-4">
           {person.phoneNumber && (
             <PhoneAtom
               eventName={`phone${cardNumber}`}
@@ -258,7 +258,7 @@ const PersonCard = ({
             </div>
           )}
           {person.cta && (
-            <div className="flex justify-start gap-2">
+            <div className="flex justify-start mt-auto gap-2">
               <CTA
                 eventName={`cta${cardNumber}`}
                 label={

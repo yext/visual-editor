@@ -45,7 +45,7 @@
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
-    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs",
+    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs ; tsx scripts/generateComponentTypeDefinitions.ts",
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
@@ -157,7 +157,7 @@
     "zod": "^3.23.8"
   },
   "peerDependencies": {
-    "@yext/pages-components": "^1.1.9",
+    "@yext/pages-components": "^1.1.13",
     "@yext/search-headless-react": "^2.5.4",
     "@yext/search-ui-react": "^1.9.3",
     "mapbox-gl": "^2.9.2",

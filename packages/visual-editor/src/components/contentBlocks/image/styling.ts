@@ -1,7 +1,9 @@
 import { Fields } from "@measured/puck";
 import { YextField, msg } from "@yext/visual-editor";
 
+/** Props for displaying an image */
 export interface ImageStylingProps {
+  /** The aspect ratio of the image */
   aspectRatio: number;
   width?: number;
 }

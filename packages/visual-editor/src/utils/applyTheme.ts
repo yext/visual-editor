@@ -23,6 +23,7 @@ export type StreamDocument = {
     name?: string;
     visualEditorConfig?: string;
     isPrimaryLocale?: boolean;
+    entityPageSetUrlTemplates?: string;
   };
 };
 
