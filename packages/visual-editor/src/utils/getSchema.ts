@@ -65,13 +65,11 @@ const DIRECTORY_LIST_ITEM_SCHEMA = `{
   }
 }`;
 
-// TODO: get produtionDomain/slug to populated urlWriteback
 const FALLBACK_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "Thing",
   "name": "[[name]]",
   "description": "[[description]]",
-  "url": "[[urlWriteback]]"
 }`;
 
 // Function to get the appropriate schema template based on entity type
