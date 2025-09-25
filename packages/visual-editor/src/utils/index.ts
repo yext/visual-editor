@@ -18,6 +18,7 @@ export { resolveComponentData } from "./resolveComponentData.tsx";
 export {
   resolveYextEntityField,
   resolveYextStructField,
+  resolveSchemaJson,
 } from "./resolveYextEntityField.ts";
 export { resolveUrlTemplate } from "./resolveUrlTemplate.ts";
 export {
