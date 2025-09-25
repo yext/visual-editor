@@ -48,7 +48,7 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
 
   const prefix = '<link href="https://fonts.googleapis.com/css2?';
-  const postfix = '&display=swap" rel="stylesheet">';
+  const postfix = 'display=swap" rel="stylesheet">';
 
   const fontEntries = Object.entries(fonts);
   const chunkSize = 7;
@@ -242,16 +242,19 @@ export const extractInUseFontFamilies = (
   }
 
   const inUseFonts: FontRegistry = {};
+  const notFoundFonts: string[] = [];
 
   // For each unique font family found, look it up in the availableFonts map.
   for (const fontName of fontFamilies) {
     if (availableFonts[fontName]) {
       inUseFonts[fontName] = availableFonts[fontName];
     } else {
-      console.warn(
-        `The font '${fontName}' is used in the theme but cannot be found in available fonts.`
-      );
+      notFoundFonts.push(fontName);
     }
+  }
+
+  if (notFoundFonts.length > 0) {
+    document.title = `Missing fonts: ${notFoundFonts.join(", ")} - ${document.title}`;
   }
 
   return inUseFonts;
