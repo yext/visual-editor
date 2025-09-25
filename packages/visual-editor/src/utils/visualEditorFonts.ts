@@ -91,15 +91,6 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     linkTags.push(`${prefix}${params}&${postfix}`);
   }
 
-  // Debug: show generated URLs in page body
-  if (typeof document !== "undefined") {
-    const debugDiv = document.createElement("div");
-    debugDiv.style.cssText =
-      "position:fixed;top:10px;right:10px;background:red;color:white;padding:10px;z-index:9999;max-width:300px;";
-    debugDiv.innerHTML = `Font URLs:<br>${linkTags.map((tag) => tag.match(/href="([^"]+)"/)?.[1] || "no url").join("<br>")}`;
-    document.body?.appendChild(debugDiv);
-  }
-
   return linkTags.length ? preconnectTags + linkTags.join("\n") : "";
 };
 
@@ -228,11 +219,17 @@ const filterFontWeights = (
   }
 };
 
-// Returns FontRegistry only containing fonts used in ThemeData
 export const extractInUseFontFamilies = (
   data: ThemeData,
   availableFonts: FontRegistry
 ): FontRegistry => {
+  // Debug: show what data we're actually receiving
+  if (typeof document !== "undefined") {
+    const keys = Object.keys(data);
+    const fontKeys = keys.filter((key) => key.includes("fontFamily"));
+    document.title = `Keys: ${keys.length} total, ${fontKeys.length} font keys | ${document.title}`;
+  }
+
   const fontFamilies = new Set<string>();
 
   for (const key in data) {
@@ -240,7 +237,6 @@ export const extractInUseFontFamilies = (
       const value = data[key];
       if (typeof value === "string" && value.length > 0) {
         const firstFont = value.split(",")[0];
-        // Better quote removal - handles both single and double quotes properly
         const cleanedFontName = firstFont
           .trim()
           .replace(/^["'](.*)["']$/, "$1");
@@ -250,11 +246,6 @@ export const extractInUseFontFamilies = (
   }
 
   const inUseFonts: FontRegistry = {};
-
-  // Debug: show extracted font names in page title
-  if (typeof document !== "undefined") {
-    document.title = `Fonts: ${Array.from(fontFamilies).join(", ")} | ${document.title}`;
-  }
 
   for (const fontName of fontFamilies) {
     if (availableFonts[fontName]) {
