@@ -291,16 +291,13 @@ export const InternalLayoutEditor = ({
                         onChange: (newValue: string) => {
                           const { dispatch } = getPuck();
                           dispatch({
-                            type: "setData",
-                            data: {
-                              ...appState.data,
-                              root: {
-                                ...appState.data.root,
-                                props: {
-                                  ...appState.data.root?.props,
-                                  schemaMarkup: newValue,
-                                } as any,
-                              },
+                            type: "replaceRoot",
+                            root: {
+                              ...appState.data.root,
+                              props: {
+                                ...appState.data.root?.props,
+                                schemaMarkup: newValue,
+                              } as any,
                             },
                           });
                         },
