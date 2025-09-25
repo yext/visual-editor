@@ -91,6 +91,15 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     linkTags.push(`${prefix}${params}&${postfix}`);
   }
 
+  // Debug: show generated URLs in page body
+  if (typeof document !== "undefined") {
+    const debugDiv = document.createElement("div");
+    debugDiv.style.cssText =
+      "position:fixed;top:10px;right:10px;background:red;color:white;padding:10px;z-index:9999;max-width:300px;";
+    debugDiv.innerHTML = `Font URLs:<br>${linkTags.map((tag) => tag.match(/href="([^"]+)"/)?.[1] || "no url").join("<br>")}`;
+    document.body?.appendChild(debugDiv);
+  }
+
   return linkTags.length ? preconnectTags + linkTags.join("\n") : "";
 };
 
