@@ -11,7 +11,6 @@ import {
   pt,
   msg,
   TranslatableRichText,
-  useBackground,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
@@ -47,10 +46,9 @@ const bodyTextFields: Fields<BodyTextProps> = {
 };
 
 const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
-  ({ data, styles }, ref) => {
+  ({ data, styles }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
-    const background = useBackground();
 
     return (
       <EntityField
@@ -58,12 +56,9 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
-        <div
-          ref={ref}
-          className={`rtf-theme ${background?.isDarkBackground ? "rtf-dark-background" : "rtf-light-background"} ${styles.variant !== "base" && `rtf-body-${styles.variant}`}`}
-        >
-          {resolveComponentData(data.text, i18n.language, streamDocument)}
-        </div>
+        {resolveComponentData(data.text, i18n.language, streamDocument, {
+          variant: styles.variant,
+        })}
       </EntityField>
     );
   }

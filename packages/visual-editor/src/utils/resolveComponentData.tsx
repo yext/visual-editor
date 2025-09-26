@@ -1,8 +1,10 @@
 import {
+  BodyProps,
   MaybeRTF,
   RichText,
   TranslatableRichText,
   TranslatableString,
+  useBackground,
   YextEntityField,
 } from "@yext/visual-editor";
 import React from "react";
@@ -32,7 +34,11 @@ export function resolveComponentData(
 export function resolveComponentData(
   data: TranslatableRichText | YextEntityField<TranslatableRichText>,
   locale: string,
-  streamDocument?: any
+  streamDocument?: any,
+  options?: {
+    variant?: BodyProps["variant"];
+    className?: string;
+  }
 ): string | React.ReactElement;
 
 // 3. Handles a generic YextEntityField
@@ -46,7 +52,11 @@ export function resolveComponentData<T>(
 export function resolveComponentData<T>(
   data: YextEntityField<T> | TranslatableString | TranslatableRichText,
   locale: string,
-  streamDocument?: any
+  streamDocument?: any,
+  options?: {
+    variant?: BodyProps["variant"];
+    className?: string;
+  }
 ): any {
   let rawValue;
 
@@ -66,7 +76,27 @@ export function resolveComponentData<T>(
 
   // Fully resolve the resulting value, converting any translatable
   // objects into their final string or React element form.
-  return resolveTranslatableType(rawValue, locale);
+  const resolved = resolveTranslatableType(rawValue, locale);
+
+  // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
+  if (React.isValidElement(resolved)) {
+    const background = useBackground();
+
+    let rtfClass = "rtf-theme rtf-light-background";
+    if (background?.isDarkBackground) {
+      rtfClass = "rtf-theme rtf-dark-background";
+    }
+    if (options?.variant && options.variant !== "base") {
+      rtfClass += ` rtf-body-${options.variant}`;
+    }
+    if (options?.className) {
+      rtfClass += ` ${options.className}`;
+    }
+
+    return <div className={rtfClass}>{resolved}</div>;
+  }
+
+  return resolved;
 }
 
 /**
