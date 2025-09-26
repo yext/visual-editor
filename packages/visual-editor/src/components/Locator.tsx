@@ -600,135 +600,164 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
   );
 };
 
-const LocationCard = ({
-  result,
-  puck,
-}: {
-  result: CardProps<Location>["result"];
-  puck: PuckContext;
-}): React.JSX.Element => {
-  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
-  const { t } = useTranslation();
-
-  const location = result.rawData;
-  const distance = result.distance;
-
-  // function that takes coordinates and returns a google maps link for directions
-  const getGoogleMapsLink = (coordinate: Coordinate): string => {
-    return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
-  };
-
-  const distanceInMiles = distance
-    ? (distance / 1609.344).toFixed(1)
-    : undefined;
-
-  const distanceInKilometers = distance
-    ? (distance / 1000).toFixed(1)
-    : undefined;
-
-  const handleGetDirectionsClick = useCardAnalyticsCallback(
+const LocationCard = React.memo(
+  ({
     result,
-    "DRIVING_DIRECTIONS"
-  );
-  const handleVisitPageClick = useCardAnalyticsCallback(result, "VIEW_WEBSITE");
-  const handlePhoneNumberClick = useCardAnalyticsCallback(
-    result,
-    "TAP_TO_CALL"
-  );
+    puck,
+  }: {
+    result: CardProps<Location>["result"];
+    puck: PuckContext;
+  }): React.JSX.Element => {
+    const { document: streamDocument, relativePrefixToRoot } =
+      useTemplateProps();
+    const { t } = useTranslation();
 
-  const resolvedUrl = resolveUrlTemplate(
-    mergeMeta(location, streamDocument),
-    relativePrefixToRoot,
-    puck.metadata?.resolveUrlTemplate
-  );
+    const location = result.rawData;
+    const distance = result.distance;
 
-  return (
-    <Background
-      background={backgroundColors.background1.value}
-      className="container flex flex-row border-b border-gray-300 p-8 gap-4"
-    >
+    // Memoize the Google Maps link function
+    const getGoogleMapsLink = React.useCallback(
+      (coordinate: Coordinate): string => {
+        return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
+      },
+      []
+    );
+
+    const distanceInMiles = React.useMemo(() => {
+      return distance ? (distance / 1609.344).toFixed(1) : undefined;
+    }, [distance]);
+
+    const distanceInKilometers = React.useMemo(() => {
+      return distance ? (distance / 1000).toFixed(1) : undefined;
+    }, [distance]);
+
+    const handleGetDirectionsClick = useCardAnalyticsCallback(
+      result,
+      "DRIVING_DIRECTIONS"
+    );
+    const handleVisitPageClick = useCardAnalyticsCallback(
+      result,
+      "VIEW_WEBSITE"
+    );
+    const handlePhoneNumberClick = useCardAnalyticsCallback(
+      result,
+      "TAP_TO_CALL"
+    );
+
+    const resolvedUrl = React.useMemo(() => {
+      return resolveUrlTemplate(
+        mergeMeta(location, streamDocument),
+        relativePrefixToRoot,
+        puck.metadata?.resolveUrlTemplate
+      );
+    }, [
+      location,
+      streamDocument,
+      relativePrefixToRoot,
+      puck.metadata?.resolveUrlTemplate,
+    ]);
+
+    const formattedPhoneNumber = React.useMemo(() => {
+      if (!location.mainPhone) return null;
+      return formatPhoneNumber(
+        location.mainPhone,
+        location.mainPhone.slice(0, 2) === "+1" ? "domestic" : "international"
+      );
+    }, [location.mainPhone]);
+
+    const googleMapsLink = React.useMemo(() => {
+      if (!location.yextDisplayCoordinate) return null;
+      return getGoogleMapsLink(
+        location.yextDisplayCoordinate || {
+          latitude: 0,
+          longitude: 0,
+        }
+      );
+    }, [location.yextDisplayCoordinate, getGoogleMapsLink]);
+
+    return (
       <Background
-        background={backgroundColors.background6.value}
-        className="flex-shrink-0 w-6 h-6 rounded-full font-bold flex items-center justify-center text-body-sm-fontSize"
+        background={backgroundColors.background1.value}
+        className="container flex flex-row border-b border-gray-300 p-8 gap-4"
       >
-        {result.index}
-      </Background>
-      <div className="flex flex-wrap gap-6 w-full">
-        <div className="w-full flex flex-col gap-4">
-          <div className="flex flex-row justify-between items-center">
-            <Heading className="font-bold text-palette-primary-dark" level={4}>
-              {location.name}
-            </Heading>
-            {distance && (
-              <div className="font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize">
-                {t("distanceInUnit", `${distanceInMiles} mi`, {
-                  distanceInMiles,
-                  distanceInKilometers,
-                })}
-              </div>
-            )}
-          </div>
-          {location.hours && (
-            <div className="font-body-fontFamily text-body-fontSize gap-8">
-              <HoursStatus
-                hours={location.hours}
-                timezone={location.timezone}
-              />
-            </div>
-          )}
-          {location.mainPhone && (
-            <a
-              href={location.mainPhone}
-              onClick={handlePhoneNumberClick}
-              className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
-            >
-              {formatPhoneNumber(
-                location.mainPhone,
-                location.mainPhone.slice(0, 2) === "+1"
-                  ? "domestic"
-                  : "international"
+        <Background
+          background={backgroundColors.background6.value}
+          className="flex-shrink-0 w-6 h-6 rounded-full font-bold flex items-center justify-center text-body-sm-fontSize"
+        >
+          {result.index}
+        </Background>
+        <div className="flex flex-wrap gap-6 w-full">
+          <div className="w-full flex flex-col gap-4">
+            <div className="flex flex-row justify-between items-center">
+              <Heading
+                className="font-bold text-palette-primary-dark"
+                level={4}
+              >
+                {location.name}
+              </Heading>
+              {distance && (
+                <div className="font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize">
+                  {t("distanceInUnit", `${distanceInMiles} mi`, {
+                    distanceInMiles,
+                    distanceInKilometers,
+                  })}
+                </div>
               )}
-            </a>
-          )}
-          <div className="flex flex-col gap-1 w-full">
-            {location.address && (
-              <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
-                <Address
-                  address={location.address}
-                  lines={[
-                    ["line1"],
-                    ["line2"],
-                    ["city", "region", "postalCode"],
-                  ]}
+            </div>
+            {location.hours && (
+              <div className="font-body-fontFamily text-body-fontSize gap-8">
+                <HoursStatus
+                  hours={location.hours}
+                  timezone={location.timezone}
                 />
               </div>
             )}
-            {location.yextDisplayCoordinate && (
+            {location.mainPhone && (
               <a
-                href={getGoogleMapsLink(
-                  location.yextDisplayCoordinate || {
-                    latitude: 0,
-                    longitude: 0,
-                  }
-                )}
-                onClick={handleGetDirectionsClick}
-                className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
+                href={location.mainPhone}
+                onClick={handlePhoneNumberClick}
+                className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
               >
-                {t("getDirections", "Get Directions")}
-                <FaAngleRight size={"12px"} />
+                {formattedPhoneNumber}
               </a>
             )}
+            <div className="flex flex-col gap-1 w-full">
+              {location.address && (
+                <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
+                  <Address
+                    address={location.address}
+                    lines={[
+                      ["line1"],
+                      ["line2"],
+                      ["city", "region", "postalCode"],
+                    ]}
+                  />
+                </div>
+              )}
+              {googleMapsLink && (
+                <a
+                  href={googleMapsLink}
+                  onClick={handleGetDirectionsClick}
+                  className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
+                >
+                  {t("getDirections", "Get Directions")}
+                  <FaAngleRight size={"12px"} />
+                </a>
+              )}
+            </div>
           </div>
+          <Button asChild className="basis-full" variant="primary">
+            <a href={resolvedUrl} onClick={handleVisitPageClick}>
+              {t("visitPage", "Visit Page")}
+            </a>
+          </Button>
         </div>
-        <Button asChild className="basis-full" variant="primary">
-          <a href={resolvedUrl} onClick={handleVisitPageClick}>
-            {t("visitPage", "Visit Page")}
-          </a>
-        </Button>
-      </div>
-    </Background>
-  );
-};
+      </Background>
+    );
+  }
+);
+
+LocationCard.displayName = "LocationCard";
 
 const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();

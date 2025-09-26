@@ -17,47 +17,77 @@ export interface HoursStatusAtomProps {
   timezone?: string;
 }
 
-export const HoursStatusAtom = ({
-  hours,
-  className,
-  showCurrentStatus = true,
-  showDayNames = true,
-  timeFormat,
-  dayOfWeekFormat = "long",
-  timezone,
-}: HoursStatusAtomProps): any => {
-  const { t, i18n } = useTranslation();
+export const HoursStatusAtom = React.memo(
+  ({
+    hours,
+    className,
+    showCurrentStatus = true,
+    showDayNames = true,
+    timeFormat,
+    dayOfWeekFormat = "long",
+    timezone,
+  }: HoursStatusAtomProps): any => {
+    const { t, i18n } = useTranslation();
 
-  return (
-    <HoursStatusJS
-      hours={hours}
-      className={themeManagerCn(
-        "components mb-2 font-body-fontWeight text-body-lg-fontSize",
-        className
-      )}
-      currentTemplate={
-        showCurrentStatus
-          ? (params: HoursStatusParams) =>
-              hoursCurrentTemplateOverride(params, t)
-          : () => <></>
-      }
-      futureTemplate={(params: HoursStatusParams) =>
-        hoursFutureTemplateOverride(params, t)
-      }
-      separatorTemplate={showCurrentStatus ? undefined : () => <></>}
-      dayOfWeekTemplate={
-        showDayNames
-          ? (params: HoursStatusParams) =>
-              hoursDayOfWeekTemplateOverride(params, i18n.language)
-          : () => <></>
-      }
-      dayOptions={{ weekday: dayOfWeekFormat }}
-      timeOptions={timeFormat ? { hour12: timeFormat === "12h" } : undefined}
-      timezone={timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone}
-      timeTemplate={(params) => timeTemplate(params, i18n.language)}
-    />
-  );
-};
+    const currentTemplate = React.useMemo(() => {
+      return showCurrentStatus
+        ? (params: HoursStatusParams) => hoursCurrentTemplateOverride(params, t)
+        : () => <></>;
+    }, [showCurrentStatus, t]);
+
+    const futureTemplate = React.useMemo(() => {
+      return (params: HoursStatusParams) =>
+        hoursFutureTemplateOverride(params, t);
+    }, [t]);
+
+    const separatorTemplate = React.useMemo(() => {
+      return showCurrentStatus ? undefined : () => <></>;
+    }, [showCurrentStatus]);
+
+    const dayOfWeekTemplate = React.useMemo(() => {
+      return showDayNames
+        ? (params: HoursStatusParams) =>
+            hoursDayOfWeekTemplateOverride(params, i18n.language)
+        : () => <></>;
+    }, [showDayNames, i18n.language]);
+
+    const timeTemplateMemo = React.useMemo(() => {
+      return (params: HoursStatusParams) => timeTemplate(params, i18n.language);
+    }, [i18n.language]);
+
+    const dayOptions = React.useMemo(() => {
+      return { weekday: dayOfWeekFormat };
+    }, [dayOfWeekFormat]);
+
+    const timeOptions = React.useMemo(() => {
+      return timeFormat ? { hour12: timeFormat === "12h" } : undefined;
+    }, [timeFormat]);
+
+    const resolvedTimezone = React.useMemo(() => {
+      return timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }, [timezone]);
+
+    return (
+      <HoursStatusJS
+        hours={hours}
+        className={themeManagerCn(
+          "components mb-2 font-body-fontWeight text-body-lg-fontSize",
+          className
+        )}
+        currentTemplate={currentTemplate}
+        futureTemplate={futureTemplate}
+        separatorTemplate={separatorTemplate}
+        dayOfWeekTemplate={dayOfWeekTemplate}
+        dayOptions={dayOptions}
+        timeOptions={timeOptions}
+        timezone={resolvedTimezone}
+        timeTemplate={timeTemplateMemo}
+      />
+    );
+  }
+);
+
+HoursStatusAtom.displayName = "HoursStatusAtom";
 
 /**
  * Overrides the current status text to incorporate i18n
