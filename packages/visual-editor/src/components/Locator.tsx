@@ -438,7 +438,11 @@ const LocatorInternal = ({
                 className="inline-flex py-1 px-3 w-auto"
               >
                 <span className="inline-flex items-center gap-2">
-                  {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
+                  {isSelected ? (
+                    <FaCheckSquare className="inline-block" />
+                  ) : (
+                    <FaRegSquare className="inline-block" />
+                  )}
                   {t("openNow", "Open Now")}
                 </span>
               </Toggle>
