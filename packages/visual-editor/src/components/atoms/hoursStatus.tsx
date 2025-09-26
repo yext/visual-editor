@@ -17,47 +17,49 @@ export interface HoursStatusAtomProps {
   timezone?: string;
 }
 
-export const HoursStatusAtom = ({
-  hours,
-  className,
-  showCurrentStatus = true,
-  showDayNames = true,
-  timeFormat,
-  dayOfWeekFormat = "long",
-  timezone,
-}: HoursStatusAtomProps): any => {
-  const { t, i18n } = useTranslation();
+export const HoursStatusAtom = React.memo(
+  ({
+    hours,
+    className,
+    showCurrentStatus = true,
+    showDayNames = true,
+    timeFormat,
+    dayOfWeekFormat = "long",
+    timezone,
+  }: HoursStatusAtomProps): any => {
+    const { t, i18n } = useTranslation();
 
-  return (
-    <HoursStatusJS
-      hours={hours}
-      className={themeManagerCn(
-        "components mb-2 font-body-fontWeight text-body-lg-fontSize",
-        className
-      )}
-      currentTemplate={
-        showCurrentStatus
-          ? (params: HoursStatusParams) =>
-              hoursCurrentTemplateOverride(params, t)
-          : () => <></>
-      }
-      futureTemplate={(params: HoursStatusParams) =>
-        hoursFutureTemplateOverride(params, t)
-      }
-      separatorTemplate={showCurrentStatus ? undefined : () => <></>}
-      dayOfWeekTemplate={
-        showDayNames
-          ? (params: HoursStatusParams) =>
-              hoursDayOfWeekTemplateOverride(params, i18n.language)
-          : () => <></>
-      }
-      dayOptions={{ weekday: dayOfWeekFormat }}
-      timeOptions={timeFormat ? { hour12: timeFormat === "12h" } : undefined}
-      timezone={timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone}
-      timeTemplate={(params) => timeTemplate(params, i18n.language)}
-    />
-  );
-};
+    return (
+      <HoursStatusJS
+        hours={hours}
+        className={themeManagerCn(
+          "components mb-2 font-body-fontWeight text-body-lg-fontSize",
+          className
+        )}
+        currentTemplate={
+          showCurrentStatus
+            ? (params: HoursStatusParams) =>
+                hoursCurrentTemplateOverride(params, t)
+            : () => <></>
+        }
+        futureTemplate={(params: HoursStatusParams) =>
+          hoursFutureTemplateOverride(params, t)
+        }
+        separatorTemplate={showCurrentStatus ? undefined : () => <></>}
+        dayOfWeekTemplate={
+          showDayNames
+            ? (params: HoursStatusParams) =>
+                hoursDayOfWeekTemplateOverride(params, i18n.language)
+            : () => <></>
+        }
+        dayOptions={{ weekday: dayOfWeekFormat }}
+        timeOptions={timeFormat ? { hour12: timeFormat === "12h" } : undefined}
+        timezone={timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone}
+        timeTemplate={(params) => timeTemplate(params, i18n.language)}
+      />
+    );
+  }
+);
 
 /**
  * Overrides the current status text to incorporate i18n
