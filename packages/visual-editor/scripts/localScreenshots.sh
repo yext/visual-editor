@@ -12,7 +12,7 @@ docker run \
   --volume "$(pwd)/../..:/app" \
   --volume /app/node_modules \
   --env GITHUB_WORKSPACE="/app" \
-  mcr.microsoft.com/playwright:v1.54.0 /bin/bash -c "
+  mcr.microsoft.com/playwright:v1.55.0 /bin/bash -c "
     set -e
 
     cd packages/visual-editor
