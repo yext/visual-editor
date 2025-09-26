@@ -8,6 +8,7 @@ import {
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { getImageUrl } from "@yext/pages-components";
 
 export const ImmersiveHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
   const { t, i18n } = useTranslation();
@@ -23,7 +24,7 @@ export const ImmersiveHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
     <div
       style={{
         backgroundImage: resolvedHero?.image?.url
-          ? `url(${resolvedHero.image.url})`
+          ? `url(${getImageUrl(resolvedHero.image.url, resolvedHero.image.width, resolvedHero.image.height)})`
           : undefined,
       }}
       className="bg-no-repeat bg-center bg-cover"
