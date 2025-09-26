@@ -4,7 +4,6 @@ import {
   RichText,
   TranslatableRichText,
   TranslatableString,
-  useBackground,
   YextEntityField,
 } from "@yext/visual-editor";
 import React from "react";
@@ -37,6 +36,7 @@ export function resolveComponentData(
   streamDocument?: any,
   options?: {
     variant?: BodyProps["variant"];
+    isDarkBackground?: boolean;
     className?: string;
   }
 ): string | React.ReactElement;
@@ -55,6 +55,7 @@ export function resolveComponentData<T>(
   streamDocument?: any,
   options?: {
     variant?: BodyProps["variant"];
+    isDarkBackground?: boolean;
     className?: string;
   }
 ): any {
@@ -80,10 +81,8 @@ export function resolveComponentData<T>(
 
   // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
   if (React.isValidElement(resolved)) {
-    const background = useBackground();
-
     let rtfClass = "rtf-theme rtf-light-background";
-    if (background?.isDarkBackground) {
+    if (options?.isDarkBackground) {
       rtfClass = "rtf-theme rtf-dark-background";
     }
     if (options?.variant && options.variant !== "base") {

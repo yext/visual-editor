@@ -11,6 +11,7 @@ import {
   pt,
   msg,
   TranslatableRichText,
+  useBackground,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
@@ -49,6 +50,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
   ({ data, styles }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
+    const background = useBackground();
 
     return (
       <EntityField
@@ -58,6 +60,7 @@ const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
       >
         {resolveComponentData(data.text, i18n.language, streamDocument, {
           variant: styles.variant,
+          isDarkBackground: background?.isDarkBackground,
         })}
       </EntityField>
     );
