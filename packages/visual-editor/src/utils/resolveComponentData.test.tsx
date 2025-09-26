@@ -11,6 +11,7 @@ import {
 vi.mock("@yext/visual-editor", () => ({
   ...vi.importActual("@yext/visual-editor"),
   MaybeRTF: (props: any) => <div data-testid="MaybeRTF" {...props} />,
+  useBackground: () => ({ isDarkBackground: false }),
 }));
 
 const mockDocument = {
