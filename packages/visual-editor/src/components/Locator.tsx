@@ -37,10 +37,8 @@ import {
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
-  EntityField,
   Heading,
   msg,
-  pt,
   useDocument,
   Toggle,
   YextField,
@@ -438,11 +436,7 @@ const LocatorInternal = ({
                 className="inline-flex py-1 px-3 w-auto"
               >
                 <span className="inline-flex items-center gap-2">
-                  {isSelected ? (
-                    <FaCheckSquare className="inline-block" />
-                  ) : (
-                    <FaRegSquare className="inline-block" />
-                  )}
+                  {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
                   {t("openNow", "Open Now")}
                 </span>
               </Toggle>
@@ -620,31 +614,27 @@ const LocationCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const getGoogleMapsLink = React.useCallback(
-      (coordinate: Coordinate): string => {
-        // Validate coordinates before creating the link
-        if (
-          !coordinate ||
-          typeof coordinate.latitude !== "number" ||
-          typeof coordinate.longitude !== "number" ||
-          isNaN(coordinate.latitude) ||
-          isNaN(coordinate.longitude)
-        ) {
-          console.warn("Invalid coordinate data:", coordinate);
-          return "#";
-        }
-        return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
-      },
-      []
-    );
+    const getGoogleMapsLink = (coordinate: Coordinate): string => {
+      // Validate coordinates before creating the link
+      if (
+        !coordinate ||
+        typeof coordinate.latitude !== "number" ||
+        typeof coordinate.longitude !== "number" ||
+        isNaN(coordinate.latitude) ||
+        isNaN(coordinate.longitude)
+      ) {
+        console.warn("Invalid coordinate data:", coordinate);
+        return "#";
+      }
+      return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
+    };
 
-    const distanceInMiles = React.useMemo(() => {
-      return distance ? (distance / 1609.344).toFixed(1) : undefined;
-    }, [distance]);
-
-    const distanceInKilometers = React.useMemo(() => {
-      return distance ? (distance / 1000).toFixed(1) : undefined;
-    }, [distance]);
+    const distanceInMiles = distance
+      ? (distance / 1609.344).toFixed(1)
+      : undefined;
+    const distanceInKilometers = distance
+      ? (distance / 1000).toFixed(1)
+      : undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -659,28 +649,20 @@ const LocationCard = React.memo(
       "TAP_TO_CALL"
     );
 
-    const resolvedUrl = React.useMemo(() => {
-      return resolveUrlTemplate(
-        mergeMeta(location, streamDocument),
-        relativePrefixToRoot,
-        puck.metadata?.resolveUrlTemplate
-      );
-    }, [
-      location,
-      streamDocument,
+    const resolvedUrl = resolveUrlTemplate(
+      mergeMeta(location, streamDocument),
       relativePrefixToRoot,
-      puck.metadata?.resolveUrlTemplate,
-    ]);
+      puck.metadata?.resolveUrlTemplate
+    );
 
-    const formattedPhoneNumber = React.useMemo(() => {
-      if (!location.mainPhone) return null;
-      return formatPhoneNumber(
-        location.mainPhone,
-        location.mainPhone.slice(0, 2) === "+1" ? "domestic" : "international"
-      );
-    }, [location.mainPhone]);
+    const formattedPhoneNumber = location.mainPhone
+      ? formatPhoneNumber(
+          location.mainPhone,
+          location.mainPhone.slice(0, 2) === "+1" ? "domestic" : "international"
+        )
+      : null;
 
-    const googleMapsLink = React.useMemo(() => {
+    const googleMapsLink = (() => {
       if (!location.yextDisplayCoordinate) return null;
 
       // Validate coordinates before creating the link
@@ -696,7 +678,7 @@ const LocationCard = React.memo(
       }
 
       return getGoogleMapsLink(coord);
-    }, [location.yextDisplayCoordinate, getGoogleMapsLink]);
+    })();
 
     return (
       <Background
@@ -728,18 +710,12 @@ const LocationCard = React.memo(
               )}
             </div>
             {location.hours && (
-              <EntityField
-                displayName={pt("fields.hours", "Hours")}
-                fieldId="hours"
-                constantValueEnabled={true}
-              >
-                <div className="font-body-fontFamily text-body-fontSize gap-8">
-                  <HoursStatus
-                    hours={location.hours}
-                    timezone={location.timezone}
-                  />
-                </div>
-              </EntityField>
+              <div className="font-body-fontFamily text-body-fontSize gap-8">
+                <HoursStatus
+                  hours={location.hours}
+                  timezone={location.timezone}
+                />
+              </div>
             )}
             {location.mainPhone && (
               <a
