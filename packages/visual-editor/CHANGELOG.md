@@ -1,3 +1,42 @@
+#### 0.0.59 (2025-09-26)
+
+##### Chores
+
+- upgrade pages-components to 1.1.3 ([#782](https://github.com/yext/visual-editor/pull/782)) ([5b1d567f](https://github.com/yext/visual-editor/commit/5b1d567f9732caef9b08777a1c629d7033a6a9cf))
+
+##### Continuous Integration
+
+- publishing improvements ([#781](https://github.com/yext/visual-editor/pull/781)) ([b927ef16](https://github.com/yext/visual-editor/commit/b927ef164a3cad7e81594645f3efe34573cd1aba))
+- use npm trusted publishing ([#764](https://github.com/yext/visual-editor/pull/764)) ([92b05104](https://github.com/yext/visual-editor/commit/92b051040385fd59ca3379dbe6c257c3c4d63cba))
+
+##### New Features
+
+- use resolved user-edited schema ([#784](https://github.com/yext/visual-editor/pull/784)) ([864ce5b1](https://github.com/yext/visual-editor/commit/864ce5b19fa613fdab0b40810bda3ad95e33aabb))
+- add Map Starting Location prop to Locator ([#777](https://github.com/yext/visual-editor/pull/777)) ([469c6856](https://github.com/yext/visual-editor/commit/469c68567069b23c8719595da2c4593594b9ebb2))
+- add default schemas to advanced settings ([#775](https://github.com/yext/visual-editor/pull/775)) ([bd5a88a4](https://github.com/yext/visual-editor/commit/bd5a88a4fd9507a641b989dc5c5d328c15bf9aba))
+- send schema markup message to YSS ([#771](https://github.com/yext/visual-editor/pull/771)) ([b7729e3d](https://github.com/yext/visual-editor/commit/b7729e3dde5480fb9972de967cd03c389eaf658b))
+- add advanced settings in sidebar ([#769](https://github.com/yext/visual-editor/pull/769)) ([006ecf98](https://github.com/yext/visual-editor/commit/006ecf98090340228ac35bbd590932d6dfc3c8e3))
+- component types documentation for AI ([#762](https://github.com/yext/visual-editor/pull/762)) ([86618dc3](https://github.com/yext/visual-editor/commit/86618dc35fd83f9cbd67a9c177edfb3a8601a950))
+
+##### Bug Fixes
+
+- make theme apply correct fonts ([#780](https://github.com/yext/visual-editor/pull/780)) ([e057f969](https://github.com/yext/visual-editor/commit/e057f96968c2c5daf1ad2fae1fd8cdfc24f919c0))
+- cannot convert undefined or null to object sentry ([#785](https://github.com/yext/visual-editor/pull/785)) ([c69fcaff](https://github.com/yext/visual-editor/commit/c69fcaff41c08e6b2cd98c2e329343651071070b))
+- save schemaMarkup to root across page loads ([#783](https://github.com/yext/visual-editor/pull/783)) ([fb00a939](https://github.com/yext/visual-editor/commit/fb00a939f48a112a322895204c5cd292492dfdd0))
+- adjust height of insight, product, and team cards ([#779](https://github.com/yext/visual-editor/pull/779)) ([10991dbd](https://github.com/yext/visual-editor/commit/10991dbd6685b9afe47182cbefb913f440937051))
+- mapbox performance on mobile ([#778](https://github.com/yext/visual-editor/pull/778)) ([fdc88a8b](https://github.com/yext/visual-editor/commit/fdc88a8b1466c870de6c37a9d73e3c46933a18b3))
+- don't treat advanced settings as a component ([#772](https://github.com/yext/visual-editor/pull/772)) ([b6c9b976](https://github.com/yext/visual-editor/commit/b6c9b976fb679b75f1074fc8a2f6f0de9268bd9d))
+- phoneNumbers in CoreInfoSection bombing out ([#773](https://github.com/yext/visual-editor/pull/773)) ([ba7049c7](https://github.com/yext/visual-editor/commit/ba7049c72890fc14d550706e7cd7fe95cfd63d90))
+- handle event card description overflow ([#748](https://github.com/yext/visual-editor/pull/748)) ([69d5099c](https://github.com/yext/visual-editor/commit/69d5099c8ac014912312e1163317a9e36f80ec70))
+- resolve base entity url templates in directory pages ([#770](https://github.com/yext/visual-editor/pull/770)) ([eb907bbb](https://github.com/yext/visual-editor/commit/eb907bbbd1c868ce8d4b695f8b6d979f6748a2e6))
+- correct German 'open now' translation ([#768](https://github.com/yext/visual-editor/pull/768)) ([aaafe013](https://github.com/yext/visual-editor/commit/aaafe013aa61b21ab60fd18f770ec2eaaf7700b0))
+- set openNow default prop for Locator ([#765](https://github.com/yext/visual-editor/pull/765)) ([358440f8](https://github.com/yext/visual-editor/commit/358440f820be342b3fd58a1064a2e63a7e0791ce))
+- text list input ([#766](https://github.com/yext/visual-editor/pull/766)) ([ed8923e7](https://github.com/yext/visual-editor/commit/ed8923e7242f74318b3b9737892d1473c447c1dd))
+
+##### Refactors
+
+- styles into separate css exports ([#763](https://github.com/yext/visual-editor/pull/763)) ([baad20c4](https://github.com/yext/visual-editor/commit/baad20c41547a436c02adb8e86fdbcb66c19d160))
+
 #### 0.0.58 (2025-09-12)
 
 ##### Chores
