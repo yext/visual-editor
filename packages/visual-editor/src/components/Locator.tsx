@@ -620,7 +620,6 @@ const LocationCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    // Memoize the Google Maps link function
     const getGoogleMapsLink = React.useCallback(
       (coordinate: Coordinate): string => {
         // Validate coordinates before creating the link
