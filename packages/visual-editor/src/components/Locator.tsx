@@ -663,7 +663,9 @@ const LocationCard = React.memo(
       : null;
 
     const googleMapsLink = (() => {
-      if (!location.yextDisplayCoordinate) return null;
+      if (!location.yextDisplayCoordinate) {
+        return null;
+      }
 
       // Validate coordinates before creating the link
       const coord = location.yextDisplayCoordinate;

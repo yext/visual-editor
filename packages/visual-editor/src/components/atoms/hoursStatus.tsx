@@ -61,8 +61,6 @@ export const HoursStatusAtom = React.memo(
   }
 );
 
-HoursStatusAtom.displayName = "HoursStatusAtom";
-
 /**
  * Overrides the current status text to incorporate i18n
  * @param params used to determine the status
