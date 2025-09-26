@@ -615,17 +615,6 @@ const LocationCard = React.memo(
     const distance = result.distance;
 
     const getGoogleMapsLink = (coordinate: Coordinate): string => {
-      // Validate coordinates before creating the link
-      if (
-        !coordinate ||
-        typeof coordinate.latitude !== "number" ||
-        typeof coordinate.longitude !== "number" ||
-        isNaN(coordinate.latitude) ||
-        isNaN(coordinate.longitude)
-      ) {
-        console.warn("Invalid coordinate data:", coordinate);
-        return "#";
-      }
       return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
     };
 
@@ -666,20 +655,7 @@ const LocationCard = React.memo(
       if (!location.yextDisplayCoordinate) {
         return null;
       }
-
-      // Validate coordinates before creating the link
-      const coord = location.yextDisplayCoordinate;
-      if (
-        typeof coord.latitude !== "number" ||
-        typeof coord.longitude !== "number" ||
-        isNaN(coord.latitude) ||
-        isNaN(coord.longitude)
-      ) {
-        console.warn("Invalid yextDisplayCoordinate:", coord);
-        return null;
-      }
-
-      return getGoogleMapsLink(coord);
+      return getGoogleMapsLink(location.yextDisplayCoordinate);
     })();
 
     return (
@@ -763,8 +739,6 @@ const LocationCard = React.memo(
     );
   }
 );
-
-LocationCard.displayName = "LocationCard";
 
 const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();
