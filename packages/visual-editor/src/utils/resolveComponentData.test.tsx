@@ -297,7 +297,7 @@ describe("resolveComponentData", () => {
     expect(result).toBe("Just a string");
   });
 
-  describe("options prop", () => {
+  describe("handles options prop", () => {
     it("applies variant to the className of the returned element", () => {
       const data: TranslatableRichText = {
         hasLocalizedValue: "true",
