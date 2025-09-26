@@ -37,8 +37,10 @@ import {
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
+  EntityField,
   Heading,
   msg,
+  pt,
   useDocument,
   Toggle,
   YextField,
@@ -705,12 +707,18 @@ const LocationCard = React.memo(
               )}
             </div>
             {location.hours && (
-              <div className="font-body-fontFamily text-body-fontSize gap-8">
-                <HoursStatus
-                  hours={location.hours}
-                  timezone={location.timezone}
-                />
-              </div>
+              <EntityField
+                displayName={pt("fields.hours", "Hours")}
+                fieldId="hours"
+                constantValueEnabled={true}
+              >
+                <div className="font-body-fontFamily text-body-fontSize gap-8">
+                  <HoursStatus
+                    hours={location.hours}
+                    timezone={location.timezone}
+                  />
+                </div>
+              </EntityField>
             )}
             {location.mainPhone && (
               <a
