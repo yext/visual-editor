@@ -17,6 +17,7 @@ import {
   defaultThemeConfig,
   applyAnalytics,
   applyHeaderScript,
+  getSchema,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
@@ -75,6 +76,8 @@ export const config = {
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
+  const schema = getSchema(document);
+
   return {
     title: document.name,
     charset: "UTF-8",
@@ -92,7 +95,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       applyAnalytics(document),
       applyHeaderScript(document),
       applyTheme(document, defaultThemeConfig),
-      SchemaWrapper(document._schema),
+      SchemaWrapper(schema),
       // Prevent Vite client script loading in StackBlitz
       `<script>
         (function() {

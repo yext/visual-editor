@@ -8,6 +8,7 @@ export { applyTheme, type StreamDocument } from "./applyTheme.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
+export { getSchema } from "./getSchema.ts";
 export {
   migrate,
   type Migration,
@@ -18,6 +19,7 @@ export { resolveComponentData } from "./resolveComponentData.tsx";
 export {
   resolveYextEntityField,
   resolveYextStructField,
+  resolveSchemaJson,
 } from "./resolveYextEntityField.ts";
 export { resolveUrlTemplate } from "./resolveUrlTemplate.ts";
 export {

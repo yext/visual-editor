@@ -1,5 +1,8 @@
+import { StreamDocument } from "@yext/visual-editor";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
+
+const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
 export const resolveYextEntityField = <T>(
   streamDocument: any,
@@ -32,27 +35,7 @@ export const resolveYextEntityField = <T>(
     return entityField.constantValue as T;
   }
 
-  try {
-    // check for the entity field in the document
-    const steps: string[] = entityField.field.split(".");
-    let missedStep = false;
-    let current = streamDocument;
-    for (let i = 0; i < steps.length; i++) {
-      if (current?.[steps[i]] !== undefined) {
-        current = current[steps[i]];
-      } else {
-        missedStep = true;
-        break;
-      }
-    }
-    if (!missedStep) {
-      return current;
-    }
-  } catch (e) {
-    console.error("Error in resolveYextEntityField:", e);
-  }
-
-  return undefined;
+  return findField<T>(streamDocument, entityField.field);
 };
 
 /**
@@ -66,7 +49,6 @@ export const resolveEmbeddedFieldsInString = (
   streamDocument: any,
   locale?: string
 ): string => {
-  const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
   return stringToResolve.replace(embeddedFieldRegex, (match, fieldName) => {
     const trimmedFieldName = fieldName.trim();
     if (!trimmedFieldName) {
@@ -219,4 +201,66 @@ export const resolveYextStructField = <T extends Record<string, any>>(
   }
 
   return finalStruct as T;
+};
+
+const stringifyResolvedField = (fieldValue: any): string => {
+  if (fieldValue === undefined || fieldValue === null) {
+    return "";
+  }
+
+  let stringToEmbed: string;
+  if (typeof fieldValue === "string") {
+    // If the value is already a string, that's what we want to embed.
+    stringToEmbed = fieldValue;
+  } else {
+    // For non-string types (objects, arrays, numbers, booleans, null),
+    // we first convert them to their standard JSON string representation.
+    stringToEmbed = JSON.stringify(fieldValue);
+  }
+
+  // Now, take the string we want to embed and prepare it to be a value
+  // in a JSON string. This requires escaping its special characters (like " and \).
+  // JSON.stringify() on a string does exactly this, and wraps the result in quotes.
+  const jsonStringLiteral = JSON.stringify(stringToEmbed);
+
+  // We return the content *inside* the quotes, which is the properly escaped string.
+  return jsonStringLiteral.slice(1, -1);
+};
+
+export const resolveSchemaJson = (
+  streamDocument: StreamDocument,
+  schema: string
+): string => {
+  return schema.replace(embeddedFieldRegex, (_, fieldName) => {
+    const resolvedValue = findField(streamDocument, fieldName);
+    return resolvedValue
+      ? stringifyResolvedField(resolvedValue)
+      : `[[${fieldName}]]`;
+  });
+};
+
+const findField = <T>(document: any, fieldName: string): T | undefined => {
+  if (fieldName === "") {
+    return undefined;
+  }
+
+  try {
+    const levels: string[] = fieldName.split(".");
+    let levelsExist = true;
+    let current = document;
+    for (let i = 0; i < levels.length; i++) {
+      if (current?.[levels[i]] !== undefined) {
+        current = current[levels[i]];
+      } else {
+        levelsExist = false;
+        break;
+      }
+    }
+    if (levelsExist) {
+      return current;
+    }
+  } catch (e) {
+    console.error("Error in findField:", e);
+  }
+  return undefined;
 };
