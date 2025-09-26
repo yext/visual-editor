@@ -310,6 +310,11 @@ const LocatorInternal = ({
     } as MarkerOptions;
   }, []);
 
+  const CardComponent = React.useCallback(
+    (result: CardProps<Location>) => <LocationCard {...result} puck={puck} />,
+    [puck]
+  );
+
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
   const [mapProps, setMapProps] = React.useState<MapProps>({
@@ -433,11 +438,7 @@ const LocatorInternal = ({
                 className="inline-flex py-1 px-3 w-auto"
               >
                 <span className="inline-flex items-center gap-2">
-                  {isSelected ? (
-                    <FaCheckSquare className="inline-block" />
-                  ) : (
-                    <FaRegSquare className="inline-block" />
-                  )}
+                  {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
                   {t("openNow", "Open Now")}
                 </span>
               </Toggle>
@@ -471,9 +472,7 @@ const LocatorInternal = ({
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
             <VerticalResults
-              CardComponent={(result: CardProps<Location>) => (
-                <LocationCard {...result} puck={puck} />
-              )}
+              CardComponent={CardComponent}
               setResultsRef={setResultsRef}
             />
           )}
@@ -620,6 +619,17 @@ const LocationCard = React.memo(
     // Memoize the Google Maps link function
     const getGoogleMapsLink = React.useCallback(
       (coordinate: Coordinate): string => {
+        // Validate coordinates before creating the link
+        if (
+          !coordinate ||
+          typeof coordinate.latitude !== "number" ||
+          typeof coordinate.longitude !== "number" ||
+          isNaN(coordinate.latitude) ||
+          isNaN(coordinate.longitude)
+        ) {
+          console.warn("Invalid coordinate data:", coordinate);
+          return "#";
+        }
         return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
       },
       []
@@ -669,12 +679,20 @@ const LocationCard = React.memo(
 
     const googleMapsLink = React.useMemo(() => {
       if (!location.yextDisplayCoordinate) return null;
-      return getGoogleMapsLink(
-        location.yextDisplayCoordinate || {
-          latitude: 0,
-          longitude: 0,
-        }
-      );
+
+      // Validate coordinates before creating the link
+      const coord = location.yextDisplayCoordinate;
+      if (
+        typeof coord.latitude !== "number" ||
+        typeof coord.longitude !== "number" ||
+        isNaN(coord.latitude) ||
+        isNaN(coord.longitude)
+      ) {
+        console.warn("Invalid yextDisplayCoordinate:", coord);
+        return null;
+      }
+
+      return getGoogleMapsLink(coord);
     }, [location.yextDisplayCoordinate, getGoogleMapsLink]);
 
     return (
