@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
   Image,
   HeadingLevel,
@@ -20,10 +20,8 @@ import {
   Timestamp,
   TimestampOption,
   ComponentFields,
-  TranslatableString,
   msg,
   pt,
-  ThemeOptions,
   getAnalyticsScopeHash,
   CTAVariant,
   resolveComponentData,
@@ -33,12 +31,6 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
 
 export interface EventData {
-  /**
-   * The main heading for the entire events section.
-   * @defaultValue "Upcoming Events" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-
   /**
    * The source of event data, which can be linked to a Yext field or provided as a constant value.
    * @defaultValue A list of 3 placeholder events.
@@ -52,14 +44,6 @@ export interface EventStyles {
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
-
-  /** Styling for the heading. */
-  heading: {
-    /** The h tag level of the section heading */
-    level: HeadingLevel;
-    /** Alignment of the event section heading */
-    align: "left" | "center" | "right";
-  };
 
   /** Styling for all the cards. */
   cards: {
@@ -87,6 +71,10 @@ export interface EventSectionProps {
    */
   styles: EventStyles;
 
+  slots: {
+    SectionHeadingSlot: Slot;
+  };
+
   /** @internal */
   analytics: {
     scope?: string;
@@ -103,13 +91,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>(
-        msg("fields.sectionHeading", "Section Heading"),
-        {
-          type: "entityField",
-          filter: { types: ["type.string"] },
-        }
-      ),
       events: YextField(msg("fields.events", "Events"), {
         type: "entityField",
         filter: {
@@ -128,20 +109,6 @@ const eventSectionFields: Fields<EventSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      heading: YextField(msg("fields.heading", "Heading"), {
-        type: "object",
-        objectFields: {
-          level: YextField(msg("fields.level", "Level"), {
-            type: "select",
-            hasSearch: true,
-            options: "HEADING_LEVEL",
-          }),
-          align: YextField(msg("fields.headingAlign", "Heading Align"), {
-            type: "radio",
-            options: ThemeOptions.ALIGNMENT,
-          }),
-        },
-      }),
       cards: YextField(msg("fields.cards", "Cards"), {
         type: "object",
         objectFields: {
@@ -181,6 +148,13 @@ const eventSectionFields: Fields<EventSectionProps> = {
       }),
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      SectionHeadingSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -295,48 +269,23 @@ const EventCard = ({
   );
 };
 
-const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
+const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
-  const { data, styles } = props;
+  const { data, styles, slots } = props;
   const streamDocument = useDocument();
   const resolvedEvents = resolveComponentData(
     data.events,
     locale,
     streamDocument
   );
-  const resolvedHeading = resolveComponentData(
-    data.heading,
-    locale,
-    streamDocument
-  );
-
-  const justifyClass = styles?.heading?.align
-    ? {
-        left: "justify-start",
-        center: "justify-center",
-        right: "justify-end",
-      }[styles.heading.align]
-    : "justify-start";
 
   return (
     <PageSection
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      {resolvedHeading && (
-        <EntityField
-          displayName={pt("fields.heading", "Heading")}
-          fieldId={data.heading.field}
-          constantValueEnabled={data.heading.constantValueEnabled}
-        >
-          <div className={`flex ${justifyClass}`}>
-            <Heading level={styles?.heading?.level ?? 2}>
-              {resolvedHeading}
-            </Heading>
-          </div>
-        </EntityField>
-      )}
+      <slots.SectionHeadingSlot />
       {resolvedEvents?.events && (
         <EntityField
           displayName={pt("fields.events", "Events")}
@@ -350,7 +299,8 @@ const EventSectionWrapper: React.FC<EventSectionProps> = (props) => {
                 cardNumber={index}
                 event={event}
                 cardStyles={styles.cards}
-                sectionHeadingLevel={styles.heading.level}
+                // TODO: think about how to handle section heading <-> card heading levels
+                sectionHeadingLevel={2}
                 ctaVariant={styles.cards.ctaVariant}
               />
             ))}
@@ -370,11 +320,6 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
   fields: eventSectionFields,
   defaultProps: {
     data: {
-      heading: {
-        field: "",
-        constantValue: { en: "Upcoming Events", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
-      },
       events: {
         field: "",
         constantValue: {
@@ -385,16 +330,32 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
-      heading: {
-        level: 2,
-        align: "left",
-      },
       cards: {
         headingLevel: 3,
         backgroundColor: backgroundColors.background1.value,
         ctaVariant: "primary",
         truncateDescription: true,
       },
+    },
+    slots: {
+      SectionHeadingSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            data: {
+              text: {
+                constantValue: {
+                  en: "Upcoming Events",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+                field: "",
+              },
+            },
+            styles: { level: 2, align: "left" },
+          },
+        },
+      ],
     },
     analytics: {
       scope: "eventsSection",

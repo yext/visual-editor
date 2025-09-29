@@ -19,18 +19,25 @@ import {
   AdvancedCoreInfoCategoryComponents,
   type AdvancedCoreInfoCategoryProps,
 } from "../categories/AdvancedCoreInfoCategory";
+import {
+  SlotsCategory,
+  SlotsCategoryComponents,
+  SlotsCategoryProps,
+} from "../categories";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
-    AdvancedCoreInfoCategoryProps {}
+    AdvancedCoreInfoCategoryProps,
+    SlotsCategoryProps {}
 
 const components: Config<MainConfigProps>["components"] = {
   ...PageSectionCategoryComponents,
   ...DeprecatedCategoryComponents,
   ...OtherCategoryComponents,
   ...AdvancedCoreInfoCategoryComponents,
+  ...SlotsCategoryComponents,
 };
 
 // The config used for base entities (locations, financial professionals, etc.)
@@ -48,6 +55,11 @@ export const mainConfig: Config<MainConfigProps> = {
     other: {
       title: "Other",
       components: OtherCategory,
+    },
+    slots: {
+      title: "Slots",
+      components: SlotsCategory,
+      visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
