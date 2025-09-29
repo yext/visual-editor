@@ -41,6 +41,9 @@
   "callToActions": "Aicinājums uz darbībām",
   "cancel": "Atcelt",
   "categories": {
+    "coreInformation": "Pamatinformācija",
+    "directory": "Direktors",
+    "locator": "Lokators",
     "other": "Cits",
     "pageSections": "Lapas sadaļas"
   },

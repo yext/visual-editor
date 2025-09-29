@@ -41,6 +41,9 @@
   "callToActions": "Oproep tot acties",
   "cancel": "Annuleren",
   "categories": {
+    "coreInformation": "Kerninformatie",
+    "directory": "Directory",
+    "locator": "Locator",
     "other": "ANDER",
     "pageSections": "Paginagecties"
   },

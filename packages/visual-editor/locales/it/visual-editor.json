@@ -41,6 +41,9 @@
   "callToActions": "Chiama alle azioni",
   "cancel": "Cancellare",
   "categories": {
+    "coreInformation": "Informazioni di base",
+    "directory": "Directory",
+    "locator": "Localizzatore",
     "other": "ALTRO",
     "pageSections": "Sezioni di pagina"
   },

@@ -41,6 +41,9 @@
   "callToActions": "Pozovite na akcije",
   "cancel": "Otkazati",
   "categories": {
+    "coreInformation": "Temeljne informacije",
+    "directory": "Imenik",
+    "locator": "Lokator",
     "other": "Drugi",
     "pageSections": "Odjeljci stranica"
   },

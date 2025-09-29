@@ -41,6 +41,9 @@
   "callToActions": "Cselekvési felhívás",
   "cancel": "Töröl",
   "categories": {
+    "coreInformation": "Alapvető információk",
+    "directory": "Könyvtár",
+    "locator": "Lokátor",
     "other": "MÁS",
     "pageSections": "Oldalszakaszok"
   },

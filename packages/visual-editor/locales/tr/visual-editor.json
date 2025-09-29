@@ -41,6 +41,9 @@
   "callToActions": "Eylem çağrısı",
   "cancel": "İptal etmek",
   "categories": {
+    "coreInformation": "Temel bilgiler",
+    "directory": "Dizin",
+    "locator": "Konumlandırıcı",
     "other": "DİĞER",
     "pageSections": "Sayfa bölümleri"
   },

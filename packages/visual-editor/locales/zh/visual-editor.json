@@ -41,6 +41,9 @@
   "callToActions": "打电话给行动",
   "cancel": "取消",
   "categories": {
+    "coreInformation": "核心信息",
+    "directory": "目录",
+    "locator": "定位器",
     "other": "其他",
     "pageSections": "页面部分"
   },

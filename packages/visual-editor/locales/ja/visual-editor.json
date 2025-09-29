@@ -41,6 +41,9 @@
   "callToActions": "行動への呼びかけ",
   "cancel": "キャンセル",
   "categories": {
+    "coreInformation": "コア情報",
+    "directory": "ディレクトリ",
+    "locator": "ロケータ",
     "other": "他の",
     "pageSections": "ページセクション"
   },

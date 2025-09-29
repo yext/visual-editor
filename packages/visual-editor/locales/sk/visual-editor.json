@@ -41,6 +41,9 @@
   "callToActions": "Zavolať",
   "cancel": "Zrušiť",
   "categories": {
+    "coreInformation": "Základné informácie",
+    "directory": "Adresár",
+    "locator": "Lokalita",
     "other": "Druhý",
     "pageSections": "Sekcie stránok"
   },
