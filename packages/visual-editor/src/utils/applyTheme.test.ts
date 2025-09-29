@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { applyTheme, StreamDocument } from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
-import { defaultGoogleFontsLinkTags } from "./font_registry.js";
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {
@@ -13,15 +12,20 @@ describe("buildCssOverridesStyle", () => {
     };
     const result = applyTheme(streamDocument, themeConfig);
 
-    expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-palette-text:red !important;" +
-        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
-        "}</style>"
+    // Should include Google Font links and the CSS style tag
+    expect(result).toContain("fonts.googleapis.com");
+    expect(result).toContain(
+      '<style id="visual-editor-theme" type="text/css">.components{'
     );
+    expect(result).toContain("--colors-palette-text:red !important;");
+    expect(result).toContain(
+      "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;"
+    );
+    expect(result).toContain(
+      "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;"
+    );
+    expect(result).toContain("--borderRadius-border-lg:8px !important;");
+    expect(result).toContain("--borderRadius-border-sm:4px !important");
   });
 
   it("should generate correct CSS with multiple overrides in c_theme", () => {
@@ -38,23 +42,28 @@ describe("buildCssOverridesStyle", () => {
 
     const result = applyTheme(streamDocument, themeConfig);
 
-    expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-palette-text:black !important;" +
-        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-border-lg:20px !important;" +
-        "--borderRadius-border-sm:4px !important" +
-        "}</style>"
+    // Should include Google Font links and the CSS style tag
+    expect(result).toContain("fonts.googleapis.com");
+    expect(result).toContain(
+      '<style id="visual-editor-theme" type="text/css">.components{'
     );
+    expect(result).toContain("--colors-palette-text:black !important;");
+    expect(result).toContain(
+      "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;"
+    );
+    expect(result).toContain(
+      "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;"
+    );
+    expect(result).toContain("--borderRadius-border-lg:20px !important;");
+    expect(result).toContain("--borderRadius-border-sm:4px !important");
   });
 
   it("should return default values for an empty c_theme field", () => {
     const result = applyTheme({} as StreamDocument, themeConfig);
 
-    expect(result).toBe(
-      defaultGoogleFontsLinkTags +
-        '<style id="visual-editor-theme" type="text/css">.components{' +
+    expect(result).toContain("fonts.googleapis.com");
+    expect(result).toContain(
+      '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
@@ -85,7 +94,8 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
+        "--borderRadius-border-sm:4px !important;" +
+        "--fontFamily-button-fontFamily:'Adamina', serif !important" +
         "}</style>"
     );
   });
@@ -105,15 +115,20 @@ describe("buildCssOverridesStyle", () => {
     };
     const result = applyTheme(streamDocument, themeConfig);
 
-    expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-palette-text:black !important;" +
-        "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
-        "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
-        "--borderRadius-border-lg:8px !important;" +
-        "--borderRadius-border-sm:4px !important" +
-        "}</style>"
+    // Should include Google Font links and the CSS style tag
+    expect(result).toContain("fonts.googleapis.com");
+    expect(result).toContain(
+      '<style id="visual-editor-theme" type="text/css">.components{'
     );
+    expect(result).toContain("--colors-palette-text:black !important;");
+    expect(result).toContain(
+      "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;"
+    );
+    expect(result).toContain(
+      "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;"
+    );
+    expect(result).toContain("--borderRadius-border-lg:8px !important;");
+    expect(result).toContain("--borderRadius-border-sm:4px !important");
   });
 
   it("should generate contrasting palette colors", () => {
@@ -136,11 +151,14 @@ describe("buildCssOverridesStyle", () => {
       },
     });
 
-    expect(result).toBe(
-      '<style id="visual-editor-theme" type="text/css">.components{' +
-        "--colors-palette-primary:#7ED321 !important;" +
-        "--colors-palette-primary-contrast:#FFFFFF !important" +
-        "}</style>"
+    // Should include Google Font links and the CSS style tag
+    expect(result).toContain("fonts.googleapis.com");
+    expect(result).toContain(
+      '<style id="visual-editor-theme" type="text/css">.components{'
+    );
+    expect(result).toContain("--colors-palette-primary:#7ED321 !important;");
+    expect(result).toContain(
+      "--colors-palette-primary-contrast:#FFFFFF !important"
     );
   });
 });

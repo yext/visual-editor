@@ -20,6 +20,7 @@ import {
   applyHeaderScript,
   defaultThemeConfig,
   locatorConfig,
+  getSchema,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -28,6 +29,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   const { title, description } = getPageMetadata(document);
+  const schema = getSchema(document);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
 
   return {
@@ -70,7 +72,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       applyAnalytics(document),
       applyHeaderScript(document),
       applyTheme(document, defaultThemeConfig),
-      SchemaWrapper(document._schema),
+      SchemaWrapper(schema),
     ].join("\n"),
   };
 };

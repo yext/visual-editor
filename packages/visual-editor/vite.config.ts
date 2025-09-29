@@ -6,7 +6,7 @@ import { exec } from "node:child_process";
 import { compareScreenshot } from "./src/components/testing/compareScreenshot.ts";
 
 export default defineConfig(() => ({
-  plugins: [react(), dts()],
+  plugins: [react(), dts(), ...(process.env.VITEST ? [cssStubPlugin] : [])],
   resolve: {
     alias: {
       "@yext/visual-editor": path.resolve(__dirname, "src"),
@@ -48,8 +48,7 @@ export default defineConfig(() => ({
     env: {
       COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY:
         process.env.COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
-      COMPONENT_TESTS_MAPBOX_API_KEY:
-        process.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+      COMPONENT_TESTS_MAPBOX_API_KEY: "dummy",
       COMPONENT_TESTS_SEARCH_API_KEY:
         process.env.COMPONENT_TESTS_SEARCH_API_KEY,
       COMPONENT_TESTS_REVIEWS_APP_API_KEY:
@@ -87,3 +86,31 @@ const dts = (): Plugin => ({
     });
   },
 });
+
+/**
+ * A custom plugin to stub out CSS/SCSS imports during Vitest runs,
+ * except for componentTests.css and style.css. This ensures that
+ * the css applied during tests is the same css applied the page templates.
+ */
+const cssStubPlugin: Plugin = {
+  name: "css-stub",
+  enforce: "pre",
+  resolveId(id: string) {
+    if (
+      (id.endsWith(".css") || id.endsWith(".scss")) &&
+      !id.endsWith("componentTests.css") &&
+      !id.endsWith("style.css")
+    ) {
+      return id;
+    }
+  },
+  load(id: string) {
+    if (
+      (id.endsWith(".css") || id.endsWith(".scss")) &&
+      !id.endsWith("componentTests.css") &&
+      !id.endsWith("style.css")
+    ) {
+      return "export default {}";
+    }
+  },
+};

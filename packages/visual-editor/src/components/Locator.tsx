@@ -76,6 +76,14 @@ export interface LocatorProps {
    * @defaultValue false
    */
   openNowButton: boolean;
+
+  /**
+   * The starting location for the map.
+   */
+  mapStartingLocation?: {
+    latitude: string;
+    longitude: string;
+  };
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -116,6 +124,20 @@ const locatorFields: Fields<LocatorProps> = {
         { label: msg("fields.options.yes", "Yes"), value: true },
         { label: msg("fields.options.no", "No"), value: false },
       ],
+    }
+  ),
+  mapStartingLocation: YextField(
+    msg("fields.options.mapStartingLocation", "Map Starting Location"),
+    {
+      type: "object",
+      objectFields: {
+        latitude: YextField(msg("fields.latitude", "Latitude"), {
+          type: "text",
+        }),
+        longitude: YextField(msg("fields.longitude", "Longitude"), {
+          type: "text",
+        }),
+      },
     }
   ),
 };
@@ -173,6 +195,7 @@ type SearchState = "not started" | "loading" | "complete";
 const LocatorInternal = ({
   mapStyle,
   openNowButton,
+  mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
@@ -235,62 +258,6 @@ const LocatorInternal = ({
     setSearchState("loading");
   };
 
-  const [userLocation, setUserLocation] = React.useState<
-    [number, number] | undefined
-  >(undefined);
-  React.useEffect(() => {
-    getUserLocation()
-      .then((location) => {
-        setUserLocation([location.coords.longitude, location.coords.latitude]);
-        searchActions.setStaticFilters([
-          {
-            selected: true,
-            displayName: "",
-            filter: {
-              kind: "fieldValue",
-              fieldId: "builtin.location",
-              value: {
-                lat: location.coords.latitude,
-                lng: location.coords.longitude,
-                radius: DEFAULT_RADIUS_METERS,
-                name: t("currentLocation", "Current Location"),
-              },
-              matcher: Matcher.Near,
-            },
-          },
-        ]);
-      })
-      .catch(() => {
-        searchActions.setStaticFilters([
-          {
-            selected: true,
-            displayName: t(
-              "newYorkCity",
-              "New York City, New York, United States"
-            ),
-            filter: {
-              kind: "fieldValue",
-              fieldId: "builtin.location",
-              value: {
-                lat: DEFAULT_MAP_CENTER[1],
-                lng: DEFAULT_MAP_CENTER[0],
-                radius: DEFAULT_RADIUS_METERS,
-                name: t(
-                  "newYorkCity",
-                  "New York City, New York, United States"
-                ),
-              },
-              matcher: Matcher.Near,
-            },
-          },
-        ]);
-      })
-      .then(() => {
-        searchActions.executeVerticalQuery();
-        setSearchState("loading");
-      });
-  }, []);
-
   const searchLoading = useSearchState((state) => state.searchStatus.isLoading);
 
   const [searchState, setSearchState] =
@@ -341,13 +308,55 @@ const LocatorInternal = ({
     } as MarkerOptions;
   }, []);
 
-  const mapProps: MapProps = {
-    ...(userLocation && { centerCoords: userLocation }),
-    ...(mapStyle && { mapStyle }),
+  const [userLocationRetrieved, setUserLocationRetrieved] =
+    React.useState<boolean>(false);
+  const [mapProps, setMapProps] = React.useState<MapProps>({
+    mapStyle,
     onDragHandler: handleDrag,
     scrollToResult: scrollToResult,
     markerOptionsOverride: markerOptionsOverride,
-  };
+  });
+
+  React.useEffect(() => {
+    let centerCoords = DEFAULT_MAP_CENTER;
+    let displayName: string | undefined;
+    getUserLocation()
+      .then((location) => {
+        centerCoords = [location.coords.longitude, location.coords.latitude];
+        setUserLocationRetrieved(true);
+        displayName = t("currentLocation", "Current Location");
+      })
+      .catch(() => {
+        try {
+          if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
+            centerCoords = parseMapStartingLocation(mapStartingLocation);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      })
+      .finally(() => {
+        searchActions.setStaticFilters([
+          {
+            selected: true,
+            displayName,
+            filter: {
+              kind: "fieldValue",
+              fieldId: "builtin.location",
+              value: {
+                lat: centerCoords[1],
+                lng: centerCoords[0],
+                radius: DEFAULT_RADIUS_METERS,
+              },
+              matcher: Matcher.Near,
+            },
+          },
+        ]);
+        searchActions.executeVerticalQuery();
+        setSearchState("loading");
+        setMapProps((prev) => ({ ...prev, centerCoords }));
+      });
+  }, []);
 
   const [isSelected, setIsSelected] = React.useState(false);
   const handleOpenNowClick = (selected: boolean) => {
@@ -403,7 +412,7 @@ const LocatorInternal = ({
               inputElement: "rounded-md p-4 h-11",
               currentLocationButton: "h-7 w-7 text-palette-primary-dark",
             }}
-            showCurrentLocationButton={!!userLocation}
+            showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
               radius: 25,
             }}
@@ -444,15 +453,18 @@ const LocatorInternal = ({
             searchState === "complete" &&
             t("noResultsFoundForThisArea", "No results found for this area")}
           {resultCount > 0 &&
-            filterDisplayName &&
-            t(
-              "locationsNear",
-              `${resultCount} locations near "${filterDisplayName}"`,
-              {
-                count: resultCount,
-                filterDisplayName,
-              }
-            )}
+            (filterDisplayName
+              ? t(
+                  "locationsNear",
+                  `${resultCount} locations near "${filterDisplayName}"`,
+                  {
+                    count: resultCount,
+                    filterDisplayName,
+                  }
+                )
+              : t("locationWithCount", `${resultCount} locations`, {
+                  count: resultCount,
+                }))}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -545,7 +557,7 @@ const Map: React.FC<MapProps> = ({
     <MapboxMap
       mapboxAccessToken={mapboxApiKey || ""}
       mapboxOptions={{
-        center: centerCoords ?? DEFAULT_MAP_CENTER,
+        center: centerCoords,
         fitBoundsOptions: { padding: mapPadding },
         ...(mapStyle ? { style: mapStyle } : {}),
       }}
@@ -747,6 +759,27 @@ const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
     left: mapHorizontalPadding,
     right: mapHorizontalPadding,
   };
+};
+
+const parseMapStartingLocation = (mapStartingLocation: {
+  latitude: string;
+  longitude: string;
+}): [number, number] => {
+  const lat = parseFloat(mapStartingLocation.latitude);
+  const lng = parseFloat(mapStartingLocation.longitude);
+
+  let err = [];
+  if (isNaN(lat) || lat < -90 || lat > 90) {
+    err.push("Latitude must be a number between -90 and 90.");
+  }
+  if (isNaN(lng) || lng < -180 || lng > 180) {
+    err.push("Longitude must be a number between -180 and 180.");
+  }
+  if (err.length) {
+    throw new Error(err.join("\n"));
+  }
+
+  return [lng, lat];
 };
 
 interface Location {

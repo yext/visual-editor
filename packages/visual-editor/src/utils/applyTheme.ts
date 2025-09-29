@@ -1,5 +1,8 @@
 import { ThemeData } from "../internal/types/themeData.ts";
-import { internalThemeResolver } from "../internal/utils/internalThemeResolver.ts";
+import {
+  internalThemeResolver,
+  generateCssVariablesFromThemeConfig,
+} from "../internal/utils/internalThemeResolver.ts";
 import { DevLogger } from "./devLogger.ts";
 import {
   constructGoogleFontLinkTags,
@@ -8,7 +11,6 @@ import {
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
-import { googleFontLinkTags } from "./visualEditorFonts";
 
 export type StreamDocument = {
   [key: string]: any;
@@ -39,17 +41,45 @@ export const applyTheme = (
   devLogger.logFunc("applyTheme");
 
   const publishedTheme = document?.__?.theme;
-  const overrides = publishedTheme ? JSON.parse(publishedTheme) : undefined;
 
-  // In the editor with no published theme, inject all the google font tags, else only inject the in-use font tags
-  const fontLinkTags = !publishedTheme
-    ? googleFontLinkTags
-    : constructGoogleFontLinkTags(
-        extractInUseFontFamilies(overrides, defaultFonts)
-      );
+  let overrides: ThemeData | undefined;
+
+  if (publishedTheme) {
+    try {
+      overrides = JSON.parse(publishedTheme);
+
+      devLogger.logData("THEME_DATA", overrides);
+    } catch (error) {
+      console.warn("Failed to parse published theme data:", error);
+    }
+  }
+
+  // Load only fonts that are actually used in the theme
+  let fontLinkTags: string;
+  if (!overrides) {
+    // No theme overrides, use only Open Sans (the default font)
+    fontLinkTags = constructGoogleFontLinkTags({
+      "Open Sans": defaultFonts["Open Sans"],
+    });
+  } else {
+    // Extract fonts from both published theme data AND default theme values
+    // This ensures we get all fonts that are actually used, not just the ones that were explicitly changed
+    const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
+    const mergedThemeData = { ...defaultThemeValues, ...overrides };
+    const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
+
+    if (Object.keys(inUseFonts).length === 0) {
+      // No fonts found in theme data, use only Open Sans
+      fontLinkTags = constructGoogleFontLinkTags({
+        "Open Sans": defaultFonts["Open Sans"],
+      });
+    } else {
+      fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
+    }
+  }
 
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides, themeConfig)}</style>`;
+    return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
   }
   return base ?? "";
 };

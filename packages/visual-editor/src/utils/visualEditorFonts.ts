@@ -47,51 +47,45 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
 
-  const prefix = '<link href="https://fonts.googleapis.com/css2?';
-  const postfix = 'display=swap" rel="stylesheet">';
-
   const fontEntries = Object.entries(fonts);
-  const chunkSize = 7;
   const linkTags: string[] = [];
 
-  for (let i = 0; i < fontEntries.length; i += chunkSize) {
-    const chunk = fontEntries.slice(i, i + chunkSize);
+  // Create a separate link tag for each font
+  for (const [fontName, fontDetails] of fontEntries) {
+    const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
 
-    const params = chunk
-      .map(([fontName, fontDetails]) => {
-        const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
+    let weightParam;
+    if ("weights" in fontDetails) {
+      // static font, use enumerated weights
+      if (fontDetails.italics) {
+        weightParam =
+          fontDetails.weights.map((w) => `0,${w};`).join("") +
+          fontDetails.weights.map((w) => `1,${w};`).join("");
+        // remove trailing semicolon
+        weightParam = weightParam.slice(0, -1);
+      } else {
+        weightParam = fontDetails.weights.join(";");
+      }
+    } else {
+      // variable font, use range of weights
+      const weightRange =
+        fontDetails.minWeight === fontDetails.maxWeight
+          ? `${fontDetails.minWeight}`
+          : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+      weightParam = fontDetails.italics
+        ? `0,${weightRange};1,${weightRange}`
+        : weightRange;
+    }
 
-        let weightParam;
-        if ("weights" in fontDetails) {
-          // static font, use enumerated weights
-          if (fontDetails.italics) {
-            weightParam =
-              fontDetails.weights.map((w) => `0,${w};`).join("") +
-              fontDetails.weights.map((w) => `1,${w};`).join("");
-            // remove trailing semicolon
-            weightParam = weightParam.slice(0, -1);
-          } else {
-            weightParam = fontDetails.weights.join(";");
-          }
-        } else {
-          // variable font, use range of weights
-          const weightRange =
-            fontDetails.minWeight === fontDetails.maxWeight
-              ? `${fontDetails.minWeight}`
-              : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
-          weightParam = fontDetails.italics
-            ? `0,${weightRange};1,${weightRange}`
-            : weightRange;
-        }
+    const param =
+      "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
 
-        return "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
-      })
-      .join("&");
-
-    linkTags.push(`${prefix}${params}&${postfix}`);
+    const linkTag = `<link href="https://fonts.googleapis.com/css2?${param}&display=swap" rel="stylesheet">`;
+    linkTags.push(linkTag);
   }
 
-  return linkTags.length ? preconnectTags + linkTags.join("\n") : "";
+  const result = linkTags.length ? preconnectTags + linkTags.join("\n") : "";
+  return result;
 };
 
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
