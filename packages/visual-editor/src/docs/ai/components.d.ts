@@ -1,4 +1,18 @@
 import {
+  Config,
+  Data,
+  DefaultComponentProps,
+  DefaultRootProps,
+  Field,
+  CustomField,
+  ComponentConfig,
+  ArrayField,
+  BaseField,
+  ObjectField,
+  NumberField,
+  Slot,
+} from "@measured/puck";
+import {
   ImageType,
   CTA as CTA$1,
   LinkType,
@@ -157,6 +171,9 @@ interface EventSectionProps {
    * @propCategory Style Props
    */
   styles: EventStyles;
+  slots: {
+    SectionHeadingSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -589,11 +606,6 @@ interface CoreInfoStyles {
 
 interface EventData {
   /**
-   * The main heading for the entire events section.
-   * @defaultValue "Upcoming Events" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
    * The source of event data, which can be linked to a Yext field or provided as a constant value.
    * @defaultValue A list of 3 placeholder events.
    */
@@ -606,13 +618,6 @@ interface EventStyles {
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for the heading. */
-  heading: {
-    /** The h tag level of the section heading */
-    level: HeadingLevel;
-    /** Alignment of the event section heading */
-    align: "left" | "center" | "right";
-  };
   /** Styling for all the cards. */
   cards: {
     /** The h tag level of each event card's title */

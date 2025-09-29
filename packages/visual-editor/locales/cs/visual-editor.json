@@ -41,6 +41,9 @@
   "callToActions": "Volání k akcím",
   "cancel": "Zrušit",
   "categories": {
+    "coreInformation": "Základní informace",
+    "directory": "Adresář",
+    "locator": "Lokátor",
     "other": "OSTATNÍ",
     "pageSections": "Sekce stránek"
   },

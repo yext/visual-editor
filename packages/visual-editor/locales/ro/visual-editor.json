@@ -41,6 +41,9 @@
   "callToActions": "Apelați la acțiuni",
   "cancel": "Anula",
   "categories": {
+    "coreInformation": "Informații de bază",
+    "directory": "Director",
+    "locator": "Localizator",
     "other": "ALTE",
     "pageSections": "Secțiuni de pagini"
   },

@@ -41,6 +41,9 @@
   "callToActions": "Ring til handlinger",
   "cancel": "Kansellere",
   "categories": {
+    "coreInformation": "Kjerneinformasjon",
+    "directory": "Katalog",
+    "locator": "Lokator",
     "other": "ANNEN",
     "pageSections": "Sideseksjoner"
   },

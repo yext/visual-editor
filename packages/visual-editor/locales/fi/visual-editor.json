@@ -41,6 +41,9 @@
   "callToActions": "Soita toimiin",
   "cancel": "Peruuttaa",
   "categories": {
+    "coreInformation": "Ydintiedot",
+    "directory": "Hakemisto",
+    "locator": "Paikantekijä",
     "other": "Muut",
     "pageSections": "Page -osiot"
   },

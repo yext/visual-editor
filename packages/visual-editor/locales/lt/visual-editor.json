@@ -41,6 +41,9 @@
   "callToActions": "Kvietimas į veiksmus",
   "cancel": "Atšaukti",
   "categories": {
+    "coreInformation": "Pagrindinė informacija",
+    "directory": "Katalogas",
+    "locator": "Lokatorius",
     "other": "Kita",
     "pageSections": "Puslapių skyriai"
   },

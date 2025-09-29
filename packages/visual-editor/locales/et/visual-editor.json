@@ -41,6 +41,9 @@
   "callToActions": "Tegevusele helistama",
   "cancel": "Tühistama",
   "categories": {
+    "coreInformation": "Põhiteave",
+    "directory": "Kataloog",
+    "locator": "Lokaator",
     "other": "Teine",
     "pageSections": "Leheosad"
   },

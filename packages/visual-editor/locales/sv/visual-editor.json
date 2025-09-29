@@ -41,6 +41,9 @@
   "callToActions": "Uppmaning till handlingar",
   "cancel": "Avboka",
   "categories": {
+    "coreInformation": "Kärninformation",
+    "directory": "Katalog",
+    "locator": "Plats",
     "other": "ANDRA",
     "pageSections": "Sidavsnitt"
   },

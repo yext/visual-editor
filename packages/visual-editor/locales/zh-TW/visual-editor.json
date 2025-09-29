@@ -41,6 +41,9 @@
   "callToActions": "打電話給行動",
   "cancel": "取消",
   "categories": {
+    "coreInformation": "核心信息",
+    "directory": "目錄",
+    "locator": "定位器",
     "other": "其他",
     "pageSections": "頁面部分"
   },

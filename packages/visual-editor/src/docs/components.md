@@ -179,10 +179,9 @@ The Events Section component is designed to display a curated list of events. It
 
 This object contains the content to be displayed by the component.
 
-| Prop           | Type                                  | Description                                                                                    | Default                           |
-| :------------- | :------------------------------------ | :--------------------------------------------------------------------------------------------- | :-------------------------------- |
-| `data.events`  | `YextEntityField<EventSectionType>`   | The source of event data, which can be linked to a Yext field or provided as a constant value. | `A list of 3 placeholder events.` |
-| `data.heading` | `YextEntityField<TranslatableString>` | The main heading for the entire events section.                                                | `"Upcoming Events" (constant)`    |
+| Prop          | Type                                | Description                                                                                    | Default                           |
+| :------------ | :---------------------------------- | :--------------------------------------------------------------------------------------------- | :-------------------------------- |
+| `data.events` | `YextEntityField<EventSectionType>` | The source of event data, which can be linked to a Yext field or provided as a constant value. | `A list of 3 placeholder events.` |
 
 #### Style Props
 
@@ -192,15 +191,15 @@ This object contains properties for customizing the component's appearance.
 | :----------------------- | :------------------------------------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------- |
 | `styles.backgroundColor` | `BackgroundStyle`                                                                                                          | The background color of the section. | `Background Color 3` |
 | `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; truncateDescription: boolean; }` | Styling for all the cards.           |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                           | Styling for the heading.             |                      |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                            | Description                                                                    | Default |
+| :--------------- | :------------------------------ | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                       | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ SectionHeadingSlot: Slot; }` |                                                                                |         |
 
 ---
 

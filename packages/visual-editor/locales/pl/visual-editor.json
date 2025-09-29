@@ -41,6 +41,9 @@
   "callToActions": "Zadzwoń do działań",
   "cancel": "Anulować",
   "categories": {
+    "coreInformation": "Informacje podstawowe",
+    "directory": "Informator",
+    "locator": "Lokalizator",
     "other": "INNY",
     "pageSections": "Sekcje stron"
   },

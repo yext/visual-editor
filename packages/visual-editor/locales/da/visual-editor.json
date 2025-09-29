@@ -41,6 +41,9 @@
   "callToActions": "Ring til handlinger",
   "cancel": "Ophæve",
   "categories": {
+    "coreInformation": "Kerneoplysninger",
+    "directory": "Vejviser",
+    "locator": "Locator",
     "other": "ANDRE",
     "pageSections": "Sidesektioner"
   },

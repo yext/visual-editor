@@ -41,6 +41,9 @@
   "callToActions": "Rufen Sie Aktionen an",
   "cancel": "Stornieren",
   "categories": {
+    "coreInformation": "Kerninformationen",
+    "directory": "Verzeichnis",
+    "locator": "Locator",
     "other": "ANDERE",
     "pageSections": "Seitenabschnitte"
   },
