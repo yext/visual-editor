@@ -25,6 +25,7 @@ import {
   CTAVariant,
   resolveComponentData,
   CTA,
+  imgSizesHelper,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -212,6 +213,11 @@ const InsightCard = ({
           image={insight.image}
           aspectRatio={1.778} // 16:9
           className="rounded-t-[inherit] h-[200px]"
+          sizes={imgSizesHelper({
+            base: "calc(100vw - 32px)",
+            md: "calc((maxWidth - 32px) / 2)",
+            lg: "calc((maxWidth - 32px) / 3)",
+          })}
         />
       )}
       <div className="flex flex-col gap-8 p-8 flex-grow">

@@ -6,6 +6,7 @@ import {
   Background,
   resolveYextStructField,
 } from "@yext/visual-editor";
+import { getImageUrl } from "@yext/pages-components";
 import { HeroVariantProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
 
@@ -24,7 +25,7 @@ export const SpotlightHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
       className="bg-no-repeat bg-center bg-cover"
       style={{
         backgroundImage: resolvedHero?.image?.url
-          ? `url(${resolvedHero.image.url})`
+          ? `url(${getImageUrl(resolvedHero.image.url, resolvedHero.image.width, resolvedHero.image.height)})`
           : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
