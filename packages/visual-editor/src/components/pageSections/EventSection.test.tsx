@@ -14,6 +14,7 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+import { HeadingText } from "../contentBlocks/HeadingText.tsx";
 
 const eventsData = {
   events: [
@@ -342,7 +343,7 @@ const tests: ComponentTest[] = [
 
 describe("EventSection", async () => {
   const puckConfig: Config = {
-    components: { EventSection },
+    components: { EventSection, HeadingTextSlot: HeadingText },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

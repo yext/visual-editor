@@ -44,18 +44,26 @@ const HeadingTextWrapper = React.forwardRef<
       }[styles.align]
     : "justify-start";
 
+  const resolvedHeadingText = resolveComponentData(
+    data.text,
+    i18n.language,
+    streamDocument
+  );
+
   return (
-    <div className={`flex ${justifyClass}`}>
-      <EntityField
-        displayName={pt("Heading", "Heading") + " " + styles.level}
-        fieldId={data.text.field}
-        constantValueEnabled={data.text.constantValueEnabled}
-      >
-        <Heading ref={ref} level={styles.level} {...headingProps}>
-          {resolveComponentData(data.text, i18n.language, streamDocument)}
-        </Heading>
-      </EntityField>
-    </div>
+    resolvedHeadingText && (
+      <div className={`flex ${justifyClass}`}>
+        <EntityField
+          displayName={pt("Heading", "Heading") + " " + styles.level}
+          fieldId={data.text.field}
+          constantValueEnabled={data.text.constantValueEnabled}
+        >
+          <Heading ref={ref} level={styles.level} {...headingProps}>
+            {resolvedHeadingText}
+          </Heading>
+        </EntityField>
+      </div>
+    )
   );
 });
 
