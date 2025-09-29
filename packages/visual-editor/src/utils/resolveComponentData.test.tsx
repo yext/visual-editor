@@ -296,4 +296,37 @@ describe("resolveComponentData", () => {
     );
     expect(result).toBe("Just a string");
   });
+
+  describe("handles options prop", () => {
+    it("applies variant to the className of the returned element", () => {
+      const data: TranslatableRichText = {
+        hasLocalizedValue: "true",
+        en: { html: "Hello <b>World</b>" },
+      };
+      const result = resolveComponentData(data, "en", mockDocument, {
+        variant: "lg",
+      });
+      expect(React.isValidElement(result)).toBe(true);
+      if (React.isValidElement(result)) {
+        const element = result as React.ReactElement<{ className: string }>;
+        expect(element.props.className).toContain("rtf-body-lg");
+      }
+    });
+
+    it("applies className to the returned element", () => {
+      const data: TranslatableRichText = {
+        hasLocalizedValue: "true",
+        en: { html: "Hello <b>World</b>" },
+      };
+      const customClass = "my-custom-class";
+      const result = resolveComponentData(data, "en", mockDocument, {
+        className: customClass,
+      });
+      expect(React.isValidElement(result)).toBe(true);
+      if (React.isValidElement(result)) {
+        const element = result as React.ReactElement<{ className: string }>;
+        expect(element.props.className).toContain(customClass);
+      }
+    });
+  });
 });
