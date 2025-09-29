@@ -45,9 +45,11 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       }
     );
 
+    const defaultSchema = getSchemaTemplate(entityTypeId);
+    const cleanDefaultSchema = defaultSchema.replace(/\n\s*/g, " ").trim();
+
     // Use the schema value from root, or default schema if not set
-    const displayValue =
-      value || (entityTypeId ? getSchemaTemplate(entityTypeId) : "");
+    const displayValue = value || (entityTypeId ? defaultSchema : "");
 
     const codeField = YextField(msg("schemaMarkup", "Schema Markup"), {
       type: "code",
@@ -75,6 +77,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
         const payload = {
           type: "SchemaMarkup",
           value: cleanSchemaValue,
+          defaultValue: cleanDefaultSchema,
           id: messageId,
         };
 
