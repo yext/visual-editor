@@ -9,9 +9,9 @@ describe("getSchema", () => {
         layout: JSON.stringify({
           root: {
             props: {
-              schemaMarkup: {
+              schemaMarkup: `{
                 name: "[[name]]",
-              },
+              }`,
             },
           },
         }),
