@@ -1,13 +1,15 @@
 import { resolveSchemaJson } from "./resolveYextEntityField.ts";
 
-export const getSchema = (document: Record<string, any>): string => {
+export const getSchema = (
+  document: Record<string, any>
+): Record<string, any> => {
   const layoutString = document?.__?.layout;
   if (!layoutString) {
-    return "";
+    return {};
   }
   try {
     const layout = JSON.parse(layoutString);
-    const schemaMarkup = JSON.stringify(layout?.root?.props?.schemaMarkup);
+    const schemaMarkup: string = layout?.root?.props?.schemaMarkup;
     return schemaMarkup
       ? JSON.parse(resolveSchemaJson(document, schemaMarkup))
       : getDefaultSchema(document);
@@ -17,14 +19,16 @@ export const getSchema = (document: Record<string, any>): string => {
   }
 };
 
-const getDefaultSchema = (document: Record<string, any>): string => {
+const getDefaultSchema = (
+  document: Record<string, any>
+): Record<string, any> => {
   const entityTypeId = (document as any)?.meta?.entityType?.id;
   const defaultSchemaTemplate = getSchemaTemplate(entityTypeId);
   try {
     return JSON.parse(resolveSchemaJson(document, defaultSchemaTemplate));
   } catch (e) {
     console.warn("Error resolving default schema:", e);
-    return "";
+    return {};
   }
 };
 
