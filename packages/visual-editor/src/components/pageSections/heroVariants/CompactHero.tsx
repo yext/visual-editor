@@ -41,7 +41,7 @@ const CompactHeroImage = ({
             styles.desktopImagePosition === "left" ? "mr-auto" : "ml-auto"
           )}
           sizes={imgSizesHelper({
-            base: "calc(100vw - 34px)",
+            base: "calc(100vw - 32px)",
             md: "calc(maxWidth / 2)",
           })}
         />
