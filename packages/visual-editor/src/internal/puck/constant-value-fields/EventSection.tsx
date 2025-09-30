@@ -1,5 +1,10 @@
-import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { useTranslation } from "react-i18next";
+import {
+  CustomField,
+  AutoField,
+  UiState,
+  ObjectField,
+  FieldLabel,
+} from "@measured/puck";
 import {
   EventSectionType,
   EventStruct,
@@ -9,11 +14,9 @@ import {
 import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
 import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import React, { useMemo } from "react";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { useDocument } from "../../../hooks/useDocument.tsx";
 import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 
 export const defaultEvent: EventStruct = {
@@ -36,6 +39,37 @@ export const defaultEvent: EventStruct = {
   },
 };
 
+const fillArray = <T,>(
+  array: T[],
+  newLength: number,
+  defaultObject: T
+): T[] => {
+  // Handle invalid lengths
+  if (newLength < 0) {
+    return [];
+  }
+
+  const currentLength = array.length;
+
+  if (newLength === currentLength) {
+    // If the length is the same, return a copy of the original array
+    return [...array];
+  } else if (newLength < currentLength) {
+    // 1. Truncate the array (length y < length x)
+    // Use .slice(0, newLength) to get the first 'newLength' elements.
+    return array.slice(0, newLength);
+  } else {
+    // 2. Extend the array (length y > length x)
+    // Create an array of 'newLength - currentLength' default objects.
+    const defaultFill: T[] = Array(newLength - currentLength).fill(
+      defaultObject
+    );
+
+    // Combine the original array (all elements preserved) with the default objects.
+    return [...array, ...defaultFill];
+  }
+};
+
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
   render: ({
@@ -47,21 +81,27 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   }) => {
     return (
       <div className={"ve-mt-4"}>
-        <AutoField
-          field={EventStructArrayField()}
-          value={value.events}
-          onChange={(newValue, uiState) =>
-            onChange({ events: newValue }, uiState)
-          }
-        />
+        <FieldLabel label={pt("numberOfCards", "Number of Cards")}>
+          <AutoField
+            field={{
+              type: "number",
+              min: 0,
+            }}
+            value={value.events.length}
+            onChange={(newValue, uiState) => {
+              onChange(
+                { events: fillArray(value.events, newValue, defaultEvent) },
+                uiState
+              );
+            }}
+          />
+        </FieldLabel>
       </div>
     );
   },
 };
 
-const EventStructArrayField = (): ArrayField<EventStruct[]> => {
-  const streamDocument = useDocument();
-
+export const EVENT_CONSTANT_CONFIG = (): ObjectField<EventStruct> => {
   const titleField = useMemo(() => {
     return TranslatableStringField<TranslatableString | undefined>(
       msg("title", "Title"),
@@ -76,9 +116,8 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
   }, []);
 
   return {
-    label: pt("arrayField", "Array Field"),
-    type: "array",
-    arrayFields: {
+    type: "object",
+    objectFields: {
       image: {
         ...IMAGE_CONSTANT_CONFIG,
         label: pt("fields.image", "Image"),
@@ -87,17 +126,6 @@ const EventStructArrayField = (): ArrayField<EventStruct[]> => {
       dateTime: DateTimeSelector,
       description: descriptionField,
       cta: LINK_ONLY_CTA_CONFIG,
-    },
-    defaultItemProps: defaultEvent,
-    getItemSummary: (item, i): string => {
-      const { i18n } = useTranslation();
-      const translation =
-        item?.title &&
-        resolveComponentData(item.title, i18n.language, streamDocument);
-      if (translation) {
-        return translation;
-      }
-      return pt("event", "Event") + " " + ((i ?? 0) + 1);
     },
   };
 };

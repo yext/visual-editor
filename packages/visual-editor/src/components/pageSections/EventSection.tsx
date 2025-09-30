@@ -1,6 +1,17 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  Slot,
+  useGetPuck,
+  createUsePuck,
+  ComponentData,
+  AutoField,
+  setDeep,
+  FieldLabel,
+} from "@measured/puck";
 import {
   Image,
   HeadingLevel,
@@ -26,9 +37,15 @@ import {
   CTAVariant,
   resolveComponentData,
   imgSizesHelper,
+  resolveYextEntityField,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultEvent } from "../../internal/puck/constant-value-fields/EventSection.tsx";
+import {
+  defaultEvent,
+  EVENT_CONSTANT_CONFIG,
+} from "../../internal/puck/constant-value-fields/EventSection.tsx";
+
+const usePuck = createUsePuck();
 
 export interface EventData {
   /**
@@ -44,18 +61,6 @@ export interface EventStyles {
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
-
-  /** Styling for all the cards. */
-  cards: {
-    /** The h tag level of each event card's title */
-    headingLevel: HeadingLevel;
-    /** The background color of each event card */
-    backgroundColor?: BackgroundStyle;
-    /** The CTA variant to use in each event card */
-    ctaVariant: CTAVariant;
-    /** Whether to truncate the event description text */
-    truncateDescription: boolean;
-  };
 }
 
 export interface EventSectionProps {
@@ -73,6 +78,7 @@ export interface EventSectionProps {
 
   slots: {
     SectionHeadingSlot: Slot;
+    CardSlot: Slot;
   };
 
   /** @internal */
@@ -109,49 +115,13 @@ const eventSectionFields: Fields<EventSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      cards: YextField(msg("fields.cards", "Cards"), {
-        type: "object",
-        objectFields: {
-          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-            type: "select",
-            hasSearch: true,
-            options: "HEADING_LEVEL",
-          }),
-          backgroundColor: YextField(
-            msg("fields.backgroundColor", "Background Color"),
-            {
-              type: "select",
-              options: "BACKGROUND_COLOR",
-            }
-          ),
-          ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-            type: "radio",
-            options: "CTA_VARIANT",
-          }),
-          truncateDescription: YextField(
-            msg("fields.truncateDescription", "Truncate Description"),
-            {
-              type: "radio",
-              options: [
-                {
-                  label: msg("fields.options.truncate", "Truncate"),
-                  value: true,
-                },
-                {
-                  label: msg("fields.options.showFullText", "Show Full Text"),
-                  value: false,
-                },
-              ],
-            }
-          ),
-        },
-      }),
     },
   }),
   slots: {
     type: "object",
     objectFields: {
       SectionHeadingSlot: { type: "slot" },
+      CardSlot: { type: "slot" },
     },
     visible: false,
   },
@@ -176,24 +146,108 @@ const eventSectionFields: Fields<EventSectionProps> = {
   ),
 };
 
-const EventCard = ({
+export type EventCardProps = {
+  /** The card number (1-based index). Used for analytics */
+  cardNumber?: number;
+  data: {
+    /** The event to display in the card. */
+    event: Partial<EventStruct> & { constantValueEnabled: boolean };
+  };
+  styles: {
+    /** The h tag level of each event card's title */
+    headingLevel: HeadingLevel;
+    /** The background color of each event card */
+    backgroundColor?: BackgroundStyle;
+    /** The CTA variant to use in each event card */
+    ctaVariant: CTAVariant;
+    /** Whether to truncate the event description text */
+    truncateDescription: boolean;
+  };
+  sectionHeadingLevel?: HeadingLevel;
+};
+
+const EventCardFields: Fields<EventCardProps> = {
+  data: {
+    type: "object",
+    label: msg("fields.data", "Data"),
+    objectFields: {
+      event: {
+        type: "custom",
+        render: ({ value, onChange }) => {
+          if (!value.constantValueEnabled) {
+            // TODO: use copy from design
+            return <p>Using Data from Knowledge Graph</p>;
+          }
+          return (
+            <FieldLabel label={pt("fields.event", "Event")}>
+              <AutoField
+                field={EVENT_CONSTANT_CONFIG()}
+                value={value}
+                onChange={onChange}
+              />
+            </FieldLabel>
+          );
+        },
+      },
+    },
+  },
+  styles: {
+    type: "object",
+    label: msg("fields.styles", "Styles"),
+    objectFields: {
+      headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+        type: "select",
+        hasSearch: true,
+        options: "HEADING_LEVEL",
+      }),
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+      ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
+      truncateDescription: YextField(
+        msg("fields.truncateDescription", "Truncate Description"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.truncate", "Truncate"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.showFullText", "Show Full Text"),
+              value: false,
+            },
+          ],
+        }
+      ),
+    },
+  },
+};
+
+const EventCardComponent = ({
   cardNumber,
-  event,
-  cardStyles,
-  sectionHeadingLevel,
-  ctaVariant,
-}: {
-  cardNumber: number;
-  event: EventStruct;
-  cardStyles: EventSectionProps["styles"]["cards"];
-  sectionHeadingLevel: HeadingLevel;
-  ctaVariant: CTAVariant;
-}) => {
+  data,
+  styles,
+  sectionHeadingLevel = 2,
+}: EventCardProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
+  const { event } = data;
+
+  if (!event) {
+    return;
+  }
+
   return (
     <Background
-      background={cardStyles.backgroundColor}
+      background={styles.backgroundColor}
       className={`flex flex-col md:flex-row rounded-lg overflow-hidden md:items-start`}
     >
       {event.image && (
@@ -217,7 +271,7 @@ const EventCard = ({
         <div className="flex flex-col gap-2">
           {event.title && (
             <Heading
-              level={cardStyles.headingLevel}
+              level={styles.headingLevel}
               semanticLevelOverride={
                 sectionHeadingLevel < 6
                   ? ((sectionHeadingLevel + 1) as HeadingLevel)
@@ -235,11 +289,7 @@ const EventCard = ({
             />
           )}
           {event.description && (
-            <p
-              className={
-                cardStyles.truncateDescription ? "md:line-clamp-2" : ""
-              }
-            >
+            <p className={styles.truncateDescription ? "md:line-clamp-2" : ""}>
               {resolveComponentData(event.description, i18n.language)}
             </p>
           )}
@@ -261,7 +311,7 @@ const EventCard = ({
             ctaType={event.cta.ctaType}
             coordinate={event.cta.coordinate}
             presetImageType={event.cta.presetImageType}
-            variant={ctaVariant}
+            variant={styles.ctaVariant}
           />
         )}
       </div>
@@ -269,16 +319,205 @@ const EventCard = ({
   );
 };
 
-const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
-  const { i18n } = useTranslation();
-  const locale = i18n.language;
-  const { data, styles, slots } = props;
+export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
+  label: msg("components.eventCard", "Event Card"),
+  fields: EventCardFields,
+  render: (props) => <EventCardComponent {...props} />,
+};
+
+const EventSectionComponent: PuckComponent<EventSectionProps> = (props) => {
+  const {
+    data,
+    styles,
+    slots,
+    id,
+    puck: { isEditing },
+  } = props;
+
   const streamDocument = useDocument();
-  const resolvedEvents = resolveComponentData(
-    data.events,
-    locale,
-    streamDocument
+  const {
+    i18n: { language: locale },
+  } = useTranslation();
+  const getPuck = useGetPuck();
+
+  const puckComponentData: ComponentData<EventSectionProps> | undefined =
+    usePuck((s) => {
+      return s.getItemById(id);
+    });
+
+  const resolvedEvents: EventSectionType | undefined = React.useMemo(
+    () => resolveYextEntityField(streamDocument, data.events, locale),
+    [data.events, locale, streamDocument]
   );
+
+  React.useEffect(() => {
+    // This useEffect synchronizes the props of all EventCards
+    if (!isEditing || !puckComponentData?.props?.id) {
+      return;
+    }
+
+    const { selectedItem, dispatch, getSelectorForId } = getPuck();
+    if (!selectedItem) {
+      return;
+    }
+
+    const sectionSelector = getSelectorForId(id);
+    const cardSelector = getSelectorForId(selectedItem.props.id);
+    if (
+      !sectionSelector ||
+      !cardSelector
+      // selectedItem?.type !== "EventCard"
+    ) {
+      return;
+    }
+
+    // Merge the existing EventCard props with the new updates
+    const oldCardProps = puckComponentData.props.slots
+      .CardSlot as ComponentData<EventCardProps>[];
+
+    let newCardProps: ComponentData<EventCardProps>[] | undefined;
+    if (selectedItem?.type === "EventCard") {
+      newCardProps = oldCardProps.map((currentSlot) => {
+        return {
+          type: "EventCard",
+          props: {
+            // Keep the unique props and data of each card
+            id: currentSlot.props.id,
+            cardNumber: currentSlot.props.cardNumber,
+            data: currentSlot.props.data,
+            sectionHeadingLevel: currentSlot.props.sectionHeadingLevel,
+            // Sync the styling props across all cards
+            styles: {
+              headingLevel: selectedItem.props.styles.headingLevel,
+              backgroundColor: selectedItem.props.styles.backgroundColor,
+              ctaVariant: selectedItem.props.styles.ctaVariant,
+              truncateDescription:
+                selectedItem.props.styles.truncateDescription,
+            },
+          },
+        };
+      });
+    } else if ((selectedItem?.type as string) === "HeadingTextSlot") {
+      // When the heading text level changes in the heading text slot,
+      // update all cards to reflect the new section heading level
+      newCardProps = oldCardProps.map((currentSlot) => {
+        return {
+          type: "EventCard",
+          props: {
+            ...currentSlot.props,
+            sectionHeadingLevel:
+              puckComponentData.props.slots.SectionHeadingSlot?.[0]?.props
+                .styles.level || 2,
+          },
+        };
+      });
+    }
+
+    // Only dispatch update if the card props have changed
+    // or the constant values have changed
+    if (
+      !newCardProps?.length ||
+      (JSON.stringify(oldCardProps) === JSON.stringify(newCardProps) &&
+        JSON.stringify(
+          newCardProps.map((p) => {
+            // oxlint-disable-next-line no-unused-vars Remove the card-level constantValueEnabled flag before checking the section-level data
+            const { constantValueEnabled, ...event } = p.props.data.event;
+            return event;
+          })
+        ) === JSON.stringify(resolvedEvents?.events))
+    ) {
+      return;
+    }
+
+    // Update the cards
+    let updatedData = setDeep(
+      puckComponentData,
+      "props.slots.CardSlot",
+      newCardProps
+    );
+
+    // Update the section constant values
+    // oxlint-disable-next-line no-unused-vars Remove the card-level constantValueEnabled flag before setting the section-level data
+    const { constantValueEnabled, ...entityFieldData } =
+      newCardProps[cardSelector.index].props.data.event;
+    updatedData = setDeep(
+      updatedData,
+      `props.data.events.constantValue.events[${cardSelector.index}]`,
+      entityFieldData
+    );
+
+    dispatch({
+      type: "replace",
+      destinationZone: sectionSelector.zone,
+      destinationIndex: sectionSelector.index,
+      data: updatedData,
+    });
+  }, [puckComponentData?.props.slots]);
+
+  React.useEffect(() => {
+    // This useEffect adds/removes EventCards to match the number of events
+    if (!isEditing) {
+      return;
+    }
+
+    const { dispatch, getSelectorForId, selectedItem } = getPuck();
+    if (!selectedItem?.props?.id || selectedItem.type !== "EventSection") {
+      return;
+    }
+
+    const selector = getSelectorForId(selectedItem?.props?.id);
+    if (!selector) {
+      return;
+    }
+
+    // Create one card for each event. Preserve the existing card props if the exist, otherwise use defaults.
+    const existingCardProps: EventCardProps | undefined =
+      selectedItem.props.slots.CardSlot?.[0]?.props;
+    const numberOfEvents =
+      (typeof resolvedEvents?.events === "number"
+        ? resolvedEvents?.events
+        : resolvedEvents?.events?.length) || 0;
+    const newCardProps: { type: string; props: EventCardProps }[] =
+      numberOfEvents
+        ? Array.from({ length: numberOfEvents }, (_, index) => ({
+            type: "EventCard",
+            props: {
+              cardNumber: index,
+              data: {
+                event: {
+                  ...resolvedEvents?.events[index],
+                  constantValueEnabled: !!data.events.constantValueEnabled,
+                },
+              },
+              sectionHeadingLevel:
+                puckComponentData?.props.slots.SectionHeadingSlot?.[0]?.props
+                  .styles.level || 2,
+              styles: {
+                headingLevel: existingCardProps?.styles?.headingLevel || 4,
+                backgroundColor:
+                  existingCardProps?.styles?.backgroundColor ||
+                  backgroundColors.background1.value,
+                ctaVariant: existingCardProps?.styles?.ctaVariant || "primary",
+                truncateDescription:
+                  existingCardProps?.styles?.truncateDescription || true,
+              },
+            },
+          }))
+        : [];
+
+    const updatedData = setDeep(
+      selectedItem,
+      "props.slots.CardSlot",
+      newCardProps
+    );
+
+    dispatch({
+      type: "replace",
+      destinationZone: selector.zone,
+      destinationIndex: selector.index,
+      data: updatedData,
+    });
+  }, [resolvedEvents]);
 
   return (
     <PageSection
@@ -292,19 +531,7 @@ const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
           fieldId={data.events.field}
           constantValueEnabled={data.events.constantValueEnabled}
         >
-          <div className="flex flex-col gap-8">
-            {resolvedEvents.events.map((event, index) => (
-              <EventCard
-                key={index}
-                cardNumber={index}
-                event={event}
-                cardStyles={styles.cards}
-                // TODO: think about how to handle section heading <-> card heading levels
-                sectionHeadingLevel={2}
-                ctaVariant={styles.cards.ctaVariant}
-              />
-            ))}
-          </div>
+          <slots.CardSlot className="flex flex-col gap-8" />
         </EntityField>
       )}
     </PageSection>
@@ -330,12 +557,6 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
     },
     styles: {
       backgroundColor: backgroundColors.background3.value,
-      cards: {
-        headingLevel: 3,
-        backgroundColor: backgroundColors.background1.value,
-        ctaVariant: "primary",
-        truncateDescription: true,
-      },
     },
     slots: {
       SectionHeadingSlot: [
@@ -356,6 +577,9 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
           },
         },
       ],
+      CardSlot: [
+        // filled based on data.events
+      ],
     },
     analytics: {
       scope: "eventsSection",
@@ -370,7 +594,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}
       >
-        <EventSectionWrapper {...props} />
+        <EventSectionComponent {...props} />
       </VisibilityWrapper>
     </AnalyticsScopeProvider>
   ),

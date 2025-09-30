@@ -2,9 +2,11 @@ import {
   HeadingTextProps,
   HeadingText,
 } from "../contentBlocks/HeadingText.tsx";
+import { EventCard, EventCardProps } from "../pageSections/EventSection.tsx";
 
 export interface SlotsCategoryProps {
   HeadingTextSlot: HeadingTextProps;
+  EventCard: EventCardProps;
 }
 
 const lockedPermissions = {
@@ -16,6 +18,7 @@ const lockedPermissions = {
 
 export const SlotsCategoryComponents = {
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
+  EventCard: { ...EventCard, permissions: lockedPermissions },
 };
 
 export const SlotsCategory = Object.keys(

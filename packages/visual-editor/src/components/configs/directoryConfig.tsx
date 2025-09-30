@@ -1,5 +1,4 @@
 import { Config, DropZone } from "@measured/puck";
-import { msg } from "@yext/visual-editor";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
@@ -30,7 +29,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   },
   categories: {
     directoryComponents: {
-      title: msg("categories.directory", "Directory"),
+      title: "Directory",
       components: [...DirectoryCategory, ...OtherCategory],
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
