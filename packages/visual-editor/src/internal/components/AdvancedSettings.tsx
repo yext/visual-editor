@@ -50,7 +50,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
     const compactDefaultSchema = defaultSchema.replace(/\n\s*/g, " ").trim();
 
     // Use the schema value from root, or default schema if not set
-    const schema = value || (entityTypeId ? defaultSchema : "");
+    const schema = value || defaultSchema;
     // Compact the schema to remove newlines and extra whitespace
     const compactSchema = schema.replace(/\n\s*/g, " ").trim();
 
