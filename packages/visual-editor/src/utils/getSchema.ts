@@ -79,7 +79,7 @@ const FALLBACK_SCHEMA = `{
 // Function to get the appropriate schema template based on entity type
 export const getSchemaTemplate = (entityTypeId?: string): string => {
   if (!entityTypeId) {
-    return FALLBACK_SCHEMA;
+    return FALLBACK_SCHEMA.replace(/\n\s*/g, " ").trim();
   }
 
   if (
@@ -87,7 +87,7 @@ export const getSchemaTemplate = (entityTypeId?: string): string => {
     entityTypeId === "financialProfessional" ||
     entityTypeId === "healthcareProfessional"
   ) {
-    return LOCAL_BUSINESS_SCHEMA;
+    return LOCAL_BUSINESS_SCHEMA.replace(/\n\s*/g, " ").trim();
   } else if (entityTypeId.startsWith("dm_")) {
     // Determine position based on entity type
     let position = 1; // default for dm_root
@@ -104,8 +104,10 @@ export const getSchemaTemplate = (entityTypeId?: string): string => {
     return DIRECTORY_LIST_ITEM_SCHEMA.replace(
       "[[position]]",
       position.toString()
-    );
+    )
+      .replace(/\n\s*/g, " ")
+      .trim();
   } else {
-    return FALLBACK_SCHEMA;
+    return FALLBACK_SCHEMA.replace(/\n\s*/g, " ").trim();
   }
 };

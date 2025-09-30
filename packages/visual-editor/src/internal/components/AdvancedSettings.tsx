@@ -46,13 +46,9 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
     );
 
     const defaultSchema = getSchemaTemplate(entityTypeId);
-    // Compact the default schema to remove newlines and extra whitespace
-    const compactDefaultSchema = defaultSchema.replace(/\n\s*/g, " ").trim();
 
     // Use the schema value from root, or default schema if not set
     const schema = value || defaultSchema;
-    // Compact the schema to remove newlines and extra whitespace
-    const compactSchema = schema.replace(/\n\s*/g, " ").trim();
 
     const codeField = YextField(msg("schemaMarkup", "Schema Markup"), {
       type: "code",
@@ -76,8 +72,8 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
 
         const payload = {
           type: "SchemaMarkup",
-          value: compactSchema,
-          defaultValue: compactDefaultSchema,
+          value: schema,
+          defaultValue: defaultSchema,
           id: messageId,
         };
 
