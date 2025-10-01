@@ -1,6 +1,6 @@
 import { ReactNode, useEffect } from "react";
 import mapboxPackageJson from "mapbox-gl/package.json";
-import { googleFontLinkTags } from "../../../utils/visualEditorFonts.ts";
+import { googleFontLinkTags } from "../../utils/visualEditorFonts.ts";
 
 /**
  * For use in Puck's iframe override. Loads the Mapbox script and stylesheet into the iframe document.
