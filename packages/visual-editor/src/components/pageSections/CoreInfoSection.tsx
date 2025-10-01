@@ -298,9 +298,7 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           className="flex flex-col gap-4"
         >
           <slots.InfoHeadingSlot />
-          <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
-            <slots.InfoAddressSlot />
-          </div>
+          <slots.InfoAddressSlot />
           {resolvedPhoneNumbers.length > 0 && (
             <ul className="flex flex-col gap-4">
               {resolvedPhoneNumbers.map((phone, idx) => {

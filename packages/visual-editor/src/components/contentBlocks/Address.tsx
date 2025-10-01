@@ -94,12 +94,12 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
   return (
     <>
       {address && (
-        <EntityField
-          displayName={pt("address", "Address")}
-          fieldId={data.address.field}
-          constantValueEnabled={data.address.constantValueEnabled}
-        >
-          <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
+        <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
+          <EntityField
+            displayName={pt("address", "Address")}
+            fieldId={data.address.field}
+            constantValueEnabled={data.address.constantValueEnabled}
+          >
             <RenderAddress
               address={address}
               lines={[
@@ -108,7 +108,7 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
                 ["city", ",", "region", "postalCode"],
               ]}
             />
-          </div>
+          </EntityField>
           {coordinates && styles.showGetDirectionsLink && (
             <CTA
               eventName={`getDirections`}
@@ -120,7 +120,7 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
               variant={styles.ctaVariant}
             />
           )}
-        </EntityField>
+        </div>
       )}
     </>
   );
