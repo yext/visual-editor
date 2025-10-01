@@ -270,8 +270,8 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
   };
 
   const hasCoreInfo: boolean =
-    React.isValidElement(slots.InfoHeadingSlot) ||
-    React.isValidElement(slots.InfoAddressSlot) ||
+    slots.InfoHeadingSlot !== null ||
+    slots.InfoAddressSlot !== null ||
     (resolvedPhoneNumbers?.length ?? 0) > 0 ||
     (resolvedEmails?.length ?? 0) > 0;
 
