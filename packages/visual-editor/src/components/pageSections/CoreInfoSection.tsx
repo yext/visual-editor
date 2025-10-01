@@ -222,8 +222,6 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
   const locale = i18n.language;
   const streamDocument = useDocument();
 
-  const AddressElement = slots.InfoAddressSlot;
-
   const resolvedEmails = resolveComponentData(
     data.info.emails,
     locale,
@@ -272,7 +270,8 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
   };
 
   const hasCoreInfo: boolean =
-    React.isValidElement(AddressElement) ||
+    React.isValidElement(slots.InfoHeadingSlot) ||
+    React.isValidElement(slots.InfoAddressSlot) ||
     (resolvedPhoneNumbers?.length ?? 0) > 0 ||
     (resolvedEmails?.length ?? 0) > 0;
 

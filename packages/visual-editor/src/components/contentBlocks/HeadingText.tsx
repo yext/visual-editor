@@ -50,6 +50,10 @@ const HeadingTextWrapper = React.forwardRef<
     streamDocument
   );
 
+  if (!resolvedHeadingText) {
+    return null;
+  }
+
   return (
     resolvedHeadingText && (
       <div className={`flex ${justifyClass}`}>
