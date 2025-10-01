@@ -135,17 +135,52 @@ const generateContrastingColors = (themeData: ThemeData) => {
   return contrastingColors;
 };
 
+// Helper function to update font links in a document
+const updateFontLinksInDocument = (
+  document: Document,
+  fontLinkTags: string
+) => {
+  const existingLinks = document.querySelectorAll(
+    'link[href*="fonts.googleapis.com"]'
+  );
+  existingLinks.forEach((link) => link.remove());
+
+  if (fontLinkTags) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = fontLinkTags;
+    const links = tempDiv.querySelectorAll("link");
+    links.forEach((link) => {
+      document.head.appendChild(link);
+    });
+  }
+};
+
 export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig
 ) => {
   devLogger.logFunc("updateThemeInEditor");
 
+  const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
+  const mergedThemeData = { ...defaultThemeValues, ...newTheme };
+  const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
+
+  let fontLinkTags: string;
+  if (Object.keys(inUseFonts).length === 0) {
+    fontLinkTags = constructGoogleFontLinkTags({
+      "Open Sans": defaultFonts["Open Sans"],
+    });
+  } else {
+    fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
+  }
+
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
   const editorStyleTag = window.document.getElementById(THEME_STYLE_TAG_ID);
   if (editorStyleTag) {
     editorStyleTag.innerText = newThemeTag;
   }
+
+  updateFontLinksInDocument(window.document, fontLinkTags);
 
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
@@ -156,6 +191,7 @@ export const updateThemeInEditor = async (
     if (pagePreviewStyleTag) {
       observer.disconnect();
       pagePreviewStyleTag.innerText = newThemeTag;
+      updateFontLinksInDocument(iframe.contentDocument!, fontLinkTags);
     }
   });
 
