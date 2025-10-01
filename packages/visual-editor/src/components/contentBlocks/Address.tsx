@@ -87,6 +87,10 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
     { provider: "google" }
   );
 
+  if (!address) {
+    return null;
+  }
+
   return (
     <>
       {address && (

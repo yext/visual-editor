@@ -2,8 +2,10 @@ import {
   HeadingTextProps,
   HeadingText,
 } from "../contentBlocks/HeadingText.tsx";
+import { Address, AddressProps } from "../contentBlocks/Address.tsx";
 
 export interface SlotsCategoryProps {
+  AddressSlot: AddressProps;
   HeadingTextSlot: HeadingTextProps;
 }
 
@@ -15,6 +17,7 @@ const lockedPermissions = {
 };
 
 export const SlotsCategoryComponents = {
+  AddressSlot: { ...Address, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
 };
 

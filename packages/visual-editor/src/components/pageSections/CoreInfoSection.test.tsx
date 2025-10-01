@@ -15,6 +15,7 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+import { HeadingText, Address } from "../contentBlocks/index.ts";
 
 const testAddress = {
   city: "Brooklyn",
@@ -756,7 +757,11 @@ const tests: ComponentTest[] = [
 
 describe("CoreInfoSection", async () => {
   const puckConfig: Config = {
-    components: { CoreInfoSection },
+    components: {
+      CoreInfoSection,
+      HeadingTextSlot: HeadingText,
+      AddressSlot: Address,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
