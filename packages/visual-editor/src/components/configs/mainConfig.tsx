@@ -1,5 +1,5 @@
 import { DropZone, Config } from "@measured/puck";
-import { msg } from "@yext/visual-editor";
+import { pt } from "@yext/visual-editor";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
@@ -46,15 +46,15 @@ export const mainConfig: Config<MainConfigProps> = {
   components,
   categories: {
     pageSections: {
-      title: msg("categories.pageSections", "Page Sections"),
+      title: pt("categories.pageSections", "Page Sections"),
       components: PageSectionCategory,
     },
     coreInformation: {
-      title: msg("categories.coreInformation", "Core Information"),
+      title: pt("categories.coreInformation", "Core Information"),
       components: AdvancedCoreInfoCategory,
     },
     other: {
-      title: msg("categories.other", "Other"),
+      title: pt("categories.other", "Other"),
       components: OtherCategory,
     },
     slots: {

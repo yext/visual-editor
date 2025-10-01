@@ -36,6 +36,8 @@ export interface Metadata {
     locale: string,
     relativePrefixToRoot: string
   ) => string;
+  // The stream document for the current page
+  streamDocument?: any;
 }
 
 export type EditorProps = {
@@ -153,7 +155,7 @@ export const Editor = ({
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}
-              metadata={metadata}
+              metadata={{ ...metadata, streamDocument: document }}
             />
           ) : (
             <LayoutEditor
@@ -163,7 +165,7 @@ export const Editor = ({
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}
-              metadata={metadata}
+              metadata={{ ...metadata, streamDocument: document }}
             />
           )
         ) : (
