@@ -32,6 +32,8 @@ const getDefaultSchema = (
   }
 };
 
+const schemaWhitespaceRegex = /\n\s*/g;
+
 const LOCAL_BUSINESS_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
@@ -50,7 +52,9 @@ const LOCAL_BUSINESS_SCHEMA = `{
   "telephone": "[[mainPhone]]",
   "paymentAccepted": "[[paymentOptions]]",
   "hasOfferCatalog": "[[services]]"
-}`;
+}`
+  .replace(schemaWhitespaceRegex, " ")
+  .trim();
 
 const DIRECTORY_LIST_ITEM_SCHEMA = `{
   "@type": "ListItem",
@@ -67,19 +71,23 @@ const DIRECTORY_LIST_ITEM_SCHEMA = `{
       "addressCountry": "[[address.countryCode]]"
     }
   }
-}`;
+}`
+  .replace(schemaWhitespaceRegex, " ")
+  .trim();
 
 const FALLBACK_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "Thing",
   "name": "[[name]]",
   "description": "[[description]]",
-}`;
+}`
+  .replace(schemaWhitespaceRegex, " ")
+  .trim();
 
 // Function to get the appropriate schema template based on entity type
 export const getSchemaTemplate = (entityTypeId?: string): string => {
   if (!entityTypeId) {
-    return FALLBACK_SCHEMA.replace(/\n\s*/g, " ").trim();
+    return FALLBACK_SCHEMA;
   }
 
   if (
@@ -87,7 +95,7 @@ export const getSchemaTemplate = (entityTypeId?: string): string => {
     entityTypeId === "financialProfessional" ||
     entityTypeId === "healthcareProfessional"
   ) {
-    return LOCAL_BUSINESS_SCHEMA.replace(/\n\s*/g, " ").trim();
+    return LOCAL_BUSINESS_SCHEMA;
   } else if (entityTypeId.startsWith("dm_")) {
     // Determine position based on entity type
     let position = 1; // default for dm_root
@@ -108,6 +116,6 @@ export const getSchemaTemplate = (entityTypeId?: string): string => {
       .replace(/\n\s*/g, " ")
       .trim();
   } else {
-    return FALLBACK_SCHEMA.replace(/\n\s*/g, " ").trim();
+    return FALLBACK_SCHEMA;
   }
 };
