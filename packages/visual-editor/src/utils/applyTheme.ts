@@ -12,8 +12,6 @@ import {
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
 
-// Test PR for fonts
-
 export type StreamDocument = {
   [key: string]: any;
   locale?: string;
