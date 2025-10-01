@@ -57,6 +57,7 @@
   "closed": "Zatvoreno",
   "closesAt": "Zatvara se",
   "components": {
+    "Video": "Video",
     "address": "Adresa",
     "bannerSection": "Odjeljak",
     "bodyText": "Tekst tijela",

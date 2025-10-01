@@ -57,6 +57,7 @@
   "closed": "关闭",
   "closesAt": "关闭",
   "components": {
+    "Video": "视频",
     "address": "地址",
     "bannerSection": "横幅部分",
     "bodyText": "正文",

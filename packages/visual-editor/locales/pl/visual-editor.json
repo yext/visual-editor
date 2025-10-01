@@ -57,6 +57,7 @@
   "closed": "Zamknięte",
   "closesAt": "Zamyka się",
   "components": {
+    "Video": "Wideo",
     "address": "Adres",
     "bannerSection": "Sekcja banerowa",
     "bodyText": "Tekst nadwozia",

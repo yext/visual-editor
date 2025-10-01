@@ -57,6 +57,7 @@
   "closed": "Gesloten",
   "closesAt": "Sluit af aan",
   "components": {
+    "Video": "Video",
     "address": "Adres",
     "bannerSection": "Bannersectie",
     "bodyText": "Lijftekst",
