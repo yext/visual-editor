@@ -93,9 +93,11 @@ export type ProductStruct = {
 };
 
 /** Data for the EventSection */
-export type EventSectionType = {
-  events: Array<EventStruct>;
-};
+export type EventSectionType =
+  | {
+      events: Array<EventStruct>;
+    }
+  | { numberOfConstantCards: number };
 
 /** An individual event in the EventsSection */
 export type EventStruct = {
