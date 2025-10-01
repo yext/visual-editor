@@ -8,7 +8,11 @@ import {
   PuckComponent,
   Slot,
 } from "@measured/puck";
-import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
+import {
+  AddressType,
+  AnalyticsScopeProvider,
+  HoursType,
+} from "@yext/pages-components";
 import { FaRegEnvelope } from "react-icons/fa";
 import {
   YextEntityField,
@@ -226,7 +230,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
  * Available on Location templates.
  */
 const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
-  const { data, styles, slots, id } = props;
+  const { data, styles, slots, id, puck } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
@@ -297,15 +301,18 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
     )[0],
     i18n.language,
     streamDocument
-  );
+  ) as unknown as AddressType;
 
-  const hasCoreInfo: boolean =
+  // Determine if the Core Info column should be shown
+  // It should be shown if in editing mode or if it has any content to display
+  const showCoreInfoCol: boolean =
+    puck.isEditing ||
     !!resolvedInfoHeading ||
-    !!resolvedInfoAddress ||
+    !!resolvedInfoAddress?.line1 ||
     (resolvedPhoneNumbers?.length ?? 0) > 0 ||
     (resolvedEmails?.length ?? 0) > 0;
 
-  const sectionCount = [hasCoreInfo, resolvedHours, servicesList].filter(
+  const sectionCount = [showCoreInfoCol, resolvedHours, servicesList].filter(
     Boolean
   ).length;
 
@@ -321,12 +328,12 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
       background={styles?.backgroundColor}
       aria-label={t("coreInfoSection", "Core Info Section")}
     >
-      {hasCoreInfo && (
+      {showCoreInfoCol && (
         <section
           aria-label={t("informationSection", "Information Section")}
           className="flex flex-col gap-4"
         >
-          <slots.InfoHeadingSlot />
+          <slots.InfoHeadingSlot style={{ maxHeight: "fit-content" }} />
           <slots.InfoAddressSlot />
           {resolvedPhoneNumbers.length > 0 && (
             <ul className="flex flex-col gap-4">
@@ -409,7 +416,7 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           aria-label={t("hoursSection", "Hours Section")}
           className="flex flex-col gap-4"
         >
-          <slots.HoursHeadingSlot />
+          <slots.HoursHeadingSlot style={{ maxHeight: "fit-content" }} />
           <EntityField
             displayName={pt("fields.hours", "Hours")}
             fieldId="hours"
@@ -438,7 +445,7 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           aria-label={t("servicesSection", "Services Section")}
           className="flex flex-col gap-4"
         >
-          <slots.ServicesHeadingSlot />
+          <slots.ServicesHeadingSlot style={{ maxHeight: "fit-content" }} />
           <EntityField
             displayName={pt("fields.textList", "Text List")}
             fieldId={data.services.servicesList.field}

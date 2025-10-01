@@ -111,7 +111,9 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
         />
       )}
     </div>
-  ) : null;
+  ) : (
+    <div className="min-h-[40px]"></div>
+  );
 };
 
 export const Address: ComponentConfig<{
