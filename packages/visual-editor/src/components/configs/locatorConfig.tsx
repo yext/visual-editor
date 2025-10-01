@@ -1,5 +1,5 @@
 import { Config, DropZone } from "@measured/puck";
-import { msg } from "@yext/visual-editor";
+import { pt } from "@yext/visual-editor";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
@@ -30,7 +30,7 @@ export const locatorConfig: Config<LocatorConfigProps> = {
   },
   categories: {
     locatorComponents: {
-      title: msg("categories.locator", "Locator"),
+      title: pt("categories.locator", "Locator"),
       components: [...LocatorCategory, ...OtherCategory],
     },
     // deprecated components are hidden in the sidebar but still render if used in the page

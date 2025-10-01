@@ -108,6 +108,7 @@ const Location: Template<TemplateRenderProps> = (props) => {
             migrationRegistry,
             filteredConfig
           )}
+          metadata={{ streamDocument: document }}
         />
       </VisualEditorProvider>
     </AnalyticsProvider>
