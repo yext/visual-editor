@@ -39,36 +39,36 @@ export const defaultEvent: EventStruct = {
   },
 };
 
-const fillArray = <T,>(
-  array: T[],
-  newLength: number,
-  defaultObject: T
-): T[] => {
-  // Handle invalid lengths
-  if (newLength < 0) {
-    return [];
-  }
+// const fillArray = <T,>(
+//   array: T[],
+//   newLength: number,
+//   defaultObject: T
+// ): T[] => {
+//   // Handle invalid lengths
+//   if (newLength < 0) {
+//     return [];
+//   }
 
-  const currentLength = array.length;
+//   const currentLength = array.length;
 
-  if (newLength === currentLength) {
-    // If the length is the same, return a copy of the original array
-    return [...array];
-  } else if (newLength < currentLength) {
-    // 1. Truncate the array (length y < length x)
-    // Use .slice(0, newLength) to get the first 'newLength' elements.
-    return array.slice(0, newLength);
-  } else {
-    // 2. Extend the array (length y > length x)
-    // Create an array of 'newLength - currentLength' default objects.
-    const defaultFill: T[] = Array(newLength - currentLength).fill(
-      defaultObject
-    );
+//   if (newLength === currentLength) {
+//     // If the length is the same, return a copy of the original array
+//     return [...array];
+//   } else if (newLength < currentLength) {
+//     // 1. Truncate the array (length y < length x)
+//     // Use .slice(0, newLength) to get the first 'newLength' elements.
+//     return array.slice(0, newLength);
+//   } else {
+//     // 2. Extend the array (length y > length x)
+//     // Create an array of 'newLength - currentLength' default objects.
+//     const defaultFill: T[] = Array(newLength - currentLength).fill(
+//       defaultObject
+//     );
 
-    // Combine the original array (all elements preserved) with the default objects.
-    return [...array, ...defaultFill];
-  }
-};
+//     // Combine the original array (all elements preserved) with the default objects.
+//     return [...array, ...defaultFill];
+//   }
+// };
 
 export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
   type: "custom",
@@ -87,12 +87,11 @@ export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
               type: "number",
               min: 0,
             }}
-            value={value.events.length}
+            value={
+              "numberOfConstantCards" in value ? value.numberOfConstantCards : 0
+            }
             onChange={(newValue, uiState) => {
-              onChange(
-                { events: fillArray(value.events, newValue, defaultEvent) },
-                uiState
-              );
+              onChange({ numberOfConstantCards: newValue }, uiState);
             }}
           />
         </FieldLabel>

@@ -16,12 +16,7 @@ export {
   type CoreInfoData,
   type CoreInfoStyles,
 } from "./CoreInfoSection.tsx";
-export {
-  EventSection,
-  type EventSectionProps,
-  type EventData,
-  type EventStyles,
-} from "./EventSection.tsx";
+export { EventSection, type EventSectionProps } from "./EventSection.tsx";
 export {
   FAQSection,
   type FAQSectionProps,

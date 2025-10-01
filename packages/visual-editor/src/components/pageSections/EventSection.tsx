@@ -47,34 +47,30 @@ import {
 
 const usePuck = createUsePuck();
 
-export interface EventData {
-  /**
-   * The source of event data, which can be linked to a Yext field or provided as a constant value.
-   * @defaultValue A list of 3 placeholder events.
-   */
-  events: YextEntityField<EventSectionType>;
-}
-
-export interface EventStyles {
-  /**
-   * The background color of the section.
-   * @defaultValue Background Color 3
-   */
-  backgroundColor?: BackgroundStyle;
-}
-
 export interface EventSectionProps {
   /**
    * This object contains the content to be displayed by the component.
    * @propCategory Data Props
    */
-  data: EventData;
+  data: {
+    /**
+     * The source of event data, which can be linked to a Yext field or provided as a constant value.
+     * @defaultValue A list of 3 placeholder events.
+     */
+    events: YextEntityField<EventSectionType>;
+  };
 
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: EventStyles;
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
+    backgroundColor?: BackgroundStyle;
+  };
 
   slots: {
     SectionHeadingSlot: Slot;
@@ -149,9 +145,13 @@ const eventSectionFields: Fields<EventSectionProps> = {
 export type EventCardProps = {
   /** The card number (1-based index). Used for analytics */
   cardNumber?: number;
+  /** The heading level of the parent section. Used to ensure proper heading semantics */
+  sectionHeadingLevel?: HeadingLevel;
   data: {
+    /** Whether the event is a constant value or an entity field */
+    constantValueEnabled: boolean;
     /** The event to display in the card. */
-    event: Partial<EventStruct> & { constantValueEnabled: boolean };
+    event: EventStruct;
   };
   styles: {
     /** The h tag level of each event card's title */
@@ -163,32 +163,26 @@ export type EventCardProps = {
     /** Whether to truncate the event description text */
     truncateDescription: boolean;
   };
-  sectionHeadingLevel?: HeadingLevel;
 };
 
 const EventCardFields: Fields<EventCardProps> = {
   data: {
-    type: "object",
-    label: msg("fields.data", "Data"),
-    objectFields: {
-      event: {
-        type: "custom",
-        render: ({ value, onChange }) => {
-          if (!value.constantValueEnabled) {
-            // TODO: use copy from design
-            return <p>Using Data from Knowledge Graph</p>;
-          }
-          return (
-            <FieldLabel label={pt("fields.event", "Event")}>
-              <AutoField
-                field={EVENT_CONSTANT_CONFIG()}
-                value={value}
-                onChange={onChange}
-              />
-            </FieldLabel>
-          );
-        },
-      },
+    type: "custom",
+    render: ({ value, onChange }) => {
+      const { event, constantValueEnabled } = value;
+      if (!constantValueEnabled) {
+        // TODO: use copy from design
+        return <p>Using Data from Knowledge Graph</p>;
+      }
+      return (
+        <FieldLabel label={pt("fields.Data", "Data")}>
+          <AutoField
+            field={EVENT_CONSTANT_CONFIG()}
+            value={event}
+            onChange={(v) => onChange({ constantValueEnabled, event: v })}
+          />
+        </FieldLabel>
+      );
     },
   },
   styles: {
@@ -345,13 +339,54 @@ const EventSectionComponent: PuckComponent<EventSectionProps> = (props) => {
       return s.getItemById(id);
     });
 
-  const resolvedEvents: EventSectionType | undefined = React.useMemo(
-    () => resolveYextEntityField(streamDocument, data.events, locale),
-    [data.events, locale, streamDocument]
-  );
-
+  const [constantValues, setConstantValues] = React.useState<EventStruct[]>([]);
   React.useEffect(() => {
-    // This useEffect synchronizes the props of all EventCards
+    // This useEffect tracks the constant values so that they can be restored if the user switches
+    // from constant values to entity field and back again.
+    if (!data.events.constantValueEnabled) {
+      return;
+    }
+    setConstantValues(
+      puckComponentData?.props?.slots?.CardSlot.map(
+        (slot) => slot.props.data.event
+      ) || []
+    );
+  }, [puckComponentData?.props?.slots?.CardSlot]);
+
+  const {
+    entityValueEvents,
+    numberOfEvents,
+  }: { entityValueEvents: EventStruct[] | undefined; numberOfEvents: number } =
+    React.useMemo(() => {
+      const resolvedEvents = resolveYextEntityField<EventSectionType>(
+        streamDocument,
+        data.events,
+        locale
+      );
+
+      if (
+        !resolvedEvents ||
+        (!data.events.constantValueEnabled && data.events.field === "")
+      ) {
+        return { entityValueEvents: undefined, numberOfEvents: 0 };
+      }
+
+      if ("numberOfConstantCards" in resolvedEvents) {
+        return {
+          entityValueEvents: undefined,
+          numberOfEvents: resolvedEvents.numberOfConstantCards,
+        };
+      } else {
+        return {
+          entityValueEvents: resolvedEvents.events,
+          numberOfEvents: resolvedEvents.events.length,
+        };
+      }
+    }, [data.events, locale, streamDocument]);
+
+  console.log("resolvedEvents", entityValueEvents, numberOfEvents);
+  React.useEffect(() => {
+    // This useEffect synchronizes the styling props of all EventCards
     if (!isEditing || !puckComponentData?.props?.id) {
       return;
     }
@@ -363,11 +398,7 @@ const EventSectionComponent: PuckComponent<EventSectionProps> = (props) => {
 
     const sectionSelector = getSelectorForId(id);
     const cardSelector = getSelectorForId(selectedItem.props.id);
-    if (
-      !sectionSelector ||
-      !cardSelector
-      // selectedItem?.type !== "EventCard"
-    ) {
+    if (!sectionSelector || !cardSelector) {
       return;
     }
 
@@ -412,40 +443,22 @@ const EventSectionComponent: PuckComponent<EventSectionProps> = (props) => {
         };
       });
     }
-
     // Only dispatch update if the card props have changed
-    // or the constant values have changed
     if (
       !newCardProps?.length ||
-      (JSON.stringify(oldCardProps) === JSON.stringify(newCardProps) &&
-        JSON.stringify(
-          newCardProps.map((p) => {
-            // oxlint-disable-next-line no-unused-vars Remove the card-level constantValueEnabled flag before checking the section-level data
-            const { constantValueEnabled, ...event } = p.props.data.event;
-            return event;
-          })
-        ) === JSON.stringify(resolvedEvents?.events))
+      JSON.stringify(oldCardProps) === JSON.stringify(newCardProps)
     ) {
       return;
     }
 
     // Update the cards
-    let updatedData = setDeep(
+    const updatedData = setDeep(
       puckComponentData,
       "props.slots.CardSlot",
       newCardProps
     );
 
-    // Update the section constant values
-    // oxlint-disable-next-line no-unused-vars Remove the card-level constantValueEnabled flag before setting the section-level data
-    const { constantValueEnabled, ...entityFieldData } =
-      newCardProps[cardSelector.index].props.data.event;
-    updatedData = setDeep(
-      updatedData,
-      `props.data.events.constantValue.events[${cardSelector.index}]`,
-      entityFieldData
-    );
-
+    console.log("dispatch 1", updatedData);
     dispatch({
       type: "replace",
       destinationZone: sectionSelector.zone,
@@ -473,21 +486,17 @@ const EventSectionComponent: PuckComponent<EventSectionProps> = (props) => {
     // Create one card for each event. Preserve the existing card props if the exist, otherwise use defaults.
     const existingCardProps: EventCardProps | undefined =
       selectedItem.props.slots.CardSlot?.[0]?.props;
-    const numberOfEvents =
-      (typeof resolvedEvents?.events === "number"
-        ? resolvedEvents?.events
-        : resolvedEvents?.events?.length) || 0;
     const newCardProps: { type: string; props: EventCardProps }[] =
-      numberOfEvents
+      numberOfEvents > 0
         ? Array.from({ length: numberOfEvents }, (_, index) => ({
             type: "EventCard",
             props: {
               cardNumber: index,
               data: {
-                event: {
-                  ...resolvedEvents?.events[index],
-                  constantValueEnabled: !!data.events.constantValueEnabled,
-                },
+                event: entityValueEvents
+                  ? entityValueEvents[index]
+                  : (constantValues[index] ?? defaultEvent),
+                constantValueEnabled: !!data.events.constantValueEnabled,
               },
               sectionHeadingLevel:
                 puckComponentData?.props.slots.SectionHeadingSlot?.[0]?.props
@@ -511,13 +520,14 @@ const EventSectionComponent: PuckComponent<EventSectionProps> = (props) => {
       newCardProps
     );
 
+    console.log("dispatch 2", updatedData);
     dispatch({
       type: "replace",
       destinationZone: selector.zone,
       destinationIndex: selector.index,
       data: updatedData,
     });
-  }, [resolvedEvents]);
+  }, [data.events]);
 
   return (
     <PageSection
@@ -525,7 +535,7 @@ const EventSectionComponent: PuckComponent<EventSectionProps> = (props) => {
       className="flex flex-col gap-8"
     >
       <slots.SectionHeadingSlot />
-      {resolvedEvents?.events && (
+      {numberOfEvents > 0 && (
         <EntityField
           displayName={pt("fields.events", "Events")}
           fieldId={data.events.field}
@@ -550,7 +560,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
       events: {
         field: "",
         constantValue: {
-          events: [defaultEvent, defaultEvent, defaultEvent],
+          numberOfConstantCards: 3,
         },
         constantValueEnabled: true,
       },
