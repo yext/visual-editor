@@ -93,7 +93,6 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
       <FieldLabel
         label={field?.label ? pt(field.label) : pt("fields.video", "Video")}
         el="div"
-        className="ve-mt-3"
       >
         <div className="ve-relative ve-group ve-mb-3">
           {/* FieldLabel grabs the onclick event for the first button in its children, 

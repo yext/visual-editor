@@ -12,6 +12,7 @@ import {
   migrate,
   migrationRegistry,
   VisualEditorProvider,
+  SlotsCategoryComponents,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
@@ -80,17 +81,109 @@ const tests: ComponentTest[] = [
     },
     version: 22,
   },
+  {
+    name: "version 25 props with entity heading text and no video",
+    document: { name: "Test Name" },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-b8418726-c3d1-4bc2-8c09-69e58f72f9ac",
+              data: {
+                text: {
+                  constantValue: { en: "Video", hasLocalizedValue: "true" },
+                  constantValueEnabled: false,
+                  field: "name",
+                },
+              },
+              styles: { level: 2, align: "center" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-5e4afbc9-7fe4-44a8-9814-d050538d6f42",
+              data: {},
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 25,
+  },
+  {
+    name: "version 25 props with constant heading text and video",
+    document: { name: "Test Name" },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-b8418726-c3d1-4bc2-8c09-69e58f72f9ac",
+              data: {
+                text: {
+                  constantValue: { en: "Video", hasLocalizedValue: "true" },
+                  constantValueEnabled: true,
+                  field: "address.city",
+                },
+              },
+              styles: { level: 6, align: "right" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-5e4afbc9-7fe4-44a8-9814-d050538d6f42",
+              data: {
+                assetVideo: {
+                  name: "Local asset",
+                  id: "0",
+                  video: {
+                    embeddedUrl: "https://www.youtube.com/embed/test",
+                    title: "Test Video",
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 25,
+  },
 ];
 
 describe("VideoSection", async () => {
   const puckConfig: Config = {
-    components: { VideoSection },
+    components: { VideoSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
@@ -126,7 +219,7 @@ describe("VideoSection", async () => {
       );
 
       await page.viewport(width, height);
-      if (props?.data?.assetVideo?.video?.embeddedUrl) {
+      if (name.includes("and video")) {
         await delay(1000);
       }
 

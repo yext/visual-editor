@@ -6,7 +6,7 @@ export type VideoProps = {
   className?: string;
 };
 
-export const Video = (props: VideoProps) => {
+export const VideoAtom = (props: VideoProps) => {
   const { youTubeEmbedUrl, title, className } = props;
 
   return (
