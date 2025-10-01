@@ -135,41 +135,22 @@ const generateContrastingColors = (themeData: ThemeData) => {
   return contrastingColors;
 };
 
-// Helper function to update font links in the editor document
-const updateFontLinksInEditor = (fontLinkTags: string) => {
-  const existingLinks = window.document.querySelectorAll(
-    'link[href*="fonts.googleapis.com"]'
-  );
-  existingLinks.forEach((link) => link.remove());
-
-  if (fontLinkTags) {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = fontLinkTags;
-    const links = tempDiv.querySelectorAll("link");
-    links.forEach((link) => {
-      window.document.head.appendChild(link);
-    });
-  }
-};
-
-const updateFontLinksInIframe = (
-  iframe: HTMLIFrameElement,
+// Helper function to update font links in a document
+const updateFontLinksInDocument = (
+  document: Document,
   fontLinkTags: string
 ) => {
-  if (!iframe.contentDocument) {
-    return;
-  }
-
-  const existingLinks = iframe.contentDocument.querySelectorAll(
+  const existingLinks = document.querySelectorAll(
     'link[href*="fonts.googleapis.com"]'
   );
   existingLinks.forEach((link) => link.remove());
+
   if (fontLinkTags) {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = fontLinkTags;
     const links = tempDiv.querySelectorAll("link");
     links.forEach((link) => {
-      iframe.contentDocument!.head.appendChild(link);
+      document.head.appendChild(link);
     });
   }
 };
@@ -199,7 +180,7 @@ export const updateThemeInEditor = async (
     editorStyleTag.innerText = newThemeTag;
   }
 
-  updateFontLinksInEditor(fontLinkTags);
+  updateFontLinksInDocument(window.document, fontLinkTags);
 
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
@@ -210,7 +191,7 @@ export const updateThemeInEditor = async (
     if (pagePreviewStyleTag) {
       observer.disconnect();
       pagePreviewStyleTag.innerText = newThemeTag;
-      updateFontLinksInIframe(iframe, fontLinkTags);
+      updateFontLinksInDocument(iframe.contentDocument!, fontLinkTags);
     }
   });
 
