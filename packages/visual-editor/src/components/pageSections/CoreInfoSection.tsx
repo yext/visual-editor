@@ -1,6 +1,13 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  ComponentData,
+  createUsePuck,
+  Fields,
+  PuckComponent,
+  Slot,
+} from "@measured/puck";
 import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import { FaRegEnvelope } from "react-icons/fa";
 import {
@@ -36,6 +43,8 @@ import {
   HoursTableProps,
   HoursTableStyleFields,
 } from "../contentBlocks/HoursTable.tsx";
+
+const usePuck = createUsePuck();
 
 export interface CoreInfoData {
   /** Content for the "Information" column. */
@@ -217,7 +226,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
  * Available on Location templates.
  */
 const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
-  const { data, styles, slots } = props;
+  const { data, styles, slots, id } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
@@ -269,9 +278,30 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
     additionalHoursText: string;
   };
 
+  const puckComponentData: ComponentData<CoreInfoSectionProps> | undefined =
+    usePuck((s) => {
+      return s.getItemById(id);
+    });
+
+  const resolvedInfoHeading = resolveComponentData(
+    puckComponentData?.props?.slots?.InfoHeadingSlot.map(
+      (slot) => slot.props.data.text
+    )[0],
+    i18n.language,
+    streamDocument
+  );
+
+  const resolvedInfoAddress = resolveComponentData(
+    puckComponentData?.props?.slots?.InfoAddressSlot.map(
+      (slot) => slot.props.data.address
+    )[0],
+    i18n.language,
+    streamDocument
+  );
+
   const hasCoreInfo: boolean =
-    slots.InfoHeadingSlot !== null ||
-    slots.InfoAddressSlot !== null ||
+    !!resolvedInfoHeading ||
+    !!resolvedInfoAddress ||
     (resolvedPhoneNumbers?.length ?? 0) > 0 ||
     (resolvedEmails?.length ?? 0) > 0;
 

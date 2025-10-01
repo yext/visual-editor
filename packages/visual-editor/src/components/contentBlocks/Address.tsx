@@ -87,43 +87,31 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
     { provider: "google" }
   );
 
-  if (!address) {
-    return null;
-  }
-
-  return (
-    <>
-      {address && (
-        <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
-          <EntityField
-            displayName={pt("address", "Address")}
-            fieldId={data.address.field}
-            constantValueEnabled={data.address.constantValueEnabled}
-          >
-            <RenderAddress
-              address={address}
-              lines={[
-                ["line1"],
-                ["line2"],
-                ["city", ",", "region", "postalCode"],
-              ]}
-            />
-          </EntityField>
-          {coordinates && styles.showGetDirectionsLink && (
-            <CTA
-              eventName={`getDirections`}
-              className="font-bold"
-              link={coordinates}
-              label={t("getDirections", "Get Directions")}
-              linkType="DRIVING_DIRECTIONS"
-              target="_blank"
-              variant={styles.ctaVariant}
-            />
-          )}
-        </div>
+  return address ? (
+    <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
+      <EntityField
+        displayName={pt("address", "Address")}
+        fieldId={data.address.field}
+        constantValueEnabled={data.address.constantValueEnabled}
+      >
+        <RenderAddress
+          address={address}
+          lines={[["line1"], ["line2"], ["city", ",", "region", "postalCode"]]}
+        />
+      </EntityField>
+      {coordinates && styles.showGetDirectionsLink && (
+        <CTA
+          eventName={`getDirections`}
+          className="font-bold"
+          link={coordinates}
+          label={t("getDirections", "Get Directions")}
+          linkType="DRIVING_DIRECTIONS"
+          target="_blank"
+          variant={styles.ctaVariant}
+        />
       )}
-    </>
-  );
+    </div>
+  ) : null;
 };
 
 export const Address: ComponentConfig<{

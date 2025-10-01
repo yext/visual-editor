@@ -32,7 +32,7 @@ export type HeadingTextProps = {
 const HeadingTextWrapper = React.forwardRef<
   HTMLHeadingElement,
   HeadingTextProps
->(({ data, styles, ...headingProps }, ref) => {
+>(({ data, styles, ...headingProps }, ref): React.ReactElement | null => {
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -50,25 +50,19 @@ const HeadingTextWrapper = React.forwardRef<
     streamDocument
   );
 
-  if (!resolvedHeadingText) {
-    return null;
-  }
-
-  return (
-    resolvedHeadingText && (
-      <div className={`flex ${justifyClass}`}>
-        <EntityField
-          displayName={pt("Heading", "Heading") + " " + styles.level}
-          fieldId={data.text.field}
-          constantValueEnabled={data.text.constantValueEnabled}
-        >
-          <Heading ref={ref} level={styles.level} {...headingProps}>
-            {resolvedHeadingText}
-          </Heading>
-        </EntityField>
-      </div>
-    )
-  );
+  return resolvedHeadingText ? (
+    <div className={`flex ${justifyClass}`}>
+      <EntityField
+        displayName={pt("Heading", "Heading") + " " + styles.level}
+        fieldId={data.text.field}
+        constantValueEnabled={data.text.constantValueEnabled}
+      >
+        <Heading ref={ref} level={styles.level} {...headingProps}>
+          {resolvedHeadingText}
+        </Heading>
+      </EntityField>
+    </div>
+  ) : null;
 });
 
 HeadingTextWrapper.displayName = "HeadingText";
