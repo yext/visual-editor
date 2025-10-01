@@ -4,72 +4,42 @@ import {
   YextField,
   msg,
   VisibilityWrapper,
-  useTemplateProps,
-  resolveUrlTemplate,
-  mergeMeta,
   backgroundColors,
   Background,
   Heading,
-  Button,
   useDocument,
-  EntityField,
-  pt,
-  resolveComponentData,
-  YextEntityField,
-  TranslatableString,
-  CTAVariant,
-  CTA,
-  HeadingLevel,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
   Fields,
-  PuckContext,
   WithPuckProps,
+  Slot,
+  ComponentDataOptionalId,
 } from "@measured/puck";
+import { CardProps, Coordinate } from "@yext/search-ui-react";
+import { AddressType, HoursType } from "@yext/pages-components";
 import {
-  CardProps,
-  Coordinate,
-  // useCardAnalyticsCallback,
-} from "@yext/search-ui-react";
-import {
-  Address as RenderAddress,
-  AddressType,
-  HoursStatus as HoursStatusAtom,
-  HoursType,
-} from "@yext/pages-components";
-import { formatPhoneNumber } from "../atoms/phone.js";
+  LockedCategoryProps,
+  LockedCategoryComponents,
+} from "../categories/LockedCategory";
 
-export interface ResultsCardData {
-  /**
-   * The location name field to display on the card.
-   * @defaultValue "name" field
-   */
-  name: YextEntityField<TranslatableString>;
+export type Components = LockedCategoryProps;
 
-  /**
-   * The hours field to display on the card.
-   * @defaultValue "hours" field
-   */
-  hours: YextEntityField<HoursType>;
+const contentBlocks = {
+  ...LockedCategoryComponents,
+};
 
-  /**
-   * The phone number field to display on the card.
-   * @defaultValue "mainPhone" field
-   */
-  phone: YextEntityField<string>;
-
-  /**
-   * The address field to display on the card.
-   * @defaultValue "address" field
-   */
-  address: YextEntityField<AddressType>;
-
-  /**
-   * The coordinates field used for directions.
-   * @defaultValue "yextDisplayCoordinate" field
-   */
-  coordinate: YextEntityField<Coordinate>;
+async function createComponent<T extends keyof Components>(
+  component: T,
+  props?: Partial<Components[T]>
+): Promise<ComponentDataOptionalId<Components[T]>> {
+  return {
+    type: component,
+    props: {
+      ...contentBlocks[component].defaultProps,
+      ...props,
+    },
+  } as ComponentDataOptionalId<Components[T]>;
 }
 
 export interface ResultsCardStyles {
@@ -84,60 +54,6 @@ export interface ResultsCardStyles {
    * @defaultValue true
    */
   showDistance: boolean;
-
-  /**
-   * Whether to show hours status.
-   * @defaultValue true
-   */
-  showHours: boolean;
-
-  /**
-   * Whether to show the phone number.
-   * @defaultValue true
-   */
-  showPhone: boolean;
-
-  /**
-   * Whether to show the address.
-   * @defaultValue true
-   */
-  showAddress: boolean;
-
-  /**
-   * Whether to show the get directions link.
-   * @defaultValue true
-   */
-  showGetDirections: boolean;
-
-  /**
-   * Whether to show the visit page button.
-   * @defaultValue true
-   */
-  showVisitPageButton: boolean;
-
-  /**
-   * The heading level for the location name.
-   * @defaultValue 4
-   */
-  nameHeadingLevel: HeadingLevel;
-
-  /**
-   * The phone number format.
-   * @defaultValue "domestic"
-   */
-  phoneFormat: "domestic" | "international";
-
-  /**
-   * The CTA variant for the get directions link.
-   * @defaultValue "link"
-   */
-  getDirectionsVariant: CTAVariant;
-
-  /**
-   * The CTA variant for the visit page button.
-   * @defaultValue "primary"
-   */
-  visitPageVariant: CTAVariant;
 }
 
 export interface TestLocatorCardSectionStyles {}
@@ -148,7 +64,16 @@ export interface TestLocatorCardSectionProps {
    * @propCategory Results Card Props
    */
   resultsCard: {
-    data: ResultsCardData;
+    /**
+     * Slots for content blocks in the card
+     */
+    slots: {
+      Slot1: Slot;
+      Slot2: Slot;
+      Slot3: Slot;
+      Slot4: Slot;
+      Slot5: Slot;
+    };
     styles: ResultsCardStyles;
   };
 
@@ -169,44 +94,16 @@ const testLocatorCardSectionFields: Fields<TestLocatorCardSectionProps> = {
   resultsCard: YextField(msg("fields.resultsCard", "Results Card"), {
     type: "object",
     objectFields: {
-      data: YextField(msg("fields.data", "Data"), {
+      slots: {
         type: "object",
         objectFields: {
-          name: YextField<any, TranslatableString>(
-            msg("fields.locationName", "Location Name"),
-            {
-              type: "entityField",
-              filter: {
-                types: ["type.string"],
-              },
-            }
-          ),
-          hours: YextField(msg("fields.hours", "Hours"), {
-            type: "entityField",
-            filter: {
-              types: ["type.hours"],
-            },
-          }),
-          phone: YextField(msg("fields.phoneNumber", "Phone Number"), {
-            type: "entityField",
-            filter: {
-              types: ["type.phone"],
-            },
-          }),
-          address: YextField(msg("fields.address", "Address"), {
-            type: "entityField",
-            filter: {
-              types: ["type.address"],
-            },
-          }),
-          coordinate: YextField(msg("fields.coordinate", "Coordinate"), {
-            type: "entityField",
-            filter: {
-              types: ["type.coordinate"],
-            },
-          }),
+          Slot1: { type: "slot" },
+          Slot2: { type: "slot" },
+          Slot3: { type: "slot" },
+          Slot4: { type: "slot" },
+          Slot5: { type: "slot" },
         },
-      }),
+      },
       styles: YextField(msg("fields.styles", "Styles"), {
         type: "object",
         objectFields: {
@@ -227,82 +124,6 @@ const testLocatorCardSectionFields: Fields<TestLocatorCardSectionProps> = {
               { label: msg("fields.options.hide", "Hide"), value: false },
             ],
           }),
-          showHours: YextField(msg("fields.showHours", "Show Hours"), {
-            type: "radio",
-            options: [
-              { label: msg("fields.options.show", "Show"), value: true },
-              { label: msg("fields.options.hide", "Hide"), value: false },
-            ],
-          }),
-          showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
-            type: "radio",
-            options: [
-              { label: msg("fields.options.show", "Show"), value: true },
-              { label: msg("fields.options.hide", "Hide"), value: false },
-            ],
-          }),
-          showAddress: YextField(msg("fields.showAddress", "Show Address"), {
-            type: "radio",
-            options: [
-              { label: msg("fields.options.show", "Show"), value: true },
-              { label: msg("fields.options.hide", "Hide"), value: false },
-            ],
-          }),
-          showGetDirections: YextField(
-            msg("fields.showGetDirections", "Show Get Directions"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
-          showVisitPageButton: YextField(
-            msg("fields.showVisitPageButton", "Show Visit Page Button"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.show", "Show"), value: true },
-                { label: msg("fields.options.hide", "Hide"), value: false },
-              ],
-            }
-          ),
-          nameHeadingLevel: YextField(
-            msg("fields.nameHeadingLevel", "Name Heading Level"),
-            {
-              type: "select",
-              hasSearch: true,
-              options: "HEADING_LEVEL",
-            }
-          ),
-          phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
-            type: "radio",
-            options: [
-              {
-                label: msg("fields.options.domestic", "Domestic"),
-                value: "domestic",
-              },
-              {
-                label: msg("fields.options.international", "International"),
-                value: "international",
-              },
-            ],
-          }),
-          getDirectionsVariant: YextField(
-            msg("fields.getDirectionsVariant", "Get Directions Variant"),
-            {
-              type: "radio",
-              options: "CTA_VARIANT",
-            }
-          ),
-          visitPageVariant: YextField(
-            msg("fields.visitPageButtonVariant", "Visit Page Button Variant"),
-            {
-              type: "radio",
-              options: "CTA_VARIANT",
-            }
-          ),
         },
       }),
     },
@@ -347,48 +168,6 @@ const createLocationResult = (
     id: `${location.id}-${index}`,
   }) as CardProps<Location>["result"];
 
-// Component for displaying the location name
-const LocationName = ({
-  data,
-  styles,
-  location,
-}: {
-  data: ResultsCardData;
-  styles: ResultsCardStyles;
-  location: Location;
-}) => {
-  const { i18n } = useTranslation();
-  const streamDocument = useDocument();
-
-  console.log("[LocationName] Data:", { data, styles, location });
-
-  if (!data || !data.name) {
-    console.error("[LocationName] data or data.name is undefined!", { data });
-    return <span>{location.name}</span>;
-  }
-
-  const resolvedName = resolveComponentData(
-    data.name,
-    i18n.language,
-    streamDocument
-  );
-
-  return (
-    <EntityField
-      displayName={pt("fields.locationName", "Location Name")}
-      fieldId={data.name.field}
-      constantValueEnabled={data.name.constantValueEnabled}
-    >
-      <Heading
-        className="font-bold text-palette-primary-dark"
-        level={styles.nameHeadingLevel}
-      >
-        {resolvedName || location.name}
-      </Heading>
-    </EntityField>
-  );
-};
-
 // Component for displaying the distance
 const Distance = ({ distance }: { distance: number | undefined }) => {
   const { t } = useTranslation();
@@ -407,224 +186,23 @@ const Distance = ({ distance }: { distance: number | undefined }) => {
   );
 };
 
-// Component for displaying hours status
-const Hours = ({
-  data,
-  location,
-}: {
-  data: ResultsCardData;
-  location: Location;
-}) => {
-  const { i18n } = useTranslation();
-  const streamDocument = useDocument();
-
-  console.log("[Hours] Data:", { data, location });
-
-  if (!data || !data.hours) {
-    console.error("[Hours] data or data.hours is undefined!", { data });
-    return null;
-  }
-
-  const resolvedHours = resolveComponentData(
-    data.hours,
-    i18n.language,
-    streamDocument
-  );
-
-  const hours = resolvedHours || location.hours;
-  if (!hours) return null;
-
-  return (
-    <EntityField
-      displayName={pt("fields.hours", "Hours")}
-      fieldId={data.hours.field}
-      constantValueEnabled={data.hours.constantValueEnabled}
-    >
-      <div className="font-body-fontFamily text-body-fontSize gap-8">
-        <HoursStatusAtom hours={hours} timezone={location.timezone} />
-      </div>
-    </EntityField>
-  );
-};
-
-// Component for displaying phone number
-const Phone = ({
-  data,
-  styles,
-  location,
-}: {
-  data: ResultsCardData;
-  styles: ResultsCardStyles;
-  location: Location;
-}) => {
-  const { i18n } = useTranslation();
-  const streamDocument = useDocument();
-
-  console.log("[Phone] Data:", { data, styles, location });
-
-  if (!data || !data.phone) {
-    console.error("[Phone] data or data.phone is undefined!", { data });
-    return null;
-  }
-
-  const resolvedPhone = resolveComponentData(
-    data.phone,
-    i18n.language,
-    streamDocument
-  );
-
-  const phone = resolvedPhone || location.mainPhone;
-  if (!phone) return null;
-
-  return (
-    <EntityField
-      displayName={pt("fields.phoneNumber", "Phone Number")}
-      fieldId={data.phone.field}
-      constantValueEnabled={data.phone.constantValueEnabled}
-    >
-      <a
-        href={`tel:${phone}`}
-        className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
-      >
-        {formatPhoneNumber(
-          phone,
-          styles.phoneFormat === "domestic" ? "domestic" : "international"
-        )}
-      </a>
-    </EntityField>
-  );
-};
-
-// Component for displaying address and get directions
-const AddressWithDirections = ({
-  data,
-  styles,
-  location,
-}: {
-  data: ResultsCardData;
-  styles: ResultsCardStyles;
-  location: Location;
-}) => {
-  const { t, i18n } = useTranslation();
-  const streamDocument = useDocument();
-
-  console.log("[AddressWithDirections] Data:", { data, styles, location });
-
-  if (!data || !data.address || !data.coordinate) {
-    console.error(
-      "[AddressWithDirections] data, data.address, or data.coordinate is undefined!",
-      { data }
-    );
-    return null;
-  }
-
-  const resolvedAddress = resolveComponentData(
-    data.address,
-    i18n.language,
-    streamDocument
-  );
-  const resolvedCoordinate = resolveComponentData(
-    data.coordinate,
-    i18n.language,
-    streamDocument
-  );
-
-  const address = resolvedAddress || location.address;
-  const coordinate = resolvedCoordinate || location.yextDisplayCoordinate;
-
-  if (!address && !coordinate) return null;
-
-  const getGoogleMapsLink = (coord: Coordinate): string => {
-    return `https://www.google.com/maps/dir/?api=1&destination=${coord.latitude},${coord.longitude}`;
-  };
-
-  return (
-    <div className="flex flex-col gap-1 w-full">
-      {styles.showAddress && address && (
-        <EntityField
-          displayName={pt("fields.address", "Address")}
-          fieldId={data.address.field}
-          constantValueEnabled={data.address.constantValueEnabled}
-        >
-          <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
-            <RenderAddress
-              address={address}
-              lines={[["line1"], ["line2"], ["city", "region", "postalCode"]]}
-            />
-          </div>
-        </EntityField>
-      )}
-      {styles.showGetDirections && coordinate && (
-        <EntityField
-          displayName={pt("fields.coordinate", "Coordinate")}
-          fieldId={data.coordinate.field}
-          constantValueEnabled={data.coordinate.constantValueEnabled}
-        >
-          <CTA
-            eventName="getDirections"
-            link={getGoogleMapsLink(coordinate)}
-            label={t("getDirections", "Get Directions")}
-            linkType="DRIVING_DIRECTIONS"
-            target="_blank"
-            variant={styles.getDirectionsVariant}
-            className="font-bold"
-          />
-        </EntityField>
-      )}
-    </div>
-  );
-};
-
-// Component for displaying the visit page button
-const VisitPageButton = ({
-  styles,
-  location,
-  puck,
-}: {
-  styles: ResultsCardStyles;
-  location: Location;
-  puck: PuckContext;
-}) => {
-  const { t } = useTranslation();
-  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
-
-  const resolvedUrl = resolveUrlTemplate(
-    mergeMeta(location, streamDocument),
-    relativePrefixToRoot,
-    puck.metadata?.resolveUrlTemplate
-  );
-
-  return (
-    <Button asChild className="basis-full" variant={styles.visitPageVariant}>
-      <a href={resolvedUrl}>{t("visitPage", "Visit Page")}</a>
-    </Button>
-  );
-};
-
 const LocationCard = ({
   result,
-  puck,
-  cardData,
+  Slot1,
+  Slot2,
+  Slot3,
+  Slot4,
+  Slot5,
   cardStyles,
 }: {
   result: CardProps<Location>["result"];
-  puck: PuckContext;
-  cardData: ResultsCardData;
+  Slot1: any;
+  Slot2: any;
+  Slot3: any;
+  Slot4: any;
+  Slot5: any;
   cardStyles: ResultsCardStyles;
 }): React.JSX.Element => {
-  console.log("[LocationCard] Props:", { result, puck, cardData, cardStyles });
-
-  if (!cardData) {
-    console.error("[LocationCard] cardData is undefined!");
-    return <div>Error: Card data is missing</div>;
-  }
-
-  if (!cardStyles) {
-    console.error("[LocationCard] cardStyles is undefined!");
-    return <div>Error: Card styles are missing</div>;
-  }
-
-  const location = result.rawData;
   const distance = result.distance;
 
   return (
@@ -643,67 +221,50 @@ const LocationCard = ({
       <div className="flex flex-wrap gap-6 w-full">
         <div className="w-full flex flex-col gap-4">
           <div className="flex flex-row justify-between items-center">
-            <LocationName
-              data={cardData}
-              styles={cardStyles}
-              location={location}
+            <Slot1
+              allow={["HeadingTextLocked", "BodyTextLocked", "TextListLocked"]}
             />
             {cardStyles.showDistance && <Distance distance={distance} />}
           </div>
-          {cardStyles.showHours && (
-            <Hours data={cardData} location={location} />
-          )}
-          {cardStyles.showPhone && (
-            <Phone data={cardData} styles={cardStyles} location={location} />
-          )}
-          <AddressWithDirections
-            data={cardData}
-            styles={cardStyles}
-            location={location}
+          <Slot2
+            allow={[
+              "HoursStatusLocked",
+              "HoursTableLocked",
+              "BodyTextLocked",
+              "TextListLocked",
+            ]}
+          />
+          <Slot3
+            allow={[
+              "PhoneLocked",
+              "EmailsLocked",
+              "BodyTextLocked",
+              "TextListLocked",
+            ]}
+          />
+          <Slot4
+            allow={[
+              "AddressLocked",
+              "GetDirectionsLocked",
+              "BodyTextLocked",
+              "TextListLocked",
+            ]}
           />
         </div>
-        {cardStyles.showVisitPageButton && (
-          <VisitPageButton
-            styles={cardStyles}
-            location={location}
-            puck={puck}
-          />
-        )}
+        <Slot5
+          allow={["CTAWrapperLocked", "CTAGroupLocked"]}
+          className="basis-full"
+        />
       </div>
     </Background>
   );
 };
 
 const TestLocatorCardSectionComponent = ({
-  puck,
   resultsCard,
 }: WithPuckProps<TestLocatorCardSectionProps>) => {
   const { t } = useTranslation();
   const streamDocument = useDocument<Location>();
-
-  // Debug logging
-  console.log("[TestLocatorCardSection] Props:", { resultsCard, puck });
-
-  if (!resultsCard) {
-    console.error("[TestLocatorCardSection] resultsCard is undefined!");
-    return null;
-  }
-
-  if (!resultsCard.data) {
-    console.error(
-      "[TestLocatorCardSection] resultsCard.data is undefined!",
-      resultsCard
-    );
-    return null;
-  }
-
-  if (!resultsCard.styles) {
-    console.error(
-      "[TestLocatorCardSection] resultsCard.styles is undefined!",
-      resultsCard
-    );
-    return null;
-  }
 
   // Create 3 results using the actual location from the document
   const results = [
@@ -745,8 +306,11 @@ const TestLocatorCardSectionComponent = ({
             <LocationCard
               key={index}
               result={result}
-              puck={puck}
-              cardData={resultsCard.data}
+              Slot1={resultsCard.slots.Slot1}
+              Slot2={resultsCard.slots.Slot2}
+              Slot3={resultsCard.slots.Slot3}
+              Slot4={resultsCard.slots.Slot4}
+              Slot5={resultsCard.slots.Slot5}
               cardStyles={resultsCard.styles}
             />
           ))}
@@ -780,22 +344,75 @@ export const TestLocatorCardSection: ComponentConfig<{
   fields: testLocatorCardSectionFields,
   defaultProps: {
     resultsCard: {
+      slots: {
+        Slot1: [],
+        Slot2: [],
+        Slot3: [],
+        Slot4: [],
+        Slot5: [],
+      },
+      styles: {
+        showResultIndex: true,
+        showDistance: true,
+      },
+    },
+    styles: {},
+    liveVisibility: true,
+  },
+  resolveData: async (data, { changed, trigger }) => {
+    // Initialize slots with default content when component is first created
+    const slotsAreEmpty =
+      data.props.resultsCard.slots.Slot1.length === 0 &&
+      data.props.resultsCard.slots.Slot2.length === 0 &&
+      data.props.resultsCard.slots.Slot3.length === 0 &&
+      data.props.resultsCard.slots.Slot4.length === 0 &&
+      data.props.resultsCard.slots.Slot5.length === 0;
+
+    // Only create default content if slots are empty or on first load
+    if (!slotsAreEmpty && trigger === "load") return data;
+    if (!slotsAreEmpty && changed && !changed.resultsCard) return data;
+
+    // Slot 1: Location Name (H4)
+    const locationName = await createComponent("HeadingTextLocked", {
+      text: {
+        field: "name",
+        constantValue: {
+          en: "",
+          hasLocalizedValue: "true",
+        },
+      },
+      level: 4,
+    });
+
+    // Slot 2: Hours Status
+    const hoursStatus = await createComponent("HoursStatusLocked", {
+      hours: {
+        field: "hours",
+        constantValue: {},
+      },
+    });
+
+    // Slot 3: Phone
+    const phone = await createComponent("PhoneLocked", {
       data: {
-        name: {
-          field: "name",
-          constantValue: {
-            en: "",
-            hasLocalizedValue: "true",
-          },
-        },
-        hours: {
-          field: "hours",
-          constantValue: {},
-        },
-        phone: {
+        number: {
           field: "mainPhone",
           constantValue: "",
         },
+        label: {
+          en: "",
+          hasLocalizedValue: "true",
+        },
+      },
+      styles: {
+        phoneFormat: "domestic",
+        includePhoneHyperlink: true,
+      },
+    });
+
+    // Slot 4: Address
+    const address = await createComponent("AddressLocked", {
+      data: {
         address: {
           field: "address",
           constantValue: {
@@ -806,54 +423,45 @@ export const TestLocatorCardSection: ComponentConfig<{
             countryCode: "",
           },
         },
-        coordinate: {
-          field: "yextDisplayCoordinate",
-          constantValue: {
-            latitude: 0,
-            longitude: 0,
+      },
+      styles: {
+        showGetDirectionsLink: true,
+        ctaVariant: "link",
+      },
+    });
+
+    // Slot 5: Visit Page Button
+    const visitPageButton = await createComponent("CTAWrapperLocked", {
+      entityField: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: {
+          ctaType: "textAndLink",
+          label: "Visit Page",
+          link: "#",
+        },
+      },
+      variant: "primary",
+    });
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        resultsCard: {
+          ...data.props.resultsCard,
+          slots: {
+            Slot1: [locationName],
+            Slot2: [hoursStatus],
+            Slot3: [phone],
+            Slot4: [address],
+            Slot5: [visitPageButton],
           },
         },
       },
-      styles: {
-        showResultIndex: true,
-        showDistance: true,
-        showHours: true,
-        showPhone: true,
-        showAddress: true,
-        showGetDirections: true,
-        showVisitPageButton: true,
-        nameHeadingLevel: 4,
-        phoneFormat: "domestic",
-        getDirectionsVariant: "link",
-        visitPageVariant: "primary",
-      },
-    },
-    styles: {},
-    liveVisibility: true,
+    };
   },
-  render: (props) => {
-    console.log("[TestLocatorCardSection.render] Props received:", props);
-
-    // Safety check - ensure resultsCard exists with proper structure
-    if (!props.resultsCard) {
-      console.error(
-        "[TestLocatorCardSection.render] resultsCard is missing from props!",
-        props
-      );
-      return (
-        <div
-          style={{
-            padding: "20px",
-            backgroundColor: "#fee",
-            border: "1px solid red",
-          }}
-        >
-          Error: resultsCard configuration is missing. Please check the
-          component setup.
-        </div>
-      );
-    }
-
+  render: (props: any) => {
     return (
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
