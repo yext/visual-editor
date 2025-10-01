@@ -140,7 +140,6 @@ const updateFontLinksInDocument = (
   document: Document,
   fontLinkTags: string
 ) => {
-  // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
     'link[href*="fonts.googleapis.com"]:not([id="visual-editor-default-fonts"])'
   );
