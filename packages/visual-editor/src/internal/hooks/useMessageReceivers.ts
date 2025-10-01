@@ -12,6 +12,7 @@ import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { filterComponentsFromConfig } from "../../utils/filterComponents.ts";
+import { googleFontLinkTags } from "../../utils/visualEditorFonts.ts";
 
 const devLogger = new DevLogger();
 
@@ -21,9 +22,20 @@ export const useCommonMessageReceivers = (
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
-  // Trigger data flow from parent
+  // Trigger data flow from parent and load initial fonts
   useEffect(() => {
     iFrameLoaded({ payload: { message: "iFrame is loaded" } });
+
+    // Load default Google Fonts for the font selector dropdown
+    if (!document.getElementById("visual-editor-default-fonts")) {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = googleFontLinkTags;
+      const links = tempDiv.querySelectorAll("link");
+      links.forEach((link) => {
+        link.id = "visual-editor-default-fonts";
+        document.head.appendChild(link);
+      });
+    }
   }, []);
 
   // Base Template Info
