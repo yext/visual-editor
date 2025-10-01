@@ -137,17 +137,71 @@ const generateContrastingColors = (themeData: ThemeData) => {
   return contrastingColors;
 };
 
+// Helper function to update font links in the editor document
+const updateFontLinksInEditor = (fontLinkTags: string) => {
+  const existingLinks = window.document.querySelectorAll(
+    'link[href*="fonts.googleapis.com"]'
+  );
+  existingLinks.forEach((link) => link.remove());
+
+  if (fontLinkTags) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = fontLinkTags;
+    const links = tempDiv.querySelectorAll("link");
+    links.forEach((link) => {
+      window.document.head.appendChild(link);
+    });
+  }
+};
+
+const updateFontLinksInIframe = (
+  iframe: HTMLIFrameElement,
+  fontLinkTags: string
+) => {
+  if (!iframe.contentDocument) {
+    return;
+  }
+
+  const existingLinks = iframe.contentDocument.querySelectorAll(
+    'link[href*="fonts.googleapis.com"]'
+  );
+  existingLinks.forEach((link) => link.remove());
+  if (fontLinkTags) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = fontLinkTags;
+    const links = tempDiv.querySelectorAll("link");
+    links.forEach((link) => {
+      iframe.contentDocument!.head.appendChild(link);
+    });
+  }
+};
+
 export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig
 ) => {
   devLogger.logFunc("updateThemeInEditor");
 
+  const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
+  const mergedThemeData = { ...defaultThemeValues, ...newTheme };
+  const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
+
+  let fontLinkTags: string;
+  if (Object.keys(inUseFonts).length === 0) {
+    fontLinkTags = constructGoogleFontLinkTags({
+      "Open Sans": defaultFonts["Open Sans"],
+    });
+  } else {
+    fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
+  }
+
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
   const editorStyleTag = window.document.getElementById(THEME_STYLE_TAG_ID);
   if (editorStyleTag) {
     editorStyleTag.innerText = newThemeTag;
   }
+
+  updateFontLinksInEditor(fontLinkTags);
 
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
@@ -158,6 +212,7 @@ export const updateThemeInEditor = async (
     if (pagePreviewStyleTag) {
       observer.disconnect();
       pagePreviewStyleTag.innerText = newThemeTag;
+      updateFontLinksInIframe(iframe, fontLinkTags);
     }
   });
 
