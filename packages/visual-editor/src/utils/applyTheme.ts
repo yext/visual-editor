@@ -141,7 +141,7 @@ const updateFontLinksInDocument = (
   fontLinkTags: string
 ) => {
   const existingLinks = document.querySelectorAll(
-    'link[href*="fonts.googleapis.com"]:not([id="visual-editor-default-fonts"])'
+    'link[href*="fonts.googleapis.com"]:not([id^="visual-editor-default-fonts"]):not([id^="visual-editor-iframe-fonts"])'
   );
   existingLinks.forEach((link) => link.remove());
 
