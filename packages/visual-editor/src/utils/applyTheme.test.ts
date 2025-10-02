@@ -87,7 +87,7 @@ describe("buildCssOverridesStyle", () => {
 
     expect(result).toBe(
       '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n' +
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
         '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +

@@ -10,8 +10,8 @@ import {
   createFontLinkElements,
   generateFontLinkData,
   fontLinkDataToHTML,
-  FontRegistry,
-  FontLinkData,
+  type FontRegistry,
+  type FontLinkData,
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";

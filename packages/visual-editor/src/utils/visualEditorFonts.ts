@@ -52,7 +52,7 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
 export type FontLinkData = {
   href: string;
   rel: string;
-  crossOrigin?: string;
+  crossOrigin?: "anonymous" | "use-credentials";
 };
 
 // Helper function to generate weight parameter for Google Fonts API
@@ -109,7 +109,9 @@ export const generateFontLinkData = (fonts: FontRegistry): FontLinkData[] => {
 export const fontLinkDataToHTML = (linkData: FontLinkData[]): string => {
   return linkData
     .map((link) => {
-      const crossOriginAttr = link.crossOrigin ? ` crossorigin` : "";
+      const crossOriginAttr = link.crossOrigin
+        ? ` crossorigin="${link.crossOrigin}"`
+        : "";
       if (link.rel === "preconnect") {
         return `<link rel="${link.rel}" href="${link.href}"${crossOriginAttr}>`;
       } else {
