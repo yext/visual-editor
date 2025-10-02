@@ -32,7 +32,7 @@ export type HeadingTextProps = {
 const HeadingTextWrapper = React.forwardRef<
   HTMLHeadingElement,
   HeadingTextProps
->(({ data, styles, ...headingProps }, ref): React.ReactElement | null => {
+>(({ data, styles, ...headingProps }, ref) => {
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
