@@ -8,6 +8,7 @@ import {
   constructGoogleFontLinkTags,
   defaultFonts,
   extractInUseFontFamilies,
+  parseHTMLSafely,
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
@@ -146,9 +147,7 @@ const updateFontLinksInDocument = (
   existingLinks.forEach((link) => link.remove());
 
   if (fontLinkTags) {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = fontLinkTags;
-    const links = tempDiv.querySelectorAll("link");
+    const links = parseHTMLSafely(fontLinkTags);
     links.forEach((link) => {
       document.head.appendChild(link);
     });

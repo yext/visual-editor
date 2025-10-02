@@ -90,6 +90,13 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
 
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
 
+// Safe HTML parser that creates DOM elements without using innerHTML
+export const parseHTMLSafely = (htmlString: string): HTMLLinkElement[] => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(htmlString, "text/html");
+  return Array.from(doc.querySelectorAll("link")) as HTMLLinkElement[];
+};
+
 // Helper function to load Google Font links into a document
 export const loadGoogleFontsIntoDocument = (
   document: Document,
@@ -97,9 +104,7 @@ export const loadGoogleFontsIntoDocument = (
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = fontLinkTags;
-    const links = tempDiv.querySelectorAll("link");
+    const links = parseHTMLSafely(fontLinkTags);
     links.forEach((link, index) => {
       link.id = `${idPrefix}-${index}`;
       link.setAttribute("data-visual-editor-font", "true");
