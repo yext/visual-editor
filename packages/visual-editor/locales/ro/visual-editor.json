@@ -57,6 +57,7 @@
   "closed": "Închis",
   "closesAt": "Se închide la",
   "components": {
+    "Video": "Video",
     "address": "Adresa",
     "bannerSection": "Secțiunea Banner",
     "bodyText": "Text corporal",

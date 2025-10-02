@@ -57,6 +57,7 @@
   "closed": "Fechado",
   "closesAt": "Fecha em",
   "components": {
+    "Video": "Vídeo",
     "address": "Endereço",
     "bannerSection": "Seção de banner",
     "bodyText": "Texto corporal",

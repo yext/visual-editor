@@ -57,6 +57,7 @@
   "closed": "Uždarytas",
   "closesAt": "Uždaroma",
   "components": {
+    "Video": "Vaizdo įrašas",
     "address": "Adresas",
     "bannerSection": "Reklamjuostės skyrius",
     "bodyText": "Kūno tekstas",

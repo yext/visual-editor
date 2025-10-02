@@ -402,15 +402,20 @@ interface TestimonialSectionProps {
 
 interface VideoSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: VideoData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: VideoStyles;
+  styles: {
+    /**
+     * The background color for the entire section, selected from the theme.
+     * @defaultValue Background Color 1
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  slots: {
+    SectionHeadingSlot: Slot;
+    VideoSlot: Slot;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -1060,29 +1065,6 @@ interface TestimonialStyles {
   };
 }
 
-interface VideoData {
-  /**
-   * The main heading for the video section.
-   * @defaultValue "" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /** The embedded YouTube video */
-  assetVideo: AssetVideo | undefined;
-}
-
-interface VideoStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 1
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-}
-
 type AssetImageType = Omit<ImageType, "alternateText"> & {
   alternateText?: TranslatableString;
   assetImage?: ImageContentData;
@@ -1286,16 +1268,6 @@ type TestimonialSectionType = {
   testimonials: Array<TestimonialStruct>;
 };
 
-type AssetVideo = {
-  video: Video$1;
-  /** Asset video description field */
-  videoDescription?: string;
-  /** Asset name (unique) */
-  name: string;
-  /** Asset internal id */
-  id: string;
-};
-
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
   name?: string;
@@ -1414,6 +1386,16 @@ type ProductStruct = {
   cta: EnhancedTranslatableCTA;
 };
 
+type AssetVideo = {
+  video: Video;
+  /** Asset video description field */
+  videoDescription?: string;
+  /** Asset name (unique) */
+  name: string;
+  /** Asset internal id */
+  id: string;
+};
+
 /** An individual person in the TeamSection */
 type PersonStruct = {
   /**
@@ -1443,20 +1425,6 @@ type TestimonialStruct = {
   contributionDate?: string;
 };
 
-type Video$1 = {
-  /** The YouTube video URL */ url: string;
-  /** The YouTube video ID */
-  id: string;
-  /** The YouTube video title */
-  title: string;
-  /** The YouTube video thumbnail URL */
-  thumbnail: string;
-  /** The YouTube video duration */
-  duration: string;
-  /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
-  embeddedUrl: string;
-};
-
 /** Describes the data corresponding to a single image. */
 type ImageData = {
   url: string;
@@ -1475,6 +1443,21 @@ type PresetImageType =
   | "galaxy-store"
   | "app-gallery"
   | "uber-eats";
+
+type Video = {
+  /** The YouTube video URL */
+  url: string;
+  /** The YouTube video ID */
+  id: string;
+  /** The YouTube video title */
+  title: string;
+  /** The YouTube video thumbnail URL */
+  thumbnail: string;
+  /** The YouTube video duration */
+  duration: string;
+  /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
+  embeddedUrl: string;
+};
 
 /** Describes the dimensions of an image. */
 type ImageDimension = {

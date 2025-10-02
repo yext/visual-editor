@@ -57,6 +57,7 @@
   "closed": "Suletud",
   "closesAt": "Sulgub",
   "components": {
+    "Video": "Video",
     "address": "Aadress",
     "bannerSection": "Ribaosa",
     "bodyText": "Keretekst",

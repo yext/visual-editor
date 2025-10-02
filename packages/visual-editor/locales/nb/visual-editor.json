@@ -57,6 +57,7 @@
   "closed": "Lukket",
   "closesAt": "Lukkes kl",
   "components": {
+    "Video": "Video",
     "address": "Adresse",
     "bannerSection": "Bannerdel",
     "bodyText": "Kroppstekst",

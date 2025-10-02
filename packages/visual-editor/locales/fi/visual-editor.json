@@ -57,6 +57,7 @@
   "closed": "Suljettu",
   "closesAt": "Sulkeutuu jhk",
   "components": {
+    "Video": "Video",
     "address": "Osoite",
     "bannerSection": "Banneriosa",
     "bodyText": "Kehon teksti",

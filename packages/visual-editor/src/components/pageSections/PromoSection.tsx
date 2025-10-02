@@ -24,7 +24,7 @@ import {
   ThemeOptions,
   EntityField,
   pt,
-  Video,
+  VideoAtom,
   AssetImageType,
   AssetVideo,
   themeManagerCn,
@@ -215,7 +215,7 @@ const PromoMedia = ({
           constantValueEnabled={data.promo.constantValueOverride.image}
         >
           {isVideo(media) ? (
-            <Video
+            <VideoAtom
               youTubeEmbedUrl={media.video.embeddedUrl}
               title={media.video.title}
             />
