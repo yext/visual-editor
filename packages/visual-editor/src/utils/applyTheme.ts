@@ -5,9 +5,13 @@ import {
 } from "../internal/utils/internalThemeResolver.ts";
 import { DevLogger } from "./devLogger.ts";
 import {
-  constructGoogleFontLinkTags,
   defaultFonts,
   extractInUseFontFamilies,
+  createFontLinkElements,
+  generateFontLinkData,
+  fontLinkDataToHTML,
+  type FontRegistry,
+  type FontLinkData,
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { hexToHSL } from "./colors.ts";
@@ -55,10 +59,10 @@ export const applyTheme = (
   }
 
   // Load only fonts that are actually used in the theme
-  let fontLinkTags: string;
+  let fontLinkData: FontLinkData[];
   if (!overrides) {
     // No theme overrides, use only Open Sans (the default font)
-    fontLinkTags = constructGoogleFontLinkTags({
+    fontLinkData = generateFontLinkData({
       "Open Sans": defaultFonts["Open Sans"],
     });
   } else {
@@ -70,13 +74,15 @@ export const applyTheme = (
 
     if (Object.keys(inUseFonts).length === 0) {
       // No fonts found in theme data, use only Open Sans
-      fontLinkTags = constructGoogleFontLinkTags({
+      fontLinkData = generateFontLinkData({
         "Open Sans": defaultFonts["Open Sans"],
       });
     } else {
-      fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
+      fontLinkData = generateFontLinkData(inUseFonts);
     }
   }
+
+  const fontLinkTags = fontLinkDataToHTML(fontLinkData);
 
   if (Object.keys(themeConfig).length > 0) {
     return `${base ?? ""}${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
@@ -136,19 +142,15 @@ const generateContrastingColors = (themeData: ThemeData) => {
 };
 
 // Helper function to update font links in a document
-const updateFontLinksInDocument = (
-  document: Document,
-  fontLinkTags: string
-) => {
+const updateFontLinksInDocument = (document: Document, fonts: FontRegistry) => {
+  // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
     'link[href*="fonts.googleapis.com"]:not([data-visual-editor-font="true"])'
   );
   existingLinks.forEach((link) => link.remove());
 
-  if (fontLinkTags) {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = fontLinkTags;
-    const links = tempDiv.querySelectorAll("link");
+  if (Object.keys(fonts).length > 0) {
+    const links = createFontLinkElements(fonts);
     links.forEach((link) => {
       document.head.appendChild(link);
     });
@@ -165,13 +167,13 @@ export const updateThemeInEditor = async (
   const mergedThemeData = { ...defaultThemeValues, ...newTheme };
   const inUseFonts = extractInUseFontFamilies(mergedThemeData, defaultFonts);
 
-  let fontLinkTags: string;
+  let fontsToLoad: FontRegistry;
   if (Object.keys(inUseFonts).length === 0) {
-    fontLinkTags = constructGoogleFontLinkTags({
+    fontsToLoad = {
       "Open Sans": defaultFonts["Open Sans"],
-    });
+    };
   } else {
-    fontLinkTags = constructGoogleFontLinkTags(inUseFonts);
+    fontsToLoad = inUseFonts;
   }
 
   const newThemeTag = internalApplyTheme(newTheme, themeConfig);
@@ -180,7 +182,7 @@ export const updateThemeInEditor = async (
     editorStyleTag.innerText = newThemeTag;
   }
 
-  updateFontLinksInDocument(window.document, fontLinkTags);
+  updateFontLinksInDocument(window.document, fontsToLoad);
 
   const observer = new MutationObserver(() => {
     const iframe = document.getElementById(
@@ -191,7 +193,7 @@ export const updateThemeInEditor = async (
     if (pagePreviewStyleTag) {
       observer.disconnect();
       pagePreviewStyleTag.innerText = newThemeTag;
-      updateFontLinksInDocument(iframe.contentDocument!, fontLinkTags);
+      updateFontLinksInDocument(iframe.contentDocument!, fontsToLoad);
     }
   });
 

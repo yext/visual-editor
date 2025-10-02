@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import mapboxPackageJson from "mapbox-gl/package.json";
 import {
-  googleFontLinkTags,
+  defaultFonts,
   loadGoogleFontsIntoDocument,
 } from "../../utils/visualEditorFonts.ts";
 
@@ -40,7 +40,7 @@ export const loadMapboxIntoIframe = ({
     // Load default Google Fonts for the font selector dropdown
     loadGoogleFontsIntoDocument(
       document,
-      googleFontLinkTags,
+      defaultFonts,
       "visual-editor-iframe-fonts"
     );
   }, [document]);
