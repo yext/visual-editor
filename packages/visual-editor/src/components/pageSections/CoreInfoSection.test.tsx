@@ -798,7 +798,7 @@ describe("CoreInfoSection", async () => {
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render config={puckConfig} data={data} metadata={{ document }} />
         </VisualEditorProvider>
       );
 
