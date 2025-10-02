@@ -102,6 +102,7 @@ export const loadGoogleFontsIntoDocument = (
     const links = tempDiv.querySelectorAll("link");
     links.forEach((link, index) => {
       link.id = `${idPrefix}-${index}`;
+      link.setAttribute("data-visual-editor-font", "true");
       document.head.appendChild(link);
     });
   }
