@@ -45,6 +45,18 @@ export const coreInfoSectionSlots: Migration = {
         ctaVariant: props.styles.info.ctaVariant,
       };
 
+      const hours = props.data.hours?.hours ?? {
+        field: "hours",
+        constantValue: {},
+      };
+      const hoursStyles = props.styles.hours ?? {
+        startOfWeek: "today",
+        collapseDays: false,
+        showAdditionalHoursText: true,
+      };
+
+      const services = props.data.services.servicesList;
+
       // Clean up old props
       delete props.data.info.headingText;
       delete props.data.hours.headingText;
@@ -53,6 +65,9 @@ export const coreInfoSectionSlots: Migration = {
       delete props.styles.heading;
       delete props.styles.info.showGetDirectionsLink;
       delete props.styles.info.ctaVariant;
+      delete props.data.hours;
+      delete props.styles.hours;
+      delete props.data.services;
 
       return {
         ...props,
@@ -98,6 +113,19 @@ export const coreInfoSectionSlots: Migration = {
               },
             },
           ],
+          HoursTableSlot: [
+            {
+              type: "HoursTableSlot",
+              props: {
+                data: {
+                  hours: hours,
+                },
+                styles: {
+                  ...hoursStyles,
+                },
+              },
+            },
+          ],
           ServicesHeadingSlot: [
             {
               type: "HeadingTextSlot",
@@ -109,6 +137,14 @@ export const coreInfoSectionSlots: Migration = {
                   level: headingLevel,
                   align: headingAlign,
                 },
+              },
+            },
+          ],
+          ServicesListSlot: [
+            {
+              type: "ServicesListSlot",
+              props: {
+                list: services,
               },
             },
           ],
