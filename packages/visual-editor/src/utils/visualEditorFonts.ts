@@ -43,68 +43,107 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
  * fall outside of the font's supported values
  */
 export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
-  const preconnectTags =
-    '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
-
-  const fontEntries = Object.entries(fonts);
-  const linkTags: string[] = [];
-
-  // Create a separate link tag for each font
-  for (const [fontName, fontDetails] of fontEntries) {
-    const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
-
-    let weightParam;
-    if ("weights" in fontDetails) {
-      // static font, use enumerated weights
-      if (fontDetails.italics) {
-        weightParam =
-          fontDetails.weights.map((w) => `0,${w};`).join("") +
-          fontDetails.weights.map((w) => `1,${w};`).join("");
-        // remove trailing semicolon
-        weightParam = weightParam.slice(0, -1);
-      } else {
-        weightParam = fontDetails.weights.join(";");
-      }
-    } else {
-      // variable font, use range of weights
-      const weightRange =
-        fontDetails.minWeight === fontDetails.maxWeight
-          ? `${fontDetails.minWeight}`
-          : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
-      weightParam = fontDetails.italics
-        ? `0,${weightRange};1,${weightRange}`
-        : weightRange;
-    }
-
-    const param =
-      "family=" + fontName.replaceAll(" ", "+") + axes + weightParam;
-
-    const linkTag = `<link href="https://fonts.googleapis.com/css2?${param}&display=swap" rel="stylesheet">`;
-    linkTags.push(linkTag);
-  }
-
-  const result = linkTags.length ? preconnectTags + linkTags.join("\n") : "";
-  return result;
+  return fontLinkDataToHTML(generateFontLinkData(fonts));
 };
 
-export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
+export type FontLinkData = {
+  href: string;
+  rel: string;
+  crossOrigin?: string;
+};
 
-// Safe HTML parser that creates DOM elements without using innerHTML
-export const parseHTMLSafely = (htmlString: string): HTMLLinkElement[] => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(htmlString, "text/html");
-  return Array.from(doc.querySelectorAll("link")) as HTMLLinkElement[];
+// Helper function to generate weight parameter for Google Fonts API
+const generateWeightParam = (fontDetails: FontSpecification): string => {
+  if ("weights" in fontDetails) {
+    if (fontDetails.italics) {
+      const normalWeights = fontDetails.weights
+        .map((w: number) => `0,${w}`)
+        .join(";");
+      const italicWeights = fontDetails.weights
+        .map((w: number) => `1,${w}`)
+        .join(";");
+      return `${normalWeights};${italicWeights}`;
+    }
+    return fontDetails.weights.join(";");
+  } else {
+    const weightRange =
+      fontDetails.minWeight === fontDetails.maxWeight
+        ? `${fontDetails.minWeight}`
+        : `${fontDetails.minWeight}..${fontDetails.maxWeight}`;
+
+    return fontDetails.italics
+      ? `0,${weightRange};1,${weightRange}`
+      : weightRange;
+  }
+};
+
+// Preconnect links for Google Fonts
+const PRECONNECT_LINKS: FontLinkData[] = [
+  { href: "https://fonts.googleapis.com", rel: "preconnect" },
+  {
+    href: "https://fonts.gstatic.com",
+    rel: "preconnect",
+    crossOrigin: "anonymous",
+  },
+];
+
+export const generateFontLinkData = (fonts: FontRegistry): FontLinkData[] => {
+  const fontLinks = Object.entries(fonts).map(([fontName, fontDetails]) => {
+    const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
+    const weightParam = generateWeightParam(fontDetails);
+    const param = `family=${fontName.replaceAll(" ", "+")}${axes}${weightParam}`;
+
+    return {
+      href: `https://fonts.googleapis.com/css2?${param}&display=swap`,
+      rel: "stylesheet",
+    };
+  });
+
+  return [...PRECONNECT_LINKS, ...fontLinks];
+};
+
+// Convert font link data to HTML string
+export const fontLinkDataToHTML = (linkData: FontLinkData[]): string => {
+  return linkData
+    .map((link) => {
+      const crossOriginAttr = link.crossOrigin ? ` crossorigin` : "";
+      if (link.rel === "preconnect") {
+        return `<link rel="${link.rel}" href="${link.href}"${crossOriginAttr}>`;
+      } else {
+        return `<link href="${link.href}" rel="${link.rel}"${crossOriginAttr}>`;
+      }
+    })
+    .join("\n");
+};
+
+export const googleFontLinkTags = fontLinkDataToHTML(
+  generateFontLinkData(defaultFonts)
+);
+
+// Create DOM elements directly from font data
+export const createFontLinkElements = (
+  fonts: FontRegistry
+): HTMLLinkElement[] => {
+  const linkData = generateFontLinkData(fonts);
+  return linkData.map((link) => {
+    const element = document.createElement("link");
+    element.href = link.href;
+    element.rel = link.rel;
+    if (link.crossOrigin) {
+      element.crossOrigin = link.crossOrigin;
+    }
+    return element;
+  });
 };
 
 // Helper function to load Google Font links into a document
 export const loadGoogleFontsIntoDocument = (
   document: Document,
-  fontLinkTags: string,
+  fonts: FontRegistry,
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
-    const links = parseHTMLSafely(fontLinkTags);
+    const links = createFontLinkElements(fonts);
     links.forEach((link, index) => {
       link.id = `${idPrefix}-${index}`;
       link.setAttribute("data-visual-editor-font", "true");

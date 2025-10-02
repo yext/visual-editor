@@ -19,7 +19,7 @@ import { useProgress } from "../internal/hooks/useProgress.ts";
 import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
 import {
-  googleFontLinkTags,
+  defaultFonts,
   loadGoogleFontsIntoDocument,
 } from "../utils/visualEditorFonts.ts";
 
@@ -105,7 +105,7 @@ export const Editor = ({
     if (typeof window !== "undefined") {
       loadGoogleFontsIntoDocument(
         window.document,
-        googleFontLinkTags,
+        defaultFonts,
         "visual-editor-default-fonts"
       );
     }
