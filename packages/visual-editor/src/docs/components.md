@@ -106,10 +106,10 @@ This object contains properties for customizing the component's appearance.
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type                                                                                                   | Description                                                                    | Default |
-| :--------------- | :----------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                                                                              | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ InfoHeadingSlot: Slot; InfoAddressSlot: Slot; HoursHeadingSlot: Slot; ServicesHeadingSlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                                                                           | Description                                                                    | Default |
+| :--------------- | :------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                      | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ CoreInfoHeadingSlot: Slot; CoreInfoAddressSlot: Slot; HoursHeadingSlot: Slot; ServicesHeadingSlot: Slot; }` |                                                                                |         |
 
 ---
 

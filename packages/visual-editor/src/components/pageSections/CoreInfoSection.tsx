@@ -1,13 +1,5 @@
-import * as React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ComponentConfig,
-  ComponentData,
-  createUsePuck,
-  Fields,
-  PuckComponent,
-  Slot,
-} from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
   AddressType,
   AnalyticsScopeProvider,
@@ -47,8 +39,6 @@ import {
   HoursTableProps,
   HoursTableStyleFields,
 } from "../contentBlocks/HoursTable.tsx";
-
-const usePuck = createUsePuck();
 
 export interface CoreInfoData {
   /** Content for the "Information" column. */
@@ -102,10 +92,17 @@ export interface CoreInfoSectionProps {
   styles: CoreInfoStyles;
 
   slots: {
-    InfoHeadingSlot: Slot;
-    InfoAddressSlot: Slot;
+    CoreInfoHeadingSlot: Slot;
+    CoreInfoAddressSlot: Slot;
     HoursHeadingSlot: Slot;
     ServicesHeadingSlot: Slot;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    coreInfoCol?: boolean;
+    hoursCol?: boolean;
+    servicesCol?: boolean;
   };
 
   /** @internal */
@@ -197,8 +194,8 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      InfoHeadingSlot: { type: "slot" },
-      InfoAddressSlot: { type: "slot" },
+      CoreInfoHeadingSlot: { type: "slot" },
+      CoreInfoAddressSlot: { type: "slot" },
       HoursHeadingSlot: { type: "slot" },
       ServicesHeadingSlot: { type: "slot" },
     },
@@ -230,7 +227,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
  * Available on Location templates.
  */
 const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
-  const { data, styles, slots, id, puck } = props;
+  const { data, styles, slots, conditionalRender, puck } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
@@ -282,33 +279,11 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
     additionalHoursText: string;
   };
 
-  const puckComponentData: ComponentData<CoreInfoSectionProps> | undefined =
-    usePuck((s) => {
-      return s.getItemById(id);
-    });
-
-  const resolvedInfoHeading = resolveComponentData(
-    puckComponentData?.props?.slots?.InfoHeadingSlot.map(
-      (slot) => slot.props.data.text
-    )[0],
-    i18n.language,
-    streamDocument
-  );
-
-  const resolvedInfoAddress = resolveComponentData(
-    puckComponentData?.props?.slots?.InfoAddressSlot.map(
-      (slot) => slot.props.data.address
-    )[0],
-    i18n.language,
-    streamDocument
-  ) as unknown as AddressType;
-
   // Determine if the Core Info column should be shown
   // It should be shown if in editing mode or if it has any content to display
   const showCoreInfoCol: boolean =
     puck.isEditing ||
-    !!resolvedInfoHeading ||
-    !!resolvedInfoAddress?.line1 ||
+    conditionalRender?.coreInfoCol ||
     (resolvedPhoneNumbers?.length ?? 0) > 0 ||
     (resolvedEmails?.length ?? 0) > 0;
 
@@ -333,8 +308,8 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           aria-label={t("informationSection", "Information Section")}
           className="flex flex-col gap-4"
         >
-          <slots.InfoHeadingSlot style={{ maxHeight: "fit-content" }} />
-          <slots.InfoAddressSlot />
+          <slots.CoreInfoHeadingSlot style={{ maxHeight: "fit-content" }} />
+          <slots.CoreInfoAddressSlot />
           {resolvedPhoneNumbers.length > 0 && (
             <ul className="flex flex-col gap-4">
               {resolvedPhoneNumbers.map((phone, idx) => {
@@ -554,7 +529,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
         },
       },
       slots: {
-        InfoHeadingSlot: [
+        CoreInfoHeadingSlot: [
           {
             type: "HeadingTextSlot",
             props: {
@@ -572,7 +547,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             },
           },
         ],
-        InfoAddressSlot: [
+        CoreInfoAddressSlot: [
           {
             type: "AddressSlot",
             props: {
@@ -635,6 +610,47 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
         scope: "coreInfoSection",
       },
       liveVisibility: true,
+    },
+    resolveData: async (data, params) => {
+      // Determine which columns should be shown on a live page
+      const locale = params.metadata.document?.locale;
+      const streamDocument = params.metadata.document;
+      if (!locale || !streamDocument) {
+        console.log("CoreInfoSection: locale or streamDocument is undefined");
+        return data;
+      }
+
+      // Check if the HeadingSlot has content to display
+      const resolvedInfoHeading = resolveComponentData(
+        data?.props?.slots?.CoreInfoHeadingSlot.map(
+          (slot) => slot.props.data.text
+        )[0],
+        locale,
+        streamDocument
+      );
+
+      // Check if the AddressSlot has an address to display
+      const resolvedInfoAddress = resolveComponentData(
+        data.props.slots.CoreInfoAddressSlot.map(
+          (slot) => slot.props.data.address
+        )[0],
+        locale,
+        streamDocument
+      ) as unknown as AddressType;
+
+      const showCoreInfoCol = !!(
+        resolvedInfoHeading || resolvedInfoAddress?.line1
+      );
+
+      return {
+        ...data,
+        props: {
+          ...data.props,
+          conditionalRender: {
+            coreInfoCol: showCoreInfoCol,
+          },
+        },
+      };
     },
     render: (props) => (
       <AnalyticsScopeProvider

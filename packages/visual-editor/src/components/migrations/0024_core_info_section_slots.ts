@@ -57,7 +57,7 @@ export const coreInfoSectionSlots: Migration = {
       return {
         ...props,
         slots: {
-          InfoHeadingSlot: [
+          CoreInfoHeadingSlot: [
             {
               type: "HeadingTextSlot",
               props: {
@@ -71,7 +71,7 @@ export const coreInfoSectionSlots: Migration = {
               },
             },
           ],
-          InfoAddressSlot: [
+          CoreInfoAddressSlot: [
             {
               type: "AddressSlot",
               props: {

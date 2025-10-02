@@ -150,8 +150,8 @@ interface CoreInfoSectionProps {
    */
   styles: CoreInfoStyles;
   slots: {
-    InfoHeadingSlot: Slot;
-    InfoAddressSlot: Slot;
+    CoreInfoHeadingSlot: Slot;
+    CoreInfoAddressSlot: Slot;
     HoursHeadingSlot: Slot;
     ServicesHeadingSlot: Slot;
   };

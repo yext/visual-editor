@@ -87,7 +87,17 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
     { provider: "google" }
   );
 
-  return address ? (
+  // Only show the address component if there's at least one line of the address
+  // address is always at least some empty lines formatted with commas
+  const showAddress = !!(
+    address?.line1 ||
+    address?.line2 ||
+    address?.city ||
+    address?.region ||
+    address?.postalCode
+  );
+
+  return showAddress ? (
     <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
       <EntityField
         displayName={pt("address", "Address")}
