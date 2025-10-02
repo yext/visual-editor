@@ -18,6 +18,10 @@ import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts"
 import { useProgress } from "../internal/hooks/useProgress.ts";
 import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
+import {
+  googleFontLinkTags,
+  loadGoogleFontsIntoDocument,
+} from "../utils/visualEditorFonts.ts";
 
 const devLogger = new DevLogger();
 
@@ -93,6 +97,17 @@ export const Editor = ({
       } else {
         window.location.assign("/404.html");
       }
+    }
+  }, []);
+
+  // Load default Google Fonts for the font selector dropdown
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      loadGoogleFontsIntoDocument(
+        window.document,
+        googleFontLinkTags,
+        "visual-editor-default-fonts"
+      );
     }
   }, []);
 

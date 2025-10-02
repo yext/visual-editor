@@ -90,6 +90,24 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
 
 export const googleFontLinkTags = constructGoogleFontLinkTags(defaultFonts);
 
+// Helper function to load Google Font links into a document
+export const loadGoogleFontsIntoDocument = (
+  document: Document,
+  fontLinkTags: string,
+  idPrefix: string = "visual-editor-fonts"
+) => {
+  if (!document.getElementById(`${idPrefix}-0`)) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = fontLinkTags;
+    const links = tempDiv.querySelectorAll("link");
+    links.forEach((link, index) => {
+      link.id = `${idPrefix}-${index}`;
+      link.setAttribute("data-visual-editor-font", "true");
+      document.head.appendChild(link);
+    });
+  }
+};
+
 const defaultWeightOptions = [
   { label: msg("theme.fontWeight.thin", "Thin (100)"), value: "100" },
   {
