@@ -613,8 +613,8 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
     },
     resolveData: async (data, params) => {
       // Determine which columns should be shown on a live page
-      const locale = params.metadata.document?.locale;
-      const streamDocument = params.metadata.document;
+      const streamDocument = params.metadata?.document;
+      const locale = streamDocument?.locale;
       if (!locale || !streamDocument) {
         return data;
       }
@@ -637,9 +637,8 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
         streamDocument
       ) as unknown as AddressType;
 
-      const showCoreInfoCol = !!(
-        resolvedInfoHeading || resolvedInfoAddress?.line1
-      );
+      const showCoreInfoCol =
+        !!resolvedInfoHeading || !!resolvedInfoAddress?.line1;
 
       return {
         ...data,

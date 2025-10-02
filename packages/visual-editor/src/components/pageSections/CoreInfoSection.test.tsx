@@ -805,7 +805,7 @@ describe("CoreInfoSection", async () => {
         puckConfig
       );
 
-      const updatedData = await resolveAllData(data, puckConfig);
+      const updatedData = await resolveAllData(data, puckConfig, { document });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>

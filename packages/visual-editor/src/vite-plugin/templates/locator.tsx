@@ -98,7 +98,9 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     migrationRegistry,
     locatorConfig
   );
-  const updatedData = await resolveAllData(migratedData, locatorConfig);
+  const updatedData = await resolveAllData(migratedData, locatorConfig, {
+    document,
+  });
 
   return { ...props, data: updatedData };
 };
