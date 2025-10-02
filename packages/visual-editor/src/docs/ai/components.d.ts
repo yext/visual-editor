@@ -1445,7 +1445,8 @@ type PresetImageType =
   | "uber-eats";
 
 type Video = {
-  /** The YouTube video URL */ url: string;
+  /** The YouTube video URL */
+  url: string;
   /** The YouTube video ID */
   id: string;
   /** The YouTube video title */
