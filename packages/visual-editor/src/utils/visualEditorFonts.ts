@@ -43,6 +43,9 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
  * fall outside of the font's supported values
  */
 export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
+  if (Object.keys(fonts).length === 0) {
+    return "";
+  }
   return fontLinkDataToHTML(generateFontLinkData(fonts));
 };
 
