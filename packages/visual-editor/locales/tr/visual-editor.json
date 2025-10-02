@@ -57,6 +57,7 @@
   "closed": "Kapalı",
   "closesAt": "Kapanır",
   "components": {
+    "Video": "Video",
     "address": "Adres",
     "bannerSection": "Banner bölümü",
     "bodyText": "Gövde metni",
