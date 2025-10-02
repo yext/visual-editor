@@ -219,7 +219,11 @@ describe("VideoSection", async () => {
       );
 
       await page.viewport(width, height);
-      if (name.includes("and video")) {
+      // Wait for video to load if it exists in the props or slots
+      if (
+        props?.data?.assetVideo?.video?.embeddedUrl ||
+        props?.slots?.VideoSlot?.[0]?.props?.data?.assetVideo?.video
+      ) {
         await delay(1000);
       }
 

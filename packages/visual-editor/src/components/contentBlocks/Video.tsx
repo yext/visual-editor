@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { AssetVideo, msg, YextField, VideoAtom } from "@yext/visual-editor";
 
 export type VideoProps = {
@@ -19,8 +19,11 @@ const videoFields: Fields<VideoProps> = {
   }),
 };
 
-const VideoComponent = (props: VideoProps) => {
-  const { data } = props;
+const VideoComponent: PuckComponent<VideoProps> = (props) => {
+  const {
+    data,
+    puck: { isEditing },
+  } = props;
 
   return data?.assetVideo?.video?.embeddedUrl ? (
     <VideoAtom
@@ -28,7 +31,11 @@ const VideoComponent = (props: VideoProps) => {
       title={data?.assetVideo?.video?.title ?? ""}
       className="lg:w-4/5 mx-auto mt-8"
     />
-  ) : null;
+  ) : isEditing ? (
+    <div className="h-20 mt-8"></div>
+  ) : (
+    <></>
+  );
 };
 
 export const Video: ComponentConfig<{
