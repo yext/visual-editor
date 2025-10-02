@@ -156,6 +156,12 @@ interface CoreInfoSectionProps {
     ServicesHeadingSlot: Slot;
   };
   /** @internal */
+  conditionalRender?: {
+    coreInfoCol?: boolean;
+    hoursCol?: boolean;
+    servicesCol?: boolean;
+  };
+  /** @internal */
   analytics: {
     scope?: string;
   };
