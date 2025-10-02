@@ -29,14 +29,15 @@ const testAddress = {
 
 const tests: ComponentTest[] = [
   {
-    name: "default props with empty document",
-    document: {},
+    name: "default props with no additional document data",
+    document: { locale: "en" },
     props: { ...CoreInfoSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "default props with document data",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -49,6 +50,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props with entity values",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -116,6 +118,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props with constant value",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -211,6 +214,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with entity values",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -301,6 +305,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with constant value",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -401,6 +406,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 1",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -490,6 +496,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 2",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -579,6 +586,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 3",
     document: {
+      locale: "en",
       hours: testHours,
       services: ["Delivery", "Catering"],
       id: "test-id",
@@ -666,6 +674,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 props with partial entity values align right",
     document: {
+      locale: "en",
       hours: testHours,
       services: ["Delivery", "Catering"],
       id: "test-id",
