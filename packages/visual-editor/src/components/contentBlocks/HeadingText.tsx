@@ -50,8 +50,8 @@ const HeadingTextWrapper = React.forwardRef<
     streamDocument
   );
 
-  return (
-    <div className={`flex ${justifyClass} min-h-[30px]`}>
+  return resolvedHeadingText ? (
+    <div className={`flex ${justifyClass}`}>
       <EntityField
         displayName={pt("Heading", "Heading") + " " + styles.level}
         fieldId={data.text.field}
@@ -62,6 +62,8 @@ const HeadingTextWrapper = React.forwardRef<
         </Heading>
       </EntityField>
     </div>
+  ) : (
+    <div className="h-[30px]" />
   );
 });
 
