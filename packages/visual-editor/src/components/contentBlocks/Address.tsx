@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   AddressType,
   getDirections,
@@ -72,23 +72,20 @@ const addressFields: Fields<AddressProps> = {
   }),
 };
 
-const AddressComponent = ({ data, styles }: AddressProps) => {
+const AddressComponent: PuckComponent<AddressProps> = (props) => {
+  const { data, styles, puck } = props;
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
   const address = resolveComponentData(
     data.address,
     i18n.language,
     streamDocument
-  );
-  const coordinates = getDirections(
-    address as AddressType,
-    undefined,
-    undefined,
-    { provider: "google" }
-  );
+  ) as unknown as AddressType | undefined;
+  const coordinates = getDirections(address, undefined, undefined, {
+    provider: "google",
+  });
 
   // Only show the address component if there's at least one line of the address
-  // address is always at least some empty lines formatted with commas
   const showAddress = !!(
     address?.line1 ||
     address?.line2 ||
@@ -121,8 +118,10 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
         />
       )}
     </div>
-  ) : (
+  ) : puck.isEditing ? (
     <div className="min-h-[40px]"></div>
+  ) : (
+    <></>
   );
 };
 

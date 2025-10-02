@@ -805,14 +805,16 @@ describe("CoreInfoSection", async () => {
         puckConfig
       );
 
-      const updatedData = await resolveAllData(data, puckConfig, { document });
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render
             config={puckConfig}
             data={updatedData}
-            metadata={{ document }}
+            metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>
       );

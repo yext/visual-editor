@@ -613,7 +613,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
     },
     resolveData: async (data, params) => {
       // Determine which columns should be shown on a live page
-      const streamDocument = params.metadata?.document;
+      const streamDocument = params.metadata?.streamDocument;
       const locale = streamDocument?.locale;
       if (!locale || !streamDocument) {
         return data;
