@@ -13,7 +13,7 @@ import {
   migrationRegistry,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 import { HeadingText, Address } from "../contentBlocks/index.ts";
 
@@ -805,9 +805,15 @@ describe("CoreInfoSection", async () => {
         puckConfig
       );
 
+      const updatedData = await resolveAllData(data, puckConfig);
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} metadata={{ document }} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ document }}
+          />
         </VisualEditorProvider>
       );
 

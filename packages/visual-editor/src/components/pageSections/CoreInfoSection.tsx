@@ -616,7 +616,6 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
       const locale = params.metadata.document?.locale;
       const streamDocument = params.metadata.document;
       if (!locale || !streamDocument) {
-        console.log("CoreInfoSection: locale or streamDocument is undefined");
         return data;
       }
 
