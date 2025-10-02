@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   EntityField,
@@ -29,10 +29,8 @@ export type HeadingTextProps = {
   };
 };
 
-const HeadingTextWrapper = React.forwardRef<
-  HTMLHeadingElement,
-  HeadingTextProps
->(({ data, styles, ...headingProps }, ref) => {
+const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
+  const { data, styles, puck } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -50,24 +48,22 @@ const HeadingTextWrapper = React.forwardRef<
     streamDocument
   );
 
-  return (
-    resolvedHeadingText && (
-      <div className={`flex ${justifyClass}`}>
-        <EntityField
-          displayName={pt("Heading", "Heading") + " " + styles.level}
-          fieldId={data.text.field}
-          constantValueEnabled={data.text.constantValueEnabled}
-        >
-          <Heading ref={ref} level={styles.level} {...headingProps}>
-            {resolvedHeadingText}
-          </Heading>
-        </EntityField>
-      </div>
-    )
+  return resolvedHeadingText ? (
+    <div className={`flex ${justifyClass}`}>
+      <EntityField
+        displayName={pt("Heading", "Heading") + " " + styles.level}
+        fieldId={data.text.field}
+        constantValueEnabled={data.text.constantValueEnabled}
+      >
+        <Heading level={styles.level}>{resolvedHeadingText}</Heading>
+      </EntityField>
+    </div>
+  ) : puck.isEditing ? (
+    <div className="h-[30px]" />
+  ) : (
+    <></>
   );
-});
-
-HeadingTextWrapper.displayName = "HeadingText";
+};
 
 const headingTextFields: Fields<HeadingTextProps> = {
   data: {

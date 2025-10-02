@@ -22,6 +22,7 @@ import { updateFooterForAssetImages } from "./0020_footer_asset_images.ts";
 import { setOpenNowDefault } from "./0021_set_open_now_default.ts";
 import { organizeHeadingTextProps } from "./0022_organize_heading_text_props.ts";
 import { eventSectionSlots } from "./0023_event_section_slots.ts";
+import { coreInfoSectionSlots } from "./0024_core_info_section_slots.ts";
 import { videoSectionSlots } from "./0025_video_section_slots.ts";
 
 // To add a migration:
@@ -53,6 +54,6 @@ export const migrationRegistry: MigrationRegistry = [
   setOpenNowDefault,
   organizeHeadingTextProps,
   eventSectionSlots,
-  {}, // address migration placeholder
+  coreInfoSectionSlots,
   videoSectionSlots,
 ];

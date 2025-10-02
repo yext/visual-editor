@@ -1,21 +1,17 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
-  Address,
   AddressType,
   AnalyticsScopeProvider,
-  getDirections,
   HoursType,
 } from "@yext/pages-components";
 import { FaRegEnvelope } from "react-icons/fa";
 import {
   YextEntityField,
-  HeadingLevel,
   BackgroundStyle,
   useDocument,
   PageSection,
   EntityField,
-  Heading,
   CTA,
   backgroundColors,
   Body,
@@ -27,16 +23,10 @@ import {
   HoursTableAtom,
   msg,
   pt,
-  ThemeOptions,
   usePlatformTranslation,
   getAnalyticsScopeHash,
   resolveComponentData,
 } from "@yext/visual-editor";
-import {
-  AddressDataField,
-  AddressProps,
-  AddressStyleFields,
-} from "../contentBlocks/Address.tsx";
 import {
   defaultPhoneDataProps,
   PhoneDataFields,
@@ -53,10 +43,6 @@ import {
 export interface CoreInfoData {
   /** Content for the "Information" column. */
   info: {
-    /** The heading at the top of the left column */
-    headingText: YextEntityField<TranslatableString>;
-    /** The address of the entity */
-    address: YextEntityField<AddressType>;
     /** The phone number for the entity */
     phoneNumbers: Array<PhoneProps["data"]>;
     /** Emails associated with the entity */
@@ -65,16 +51,12 @@ export interface CoreInfoData {
 
   /** Content for the "Hours" column. */
   hours: {
-    /** The heading at the top of the middle column */
-    headingText: YextEntityField<TranslatableString>;
     /** The hours for the entity */
     hours: YextEntityField<HoursType>;
   };
 
   /** Content for the "Services" column. */
   services: {
-    /** The heading at the top of the right column */
-    headingText: YextEntityField<TranslatableString>;
     /** A text list, often of services the entity provides */
     servicesList: YextEntityField<TranslatableString[]>;
   };
@@ -87,17 +69,10 @@ export interface CoreInfoStyles {
    */
   backgroundColor?: BackgroundStyle;
 
-  /** Styling for all column headings. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-
   /** Styling for the "Information" column. */
-  info: AddressProps["styles"] &
-    PhoneProps["styles"] & {
-      emailsListLength?: number;
-    };
+  info: PhoneProps["styles"] & {
+    emailsListLength?: number;
+  };
 
   /** Styling for the "Hours" column. */
   hours: Omit<HoursTableProps["styles"], "alignment">;
@@ -115,6 +90,20 @@ export interface CoreInfoSectionProps {
    * @propCategory Style Props
    */
   styles: CoreInfoStyles;
+
+  slots: {
+    CoreInfoHeadingSlot: Slot;
+    CoreInfoAddressSlot: Slot;
+    HoursHeadingSlot: Slot;
+    ServicesHeadingSlot: Slot;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    coreInfoCol?: boolean;
+    hoursCol?: boolean;
+    servicesCol?: boolean;
+  };
 
   /** @internal */
   analytics: {
@@ -135,14 +124,6 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       info: YextField(msg("fields.infoColumn", "Info Column"), {
         type: "object",
         objectFields: {
-          headingText: YextField<any, TranslatableString>(
-            msg("fields.headingText", "Heading Text"),
-            {
-              type: "entityField",
-              filter: { types: ["type.string"] },
-            }
-          ),
-          address: AddressDataField,
           phoneNumbers: YextField(msg("fields.phoneNumbers", "Phone Numbers"), {
             type: "array",
             arrayFields: PhoneDataFields,
@@ -167,30 +148,12 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       hours: YextField(msg("fields.hoursColumn", "Hours Column"), {
         type: "object",
         objectFields: {
-          headingText: YextField<any, TranslatableString>(
-            msg("fields.headingText", "Heading Text"),
-            {
-              type: "entityField",
-              filter: {
-                types: ["type.string"],
-              },
-            }
-          ),
           hours: HoursTableDataField,
         },
       }),
       services: YextField(msg("fields.servicesColumn", "Services Column"), {
         type: "object",
         objectFields: {
-          headingText: YextField<any, TranslatableString>(
-            msg("fields.headingText", "Heading Text"),
-            {
-              type: "entityField",
-              filter: {
-                types: ["type.string"],
-              },
-            }
-          ),
           servicesList: YextField<any, TranslatableString[]>(
             msg("fields.servicesList", "Services List"),
             {
@@ -209,20 +172,6 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      heading: YextField(msg("fields.heading", "Heading"), {
-        type: "object",
-        objectFields: {
-          level: YextField(msg("fields.level", "Level"), {
-            type: "select",
-            hasSearch: true,
-            options: "HEADING_LEVEL",
-          }),
-          align: YextField(msg("fields.headingAlign", "Heading Align"), {
-            type: "radio",
-            options: ThemeOptions.ALIGNMENT,
-          }),
-        },
-      }),
       backgroundColor: YextField(
         msg("fields.backgroundColor", "Background Color"),
         {
@@ -233,7 +182,6 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       info: YextField(msg("fields.infoColumn", "Info Column"), {
         type: "object",
         objectFields: {
-          ...AddressStyleFields,
           ...PhoneStyleFields,
         },
       }),
@@ -243,6 +191,16 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       }),
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      CoreInfoHeadingSlot: { type: "slot" },
+      CoreInfoAddressSlot: { type: "slot" },
+      HoursHeadingSlot: { type: "slot" },
+      ServicesHeadingSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -268,20 +226,12 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
  * The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization.
  * Available on Location templates.
  */
-const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
+const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
+  const { data, styles, slots, conditionalRender, puck } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const addressHeadingText = resolveComponentData(
-    data.info.headingText,
-    locale,
-    streamDocument
-  );
-  const resolvedAddress = resolveComponentData(
-    data.info.address,
-    locale,
-    streamDocument
-  );
+
   const resolvedEmails = resolveComponentData(
     data.info.emails,
     locale,
@@ -312,21 +262,12 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       })
       ?.filter((item): item is ResolvedPhoneNumber => item !== null) ?? [];
 
-  const hoursHeadingText = resolveComponentData(
-    data.hours.headingText,
-    locale,
-    streamDocument
-  );
   const resolvedHours = resolveComponentData(
     data.hours.hours,
     locale,
     streamDocument
   );
-  const servicesHeadingText = resolveComponentData(
-    data.services.headingText,
-    locale,
-    streamDocument
-  );
+
   const servicesList = resolveComponentData(
     data.services.servicesList,
     locale,
@@ -334,35 +275,19 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   )?.map((translatableString: TranslatableString) =>
     resolveComponentData(translatableString, i18n.language)
   );
-  const coordinates = getDirections(
-    resolvedAddress as AddressType,
-    undefined,
-    undefined,
-    { provider: "google" }
-  );
   const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
 
-  const hasCoreInfo: boolean =
-    !!addressHeadingText ||
-    !!resolvedAddress?.line1 ||
-    !!resolvedAddress?.city ||
-    !!resolvedAddress?.postalCode ||
-    !!resolvedAddress?.countryCode ||
+  // Determine if the Core Info column should be shown
+  // It should be shown if in editing mode or if it has any content to display
+  const showCoreInfoCol: boolean =
+    puck.isEditing ||
+    conditionalRender?.coreInfoCol ||
     (resolvedPhoneNumbers?.length ?? 0) > 0 ||
-    (resolvedEmails?.length ?? 0) > 0 ||
-    !!(coordinates && styles?.info?.showGetDirectionsLink);
+    (resolvedEmails?.length ?? 0) > 0;
 
-  const justifyClass = styles?.heading?.align
-    ? {
-        left: "justify-start",
-        center: "justify-center",
-        right: "justify-end",
-      }[styles.heading.align]
-    : "justify-start";
-
-  const sectionCount = [hasCoreInfo, resolvedHours, servicesList].filter(
+  const sectionCount = [showCoreInfoCol, resolvedHours, servicesList].filter(
     Boolean
   ).length;
 
@@ -378,53 +303,13 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
       background={styles?.backgroundColor}
       aria-label={t("coreInfoSection", "Core Info Section")}
     >
-      {hasCoreInfo && (
+      {showCoreInfoCol && (
         <section
           aria-label={t("informationSection", "Information Section")}
           className="flex flex-col gap-4"
         >
-          {addressHeadingText && (
-            <EntityField
-              displayName={pt("fields.headingText", "Heading Text")}
-              fieldId={data.info.headingText.field}
-              constantValueEnabled={data.info.headingText.constantValueEnabled}
-            >
-              <div className={`flex ${justifyClass}`}>
-                <Heading level={styles?.heading?.level ?? 2}>
-                  {addressHeadingText}
-                </Heading>
-              </div>
-            </EntityField>
-          )}
-          <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
-            {resolvedAddress && (
-              <EntityField
-                displayName={pt("fields.address", "Address")}
-                fieldId={data.info.address.field}
-                constantValueEnabled={data.info.address.constantValueEnabled}
-              >
-                <Address
-                  address={resolvedAddress}
-                  lines={[
-                    ["line1"],
-                    ["line2"],
-                    ["city", ",", "region", "postalCode"],
-                  ]}
-                />
-              </EntityField>
-            )}
-            {coordinates && styles.info.showGetDirectionsLink && (
-              <CTA
-                eventName={`getDirections`}
-                className="font-bold"
-                link={coordinates}
-                label={t("getDirections", "Get Directions")}
-                linkType="DRIVING_DIRECTIONS"
-                target="_blank"
-                variant={styles.info.ctaVariant}
-              />
-            )}
-          </div>
+          <slots.CoreInfoHeadingSlot style={{ maxHeight: "fit-content" }} />
+          <slots.CoreInfoAddressSlot />
           {resolvedPhoneNumbers.length > 0 && (
             <ul className="flex flex-col gap-4">
               {resolvedPhoneNumbers.map((phone, idx) => {
@@ -506,19 +391,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           aria-label={t("hoursSection", "Hours Section")}
           className="flex flex-col gap-4"
         >
-          {hoursHeadingText && (
-            <EntityField
-              displayName={pt("fields.headingText", "Heading Text")}
-              fieldId={data.hours.headingText.field}
-              constantValueEnabled={data.hours.headingText.constantValueEnabled}
-            >
-              <div className={`flex ${justifyClass}`}>
-                <Heading level={styles.heading.level}>
-                  {hoursHeadingText}
-                </Heading>
-              </div>
-            </EntityField>
-          )}
+          <slots.HoursHeadingSlot style={{ maxHeight: "fit-content" }} />
           <EntityField
             displayName={pt("fields.hours", "Hours")}
             fieldId="hours"
@@ -547,21 +420,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
           aria-label={t("servicesSection", "Services Section")}
           className="flex flex-col gap-4"
         >
-          {servicesHeadingText && (
-            <EntityField
-              displayName={pt("fields.headingText", "Heading Text")}
-              fieldId={data.services.headingText.field}
-              constantValueEnabled={
-                data.services.headingText.constantValueEnabled
-              }
-            >
-              <div className={`flex ${justifyClass}`}>
-                <Heading level={styles.heading.level}>
-                  {servicesHeadingText}
-                </Heading>
-              </div>
-            </EntityField>
-          )}
+          <slots.ServicesHeadingSlot style={{ maxHeight: "fit-content" }} />
           <EntityField
             displayName={pt("fields.textList", "Text List")}
             fieldId={data.services.servicesList.field}
@@ -626,23 +485,6 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
     defaultProps: {
       data: {
         info: {
-          headingText: {
-            field: "",
-            constantValue: {
-              en: "Information",
-              hasLocalizedValue: "true",
-            },
-            constantValueEnabled: true,
-          },
-          address: {
-            field: "address",
-            constantValue: {
-              line1: "",
-              city: "",
-              postalCode: "",
-              countryCode: "",
-            },
-          },
           phoneNumbers: [
             {
               number: {
@@ -661,28 +503,12 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
           },
         },
         hours: {
-          headingText: {
-            field: "",
-            constantValue: {
-              en: "Hours",
-              hasLocalizedValue: "true",
-            },
-            constantValueEnabled: true,
-          },
           hours: {
             field: "hours",
             constantValue: {},
           },
         },
         services: {
-          headingText: {
-            field: "",
-            constantValue: {
-              en: "Services",
-              hasLocalizedValue: "true",
-            },
-            constantValueEnabled: true,
-          },
           servicesList: {
             field: "services",
             constantValue: [],
@@ -690,17 +516,11 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
         },
       },
       styles: {
-        heading: {
-          level: 3,
-          align: "left",
-        },
         backgroundColor: backgroundColors.background1.value,
         info: {
-          showGetDirectionsLink: true,
           phoneFormat: "domestic",
           includePhoneHyperlink: true,
           emailsListLength: 1,
-          ctaVariant: "link",
         },
         hours: {
           startOfWeek: "today",
@@ -708,10 +528,127 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
           showAdditionalHoursText: true,
         },
       },
+      slots: {
+        CoreInfoHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Information",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        CoreInfoAddressSlot: [
+          {
+            type: "AddressSlot",
+            props: {
+              data: {
+                address: {
+                  constantValue: {
+                    line1: "",
+                    city: "",
+                    postalCode: "",
+                    countryCode: "",
+                  },
+                  field: "address",
+                },
+              },
+              styles: {
+                showGetDirectionsLink: true,
+                ctaVariant: "link",
+              },
+            },
+          },
+        ],
+        HoursHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Hours",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        ServicesHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Services",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+      },
       analytics: {
         scope: "coreInfoSection",
       },
       liveVisibility: true,
+    },
+    resolveData: async (data, params) => {
+      // Determine which columns should be shown on a live page
+      const streamDocument = params.metadata?.streamDocument;
+      const locale = streamDocument?.locale;
+      if (!locale || !streamDocument) {
+        return data;
+      }
+
+      // Check if the HeadingSlot has content to display
+      const resolvedInfoHeading = resolveComponentData(
+        data?.props?.slots?.CoreInfoHeadingSlot.map(
+          (slot) => slot.props.data.text
+        )[0],
+        locale,
+        streamDocument
+      );
+
+      // Check if the AddressSlot has an address to display
+      const resolvedInfoAddress = resolveComponentData(
+        data.props.slots.CoreInfoAddressSlot.map(
+          (slot) => slot.props.data.address
+        )[0],
+        locale,
+        streamDocument
+      ) as unknown as AddressType;
+
+      const showCoreInfoCol =
+        !!resolvedInfoHeading || !!resolvedInfoAddress?.line1;
+
+      return {
+        ...data,
+        props: {
+          ...data.props,
+          conditionalRender: {
+            coreInfoCol: showCoreInfoCol,
+          },
+        },
+      };
     },
     render: (props) => (
       <AnalyticsScopeProvider

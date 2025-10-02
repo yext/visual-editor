@@ -149,6 +149,18 @@ interface CoreInfoSectionProps {
    * @propCategory Style Props
    */
   styles: CoreInfoStyles;
+  slots: {
+    CoreInfoHeadingSlot: Slot;
+    CoreInfoAddressSlot: Slot;
+    HoursHeadingSlot: Slot;
+    ServicesHeadingSlot: Slot;
+  };
+  /** @internal */
+  conditionalRender?: {
+    coreInfoCol?: boolean;
+    hoursCol?: boolean;
+    servicesCol?: boolean;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -564,10 +576,6 @@ interface BreadcrumbsStyles {
 interface CoreInfoData {
   /** Content for the "Information" column. */
   info: {
-    /** The heading at the top of the left column */
-    headingText: YextEntityField<TranslatableString>;
-    /** The address of the entity */
-    address: YextEntityField<AddressType>;
     /** The phone number for the entity */
     phoneNumbers: Array<PhoneProps["data"]>;
     /** Emails associated with the entity */
@@ -575,15 +583,11 @@ interface CoreInfoData {
   };
   /** Content for the "Hours" column. */
   hours: {
-    /** The heading at the top of the middle column */
-    headingText: YextEntityField<TranslatableString>;
     /** The hours for the entity */
     hours: YextEntityField<HoursType>;
   };
   /** Content for the "Services" column. */
   services: {
-    /** The heading at the top of the right column */
-    headingText: YextEntityField<TranslatableString>;
     /** A text list, often of services the entity provides */
     servicesList: YextEntityField<TranslatableString[]>;
   };
@@ -595,16 +599,10 @@ interface CoreInfoStyles {
    * @defaultValue `Background Color 1`
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for all column headings. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
   /** Styling for the "Information" column. */
-  info: AddressProps["styles"] &
-    PhoneProps["styles"] & {
-      emailsListLength?: number;
-    };
+  info: PhoneProps["styles"] & {
+    emailsListLength?: number;
+  };
   /** Styling for the "Hours" column. */
   hours: Omit<HoursTableProps["styles"], "alignment">;
 }
@@ -1158,23 +1156,6 @@ interface PhoneProps {
   };
 }
 
-/** Corresponds to the different semantic heading levels */
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
-/** Props for the Address component */
-interface AddressProps {
-  data: {
-    /** The address data to display. */
-    address: YextEntityField<AddressType>;
-  };
-  styles: {
-    /** Whether to include a "Get Directions" CTA to Google Maps */
-    showGetDirectionsLink: boolean;
-    /** The variant of the get directions button */
-    ctaVariant: CTAVariant;
-  };
-}
-
 /** Props for the HoursTable component. */
 interface HoursTableProps {
   data: {
@@ -1200,6 +1181,9 @@ interface HoursTableProps {
 type EventSectionType = {
   events: Array<EventStruct>;
 };
+
+/** Corresponds to the different semantic heading levels */
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Data for the FAQSection */
 type FAQSectionType = {

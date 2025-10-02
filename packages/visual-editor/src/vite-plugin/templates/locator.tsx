@@ -9,8 +9,9 @@ import {
   GetHeadConfig,
   HeadConfig,
   TagType,
+  TransformProps,
 } from "@yext/pages";
-import { Render } from "@measured/puck";
+import { Render, resolveAllData } from "@measured/puck";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -21,6 +22,8 @@ import {
   defaultThemeConfig,
   locatorConfig,
   getSchema,
+  migrate,
+  migrationRegistry,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -88,8 +91,22 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
   return normalizeSlug(path);
 };
 
-const Locator: Template<TemplateRenderProps> = (props) => {
+export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
+  const migratedData = migrate(
+    JSON.parse(document.__.layout),
+    migrationRegistry,
+    locatorConfig
+  );
+  const updatedData = await resolveAllData(migratedData, locatorConfig, {
+    document,
+  });
+
+  return { ...props, data: updatedData };
+};
+
+const Locator: Template<TemplateRenderProps> = (props) => {
+  const { document, data } = props;
 
   return (
     <>
@@ -110,7 +127,7 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         <VisualEditorProvider templateProps={props}>
           <Render
             config={locatorConfig}
-            data={JSON.parse(document.__.layout)}
+            data={data}
             metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>
