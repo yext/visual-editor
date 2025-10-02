@@ -106,6 +106,7 @@ const Directory: Template<TemplateRenderProps> = (props) => {
             migrationRegistry,
             directoryConfig
           )}
+          metadata={{ streamDocument: document }}
         />
       </VisualEditorProvider>
     </AnalyticsProvider>

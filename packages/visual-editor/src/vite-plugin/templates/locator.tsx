@@ -111,6 +111,7 @@ const Locator: Template<TemplateRenderProps> = (props) => {
           <Render
             config={locatorConfig}
             data={JSON.parse(document.__.layout)}
+            metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>
       </AnalyticsProvider>

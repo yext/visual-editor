@@ -699,6 +699,8 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Video Section is used to display an embedded YouTube video. Available on Location templates.
 
+![Preview of the VideoSection component](../components/testing/screenshots/VideoSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
+
 ### Props
 
 #### Data Props
