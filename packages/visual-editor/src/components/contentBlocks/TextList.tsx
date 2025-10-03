@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   EntityField,
@@ -26,8 +25,9 @@ const textListFields: Fields<TextListProps> = {
   }),
 };
 
-const TextListComponent: React.FC<TextListProps> = ({
+const TextListComponent: PuckComponent<TextListProps> = ({
   list: textListField,
+  puck,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -42,7 +42,7 @@ const TextListComponent: React.FC<TextListProps> = ({
     resolvedTextList = [resolvedTextList];
   }
 
-  return (
+  return resolvedTextList?.length ? (
     <EntityField
       displayName={pt("textList", "Text List")}
       fieldId={textListField.field}
@@ -58,6 +58,10 @@ const TextListComponent: React.FC<TextListProps> = ({
         </ul>
       ) : null}
     </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-10" />
+  ) : (
+    <></>
   );
 };
 
@@ -67,6 +71,27 @@ export const TextList: ComponentConfig<{ props: TextListProps }> = {
   defaultProps: {
     list: {
       field: "",
+      constantValue: [],
+    },
+  },
+  render: (props) => <TextListComponent {...props} />,
+};
+
+export const ServicesList: ComponentConfig<{ props: TextListProps }> = {
+  label: msg("components.servicesList", "Services List"),
+  fields: {
+    list: YextField(msg("fields.values", "Values"), {
+      type: "entityField",
+      filter: {
+        types: ["type.string"],
+        includeListsOnly: true,
+        allowList: ["services"],
+      },
+    }),
+  },
+  defaultProps: {
+    list: {
+      field: "services",
       constantValue: [],
     },
   },

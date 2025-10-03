@@ -153,7 +153,9 @@ interface CoreInfoSectionProps {
     CoreInfoHeadingSlot: Slot;
     CoreInfoAddressSlot: Slot;
     HoursHeadingSlot: Slot;
+    HoursTableSlot: Slot;
     ServicesHeadingSlot: Slot;
+    ServicesListSlot: Slot;
   };
   /** @internal */
   conditionalRender?: {
@@ -581,16 +583,6 @@ interface CoreInfoData {
     /** Emails associated with the entity */
     emails: YextEntityField<string[]>;
   };
-  /** Content for the "Hours" column. */
-  hours: {
-    /** The hours for the entity */
-    hours: YextEntityField<HoursType>;
-  };
-  /** Content for the "Services" column. */
-  services: {
-    /** A text list, often of services the entity provides */
-    servicesList: YextEntityField<TranslatableString[]>;
-  };
 }
 
 interface CoreInfoStyles {
@@ -603,8 +595,6 @@ interface CoreInfoStyles {
   info: PhoneProps["styles"] & {
     emailsListLength?: number;
   };
-  /** Styling for the "Hours" column. */
-  hours: Omit<HoursTableProps["styles"], "alignment">;
 }
 
 interface EventData {
@@ -1153,27 +1143,6 @@ interface PhoneProps {
     phoneFormat: "domestic" | "international";
     /** Whether to make the phone number a clickable link */
     includePhoneHyperlink: boolean;
-  };
-}
-
-/** Props for the HoursTable component. */
-interface HoursTableProps {
-  data: {
-    /** The hours data to display in the table. */
-    hours: YextEntityField<HoursType>;
-  };
-  styles: {
-    /**
-     * The day of week to display at the top of the table.
-     * If set to "today", the current day will dynamically be at the top.
-     */
-    startOfWeek: keyof DayOfWeekNames | "today";
-    /** If true, consecutive days that have the same hours will be collapsed into one row. */
-    collapseDays: boolean;
-    /** Shows the showAdditionalHoursText subfield from the hours field, if present */
-    showAdditionalHoursText: boolean;
-    /** Alignment of the text in the hours table */
-    alignment: "items-start" | "items-center";
   };
 }
 

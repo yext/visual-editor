@@ -86,11 +86,9 @@ The Core Info Section is a comprehensive component designed to display essential
 
 This object contains all the content to be displayed within the three columns.
 
-| Prop            | Type                                                                              | Description                           | Default |
-| :-------------- | :-------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.hours`    | `{ hours: YextEntityField<HoursType>; }`                                          | Content for the "Hours" column.       |         |
-| `data.info`     | `{ phoneNumbers: Array<PhoneProps["data"]>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
-| `data.services` | `{ servicesList: YextEntityField<TranslatableString[]>; }`                        | Content for the "Services" column.    |         |
+| Prop        | Type                                                                              | Description                           | Default |
+| :---------- | :-------------------------------------------------------------------------------- | :------------------------------------ | :------ |
+| `data.info` | `{ phoneNumbers: Array<PhoneProps["data"]>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
 
 #### Style Props
 
@@ -99,17 +97,16 @@ This object contains properties for customizing the component's appearance.
 | Prop                     | Type                                                    | Description                           | Default |
 | :----------------------- | :------------------------------------------------------ | :------------------------------------ | :------ |
 | `styles.backgroundColor` | `BackgroundStyle`                                       | The background color of the section.  |         |
-| `styles.hours`           | `Omit<HoursTableProps["styles"], "alignment">`          | Styling for the "Hours" column.       |         |
 | `styles.info`            | `PhoneProps["styles"] & { emailsListLength?: number; }` | Styling for the "Information" column. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type                                                                                                           | Description                                                                    | Default |
-| :--------------- | :------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                                                                                      | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ CoreInfoHeadingSlot: Slot; CoreInfoAddressSlot: Slot; HoursHeadingSlot: Slot; ServicesHeadingSlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                                                                                                                         | Description                                                                    | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                    | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ CoreInfoHeadingSlot: Slot; CoreInfoAddressSlot: Slot; HoursHeadingSlot: Slot; HoursTableSlot: Slot; ServicesHeadingSlot: Slot; ServicesListSlot: Slot; }` |                                                                                |         |
 
 ---
 
