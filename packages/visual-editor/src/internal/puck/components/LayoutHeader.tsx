@@ -13,7 +13,10 @@ import "../ui/puck.css";
 import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import {
+  i18nComponentsInstance,
+  loadTranslations,
+} from "../../../utils/i18n/components.ts";
 import {
   i18nPlatformInstance,
   usePlatformTranslation,
@@ -218,8 +221,9 @@ export const LocalDevOverrideButtons = () => {
       </Button>
       <Button
         onClick={() => {
-          const locale = prompt("Enter components locale:");
-          i18nComponentsInstance.changeLanguage(locale ?? "en");
+          const locale = prompt("Enter components locale:") || "en";
+          loadTranslations(locale);
+          i18nComponentsInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
