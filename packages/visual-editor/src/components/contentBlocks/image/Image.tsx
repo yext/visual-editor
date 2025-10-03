@@ -21,6 +21,11 @@ export interface ImageWrapperProps {
     image: YextEntityField<ImageType | ComplexImageType>;
   };
   styles: ImageStylingProps;
+  parentData?: {
+    field: string;
+    image: ImageType | ComplexImageType;
+  };
+  className?: string;
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
@@ -46,15 +51,19 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   }),
 };
 
-const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
+const ImageWrapperComponent = ({
+  data,
+  styles,
+  parentData,
+  className,
+}: ImageWrapperProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedImage = resolveComponentData(
-    data.image,
-    i18n.language,
-    streamDocument
-  );
+  const resolvedImage = parentData
+    ? parentData.image
+    : resolveComponentData(data.image, i18n.language, streamDocument);
 
+  console.log("Resolved Image: ", resolvedImage);
   if (!resolvedImage) {
     return null;
   }
@@ -62,15 +71,17 @@ const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
   return (
     <EntityField
       displayName={pt("fields.image", "Image")}
-      fieldId={data.image.field}
-      constantValueEnabled={data.image.constantValueEnabled}
+      fieldId={parentData ? parentData.field : data.image.field}
+      constantValueEnabled={!parentData && data.image.constantValueEnabled}
     >
       <div className="w-full">
         <Image
           image={resolvedImage}
           aspectRatio={styles.aspectRatio}
           width={styles.width}
-          className="max-w-full rounded-image-borderRadius w-full"
+          className={
+            className || "max-w-full rounded-image-borderRadius w-full"
+          }
           sizes={imgSizesHelper({
             base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
             md: styles.width
@@ -102,6 +113,28 @@ export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
       aspectRatio: 1.78,
       width: 640,
     },
+  },
+  resolveFields: (data) => {
+    if (data.props.parentData) {
+      return {
+        ...ImageWrapperFields,
+        data: {
+          label: msg("fields.data", "Data"),
+          type: "object",
+          objectFields: {
+            info: {
+              type: "custom",
+              render: () => (
+                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
+                  Data is inherited from the parent section.
+                </p>
+              ),
+            },
+          },
+        },
+      } as any;
+    }
+    return ImageWrapperFields;
   },
   render: (props) => <ImageWrapperComponent {...props} />,
 };

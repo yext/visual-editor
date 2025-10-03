@@ -553,27 +553,26 @@ This object contains the content to be displayed by the component.
 
 | Prop         | Type                                      | Description                                                                                           | Default                                         |
 | :----------- | :---------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
-| `data.promo` | `YextStructEntityField<PromoSectionType>` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
+| `data.media` | `"image" \| "video"`                      |                                                                                                       |                                                 |
+| `data.promo` | `YextEntityField<PromoSectionType \| {}>` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                                                   | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color for the entire section.                  | `Background Color 1` |
-| `styles.ctaVariant`      | `CTAVariant`                                                     | The visual style variant for the call-to-action button.       | `'primary'`          |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the promo's title.                                |                      |
-| `styles.image`           | `ImageStylingProps`                                              | Styling options for the promo image, such as aspect ratio.    |                      |
-| `styles.orientation`     | `"left" \| "right"`                                              | Positions the image to the left or right of the text content. | `'left'`             |
+| Prop                     | Type                | Description                                                   | Default              |
+| :----------------------- | :------------------ | :------------------------------------------------------------ | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`   | The background color for the entire section.                  | `Background Color 1` |
+| `styles.orientation`     | `"left" \| "right"` | Positions the image to the left or right of the text content. | `'left'`             |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                                                             | Description                                                                    | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                        | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ HeadingSlot: Slot; DescriptionSlot: Slot; VideoSlot: Slot; ImageSlot: Slot; CTASlot: Slot; }` |                                                                                |         |
 
 ---
 

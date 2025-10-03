@@ -15,7 +15,12 @@ import {
   getCTATypeAndCoordinate,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
-const defaultButton: CTAWrapperProps = {
+type BasicCTAProps = {
+  entityField: CTAWrapperProps["data"]["entityField"];
+  variant: CTAWrapperProps["styles"]["variant"];
+};
+
+const defaultButton: BasicCTAProps = {
   entityField: {
     field: "",
     constantValueEnabled: true,
@@ -29,7 +34,7 @@ const defaultButton: CTAWrapperProps = {
 };
 
 export interface CTAGroupProps {
-  buttons: CTAWrapperProps[];
+  buttons: BasicCTAProps[];
 }
 
 const ctaGroupFields: Fields<CTAGroupProps> = {

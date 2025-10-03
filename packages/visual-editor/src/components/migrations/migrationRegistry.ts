@@ -24,6 +24,8 @@ import { organizeHeadingTextProps } from "./0022_organize_heading_text_props.ts"
 import { eventSectionSlots } from "./0023_event_section_slots.ts";
 import { coreInfoSectionSlots } from "./0024_core_info_section_slots.ts";
 import { videoSectionSlots } from "./0025_video_section_slots.ts";
+import { organizeCTAWrapperProps } from "./0026_organize_cta_wrapper_props.ts";
+import { promoSectionSlots } from "./0027_promo_section_slots.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -56,4 +58,6 @@ export const migrationRegistry: MigrationRegistry = [
   eventSectionSlots,
   coreInfoSectionSlots,
   videoSectionSlots,
+  organizeCTAWrapperProps,
+  promoSectionSlots,
 ];

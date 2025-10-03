@@ -335,6 +335,13 @@ interface PromoSectionProps {
    * @propCategory Style Props
    */
   styles: PromoStyles;
+  slots: {
+    HeadingSlot: Slot;
+    DescriptionSlot: Slot;
+    VideoSlot: Slot;
+    ImageSlot: Slot;
+    CTASlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -902,7 +909,8 @@ interface PromoData {
    * The source for the promotional content, including an image, title, description, and a call-to-action.
    * @defaultValue Placeholder content for a featured promotion.
    */
-  promo: YextStructEntityField<PromoSectionType>;
+  promo: YextEntityField<PromoSectionType | {}>;
+  media: "image" | "video";
 }
 
 interface PromoStyles {
@@ -916,20 +924,6 @@ interface PromoStyles {
    * @defaultValue 'left'
    */
   orientation: "left" | "right";
-  /**
-   * The visual style variant for the call-to-action button.
-   * @defaultValue 'primary'
-   */
-  ctaVariant: CTAVariant;
-  /** Styling for the promo's title. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /**
-   * Styling options for the promo image, such as aspect ratio.
-   */
-  image: ImageStylingProps;
 }
 
 /**

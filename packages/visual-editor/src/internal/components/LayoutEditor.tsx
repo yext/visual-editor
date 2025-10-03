@@ -23,6 +23,7 @@ import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
 
 const devLogger = new DevLogger();
 
@@ -61,6 +62,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     localDev,
     puckConfig
   );
+
+  const streamDocument = useDocument();
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
@@ -148,7 +151,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         ).map((history) => ({
           id: history.id,
           state: {
-            data: migrate(history.state.data, migrationRegistry, puckConfig),
+            data: migrate(
+              history.state.data,
+              migrationRegistry,
+              puckConfig,
+              streamDocument
+            ),
             ui: history.state.ui,
           },
         }));

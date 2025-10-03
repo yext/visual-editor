@@ -27,10 +27,16 @@ export type HeadingTextProps = {
     /** Alignment of the event section heading */
     align: "left" | "center" | "right";
   };
+
+  /** @internal Controlled data from the parent section */
+  parentData?: {
+    field: string;
+    text: string;
+  };
 };
 
 const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
-  const { data, styles, puck } = props;
+  const { data, styles, puck, parentData } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -42,18 +48,16 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
       }[styles.align]
     : "justify-start";
 
-  const resolvedHeadingText = resolveComponentData(
-    data.text,
-    i18n.language,
-    streamDocument
-  );
+  const resolvedHeadingText = parentData
+    ? parentData.text
+    : resolveComponentData(data.text, i18n.language, streamDocument);
 
   return resolvedHeadingText ? (
     <div className={`flex ${justifyClass}`}>
       <EntityField
         displayName={pt("Heading", "Heading") + " " + styles.level}
-        fieldId={data.text.field}
-        constantValueEnabled={data.text.constantValueEnabled}
+        fieldId={parentData ? parentData.field : data.text.field}
+        constantValueEnabled={!parentData && data.text.constantValueEnabled}
       >
         <Heading level={styles.level}>{resolvedHeadingText}</Heading>
       </EntityField>
@@ -98,6 +102,28 @@ const headingTextFields: Fields<HeadingTextProps> = {
 export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
+  resolveFields: (data) => {
+    if (data.props.parentData) {
+      return {
+        ...headingTextFields,
+        data: {
+          label: msg("fields.data", "Data"),
+          type: "object",
+          objectFields: {
+            info: {
+              type: "custom",
+              render: () => (
+                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
+                  Data is inherited from the parent section.
+                </p>
+              ),
+            },
+          },
+        },
+      } as any;
+    }
+    return headingTextFields;
+  },
   defaultProps: {
     data: {
       text: {

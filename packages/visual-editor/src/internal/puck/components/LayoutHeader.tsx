@@ -207,7 +207,7 @@ export const LocalDevOverrideButtons = () => {
           try {
             data = JSON.parse(prompt("Enter layout data:") ?? "{}");
           } finally {
-            const migratedData = migrate(data, migrationRegistry, config);
+            const migratedData = migrate(data, migrationRegistry, config, {});
             setHistories([...histories, { state: { data: migratedData } }]);
           }
         }}

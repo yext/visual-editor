@@ -6,6 +6,7 @@ import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import { migrate } from "../../../utils/migrate.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 const devLogger = new DevLogger();
 
@@ -14,6 +15,7 @@ export const useLayoutMessageReceivers = (
   puckConfig: Config
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
+  const { streamDocument } = useDocument();
 
   // Trigger additional data flow from parent
   useEffect(() => {
@@ -31,7 +33,12 @@ export const useLayoutMessageReceivers = (
       const history = JSON.parse(payload.history) as AppState;
       const migratedHistory = {
         ...history,
-        data: migrate(history.data, migrationRegistry, puckConfig),
+        data: migrate(
+          history.data,
+          migrationRegistry,
+          puckConfig,
+          streamDocument
+        ),
       };
 
       receivedLayoutSaveState = {
