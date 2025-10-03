@@ -117,7 +117,7 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
   const { t } = useTranslation();
 
   // Determine which columns to show. All 3 should be shown in editing mode.
-  const showCoreInfoCol = puck.isEditing || conditionalRender?.coreInfoCol;
+  const showCoreInfoCol = conditionalRender?.coreInfoCol || puck.isEditing;
   const showHoursCol = conditionalRender?.hoursCol || puck.isEditing;
   const showServicesCol = conditionalRender?.servicesCol || puck.isEditing;
 
