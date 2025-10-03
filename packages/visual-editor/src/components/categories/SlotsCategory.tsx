@@ -1,9 +1,15 @@
+import { Address, AddressProps } from "../contentBlocks/Address.tsx";
+import { BodyTextProps, BodyText } from "../contentBlocks/BodyText.tsx";
+import { CTAWrapperProps, CTAWrapper } from "../contentBlocks/CtaWrapper.tsx";
 import {
   HeadingTextProps,
   HeadingText,
 } from "../contentBlocks/HeadingText.tsx";
-import { Address, AddressProps } from "../contentBlocks/Address.tsx";
 import { HoursTable, HoursTableProps } from "../contentBlocks/HoursTable.tsx";
+import {
+  ImageWrapperProps,
+  ImageWrapper,
+} from "../contentBlocks/image/Image.tsx";
 import { Video, VideoProps } from "../contentBlocks/Video.tsx";
 import {
   TextList,
@@ -15,9 +21,12 @@ import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
+  BodyTextSlot: BodyTextProps;
+  CTAWrapperSlot: CTAWrapperProps;
   EmailsSlot: EmailsProps;
   HeadingTextSlot: HeadingTextProps;
   HoursTableSlot: HoursTableProps;
+  ImageWrapperSlot: ImageWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
   ServicesListSlot: TextListProps;
   TextListSlot: TextListProps;
@@ -33,9 +42,13 @@ const lockedPermissions = {
 
 export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
+  BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
+  CTAWrapperSlot: { ...CTAWrapper, permissions: lockedPermissions },
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
+  ImageWrapperSlot: { ...ImageWrapper, permissions: lockedPermissions },
+
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TextListSlot: { ...TextList, permissions: lockedPermissions },

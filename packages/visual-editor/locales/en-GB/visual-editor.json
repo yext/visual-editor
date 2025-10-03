@@ -228,6 +228,7 @@
     "mapStyle": "Map Style",
     "maxWidth": "Max Width",
     "media": "Media",
+    "mediaOrientation": "Media Orientation",
     "metaDescription": "Meta Description",
     "metaTitle": "Meta Title",
     "mobileContentAlignment": "Mobile Content Alignment",
@@ -299,6 +300,7 @@
       "truncate": "Truncate",
       "tuesday": "Tuesday",
       "two": "Two",
+      "video": "Video",
       "wednesday": "Wednesday",
       "width": "Width",
       "yes": "Yes"

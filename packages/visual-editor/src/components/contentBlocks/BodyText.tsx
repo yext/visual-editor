@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   BodyProps,
   useDocument,
@@ -20,6 +20,10 @@ export type BodyTextProps = {
   };
   styles: {
     variant: BodyProps["variant"];
+  };
+  parentData?: {
+    field: string;
+    richText: TranslatableRichText;
   };
 };
 
@@ -46,30 +50,62 @@ const bodyTextFields: Fields<BodyTextProps> = {
   }),
 };
 
-const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
-  ({ data, styles }) => {
-    const { i18n } = useTranslation();
-    const streamDocument = useDocument();
-    const background = useBackground();
+const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
+  const { data, styles, puck, parentData } = props;
+  const { i18n } = useTranslation();
+  const streamDocument = useDocument();
+  const background = useBackground();
 
-    return (
-      <EntityField
-        displayName={pt("body", "Body")}
-        fieldId={data.text.field}
-        constantValueEnabled={data.text.constantValueEnabled}
-      >
-        {resolveComponentData(data.text, i18n.language, streamDocument, {
-          variant: styles.variant,
-          isDarkBackground: background?.isDarkBackground,
-        })}
-      </EntityField>
-    );
-  }
-);
+  const resolvedData = resolveComponentData(
+    parentData ? parentData.richText : data.text,
+    i18n.language,
+    streamDocument,
+    {
+      variant: styles.variant,
+      isDarkBackground: background?.isDarkBackground,
+    }
+  );
+
+  return resolvedData ? (
+    <EntityField
+      displayName={pt("body", "Body")}
+      fieldId={parentData ? parentData.field : data.text.field}
+      constantValueEnabled={data.text.constantValueEnabled}
+    >
+      {resolvedData}
+    </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-[60px]" />
+  ) : (
+    <></>
+  );
+};
 
 export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
   label: msg("components.bodyText", "Body Text"),
   fields: bodyTextFields,
+  resolveFields: (data) => {
+    if (data.props.parentData) {
+      return {
+        ...bodyTextFields,
+        data: {
+          label: msg("fields.data", "Data"),
+          type: "object",
+          objectFields: {
+            info: {
+              type: "custom",
+              render: () => (
+                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
+                  Data is inherited from the parent section.
+                </p>
+              ),
+            },
+          },
+        },
+      } as any;
+    }
+    return bodyTextFields;
+  },
   defaultProps: {
     data: {
       text: {

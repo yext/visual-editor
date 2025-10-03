@@ -229,6 +229,7 @@
     "mapStyle": "マップスタイル",
     "maxWidth": "最大幅",
     "media": "メディア",
+    "mediaOrientation": "メディアオリエンテーション",
     "metaDescription": "メタ説明",
     "metaTitle": "メタタイトル",
     "mobileContentAlignment": "モバイルコンテンツアライメント",
@@ -300,6 +301,7 @@
       "truncate": "切り捨てます",
       "tuesday": "火曜日",
       "two": "二",
+      "video": "ビデオ",
       "wednesday": "水曜日",
       "width": "幅",
       "yes": "はい"

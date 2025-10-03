@@ -229,6 +229,7 @@
     "mapStyle": "Styl mapy",
     "maxWidth": "Max szerokość",
     "media": "Głoska bezdźwięczna",
+    "mediaOrientation": "Orientacja mediów",
     "metaDescription": "Opis meta",
     "metaTitle": "Tytuł meta",
     "mobileContentAlignment": "Wyrównanie treści mobilnych",
@@ -300,6 +301,7 @@
       "truncate": "Ścięty",
       "tuesday": "Wtorek",
       "two": "Dwa",
+      "video": "Wideo",
       "wednesday": "Środa",
       "width": "Szerokość",
       "yes": "Tak"

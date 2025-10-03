@@ -375,7 +375,8 @@ describe("TeamSection", async () => {
           ],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
 
       const { container } = reactRender(

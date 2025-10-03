@@ -228,6 +228,7 @@
     "mapStyle": "Kartenstil",
     "maxWidth": "Maximale Breite",
     "media": "Medien",
+    "mediaOrientation": "Medienorientierung",
     "metaDescription": "Meta Beschreibung",
     "metaTitle": "Meta -Titel",
     "mobileContentAlignment": "Ausrichtung des mobilen Inhalts",
@@ -299,6 +300,7 @@
       "truncate": "Kürzen",
       "tuesday": "Dienstag",
       "two": "Zwei",
+      "video": "Video",
       "wednesday": "Mittwoch",
       "width": "Breite",
       "yes": "Ja"

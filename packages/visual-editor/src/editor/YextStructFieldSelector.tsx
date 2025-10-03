@@ -19,10 +19,7 @@ type EntityFieldTypesFilter = {
 
 // StructEntityFieldTypes contains new struct types that we support overriding individual subfields for
 export type StructEntityFieldTypes = "type.hero_section" | "type.promo_section";
-export const supportedStructEntityFieldTypes = [
-  "type.hero_section",
-  "type.promo_section",
-];
+export const supportedStructEntityFieldTypes = ["type.hero_section"];
 
 /** Represents a Yext struct entity field (hero or promo) with support for static values and overrides. */
 export type YextStructEntityField<T extends Record<string, any> = any> = {

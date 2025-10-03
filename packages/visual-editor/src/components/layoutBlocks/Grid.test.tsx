@@ -560,7 +560,8 @@ describe("Grid", async () => {
           ],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
 
       const { container } = reactRender(
