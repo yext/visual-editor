@@ -82,31 +82,22 @@ The Core Info Section is a comprehensive component designed to display essential
 
 ### Props
 
-#### Data Props
-
-This object contains all the content to be displayed within the three columns.
-
-| Prop        | Type                                                                              | Description                           | Default |
-| :---------- | :-------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.info` | `{ phoneNumbers: Array<PhoneProps["data"]>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                    | Description                           | Default |
-| :----------------------- | :------------------------------------------------------ | :------------------------------------ | :------ |
-| `styles.backgroundColor` | `BackgroundStyle`                                       | The background color of the section.  |         |
-| `styles.info`            | `PhoneProps["styles"] & { emailsListLength?: number; }` | Styling for the "Information" column. |         |
+| Prop                     | Type              | Description                          | Default |
+| :----------------------- | :---------------- | :----------------------------------- | :------ |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type                                                                                                                                                         | Description                                                                    | Default |
-| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                                                                                                                                    | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ CoreInfoHeadingSlot: Slot; CoreInfoAddressSlot: Slot; HoursHeadingSlot: Slot; HoursTableSlot: Slot; ServicesHeadingSlot: Slot; ServicesListSlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                                                                                                                                                                                   | Description                                                                    | Default |
+| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                                                                              | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ CoreInfoHeadingSlot: Slot; CoreInfoAddressSlot: Slot; CoreInfoPhoneNumbersSlot: Slot; CoreInfoEmailsSlot: Slot; HoursHeadingSlot: Slot; HoursTableSlot: Slot; ServicesHeadingSlot: Slot; ServicesListSlot: Slot; }` |                                                                                |         |
 
 ---
 

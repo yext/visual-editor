@@ -1,43 +1,19 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { AddressType, AnalyticsScopeProvider } from "@yext/pages-components";
-import { FaRegEnvelope } from "react-icons/fa";
 import {
   YextEntityField,
   BackgroundStyle,
-  useDocument,
   PageSection,
-  EntityField,
-  CTA,
   backgroundColors,
-  PhoneAtom,
-  Background,
   YextField,
   VisibilityWrapper,
   msg,
-  pt,
-  usePlatformTranslation,
   getAnalyticsScopeHash,
   resolveComponentData,
   TranslatableString,
 } from "@yext/visual-editor";
-import {
-  defaultPhoneDataProps,
-  PhoneDataFields,
-  PhoneProps,
-  PhoneStyleFields,
-} from "../contentBlocks/Phone.tsx";
-import { EmailsFields } from "../contentBlocks/Emails.tsx";
-
-export interface CoreInfoData {
-  /** Content for the "Information" column. */
-  info: {
-    /** The phone number for the entity */
-    phoneNumbers: Array<PhoneProps["data"]>;
-    /** Emails associated with the entity */
-    emails: YextEntityField<string[]>;
-  };
-}
+import { resolvePhoneNumbers } from "../contentBlocks/PhoneList";
 
 export interface CoreInfoStyles {
   /**
@@ -45,20 +21,9 @@ export interface CoreInfoStyles {
    * @defaultValue `Background Color 1`
    */
   backgroundColor?: BackgroundStyle;
-
-  /** Styling for the "Information" column. */
-  info: PhoneProps["styles"] & {
-    emailsListLength?: number;
-  };
 }
 
 export interface CoreInfoSectionProps {
-  /**
-   * This object contains all the content to be displayed within the three columns.
-   * @propCategory Data Props
-   */
-  data: CoreInfoData;
-
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
@@ -68,6 +33,8 @@ export interface CoreInfoSectionProps {
   slots: {
     CoreInfoHeadingSlot: Slot;
     CoreInfoAddressSlot: Slot;
+    CoreInfoPhoneNumbersSlot: Slot;
+    CoreInfoEmailsSlot: Slot;
     HoursHeadingSlot: Slot;
     HoursTableSlot: Slot;
     ServicesHeadingSlot: Slot;
@@ -94,35 +61,6 @@ export interface CoreInfoSectionProps {
 }
 
 const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      info: YextField(msg("fields.infoColumn", "Info Column"), {
-        type: "object",
-        objectFields: {
-          phoneNumbers: YextField(msg("fields.phoneNumbers", "Phone Numbers"), {
-            type: "array",
-            arrayFields: PhoneDataFields,
-            defaultItemProps: defaultPhoneDataProps,
-            getItemSummary: (item): string => {
-              const { i18n } = usePlatformTranslation();
-              const streamDocument = useDocument();
-              const resolvedValue = resolveComponentData(
-                item.label,
-                i18n.language,
-                streamDocument
-              );
-              if (resolvedValue) {
-                return resolvedValue;
-              }
-              return pt("phone", "Phone");
-            },
-          }),
-          emails: EmailsFields.list,
-        },
-      }),
-    },
-  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -133,12 +71,6 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      info: YextField(msg("fields.infoColumn", "Info Column"), {
-        type: "object",
-        objectFields: {
-          ...PhoneStyleFields,
-        },
-      }),
     },
   }),
   slots: {
@@ -146,6 +78,8 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
     objectFields: {
       CoreInfoHeadingSlot: { type: "slot" },
       CoreInfoAddressSlot: { type: "slot" },
+      CoreInfoPhoneNumbersSlot: { type: "slot" },
+      CoreInfoEmailsSlot: { type: "slot" },
       HoursHeadingSlot: { type: "slot" },
       HoursTableSlot: { type: "slot" },
       ServicesHeadingSlot: { type: "slot" },
@@ -179,52 +113,13 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
  * Available on Location templates.
  */
 const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
-  const { data, styles, slots, conditionalRender, puck } = props;
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const streamDocument = useDocument();
+  const { styles, slots, conditionalRender, puck } = props;
+  const { t } = useTranslation();
 
-  const resolvedEmails = resolveComponentData(
-    data.info.emails,
-    locale,
-    streamDocument
-  );
-
-  type ResolvedPhoneNumber = {
-    number: string;
-    label?: string;
-  };
-  const resolvedPhoneNumbers: ResolvedPhoneNumber[] =
-    data?.info?.phoneNumbers
-      ?.map((item): ResolvedPhoneNumber | null => {
-        const number = resolveComponentData(
-          item.number,
-          locale,
-          streamDocument
-        );
-        const label = resolveComponentData(
-          item.label,
-          i18n.language,
-          streamDocument
-        );
-
-        if (!number) return null;
-
-        return { number, label };
-      })
-      ?.filter((item): item is ResolvedPhoneNumber => item !== null) ?? [];
-
-  // Determine if the Core Info column should be shown
-  // It should be shown if in editing mode or if it has any content to display
-  const showCoreInfoCol: boolean =
-    puck.isEditing ||
-    conditionalRender?.coreInfoCol ||
-    (resolvedPhoneNumbers?.length ?? 0) > 0 ||
-    (resolvedEmails?.length ?? 0) > 0;
-
-  const showHoursCol: boolean = conditionalRender?.hoursCol || puck.isEditing;
-  const showServicesCol: boolean =
-    conditionalRender?.servicesCol || puck.isEditing;
+  // Determine which columns to show. All 3 should be shown in editing mode.
+  const showCoreInfoCol = conditionalRender?.coreInfoCol || puck.isEditing;
+  const showHoursCol = conditionalRender?.hoursCol || puck.isEditing;
+  const showServicesCol = conditionalRender?.servicesCol || puck.isEditing;
 
   const sectionCount = [showCoreInfoCol, showHoursCol, showServicesCol].filter(
     Boolean
@@ -249,80 +144,8 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
         >
           <slots.CoreInfoHeadingSlot style={{ maxHeight: "fit-content" }} />
           <slots.CoreInfoAddressSlot />
-          {resolvedPhoneNumbers.length > 0 && (
-            <ul className="flex flex-col gap-4">
-              {resolvedPhoneNumbers.map((phone, idx) => {
-                return (
-                  <li
-                    key={`${phone.number}-${idx}`}
-                    className="flex gap-2 items-center"
-                  >
-                    {/* Assuming you want to associate this with the original EntityField data —
-              fallback to data.info.phoneNumbers[idx] */}
-                    <EntityField
-                      displayName={pt("fields.phoneNumber", "Phone Number")}
-                      fieldId={data.info.phoneNumbers[idx]?.number?.field}
-                      constantValueEnabled={
-                        data.info.phoneNumbers[idx]?.number
-                          ?.constantValueEnabled
-                      }
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex gap-2 items-center">
-                          <PhoneAtom
-                            eventName={`phone${idx}`}
-                            backgroundColor={backgroundColors.background2.value}
-                            label={phone.label}
-                            phoneNumber={phone.number}
-                            format={styles.info.phoneFormat}
-                            includeHyperlink={styles.info.includePhoneHyperlink}
-                            includeIcon={true}
-                          />
-                        </div>
-                      </div>
-                    </EntityField>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-          {resolvedEmails && (
-            <EntityField
-              displayName={pt("fields.emailList", "Email List")}
-              fieldId={data.info.emails.field}
-              constantValueEnabled={data.info.emails.constantValueEnabled}
-            >
-              <ul className="list-inside flex flex-col gap-4">
-                {resolvedEmails
-                  .slice(
-                    0,
-                    data.info.emails.constantValueEnabled
-                      ? resolvedEmails.length
-                      : Math.min(
-                          resolvedEmails.length,
-                          styles.info.emailsListLength!
-                        )
-                  )
-                  .map((email, index) => (
-                    <li key={index} className={`flex items-center gap-3`}>
-                      <Background
-                        background={backgroundColors.background2.value}
-                        className={`h-10 w-10 flex justify-center rounded-full items-center`}
-                      >
-                        <FaRegEnvelope className="w-4 h-4" />
-                      </Background>
-                      <CTA
-                        eventName={`email${index}`}
-                        link={email}
-                        label={email}
-                        linkType="EMAIL"
-                        variant="link"
-                      />
-                    </li>
-                  ))}
-              </ul>
-            </EntityField>
-          )}
+          <slots.CoreInfoPhoneNumbersSlot />
+          <slots.CoreInfoEmailsSlot />
         </section>
       )}
       {showHoursCol && (
@@ -355,66 +178,9 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
   {
     label: msg("components.coreInfoSection", "Core Info Section"),
     fields: coreInfoSectionFields,
-    resolveFields: (data, { fields }) => {
-      if (data.props.data.info.emails.constantValueEnabled) {
-        return fields;
-      }
-
-      return {
-        ...fields,
-        styles: {
-          ...fields.styles,
-          objectFields: {
-            // @ts-expect-error ts(2339) objectFields exists
-            ...fields.styles.objectFields,
-            info: {
-              // @ts-expect-error ts(2339) objectFields exists
-              ...fields.styles.objectFields.info,
-              objectFields: {
-                // @ts-expect-error ts(2339) objectFields exists
-                ...fields.styles.objectFields.info.objectFields,
-                emailsListLength: YextField(
-                  msg("fields.emailsListLength", "Emails List Length"),
-                  {
-                    type: "number",
-                    min: 0,
-                    max: 3,
-                  }
-                ),
-              },
-            },
-          },
-        },
-      };
-    },
     defaultProps: {
-      data: {
-        info: {
-          phoneNumbers: [
-            {
-              number: {
-                field: "mainPhone",
-                constantValue: "",
-              },
-              label: {
-                en: "Phone",
-                hasLocalizedValue: "true",
-              },
-            },
-          ],
-          emails: {
-            field: "emails",
-            constantValue: [],
-          },
-        },
-      },
       styles: {
         backgroundColor: backgroundColors.background1.value,
-        info: {
-          phoneFormat: "domestic",
-          includePhoneHyperlink: true,
-          emailsListLength: 1,
-        },
       },
       slots: {
         CoreInfoHeadingSlot: [
@@ -453,6 +219,47 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
               styles: {
                 showGetDirectionsLink: true,
                 ctaVariant: "link",
+              },
+            },
+          },
+        ],
+        CoreInfoPhoneNumbersSlot: [
+          {
+            type: "PhoneNumbersSlot",
+            props: {
+              data: {
+                phoneNumbers: [
+                  {
+                    number: {
+                      field: "mainPhone",
+                      constantValue: "",
+                    },
+                    label: {
+                      en: "Phone",
+                      hasLocalizedValue: "true",
+                    },
+                  },
+                ],
+              },
+              styles: {
+                phoneFormat: "domestic",
+                includePhoneHyperlink: true,
+              },
+            },
+          },
+        ],
+        CoreInfoEmailsSlot: [
+          {
+            type: "EmailsSlot",
+            props: {
+              data: {
+                list: {
+                  field: "emails",
+                  constantValue: [],
+                },
+              },
+              styles: {
+                listLength: 1,
               },
             },
           },
@@ -554,8 +361,26 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
         streamDocument
       ) as unknown as AddressType;
 
+      const resolvedPhoneNumbers = resolvePhoneNumbers(
+        data.props.slots.CoreInfoPhoneNumbersSlot?.[0].props?.data
+          ?.phoneNumbers,
+        locale,
+        streamDocument
+      );
+
+      const resolvedEmails = resolveComponentData(
+        data.props.slots.CoreInfoEmailsSlot.map(
+          (slot) => slot.props.data.list
+        )[0],
+        locale,
+        streamDocument
+      );
+
       const showCoreInfoCol =
-        !!resolvedInfoHeading || !!resolvedInfoAddress?.line1;
+        !!resolvedInfoHeading ||
+        !!resolvedInfoAddress?.line1 ||
+        (resolvedPhoneNumbers?.length ?? 0) > 0 ||
+        (resolvedEmails?.length ?? 0) > 0;
 
       const resolvedHours = resolveComponentData(
         data.props?.slots?.HoursTableSlot.map(

@@ -15,8 +15,14 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
-import { HeadingText, Address, HoursTable } from "../contentBlocks/index.ts";
+import {
+  HeadingText,
+  Address,
+  HoursTable,
+  Emails,
+} from "../contentBlocks/index.ts";
 import { ServicesList } from "../contentBlocks/TextList.tsx";
+import { PhoneList } from "../contentBlocks/PhoneList.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -770,8 +776,10 @@ describe("CoreInfoSection", async () => {
     components: {
       CoreInfoSection,
       AddressSlot: Address,
+      EmailsSlot: Emails,
       HeadingTextSlot: HeadingText,
       HoursTableSlot: HoursTable,
+      PhoneNumbersSlot: PhoneList,
       ServicesListSlot: ServicesList,
     },
     root: {

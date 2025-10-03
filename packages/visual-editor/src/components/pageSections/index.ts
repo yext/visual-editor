@@ -13,7 +13,6 @@ export {
 export {
   CoreInfoSection,
   type CoreInfoSectionProps,
-  type CoreInfoData,
   type CoreInfoStyles,
 } from "./CoreInfoSection.tsx";
 export {

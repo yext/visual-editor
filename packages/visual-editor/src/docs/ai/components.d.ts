@@ -140,11 +140,6 @@ interface BreadcrumbsSectionProps {
 
 interface CoreInfoSectionProps {
   /**
-   * This object contains all the content to be displayed within the three columns.
-   * @propCategory Data Props
-   */
-  data: CoreInfoData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
@@ -152,6 +147,8 @@ interface CoreInfoSectionProps {
   slots: {
     CoreInfoHeadingSlot: Slot;
     CoreInfoAddressSlot: Slot;
+    CoreInfoPhoneNumbersSlot: Slot;
+    CoreInfoEmailsSlot: Slot;
     HoursHeadingSlot: Slot;
     HoursTableSlot: Slot;
     ServicesHeadingSlot: Slot;
@@ -575,26 +572,12 @@ interface BreadcrumbsStyles {
   backgroundColor?: BackgroundStyle;
 }
 
-interface CoreInfoData {
-  /** Content for the "Information" column. */
-  info: {
-    /** The phone number for the entity */
-    phoneNumbers: Array<PhoneProps["data"]>;
-    /** Emails associated with the entity */
-    emails: YextEntityField<string[]>;
-  };
-}
-
 interface CoreInfoStyles {
   /**
    * The background color of the section.
    * @defaultValue `Background Color 1`
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for the "Information" column. */
-  info: PhoneProps["styles"] & {
-    emailsListLength?: number;
-  };
 }
 
 interface EventData {
@@ -1129,22 +1112,6 @@ type YextEntityField<T> = {
 type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
-
-/** The props for the Phone component */
-interface PhoneProps {
-  data: {
-    /** The phone number data to display */
-    number: YextEntityField<string>;
-    /** The text to display before the phone number */
-    label: TranslatableString;
-  };
-  styles: {
-    /** Whether to format the phone number like a domestic or international number */
-    phoneFormat: "domestic" | "international";
-    /** Whether to make the phone number a clickable link */
-    includePhoneHyperlink: boolean;
-  };
-}
 
 /** Data for the EventSection */
 type EventSectionType = {
