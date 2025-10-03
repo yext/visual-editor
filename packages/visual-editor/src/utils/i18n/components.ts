@@ -38,11 +38,7 @@ export const injectTranslations = async (templateProps: any) => {
 };
 
 /**
- * Dynamically imports the translation file for the given locale. To be used
- * by consumers of visual-editor in transformProps of a template.
- *
- * @param locale The locale to load translations for.
- * @returns
+ * Dynamically imports the translation file for the given locale.
  */
 const getTranslations = async (
   locale: string
