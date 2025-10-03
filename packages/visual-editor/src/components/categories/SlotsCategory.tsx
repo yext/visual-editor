@@ -10,11 +10,15 @@ import {
   TextListProps,
   ServicesList,
 } from "../contentBlocks/TextList.tsx";
+import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
+import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
+  EmailsSlot: EmailsProps;
   HeadingTextSlot: HeadingTextProps;
   HoursTableSlot: HoursTableProps;
+  PhoneNumbersSlot: PhoneListProps;
   ServicesListSlot: TextListProps;
   TextListSlot: TextListProps;
   VideoSlot: VideoProps;
@@ -29,8 +33,10 @@ const lockedPermissions = {
 
 export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
+  EmailsSlot: { ...Emails, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
+  PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
