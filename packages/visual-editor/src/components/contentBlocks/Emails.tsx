@@ -67,7 +67,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
             0,
             data.list.constantValueEnabled
               ? resolvedEmailList.length
-              : Math.min(resolvedEmailList.length, styles?.listLength)
+              : Math.min(resolvedEmailList.length, styles?.listLength ?? 1)
           )
           .filter((e) => !!e)
           .map((email, index) => (

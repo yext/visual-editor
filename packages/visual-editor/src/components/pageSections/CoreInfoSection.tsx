@@ -402,26 +402,6 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
         resolvedServicesList = [resolvedServicesList];
       }
 
-      const resolvedHours = resolveComponentData(
-        data.props?.slots?.HoursTableSlot.map(
-          (slot) => slot.props.data.hours
-        )[0],
-        locale,
-        streamDocument
-      );
-
-      let resolvedServicesList = resolveComponentData(
-        data.props?.slots?.ServicesListSlot?.map(
-          (slot) => slot.props.list as YextEntityField<TranslatableString[]>
-        )[0],
-        locale,
-        streamDocument
-      );
-
-      if (resolvedServicesList && !Array.isArray(resolvedServicesList)) {
-        resolvedServicesList = [resolvedServicesList];
-      }
-
       return {
         ...data,
         props: {
