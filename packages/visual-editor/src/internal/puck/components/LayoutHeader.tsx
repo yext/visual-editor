@@ -22,7 +22,6 @@ import {
   usePlatformTranslation,
   pt,
 } from "../../../utils/i18n/platform.ts";
-import { useTemplateProps } from "../../../hooks/useDocument.tsx";
 
 const usePuck = createUsePuck();
 
