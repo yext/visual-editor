@@ -28,7 +28,7 @@ export const applyI18nFallbacks = (
   fallbacks: Fallback[]
 ) => {
   fallbacks.forEach(({ from, to }: Fallback) => {
-    if (!!resources[from]) {
+    if (resources[from]) {
       return;
     }
     if (!resources[to]) {

@@ -7,6 +7,7 @@ import {
   TemplateConfig,
   TemplateProps,
   TemplateRenderProps,
+  TransformProps,
 } from "@yext/pages";
 import { componentRegistry } from "../ve.config";
 import {
@@ -18,6 +19,7 @@ import {
   applyAnalytics,
   applyHeaderScript,
   getSchema,
+  injectTranslations,
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
@@ -124,6 +126,12 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       </script>`,
     ].join("\n"),
   };
+};
+
+export const transformProps: TransformProps<TemplateProps<any>> = async (
+  data
+) => {
+  return await injectTranslations(data);
 };
 
 export const getPath: GetPath<TemplateProps> = ({ document }) => {
