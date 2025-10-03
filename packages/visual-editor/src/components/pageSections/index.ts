@@ -62,7 +62,6 @@ export {
 export {
   ProductSection,
   type ProductSectionProps,
-  type ProductData,
   type ProductStyles,
 } from "./ProductSection.tsx";
 export { ReviewsSection, type ReviewsSectionProps } from "./ReviewsSection.tsx";

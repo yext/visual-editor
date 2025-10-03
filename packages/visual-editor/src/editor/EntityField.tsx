@@ -26,65 +26,73 @@ type EntityFieldProps = {
   className?: string;
 };
 
-export const EntityField = ({
-  displayName,
-  fieldId,
-  constantValueEnabled,
-  children,
-  fullHeight,
-  className,
-}: EntityFieldProps) => {
-  const tooltipsContext = useEntityTooltips();
+export const EntityField = React.forwardRef<HTMLDivElement, EntityFieldProps>(
+  (
+    {
+      displayName,
+      fieldId,
+      constantValueEnabled,
+      children,
+      fullHeight,
+      className,
+    }: EntityFieldProps,
+    ref
+  ) => {
+    const tooltipsContext = useEntityTooltips();
 
-  if (!tooltipsContext) {
-    return children;
-  }
+    if (!tooltipsContext) {
+      return children;
+    }
 
-  const { tooltipsVisible } = tooltipsContext;
+    const { tooltipsVisible } = tooltipsContext;
 
-  let tooltipContent = "";
-  if (constantValueEnabled) {
-    tooltipContent = pt("staticContent", "Static content");
-  } else if (displayName && fieldId) {
-    tooltipContent = `${displayName} (${fieldId})`;
-  } else if (fieldId) {
-    tooltipContent = `${fieldId}`;
-  } else if (displayName) {
-    tooltipContent = `${displayName}`;
-  }
+    let tooltipContent = "";
+    if (constantValueEnabled) {
+      tooltipContent = pt("staticContent", "Static content");
+    } else if (displayName && fieldId) {
+      tooltipContent = `${displayName} (${fieldId})`;
+    } else if (fieldId) {
+      tooltipContent = `${fieldId}`;
+    } else if (displayName) {
+      tooltipContent = `${displayName}`;
+    }
 
-  return (
-    <div className={fullHeight ? `h-full ${className}` : `${className}`}>
-      <TooltipProvider>
-        <Tooltip open={!!tooltipContent && tooltipsVisible}>
-          <TooltipTrigger asChild>
-            <div
-              className={
-                (fullHeight ? "h-full " : "") +
-                (tooltipsVisible
-                  ? "ve-outline-2 ve-outline-dotted" +
-                    (!constantValueEnabled ? " ve-outline-primary" : "")
-                  : "")
-              }
+    return (
+      <div
+        className={fullHeight ? `h-full ${className}` : `${className}`}
+        ref={ref}
+      >
+        <TooltipProvider>
+          <Tooltip open={!!tooltipContent && tooltipsVisible}>
+            <TooltipTrigger asChild>
+              <div
+                className={
+                  (fullHeight ? "h-full " : "") +
+                  (tooltipsVisible
+                    ? "ve-outline-2 ve-outline-dotted" +
+                      (!constantValueEnabled ? " ve-outline-primary" : "")
+                    : "")
+                }
+              >
+                <MemoizedChildren>{children}</MemoizedChildren>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent
+              zoomWithViewport
+              className={!constantValueEnabled ? "ve-bg-primary" : ""}
             >
-              <MemoizedChildren>{children}</MemoizedChildren>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent
-            zoomWithViewport
-            className={!constantValueEnabled ? "ve-bg-primary" : ""}
-          >
-            <p>{tooltipContent}</p>
-            <TooltipArrow
-              fill="bg-popover"
-              className={!constantValueEnabled ? "ve-fill-primary" : ""}
-            />
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
-  );
-};
+              <p>{tooltipContent}</p>
+              <TooltipArrow
+                fill="bg-popover"
+                className={!constantValueEnabled ? "ve-fill-primary" : ""}
+              />
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+    );
+  }
+);
 
 type EntityTooltipsContext = {
   tooltipsVisible: boolean;

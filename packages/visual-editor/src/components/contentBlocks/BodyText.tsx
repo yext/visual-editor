@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   BodyProps,
   useDocument,
@@ -46,26 +46,37 @@ const bodyTextFields: Fields<BodyTextProps> = {
   }),
 };
 
-const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
-  ({ data, styles }) => {
-    const { i18n } = useTranslation();
-    const streamDocument = useDocument();
-    const background = useBackground();
+const BodyTextComponent = React.forwardRef<
+  HTMLParagraphElement,
+  WithPuckProps<BodyTextProps>
+>(({ data, styles, puck }, ref) => {
+  const { i18n } = useTranslation();
+  const streamDocument = useDocument();
+  const background = useBackground();
 
-    return (
-      <EntityField
-        displayName={pt("body", "Body")}
-        fieldId={data.text.field}
-        constantValueEnabled={data.text.constantValueEnabled}
-      >
-        {resolveComponentData(data.text, i18n.language, streamDocument, {
-          variant: styles.variant,
-          isDarkBackground: background?.isDarkBackground,
-        })}
-      </EntityField>
-    );
-  }
-);
+  const resolvedBodyText = resolveComponentData(
+    data.text,
+    i18n.language,
+    streamDocument,
+    {
+      variant: styles.variant,
+      isDarkBackground: background?.isDarkBackground,
+    }
+  );
+
+  // TODO: How to know empty state
+  return resolvedBodyText ? (
+    <EntityField
+      displayName={pt("body", "Body")}
+      fieldId={data.text.field}
+      constantValueEnabled={data.text.constantValueEnabled}
+    >
+      {resolvedBodyText}
+    </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-[30px]" />
+  ) : null;
+});
 
 export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
   label: msg("components.bodyText", "Body Text"),
