@@ -1,3 +1,23 @@
+#### 0.0.60 (2025-10-03)
+
+##### New Features
+
+- provide default schema to parent window ([#791](https://github.com/yext/visual-editor/pull/791)) ([b8c4aa14](https://github.com/yext/visual-editor/commit/b8c4aa145bf813876eebf3d4e78805485a770e70))
+- use img sizes attribute to improve page load speed ([#767](https://github.com/yext/visual-editor/pull/767)) ([db37b1d0](https://github.com/yext/visual-editor/commit/db37b1d0af81700827fce4e98368a24e2e860d8d))
+
+##### Bug Fixes
+
+- refactor to remove vulnerability ([#799](https://github.com/yext/visual-editor/pull/799)) ([6e6dd90c](https://github.com/yext/visual-editor/commit/6e6dd90ca23efab778181b4122f6689e9193b6eb))
+- load fonts in font selector ([#796](https://github.com/yext/visual-editor/pull/796)) ([bfcfe02d](https://github.com/yext/visual-editor/commit/bfcfe02d679288b63447cf3072a7d3a07c2c0095))
+- fonts not loading in editor ([#793](https://github.com/yext/visual-editor/pull/793)) ([2eeb0f07](https://github.com/yext/visual-editor/commit/2eeb0f07d9407d96ffb06c2553077cf1503fb4ee))
+- insert schema as json instead of string ([#789](https://github.com/yext/visual-editor/pull/789)) ([752341c5](https://github.com/yext/visual-editor/commit/752341c5c89e533ad1f43597cdff61840814c7a4))
+- locator jumpiness on hours component ([#787](https://github.com/yext/visual-editor/pull/787)) ([2d3b649e](https://github.com/yext/visual-editor/commit/2d3b649e4620347ca0970b04a69cf45cc13970b4))
+- photo gallery css and update component tests ([#786](https://github.com/yext/visual-editor/pull/786)) ([b2eeabb8](https://github.com/yext/visual-editor/commit/b2eeabb8919d4149deaf56fa59ac11d94ad8ee55))
+
+##### Refactors
+
+- pass variants directly into resolveComponentData ([#788](https://github.com/yext/visual-editor/pull/788)) ([a7072ecb](https://github.com/yext/visual-editor/commit/a7072ecba993e065329b74291cec2dae90ae7b79))
+
 #### 0.0.59 (2025-09-26)
 
 ##### Chores
