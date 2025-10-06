@@ -464,11 +464,11 @@ Props for the HoursTable component.
 
 Additional CSS classes to apply to the image.
 
-| Prop        | Type                                                         | Description                                   | Default |
-| :---------- | :----------------------------------------------------------- | :-------------------------------------------- | :------ |
-| `className` | `string`                                                     | Additional CSS classes to apply to the image. |         |
-| `data`      | `{ image: YextEntityField<ImageType \| ComplexImageType>; }` |                                               |         |
-| `styles`    | `ImageStylingProps`                                          | Size and aspect ratio of the image.           |         |
+| Prop        | Type                                                                           | Description                                   | Default |
+| :---------- | :----------------------------------------------------------------------------- | :-------------------------------------------- | :------ |
+| `className` | `string`                                                                       | Additional CSS classes to apply to the image. |         |
+| `data`      | `{ image: YextEntityField<ImageType \| ComplexImageType \| AssetImageType>; }` |                                               |         |
+| `styles`    | `ImageStylingProps`                                                            | Size and aspect ratio of the image.           |         |
 
 ---
 
