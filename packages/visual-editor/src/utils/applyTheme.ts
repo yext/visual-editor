@@ -14,7 +14,7 @@ import {
   type FontLinkData,
 } from "./visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
-import { hexToHSL } from "./colors.ts";
+import { getContrastingColor } from "./colors.ts";
 
 export type StreamDocument = {
   [key: string]: any;
@@ -106,8 +106,8 @@ const internalApplyTheme = (
   }
 
   const themeValuesToApply = {
-    ...mergedThemeValues,
     ...generateContrastingColors(mergedThemeValues),
+    ...mergedThemeValues,
   };
 
   devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
@@ -129,13 +129,14 @@ const internalApplyTheme = (
 const generateContrastingColors = (themeData: ThemeData) => {
   const contrastingColors: Record<string, string> = {};
   Object.entries(themeData).forEach(([cssVariableName, value]) => {
-    if (cssVariableName.includes("--colors")) {
-      const hsl = hexToHSL(value);
-      if (hsl && hsl[2] >= 50) {
-        contrastingColors[cssVariableName + "-contrast"] = "#000000";
-      } else if (hsl) {
-        contrastingColors[cssVariableName + "-contrast"] = "#FFFFFF";
-      }
+    if (
+      cssVariableName.includes("--colors") &&
+      !themeData[cssVariableName + "-contrast"] &&
+      value.startsWith("#") &&
+      (value.length === 7 || value.length === 4)
+    ) {
+      const contrastColor = getContrastingColor(value, 12, 400);
+      contrastingColors[cssVariableName + "-contrast"] = contrastColor;
     }
   });
   return contrastingColors;
