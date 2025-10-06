@@ -20,6 +20,7 @@ export type HeadingTextProps = {
   data: {
     text: YextEntityField<TranslatableString>;
   };
+
   /** Styling for the heading. */
   styles: {
     /** The h tag level of the section heading */

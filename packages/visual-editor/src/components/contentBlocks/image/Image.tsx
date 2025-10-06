@@ -10,6 +10,7 @@ import {
   msg,
   pt,
   imgSizesHelper,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
@@ -18,13 +19,20 @@ const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface ImageWrapperProps {
   data: {
+    /** The image to display. */
     image: YextEntityField<ImageType | ComplexImageType>;
   };
+
+  /** Size and aspect ratio of the image. */
   styles: ImageStylingProps;
+
+  /** @internal Controlled data from the parent section. */
   parentData?: {
     field: string;
     image: ImageType | ComplexImageType;
   };
+
+  /** Additional CSS classes to apply to the image. */
   className?: string;
 }
 
@@ -114,27 +122,6 @@ export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
       width: 640,
     },
   },
-  resolveFields: (data) => {
-    if (data.props.parentData) {
-      return {
-        ...ImageWrapperFields,
-        data: {
-          label: msg("fields.data", "Data"),
-          type: "object",
-          objectFields: {
-            info: {
-              type: "custom",
-              render: () => (
-                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
-                  Data is inherited from the parent section.
-                </p>
-              ),
-            },
-          },
-        },
-      } as any;
-    }
-    return ImageWrapperFields;
-  },
+  resolveFields: (data) => resolveDataFromParent(ImageWrapperFields, data),
   render: (props) => <ImageWrapperComponent {...props} />,
 };

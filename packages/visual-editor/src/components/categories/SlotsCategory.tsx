@@ -22,11 +22,11 @@ import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
   BodyTextSlot: BodyTextProps;
-  CTAWrapperSlot: CTAWrapperProps;
+  CTASlot: CTAWrapperProps;
   EmailsSlot: EmailsProps;
   HeadingTextSlot: HeadingTextProps;
   HoursTableSlot: HoursTableProps;
-  ImageWrapperSlot: ImageWrapperProps;
+  ImageSlot: ImageWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
   ServicesListSlot: TextListProps;
   TextListSlot: TextListProps;
@@ -43,12 +43,11 @@ const lockedPermissions = {
 export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
-  CTAWrapperSlot: { ...CTAWrapper, permissions: lockedPermissions },
+  CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
-  ImageWrapperSlot: { ...ImageWrapper, permissions: lockedPermissions },
-
+  ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TextListSlot: { ...TextList, permissions: lockedPermissions },

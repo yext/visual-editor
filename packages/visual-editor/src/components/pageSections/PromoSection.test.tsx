@@ -407,9 +407,9 @@ const tests: ComponentTest[] = [
         ],
         ImageSlot: [
           {
-            type: "ImageWrapperSlot",
+            type: "ImageSlot",
             props: {
-              id: "ImageWrapperSlot-3caab504-556e-4420-987e-5ed793890c2c",
+              id: "ImageSlot-3caab504-556e-4420-987e-5ed793890c2c",
               data: {
                 image: {
                   field: "",
@@ -464,9 +464,9 @@ const tests: ComponentTest[] = [
         ],
         CTASlot: [
           {
-            type: "CTAWrapperSlot",
+            type: "CTASlot",
             props: {
-              id: "CTAWrapperSlot-177d77c3-3b73-4285-ba66-fb2776520062",
+              id: "CTASlot-177d77c3-3b73-4285-ba66-fb2776520062",
               data: {
                 entityField: {
                   field: "",
@@ -571,9 +571,9 @@ const tests: ComponentTest[] = [
         ],
         ImageSlot: [
           {
-            type: "ImageWrapperSlot",
+            type: "ImageSlot",
             props: {
-              id: "ImageWrapperSlot-82720cc0-77af-4284-bbe9-f28bd4d135fb",
+              id: "ImageSlot-82720cc0-77af-4284-bbe9-f28bd4d135fb",
               data: {
                 image: {
                   field: "",
@@ -593,9 +593,9 @@ const tests: ComponentTest[] = [
         ],
         CTASlot: [
           {
-            type: "CTAWrapperSlot",
+            type: "CTASlot",
             props: {
-              id: "CTAWrapperSlot-9d1cf16a-1858-4cb6-8c1f-a31ea633d609",
+              id: "CTASlot-9d1cf16a-1858-4cb6-8c1f-a31ea633d609",
               data: {
                 entityField: {
                   field: "",

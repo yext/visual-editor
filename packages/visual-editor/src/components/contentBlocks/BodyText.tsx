@@ -12,15 +12,21 @@ import {
   msg,
   TranslatableRichText,
   useBackground,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
   data: {
+    /** The body text to display. */
     text: YextEntityField<TranslatableRichText>;
   };
   styles: {
+    /** The size of the body text. */
     variant: BodyProps["variant"];
   };
+  /**
+   * @internal Controlled data from the parent section.
+   */
   parentData?: {
     field: string;
     richText: TranslatableRichText;
@@ -84,28 +90,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
 export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
   label: msg("components.bodyText", "Body Text"),
   fields: bodyTextFields,
-  resolveFields: (data) => {
-    if (data.props.parentData) {
-      return {
-        ...bodyTextFields,
-        data: {
-          label: msg("fields.data", "Data"),
-          type: "object",
-          objectFields: {
-            info: {
-              type: "custom",
-              render: () => (
-                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
-                  Data is inherited from the parent section.
-                </p>
-              ),
-            },
-          },
-        },
-      } as any;
-    }
-    return bodyTextFields;
-  },
+  resolveFields: (data) => resolveDataFromParent(bodyTextFields, data),
   defaultProps: {
     data: {
       text: {

@@ -23,6 +23,11 @@ import {
   YextEntityField,
   YextEntityFieldSelector,
   resolveYextEntityField,
+  BodyTextProps,
+  CTAWrapperProps,
+  HeadingTextProps,
+  ImageWrapperProps,
+  VideoProps,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -35,6 +40,10 @@ export interface PromoData {
    */
   promo: YextEntityField<PromoSectionType | {}>;
 
+  /**
+   * Determines whether to display an image or video in the media section.
+   * @defaultValue 'image'
+   */
   media: "image" | "video";
 }
 
@@ -65,6 +74,7 @@ export interface PromoSectionProps {
    */
   styles: PromoStyles;
 
+  /** @internal */
   slots: {
     HeadingSlot: Slot;
     DescriptionSlot: Slot;
@@ -193,7 +203,11 @@ const PromoMedia = ({
         fieldId={data.promo.field}
         constantValueEnabled={data.promo.constantValueEnabled}
       >
-        {data.media === "video" ? <slots.VideoSlot /> : <slots.ImageSlot />}
+        {data.media === "video" ? (
+          <slots.VideoSlot style={{ height: "auto" }} />
+        ) : (
+          <slots.ImageSlot style={{ height: "auto" }} />
+        )}
       </EntityField>
     </div>
   );
@@ -216,9 +230,9 @@ const PromoWrapper: PuckComponent<PromoSectionProps> = (props) => {
         )}
       />
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
-        <slots.HeadingSlot />
-        <slots.DescriptionSlot />
-        <slots.CTASlot />
+        <slots.HeadingSlot style={{ height: "auto" }} />
+        <slots.DescriptionSlot style={{ height: "auto" }} />
+        <slots.CTASlot style={{ height: "auto" }} />
       </div>
       {/* Desktop right image */}
       <PromoMedia
@@ -269,7 +283,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               },
             },
             styles: { level: 2, align: "left" },
-          },
+          } satisfies HeadingTextProps,
         },
       ],
       DescriptionSlot: [
@@ -287,7 +301,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               },
             },
             styles: { variant: "base" },
-          },
+          } satisfies BodyTextProps,
         },
       ],
       VideoSlot: [
@@ -297,12 +311,12 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             data: {
               assetVideo: undefined,
             },
-          },
+          } satisfies VideoProps,
         },
       ],
       ImageSlot: [
         {
-          type: "ImageWrapperSlot",
+          type: "ImageSlot",
           props: {
             data: {
               image: {
@@ -321,12 +335,12 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             },
             className:
               "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
-          },
+          } satisfies ImageWrapperProps,
         },
       ],
       CTASlot: [
         {
-          type: "CTAWrapperSlot",
+          type: "CTASlot",
           props: {
             data: {
               entityField: {
@@ -340,7 +354,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               },
             },
             styles: { variant: "primary" },
-          },
+          } satisfies CTAWrapperProps,
         },
       ],
     },

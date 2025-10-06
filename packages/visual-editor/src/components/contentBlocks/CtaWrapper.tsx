@@ -12,6 +12,7 @@ import {
   EnhancedTranslatableCTA,
   CTA,
   CTAVariant,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 import {
   ctaTypeOptions,
@@ -21,12 +22,19 @@ import {
 
 export interface CTAWrapperProps {
   data: {
+    /** The call to action to display */
     entityField: YextEntityField<EnhancedTranslatableCTA>;
   };
+
   styles: {
+    /** The visual style of the CTA. */
     variant: CTAVariant;
   };
+
+  /** Additional CSS classes to apply to the CTA. */
   className?: string;
+
+  /** @internal Controlled data from the parent section. */
   parentData?: {
     field: string;
     cta: EnhancedTranslatableCTA;
@@ -119,27 +127,6 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
       variant: "primary",
     },
   },
-  resolveFields: (data) => {
-    if (data.props.parentData) {
-      return {
-        ...ctaWrapperFields,
-        data: {
-          label: msg("fields.data", "Data"),
-          type: "object",
-          objectFields: {
-            info: {
-              type: "custom",
-              render: () => (
-                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
-                  Data is inherited from the parent section.
-                </p>
-              ),
-            },
-          },
-        },
-      } as any;
-    }
-    return ctaWrapperFields;
-  },
+  resolveFields: (data) => resolveDataFromParent(ctaWrapperFields, data),
   render: (props: CTAWrapperProps) => <CTAWrapperComponent {...props} />,
 };

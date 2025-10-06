@@ -23,4 +23,4 @@ export {
   type ReviewStarsProps,
   type AggregateRating,
 } from "./reviewStars.tsx";
-export { VideoAtom, type VideoProps } from "./video.tsx";
+export { VideoAtom, type VideoAtomProps } from "./video.tsx";

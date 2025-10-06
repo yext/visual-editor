@@ -104,7 +104,7 @@ export const promoSectionSlots: Migration = {
             ? []
             : [
                 {
-                  type: "ImageWrapperSlot",
+                  type: "ImageSlot",
                   props: {
                     data: {
                       image: {
@@ -128,7 +128,7 @@ export const promoSectionSlots: Migration = {
               ],
           CTASlot: [
             {
-              type: "CTAWrapperSlot",
+              type: "CTASlot",
               props: {
                 data: {
                   entityField: {
