@@ -72,7 +72,6 @@ const ImageWrapperComponent = ({
     ? parentData.image
     : resolveComponentData(data.image, i18n.language, streamDocument);
 
-  console.log("Resolved Image: ", resolvedImage);
   if (!resolvedImage) {
     return null;
   }
