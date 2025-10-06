@@ -3,6 +3,21 @@ title: Components
 outline: 2
 ---
 
+## Address
+
+### Props
+
+Props for the Address component
+
+#### Other Props
+
+| Prop     | Type                                                          | Description | Default |
+| :------- | :------------------------------------------------------------ | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                  |             |         |
+| `styles` | `{ showGetDirectionsLink: boolean; ctaVariant: CTAVariant; }` |             |         |
+
+---
+
 ## BannerSection
 
 The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page. Available on Location templates.
@@ -101,6 +116,34 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## CTAGroup
+
+### Props
+
+#### Other Props
+
+| Prop      | Type              | Description | Default |
+| :-------- | :---------------- | :---------- | :------ |
+| `buttons` | `BasicCTAProps[]` |             |         |
+
+---
+
+## CTAWrapper
+
+### Props
+
+#### Other Props
+
+Additional CSS classes to apply to the CTA.
+
+| Prop        | Type                                                         | Description                                 | Default |
+| :---------- | :----------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                     | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ entityField: YextEntityField<EnhancedTranslatableCTA>; }` |                                             |         |
+| `styles`    | `{ variant: CTAVariant; }`                                   |                                             |         |
+
+---
+
 ## CustomCodeSection
 
 The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively. Only available with additional feature flag enabled.
@@ -152,6 +195,19 @@ This object contains properties for customizing the component's appearance.
 | `styles.hours`                      | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.                     |                      |
 | `styles.phoneNumberFormat`          | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards.              | `'domestic'`         |
 | `styles.phoneNumberLink`            | `boolean`                                                                                                                   | If "true", wraps phone numbers in a clickable "tel:" hyperlink. | `false`              |
+
+---
+
+## Emails
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                   | Description | Default |
+| :------- | :------------------------------------- | :---------- | :------ |
+| `data`   | `{ list: YextEntityField<string[]>; }` |             |         |
+| `styles` | `{ listLength?: number; }`             |             |         |
 
 ---
 
@@ -368,6 +424,54 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## HoursStatus
+
+### Props
+
+#### Other Props
+
+| Prop                | Type                         | Description | Default |
+| :------------------ | :--------------------------- | :---------- | :------ |
+| `className`         | `string`                     |             |         |
+| `dayOfWeekFormat`   | `"short" \| "long"`          |             |         |
+| `hours`             | `YextEntityField<HoursType>` |             |         |
+| `showCurrentStatus` | `boolean`                    |             |         |
+| `showDayNames`      | `boolean`                    |             |         |
+| `timeFormat`        | `"12h" \| "24h"`             |             |         |
+
+---
+
+## HoursTable
+
+### Props
+
+Props for the HoursTable component.
+
+#### Other Props
+
+| Prop     | Type                                                                                                                                                     | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                 |             |         |
+| `styles` | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; alignment: "items-start" \| "items-center"; }` |             |         |
+
+---
+
+## ImageWrapper
+
+### Props
+
+#### Other Props
+
+Additional CSS classes to apply to the image.
+
+| Prop        | Type                                                         | Description                                   | Default |
+| :---------- | :----------------------------------------------------------- | :-------------------------------------------- | :------ |
+| `className` | `string`                                                     | Additional CSS classes to apply to the image. |         |
+| `data`      | `{ image: YextEntityField<ImageType \| ComplexImageType>; }` |                                               |         |
+| `styles`    | `ImageStylingProps`                                          | Size and aspect ratio of the image.           |         |
+
+---
+
 ## InsightSection
 
 The Insight Section is used to display a curated list of content such as articles, blog posts, or other informational blurbs. It features a main section heading and renders each insight as a distinct card, making it an effective way to showcase valuable content. Available on Location templates.
@@ -465,6 +569,21 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## Phone
+
+### Props
+
+The props for the Phone component
+
+#### Other Props
+
+| Prop     | Type                                                                              | Description | Default |
+| :------- | :-------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                 |             |         |
+| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; }` |             |         |
+
+---
+
 ## PhotoGallerySection
 
 The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation. Available on Location templates.
@@ -553,7 +672,7 @@ This object contains the content to be displayed by the component.
 
 | Prop         | Type                                      | Description                                                                                           | Default                                         |
 | :----------- | :---------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
-| `data.media` | `"image" \| "video"`                      |                                                                                                       |                                                 |
+| `data.media` | `"image" \| "video"`                      | Determines whether to display an image or video in the media section.                                 | `'image'`                                       |
 | `data.promo` | `YextEntityField<PromoSectionType \| {}>` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
 
 #### Style Props
@@ -569,10 +688,9 @@ This object contains properties for customizing the component's appearance.
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type                                                                                             | Description                                                                    | Default |
-| :--------------- | :----------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                                                                        | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ HeadingSlot: Slot; DescriptionSlot: Slot; VideoSlot: Slot; ImageSlot: Slot; CTASlot: Slot; }` |                                                                                |         |
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
 
 ---
 
@@ -679,6 +797,18 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 | Prop             | Type      | Description                                                                    | Default |
 | :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
 | `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
+## TextList
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                                    | Description | Default |
+| :----- | :-------------------------------------- | :---------- | :------ |
+| `list` | `YextEntityField<TranslatableString[]>` |             |         |
 
 ---
 
