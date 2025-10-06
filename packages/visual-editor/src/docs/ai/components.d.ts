@@ -10,6 +10,8 @@ import {
   BaseField,
   ObjectField,
   NumberField,
+  Fields,
+  ComponentData,
   Slot,
 } from "@measured/puck";
 import {
@@ -335,6 +337,14 @@ interface PromoSectionProps {
    * @propCategory Style Props
    */
   styles: PromoStyles;
+  /** @internal */
+  slots: {
+    HeadingSlot: Slot;
+    DescriptionSlot: Slot;
+    VideoSlot: Slot;
+    ImageSlot: Slot;
+    CTASlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -902,7 +912,12 @@ interface PromoData {
    * The source for the promotional content, including an image, title, description, and a call-to-action.
    * @defaultValue Placeholder content for a featured promotion.
    */
-  promo: YextStructEntityField<PromoSectionType>;
+  promo: YextEntityField<PromoSectionType | {}>;
+  /**
+   * Determines whether to display an image or video in the media section.
+   * @defaultValue 'image'
+   */
+  media: "image" | "video";
 }
 
 interface PromoStyles {
@@ -916,20 +931,6 @@ interface PromoStyles {
    * @defaultValue 'left'
    */
   orientation: "left" | "right";
-  /**
-   * The visual style variant for the call-to-action button.
-   * @defaultValue 'primary'
-   */
-  ctaVariant: CTAVariant;
-  /** Styling for the promo's title. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /**
-   * Styling options for the promo image, such as aspect ratio.
-   */
-  image: ImageStylingProps;
 }
 
 /**
@@ -1307,7 +1308,7 @@ type ProductStruct = {
 };
 
 type AssetVideo = {
-  video: Video;
+  video: Video$1;
   /** Asset video description field */
   videoDescription?: string;
   /** Asset name (unique) */
@@ -1364,7 +1365,7 @@ type PresetImageType =
   | "app-gallery"
   | "uber-eats";
 
-type Video = {
+type Video$1 = {
   /** The YouTube video URL */
   url: string;
   /** The YouTube video ID */

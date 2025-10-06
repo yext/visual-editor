@@ -229,6 +229,7 @@
     "mapStyle": "Stil karte",
     "maxWidth": "Maksimalna širina",
     "media": "Medija",
+    "mediaOrientation": "Medijska orijentacija",
     "metaDescription": "Meta opis",
     "metaTitle": "Meta naslov",
     "mobileContentAlignment": "Poravnavanje mobilnog sadržaja",
@@ -300,6 +301,7 @@
       "truncate": "Skratiti",
       "tuesday": "utorak",
       "two": "Dva",
+      "video": "Video",
       "wednesday": "srijeda",
       "width": "Širina",
       "yes": "Da"
@@ -391,6 +393,7 @@
   "hoursText": "Sati teksta",
   "image": "Slika",
   "informationSection": "Odjeljak",
+  "inheritedDataMsg": "Podaci se nasljeđuju iz roditeljskog odjeljka.",
   "insight": "Uvid",
   "knowledgeGraphContent": "Sadržaj grafikona znanja",
   "label": "Označiti",

@@ -10,6 +10,8 @@ import {
   msg,
   pt,
   imgSizesHelper,
+  resolveDataFromParent,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
@@ -18,16 +20,28 @@ const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface ImageWrapperProps {
   data: {
-    image: YextEntityField<ImageType | ComplexImageType>;
+    /** The image to display. */
+    image: YextEntityField<ImageType | ComplexImageType | AssetImageType>;
   };
+
+  /** Size and aspect ratio of the image. */
   styles: ImageStylingProps;
+
+  /** @internal Controlled data from the parent section. */
+  parentData?: {
+    field: string;
+    image: ImageType | ComplexImageType | AssetImageType;
+  };
+
+  /** Additional CSS classes to apply to the image. */
+  className?: string;
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      image: YextField<any, ImageType | ComplexImageType>(
+      image: YextField<any, ImageType | ComplexImageType | AssetImageType>(
         msg("fields.options.image", "Image"),
         {
           type: "entityField",
@@ -46,14 +60,17 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   }),
 };
 
-const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
+const ImageWrapperComponent = ({
+  data,
+  styles,
+  parentData,
+  className,
+}: ImageWrapperProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedImage = resolveComponentData(
-    data.image,
-    i18n.language,
-    streamDocument
-  );
+  const resolvedImage = parentData
+    ? parentData.image
+    : resolveComponentData(data.image, i18n.language, streamDocument);
 
   if (!resolvedImage) {
     return null;
@@ -62,15 +79,17 @@ const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
   return (
     <EntityField
       displayName={pt("fields.image", "Image")}
-      fieldId={data.image.field}
-      constantValueEnabled={data.image.constantValueEnabled}
+      fieldId={parentData ? parentData.field : data.image.field}
+      constantValueEnabled={!parentData && data.image.constantValueEnabled}
     >
       <div className="w-full">
         <Image
           image={resolvedImage}
           aspectRatio={styles.aspectRatio}
           width={styles.width}
-          className="max-w-full rounded-image-borderRadius w-full"
+          className={
+            className || "max-w-full rounded-image-borderRadius w-full"
+          }
           sizes={imgSizesHelper({
             base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
             md: styles.width
@@ -103,5 +122,6 @@ export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
       width: 640,
     },
   },
+  resolveFields: (data) => resolveDataFromParent(ImageWrapperFields, data),
   render: (props) => <ImageWrapperComponent {...props} />,
 };

@@ -1,5 +1,6 @@
 export * from "./atoms/index.ts";
 export * from "./categories/index.ts";
+export * from "./contentBlocks/index.ts";
 export * from "./configs/index.ts";
 export * from "./pageSections/index.ts";
 export * from "./migrations/index.ts";

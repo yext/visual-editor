@@ -228,6 +228,7 @@
     "mapStyle": "Style cartographier",
     "maxWidth": "Largeur maximale",
     "media": "Médias",
+    "mediaOrientation": "Orientation des médias",
     "metaDescription": "Méta-description",
     "metaTitle": "Méta-titre",
     "mobileContentAlignment": "Alignement du contenu mobile",
@@ -299,6 +300,7 @@
       "truncate": "Tronquer",
       "tuesday": "Mardi",
       "two": "Deux",
+      "video": "Vidéo",
       "wednesday": "Mercredi",
       "width": "Largeur",
       "yes": "Oui"
@@ -390,6 +392,7 @@
   "hoursText": "Texte des heures",
   "image": "Image",
   "informationSection": "Section d'information",
+  "inheritedDataMsg": "Les données sont héritées de la section parent.",
   "insight": "Aperçu",
   "knowledgeGraphContent": "Contenu du graphique de connaissances",
   "label": "Étiquette",

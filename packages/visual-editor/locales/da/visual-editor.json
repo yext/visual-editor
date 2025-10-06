@@ -229,6 +229,7 @@
     "mapStyle": "Kortstil",
     "maxWidth": "Maks. Bredde",
     "media": "Medier",
+    "mediaOrientation": "Medieorientering",
     "metaDescription": "Metabeskrivelse",
     "metaTitle": "Metatitel",
     "mobileContentAlignment": "Mobilindholdsjustering",
@@ -300,6 +301,7 @@
       "truncate": "Afkortet",
       "tuesday": "tirsdag",
       "two": "To",
+      "video": "Video",
       "wednesday": "onsdag",
       "width": "Bredde",
       "yes": "Ja"
@@ -391,6 +393,7 @@
   "hoursText": "Teksttekst",
   "image": "Billede",
   "informationSection": "Informationsafsnit",
+  "inheritedDataMsg": "Data er arvet fra overordnede sektion.",
   "insight": "Indsigt",
   "knowledgeGraphContent": "Videngrafindhold",
   "label": "Mærke",

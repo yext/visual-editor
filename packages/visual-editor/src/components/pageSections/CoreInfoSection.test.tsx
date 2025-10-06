@@ -813,7 +813,8 @@ describe("CoreInfoSection", async () => {
           ],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
 
       const updatedData = await resolveAllData(data, puckConfig, {
