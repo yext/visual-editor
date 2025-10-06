@@ -1,4 +1,4 @@
-export { i18nComponentsInstance } from "./components.ts";
+export { i18nComponentsInstance, injectTranslations } from "./components.ts";
 export {
   i18nPlatformInstance,
   usePlatformTranslation,

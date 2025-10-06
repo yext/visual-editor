@@ -9,6 +9,7 @@ import {
   GetHeadConfig,
   HeadConfig,
   TagType,
+  TransformProps,
 } from "@yext/pages";
 import { Render } from "@measured/puck";
 import {
@@ -21,6 +22,7 @@ import {
   defaultThemeConfig,
   locatorConfig,
   getSchema,
+  injectTranslations,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -75,6 +77,12 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
       SchemaWrapper(schema),
     ].join("\n"),
   };
+};
+
+export const transformProps: TransformProps<TemplateProps<any>> = async (
+  data
+) => {
+  return await injectTranslations(data);
 };
 
 export const getPath: GetPath<TemplateProps> = ({ document }) => {
