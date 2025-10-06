@@ -393,6 +393,7 @@
   "hoursText": "Testo delle ore",
   "image": "Immagine",
   "informationSection": "Sezione di informazioni",
+  "inheritedDataMsg": "I dati sono ereditati dalla sezione genitore.",
   "insight": "Intuizione",
   "knowledgeGraphContent": "Contenuto del grafico della conoscenza",
   "label": "Etichetta",

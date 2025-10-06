@@ -393,6 +393,7 @@
   "hoursText": "Tuntien teksti",
   "image": "Kuva",
   "informationSection": "Tiedonsiirto",
+  "inheritedDataMsg": "Tiedot on peritty vanhempien osiosta.",
   "insight": "Oivallus",
   "knowledgeGraphContent": "Tietokaavion sisältö",
   "label": "Merkitä",

@@ -393,6 +393,7 @@
   "hoursText": "Texto de horas",
   "image": "Imagem",
   "informationSection": "Seção de informações",
+  "inheritedDataMsg": "Os dados são herdados da seção pai.",
   "insight": "Entendimento",
   "knowledgeGraphContent": "Conteúdo do gráfico de conhecimento",
   "label": "Rótulo",

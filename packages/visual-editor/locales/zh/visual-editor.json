@@ -393,6 +393,7 @@
   "hoursText": "小时文字",
   "image": "图像",
   "informationSection": "信息部分",
+  "inheritedDataMsg": "数据是从父部分继承的。",
   "insight": "洞察力",
   "knowledgeGraphContent": "知识图内容",
   "label": "标签",

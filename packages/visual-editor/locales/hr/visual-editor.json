@@ -393,6 +393,7 @@
   "hoursText": "Sati teksta",
   "image": "Slika",
   "informationSection": "Odjeljak",
+  "inheritedDataMsg": "Podaci se nasljeđuju iz roditeljskog odjeljka.",
   "insight": "Uvid",
   "knowledgeGraphContent": "Sadržaj grafikona znanja",
   "label": "Označiti",

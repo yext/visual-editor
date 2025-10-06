@@ -393,6 +393,7 @@
   "hoursText": "Órás szöveg",
   "image": "Kép",
   "informationSection": "Információs szakasz",
+  "inheritedDataMsg": "Az adatok a szülői szakaszból örökölnek.",
   "insight": "Betekintés",
   "knowledgeGraphContent": "Tudás grafikon tartalma",
   "label": "Címke",

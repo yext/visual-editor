@@ -393,6 +393,7 @@
   "hoursText": "Stundu teksts",
   "image": "Attēls",
   "informationSection": "Informācijas sadaļa",
+  "inheritedDataMsg": "Dati ir mantoti no vecāku sadaļas.",
   "insight": "Ieskats",
   "knowledgeGraphContent": "Zināšanu grafika saturs",
   "label": "Etiķete",

@@ -393,6 +393,7 @@
   "hoursText": "Teksttekst",
   "image": "Billede",
   "informationSection": "Informationsafsnit",
+  "inheritedDataMsg": "Data er arvet fra overordnede sektion.",
   "insight": "Indsigt",
   "knowledgeGraphContent": "Videngrafindhold",
   "label": "Mærke",

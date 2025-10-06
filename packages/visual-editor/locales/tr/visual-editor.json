@@ -393,6 +393,7 @@
   "hoursText": "Saat Metni",
   "image": "İmaj",
   "informationSection": "Bilgi bölümü",
+  "inheritedDataMsg": "Veriler ana bölümden devralınmıştır.",
   "insight": "İç yüzü",
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
   "label": "Etiket",

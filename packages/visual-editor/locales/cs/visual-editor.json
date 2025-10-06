@@ -394,6 +394,7 @@
   "hoursText": "Hodiny text",
   "image": "Obraz",
   "informationSection": "Sekce informací",
+  "inheritedDataMsg": "Data jsou zděděna z nadřazené části.",
   "insight": "Vhled",
   "knowledgeGraphContent": "Obsah grafu znalostí",
   "label": "Označení",

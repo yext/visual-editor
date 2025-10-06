@@ -393,6 +393,7 @@
   "hoursText": "時間テキスト",
   "image": "画像",
   "informationSection": "情報セクション",
+  "inheritedDataMsg": "データは親セクションから継承されます。",
   "insight": "洞察力",
   "knowledgeGraphContent": "ナレッジグラフコンテンツ",
   "label": "ラベル",

@@ -393,6 +393,7 @@
   "hoursText": "Text",
   "image": "Predstavovať",
   "informationSection": "Sekcia",
+  "inheritedDataMsg": "Údaje sa zdedia z rodičovskej sekcie.",
   "insight": "Nahliadnutie",
   "knowledgeGraphContent": "Obsah grafov vedomostí",
   "label": "Štítok",

@@ -392,6 +392,7 @@
   "hoursText": "Texte des heures",
   "image": "Image",
   "informationSection": "Section d'information",
+  "inheritedDataMsg": "Les données sont héritées de la section parent.",
   "insight": "Aperçu",
   "knowledgeGraphContent": "Contenu du graphique de connaissances",
   "label": "Étiquette",

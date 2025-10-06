@@ -393,6 +393,7 @@
   "hoursText": "SMS -y",
   "image": "Obraz",
   "informationSection": "Sekcja informacji",
+  "inheritedDataMsg": "Dane są dziedziczone z sekcji nadrzędnej.",
   "insight": "Wgląd",
   "knowledgeGraphContent": "Treść wykresu wiedzy",
   "label": "Etykieta",

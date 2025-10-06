@@ -393,6 +393,7 @@
   "hoursText": "Valandų tekstas",
   "image": "Vaizdas",
   "informationSection": "Informacijos skyrius",
+  "inheritedDataMsg": "Duomenys paveldimi iš pirminio skyriaus.",
   "insight": "Įžvalga",
   "knowledgeGraphContent": "Žinių grafiko turinys",
   "label": "Etiketė",

@@ -392,6 +392,7 @@
   "hoursText": "Mensaje de texto de horas",
   "image": "Imagen",
   "informationSection": "Sección de información",
+  "inheritedDataMsg": "Los datos se heredan de la sección principal.",
   "insight": "Conocimiento",
   "knowledgeGraphContent": "Contenido del gráfico de conocimiento",
   "label": "Etiqueta",

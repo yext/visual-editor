@@ -393,6 +393,7 @@
   "hoursText": "Timeseks",
   "image": "Bilde",
   "informationSection": "Informasjonsdel",
+  "inheritedDataMsg": "Data er arvet fra overordnetseksjonen.",
   "insight": "Innsikt",
   "knowledgeGraphContent": "Kunnskapsgrafinnhold",
   "label": "Merkelapp",

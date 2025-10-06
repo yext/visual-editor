@@ -392,6 +392,7 @@
   "hoursText": "Stunden Text",
   "image": "Bild",
   "informationSection": "Informationsabschnitt",
+  "inheritedDataMsg": "Daten werden aus dem übergeordneten Abschnitt geerbt.",
   "insight": "Einblick",
   "knowledgeGraphContent": "Knowledge Graph Inhalt",
   "label": "Etikett",

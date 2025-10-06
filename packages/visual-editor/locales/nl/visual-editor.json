@@ -393,6 +393,7 @@
   "hoursText": "Uren tekst",
   "image": "Afbeelding",
   "informationSection": "Informatiegedeelte",
+  "inheritedDataMsg": "Gegevens worden geërfd van het bovenliggende gedeelte.",
   "insight": "Inzicht",
   "knowledgeGraphContent": "Kennisgrafiekinhoud",
   "label": "Label",

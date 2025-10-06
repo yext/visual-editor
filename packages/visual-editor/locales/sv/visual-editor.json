@@ -393,6 +393,7 @@
   "hoursText": "Timmars text",
   "image": "Bild",
   "informationSection": "Informationsavsnitt",
+  "inheritedDataMsg": "Data ärvs från överordnade avsnittet.",
   "insight": "Insikt",
   "knowledgeGraphContent": "Kunskapgrafinnehåll",
   "label": "Märka",

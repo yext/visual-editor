@@ -393,6 +393,7 @@
   "hoursText": "Tundidekst",
   "image": "Pilt",
   "informationSection": "Infosektsioon",
+  "inheritedDataMsg": "Andmed päritakse vanemate jaotisest.",
   "insight": "Ülevaade",
   "knowledgeGraphContent": "Teadmiste graafi sisu",
   "label": "Silt",
