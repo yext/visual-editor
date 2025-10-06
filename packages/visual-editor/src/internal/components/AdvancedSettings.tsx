@@ -45,9 +45,10 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       }
     );
 
+    const defaultSchema = getSchemaTemplate(entityTypeId);
+
     // Use the schema value from root, or default schema if not set
-    const displayValue =
-      value || (entityTypeId ? getSchemaTemplate(entityTypeId) : "");
+    const schema = value || defaultSchema;
 
     const codeField = YextField(msg("schemaMarkup", "Schema Markup"), {
       type: "code",
@@ -58,12 +59,9 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       e.stopPropagation();
       e.preventDefault();
 
-      // Clean the schema value to remove newlines and extra whitespace
-      const cleanSchemaValue = displayValue.replace(/\n\s*/g, " ").trim();
-
       /** Handles local development testing outside of Storm */
       if (window.location.href.includes("http://localhost:5173/dev-location")) {
-        const userInput = prompt("Enter Schema Markup:", displayValue);
+        const userInput = prompt("Enter Schema Markup:", schema);
         if (userInput !== null) {
           onChange(userInput);
         }
@@ -74,7 +72,8 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
 
         const payload = {
           type: "SchemaMarkup",
-          value: cleanSchemaValue,
+          value: schema,
+          defaultValue: defaultSchema,
           id: messageId,
         };
 
@@ -100,7 +99,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
             onChange: (newValue: string | number) => {
               onChange(String(newValue));
             },
-            value: displayValue,
+            value: schema,
             field: codeField,
             name: "schemaMarkup",
             id: "schemaMarkup",

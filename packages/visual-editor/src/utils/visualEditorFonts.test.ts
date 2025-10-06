@@ -91,7 +91,7 @@ describe("extractInUseFontFamilies", () => {
 describe("constructGoogleFontLinkTags", () => {
   const preconnectTags =
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n';
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n';
 
   it("should return an empty string if the font registry is empty", () => {
     const fonts: FontRegistry = {};
