@@ -18,10 +18,6 @@ i18nComponentsInstance.use(initReactI18next).init({
 /**
  * Dynamically adds translations to the templateProps object. To be used
  * by consumers of visual-editor in transformProps of a template.
- *
- * @param templateProps
- * @param locale
- * @returns
  */
 export const injectTranslations = async (templateProps: any) => {
   if (!templateProps?.document?.locale) {
