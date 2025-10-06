@@ -134,7 +134,10 @@ describe("buildCssOverridesStyle", () => {
   it("should generate contrasting palette colors", () => {
     const streamDocument: StreamDocument = {
       __: {
-        theme: JSON.stringify({ "--colors-palette-primary": "#7ED321" }),
+        theme: JSON.stringify({
+          "--colors-palette-primary": "#7ED321",
+          "--colors-palette-secondary": "#305af3",
+        }),
       },
     };
     const result = applyTheme(streamDocument, {
@@ -143,6 +146,12 @@ describe("buildCssOverridesStyle", () => {
         styles: {
           primary: {
             label: "Primary",
+            plugin: "colors",
+            type: "color",
+            default: "#000000",
+          },
+          secondary: {
+            label: "Secondary",
             plugin: "colors",
             type: "color",
             default: "#000000",
@@ -156,9 +165,12 @@ describe("buildCssOverridesStyle", () => {
     expect(result).toContain(
       '<style id="visual-editor-theme" type="text/css">.components{'
     );
-    expect(result).toContain("--colors-palette-primary:#7ED321 !important;");
+    expect(result).toContain("--colors-palette-primary:#7ED321 !important");
     expect(result).toContain(
-      "--colors-palette-primary-contrast:#FFFFFF !important"
+      "--colors-palette-primary-contrast:#000000 !important"
+    );
+    expect(result).toContain(
+      "--colors-palette-secondary-contrast:#FFFFFF !important"
     );
   });
 });
