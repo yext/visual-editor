@@ -13,8 +13,16 @@ import {
   migrationRegistry,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+import {
+  HeadingText,
+  Address,
+  HoursTable,
+  Emails,
+} from "../contentBlocks/index.ts";
+import { ServicesList } from "../contentBlocks/TextList.tsx";
+import { PhoneList } from "../contentBlocks/PhoneList.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -28,14 +36,15 @@ const testAddress = {
 
 const tests: ComponentTest[] = [
   {
-    name: "default props with empty document",
-    document: {},
+    name: "default props with no additional document data",
+    document: { locale: "en" },
     props: { ...CoreInfoSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "default props with document data",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -48,6 +57,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props with entity values",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -115,6 +125,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props with constant value",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -210,6 +221,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with entity values",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -300,6 +312,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with constant value",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -400,6 +413,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 1",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -489,6 +503,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 2",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -578,6 +593,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 3",
     document: {
+      locale: "en",
       hours: testHours,
       services: ["Delivery", "Catering"],
       id: "test-id",
@@ -665,6 +681,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 props with partial entity values align right",
     document: {
+      locale: "en",
       hours: testHours,
       services: ["Delivery", "Catering"],
       id: "test-id",
@@ -756,7 +773,15 @@ const tests: ComponentTest[] = [
 
 describe("CoreInfoSection", async () => {
   const puckConfig: Config = {
-    components: { CoreInfoSection },
+    components: {
+      CoreInfoSection,
+      AddressSlot: Address,
+      EmailsSlot: Emails,
+      HeadingTextSlot: HeadingText,
+      HoursTableSlot: HoursTable,
+      PhoneNumbersSlot: PhoneList,
+      ServicesListSlot: ServicesList,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -788,12 +813,21 @@ describe("CoreInfoSection", async () => {
           ],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
+
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

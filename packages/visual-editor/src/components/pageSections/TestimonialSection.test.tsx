@@ -288,7 +288,8 @@ describe("TestimonialSection", async () => {
           ],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
 
       const { container } = reactRender(

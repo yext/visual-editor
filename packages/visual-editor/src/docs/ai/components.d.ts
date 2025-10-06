@@ -10,6 +10,8 @@ import {
   BaseField,
   ObjectField,
   NumberField,
+  Fields,
+  ComponentData,
   Slot,
 } from "@measured/puck";
 import {
@@ -140,15 +142,26 @@ interface BreadcrumbsSectionProps {
 
 interface CoreInfoSectionProps {
   /**
-   * This object contains all the content to be displayed within the three columns.
-   * @propCategory Data Props
-   */
-  data: CoreInfoData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
   styles: CoreInfoStyles;
+  slots: {
+    CoreInfoHeadingSlot: Slot;
+    CoreInfoAddressSlot: Slot;
+    CoreInfoPhoneNumbersSlot: Slot;
+    CoreInfoEmailsSlot: Slot;
+    HoursHeadingSlot: Slot;
+    HoursTableSlot: Slot;
+    ServicesHeadingSlot: Slot;
+    ServicesListSlot: Slot;
+  };
+  /** @internal */
+  conditionalRender?: {
+    coreInfoCol?: boolean;
+    hoursCol?: boolean;
+    servicesCol?: boolean;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -325,6 +338,14 @@ interface PromoSectionProps {
    */
   styles: PromoStyles;
   /** @internal */
+  slots: {
+    HeadingSlot: Slot;
+    DescriptionSlot: Slot;
+    VideoSlot: Slot;
+    ImageSlot: Slot;
+    CTASlot: Slot;
+  };
+  /** @internal */
   analytics: {
     scope?: string;
   };
@@ -402,15 +423,20 @@ interface TestimonialSectionProps {
 
 interface VideoSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: VideoData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: VideoStyles;
+  styles: {
+    /**
+     * The background color for the entire section, selected from the theme.
+     * @defaultValue Background Color 1
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  slots: {
+    SectionHeadingSlot: Slot;
+    VideoSlot: Slot;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -556,52 +582,12 @@ interface BreadcrumbsStyles {
   backgroundColor?: BackgroundStyle;
 }
 
-interface CoreInfoData {
-  /** Content for the "Information" column. */
-  info: {
-    /** The heading at the top of the left column */
-    headingText: YextEntityField<TranslatableString>;
-    /** The address of the entity */
-    address: YextEntityField<AddressType>;
-    /** The phone number for the entity */
-    phoneNumbers: Array<PhoneProps["data"]>;
-    /** Emails associated with the entity */
-    emails: YextEntityField<string[]>;
-  };
-  /** Content for the "Hours" column. */
-  hours: {
-    /** The heading at the top of the middle column */
-    headingText: YextEntityField<TranslatableString>;
-    /** The hours for the entity */
-    hours: YextEntityField<HoursType>;
-  };
-  /** Content for the "Services" column. */
-  services: {
-    /** The heading at the top of the right column */
-    headingText: YextEntityField<TranslatableString>;
-    /** A text list, often of services the entity provides */
-    servicesList: YextEntityField<TranslatableString[]>;
-  };
-}
-
 interface CoreInfoStyles {
   /**
    * The background color of the section.
    * @defaultValue `Background Color 1`
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for all column headings. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the "Information" column. */
-  info: AddressProps["styles"] &
-    PhoneProps["styles"] & {
-      emailsListLength?: number;
-    };
-  /** Styling for the "Hours" column. */
-  hours: Omit<HoursTableProps["styles"], "alignment">;
 }
 
 interface EventData {
@@ -926,7 +912,12 @@ interface PromoData {
    * The source for the promotional content, including an image, title, description, and a call-to-action.
    * @defaultValue Placeholder content for a featured promotion.
    */
-  promo: YextStructEntityField<PromoSectionType>;
+  promo: YextEntityField<PromoSectionType | {}>;
+  /**
+   * Determines whether to display an image or video in the media section.
+   * @defaultValue 'image'
+   */
+  media: "image" | "video";
 }
 
 interface PromoStyles {
@@ -940,20 +931,6 @@ interface PromoStyles {
    * @defaultValue 'left'
    */
   orientation: "left" | "right";
-  /**
-   * The visual style variant for the call-to-action button.
-   * @defaultValue 'primary'
-   */
-  ctaVariant: CTAVariant;
-  /** Styling for the promo's title. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /**
-   * Styling options for the promo image, such as aspect ratio.
-   */
-  image: ImageStylingProps;
 }
 
 /**
@@ -1060,29 +1037,6 @@ interface TestimonialStyles {
   };
 }
 
-interface VideoData {
-  /**
-   * The main heading for the video section.
-   * @defaultValue "" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /** The embedded YouTube video */
-  assetVideo: AssetVideo | undefined;
-}
-
-interface VideoStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 1
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-}
-
 type AssetImageType = Omit<ImageType, "alternateText"> & {
   alternateText?: TranslatableString;
   assetImage?: ImageContentData;
@@ -1160,64 +1114,13 @@ type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
 
-/** The props for the Phone component */
-interface PhoneProps {
-  data: {
-    /** The phone number data to display */
-    number: YextEntityField<string>;
-    /** The text to display before the phone number */
-    label: TranslatableString;
-  };
-  styles: {
-    /** Whether to format the phone number like a domestic or international number */
-    phoneFormat: "domestic" | "international";
-    /** Whether to make the phone number a clickable link */
-    includePhoneHyperlink: boolean;
-  };
-}
-
-/** Corresponds to the different semantic heading levels */
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
-/** Props for the Address component */
-interface AddressProps {
-  data: {
-    /** The address data to display. */
-    address: YextEntityField<AddressType>;
-  };
-  styles: {
-    /** Whether to include a "Get Directions" CTA to Google Maps */
-    showGetDirectionsLink: boolean;
-    /** The variant of the get directions button */
-    ctaVariant: CTAVariant;
-  };
-}
-
-/** Props for the HoursTable component. */
-interface HoursTableProps {
-  data: {
-    /** The hours data to display in the table. */
-    hours: YextEntityField<HoursType>;
-  };
-  styles: {
-    /**
-     * The day of week to display at the top of the table.
-     * If set to "today", the current day will dynamically be at the top.
-     */
-    startOfWeek: keyof DayOfWeekNames | "today";
-    /** If true, consecutive days that have the same hours will be collapsed into one row. */
-    collapseDays: boolean;
-    /** Shows the showAdditionalHoursText subfield from the hours field, if present */
-    showAdditionalHoursText: boolean;
-    /** Alignment of the text in the hours table */
-    alignment: "items-start" | "items-center";
-  };
-}
-
 /** Data for the EventSection */
 type EventSectionType = {
   events: Array<EventStruct>;
 };
+
+/** Corresponds to the different semantic heading levels */
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Data for the FAQSection */
 type FAQSectionType = {
@@ -1284,16 +1187,6 @@ type TeamSectionType = {
 /** Data for the TestimonialSection */
 type TestimonialSectionType = {
   testimonials: Array<TestimonialStruct>;
-};
-
-type AssetVideo = {
-  video: Video$1;
-  /** Asset video description field */
-  videoDescription?: string;
-  /** Asset name (unique) */
-  name: string;
-  /** Asset internal id */
-  id: string;
 };
 
 /** Describes the data corresponding to a piece of image content. */
@@ -1414,6 +1307,16 @@ type ProductStruct = {
   cta: EnhancedTranslatableCTA;
 };
 
+type AssetVideo = {
+  video: Video$1;
+  /** Asset video description field */
+  videoDescription?: string;
+  /** Asset name (unique) */
+  name: string;
+  /** Asset internal id */
+  id: string;
+};
+
 /** An individual person in the TeamSection */
 type PersonStruct = {
   /**
@@ -1443,20 +1346,6 @@ type TestimonialStruct = {
   contributionDate?: string;
 };
 
-type Video$1 = {
-  /** The YouTube video URL */ url: string;
-  /** The YouTube video ID */
-  id: string;
-  /** The YouTube video title */
-  title: string;
-  /** The YouTube video thumbnail URL */
-  thumbnail: string;
-  /** The YouTube video duration */
-  duration: string;
-  /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
-  embeddedUrl: string;
-};
-
 /** Describes the data corresponding to a single image. */
 type ImageData = {
   url: string;
@@ -1475,6 +1364,21 @@ type PresetImageType =
   | "galaxy-store"
   | "app-gallery"
   | "uber-eats";
+
+type Video$1 = {
+  /** The YouTube video URL */
+  url: string;
+  /** The YouTube video ID */
+  id: string;
+  /** The YouTube video title */
+  title: string;
+  /** The YouTube video thumbnail URL */
+  thumbnail: string;
+  /** The YouTube video duration */
+  duration: string;
+  /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
+  embeddedUrl: string;
+};
 
 /** Describes the dimensions of an image. */
 type ImageDimension = {

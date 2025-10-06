@@ -1,12 +1,12 @@
 import { themeManagerCn } from "@yext/visual-editor";
 
-export type VideoProps = {
+export type VideoAtomProps = {
   youTubeEmbedUrl: string;
   title: string;
   className?: string;
 };
 
-export const Video = (props: VideoProps) => {
+export const VideoAtom = (props: VideoAtomProps) => {
   const { youTubeEmbedUrl, title, className } = props;
 
   return (

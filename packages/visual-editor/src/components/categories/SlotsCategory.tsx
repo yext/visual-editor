@@ -1,27 +1,44 @@
+import { Address, AddressProps } from "../contentBlocks/Address.tsx";
+import { BodyTextProps, BodyText } from "../contentBlocks/BodyText.tsx";
+import { CTAWrapperProps, CTAWrapper } from "../contentBlocks/CtaWrapper.tsx";
 import {
   HeadingTextProps,
   HeadingText,
 } from "../contentBlocks/HeadingText.tsx";
-import { BodyTextProps, BodyText } from "../contentBlocks/BodyText.tsx";
-import { CTAWrapper, CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { HoursTable, HoursTableProps } from "../contentBlocks/HoursTable.tsx";
 import {
-  ImageWrapper,
   ImageWrapperProps,
+  ImageWrapper,
 } from "../contentBlocks/image/Image.tsx";
+import { Video, VideoProps } from "../contentBlocks/Video.tsx";
+import {
+  TextList,
+  TextListProps,
+  ServicesList,
+} from "../contentBlocks/TextList.tsx";
+import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
 import {
   ProductCardsWrapper,
   ProductCardsWrapperProps,
   ProductCard,
   ProductCardProps,
 } from "../pageSections/ProductSection.tsx";
+import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 
 export interface SlotsCategoryProps {
+  AddressSlot: AddressProps;
+  BodyTextSlot: BodyTextProps;
+  CTASlot: CTAWrapperProps;
+  EmailsSlot: EmailsProps;
   HeadingTextSlot: HeadingTextProps;
+  HoursTableSlot: HoursTableProps;
+  ImageSlot: ImageWrapperProps;
+  PhoneNumbersSlot: PhoneListProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
-  BodyTextSlot: BodyTextProps;
-  CTAWrapperSlot: CTAWrapperProps;
-  ImageWrapperSlot: ImageWrapperProps;
+  ServicesListSlot: TextListProps;
+  TextListSlot: TextListProps;
+  VideoSlot: VideoProps;
 }
 
 const lockedPermissions = {
@@ -32,15 +49,22 @@ const lockedPermissions = {
 };
 
 export const SlotsCategoryComponents = {
+  AddressSlot: { ...Address, permissions: lockedPermissions },
+  BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
+  CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
+  EmailsSlot: { ...Emails, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
+  HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
+  ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
+  PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
   ProductCardsWrapper: {
     ...ProductCardsWrapper,
     permissions: lockedPermissions,
   },
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
-  BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
-  CTAWrapperSlot: { ...CTAWrapper, permissions: lockedPermissions },
-  ImageWrapperSlot: { ...ImageWrapper, permissions: lockedPermissions },
+  ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
+  TextListSlot: { ...TextList, permissions: lockedPermissions },
+  VideoSlot: { ...Video, permissions: lockedPermissions },
 };
 
 export const SlotsCategory = Object.keys(

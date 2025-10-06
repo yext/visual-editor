@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { FaRegEnvelope } from "react-icons/fa";
 import {
   useDocument,
@@ -16,53 +15,59 @@ import {
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
-  list: YextEntityField<string[]>;
-  listLength?: number;
+  data: {
+    list: YextEntityField<string[]>;
+  };
+  styles?: {
+    listLength?: number;
+  };
 }
 
 // Email fields used in Emails and CoreInfoSection
 export const EmailsFields: Fields<EmailsProps> = {
-  list: YextField<any, string[]>(msg("fields.emails", "Emails"), {
-    type: "entityField",
-    filter: {
-      types: ["type.string"],
-      includeListsOnly: true,
-      allowList: ["emails"],
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      list: YextField<any, string[]>(msg("fields.emails", "Emails"), {
+        type: "entityField",
+        filter: {
+          types: ["type.string"],
+          includeListsOnly: true,
+          allowList: ["emails"],
+        },
+        disallowTranslation: true,
+      }),
     },
-    disallowTranslation: true,
   }),
 };
 
-const EmailsComponent: React.FC<EmailsProps> = ({
-  list: emailListField,
-  listLength,
-}) => {
+const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
+  const { data, styles, puck } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   let resolvedEmailList = resolveComponentData(
-    emailListField,
+    data.list,
     i18n.language,
     streamDocument
   );
-  if (!resolvedEmailList) {
-    return;
-  } else if (!Array.isArray(resolvedEmailList)) {
+
+  if (!!resolvedEmailList && !Array.isArray(resolvedEmailList)) {
     resolvedEmailList = [resolvedEmailList];
   }
 
-  return (
+  return resolvedEmailList?.length ? (
     <EntityField
       displayName={pt("fields.emailList", "Email List")}
-      fieldId={emailListField.field}
-      constantValueEnabled={emailListField.constantValueEnabled}
+      fieldId={data.list.field}
+      constantValueEnabled={data.list.constantValueEnabled}
     >
       <ul className="list-inside flex flex-col gap-4">
         {resolvedEmailList
           .slice(
             0,
-            emailListField.constantValueEnabled
+            data.list.constantValueEnabled
               ? resolvedEmailList.length
-              : Math.min(resolvedEmailList.length, listLength!)
+              : Math.min(resolvedEmailList.length, styles?.listLength ?? 1)
           )
           .filter((e) => !!e)
           .map((email, index) => (
@@ -84,32 +89,45 @@ const EmailsComponent: React.FC<EmailsProps> = ({
           ))}
       </ul>
     </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-10" />
+  ) : (
+    <></>
   );
 };
 
-export const Emails: ComponentConfig<{ props: EmailsProps }> = {
+export const Emails: ComponentConfig<EmailsProps> = {
   label: msg("components.emails", "Emails"),
   fields: EmailsFields,
   resolveFields: (data, { fields }) => {
-    if (data.props.list.constantValueEnabled) {
+    if (data.props.data.list.constantValueEnabled) {
       return fields;
     }
 
     return {
       ...fields,
-      listLength: YextField(msg("fields.listLength", "List Length"), {
-        type: "number",
-        min: 1,
-        max: 5,
+      styles: YextField(msg("fields.styles", "Styles"), {
+        type: "object",
+        objectFields: {
+          listLength: YextField(msg("fields.listLength", "List Length"), {
+            type: "number",
+            min: 1,
+            max: 5,
+          }),
+        },
       }),
     };
   },
   defaultProps: {
-    list: {
-      field: "emails",
-      constantValue: [],
+    data: {
+      list: {
+        field: "emails",
+        constantValue: [],
+      },
     },
-    listLength: 3,
+    styles: {
+      listLength: 3,
+    },
   },
   render: (props) => <EmailsComponent {...props} />,
 };
