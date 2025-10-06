@@ -437,7 +437,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
     );
 
     return {
-      ...data,
+      ...updatedData,
       readOnly: {
         [mediaSubfield]: true,
       },

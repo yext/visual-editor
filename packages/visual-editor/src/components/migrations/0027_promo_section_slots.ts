@@ -1,6 +1,12 @@
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { Migration } from "../../utils/migrate.ts";
 import { PromoSectionType } from "../../types/types.ts";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../contentBlocks/BodyText.tsx";
+import { VideoProps } from "../contentBlocks/Video.tsx";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 
 export const promoSectionSlots: Migration = {
   PromoSection: {
@@ -40,6 +46,14 @@ export const promoSectionSlots: Migration = {
       delete props.styles.heading;
       delete props.styles.ctaVariant;
 
+      const resolvedTitle = resolvedPromo?.title
+        ? resolveComponentData(
+            resolvedPromo.title,
+            streamDocument.locale ?? "en",
+            streamDocument
+          )
+        : "";
+
       return {
         ...props,
         slots: {
@@ -57,11 +71,11 @@ export const promoSectionSlots: Migration = {
                 styles: headingStyle,
                 parentData: !constantValueOverride.title
                   ? {
-                      text: resolvedPromo?.title || "",
+                      text: resolvedTitle,
                       field,
                     }
                   : undefined,
-              },
+              } satisfies HeadingTextProps,
             },
           ],
           DescriptionSlot: [
@@ -85,7 +99,7 @@ export const promoSectionSlots: Migration = {
                       field,
                     }
                   : undefined,
-              },
+              } satisfies BodyTextProps,
             },
           ],
           VideoSlot: isVideo
@@ -94,9 +108,12 @@ export const promoSectionSlots: Migration = {
                   type: "VideoSlot",
                   props: {
                     data: {
-                      assetVideo: constantValue.image || {},
+                      assetVideo:
+                        "video" in constantValue.image
+                          ? constantValue.image
+                          : {},
                     },
-                  },
+                  } satisfies VideoProps,
                 },
               ]
             : [],
@@ -114,16 +131,27 @@ export const promoSectionSlots: Migration = {
                           constantValueOverride.image ?? false,
                       },
                     },
-                    styles: imageStyle,
+                    styles: {
+                      aspectRatio: imageStyle?.aspectRatio ?? "1.78",
+                      width: imageStyle?.width ?? 640,
+                    },
                     className:
                       "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
                     parentData: !constantValueOverride.title
                       ? {
                           field,
-                          image: resolvedPromo?.image || "",
+                          image:
+                            resolvedPromo?.image &&
+                            !("video" in resolvedPromo.image)
+                              ? resolvedPromo.image
+                              : {
+                                  url: "https://placehold.co/640x360",
+                                  height: 360,
+                                  width: 640,
+                                },
                         }
                       : undefined,
-                  },
+                  } satisfies ImageWrapperProps,
                 },
               ],
           CTASlot: [
@@ -143,10 +171,18 @@ export const promoSectionSlots: Migration = {
                 parentData: !constantValueOverride.title
                   ? {
                       field,
-                      cta: resolvedPromo?.cta || "",
+                      cta: resolvedPromo?.cta || {
+                        label: {
+                          en: "Call to Action",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                        linkType: "URL",
+                        ctaType: "textAndLink",
+                      },
                     }
                   : undefined,
-              },
+              } satisfies CTAWrapperProps,
             },
           ],
         },

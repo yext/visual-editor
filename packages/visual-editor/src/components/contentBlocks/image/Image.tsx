@@ -11,6 +11,7 @@ import {
   pt,
   imgSizesHelper,
   resolveDataFromParent,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
@@ -20,7 +21,7 @@ const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 export interface ImageWrapperProps {
   data: {
     /** The image to display. */
-    image: YextEntityField<ImageType | ComplexImageType>;
+    image: YextEntityField<ImageType | ComplexImageType | AssetImageType>;
   };
 
   /** Size and aspect ratio of the image. */
@@ -29,7 +30,7 @@ export interface ImageWrapperProps {
   /** @internal Controlled data from the parent section. */
   parentData?: {
     field: string;
-    image: ImageType | ComplexImageType;
+    image: ImageType | ComplexImageType | AssetImageType;
   };
 
   /** Additional CSS classes to apply to the image. */
@@ -40,7 +41,7 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      image: YextField<any, ImageType | ComplexImageType>(
+      image: YextField<any, ImageType | ComplexImageType | AssetImageType>(
         msg("fields.options.image", "Image"),
         {
           type: "entityField",
