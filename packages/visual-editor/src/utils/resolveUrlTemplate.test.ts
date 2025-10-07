@@ -27,7 +27,7 @@ const mockStreamDocument: StreamDocument = {
   }),
 };
 
-const mockDirectoryDocument: StreamDocument = {
+const mockDirectoryMergedDocument: StreamDocument = {
   name: "Yext",
   id: "123",
   locale: "en",
@@ -43,6 +43,27 @@ const mockDirectoryDocument: StreamDocument = {
     entityPageSetUrlTemplates: JSON.stringify({
       primary: "[[address.region]]/page/[[id]]",
       alternate: "[[locale]]/[[address.region]]/page/[[id]]",
+    }),
+  },
+  _pageset: JSON.stringify({}),
+};
+
+const mockLocatorMergedDocument: StreamDocument = {
+  name: "Yext",
+  id: "123",
+  locale: "en",
+  address: {
+    line1: "61 9th Ave",
+    city: "New York",
+    region: "NY",
+    country: "USA",
+  },
+  __: {
+    isPrimaryLocale: true,
+    codeTemplate: "locator",
+    entityPageSetUrlTemplates: JSON.stringify({
+      primary: "[[address.region]]/location/[[id]]",
+      alternate: "[[locale]]/[[address.region]]/location/[[id]]",
     }),
   },
   _pageset: JSON.stringify({}),
@@ -257,19 +278,40 @@ describe("resolveUrlTemplate", () => {
   });
 
   it("handles primary url template on directory pages", () => {
-    expect(resolveUrlTemplate(mockDirectoryDocument, "")).toBe("ny/page/123");
+    expect(resolveUrlTemplate(mockDirectoryMergedDocument, "")).toBe(
+      "ny/page/123"
+    );
   });
 
   it("handles alternate url templates on directory pages", () => {
     expect(
       resolveUrlTemplate(
         {
-          ...mockDirectoryDocument,
-          __: { ...mockDirectoryDocument.__, isPrimaryLocale: false },
+          ...mockDirectoryMergedDocument,
+          __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
           locale: "es",
         },
         ""
       )
     ).toBe("es/ny/page/123");
+  });
+
+  it("handles primary url template on locator pages", () => {
+    expect(resolveUrlTemplate(mockLocatorMergedDocument, "")).toBe(
+      "ny/location/123"
+    );
+  });
+
+  it("handles alternate url templates on locator pages", () => {
+    expect(
+      resolveUrlTemplate(
+        {
+          ...mockLocatorMergedDocument,
+          __: { ...mockLocatorMergedDocument.__, isPrimaryLocale: false },
+          locale: "es",
+        },
+        ""
+      )
+    ).toBe("es/ny/location/123");
   });
 });
