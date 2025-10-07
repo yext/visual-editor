@@ -84,17 +84,20 @@ const FALLBACK_SCHEMA = `{
   .replace(schemaWhitespaceRegex, " ")
   .trim();
 
+const LOCAL_BUSINESS_API_NAMES = [
+  "location",
+  "financialProfessional",
+  "healthcareProfessional",
+  "restaurant",
+] as const;
+
 // Function to get the appropriate schema template based on entity type
 export const getSchemaTemplate = (entityTypeId?: string): string => {
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   }
 
-  if (
-    entityTypeId === "location" ||
-    entityTypeId === "financialProfessional" ||
-    entityTypeId === "healthcareProfessional"
-  ) {
+  if ((LOCAL_BUSINESS_API_NAMES as readonly string[]).includes(entityTypeId)) {
     return LOCAL_BUSINESS_SCHEMA;
   } else if (entityTypeId.startsWith("dm_")) {
     // Determine position based on entity type
