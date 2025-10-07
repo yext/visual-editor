@@ -89,7 +89,12 @@ const LOCAL_BUSINESS_API_NAMES = [
   "financialProfessional",
   "healthcareProfessional",
   "restaurant",
-] as const;
+  "healthcareFacility",
+  "atm",
+  "hotel",
+  "healthcareProvider",
+  "providerFacility",
+];
 
 // Function to get the appropriate schema template based on entity type
 export const getSchemaTemplate = (entityTypeId?: string): string => {
@@ -97,7 +102,7 @@ export const getSchemaTemplate = (entityTypeId?: string): string => {
     return FALLBACK_SCHEMA;
   }
 
-  if ((LOCAL_BUSINESS_API_NAMES as readonly string[]).includes(entityTypeId)) {
+  if (LOCAL_BUSINESS_API_NAMES.includes(entityTypeId)) {
     return LOCAL_BUSINESS_SCHEMA;
   } else if (entityTypeId.startsWith("dm_")) {
     // Determine position based on entity type
