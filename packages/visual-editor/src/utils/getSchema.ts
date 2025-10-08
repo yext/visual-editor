@@ -84,17 +84,25 @@ const FALLBACK_SCHEMA = `{
   .replace(schemaWhitespaceRegex, " ")
   .trim();
 
+const LOCAL_BUSINESS_ENTITY_TYPES = [
+  "location",
+  "financialProfessional",
+  "healthcareProfessional",
+  "restaurant",
+  "healthcareFacility",
+  "atm",
+  "hotel",
+  "healthcareProvider",
+  "providerFacility",
+];
+
 // Function to get the appropriate schema template based on entity type
 export const getSchemaTemplate = (entityTypeId?: string): string => {
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   }
 
-  if (
-    entityTypeId === "location" ||
-    entityTypeId === "financialProfessional" ||
-    entityTypeId === "healthcareProfessional"
-  ) {
+  if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
     return LOCAL_BUSINESS_SCHEMA;
   } else if (entityTypeId.startsWith("dm_")) {
     // Determine position based on entity type
