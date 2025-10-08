@@ -17,6 +17,7 @@ import {
   AssetImageType,
   themeManagerCn,
   CTAVariant,
+  HeadingLevel,
 } from "@yext/visual-editor";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -501,6 +502,14 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
       ctaClassNameFn
     );
 
+    const geomodifierLevel =
+      data.props.slots.GeomodifierSlot[0]?.props.styles.level;
+    data = setDeep(
+      data,
+      "props.slots.BusinessNameSlot[0].props.styles.semanticLevelOverride",
+      geomodifierLevel < 6 ? ((geomodifierLevel + 1) as HeadingLevel) : "span"
+    );
+
     switch (data.props.styles.variant) {
       case "compact":
         data = setDeep(
@@ -519,6 +528,13 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           data,
           "props.slots.ImageSlot[0].props.className",
           "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
+        );
+        break;
+      case "spotlight":
+        data = setDeep(
+          data,
+          "props.slots.GeomodifierSlot[0].props.styles.align",
+          "center"
         );
         break;
     }
