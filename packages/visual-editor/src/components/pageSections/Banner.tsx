@@ -138,6 +138,25 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
   );
 };
 
+export const defaultBannerProps: BannerSectionProps = {
+  data: {
+    text: {
+      field: "",
+      constantValue: {
+        en: "Banner Text",
+        hasLocalizedValue: "true",
+      },
+      constantValueEnabled: true,
+    },
+  },
+  styles: {
+    backgroundColor: backgroundColors.background6.value,
+    textAlignment: "center",
+  },
+  liveVisibility: true,
+  ignoreLocaleWarning: ["data.text"],
+};
+
 /**
  * The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page.
  * Available on Location templates.
@@ -145,24 +164,7 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
 export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
   label: msg("components.bannerSection", "Banner Section"),
   fields: bannerSectionFields,
-  defaultProps: {
-    data: {
-      text: {
-        field: "",
-        constantValue: {
-          en: "Banner Text",
-          hasLocalizedValue: "true",
-        },
-        constantValueEnabled: true,
-      },
-    },
-    styles: {
-      backgroundColor: backgroundColors.background6.value,
-      textAlignment: "center",
-    },
-    liveVisibility: true,
-    ignoreLocaleWarning: ["data.text"],
-  },
+  defaultProps: defaultBannerProps,
   render: (props) => (
     <VisibilityWrapper
       liveVisibility={props.liveVisibility}
