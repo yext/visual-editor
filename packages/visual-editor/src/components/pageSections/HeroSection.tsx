@@ -18,6 +18,10 @@ import {
   themeManagerCn,
   CTAVariant,
   HeadingLevel,
+  HeadingTextProps,
+  HoursStatusProps,
+  ImageWrapperProps,
+  CTAWrapperProps,
 } from "@yext/visual-editor";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -354,7 +358,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
               },
             },
             styles: { level: 3, align: "left" },
-          },
+          } satisfies HeadingTextProps,
         },
       ],
       GeomodifierSlot: [
@@ -372,7 +376,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
               },
             },
             styles: { level: 1, align: "left" },
-          },
+          } satisfies HeadingTextProps,
         },
       ],
       HoursStatusSlot: [
@@ -385,12 +389,8 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
                 constantValue: {},
               },
             },
-            styles: {
-              startOfWeek: "today",
-              collapseDays: false,
-              showAdditionalHoursText: true,
-            },
-          },
+            styles: {},
+          } satisfies HoursStatusProps,
         },
       ],
       ImageSlot: [
@@ -412,7 +412,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
               aspectRatio: 1.78,
               width: 640,
             },
-          },
+          } satisfies ImageWrapperProps,
         },
       ],
       PrimaryCTASlot: [
@@ -436,7 +436,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             styles: {
               variant: "primary",
             },
-          },
+          } satisfies CTAWrapperProps,
         },
       ],
       SecondaryCTASlot: [
@@ -460,7 +460,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             styles: {
               variant: "secondary",
             },
-          },
+          } satisfies CTAWrapperProps,
         },
       ],
     },
@@ -534,6 +534,11 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
         data = setDeep(
           data,
           "props.slots.GeomodifierSlot[0].props.styles.align",
+          "center"
+        );
+        data = setDeep(
+          data,
+          "props.slots.BusinessNameSlot[0].props.styles.align",
           "center"
         );
         break;

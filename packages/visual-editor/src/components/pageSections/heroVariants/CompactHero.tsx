@@ -18,7 +18,7 @@ const CompactHeroImage: PuckComponent<HeroImageProps> = ({
       role="region"
       aria-label={t("heroImage", "Hero Image")}
     >
-      <slots.ImageSlot style={{ height: "100%" }} />
+      <slots.ImageSlot style={{ height: "100%" }} allow={[]} />
     </div>
   ) : puck.isEditing ? (
     <div className="h-20" />
@@ -37,7 +37,7 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
     >
       {/* Desktop left image / Mobile top image */}
       <CompactHeroImage
-        id={"left-hero-image" + id}
+        id={id + "-image"}
         className={themeManagerCn(
           styles.mobileImagePosition === "bottom" && "hidden sm:block",
           styles.desktopImagePosition === "right" && "sm:hidden"
@@ -84,7 +84,7 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
 
       {/* Desktop right image / Mobile bottom image */}
       <CompactHeroImage
-        id={"right-hero-image" + id}
+        id={id + "-image"}
         className={themeManagerCn(
           styles.mobileImagePosition === "top" && "hidden sm:block",
           styles.desktopImagePosition === "left" && "sm:hidden"

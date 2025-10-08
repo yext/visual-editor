@@ -41,10 +41,10 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
           className="flex flex-col gap-y-0"
           aria-label={t("businessInformation", "Business Information")}
         >
-          <slots.BusinessNameSlot style={{ height: "auto" }} />
-          <slots.GeomodifierSlot style={{ height: "auto" }} />
+          <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
+          <slots.GeomodifierSlot style={{ height: "auto" }} allow={[]} />
         </section>
-        <slots.HoursStatusSlot style={{ height: "auto" }} />
+        <slots.HoursStatusSlot style={{ height: "auto" }} allow={[]} />
         {reviewCount > 0 && styles.showAverageReview && (
           <ReviewStars
             averageRating={averageRating}
@@ -72,8 +72,14 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
         )}
         aria-label={t("callToActions", "Call to Actions")}
       >
-        <slots.PrimaryCTASlot style={{ height: "auto", width: "auto" }} />
-        <slots.SecondaryCTASlot style={{ height: "auto", width: "auto" }} />
+        <slots.PrimaryCTASlot
+          style={{ height: "auto", width: "auto" }}
+          allow={[]}
+        />
+        <slots.SecondaryCTASlot
+          style={{ height: "auto", width: "auto" }}
+          allow={[]}
+        />
       </div>
     </>
   );

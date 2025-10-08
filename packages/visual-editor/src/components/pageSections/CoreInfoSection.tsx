@@ -142,10 +142,13 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           aria-label={t("informationSection", "Information Section")}
           className="flex flex-col gap-4"
         >
-          <slots.CoreInfoHeadingSlot style={{ height: "auto" }} />
-          <slots.CoreInfoAddressSlot style={{ height: "auto" }} />
-          <slots.CoreInfoPhoneNumbersSlot style={{ height: "auto" }} />
-          <slots.CoreInfoEmailsSlot style={{ height: "auto" }} />
+          <slots.CoreInfoHeadingSlot style={{ height: "auto" }} allow={[]} />
+          <slots.CoreInfoAddressSlot style={{ height: "auto" }} allow={[]} />
+          <slots.CoreInfoPhoneNumbersSlot
+            style={{ height: "auto" }}
+            allow={[]}
+          />
+          <slots.CoreInfoEmailsSlot style={{ height: "auto" }} allow={[]} />
         </section>
       )}
       {showHoursCol && (
@@ -153,8 +156,8 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           aria-label={t("hoursSection", "Hours Section")}
           className="flex flex-col gap-4"
         >
-          <slots.HoursHeadingSlot style={{ height: "auto" }} />
-          <slots.HoursTableSlot style={{ height: "auto" }} />
+          <slots.HoursHeadingSlot style={{ height: "auto" }} allow={[]} />
+          <slots.HoursTableSlot style={{ height: "auto" }} allow={[]} />
         </section>
       )}
       {showServicesCol && (
@@ -162,8 +165,8 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           aria-label={t("servicesSection", "Services Section")}
           className="flex flex-col gap-4"
         >
-          <slots.ServicesHeadingSlot style={{ height: "auto" }} />
-          <slots.ServicesListSlot style={{ height: "auto" }} />
+          <slots.ServicesHeadingSlot style={{ height: "auto" }} allow={[]} />
+          <slots.ServicesListSlot style={{ height: "auto" }} allow={[]} />
         </section>
       )}
     </PageSection>

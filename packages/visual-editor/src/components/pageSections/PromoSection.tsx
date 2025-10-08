@@ -204,9 +204,9 @@ const PromoMedia = ({
         constantValueEnabled={data.promo.constantValueEnabled}
       >
         {data.media === "video" ? (
-          <slots.VideoSlot style={{ height: "auto" }} />
+          <slots.VideoSlot style={{ height: "auto" }} allow={[]} />
         ) : (
-          <slots.ImageSlot style={{ height: "auto" }} />
+          <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
         )}
       </EntityField>
     </div>
@@ -230,9 +230,9 @@ const PromoWrapper: PuckComponent<PromoSectionProps> = (props) => {
         )}
       />
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
-        <slots.HeadingSlot style={{ height: "auto" }} />
-        <slots.DescriptionSlot style={{ height: "auto" }} />
-        <slots.CTASlot style={{ height: "auto" }} />
+        <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
+        <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
+        <slots.CTASlot style={{ height: "auto" }} allow={[]} />
       </div>
       {/* Desktop right image */}
       <PromoMedia
