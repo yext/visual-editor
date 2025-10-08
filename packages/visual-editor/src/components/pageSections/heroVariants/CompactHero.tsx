@@ -1,66 +1,34 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
-import {
-  EntityField,
-  pt,
-  themeManagerCn,
-  useDocument,
-  Image,
-  Background,
-  resolveYextStructField,
-  imgSizesHelper,
-} from "@yext/visual-editor";
+import { themeManagerCn, Background } from "@yext/visual-editor";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { PuckComponent } from "@measured/puck";
 
-const CompactHeroImage = ({
+const CompactHeroImage: PuckComponent<HeroImageProps> = ({
   className,
-  resolvedHero,
   styles,
-  data,
-}: HeroImageProps) => {
+  slots,
+  puck,
+}) => {
   const { t } = useTranslation();
 
-  return resolvedHero?.image && styles.showImage ? (
+  return styles.showImage ? (
     <div
       className={themeManagerCn("w-full", className)}
       role="region"
       aria-label={t("heroImage", "Hero Image")}
     >
-      <EntityField
-        displayName={pt("fields.image", "Image")}
-        fieldId={data.hero.field}
-        constantValueEnabled={data.hero.constantValueOverride.image}
-        fullHeight
-      >
-        <Image
-          image={resolvedHero.image}
-          aspectRatio={styles.image.aspectRatio}
-          className={themeManagerCn(
-            "w-full sm:w-fit h-full",
-            styles.desktopImagePosition === "left" ? "mr-auto" : "ml-auto"
-          )}
-          sizes={imgSizesHelper({
-            base: "calc(100vw - 32px)",
-            md: "calc(maxWidth / 2)",
-          })}
-        />
-      </EntityField>
+      <slots.ImageSlot style={{ height: "100%" }} />
     </div>
+  ) : puck.isEditing ? (
+    <div className="h-20" />
   ) : (
-    <div className="w-full"></div>
+    <></>
   );
 };
 
-export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
-  const { i18n } = useTranslation();
-  const locale = i18n.language;
-  const streamDocument = useDocument();
-  const resolvedHero = resolveYextStructField(
-    streamDocument,
-    data?.hero,
-    locale
-  );
+export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
+  const { styles, slots, puck, id } = props;
 
   return (
     <Background
@@ -69,13 +37,14 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
     >
       {/* Desktop left image / Mobile top image */}
       <CompactHeroImage
+        id={"left-hero-image" + id}
         className={themeManagerCn(
           styles.mobileImagePosition === "bottom" && "hidden sm:block",
           styles.desktopImagePosition === "right" && "sm:hidden"
         )}
-        resolvedHero={resolvedHero}
         styles={styles}
-        data={data}
+        slots={slots}
+        puck={puck}
       />
 
       {/* Mobile container styles */}
@@ -85,7 +54,7 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
           "sm:hidden max-w-[700px] py-pageSection-verticalPadding pt-6 px-4"
         )}
       >
-        <HeroContent data={data} styles={styles} />
+        <HeroContent {...props} />
       </div>
 
       {/* Desktop container */}
@@ -110,18 +79,19 @@ export const CompactHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
               }
         }
       >
-        <HeroContent data={data} styles={styles} />
+        <HeroContent {...props} />
       </div>
 
       {/* Desktop right image / Mobile bottom image */}
       <CompactHeroImage
+        id={"right-hero-image" + id}
         className={themeManagerCn(
           styles.mobileImagePosition === "top" && "hidden sm:block",
           styles.desktopImagePosition === "left" && "sm:hidden"
         )}
-        resolvedHero={resolvedHero}
         styles={styles}
-        data={data}
+        slots={slots}
+        puck={puck}
       />
     </Background>
   );

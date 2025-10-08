@@ -40,7 +40,6 @@ import {
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18n/platform.ts";
-import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
@@ -269,14 +268,11 @@ export const ConstantValueModeToggler = ({
   // Else if the field type is supported by constant value input, constantValueInputSupported is true
   const constantValueInputSupported =
     !disableConstantValue &&
-    (fieldTypeFilter.some(
+    fieldTypeFilter.some(
       (fieldType) =>
         Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
         Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-    ) ||
-      fieldTypeFilter.some((fieldType) =>
-        supportedStructEntityFieldTypes.includes(fieldType)
-      ));
+    );
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
@@ -555,12 +551,6 @@ const getNoFieldsFoundMessage = (
     return;
   }
 
-  if (filter.types.includes("type.hero_section")) {
-    return pt(
-      "noHeroFieldsMsg",
-      "To use entity content for this section, add a Hero Section field to your page group's entity type."
-    );
-  }
   if (filter.types.includes("type.promo_section")) {
     return pt(
       "noPromoFieldsMsg",

@@ -1,5 +1,4 @@
 import { msg } from "../../utils/i18n/platform.ts";
-import { StructEntityFieldTypes } from "../../editor/YextStructFieldSelector.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import {
   ConstantValueTypes,
@@ -14,20 +13,6 @@ export type SubFieldProps = {
   label: string;
   constantValueType?: ConstantValueTypes;
 }[];
-
-const HERO_SECTION_SUBFIELD: SubFieldProps = [
-  { field: "image", type: "type.image", label: msg("fields.image", "Image") },
-  {
-    field: "primaryCta",
-    type: "type.cta",
-    label: msg("fields.primaryCTA", "Primary CTA"),
-  },
-  {
-    field: "secondaryCta",
-    type: "type.cta",
-    label: msg("fields.secondaryCTA", "Secondary CTA"),
-  },
-];
 
 const PROMO_SECTION_SUBFIELD: SubFieldProps = [
   {
@@ -45,14 +30,12 @@ const PROMO_SECTION_SUBFIELD: SubFieldProps = [
   { field: "cta", type: "type.cta", label: msg("fields.cta", "CTA") },
 ];
 
-const STRUCT_TYPE_TO_SUBFIELDS: Record<StructEntityFieldTypes, SubFieldProps> =
-  {
-    "type.hero_section": HERO_SECTION_SUBFIELD,
-    "type.promo_section": PROMO_SECTION_SUBFIELD,
-  };
+const STRUCT_TYPE_TO_SUBFIELDS: Record<string, SubFieldProps> = {
+  "type.promo_section": PROMO_SECTION_SUBFIELD,
+};
 
 export const getSubfieldsFromType = (
-  type: StructEntityFieldTypes | undefined
+  type: string | undefined
 ): SubFieldProps | undefined => {
   if (!type) {
     return;

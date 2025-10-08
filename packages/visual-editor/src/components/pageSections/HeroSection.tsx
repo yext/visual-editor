@@ -1,26 +1,23 @@
-import * as React from "react";
-import { ComponentConfig, DefaultComponentProps, Fields } from "@measured/puck";
-import { AnalyticsScopeProvider, HoursType } from "@yext/pages-components";
 import {
-  HeroSectionType,
-  YextEntityField,
+  ComponentConfig,
+  DefaultComponentProps,
+  Fields,
+  setDeep,
+  Slot,
+} from "@measured/puck";
+import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
+import {
   backgroundColors,
   BackgroundStyle,
-  HeadingLevel,
   YextField,
   VisibilityWrapper,
-  CTAVariant,
-  YextStructFieldSelector,
-  YextStructEntityField,
-  ComponentFields,
-  TranslatableString,
   msg,
   getAnalyticsScopeHash,
+  YextEntityField,
+  AssetImageType,
+  themeManagerCn,
+  CTAVariant,
 } from "@yext/visual-editor";
-import {
-  ImageStylingFields,
-  ImageStylingProps,
-} from "../contentBlocks/image/styling.ts";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
@@ -29,35 +26,7 @@ import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface HeroData {
-  /**
-   * The primary business name displayed in the hero.
-   * @defaultValue "Business Name" (constant)
-   */
-  businessName: YextEntityField<TranslatableString>;
-
-  /**
-   * A location-based modifier or slogan (e.g., "Serving Downtown").
-   * @defaultValue "Geomodifier" (constant)
-   */
-  localGeoModifier: YextEntityField<TranslatableString>;
-
-  /**
-   * The entity's hours data, used to display an "Open/Closed" status.
-   * @defaultValue 'hours' field
-   */
-  hours: YextEntityField<HoursType>;
-
-  /**
-   * The main hero content, including an image and primary/secondary call-to-action buttons.
-   * @defaultValue Placeholder image and CTAs
-   */
-  hero: YextStructEntityField<HeroSectionType>;
-
-  /**
-   * If 'true', displays the entity's average review rating.
-   * @defaultValue true
-   */
-  showAverageReview: boolean;
+  backgroundImage: YextEntityField<ImageType | AssetImageType>;
 }
 
 export interface HeroStyles {
@@ -75,37 +44,23 @@ export interface HeroStyles {
   backgroundColor?: BackgroundStyle;
 
   /**
-   * The HTML heading level for the business name.
-   * @defaultValue 3
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
    */
-  businessNameLevel: HeadingLevel;
+  showAverageReview: boolean;
 
   /**
-   * The HTML heading level for the local geo-modifier.
-   * @defaultValue 1
+   * Whether to show the hero image (classic and compact variant).
+   * @defaultValue true
    */
-  localGeoModifierLevel: HeadingLevel;
+  showImage: boolean;
 
   /**
-   * The visual style variant for the primary call-to-action button.
-   * @defaultValue primary
+   * Image Height for the hero image with Immersive or Spotlight variant
+   * Minimum height: content height + Page Section Top/Bottom Padding
+   * @default 500px
    */
-  primaryCTA: CTAVariant;
-
-  /**
-   * The visual style variant for the secondary call-to-action button.
-   * @defaultValue secondary
-   */
-  secondaryCTA: CTAVariant;
-
-  /**
-   * Styling options for the hero image.
-   * Classic variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported) and height.
-   * Immersive variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
-   * Spotlight variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
-   * Compact variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported).
-   */
-  image: ImageStylingProps & { height?: number };
+  imageHeight?: number;
 
   /**
    * Container position on desktop (spotlight and immersive variants).
@@ -118,12 +73,6 @@ export interface HeroStyles {
    * @defaultValue left
    */
   mobileContentAlignment?: "left" | "center";
-
-  /**
-   * Whether to show the hero image (classic and compact variant).
-   * @defaultValue true
-   */
-  showImage: boolean;
 
   /**
    * Positions the image to the left or right of the hero content on desktop (classic and compact variants).
@@ -151,6 +100,15 @@ export interface HeroSectionProps {
    */
   styles: HeroStyles;
 
+  slots: {
+    BusinessNameSlot: Slot;
+    GeomodifierSlot: Slot;
+    HoursStatusSlot: Slot;
+    ImageSlot: Slot;
+    PrimaryCTASlot: Slot;
+    SecondaryCTASlot: Slot;
+  };
+
   /** @internal */
   analytics: {
     scope?: string;
@@ -163,59 +121,27 @@ export interface HeroSectionProps {
   liveVisibility?: boolean;
 }
 
-export type HeroVariantProps = Pick<HeroSectionProps, "data" | "styles">;
+export type HeroVariantProps = Pick<
+  HeroSectionProps,
+  "data" | "styles" | "slots"
+>;
 
 export type HeroImageProps = {
   className: string;
-  resolvedHero: HeroSectionType | undefined;
   styles: HeroStyles;
-  data: HeroData;
+  slots: HeroSectionProps["slots"];
 };
 
 const heroSectionFields: Fields<HeroSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      businessName: YextField<any, TranslatableString>(
-        msg("fields.businessName", "Business Name"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
-        }
-      ),
-      localGeoModifier: YextField<any, TranslatableString>(
-        msg("fields.localGeomodifier", "Local GeoModifier"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
-        }
-      ),
-      hours: YextField(msg("fields.hours", "Hours"), {
+      backgroundImage: YextField(msg("fields.image", "Image"), {
         type: "entityField",
         filter: {
-          types: ["type.hours"],
+          types: ["type.image"],
         },
       }),
-      hero: YextStructFieldSelector<HeroSectionType>({
-        label: msg("fields.hero", "Hero"),
-        filter: {
-          type: ComponentFields.HeroSection.type,
-        },
-      }),
-      showAverageReview: YextField(
-        msg("fields.showAverageReview", "Show Average Review"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
-          ],
-        }
-      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -246,39 +172,34 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      businessNameLevel: YextField(
-        msg("fields.businessNameHeadingLevel", "Business Name Heading Level"),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "HEADING_LEVEL",
-        }
-      ),
-      localGeoModifierLevel: YextField(
-        msg(
-          "fields.localGeomodifierHeadingLevel",
-          "Local GeoModifier Heading Level"
-        ),
-        {
-          type: "select",
-          hasSearch: true,
-          options: "HEADING_LEVEL",
-        }
-      ),
-      primaryCTA: YextField(
-        msg("fields.primaryCTAVariant", "Primary CTA Variant"),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
         {
           type: "radio",
-          options: "CTA_VARIANT",
+          options: [
+            { label: msg("fields.options.show", "Show"), value: true },
+            { label: msg("fields.options.hide", "Hide"), value: false },
+          ],
         }
       ),
-      secondaryCTA: YextField(
-        msg("fields.secondaryCTAVariant", "Secondary CTA Variant"),
-        {
-          type: "radio",
-          options: "CTA_VARIANT",
-        }
-      ),
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.true", "True"),
+            value: true,
+          },
+          {
+            label: msg("fields.options.false", "False"),
+            value: false,
+          },
+        ],
+      }),
+      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
+        type: "number",
+        min: 0,
+        max: 500,
+      }),
       desktopContainerPosition: YextField(
         msg("fields.desktopContainerPosition", "Desktop Container Position"),
         {
@@ -319,30 +240,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           ],
         }
       ),
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
-        type: "radio",
-        options: [
-          {
-            label: msg("fields.options.true", "True"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.false", "False"),
-            value: false,
-          },
-        ],
-      }),
-      image: YextField(msg("fields.image", "Image"), {
-        type: "object",
-        objectFields: {
-          height: {
-            type: "number",
-            min: 0,
-            label: msg("fields.height", "Height"),
-          },
-          ...ImageStylingFields,
-        },
-      }),
       desktopImagePosition: YextField(
         msg("fields.desktopImagePosition", "Desktop Image Position"),
         {
@@ -381,6 +278,18 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       ),
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      BusinessNameSlot: { type: "slot" },
+      GeomodifierSlot: { type: "slot" },
+      HoursStatusSlot: { type: "slot" },
+      ImageSlot: { type: "slot" },
+      PrimaryCTASlot: { type: "slot" },
+      SecondaryCTASlot: { type: "slot" },
+    },
+    visible: false,
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -407,146 +316,239 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
   fields: heroSectionFields,
   defaultProps: {
     data: {
-      businessName: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: {
-          en: "Business Name",
-          hasLocalizedValue: "true",
-        },
-      },
-      localGeoModifier: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: {
-          en: "Geomodifier",
-          hasLocalizedValue: "true",
-        },
-      },
-      hours: {
-        field: "hours",
-        constantValue: {},
-      },
-      hero: {
+      backgroundImage: {
         field: "",
         constantValue: {
-          primaryCta: {
-            label: {
-              en: "Call To Action",
-              hasLocalizedValue: "true",
-            },
-            link: "#",
-            linkType: "URL",
-            ctaType: "textAndLink",
-          },
-          secondaryCta: {
-            label: {
-              en: "Learn More",
-              hasLocalizedValue: "true",
-            },
-            link: "#",
-            linkType: "URL",
-            ctaType: "textAndLink",
-          },
-          image: {
-            url: PLACEHOLDER_IMAGE_URL,
-            height: 360,
-            width: 640,
-          },
+          url: PLACEHOLDER_IMAGE_URL,
+          height: 360,
+          width: 640,
         },
         constantValueEnabled: true,
-        constantValueOverride: {
-          primaryCta: true,
-          secondaryCta: true,
-          image: true,
-        },
       },
-      showAverageReview: true,
     },
     styles: {
       variant: "classic",
       backgroundColor: backgroundColors.background1.value,
+      showAverageReview: true,
+      showImage: true,
+      imageHeight: 500,
       desktopImagePosition: "right",
-      businessNameLevel: 3,
-      localGeoModifierLevel: 1,
-      primaryCTA: "primary",
-      secondaryCTA: "secondary",
-      image: {
-        aspectRatio: 1.78, // 16:9 default
-        height: 500,
-      },
       desktopContainerPosition: "left",
       mobileContentAlignment: "left",
-      showImage: true,
       mobileImagePosition: "bottom",
+    },
+    slots: {
+      BusinessNameSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            data: {
+              text: {
+                constantValue: {
+                  en: "Business Name",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+                field: "",
+              },
+            },
+            styles: { level: 3, align: "left" },
+          },
+        },
+      ],
+      GeomodifierSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            data: {
+              text: {
+                constantValue: {
+                  en: "Geomodifier",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+                field: "",
+              },
+            },
+            styles: { level: 1, align: "left" },
+          },
+        },
+      ],
+      HoursStatusSlot: [
+        {
+          type: "HoursStatusSlot",
+          props: {
+            data: {
+              hours: {
+                field: "hours",
+                constantValue: {},
+              },
+            },
+            styles: {
+              startOfWeek: "today",
+              collapseDays: false,
+              showAdditionalHoursText: true,
+            },
+          },
+        },
+      ],
+      ImageSlot: [
+        {
+          type: "HeroImageSlot",
+          props: {
+            data: {
+              image: {
+                field: "",
+                constantValue: {
+                  url: PLACEHOLDER_IMAGE_URL,
+                  height: 360,
+                  width: 640,
+                },
+                constantValueEnabled: true,
+              },
+            },
+            styles: {
+              aspectRatio: 1.78,
+              width: 640,
+            },
+          },
+        },
+      ],
+      PrimaryCTASlot: [
+        {
+          type: "CTASlot",
+          props: {
+            data: {
+              entityField: {
+                field: "",
+                constantValue: {
+                  label: {
+                    en: "Call To Action",
+                    hasLocalizedValue: "true",
+                  },
+                  link: "#",
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+              },
+            },
+            styles: {
+              variant: "primary",
+            },
+          },
+        },
+      ],
+      SecondaryCTASlot: [
+        {
+          type: "CTASlot",
+          props: {
+            data: {
+              entityField: {
+                field: "",
+                constantValue: {
+                  label: {
+                    en: "Learn More",
+                    hasLocalizedValue: "true",
+                  },
+                  link: "#",
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+              },
+            },
+            styles: {
+              variant: "secondary",
+            },
+          },
+        },
+      ],
     },
     analytics: {
       scope: "heroSection",
     },
     liveVisibility: true,
   },
-  resolveFields: (data, { lastData }) => {
-    let fields = heroSectionFields;
-    // If set to entity value and no field selected, hide the component.
-    if (
-      !data.props.data.hero.constantValueEnabled &&
-      data.props.data.hero.field === ""
-    ) {
-      data.props.liveVisibility = false;
-      fields = {
-        ...fields,
-        liveVisibility: undefined,
-      };
+  resolveData: (data) => {
+    data = setDeep(
+      data,
+      "props.slots.ImageSlot[0].props.variant",
+      data.props.styles.variant
+    );
+
+    const ctaClassNameFn = (variant: CTAVariant): string => {
+      switch (variant) {
+        case "link":
+          return (
+            "py-3 border-2 border-transparent w-fit " +
+            (data.props.styles.mobileContentAlignment === "center"
+              ? " mx-auto sm:m-0"
+              : "")
+          );
+        default:
+          return "";
+      }
+    };
+
+    data = setDeep(
+      data,
+      "props.slots.PrimaryCTASlot[0].props.parentStyles.classNameFn",
+      ctaClassNameFn
+    );
+
+    data = setDeep(
+      data,
+      "props.slots.SecondaryCTASlot[0].props.parentStyles.classNameFn",
+      ctaClassNameFn
+    );
+
+    switch (data.props.styles.variant) {
+      case "compact":
+        data = setDeep(
+          data,
+          "props.slots.ImageSlot[0].props.className",
+          themeManagerCn(
+            "w-full sm:w-fit h-full",
+            data.props.styles.desktopImagePosition === "left"
+              ? "mr-auto"
+              : "ml-auto"
+          )
+        );
+        break;
+      case "classic":
+        data = setDeep(
+          data,
+          "props.slots.ImageSlot[0].props.className",
+          "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
+        );
+        break;
     }
 
-    // If no field was selected and then constant value is enabled
-    // or a field is selected, show the component.
-    if (
-      (data.props.data.hero.constantValueEnabled &&
-        !lastData?.props.data.hero.constantValueEnabled &&
-        data.props.data.hero.field === "") ||
-      (lastData?.props.data.hero.field === "" &&
-        data.props.data.hero.field !== "")
-    ) {
-      data.props.liveVisibility = true;
-    }
+    return { ...data };
+  },
+  resolveFields: (data) => {
+    let fields = heroSectionFields;
 
     switch (data.props.styles.variant) {
       case "compact": {
-        fields = updateFields(
-          fields,
-          ["styles.objectFields.image.objectFields.width"],
-          undefined
-        );
         // compact should also remove the props removed by classic
       }
       case "classic": {
         fields = updateFields(
           fields,
           [
+            "data",
+            "styles.objectFields.imageHeight",
             "styles.objectFields.desktopContainerPosition",
-            "styles.objectFields.image.objectFields.height",
           ],
           undefined
         );
 
-        if (data.props.styles.showImage) {
-          fields = updateFields(
-            fields,
-            ["styles.objectFields.image.objectFields.aspectRatio.options"],
-            // @ts-expect-error ts(2339) objectFields exists
-            fields.styles.objectFields.image.objectFields.aspectRatio.options.filter(
-              (option: { label: string; value: string }) =>
-                !["4:1", "3:1", "2:1", "9:16"].includes(option.label)
-            )
-          );
-        } else {
+        if (!data.props.styles.showImage) {
           fields = updateFields(
             fields,
             [
               "styles.objectFields.mobileImagePosition",
               "styles.objectFields.desktopImagePosition",
-              "styles.objectFields.image",
             ],
             undefined
           );
@@ -556,7 +558,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
       case "immersive": {
         fields = updateFields(
           fields,
-          ["styles.objectFields.backgroundColor"],
+          ["styles.objectFields.backgroundColor", "slots.ImageSlot"],
           undefined
         );
         // immersive should also remove the props removed by spotlight
@@ -566,8 +568,6 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           fields,
           [
             "styles.objectFields.showImage",
-            "styles.objectFields.image.objectFields.aspectRatio",
-            "styles.objectFields.image.objectFields.width",
             "styles.objectFields.mobileImagePosition",
             "styles.objectFields.desktopImagePosition",
           ],
@@ -580,17 +580,16 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     return fields;
   },
   render: (props) => {
-    const { data, styles } = props;
-    let HeroVariant = <ClassicHero data={data} styles={styles} />;
+    let HeroVariant = <ClassicHero {...props} />;
     switch (props.styles.variant) {
       case "immersive":
-        HeroVariant = <ImmersiveHero data={data} styles={styles} />;
+        HeroVariant = <ImmersiveHero {...props} />;
         break;
       case "spotlight":
-        HeroVariant = <SpotlightHero data={data} styles={styles} />;
+        HeroVariant = <SpotlightHero {...props} />;
         break;
       case "compact":
-        HeroVariant = <CompactHero data={data} styles={styles} />;
+        HeroVariant = <CompactHero {...props} />;
         break;
     }
 
@@ -614,7 +613,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
  * based on a dot notation path
  * @internal
  */
-const updateFields = <T extends DefaultComponentProps>(
+export const updateFields = <T extends DefaultComponentProps>(
   obj: Record<string, any>,
   paths: string[],
   value: any

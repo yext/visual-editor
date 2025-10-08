@@ -11,9 +11,10 @@ import {
   HeroSection,
   migrate,
   migrationRegistry,
+  SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const tests: ComponentTest[] = [
@@ -1019,7 +1020,10 @@ const tests: ComponentTest[] = [
 
 describe("HeroSection", async () => {
   const puckConfig: Config = {
-    components: { HeroSection },
+    components: {
+      HeroSection,
+      ...SlotsCategoryComponents,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -1055,9 +1059,17 @@ describe("HeroSection", async () => {
         document
       );
 
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 
