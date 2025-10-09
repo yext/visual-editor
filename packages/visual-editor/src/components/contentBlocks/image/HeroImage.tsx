@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   resolveComponentData,
@@ -21,7 +21,7 @@ export interface HeroImageProps extends ImageWrapperProps {
   variant?: "classic" | "compact" | "immersive" | "spotlight";
 }
 
-const HeroImageComponent = ({
+const HeroImageComponent: PuckComponent<HeroImageProps> = ({
   data,
   styles,
   className,
@@ -36,7 +36,7 @@ const HeroImageComponent = ({
   );
 
   if (!resolvedImage) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -44,15 +44,12 @@ const HeroImageComponent = ({
       displayName={pt("fields.image", "Image")}
       fieldId={data.image.field}
       constantValueEnabled={data.image.constantValueEnabled}
+      fullHeight={true}
     >
       <Image
         image={resolvedImage}
         aspectRatio={styles.aspectRatio}
-        width={
-          variant === "immersive" || variant === "spotlight"
-            ? undefined
-            : styles.width
-        }
+        width={variant === "compact" ? undefined : styles.width}
         className={className || "max-w-full rounded-image-borderRadius w-full"}
         sizes={imgSizesHelper({
           base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",

@@ -18,7 +18,7 @@ const CompactHeroImage: PuckComponent<HeroImageProps> = ({
       role="region"
       aria-label={t("heroImage", "Hero Image")}
     >
-      <slots.ImageSlot style={{ height: "100%" }} allow={[]} />
+      <slots.ImageSlot style={{ height: "100%", display: "grid" }} allow={[]} />
     </div>
   ) : puck.isEditing ? (
     <div className="h-20" />

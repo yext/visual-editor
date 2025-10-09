@@ -203,7 +203,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
       imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
         type: "number",
         min: 0,
-        max: 500,
       }),
       desktopContainerPosition: YextField(
         msg("fields.desktopContainerPosition", "Desktop Container Position"),
@@ -389,7 +388,11 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
                 constantValue: {},
               },
             },
-            styles: {},
+            styles: {
+              dayOfWeekFormat: "long",
+              showDayNames: true,
+              showCurrentStatus: true,
+            },
           } satisfies HoursStatusProps,
         },
       ],
@@ -516,7 +519,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           data,
           "props.slots.ImageSlot[0].props.className",
           themeManagerCn(
-            "w-full sm:w-fit h-full",
+            "w-full h-full",
             data.props.styles.desktopImagePosition === "left"
               ? "mr-auto"
               : "ml-auto"
