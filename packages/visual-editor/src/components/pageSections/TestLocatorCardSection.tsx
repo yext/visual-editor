@@ -42,40 +42,31 @@ async function createComponent<T extends keyof Components>(
   } as ComponentDataOptionalId<Components[T]>;
 }
 
-export interface ResultsCardStyles {
+export interface TestLocatorCardSectionStyles {
   /**
-   * Whether to show the result index number.
-   * @defaultValue true
+   * Styling options for the result cards.
    */
-  showResultIndex: boolean;
+  card: {
+    /**
+     * Whether to show the result index number.
+     * @defaultValue true
+     */
+    showResultIndex: boolean;
 
-  /**
-   * Whether to show the distance.
-   * @defaultValue true
-   */
-  showDistance: boolean;
+    /**
+     * Whether to show the distance.
+     * @defaultValue true
+     */
+    showDistance: boolean;
+  };
 }
-
-export interface TestLocatorCardSectionStyles {}
 
 export interface TestLocatorCardSectionProps {
   /**
-   * This object contains the content to be displayed by the results card.
-   * @propCategory Results Card Props
+   * Array of slots for content blocks in the card
+   * @propCategory Content Slots
    */
-  resultsCard: {
-    /**
-     * Slots for content blocks in the card
-     */
-    slots: {
-      Slot1: Slot;
-      Slot2: Slot;
-      Slot3: Slot;
-      Slot4: Slot;
-      Slot5: Slot;
-    };
-    styles: ResultsCardStyles;
-  };
+  slots: { Slot: Slot }[];
 
   /**
    * This object contains properties for customizing the component's appearance.
@@ -91,20 +82,16 @@ export interface TestLocatorCardSectionProps {
 }
 
 const testLocatorCardSectionFields: Fields<TestLocatorCardSectionProps> = {
-  resultsCard: YextField(msg("fields.resultsCard", "Results Card"), {
+  slots: {
+    type: "array",
+    arrayFields: {
+      Slot: { type: "slot" },
+    },
+  },
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      slots: {
-        type: "object",
-        objectFields: {
-          Slot1: { type: "slot" },
-          Slot2: { type: "slot" },
-          Slot3: { type: "slot" },
-          Slot4: { type: "slot" },
-          Slot5: { type: "slot" },
-        },
-      },
-      styles: YextField(msg("fields.styles", "Styles"), {
+      card: YextField(msg("fields.card", "Card"), {
         type: "object",
         objectFields: {
           showResultIndex: YextField(
@@ -127,10 +114,6 @@ const testLocatorCardSectionFields: Fields<TestLocatorCardSectionProps> = {
         },
       }),
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {},
   }),
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
@@ -188,22 +171,47 @@ const Distance = ({ distance }: { distance: number | undefined }) => {
 
 const LocationCard = ({
   result,
-  Slot1,
-  Slot2,
-  Slot3,
-  Slot4,
-  Slot5,
+  slots,
   cardStyles,
 }: {
   result: CardProps<Location>["result"];
-  Slot1: any;
-  Slot2: any;
-  Slot3: any;
-  Slot4: any;
-  Slot5: any;
-  cardStyles: ResultsCardStyles;
+  slots: { Slot: any }[];
+  cardStyles: TestLocatorCardSectionStyles["card"];
 }): React.JSX.Element => {
   const distance = result.distance;
+
+  // Define allow lists for each slot index
+  const getAllowList = (index: number): string[] => {
+    switch (index) {
+      case 0:
+        return ["HeadingTextLocked", "BodyTextLocked", "TextListLocked"];
+      case 1:
+        return [
+          "HoursStatusLocked",
+          "HoursTableLocked",
+          "BodyTextLocked",
+          "TextListLocked",
+        ];
+      case 2:
+        return [
+          "PhoneLocked",
+          "EmailsLocked",
+          "BodyTextLocked",
+          "TextListLocked",
+        ];
+      case 3:
+        return [
+          "AddressLocked",
+          "GetDirectionsLocked",
+          "BodyTextLocked",
+          "TextListLocked",
+        ];
+      case 4:
+        return ["CTAWrapperLocked", "CTAGroupLocked"];
+      default:
+        return [];
+    }
+  };
 
   return (
     <Background
@@ -220,48 +228,36 @@ const LocationCard = ({
       )}
       <div className="flex flex-wrap gap-6 w-full">
         <div className="w-full flex flex-col gap-4">
-          <div className="flex flex-row justify-between items-center">
-            <Slot1
-              allow={["HeadingTextLocked", "BodyTextLocked", "TextListLocked"]}
-            />
-            {cardStyles.showDistance && <Distance distance={distance} />}
-          </div>
-          <Slot2
-            allow={[
-              "HoursStatusLocked",
-              "HoursTableLocked",
-              "BodyTextLocked",
-              "TextListLocked",
-            ]}
-          />
-          <Slot3
-            allow={[
-              "PhoneLocked",
-              "EmailsLocked",
-              "BodyTextLocked",
-              "TextListLocked",
-            ]}
-          />
-          <Slot4
-            allow={[
-              "AddressLocked",
-              "GetDirectionsLocked",
-              "BodyTextLocked",
-              "TextListLocked",
-            ]}
-          />
+          {slots.slice(0, 4).map(({ Slot }, idx) => (
+            <React.Fragment key={idx}>
+              {idx === 0 && (
+                <div className="flex flex-row justify-between items-center">
+                  <Slot allow={getAllowList(idx)} />
+                  {cardStyles.showDistance && <Distance distance={distance} />}
+                </div>
+              )}
+              {idx > 0 && <Slot allow={getAllowList(idx)} />}
+            </React.Fragment>
+          ))}
         </div>
-        <Slot5
-          allow={["CTAWrapperLocked", "CTAGroupLocked"]}
-          className="basis-full"
-        />
+        {slots.length > 4 &&
+          slots
+            .slice(4)
+            .map(({ Slot }, idx) => (
+              <Slot
+                key={idx + 4}
+                allow={getAllowList(idx + 4)}
+                className="basis-full"
+              />
+            ))}
       </div>
     </Background>
   );
 };
 
 const TestLocatorCardSectionComponent = ({
-  resultsCard,
+  slots,
+  styles,
 }: WithPuckProps<TestLocatorCardSectionProps>) => {
   const { t } = useTranslation();
   const streamDocument = useDocument<Location>();
@@ -306,12 +302,8 @@ const TestLocatorCardSectionComponent = ({
             <LocationCard
               key={index}
               result={result}
-              Slot1={resultsCard.slots.Slot1}
-              Slot2={resultsCard.slots.Slot2}
-              Slot3={resultsCard.slots.Slot3}
-              Slot4={resultsCard.slots.Slot4}
-              Slot5={resultsCard.slots.Slot5}
-              cardStyles={resultsCard.styles}
+              slots={slots}
+              cardStyles={styles.card}
             />
           ))}
         </div>
@@ -343,121 +335,130 @@ export const TestLocatorCardSection: ComponentConfig<{
   label: msg("components.testLocatorCardSection", "Test Locator Card Section"),
   fields: testLocatorCardSectionFields,
   defaultProps: {
-    resultsCard: {
-      slots: {
-        Slot1: [],
-        Slot2: [],
-        Slot3: [],
-        Slot4: [],
-        Slot5: [],
-      },
-      styles: {
+    slots: [
+      { Slot: [] },
+      { Slot: [] },
+      { Slot: [] },
+      { Slot: [] },
+      { Slot: [] },
+    ],
+    styles: {
+      card: {
         showResultIndex: true,
         showDistance: true,
       },
     },
-    styles: {},
     liveVisibility: true,
   },
   resolveData: async (data, { changed, trigger }) => {
-    // Initialize slots with default content when component is first created
-    const slotsAreEmpty =
-      data.props.resultsCard.slots.Slot1.length === 0 &&
-      data.props.resultsCard.slots.Slot2.length === 0 &&
-      data.props.resultsCard.slots.Slot3.length === 0 &&
-      data.props.resultsCard.slots.Slot4.length === 0 &&
-      data.props.resultsCard.slots.Slot5.length === 0;
+    // Don't populate slots on load if they already have content
+    if (trigger === "load") return data;
 
-    // Only create default content if slots are empty or on first load
-    if (!slotsAreEmpty && trigger === "load") return data;
-    if (!slotsAreEmpty && changed && !changed.resultsCard) return data;
+    // Only process if slots were changed or if it's the first render
+    if (changed && !changed.slots) return data;
 
-    // Slot 1: Location Name (H4)
-    const locationName = await createComponent("HeadingTextLocked", {
-      text: {
-        field: "name",
-        constantValue: {
-          en: "",
-          hasLocalizedValue: "true",
-        },
-      },
-      level: 4,
-    });
+    // Helper function to get default component for a slot index
+    const getDefaultComponentForSlot = async (index: number) => {
+      switch (index) {
+        case 0:
+          // Slot 0: Location Name (H4)
+          return await createComponent("HeadingTextLocked", {
+            text: {
+              field: "name",
+              constantValue: {
+                en: "",
+                hasLocalizedValue: "true",
+              },
+            },
+            level: 4,
+          });
+        case 1:
+          // Slot 1: Hours Status
+          return await createComponent("HoursStatusLocked", {
+            hours: {
+              field: "hours",
+              constantValue: {},
+            },
+          });
+        case 2:
+          // Slot 2: Phone
+          return await createComponent("PhoneLocked", {
+            data: {
+              number: {
+                field: "mainPhone",
+                constantValue: "",
+              },
+              label: {
+                en: "",
+                hasLocalizedValue: "true",
+              },
+            },
+            styles: {
+              phoneFormat: "domestic",
+              includePhoneHyperlink: true,
+            },
+          });
+        case 3:
+          // Slot 3: Address
+          return await createComponent("AddressLocked", {
+            data: {
+              address: {
+                field: "address",
+                constantValue: {
+                  line1: "",
+                  city: "",
+                  region: "",
+                  postalCode: "",
+                  countryCode: "",
+                },
+              },
+            },
+            styles: {
+              showGetDirectionsLink: true,
+              ctaVariant: "link",
+            },
+          });
+        case 4:
+          // Slot 4: Visit Page Button
+          return await createComponent("CTAWrapperLocked", {
+            entityField: {
+              field: "",
+              constantValueEnabled: true,
+              constantValue: {
+                ctaType: "textAndLink",
+                label: "Visit Page",
+                link: "#",
+              },
+            },
+            variant: "primary",
+          });
+        default:
+          // For slots beyond the defaults, return null (user will populate)
+          return null;
+      }
+    };
 
-    // Slot 2: Hours Status
-    const hoursStatus = await createComponent("HoursStatusLocked", {
-      hours: {
-        field: "hours",
-        constantValue: {},
-      },
-    });
+    // Populate empty slots with default content
+    const populatedSlots = await Promise.all(
+      data.props.slots.map(async (slot, index) => {
+        // If the slot already has content, keep it
+        if (slot.Slot.length > 0) {
+          return slot;
+        }
 
-    // Slot 3: Phone
-    const phone = await createComponent("PhoneLocked", {
-      data: {
-        number: {
-          field: "mainPhone",
-          constantValue: "",
-        },
-        label: {
-          en: "",
-          hasLocalizedValue: "true",
-        },
-      },
-      styles: {
-        phoneFormat: "domestic",
-        includePhoneHyperlink: true,
-      },
-    });
-
-    // Slot 4: Address
-    const address = await createComponent("AddressLocked", {
-      data: {
-        address: {
-          field: "address",
-          constantValue: {
-            line1: "",
-            city: "",
-            region: "",
-            postalCode: "",
-            countryCode: "",
-          },
-        },
-      },
-      styles: {
-        showGetDirectionsLink: true,
-        ctaVariant: "link",
-      },
-    });
-
-    // Slot 5: Visit Page Button
-    const visitPageButton = await createComponent("CTAWrapperLocked", {
-      entityField: {
-        field: "",
-        constantValueEnabled: true,
-        constantValue: {
-          ctaType: "textAndLink",
-          label: "Visit Page",
-          link: "#",
-        },
-      },
-      variant: "primary",
-    });
+        // If the slot is empty, populate it with default content (if available)
+        const defaultComponent = await getDefaultComponentForSlot(index);
+        return {
+          Slot: defaultComponent ? [defaultComponent] : [],
+        };
+      })
+    );
 
     return {
       ...data,
       props: {
         ...data.props,
-        resultsCard: {
-          ...data.props.resultsCard,
-          slots: {
-            Slot1: [locationName],
-            Slot2: [hoursStatus],
-            Slot3: [phone],
-            Slot4: [address],
-            Slot5: [visitPageButton],
-          },
-        },
+        slots: populatedSlots,
       },
     };
   },
