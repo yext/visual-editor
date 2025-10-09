@@ -14,11 +14,14 @@ import {
   OtherCategoryComponents,
   type OtherCategoryProps,
 } from "../categories/OtherCategory";
+import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
     DeprecatedCategoryProps,
-    OtherCategoryProps {}
+    OtherCategoryProps {
+  BannerSection: BannerSectionProps;
+}
 
 // The config used for the locator
 export const locatorConfig: Config<LocatorConfigProps> = {
@@ -26,11 +29,12 @@ export const locatorConfig: Config<LocatorConfigProps> = {
     ...LocatorCategoryComponents,
     ...DeprecatedCategoryComponents,
     ...OtherCategoryComponents,
+    BannerSection,
   },
   categories: {
     locatorComponents: {
       title: "Locator",
-      components: [...LocatorCategory, ...OtherCategory],
+      components: [...LocatorCategory, "BannerSection", ...OtherCategory],
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
