@@ -502,6 +502,10 @@
   "showLess": "Vis mindre",
   "showMore": "Vis mere",
   "siteColors": "Webstedsfarver",
+  "slots": {
+    "productCard": "Produktkort",
+    "productCards": "Produktkort"
+  },
   "spacingDefaultLabel": "Misligholdelse",
   "staticContent": "Statisk indhold",
   "sunday": "søndag",

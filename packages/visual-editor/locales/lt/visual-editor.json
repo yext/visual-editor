@@ -502,6 +502,10 @@
   "showLess": "Parodyk mažiau",
   "showMore": "Parodyk daugiau",
   "siteColors": "Svetainės spalvos",
+  "slots": {
+    "productCard": "Produkto kortelė",
+    "productCards": "Produktų kortelės"
+  },
   "spacingDefaultLabel": "Numatytasis",
   "staticContent": "Statinis turinys",
   "sunday": "Sekmadienis",

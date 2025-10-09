@@ -502,6 +502,10 @@
   "showLess": "少なく表示します",
   "showMore": "もっと見せてください",
   "siteColors": "サイトの色",
+  "slots": {
+    "productCard": "製品カード",
+    "productCards": "製品カード"
+  },
   "spacingDefaultLabel": "デフォルト",
   "staticContent": "静的コンテンツ",
   "sunday": "日曜日",

@@ -502,6 +502,10 @@
   "showLess": "少顯示",
   "showMore": "顯示更多",
   "siteColors": "站點顏色",
+  "slots": {
+    "productCard": "產品卡",
+    "productCards": "產品卡"
+  },
   "spacingDefaultLabel": "預設",
   "staticContent": "靜態內容",
   "sunday": "星期日",

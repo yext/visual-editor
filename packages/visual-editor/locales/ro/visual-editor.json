@@ -502,6 +502,10 @@
   "showLess": "Arată mai puțin",
   "showMore": "Arată mai mult",
   "siteColors": "Culorile site -ului",
+  "slots": {
+    "productCard": "Card de produs",
+    "productCards": "Cărți de produs"
+  },
   "spacingDefaultLabel": "Implicit",
   "staticContent": "Conținut static",
   "sunday": "duminică",
