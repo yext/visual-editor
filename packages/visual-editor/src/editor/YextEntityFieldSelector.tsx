@@ -440,7 +440,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         "noTypesFoundMsg",
         "No types found. Please check your configuration."
       ),
-      icon: null,
     });
   }, [typeSelectorConfig]);
 
@@ -507,7 +506,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
       noOptionsMessage: getNoFieldsFoundMessage(filter),
-      icon: null,
     });
   }, [entityFields, filter, value?.selectedType]);
 
