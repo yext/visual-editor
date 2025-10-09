@@ -13,20 +13,29 @@ import {
   ComponentConfig,
   Fields,
   WithPuckProps,
+  WithId,
   Slot,
   ComponentDataOptionalId,
+  Render,
+  Config,
+  useGetPuck,
 } from "@measured/puck";
 import { CardProps, Coordinate } from "@yext/search-ui-react";
 import { AddressType, HoursType } from "@yext/pages-components";
 import {
-  LockedCategoryProps,
-  LockedCategoryComponents,
-} from "../categories/LockedCategory";
+  AdvancedCoreInfoCategoryProps,
+  AdvancedCoreInfoCategoryComponents,
+} from "../categories/AdvancedCoreInfoCategory";
 
-export type Components = LockedCategoryProps;
+export type Components = AdvancedCoreInfoCategoryProps;
 
 const contentBlocks = {
-  ...LockedCategoryComponents,
+  ...AdvancedCoreInfoCategoryComponents,
+};
+
+// Create a Puck config for rendering slot content in read-only mode
+const slotContentConfig: Config<Components> = {
+  components: contentBlocks,
 };
 
 async function createComponent<T extends keyof Components>(
@@ -172,46 +181,34 @@ const Distance = ({ distance }: { distance: number | undefined }) => {
 const LocationCard = ({
   result,
   slots,
+  rawSlotData,
   cardStyles,
+  isEditable = false,
 }: {
   result: CardProps<Location>["result"];
   slots: { Slot: any }[];
+  rawSlotData?: any[];
   cardStyles: LocatorSectionStyles["card"];
+  isEditable?: boolean;
 }): React.JSX.Element => {
   const distance = result.distance;
 
-  // Define allow lists for each slot index
-  const getAllowList = (index: number): string[] => {
-    switch (index) {
-      case 0:
-        return ["HeadingTextLocked", "BodyTextLocked", "TextListLocked"];
-      case 1:
-        return [
-          "HoursStatusLocked",
-          "HoursTableLocked",
-          "BodyTextLocked",
-          "TextListLocked",
-        ];
-      case 2:
-        return [
-          "PhoneLocked",
-          "EmailsLocked",
-          "BodyTextLocked",
-          "TextListLocked",
-        ];
-      case 3:
-        return [
-          "AddressLocked",
-          "GetDirectionsLocked",
-          "BodyTextLocked",
-          "TextListLocked",
-        ];
-      case 4:
-        return ["CTAWrapperLocked", "CTAGroupLocked"];
-      default:
-        return [];
-    }
-  };
+  // Allow all AdvancedCoreInfoCategory components except Grid
+  const allowList = [
+    "Address",
+    "BodyText",
+    "CTAGroup",
+    "CTAWrapper",
+    "Emails",
+    "GetDirections",
+    "HeadingText",
+    "HoursTable",
+    "HoursStatus",
+    "ImageWrapper",
+    "Phone",
+    "TextList",
+    "SlotFlex",
+  ];
 
   return (
     <Background
@@ -228,28 +225,52 @@ const LocationCard = ({
       )}
       <div className="flex flex-wrap gap-6 w-full">
         <div className="w-full flex flex-col gap-4">
-          {slots.slice(0, 4).map(({ Slot }, idx) => (
-            <React.Fragment key={idx}>
-              {idx === 0 && (
-                <div className="flex flex-row justify-between items-center">
-                  <Slot allow={getAllowList(idx)} />
-                  {cardStyles.showDistance && <Distance distance={distance} />}
-                </div>
-              )}
-              {idx > 0 && <Slot allow={getAllowList(idx)} />}
-            </React.Fragment>
-          ))}
+          {slots.slice(0, 4).map(({ Slot }, idx) => {
+            const slotContent = rawSlotData?.[idx]?.Slot;
+            return (
+              <React.Fragment key={idx}>
+                {idx === 0 && (
+                  <div className="flex flex-row justify-between items-start">
+                    {isEditable ? (
+                      <Slot allow={allowList} />
+                    ) : Array.isArray(slotContent) && slotContent.length > 0 ? (
+                      <Render
+                        config={slotContentConfig}
+                        data={{ content: slotContent, root: { props: {} } }}
+                      />
+                    ) : null}
+                    {cardStyles.showDistance && (
+                      <Distance distance={distance} />
+                    )}
+                  </div>
+                )}
+                {idx > 0 &&
+                  (isEditable ? (
+                    <Slot allow={allowList} />
+                  ) : Array.isArray(slotContent) && slotContent.length > 0 ? (
+                    <Render
+                      config={slotContentConfig}
+                      data={{ content: slotContent, root: { props: {} } }}
+                    />
+                  ) : null)}
+              </React.Fragment>
+            );
+          })}
         </div>
         {slots.length > 4 &&
-          slots
-            .slice(4)
-            .map(({ Slot }, idx) => (
-              <Slot
-                key={idx + 4}
-                allow={getAllowList(idx + 4)}
-                className="basis-full"
-              />
-            ))}
+          slots.slice(4).map(({ Slot }, idx) => {
+            const slotContent = rawSlotData?.[idx + 4]?.Slot;
+            return isEditable ? (
+              <Slot key={idx + 4} allow={allowList} className="basis-full" />
+            ) : Array.isArray(slotContent) && slotContent.length > 0 ? (
+              <div key={idx + 4} className="basis-full">
+                <Render
+                  config={slotContentConfig}
+                  data={{ content: slotContent, root: { props: {} } }}
+                />
+              </div>
+            ) : null;
+          })}
       </div>
     </Background>
   );
@@ -258,9 +279,21 @@ const LocationCard = ({
 const LocatorSectionComponent = ({
   slots,
   styles,
-}: WithPuckProps<LocatorSectionProps>) => {
+  id,
+}: WithId<WithPuckProps<LocatorSectionProps>>) => {
   const { t } = useTranslation();
   const streamDocument = useDocument<Location>();
+  const getPuck = useGetPuck();
+
+  // Extract raw slot data from puck state
+  const rawSlotData = React.useMemo(() => {
+    const { appState } = getPuck();
+    if (!appState?.data?.content) return [];
+    const componentData = appState.data.content.find(
+      (c: any) => c.props?.id === id
+    );
+    return componentData?.props?.slots || [];
+  }, [getPuck, id]);
 
   // Create 3 results using the actual location from the document
   const results = [
@@ -303,7 +336,9 @@ const LocatorSectionComponent = ({
               key={index}
               result={result}
               slots={slots}
+              rawSlotData={rawSlotData}
               cardStyles={styles.card}
+              isEditable={index === 0}
             />
           ))}
         </div>
@@ -362,7 +397,7 @@ export const LocatorSection: ComponentConfig<{
       switch (index) {
         case 0:
           // Slot 0: Location Name (H4)
-          return await createComponent("HeadingTextLocked", {
+          return await createComponent("HeadingText", {
             text: {
               field: "name",
               constantValue: {
@@ -374,7 +409,7 @@ export const LocatorSection: ComponentConfig<{
           });
         case 1:
           // Slot 1: Hours Status
-          return await createComponent("HoursStatusLocked", {
+          return await createComponent("HoursStatus", {
             hours: {
               field: "hours",
               constantValue: {},
@@ -382,7 +417,7 @@ export const LocatorSection: ComponentConfig<{
           });
         case 2:
           // Slot 2: Phone
-          return await createComponent("PhoneLocked", {
+          return await createComponent("Phone", {
             data: {
               number: {
                 field: "mainPhone",
@@ -400,7 +435,7 @@ export const LocatorSection: ComponentConfig<{
           });
         case 3:
           // Slot 3: Address
-          return await createComponent("AddressLocked", {
+          return await createComponent("Address", {
             data: {
               address: {
                 field: "address",
@@ -420,7 +455,7 @@ export const LocatorSection: ComponentConfig<{
           });
         case 4:
           // Slot 4: Visit Page Button
-          return await createComponent("CTAWrapperLocked", {
+          return await createComponent("CTAWrapper", {
             entityField: {
               field: "",
               constantValueEnabled: true,

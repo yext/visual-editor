@@ -52,8 +52,8 @@ const SlotFlexInternal: ComponentConfig<SlotFlexProps> = {
     items: [],
   },
   permissions: {
-    drag: false,
-    insert: false,
+    // drag: false,
+    // insert: false,
   },
   render: ({ className, items: Items }) => {
     return (
