@@ -75,10 +75,7 @@ export {
   type StaticMapSectionProps,
   type StaticMapStyles,
 } from "./StaticMapSection.tsx";
-export {
-  LocatorCardSection,
-  type LocatorCardSectionProps,
-} from "./LocatorCardSection.tsx";
+export { LocatorSection, type LocatorSectionProps } from "./LocatorSection.tsx";
 export {
   TestimonialSection,
   type TestimonialSectionProps,

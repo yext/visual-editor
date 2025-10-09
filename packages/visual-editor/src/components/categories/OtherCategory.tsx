@@ -5,22 +5,22 @@ import {
 import { ExpandedFooterProps, ExpandedFooter } from "../footer";
 import { ExpandedHeaderProps, ExpandedHeader } from "../header";
 import {
-  LocatorCardSection,
-  LocatorCardSectionProps,
-} from "../pageSections/LocatorCardSection.tsx";
+  LocatorSection,
+  LocatorSectionProps,
+} from "../pageSections/LocatorSection.tsx";
 
 export interface OtherCategoryProps {
   ExpandedHeader: ExpandedHeaderProps;
   ExpandedFooter: ExpandedFooterProps;
   CustomCodeSection: CustomCodeSectionProps;
-  LocatorCardSection: LocatorCardSectionProps;
+  LocatorSection: LocatorSectionProps;
 }
 
 export const OtherCategoryComponents = {
   ExpandedHeader,
   ExpandedFooter,
   CustomCodeSection,
-  LocatorCardSection,
+  LocatorSection,
 };
 
 export const OtherCategory = Object.keys(
