@@ -4,8 +4,8 @@ import {
   DefaultComponentProps,
   DefaultRootProps,
   Field,
-  CustomField,
   ComponentConfig,
+  CustomField,
   ArrayField,
   BaseField,
   ObjectField,
@@ -231,6 +231,18 @@ interface HeroSectionProps {
    * @propCategory Style Props
    */
   styles: HeroStyles;
+  slots: {
+    BusinessNameSlot: Slot;
+    GeomodifierSlot: Slot;
+    HoursStatusSlot: Slot;
+    ImageSlot: Slot;
+    PrimaryCTASlot: Slot;
+    SecondaryCTASlot: Slot;
+  };
+  /** @internal */
+  conditionalRender?: {
+    hours: boolean;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -644,31 +656,7 @@ interface FAQStyles {
 }
 
 interface HeroData {
-  /**
-   * The primary business name displayed in the hero.
-   * @defaultValue "Business Name" (constant)
-   */
-  businessName: YextEntityField<TranslatableString>;
-  /**
-   * A location-based modifier or slogan (e.g., "Serving Downtown").
-   * @defaultValue "Geomodifier" (constant)
-   */
-  localGeoModifier: YextEntityField<TranslatableString>;
-  /**
-   * The entity's hours data, used to display an "Open/Closed" status.
-   * @defaultValue 'hours' field
-   */
-  hours: YextEntityField<HoursType>;
-  /**
-   * The main hero content, including an image and primary/secondary call-to-action buttons.
-   * @defaultValue Placeholder image and CTAs
-   */
-  hero: YextStructEntityField<HeroSectionType>;
-  /**
-   * If 'true', displays the entity's average review rating.
-   * @defaultValue true
-   */
-  showAverageReview: boolean;
+  backgroundImage: YextEntityField<ImageType | AssetImageType>;
 }
 
 interface HeroStyles {
@@ -684,35 +672,21 @@ interface HeroStyles {
    */
   backgroundColor?: BackgroundStyle;
   /**
-   * The HTML heading level for the business name.
-   * @defaultValue 3
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
    */
-  businessNameLevel: HeadingLevel;
+  showAverageReview: boolean;
   /**
-   * The HTML heading level for the local geo-modifier.
-   * @defaultValue 1
+   * Whether to show the hero image (classic and compact variant).
+   * @defaultValue true
    */
-  localGeoModifierLevel: HeadingLevel;
+  showImage: boolean;
   /**
-   * The visual style variant for the primary call-to-action button.
-   * @defaultValue primary
+   * Image Height for the hero image with Immersive or Spotlight variant
+   * Minimum height: content height + Page Section Top/Bottom Padding
+   * @default 500px
    */
-  primaryCTA: CTAVariant;
-  /**
-   * The visual style variant for the secondary call-to-action button.
-   * @defaultValue secondary
-   */
-  secondaryCTA: CTAVariant;
-  /**
-   * Styling options for the hero image.
-   * Classic variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported) and height.
-   * Immersive variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
-   * Spotlight variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding)
-   * Compact variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported).
-   */
-  image: ImageStylingProps & {
-    height?: number;
-  };
+  imageHeight?: number;
   /**
    * Container position on desktop (spotlight and immersive variants).
    * @defaultValue left
@@ -723,11 +697,6 @@ interface HeroStyles {
    * @defaultValue left
    */
   mobileContentAlignment?: "left" | "center";
-  /**
-   * Whether to show the hero image (classic and compact variant).
-   * @defaultValue true
-   */
-  showImage: boolean;
   /**
    * Positions the image to the left or right of the hero content on desktop (classic and compact variants).
    * @defaultValue right
@@ -1127,33 +1096,6 @@ type FAQSectionType = {
   faqs: Array<FAQStruct>;
 };
 
-/** Represents a Yext struct entity field (hero or promo) with support for static values and overrides. */
-type YextStructEntityField<T extends Record<string, any> = any> = {
-  /** The Yext Knowledge Graph field api name */
-  field: string;
-  /** The static value for the field */
-  constantValue: T;
-  /** Whether to use the static value instead of the entity field value */
-  constantValueEnabled?: boolean;
-  /** A map of subfield names to whether to use the static value for that subfield */
-  constantValueOverride: {
-    [K in keyof T]: boolean;
-  };
-};
-
-/** Data for the HeroSection */
-type HeroSectionType = {
-  /**
-   * The image to show in the hero section
-   * @ai Always use ImageType
-   */
-  image?: ImageType | AssetImageType;
-  /** The first CTA button for the hero section */
-  primaryCta?: EnhancedTranslatableCTA;
-  /** The second CTA button for the hero section */
-  secondaryCta?: EnhancedTranslatableCTA;
-};
-
 /** Data for the InsightSection */
 type InsightSectionType = {
   insights: Array<InsightStruct>;
@@ -1246,25 +1188,6 @@ type FAQStruct = {
   answer: TranslatableRichText;
 };
 
-/** Enhanced CTA options */
-type EnhancedTranslatableCTA = TranslatableCTA & {
-  /**
-   * The type of CTA button to display.
-   * textAndLink is a standard button
-   * getDirections is a button that opens a map based on the coordinate field
-   * presetImage uses a preset image such as app store or food delivery logos for the button
-   * @defaultValue "textAndLink"
-   * @ai If the CTA is for getting directions, use "getDirections" and provide the coordinate field.
-   * If the CTA is for app downloads or food delivery, use "presetImage" and select the appropriate presetImageType. Otherwise, use "textAndLink".
-   */
-  ctaType?: "textAndLink" | "getDirections" | "presetImage";
-  coordinate?: {
-    latitude: number;
-    longitude: number;
-  };
-  presetImageType?: PresetImageType;
-};
-
 /** An individual insight for the InsightSection */
 type InsightStruct = {
   /**
@@ -1317,6 +1240,25 @@ type AssetVideo = {
   id: string;
 };
 
+/** Enhanced CTA options */
+type EnhancedTranslatableCTA = TranslatableCTA & {
+  /**
+   * The type of CTA button to display.
+   * textAndLink is a standard button
+   * getDirections is a button that opens a map based on the coordinate field
+   * presetImage uses a preset image such as app store or food delivery logos for the button
+   * @defaultValue "textAndLink"
+   * @ai If the CTA is for getting directions, use "getDirections" and provide the coordinate field.
+   * If the CTA is for app downloads or food delivery, use "presetImage" and select the appropriate presetImageType. Otherwise, use "textAndLink".
+   */
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
+  coordinate?: {
+    latitude: number;
+    longitude: number;
+  };
+  presetImageType?: PresetImageType;
+};
+
 /** An individual person in the TeamSection */
 type PersonStruct = {
   /**
@@ -1357,14 +1299,6 @@ type ImageData = {
 
 type ImageTransformations = Partial<Record<TransformKind, ImageTransformation>>;
 
-/** Preset image types for CTA buttons - app store or food delivery logos */
-type PresetImageType =
-  | "app-store"
-  | "google-play"
-  | "galaxy-store"
-  | "app-gallery"
-  | "uber-eats";
-
 type Video$1 = {
   /** The YouTube video URL */
   url: string;
@@ -1379,6 +1313,14 @@ type Video$1 = {
   /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
   embeddedUrl: string;
 };
+
+/** Preset image types for CTA buttons - app store or food delivery logos */
+type PresetImageType =
+  | "app-store"
+  | "google-play"
+  | "galaxy-store"
+  | "app-gallery"
+  | "uber-eats";
 
 /** Describes the dimensions of an image. */
 type ImageDimension = {

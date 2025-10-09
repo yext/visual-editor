@@ -1,37 +1,38 @@
-import { useTranslation } from "react-i18next";
-import * as React from "react";
 import {
-  PageSection,
-  useDocument,
   backgroundColors,
-  resolveYextStructField,
+  PageSection,
+  resolveYextEntityField,
+  useDocument,
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { useTranslation } from "react-i18next";
 import { getImageUrl } from "@yext/pages-components";
+import { PuckComponent } from "@measured/puck";
 
-export const ImmersiveHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
+export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
+  const { data, styles } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedHero = resolveYextStructField(
+  const resolvedBackgroundImage = resolveYextEntityField(
     streamDocument,
-    data?.hero,
+    data?.backgroundImage,
     locale
   );
 
   return (
     <div
       style={{
-        backgroundImage: resolvedHero?.image?.url
-          ? `url(${getImageUrl(resolvedHero.image.url, resolvedHero.image.width, resolvedHero.image.height)})`
+        backgroundImage: resolvedBackgroundImage?.url
+          ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`
           : undefined,
       }}
       className="bg-no-repeat bg-center bg-cover"
     >
       <PageSection
         background={
-          resolvedHero?.image?.url
+          resolvedBackgroundImage?.url
             ? {
                 bgColor: "bg-[#00000080]",
                 textColor: "text-white",
@@ -43,11 +44,11 @@ export const ImmersiveHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
         className="z-10 flex items-center h-full w-full"
         outerClassName="h-fit flex items-center"
         outerStyle={{
-          minHeight: `${styles.image.height}px`,
+          minHeight: `${styles.imageHeight}px`,
         }}
       >
         <div className={heroContentParentCn(styles)}>
-          <HeroContent data={data} styles={styles} />
+          <HeroContent {...props} />
         </div>
       </PageSection>
     </div>

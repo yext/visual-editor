@@ -137,7 +137,7 @@ export const promoSectionSlots: Migration = {
                     },
                     className:
                       "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
-                    parentData: !constantValueOverride.title
+                    parentData: !constantValueOverride.image
                       ? {
                           field,
                           image:
@@ -168,7 +168,7 @@ export const promoSectionSlots: Migration = {
                 styles: {
                   variant: ctaVariant,
                 },
-                parentData: !constantValueOverride.title
+                parentData: !constantValueOverride.cta
                   ? {
                       field,
                       cta: resolvedPromo?.cta || {

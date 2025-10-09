@@ -12,6 +12,7 @@ import {
   pt,
   msg,
   ThemeOptions,
+  HeadingLevel,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -27,6 +28,8 @@ export type HeadingTextProps = {
     level: HeadingProps["level"];
     /** Alignment of the event section heading */
     align: "left" | "center" | "right";
+    /** Optional override to render a different HTML tag instead of the one based on the level */
+    semanticLevelOverride?: HeadingLevel | "span";
   };
 
   /** @internal Controlled data from the parent section */
@@ -60,7 +63,12 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
         fieldId={parentData ? parentData.field : data.text.field}
         constantValueEnabled={!parentData && data.text.constantValueEnabled}
       >
-        <Heading level={styles.level}>{resolvedHeadingText}</Heading>
+        <Heading
+          level={styles.level}
+          semanticLevelOverride={styles.semanticLevelOverride}
+        >
+          {resolvedHeadingText}
+        </Heading>
       </EntityField>
     </div>
   ) : puck.isEditing ? (

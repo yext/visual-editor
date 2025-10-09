@@ -1,6 +1,5 @@
 import { StreamDocument } from "@yext/visual-editor";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
-import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
 
 const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
@@ -157,50 +156,6 @@ export const resolveEmbeddedFieldsRecursively = (
     );
   }
   return newData;
-};
-
-export const resolveYextStructField = <T extends Record<string, any>>(
-  streamDocument: any,
-  entityField: YextStructEntityField<T>,
-  locale?: string
-): T | undefined => {
-  // If the entire struct is a constant value, resolveYextEntityField will recursively
-  // resolve all embedded fields within it. We can just return that result.
-  if (entityField.constantValueEnabled) {
-    return resolveYextEntityField(streamDocument, entityField, locale);
-  }
-
-  // Otherwise, the struct is based on an entity field, with some properties
-  // potentially being overridden by constant values.
-
-  // 1. Get the base struct from the entity field path.
-  const baseStructFromEntity = resolveYextEntityField(
-    streamDocument,
-    {
-      ...entityField,
-      // Temporarily disable constant value to ensure we get the entity field value.
-      constantValueEnabled: false,
-    },
-    locale
-  );
-
-  // 2. Resolve any embedded fields that might exist in the constant values.
-  const resolvedConstantValues = resolveEmbeddedFieldsRecursively(
-    entityField.constantValue,
-    streamDocument,
-    locale
-  );
-
-  // 3. Start with the base entity value and merge in the overrides.
-  const finalStruct = { ...baseStructFromEntity };
-  for (const key in entityField.constantValueOverride) {
-    if (entityField.constantValueOverride[key]) {
-      // If override is true, take the value from our resolved constants.
-      finalStruct[key] = resolvedConstantValues?.[key];
-    }
-  }
-
-  return finalStruct as T;
 };
 
 const stringifyResolvedField = (fieldValue: any): string => {

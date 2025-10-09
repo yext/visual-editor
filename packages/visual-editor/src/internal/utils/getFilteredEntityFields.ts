@@ -52,7 +52,6 @@ export type EntityFieldTypes =
   | "type.team_section"
   | "type.events_section"
   | "type.promo_section"
-  | "type.hero_section"
   | `c_${string}`;
 
 export type ConstantValueTypes = EntityFieldTypes | "imageOrVideo";
