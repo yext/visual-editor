@@ -519,7 +519,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           data,
           "props.slots.ImageSlot[0].props.className",
           themeManagerCn(
-            "w-full h-full",
+            "w-full sm:w-fit h-full",
             data.props.styles.desktopImagePosition === "left"
               ? "mr-auto"
               : "ml-auto"
