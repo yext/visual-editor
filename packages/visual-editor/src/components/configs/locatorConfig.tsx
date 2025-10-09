@@ -32,9 +32,9 @@ export const locatorConfig: Config<LocatorConfigProps> = {
     BannerSection,
   },
   categories: {
-    locatorComponents: {
-      title: "Locator",
-      components: [...LocatorCategory, "BannerSection", ...OtherCategory],
+    pageSections: {
+      title: "Page Sections",
+      components: [...LocatorCategory, "BannerSection"],
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
@@ -42,7 +42,7 @@ export const locatorConfig: Config<LocatorConfigProps> = {
       components: DeprecatedCategory,
     },
     other: {
-      visible: false,
+      components: OtherCategory,
     },
   },
   root: {

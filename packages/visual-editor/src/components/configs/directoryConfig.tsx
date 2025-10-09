@@ -32,9 +32,9 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
     BannerSection,
   },
   categories: {
-    directoryComponents: {
-      title: "Directory",
-      components: [...DirectoryCategory, "BannerSection", ...OtherCategory],
+    pageSections: {
+      title: "Page Sections",
+      components: [...DirectoryCategory, "BannerSection"],
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
@@ -42,7 +42,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
       components: DeprecatedCategory,
     },
     other: {
-      visible: false,
+      components: OtherCategory,
     },
   },
   root: {
