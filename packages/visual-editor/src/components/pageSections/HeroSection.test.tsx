@@ -20,13 +20,16 @@ import { page } from "@vitest/browser/context";
 const tests: ComponentTest[] = [
   {
     name: "default props with no data",
-    document: {},
+    document: {
+      locale: "en",
+    },
     props: { ...HeroSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "default props with data",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -46,6 +49,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props using entity values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -113,6 +117,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -189,6 +194,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 9 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -270,6 +276,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 16 props with old CTA structure",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -351,6 +358,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 16 props using entity values with old CTA structure",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -427,6 +435,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 16 props with missing ctaType",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -510,6 +519,7 @@ const tests: ComponentTest[] = [
   {
     name: "[classic] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -613,6 +623,7 @@ const tests: ComponentTest[] = [
   {
     name: "[classic] version 17 props using entity values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -713,6 +724,7 @@ const tests: ComponentTest[] = [
   {
     name: "[immersive] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -819,6 +831,7 @@ const tests: ComponentTest[] = [
   {
     name: "[spotlight] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -919,6 +932,7 @@ const tests: ComponentTest[] = [
   {
     name: "[compact] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",

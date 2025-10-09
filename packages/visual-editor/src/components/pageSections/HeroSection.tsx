@@ -22,6 +22,7 @@ import {
   HoursStatusProps,
   ImageWrapperProps,
   CTAWrapperProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -115,6 +116,11 @@ export interface HeroSectionProps {
   };
 
   /** @internal */
+  conditionalRender?: {
+    hours: boolean;
+  };
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
@@ -128,7 +134,7 @@ export interface HeroSectionProps {
 
 export type HeroVariantProps = Pick<
   HeroSectionProps,
-  "data" | "styles" | "slots"
+  "data" | "styles" | "slots" | "conditionalRender"
 >;
 
 export type HeroImageProps = {
@@ -472,7 +478,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     },
     liveVisibility: true,
   },
-  resolveData: (data) => {
+  resolveData: (data, params) => {
     data = setDeep(
       data,
       "props.slots.ImageSlot[0].props.variant",
@@ -547,7 +553,28 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
         break;
     }
 
-    return { ...data };
+    const streamDocument = params.metadata?.streamDocument;
+    const locale = streamDocument?.locale;
+    if (!locale || !streamDocument) {
+      return { ...data };
+    }
+
+    // Check if the HoursStatusSlot has content to display
+    const resolvedHours = resolveComponentData(
+      data?.props?.slots?.HoursStatusSlot.map(
+        (slot) => slot.props.data.hours
+      )[0],
+      locale,
+      streamDocument
+    );
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        conditionalRender: { hours: !!resolvedHours },
+      },
+    };
   },
   resolveFields: (data) => {
     let fields = heroSectionFields;

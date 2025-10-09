@@ -25,7 +25,6 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = ({
   data,
   styles,
   className,
-  variant,
 }: HeroImageProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -49,13 +48,11 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = ({
       <Image
         image={resolvedImage}
         aspectRatio={styles.aspectRatio}
-        width={variant === "compact" ? undefined : styles.width}
+        width={undefined}
         className={className || "max-w-full rounded-image-borderRadius w-full"}
         sizes={imgSizesHelper({
-          base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
-          md: styles.width
-            ? `min(${styles.width}px, calc((maxWidth - 32px) / 2))`
-            : "100vw",
+          base: "calc(100vw - 32px)",
+          md: "calc(maxWidth / 2)",
         })}
       />
     </EntityField>
@@ -72,6 +69,7 @@ export const HeroImage: ComponentConfig<{ props: HeroImageProps }> = {
     switch (data.props.variant ?? "classic") {
       case "compact": {
         fields = updateFields(fields, ["styles.objectFields.width"], undefined);
+        // compact should also remove the props removed by classic
       }
       case "classic": {
         fields = updateFields(

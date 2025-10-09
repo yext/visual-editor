@@ -20,16 +20,19 @@ export const heroContentParentCn = (styles: HeroVariantProps["styles"]) => {
 export const HeroContent: PuckComponent<HeroVariantProps> = ({
   styles,
   slots,
+  conditionalRender,
+  puck,
 }) => {
   const { t } = useTranslation();
   const streamDocument = useDocument();
-
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   const desktopContainerPosition =
     styles.variant === "spotlight" || styles.variant === "immersive"
       ? styles.desktopContainerPosition
       : "left";
+
+  const showHours = conditionalRender?.hours || puck.isEditing;
 
   return (
     <>
@@ -44,7 +47,9 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
           <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
           <slots.GeomodifierSlot style={{ height: "auto" }} allow={[]} />
         </section>
-        <slots.HoursStatusSlot style={{ height: "auto" }} allow={[]} />
+        {showHours && (
+          <slots.HoursStatusSlot style={{ height: "auto" }} allow={[]} />
+        )}
         {reviewCount > 0 && styles.showAverageReview && (
           <ReviewStars
             averageRating={averageRating}
