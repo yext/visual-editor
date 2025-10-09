@@ -42,7 +42,7 @@ async function createComponent<T extends keyof Components>(
   } as ComponentDataOptionalId<Components[T]>;
 }
 
-export interface TestLocatorCardSectionStyles {
+export interface LocatorCardSectionStyles {
   /**
    * Styling options for the result cards.
    */
@@ -61,7 +61,7 @@ export interface TestLocatorCardSectionStyles {
   };
 }
 
-export interface TestLocatorCardSectionProps {
+export interface LocatorCardSectionProps {
   /**
    * Array of slots for content blocks in the card
    * @propCategory Content Slots
@@ -72,7 +72,7 @@ export interface TestLocatorCardSectionProps {
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: TestLocatorCardSectionStyles;
+  styles: LocatorCardSectionStyles;
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -81,7 +81,7 @@ export interface TestLocatorCardSectionProps {
   liveVisibility: boolean;
 }
 
-const testLocatorCardSectionFields: Fields<TestLocatorCardSectionProps> = {
+const locatorCardSectionFields: Fields<LocatorCardSectionProps> = {
   slots: {
     type: "array",
     arrayFields: {
@@ -176,7 +176,7 @@ const LocationCard = ({
 }: {
   result: CardProps<Location>["result"];
   slots: { Slot: any }[];
-  cardStyles: TestLocatorCardSectionStyles["card"];
+  cardStyles: LocatorCardSectionStyles["card"];
 }): React.JSX.Element => {
   const distance = result.distance;
 
@@ -255,10 +255,10 @@ const LocationCard = ({
   );
 };
 
-const TestLocatorCardSectionComponent = ({
+const LocatorCardSectionComponent = ({
   slots,
   styles,
-}: WithPuckProps<TestLocatorCardSectionProps>) => {
+}: WithPuckProps<LocatorCardSectionProps>) => {
   const { t } = useTranslation();
   const streamDocument = useDocument<Location>();
 
@@ -324,16 +324,16 @@ const TestLocatorCardSectionComponent = ({
 };
 
 /**
- * Test component for experimenting with LocationCard implementations.
+ * Component for experimenting with LocationCard implementations.
  * This component mimics the Locator layout with mock search and map functionality,
  * focusing on the LocationCard display for prototyping purposes.
  * The component repeats the current location document multiple times to test the card layout.
  */
-export const TestLocatorCardSection: ComponentConfig<{
-  props: TestLocatorCardSectionProps;
+export const LocatorCardSection: ComponentConfig<{
+  props: LocatorCardSectionProps;
 }> = {
-  label: msg("components.testLocatorCardSection", "Test Locator Card Section"),
-  fields: testLocatorCardSectionFields,
+  label: msg("components.locatorCardSection", "Locator Card Section"),
+  fields: locatorCardSectionFields,
   defaultProps: {
     slots: [
       { Slot: [] },
@@ -469,7 +469,7 @@ export const TestLocatorCardSection: ComponentConfig<{
         isEditing={props.puck.isEditing}
         iconSize="md"
       >
-        <TestLocatorCardSectionComponent {...props} />
+        <LocatorCardSectionComponent {...props} />
       </VisibilityWrapper>
     );
   },
