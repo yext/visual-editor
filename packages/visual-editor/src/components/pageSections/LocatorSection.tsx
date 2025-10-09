@@ -67,15 +67,39 @@ export interface LocatorSectionStyles {
      * @defaultValue true
      */
     showDistance: boolean;
+
+    /**
+     * Column layout for the card content.
+     * @defaultValue "1-column"
+     */
+    columnLayout: "1-column" | "2-column";
+
+    /**
+     * Spacing between slots in column 1.
+     * @defaultValue "4"
+     */
+    column1Spacing: "0" | "1" | "2" | "3" | "4" | "6" | "8" | "12";
+
+    /**
+     * Spacing between slots in column 2.
+     * @defaultValue "4"
+     */
+    column2Spacing: "0" | "1" | "2" | "3" | "4" | "6" | "8" | "12";
   };
 }
 
 export interface LocatorSectionProps {
   /**
-   * Array of slots for content blocks in the card
+   * Array of slots for content blocks in column 1 of the card
    * @propCategory Content Slots
    */
-  slots: { Slot: Slot }[];
+  column1Slots: { Slot: Slot }[];
+
+  /**
+   * Array of slots for content blocks in column 2 of the card (only visible in 2-column layout)
+   * @propCategory Content Slots
+   */
+  column2Slots: { Slot: Slot }[];
 
   /**
    * This object contains properties for customizing the component's appearance.
@@ -91,7 +115,13 @@ export interface LocatorSectionProps {
 }
 
 const locatorSectionFields: Fields<LocatorSectionProps> = {
-  slots: {
+  column1Slots: {
+    type: "array",
+    arrayFields: {
+      Slot: { type: "slot" },
+    },
+  },
+  column2Slots: {
     type: "array",
     arrayFields: {
       Slot: { type: "slot" },
@@ -120,6 +150,51 @@ const locatorSectionFields: Fields<LocatorSectionProps> = {
               { label: msg("fields.options.hide", "Hide"), value: false },
             ],
           }),
+          columnLayout: YextField(msg("fields.columnLayout", "Column Layout"), {
+            type: "radio",
+            options: [
+              {
+                label: msg("fields.options.1column", "1 Column"),
+                value: "1-column",
+              },
+              {
+                label: msg("fields.options.2column", "2 Columns"),
+                value: "2-column",
+              },
+            ],
+          }),
+          column1Spacing: YextField(
+            msg("fields.column1Spacing", "Column 1 Spacing"),
+            {
+              type: "select",
+              options: [
+                { label: msg("fields.options.0px", "0px"), value: "0" },
+                { label: msg("fields.options.4px", "4px"), value: "1" },
+                { label: msg("fields.options.8px", "8px"), value: "2" },
+                { label: msg("fields.options.12px", "12px"), value: "3" },
+                { label: msg("fields.options.16px", "16px"), value: "4" },
+                { label: msg("fields.options.24px", "24px"), value: "6" },
+                { label: msg("fields.options.32px", "32px"), value: "8" },
+                { label: msg("fields.options.48px", "48px"), value: "12" },
+              ],
+            }
+          ),
+          column2Spacing: YextField(
+            msg("fields.column2Spacing", "Column 2 Spacing"),
+            {
+              type: "select",
+              options: [
+                { label: msg("fields.options.0px", "0px"), value: "0" },
+                { label: msg("fields.options.4px", "4px"), value: "1" },
+                { label: msg("fields.options.8px", "8px"), value: "2" },
+                { label: msg("fields.options.12px", "12px"), value: "3" },
+                { label: msg("fields.options.16px", "16px"), value: "4" },
+                { label: msg("fields.options.24px", "24px"), value: "6" },
+                { label: msg("fields.options.32px", "32px"), value: "8" },
+                { label: msg("fields.options.48px", "48px"), value: "12" },
+              ],
+            }
+          ),
         },
       }),
     },
@@ -180,18 +255,23 @@ const Distance = ({ distance }: { distance: number | undefined }) => {
 
 const LocationCard = ({
   result,
-  slots,
-  rawSlotData,
+  column1Slots,
+  column2Slots,
+  rawColumn1Data,
+  rawColumn2Data,
   cardStyles,
   isEditable = false,
 }: {
   result: CardProps<Location>["result"];
-  slots: { Slot: any }[];
-  rawSlotData?: any[];
+  column1Slots: { Slot: any }[];
+  column2Slots: { Slot: any }[];
+  rawColumn1Data?: any[];
+  rawColumn2Data?: any[];
   cardStyles: LocatorSectionStyles["card"];
   isEditable?: boolean;
 }): React.JSX.Element => {
   const distance = result.distance;
+  const isTwoColumn = cardStyles.columnLayout === "2-column";
 
   // Allow all AdvancedCoreInfoCategory components except Grid
   const allowList = [
@@ -210,6 +290,100 @@ const LocationCard = ({
     "SlotFlex",
   ];
 
+  const renderSlot = (idx: number, Slot: any, rawData?: any[]) => {
+    const slotContent = rawData?.[idx]?.Slot;
+    return isEditable ? (
+      <Slot allow={allowList} />
+    ) : Array.isArray(slotContent) && slotContent.length > 0 ? (
+      <Render
+        config={slotContentConfig}
+        data={{ content: slotContent, root: { props: {} } }}
+      />
+    ) : null;
+  };
+
+  if (isTwoColumn) {
+    // Two-column layout: separate column arrays
+
+    // Map spacing values to pixels
+    const spacingMap: Record<string, string> = {
+      "0": "0px",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "6": "1.5rem",
+      "8": "2rem",
+      "12": "3rem",
+    };
+
+    return (
+      <Background
+        background={backgroundColors.background1.value}
+        className="container flex flex-row border-b border-gray-300 p-8 gap-4"
+      >
+        {cardStyles.showResultIndex && (
+          <Background
+            background={backgroundColors.background6.value}
+            className="flex-shrink-0 w-6 h-6 rounded-full font-bold flex items-center justify-center text-body-sm-fontSize"
+          >
+            {result.index}
+          </Background>
+        )}
+        <div className="flex flex-col w-full">
+          {/* First row: First slot and distance span full width */}
+          <div
+            className="flex flex-row justify-between items-start"
+            style={{ marginBottom: spacingMap[cardStyles.column1Spacing] }}
+          >
+            <div>{renderSlot(0, column1Slots[0]?.Slot, rawColumn1Data)}</div>
+            {cardStyles.showDistance && <Distance distance={distance} />}
+          </div>
+
+          {/* Columns below */}
+          <div className="flex gap-6 w-full">
+            {/* Column 1 - remaining slots from column 1 */}
+            <div
+              className="flex-1 flex flex-col"
+              style={{ gap: spacingMap[cardStyles.column1Spacing] }}
+            >
+              {column1Slots.slice(1).map(({ Slot }, idx) => (
+                <div key={idx + 1}>
+                  {renderSlot(idx + 1, Slot, rawColumn1Data)}
+                </div>
+              ))}
+            </div>
+
+            {/* Column 2 - all slots from column 2 */}
+            {column2Slots.length > 0 && (
+              <div
+                className="flex-1 flex flex-col"
+                style={{ gap: spacingMap[cardStyles.column2Spacing] }}
+              >
+                {column2Slots.map(({ Slot }, idx) => (
+                  <div key={idx}>{renderSlot(idx, Slot, rawColumn2Data)}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </Background>
+    );
+  }
+
+  // One-column layout - only show column 1
+  // Map spacing values to pixels
+  const spacingMap: Record<string, string> = {
+    "0": "0px",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "12": "3rem",
+  };
+
   return (
     <Background
       background={backgroundColors.background1.value}
@@ -223,61 +397,29 @@ const LocationCard = ({
           {result.index}
         </Background>
       )}
-      <div className="flex flex-wrap gap-6 w-full">
-        <div className="w-full flex flex-col gap-4">
-          {slots.slice(0, 4).map(({ Slot }, idx) => {
-            const slotContent = rawSlotData?.[idx]?.Slot;
-            return (
-              <React.Fragment key={idx}>
-                {idx === 0 && (
-                  <div className="flex flex-row justify-between items-start">
-                    {isEditable ? (
-                      <Slot allow={allowList} />
-                    ) : Array.isArray(slotContent) && slotContent.length > 0 ? (
-                      <Render
-                        config={slotContentConfig}
-                        data={{ content: slotContent, root: { props: {} } }}
-                      />
-                    ) : null}
-                    {cardStyles.showDistance && (
-                      <Distance distance={distance} />
-                    )}
-                  </div>
-                )}
-                {idx > 0 &&
-                  (isEditable ? (
-                    <Slot allow={allowList} />
-                  ) : Array.isArray(slotContent) && slotContent.length > 0 ? (
-                    <Render
-                      config={slotContentConfig}
-                      data={{ content: slotContent, root: { props: {} } }}
-                    />
-                  ) : null)}
-              </React.Fragment>
-            );
-          })}
-        </div>
-        {slots.length > 4 &&
-          slots.slice(4).map(({ Slot }, idx) => {
-            const slotContent = rawSlotData?.[idx + 4]?.Slot;
-            return isEditable ? (
-              <Slot key={idx + 4} allow={allowList} className="basis-full" />
-            ) : Array.isArray(slotContent) && slotContent.length > 0 ? (
-              <div key={idx + 4} className="basis-full">
-                <Render
-                  config={slotContentConfig}
-                  data={{ content: slotContent, root: { props: {} } }}
-                />
+      <div
+        className="flex flex-col w-full"
+        style={{ gap: spacingMap[cardStyles.column1Spacing] }}
+      >
+        {column1Slots.map(({ Slot }, idx) => (
+          <React.Fragment key={idx}>
+            {idx === 0 && (
+              <div className="flex flex-row justify-between items-start">
+                {renderSlot(idx, Slot, rawColumn1Data)}
+                {cardStyles.showDistance && <Distance distance={distance} />}
               </div>
-            ) : null;
-          })}
+            )}
+            {idx > 0 && renderSlot(idx, Slot, rawColumn1Data)}
+          </React.Fragment>
+        ))}
       </div>
     </Background>
   );
 };
 
 const LocatorSectionComponent = ({
-  slots,
+  column1Slots,
+  column2Slots,
   styles,
   id,
 }: WithId<WithPuckProps<LocatorSectionProps>>) => {
@@ -286,13 +428,17 @@ const LocatorSectionComponent = ({
   const getPuck = useGetPuck();
 
   // Extract raw slot data from puck state
-  const rawSlotData = React.useMemo(() => {
+  const { rawColumn1Data, rawColumn2Data } = React.useMemo(() => {
     const { appState } = getPuck();
-    if (!appState?.data?.content) return [];
+    if (!appState?.data?.content)
+      return { rawColumn1Data: [], rawColumn2Data: [] };
     const componentData = appState.data.content.find(
       (c: any) => c.props?.id === id
     );
-    return componentData?.props?.slots || [];
+    return {
+      rawColumn1Data: componentData?.props?.column1Slots || [],
+      rawColumn2Data: componentData?.props?.column2Slots || [],
+    };
   }, [getPuck, id]);
 
   // Create 3 results using the actual location from the document
@@ -307,10 +453,14 @@ const LocatorSectionComponent = ({
     ? `${streamDocument.address.city}, ${streamDocument.address.region}`
     : "Your Location";
 
+  const isTwoColumn = styles.card.columnLayout === "2-column";
+
   return (
     <div className="components flex h-screen w-screen mx-auto">
-      {/* Left Section: Mock Search + Results. Full width for small screens */}
-      <div className="h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col">
+      {/* Left Section: Mock Search + Results. Adjust width based on column layout */}
+      <div
+        className={`h-screen w-full flex flex-col ${isTwoColumn ? "md:w-3/5 lg:w-1/2" : "md:w-2/5 lg:w-1/3"}`}
+      >
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           {/* Mock Search Input */}
@@ -335,8 +485,10 @@ const LocatorSectionComponent = ({
             <LocationCard
               key={index}
               result={result}
-              slots={slots}
-              rawSlotData={rawSlotData}
+              column1Slots={column1Slots}
+              column2Slots={column2Slots}
+              rawColumn1Data={rawColumn1Data}
+              rawColumn2Data={rawColumn2Data}
               cardStyles={styles.card}
               isEditable={index === 0}
             />
@@ -344,8 +496,10 @@ const LocatorSectionComponent = ({
         </div>
       </div>
 
-      {/* Right Section: Mock Map. Hidden for small screens */}
-      <div className="md:w-3/5 lg:w-2/3 md:flex hidden relative bg-gray-200">
+      {/* Right Section: Mock Map. Hidden for small screens. Adjust width based on column layout */}
+      <div
+        className={`md:flex hidden relative bg-gray-200 ${isTwoColumn ? "md:w-2/5 lg:w-1/2" : "md:w-3/5 lg:w-2/3"}`}
+      >
         <div className="flex items-center justify-center w-full h-full">
           <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
             <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
@@ -370,30 +524,45 @@ export const LocatorSection: ComponentConfig<{
   label: msg("components.locatorSection", "Locator"),
   fields: locatorSectionFields,
   defaultProps: {
-    slots: [
-      { Slot: [] },
-      { Slot: [] },
-      { Slot: [] },
-      { Slot: [] },
-      { Slot: [] },
-    ],
+    column1Slots: [{ Slot: [] }, { Slot: [] }, { Slot: [] }, { Slot: [] }],
+    column2Slots: [{ Slot: [] }],
     styles: {
       card: {
         showResultIndex: true,
         showDistance: true,
+        columnLayout: "1-column",
+        column1Spacing: "4",
+        column2Spacing: "4",
       },
     },
     liveVisibility: true,
   },
-  resolveData: async (data, { changed, trigger }) => {
+  resolveData: async (data, { changed, trigger, lastData }) => {
     // Don't populate slots on load if they already have content
     if (trigger === "load") return data;
 
-    // Only process if slots were changed or if it's the first render
-    if (changed && !changed.slots) return data;
+    // Check if columnLayout was changed to "2-column"
+    const columnLayoutChanged =
+      changed?.styles &&
+      lastData?.props?.styles?.card?.columnLayout !== "2-column" &&
+      data.props.styles.card.columnLayout === "2-column";
 
-    // Helper function to get default component for a slot index
-    const getDefaultComponentForSlot = async (index: number) => {
+    // If switching to 2-column and column2Slots is empty, add one empty slot
+    if (columnLayoutChanged && data.props.column2Slots.length === 0) {
+      return {
+        ...data,
+        props: {
+          ...data.props,
+          column2Slots: [{ Slot: [] }],
+        },
+      };
+    }
+
+    // Only process if column slots were changed or if it's the first render
+    if (changed && !changed.column1Slots && !changed.column2Slots) return data;
+
+    // Helper function to get default component for column 1 slots
+    const getDefaultColumn1Component = async (index: number) => {
       switch (index) {
         case 0:
           // Slot 0: Location Name (H4)
@@ -453,8 +622,16 @@ export const LocatorSection: ComponentConfig<{
               ctaVariant: "link",
             },
           });
-        case 4:
-          // Slot 4: Visit Page Button
+        default:
+          return null;
+      }
+    };
+
+    // Helper function to get default component for column 2 slots
+    const getDefaultColumn2Component = async (index: number) => {
+      switch (index) {
+        case 0:
+          // Column 2, Slot 0: Visit Page Button
           return await createComponent("CTAWrapper", {
             entityField: {
               field: "",
@@ -468,21 +645,36 @@ export const LocatorSection: ComponentConfig<{
             variant: "primary",
           });
         default:
-          // For slots beyond the defaults, return null (user will populate)
           return null;
       }
     };
 
-    // Populate empty slots with default content
-    const populatedSlots = await Promise.all(
-      data.props.slots.map(async (slot, index) => {
+    // Populate empty column 1 slots with default content
+    const populatedColumn1Slots = await Promise.all(
+      data.props.column1Slots.map(async (slot, index) => {
         // If the slot already has content, keep it
         if (slot.Slot.length > 0) {
           return slot;
         }
 
         // If the slot is empty, populate it with default content (if available)
-        const defaultComponent = await getDefaultComponentForSlot(index);
+        const defaultComponent = await getDefaultColumn1Component(index);
+        return {
+          Slot: defaultComponent ? [defaultComponent] : [],
+        };
+      })
+    );
+
+    // Populate empty column 2 slots with default content
+    const populatedColumn2Slots = await Promise.all(
+      data.props.column2Slots.map(async (slot, index) => {
+        // If the slot already has content, keep it
+        if (slot.Slot.length > 0) {
+          return slot;
+        }
+
+        // If the slot is empty, populate it with default content (if available)
+        const defaultComponent = await getDefaultColumn2Component(index);
         return {
           Slot: defaultComponent ? [defaultComponent] : [],
         };
@@ -493,7 +685,8 @@ export const LocatorSection: ComponentConfig<{
       ...data,
       props: {
         ...data.props,
-        slots: populatedSlots,
+        column1Slots: populatedColumn1Slots,
+        column2Slots: populatedColumn2Slots,
       },
     };
   },
