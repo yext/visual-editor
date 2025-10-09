@@ -306,15 +306,20 @@ interface PhotoGallerySectionProps {
 
 interface ProductSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: ProductData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: ProductStyles;
+  styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
+  };
   /** @internal  */
   analytics: {
     scope?: string;
@@ -324,6 +329,8 @@ interface ProductSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
+  /** Used to forward the section heading slot's semantic level to other components */
+  sectionHeadingLevel?: HeadingProps["level"];
 }
 
 interface PromoSectionProps {
@@ -872,39 +879,31 @@ interface PhotoGalleryStyles {
   image: ImageStylingProps;
 }
 
-interface ProductData {
-  /**
-   * The main heading for the entire products section.
-   * @defaultValue "Featured Products" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the product data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder products.
-   */
-  products: YextEntityField<ProductSectionType>;
-}
+/**
+ * Applies a theme color as the background of a page section
+ * @ai This value MUST be one of the following
+ * { bgColor: "bg-white", textColor: "text-black" }
+ * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
+ * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ */
+type BackgroundStyle = {
+  /** The tailwind background color class */
+  bgColor: string;
+  /** The tailwind text color class */
+  textColor: string;
+  /** Whether the background color is dark (for adjusting other styles based on background) */
+  isDarkBackground?: boolean;
+};
 
-interface ProductStyles {
-  /**
-   * The background color for the entire section.
-   * @defaultValue Background Color 2
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual product cards. */
-  cards: {
-    /** The h tag level of each product card's title */
-    headingLevel: HeadingLevel;
-    /** The background color of each product card */
-    backgroundColor?: BackgroundStyle;
-    /** The CTA variant to use in each product card */
-    ctaVariant: CTAVariant;
-  };
+interface HeadingProps
+  extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
+    VariantProps<typeof headingVariants> {
+  level: HeadingLevel;
+  semanticLevelOverride?: HeadingLevel | "span";
 }
 
 interface PromoData {
@@ -932,26 +931,6 @@ interface PromoStyles {
    */
   orientation: "left" | "right";
 }
-
-/**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
- */
-type BackgroundStyle = {
-  /** The tailwind background color class */
-  bgColor: string;
-  /** The tailwind text color class */
-  textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
-  isDarkBackground?: boolean;
-};
 
 interface StaticMapData {
   /**
@@ -1159,11 +1138,6 @@ type InsightSectionType = {
   insights: Array<InsightStruct>;
 };
 
-/** Data for the ProductSection */
-type ProductSectionType = {
-  products: Array<ProductStruct>;
-};
-
 /** Data for the PromoSection */
 type PromoSectionType = {
   /**
@@ -1284,26 +1258,6 @@ type InsightStruct = {
   /** The insight's description */
   description?: TranslatableRichText;
   /** The insight's CTA */
-  cta: EnhancedTranslatableCTA;
-};
-
-/** An individual product in the ProductSection */
-type ProductStruct = {
-  /**
-   * The product's image
-   * @ai Always use ImageType
-   */
-  image?: ImageType | AssetImageType;
-  /** The product's name */
-  name?: TranslatableString;
-  /** The product's description */
-  description?: TranslatableRichText;
-  /**
-   * The product's category
-   * @ai This should not be more than a few words
-   */
-  category?: TranslatableString;
-  /** The product's CTA */
   cta: EnhancedTranslatableCTA;
 };
 
