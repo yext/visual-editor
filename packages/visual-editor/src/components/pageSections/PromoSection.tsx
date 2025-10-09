@@ -28,6 +28,7 @@ import {
   HeadingTextProps,
   ImageWrapperProps,
   VideoProps,
+  i18nComponentsInstance,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -395,7 +396,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
     const resolvedPromo = resolveYextEntityField(
       params.metadata.streamDocument,
       data.props.data.promo,
-      "en"
+      i18nComponentsInstance.language || "en"
     );
 
     if (!resolvedPromo || !("title" in resolvedPromo)) {

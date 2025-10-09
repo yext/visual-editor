@@ -59,7 +59,9 @@ export const EntityField = React.forwardRef<HTMLDivElement, EntityFieldProps>(
 
     return (
       <div
-        className={fullHeight ? `h-full ${className}` : `${className}`}
+        className={
+          fullHeight ? `h-full ${className ?? ""}` : (className ?? undefined)
+        }
         ref={ref}
       >
         <TooltipProvider>
@@ -68,10 +70,11 @@ export const EntityField = React.forwardRef<HTMLDivElement, EntityFieldProps>(
               <div
                 className={
                   (fullHeight ? "h-full " : "") +
-                  (tooltipsVisible
-                    ? "ve-outline-2 ve-outline-dotted" +
-                      (!constantValueEnabled ? " ve-outline-primary" : "")
-                    : "")
+                    (tooltipsVisible
+                      ? `ve-outline-2 ve-outline-dotted${
+                          !constantValueEnabled ? " ve-outline-primary" : ""
+                        }`
+                      : "") || undefined
                 }
               >
                 <MemoizedChildren>{children}</MemoizedChildren>

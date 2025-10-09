@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   resolveComponentData,
@@ -30,7 +30,7 @@ export interface ImageWrapperProps {
   /** @internal Controlled data from the parent section. */
   parentData?: {
     field: string;
-    image: ImageType | ComplexImageType | AssetImageType;
+    image: ImageType | ComplexImageType | AssetImageType | undefined;
   };
 
   /** Additional CSS classes to apply to the image. */
@@ -60,20 +60,16 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   }),
 };
 
-const ImageWrapperComponent = ({
-  data,
-  styles,
-  parentData,
-  className,
-}: ImageWrapperProps) => {
+const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
+  const { data, styles, parentData, className, puck } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = parentData
-    ? parentData.image
+    ? parentData?.image
     : resolveComponentData(data.image, i18n.language, streamDocument);
 
   if (!resolvedImage) {
-    return null;
+    return puck.isEditing ? <div className="h-[200px] w-full" /> : <></>;
   }
 
   return (
@@ -81,14 +77,16 @@ const ImageWrapperComponent = ({
       displayName={pt("fields.image", "Image")}
       fieldId={parentData ? parentData.field : data.image.field}
       constantValueEnabled={!parentData && data.image.constantValueEnabled}
+      fullHeight
+      ref={puck.dragRef}
     >
-      <div className="w-full">
+      <div className="w-full h-full">
         <Image
           image={resolvedImage}
           aspectRatio={styles.aspectRatio}
           width={styles.width}
           className={
-            className || "max-w-full rounded-image-borderRadius w-full"
+            className || "max-w-full rounded-image-borderRadius w-full h-full"
           }
           sizes={imgSizesHelper({
             base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
@@ -104,6 +102,7 @@ const ImageWrapperComponent = ({
 
 export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   label: msg("components.image", "Image"),
+  inline: true,
   fields: ImageWrapperFields,
   defaultProps: {
     data: {

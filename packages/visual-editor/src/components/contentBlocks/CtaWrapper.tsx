@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   EntityField,
@@ -72,9 +72,9 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
   },
 };
 
-const CTAWrapperComponent: React.FC<CTAWrapperProps> = (props) => {
+const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
   const { i18n } = useTranslation();
-  const { data, styles, className, parentData } = props;
+  const { data, styles, className, parentData, puck } = props;
   const streamDocument = useDocument();
   const cta = parentData
     ? parentData.cta
@@ -92,7 +92,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = (props) => {
         !parentData && data.entityField.constantValueEnabled
       }
     >
-      {cta && (
+      {cta ? (
         <CTA
           label={resolveComponentData(cta.label, i18n.language, streamDocument)}
           link={resolveComponentData(cta.link, i18n.language, streamDocument)}
@@ -103,6 +103,10 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = (props) => {
           variant={styles.variant}
           className={className}
         />
+      ) : puck.isEditing ? (
+        <div className="h-[50px] min-w-[130px]" />
+      ) : (
+        <></>
       )}
     </EntityField>
   );
@@ -128,5 +132,5 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     },
   },
   resolveFields: (data) => resolveDataFromParent(ctaWrapperFields, data),
-  render: (props: CTAWrapperProps) => <CTAWrapperComponent {...props} />,
+  render: (props) => <CTAWrapperComponent {...props} />,
 };

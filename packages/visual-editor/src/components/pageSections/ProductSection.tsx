@@ -1,10 +1,8 @@
-import { useTranslation } from "react-i18next";
 import * as React from "react";
 import {
   BackgroundStyle,
   YextField,
   YextEntityField,
-  useDocument,
   PageSection,
   backgroundColors,
   VisibilityWrapper,
@@ -13,22 +11,33 @@ import {
   msg,
   getAnalyticsScopeHash,
   Background,
+  CTAWrapperProps,
+  BodyTextProps,
+  HeadingTextProps,
+  ImageWrapperProps,
+  resolveYextEntityField,
+  ProductStruct,
+  i18nComponentsInstance,
+  deepMerge,
+  HeadingProps,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
   ComponentData,
+  createUsePuck,
   Fields,
   PuckComponent,
-  Slot,
-  createUsePuck,
-  resolveAllData,
   setDeep,
+  Slot,
   useGetPuck,
-  walkTree,
 } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultProduct } from "../../internal/puck/constant-value-fields/ProductSection.tsx";
-import { use } from "i18next";
+import {
+  CardContextProvider,
+  useCardContext,
+} from "../../hooks/useCardContext.tsx";
+
+const usePuck = createUsePuck();
 
 const getDefaultRTF = (text: string) => {
   return {
@@ -37,32 +46,18 @@ const getDefaultRTF = (text: string) => {
   };
 };
 
-const usePuck = createUsePuck();
-
-export interface ProductStyles {
-  /**
-   * The background color for the entire section.
-   * @defaultValue Background Color 2
-   */
-  backgroundColor?: BackgroundStyle;
-
-  // /** Styling for the individual product cards. */
-  // cards: {
-  //   /** The h tag level of each product card's title */
-  //   headingLevel: HeadingLevel;
-  //   /** The background color of each product card */
-  //   backgroundColor?: BackgroundStyle;
-  //   /** The CTA variant to use in each product card */
-  //   ctaVariant: CTAVariant;
-  // };
-}
-
 export interface ProductSectionProps {
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: ProductStyles;
+  styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+  };
 
   slots: {
     SectionHeadingSlot: Slot;
@@ -79,6 +74,9 @@ export interface ProductSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
+
+  /** Used to forward the section heading slot's semantic level to other components */
+  sectionHeadingLevel?: HeadingProps["level"];
 }
 
 const productSectionFields: Fields<ProductSectionProps> = {
@@ -92,27 +90,6 @@ const productSectionFields: Fields<ProductSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      // cards: YextField(msg("fields.cards", "Cards"), {
-      //   type: "object",
-      //   objectFields: {
-      //     headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
-      //       type: "select",
-      //       hasSearch: true,
-      //       options: "HEADING_LEVEL",
-      //     }),
-      //     backgroundColor: YextField(
-      //       msg("fields.backgroundColor", "Background Color"),
-      //       {
-      //         type: "select",
-      //         options: "BACKGROUND_COLOR",
-      //       }
-      //     ),
-      //     ctaVariant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
-      //       type: "radio",
-      //       options: "CTA_VARIANT",
-      //     }),
-      //   },
-      // }),
     },
   }),
   slots: {
@@ -145,7 +122,11 @@ const productSectionFields: Fields<ProductSectionProps> = {
 };
 
 export type ProductCardsWrapperProps = {
-  data: YextEntityField<ProductSectionType>;
+  data: Omit<YextEntityField<ProductSectionType>, "constantValue"> & {
+    constantValue: {
+      id: string;
+    }[];
+  };
   slots: {
     CardSlot: Slot;
   };
@@ -170,128 +151,13 @@ const ProductCardsWrapperFields: Fields<ProductCardsWrapperProps> = {
 const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = (
   props
 ) => {
-  // const { id } = props;
-  // const streamDocument = useDocument();
-  // const getPuck = useGetPuck();
-
-  // let puckComponentData: ComponentData<ProductCardsWrapperProps> | undefined;
-  // try {
-  //   puckComponentData = usePuck((s) => {
-  //     return s.getItemById(id);
-  //   });
-  // } catch {
-  //   // live page
-  // }
-
-  //   React.useEffect(() => {
-  //     // This useEffect synchronizes the styling props of all ProductCards
-  //     if (!puckComponentData?.props?.id) {
-  //       return;
-  //     }
-
-  //     const r = async () => {
-  //       const { appState, config, dispatch, getSelectorForId } = getPuck();
-
-  //       // const resolvedData = await resolveAllData(appState.data.content[-], config, {
-  //       //   streamDocument,
-  //       // });
-
-  //       // const { selectedItem, dispatch, getSelectorForId } = getPuck();
-  //       // if (!selectedItem) {
-  //       //   return;
-  //       // }
-
-  //       const sectionSelector = getSelectorForId(id);
-
-  //       if (!sectionSelector) {
-  //         return;
-  //       }
-  //       console.log(resolvedData, appState.data);
-  //       if (JSON.stringify(resolvedData) === JSON.stringify(appState.data)) {
-  //         return;
-  //       }
-
-  //       dispatch({
-  //         type: "setData",
-  //         data: resolvedData,
-  //       });
-  //     };
-  //     r();
-
-  //     // const cardSelector = getSelectorForId(selectedItem.props.id);
-  //     // if (!sectionSelector || !cardSelector) {
-  //     //   return;
-  //     // }
-
-  //     // // Merge the existing ProductCard props with the new updates
-  //     // const oldCardProps = puckComponentData.props.slots
-  //     //   .CardSlot as ComponentData<ProductCardProps>[];
-
-  //     // let newCardProps: ComponentData<ProductCardProps>[] | undefined;
-  //     // if (selectedItem?.type === "ProductCard") {
-  //     //   newCardProps = oldCardProps.map((currentSlot) => {
-  //     //     console.log("currentSlot", currentSlot);
-  //     //     return {
-  //     //       type: "ProductCard",
-  //     //       props: {
-  //     //         // Keep the unique props and data of each card
-  //     //         id: currentSlot.props.id,
-  //     //         styles: {
-  //     //           backgroundColor: selectedItem.props.styles.backgroundColor,
-  //     //         },
-  //     //         slots: currentSlot.props.slots,
-  //     //       },
-  //     //     };
-  //     //   });
-  //     // }
-
-  //     // console.log("newCardProps", newCardProps);
-  //     // console.log("oldCardProps", oldCardProps);
-
-  //     // // else if ((selectedItem?.type as string) === "HeadingTextSlot") {
-  //     // //   // When the heading text level changes in the heading text slot,
-  //     // //   // update all cards to reflect the new section heading level
-  //     // //   newCardProps = oldCardProps.map((currentSlot) => {
-  //     // //     return {
-  //     // //       type: "EventCard",
-  //     // //       props: {
-  //     // //         ...currentSlot.props,
-  //     // //         sectionHeadingLevel:
-  //     // //           puckComponentData.props.slots.SectionHeadingSlot?.[0]?.props
-  //     // //             .styles.level || 2,
-  //     // //       },
-  //     // //     };
-  //     // //   });
-  //     // // }
-
-  //     // // Only dispatch update if the card props have changed
-  //     // if (
-  //     //   !newCardProps?.length ||
-  //     //   JSON.stringify(oldCardProps) === JSON.stringify(newCardProps)
-  //     // ) {
-  //     //   return;
-  //     // }
-
-  //     // // Update the cards
-  //     // const updatedData = setDeep(
-  //     //   puckComponentData,
-  //     //   "props.slots.CardSlot",
-  //     //   newCardProps
-  //     // );
-
-  //     // console.log("dispatch 1", updatedData);
-  //     // dispatch({
-  //     //   type: "replace",
-  //     //   destinationZone: sectionSelector.zone,
-  //     //   destinationIndex: sectionSelector.index,
-  //     //   data: updatedData,
-  //     // });
-  //   }, [puckComponentData?.props.slots]);
+  const { slots } = props;
 
   return (
-    <div ref={props.puck.dragRef}>
-      <props.slots.CardSlot className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch" />
-    </div>
+    <slots.CardSlot
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch"
+      allow={[]}
+    />
   );
 };
 
@@ -300,40 +166,132 @@ export const ProductCardsWrapper: ComponentConfig<{
 }> = {
   label: msg("slots.productCards", "Product Cards"),
   fields: ProductCardsWrapperFields,
-  inline: true,
   defaultProps: {
     data: {
       field: "",
-      constantValue: {
-        products: [defaultProduct, defaultProduct, defaultProduct],
-      },
       constantValueEnabled: true,
+      constantValue: [],
     },
     slots: {
       CardSlot: [],
     },
   },
-  resolveFields: (data, params) => {
-    console.log("ProductCardsWrapper resolve fields", data, params);
-    return ProductCardsWrapperFields;
-  },
   resolveData: (data, params) => {
-    console.log("ProductCardsWrapper resolve data", data, params);
-    return data;
+    const streamDocument = params.metadata.streamDocument;
+
+    if (!data.props.data.constantValueEnabled && data.props.data.field) {
+      // ENTITY VALUES
+      const resolvedProducts = resolveYextEntityField<
+        ProductSectionType | { products: undefined }
+      >(
+        streamDocument,
+        {
+          ...data.props.data,
+          constantValue: { products: undefined },
+        },
+        i18nComponentsInstance.language || "en"
+      )?.products;
+
+      if (!resolvedProducts?.length) {
+        return setDeep(data, "props.slots.CardSlot", []);
+      }
+
+      return setDeep(
+        data,
+        "props.slots.CardSlot",
+        data.props.slots.CardSlot.slice(0, resolvedProducts.length).map(
+          (card, i) => {
+            return setDeep(card, "props.parentData", {
+              field: data.props.data.field,
+              product: resolvedProducts[i],
+            } satisfies ProductCardProps["parentData"]);
+          }
+        )
+      );
+    } else {
+      // STATIC VALUES
+      let updatedData = data;
+
+      // For each id in constantValue, check if there's already an existing card.
+      // If not, add a new default card.
+      // Also, de-duplicate ids to avoid conflicts.
+      // Finally, update the card slot and the constantValue object.
+      const inUseIds = new Set<string>();
+      const newSlots = data.props.data.constantValue.map(({ id }) => {
+        const existingCard = id
+          ? (data.props.slots.CardSlot.find(
+              (slot) => slot.props.id === id
+            ) as ComponentData<ProductCardProps>)
+          : undefined;
+
+        // Make a deep copy of existingCard to avoid mutating multiple cards
+        let newCard = existingCard
+          ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
+          : undefined;
+
+        let newId = newCard?.props.id || `ProductCard-${crypto.randomUUID()}`;
+
+        if (newCard && inUseIds.has(newId)) {
+          newId = `ProductCard-${crypto.randomUUID()}`;
+          // Update the ids of the components in the child slots as well
+          Object.entries(newCard.props.slots).forEach(
+            ([slotKey, slotArray]) => {
+              slotArray[0].props.id = newId + "-" + slotKey;
+            }
+          );
+        }
+        inUseIds.add(newId);
+
+        if (!newCard) {
+          return defaultProductCardSlotData(newId);
+        }
+
+        newCard = setDeep(newCard, "props.id", newId); // update the id
+        newCard = setDeep(newCard, "props.parentData", undefined); // set to constant values
+
+        return newCard;
+      });
+
+      // update the  cards
+      updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
+      // update the constantValue for the sidebar
+      updatedData = setDeep(
+        updatedData,
+        "props.data.constantValue",
+        newSlots.map((card) => ({ id: card.props.id }))
+      );
+      return updatedData;
+    }
   },
   render: (props) => <ProductCardsWrapperComponent {...props} />,
 };
 
 export type ProductCardProps = {
   styles: {
+    /** The background color of each individual card
+     * @defaultValue Background Color 1
+     */
     backgroundColor?: BackgroundStyle;
   };
+
+  /** @internal */
   slots: {
     ImageSlot: Slot;
     TitleSlot: Slot;
     CategorySlot: Slot;
     DescriptionSlot: Slot;
     CTASlot: Slot;
+  };
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    product: ProductStruct;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    category?: boolean;
   };
 };
 
@@ -364,39 +322,236 @@ const ProductCardFields: Fields<ProductCardProps> = {
 };
 
 const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
-  const {
-    styles,
-    puck: { dragRef },
-  } = props;
+  const { styles, puck, conditionalRender, slots } = props;
+  const { sharedCardProps, setSharedCardProps } = useCardContext<{
+    cardBackground: BackgroundStyle | undefined;
+    slotStyles: Record<string, ProductCardProps["styles"]>;
+  }>();
+
+  // In editor, use puck hooks to get the slot props
+  let slotsData: ProductCardProps["slots"] | undefined = undefined;
+  let getPuck: ReturnType<typeof useGetPuck>;
+  try {
+    slotsData = usePuck((s) => s.getItemById(props.id)?.props.slots);
+    getPuck = useGetPuck();
+  } catch {
+    // live page, do nothing
+  }
+
+  // Process the slot props into just the shared styles
+  const slotStyles = React.useMemo(() => {
+    const slotNameToStyles = {} as Record<string, any>;
+    Object.entries(slotsData || {}).forEach(([key, value]) => {
+      slotNameToStyles[key] = value[0].props.styles || {};
+    });
+    return slotNameToStyles;
+  }, [slotsData]);
+
+  // sharedCardProps useEffect
+  // When the context changes, dispatch an update to sync the changes to puck
+  React.useEffect(() => {
+    if (!puck.isEditing || !sharedCardProps) {
+      return;
+    }
+
+    if (
+      JSON.stringify(sharedCardProps?.cardBackground) ===
+        JSON.stringify(styles.backgroundColor) &&
+      JSON.stringify(slotStyles) === JSON.stringify(sharedCardProps?.slotStyles)
+    ) {
+      return;
+    }
+
+    const { dispatch, getSelectorForId } = getPuck();
+    const selector = getSelectorForId(props.id);
+    if (!selector || !slotsData) {
+      return;
+    }
+
+    const newSlotData: ProductCardProps["slots"] = {
+      ImageSlot: [],
+      TitleSlot: [],
+      CategorySlot: [],
+      DescriptionSlot: [],
+      CTASlot: [],
+    };
+    Object.entries(slotsData).forEach(([key, value]) => {
+      newSlotData[key as keyof ProductCardProps["slots"]] = [
+        {
+          ...deepMerge(
+            { props: { styles: { ...sharedCardProps?.slotStyles?.[key] } } },
+            value[0]
+          ),
+        },
+      ];
+    });
+
+    // oxlint-disable-next-line no-unused-vars: remove props.puck before dispatching to avoid writing it to the saved data
+    const { puck: _, editMode: __, ...otherProps } = props;
+    dispatch({
+      type: "replace" as const,
+      destinationIndex: selector.index,
+      destinationZone: selector.zone,
+      data: {
+        type: "ProductCard",
+        props: {
+          ...otherProps,
+          styles: {
+            ...otherProps.styles,
+            backgroundColor:
+              sharedCardProps?.cardBackground ||
+              backgroundColors.background1.value,
+          },
+          slots: newSlotData,
+        } satisfies ProductCardProps,
+      },
+    });
+  }, [sharedCardProps]);
+
+  // styles and slotStyles useEffect
+  // When the card's shared props or the card's slots' shared props change, update the context
+  React.useEffect(() => {
+    if (!puck.isEditing || !slotsData) {
+      return;
+    }
+
+    if (
+      JSON.stringify(sharedCardProps?.cardBackground) ===
+        JSON.stringify(styles.backgroundColor) &&
+      JSON.stringify(sharedCardProps?.slotStyles) === JSON.stringify(slotStyles)
+    ) {
+      return;
+    }
+
+    setSharedCardProps({
+      cardBackground: styles.backgroundColor,
+      slotStyles: slotStyles,
+    });
+  }, [styles, slotStyles]);
+
   return (
-    <div ref={dragRef}>
-      <Background
-        className="flex flex-col rounded-lg overflow-hidden border h-full"
-        background={styles.backgroundColor}
-      >
-        <props.slots.ImageSlot />
-        <div className="p-8 gap-8 flex flex-col">
-          <div className="gap-4 flex flex-col flex-grow">
-            <props.slots.TitleSlot />
+    <Background
+      className="flex flex-col rounded-lg overflow-hidden border h-full"
+      background={styles.backgroundColor}
+    >
+      <slots.ImageSlot className="h-auto sm:h-[200px]" allow={[]} />
+      <div className="p-8 gap-8 flex flex-col">
+        <div className="gap-4 flex flex-col flex-grow">
+          <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
+          {conditionalRender?.category && (
             <Background
               background={backgroundColors.background5.value}
               className="py-2 px-4 rounded w-fit"
             >
-              <props.slots.CategorySlot />
+              <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
             </Background>
-          </div>
-          <props.slots.DescriptionSlot />
-          <props.slots.CTASlot />
+          )}
+          <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
         </div>
-      </Background>
-    </div>
+        <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+      </div>
+    </Background>
   );
 };
 
 export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   label: msg("slots.productCard", "Product Card"),
   fields: ProductCardFields,
-  inline: true,
+  resolveData: (data) => {
+    const categorySlotProps = data.props.slots.CategorySlot?.[0]
+      ?.props as unknown as BodyTextProps | undefined;
+    const showCategory = Boolean(
+      categorySlotProps?.parentData
+        ? categorySlotProps.parentData.richText
+        : categorySlotProps?.data.text
+    );
+
+    let updatedData = {
+      ...data,
+      props: {
+        ...data.props,
+        conditionalRender: {
+          category: showCategory,
+        },
+      } satisfies ProductCardProps,
+    };
+
+    if (data.props.parentData) {
+      const product = data.props.parentData.product;
+      const field = data.props.parentData.field;
+
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ImageSlot.0.props.parentData",
+        {
+          field: field,
+          image: product.image,
+        } satisfies ImageWrapperProps["parentData"]
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.TitleSlot.0.props.parentData",
+        {
+          field: field,
+          text: product.name as string, // will already be resolved
+        } satisfies HeadingTextProps["parentData"]
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CategorySlot.0.props.parentData",
+        {
+          field: field,
+          richText: product.category,
+        } satisfies BodyTextProps["parentData"]
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.DescriptionSlot.0.props.parentData",
+        {
+          field: field,
+          richText: product.description,
+        } satisfies BodyTextProps["parentData"]
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CTASlot.0.props.parentData",
+        {
+          field: field,
+          cta: product.cta,
+        } satisfies CTAWrapperProps["parentData"]
+      );
+
+      return updatedData;
+    } else {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ImageSlot.0.props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.TitleSlot.0.props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CategorySlot.0.props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.DescriptionSlot.0.props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CTASlot.0.props.parentData",
+        undefined
+      );
+    }
+
+    return updatedData;
+  },
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
@@ -412,186 +567,33 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   render: (props) => <ProductCardComponent {...props} />,
 };
 
-// const ProductCard = ({
-//   cardNumber,
-//   product,
-//   cardStyles,
-//   sectionHeadingLevel,
-//   ctaVariant,
-// }: {
-//   cardNumber: number;
-//   product: ProductStruct;
-//   cardStyles: ProductSectionProps["styles"]["cards"];
-//   sectionHeadingLevel: HeadingLevel;
-//   ctaVariant: CTAVariant;
-// }) => {
-//   const { i18n } = useTranslation();
-//   const streamDocument = useDocument();
-//   return (
-//     <Background
-//       className="flex flex-col rounded-lg overflow-hidden border h-full"
-//       background={cardStyles.backgroundColor}
-//     >
-//       {product.image ? (
-//         <Image
-//           image={product.image}
-//           aspectRatio={1.778} // 16:9
-//           className="h-[200px]"
-//           sizes={imgSizesHelper({
-//             base: "calc(100vw - 32px)",
-//             md: "calc((maxWidth - 32px) / 2)",
-//             lg: "calc((maxWidth - 32px) / 3)",
-//           })}
-//         />
-//       ) : (
-//         <div className="sm:h-[200px]" />
-//       )}
-//       <div className="p-8 gap-8 flex flex-col flex-grow">
-//         <div className="gap-4 flex flex-col">
-//           {product.name && (
-//             <Heading
-//               level={cardStyles.headingLevel}
-//               semanticLevelOverride={
-//                 sectionHeadingLevel < 6
-//                   ? ((sectionHeadingLevel + 1) as HeadingLevel)
-//                   : "span"
-//               }
-//               className="mb-2"
-//             >
-//               {resolveComponentData(
-//                 product.name,
-//                 i18n.language,
-//                 streamDocument
-//               )}
-//             </Heading>
-//           )}
-//           {product.category && (
-//             <Background
-//               background={backgroundColors.background5.value}
-//               className="py-2 px-4 rounded w-fit"
-//             >
-//               <Body>
-//                 {resolveComponentData(
-//                   product.category,
-//                   i18n.language,
-//                   streamDocument
-//                 )}
-//               </Body>
-//             </Background>
-//           )}
-//           {product?.description &&
-//             resolveComponentData(product.description, i18n.language)}
-//         </div>
-//         {product.cta && (
-//           <CTA
-//             eventName={`cta${cardNumber}`}
-//             variant={ctaVariant}
-//             label={
-//               product.cta.label
-//                 ? resolveComponentData(
-//                     product.cta.label,
-//                     i18n.language,
-//                     streamDocument
-//                   )
-//                 : undefined
-//             }
-//             link={resolveComponentData(
-//               product.cta.link,
-//               i18n.language,
-//               streamDocument
-//             )}
-//             linkType={product.cta.linkType}
-//             ctaType={product.cta.ctaType}
-//             coordinate={product.cta.coordinate}
-//             presetImageType={product.cta.presetImageType}
-//             className="mt-auto"
-//           />
-//         )}
-//       </div>
-//     </Background>
-//   );
-// };
-
 const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
-  const { i18n } = useTranslation();
-  const { slots, styles, id } = props;
-  const locale = i18n.language;
-  const streamDocument = useDocument();
-  // const resolvedProducts = resolveComponentData(
-  //   data.products,
-  //   locale,
-  //   streamDocument
-  // );
-  // console.log("ProductSectionComponent props", props);
-
-  const getPuck = useGetPuck();
-
-  let puckComponentData: ComponentData<ProductCardsWrapperProps> | undefined;
-  try {
-    puckComponentData = usePuck((s) => {
-      return s.getItemById(id);
-    });
-  } catch {
-    // live page
-  }
-
-  React.useEffect(() => {
-    const { appState, config, selectedItem } = getPuck();
-    console.log("selectedItem", selectedItem);
-
-    let parent;
-    const newData = walkTree(appState.data, config, (content, options) => {
-      if (content[0].props.id === selectedItem?.props.id) {
-        console.log("this one", content, options);
-        parent = options.parentId;
-      } else {
-        console.log("no", content, options);
-      }
-    });
-    console.log("parent", parent);
-  }, [puckComponentData?.props.slots]);
+  const { slots, styles, sectionHeadingLevel } = props;
 
   return (
     <PageSection
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot />
-      <slots.CardsWrapperSlot />
-      {/* {resolvedProducts?.products && (
-        <EntityField
-          displayName={pt("fields.products", "Products")}
-          fieldId={data.products.field}
-          constantValueEnabled={data.products.constantValueEnabled}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch">
-            {resolvedProducts.products.map((product, index) => (
-              <ProductCard
-                key={index}
-                cardNumber={index}
-                product={product}
-                cardStyles={styles.cards}
-                sectionHeadingLevel={styles.heading.level}
-                ctaVariant={styles.cards.ctaVariant}
-              />
-            ))}
-          </div>
-        </EntityField>
-      )} */}
+      <CardContextProvider sectionHeadingLevel={sectionHeadingLevel}>
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      </CardContextProvider>
     </PageSection>
   );
 };
 
-const defaultProductCardSlotData = {
+const defaultProductCardSlotData = (id: string) => ({
   type: "ProductCard",
   props: {
+    id,
     styles: {
       backgroundColor: backgroundColors.background1.value,
-    },
+    } satisfies ProductCardProps["styles"],
     slots: {
       ImageSlot: [
         {
-          type: "ImageWrapperSlot",
+          type: "ImageSlot",
           props: {
             data: {
               image: {
@@ -608,7 +610,7 @@ const defaultProductCardSlotData = {
               aspectRatio: 1.78,
               width: 640,
             },
-          },
+          } satisfies ImageWrapperProps,
         },
       ],
       TitleSlot: [
@@ -619,7 +621,7 @@ const defaultProductCardSlotData = {
               text: {
                 field: "",
                 constantValue: {
-                  en: "Product Name",
+                  en: "Product Title",
                   hasLocalizedValue: "true",
                 },
                 constantValueEnabled: true,
@@ -629,7 +631,7 @@ const defaultProductCardSlotData = {
               level: 3,
               align: "left",
             },
-          },
+          } satisfies HeadingTextProps,
         },
       ],
       CategorySlot: [
@@ -640,7 +642,7 @@ const defaultProductCardSlotData = {
               text: {
                 field: "",
                 constantValue: {
-                  en: getDefaultRTF("Category"),
+                  en: getDefaultRTF("Category, Pricing, etc"),
                   hasLocalizedValue: "true",
                 },
                 constantValueEnabled: true,
@@ -649,7 +651,7 @@ const defaultProductCardSlotData = {
             styles: {
               variant: "base",
             },
-          },
+          } satisfies BodyTextProps,
         },
       ],
       DescriptionSlot: [
@@ -661,7 +663,7 @@ const defaultProductCardSlotData = {
                 field: "",
                 constantValue: {
                   en: getDefaultRTF(
-                    "Description of the product. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                   ),
                   hasLocalizedValue: "true",
                 },
@@ -671,29 +673,34 @@ const defaultProductCardSlotData = {
             styles: {
               variant: "base",
             },
-          },
+          } satisfies BodyTextProps,
         },
       ],
       CTASlot: [
         {
-          type: "CTAWrapperSlot",
+          type: "CTASlot",
           props: {
-            entityField: {
-              field: "",
-              constantValue: {
-                label: "Learn More",
-                link: "#",
-                linkType: "URL",
-                ctaType: "textAndLink",
+            data: {
+              entityField: {
+                field: "",
+                constantValue: {
+                  label: "Learn More",
+                  link: "#",
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+                constantValueEnabled: true,
               },
             },
-            variant: "primary",
-          },
+            styles: {
+              variant: "primary",
+            },
+          } satisfies CTAWrapperProps,
         },
       ],
     },
   },
-};
+});
 
 /**
  * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
@@ -702,22 +709,7 @@ const defaultProductCardSlotData = {
 export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   label: msg("components.productsSection", "Products Section"),
   fields: productSectionFields,
-  inline: true,
   defaultProps: {
-    // data: {
-    //   heading: {
-    //     field: "",
-    //     constantValue: { en: "Featured Products", hasLocalizedValue: "true" },
-    //     constantValueEnabled: true,
-    //   },
-    //   products: {
-    //     field: "",
-    //     constantValue: {
-    //       products: [defaultProduct, defaultProduct, defaultProduct],
-    //     },
-    //     constantValueEnabled: true,
-    //   },
-    // },
     styles: {
       backgroundColor: backgroundColors.background2.value,
     },
@@ -740,7 +732,7 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
               level: 2,
               align: "left",
             },
-          },
+          } satisfies HeadingTextProps,
         },
       ],
       CardsWrapperSlot: [
@@ -749,19 +741,21 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
           props: {
             data: {
               field: "",
-              constantValue: {
-                products: [defaultProduct, defaultProduct, defaultProduct],
-              },
               constantValueEnabled: true,
+              constantValue: [
+                { id: "ProductCard-default-1" },
+                { id: "ProductCard-default-2" },
+                { id: "ProductCard-default-3" },
+              ],
             },
             slots: {
               CardSlot: [
-                defaultProductCardSlotData,
-                defaultProductCardSlotData,
-                defaultProductCardSlotData,
+                defaultProductCardSlotData("ProductCard-default-1"),
+                defaultProductCardSlotData("ProductCard-default-2"),
+                defaultProductCardSlotData("ProductCard-default-3"),
               ],
             },
-          },
+          } satisfies ProductCardsWrapperProps,
         },
       ],
     },
@@ -770,28 +764,23 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
     },
     liveVisibility: true,
   },
-  resolveFields: (data, params) => {
-    console.log("ProductSection resolve fields", data, params);
-    return productSectionFields;
-  },
-  resolveData: (data, params) => {
-    console.log("ProductSection resolve data", data, params);
+  resolveData: (data) => {
+    data.props.sectionHeadingLevel =
+      data.props.slots.SectionHeadingSlot?.[0].props.styles.level;
     return data;
   },
   render: (props) => {
     return (
-      <div ref={props.puck.dragRef}>
-        <AnalyticsScopeProvider
-          name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+      >
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
         >
-          <VisibilityWrapper
-            liveVisibility={props.liveVisibility}
-            isEditing={props.puck.isEditing}
-          >
-            <ProductSectionComponent {...props} />
-          </VisibilityWrapper>
-        </AnalyticsScopeProvider>
-      </div>
+          <ProductSectionComponent {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
     );
   },
 };

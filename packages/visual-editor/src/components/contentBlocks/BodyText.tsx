@@ -29,7 +29,7 @@ export type BodyTextProps = {
    */
   parentData?: {
     field: string;
-    richText: TranslatableRichText;
+    richText: TranslatableRichText | undefined;
   };
 };
 
@@ -62,15 +62,14 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
   const streamDocument = useDocument();
   const background = useBackground();
 
-  const resolvedData = resolveComponentData(
-    parentData ? parentData.richText : data.text,
-    i18n.language,
-    streamDocument,
-    {
-      variant: styles.variant,
-      isDarkBackground: background?.isDarkBackground,
-    }
-  );
+  const sourceData = parentData ? parentData?.richText : data.text;
+
+  const resolvedData = sourceData
+    ? resolveComponentData(sourceData, i18n.language, streamDocument, {
+        variant: styles.variant,
+        isDarkBackground: background?.isDarkBackground,
+      })
+    : undefined;
 
   return resolvedData ? (
     <EntityField
@@ -81,7 +80,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
       {resolvedData}
     </EntityField>
   ) : puck.isEditing ? (
-    <div className="h-[60px]" />
+    <div className="h-[60px] min-w-[100px]" />
   ) : (
     <></>
   );

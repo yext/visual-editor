@@ -14,6 +14,7 @@ import {
   ThemeOptions,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
+import { useCardContext } from "../../hooks/useCardContext";
 
 export type HeadingTextProps = {
   /** The heading text value */
@@ -32,7 +33,7 @@ export type HeadingTextProps = {
   /** @internal Controlled data from the parent section */
   parentData?: {
     field: string;
-    text: string;
+    text: string | undefined;
   };
 };
 
@@ -40,6 +41,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
   const { data, styles, puck, parentData } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
+  const { sectionHeadingLevel } = useCardContext();
 
   const justifyClass = styles?.align
     ? {
@@ -48,10 +50,23 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
         right: "justify-end",
       }[styles.align]
     : "justify-start";
+  const alignClass = styles?.align
+    ? {
+        left: "text-left",
+        center: "text-center",
+        right: "text-right",
+      }[styles.align]
+    : "text-left";
 
   const resolvedHeadingText = parentData
-    ? parentData.text
+    ? parentData?.text
     : resolveComponentData(data.text, i18n.language, streamDocument);
+
+  const semanticHeadingLevel = sectionHeadingLevel
+    ? sectionHeadingLevel < 6
+      ? ((sectionHeadingLevel + 1) as HeadingProps["level"])
+      : "span"
+    : undefined;
 
   return resolvedHeadingText ? (
     <div className={`flex ${justifyClass}`}>
@@ -60,7 +75,13 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
         fieldId={parentData ? parentData.field : data.text.field}
         constantValueEnabled={!parentData && data.text.constantValueEnabled}
       >
-        <Heading level={styles.level}>{resolvedHeadingText}</Heading>
+        <Heading
+          level={styles.level}
+          className={alignClass}
+          semanticLevelOverride={semanticHeadingLevel}
+        >
+          {resolvedHeadingText}
+        </Heading>
       </EntityField>
     </div>
   ) : puck.isEditing ? (
