@@ -240,6 +240,10 @@ interface HeroSectionProps {
     SecondaryCTASlot: Slot;
   };
   /** @internal */
+  conditionalRender?: {
+    hours: boolean;
+  };
+  /** @internal */
   analytics: {
     scope?: string;
   };
