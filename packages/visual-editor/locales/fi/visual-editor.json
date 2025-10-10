@@ -197,6 +197,7 @@
     "hoursText": "Tuntien teksti",
     "html": "HTML",
     "image": "Kuva",
+    "imageHeight": "Kuvankorkeus",
     "imageOrientation": "Kuvan suuntaus",
     "imageUrl": "Kuva -URL -osoite",
     "images": "Kuvat",

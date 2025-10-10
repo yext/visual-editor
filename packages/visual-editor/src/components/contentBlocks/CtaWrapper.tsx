@@ -13,6 +13,7 @@ import {
   CTA,
   CTAVariant,
   resolveDataFromParent,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import {
   ctaTypeOptions,
@@ -38,6 +39,11 @@ export interface CTAWrapperProps {
   parentData?: {
     field: string;
     cta: EnhancedTranslatableCTA;
+  };
+
+  /** @internal Controlled style from the parent section */
+  parentStyles?: {
+    classNameFn?: (variant: CTAVariant) => string;
   };
 }
 
@@ -74,7 +80,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
 
 const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
   const { i18n } = useTranslation();
-  const { data, styles, className, parentData, puck } = props;
+  const { data, styles, className, parentData, puck, parentStyles } = props;
   const streamDocument = useDocument();
   const cta = parentData
     ? parentData.cta
@@ -83,6 +89,14 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     data.entityField,
     cta
   );
+
+  let combinedClassName = className;
+  if (parentStyles?.classNameFn) {
+    combinedClassName = themeManagerCn(
+      parentStyles.classNameFn(styles.variant),
+      className
+    );
+  }
 
   return (
     <EntityField
@@ -101,7 +115,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           coordinate={coordinate}
           presetImageType={cta.presetImageType}
           variant={styles.variant}
-          className={className}
+          className={combinedClassName}
         />
       ) : puck.isEditing ? (
         <div className="h-[50px] min-w-[130px]" />

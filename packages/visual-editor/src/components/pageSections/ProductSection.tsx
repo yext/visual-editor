@@ -19,7 +19,6 @@ import {
   ProductStruct,
   i18nComponentsInstance,
   deepMerge,
-  HeadingProps,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -74,9 +73,6 @@ export interface ProductSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-
-  /** Used to forward the section heading slot's semantic level to other components */
-  sectionHeadingLevel?: HeadingProps["level"];
 }
 
 const productSectionFields: Fields<ProductSectionProps> = {
@@ -154,10 +150,12 @@ const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = (
   const { slots } = props;
 
   return (
-    <slots.CardSlot
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch"
-      allow={[]}
-    />
+    <CardContextProvider>
+      <slots.CardSlot
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch"
+        allow={[]}
+      />
+    </CardContextProvider>
   );
 };
 
@@ -568,17 +566,15 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
 };
 
 const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
-  const { slots, styles, sectionHeadingLevel } = props;
+  const { slots, styles } = props;
 
   return (
     <PageSection
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <CardContextProvider sectionHeadingLevel={sectionHeadingLevel}>
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-      </CardContextProvider>
+      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
 };
@@ -765,8 +761,28 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    data.props.sectionHeadingLevel =
-      data.props.slots.SectionHeadingSlot?.[0].props.styles.level;
+    // Get the section heading level from the SectionHeadingSlot
+    // and pass a semanticLevelOverride into each card's TitleSlot
+
+    const sectionHeadingLevel =
+      data.props.slots.SectionHeadingSlot?.[0]?.props?.styles?.level;
+    const cards: ProductCardsWrapperProps["slots"]["CardSlot"] =
+      data.props.slots.CardsWrapperSlot?.[0]?.props?.slots?.CardSlot;
+    const semanticOverride =
+      sectionHeadingLevel < 6 ? sectionHeadingLevel + 1 : "span";
+
+    if (cards) {
+      data.props.slots.CardsWrapperSlot[0].props.slots.CardSlot = cards.map(
+        (card) => {
+          return setDeep(
+            card,
+            "props.slots.TitleSlot[0].props.styles.semanticLevelOverride",
+            semanticOverride
+          );
+        }
+      );
+    }
+
     return data;
   },
   render: (props) => {

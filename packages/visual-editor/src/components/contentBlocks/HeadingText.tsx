@@ -12,9 +12,9 @@ import {
   pt,
   msg,
   ThemeOptions,
+  HeadingLevel,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
-import { useCardContext } from "../../hooks/useCardContext";
 
 export type HeadingTextProps = {
   /** The heading text value */
@@ -28,6 +28,8 @@ export type HeadingTextProps = {
     level: HeadingProps["level"];
     /** Alignment of the event section heading */
     align: "left" | "center" | "right";
+    /** Optional override to render a different HTML tag instead of the one based on the level */
+    semanticLevelOverride?: HeadingLevel | "span";
   };
 
   /** @internal Controlled data from the parent section */
@@ -41,7 +43,6 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
   const { data, styles, puck, parentData } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
-  const { sectionHeadingLevel } = useCardContext();
 
   const justifyClass = styles?.align
     ? {
@@ -50,6 +51,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
         right: "justify-end",
       }[styles.align]
     : "justify-start";
+
   const alignClass = styles?.align
     ? {
         left: "text-left",
@@ -62,12 +64,6 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
     ? parentData?.text
     : resolveComponentData(data.text, i18n.language, streamDocument);
 
-  const semanticHeadingLevel = sectionHeadingLevel
-    ? sectionHeadingLevel < 6
-      ? ((sectionHeadingLevel + 1) as HeadingProps["level"])
-      : "span"
-    : undefined;
-
   return resolvedHeadingText ? (
     <div className={`flex ${justifyClass}`}>
       <EntityField
@@ -78,7 +74,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
         <Heading
           level={styles.level}
           className={alignClass}
-          semanticLevelOverride={semanticHeadingLevel}
+          semanticLevelOverride={styles.semanticLevelOverride}
         >
           {resolvedHeadingText}
         </Heading>

@@ -100,27 +100,29 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
   );
 };
 
+export const imageDefaultProps = {
+  data: {
+    image: {
+      field: "",
+      constantValue: {
+        url: PLACEHOLDER_IMAGE_URL,
+        height: 360,
+        width: 640,
+      },
+      constantValueEnabled: true,
+    },
+  },
+  styles: {
+    aspectRatio: 1.78,
+    width: 640,
+  },
+};
+
 export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   label: msg("components.image", "Image"),
   inline: true,
   fields: ImageWrapperFields,
-  defaultProps: {
-    data: {
-      image: {
-        field: "",
-        constantValue: {
-          url: PLACEHOLDER_IMAGE_URL,
-          height: 360,
-          width: 640,
-        },
-        constantValueEnabled: true,
-      },
-    },
-    styles: {
-      aspectRatio: 1.78,
-      width: 640,
-    },
-  },
+  defaultProps: imageDefaultProps,
   resolveFields: (data) => resolveDataFromParent(ImageWrapperFields, data),
   render: (props) => <ImageWrapperComponent {...props} />,
 };

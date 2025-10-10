@@ -285,7 +285,7 @@ const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot />
+      <slots.SectionHeadingSlot allow={[]} />
       {resolvedEvents?.events && (
         <EntityField
           displayName={pt("fields.events", "Events")}

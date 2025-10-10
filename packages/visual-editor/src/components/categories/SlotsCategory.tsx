@@ -24,6 +24,14 @@ import {
   ProductCardProps,
 } from "../pageSections/ProductSection.tsx";
 import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
+import {
+  HoursStatus,
+  HoursStatusProps,
+} from "../contentBlocks/HoursStatus.tsx";
+import {
+  HeroImage,
+  HeroImageProps,
+} from "../contentBlocks/image/HeroImage.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -31,6 +39,8 @@ export interface SlotsCategoryProps {
   CTASlot: CTAWrapperProps;
   EmailsSlot: EmailsProps;
   HeadingTextSlot: HeadingTextProps;
+  HeroImageSlot: HeroImageProps;
+  HoursStatusSlot: HoursStatusProps;
   HoursTableSlot: HoursTableProps;
   ImageSlot: ImageWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
@@ -54,6 +64,8 @@ export const SlotsCategoryComponents = {
   CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
+  HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
+  HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
   ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },

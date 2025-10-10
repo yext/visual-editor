@@ -387,40 +387,34 @@ If 'true', displays the language selector dropdown in the header.
 
 This object contains the content to be displayed by the component.
 
-| Prop                     | Type                                     | Description                                                                             | Default                      |
-| :----------------------- | :--------------------------------------- | :-------------------------------------------------------------------------------------- | :--------------------------- |
-| `data.businessName`      | `YextEntityField<TranslatableString>`    | The primary business name displayed in the hero.                                        | `"Business Name" (constant)` |
-| `data.hero`              | `YextStructEntityField<HeroSectionType>` | The main hero content, including an image and primary/secondary call-to-action buttons. | `Placeholder image and CTAs` |
-| `data.hours`             | `YextEntityField<HoursType>`             | The entity's hours data, used to display an "Open/Closed" status.                       | `'hours' field`              |
-| `data.localGeoModifier`  | `YextEntityField<TranslatableString>`    | A location-based modifier or slogan (e.g., "Serving Downtown").                         | `"Geomodifier" (constant)`   |
-| `data.showAverageReview` | `boolean`                                | If 'true', displays the entity's average review rating.                                 | `true`                       |
+| Prop                   | Type                                           | Description | Default |
+| :--------------------- | :--------------------------------------------- | :---------- | :------ |
+| `data.backgroundImage` | `YextEntityField<ImageType \| AssetImageType>` |             |         |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                              | Type                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                | Default              |
-| :-------------------------------- | :----------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`          | `BackgroundStyle`                                      | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant).                                                                                                                                                                                                                                                                                             | `Background Color 1` |
-| `styles.businessNameLevel`        | `HeadingLevel`                                         | The HTML heading level for the business name.                                                                                                                                                                                                                                                                                                                                                                                              | `3`                  |
-| `styles.desktopContainerPosition` | `"left" \| "center"`                                   | Container position on desktop (spotlight and immersive variants).                                                                                                                                                                                                                                                                                                                                                                          | `left`               |
-| `styles.desktopImagePosition`     | `"left" \| "right"`                                    | Positions the image to the left or right of the hero content on desktop (classic and compact variants).                                                                                                                                                                                                                                                                                                                                    | `right`              |
-| `styles.image`                    | `ImageStylingProps & { height?: number; }`             | Styling options for the hero image. Classic variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported) and height. Immersive variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding) Spotlight variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding) Compact variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported). |                      |
-| `styles.localGeoModifierLevel`    | `HeadingLevel`                                         | The HTML heading level for the local geo-modifier.                                                                                                                                                                                                                                                                                                                                                                                         | `1`                  |
-| `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                                                                                                                                                                                                                                                                                                                    | `left`               |
-| `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                                                                                                                                                                                                                                                                                                                     | `top`                |
-| `styles.primaryCTA`               | `CTAVariant`                                           | The visual style variant for the primary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                            | `primary`            |
-| `styles.secondaryCTA`             | `CTAVariant`                                           | The visual style variant for the secondary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                          | `secondary`          |
-| `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                                                                                                                                                                                                                                                                                                              | `true`               |
-| `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                                                                                                                                                                                                                                                                                                                   | `classic`            |
+| Prop                              | Type                                                   | Description                                                                                                                                    | Default              |
+| :-------------------------------- | :----------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`          | `BackgroundStyle`                                      | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant). | `Background Color 1` |
+| `styles.desktopContainerPosition` | `"left" \| "center"`                                   | Container position on desktop (spotlight and immersive variants).                                                                              | `left`               |
+| `styles.desktopImagePosition`     | `"left" \| "right"`                                    | Positions the image to the left or right of the hero content on desktop (classic and compact variants).                                        | `right`              |
+| `styles.imageHeight`              | `number`                                               | Image Height for the hero image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding 500px     |                      |
+| `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                        | `left`               |
+| `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                         | `top`                |
+| `styles.showAverageReview`        | `boolean`                                              | If 'true', displays the entity's average review rating.                                                                                        | `true`               |
+| `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                  | `true`               |
+| `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                       | `classic`            |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                                                                                                       | Description                                                                    | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                  | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ BusinessNameSlot: Slot; GeomodifierSlot: Slot; HoursStatusSlot: Slot; ImageSlot: Slot; PrimaryCTASlot: Slot; SecondaryCTASlot: Slot; }` |                                                                                |         |
 
 ---
 
@@ -430,14 +424,10 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop                | Type                         | Description | Default |
-| :------------------ | :--------------------------- | :---------- | :------ |
-| `className`         | `string`                     |             |         |
-| `dayOfWeekFormat`   | `"short" \| "long"`          |             |         |
-| `hours`             | `YextEntityField<HoursType>` |             |         |
-| `showCurrentStatus` | `boolean`                    |             |         |
-| `showDayNames`      | `boolean`                    |             |         |
-| `timeFormat`        | `"12h" \| "24h"`             |             |         |
+| Prop     | Type                                                                                                                                             | Description | Default |
+| :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                         |             |         |
+| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; }` |             |         |
 
 ---
 

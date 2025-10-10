@@ -11,21 +11,25 @@ import {
   HeroSection,
   migrate,
   migrationRegistry,
+  SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const tests: ComponentTest[] = [
   {
     name: "default props with no data",
-    document: {},
+    document: {
+      locale: "en",
+    },
     props: { ...HeroSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "default props with data",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -45,6 +49,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props using entity values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -112,6 +117,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -188,6 +194,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 9 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -269,6 +276,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 16 props with old CTA structure",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -350,6 +358,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 16 props using entity values with old CTA structure",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -426,6 +435,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 16 props with missing ctaType",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -509,6 +519,7 @@ const tests: ComponentTest[] = [
   {
     name: "[classic] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -612,6 +623,7 @@ const tests: ComponentTest[] = [
   {
     name: "[classic] version 17 props using entity values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -712,6 +724,7 @@ const tests: ComponentTest[] = [
   {
     name: "[immersive] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -818,6 +831,7 @@ const tests: ComponentTest[] = [
   {
     name: "[spotlight] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -918,6 +932,7 @@ const tests: ComponentTest[] = [
   {
     name: "[compact] version 17 props using constant values",
     document: {
+      locale: "en",
       name: "name",
       address: {
         city: "city",
@@ -1019,7 +1034,10 @@ const tests: ComponentTest[] = [
 
 describe("HeroSection", async () => {
   const puckConfig: Config = {
-    components: { HeroSection },
+    components: {
+      HeroSection,
+      ...SlotsCategoryComponents,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -1055,9 +1073,17 @@ describe("HeroSection", async () => {
         document
       );
 
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

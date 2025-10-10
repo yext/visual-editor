@@ -12,10 +12,8 @@ const CardContext = createContext<CardContextType<any>>({
 
 export const CardContextProvider = <T extends Record<string, any>>({
   children,
-  sectionHeadingLevel,
 }: {
   children: React.ReactNode;
-  sectionHeadingLevel?: number;
 }) => {
   const [sharedCardProps, setSharedCardProps] = useState<T | undefined>(
     undefined
@@ -25,9 +23,8 @@ export const CardContextProvider = <T extends Record<string, any>>({
     () => ({
       sharedCardProps,
       setSharedCardProps,
-      sectionHeadingLevel,
     }),
-    [sharedCardProps, sectionHeadingLevel]
+    [sharedCardProps]
   );
 
   return (
@@ -39,7 +36,5 @@ export const CardContextProvider = <T extends Record<string, any>>({
 
 // Custom hook for consuming the CardWrapperContext with type safety
 export const useCardContext = <T extends Record<string, any>>() => {
-  return useContext(CardContext) as CardContextType<T> & {
-    sectionHeadingLevel?: number;
-  };
+  return useContext(CardContext) as CardContextType<T>;
 };

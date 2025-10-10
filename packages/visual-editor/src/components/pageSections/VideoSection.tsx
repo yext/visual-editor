@@ -71,8 +71,8 @@ const VideoSectionComponent: PuckComponent<VideoSectionProps> = (props) => {
 
   return (
     <PageSection background={styles.backgroundColor} className="flex flex-col">
-      <slots.SectionHeadingSlot />
-      <slots.VideoSlot />
+      <slots.SectionHeadingSlot allow={[]} />
+      <slots.VideoSlot allow={[]} />
     </PageSection>
   );
 };
