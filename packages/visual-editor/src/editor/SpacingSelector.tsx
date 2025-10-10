@@ -2,7 +2,6 @@ import React from "react";
 import { AutoField, Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
-import { ChevronDown } from "lucide-react";
 import { pt } from "../utils/i18n/platform.ts";
 
 export const spacingOptions = [
@@ -89,7 +88,7 @@ export const SpacingSelector = <T,>(
       const tailwindConfig: TailwindConfig = useTailwindConfig();
 
       return (
-        <FieldLabel label={label} icon={<ChevronDown size={16} />}>
+        <FieldLabel label={label}>
           <AutoField
             value={value}
             onChange={onChange}

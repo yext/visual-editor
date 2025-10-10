@@ -2,7 +2,6 @@ import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
-import { ChevronDown } from "lucide-react";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 
@@ -117,10 +116,7 @@ export const FontSizeSelector = (
       );
 
       return (
-        <FieldLabel
-          label={label ?? pt("fontSize", "Font Size")}
-          icon={<ChevronDown size={16} />}
-        >
+        <FieldLabel label={label ?? pt("fontSize", "Font Size")}>
           <Combobox
             selectedOption={
               options.find((option) => option.value === value) ?? options[0]
