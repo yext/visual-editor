@@ -341,8 +341,6 @@ interface ProductSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-  /** Used to forward the section heading slot's semantic level to other components */
-  sectionHeadingLevel?: HeadingProps["level"];
 }
 
 interface PromoSectionProps {
@@ -867,13 +865,6 @@ type BackgroundStyle = {
   /** Whether the background color is dark (for adjusting other styles based on background) */
   isDarkBackground?: boolean;
 };
-
-interface HeadingProps
-  extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
-    VariantProps<typeof headingVariants> {
-  level: HeadingLevel;
-  semanticLevelOverride?: HeadingLevel | "span";
-}
 
 interface PromoData {
   /**

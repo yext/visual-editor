@@ -631,11 +631,10 @@ This object contains properties for customizing the component's appearance.
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop                  | Type                                                    | Description                                                                    | Default |
-| :-------------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility`      | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `sectionHeadingLevel` | `HeadingProps["level"]`                                 | Used to forward the section heading slot's semantic level to other components  |         |
-| `slots`               | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                    | Description                                                                    | Default |
+| :--------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
 
 ---
 
