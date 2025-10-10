@@ -1,4 +1,4 @@
-import { Puck, Config, InitialHistory } from "@measured/puck";
+import { Puck, Config, InitialHistory, FieldLabel } from "@measured/puck";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -189,6 +189,10 @@ export const InternalThemeEditor = ({
           drawer: () => <></>,
           fields: fieldsOverride,
           iframe: loadMapboxIntoIframe,
+          // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
+          fieldLabel: ({ icon, children, ...rest }) => (
+            <FieldLabel {...rest}>{children}</FieldLabel>
+          ),
         }}
         metadata={metadata}
       />

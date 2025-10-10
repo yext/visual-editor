@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FieldLabel } from "@measured/puck";
 import { StyleSelectOption } from "../../../utils/themeResolver.ts";
 import "../ui/puck.css";
-import { ChevronDown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 type FontSelectorProps = {
@@ -47,12 +47,7 @@ export const FontSelector = ({
     pt("fonts.choose", "Choose a font");
 
   return (
-    <FieldLabel
-      label={label}
-      el="div"
-      className="ve-relative"
-      icon={<ChevronDown size={16} />}
-    >
+    <FieldLabel label={label} el="div" className="ve-relative">
       <button
         onClick={toggleDropdown}
         className="font-select"
