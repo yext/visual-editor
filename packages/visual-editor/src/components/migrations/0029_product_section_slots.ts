@@ -22,7 +22,7 @@ export const productSectionSlots: Migration = {
       const products = resolveYextEntityField(
         streamDocument,
         props.data.products as YextEntityField<ProductSectionType>,
-        streamDocument.locale
+        streamDocument.meta?.locale
       )?.products;
 
       const cards =

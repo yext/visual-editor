@@ -194,17 +194,32 @@ export const ProductCardsWrapper: ComponentConfig<{
         return setDeep(data, "props.slots.CardSlot", []);
       }
 
+      const requiredLength = resolvedProducts.length;
+      const currentLength = data.props.slots.CardSlot.length;
+      // If CardSlot is shorter, create an array of placeholder cards and append them.
+      // If CardSlot is longer or equal, this will just be an empty array.
+      const cardsToAdd =
+        currentLength < requiredLength
+          ? Array(requiredLength - currentLength)
+              .fill(null)
+              .map(() =>
+                defaultProductCardSlotData(`ProductCard-${crypto.randomUUID()}`)
+              )
+          : [];
+      const updatedCardSlot = [
+        ...data.props.slots.CardSlot,
+        ...cardsToAdd,
+      ].slice(0, requiredLength);
+
       return setDeep(
         data,
         "props.slots.CardSlot",
-        data.props.slots.CardSlot.slice(0, resolvedProducts.length).map(
-          (card, i) => {
-            return setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              product: resolvedProducts[i],
-            } satisfies ProductCardProps["parentData"]);
-          }
-        )
+        updatedCardSlot.map((card, i) => {
+          return setDeep(card, "props.parentData", {
+            field: data.props.data.field,
+            product: resolvedProducts[i],
+          } satisfies ProductCardProps["parentData"]);
+        })
       );
     } else {
       // STATIC VALUES
