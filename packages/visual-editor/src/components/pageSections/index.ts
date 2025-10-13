@@ -58,7 +58,10 @@ export {
   type PromoData,
   type PromoStyles,
 } from "./PromoSection.tsx";
-export { ProductSection, type ProductSectionProps } from "./ProductSection.tsx";
+export {
+  ProductSection,
+  type ProductSectionProps,
+} from "./ProductSection/ProductSection.tsx";
 export { ReviewsSection, type ReviewsSectionProps } from "./ReviewsSection.tsx";
 export {
   SectionContainer,

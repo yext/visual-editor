@@ -20,9 +20,11 @@ import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
 import {
   ProductCardsWrapper,
   ProductCardsWrapperProps,
+} from "../pageSections/ProductSection/ProductCardsWrapper.tsx";
+import {
   ProductCard,
   ProductCardProps,
-} from "../pageSections/ProductSection.tsx";
+} from "../pageSections/ProductSection/ProductCard.tsx";
 import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 import {
   HoursStatus,

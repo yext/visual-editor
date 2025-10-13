@@ -4,7 +4,7 @@ import {
   axe,
   ComponentTest,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   ProductSection,

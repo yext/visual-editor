@@ -1,10 +1,8 @@
 import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import {
-  ProductCardProps,
-  ProductCardsWrapperProps,
-  ProductSectionProps,
-} from "../pageSections/ProductSection";
+import { ProductSectionProps } from "../pageSections/ProductSection/ProductSection";
+import { ProductCardProps } from "../pageSections/ProductSection/ProductCard";
+import { ProductCardsWrapperProps } from "../pageSections/ProductSection/ProductCardsWrapper";
 import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
 import { ProductSectionType } from "../../types/types";
