@@ -418,9 +418,12 @@ export const InternalLayoutEditor = ({
                 const newData = walkTree(pastedData, puckConfig, (contents) =>
                   contents.map((item: ComponentDataOptionalId) => {
                     const id = `${item.type}-${uuidv4()}`;
+                    // oxlint-disable-next-line no-unused-vars
+                    const { id: _, parentData: __, ...rest } = item.props;
+
                     return {
                       ...item,
-                      props: { ...item.props, id },
+                      props: { ...rest, id },
                     };
                   })
                 );

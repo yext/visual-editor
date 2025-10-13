@@ -119,8 +119,11 @@ const productSectionFields: Fields<ProductSectionProps> = {
 
 export type ProductCardsWrapperProps = {
   data: Omit<YextEntityField<ProductSectionType>, "constantValue"> & {
+    // At the wrapper level, the only constant value stored is the puck id
+    // of the ProductCard. The rest of the data is stored in each card.
+    // If id is not provided, a default card will be created with an auto-generated id.
     constantValue: {
-      id: string;
+      id?: string;
     }[];
   };
   slots: {
@@ -128,7 +131,7 @@ export type ProductCardsWrapperProps = {
   };
 };
 
-const ProductCardsWrapperFields: Fields<ProductCardsWrapperProps> = {
+const productCardsWrapperFields: Fields<ProductCardsWrapperProps> = {
   data: YextField(msg("fields.products", "Products"), {
     type: "entityField",
     filter: {
@@ -163,7 +166,7 @@ export const ProductCardsWrapper: ComponentConfig<{
   props: ProductCardsWrapperProps;
 }> = {
   label: msg("slots.productCards", "Product Cards"),
-  fields: ProductCardsWrapperFields,
+  fields: productCardsWrapperFields,
   defaultProps: {
     data: {
       field: "",
@@ -175,6 +178,7 @@ export const ProductCardsWrapper: ComponentConfig<{
     },
   },
   resolveData: (data, params) => {
+    console.log("this resolveData was called");
     const streamDocument = params.metadata.streamDocument;
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
@@ -594,10 +598,10 @@ const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
   );
 };
 
-const defaultProductCardSlotData = (id: string) => ({
+const defaultProductCardSlotData = (id?: string) => ({
   type: "ProductCard",
   props: {
-    id,
+    ...(id && { id }),
     styles: {
       backgroundColor: backgroundColors.background1.value,
     } satisfies ProductCardProps["styles"],
@@ -753,17 +757,13 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
             data: {
               field: "",
               constantValueEnabled: true,
-              constantValue: [
-                { id: "ProductCard-default-1" },
-                { id: "ProductCard-default-2" },
-                { id: "ProductCard-default-3" },
-              ],
+              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
             },
             slots: {
               CardSlot: [
-                defaultProductCardSlotData("ProductCard-default-1"),
-                defaultProductCardSlotData("ProductCard-default-2"),
-                defaultProductCardSlotData("ProductCard-default-3"),
+                defaultProductCardSlotData(),
+                defaultProductCardSlotData(),
+                defaultProductCardSlotData(),
               ],
             },
           } satisfies ProductCardsWrapperProps,
