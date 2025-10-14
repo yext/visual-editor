@@ -83,8 +83,8 @@ importers:
   packages/visual-editor:
     dependencies:
       "@measured/puck":
-        specifier: 0.20.1
-        version: 0.20.1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
+        specifier: 0.20.2
+        version: 0.20.2(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
       "@microsoft/api-documenter":
         specifier: ^7.26.29
         version: 7.26.32(@types/node@20.19.11)
@@ -369,8 +369,8 @@ importers:
         specifier: ^7.10.1
         version: 7.17.8(react@18.3.1)
       "@measured/puck":
-        specifier: 0.20.1
-        version: 0.20.1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
+        specifier: 0.20.2
+        version: 0.20.2(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
       "@radix-ui/react-accordion":
         specifier: ^1.2.0
         version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2154,10 +2154,10 @@ packages:
       }
     engines: { node: ">=6.0.0" }
 
-  "@measured/puck@0.20.1":
+  "@measured/puck@0.20.2":
     resolution:
       {
-        integrity: sha512-qD5nDxDqbm5dEF4nQrgR3cTEnDRSe320HtWDOFaoRe7FpHCQBBPyDqb49maK9YUR0TPy7j8OeG1ymDHnKy05Ow==,
+        integrity: sha512-/GuzlsGs1T2S3lY9so4GyHpDBlWnC1h/4rkYuelrLNHvacnXBZyn50hvgRhWAqlLn/xOuJvJeuY740Zemxdt3Q==,
       }
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
@@ -13312,7 +13312,7 @@ snapshots:
 
   "@mapbox/whoots-js@3.1.0": {}
 
-  "@measured/puck@0.20.1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))":
+  "@measured/puck@0.20.2(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))":
     dependencies:
       "@dnd-kit/helpers": 0.1.18
       "@dnd-kit/react": 0.1.18(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

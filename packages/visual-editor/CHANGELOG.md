@@ -1,3 +1,18 @@
+#### 0.0.61 (2025-10-10)
+
+##### New Features
+
+- remove all field icons ([#813](https://github.com/yext/visual-editor/pull/813)) ([3c96f5f1](https://github.com/yext/visual-editor/commit/3c96f5f124dd6ffa65442564df26a9e9725e81f5))
+- add Banner Section to Locator and Directory pages ([#811](https://github.com/yext/visual-editor/pull/811)) ([0aeaeca7](https://github.com/yext/visual-editor/commit/0aeaeca73614ba65c00356ca0b2ef87eefde6d5f))
+
+##### Bug Fixes
+
+- add pages-component css to rendered page css bundle ([#812](https://github.com/yext/visual-editor/pull/812)) ([33dd0b0a](https://github.com/yext/visual-editor/commit/33dd0b0aef86551e6b08f8e0de52fa2ccff6ad38))
+- fixed position for expanded header ([#806](https://github.com/yext/visual-editor/pull/806)) ([85297926](https://github.com/yext/visual-editor/commit/8529792602024a1abba9dace26dd24d7ca4e1fac))
+- provide LocalBusiness schema to location entity types ([#808](https://github.com/yext/visual-editor/pull/808)) ([3d0d392a](https://github.com/yext/visual-editor/commit/3d0d392a7f3f104ec482faa1b5b6c4903fe5863b))
+- use entityPageSetUrlTemplates for resolving locator card urls ([#807](https://github.com/yext/visual-editor/pull/807)) ([74515526](https://github.com/yext/visual-editor/commit/74515526897bb30519eb2c53c89f0d34e8ccdd10))
+- improve color contrast handling ([#805](https://github.com/yext/visual-editor/pull/805)) ([011d6c20](https://github.com/yext/visual-editor/commit/011d6c20571217e4305a301b2db629b4794fb376))
+
 #### 0.0.60 (2025-10-03)
 
 ##### New Features

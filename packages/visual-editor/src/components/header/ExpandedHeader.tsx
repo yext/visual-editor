@@ -452,7 +452,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
   return (
     <>
       {styles.headerPosition === "fixed" && headerHeight > 0 ? (
-        <div style={{ height: headerHeight }} />
+        <div style={{ minHeight: headerHeight }} />
       ) : null}
       <div
         ref={headerRef}

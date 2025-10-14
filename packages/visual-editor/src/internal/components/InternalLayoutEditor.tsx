@@ -9,6 +9,7 @@ import {
   useGetPuck,
   walkTree,
   ComponentDataOptionalId,
+  FieldLabel,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -470,6 +471,10 @@ export const InternalLayoutEditor = ({
               </ActionBar>
             );
           },
+          // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
+          fieldLabel: ({ icon, children, ...rest }) => (
+            <FieldLabel {...rest}>{children}</FieldLabel>
+          ),
         }}
         metadata={metadata}
       />
