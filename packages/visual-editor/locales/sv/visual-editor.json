@@ -503,6 +503,10 @@
   "showLess": "Visa mindre",
   "showMore": "Visa mer",
   "siteColors": "Platsfärger",
+  "slots": {
+    "productCard": "Produktkort",
+    "productCards": "Produktkort"
+  },
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statiskt innehåll",
   "sunday": "Söndag",

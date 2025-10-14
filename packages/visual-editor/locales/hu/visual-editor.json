@@ -503,6 +503,10 @@
   "showLess": "Mutasson kevesebbet",
   "showMore": "Mutasson többet",
   "siteColors": "Helyszínek",
+  "slots": {
+    "productCard": "Termékkártya",
+    "productCards": "Termékkártyák"
+  },
   "spacingDefaultLabel": "Mulasztás",
   "staticContent": "Statikus tartalom",
   "sunday": "vasárnap",

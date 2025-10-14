@@ -17,6 +17,14 @@ import {
   ServicesList,
 } from "../contentBlocks/TextList.tsx";
 import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
+import {
+  ProductCardsWrapper,
+  ProductCardsWrapperProps,
+} from "../pageSections/ProductSection/ProductCardsWrapper.tsx";
+import {
+  ProductCard,
+  ProductCardProps,
+} from "../pageSections/ProductSection/ProductCard.tsx";
 import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 import {
   HoursStatus,
@@ -38,6 +46,8 @@ export interface SlotsCategoryProps {
   HoursTableSlot: HoursTableProps;
   ImageSlot: ImageWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
+  ProductCardsWrapper: ProductCardsWrapperProps;
+  ProductCard: ProductCardProps;
   ServicesListSlot: TextListProps;
   TextListSlot: TextListProps;
   VideoSlot: VideoProps;
@@ -61,6 +71,11 @@ export const SlotsCategoryComponents = {
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
   ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
+  ProductCardsWrapper: {
+    ...ProductCardsWrapper,
+    permissions: lockedPermissions,
+  },
+  ProductCard: { ...ProductCard, permissions: lockedPermissions },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },

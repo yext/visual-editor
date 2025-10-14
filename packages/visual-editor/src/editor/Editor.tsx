@@ -22,6 +22,8 @@ import {
   defaultFonts,
   loadGoogleFontsIntoDocument,
 } from "../utils/visualEditorFonts.ts";
+import { migrate } from "../utils/migrate.ts";
+import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 
 const devLogger = new DevLogger();
 
@@ -79,7 +81,7 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, !!localDev);
+  } = useCommonMessageReceivers(componentRegistry, !!localDev, document);
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 
@@ -158,6 +160,10 @@ export const Editor = ({
     ],
   });
 
+  const migratedData = !isLoading
+    ? migrate(layoutData!, migrationRegistry, puckConfig, document)
+    : undefined;
+
   return (
     <TemplateMetadataContext.Provider value={templateMetadata!}>
       <ErrorBoundary fallback={<></>} onError={logError}>
@@ -166,7 +172,7 @@ export const Editor = ({
             <ThemeEditor
               puckConfig={puckConfig!}
               templateMetadata={templateMetadata!}
-              layoutData={layoutData!}
+              layoutData={migratedData!}
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}
@@ -176,7 +182,7 @@ export const Editor = ({
             <LayoutEditor
               puckConfig={puckConfig!}
               templateMetadata={templateMetadata!}
-              layoutData={layoutData!}
+              layoutData={migratedData!}
               themeData={themeData!}
               themeConfig={themeConfig}
               localDev={!!localDev}

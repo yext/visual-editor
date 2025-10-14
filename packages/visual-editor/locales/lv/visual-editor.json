@@ -503,6 +503,10 @@
   "showLess": "Rādīt mazāk",
   "showMore": "Parādīt vairāk",
   "siteColors": "Vietnes krāsas",
+  "slots": {
+    "productCard": "Produktu karte",
+    "productCards": "Produktu kartes"
+  },
   "spacingDefaultLabel": "Nepildīt",
   "staticContent": "Statisks saturs",
   "sunday": "Svētdiena",

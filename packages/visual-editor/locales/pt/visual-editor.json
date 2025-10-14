@@ -503,6 +503,10 @@
   "showLess": "Mostre menos",
   "showMore": "Mostre mais",
   "siteColors": "Cores do site",
+  "slots": {
+    "productCard": "Cartão de produto",
+    "productCards": "Cartões de produto"
+  },
   "spacingDefaultLabel": "Padrão",
   "staticContent": "Conteúdo estático",
   "sunday": "Domingo",

@@ -503,6 +503,10 @@
   "showLess": "Näyttää vähemmän",
   "showMore": "Näyttää enemmän",
   "siteColors": "Sivuston värit",
+  "slots": {
+    "productCard": "Tuotekortti",
+    "productCards": "Tuotekortit"
+  },
   "spacingDefaultLabel": "Laiminlyönti",
   "staticContent": "Staattinen sisältö",
   "sunday": "sunnuntai",

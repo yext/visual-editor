@@ -23,7 +23,7 @@ import {
 import {
   ProductSection,
   ProductSectionProps,
-} from "../pageSections/ProductSection.tsx";
+} from "../pageSections/ProductSection/ProductSection.tsx";
 import {
   PromoSection,
   PromoSectionProps,

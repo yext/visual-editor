@@ -503,6 +503,10 @@
   "showLess": "Daha az göster",
   "showMore": "Daha Fazla Göster",
   "siteColors": "Site Renkleri",
+  "slots": {
+    "productCard": "Ürün Kartı",
+    "productCards": "Ürün Kartları"
+  },
   "spacingDefaultLabel": "Varsayılan",
   "staticContent": "Statik içerik",
   "sunday": "Pazar",

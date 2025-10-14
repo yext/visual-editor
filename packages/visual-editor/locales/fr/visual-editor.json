@@ -502,6 +502,10 @@
   "showLess": "Montrer moins",
   "showMore": "Montrer plus",
   "siteColors": "Couleurs du site",
+  "slots": {
+    "productCard": "Fiche produit",
+    "productCards": "Fiches produits"
+  },
   "spacingDefaultLabel": "Défaut",
   "staticContent": "Contenu statique",
   "sunday": "Dimanche",

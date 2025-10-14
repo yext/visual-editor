@@ -34,7 +34,7 @@ export {
   type HeadingLevel,
   VisualEditorComponentsContentPath,
 } from "./themeConfigOptions.ts";
-export { type ThemeConfig, themeResolver } from "./themeResolver.ts";
+export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export {
   constructFontSelectOptions,

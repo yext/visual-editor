@@ -504,6 +504,10 @@
   "showLess": "Ukázat méně",
   "showMore": "Ukázat více",
   "siteColors": "Barvy webu",
+  "slots": {
+    "productCard": "Karta produktu",
+    "productCards": "Karty produktů"
+  },
   "spacingDefaultLabel": "Výchozí",
   "staticContent": "Statický obsah",
   "sunday": "neděle",

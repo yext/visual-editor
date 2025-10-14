@@ -619,32 +619,22 @@ The Product Section is used to display a curated list of products in a dedicated
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop            | Type                                  | Description                                                                                    | Default                             |
-| :-------------- | :------------------------------------ | :--------------------------------------------------------------------------------------------- | :---------------------------------- |
-| `data.heading`  | `YextEntityField<TranslatableString>` | The main heading for the entire products section.                                              | `"Featured Products" (constant)`    |
-| `data.products` | `YextEntityField<ProductSectionType>` | The source of the product data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder products.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                         | Description                                  | Default              |
-| :----------------------- | :------------------------------------------------------------------------------------------- | :------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                            | The background color for the entire section. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; }` | Styling for the individual product cards.    |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                             | Styling for the main section heading.        |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                    | Description                                                                    | Default |
+| :--------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
 
 ---
 

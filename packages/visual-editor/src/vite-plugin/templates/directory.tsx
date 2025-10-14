@@ -99,7 +99,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     document
   );
   const updatedData = await resolveAllData(migratedData, directoryConfig, {
-    document,
+    streamDocument: document,
   });
 
   return { ...props, data: updatedData };

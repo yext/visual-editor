@@ -15,7 +15,10 @@ export { BasicSelector } from "./BasicSelector.tsx";
 export { YextField } from "./YextField.tsx";
 export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 export { TranslatableStringField } from "./TranslatableStringField.tsx";
-export { TranslatableRichTextField } from "./TranslatableRichTextField.tsx";
+export {
+  TranslatableRichTextField,
+  getDefaultRTF,
+} from "./TranslatableRichTextField.tsx";
 export { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 export { CodeField, type CodeFieldProps } from "./CodeField.tsx";
 export { getMaxWidthOptions, filterMaxWidths } from "./MaxWidthSelector.tsx";

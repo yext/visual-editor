@@ -35,7 +35,7 @@ export type HeadingTextProps = {
   /** @internal Controlled data from the parent section */
   parentData?: {
     field: string;
-    text: string;
+    text: string | undefined;
   };
 };
 
@@ -52,8 +52,16 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
       }[styles.align]
     : "justify-start";
 
+  const alignClass = styles?.align
+    ? {
+        left: "text-left",
+        center: "text-center",
+        right: "text-right",
+      }[styles.align]
+    : "text-left";
+
   const resolvedHeadingText = parentData
-    ? parentData.text
+    ? parentData?.text
     : resolveComponentData(data.text, i18n.language, streamDocument);
 
   return resolvedHeadingText ? (
@@ -65,6 +73,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
       >
         <Heading
           level={styles.level}
+          className={alignClass}
           semanticLevelOverride={styles.semanticLevelOverride}
         >
           {resolvedHeadingText}

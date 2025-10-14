@@ -503,6 +503,10 @@
   "showLess": "Pokazati manje",
   "showMore": "Pokažite više",
   "siteColors": "Boje mjesta",
+  "slots": {
+    "productCard": "Kartica za proizvod",
+    "productCards": "Kartice za proizvod"
+  },
   "spacingDefaultLabel": "Zadano",
   "staticContent": "Statički sadržaj",
   "sunday": "nedjelja",

@@ -503,6 +503,10 @@
   "showLess": "Vykazovať menej",
   "showMore": "Ukázať viac",
   "siteColors": "Farby stránok",
+  "slots": {
+    "productCard": "Karta",
+    "productCards": "Produktové karty"
+  },
   "spacingDefaultLabel": "Predvolený",
   "staticContent": "Statický obsah",
   "sunday": "Nedeľa",

@@ -503,6 +503,10 @@
   "showLess": "Näitama vähem",
   "showMore": "Näidata veel",
   "siteColors": "Saidi värvid",
+  "slots": {
+    "productCard": "Tootekaart",
+    "productCards": "Tootekaardid"
+  },
   "spacingDefaultLabel": "Täitmata jätmine",
   "staticContent": "Staatiline sisu",
   "sunday": "Pühapäev",

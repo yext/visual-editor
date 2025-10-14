@@ -503,6 +503,10 @@
   "showLess": "Minder laten zien",
   "showMore": "Laat meer zien",
   "siteColors": "Sitekleuren",
+  "slots": {
+    "productCard": "Productkaart",
+    "productCards": "Productkaarten"
+  },
   "spacingDefaultLabel": "Standaard",
   "staticContent": "Statische inhoud",
   "sunday": "Zondag",

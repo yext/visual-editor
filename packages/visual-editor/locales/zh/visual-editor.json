@@ -503,6 +503,10 @@
   "showLess": "少显示",
   "showMore": "显示更多",
   "siteColors": "站点颜色",
+  "slots": {
+    "productCard": "产品卡",
+    "productCards": "产品卡"
+  },
   "spacingDefaultLabel": "默认",
   "staticContent": "静态内容",
   "sunday": "星期日",
