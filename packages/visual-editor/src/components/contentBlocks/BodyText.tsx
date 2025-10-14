@@ -20,16 +20,23 @@ export type BodyTextProps = {
     /** The body text to display. */
     text: YextEntityField<TranslatableRichText>;
   };
+
   styles: {
     /** The size of the body text. */
     variant: BodyProps["variant"];
   };
+
   /**
    * @internal Controlled data from the parent section.
    */
   parentData?: {
     field: string;
     richText: TranslatableRichText | undefined;
+  };
+
+  /** @internal Controlled style from the parent section */
+  parentStyles?: {
+    className: string;
   };
 };
 
@@ -68,6 +75,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
     ? resolveComponentData(sourceData, i18n.language, streamDocument, {
         variant: styles.variant,
         isDarkBackground: background?.isDarkBackground,
+        className: props.parentStyles?.className,
       })
     : undefined;
 

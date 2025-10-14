@@ -18,9 +18,7 @@ export {
 export {
   EventSection,
   type EventSectionProps,
-  type EventData,
-  type EventStyles,
-} from "./EventSection.tsx";
+} from "./EventSection/EventSection.tsx";
 export {
   FAQSection,
   type FAQSectionProps,

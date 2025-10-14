@@ -67,6 +67,11 @@ export const productSectionSlots: Migration = {
                         width: 640,
                         aspectRatio: 16 / 9,
                       },
+                      sizes: {
+                        base: "calc(100vw - 32px)",
+                        md: "calc((maxWidth - 32px) / 2)",
+                        lg: "calc((maxWidth - 32px) / 3)",
+                      },
                       parentData: constantValueEnabled
                         ? undefined
                         : {
@@ -159,6 +164,7 @@ export const productSectionSlots: Migration = {
                         },
                       },
                       styles: { variant: props.styles.cards.ctaVariant },
+                      eventName: `cta${i}`,
                       parentData: constantValueEnabled
                         ? undefined
                         : {

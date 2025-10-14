@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
   BackgroundStyle,
   YextField,
@@ -7,33 +8,32 @@ import {
   VisibilityWrapper,
   msg,
   getAnalyticsScopeHash,
-  HeadingTextProps,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultProductCardSlotData } from "./ProductCard.tsx";
-import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
+import { defaultEventCardSlotData } from "./EventCard.tsx";
+import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 
-export interface ProductSectionProps {
+export interface EventSectionProps {
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
   styles: {
     /**
-     * The background color for the entire section.
-     * @defaultValue Background Color 2
+     * The background color of the section.
+     * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
   };
 
+  /** @internal */
   slots: {
     SectionHeadingSlot: Slot;
     CardsWrapperSlot: Slot;
   };
 
-  /** @internal  */
+  /** @internal */
   analytics: {
     scope?: string;
   };
@@ -45,7 +45,7 @@ export interface ProductSectionProps {
   liveVisibility: boolean;
 }
 
-const productSectionFields: Fields<ProductSectionProps> = {
+const eventSectionFields: Fields<EventSectionProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -87,8 +87,8 @@ const productSectionFields: Fields<ProductSectionProps> = {
   ),
 };
 
-const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
-  const { slots, styles } = props;
+const EventSectionWrapper: PuckComponent<EventSectionProps> = (props) => {
+  const { styles, slots } = props;
 
   return (
     <PageSection
@@ -102,15 +102,15 @@ const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
 };
 
 /**
- * The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers.
+ * The Events Section component is designed to display a curated list of events. It features a prominent section heading and renders each event as an individual card, making it ideal for showcasing upcoming activities, workshops, or promotions.
  * Available on Location templates.
  */
-export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
-  label: msg("components.productsSection", "Products Section"),
-  fields: productSectionFields,
+export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
+  label: msg("components.eventsSection", "Events Section"),
+  fields: eventSectionFields,
   defaultProps: {
     styles: {
-      backgroundColor: backgroundColors.background2.value,
+      backgroundColor: backgroundColors.background3.value,
     },
     slots: {
       SectionHeadingSlot: [
@@ -119,24 +119,21 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
           props: {
             data: {
               text: {
-                field: "",
                 constantValue: {
-                  en: "Featured Products",
+                  en: "Upcoming Events",
                   hasLocalizedValue: "true",
                 },
                 constantValueEnabled: true,
+                field: "",
               },
             },
-            styles: {
-              level: 2,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
+            styles: { level: 2, align: "left" },
+          },
         },
       ],
       CardsWrapperSlot: [
         {
-          type: "ProductCardsWrapper",
+          type: "EventCardsWrapper",
           props: {
             data: {
               field: "",
@@ -145,35 +142,33 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
             },
             slots: {
               CardSlot: [
-                defaultProductCardSlotData(),
-                defaultProductCardSlotData(),
-                defaultProductCardSlotData(),
+                defaultEventCardSlotData(undefined, 0),
+                defaultEventCardSlotData(undefined, 1),
+                defaultEventCardSlotData(undefined, 2),
               ],
             },
-          } satisfies ProductCardsWrapperProps,
+          } satisfies EventCardsWrapperProps,
         },
       ],
     },
     analytics: {
-      scope: "productsSection",
+      scope: "eventsSection",
     },
     liveVisibility: true,
   },
   resolveData: (data) => {
     return forwardHeadingLevel(data, "TitleSlot");
   },
-  render: (props) => {
-    return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+  render: (props) => (
+    <AnalyticsScopeProvider
+      name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
+    >
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
-        >
-          <ProductSectionComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
-    );
-  },
+        <EventSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </AnalyticsScopeProvider>
+  ),
 };

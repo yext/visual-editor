@@ -1,59 +1,53 @@
 import * as React from "react";
 import {
-  ProductSectionType,
-  ComponentFields,
-  msg,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
-import {
   ComponentConfig,
   ComponentData,
   PuckComponent,
   setDeep,
 } from "@measured/puck";
+import {
+  EventSectionType,
+  ComponentFields,
+  msg,
+  i18nComponentsInstance,
+  resolveYextEntityField,
+} from "@yext/visual-editor";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
-  CardWrapperType,
   cardWrapperFields,
+  CardWrapperType,
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
-import {
-  defaultProductCardSlotData,
-  ProductCardProps,
-} from "./ProductCard.tsx";
+import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
 
-export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType>;
+export type EventCardsWrapperProps = CardWrapperType<EventSectionType>;
 
-const productCardsWrapperFields = cardWrapperFields<ProductCardsWrapperProps>(
-  msg("components.products", "Products"),
-  ComponentFields.ProductSection.type
+const eventCardsWrapperFields = cardWrapperFields<EventCardsWrapperProps>(
+  msg("components.events", "Events"),
+  ComponentFields.EventSection.type
 );
 
-const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = (
+const EventCardsWrapperComponent: PuckComponent<EventCardsWrapperProps> = (
   props
 ) => {
   const { slots } = props;
 
   return (
     <CardContextProvider>
-      <slots.CardSlot
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 align-stretch"
-        allow={[]}
-      />
+      <slots.CardSlot className="flex flex-col gap-8" allow={[]} />
     </CardContextProvider>
   );
 };
 
-export const ProductCardsWrapper: ComponentConfig<{
-  props: ProductCardsWrapperProps;
+export const EventCardsWrapper: ComponentConfig<{
+  props: EventCardsWrapperProps;
 }> = {
-  label: msg("slots.productCards", "Product Cards"),
-  fields: productCardsWrapperFields,
+  label: msg("components.eventCardsWrapper", "Event Cards"),
+  fields: eventCardsWrapperFields,
   defaultProps: {
     data: {
-      field: "",
+      constantValue: [{}, {}, {}],
       constantValueEnabled: true,
-      constantValue: [],
+      field: "",
     },
     slots: {
       CardSlot: [],
@@ -64,22 +58,22 @@ export const ProductCardsWrapper: ComponentConfig<{
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
-      const resolvedProducts = resolveYextEntityField<
-        ProductSectionType | { products: undefined }
+      const resolvedEvents = resolveYextEntityField<
+        EventSectionType | { events: undefined }
       >(
         streamDocument,
         {
           ...data.props.data,
-          constantValue: { products: undefined },
+          constantValue: { events: undefined },
         },
         i18nComponentsInstance.language || "en"
-      )?.products;
+      )?.events;
 
-      if (!resolvedProducts?.length) {
+      if (!resolvedEvents?.length) {
         return setDeep(data, "props.slots.CardSlot", []);
       }
 
-      const requiredLength = resolvedProducts.length;
+      const requiredLength = resolvedEvents.length;
       const currentLength = data.props.slots.CardSlot.length;
       // If CardSlot is shorter, create an array of placeholder cards and append them.
       // If CardSlot is longer or equal, this will just be an empty array.
@@ -88,13 +82,13 @@ export const ProductCardsWrapper: ComponentConfig<{
           ? Array(requiredLength - currentLength)
               .fill(null)
               .map(() =>
-                defaultProductCardSlotData(`ProductCard-${crypto.randomUUID()}`)
+                defaultEventCardSlotData(`EventCard-${crypto.randomUUID()}`)
               )
           : [];
       const updatedCardSlot = [
         ...data.props.slots.CardSlot,
         ...cardsToAdd,
-      ].slice(0, requiredLength) as ComponentData<ProductCardProps>[];
+      ].slice(0, requiredLength) as ComponentData<EventCardProps>[];
 
       return setDeep(
         data,
@@ -103,8 +97,8 @@ export const ProductCardsWrapper: ComponentConfig<{
           card.props.index = i;
           return setDeep(card, "props.parentData", {
             field: data.props.data.field,
-            product: resolvedProducts[i],
-          } satisfies ProductCardProps["parentData"]);
+            event: resolvedEvents[i],
+          } satisfies EventCardProps["parentData"]);
         })
       );
     } else {
@@ -120,7 +114,7 @@ export const ProductCardsWrapper: ComponentConfig<{
         const existingCard = id
           ? (data.props.slots.CardSlot.find(
               (slot) => slot.props.id === id
-            ) as ComponentData<ProductCardProps>)
+            ) as ComponentData<EventCardProps>)
           : undefined;
 
         // Make a deep copy of existingCard to avoid mutating multiple cards
@@ -128,10 +122,10 @@ export const ProductCardsWrapper: ComponentConfig<{
           ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
           : undefined;
 
-        let newId = newCard?.props.id || `ProductCard-${crypto.randomUUID()}`;
+        let newId = newCard?.props.id || `EventCard-${crypto.randomUUID()}`;
 
         if (newCard && inUseIds.has(newId)) {
-          newId = `ProductCard-${crypto.randomUUID()}`;
+          newId = `EventCard-${crypto.randomUUID()}`;
           // Update the ids of the components in the child slots as well
           Object.entries(newCard.props.slots).forEach(
             ([slotKey, slotArray]) => {
@@ -142,7 +136,7 @@ export const ProductCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultProductCardSlotData(newId, i);
+          return defaultEventCardSlotData(newId, i);
         }
 
         newCard = setDeep(newCard, "props.id", newId); // update the id
@@ -163,5 +157,5 @@ export const ProductCardsWrapper: ComponentConfig<{
       return updatedData;
     }
   },
-  render: (props) => <ProductCardsWrapperComponent {...props} />,
+  render: (props) => <EventCardsWrapperComponent {...props} />,
 };

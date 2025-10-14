@@ -15,7 +15,7 @@ import {
   VisibilityWrapper,
   InsightSectionType,
   InsightStruct,
-  Timestamp,
+  TimestampAtom,
   ComponentFields,
   TranslatableString,
   msg,
@@ -227,7 +227,7 @@ const InsightCard = ({
               {hasCategory && <Body>{resolvedCategory}</Body>}
               {hasCategory && hasPublishTime && <Body>|</Body>}
               {hasPublishTime && (
-                <Timestamp
+                <TimestampAtom
                   date={insight.publishTime ?? ""}
                   hideTimeZone={true}
                 />

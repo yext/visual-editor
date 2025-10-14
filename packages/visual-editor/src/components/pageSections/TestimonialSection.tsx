@@ -13,7 +13,7 @@ import {
   VisibilityWrapper,
   TestimonialSectionType,
   TestimonialStruct,
-  Timestamp,
+  TimestampAtom,
   ComponentFields,
   TimestampOption,
   TranslatableString,
@@ -190,7 +190,7 @@ const TestimonialCard = ({
           </Heading>
         )}
         {testimonial.contributionDate && (
-          <Timestamp
+          <TimestampAtom
             date={testimonial.contributionDate}
             option={TimestampOption.DATE}
             hideTimeZone={true}
