@@ -1,5 +1,4 @@
 import { Config, DropZone } from "@measured/puck";
-import { pt } from "@yext/visual-editor";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
@@ -15,11 +14,14 @@ import {
   OtherCategoryComponents,
   type OtherCategoryProps,
 } from "../categories/OtherCategory";
+import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
     DeprecatedCategoryProps,
-    OtherCategoryProps {}
+    OtherCategoryProps {
+  BannerSection: BannerSectionProps;
+}
 
 // The config used for all levels of directory pages
 export const directoryConfig: Config<DirectoryConfigProps> = {
@@ -27,11 +29,12 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
     ...DirectoryCategoryComponents,
     ...DeprecatedCategoryComponents,
     ...OtherCategoryComponents,
+    BannerSection,
   },
   categories: {
-    directoryComponents: {
-      title: pt("categories.directory", "Directory"),
-      components: [...DirectoryCategory, ...OtherCategory],
+    pageSections: {
+      title: "Page Sections",
+      components: [...DirectoryCategory, "BannerSection"],
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
@@ -39,7 +42,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
       components: DeprecatedCategory,
     },
     other: {
-      visible: false,
+      components: OtherCategory,
     },
   },
   root: {

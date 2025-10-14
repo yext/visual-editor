@@ -5,7 +5,6 @@ import {
   getDirections,
   Address as RenderAddress,
 } from "@yext/pages-components";
-import "@yext/pages-components/style.css";
 import {
   useDocument,
   EntityField,

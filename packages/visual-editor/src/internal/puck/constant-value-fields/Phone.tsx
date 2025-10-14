@@ -1,5 +1,4 @@
 import { CustomField, FieldLabel } from "@measured/puck";
-import { Phone } from "lucide-react";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import "../ui/puck.css";
@@ -20,10 +19,7 @@ export const PHONE_CONSTANT_CONFIG: CustomField<string | undefined> = {
 
     return (
       <div className="ve-mt-[12px]">
-        <FieldLabel
-          label={pt("fields.phoneNumber", "Phone Number")}
-          icon={<Phone size={16} />}
-        >
+        <FieldLabel label={pt("fields.phoneNumber", "Phone Number")}>
           {/* FieldLabel grabs the onclick event for the first button in its children, 
               and applies it to the whole area covered by the FieldLabel and its children.
               This hidden button catches clicks on the label/phone input to block unintended behavior. */}

@@ -1,5 +1,4 @@
 import { Config, DropZone } from "@measured/puck";
-import { pt } from "@yext/visual-editor";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
@@ -15,11 +14,14 @@ import {
   OtherCategoryComponents,
   type OtherCategoryProps,
 } from "../categories/OtherCategory";
+import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
     DeprecatedCategoryProps,
-    OtherCategoryProps {}
+    OtherCategoryProps {
+  BannerSection: BannerSectionProps;
+}
 
 // The config used for the locator
 export const locatorConfig: Config<LocatorConfigProps> = {
@@ -27,11 +29,12 @@ export const locatorConfig: Config<LocatorConfigProps> = {
     ...LocatorCategoryComponents,
     ...DeprecatedCategoryComponents,
     ...OtherCategoryComponents,
+    BannerSection,
   },
   categories: {
-    locatorComponents: {
-      title: pt("categories.locator", "Locator"),
-      components: [...LocatorCategory, ...OtherCategory],
+    pageSections: {
+      title: "Page Sections",
+      components: [...LocatorCategory, "BannerSection"],
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
@@ -39,7 +42,7 @@ export const locatorConfig: Config<LocatorConfigProps> = {
       components: DeprecatedCategory,
     },
     other: {
-      visible: false,
+      components: OtherCategory,
     },
   },
   root: {

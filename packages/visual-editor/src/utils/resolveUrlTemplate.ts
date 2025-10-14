@@ -36,7 +36,10 @@ export const resolveUrlTemplate = (
   const isPrimaryLocale = streamDocument.__?.isPrimaryLocale !== false;
 
   let urlTemplates;
-  if (streamDocument?.__?.codeTemplate === "directory") {
+  if (
+    streamDocument?.__?.codeTemplate === "directory" ||
+    streamDocument?.__?.codeTemplate === "locator"
+  ) {
     urlTemplates = JSON.parse(
       streamDocument?.__?.entityPageSetUrlTemplates || "{}"
     );

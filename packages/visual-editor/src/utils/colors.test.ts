@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   getContrastingColor,
   hexToRGB,
-  hexToHSL,
   luminanceFromRGB,
   isColorContrastWcagCompliant,
   convertComputedStyleColorToHex,
@@ -48,21 +47,6 @@ describe("hexToRGB", () => {
     expect(hexToRGB("123456")).toBeUndefined();
     expect(hexToRGB("#123456789")).toBeUndefined();
     expect(hexToRGB("#16")).toBeUndefined();
-  });
-});
-
-describe("hexToHSL", () => {
-  it("should correctly calculate HSL", () => {
-    expect(hexToHSL("#000000")).toStrictEqual([0, 0, 0]);
-    expect(hexToHSL("#FFF")).toStrictEqual([0, 0, 100]);
-    expect(hexToHSL("#11544d")).toStrictEqual([174, 66.3, 19.8]);
-    expect(hexToHSL("#777")).toStrictEqual([0, 0, 46.7]);
-  });
-
-  it("should return undefined if hex argument is invalid", () => {
-    expect(hexToHSL("123456")).toBeUndefined();
-    expect(hexToHSL("#123456789")).toBeUndefined();
-    expect(hexToHSL("#16")).toBeUndefined();
   });
 });
 

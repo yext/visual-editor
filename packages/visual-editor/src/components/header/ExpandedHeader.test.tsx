@@ -8,6 +8,7 @@ import {
 import { act, render as reactRender, waitFor } from "@testing-library/react";
 import {
   backgroundColors,
+  BannerSection,
   ExpandedHeader,
   migrate,
   migrationRegistry,
@@ -15,6 +16,7 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+import { defaultBannerProps } from "../pageSections/Banner.tsx";
 
 const defaultMainLinkV0 = {
   linkType: "URL" as const,
@@ -385,11 +387,65 @@ const tests: ComponentTest[] = [
       });
     },
   },
+  {
+    name: "version 15 props - fixed header",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+        headerPosition: "fixed",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 15,
+  },
 ];
 
 describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
-    components: { ExpandedHeader },
+    components: { ExpandedHeader, BannerSection },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -406,6 +462,26 @@ describe("ExpandedHeader", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
+      // if the header position is fixed, render another section beneath the header
+      const fixedHeader = props.styles.headerPosition === "fixed";
+      const content = fixedHeader
+        ? [
+            {
+              type: "ExpandedHeader",
+              props: props,
+            },
+            {
+              type: "BannerSection",
+              props: defaultBannerProps,
+            },
+          ]
+        : [
+            {
+              type: "ExpandedHeader",
+              props: props,
+            },
+          ];
+
       const data = migrate(
         {
           root: {
@@ -413,12 +489,7 @@ describe("ExpandedHeader", async () => {
               version,
             },
           },
-          content: [
-            {
-              type: "ExpandedHeader",
-              props: props,
-            },
-          ],
+          content: content,
         },
         migrationRegistry,
         puckConfig,
