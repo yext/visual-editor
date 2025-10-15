@@ -79,9 +79,9 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     className,
     puck,
     sizes = {
-      base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
+      base: styles.width ? `min(100vw, width)` : "100vw",
       md: styles.width
-        ? `min(${styles.width}px, calc((maxWidth - 32px) / 2))`
+        ? `min(width, calc((maxWidth - 32px) / 2))`
         : "maxWidth / 2",
     },
     hideWidthProp,
@@ -96,7 +96,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     return puck.isEditing ? <div className="h-[200px] w-full" /> : <></>;
   }
 
-  const transformedSizes = imgSizesHelper(sizes);
+  const transformedSizes = imgSizesHelper(sizes, `${styles.width}px`);
 
   return (
     <EntityField

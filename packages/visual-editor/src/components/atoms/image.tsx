@@ -106,7 +106,10 @@ export type ImgSizesByBreakpoint = {
  * @param sizes - the width of the image at different breakpoints
  * @returns a string for the sizes attribute of an img tag
  */
-export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
+export const imgSizesHelper = (
+  sizes: ImgSizesByBreakpoint,
+  width?: string
+): string => {
   const streamDocument = useDocument();
 
   let maxWidth = undefined;
@@ -145,7 +148,9 @@ export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
   const updatedBreakpointSizes = Object.fromEntries(
     Object.entries(sizes).map(([key, value]) => [
       key,
-      value.replace("maxWidth", maxWidth || "1440px"),
+      value
+        .replace("maxWidth", maxWidth || "1440px")
+        .replace("width", width || 640 + "px"),
     ])
   );
 
