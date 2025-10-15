@@ -26,9 +26,9 @@ export type TimestampProps = {
 
   styles: {
     /** Whether to display just the date or the date and time */
-    includeTime: "DATE" | "DATE_TIME";
+    includeTime: boolean;
     /** Whether to display an end date */
-    includeRange: "_RANGE" | "";
+    includeRange: boolean;
   };
 
   /**
@@ -67,16 +67,16 @@ const timestampFields: Fields<TimestampProps> = {
         type: "radio",
         label: msg("fields.includeTime", "Include Time"),
         options: [
-          { label: msg("fields.options.no", "No"), value: "DATE" },
-          { label: msg("fields.options.yes", "Yes"), value: "DATE_TIME" },
+          { label: msg("fields.options.no", "No"), value: false },
+          { label: msg("fields.options.yes", "Yes"), value: true },
         ],
       },
       includeRange: {
         type: "radio",
         label: msg("fields.includeRange", "Include Range"),
         options: [
-          { label: msg("fields.options.no", "No"), value: "" },
-          { label: msg("fields.options.yes", "Yes"), value: "_RANGE" },
+          { label: msg("fields.options.no", "No"), value: false },
+          { label: msg("fields.options.yes", "Yes"), value: true },
         ],
       },
     },
@@ -100,15 +100,16 @@ const TimestampComponent: PuckComponent<TimestampProps> = (props) => {
     return <></>;
   }
 
+  let option = (styles.includeTime ? "DATE_TIME" : "DATE") as TimestampOption;
+  if (!parentData && styles.includeRange) {
+    option = (option + "_RANGE") as TimestampOption;
+  }
+
   return (
     <TimestampAtom
       date={resolvedDate}
       endDate={resolvedEndDate}
-      option={
-        (parentData
-          ? styles.includeTime
-          : styles.includeTime + styles.includeRange) as TimestampOption
-      }
+      option={option}
       locale={i18n.language}
       hideTimeZone
     />
@@ -132,8 +133,8 @@ export const Timestamp: ComponentConfig<{ props: TimestampProps }> = {
       },
     },
     styles: {
-      includeRange: "",
-      includeTime: "DATE",
+      includeRange: false,
+      includeTime: false,
     },
   },
   resolveFields: (data) => {
@@ -144,7 +145,7 @@ export const Timestamp: ComponentConfig<{ props: TimestampProps }> = {
 
     setDeep(timestampFields, "styles.objectFields.includeRange.visible", true);
 
-    if (data.props.styles.includeRange === "_RANGE") {
+    if (data.props.styles.includeRange) {
       return setDeep(
         timestampFields,
         "data.objectFields.endDate.visible",

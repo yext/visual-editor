@@ -111,8 +111,8 @@ export const eventSectionSlots: Migration = {
                         },
                       },
                       styles: {
-                        includeTime: "DATE_TIME",
-                        includeRange: "",
+                        includeTime: true,
+                        includeRange: false,
                       },
                       parentData: constantValueEnabled
                         ? undefined

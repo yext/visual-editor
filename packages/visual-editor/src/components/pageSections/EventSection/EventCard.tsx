@@ -102,8 +102,8 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
               },
             },
             styles: {
-              includeTime: "DATE_TIME",
-              includeRange: "",
+              includeTime: true,
+              includeRange: false,
             },
           } satisfies TimestampProps,
         },
@@ -152,7 +152,6 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
               },
             },
             styles: {
-              displayType: "textAndLink",
               variant: "primary",
             },
             eventName: index !== undefined ? `cta${index}` : undefined,
