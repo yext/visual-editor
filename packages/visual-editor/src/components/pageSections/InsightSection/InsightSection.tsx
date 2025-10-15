@@ -146,13 +146,17 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
             data: {
               field: "",
               constantValueEnabled: true,
-              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+              constantValue: [
+                { id: "InsightCard-1" },
+                { id: "InsightCard-2" },
+                { id: "InsightCard-3" },
+              ],
             },
             slots: {
               CardSlot: [
-                defaultInsightCardSlotData(),
-                defaultInsightCardSlotData(),
-                defaultInsightCardSlotData(),
+                defaultInsightCardSlotData("InsightCard-1"),
+                defaultInsightCardSlotData("InsightCard-2"),
+                defaultInsightCardSlotData("InsightCard-3"),
               ],
             },
           } satisfies InsightCardsWrapperProps,
