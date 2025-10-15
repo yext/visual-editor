@@ -142,7 +142,6 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
                 },
               },
               styles: {
-                displayType: "textAndLink",
                 variant: "primary",
               },
             } satisfies CTAWrapperProps,
