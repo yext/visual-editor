@@ -33,10 +33,10 @@ export {
 } from "./HeroSection.tsx";
 export {
   InsightSection,
-  InsightCardsWrapper,
-  InsightCard,
   type InsightSectionProps,
-} from "./InsightSection.tsx";
+} from "./InsightSection/InsightSection.tsx";
+export { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
+export { InsightCard } from "./InsightSection/InsightCard.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,

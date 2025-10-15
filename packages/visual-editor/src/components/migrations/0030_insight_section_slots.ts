@@ -33,21 +33,6 @@ export const insightSectionSlots: Migration = {
                 streamDocument
               )
             : "";
-          // const resolvedCategory = insight.category
-          //   ? resolveComponentData(
-          //       insight.category,
-          //       streamDocument.locale || "en",
-          //       streamDocument
-          //     )
-          //   : "";
-          // const resolvedDescription = insight.description
-          //   ? resolveComponentData(
-          //       insight.description,
-          //       streamDocument.locale || "en",
-          //       streamDocument
-          //     )
-          //   : "";
-
           return {
             type: "InsightCard",
             props: {

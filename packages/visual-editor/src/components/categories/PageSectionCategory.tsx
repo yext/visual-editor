@@ -15,7 +15,7 @@ import { HeroSection, HeroSectionProps } from "../pageSections/HeroSection.tsx";
 import {
   InsightSection,
   InsightSectionProps,
-} from "../pageSections/InsightSection.tsx";
+} from "../pageSections/InsightSection/InsightSection.tsx";
 import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,
