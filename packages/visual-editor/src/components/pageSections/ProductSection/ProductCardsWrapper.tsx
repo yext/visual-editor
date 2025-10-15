@@ -1,7 +1,5 @@
 import * as React from "react";
 import {
-  YextField,
-  YextEntityField,
   ProductSectionType,
   ComponentFields,
   msg,
@@ -11,46 +9,25 @@ import {
 import {
   ComponentConfig,
   ComponentData,
-  Fields,
   PuckComponent,
   setDeep,
-  Slot,
 } from "@measured/puck";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
+import {
+  CardWrapperType,
+  cardWrapperFields,
+} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   defaultProductCardSlotData,
   ProductCardProps,
 } from "./ProductCard.tsx";
 
-export type ProductCardsWrapperProps = {
-  data: Omit<YextEntityField<ProductSectionType>, "constantValue"> & {
-    // At the wrapper level, the only constant value stored is the puck id
-    // of the ProductCard. The rest of the data is stored in each card.
-    // If id is not provided, a default card will be created with an auto-generated id.
-    constantValue: {
-      id?: string;
-    }[];
-  };
-  slots: {
-    CardSlot: Slot;
-  };
-};
+export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType>;
 
-const productCardsWrapperFields: Fields<ProductCardsWrapperProps> = {
-  data: YextField(msg("fields.products", "Products"), {
-    type: "entityField",
-    filter: {
-      types: [ComponentFields.ProductSection.type],
-    },
-  }),
-  slots: {
-    type: "object",
-    objectFields: {
-      CardSlot: { type: "slot" },
-    },
-    visible: false,
-  },
-};
+const productCardsWrapperFields = cardWrapperFields<ProductCardsWrapperProps>(
+  msg("components.products", "Products"),
+  ComponentFields.ProductSection.type
+);
 
 const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = (
   props
@@ -117,12 +94,13 @@ export const ProductCardsWrapper: ComponentConfig<{
       const updatedCardSlot = [
         ...data.props.slots.CardSlot,
         ...cardsToAdd,
-      ].slice(0, requiredLength);
+      ].slice(0, requiredLength) as ComponentData<ProductCardProps>[];
 
       return setDeep(
         data,
         "props.slots.CardSlot",
         updatedCardSlot.map((card, i) => {
+          card.props.index = i;
           return setDeep(card, "props.parentData", {
             field: data.props.data.field,
             product: resolvedProducts[i],
@@ -138,7 +116,7 @@ export const ProductCardsWrapper: ComponentConfig<{
       // Also, de-duplicate ids to avoid conflicts.
       // Finally, update the card slot and the constantValue object.
       const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }) => {
+      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
         const existingCard = id
           ? (data.props.slots.CardSlot.find(
               (slot) => slot.props.id === id
@@ -164,10 +142,11 @@ export const ProductCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultProductCardSlotData(newId);
+          return defaultProductCardSlotData(newId, i);
         }
 
         newCard = setDeep(newCard, "props.id", newId); // update the id
+        newCard = setDeep(newCard, "props.index", i); // update the index
         newCard = setDeep(newCard, "props.parentData", undefined); // set to constant values
 
         return newCard;

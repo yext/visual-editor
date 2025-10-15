@@ -12,25 +12,25 @@ import {
   ProductStruct,
   deepMerge,
   getDefaultRTF,
+  ImgSizesByBreakpoint,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
-  createUsePuck,
   Fields,
   PuckComponent,
   setDeep,
   Slot,
-  useGetPuck,
+  WithId,
 } from "@measured/puck";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 
-const usePuck = createUsePuck();
-
-export const defaultProductCardSlotData = (id?: string) => {
+export const defaultProductCardSlotData = (id?: string, index?: number) => {
   return {
     type: "ProductCard",
     props: {
       ...(id && { id }),
+      ...(index !== undefined && { index }),
       styles: {
         backgroundColor: backgroundColors.background1.value,
       } satisfies ProductCardProps["styles"],
@@ -143,7 +143,7 @@ export const defaultProductCardSlotData = (id?: string) => {
           },
         ],
       },
-    },
+    } satisfies ProductCardProps,
   };
 };
 
@@ -174,6 +174,9 @@ export type ProductCardProps = {
   conditionalRender?: {
     category?: boolean;
   };
+
+  /** @internal */
+  index?: number;
 };
 
 const ProductCardFields: Fields<ProductCardProps> = {
@@ -209,29 +212,14 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     slotStyles: Record<string, ProductCardProps["styles"]>;
   }>();
 
-  // In editor, use puck hooks to get the slot props
-  let slotsData: ProductCardProps["slots"] | undefined = undefined;
-  let getPuck: ReturnType<typeof useGetPuck>;
-  try {
-    slotsData = usePuck((s) => s.getItemById(props.id)?.props.slots);
-    getPuck = useGetPuck();
-  } catch {
-    // live page, do nothing
-  }
-
-  // Process the slot props into just the shared styles
-  const slotStyles = React.useMemo(() => {
-    const slotNameToStyles = {} as Record<string, any>;
-    Object.entries(slotsData || {}).forEach(([key, value]) => {
-      slotNameToStyles[key] = value[0].props.styles || {};
-    });
-    return slotNameToStyles;
-  }, [slotsData]);
+  const { slotStyles, getPuck, slotProps } = useGetCardSlots<ProductCardProps>(
+    props.id
+  );
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
   React.useEffect(() => {
-    if (!puck.isEditing || !sharedCardProps) {
+    if (!puck.isEditing || !sharedCardProps || !getPuck) {
       return;
     }
 
@@ -245,7 +233,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
 
     const { dispatch, getSelectorForId } = getPuck();
     const selector = getSelectorForId(props.id);
-    if (!selector || !slotsData) {
+    if (!selector || !slotProps) {
       return;
     }
 
@@ -256,7 +244,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       DescriptionSlot: [],
       CTASlot: [],
     };
-    Object.entries(slotsData).forEach(([key, value]) => {
+    Object.entries(slotProps).forEach(([key, value]) => {
       newSlotData[key as keyof ProductCardProps["slots"]] = [
         {
           ...deepMerge(
@@ -292,7 +280,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
   // styles and slotStyles useEffect
   // When the card's shared props or the card's slots' shared props change, update the context
   React.useEffect(() => {
-    if (!puck.isEditing || !slotsData) {
+    if (!puck.isEditing || !slotProps) {
       return;
     }
 
@@ -339,8 +327,9 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   label: msg("slots.productCard", "Product Card"),
   fields: ProductCardFields,
   resolveData: (data) => {
-    const categorySlotProps = data.props.slots.CategorySlot?.[0]
-      ?.props as unknown as BodyTextProps | undefined;
+    const categorySlotProps = data.props.slots.CategorySlot?.[0]?.props as
+      | WithId<BodyTextProps>
+      | undefined;
     const showCategory = Boolean(
       categorySlotProps?.parentData
         ? categorySlotProps.parentData.richText
@@ -357,13 +346,27 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       } satisfies ProductCardProps,
     };
 
+    // Set the image's sizes attribute
+    updatedData = setDeep(updatedData, "props.slots.ImageSlot[0].props.sizes", {
+      base: "calc(100vw - 32px)",
+      md: "calc((maxWidth - 32px) / 2)",
+      lg: "calc((maxWidth - 32px) / 3)",
+    } satisfies ImgSizesByBreakpoint);
+
+    // Set the CTA's event name
+    updatedData = setDeep(
+      updatedData,
+      "props.slots.CTASlot[0].props.eventName",
+      `cta${data.props.index}`
+    );
+
     if (data.props.parentData) {
       const product = data.props.parentData.product;
       const field = data.props.parentData.field;
 
       updatedData = setDeep(
         updatedData,
-        "props.slots.ImageSlot.0.props.parentData",
+        "props.slots.ImageSlot[0].props.parentData",
         {
           field: field,
           image: product.image,
@@ -371,7 +374,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.TitleSlot.0.props.parentData",
+        "props.slots.TitleSlot[0].props.parentData",
         {
           field: field,
           text: product.name as string, // will already be resolved
@@ -379,7 +382,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.CategorySlot.0.props.parentData",
+        "props.slots.CategorySlot[0].props.parentData",
         {
           field: field,
           richText: product.category,
@@ -387,7 +390,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.DescriptionSlot.0.props.parentData",
+        "props.slots.DescriptionSlot[0].props.parentData",
         {
           field: field,
           richText: product.description,
@@ -395,7 +398,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.CTASlot.0.props.parentData",
+        "props.slots.CTASlot[0].props.parentData",
         {
           field: field,
           cta: product.cta,
@@ -406,27 +409,27 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     } else {
       updatedData = setDeep(
         updatedData,
-        "props.slots.ImageSlot.0.props.parentData",
+        "props.slots.ImageSlot[0].props.parentData",
         undefined
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.TitleSlot.0.props.parentData",
+        "props.slots.TitleSlot[0].props.parentData",
         undefined
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.CategorySlot.0.props.parentData",
+        "props.slots.CategorySlot[0].props.parentData",
         undefined
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.DescriptionSlot.0.props.parentData",
+        "props.slots.DescriptionSlot[0].props.parentData",
         undefined
       );
       updatedData = setDeep(
         updatedData,
-        "props.slots.CTASlot.0.props.parentData",
+        "props.slots.CTASlot[0].props.parentData",
         undefined
       );
     }

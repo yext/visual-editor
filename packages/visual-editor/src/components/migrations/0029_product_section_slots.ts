@@ -20,7 +20,7 @@ export const productSectionSlots: Migration = {
       const products = resolveYextEntityField(
         streamDocument,
         props.data.products as YextEntityField<ProductSectionType>,
-        streamDocument.meta?.locale
+        streamDocument?.locale
       )?.products;
 
       const cards =
@@ -66,6 +66,11 @@ export const productSectionSlots: Migration = {
                       styles: {
                         width: 640,
                         aspectRatio: 16 / 9,
+                      },
+                      sizes: {
+                        base: "calc(100vw - 32px)",
+                        md: "calc((maxWidth - 32px) / 2)",
+                        lg: "calc((maxWidth - 32px) / 3)",
                       },
                       parentData: constantValueEnabled
                         ? undefined
@@ -159,6 +164,7 @@ export const productSectionSlots: Migration = {
                         },
                       },
                       styles: { variant: props.styles.cards.ctaVariant },
+                      eventName: `cta${i}`,
                       parentData: constantValueEnabled
                         ? undefined
                         : {

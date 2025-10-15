@@ -1,103 +1,15 @@
-import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { useTranslation } from "react-i18next";
-import {
-  EventSectionType,
-  EventStruct,
-  TranslatableRichText,
-  TranslatableString,
-} from "../../../types/types.ts";
-import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
-import { DateTimeSelector } from "../components/DateTimeSelector.tsx";
-import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import React, { useMemo } from "react";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
+import { ArrayField } from "@measured/puck";
+import { pt } from "../../../utils/i18n/platform.ts";
 
-export const defaultEvent: EventStruct = {
-  image: {
-    url: "https://placehold.co/640x360",
-    height: 360,
-    width: 640,
-  },
-  title: { en: "Event Title", hasLocalizedValue: "true" },
-  description: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
-    hasLocalizedValue: "true",
-  },
-  dateTime: "2022-12-12T14:00:00",
-  cta: {
-    link: "#",
-    label: { en: "Learn More", hasLocalizedValue: "true" },
-    linkType: "URL",
-    ctaType: "textAndLink",
-  },
-};
-
-export const EVENT_SECTION_CONSTANT_CONFIG: CustomField<EventSectionType> = {
-  type: "custom",
-  render: ({
-    onChange,
-    value,
-  }: {
-    value: EventSectionType;
-    onChange: (value: EventSectionType, uiState?: Partial<UiState>) => void;
-  }) => {
-    return (
-      <div className={"ve-mt-4"}>
-        <AutoField
-          field={EventStructArrayField()}
-          value={value.events}
-          onChange={(newValue, uiState) =>
-            onChange({ events: newValue }, uiState)
-          }
-        />
-      </div>
-    );
-  },
-};
-
-const EventStructArrayField = (): ArrayField<EventStruct[]> => {
-  const streamDocument = useDocument();
-
-  const titleField = useMemo(() => {
-    return TranslatableStringField<TranslatableString | undefined>(
-      msg("title", "Title"),
-      { types: ["type.string"] }
-    );
-  }, []);
-
-  const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>(
-      msg("fields.description", "Description")
-    );
-  }, []);
-
-  return {
-    label: pt("arrayField", "Array Field"),
-    type: "array",
-    arrayFields: {
-      image: {
-        ...IMAGE_CONSTANT_CONFIG,
-        label: pt("fields.image", "Image"),
-      },
-      title: titleField,
-      dateTime: DateTimeSelector,
-      description: descriptionField,
-      cta: LINK_ONLY_CTA_CONFIG,
+export const EVENT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
+  type: "array",
+  arrayFields: {
+    id: {
+      type: "text",
+      visible: false,
     },
-    defaultItemProps: defaultEvent,
-    getItemSummary: (item, i): string => {
-      const { i18n } = useTranslation();
-      const translation =
-        item?.title &&
-        resolveComponentData(item.title, i18n.language, streamDocument);
-      if (translation) {
-        return translation;
-      }
-      return pt("event", "Event") + " " + ((i ?? 0) + 1);
-    },
-  };
+  },
+  label: "",
+  getItemSummary: (item, index) =>
+    pt("event", "Event") + " " + ((index ?? 0) + 1),
 };

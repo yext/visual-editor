@@ -91,7 +91,7 @@ function isComplexImageType(
   return "image" in image;
 }
 
-type ImgSizesByBreakpoint = {
+export type ImgSizesByBreakpoint = {
   base: string;
   sm?: string;
   md?: string;
