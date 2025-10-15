@@ -99,8 +99,8 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
               },
             },
             styles: {
-              includeTime: "DATE_TIME",
-              includeRange: "",
+              includeTime: true,
+              includeRange: false,
             },
           } satisfies TimestampProps,
         },
