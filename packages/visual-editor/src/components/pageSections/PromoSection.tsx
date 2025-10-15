@@ -206,17 +206,9 @@ const PromoMedia = ({
         constantValueEnabled={data.promo.constantValueEnabled}
       >
         {data.media === "video" ? (
-          <slots.VideoSlot
-            className={className}
-            style={{ height: "auto" }}
-            allow={[]}
-          />
+          <slots.VideoSlot style={{ height: "auto" }} allow={[]} />
         ) : (
-          <slots.ImageSlot
-            className={className}
-            style={{ height: "auto" }}
-            allow={[]}
-          />
+          <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
         )}
       </EntityField>
     </div>
