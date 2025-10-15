@@ -503,6 +503,8 @@
   "showMore": "Zeigen Sie mehr",
   "siteColors": "Standortfarben",
   "slots": {
+    "insightCard": "Insight-Karte",
+    "insightCards": "Einblickkarten",
     "productCard": "Produktkarte",
     "productCards": "Produktkarten"
   },

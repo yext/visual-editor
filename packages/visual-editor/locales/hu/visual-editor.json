@@ -504,6 +504,8 @@
   "showMore": "Mutasson többet",
   "siteColors": "Helyszínek",
   "slots": {
+    "insightCard": "Insight Card",
+    "insightCards": "Betekintéskártyák",
     "productCard": "Termékkártya",
     "productCards": "Termékkártyák"
   },

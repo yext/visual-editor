@@ -504,6 +504,8 @@
   "showMore": "Visa mer",
   "siteColors": "Platsfärger",
   "slots": {
+    "insightCard": "Insiktskort",
+    "insightCards": "Insiktskort",
     "productCard": "Produktkort",
     "productCards": "Produktkort"
   },

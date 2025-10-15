@@ -504,6 +504,8 @@
   "showMore": "Pokaż więcej",
   "siteColors": "Kolory strony",
   "slots": {
+    "insightCard": "Karta Wglądu",
+    "insightCards": "Karty Wglądu",
     "productCard": "Karta Produktu",
     "productCards": "Karty Produktów"
   },

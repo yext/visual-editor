@@ -505,6 +505,8 @@
   "showMore": "Ukázat více",
   "siteColors": "Barvy webu",
   "slots": {
+    "insightCard": "Přehledová karta",
+    "insightCards": "Karty statistik",
     "productCard": "Karta produktu",
     "productCards": "Karty produktů"
   },

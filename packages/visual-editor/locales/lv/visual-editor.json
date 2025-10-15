@@ -504,6 +504,8 @@
   "showMore": "Parādīt vairāk",
   "siteColors": "Vietnes krāsas",
   "slots": {
+    "insightCard": "Ieskatu karte",
+    "insightCards": "Ieskatu kartes",
     "productCard": "Produktu karte",
     "productCards": "Produktu kartes"
   },

@@ -504,6 +504,8 @@
   "showMore": "Näyttää enemmän",
   "siteColors": "Sivuston värit",
   "slots": {
+    "insightCard": "Oivalluskortti",
+    "insightCards": "Insight-kortit",
     "productCard": "Tuotekortti",
     "productCards": "Tuotekortit"
   },
