@@ -1,5 +1,11 @@
 import React from "react";
-import { createUsePuck, Data, useGetPuck, type History } from "@measured/puck";
+import {
+  createUsePuck,
+  Data,
+  resolveAllData,
+  useGetPuck,
+  type History,
+} from "@measured/puck";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
@@ -19,6 +25,7 @@ import {
   usePlatformTranslation,
   pt,
 } from "../../../utils/i18n/platform.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 const usePuck = createUsePuck();
 
@@ -51,6 +58,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     React.useState<boolean>(false);
   const { i18n } = usePlatformTranslation();
   const getPuck = useGetPuck();
+  const streamDocument = useDocument();
   const histories = usePuck((s) => s.history.histories);
   const index = usePuck((s) => s.history.index);
   const hasFuture = usePuck((s) => s.history.hasFuture);
@@ -61,6 +69,19 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   }, [index, histories, onHistoryChange]);
 
   useEffect(translatePuckSidebars, [i18n.language]);
+
+  useEffect(() => {
+    // Resolve all data and slots when the document changes
+    const resolveData = async () => {
+      const { appState, config, dispatch } = getPuck();
+      const resolvedData = await resolveAllData(appState.data, config, {
+        streamDocument,
+      });
+      dispatch({ type: "setData", data: resolvedData });
+    };
+
+    resolveData();
+  }, [streamDocument.id]);
 
   const buttonText = (() => {
     if (templateMetadata.assignment === "ALL") {

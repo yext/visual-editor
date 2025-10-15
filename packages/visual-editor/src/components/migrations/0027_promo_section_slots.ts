@@ -151,6 +151,11 @@ export const promoSectionSlots: Migration = {
                                 },
                         }
                       : undefined,
+                    sizes: {
+                      base: "calc(100vw - 32px)",
+                      md: "min(width, 450px)",
+                      lg: "width",
+                    },
                   } satisfies ImageWrapperProps,
                 },
               ],
@@ -182,6 +187,7 @@ export const promoSectionSlots: Migration = {
                       },
                     }
                   : undefined,
+                eventName: "cta",
               } satisfies CTAWrapperProps,
             },
           ],

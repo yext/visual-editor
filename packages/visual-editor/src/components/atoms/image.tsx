@@ -103,10 +103,15 @@ export type ImgSizesByBreakpoint = {
 /**
  * Creates an img sizes attribute based on the default Tailwind breakpoints.
  * Replaces `maxWidth` with the current page section max width from the theme.
+ * Replaces `width` with the width parameter.
  * @param sizes - the width of the image at different breakpoints
+ * @param width - the current width prop of the image
  * @returns a string for the sizes attribute of an img tag
  */
-export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
+export const imgSizesHelper = (
+  sizes: ImgSizesByBreakpoint,
+  width?: string
+): string => {
   const streamDocument = useDocument();
 
   let maxWidth = undefined;
@@ -145,7 +150,9 @@ export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
   const updatedBreakpointSizes = Object.fromEntries(
     Object.entries(sizes).map(([key, value]) => [
       key,
-      value.replace("maxWidth", maxWidth || "1440px"),
+      value
+        .replace("maxWidth", maxWidth || "1440px")
+        .replace("width", width || 640 + "px"),
     ])
   );
 

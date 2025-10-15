@@ -42,6 +42,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
         {
           type: "ImageSlot",
           props: {
+            ...(id && { id: `${id}-image` }),
             data: {
               image: {
                 field: "",
@@ -65,6 +66,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
         {
           type: "HeadingTextSlot",
           props: {
+            ...(id && { id: `${id}-title` }),
             data: {
               text: {
                 field: "",
@@ -86,6 +88,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
         {
           type: "Timestamp",
           props: {
+            ...(id && { id: `${id}-timestamp` }),
             data: {
               date: {
                 field: "",
@@ -109,6 +112,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
         {
           type: "BodyTextSlot",
           props: {
+            ...(id && { id: `${id}-description` }),
             data: {
               text: {
                 field: "",
@@ -134,6 +138,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
         {
           type: "CTASlot",
           props: {
+            ...(id && { id: `${id}-cta` }),
             data: {
               entityField: {
                 field: "",
