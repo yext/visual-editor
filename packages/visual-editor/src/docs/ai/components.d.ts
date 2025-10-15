@@ -269,9 +269,11 @@ interface InsightSectionProps {
      */
     backgroundColor?: BackgroundStyle;
   };
-  /**
-   * @internal
-   */
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
+  };
+  /** @internal  */
   analytics: {
     scope?: string;
   };
@@ -280,13 +282,6 @@ interface InsightSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-  /**
-   * The slots for the InsightSection component.
-   */
-  slots: {
-    SectionHeadingSlot: Slot;
-    CardsWrapperSlot: Slot;
-  };
 }
 
 interface NearbyLocationsSectionProps {
@@ -1010,11 +1005,6 @@ type FAQSectionType = {
 /** Corresponds to the different semantic heading levels */
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-/** Data for the InsightSection */
-type InsightSectionType = {
-  insights: Array<InsightStruct>;
-};
-
 /** Data for the PromoSection */
 type PromoSectionType = {
   /**
@@ -1078,28 +1068,6 @@ type FAQStruct = {
   question: TranslatableString;
   /** The answer (visible when the question is clicked) */
   answer: TranslatableRichText;
-};
-
-/** An individual insight for the InsightSection */
-type InsightStruct = {
-  /**
-   * An image representing the insight
-   * @ai Always use ImageType
-   */
-  image?: ImageType | AssetImageType;
-  /** The insight's title */
-  name?: TranslatableString;
-  /**
-   * The insight's category
-   * @ai This should not be more than a few words
-   */
-  category?: TranslatableString;
-  /** A UTC string for the insight's publish time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
-  publishTime?: string;
-  /** The insight's description */
-  description?: TranslatableRichText;
-  /** The insight's CTA */
-  cta: EnhancedTranslatableCTA;
 };
 
 type AssetVideo = {
