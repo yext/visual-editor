@@ -39,6 +39,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
           {
             type: "ImageSlot",
             props: {
+              ...(id && { id: `${id}-image` }),
               data: {
                 image: {
                   field: "",
@@ -61,6 +62,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
           {
             type: "HeadingTextSlot",
             props: {
+              ...(id && { id: `${id}-title` }),
               data: {
                 text: {
                   field: "",
@@ -82,6 +84,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
           {
             type: "BodyTextSlot",
             props: {
+              ...(id && { id: `${id}-category` }),
               data: {
                 text: {
                   field: "",
@@ -102,6 +105,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
           {
             type: "BodyTextSlot",
             props: {
+              ...(id && { id: `${id}-description` }),
               data: {
                 text: {
                   field: "",
@@ -124,6 +128,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
           {
             type: "CTASlot",
             props: {
+              ...(id && { id: `${id}-cta` }),
               data: {
                 entityField: {
                   field: "",
@@ -137,6 +142,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
                 },
               },
               styles: {
+                displayType: "textAndLink",
                 variant: "primary",
               },
             } satisfies CTAWrapperProps,
