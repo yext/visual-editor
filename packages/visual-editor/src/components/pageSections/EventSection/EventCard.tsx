@@ -4,6 +4,7 @@ import {
   Fields,
   PuckComponent,
   Slot,
+  WithId,
   setDeep,
 } from "@measured/puck";
 import {
@@ -385,18 +386,18 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
     },
   },
   resolveData: (data, params) => {
-    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as unknown as
-      | ImageWrapperProps
+    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
+      | WithId<ImageWrapperProps>
       | undefined;
-    const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as unknown as
-      | HeadingTextProps
+    const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
+      | WithId<HeadingTextProps>
       | undefined;
     const dateTimeSlotProps = data.props.slots.DateTimeSlot?.[0]
-      ?.props as unknown as TimestampProps | undefined;
+      ?.props as WithId<TimestampProps | undefined>;
     const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
-      ?.props as unknown as BodyTextProps | undefined;
-    const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as unknown as
-      | CTAWrapperProps
+      ?.props as WithId<BodyTextProps | undefined>;
+    const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
+      | WithId<CTAWrapperProps>
       | undefined;
 
     const showImage = Boolean(
@@ -429,7 +430,9 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
               i18nComponentsInstance.language || "en"
             ))
     );
-    const showDateTime = Boolean(dateTimeSlotProps?.data?.date);
+    const showDateTime = Boolean(
+      dateTimeSlotProps?.parentData?.date || dateTimeSlotProps?.data?.date
+    );
     const showCTA = Boolean(
       ctaSlotProps &&
         (ctaSlotProps.parentData

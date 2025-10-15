@@ -20,6 +20,7 @@ import {
   PuckComponent,
   setDeep,
   Slot,
+  WithId,
 } from "@measured/puck";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
@@ -326,8 +327,9 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   label: msg("slots.productCard", "Product Card"),
   fields: ProductCardFields,
   resolveData: (data) => {
-    const categorySlotProps = data.props.slots.CategorySlot?.[0]
-      ?.props as unknown as BodyTextProps | undefined;
+    const categorySlotProps = data.props.slots.CategorySlot?.[0]?.props as
+      | WithId<BodyTextProps>
+      | undefined;
     const showCategory = Boolean(
       categorySlotProps?.parentData
         ? categorySlotProps.parentData.richText

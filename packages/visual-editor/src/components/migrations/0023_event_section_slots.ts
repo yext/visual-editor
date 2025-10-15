@@ -21,7 +21,7 @@ export const eventSectionSlots: Migration = {
       const events = resolveYextEntityField(
         streamDocument,
         props.data.events as YextEntityField<EventSectionType>,
-        streamDocument.meta?.locale
+        streamDocument?.locale
       )?.events;
 
       const cards =
