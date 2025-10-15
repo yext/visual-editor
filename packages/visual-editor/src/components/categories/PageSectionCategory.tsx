@@ -13,8 +13,8 @@ import {
 } from "../pageSections/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "../pageSections/HeroSection.tsx";
 import {
-  InsightSectionProps,
   InsightSection,
+  InsightSectionProps,
 } from "../pageSections/InsightSection.tsx";
 import {
   NearbyLocationsSection,

@@ -34,6 +34,14 @@ import {
   HeroImage,
   HeroImageProps,
 } from "../contentBlocks/image/HeroImage.tsx";
+import {
+  InsightCardsWrapper,
+  InsightCardsWrapperProps,
+} from "../pageSections/InsightSection/InsightCardsWrapper.tsx";
+import {
+  InsightCard,
+  InsightCardProps,
+} from "../pageSections/InsightSection/InsightCard.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -45,6 +53,8 @@ export interface SlotsCategoryProps {
   HoursStatusSlot: HoursStatusProps;
   HoursTableSlot: HoursTableProps;
   ImageSlot: ImageWrapperProps;
+  InsightCardsWrapper: InsightCardsWrapperProps;
+  InsightCard: InsightCardProps;
   PhoneNumbersSlot: PhoneListProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
@@ -70,6 +80,11 @@ export const SlotsCategoryComponents = {
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
   ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
+  InsightCardsWrapper: {
+    ...InsightCardsWrapper,
+    permissions: lockedPermissions,
+  },
+  InsightCard: { ...InsightCard, permissions: lockedPermissions },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
   ProductCardsWrapper: {
     ...ProductCardsWrapper,

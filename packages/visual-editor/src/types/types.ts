@@ -142,11 +142,6 @@ export type TestimonialStruct = {
   contributionDate?: string;
 };
 
-/** Data for the InsightSection */
-export type InsightSectionType = {
-  insights: Array<InsightStruct>;
-};
-
 /** An individual insight for the InsightSection */
 export type InsightStruct = {
   /**
@@ -167,6 +162,11 @@ export type InsightStruct = {
   description?: TranslatableRichText;
   /** The insight's CTA */
   cta: EnhancedTranslatableCTA;
+};
+
+/** Data for the InsightSection */
+export type InsightSectionType = {
+  insights: Array<InsightStruct>;
 };
 
 /** Data for the TeamSection */
