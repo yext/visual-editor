@@ -13,17 +13,9 @@ import {
   deepMerge,
   getDefaultRTF,
 } from "@yext/visual-editor";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  Slot,
-  createUsePuck,
-  useGetPuck,
-} from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
-
-const usePuck = createUsePuck();
+import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 
 export const defaultInsightCardSlotData = (id?: string) => {
   return {
@@ -38,6 +30,7 @@ export const defaultInsightCardSlotData = (id?: string) => {
           {
             type: "ImageSlot",
             props: {
+              ...(id && { id: `${id}-image` }),
               data: {
                 image: {
                   field: "",
@@ -52,6 +45,11 @@ export const defaultInsightCardSlotData = (id?: string) => {
               styles: {
                 aspectRatio: 1.78,
                 width: 640,
+              },
+              sizes: {
+                base: "calc(100vw - 32px)",
+                md: "calc((maxWidth - 32px) / 2)",
+                lg: "calc((maxWidth - 32px) / 3)",
               },
             } satisfies ImageWrapperProps,
           },
@@ -81,6 +79,7 @@ export const defaultInsightCardSlotData = (id?: string) => {
           {
             type: "BodyTextSlot",
             props: {
+              ...(id && { id: `${id}-category` }),
               data: {
                 text: {
                   field: "",
@@ -101,6 +100,7 @@ export const defaultInsightCardSlotData = (id?: string) => {
           {
             type: "BodyTextSlot",
             props: {
+              ...(id && { id: `${id}-description` }),
               data: {
                 text: {
                   field: "",
@@ -121,28 +121,33 @@ export const defaultInsightCardSlotData = (id?: string) => {
         ],
         PublishTimeSlot: [
           {
-            type: "BodyTextSlot",
+            type: "Timestamp",
             props: {
+              ...(id && { id: `${id}-timestamp` }),
               data: {
-                text: {
+                date: {
                   field: "",
-                  constantValue: {
-                    en: getDefaultRTF("2022-08-02"),
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: "2022-08-02T14:00:00",
+                  constantValueEnabled: true,
+                },
+                endDate: {
+                  field: "",
+                  constantValue: "",
                   constantValueEnabled: true,
                 },
               },
               styles: {
-                variant: "base",
+                includeTime: false,
+                includeRange: false,
               },
-            } satisfies BodyTextProps,
+            },
           },
         ],
         CTASlot: [
           {
             type: "CTASlot",
             props: {
+              ...(id && { id: `${id}-cta` }),
               data: {
                 entityField: {
                   field: "",
@@ -156,6 +161,7 @@ export const defaultInsightCardSlotData = (id?: string) => {
                 },
               },
               styles: { variant: "primary" },
+              eventName: "cta",
             } satisfies CTAWrapperProps,
           },
         ],
@@ -216,21 +222,11 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
     slotStyles: Record<string, InsightCardProps["styles"]>;
   }>();
 
-  let slotsData: InsightCardProps["slots"] | undefined = undefined;
-  let getPuck: ReturnType<typeof useGetPuck> | undefined = undefined;
-  try {
-    slotsData = usePuck((s) => s.getItemById(props.id)?.props.slots);
-    getPuck = useGetPuck();
-  } catch {}
-
-  // Process the slot props into just the shared styles
-  const slotStyles = React.useMemo(() => {
-    const slotNameToStyles = {} as Record<string, any>;
-    Object.entries(slotsData || {}).forEach(([key, value]) => {
-      slotNameToStyles[key] = value[0].props.styles || {};
-    });
-    return slotNameToStyles;
-  }, [slotsData]);
+  const {
+    slotStyles,
+    getPuck,
+    slotProps: slotsData,
+  } = useGetCardSlots<InsightCardProps>(props.id);
 
   React.useEffect(() => {
     if (!props.puck.isEditing || !sharedCardProps) {
@@ -387,9 +383,7 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
 
       data.props.slots.PublishTimeSlot[0].props.parentData = {
         field: `${field}.publishTime`,
-        text: insight.publishTime
-          ? getDefaultRTF(insight.publishTime)
-          : undefined,
+        date: insight.publishTime || undefined,
       };
 
       data.props.slots.CTASlot[0].props.parentData = {

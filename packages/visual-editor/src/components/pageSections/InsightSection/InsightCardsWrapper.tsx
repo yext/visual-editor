@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  YextField,
   YextEntityField,
   InsightSectionType,
   ComponentFields,
@@ -8,10 +7,10 @@ import {
   resolveYextEntityField,
   i18nComponentsInstance,
 } from "@yext/visual-editor";
+import { cardWrapperFields } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   ComponentConfig,
   ComponentData,
-  Fields,
   PuckComponent,
   setDeep,
   Slot,
@@ -33,21 +32,10 @@ export type InsightCardsWrapperProps = {
   };
 };
 
-const insightCardsWrapperFields: Fields<InsightCardsWrapperProps> = {
-  data: YextField(msg("fields.insights", "Insights"), {
-    type: "entityField",
-    filter: {
-      types: [ComponentFields.InsightSection.type],
-    },
-  }),
-  slots: {
-    type: "object",
-    objectFields: {
-      CardSlot: { type: "slot" },
-    },
-    visible: false,
-  },
-};
+const insightCardsWrapperFields = cardWrapperFields<InsightCardsWrapperProps>(
+  msg("fields.insights", "Insights"),
+  ComponentFields.InsightSection.type
+);
 
 const InsightCardsWrapperComponent: PuckComponent<InsightCardsWrapperProps> = (
   props
