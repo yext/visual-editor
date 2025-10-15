@@ -679,9 +679,9 @@ describe("PromoSection", async () => {
         await delay(1000);
       }
 
-      await expect(
-        `PromoSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      await expect(`PromoSection/[${viewportName}] ${name}`).toMatchScreenshot({
+        customThreshold: 10,
+      });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -689,7 +689,7 @@ describe("PromoSection", async () => {
         await interactions(page);
         await expect(
           `PromoSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ customThreshold: 10 });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

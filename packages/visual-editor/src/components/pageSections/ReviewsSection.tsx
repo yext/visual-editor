@@ -15,7 +15,7 @@ import {
   msg,
   PageSection,
   ReviewStars,
-  Timestamp,
+  TimestampAtom,
   TimestampOption,
   useBackground,
   useDocument,
@@ -240,7 +240,7 @@ const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
       <Body variant={"lg"} className="font-bold">
         {author}
       </Body>
-      <Timestamp
+      <TimestampAtom
         date={date}
         option={TimestampOption.DATE}
         hideTimeZone={true}

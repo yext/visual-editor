@@ -175,17 +175,20 @@ interface CoreInfoSectionProps {
 
 interface EventSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: EventData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: EventStyles;
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
   slots: {
     SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
   };
   /** @internal */
   analytics: {
@@ -617,32 +620,25 @@ interface CoreInfoStyles {
   backgroundColor?: BackgroundStyle;
 }
 
-interface EventData {
-  /**
-   * The source of event data, which can be linked to a Yext field or provided as a constant value.
-   * @defaultValue A list of 3 placeholder events.
-   */
-  events: YextEntityField<EventSectionType>;
-}
-
-interface EventStyles {
-  /**
-   * The background color of the section.
-   * @defaultValue Background Color 3
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for all the cards. */
-  cards: {
-    /** The h tag level of each event card's title */
-    headingLevel: HeadingLevel;
-    /** The background color of each event card */
-    backgroundColor?: BackgroundStyle;
-    /** The CTA variant to use in each event card */
-    ctaVariant: CTAVariant;
-    /** Whether to truncate the event description text */
-    truncateDescription: boolean;
-  };
-}
+/**
+ * Applies a theme color as the background of a page section
+ * @ai This value MUST be one of the following
+ * { bgColor: "bg-white", textColor: "text-black" }
+ * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
+ * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ */
+type BackgroundStyle = {
+  /** The tailwind background color class */
+  bgColor: string;
+  /** The tailwind text color class */
+  textColor: string;
+  /** Whether the background color is dark (for adjusting other styles based on background) */
+  isDarkBackground?: boolean;
+};
 
 interface FAQData {
   /**
@@ -818,26 +814,6 @@ interface PhotoGalleryStyles {
   /** Styling options for the gallery images, such as aspect ratio. */
   image: ImageStylingProps;
 }
-
-/**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
- */
-type BackgroundStyle = {
-  /** The tailwind background color class */
-  bgColor: string;
-  /** The tailwind text color class */
-  textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
-  isDarkBackground?: boolean;
-};
 
 interface PromoData {
   /**
@@ -1026,18 +1002,13 @@ type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
 
-/** Data for the EventSection */
-type EventSectionType = {
-  events: Array<EventStruct>;
-};
-
-/** Corresponds to the different semantic heading levels */
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
 /** Data for the FAQSection */
 type FAQSectionType = {
   faqs: Array<FAQStruct>;
 };
+
+/** Corresponds to the different semantic heading levels */
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Data for the InsightSection */
 type InsightSectionType = {
@@ -1099,23 +1070,6 @@ type LocalizedValues = {
 type RichText = {
   html?: string;
   json?: string;
-};
-
-/** An individual event in the EventsSection */
-type EventStruct = {
-  /**
-   * An image representing the event
-   * @ai Always use ImageType
-   */
-  image?: ImageType | AssetImageType;
-  /** The event's title */
-  title?: TranslatableString;
-  /** A UTC string for event's date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
-  dateTime?: string;
-  /** The event's description */
-  description?: TranslatableRichText;
-  /** The event's CTA */
-  cta: EnhancedTranslatableCTA;
 };
 
 /** An individual FAQ */

@@ -25,6 +25,14 @@ import {
   ProductCard,
   ProductCardProps,
 } from "../pageSections/ProductSection/ProductCard.tsx";
+import {
+  EventCardsWrapper,
+  EventCardsWrapperProps,
+} from "../pageSections/EventSection/EventCardsWrapper.tsx";
+import {
+  EventCard,
+  EventCardProps,
+} from "../pageSections/EventSection/EventCard.tsx";
 import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 import {
   HoursStatus,
@@ -34,6 +42,7 @@ import {
   HeroImage,
   HeroImageProps,
 } from "../contentBlocks/image/HeroImage.tsx";
+import { Timestamp, TimestampProps } from "../contentBlocks/Timestamp.tsx";
 import {
   InsightCardsWrapper,
   InsightCardsWrapperProps,
@@ -48,6 +57,8 @@ export interface SlotsCategoryProps {
   BodyTextSlot: BodyTextProps;
   CTASlot: CTAWrapperProps;
   EmailsSlot: EmailsProps;
+  EventCard: EventCardProps;
+  EventCardsWrapper: EventCardsWrapperProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;
@@ -60,6 +71,7 @@ export interface SlotsCategoryProps {
   ProductCard: ProductCardProps;
   ServicesListSlot: TextListProps;
   TextListSlot: TextListProps;
+  Timestamp: TimestampProps;
   VideoSlot: VideoProps;
 }
 
@@ -75,6 +87,8 @@ export const SlotsCategoryComponents = {
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
   CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
+  EventCard: { ...EventCard, permissions: lockedPermissions },
+  EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
@@ -93,6 +107,7 @@ export const SlotsCategoryComponents = {
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
+  Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
 };
 

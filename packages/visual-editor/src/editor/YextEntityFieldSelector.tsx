@@ -44,6 +44,7 @@ import { useTranslation } from "react-i18next";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
+import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
 
 const devLogger = new DevLogger();
 
@@ -103,6 +104,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.address": ADDRESS_CONSTANT_CONFIG,
   "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
+  "type.datetime": DATE_TIME_CONSTANT_CONFIG,
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
   "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,

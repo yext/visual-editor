@@ -9,16 +9,11 @@ import {
   getAnalyticsScopeHash,
   HeadingTextProps,
 } from "@yext/visual-editor";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
+import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 
 export interface ProductSectionProps {
   /**
@@ -165,29 +160,7 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    // Get the section heading level from the SectionHeadingSlot
-    // and pass a semanticLevelOverride into each card's TitleSlot
-
-    const sectionHeadingLevel =
-      data.props.slots.SectionHeadingSlot?.[0]?.props?.styles?.level;
-    const cards: ProductCardsWrapperProps["slots"]["CardSlot"] =
-      data.props.slots.CardsWrapperSlot?.[0]?.props?.slots?.CardSlot;
-    const semanticOverride =
-      sectionHeadingLevel < 6 ? sectionHeadingLevel + 1 : "span";
-
-    if (cards) {
-      data.props.slots.CardsWrapperSlot[0].props.slots.CardSlot = cards.map(
-        (card) => {
-          return setDeep(
-            card,
-            "props.slots.TitleSlot[0].props.styles.semanticLevelOverride",
-            semanticOverride
-          );
-        }
-      );
-    }
-
-    return data;
+    return forwardHeadingLevel(data, "TitleSlot");
   },
   render: (props) => {
     return (

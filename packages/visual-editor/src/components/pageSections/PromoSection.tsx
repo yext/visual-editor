@@ -6,6 +6,7 @@ import {
   PuckComponent,
   setDeep,
   Slot,
+  SlotComponent,
 } from "@measured/puck";
 import {
   PromoSectionType,
@@ -187,8 +188,8 @@ const PromoMedia = ({
   className: string;
   data: PromoData;
   slots: {
-    VideoSlot: React.ElementType;
-    ImageSlot: React.ElementType;
+    VideoSlot: SlotComponent;
+    ImageSlot: SlotComponent;
   };
 }) => {
   const { t } = useTranslation();
@@ -334,6 +335,11 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               aspectRatio: 1.78,
               width: 640,
             },
+            sizes: {
+              base: "calc(100vw - 32px)",
+              md: "min(width, 450px)",
+              lg: "width",
+            },
             className:
               "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
           } satisfies ImageWrapperProps,
@@ -355,6 +361,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               },
             },
             styles: { variant: "primary" },
+            eventName: "cta",
           } satisfies CTAWrapperProps,
         },
       ],

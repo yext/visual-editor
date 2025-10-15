@@ -45,6 +45,9 @@ export interface CTAWrapperProps {
   parentStyles?: {
     classNameFn?: (variant: CTAVariant) => string;
   };
+
+  /** @internal Event name to be used for click analytics */
+  eventName?: string;
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
@@ -80,7 +83,8 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
 
 const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
   const { i18n } = useTranslation();
-  const { data, styles, className, parentData, puck, parentStyles } = props;
+  const { data, styles, className, parentData, puck, parentStyles, eventName } =
+    props;
   const streamDocument = useDocument();
   const cta = parentData
     ? parentData.cta
@@ -116,6 +120,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           presetImageType={cta.presetImageType}
           variant={styles.variant}
           className={combinedClassName}
+          eventName={eventName}
         />
       ) : puck.isEditing ? (
         <div className="h-[50px] min-w-[130px]" />

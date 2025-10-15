@@ -10,7 +10,7 @@ import {
 import {
   EventSection,
   EventSectionProps,
-} from "../pageSections/EventSection.tsx";
+} from "../pageSections/EventSection/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "../pageSections/HeroSection.tsx";
 import {
   InsightSection,
