@@ -84,11 +84,8 @@ export const InsightCardsWrapper: ComponentConfig<{
         currentLength < requiredLength
           ? Array(requiredLength - currentLength)
               .fill(null)
-              .map((_, i) =>
-                defaultInsightCardSlotData(
-                  `InsightCard-${crypto.randomUUID()}`,
-                  i + currentLength
-                )
+              .map(() =>
+                defaultInsightCardSlotData(`InsightCard-${crypto.randomUUID()}`)
               )
           : [];
       const updatedCardSlot = [
@@ -137,8 +134,7 @@ export const InsightCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          const newCardData = defaultInsightCardSlotData(newId, i);
-          return newCardData;
+          return defaultInsightCardSlotData(newId, i);
         }
 
         newCard = setDeep(newCard, "props.id", newId);
