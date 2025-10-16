@@ -253,6 +253,26 @@ const LocatorInternal = ({
         matcher: Matcher.Near,
       },
     };
+    // Update URL with lat, lng, radius, and name if present
+    const value = params.newFilter.value;
+    if (
+      value &&
+      typeof value === "object" &&
+      "lat" in value &&
+      "lng" in value &&
+      "radius" in value
+    ) {
+      const url = new URL(window.location.href);
+      url.searchParams.set("lat", String(value.lat));
+      url.searchParams.set("lng", String(value.lng));
+      url.searchParams.set("radius", String(value.radius));
+      if ("name" in value && value.name) {
+        url.searchParams.set("name", String(value.name));
+      } else {
+        url.searchParams.delete("name");
+      }
+      window.history.replaceState({}, "", url.toString());
+    }
     searchActions.setStaticFilters([locationFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
@@ -264,6 +284,34 @@ const LocatorInternal = ({
     React.useState<SearchState>("not started");
 
   React.useEffect(() => {
+    // On initial load, read lat/lng/radius/name from URL and set filter if present
+    React.useEffect(() => {
+      const url = new URL(window.location.href);
+      const lat = url.searchParams.get("lat");
+      const lng = url.searchParams.get("lng");
+      const radius = url.searchParams.get("radius");
+      const name = url.searchParams.get("name");
+      if (lat && lng && radius) {
+        const locationFilter: SelectableStaticFilter = {
+          displayName: name || "",
+          selected: true,
+          filter: {
+            kind: "fieldValue",
+            fieldId: "builtin.location",
+            value: {
+              lat: parseFloat(lat),
+              lng: parseFloat(lng),
+              radius: parseFloat(radius),
+              ...(name ? { name } : {}),
+            },
+            matcher: Matcher.Near,
+          },
+        };
+        searchActions.setStaticFilters([locationFilter]);
+        searchActions.executeVerticalQuery();
+        setSearchState("loading");
+      }
+    }, []);
     if (!searchLoading && searchState === "loading") {
       setSearchState("complete");
     }
