@@ -39,6 +39,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
           linkType="PHONE"
           variant="link"
           eventName={props.eventName}
+          alwaysHideCaret={true}
         />
       ) : (
         <Body>{formattedPhoneNumber}</Body>

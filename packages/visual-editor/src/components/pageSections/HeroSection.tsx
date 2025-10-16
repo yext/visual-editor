@@ -444,6 +444,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             },
             eventName: "primaryCta",
             styles: {
+              displayType: "textAndLink",
               variant: "primary",
             },
           } satisfies CTAWrapperProps,
@@ -468,6 +469,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
               },
             },
             styles: {
+              displayType: "textAndLink",
               variant: "secondary",
             },
             eventName: "secondaryCta",

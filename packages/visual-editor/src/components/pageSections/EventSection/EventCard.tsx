@@ -152,6 +152,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
               },
             },
             styles: {
+              displayType: "textAndLink",
               variant: "primary",
             },
             eventName: index !== undefined ? `cta${index}` : undefined,

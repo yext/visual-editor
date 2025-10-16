@@ -163,7 +163,10 @@ export const productSectionSlots: Migration = {
                           },
                         },
                       },
-                      styles: { variant: props.styles.cards.ctaVariant },
+                      styles: {
+                        displayType: "textAndLink",
+                        variant: props.styles.cards.ctaVariant,
+                      },
                       eventName: `cta${i}`,
                       parentData: constantValueEnabled
                         ? undefined

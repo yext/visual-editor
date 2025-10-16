@@ -168,9 +168,18 @@ export const promoSectionSlots: Migration = {
                     field,
                     constantValue: constantValue.cta ?? {},
                     constantValueEnabled: constantValueOverride.cta ?? false,
+                    selectedTypes:
+                      constantValue.cta?.ctaType === "getDirections"
+                        ? ["type.coordinate"]
+                        : ["type.cta"],
                   },
                 },
                 styles: {
+                  displayType:
+                    constantValue.cta?.ctaType === "presetImage"
+                      ? "presetImage"
+                      : "textAndLink",
+                  presetImage: constantValue.cta?.presetImageType,
                   variant: ctaVariant,
                 },
                 parentData: !constantValueOverride.cta

@@ -2,6 +2,7 @@ import { ComboboxOptionGroup } from "../internal/puck/ui/Combobox.tsx";
 import { fontSizeOptions } from "../editor/FontSizeSelector.tsx";
 import { spacingOptions } from "../editor/SpacingSelector.tsx";
 import { msg } from "./i18n/platform.ts";
+import { PresetImageType, CTADisplayType } from "../types/types.ts";
 
 const getFontSizeOptions = (includeLargeSizes = true) => {
   return fontSizeOptions(includeLargeSizes).map((option) => {
@@ -279,6 +280,37 @@ const ctaVariantOptions = [
   { label: msg("fields.options.ctaVariant.link", "Link"), value: "link" },
 ];
 
+const ctaDisplayTypeOptions: { label: string; value: CTADisplayType }[] = [
+  {
+    label: msg("fields.options.ctaDisplayType.textAndLink", "Text and Link"),
+    value: "textAndLink",
+  },
+  {
+    label: msg("fields.options.ctaDisplayType.presetImage", "Preset Image"),
+    value: "presetImage",
+  },
+];
+
+const presetImageTypeOptions: {
+  label: string;
+  value: PresetImageType;
+}[] = [
+  { label: msg("presetImages.appStore", "App Store"), value: "app-store" },
+  {
+    label: msg("presetImages.googlePlay", "Google Play"),
+    value: "google-play",
+  },
+  {
+    label: msg("presetImages.galaxyStore", "Galaxy Store"),
+    value: "galaxy-store",
+  },
+  {
+    label: msg("presetImages.appGallery", "App Gallery"),
+    value: "app-gallery",
+  },
+  { label: msg("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
+];
+
 const alignmentOptions = [
   {
     label: msg("fields.options.left", "Left", { context: "direction" }),
@@ -370,6 +402,8 @@ export const ThemeOptions = {
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
   CTA_VARIANT: ctaVariantOptions,
+  CTA_DISPLAY_TYPE: ctaDisplayTypeOptions,
+  PRESET_IMAGE: presetImageTypeOptions,
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
