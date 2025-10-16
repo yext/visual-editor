@@ -440,7 +440,40 @@ const tests: ComponentTest[] = [
                 constantValue: [],
               },
               slots: {
-                CardSlot: [],
+                CardSlot: [
+                  {
+                    type: "InsightCard",
+                    props: {
+                      id: "InsightCard-1",
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-white",
+                          textColor: "text-black",
+                        },
+                      },
+                      slots: {
+                        TitleSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Fresh Flavors Fast",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
