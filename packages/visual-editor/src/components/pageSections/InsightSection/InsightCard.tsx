@@ -328,8 +328,8 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
       className="rounded flex flex-col"
       background={mergedStyles.backgroundColor}
     >
-      <div className="flex flex-col gap-4 p-6 h-full">
-        <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
+      <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
+      <div className="flex flex-col gap-4 p-6 flex-grow">
         <div className="flex flex-col gap-2 flex-grow">
           <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
           <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
