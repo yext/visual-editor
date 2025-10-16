@@ -51,6 +51,14 @@ import {
   InsightCard,
   InsightCardProps,
 } from "../pageSections/InsightSection/InsightCard.tsx";
+import {
+  TeamCardsWrapper,
+  TeamCardsWrapperProps,
+} from "../pageSections/TeamSection/TeamCardsWrapper.tsx";
+import {
+  TeamCard,
+  TeamCardProps,
+} from "../pageSections/TeamSection/TeamCard.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -70,6 +78,8 @@ export interface SlotsCategoryProps {
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
   ServicesListSlot: TextListProps;
+  TeamCard: TeamCardProps;
+  TeamCardsWrapper: TeamCardsWrapperProps;
   TextListSlot: TextListProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
@@ -106,6 +116,8 @@ export const SlotsCategoryComponents = {
   },
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
+  TeamCard: { ...TeamCard, permissions: lockedPermissions },
+  TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },

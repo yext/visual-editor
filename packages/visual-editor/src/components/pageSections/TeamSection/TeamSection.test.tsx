@@ -4,10 +4,12 @@ import {
   axe,
   ComponentTest,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   TeamSection,
+  TeamCardsWrapper,
+  TeamCard,
   migrate,
   migrationRegistry,
   VisualEditorProvider,
@@ -339,11 +341,113 @@ const tests: ComponentTest[] = [
     },
     version: 16,
   },
+  {
+    name: "version 31 props with slot-based structure",
+    document: { c_team: teamData },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "name",
+                  constantValue: {
+                    en: "Meet Our Team",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "TeamCardsWrapper",
+            props: {
+              data: {
+                field: "c_team",
+                constantValueEnabled: false,
+                constantValue: [],
+              },
+              slots: {
+                CardSlot: [],
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 31,
+  },
+  {
+    name: "version 31 props with slot-based structure and constant values",
+    document: { c_team: teamData },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Our Amazing Team",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "TeamCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}, {}, {}],
+              },
+              slots: {
+                CardSlot: [],
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 31,
+  },
 ];
 
 describe("TeamSection", async () => {
   const puckConfig: Config = {
-    components: { TeamSection },
+    components: {
+      TeamSection,
+      TeamCardsWrapper,
+      TeamCard,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
