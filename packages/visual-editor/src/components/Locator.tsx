@@ -200,9 +200,24 @@ const LocatorInternal = ({
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
+  const entityDocument: any = useDocument();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
+
+  const documentIsUndefined = typeof document === "undefined";
+  const iframe = documentIsUndefined
+    ? undefined
+    : (document.getElementById("preview-frame") as HTMLIFrameElement);
+
+  let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
+  if (
+    iframe?.contentDocument &&
+    entityDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+  ) {
+    // If we are in the layout editor, use the non-URL-restricted Mapbox API key
+    mapboxApiKey = entityDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+  }
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
@@ -326,10 +341,41 @@ const LocatorInternal = ({
     let centerCoords = DEFAULT_MAP_CENTER;
     let displayName: string | undefined;
     getUserLocation()
-      .then((location) => {
+      .then(async (location) => {
         centerCoords = [location.coords.longitude, location.coords.latitude];
         setUserLocationRetrieved(true);
-        displayName = t("currentLocation", "Current Location");
+
+        // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
+        try {
+          if (mapboxApiKey) {
+            const lang =
+              (entityDocument.locale as string) ||
+              (typeof navigator !== "undefined"
+                ? navigator.language
+                : undefined) ||
+              "en";
+            const lon = centerCoords[0];
+            const lat = centerCoords[1];
+            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+              lang
+            )}`;
+
+            const res = await fetch(url);
+            if (res.ok) {
+              const data = await res.json();
+              const feature = data.features && data.features[0];
+              displayName = feature?.place_name || undefined;
+            } else {
+              displayName = undefined;
+            }
+          } else {
+            displayName = undefined;
+          }
+        } catch (e) {
+          // If reverse geocoding fails for any reason, leave displayName undefined so no placeholder is shown
+          displayName = undefined;
+          console.error(e);
+        }
       })
       .catch(() => {
         try {
@@ -651,6 +697,13 @@ const LocationCard = React.memo(
         )
       : null;
 
+    // Build a safe tel: href for the phone link. Strip all characters except digits and leading +.
+    const telHref: string | undefined = location.mainPhone
+      ? location.mainPhone.startsWith("tel:")
+        ? location.mainPhone
+        : `tel:${location.mainPhone.replace(/[^\d+]/g, "")}`
+      : undefined;
+
     const googleMapsLink = (() => {
       if (!location.yextDisplayCoordinate) {
         return null;
@@ -697,7 +750,7 @@ const LocationCard = React.memo(
             )}
             {location.mainPhone && (
               <a
-                href={location.mainPhone}
+                href={telHref}
                 onClick={handlePhoneNumberClick}
                 className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
               >
