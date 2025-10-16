@@ -6,13 +6,13 @@ import { Button, ButtonProps } from "./button.js";
 import { themeManagerCn } from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
-import { CTADisplayType, PresetImageType } from "../../types/types";
+import { PresetImageType } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
 
 export type CTAProps = {
   // Core props
   label: React.ReactNode;
-  ctaType?: CTADisplayType | "getDirections";
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
 
   // ctaType specific props
   link?: string;
@@ -66,10 +66,9 @@ const useResolvedCtaProps = (props: CTAProps) => {
         return {
           link: getDirectionsLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
-          label: props.label || t("getDirections", "Get Directions"),
-          ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
+          label: props.label || "Get Directions",
+          ariaLabel: ariaLabel || "Get Directions",
         };
-
       case "presetImage":
         if (!props.presetImageType) {
           return null;
@@ -103,7 +102,11 @@ const useResolvedCtaProps = (props: CTAProps) => {
   const buttonVariant = ctaType === "presetImage" ? "link" : variant;
 
   const showCaret =
-    !alwaysHideCaret && ctaType !== "presetImage" && variant === "link";
+    !alwaysHideCaret &&
+    ctaType !== "presetImage" &&
+    variant === "link" &&
+    resolvedDynamicProps.linkType !== "EMAIL" &&
+    resolvedDynamicProps.linkType !== "PHONE";
 
   const buttonClassName = themeManagerCn(
     "flex",
@@ -127,6 +130,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
 
 export const CTA = (props: CTAProps) => {
   const { eventName, target, variant, ctaType } = props;
+
   const resolvedProps = useResolvedCtaProps(props);
 
   if (!resolvedProps) {
