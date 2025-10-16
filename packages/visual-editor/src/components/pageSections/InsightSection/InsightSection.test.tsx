@@ -452,6 +452,28 @@ const tests: ComponentTest[] = [
                         },
                       },
                       slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/640x360",
+                                    height: 360,
+                                    width: 640,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1.78,
+                                width: 640,
+                              },
+                            },
+                          },
+                        ],
                         TitleSlot: [
                           {
                             type: "HeadingTextSlot",
@@ -464,9 +486,89 @@ const tests: ComponentTest[] = [
                                 },
                               },
                               styles: {
-                                level: 3,
+                                level: 4,
                                 align: "left",
+                                semanticLevelOverride: 3,
                               },
+                            },
+                          },
+                        ],
+                        CategorySlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Blog",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                        DescriptionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue:
+                                    "Discover how Galaxy Grill is redefining fast casual dining.",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                        PublishTimeSlot: [
+                          {
+                            type: "Timestamp",
+                            props: {
+                              data: {
+                                date: {
+                                  field: "",
+                                  constantValue: "2025-01-01T12:00",
+                                  constantValueEnabled: true,
+                                },
+                                endDate: {
+                                  field: "",
+                                  constantValue: "",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                includeTime: false,
+                                includeRange: false,
+                              },
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "Read Now",
+                                    link: "https://yext.com",
+                                    linkType: "URL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "primary" },
+                              eventName: "cta0",
                             },
                           },
                         ],
