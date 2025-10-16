@@ -112,8 +112,7 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Få veibeskrivelse",
-    "presetImage": "Forhåndsinnstilt bilde",
-    "textAndLink": "Tekst og lenke"
+    "link": "Link"
   },
   "currentLocation": "Nåværende plassering",
   "customSearchArea": "Tilpasset søkeområde",
@@ -173,6 +172,7 @@
     "destinationURL": "Destinasjonsadressen",
     "direction": "Retning",
     "directoryRootLinkLabel": "Directory Root Link Label",
+    "displayType": "Visningstype",
     "email": "E -post",
     "emailList": "E -postliste",
     "emails": "E -post",
@@ -254,6 +254,10 @@
       "center_direction": "Sentrum",
       "classic": "Klassisk",
       "compact": "Kompakt",
+      "ctaDisplayType": {
+        "presetImage": "Forhåndsinnstilt bilde",
+        "textAndLink": "Tekst og lenke"
+      },
       "ctaVariant": {
         "link": "Lenke",
         "primary": "Primær",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Telefonnummerformat",
     "phoneNumbers": "Telefonnumre",
     "pinterestLink": "Pinterest Link",
+    "presetImage": "Forhåndsinnstilt bilde",
     "presetImageType": "Forhåndsinnstilt bildetype",
     "primaryCTA": "Primær CTA",
     "primaryCTAVariant": "Primær CTA -variant",

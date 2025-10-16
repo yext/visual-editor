@@ -111,9 +111,8 @@
   "coreInfoSection": "Alapvető információ szakasz",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Szerezzen útmutatásokat",
-    "presetImage": "Előre beállított kép",
-    "textAndLink": "Szöveg és link"
+    "getDirections": "Útvonaltervezés",
+    "link": "Link"
   },
   "currentLocation": "Aktuális hely",
   "customSearchArea": "Egyedi keresési terület",
@@ -173,6 +172,7 @@
     "destinationURL": "Cél URL",
     "direction": "Irány",
     "directoryRootLinkLabel": "Directory Root Link címke",
+    "displayType": "Kijelző típusa",
     "email": "Email",
     "emailList": "E -mail lista",
     "emails": "E -mailek",
@@ -254,6 +254,10 @@
       "center_direction": "Központ",
       "classic": "Klasszikus",
       "compact": "Kompakt",
+      "ctaDisplayType": {
+        "presetImage": "Előre beállított kép",
+        "textAndLink": "Szöveg és link"
+      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Elsődleges",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Telefonszám formátuma",
     "phoneNumbers": "Telefonszámok",
     "pinterestLink": "Pinterest link",
+    "presetImage": "Előre beállított kép",
     "presetImageType": "Előre beállított képtípus",
     "primaryCTA": "Elsődleges CTA",
     "primaryCTAVariant": "Elsődleges CTA -változat",

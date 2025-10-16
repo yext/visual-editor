@@ -111,9 +111,8 @@
   "coreInfoSection": "Kärninfo -sektionen",
   "cta": "Cta",
   "ctaTypes": {
-    "getDirections": "Få vägbeskrivning",
-    "presetImage": "Förinställning",
-    "textAndLink": "Text & länk"
+    "getDirections": "Få vägbeskrivningar",
+    "link": "Länk"
   },
   "currentLocation": "Nuvarande plats",
   "customSearchArea": "Anpassad sökområde",
@@ -173,6 +172,7 @@
     "destinationURL": "Destinationsadress",
     "direction": "Riktning",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
+    "displayType": "Visningstyp",
     "email": "E-post",
     "emailList": "E -postlista",
     "emails": "E -postmeddelanden",
@@ -254,6 +254,10 @@
       "center_direction": "Center",
       "classic": "Klassisk",
       "compact": "Kompakt",
+      "ctaDisplayType": {
+        "presetImage": "Förinställd bild",
+        "textAndLink": "Text och länk"
+      },
       "ctaVariant": {
         "link": "Länk",
         "primary": "Primär",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Telefonnummerformat",
     "phoneNumbers": "Telefonnummer",
     "pinterestLink": "Pinterestlänk",
+    "presetImage": "Förinställd bild",
     "presetImageType": "Förinställd bildtyp",
     "primaryCTA": "Primär CTA",
     "primaryCTAVariant": "Primär CTA -variant",

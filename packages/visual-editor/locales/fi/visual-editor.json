@@ -112,8 +112,7 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Hanki reittiohjeet",
-    "presetImage": "Esiasetettu kuva",
-    "textAndLink": "Teksti ja linkki"
+    "link": "Linkki"
   },
   "currentLocation": "Nykyinen sijainti",
   "customSearchArea": "Mukautettu hakualue",
@@ -173,6 +172,7 @@
     "destinationURL": "Kohde -URL -osoite",
     "direction": "Suunta",
     "directoryRootLinkLabel": "Hakemistojuurilinkin tarra",
+    "displayType": "Näytön tyyppi",
     "email": "Sähköposti",
     "emailList": "Sähköpostiluettelo",
     "emails": "Sähköpostit",
@@ -254,6 +254,10 @@
       "center_direction": "Keskusta",
       "classic": "Klassinen",
       "compact": "Kompakti",
+      "ctaDisplayType": {
+        "presetImage": "Esiasetettu kuva",
+        "textAndLink": "Teksti ja linkki"
+      },
       "ctaVariant": {
         "link": "Linkki",
         "primary": "Ensisijainen",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Puhelinnumeromuoto",
     "phoneNumbers": "Puhelinnumerot",
     "pinterestLink": "Pinterest -linkki",
+    "presetImage": "Esiasetettu kuva",
     "presetImageType": "Esiasetettu kuvatyyppi",
     "primaryCTA": "Ensisijainen CTA",
     "primaryCTAVariant": "Ensisijainen CTA -variantti",

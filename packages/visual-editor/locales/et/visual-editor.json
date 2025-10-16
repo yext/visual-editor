@@ -111,9 +111,8 @@
   "coreInfoSection": "Põhiteabe jaotis",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Hankige juhiseid",
-    "presetImage": "Eelseade",
-    "textAndLink": "Tekst ja link"
+    "getDirections": "Hankige juhised",
+    "link": "Link"
   },
   "currentLocation": "Praegune asukoht",
   "customSearchArea": "Kohandatud otsinguala",
@@ -173,6 +172,7 @@
     "destinationURL": "Sihtkoha URL",
     "direction": "Suund",
     "directoryRootLinkLabel": "Kataloogi juurte lingi silt",
+    "displayType": "Kuva tüüp",
     "email": "E -kiri",
     "emailList": "E -posti nimekiri",
     "emails": "E -kirjad",
@@ -254,6 +254,10 @@
       "center_direction": "Keskus",
       "classic": "Klassikaline",
       "compact": "Kompaktne",
+      "ctaDisplayType": {
+        "presetImage": "Eelseadistatud pilt",
+        "textAndLink": "Tekst ja link"
+      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Alg-",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Telefoninumbri vorming",
     "phoneNumbers": "Telefoninumbrid",
     "pinterestLink": "Pinterest Link",
+    "presetImage": "Eelseadistatud pilt",
     "presetImageType": "Eelseadistatud pildi tüüp",
     "primaryCTA": "Esmane CTA",
     "primaryCTAVariant": "Esmane CTA variant",

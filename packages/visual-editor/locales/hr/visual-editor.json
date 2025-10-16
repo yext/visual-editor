@@ -111,9 +111,8 @@
   "coreInfoSection": "Odjeljak jezgrenih informacija",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Dobiti upute",
-    "presetImage": "Unaprijed postavljena slika",
-    "textAndLink": "Tekst i veza"
+    "getDirections": "Preuzmite upute",
+    "link": "Link"
   },
   "currentLocation": "Trenutno mjesto",
   "customSearchArea": "Područje prilagođenog pretraživanja",
@@ -173,6 +172,7 @@
     "destinationURL": "URL odredišta",
     "direction": "Smjer",
     "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
+    "displayType": "Vrsta zaslona",
     "email": "E -pošta",
     "emailList": "Popis e -pošte",
     "emails": "E -mailovi",
@@ -254,6 +254,10 @@
       "center_direction": "Centar",
       "classic": "Klasičan",
       "compact": "Kompaktan",
+      "ctaDisplayType": {
+        "presetImage": "Unaprijed postavljena slika",
+        "textAndLink": "Tekst i veza"
+      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Osnovan",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Format telefonskog broja",
     "phoneNumbers": "Telefonski brojevi",
     "pinterestLink": "Pinterest veza",
+    "presetImage": "Unaprijed postavljena slika",
     "presetImageType": "Unaprijed postavljena vrsta slike",
     "primaryCTA": "Primarni CTA",
     "primaryCTAVariant": "Primarna CTA varijanta",

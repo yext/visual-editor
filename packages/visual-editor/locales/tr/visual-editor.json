@@ -111,9 +111,8 @@
   "coreInfoSection": "Çekirdek Bilgi Bölümü",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Yol tarifi alın",
-    "presetImage": "Önceden ayarlanmış resim",
-    "textAndLink": "Metin ve Bağlantı"
+    "getDirections": "Yol Tarifi Al",
+    "link": "Bağlantı"
   },
   "currentLocation": "Mevcut Konum",
   "customSearchArea": "Özel arama alanı",
@@ -173,6 +172,7 @@
     "destinationURL": "Hedef URL",
     "direction": "Yön",
     "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
+    "displayType": "Ekran Tipi",
     "email": "E -posta",
     "emailList": "E -posta Listesi",
     "emails": "E -postalar",
@@ -254,6 +254,10 @@
       "center_direction": "Merkez",
       "classic": "Klasik",
       "compact": "Kompakt",
+      "ctaDisplayType": {
+        "presetImage": "Önceden Ayarlanmış Görüntü",
+        "textAndLink": "Metin ve Bağlantı"
+      },
       "ctaVariant": {
         "link": "Bağlantı",
         "primary": "Öncelik",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Telefon numarası biçimi",
     "phoneNumbers": "Telefon numaraları",
     "pinterestLink": "Pinterest bağlantısı",
+    "presetImage": "Önceden Ayarlanmış Görüntü",
     "presetImageType": "Önceden ayarlanmış görüntü türü",
     "primaryCTA": "Birincil CTA",
     "primaryCTAVariant": "Birincil CTA varyantı",

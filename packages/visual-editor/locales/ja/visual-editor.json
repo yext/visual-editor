@@ -111,9 +111,8 @@
   "coreInfoSection": "コア情報セクション",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "道順を取得します",
-    "presetImage": "プリセット画像",
-    "textAndLink": "テキストとリンク"
+    "getDirections": "道順を調べる",
+    "link": "リンク"
   },
   "currentLocation": "現在の場所",
   "customSearchArea": "カスタム検索領域",
@@ -173,6 +172,7 @@
     "destinationURL": "宛先URL",
     "direction": "方向",
     "directoryRootLinkLabel": "ディレクトリルートリンクラベル",
+    "displayType": "表示タイプ",
     "email": "メール",
     "emailList": "メーリングリスト",
     "emails": "メール",
@@ -254,6 +254,10 @@
       "center_direction": "センター",
       "classic": "クラシック",
       "compact": "コンパクト",
+      "ctaDisplayType": {
+        "presetImage": "プリセット画像",
+        "textAndLink": "テキストとリンク"
+      },
       "ctaVariant": {
         "link": "リンク",
         "primary": "主要な",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "電話番号形式",
     "phoneNumbers": "電話番号",
     "pinterestLink": "Pinterestリンク",
+    "presetImage": "プリセット画像",
     "presetImageType": "プリセット画像タイプ",
     "primaryCTA": "プライマリCTA",
     "primaryCTAVariant": "プライマリCTAバリアント",

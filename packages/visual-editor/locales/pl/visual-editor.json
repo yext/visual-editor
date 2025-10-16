@@ -112,8 +112,7 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Uzyskaj wskazówki",
-    "presetImage": "Wstępnie ustawione obraz",
-    "textAndLink": "Tekst i link"
+    "link": "Połączyć"
   },
   "currentLocation": "Aktualna lokalizacja",
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
@@ -173,6 +172,7 @@
     "destinationURL": "URL docelowego",
     "direction": "Kierunek",
     "directoryRootLinkLabel": "Director Count Link",
+    "displayType": "Typ wyświetlacza",
     "email": "E-mail",
     "emailList": "Lista e -mail",
     "emails": "E -maile",
@@ -254,6 +254,10 @@
       "center_direction": "Środkowy",
       "classic": "Klasyczny",
       "compact": "Kompaktowy",
+      "ctaDisplayType": {
+        "presetImage": "Wstępnie ustawiony obraz",
+        "textAndLink": "Tekst i link"
+      },
       "ctaVariant": {
         "link": "Połączyć",
         "primary": "Podstawowy",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Format numeru telefonu",
     "phoneNumbers": "Numery telefonów",
     "pinterestLink": "Pinterest Link",
+    "presetImage": "Wstępnie ustawiony obraz",
     "presetImageType": "Postanowiony typ obrazu",
     "primaryCTA": "Podstawowy CTA",
     "primaryCTAVariant": "Pierwotny wariant CTA",

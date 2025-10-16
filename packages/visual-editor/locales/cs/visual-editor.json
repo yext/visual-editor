@@ -111,9 +111,8 @@
   "coreInfoSection": "Sekce hlavních informací",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Získejte pokyny",
-    "presetImage": "Přednastavený obrázek",
-    "textAndLink": "Text a odkaz"
+    "getDirections": "Získejte trasu",
+    "link": "Odkaz"
   },
   "currentLocation": "Aktuální umístění",
   "customSearchArea": "Vlastní vyhledávací oblast",
@@ -174,6 +173,7 @@
     "destinationURL": "Cílová adresa URL",
     "direction": "Směr",
     "directoryRootLinkLabel": "Štítek kořenového odkazu na adresář",
+    "displayType": "Typ zobrazení",
     "email": "E-mail",
     "emailList": "Seznam e -mailů",
     "emails": "E -maily",
@@ -255,6 +255,10 @@
       "center_direction": "Centrum",
       "classic": "Klasický",
       "compact": "Kompaktní",
+      "ctaDisplayType": {
+        "presetImage": "Přednastavený obrázek",
+        "textAndLink": "Text a odkaz"
+      },
       "ctaVariant": {
         "link": "Odkaz",
         "primary": "Primární",
@@ -322,6 +326,7 @@
     "phoneNumberFormat": "Formát telefonního čísla",
     "phoneNumbers": "Telefonní čísla",
     "pinterestLink": "Pinterest Link",
+    "presetImage": "Přednastavený obrázek",
     "presetImageType": "Přednastavený typ obrazu",
     "primaryCTA": "Primární CTA",
     "primaryCTAVariant": "Primární varianta CTA",

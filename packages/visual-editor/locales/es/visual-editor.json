@@ -110,9 +110,8 @@
   "coreInfoSection": "Sección de información central",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Obtener instrucciones",
-    "presetImage": "Imagen preestablecida",
-    "textAndLink": "Texto y enlace"
+    "getDirections": "Obtener direcciones",
+    "link": "Enlace"
   },
   "currentLocation": "Ubicación actual",
   "customSearchArea": "Área de búsqueda personalizada",
@@ -172,6 +171,7 @@
     "destinationURL": "URL de destino",
     "direction": "Dirección",
     "directoryRootLinkLabel": "Etiqueta de enlace de raíz del directorio",
+    "displayType": "Tipo de pantalla",
     "email": "Correo electrónico",
     "emailList": "Lista de correo electrónico",
     "emails": "Correos electrónicos",
@@ -253,6 +253,10 @@
       "center_direction": "Centro",
       "classic": "Clásico",
       "compact": "Compacto",
+      "ctaDisplayType": {
+        "presetImage": "Imagen preestablecida",
+        "textAndLink": "Texto y enlace"
+      },
       "ctaVariant": {
         "link": "Enlace",
         "primary": "Primario",
@@ -320,6 +324,7 @@
     "phoneNumberFormat": "Formato de número de teléfono",
     "phoneNumbers": "Números de teléfono",
     "pinterestLink": "Enlace Pinterest",
+    "presetImage": "Imagen preestablecida",
     "presetImageType": "Tipo de imagen preestablecido",
     "primaryCTA": "CTA primario",
     "primaryCTAVariant": "Variante de CTA primaria",

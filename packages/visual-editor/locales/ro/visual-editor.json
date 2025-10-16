@@ -112,8 +112,7 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Obțineți indicații",
-    "presetImage": "Imagine prestabilită",
-    "textAndLink": "Text și link"
+    "link": "Legătură"
   },
   "currentLocation": "Locația curentă",
   "customSearchArea": "Zona de căutare personalizată",
@@ -173,6 +172,7 @@
     "destinationURL": "URL de destinație",
     "direction": "Direcţie",
     "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
+    "displayType": "Tip de afișare",
     "email": "E-mail",
     "emailList": "Lista de e -mailuri",
     "emails": "E -mailuri",
@@ -254,6 +254,10 @@
       "center_direction": "Centru",
       "classic": "Clasic",
       "compact": "Compact",
+      "ctaDisplayType": {
+        "presetImage": "Imagine prestabilită",
+        "textAndLink": "Text și link"
+      },
       "ctaVariant": {
         "link": "Legătură",
         "primary": "Primar",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Formatul numărului de telefon",
     "phoneNumbers": "Numere de telefon",
     "pinterestLink": "Link Pinterest",
+    "presetImage": "Imagine prestabilită",
     "presetImageType": "Tipul de imagine prestabilit",
     "primaryCTA": "CTA primară",
     "primaryCTAVariant": "Varianta CTA primară",
