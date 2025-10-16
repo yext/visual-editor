@@ -1,3 +1,9 @@
+#### 0.0.62 (2025-10-16)
+
+##### Bug Fixes
+
+- locator phone number and search input ([#818](https://github.com/yext/visual-editor/pull/818)) ([e4b3fb09](https://github.com/yext/visual-editor/commit/e4b3fb09e378c850763d38037237ecf0b4aaaf3f))
+
 #### 0.0.61 (2025-10-10)
 
 ##### New Features
