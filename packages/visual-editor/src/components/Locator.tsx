@@ -215,7 +215,7 @@ const LocatorInternal = ({
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
-  const entityDocument: any = useDocument();
+  const streamDocument = useDocument();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -225,13 +225,13 @@ const LocatorInternal = ({
       ? undefined
       : (document.getElementById("preview-frame") as HTMLIFrameElement);
 
-  let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
+  let mapboxApiKey = streamDocument._env?.YEXT_MAPBOX_API_KEY;
   if (
     iframe?.contentDocument &&
-    entityDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+    streamDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
   ) {
     // If we are in the layout editor, use the non-URL-restricted Mapbox API key
-    mapboxApiKey = entityDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+    mapboxApiKey = streamDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
   }
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
@@ -364,7 +364,7 @@ const LocatorInternal = ({
         try {
           if (mapboxApiKey) {
             const lang =
-              (entityDocument.locale as string) ||
+              (streamDocument.locale as string) ||
               (typeof navigator !== "undefined"
                 ? navigator.language
                 : undefined) ||
