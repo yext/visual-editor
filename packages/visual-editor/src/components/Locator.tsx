@@ -64,6 +64,21 @@ const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New Yor
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 const HOURS_FIELD = "builtin.hours";
 
+// Keep only digits and at most one leading plus for tel: links.
+// If the input already starts with "tel:", return it as-is.
+function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
+  if (!rawPhone) {
+    return undefined;
+  }
+  if (rawPhone.startsWith("tel:")) {
+    return rawPhone;
+  }
+
+  // Remove any '+' that is not the leading character and strip non-digits.
+  const cleaned = rawPhone.replace(/(?!^\+)\+|[^\d+]/g, "");
+  return `tel:${cleaned}`;
+}
+
 export interface LocatorProps {
   /**
    * The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.
@@ -200,9 +215,24 @@ const LocatorInternal = ({
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
+  const streamDocument = useDocument();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
+
+  const iframe =
+    typeof document === "undefined"
+      ? undefined
+      : (document.getElementById("preview-frame") as HTMLIFrameElement);
+
+  let mapboxApiKey = streamDocument._env?.YEXT_MAPBOX_API_KEY;
+  if (
+    iframe?.contentDocument &&
+    streamDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+  ) {
+    // If we are in the layout editor, use the non-URL-restricted Mapbox API key
+    mapboxApiKey = streamDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+  }
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
@@ -326,10 +356,35 @@ const LocatorInternal = ({
     let centerCoords = DEFAULT_MAP_CENTER;
     let displayName: string | undefined;
     getUserLocation()
-      .then((location) => {
+      .then(async (location) => {
         centerCoords = [location.coords.longitude, location.coords.latitude];
         setUserLocationRetrieved(true);
-        displayName = t("currentLocation", "Current Location");
+
+        // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
+        try {
+          if (mapboxApiKey) {
+            const lang =
+              (streamDocument.locale as string) ||
+              (typeof navigator !== "undefined"
+                ? navigator.language
+                : undefined) ||
+              "en";
+            const lon = centerCoords[0];
+            const lat = centerCoords[1];
+            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+              lang
+            )}`;
+
+            const res = await fetch(url);
+            if (res.ok) {
+              const data = await res.json();
+              const feature = data.features && data.features[0];
+              displayName = feature?.place_name || undefined;
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
       })
       .catch(() => {
         try {
@@ -651,6 +706,8 @@ const LocationCard = React.memo(
         )
       : null;
 
+    const telHref = sanitizePhoneForTelHref(location.mainPhone);
+
     const googleMapsLink = (() => {
       if (!location.yextDisplayCoordinate) {
         return null;
@@ -697,7 +754,7 @@ const LocationCard = React.memo(
             )}
             {location.mainPhone && (
               <a
-                href={location.mainPhone}
+                href={telHref}
                 onClick={handlePhoneNumberClick}
                 className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
               >
