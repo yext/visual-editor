@@ -67,18 +67,16 @@ const HOURS_FIELD = "builtin.hours";
 // Keep only digits and at most one leading plus for tel: links.
 // If the input already starts with "tel:", return it as-is.
 function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
-  if (!rawPhone) return undefined;
-  if (rawPhone.startsWith("tel:")) return rawPhone;
+  if (!rawPhone) {
+    return undefined;
+  }
+  if (rawPhone.startsWith("tel:")) {
+    return rawPhone;
+  }
 
-  // Strip everything except digits and plus signs
-  let cleaned = rawPhone.replace(/[^\d+]/g, "");
-
-  // If there's a leading '+', keep it and remove any other '+' characters from the rest;
-  // otherwise remove all plus signs. Do the replace of extra '+' only once on the rest.
-  const hasPlus = cleaned.startsWith("+");
-  const phoneWithoutLeadingPlus = hasPlus ? cleaned.slice(1) : cleaned;
-  const phoneWithDigitsOnly = phoneWithoutLeadingPlus.replace(/\+/g, "");
-  return `tel:${hasPlus ? "+" : ""}${phoneWithDigitsOnly}`;
+  // Remove any '+' that is not the leading character and strip non-digits.
+  const cleaned = rawPhone.replace(/(?!^\+)\+|[^\d+]/g, "");
+  return `tel:${cleaned}`;
 }
 
 export interface LocatorProps {
