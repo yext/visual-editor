@@ -64,6 +64,23 @@ const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New Yor
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 const HOURS_FIELD = "builtin.hours";
 
+// Keep only digits and at most one leading plus for tel: links.
+// If the input already starts with "tel:", return it as-is.
+function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
+  if (!rawPhone) return undefined;
+  if (rawPhone.startsWith("tel:")) return rawPhone;
+
+  // Strip everything except digits and plus signs
+  let cleaned = rawPhone.replace(/[^\d+]/g, "");
+
+  // If there's a leading '+', keep it and remove any other '+' characters from the rest;
+  // otherwise remove all plus signs. Do the replace of extra '+' only once on the rest.
+  const hasPlus = cleaned.startsWith("+");
+  const phoneWithoutLeadingPlus = hasPlus ? cleaned.slice(1) : cleaned;
+  const phoneWithDigitsOnly = phoneWithoutLeadingPlus.replace(/\+/g, "");
+  return `tel:${hasPlus ? "+" : ""}${phoneWithDigitsOnly}`;
+}
+
 export interface LocatorProps {
   /**
    * The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.
@@ -205,10 +222,10 @@ const LocatorInternal = ({
     (state) => state.vertical.resultsCount || 0
   );
 
-  const documentIsUndefined = typeof document === "undefined";
-  const iframe = documentIsUndefined
-    ? undefined
-    : (document.getElementById("preview-frame") as HTMLIFrameElement);
+  const iframe =
+    typeof document === "undefined"
+      ? undefined
+      : (document.getElementById("preview-frame") as HTMLIFrameElement);
 
   let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
   if (
@@ -365,15 +382,9 @@ const LocatorInternal = ({
               const data = await res.json();
               const feature = data.features && data.features[0];
               displayName = feature?.place_name || undefined;
-            } else {
-              displayName = undefined;
             }
-          } else {
-            displayName = undefined;
           }
         } catch (e) {
-          // If reverse geocoding fails for any reason, leave displayName undefined so no placeholder is shown
-          displayName = undefined;
           console.error(e);
         }
       })
@@ -697,12 +708,7 @@ const LocationCard = React.memo(
         )
       : null;
 
-    // Build a safe tel: href for the phone link. Strip all characters except digits and leading +.
-    const telHref: string | undefined = location.mainPhone
-      ? location.mainPhone.startsWith("tel:")
-        ? location.mainPhone
-        : `tel:${location.mainPhone.replace(/[^\d+]/g, "")}`
-      : undefined;
+    const telHref = sanitizePhoneForTelHref(location.mainPhone);
 
     const googleMapsLink = (() => {
       if (!location.yextDisplayCoordinate) {
