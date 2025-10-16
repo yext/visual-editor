@@ -1,19 +1,20 @@
 import * as React from "react";
 import {
-  YextEntityField,
   InsightSectionType,
   ComponentFields,
   msg,
   resolveYextEntityField,
   i18nComponentsInstance,
 } from "@yext/visual-editor";
-import { cardWrapperFields } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
+import {
+  cardWrapperFields,
+  CardWrapperType,
+} from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import {
   ComponentConfig,
   ComponentData,
   PuckComponent,
   setDeep,
-  Slot,
 } from "@measured/puck";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
@@ -21,16 +22,7 @@ import {
   InsightCardProps,
 } from "./InsightCard.tsx";
 
-export type InsightCardsWrapperProps = {
-  data: Omit<YextEntityField<InsightSectionType>, "constantValue"> & {
-    constantValue: {
-      id?: string;
-    }[];
-  };
-  slots: {
-    CardSlot: Slot;
-  };
-};
+export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType>;
 
 const insightCardsWrapperFields = cardWrapperFields<InsightCardsWrapperProps>(
   msg("fields.insights", "Insights"),
@@ -92,8 +84,11 @@ export const InsightCardsWrapper: ComponentConfig<{
         currentLength < requiredLength
           ? Array(requiredLength - currentLength)
               .fill(null)
-              .map(() =>
-                defaultInsightCardSlotData(`InsightCard-${crypto.randomUUID()}`)
+              .map((_, i) =>
+                defaultInsightCardSlotData(
+                  `InsightCard-${crypto.randomUUID()}`,
+                  i + currentLength
+                )
               )
           : [];
       const updatedCardSlot = [
@@ -104,17 +99,21 @@ export const InsightCardsWrapper: ComponentConfig<{
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            insight: resolvedInsights[i],
-          } satisfies InsightCardProps["parentData"]);
-        })
+        updatedCardSlot
+          .map((card, i) => {
+            return setDeep(card, "props.index", i);
+          })
+          .map((card, i) => {
+            return setDeep(card, "props.parentData", {
+              field: data.props.data.field,
+              insight: resolvedInsights[i],
+            } satisfies InsightCardProps["parentData"]);
+          })
       );
     } else {
       let updatedData = data;
       const inUseIds = new Set<string>();
-      const newSlots = data.props.data.constantValue.map(({ id }) => {
+      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
         const existingCard = id
           ? (data.props.slots.CardSlot.find(
               (slot) => slot.props.id === id
@@ -138,10 +137,12 @@ export const InsightCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultInsightCardSlotData(newId);
+          const newCardData = defaultInsightCardSlotData(newId, i);
+          return newCardData;
         }
 
         newCard = setDeep(newCard, "props.id", newId);
+        newCard = setDeep(newCard, "props.index", i);
         newCard = setDeep(newCard, "props.parentData", undefined);
 
         return newCard;

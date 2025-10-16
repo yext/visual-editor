@@ -11,8 +11,9 @@ import {
   migrate,
   migrationRegistry,
   VisualEditorProvider,
+  SlotsCategoryComponents,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const insightsData = {
@@ -940,7 +941,7 @@ const tests: ComponentTest[] = [
 
 describe("InsightSection", async () => {
   const puckConfig: Config = {
-    components: { InsightSection },
+    components: { InsightSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -957,7 +958,7 @@ describe("InsightSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -975,6 +976,10 @@ describe("InsightSection", async () => {
         puckConfig,
         document
       );
+
+      data = await resolveAllData(data, puckConfig, {
+        document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>

@@ -17,7 +17,7 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 
-export const defaultInsightCardSlotData = (id?: string) => {
+export const defaultInsightCardSlotData = (id?: string, index?: number) => {
   return {
     type: "InsightCard",
     props: {
@@ -161,7 +161,7 @@ export const defaultInsightCardSlotData = (id?: string) => {
                 },
               },
               styles: { variant: "primary" },
-              eventName: "cta",
+              eventName: index !== undefined ? `cta${index}` : undefined,
             } satisfies CTAWrapperProps,
           },
         ],
@@ -186,6 +186,9 @@ export type InsightCardProps = {
     field: string;
     insight: InsightStruct;
   };
+
+  /** @internal */
+  index?: number;
 };
 
 const insightCardFields: Fields<InsightCardProps> = {
