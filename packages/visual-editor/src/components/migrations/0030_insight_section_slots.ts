@@ -211,13 +211,18 @@ export const insightSectionSlots: Migration = {
               props: {
                 data: {
                   text: {
-                    field: props.data.heading.field,
-                    constantValueEnabled:
-                      props.data.heading.constantValueEnabled,
-                    constantValue: props.data.heading.constantValue,
+                    field: "",
+                    constantValueEnabled: true,
+                    constantValue: {
+                      en: "Insights",
+                      hasLocalizedValue: "true",
+                    },
                   },
                 },
-                styles: props.styles.heading,
+                styles: props.styles.heading || {
+                  level: 3,
+                  align: "left",
+                },
               } satisfies HeadingTextProps,
             },
           ],
