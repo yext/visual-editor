@@ -11,7 +11,7 @@ import { ImageWrapperProps } from "../contentBlocks/image/Image";
 import { BodyTextProps } from "../contentBlocks/BodyText";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
-import { getDefaultRTF } from "../../editor/TranslatableRichTextField";
+import { TimestampProps } from "../contentBlocks/Timestamp";
 
 export const insightSectionSlots: Migration = {
   InsightSection: {
@@ -57,9 +57,18 @@ export const insightSectionSlots: Migration = {
                         },
                       },
                       styles: {
-                        width: 640,
-                        aspectRatio: 16 / 9,
+                        width: insight.image?.width || 640,
+                        aspectRatio:
+                          insight.image?.width && insight.image?.height
+                            ? insight.image.width / insight.image.height
+                            : 16 / 9,
                       },
+                      className: "max-w-full h-full object-cover",
+                      sizes: {
+                        base: "calc(100vw - 32px)",
+                        lg: "calc(maxWidth * 0.45)",
+                      },
+                      hideWidthProp: true,
                       parentData: constantValueEnabled
                         ? undefined
                         : {
@@ -137,27 +146,31 @@ export const insightSectionSlots: Migration = {
                 ],
                 PublishTimeSlot: [
                   {
-                    type: "BodyTextSlot",
+                    type: "Timestamp",
                     props: {
                       data: {
-                        text: {
+                        date: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: insight.publishTime
-                            ? getDefaultRTF(insight.publishTime)
-                            : getDefaultRTF(""),
+                          constantValue: insight.publishTime || "",
+                        },
+                        endDate: {
+                          field: "",
+                          constantValueEnabled: false,
+                          constantValue: "",
                         },
                       },
-                      styles: { variant: "base" },
+                      styles: {
+                        includeTime: false,
+                        includeRange: false,
+                      },
                       parentData: constantValueEnabled
                         ? undefined
                         : {
                             field: props.data.field,
-                            richText: insight.publishTime
-                              ? getDefaultRTF(insight.publishTime)
-                              : undefined,
+                            date: insight.publishTime,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies TimestampProps,
                   },
                 ],
                 CTASlot: [
@@ -183,6 +196,7 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             cta: insight.cta,
                           },
+                      eventName: `cta${i}`,
                     } satisfies CTAWrapperProps,
                   },
                 ],
@@ -211,18 +225,13 @@ export const insightSectionSlots: Migration = {
               props: {
                 data: {
                   text: {
-                    field: "",
-                    constantValueEnabled: true,
-                    constantValue: {
-                      en: "Insights",
-                      hasLocalizedValue: "true",
-                    },
+                    field: props.data.heading?.field ?? "",
+                    constantValueEnabled:
+                      props.data.heading?.constantValueEnabled ?? true,
+                    constantValue: props.data.heading?.constantValue ?? "",
                   },
                 },
-                styles: props.styles.heading || {
-                  level: 3,
-                  align: "left",
-                },
+                styles: props.styles.heading,
               } satisfies HeadingTextProps,
             },
           ],

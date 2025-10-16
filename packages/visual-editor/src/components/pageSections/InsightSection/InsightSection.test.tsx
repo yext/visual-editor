@@ -152,7 +152,7 @@ const tests: ComponentTest[] = [
         },
         insights: {
           field: "c_insights",
-          constantValue: { insights: [] },
+          constantValue: { insights: [{}] },
           constantValueEnabled: false,
           constantValueOverride: {},
         },
@@ -348,36 +348,38 @@ const tests: ComponentTest[] = [
     version: 7,
   },
   {
-    name: "version 16 props with missing ctaType",
+    name: "version 15 props with missing ctaType",
     document: { c_insights: insightsData },
     props: {
       data: {
         insights: {
           field: "c_insights",
-          constantValue: [
-            {
-              name: "Insight with missing CTA properties",
-              category: "Category",
-              publishTime: "2025-06-15",
-              description: "Description",
-              cta: {
-                label: "CTA",
-                // Missing link, linkType, and ctaType - should be added by migration
+          constantValue: {
+            insights: [
+              {
+                name: "Insight with missing CTA properties",
+                category: "Category",
+                publishTime: "2025-06-15",
+                description: "Description",
+                cta: {
+                  label: "CTA",
+                  // Missing link, linkType, and ctaType - should be added by migration
+                },
               },
-            },
-            {
-              name: "Insight with partial CTA properties",
-              category: "Category 2",
-              publishTime: "2025-06-15",
-              description: "Description",
-              cta: {
-                label: "CTA 2",
-                link: "#",
-                linkType: "URL",
-                // Missing ctaType - should be added by migration
+              {
+                name: "Insight with partial CTA properties",
+                category: "Category 2",
+                publishTime: "2025-06-15",
+                description: "Description",
+                cta: {
+                  label: "CTA 2",
+                  link: "#",
+                  linkType: "URL",
+                  // Missing ctaType - should be added by migration
+                },
               },
-            },
-          ],
+            ],
+          },
           constantValueEnabled: true,
         },
       },
@@ -397,7 +399,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 16,
+    version: 15,
   },
   {
     name: "version 30 props with entity values",
@@ -978,7 +980,7 @@ describe("InsightSection", async () => {
       );
 
       data = await resolveAllData(data, puckConfig, {
-        document,
+        streamDocument: document,
       });
 
       const { container } = reactRender(
@@ -995,7 +997,7 @@ describe("InsightSection", async () => {
 
       await expect(
         `InsightSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ useFullPage: true });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -1003,7 +1005,7 @@ describe("InsightSection", async () => {
         await interactions(page);
         await expect(
           `InsightSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ useFullPage: true });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
