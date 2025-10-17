@@ -5,12 +5,13 @@ import {
   ComponentTest,
   delay,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   migrate,
   migrationRegistry,
   NearbyLocationsSection,
+  SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
@@ -254,7 +255,7 @@ describe("NearbyLocationsSection", async () => {
   });
 
   const puckConfig: Config = {
-    components: { NearbyLocationsSection },
+    components: { NearbyLocationsSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;

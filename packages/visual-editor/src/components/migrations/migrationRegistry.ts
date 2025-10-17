@@ -28,6 +28,7 @@ import { organizeCTAWrapperProps } from "./0026_organize_cta_wrapper_props.ts";
 import { promoSectionSlots } from "./0027_promo_section_slots.ts";
 import { heroSectionSlots } from "./0028_slotify_hero_section.ts";
 import { productSectionSlots } from "./0029_product_section_slots.ts";
+import { nearbyLocationSlots } from "./0031_nearby_location_slots.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -64,4 +65,6 @@ export const migrationRegistry: MigrationRegistry = [
   promoSectionSlots,
   heroSectionSlots,
   productSectionSlots,
+  {}, // 30: insights placeholder,
+  nearbyLocationSlots,
 ];
