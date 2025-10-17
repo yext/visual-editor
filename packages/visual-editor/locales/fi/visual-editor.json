@@ -320,6 +320,7 @@
       "width": "Leveys",
       "yes": "Kyllä"
     },
+    "phone": "Puhelin",
     "phoneFormat": "Puhelinmuoto",
     "phoneNumber": "Puhelinnumero",
     "phoneNumberFormat": "Puhelinnumeromuoto",
@@ -520,6 +521,7 @@
   "slots": {
     "insightCard": "Oivalluskortti",
     "insightCards": "Insight-kortit",
+    "nearbyLocationCards": "Läheiset sijaintikortit",
     "productCard": "Tuotekortti",
     "productCards": "Tuotekortit"
   },

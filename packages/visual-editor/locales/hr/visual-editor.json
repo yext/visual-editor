@@ -320,6 +320,7 @@
       "width": "Širina",
       "yes": "Da"
     },
+    "phone": "Telefon",
     "phoneFormat": "Format telefona",
     "phoneNumber": "Telefonski broj",
     "phoneNumberFormat": "Format telefonskog broja",
@@ -520,6 +521,7 @@
   "slots": {
     "insightCard": "Kartica uvida",
     "insightCards": "Kartice uvida",
+    "nearbyLocationCards": "Kartice obližnjih lokacija",
     "productCard": "Kartica za proizvod",
     "productCards": "Kartice za proizvod"
   },

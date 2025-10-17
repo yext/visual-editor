@@ -319,6 +319,7 @@
       "width": "Width",
       "yes": "Yes"
     },
+    "phone": "Phone",
     "phoneFormat": "Phone Format",
     "phoneNumber": "Phone Number",
     "phoneNumberFormat": "Phone Number Format",
@@ -519,6 +520,7 @@
   "slots": {
     "insightCard": "Insight Card",
     "insightCards": "Insight Cards",
+    "nearbyLocationCards": "Nearby Location Cards",
     "productCard": "Product Card",
     "productCards": "Product Cards"
   },

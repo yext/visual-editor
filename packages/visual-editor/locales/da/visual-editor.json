@@ -320,6 +320,7 @@
       "width": "Bredde",
       "yes": "Ja"
     },
+    "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
     "phoneNumberFormat": "Telefonnummerformat",
@@ -520,6 +521,7 @@
   "slots": {
     "insightCard": "Insight Card",
     "insightCards": "Insight Cards",
+    "nearbyLocationCards": "Lokalitetskort i nærheden",
     "productCard": "Produktkort",
     "productCards": "Produktkort"
   },
