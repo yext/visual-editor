@@ -507,29 +507,13 @@ The Nearby Locations Section dynamically finds and displays a list of business l
 
 ### Props
 
-#### Data Props
-
-This object defines the search parameters for finding nearby locations.
-
-| Prop              | Type                                  | Description                                          | Default                         |
-| :---------------- | :------------------------------------ | :--------------------------------------------------- | :------------------------------ |
-| `data.coordinate` | `YextEntityField<Coordinate>`         | The central coordinate (, ) to search from.          | `'yextDisplayCoordinate' field` |
-| `data.heading`    | `YextEntityField<TranslatableString>` | The main heading for the entire section.             | `"Nearby Locations" (constant)` |
-| `data.limit`      | `number`                              | The maximum number of locations to find and display. | `3`                             |
-| `data.radius`     | `number`                              | The search radius in miles.                          | `10`                            |
-
 #### Style Props
 
 This object contains extensive properties for customizing the component's appearance.
 
-| Prop                       | Type                                                                                                                        | Description                                        | Default              |
-| :------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`   | `BackgroundStyle`                                                                                                           | The background color for the entire section.       | `Background Color 1` |
-| `styles.cards`             | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }`                                                        | Styling for the individual location cards.         |                      |
-| `styles.heading`           | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                            | Styling for the main section heading.              |                      |
-| `styles.hours`             | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.        |                      |
-| `styles.phoneNumberFormat` | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards. | `'domestic'`         |
-| `styles.phoneNumberLink`   | `boolean`                                                                                                                   | If , wraps phone numbers in a clickable hyperlink. | `false`              |
+| Prop     | Type                                     | Description                                                                           | Default |
+| :------- | :--------------------------------------- | :------------------------------------------------------------------------------------ | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains extensive properties for customizing the component's appearance. |         |
 
 #### Other Props
 
