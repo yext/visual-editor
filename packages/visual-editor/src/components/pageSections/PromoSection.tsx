@@ -360,7 +360,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
                 },
               },
             },
-            styles: { variant: "primary" },
+            styles: { displayType: "textAndLink", variant: "primary" },
             eventName: "cta",
           } satisfies CTAWrapperProps,
         },

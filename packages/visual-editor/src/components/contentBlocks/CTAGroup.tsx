@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   YextField,
@@ -7,17 +7,22 @@ import {
   resolveComponentData,
   CTA,
   pt,
+  CTADisplayType,
+  PresetImageType,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
-import {
-  ctaTypeOptions,
-  ctaTypeToEntityFieldType,
-  getCTATypeAndCoordinate,
-} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { ctaTypeOptions } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { CTAProps, CTAVariant } from "../atoms/cta.tsx";
 
 type BasicCTAProps = {
+  /** The CTA entity field or static value */
   entityField: CTAWrapperProps["data"]["entityField"];
-  variant: CTAWrapperProps["styles"]["variant"];
+  /** The CTA display type */
+  displayType: CTADisplayType;
+  /** The visual style of the CTA. */
+  variant: CTAVariant;
+  /** The image to use if the CTA is set to preset image */
+  presetImage?: PresetImageType;
 };
 
 const defaultButton: BasicCTAProps = {
@@ -31,6 +36,8 @@ const defaultButton: BasicCTAProps = {
     },
   },
   variant: "primary",
+  displayType: "textAndLink",
+  presetImage: "app-store",
 };
 
 export interface CTAGroupProps {
@@ -52,24 +59,33 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
           typeLabel: msg("fields.ctaType", "CTA Type"),
           fieldLabel: msg("fields.ctaField", "CTA Field"),
           options: ctaTypeOptions(),
-          optionValueToEntityFieldType: ctaTypeToEntityFieldType,
         },
+      }),
+      displayType: YextField(msg("fields.displayType", "Display Type"), {
+        type: "select",
+        options: "CTA_DISPLAY_TYPE",
       }),
       variant: YextField(msg("fields.variant", "Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
+      }),
+      presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
+        type: "select",
+        options: "PRESET_IMAGE",
       }),
     },
     getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
   }),
 };
 
-const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
+const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
-  if (!buttons || buttons.length === 0) return null;
+  if (!buttons || buttons.length === 0) {
+    return <></>;
+  }
 
   return (
     <div
@@ -83,14 +99,28 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
           locale,
           streamDocument
         );
-        const { ctaType, coordinate } = getCTATypeAndCoordinate(
-          button.entityField,
-          cta
-        );
+
+        let coordinate = undefined;
+        let ctaType: CTAProps["ctaType"] =
+          button.entityField.selectedTypes?.[0] === "type.coordinate"
+            ? "getDirections"
+            : button.displayType;
+        if (
+          ctaType === "getDirections" &&
+          cta?.latitude !== undefined &&
+          cta?.longitude !== undefined
+        ) {
+          coordinate = { latitude: cta.latitude, longitude: cta.longitude };
+        }
 
         return (
           cta && (
-            <div key={idx} className="w-full sm:w-auto">
+            <div
+              key={idx}
+              className={
+                button.variant === "link" ? "w-fit" : "w-full sm:w-auto"
+              }
+            >
               <CTA
                 label={resolveComponentData(cta.label, locale, streamDocument)}
                 link={resolveComponentData(cta.link, locale, streamDocument)}
@@ -98,7 +128,7 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
                 variant={button.variant}
                 ctaType={ctaType}
                 coordinate={coordinate}
-                presetImageType={cta.presetImageType}
+                presetImageType={button.presetImage}
                 className="truncate w-full"
               />
             </div>
@@ -115,5 +145,5 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   defaultProps: {
     buttons: [defaultButton, defaultButton],
   },
-  render: (props: CTAGroupProps) => <CTAGroupComponent {...props} />,
+  render: (props) => <CTAGroupComponent {...props} />,
 };

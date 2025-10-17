@@ -84,6 +84,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
                 label={email}
                 linkType="EMAIL"
                 variant="link"
+                alwaysHideCaret={true}
               />
             </li>
           ))}

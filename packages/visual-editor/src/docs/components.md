@@ -136,11 +136,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 Additional CSS classes to apply to the CTA.
 
-| Prop        | Type                                                         | Description                                 | Default |
-| :---------- | :----------------------------------------------------------- | :------------------------------------------ | :------ |
-| `className` | `string`                                                     | Additional CSS classes to apply to the CTA. |         |
-| `data`      | `{ entityField: YextEntityField<EnhancedTranslatableCTA>; }` |                                             |         |
-| `styles`    | `{ variant: CTAVariant; }`                                   |                                             |         |
+| Prop        | Type                                                                                   | Description                                 | Default |
+| :---------- | :------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                                               | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ entityField: YextEntityField<EnhancedTranslatableCTA>; }`                           |                                             |         |
+| `styles`    | `{ displayType: CTADisplayType; variant: CTAVariant; presetImage?: PresetImageType; }` |                                             |         |
 
 ---
 

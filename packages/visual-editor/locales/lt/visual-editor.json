@@ -111,9 +111,8 @@
   "coreInfoSection": "Pagrindinės informacijos skyrius",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Gaukite nurodymus",
-    "presetImage": "Iš anksto nustatytas vaizdas",
-    "textAndLink": "Tekstas ir nuoroda"
+    "getDirections": "Gaukite nuorodas",
+    "link": "Nuoroda"
   },
   "currentLocation": "Dabartinė vieta",
   "customSearchArea": "Pasirinktinė paieškos sritis",
@@ -173,6 +172,7 @@
     "destinationURL": "Paskirties URL",
     "direction": "Kryptis",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
+    "displayType": "Ekrano tipas",
     "email": "El. Paštas",
     "emailList": "El. Pašto sąrašas",
     "emails": "El. Laiškai",
@@ -254,6 +254,10 @@
       "center_direction": "Centras",
       "classic": "Klasikinis",
       "compact": "Kompaktiškas",
+      "ctaDisplayType": {
+        "presetImage": "Iš anksto nustatytas vaizdas",
+        "textAndLink": "Tekstas ir nuoroda"
+      },
       "ctaVariant": {
         "link": "Nuoroda",
         "primary": "Pirminis",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Telefono numerio formatas",
     "phoneNumbers": "Telefono numeriai",
     "pinterestLink": "„Pinterest“ nuoroda",
+    "presetImage": "Iš anksto nustatytas vaizdas",
     "presetImageType": "Iš anksto nustatytas vaizdo tipas",
     "primaryCTA": "Pirminė CTA",
     "primaryCTAVariant": "Pirminis CTA variantas",

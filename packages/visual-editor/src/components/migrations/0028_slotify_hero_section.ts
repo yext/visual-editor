@@ -134,14 +134,27 @@ export const heroSectionSlots: Migration = {
                       },
                       link: "#",
                       linkType: "URL",
-                      ctaType: "textAndLink",
                     },
+                    selectedTypes:
+                      constantValue.primaryCta?.ctaType === "getDirections"
+                        ? ["type.coordinate"]
+                        : ["type.cta"],
                     constantValueEnabled:
                       constantValueOverride.primaryCta ?? false,
                   },
                 },
                 eventName: "primaryCta",
-                styles: { variant: primaryCTA },
+                styles: {
+                  variant: primaryCTA,
+                  displayType:
+                    constantValue.primaryCta.ctaType === "presetImage"
+                      ? "presetImage"
+                      : "textAndLink",
+                  presetImage:
+                    constantValue.primaryCta.ctaType === "presetImage"
+                      ? constantValue.primaryCta.presetImageType
+                      : undefined,
+                },
               },
             },
           ],
@@ -159,14 +172,27 @@ export const heroSectionSlots: Migration = {
                       },
                       link: "#",
                       linkType: "URL",
-                      ctaType: "textAndLink",
                     },
+                    selectedTypes:
+                      constantValue.secondaryCta?.ctaType === "getDirections"
+                        ? ["type.coordinate"]
+                        : ["type.cta"],
                     constantValueEnabled:
                       constantValueOverride.secondaryCta ?? false,
                   },
                 },
                 eventName: "secondaryCta",
-                styles: { variant: secondaryCTA },
+                styles: {
+                  variant: secondaryCTA,
+                  displayType:
+                    constantValue.secondaryCta.ctaType === "presetImage"
+                      ? "presetImage"
+                      : "textAndLink",
+                  presetImage:
+                    constantValue.secondaryCta.ctaType === "presetImage"
+                      ? constantValue.secondaryCta.presetImageType
+                      : undefined,
+                },
               },
             },
           ],

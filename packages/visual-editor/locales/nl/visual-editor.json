@@ -111,9 +111,8 @@
   "coreInfoSection": "Core Info -sectie",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Krijg een routebeschrijving",
-    "presetImage": "Vooraf ingestelde afbeelding",
-    "textAndLink": "Tekst en link"
+    "getDirections": "Routebeschrijving opvragen",
+    "link": "Link"
   },
   "currentLocation": "Huidige locatie",
   "customSearchArea": "Aangepast zoekgebied",
@@ -173,6 +172,7 @@
     "destinationURL": "Bestemming URL",
     "direction": "Richting",
     "directoryRootLinkLabel": "Directory root link label",
+    "displayType": "Weergavetype",
     "email": "E -mail",
     "emailList": "E -maillijst",
     "emails": "E -mails",
@@ -254,6 +254,10 @@
       "center_direction": "Centrum",
       "classic": "Klassiek",
       "compact": "Compact",
+      "ctaDisplayType": {
+        "presetImage": "Vooraf ingesteld beeld",
+        "textAndLink": "Tekst en link"
+      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Primair",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Telefoonnummerformaat",
     "phoneNumbers": "Telefoonnummers",
     "pinterestLink": "Pinterest -link",
+    "presetImage": "Vooraf ingesteld beeld",
     "presetImageType": "Vooraf ingestelde afbeeldingstype",
     "primaryCTA": "Primaire CTA",
     "primaryCTAVariant": "Primaire CTA -variant",

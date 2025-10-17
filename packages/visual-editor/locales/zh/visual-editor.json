@@ -111,9 +111,8 @@
   "coreInfoSection": "核心信息部分",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "获取指示",
-    "presetImage": "预设图像",
-    "textAndLink": "文字和链接"
+    "getDirections": "获取路线",
+    "link": "关联"
   },
   "currentLocation": "当前位置",
   "customSearchArea": "自定义搜索区域",
@@ -173,6 +172,7 @@
     "destinationURL": "目标网址",
     "direction": "方向",
     "directoryRootLinkLabel": "目录根链接标签",
+    "displayType": "显示类型",
     "email": "电子邮件",
     "emailList": "电子邮件列表",
     "emails": "电子邮件",
@@ -254,6 +254,10 @@
       "center_direction": "中心",
       "classic": "经典的",
       "compact": "袖珍的",
+      "ctaDisplayType": {
+        "presetImage": "预设图像",
+        "textAndLink": "文本和链接"
+      },
       "ctaVariant": {
         "link": "关联",
         "primary": "基本的",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "电话号码格式",
     "phoneNumbers": "电话号码",
     "pinterestLink": "Pinterest链接",
+    "presetImage": "预设图像",
     "presetImageType": "预设图像类型",
     "primaryCTA": "主要CTA",
     "primaryCTAVariant": "主要CTA变体",

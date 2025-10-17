@@ -110,9 +110,8 @@
   "coreInfoSection": "Section d'informations de base",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Obtenir des itinéraires",
-    "presetImage": "Image prédéfinie",
-    "textAndLink": "Texte et lien"
+    "getDirections": "Obtenir un itinéraire",
+    "link": "Lien"
   },
   "currentLocation": "Emplacement actuel",
   "customSearchArea": "Zone de recherche personnalisée",
@@ -172,6 +171,7 @@
     "destinationURL": "URL de destination",
     "direction": "Direction",
     "directoryRootLinkLabel": "Étiquette du lien racine du répertoire",
+    "displayType": "Type d'affichage",
     "email": "E-mail",
     "emailList": "Liste de diffusion",
     "emails": "E-mails",
@@ -253,6 +253,10 @@
       "center_direction": "Centre",
       "classic": "Classique",
       "compact": "Compact",
+      "ctaDisplayType": {
+        "presetImage": "Image prédéfinie",
+        "textAndLink": "Texte et lien"
+      },
       "ctaVariant": {
         "link": "Lien",
         "primary": "Primaire",
@@ -320,6 +324,7 @@
     "phoneNumberFormat": "Format de numéro de téléphone",
     "phoneNumbers": "Numéros de téléphone",
     "pinterestLink": "Lien pinterest",
+    "presetImage": "Image prédéfinie",
     "presetImageType": "Type d'image prédéfini",
     "primaryCTA": "CTA primaire",
     "primaryCTAVariant": "Variante CTA primaire",

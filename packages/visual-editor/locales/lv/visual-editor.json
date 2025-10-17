@@ -111,9 +111,8 @@
   "coreInfoSection": "Pamatinformācija",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Saņemt norādes",
-    "presetImage": "Iepriekš iestatīts attēls",
-    "textAndLink": "Teksts un saite"
+    "getDirections": "Saņemiet norādes",
+    "link": "Saite"
   },
   "currentLocation": "Pašreizējā atrašanās vieta",
   "customSearchArea": "Pielāgota meklēšanas zona",
@@ -173,6 +172,7 @@
     "destinationURL": "Galamērķa URL",
     "direction": "Vadība",
     "directoryRootLinkLabel": "Direktorija sakņu saites etiķete",
+    "displayType": "Displeja veids",
     "email": "E -pasts",
     "emailList": "E -pasta saraksts",
     "emails": "E -pasti",
@@ -254,6 +254,10 @@
       "center_direction": "Centrs",
       "classic": "Klasisks",
       "compact": "Kompakts",
+      "ctaDisplayType": {
+        "presetImage": "Iepriekš iestatīts attēls",
+        "textAndLink": "Teksts un saite"
+      },
       "ctaVariant": {
         "link": "Saite",
         "primary": "Primārs",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "Tālruņa numura formāts",
     "phoneNumbers": "Tālruņu numuri",
     "pinterestLink": "Pinterest saite",
+    "presetImage": "Iepriekš iestatīts attēls",
     "presetImageType": "Iepriekš iestatīts attēla tips",
     "primaryCTA": "Primārā CTA",
     "primaryCTAVariant": "Primārais CTA variants",

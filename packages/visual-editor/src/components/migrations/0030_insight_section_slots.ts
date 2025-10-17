@@ -189,7 +189,11 @@ export const insightSectionSlots: Migration = {
                           },
                         },
                       },
-                      styles: { variant: props.styles.cards.ctaVariant },
+                      styles: {
+                        variant: props.styles.cards.ctaVariant,
+                        displayType: "textAndLink",
+                        presetImage: "app-store",
+                      },
                       parentData: constantValueEnabled
                         ? undefined
                         : {

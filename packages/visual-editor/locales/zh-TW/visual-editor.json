@@ -111,9 +111,8 @@
   "coreInfoSection": "核心信息部分",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "獲取指示",
-    "presetImage": "預設圖像",
-    "textAndLink": "文字和鏈接"
+    "getDirections": "獲取路線",
+    "link": "關聯"
   },
   "currentLocation": "當前位置",
   "customSearchArea": "自定義搜索區域",
@@ -173,6 +172,7 @@
     "destinationURL": "目標網址",
     "direction": "方向",
     "directoryRootLinkLabel": "目錄根鏈接標籤",
+    "displayType": "顯示類型",
     "email": "電子郵件",
     "emailList": "電子郵件列表",
     "emails": "電子郵件",
@@ -254,6 +254,10 @@
       "center_direction": "中心",
       "classic": "經典的",
       "compact": "袖珍的",
+      "ctaDisplayType": {
+        "presetImage": "預設圖像",
+        "textAndLink": "文本和鏈接"
+      },
       "ctaVariant": {
         "link": "關聯",
         "primary": "基本的",
@@ -321,6 +325,7 @@
     "phoneNumberFormat": "電話號碼格式",
     "phoneNumbers": "電話號碼",
     "pinterestLink": "Pinterest鏈接",
+    "presetImage": "預設圖像",
     "presetImageType": "預設圖像類型",
     "primaryCTA": "主要CTA",
     "primaryCTAVariant": "主要CTA變體",
