@@ -513,6 +513,8 @@
   "showMore": "Mostra di più",
   "siteColors": "Colori del sito",
   "slots": {
+    "insightCard": "Scheda di approfondimento",
+    "insightCards": "Carte di approfondimento",
     "productCard": "Scheda Prodotto",
     "productCards": "Schede Prodotto"
   },

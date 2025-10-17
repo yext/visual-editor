@@ -513,6 +513,8 @@
   "showMore": "Daha Fazla Göster",
   "siteColors": "Site Renkleri",
   "slots": {
+    "insightCard": "İçgörü Kartı",
+    "insightCards": "İçgörü Kartları",
     "productCard": "Ürün Kartı",
     "productCards": "Ürün Kartları"
   },

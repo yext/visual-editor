@@ -513,6 +513,8 @@
   "showMore": "Vis mere",
   "siteColors": "Webstedsfarver",
   "slots": {
+    "insightCard": "Insight Card",
+    "insightCards": "Insight Cards",
     "productCard": "Produktkort",
     "productCards": "Produktkort"
   },

@@ -513,6 +513,8 @@
   "showMore": "Pokažite više",
   "siteColors": "Boje mjesta",
   "slots": {
+    "insightCard": "Kartica uvida",
+    "insightCards": "Kartice uvida",
     "productCard": "Kartica za proizvod",
     "productCards": "Kartice za proizvod"
   },

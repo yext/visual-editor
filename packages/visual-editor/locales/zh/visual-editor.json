@@ -513,6 +513,8 @@
   "showMore": "显示更多",
   "siteColors": "站点颜色",
   "slots": {
+    "insightCard": "洞察卡",
+    "insightCards": "洞察卡",
     "productCard": "产品卡",
     "productCards": "产品卡"
   },

@@ -513,6 +513,8 @@
   "showMore": "Näidata veel",
   "siteColors": "Saidi värvid",
   "slots": {
+    "insightCard": "Ülevaatekaart",
+    "insightCards": "Insight -kaardid",
     "productCard": "Tootekaart",
     "productCards": "Tootekaardid"
   },

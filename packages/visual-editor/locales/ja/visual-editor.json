@@ -513,6 +513,8 @@
   "showMore": "もっと見せてください",
   "siteColors": "サイトの色",
   "slots": {
+    "insightCard": "インサイトカード",
+    "insightCards": "インサイトカード",
     "productCard": "製品カード",
     "productCards": "製品カード"
   },

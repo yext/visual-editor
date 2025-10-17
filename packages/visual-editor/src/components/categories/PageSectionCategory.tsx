@@ -13,9 +13,9 @@ import {
 } from "../pageSections/EventSection/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "../pageSections/HeroSection.tsx";
 import {
-  InsightSectionProps,
   InsightSection,
-} from "../pageSections/InsightSection.tsx";
+  InsightSectionProps,
+} from "../pageSections/InsightSection/InsightSection.tsx";
 import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,

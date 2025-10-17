@@ -513,6 +513,8 @@
   "showMore": "Ukázať viac",
   "siteColors": "Farby stránok",
   "slots": {
+    "insightCard": "Karta",
+    "insightCards": "Karty prehľadov",
     "productCard": "Karta",
     "productCards": "Produktové karty"
   },
