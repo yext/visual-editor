@@ -47,6 +47,14 @@ import {
   NearbyLocationCardsWrapper,
   NearbyLocationCardsWrapperProps,
 } from "../pageSections/NearbyLocations/NearbyLocationsCardsWrapper.tsx";
+import {
+  InsightCardsWrapper,
+  InsightCardsWrapperProps,
+} from "../pageSections/InsightSection/InsightCardsWrapper.tsx";
+import {
+  InsightCard,
+  InsightCardProps,
+} from "../pageSections/InsightSection/InsightCard.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -60,6 +68,8 @@ export interface SlotsCategoryProps {
   HoursStatusSlot: HoursStatusProps;
   HoursTableSlot: HoursTableProps;
   ImageSlot: ImageWrapperProps;
+  InsightCardsWrapper: InsightCardsWrapperProps;
+  InsightCard: InsightCardProps;
   NearbyLocationCardsWrapper: NearbyLocationCardsWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
@@ -89,6 +99,11 @@ export const SlotsCategoryComponents = {
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
   HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
   ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
+  InsightCardsWrapper: {
+    ...InsightCardsWrapper,
+    permissions: lockedPermissions,
+  },
+  InsightCard: { ...InsightCard, permissions: lockedPermissions },
   NearbyLocationCardsWrapper: {
     ...NearbyLocationCardsWrapper,
     permissions: lockedPermissions,

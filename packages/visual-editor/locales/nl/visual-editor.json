@@ -518,6 +518,8 @@
   "showMore": "Laat meer zien",
   "siteColors": "Sitekleuren",
   "slots": {
+    "insightCard": "Inzichtkaart",
+    "insightCards": "Inzichtkaarten",
     "productCard": "Productkaart",
     "productCards": "Productkaarten"
   },

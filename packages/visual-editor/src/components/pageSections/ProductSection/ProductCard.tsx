@@ -144,6 +144,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
               styles: {
                 displayType: "textAndLink",
                 variant: "primary",
+                presetImage: "app-store",
               },
             } satisfies CTAWrapperProps,
           },

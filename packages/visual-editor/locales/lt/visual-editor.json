@@ -518,6 +518,8 @@
   "showMore": "Parodyk daugiau",
   "siteColors": "Svetainės spalvos",
   "slots": {
+    "insightCard": "Įžvalgos kortelė",
+    "insightCards": "Įžvalgos kortelės",
     "productCard": "Produkto kortelė",
     "productCards": "Produktų kortelės"
   },

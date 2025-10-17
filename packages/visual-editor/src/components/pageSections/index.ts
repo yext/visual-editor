@@ -34,9 +34,9 @@ export {
 export {
   InsightSection,
   type InsightSectionProps,
-  type InsightData,
-  type InsightStyles,
-} from "./InsightSection.tsx";
+} from "./InsightSection/InsightSection.tsx";
+export { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
+export { InsightCard } from "./InsightSection/InsightCard.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,

@@ -1,49 +1,42 @@
 import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { ProductSectionProps } from "../pageSections/ProductSection/ProductSection";
-import { ProductCardProps } from "../pageSections/ProductSection/ProductCard";
-import { ProductCardsWrapperProps } from "../pageSections/ProductSection/ProductCardsWrapper";
+import { InsightSectionProps } from "../pageSections/InsightSection/InsightSection";
+import { InsightCardProps } from "../pageSections/InsightSection/InsightCard";
+import { InsightCardsWrapperProps } from "../pageSections/InsightSection/InsightCardsWrapper";
 import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { ProductSectionType } from "../../types/types";
+import { InsightSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { ImageWrapperProps } from "../contentBlocks/image/Image";
 import { BodyTextProps } from "../contentBlocks/BodyText";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
+import { TimestampProps } from "../contentBlocks/Timestamp";
 
-export const productSectionSlots: Migration = {
-  ProductSection: {
+export const insightSectionSlots: Migration = {
+  InsightSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
       const constantValueEnabled: boolean = props.data.constantValueEnabled;
-      const products = resolveYextEntityField(
+      const insights = resolveYextEntityField(
         streamDocument,
-        props.data.products as YextEntityField<ProductSectionType>,
-        streamDocument?.locale
-      )?.products;
+        props.data.insights as YextEntityField<InsightSectionType>,
+        streamDocument.meta?.locale
+      )?.insights;
 
       const cards =
-        products?.map((product, i) => {
-          const resolvedName = product.name
+        insights?.map((insight, i) => {
+          const resolvedName = insight.name
             ? resolveComponentData(
-                product.name,
+                insight.name,
                 streamDocument.locale || "en",
                 streamDocument
               )
             : "";
-          const resolvedCategory = product.category
-            ? resolveComponentData(
-                product.category,
-                streamDocument.locale || "en",
-                streamDocument
-              )
-            : "";
-
           return {
-            type: "ProductCard",
+            type: "InsightCard",
             props: {
-              id: "ProductCard-migrated-" + i,
+              id: "InsightCard-migrated-" + i,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },
@@ -56,7 +49,7 @@ export const productSectionSlots: Migration = {
                         image: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: product.image || {
+                          constantValue: insight.image || {
                             url: "",
                             height: 360,
                             width: 640,
@@ -64,42 +57,25 @@ export const productSectionSlots: Migration = {
                         },
                       },
                       styles: {
-                        width: 640,
-                        aspectRatio: 16 / 9,
+                        width: insight.image?.width || 640,
+                        aspectRatio:
+                          insight.image?.width && insight.image?.height
+                            ? insight.image.width / insight.image.height
+                            : 16 / 9,
                       },
+                      className: "max-w-full h-full object-cover",
                       sizes: {
                         base: "calc(100vw - 32px)",
-                        md: "calc((maxWidth - 32px) / 2)",
-                        lg: "calc((maxWidth - 32px) / 3)",
+                        lg: "calc(maxWidth * 0.45)",
                       },
+                      hideWidthProp: true,
                       parentData: constantValueEnabled
                         ? undefined
                         : {
                             field: props.data.field,
-                            image: product.image,
+                            image: insight.image,
                           },
                     } satisfies ImageWrapperProps,
-                  },
-                ],
-                CategorySlot: [
-                  {
-                    type: "BodyTextSlot",
-                    props: {
-                      data: {
-                        text: {
-                          field: "",
-                          constantValueEnabled: true,
-                          constantValue: product.category ?? "",
-                        },
-                      },
-                      styles: { variant: "base" },
-                      parentData: constantValueEnabled
-                        ? undefined
-                        : {
-                            field: props.data.field,
-                            richText: product.category,
-                          },
-                    } satisfies BodyTextProps,
                   },
                 ],
                 TitleSlot: [
@@ -110,7 +86,7 @@ export const productSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: product.name ?? "",
+                          constantValue: insight.name ?? "",
                         },
                       },
                       styles: {
@@ -126,6 +102,27 @@ export const productSectionSlots: Migration = {
                     } satisfies HeadingTextProps,
                   },
                 ],
+                CategorySlot: [
+                  {
+                    type: "BodyTextSlot",
+                    props: {
+                      data: {
+                        text: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: insight.category ?? "",
+                        },
+                      },
+                      styles: { variant: "base" },
+                      parentData: constantValueEnabled
+                        ? undefined
+                        : {
+                            field: props.data.field,
+                            richText: insight.category,
+                          },
+                    } satisfies BodyTextProps,
+                  },
+                ],
                 DescriptionSlot: [
                   {
                     type: "BodyTextSlot",
@@ -134,7 +131,7 @@ export const productSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: product.description ?? "",
+                          constantValue: insight.description ?? "",
                         },
                       },
                       styles: { variant: "base" },
@@ -142,9 +139,38 @@ export const productSectionSlots: Migration = {
                         ? undefined
                         : {
                             field: props.data.field,
-                            richText: product.description,
+                            richText: insight.description,
                           },
                     } satisfies BodyTextProps,
+                  },
+                ],
+                PublishTimeSlot: [
+                  {
+                    type: "Timestamp",
+                    props: {
+                      data: {
+                        date: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: insight.publishTime || "",
+                        },
+                        endDate: {
+                          field: "",
+                          constantValueEnabled: false,
+                          constantValue: "",
+                        },
+                      },
+                      styles: {
+                        includeTime: false,
+                        includeRange: false,
+                      },
+                      parentData: constantValueEnabled
+                        ? undefined
+                        : {
+                            field: props.data.field,
+                            date: insight.publishTime,
+                          },
+                    } satisfies TimestampProps,
                   },
                 ],
                 CTASlot: [
@@ -156,25 +182,25 @@ export const productSectionSlots: Migration = {
                           field: "",
                           constantValueEnabled: true,
                           constantValue: {
-                            label: product.cta?.label ?? "Learn More",
-                            link: product.cta?.link ?? "#",
-                            linkType: product.cta?.linkType ?? "URL",
+                            label: insight.cta?.label ?? "Read More",
+                            link: insight.cta?.link ?? "#",
+                            linkType: insight.cta?.linkType ?? "URL",
                             ctaType: "textAndLink",
                           },
                         },
                       },
                       styles: {
-                        displayType: "textAndLink",
                         variant: props.styles.cards.ctaVariant,
+                        displayType: "textAndLink",
                         presetImage: "app-store",
                       },
-                      eventName: `cta${i}`,
                       parentData: constantValueEnabled
                         ? undefined
                         : {
                             field: props.data.field,
-                            cta: product.cta,
+                            cta: insight.cta,
                           },
+                      eventName: `cta${i}`,
                     } satisfies CTAWrapperProps,
                   },
                 ],
@@ -183,12 +209,9 @@ export const productSectionSlots: Migration = {
                 ? undefined
                 : {
                     field: props.data.field,
-                    product,
+                    insight,
                   },
-              conditionalRender: {
-                category: resolvedCategory !== "",
-              },
-            } satisfies WithId<ProductCardProps>,
+            } satisfies WithId<InsightCardProps>,
           };
         }) || [];
 
@@ -206,10 +229,10 @@ export const productSectionSlots: Migration = {
               props: {
                 data: {
                   text: {
-                    field: props.data.heading.field,
+                    field: props.data.heading?.field ?? "",
                     constantValueEnabled:
-                      props.data.heading.constantValueEnabled,
-                    constantValue: props.data.heading.constantValue,
+                      props.data.heading?.constantValueEnabled ?? true,
+                    constantValue: props.data.heading?.constantValue ?? "",
                   },
                 },
                 styles: props.styles.heading,
@@ -218,22 +241,22 @@ export const productSectionSlots: Migration = {
           ],
           CardsWrapperSlot: [
             {
-              type: "ProductCardsWrapper",
+              type: "InsightCardsWrapper",
               props: {
                 data: {
-                  field: props.data.products.field,
+                  field: props.data.insights.field,
                   constantValueEnabled:
-                    props.data.products.constantValueEnabled,
+                    props.data.insights.constantValueEnabled,
                   constantValue: cards.map((c) => ({ id: c.props.id })),
                 },
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies ProductCardsWrapperProps,
+              } satisfies InsightCardsWrapperProps,
             },
           ],
         },
-      } satisfies WithId<ProductSectionProps>;
+      } satisfies WithId<InsightSectionProps>;
     },
   },
 };
