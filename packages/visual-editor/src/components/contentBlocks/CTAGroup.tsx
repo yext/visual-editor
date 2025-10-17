@@ -115,7 +115,12 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
 
         return (
           cta && (
-            <div key={idx} className="w-full sm:w-auto">
+            <div
+              key={idx}
+              className={
+                button.variant === "link" ? "w-fit" : "w-full sm:w-auto"
+              }
+            >
               <CTA
                 label={resolveComponentData(cta.label, locale, streamDocument)}
                 link={resolveComponentData(cta.link, locale, streamDocument)}
