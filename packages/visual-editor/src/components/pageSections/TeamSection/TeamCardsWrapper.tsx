@@ -59,13 +59,11 @@ export const TeamCardsWrapper: ComponentConfig<{
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
 
-    // Ensure data structure is valid
     if (!data?.props?.data) {
       return data;
     }
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
-      // ENTITY VALUES
       const resolvedTeam = resolveYextEntityField<
         TeamSectionType | { people: undefined }
       >(
@@ -83,8 +81,6 @@ export const TeamCardsWrapper: ComponentConfig<{
 
       const requiredLength = resolvedTeam.length;
       const currentLength = data.props.slots.CardSlot.length;
-      // If CardSlot is shorter, create an array of placeholder cards and append them.
-      // If CardSlot is longer or equal, this will just be an empty array.
       const cardsToAdd =
         currentLength < requiredLength
           ? Array(requiredLength - currentLength)
@@ -110,22 +106,15 @@ export const TeamCardsWrapper: ComponentConfig<{
         })
       );
     } else {
-      // STATIC VALUES
       let updatedData = data;
 
-      // Ensure constantValue is an array
       if (!Array.isArray(data.props.data.constantValue)) {
         updatedData = setDeep(updatedData, "props.data.constantValue", []);
         return updatedData;
       }
 
-      // For each id in constantValue, check if there's already an existing card.
-      // If not, add a new default card.
-      // Also, de-duplicate ids to avoid conflicts.
-      // Finally, update the card slot and the constantValue object.
       const inUseIds = new Set<string>();
       const newSlots = data.props.data.constantValue.map(({ id }, i) => {
-        // Try to find existing card by ID, or fall back to index if no ID
         const existingCard = id
           ? (data.props.slots.CardSlot.find(
               (slot) => slot.props.id === id
@@ -134,7 +123,6 @@ export const TeamCardsWrapper: ComponentConfig<{
               | ComponentData<TeamCardProps>
               | undefined);
 
-        // Make a deep copy of existingCard to avoid mutating multiple cards
         let newCard = existingCard
           ? (JSON.parse(JSON.stringify(existingCard)) as typeof existingCard)
           : undefined;
@@ -143,7 +131,6 @@ export const TeamCardsWrapper: ComponentConfig<{
 
         if (newCard && inUseIds.has(newId)) {
           newId = `TeamCard-${crypto.randomUUID()}`;
-          // Update the ids of the components in the child slots as well
           Object.entries(newCard.props.slots).forEach(
             ([slotKey, slotArray]) => {
               slotArray[0].props.id = newId + "-" + slotKey;
@@ -156,16 +143,14 @@ export const TeamCardsWrapper: ComponentConfig<{
           return defaultTeamCardSlotData(newId, i);
         }
 
-        newCard = setDeep(newCard, "props.id", newId); // update the id
-        newCard = setDeep(newCard, "props.index", i); // update the index
-        newCard = setDeep(newCard, "props.parentData", undefined); // set to constant values
+        newCard = setDeep(newCard, "props.id", newId);
+        newCard = setDeep(newCard, "props.index", i);
+        newCard = setDeep(newCard, "props.parentData", undefined);
 
         return newCard;
       });
 
-      // update the  cards
       updatedData = setDeep(updatedData, "props.slots.CardSlot", newSlots);
-      // update the constantValue for the sidebar
       updatedData = setDeep(
         updatedData,
         "props.data.constantValue",
