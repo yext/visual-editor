@@ -8,13 +8,12 @@ import {
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   TeamSection,
-  TeamCardsWrapper,
-  TeamCard,
   migrate,
   migrationRegistry,
   VisualEditorProvider,
+  SlotsCategoryComponents,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const teamData = {
@@ -287,7 +286,7 @@ const tests: ComponentTest[] = [
     version: 7,
   },
   {
-    name: "version 16 props with missing ctaType",
+    name: "version 15 props with missing ctaType",
     document: { c_team: teamData },
     props: {
       data: {
@@ -339,7 +338,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 16,
+    version: 15,
   },
   {
     name: "version 31 props with slot-based structure",
@@ -443,11 +442,7 @@ const tests: ComponentTest[] = [
 
 describe("TeamSection", async () => {
   const puckConfig: Config = {
-    components: {
-      TeamSection,
-      TeamCardsWrapper,
-      TeamCard,
-    },
+    components: { TeamSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -464,7 +459,7 @@ describe("TeamSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -482,6 +477,10 @@ describe("TeamSection", async () => {
         puckConfig,
         document
       );
+
+      data = await resolveAllData(data, puckConfig, {
+        document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
