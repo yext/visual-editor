@@ -48,9 +48,9 @@ export const TeamCardsWrapper: ComponentConfig<{
   fields: teamCardsWrapperFields,
   defaultProps: {
     data: {
-      constantValue: [{}, {}, {}],
-      constantValueEnabled: true,
       field: "",
+      constantValueEnabled: true,
+      constantValue: [],
     },
     slots: {
       CardSlot: [],
@@ -114,22 +114,25 @@ export const TeamCardsWrapper: ComponentConfig<{
       let updatedData = data;
 
       // Ensure constantValue is an array
-      const constantValue = Array.isArray(data.props.data.constantValue)
-        ? data.props.data.constantValue
-        : [{}, {}, {}]; // fallback to default structure
+      if (!Array.isArray(data.props.data.constantValue)) {
+        updatedData = setDeep(updatedData, "props.data.constantValue", []);
+        return updatedData;
+      }
 
       // For each id in constantValue, check if there's already an existing card.
       // If not, add a new default card.
       // Also, de-duplicate ids to avoid conflicts.
       // Finally, update the card slot and the constantValue object.
       const inUseIds = new Set<string>();
-      const newSlots = constantValue.map((item, i) => {
-        const id = item?.id;
+      const newSlots = data.props.data.constantValue.map(({ id }, i) => {
+        // Try to find existing card by ID, or fall back to index if no ID
         const existingCard = id
           ? (data.props.slots.CardSlot.find(
               (slot) => slot.props.id === id
             ) as ComponentData<TeamCardProps>)
-          : undefined;
+          : (data.props.slots.CardSlot[i] as
+              | ComponentData<TeamCardProps>
+              | undefined);
 
         // Make a deep copy of existingCard to avoid mutating multiple cards
         let newCard = existingCard
