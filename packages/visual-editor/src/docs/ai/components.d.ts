@@ -259,16 +259,21 @@ interface HeroSectionProps {
 
 interface InsightSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: InsightData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: InsightStyles;
-  /** @internal */
+  styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
+  };
+  /** @internal  */
   analytics: {
     scope?: string;
   };
@@ -710,43 +715,6 @@ interface HeroStyles {
   mobileImagePosition: "bottom" | "top";
 }
 
-interface InsightData {
-  /**
-   * The main heading for the entire insights section.
-   * @defaultValue "Insights"
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the insight data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder insights.
-   */
-  insights: YextEntityField<InsightSectionType>;
-}
-
-interface InsightStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 2
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    /** The h tag level of the section heading */
-    level: HeadingLevel;
-    /** Alignment of the insight section heading */
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual insight cards. */
-  cards: {
-    /** The h tag level of each insight card's title */
-    headingLevel: HeadingLevel;
-    /** The background color of each insight card */
-    backgroundColor?: BackgroundStyle;
-    /** The CTA variant to use in each insight card */
-    ctaVariant: CTAVariant;
-  };
-}
-
 interface NearbyLocationsData {
   /**
    * The main heading for the entire section.
@@ -1037,11 +1005,6 @@ type FAQSectionType = {
 /** Corresponds to the different semantic heading levels */
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-/** Data for the InsightSection */
-type InsightSectionType = {
-  insights: Array<InsightStruct>;
-};
-
 /** Data for the PromoSection */
 type PromoSectionType = {
   /**
@@ -1105,28 +1068,6 @@ type FAQStruct = {
   question: TranslatableString;
   /** The answer (visible when the question is clicked) */
   answer: TranslatableRichText;
-};
-
-/** An individual insight for the InsightSection */
-type InsightStruct = {
-  /**
-   * An image representing the insight
-   * @ai Always use ImageType
-   */
-  image?: ImageType | AssetImageType;
-  /** The insight's title */
-  name?: TranslatableString;
-  /**
-   * The insight's category
-   * @ai This should not be more than a few words
-   */
-  category?: TranslatableString;
-  /** A UTC string for the insight's publish time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
-  publishTime?: string;
-  /** The insight's description */
-  description?: TranslatableRichText;
-  /** The insight's CTA */
-  cta: EnhancedTranslatableCTA;
 };
 
 type AssetVideo = {

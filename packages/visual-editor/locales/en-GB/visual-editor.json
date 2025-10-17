@@ -517,6 +517,8 @@
   "showMore": "Show more",
   "siteColors": "Site Colors",
   "slots": {
+    "insightCard": "Insight Card",
+    "insightCards": "Insight Cards",
     "productCard": "Product Card",
     "productCards": "Product Cards"
   },

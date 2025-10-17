@@ -192,6 +192,7 @@ export const eventSectionSlots: Migration = {
                       styles: {
                         displayType: "textAndLink",
                         variant: props.styles.cards.ctaVariant,
+                        presetImage: "app-store",
                       },
                       parentData: constantValueEnabled
                         ? undefined
