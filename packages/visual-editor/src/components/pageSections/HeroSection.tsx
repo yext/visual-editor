@@ -138,7 +138,7 @@ export type HeroVariantProps = Pick<
 >;
 
 export type HeroImageProps = {
-  className: string;
+  className?: string;
   styles: HeroStyles;
   slots: HeroSectionProps["slots"];
 };

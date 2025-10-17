@@ -45,3 +45,4 @@ export {
 } from "./visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
 export { mergeMeta } from "./mergeMeta.ts";
+export { visualEditorMediaQuery } from "./mediaQuery.ts";

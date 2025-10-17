@@ -30,6 +30,7 @@ import {
   ImageWrapperProps,
   VideoProps,
   i18nComponentsInstance,
+  visualEditorMediaQuery,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -185,7 +186,7 @@ const PromoMedia = ({
   data,
   slots,
 }: {
-  className: string;
+  className?: string;
   data: PromoData;
   slots: {
     VideoSlot: SlotComponent;
@@ -217,34 +218,23 @@ const PromoMedia = ({
 
 const PromoWrapper: PuckComponent<PromoSectionProps> = (props) => {
   const { data, styles, slots } = props;
+  const { sm: isMobile } = visualEditorMediaQuery();
+  const displayLeftImage = isMobile || styles.orientation === "left";
 
   return (
     <PageSection
       background={styles.backgroundColor}
       className={themeManagerCn("flex flex-col md:flex-row md:gap-16")}
     >
-      {/* Desktop left image */}
-      <PromoMedia
-        data={data}
-        slots={slots}
-        className={themeManagerCn(
-          styles.orientation === "right" && "md:hidden"
-        )}
-      />
+      {/* Desktop left image and mobile image */}
+      {displayLeftImage && <PromoMedia data={data} slots={slots} />}
       <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
         <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
         <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
         <slots.CTASlot style={{ height: "auto" }} allow={[]} />
       </div>
       {/* Desktop right image */}
-      <PromoMedia
-        data={data}
-        slots={slots}
-        className={themeManagerCn(
-          "hidden sm:block",
-          styles.orientation === "left" && "md:hidden"
-        )}
-      />
+      {!displayLeftImage && <PromoMedia data={data} slots={slots} />}
     </PageSection>
   );
 };

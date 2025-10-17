@@ -1,5 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { themeManagerCn, Background } from "@yext/visual-editor";
+import {
+  themeManagerCn,
+  Background,
+  visualEditorMediaQuery,
+} from "@yext/visual-editor";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
 import { PuckComponent } from "@measured/puck";
@@ -29,6 +33,10 @@ const CompactHeroImage: PuckComponent<HeroImageProps> = ({
 
 export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
   const { styles, slots, puck, id } = props;
+  const { sm: isMobile } = visualEditorMediaQuery();
+  const showLeftImage = isMobile
+    ? styles.mobileImagePosition === "top"
+    : styles.desktopImagePosition === "left";
 
   return (
     <Background
@@ -36,16 +44,14 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
       className="components w-full flex flex-col sm:flex-row justify-between"
     >
       {/* Desktop left image / Mobile top image */}
-      <CompactHeroImage
-        id={id + "-image"}
-        className={themeManagerCn(
-          styles.mobileImagePosition === "bottom" && "hidden sm:block",
-          styles.desktopImagePosition === "right" && "sm:hidden"
-        )}
-        styles={styles}
-        slots={slots}
-        puck={puck}
-      />
+      {showLeftImage && (
+        <CompactHeroImage
+          id={id + "-image"}
+          styles={styles}
+          slots={slots}
+          puck={puck}
+        />
+      )}
 
       {/* Mobile container styles */}
       <div
@@ -83,16 +89,14 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
       </div>
 
       {/* Desktop right image / Mobile bottom image */}
-      <CompactHeroImage
-        id={id + "-image"}
-        className={themeManagerCn(
-          styles.mobileImagePosition === "top" && "hidden sm:block",
-          styles.desktopImagePosition === "left" && "sm:hidden"
-        )}
-        styles={styles}
-        slots={slots}
-        puck={puck}
-      />
+      {!showLeftImage && (
+        <CompactHeroImage
+          id={id + "-image"}
+          styles={styles}
+          slots={slots}
+          puck={puck}
+        />
+      )}
     </Background>
   );
 };
