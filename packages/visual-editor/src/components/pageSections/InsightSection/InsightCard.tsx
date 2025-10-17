@@ -14,6 +14,8 @@ import {
   getDefaultRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { useTranslation } from "react-i18next";
+import { getDisplayValue } from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 
@@ -251,6 +253,7 @@ const SlotsWithSeparator: React.FC<{
 
 const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
   const { styles, slots } = props;
+  const { i18n } = useTranslation();
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: BackgroundStyle | undefined;
     slotStyles: Record<string, InsightCardProps["styles"]>;
@@ -368,57 +371,18 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
 
     // Check parent data (from entity)
     if (slot.props?.parentData?.richText) {
-      const richText = slot.props.parentData.richText;
-      if (typeof richText === "string") {
-        return richText.trim() !== "";
-      }
-      if (typeof richText === "object" && richText !== null) {
-        const contentKeys = Object.keys(richText).filter(
-          (key) => key !== "hasLocalizedValue"
-        );
-        return contentKeys.some((key) => {
-          const val = richText[key];
-          if (typeof val === "string") {
-            return val.trim() !== "";
-          }
-          if (typeof val === "object" && val !== null) {
-            return Object.values(val).some(
-              (v) => typeof v === "string" && v.trim() !== ""
-            );
-          }
-          return false;
-        });
-      }
+      const displayValue = getDisplayValue(
+        slot.props.parentData.richText,
+        i18n.language
+      );
+      return displayValue.trim() !== "";
     }
 
     // Check constant value (can be string or object with localized values)
     const constantValue = slot.props?.data?.text?.constantValue;
     if (constantValue) {
-      if (typeof constantValue === "string") {
-        return constantValue.trim() !== "";
-      }
-      if (typeof constantValue === "object" && constantValue !== null) {
-        const contentKeys = Object.keys(constantValue).filter(
-          (key) => key !== "hasLocalizedValue"
-        );
-
-        // Check if any of the content values are non-empty
-        return contentKeys.some((key) => {
-          const val = constantValue[key];
-
-          if (typeof val === "string") {
-            return val.trim() !== "";
-          }
-
-          if (typeof val === "object" && val !== null) {
-            return Object.values(val).some(
-              (v) => typeof v === "string" && v.trim() !== ""
-            );
-          }
-
-          return false;
-        });
-      }
+      const displayValue = getDisplayValue(constantValue, i18n.language);
+      return displayValue.trim() !== "";
     }
 
     return false;
