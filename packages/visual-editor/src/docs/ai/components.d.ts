@@ -408,15 +408,21 @@ interface StaticMapSectionProps {
 
 interface TeamSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: TeamData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: TeamStyles;
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -857,38 +863,6 @@ interface StaticMapStyles {
   mapStyle: string;
 }
 
-interface TeamData {
-  /**
-   * The main heading for the entire team section.
-   * @defaultValue "Meet Our Team" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the team member data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder people.
-   */
-  people: YextEntityField<TeamSectionType>;
-}
-
-interface TeamStyles {
-  /**
-   * The background color for the entire section.
-   * @defaultValue Background Color 3
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual people cards. */
-  cards: {
-    headingLevel: HeadingLevel;
-    backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAVariant;
-  };
-}
-
 interface TestimonialData {
   /**
    * The main heading for the entire testimonials section.
@@ -1020,11 +994,6 @@ type PromoSectionType = {
   cta: EnhancedTranslatableCTA;
 };
 
-/** Data for the TeamSection */
-type TeamSectionType = {
-  people: Array<PersonStruct>;
-};
-
 /** Data for the TestimonialSection */
 type TestimonialSectionType = {
   testimonials: Array<TestimonialStruct>;
@@ -1096,25 +1065,6 @@ type EnhancedTranslatableCTA = TranslatableCTA & {
    */
   latitude?: number;
   longitude?: number;
-};
-
-/** An individual person in the TeamSection */
-type PersonStruct = {
-  /**
-   * The person's headshot image
-   * @ai Always use ImageType
-   */
-  headshot?: ImageType | AssetImageType;
-  /** The person's name */
-  name?: TranslatableString;
-  /** The person's job title */
-  title?: TranslatableString;
-  /** The person's phone number. Format: +1234567890 */
-  phoneNumber?: string;
-  /** The person's email address */
-  email?: string;
-  /** A call to action for the person */
-  cta: EnhancedTranslatableCTA;
 };
 
 /** An individual testimonial for the TestimonialSection */

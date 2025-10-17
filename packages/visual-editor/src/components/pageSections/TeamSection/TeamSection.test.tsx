@@ -4,15 +4,16 @@ import {
   axe,
   ComponentTest,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   TeamSection,
   migrate,
   migrationRegistry,
   VisualEditorProvider,
+  SlotsCategoryComponents,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const teamData = {
@@ -285,7 +286,7 @@ const tests: ComponentTest[] = [
     version: 7,
   },
   {
-    name: "version 16 props with missing ctaType",
+    name: "version 15 props with missing ctaType",
     document: { c_team: teamData },
     props: {
       data: {
@@ -337,13 +338,111 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 16,
+    version: 15,
+  },
+  {
+    name: "version 31 props with slot-based structure",
+    document: { c_team: teamData },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "name",
+                  constantValue: {
+                    en: "Meet Our Team",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "TeamCardsWrapper",
+            props: {
+              data: {
+                field: "c_team",
+                constantValueEnabled: false,
+                constantValue: [],
+              },
+              slots: {
+                CardSlot: [],
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 31,
+  },
+  {
+    name: "version 31 props with slot-based structure and constant values",
+    document: { c_team: teamData },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Our Amazing Team",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "TeamCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}, {}, {}],
+              },
+              slots: {
+                CardSlot: [],
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 31,
   },
 ];
 
 describe("TeamSection", async () => {
   const puckConfig: Config = {
-    components: { TeamSection },
+    components: { TeamSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -360,7 +459,7 @@ describe("TeamSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -378,6 +477,10 @@ describe("TeamSection", async () => {
         puckConfig,
         document
       );
+
+      data = await resolveAllData(data, puckConfig, {
+        document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>

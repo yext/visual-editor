@@ -699,21 +699,13 @@ The Team Section is designed to showcase a list of people, such as employees, ex
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop   | Type       | Description                                                        | Default |
-| :----- | :--------- | :----------------------------------------------------------------- | :------ |
-| `data` | `TeamData` | This object contains the content to be displayed by the component. |         |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type         | Description                                                                 | Default |
-| :------- | :----------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `TeamStyles` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 

@@ -32,7 +32,24 @@ export const defaultPerson: PersonStruct = {
   },
 };
 
-export const TEAM_SECTION_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
+// This config is used by TeamCardsWrapper when constantValueEnabled is true
+// It just manages an array of card IDs, not the full PersonStruct data
+export const TEAM_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
+  type: "array",
+  arrayFields: {
+    id: {
+      type: "text",
+      visible: false,
+    },
+  },
+  label: "",
+  getItemSummary: (item, index) =>
+    pt("teamMember", "Team Member") + " " + ((index ?? 0) + 1),
+};
+
+// This is the full team section config for editing PersonStruct data
+// Used when editing team data directly (not through the wrapper)
+export const TEAM_SECTION_FULL_CONSTANT_CONFIG: CustomField<TeamSectionType> = {
   type: "custom",
   render: ({
     onChange,

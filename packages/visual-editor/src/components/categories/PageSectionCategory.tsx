@@ -41,7 +41,10 @@ import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "../pageSections/TestimonialSection.tsx";
-import { TeamSection, TeamSectionProps } from "../pageSections/TeamSection.tsx";
+import {
+  TeamSection,
+  TeamSectionProps,
+} from "../pageSections/TeamSection/TeamSection.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,
