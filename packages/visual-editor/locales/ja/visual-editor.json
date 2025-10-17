@@ -320,6 +320,7 @@
       "width": "幅",
       "yes": "はい"
     },
+    "phone": "電話",
     "phoneFormat": "電話形式",
     "phoneNumber": "電話番号",
     "phoneNumberFormat": "電話番号形式",
@@ -520,6 +521,7 @@
   "slots": {
     "insightCard": "インサイトカード",
     "insightCards": "インサイトカード",
+    "nearbyLocationCards": "近くの場所カード",
     "productCard": "製品カード",
     "productCards": "製品カード"
   },

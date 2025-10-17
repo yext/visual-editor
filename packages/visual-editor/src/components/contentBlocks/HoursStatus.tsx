@@ -14,14 +14,28 @@ import {
 
 export interface HoursStatusProps {
   data: {
+    /** The hours field to display the status for */
     hours: YextEntityField<HoursType>;
   };
+
   styles: {
+    /** Whether to show the open status ("Open Now" or "Closed") */
     showCurrentStatus?: boolean;
+    /** The time format to use */
     timeFormat?: "12h" | "24h";
+    /** The day of week format ("Mon" vs. "Monday") */
     dayOfWeekFormat?: "short" | "long";
+    /** Whether to show day names ("Monday", "Tuesday") */
     showDayNames?: boolean;
+    /** Additional class names to apply to the underlying component */
     className?: string;
+  };
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    hours: HoursType;
+    timezone: string;
   };
 }
 
@@ -82,19 +96,23 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
   data,
   styles,
   puck,
+  parentData,
 }) => {
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
-  const hours = resolveComponentData(data.hours, i18n.language, streamDocument);
+  const hours = parentData
+    ? parentData.hours
+    : resolveComponentData(data.hours, i18n.language, streamDocument);
 
   return hours ? (
     <EntityField
-      displayName={pt("hours", "Hours")}
+      displayName={parentData ? parentData.field : pt("hours", "Hours")}
       fieldId={data.hours.field}
-      constantValueEnabled={data.hours.constantValueEnabled}
+      constantValueEnabled={!parentData && data.hours.constantValueEnabled}
     >
       <HoursStatusAtom
         hours={hours}
+        timezone={parentData?.timezone}
         className={styles.className}
         showCurrentStatus={styles.showCurrentStatus}
         showDayNames={styles.showDayNames}

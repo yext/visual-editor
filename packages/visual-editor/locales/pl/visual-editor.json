@@ -320,6 +320,7 @@
       "width": "Szerokość",
       "yes": "Tak"
     },
+    "phone": "Telefon",
     "phoneFormat": "Format telefonu",
     "phoneNumber": "Numer telefonu",
     "phoneNumberFormat": "Format numeru telefonu",
@@ -520,6 +521,7 @@
   "slots": {
     "insightCard": "Karta Wglądu",
     "insightCards": "Karty Wglądu",
+    "nearbyLocationCards": "Karty lokalizacji w pobliżu",
     "productCard": "Karta Produktu",
     "productCards": "Karty Produktów"
   },

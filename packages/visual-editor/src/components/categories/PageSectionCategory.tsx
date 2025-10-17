@@ -19,7 +19,7 @@ import {
 import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,
-} from "../pageSections/NearbyLocations.tsx";
+} from "../pageSections/NearbyLocations/NearbyLocations.tsx";
 import {
   ProductSection,
   ProductSectionProps,

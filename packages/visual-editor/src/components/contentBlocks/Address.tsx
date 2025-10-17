@@ -23,11 +23,18 @@ export interface AddressProps {
     /** The address data to display. */
     address: YextEntityField<AddressType>;
   };
+
   styles: {
     /** Whether to include a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
+  };
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    address: AddressType;
   };
 }
 
@@ -72,14 +79,16 @@ const addressFields: Fields<AddressProps> = {
 };
 
 const AddressComponent: PuckComponent<AddressProps> = (props) => {
-  const { data, styles, puck } = props;
+  const { data, styles, puck, parentData } = props;
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
-  const address = resolveComponentData(
-    data.address,
-    i18n.language,
-    streamDocument
-  ) as unknown as AddressType | undefined;
+  const address = parentData
+    ? parentData.address
+    : (resolveComponentData(
+        data.address,
+        i18n.language,
+        streamDocument
+      ) as unknown as AddressType | undefined);
   const coordinates = getDirections(address, undefined, undefined, {
     provider: "google",
   });
@@ -96,9 +105,9 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   return showAddress ? (
     <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
       <EntityField
-        displayName={pt("address", "Address")}
+        displayName={parentData ? parentData.field : pt("address", "Address")}
         fieldId={data.address.field}
-        constantValueEnabled={data.address.constantValueEnabled}
+        constantValueEnabled={!parentData && data.address.constantValueEnabled}
       >
         <RenderAddress
           address={address}

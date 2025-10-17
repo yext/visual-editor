@@ -320,6 +320,7 @@
       "width": "Szélesség",
       "yes": "Igen"
     },
+    "phone": "Telefon",
     "phoneFormat": "Telefonformátum",
     "phoneNumber": "Telefonszám",
     "phoneNumberFormat": "Telefonszám formátuma",
@@ -520,6 +521,7 @@
   "slots": {
     "insightCard": "Insight Card",
     "insightCards": "Betekintéskártyák",
+    "nearbyLocationCards": "Közeli helykártyák",
     "productCard": "Termékkártya",
     "productCards": "Termékkártyák"
   },
