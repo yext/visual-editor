@@ -323,6 +323,90 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
     styles
   );
 
+  const getCategoryValue = () => {
+    const slot = slotsData?.CategorySlot?.[0];
+    if (!slot) {
+      return false;
+    }
+
+    // Check parent data (from entity)
+    if (slot.props?.parentData?.richText) {
+      const richText = slot.props.parentData.richText;
+      if (typeof richText === "string") {
+        return richText.trim() !== "";
+      }
+      if (typeof richText === "object" && richText !== null) {
+        const contentKeys = Object.keys(richText).filter(
+          (key) => key !== "hasLocalizedValue"
+        );
+        return contentKeys.some((key) => {
+          const val = richText[key];
+          if (typeof val === "string") {
+            return val.trim() !== "";
+          }
+          if (typeof val === "object" && val !== null) {
+            return Object.values(val).some(
+              (v) => typeof v === "string" && v.trim() !== ""
+            );
+          }
+          return false;
+        });
+      }
+    }
+
+    // Check constant value (can be string or object with localized values)
+    const constantValue = slot.props?.data?.text?.constantValue;
+    if (constantValue) {
+      if (typeof constantValue === "string") {
+        return constantValue.trim() !== "";
+      }
+      if (typeof constantValue === "object" && constantValue !== null) {
+        const contentKeys = Object.keys(constantValue).filter(
+          (key) => key !== "hasLocalizedValue"
+        );
+
+        // Check if any of the content values are non-empty
+        return contentKeys.some((key) => {
+          const val = constantValue[key];
+
+          if (typeof val === "string") {
+            return val.trim() !== "";
+          }
+
+          if (typeof val === "object" && val !== null) {
+            return Object.values(val).some(
+              (v) => typeof v === "string" && v.trim() !== ""
+            );
+          }
+
+          return false;
+        });
+      }
+    }
+
+    return false;
+  };
+
+  const getPublishTimeValue = () => {
+    const slot = slotsData?.PublishTimeSlot?.[0];
+    if (!slot) return "";
+
+    // Check parent data (from entity)
+    if (slot.props?.parentData?.date) {
+      return slot.props.parentData.date;
+    }
+
+    // Check constant value or field
+    return (
+      slot.props?.data?.date?.constantValue ||
+      slot.props?.data?.date?.field ||
+      ""
+    );
+  };
+
+  const hasCategory = getCategoryValue();
+  const hasPublishTime = Boolean(getPublishTimeValue());
+
   return (
     <Background
       className="rounded flex flex-col"
@@ -331,9 +415,25 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
       <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
       <div className="flex flex-col gap-4 p-6 flex-grow">
         <div className="flex flex-col gap-2 flex-grow">
+          {(hasCategory || hasPublishTime || props.puck.isEditing) && (
+            <div className="flex items-center">
+              {(hasCategory || props.puck.isEditing) && (
+                <div className="flex items-center">
+                  <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
+                </div>
+              )}
+              {hasCategory && hasPublishTime && <span className="px-3">|</span>}
+              {(hasPublishTime || props.puck.isEditing) && (
+                <div className="flex items-center">
+                  <slots.PublishTimeSlot
+                    style={{ height: "auto" }}
+                    allow={[]}
+                  />
+                </div>
+              )}
+            </div>
+          )}
           <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
-          <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
-          <slots.PublishTimeSlot style={{ height: "auto" }} allow={[]} />
           <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
         </div>
         <div className="mt-auto">
