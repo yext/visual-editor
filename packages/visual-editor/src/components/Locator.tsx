@@ -40,7 +40,6 @@ import {
   Heading,
   msg,
   useDocument,
-  Toggle,
   YextField,
   useTemplateProps,
   resolveUrlTemplate,
@@ -515,14 +514,13 @@ const LocatorInternal = ({
                     }))}
             </div>
             {openNowButton && (
-              <Toggle
-                pressed={showFilter}
-                onPressedChange={(pressed) => setShowFilter(pressed)}
+              <button
                 className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                onClick={() => setShowFilter((prev) => !prev)}
               >
                 {t("filter", "Filter")}
                 {<FaSlidersH />}
-              </Toggle>
+              </button>
             )}
           </div>
           {showFilter && (
@@ -546,12 +544,9 @@ const LocatorInternal = ({
                   <div className="flex flex-col gap-4">
                     <div className="font-bold">{t("hours", "Hours")}</div>
                     <div className="flex flex-row gap-1">
-                      <Toggle
-                        pressed={isSelected}
-                        onPressedChange={(pressed) =>
-                          handleOpenNowClick(pressed)
-                        }
+                      <button
                         className="inline-flex bg-white"
+                        onClick={() => handleOpenNowClick(!isSelected)}
                       >
                         <div className="inline-flex items-center gap-4">
                           {t("openNow", "Open Now")}
@@ -559,7 +554,7 @@ const LocatorInternal = ({
                             {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
                           </div>
                         </div>
-                      </Toggle>
+                      </button>
                     </div>
                   </div>
                 </div>
