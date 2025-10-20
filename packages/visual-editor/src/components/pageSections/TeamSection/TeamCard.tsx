@@ -251,7 +251,6 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
     props.id
   );
 
-  const showImage = Boolean(conditionalRender?.image || puck.isEditing);
   const showName = Boolean(conditionalRender?.name || puck.isEditing);
   const showTitle = Boolean(conditionalRender?.title || puck.isEditing);
   const showPhone = Boolean(conditionalRender?.phone || puck.isEditing);
@@ -345,11 +344,9 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
         background={styles.backgroundColor}
         className="flex p-8 gap-6"
       >
-        {showImage && (
-          <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
-            <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
-          </div>
-        )}
+        <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
+          <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
+        </div>
         <div className="flex flex-col justify-center gap-1">
           {showName && <slots.NameSlot style={{ height: "auto" }} allow={[]} />}
           {showTitle && (
