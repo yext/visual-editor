@@ -122,42 +122,44 @@ export const teamsSectionSlots: Migration = {
                 ],
                 PhoneSlot: [
                   {
-                    type: "Phone",
+                    type: "PhoneNumbersSlot",
                     props: {
                       data: {
-                        phone: {
-                          field: "",
-                          constantValueEnabled: true,
-                          constantValue: person.phoneNumber ?? "",
-                        },
+                        phoneNumbers: person.phoneNumber
+                          ? [
+                              {
+                                number: {
+                                  field: "",
+                                  constantValueEnabled: true,
+                                  constantValue: person.phoneNumber,
+                                },
+                                label: {
+                                  en: "Phone",
+                                  hasLocalizedValue: "true",
+                                },
+                              },
+                            ]
+                          : [],
                       },
-                      parentData: constantValueEnabled
-                        ? undefined
-                        : {
-                            field: props.data.people.field,
-                            phone: person.phoneNumber,
-                          },
+                      styles: {
+                        phoneFormat: "domestic",
+                        includePhoneHyperlink: true,
+                      },
                       eventName: `phone${i}`,
                     },
                   },
                 ],
                 EmailSlot: [
                   {
-                    type: "Email",
+                    type: "EmailsSlot",
                     props: {
                       data: {
-                        email: {
+                        list: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: person.email ?? "",
+                          constantValue: person.email ? [person.email] : [],
                         },
                       },
-                      parentData: constantValueEnabled
-                        ? undefined
-                        : {
-                            field: props.data.people.field,
-                            email: person.email,
-                          },
                       eventName: `email${i}`,
                     },
                   },

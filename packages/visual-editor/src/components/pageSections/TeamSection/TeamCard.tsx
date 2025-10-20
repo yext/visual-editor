@@ -22,8 +22,8 @@ import {
   ImgSizesByBreakpoint,
   resolveYextEntityField,
   i18nComponentsInstance,
+  getDefaultRTF,
 } from "@yext/visual-editor";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { defaultPerson } from "../../../internal/puck/constant-value-fields/TeamSection.tsx";
@@ -255,6 +255,8 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
   const showName = Boolean(conditionalRender?.name || puck.isEditing);
   const showTitle = Boolean(conditionalRender?.title || puck.isEditing);
   const showPhone = Boolean(conditionalRender?.phone || puck.isEditing);
+  const showEmail = Boolean(conditionalRender?.email || puck.isEditing);
+  const showCta = Boolean(conditionalRender?.cta || puck.isEditing);
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -364,10 +366,14 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
           {showPhone && (
             <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
           )}
-          <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
-          <div className="flex justify-start mt-auto gap-2">
-            <slots.CTASlot style={{ height: "auto" }} allow={[]} />
-          </div>
+          {showEmail && (
+            <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
+          )}
+          {showCta && (
+            <div className="flex justify-start mt-auto gap-2">
+              <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+            </div>
+          )}
         </div>
       </Background>
     </div>
@@ -444,19 +450,25 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
       phoneSlotProps &&
         (phoneSlotProps.parentData
           ? phoneSlotProps.parentData.phoneNumbers?.length
-          : phoneSlotProps.data?.phoneNumbers?.length)
+          : phoneSlotProps.data?.phoneNumbers?.length &&
+            phoneSlotProps.data.phoneNumbers.some(
+              (phone: any) => phone.number?.constantValue || phone.number?.field
+            ))
     );
     const showEmail = Boolean(
       emailSlotProps &&
         (emailSlotProps.parentData
           ? emailSlotProps.parentData.list?.length
-          : emailSlotProps.data?.list?.length)
+          : emailSlotProps.data?.list?.constantValue?.length ||
+            emailSlotProps.data?.list?.field)
     );
     const showCTA = Boolean(
       ctaSlotProps &&
         (ctaSlotProps.parentData
           ? ctaSlotProps.parentData.cta?.label
-          : resolveYextEntityField(
+          : ctaSlotProps.data?.entityField?.constantValue?.label ||
+            ctaSlotProps.data?.entityField?.field ||
+            resolveYextEntityField(
               params.metadata.streamDocument,
               ctaSlotProps.data.entityField
             )?.label)
