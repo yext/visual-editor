@@ -341,8 +341,8 @@ const tests: ComponentTest[] = [
     version: 15,
   },
   {
-    name: "version 31 props with slot-based structure",
-    document: { c_team: teamData },
+    name: "version 31 props with entity values",
+    document: { c_team: teamData, name: "Test Name" },
     props: {
       styles: {
         backgroundColor: {
@@ -358,10 +358,7 @@ const tests: ComponentTest[] = [
               data: {
                 text: {
                   field: "name",
-                  constantValue: {
-                    en: "Meet Our Team",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: "Meet Our Team",
                   constantValueEnabled: false,
                 },
               },
@@ -379,18 +376,156 @@ const tests: ComponentTest[] = [
                 constantValue: [],
               },
               slots: {
-                CardSlot: [],
+                CardSlot: [
+                  {
+                    type: "TeamCard",
+                    props: {
+                      id: "TeamCard-1",
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-palette-secondary-light",
+                          textColor: "text-black",
+                        },
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/80x80",
+                                    height: 80,
+                                    width: 80,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1,
+                                width: 80,
+                              },
+                            },
+                          },
+                        ],
+                        NameSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Captain Cosmo",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Founder & CEO",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                        PhoneSlot: [
+                          {
+                            type: "PhoneNumbersSlot",
+                            props: {
+                              data: {
+                                phoneNumbers: [
+                                  {
+                                    number: {
+                                      field: "",
+                                      constantValue: "+18005551010",
+                                      constantValueEnabled: true,
+                                    },
+                                    label: {
+                                      en: "Phone",
+                                      hasLocalizedValue: "true",
+                                    },
+                                  },
+                                ],
+                              },
+                              styles: {
+                                phoneFormat: "domestic",
+                                includePhoneHyperlink: true,
+                              },
+                              eventName: "phone0",
+                            },
+                          },
+                        ],
+                        EmailSlot: [
+                          {
+                            type: "EmailsSlot",
+                            props: {
+                              data: {
+                                list: {
+                                  field: "",
+                                  constantValue: ["cosmo@galaxygrill.com"],
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              eventName: "email0",
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "Email Me",
+                                    link: "cosmo@galaxygrill.com",
+                                    linkType: "EMAIL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "primary" },
+                              eventName: "cta0",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
         ],
+      },
+      analytics: {
+        scope: "teamSection",
       },
       liveVisibility: true,
     },
     version: 31,
   },
   {
-    name: "version 31 props with slot-based structure and constant values",
+    name: "version 31 props with constant values",
     document: { c_team: teamData },
     props: {
       styles: {
@@ -407,10 +542,7 @@ const tests: ComponentTest[] = [
               data: {
                 text: {
                   field: "",
-                  constantValue: {
-                    en: "Our Amazing Team",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: "Our Amazing Team",
                   constantValueEnabled: true,
                 },
               },
@@ -432,11 +564,447 @@ const tests: ComponentTest[] = [
                 ],
               },
               slots: {
-                CardSlot: [],
+                CardSlot: [
+                  {
+                    type: "TeamCard",
+                    props: {
+                      id: "TeamCard-1",
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-palette-secondary-light",
+                          textColor: "text-black",
+                        },
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              id: "TeamCard-1-image",
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/80x80",
+                                    height: 80,
+                                    width: 80,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1,
+                                width: 80,
+                              },
+                              sizes: {
+                                base: "calc(100vw - 32px)",
+                                lg: "calc(maxWidth * 0.45)",
+                              },
+                            },
+                          },
+                        ],
+                        NameSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              id: "TeamCard-1-name",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Team Member 1",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "TeamCard-1-title",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Position 1",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                        PhoneSlot: [
+                          {
+                            type: "PhoneNumbersSlot",
+                            props: {
+                              id: "TeamCard-1-phone",
+                              data: {
+                                phoneNumbers: [
+                                  {
+                                    number: {
+                                      field: "",
+                                      constantValue: "+18005551111",
+                                      constantValueEnabled: true,
+                                    },
+                                    label: {
+                                      en: "Phone",
+                                      hasLocalizedValue: "true",
+                                    },
+                                  },
+                                ],
+                              },
+                              styles: {
+                                phoneFormat: "domestic",
+                                includePhoneHyperlink: true,
+                              },
+                              eventName: "phone",
+                            },
+                          },
+                        ],
+                        EmailSlot: [
+                          {
+                            type: "EmailsSlot",
+                            props: {
+                              id: "TeamCard-1-email",
+                              data: {
+                                list: {
+                                  field: "",
+                                  constantValue: ["team1@example.com"],
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              eventName: "email",
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              id: "TeamCard-1-cta",
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "View Profile",
+                                    link: "#",
+                                    linkType: "URL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "primary" },
+                              eventName: "cta",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                  {
+                    type: "TeamCard",
+                    props: {
+                      id: "TeamCard-2",
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-palette-secondary-light",
+                          textColor: "text-black",
+                        },
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              id: "TeamCard-2-image",
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/80x80",
+                                    height: 80,
+                                    width: 80,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1,
+                                width: 80,
+                              },
+                              sizes: {
+                                base: "calc(100vw - 32px)",
+                                lg: "calc(maxWidth * 0.45)",
+                              },
+                            },
+                          },
+                        ],
+                        NameSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              id: "TeamCard-2-name",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Team Member 2",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "TeamCard-2-title",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Position 2",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                        PhoneSlot: [
+                          {
+                            type: "PhoneNumbersSlot",
+                            props: {
+                              id: "TeamCard-2-phone",
+                              data: {
+                                phoneNumbers: [
+                                  {
+                                    number: {
+                                      field: "",
+                                      constantValue: "+18005552222",
+                                      constantValueEnabled: true,
+                                    },
+                                    label: {
+                                      en: "Phone",
+                                      hasLocalizedValue: "true",
+                                    },
+                                  },
+                                ],
+                              },
+                              styles: {
+                                phoneFormat: "domestic",
+                                includePhoneHyperlink: true,
+                              },
+                              eventName: "phone",
+                            },
+                          },
+                        ],
+                        EmailSlot: [
+                          {
+                            type: "EmailsSlot",
+                            props: {
+                              id: "TeamCard-2-email",
+                              data: {
+                                list: {
+                                  field: "",
+                                  constantValue: ["team2@example.com"],
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              eventName: "email",
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              id: "TeamCard-2-cta",
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "View Profile",
+                                    link: "#",
+                                    linkType: "URL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "primary" },
+                              eventName: "cta",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                  {
+                    type: "TeamCard",
+                    props: {
+                      id: "TeamCard-3",
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-palette-secondary-light",
+                          textColor: "text-black",
+                        },
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              id: "TeamCard-3-image",
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/80x80",
+                                    height: 80,
+                                    width: 80,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1,
+                                width: 80,
+                              },
+                              sizes: {
+                                base: "calc(100vw - 32px)",
+                                lg: "calc(maxWidth * 0.45)",
+                              },
+                            },
+                          },
+                        ],
+                        NameSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              id: "TeamCard-3-name",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Team Member 3",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "TeamCard-3-title",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Position 3",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                        PhoneSlot: [
+                          {
+                            type: "PhoneNumbersSlot",
+                            props: {
+                              id: "TeamCard-3-phone",
+                              data: {
+                                phoneNumbers: [
+                                  {
+                                    number: {
+                                      field: "",
+                                      constantValue: "+18005553333",
+                                      constantValueEnabled: true,
+                                    },
+                                    label: {
+                                      en: "Phone",
+                                      hasLocalizedValue: "true",
+                                    },
+                                  },
+                                ],
+                              },
+                              styles: {
+                                phoneFormat: "domestic",
+                                includePhoneHyperlink: true,
+                              },
+                              eventName: "phone",
+                            },
+                          },
+                        ],
+                        EmailSlot: [
+                          {
+                            type: "EmailsSlot",
+                            props: {
+                              id: "TeamCard-3-email",
+                              data: {
+                                list: {
+                                  field: "",
+                                  constantValue: ["team3@example.com"],
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              eventName: "email",
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              id: "TeamCard-3-cta",
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "View Profile",
+                                    link: "#",
+                                    linkType: "URL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "primary" },
+                              eventName: "cta",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
         ],
+      },
+      analytics: {
+        scope: "teamSection",
       },
       liveVisibility: true,
     },
@@ -483,7 +1051,7 @@ describe("TeamSection", async () => {
       );
 
       data = await resolveAllData(data, puckConfig, {
-        document,
+        streamDocument: document,
       });
 
       const { container } = reactRender(
