@@ -5,14 +5,18 @@ import {
   setDeep,
   Slot,
 } from "@measured/puck";
-import { BodyTextProps, FAQStruct, msg } from "@yext/visual-editor";
+import {
+  BodyTextProps,
+  FAQStruct,
+  getDefaultRTF,
+  msg,
+} from "@yext/visual-editor";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../../atoms/accordion";
 import { useAnalytics } from "@yext/pages-components";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 export const defaultFAQSlotData = (id?: string, index?: number) => ({
   type: "FAQSlot",
