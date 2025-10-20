@@ -366,6 +366,7 @@
     "xLink": "X -länk",
     "youtubeLink": "YouTube -länk"
   },
+  "filter": "Filtrera",
   "findALocation": "Hitta en plats",
   "fontSize": "Fontstorlek",
   "fontSizeDefaultLabel": "Standard",
@@ -478,6 +479,7 @@
   "recentReviews": "Senaste recensioner",
   "recommendedColors": "Rekommenderade färger",
   "redo": "Göra om",
+  "refineYourSearch": "Förfina din sökning",
   "reopenDate": "Öppna datum igen",
   "responseFrom": "Svar från {{businessName}}",
   "saturday": "Lördag",
@@ -587,7 +589,5 @@
   "video": "Video",
   "videoThumbnail": "Videotumsstil",
   "visitPage": "Besöka sidan",
-  "wednesday": "Onsdag",
-  "filter": "Filtrera",
-  "refineYourSearch": "Förfina din sökning"
+  "wednesday": "Onsdag"
 }

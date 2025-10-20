@@ -364,6 +364,7 @@
     "xLink": "X Link",
     "youtubeLink": "YouTube -Link"
   },
+  "filter": "Filter",
   "findALocation": "Finden Sie einen Ort",
   "fontSize": "Schriftgröße",
   "fontSizeDefaultLabel": "Standard",
@@ -476,6 +477,7 @@
   "recentReviews": "Neuere Bewertungen",
   "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
+  "refineYourSearch": "Verfeinern Sie Ihre Suche",
   "reopenDate": "Wiedereröffnung Datum",
   "responseFrom": "Antwort von {{businessName}}",
   "saturday": "Samstag",
@@ -585,7 +587,5 @@
   "video": "Video",
   "videoThumbnail": "Video -Miniaturansicht",
   "visitPage": "Besuchen Sie die Seite",
-  "wednesday": "Mittwoch",
-  "filter": "Filter",
-  "refineYourSearch": "Verfeinern Sie Ihre Suche"
+  "wednesday": "Mittwoch"
 }

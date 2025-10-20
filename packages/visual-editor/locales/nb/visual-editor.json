@@ -365,6 +365,7 @@
     "xLink": "X lenke",
     "youtubeLink": "YouTube -lenke"
   },
+  "filter": "Filter",
   "findALocation": "Finn et sted",
   "fontSize": "Fontstørrelse",
   "fontSizeDefaultLabel": "Misligholde",
@@ -477,6 +478,7 @@
   "recentReviews": "Nyere anmeldelser",
   "recommendedColors": "Anbefalte farger",
   "redo": "Gjøre om",
+  "refineYourSearch": "Avgrens søket ditt",
   "reopenDate": "Åpne dato på nytt",
   "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",
@@ -586,7 +588,5 @@
   "video": "Video",
   "videoThumbnail": "Video miniatyrbilde",
   "visitPage": "Besøk side",
-  "wednesday": "onsdag",
-  "filter": "Filter",
-  "refineYourSearch": "Avgrens søket ditt"
+  "wednesday": "onsdag"
 }

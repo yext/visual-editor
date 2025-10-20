@@ -365,6 +365,7 @@
     "xLink": "X nuoroda",
     "youtubeLink": "„YouTube“ nuoroda"
   },
+  "filter": "Filtruoti",
   "findALocation": "Raskite vietą",
   "fontSize": "Šrifto dydis",
   "fontSizeDefaultLabel": "Numatytasis",
@@ -477,6 +478,7 @@
   "recentReviews": "Naujausios apžvalgos",
   "recommendedColors": "Rekomenduojamos spalvos",
   "redo": "Perdaryti",
+  "refineYourSearch": "Patikslinkite savo paiešką",
   "reopenDate": "Atnaujinti datą",
   "responseFrom": "Atsakymas iš {{businessName}}",
   "saturday": "Šeštadienis",
@@ -586,7 +588,5 @@
   "video": "Vaizdo įrašas",
   "videoThumbnail": "Vaizdo įrašo miniatiūra",
   "visitPage": "Apsilankykite puslapyje",
-  "wednesday": "Trečiadienis",
-  "filter": "Filtruoti",
-  "refineYourSearch": "Patikslinkite savo paiešką"
+  "wednesday": "Trečiadienis"
 }

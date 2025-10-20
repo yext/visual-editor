@@ -366,6 +366,7 @@
     "xLink": "X odkaz",
     "youtubeLink": "Odkaz na YouTube"
   },
+  "filter": "Filtr",
   "findALocation": "Najděte polohu",
   "fontSize": "Velikost písma",
   "fontSizeDefaultLabel": "Výchozí",
@@ -478,6 +479,7 @@
   "recentReviews": "Nedávné recenze",
   "recommendedColors": "Doporučené barvy",
   "redo": "Předělat",
+  "refineYourSearch": "Upřesněte své vyhledávání",
   "reopenDate": "Znovu otevřít datum",
   "responseFrom": "Odpověď od {{businessName}}",
   "saturday": "sobota",
@@ -587,7 +589,5 @@
   "video": "Video",
   "videoThumbnail": "Video miniatura",
   "visitPage": "Navštivte stránku",
-  "wednesday": "středa",
-  "filter": "Filtr",
-  "refineYourSearch": "Upřesněte své vyhledávání"
+  "wednesday": "středa"
 }

@@ -365,6 +365,7 @@
     "xLink": "x链接",
     "youtubeLink": "YouTube链接"
   },
+  "filter": "筛选",
   "findALocation": "找到一个位置",
   "fontSize": "字体大小",
   "fontSizeDefaultLabel": "默认",
@@ -477,6 +478,7 @@
   "recentReviews": "最近的评论",
   "recommendedColors": "推荐的颜色",
   "redo": "重做",
+  "refineYourSearch": "优化您的搜索",
   "reopenDate": "重新开放日期",
   "responseFrom": "{{businessName}}的响应",
   "saturday": "周六",
@@ -586,7 +588,5 @@
   "video": "视频",
   "videoThumbnail": "视频缩略图",
   "visitPage": "访问页面",
-  "wednesday": "周三",
-  "filter": "筛选",
-  "refineYourSearch": "优化您的搜索"
+  "wednesday": "周三"
 }

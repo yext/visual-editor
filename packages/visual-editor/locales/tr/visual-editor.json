@@ -365,6 +365,7 @@
     "xLink": "X Bağlantı",
     "youtubeLink": "YouTube bağlantısı"
   },
+  "filter": "Filtre",
   "findALocation": "Bir Konum Bul",
   "fontSize": "Yazı tipi boyutu",
   "fontSizeDefaultLabel": "Varsayılan",
@@ -477,6 +478,7 @@
   "recentReviews": "Son İncelemeler",
   "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
+  "refineYourSearch": "Aramanızı Hassaslaştırın",
   "reopenDate": "Tarihi Yeniden Aç",
   "responseFrom": "{{businessName}} 'dan yanıt",
   "saturday": "Cumartesi",
@@ -586,7 +588,5 @@
   "video": "Video",
   "videoThumbnail": "Video küçük resim",
   "visitPage": "Ziyaret Sayfası",
-  "wednesday": "Çarşamba",
-  "filter": "Filtre",
-  "refineYourSearch": "Aramanızı Hassaslaştırın"
+  "wednesday": "Çarşamba"
 }

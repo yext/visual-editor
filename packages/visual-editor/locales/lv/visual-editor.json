@@ -365,6 +365,7 @@
     "xLink": "X saite",
     "youtubeLink": "YouTube saite"
   },
+  "filter": "Filtrs",
   "findALocation": "Atrodiet atrašanās vietu",
   "fontSize": "Fonta lielums",
   "fontSizeDefaultLabel": "Nepildīt",
@@ -477,6 +478,7 @@
   "recentReviews": "Nesenie pārskati",
   "recommendedColors": "Ieteicamās krāsas",
   "redo": "Pārtaisīt",
+  "refineYourSearch": "Uzlabojiet meklēšanu",
   "reopenDate": "Atkārtoti atvērt datumu",
   "responseFrom": "Atbilde no {{businessName}}",
   "saturday": "Sestdiena",
@@ -586,7 +588,5 @@
   "video": "Video",
   "videoThumbnail": "Video sīktēls",
   "visitPage": "Apmeklējuma lapa",
-  "wednesday": "Trešdiena",
-  "filter": "Filtrs",
-  "refineYourSearch": "Uzlabojiet meklēšanu"
+  "wednesday": "Trešdiena"
 }

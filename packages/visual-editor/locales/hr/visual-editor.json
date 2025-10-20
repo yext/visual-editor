@@ -365,6 +365,7 @@
     "xLink": "X Link",
     "youtubeLink": "YouTube veza"
   },
+  "filter": "Filter",
   "findALocation": "Pronađite lokaciju",
   "fontSize": "Veličina fonta",
   "fontSizeDefaultLabel": "Zadano",
@@ -477,6 +478,7 @@
   "recentReviews": "Nedavne recenzije",
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
+  "refineYourSearch": "Pročistite svoju pretragu",
   "reopenDate": "Ponovno otvaranje datuma",
   "responseFrom": "Odgovor od {{businessName}}",
   "saturday": "subota",
@@ -586,7 +588,5 @@
   "video": "Video",
   "videoThumbnail": "Video sličica",
   "visitPage": "Stranica za posjetu",
-  "wednesday": "srijeda",
-  "filter": "Filter",
-  "refineYourSearch": "Pročistite svoju pretragu"
+  "wednesday": "srijeda"
 }

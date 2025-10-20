@@ -365,6 +365,7 @@
     "xLink": "X Link",
     "youtubeLink": "YouTube'i link"
   },
+  "filter": "Filter",
   "findALocation": "Leidke asukoht",
   "fontSize": "Fondi suurus",
   "fontSizeDefaultLabel": "Täitmata jätmine",
@@ -477,6 +478,7 @@
   "recentReviews": "Viimased ülevaated",
   "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
+  "refineYourSearch": "Täpsustage oma otsingut",
   "reopenDate": "Taasavamine kuupäev",
   "responseFrom": "Vastus {{businessName}}",
   "saturday": "Laupäev",
@@ -586,7 +588,5 @@
   "video": "Video",
   "videoThumbnail": "Video pisipilt",
   "visitPage": "Külastage leht",
-  "wednesday": "Kolmapäev",
-  "filter": "Filter",
-  "refineYourSearch": "Täpsustage oma otsingut"
+  "wednesday": "Kolmapäev"
 }

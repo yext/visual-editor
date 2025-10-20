@@ -366,6 +366,7 @@
     "xLink": "X Link",
     "youtubeLink": "Odkaz na YouTube"
   },
+  "filter": "Filter",
   "findALocation": "Nájdite miesto",
   "fontSize": "Veľkosť písma",
   "fontSizeDefaultLabel": "Predvolený",
@@ -478,6 +479,7 @@
   "recentReviews": "Posledné recenzie",
   "recommendedColors": "Odporúčané farby",
   "redo": "Opätovne prekážať",
+  "refineYourSearch": "Upravte svoje vyhľadávanie",
   "reopenDate": "Znovu otvoriť dátum",
   "responseFrom": "Odpoveď z {{businessName}}",
   "saturday": "Sobota",
@@ -587,7 +589,5 @@
   "video": "Video",
   "videoThumbnail": "Video",
   "visitPage": "Navštíviť stránku",
-  "wednesday": "Streda",
-  "filter": "Filter",
-  "refineYourSearch": "Upravte svoje vyhľadávanie"
+  "wednesday": "Streda"
 }

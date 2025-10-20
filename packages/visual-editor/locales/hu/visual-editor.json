@@ -365,6 +365,7 @@
     "xLink": "X link",
     "youtubeLink": "YouTube link"
   },
+  "filter": "Szűrő",
   "findALocation": "Keressen egy helyet",
   "fontSize": "Betűkészlet",
   "fontSizeDefaultLabel": "Mulasztás",
@@ -477,6 +478,7 @@
   "recentReviews": "Legutóbbi vélemények",
   "recommendedColors": "Ajánlott színek",
   "redo": "Újra felújít",
+  "refineYourSearch": "Finomítsa a keresést",
   "reopenDate": "Újra megnyitja a dátumot",
   "responseFrom": "Válasz a {{businessName}}ból",
   "saturday": "szombat",
@@ -586,7 +588,5 @@
   "video": "Videó",
   "videoThumbnail": "Videó miniatűr",
   "visitPage": "Látogasson el az oldalra",
-  "wednesday": "szerda",
-  "filter": "Szűrő",
-  "refineYourSearch": "Finomítsa a keresést"
+  "wednesday": "szerda"
 }

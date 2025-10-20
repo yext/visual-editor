@@ -365,6 +365,7 @@
     "xLink": "x鏈接",
     "youtubeLink": "YouTube鏈接"
   },
+  "filter": "篩選",
   "findALocation": "找到一個位置",
   "fontSize": "字體大小",
   "fontSizeDefaultLabel": "預設",
@@ -477,6 +478,7 @@
   "recentReviews": "最近的評論",
   "recommendedColors": "推薦的顏色",
   "redo": "重做",
+  "refineYourSearch": "優化您的搜索",
   "reopenDate": "重新開放日期",
   "responseFrom": "{{businessName}}的響應",
   "saturday": "週六",
@@ -586,7 +588,5 @@
   "video": "影片",
   "videoThumbnail": "視頻縮略圖",
   "visitPage": "訪問頁面",
-  "wednesday": "週三",
-  "filter": "篩選",
-  "refineYourSearch": "優化您的搜索"
+  "wednesday": "週三"
 }

@@ -365,6 +365,7 @@
     "xLink": "X Link",
     "youtubeLink": "Link YouTube"
   },
+  "filter": "Filtra",
   "findALocation": "Găsiți o locație",
   "fontSize": "Dimensiunea fontului",
   "fontSizeDefaultLabel": "Implicit",
@@ -477,6 +478,7 @@
   "recentReviews": "Recenzii recente",
   "recommendedColors": "Culorile recomandate",
   "redo": "Redo.",
+  "refineYourSearch": "Rafinați-vă căutarea",
   "reopenDate": "Data redeschiderii",
   "responseFrom": "Răspuns de la {{businessName}}",
   "saturday": "sâmbătă",
@@ -586,7 +588,5 @@
   "video": "Video",
   "videoThumbnail": "Miniatură video",
   "visitPage": "Vizitați pagina",
-  "wednesday": "miercuri",
-  "filter": "Filtra",
-  "refineYourSearch": "Rafinați-vă căutarea"
+  "wednesday": "miercuri"
 }

@@ -365,6 +365,7 @@
     "xLink": "X -linkki",
     "youtubeLink": "YouTube -linkki"
   },
+  "filter": "Suodattaa",
   "findALocation": "Etsi sijainti",
   "fontSize": "Fontin koko",
   "fontSizeDefaultLabel": "Laiminlyönti",
@@ -477,6 +478,7 @@
   "recentReviews": "Viimeaikaiset arvostelut",
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
+  "refineYourSearch": "Tarkenna hakuasi",
   "reopenDate": "Avata päivämäärä uudelleen",
   "responseFrom": "Vastaus {{businessName}}}",
   "saturday": "Lauantai",
@@ -586,7 +588,5 @@
   "video": "Video",
   "videoThumbnail": "Videon pikkukuva",
   "visitPage": "Vieraile sivussa",
-  "wednesday": "keskiviikko",
-  "filter": "Suodattaa",
-  "refineYourSearch": "Tarkenna hakuasi"
+  "wednesday": "keskiviikko"
 }
