@@ -436,15 +436,25 @@ interface TeamSectionProps {
 
 interface TestimonialSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: TestimonialData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: TestimonialStyles;
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
+  };
+  /** @internal */
+  analytics: {
+    scope?: string;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -861,37 +871,6 @@ interface StaticMapStyles {
    * @defaultValue Default (streets-v12)
    */
   mapStyle: string;
-}
-
-interface TestimonialData {
-  /**
-   * The main heading for the entire testimonials section.
-   * @defaultValue "Featured Testimonials" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the testimonial data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder testimonials.
-   */
-  testimonials: YextEntityField<TestimonialSectionType>;
-}
-
-interface TestimonialStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 2
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual testimonial cards. */
-  cards: {
-    headingLevel: HeadingLevel;
-    backgroundColor?: BackgroundStyle;
-  };
 }
 
 type AssetImageType = Omit<ImageType, "alternateText"> & {

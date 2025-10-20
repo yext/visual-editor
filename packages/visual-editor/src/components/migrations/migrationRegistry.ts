@@ -30,6 +30,7 @@ import { heroSectionSlots } from "./0028_slotify_hero_section.ts";
 import { productSectionSlots } from "./0029_product_section_slots.ts";
 import { insightSectionSlots } from "./0030_insight_section_slots.ts";
 import { teamsSectionSlots } from "./0031_teams_section_slots.ts";
+import { testimonialsSectionSlots } from "./0032_testimonials_section_slots.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -68,4 +69,5 @@ export const migrationRegistry: MigrationRegistry = [
   productSectionSlots,
   insightSectionSlots,
   teamsSectionSlots,
+  testimonialsSectionSlots,
 ];

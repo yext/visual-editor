@@ -40,7 +40,7 @@ import {
 import {
   TestimonialSection,
   TestimonialSectionProps,
-} from "../pageSections/TestimonialSection.tsx";
+} from "../pageSections/TestimonialSection/TestimonialSection.tsx";
 import {
   TeamSection,
   TeamSectionProps,
