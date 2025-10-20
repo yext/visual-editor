@@ -5,16 +5,18 @@ import {
   ComponentTest,
   delay,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import { render as reactRender, act } from "@testing-library/react";
 import {
   FAQSection,
+  getDefaultRTF,
   migrate,
   migrationRegistry,
   VisualEditorProvider,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory";
 
 const interactionsDelay = 200;
 
@@ -37,11 +39,13 @@ const faqData = {
 
 const version10DefaultFAQ = {
   question: {
-    en: "Question Lorem ipsum dolor sit amet?",
+    en: getDefaultRTF("Question Lorem ipsum dolor sit amet?"),
     hasLocalizedValue: "true",
   },
   answer: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    en: getDefaultRTF(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    ),
     hasLocalizedValue: "true",
   },
 };
@@ -49,19 +53,21 @@ const version10DefaultFAQ = {
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
-    document: {},
+    document: {
+      locale: "en",
+    },
     props: { ...FAQSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "default props with document data",
-    document: { c_faq: faqData },
+    document: { locale: "en", c_faq: faqData },
     props: { ...FAQSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "version 10 props with entity values",
-    document: { c_faq: faqData, name: "test name" },
+    document: { locale: "en", c_faq: faqData, name: "test name" },
     props: {
       data: {
         heading: {
@@ -101,7 +107,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "version 10 props with constant value",
-    document: { c_faq: faqData },
+    document: { locale: "en", c_faq: faqData },
     props: {
       data: {
         heading: {
@@ -152,7 +158,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "version 10 props with no data",
-    document: {},
+    document: { locale: "en" },
     props: {
       data: {
         heading: {
@@ -188,6 +194,116 @@ const tests: ComponentTest[] = [
     },
     version: 10,
   },
+  {
+    name: "version 31 with constant values",
+    document: { locale: "en" },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-tertiary-light",
+          textColor: "text-black",
+        },
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "FAQs Heading Slot",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        FAQsWrapperSlot: [
+          {
+            type: "FAQsWrapperSlot",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{ id: "faq-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "FAQSlot",
+                    props: {
+                      id: "faq-1",
+                      slots: {
+                        QuestionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "faq-1-question",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: getDefaultRTF(
+                                      "What is your return policy?"
+                                    ),
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                        AnswerSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "faq-1-answer",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: getDefaultRTF(
+                                      "You can return any item within 30 days of purchase."
+                                    ),
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    interactions: async (page) => {
+      const q1 = page.getByText("What is your return policy?");
+      await act(async () => {
+        await q1.click();
+        await delay(interactionsDelay);
+      });
+    },
+    version: 31,
+  },
 ];
 
 const screenshotThreshold = 10;
@@ -196,13 +312,14 @@ const ignoredScreenshotDifferences = [420, 422];
 
 describe("FAQSection", async () => {
   const puckConfig: Config = {
-    components: { FAQSection },
+    components: { FAQSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
