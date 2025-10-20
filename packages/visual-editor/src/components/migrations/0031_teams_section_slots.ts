@@ -16,7 +16,8 @@ export const teamsSectionSlots: Migration = {
   TeamSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const constantValueEnabled: boolean = props.data.constantValueEnabled;
+      const constantValueEnabled: boolean =
+        props.data.people.constantValueEnabled;
       const team = resolveYextEntityField(
         streamDocument,
         props.data.people as YextEntityField<TeamSectionType>,
@@ -68,7 +69,7 @@ export const teamsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.people.field,
                             image: person.headshot,
                           },
                     } satisfies ImageWrapperProps,
@@ -92,7 +93,7 @@ export const teamsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.people.field,
                             text: resolvedName,
                           },
                     } satisfies HeadingTextProps,
@@ -113,7 +114,7 @@ export const teamsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.people.field,
                             richText: person.title,
                           },
                     } satisfies BodyTextProps,
@@ -133,7 +134,7 @@ export const teamsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.people.field,
                             phone: person.phoneNumber,
                           },
                       eventName: `phone${i}`,
@@ -154,7 +155,7 @@ export const teamsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.people.field,
                             email: person.email,
                           },
                       eventName: `email${i}`,
@@ -185,7 +186,7 @@ export const teamsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.people.field,
                             cta: person.cta,
                           },
                       eventName: `cta${i}`,
@@ -196,7 +197,7 @@ export const teamsSectionSlots: Migration = {
               parentData: constantValueEnabled
                 ? undefined
                 : {
-                    field: props.data.field,
+                    field: props.data.people.field,
                     person,
                   },
             } satisfies WithId<TeamCardProps>,
