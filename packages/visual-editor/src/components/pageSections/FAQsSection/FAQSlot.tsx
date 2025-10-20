@@ -134,7 +134,7 @@ const FaqSlotComponent: PuckComponent<FAQSlotProps> = ({ slots, index }) => {
 };
 
 export const FAQSlot: ComponentConfig<{ props: FAQSlotProps }> = {
-  label: msg("slots.FAQ", "FAQ"),
+  label: msg("faq", "FAQ"),
   fields: FaqSlotFields,
   defaultProps: {
     slots: {

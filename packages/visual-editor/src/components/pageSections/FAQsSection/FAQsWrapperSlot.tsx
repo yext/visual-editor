@@ -48,7 +48,7 @@ const FAQsWrapperSlotComponent: PuckComponent<FAQsWrapperSlotProps> = (
 
 export const FAQsWrapperSlot: ComponentConfig<{ props: FAQsWrapperSlotProps }> =
   {
-    label: msg("slots.FAQsSection", "FAQs Section"),
+    label: msg("components.faqsSection", "FAQs Section"),
     fields: FAQsWrapperSlotFields,
     resolveData(data, params) {
       const streamDocument = params.metadata.streamDocument;
