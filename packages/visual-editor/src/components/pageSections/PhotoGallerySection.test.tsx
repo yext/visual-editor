@@ -11,6 +11,7 @@ import {
   migrate,
   migrationRegistry,
   VisualEditorProvider,
+  SlotsCategoryComponents,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
@@ -375,13 +376,14 @@ const tests: ComponentTest[] = [
 
 describe("PhotoGallerySection", async () => {
   const puckConfig: Config = {
-    components: { PhotoGallerySection },
+    components: { PhotoGallerySection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({

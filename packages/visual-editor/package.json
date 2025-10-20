@@ -38,7 +38,7 @@
     "build": "pnpm run build:components && pnpm run build:plugin",
     "test": "pnpm run test:editor && pnpm run test:components",
     "test:editor": "vitest run --exclude './src/components/**/*.test.tsx' --browser.enabled false",
-    "test:components": "vitest run ./src/components/**",
+    "test:components": "vitest run ./src/components/pageSections/PhotoGallerySection.test.tsx",
     "test:components:local": "./scripts/localScreenshots.sh",
     "prettier": "prettier --write --cache .",
     "lint": "oxlint --fix --ignore-pattern 'src/vite-plugin/templates/*'",

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import React, { cloneElement } from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
   CarouselProvider,
   Slider,
@@ -14,8 +14,6 @@ import {
   backgroundColors,
   BackgroundStyle,
   EntityField,
-  Heading,
-  HeadingLevel,
   Image,
   ImageProps,
   PageSection,
@@ -25,11 +23,10 @@ import {
   YextEntityField,
   YextField,
   VisibilityWrapper,
-  TranslatableString,
   msg,
   pt,
-  ThemeOptions,
   resolveComponentData,
+  HeadingTextProps,
 } from "@yext/visual-editor";
 import {
   ImageStylingFields,
@@ -53,12 +50,6 @@ const PLACEHOLDER: AssetImageType = {
 
 export interface PhotoGalleryData {
   /**
-   * The main heading for the photo gallery.
-   * @defaultValue "Gallery" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-
-  /**
    * The source of the image data, which can be linked to a Yext field or provided as a constant.
    * @defaultValue A list of 3 placeholder images.
    */
@@ -73,12 +64,6 @@ export interface PhotoGalleryStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
-
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
 
   /** Styling options for the gallery images, such as aspect ratio. */
   image: ImageStylingProps;
@@ -96,6 +81,11 @@ export interface PhotoGallerySectionProps {
    * @propCategory Style Props
    */
   styles: PhotoGalleryStyles;
+
+  /** @internal */
+  slots: {
+    HeadingSlot: Slot;
+  };
 
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -134,15 +124,6 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      heading: YextField<any, TranslatableString>(
-        msg("fields.heading", "Heading"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.string"],
-          },
-        }
-      ),
       images: YextField<
         any,
         ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
@@ -165,26 +146,19 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      heading: YextField(msg("fields.heading", "Heading"), {
-        type: "object",
-        objectFields: {
-          level: YextField(msg("fields.level", "Level"), {
-            type: "select",
-            hasSearch: true,
-            options: "HEADING_LEVEL",
-          }),
-          align: YextField(msg("fields.headingAlign", "Heading Align"), {
-            type: "radio",
-            options: ThemeOptions.ALIGNMENT,
-          }),
-        },
-      }),
       image: YextField(msg("fields.image", "Image"), {
         type: "object",
         objectFields: ImageStylingFields,
       }),
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      HeadingSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   liveVisibility: YextField(
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
@@ -197,18 +171,14 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
   ),
 };
 
-const PhotoGallerySectionComponent = ({
+const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
   data,
   styles,
-}: PhotoGallerySectionProps) => {
+  slots,
+}) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const sectionHeading = resolveComponentData(
-    data.heading,
-    locale,
-    streamDocument
-  );
 
   const resolvedImages = resolveComponentData(
     data.images,
@@ -254,29 +224,13 @@ const PhotoGallerySectionComponent = ({
       };
     }) ?? [];
 
-  const justifyClass = {
-    left: "justify-start",
-    center: "justify-center",
-    right: "justify-end",
-  }[styles.heading.align];
-
   return (
     <PageSection
       aria-label={t("photoGallerySection", "Photo Gallery Section")}
       background={styles.backgroundColor}
       className="flex flex-col gap-8"
     >
-      {sectionHeading && (
-        <EntityField
-          displayName={pt("fields.headingText", "Heading Text")}
-          fieldId={data.heading.field}
-          constantValueEnabled={data.heading.constantValueEnabled}
-        >
-          <div className={`flex ${justifyClass}`}>
-            <Heading level={styles.heading.level}>{sectionHeading}</Heading>
-          </div>
-        </EntityField>
-      )}
+      <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
       {filteredImages && filteredImages.length > 0 && (
         <CarouselProvider
           className="flex flex-col gap-8"
@@ -424,11 +378,6 @@ export const PhotoGallerySection: ComponentConfig<{
   fields: photoGallerySectionFields,
   defaultProps: {
     data: {
-      heading: {
-        field: "",
-        constantValue: { en: "Gallery", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
-      },
       images: {
         field: "",
         constantValue: [
@@ -441,13 +390,32 @@ export const PhotoGallerySection: ComponentConfig<{
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
-      heading: {
-        level: 2,
-        align: "left",
-      },
       image: {
         aspectRatio: 1.78,
       },
+    },
+    slots: {
+      HeadingSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            data: {
+              text: {
+                field: "",
+                constantValue: {
+                  en: "Gallery",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+            },
+            styles: {
+              level: 2,
+              align: "left",
+            },
+          } satisfies HeadingTextProps,
+        },
+      ],
     },
     liveVisibility: true,
   },
