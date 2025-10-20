@@ -37,8 +37,12 @@ import {
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
+  DynamicOption,
+  DynamicOptionsSelectorType,
+  DynamicOptionsSelector,
   Heading,
   msg,
+  pt,
   useDocument,
   Toggle,
   YextField,
@@ -79,6 +83,123 @@ function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
   return `tel:${cleaned}`;
 }
 
+const getEntityType = (entityTypeEnvVar?: string) => {
+  const entityDocument: any = useDocument();
+  if (!entityDocument._pageset && entityTypeEnvVar) {
+    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
+  }
+
+  try {
+    const entityType = JSON.parse(entityDocument._pageset).typeConfig
+      .locatorConfig.entityType;
+    return entityType || DEFAULT_ENTITY_TYPE;
+  } catch {
+    return DEFAULT_ENTITY_TYPE;
+  }
+};
+
+function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
+  let filterOptions: DynamicOption<string>[] = [];
+  switch (entityType) {
+    case "location":
+      filterOptions = [
+        { label: "City", value: "address.city" },
+        { label: "Postal Code", value: "address.postalCode" },
+        { label: "Region", value: "address.region" },
+        { label: "Associations", value: "associations" },
+        { label: "Brands", value: "brands" },
+        { label: "Keywords", value: "keywords" },
+        { label: "Languages", value: "languages" },
+        { label: "Payment Options", value: "paymentOptions" },
+        { label: "Products", value: "products" },
+        { label: "Services", value: "services" },
+        { label: "Specialties", value: "specialties" },
+      ];
+      break;
+    case "restaurant":
+      filterOptions = [
+        { label: "City", value: "address.city" },
+        { label: "Postal Code", value: "address.postalCode" },
+        { label: "Region", value: "address.region" },
+        { label: "Accepts Reservations", value: "acceptsReservations" },
+        { label: "Associations", value: "associations" },
+        { label: "Brands", value: "brands" },
+        { label: "Keywords", value: "keywords" },
+        { label: "Languages", value: "languages" },
+        { label: "Meals Served", value: "mealsServed" },
+        { label: "Neighborhood", value: "neighborhood" },
+        { label: "Payment Options", value: "paymentOptions" },
+        {
+          label: "Pickup and Delivery Services",
+          value: "pickupAndDeliveryServices",
+        },
+        { label: "Price Range", value: "priceRange" },
+        { label: "Services", value: "services" },
+        { label: "Specialties", value: "specialties" },
+      ];
+      break;
+    case "healthcareFacility":
+      filterOptions = [
+        { label: "City", value: "address.city" },
+        { label: "Postal Code", value: "address.postalCode" },
+        { label: "Region", value: "address.region" },
+        { label: "Accepting New Patients", value: "acceptingNewPatients" },
+        { label: "Conditions Treated", value: "conditionsTreated" },
+        { label: "Insurance Accepted", value: "insuranceAccepted" },
+        { label: "Payment Options", value: "paymentOptions" },
+        { label: "Services", value: "services" },
+      ];
+      break;
+    case "healthcareProfessional":
+      filterOptions = [
+        { label: "City", value: "address.city" },
+        { label: "Postal Code", value: "address.postalCode" },
+        { label: "Region", value: "address.region" },
+        { label: "Accepting New Patients", value: "acceptingNewPatients" },
+        { label: "Admitting Hospitals", value: "admittingHospitals" },
+        { label: "Brands", value: "brands" },
+        { label: "Certifications", value: "certifications" },
+        { label: "Conditions Treated", value: "conditionsTreated" },
+        { label: "Degrees", value: "degrees" },
+        { label: "Gender", value: "gender" },
+        { label: "Insurance Accepted", value: "insuranceAccepted" },
+        { label: "Languages", value: "languages" },
+        { label: "Neighborhood", value: "neighborhood" },
+        { label: "Office Name", value: "officeName" },
+        { label: "Services", value: "services" },
+      ];
+      break;
+    case "hotel":
+      filterOptions = [
+        { label: "City", value: "address.city" },
+        { label: "Postal Code", value: "address.postalCode" },
+        { label: "Region", value: "address.region" },
+        { label: "Bar", value: "bar" },
+        { label: "Cats Allowed", value: "catsAllowed" },
+        { label: "Dogs Allowed", value: "dogsAllowed" },
+        { label: "Parking", value: "parking" },
+        { label: "Pools", value: "pools" },
+      ];
+      break;
+    case "financialProfessional":
+      filterOptions = [
+        { label: "City", value: "address.city" },
+        { label: "Postal Code", value: "address.postalCode" },
+        { label: "Region", value: "address.region" },
+        { label: "Certifications", value: "certifications" },
+        { label: "Interests", value: "interests" },
+        { label: "Languages", value: "languages" },
+        { label: "Services", value: "services" },
+        { label: "Specialities", value: "specialities" },
+        { label: "Years of Experience", value: "yearsOfExperience" },
+      ];
+      break;
+    default:
+      filterOptions = [];
+  }
+  return filterOptions.sort((a, b) => a.label.localeCompare(b.label));
+}
+
 export interface LocatorProps {
   /**
    * The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.
@@ -87,10 +208,17 @@ export interface LocatorProps {
   mapStyle?: string;
 
   /**
-   * If 'true', displays a button to filter for locations that are currently open.
-   * @defaultValue false
+   * Configuration for the filters available in the locator search experience.
    */
-  openNowButton: boolean;
+  filters: {
+    /**
+     * If 'true', displays a button to filter for locations that are currently open.
+     * @defaultValue false
+     */
+    openNowButton: boolean;
+    /** Which fields are facetable in the search experience */
+    facetFields?: DynamicOptionsSelectorType<string>;
+  };
 
   /**
    * The starting location for the map.
@@ -131,16 +259,30 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
-  openNowButton: YextField(
-    msg("fields.options.includeOpenNow", "Include Open Now Button"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+  filters: YextField(msg("filters", "Filters"), {
+    type: "object",
+    objectFields: {
+      openNowButton: YextField(
+        msg("fields.options.includeOpenNow", "Include Open Now Button"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
+      facetFields: DynamicOptionsSelector({
+        label: pt("dynamicFilters", "Dynamic Filters"),
+        dropdownLabel: pt("field", "Field"),
+        getOptions: () => {
+          const entityType = getEntityType();
+          return getFacetFieldOptions(entityType);
+        },
+        placeholderOptionLabel: pt("selectField", "Select a field"),
+      }),
+    },
+  }),
   mapStartingLocation: YextField(
     msg("fields.options.mapStartingLocation", "Map Starting Location"),
     {
@@ -163,7 +305,9 @@ const locatorFields: Fields<LocatorProps> = {
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
   defaultProps: {
-    openNowButton: false,
+    filters: {
+      openNowButton: false,
+    },
   },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
@@ -209,7 +353,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  openNowButton,
+  filters: { openNowButton },
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
@@ -796,21 +940,6 @@ const LocationCard = React.memo(
     );
   }
 );
-
-const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: any = useDocument();
-  if (!entityDocument._pageset && entityTypeEnvVar) {
-    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
-  }
-
-  try {
-    const entityType = JSON.parse(entityDocument._pageset).typeConfig
-      .locatorConfig.entityType;
-    return entityType || DEFAULT_ENTITY_TYPE;
-  } catch {
-    return DEFAULT_ENTITY_TYPE;
-  }
-};
 
 const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
   if (!divElement) {
