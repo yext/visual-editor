@@ -397,6 +397,10 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
     },
   },
   resolveData: (data, params) => {
+    // Check card-level parentData first for entity data
+    const cardParentData = data.props.parentData;
+    const person = cardParentData?.person;
+
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | WithId<ImageWrapperProps>
       | undefined;
@@ -417,61 +421,59 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
       | undefined;
 
     const showImage = Boolean(
-      imageSlotProps?.parentData
-        ? imageSlotProps.parentData.image
-        : imageSlotProps &&
-            (imageSlotProps?.data.image.field ||
-              ("url" in imageSlotProps.data.image.constantValue &&
-                imageSlotProps.data.image.constantValue.url) ||
-              ("image" in imageSlotProps.data.image.constantValue &&
-                imageSlotProps.data.image.constantValue.image.url))
+      person?.headshot ||
+        imageSlotProps?.parentData?.image ||
+        (imageSlotProps &&
+          (imageSlotProps?.data.image.field ||
+            ("url" in imageSlotProps.data.image.constantValue &&
+              imageSlotProps.data.image.constantValue.url) ||
+            ("image" in imageSlotProps.data.image.constantValue &&
+              imageSlotProps.data.image.constantValue.image.url)))
     );
     const showName = Boolean(
-      nameSlotProps &&
-        (nameSlotProps.parentData
-          ? nameSlotProps.parentData.text
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              nameSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
+      person?.name ||
+        nameSlotProps?.parentData?.text ||
+        (nameSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            nameSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
     );
     const showTitle = Boolean(
-      titleSlotProps &&
-        (titleSlotProps.parentData
-          ? titleSlotProps.parentData.richText
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              titleSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
+      person?.title ||
+        titleSlotProps?.parentData?.richText ||
+        (titleSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            titleSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
     );
     const showPhone = Boolean(
-      phoneSlotProps &&
-        (phoneSlotProps.parentData
-          ? phoneSlotProps.parentData.phoneNumbers?.length
-          : phoneSlotProps.data?.phoneNumbers?.length &&
-            phoneSlotProps.data.phoneNumbers.some(
-              (phone: any) => phone.number?.constantValue || phone.number?.field
-            ))
+      person?.phoneNumber ||
+        phoneSlotProps?.parentData?.phoneNumbers?.length ||
+        (phoneSlotProps?.data?.phoneNumbers?.length &&
+          phoneSlotProps.data.phoneNumbers.some(
+            (phone: any) => phone.number?.constantValue || phone.number?.field
+          ))
     );
     const showEmail = Boolean(
-      emailSlotProps &&
-        (emailSlotProps.parentData
-          ? emailSlotProps.parentData.list?.length
-          : emailSlotProps.data?.list?.constantValue?.length ||
-            emailSlotProps.data?.list?.field)
+      person?.email ||
+        emailSlotProps?.parentData?.list?.length ||
+        emailSlotProps?.data?.list?.constantValue?.length ||
+        emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
-      ctaSlotProps &&
-        (ctaSlotProps.parentData
-          ? ctaSlotProps.parentData.cta?.label
-          : ctaSlotProps.data?.entityField?.constantValue?.label ||
-            ctaSlotProps.data?.entityField?.field ||
-            resolveYextEntityField(
-              params.metadata.streamDocument,
-              ctaSlotProps.data.entityField
-            )?.label)
+      person?.cta?.label ||
+        ctaSlotProps?.parentData?.cta?.label ||
+        ctaSlotProps?.data?.entityField?.constantValue?.label ||
+        ctaSlotProps?.data?.entityField?.field ||
+        (ctaSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            ctaSlotProps.data.entityField
+          )?.label)
     );
 
     let updatedData = {

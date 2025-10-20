@@ -425,7 +425,11 @@ const tests: ComponentTest[] = [
               data: {
                 field: "",
                 constantValueEnabled: true,
-                constantValue: [{}, {}, {}],
+                constantValue: [
+                  { id: "TeamCard-1" },
+                  { id: "TeamCard-2" },
+                  { id: "TeamCard-3" },
+                ],
               },
               slots: {
                 CardSlot: [],
