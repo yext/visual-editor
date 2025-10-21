@@ -142,7 +142,10 @@ export const teamsSectionSlots: Migration = {
                           : [],
                       },
                       styles: {
-                        phoneFormat: "domestic",
+                        phoneFormat:
+                          person.phoneNumber?.slice(0, 2) === "+1"
+                            ? "domestic"
+                            : "international",
                         includePhoneHyperlink: true,
                       },
                       eventName: `phone${i}`,
