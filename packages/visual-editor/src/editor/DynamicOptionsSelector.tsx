@@ -6,8 +6,9 @@ import {
   FieldLabel,
 } from "@measured/puck";
 import { useMemo } from "react";
+import { pt } from "../utils/i18n/platform.ts";
 
-type AllowedOptionValueTypes =
+export type DynamicOptionValueTypes =
   | string
   | number
   | boolean
@@ -15,28 +16,28 @@ type AllowedOptionValueTypes =
   | null
   | undefined;
 
-type DynamicOptionsSelectorProps<T extends AllowedOptionValueTypes> = {
+type DynamicOptionsSelectorProps<T extends DynamicOptionValueTypes> = {
   label: string;
   dropdownLabel: string;
   getOptions: () => DynamicOption<T>[];
   placeholderOptionLabel?: string;
 };
 
-interface DynamicOptionItem<T extends AllowedOptionValueTypes> {
+interface DynamicOptionItem<T extends DynamicOptionValueTypes> {
   value: T;
 }
 
-export interface DynamicOptionsSelectorType<T extends AllowedOptionValueTypes> {
+export interface DynamicOptionsSelectorType<T extends DynamicOptionValueTypes> {
   options: DynamicOption<T>[];
 }
 
-export interface DynamicOption<T extends AllowedOptionValueTypes> {
+export interface DynamicOption<T extends DynamicOptionValueTypes> {
   label: string;
   value: T;
 }
 
 const getDefaultDynamicOptions = <
-  T extends AllowedOptionValueTypes,
+  T extends DynamicOptionValueTypes,
 >(): DynamicOptionItem<T> => ({
   value: undefined as T,
 });
@@ -44,7 +45,7 @@ const getDefaultDynamicOptions = <
 /**
  * A selector component for dynamic options. The options can be loaded from a function that uses hooks.
  */
-export const DynamicOptionsSelector = <T extends AllowedOptionValueTypes>(
+export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
   props: DynamicOptionsSelectorProps<T>
 ): Field<DynamicOptionsSelectorType<T> | undefined> => {
   return {
@@ -62,7 +63,7 @@ export const DynamicOptionsSelector = <T extends AllowedOptionValueTypes>(
       const options = props.getOptions();
       const optionsValue = value?.options ?? [];
       return (
-        <FieldLabel label={props.label}>
+        <FieldLabel label={pt(props.label)}>
           <AutoField
             field={DynamicOptionsArrayField(
               options,
@@ -80,7 +81,7 @@ export const DynamicOptionsSelector = <T extends AllowedOptionValueTypes>(
   };
 };
 
-const DynamicOptionsArrayField = <T extends AllowedOptionValueTypes>(
+const DynamicOptionsArrayField = <T extends DynamicOptionValueTypes>(
   options: DynamicOption<T>[],
   dropdownLabel: string,
   placeholderOptionLabel?: string
@@ -113,9 +114,9 @@ const DynamicOptionsArrayField = <T extends AllowedOptionValueTypes>(
     getItemSummary: (item, i) => {
       const opt = options.find((opt) => String(opt.value) === item.value);
       if (opt) {
-        return opt.label;
+        return pt(opt.label);
       }
-      return dropdownLabel + " " + ((i ?? 0) + 1);
+      return pt(dropdownLabel) + " " + ((i ?? 0) + 1);
     },
   };
 };

@@ -27,4 +27,5 @@ export {
   type DynamicOption,
   DynamicOptionsSelector,
   type DynamicOptionsSelectorType,
+  type DynamicOptionValueTypes,
 } from "./DynamicOptionsSelector.tsx";

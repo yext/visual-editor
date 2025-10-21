@@ -39,10 +39,8 @@ import {
   createSearchHeadlessConfig,
   DynamicOption,
   DynamicOptionsSelectorType,
-  DynamicOptionsSelector,
   Heading,
   msg,
-  pt,
   useDocument,
   Toggle,
   YextField,
@@ -103,95 +101,314 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
   switch (entityType) {
     case "location":
       filterOptions = [
-        { label: "City", value: "address.city" },
-        { label: "Postal Code", value: "address.postalCode" },
-        { label: "Region", value: "address.region" },
-        { label: "Associations", value: "associations" },
-        { label: "Brands", value: "brands" },
-        { label: "Keywords", value: "keywords" },
-        { label: "Languages", value: "languages" },
-        { label: "Payment Options", value: "paymentOptions" },
-        { label: "Products", value: "products" },
-        { label: "Services", value: "services" },
-        { label: "Specialties", value: "specialties" },
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg("fields.options.facets.associations", "Associations"),
+          value: "associations",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.keywords", "Keywords"),
+          value: "keywords",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg("fields.options.facets.products", "Products"),
+          value: "products",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialties",
+        },
       ];
       break;
     case "restaurant":
       filterOptions = [
-        { label: "City", value: "address.city" },
-        { label: "Postal Code", value: "address.postalCode" },
-        { label: "Region", value: "address.region" },
-        { label: "Accepts Reservations", value: "acceptsReservations" },
-        { label: "Associations", value: "associations" },
-        { label: "Brands", value: "brands" },
-        { label: "Keywords", value: "keywords" },
-        { label: "Languages", value: "languages" },
-        { label: "Meals Served", value: "mealsServed" },
-        { label: "Neighborhood", value: "neighborhood" },
-        { label: "Payment Options", value: "paymentOptions" },
         {
-          label: "Pickup and Delivery Services",
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptsReservations",
+            "Accepts Reservations"
+          ),
+          value: "acceptsReservations",
+        },
+        {
+          label: msg("fields.options.facets.associations", "Associations"),
+          value: "associations",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.keywords", "Keywords"),
+          value: "keywords",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.mealsServed", "Meals Served"),
+          value: "mealsServed",
+        },
+        {
+          label: msg("fields.options.facets.neighborhood", "Neighborhood"),
+          value: "neighborhood",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg(
+            "fields.options.facets.pickupAndDeliveryServices",
+            "Pickup and Delivery Services"
+          ),
           value: "pickupAndDeliveryServices",
         },
-        { label: "Price Range", value: "priceRange" },
-        { label: "Services", value: "services" },
-        { label: "Specialties", value: "specialties" },
+        {
+          label: msg("fields.options.facets.priceRange", "Price Range"),
+          value: "priceRange",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialties",
+        },
       ];
       break;
     case "healthcareFacility":
       filterOptions = [
-        { label: "City", value: "address.city" },
-        { label: "Postal Code", value: "address.postalCode" },
-        { label: "Region", value: "address.region" },
-        { label: "Accepting New Patients", value: "acceptingNewPatients" },
-        { label: "Conditions Treated", value: "conditionsTreated" },
-        { label: "Insurance Accepted", value: "insuranceAccepted" },
-        { label: "Payment Options", value: "paymentOptions" },
-        { label: "Services", value: "services" },
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptingNewPatients",
+            "Accepting New Patients"
+          ),
+          value: "acceptingNewPatients",
+        },
+        {
+          label: msg(
+            "fields.options.facets.conditionsTreated",
+            "Conditions Treated"
+          ),
+          value: "conditionsTreated",
+        },
+        {
+          label: msg(
+            "fields.options.facets.insuranceAccepted",
+            "Insurance Accepted"
+          ),
+          value: "insuranceAccepted",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
       ];
       break;
     case "healthcareProfessional":
       filterOptions = [
-        { label: "City", value: "address.city" },
-        { label: "Postal Code", value: "address.postalCode" },
-        { label: "Region", value: "address.region" },
-        { label: "Accepting New Patients", value: "acceptingNewPatients" },
-        { label: "Admitting Hospitals", value: "admittingHospitals" },
-        { label: "Brands", value: "brands" },
-        { label: "Certifications", value: "certifications" },
-        { label: "Conditions Treated", value: "conditionsTreated" },
-        { label: "Degrees", value: "degrees" },
-        { label: "Gender", value: "gender" },
-        { label: "Insurance Accepted", value: "insuranceAccepted" },
-        { label: "Languages", value: "languages" },
-        { label: "Neighborhood", value: "neighborhood" },
-        { label: "Office Name", value: "officeName" },
-        { label: "Services", value: "services" },
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptingNewPatients",
+            "Accepting New Patients"
+          ),
+          value: "acceptingNewPatients",
+        },
+        {
+          label: msg(
+            "fields.options.facets.admittingHospitals",
+            "Admitting Hospitals"
+          ),
+          value: "admittingHospitals",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.certifications", "Certifications"),
+          value: "certifications",
+        },
+        {
+          label: msg(
+            "fields.options.facets.conditionsTreated",
+            "Conditions Treated"
+          ),
+          value: "conditionsTreated",
+        },
+        {
+          label: msg("fields.options.facets.degrees", "Degrees"),
+          value: "degrees",
+        },
+        {
+          label: msg("fields.options.facets.gender", "Gender"),
+          value: "gender",
+        },
+        {
+          label: msg(
+            "fields.options.facets.insuranceAccepted",
+            "Insurance Accepted"
+          ),
+          value: "insuranceAccepted",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.neighborhood", "Neighborhood"),
+          value: "neighborhood",
+        },
+        {
+          label: msg("fields.options.facets.officeName", "Office Name"),
+          value: "officeName",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
       ];
       break;
     case "hotel":
       filterOptions = [
-        { label: "City", value: "address.city" },
-        { label: "Postal Code", value: "address.postalCode" },
-        { label: "Region", value: "address.region" },
-        { label: "Bar", value: "bar" },
-        { label: "Cats Allowed", value: "catsAllowed" },
-        { label: "Dogs Allowed", value: "dogsAllowed" },
-        { label: "Parking", value: "parking" },
-        { label: "Pools", value: "pools" },
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        { label: msg("fields.options.facets.bar", "Bar"), value: "bar" },
+        {
+          label: msg("fields.options.facets.catsAllowed", "Cats Allowed"),
+          value: "catsAllowed",
+        },
+        {
+          label: msg("fields.options.facets.dogsAllowed", "Dogs Allowed"),
+          value: "dogsAllowed",
+        },
+        {
+          label: msg("fields.options.facets.parking", "Parking"),
+          value: "parking",
+        },
+        { label: msg("fields.options.facets.pools", "Pools"), value: "pools" },
       ];
       break;
     case "financialProfessional":
       filterOptions = [
-        { label: "City", value: "address.city" },
-        { label: "Postal Code", value: "address.postalCode" },
-        { label: "Region", value: "address.region" },
-        { label: "Certifications", value: "certifications" },
-        { label: "Interests", value: "interests" },
-        { label: "Languages", value: "languages" },
-        { label: "Services", value: "services" },
-        { label: "Specialities", value: "specialities" },
-        { label: "Years of Experience", value: "yearsOfExperience" },
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg("fields.options.facets.certifications", "Certifications"),
+          value: "certifications",
+        },
+        {
+          label: msg("fields.options.facets.interests", "Interests"),
+          value: "interests",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialities", "Specialities"),
+          value: "specialities",
+        },
+        {
+          label: msg(
+            "fields.options.facets.yearsOfExperience",
+            "Years of Experience"
+          ),
+          value: "yearsOfExperience",
+        },
       ];
       break;
     default:
@@ -272,14 +489,17 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
-      facetFields: DynamicOptionsSelector({
-        label: pt("dynamicFilters", "Dynamic Filters"),
-        dropdownLabel: pt("field", "Field"),
+      facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
+        type: "dynamicSelect",
+        dropdownLabel: msg("fields.field", "Field"),
         getOptions: () => {
           const entityType = getEntityType();
           return getFacetFieldOptions(entityType);
         },
-        placeholderOptionLabel: pt("selectField", "Select a field"),
+        placeholderOptionLabel: msg(
+          "fields.options.selectAField",
+          "Select a field"
+        ),
       }),
     },
   }),
