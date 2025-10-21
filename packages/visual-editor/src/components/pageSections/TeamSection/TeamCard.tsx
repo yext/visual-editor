@@ -367,7 +367,7 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
             <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
           )}
           {showCta && (
-            <div className="mt-auto flex md:justify-start">
+            <div className="mt-auto w-full md:w-auto">
               <slots.CTASlot style={{ height: "auto" }} allow={[]} />
             </div>
           )}
