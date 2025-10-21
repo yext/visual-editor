@@ -11,19 +11,16 @@ export const parseDocument = (
   contentEndpointId: string;
   contentDeliveryAPIDomain: string;
 } => {
-  // read businessId
   const businessId: string = streamDocument?.businessId;
   if (!businessId) {
     console.warn("Missing businessId! Unable to fetch nearby locations.");
   }
 
-  // read entityId
   const entityId: string = streamDocument?.id;
   if (!entityId) {
     console.warn("Missing entityId! Unable to fetch nearby locations.");
   }
 
-  // read API key
   const apiKey: string =
     streamDocument?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
   if (!apiKey) {
@@ -32,7 +29,6 @@ export const parseDocument = (
     );
   }
 
-  // parse contentEndpointId
   let contentEndpointId: string = "";
   if (streamDocument?._pageset) {
     try {
@@ -50,7 +46,6 @@ export const parseDocument = (
     );
   }
 
-  // read contentDeliveryAPIDomain
   const contentDeliveryAPIDomain =
     streamDocument?._yext?.contentDeliveryAPIDomain;
   if (!contentDeliveryAPIDomain) {
