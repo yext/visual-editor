@@ -119,7 +119,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
                     constantValueEnabled: true,
                   },
                   label: {
-                    en: "Phone",
+                    en: "",
                     hasLocalizedValue: "true",
                   },
                 },

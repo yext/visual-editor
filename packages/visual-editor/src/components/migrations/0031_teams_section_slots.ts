@@ -134,7 +134,7 @@ export const teamsSectionSlots: Migration = {
                                   constantValue: person.phoneNumber,
                                 },
                                 label: {
-                                  en: "Phone",
+                                  en: "",
                                   hasLocalizedValue: "true",
                                 },
                               },
