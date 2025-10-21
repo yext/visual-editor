@@ -406,7 +406,6 @@
   "locationWithCount_one": "{{count}} atrašanās vieta",
   "locationWithCount_other": "{{count}} vietas",
   "locationsNear_one": "{{count}} atrašanās vieta netālu no \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filtrs:",
   "map": "Karte",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
   "mediaType": "Multivides tips",

@@ -406,7 +406,6 @@
   "locationWithCount_one": "{{count}} plassering",
   "locationWithCount_other": "{{count}} lokasjoner",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filter:",
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "mediaType": "Medietype",
