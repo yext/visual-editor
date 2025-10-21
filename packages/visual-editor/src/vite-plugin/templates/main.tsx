@@ -29,7 +29,7 @@ import {
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
-  data
+  data: TemplateRenderProps
 ): HeadConfig => {
   const { document } = data;
   const { title, description } = getPageMetadata(document);
@@ -48,13 +48,17 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
           type: "image/x-icon",
         },
       },
-      {
-        type: "link",
-        attributes: {
-          rel: "canonical",
-          href: getCanonicalUrl(data),
-        },
-      },
+      ...(data.document.siteDomain
+        ? [
+            {
+              type: "link",
+              attributes: {
+                rel: "canonical",
+                href: getCanonicalUrl(data),
+              },
+            },
+          ]
+        : []),
       ...(description
         ? [
             {
