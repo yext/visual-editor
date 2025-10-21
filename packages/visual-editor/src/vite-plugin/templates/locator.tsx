@@ -21,13 +21,15 @@ import {
   defaultThemeConfig,
   locatorConfig,
   getSchema,
+  getCanonicalUrl,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
 
-export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
-  document,
-}): HeadConfig => {
+export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
+  data
+): HeadConfig => {
+  const { document } = data;
   const { title, description } = getPageMetadata(document);
   const schema = getSchema(document);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
@@ -42,6 +44,13 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
         attributes: {
           rel: "icon",
           type: "image/x-icon",
+        },
+      },
+      {
+        type: "link",
+        attributes: {
+          rel: "canonical",
+          href: getCanonicalUrl(data),
         },
       },
       ...(description
