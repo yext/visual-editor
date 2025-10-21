@@ -1,4 +1,4 @@
-export const getCanonicalUrl = (data): string => {
+export const getCanonicalUrl = (data: Record<string, any>): string => {
   let pagePath = data?.path;
 
   // Same logic that consulting uses to generate canonical URLs
