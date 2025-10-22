@@ -29,7 +29,9 @@ import { promoSectionSlots } from "./0027_promo_section_slots.ts";
 import { heroSectionSlots } from "./0028_slotify_hero_section.ts";
 import { productSectionSlots } from "./0029_product_section_slots.ts";
 import { insightSectionSlots } from "./0030_insight_section_slots.ts";
-import { photoGallerySlots } from "./0033_photo_gallery_slots.ts";
+import { teamsSectionSlots } from "./0031_teams_section_slots.ts";
+import { faqsSectionSlots } from "./0032_slotify_faq_section.ts";
+import { photoGallerySlots } from "./0034_photo_gallery_slots.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -67,6 +69,8 @@ export const migrationRegistry: MigrationRegistry = [
   heroSectionSlots,
   productSectionSlots,
   insightSectionSlots,
+  teamsSectionSlots,
+  faqsSectionSlots,
   {},
   photoGallerySlots,
 ];

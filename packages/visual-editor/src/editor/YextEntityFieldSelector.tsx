@@ -30,7 +30,6 @@ import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fiel
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
 import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ProductSection.tsx";
-import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import { TEAM_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TeamSection.tsx";
 import { TESTIMONIAL_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TestimonialSection.tsx";
 import {
@@ -48,6 +47,7 @@ import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
+import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection";
 
 const devLogger = new DevLogger();
 

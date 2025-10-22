@@ -203,15 +203,14 @@ interface EventSectionProps {
 
 interface FAQSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: FAQData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
   styles: FAQStyles;
+  slots: {
+    HeadingSlot: Slot;
+    FAQsWrapperSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -408,15 +407,21 @@ interface StaticMapSectionProps {
 
 interface TeamSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: TeamData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: TeamStyles;
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 3
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -635,30 +640,12 @@ type BackgroundStyle = {
   isDarkBackground?: boolean;
 };
 
-interface FAQData {
-  /**
-   * The main heading for the entire events section.
-   * @defaultValue "Frequently Asked Questions" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the FAQ data (questions and answers), which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder FAQs.
-   */
-  faqs: YextEntityField<FAQSectionType>;
-}
-
 interface FAQStyles {
   /**
    * The background color of the section.
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for the heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
 }
 
 interface HeroData {
@@ -857,38 +844,6 @@ interface StaticMapStyles {
   mapStyle: string;
 }
 
-interface TeamData {
-  /**
-   * The main heading for the entire team section.
-   * @defaultValue "Meet Our Team" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the team member data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder people.
-   */
-  people: YextEntityField<TeamSectionType>;
-}
-
-interface TeamStyles {
-  /**
-   * The background color for the entire section.
-   * @defaultValue Background Color 3
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual people cards. */
-  cards: {
-    headingLevel: HeadingLevel;
-    backgroundColor?: BackgroundStyle;
-    ctaVariant: CTAVariant;
-  };
-}
-
 interface TestimonialData {
   /**
    * The main heading for the entire testimonials section.
@@ -997,11 +952,6 @@ type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
 
-/** Data for the FAQSection */
-type FAQSectionType = {
-  faqs: Array<FAQStruct>;
-};
-
 /** Corresponds to the different semantic heading levels */
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -1018,11 +968,6 @@ type PromoSectionType = {
   description?: TranslatableRichText;
   /** The CTA button for the promo */
   cta: EnhancedTranslatableCTA;
-};
-
-/** Data for the TeamSection */
-type TeamSectionType = {
-  people: Array<PersonStruct>;
 };
 
 /** Data for the TestimonialSection */
@@ -1062,14 +1007,6 @@ type RichText = {
   json?: string;
 };
 
-/** An individual FAQ */
-type FAQStruct = {
-  /** The question (always visible on the page) */
-  question: TranslatableString;
-  /** The answer (visible when the question is clicked) */
-  answer: TranslatableRichText;
-};
-
 type AssetVideo = {
   video: Video$1;
   /** Asset video description field */
@@ -1096,25 +1033,6 @@ type EnhancedTranslatableCTA = TranslatableCTA & {
    */
   latitude?: number;
   longitude?: number;
-};
-
-/** An individual person in the TeamSection */
-type PersonStruct = {
-  /**
-   * The person's headshot image
-   * @ai Always use ImageType
-   */
-  headshot?: ImageType | AssetImageType;
-  /** The person's name */
-  name?: TranslatableString;
-  /** The person's job title */
-  title?: TranslatableString;
-  /** The person's phone number. Format: +1234567890 */
-  phoneNumber?: string;
-  /** The person's email address */
-  email?: string;
-  /** A call to action for the person */
-  cta: EnhancedTranslatableCTA;
 };
 
 /** An individual testimonial for the TestimonialSection */

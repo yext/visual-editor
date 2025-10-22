@@ -32,7 +32,10 @@ import {
   PhotoGallerySection,
   PhotoGallerySectionProps,
 } from "../pageSections/PhotoGallerySection/PhotoGallerySection.tsx";
-import { FAQSection, FAQSectionProps } from "../pageSections/FAQsSection.tsx";
+import {
+  FAQSection,
+  FAQSectionProps,
+} from "../pageSections/FAQsSection/FAQsSection.tsx";
 import {
   ReviewsSection,
   ReviewsSectionProps,
@@ -41,7 +44,10 @@ import {
   TestimonialSection,
   TestimonialSectionProps,
 } from "../pageSections/TestimonialSection.tsx";
-import { TeamSection, TeamSectionProps } from "../pageSections/TeamSection.tsx";
+import {
+  TeamSection,
+  TeamSectionProps,
+} from "../pageSections/TeamSection/TeamSection.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,

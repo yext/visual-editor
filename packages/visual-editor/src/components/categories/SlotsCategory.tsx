@@ -55,6 +55,19 @@ import {
   PhotoGalleryWrapperProps,
   PhotoGalleryWrapper,
 } from "../pageSections/PhotoGallerySection/PhotoGalleryWrapper.tsx";
+import {
+  FAQsWrapperSlot,
+  FAQsWrapperSlotProps,
+} from "../pageSections/FAQsSection/FAQsWrapperSlot.tsx";
+import { FAQSlot, FAQSlotProps } from "../pageSections/FAQsSection/FAQSlot.tsx";
+import {
+  TeamCardsWrapper,
+  TeamCardsWrapperProps,
+} from "../pageSections/TeamSection/TeamCardsWrapper.tsx";
+import {
+  TeamCard,
+  TeamCardProps,
+} from "../pageSections/TeamSection/TeamCard.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -63,6 +76,8 @@ export interface SlotsCategoryProps {
   EmailsSlot: EmailsProps;
   EventCard: EventCardProps;
   EventCardsWrapper: EventCardsWrapperProps;
+  FAQsWrapperSlot: FAQsWrapperSlotProps;
+  FAQSlot: FAQSlotProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;
@@ -75,6 +90,8 @@ export interface SlotsCategoryProps {
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
   ServicesListSlot: TextListProps;
+  TeamCard: TeamCardProps;
+  TeamCardsWrapper: TeamCardsWrapperProps;
   TextListSlot: TextListProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
@@ -94,6 +111,8 @@ export const SlotsCategoryComponents = {
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   EventCard: { ...EventCard, permissions: lockedPermissions },
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
+  FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
+  FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
@@ -115,6 +134,8 @@ export const SlotsCategoryComponents = {
   },
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
+  TeamCard: { ...TeamCard, permissions: lockedPermissions },
+  TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
