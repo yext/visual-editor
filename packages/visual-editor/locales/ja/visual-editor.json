@@ -365,6 +365,7 @@
     "xLink": "Xリンク",
     "youtubeLink": "YouTubeリンク"
   },
+  "filter": "フィルター",
   "findALocation": "場所を見つけます",
   "fontSize": "フォントサイズ",
   "fontSizeDefaultLabel": "デフォルト",
@@ -405,7 +406,6 @@
   "locationWithCount_one": "{{count}}場所",
   "locationWithCount_other": "{{count}}場所",
   "locationsNear_one": "{{count}}近くの場所 \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "フィルター：",
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "mediaType": "メディアタイプ",
@@ -477,6 +477,7 @@
   "recentReviews": "最近のレビュー",
   "recommendedColors": "推奨される色",
   "redo": "やり直します",
+  "refineYourSearch": "検索を絞り込む",
   "reopenDate": "日付を再開します",
   "responseFrom": "{{businessName}}からの応答",
   "saturday": "土曜日",

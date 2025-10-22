@@ -365,6 +365,7 @@
     "xLink": "X nuoroda",
     "youtubeLink": "„YouTube“ nuoroda"
   },
+  "filter": "Filtruoti",
   "findALocation": "Raskite vietą",
   "fontSize": "Šrifto dydis",
   "fontSizeDefaultLabel": "Numatytasis",
@@ -405,7 +406,6 @@
   "locationWithCount_one": "{{count}} vieta",
   "locationWithCount_other": "{{count}} vietos",
   "locationsNear_one": "{{count}} vieta prie \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "FiltRas:",
   "map": "Žemėlapis",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
   "mediaType": "Žiniasklaidos tipas",
@@ -477,6 +477,7 @@
   "recentReviews": "Naujausios apžvalgos",
   "recommendedColors": "Rekomenduojamos spalvos",
   "redo": "Perdaryti",
+  "refineYourSearch": "Patikslinkite savo paiešką",
   "reopenDate": "Atnaujinti datą",
   "responseFrom": "Atsakymas iš {{businessName}}",
   "saturday": "Šeštadienis",

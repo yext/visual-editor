@@ -365,6 +365,7 @@
     "xLink": "X Link",
     "youtubeLink": "Link YouTube"
   },
+  "filter": "Filtra",
   "findALocation": "Găsiți o locație",
   "fontSize": "Dimensiunea fontului",
   "fontSizeDefaultLabel": "Implicit",
@@ -405,7 +406,6 @@
   "locationWithCount_one": "{{count}} locație",
   "locationWithCount_other": "{{count}} locații",
   "locationsNear_one": "{{count}} locație lângă \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filtra:",
   "map": "Hartă",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
   "mediaType": "Tip media",
@@ -477,6 +477,7 @@
   "recentReviews": "Recenzii recente",
   "recommendedColors": "Culorile recomandate",
   "redo": "Redo.",
+  "refineYourSearch": "Rafinați-vă căutarea",
   "reopenDate": "Data redeschiderii",
   "responseFrom": "Răspuns de la {{businessName}}",
   "saturday": "sâmbătă",

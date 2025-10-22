@@ -364,6 +364,7 @@
     "xLink": "X Link",
     "youtubeLink": "YouTube Link"
   },
+  "filter": "Filter",
   "findALocation": "Find a Location",
   "fontSize": "Font Size",
   "fontSizeDefaultLabel": "Default",
@@ -404,7 +405,6 @@
   "locationWithCount_one": "{{count}} location",
   "locationWithCount_other": "{{count}} locations",
   "locationsNear_one": "{{count}} location near \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filter:",
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "mediaType": "Media Type",
@@ -476,6 +476,7 @@
   "recentReviews": "Recent Reviews",
   "recommendedColors": "Recommended Colors",
   "redo": "Redo",
+  "refineYourSearch": "Refine Your Search",
   "reopenDate": "Reopen Date",
   "responseFrom": "Response from {{businessName}}",
   "saturday": "Saturday",

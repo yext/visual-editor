@@ -366,6 +366,7 @@
     "xLink": "X link",
     "youtubeLink": "YouTube -link"
   },
+  "filter": "Filter",
   "findALocation": "Find en placering",
   "fontSize": "Skrifttypestørrelse",
   "fontSizeDefaultLabel": "Misligholdelse",
@@ -406,7 +407,6 @@
   "locationWithCount_one": "{{count}} placering",
   "locationWithCount_other": "{{count}} placeringer",
   "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filter:",
   "map": "Kort",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "mediaType": "Medietype",
@@ -478,6 +478,7 @@
   "recentReviews": "Nylige anmeldelser",
   "recommendedColors": "Anbefalede farver",
   "redo": "Genindstille",
+  "refineYourSearch": "Forfin din søgning",
   "reopenDate": "Genåbnet dato",
   "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",

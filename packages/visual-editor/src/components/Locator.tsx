@@ -40,7 +40,6 @@ import {
   Heading,
   msg,
   useDocument,
-  Toggle,
   YextField,
   useTemplateProps,
   resolveUrlTemplate,
@@ -54,9 +53,14 @@ import {
   HoursType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
-import { FaAngleRight, FaCheckSquare, FaRegSquare } from "react-icons/fa";
+import {
+  FaAngleRight,
+  FaCheckSquare,
+  FaRegSquare,
+  FaSlidersH,
+  FaTimes,
+} from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
-import { FaSliders } from "react-icons/fa6";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -453,6 +457,8 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
+  const [showFilter, setShowFilter] = React.useState(false);
+
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
@@ -477,50 +483,84 @@ const LocatorInternal = ({
               radius: 25,
             }}
           />
-          {openNowButton && (
-            <div className={"flex flex-row gap-2 items-center"}>
-              <div className={"flex items-center gap-1"}>
-                <FaSliders />
-                <span className="font-bold">
-                  {t("locatorFilterLabel", "Filter:")}
-                </span>
-              </div>
-              <Toggle
-                pressed={isSelected}
-                onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-                className="inline-flex py-1 px-3 w-auto"
+        </div>
+        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 relative inline-block">
+          <div className="flex flex-row justify-between">
+            <div>
+              {resultCount === 0 &&
+                searchState === "not started" &&
+                t(
+                  "useOurLocatorToFindALocationNearYou",
+                  "Use our locator to find a location near you"
+                )}
+              {resultCount === 0 &&
+                searchState === "complete" &&
+                t(
+                  "noResultsFoundForThisArea",
+                  "No results found for this area"
+                )}
+              {resultCount > 0 &&
+                (filterDisplayName
+                  ? t(
+                      "locationsNear",
+                      `${resultCount} locations near "${filterDisplayName}"`,
+                      {
+                        count: resultCount,
+                        filterDisplayName,
+                      }
+                    )
+                  : t("locationWithCount", `${resultCount} locations`, {
+                      count: resultCount,
+                    }))}
+            </div>
+            {openNowButton && (
+              <button
+                className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                onClick={() => setShowFilter((prev) => !prev)}
               >
-                <span className="inline-flex items-center gap-2">
-                  {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
-                  {t("openNow", "Open Now")}
-                </span>
-              </Toggle>
+                {t("filter", "Filter")}
+                {<FaSlidersH />}
+              </button>
+            )}
+          </div>
+          {showFilter && (
+            <div
+              id="popup"
+              className="absolute top-0 z-50 w-80 flex flex-col bg-white shadow-lg absolute left-full top-0 ml-2 rounded-md shadow-lg"
+            >
+              <div className="inline-flex justify-between items-center px-6 py-4 gap-4 border-b border-gray-300">
+                <div className="font-bold">
+                  {t("refineYourSearch", "Refine Your Search")}
+                </div>
+                <button
+                  className="text-palette-primary-dark"
+                  onClick={() => setShowFilter(false)}
+                >
+                  <FaTimes />
+                </button>
+              </div>
+              <div className="flex flex-col p-6 gap-6">
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-4">
+                    <div className="font-bold">{t("hours", "Hours")}</div>
+                    <div className="flex flex-row gap-1">
+                      <button
+                        className="inline-flex bg-white"
+                        onClick={() => handleOpenNowClick(!isSelected)}
+                      >
+                        <div className="inline-flex items-center gap-4">
+                          {t("openNow", "Open Now")}
+                          <div className="text-palette-primary-dark">
+                            {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
-        </div>
-        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
-          {resultCount === 0 &&
-            searchState === "not started" &&
-            t(
-              "useOurLocatorToFindALocationNearYou",
-              "Use our locator to find a location near you"
-            )}
-          {resultCount === 0 &&
-            searchState === "complete" &&
-            t("noResultsFoundForThisArea", "No results found for this area")}
-          {resultCount > 0 &&
-            (filterDisplayName
-              ? t(
-                  "locationsNear",
-                  `${resultCount} locations near "${filterDisplayName}"`,
-                  {
-                    count: resultCount,
-                    filterDisplayName,
-                  }
-                )
-              : t("locationWithCount", `${resultCount} locations`, {
-                  count: resultCount,
-                }))}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (

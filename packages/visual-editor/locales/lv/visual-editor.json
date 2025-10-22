@@ -365,6 +365,7 @@
     "xLink": "X saite",
     "youtubeLink": "YouTube saite"
   },
+  "filter": "Filtrs",
   "findALocation": "Atrodiet atrašanās vietu",
   "fontSize": "Fonta lielums",
   "fontSizeDefaultLabel": "Nepildīt",
@@ -405,7 +406,6 @@
   "locationWithCount_one": "{{count}} atrašanās vieta",
   "locationWithCount_other": "{{count}} vietas",
   "locationsNear_one": "{{count}} atrašanās vieta netālu no \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filtrs:",
   "map": "Karte",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
   "mediaType": "Multivides tips",
@@ -477,6 +477,7 @@
   "recentReviews": "Nesenie pārskati",
   "recommendedColors": "Ieteicamās krāsas",
   "redo": "Pārtaisīt",
+  "refineYourSearch": "Uzlabojiet meklēšanu",
   "reopenDate": "Atkārtoti atvērt datumu",
   "responseFrom": "Atbilde no {{businessName}}",
   "saturday": "Sestdiena",

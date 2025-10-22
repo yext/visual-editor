@@ -366,6 +366,7 @@
     "xLink": "X link",
     "youtubeLink": "Link YouTube"
   },
+  "filter": "Filtr",
   "findALocation": "Znajdź lokalizację",
   "fontSize": "Rozmiar czcionki",
   "fontSizeDefaultLabel": "Domyślny",
@@ -406,7 +407,6 @@
   "locationWithCount_one": "{{count}} Lokalizacja",
   "locationWithCount_other": "{{count}} Lokalizacje",
   "locationsNear_one": "{{count}} Lokalizacja w pobliżu „{{filterDisplayName}}”",
-  "locatorFilterLabel": "Filtr:",
   "map": "Mapa",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "mediaType": "Typ mediów",
@@ -478,6 +478,7 @@
   "recentReviews": "Ostatnie recenzje",
   "recommendedColors": "Zalecane kolory",
   "redo": "Przerobić",
+  "refineYourSearch": "Sprecyzuj wyszukiwanie",
   "reopenDate": "Data ponownego otwarcia",
   "responseFrom": "Odpowiedź od {{businessName}}",
   "saturday": "Sobota",

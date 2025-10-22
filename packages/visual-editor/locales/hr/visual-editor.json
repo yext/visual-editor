@@ -365,6 +365,7 @@
     "xLink": "X Link",
     "youtubeLink": "YouTube veza"
   },
+  "filter": "Filter",
   "findALocation": "Pronađite lokaciju",
   "fontSize": "Veličina fonta",
   "fontSizeDefaultLabel": "Zadano",
@@ -405,7 +406,6 @@
   "locationWithCount_one": "{{count}} lokacija",
   "locationWithCount_other": "{{count}} Lokacije",
   "locationsNear_one": "{{count}} Lokacija u blizini \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filter:",
   "map": "Karta",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
   "mediaType": "Medijska vrsta",
@@ -477,6 +477,7 @@
   "recentReviews": "Nedavne recenzije",
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
+  "refineYourSearch": "Pročistite svoju pretragu",
   "reopenDate": "Ponovno otvaranje datuma",
   "responseFrom": "Odgovor od {{businessName}}",
   "saturday": "subota",
