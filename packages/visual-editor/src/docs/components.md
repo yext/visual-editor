@@ -555,24 +555,13 @@ The Photo Gallery Section is designed to display a collection of images in a vis
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop           | Type                                                                                      | Description                                                                                  | Default                           |
-| :------------- | :---------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- | :-------------------------------- |
-| `data.heading` | `YextEntityField<TranslatableString>`                                                     | The main heading for the photo gallery.                                                      | `"Gallery" (constant)`            |
-| `data.images`  | `YextEntityField<ImageType[] \| ComplexImageType[] \| { assetImage: AssetImageType; }[]>` | The source of the image data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder images.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                                                           | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color for the entire section, selected from the theme. | `Background Color 1` |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the main section heading.                                 |                      |
-| `styles.image`           | `ImageStylingProps`                                              | Styling options for the gallery images, such as aspect ratio.         |                      |
+| Prop                     | Type              | Description                                                           | Default              |
+| :----------------------- | :---------------- | :-------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color for the entire section, selected from the theme. | `Background Color 1` |
 
 #### Other Props
 
