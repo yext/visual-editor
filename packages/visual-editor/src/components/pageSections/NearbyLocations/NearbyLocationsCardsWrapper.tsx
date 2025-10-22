@@ -233,8 +233,8 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     !!apiKey &&
     !!contentEndpointId &&
     !!contentDeliveryAPIDomain &&
-    !!coordinate?.latitude &&
-    !!coordinate.longitude &&
+    coordinate?.latitude !== undefined &&
+    coordinate?.longitude !== undefined &&
     !!data?.radius &&
     !!data?.limit;
 
