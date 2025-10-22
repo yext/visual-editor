@@ -323,6 +323,7 @@
       "width": "Bredd",
       "yes": "Ja"
     },
+    "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
     "phoneNumberFormat": "Telefonnummerformat",
@@ -523,6 +524,7 @@
   "slots": {
     "insightCard": "Insiktskort",
     "insightCards": "Insiktskort",
+    "nearbyLocationCards": "Närliggande platskort",
     "productCard": "Produktkort",
     "productCards": "Produktkort"
   },

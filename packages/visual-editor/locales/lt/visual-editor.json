@@ -323,6 +323,7 @@
       "width": "Plotis",
       "yes": "Taip"
     },
+    "phone": "Telefonas",
     "phoneFormat": "Telefono formatas",
     "phoneNumber": "Telefono numeris",
     "phoneNumberFormat": "Telefono numerio formatas",
@@ -523,6 +524,7 @@
   "slots": {
     "insightCard": "Įžvalgos kortelė",
     "insightCards": "Įžvalgos kortelės",
+    "nearbyLocationCards": "Netoliese esančios vietos kortelės",
     "productCard": "Produkto kortelė",
     "productCards": "Produktų kortelės"
   },

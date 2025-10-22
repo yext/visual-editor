@@ -323,6 +323,7 @@
       "width": "Genişlik",
       "yes": "Evet"
     },
+    "phone": "Telefon",
     "phoneFormat": "Telefon formatı",
     "phoneNumber": "Telefon numarası",
     "phoneNumberFormat": "Telefon numarası biçimi",
@@ -523,6 +524,7 @@
   "slots": {
     "insightCard": "İçgörü Kartı",
     "insightCards": "İçgörü Kartları",
+    "nearbyLocationCards": "Yakındaki Konum Kartları",
     "productCard": "Ürün Kartı",
     "productCards": "Ürün Kartları"
   },

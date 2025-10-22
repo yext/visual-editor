@@ -285,18 +285,24 @@ interface InsightSectionProps {
 
 interface NearbyLocationsSectionProps {
   /**
-   * This object defines the search parameters for finding nearby locations.
-   * @propCategory Data Props
-   */
-  data: NearbyLocationsData;
-  /**
    * This object contains extensive properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: NearbyLocationsStyles;
+  styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 1
+     */
+    backgroundColor?: BackgroundStyle;
+  };
   /** @internal */
   analytics: {
     scope?: string;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
   };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -700,67 +706,6 @@ interface HeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
-}
-
-interface NearbyLocationsData {
-  /**
-   * The main heading for the entire section.
-   * @defaultValue "Nearby Locations" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The central coordinate (`latitude`, `longitude`) to search from.
-   * @defaultValue 'yextDisplayCoordinate' field
-   */
-  coordinate: YextEntityField<Coordinate>;
-  /**
-   * The search radius in miles.
-   * @defaultValue 10
-   */
-  radius: number;
-  /**
-   * The maximum number of locations to find and display.
-   * @defaultValue 3
-   */
-  limit: number;
-}
-
-interface NearbyLocationsStyles {
-  /**
-   * The background color for the entire section.
-   * @defaultValue Background Color 1
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual location cards. */
-  cards: {
-    headingLevel: HeadingLevel;
-    backgroundColor?: BackgroundStyle;
-  };
-  /**
-   * The display format for phone numbers on the cards.
-   * @defaultValue 'domestic'
-   */
-  phoneNumberFormat: "domestic" | "international";
-  /**
-   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
-   * @defaultValue false
-   */
-  phoneNumberLink: boolean;
-  /** Styling for the hours display on each card. */
-  hours: {
-    /** Whether to display the current status ("Open Now" or "Closed") */
-    showCurrentStatus: boolean;
-    timeFormat?: "12h" | "24h";
-    /** How to format the days of the week (short:Mon, long:Monday) */
-    dayOfWeekFormat?: "short" | "long";
-    /** Whether to include the day of the week */
-    showDayNames?: boolean;
-  };
 }
 
 interface PhotoGalleryData {

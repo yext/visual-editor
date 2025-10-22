@@ -1,6 +1,5 @@
 export * from "./i18n/index.ts";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
-export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
 export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";

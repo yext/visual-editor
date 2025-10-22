@@ -39,9 +39,7 @@ export { InsightCard } from "./InsightSection/InsightCard.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,
-  type NearbyLocationsData,
-  type NearbyLocationsStyles,
-} from "./NearbyLocations.tsx";
+} from "./NearbyLocations/NearbyLocations.tsx";
 export {
   TeamSection,
   type TeamSectionProps,

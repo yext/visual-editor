@@ -324,6 +324,7 @@
       "width": "Šířka",
       "yes": "Ano"
     },
+    "phone": "Telefon",
     "phoneFormat": "Formát telefonu",
     "phoneNumber": "Telefonní číslo",
     "phoneNumberFormat": "Formát telefonního čísla",
@@ -524,6 +525,7 @@
   "slots": {
     "insightCard": "Přehledová karta",
     "insightCards": "Karty statistik",
+    "nearbyLocationCards": "Karty polohy v okolí",
     "productCard": "Karta produktu",
     "productCards": "Karty produktů"
   },
