@@ -17,8 +17,9 @@ import {
   migrationRegistry,
   ReviewsSection,
   VisualEditorProvider,
+  SlotsCategoryComponents,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const interactionsDelay = 750;
@@ -113,11 +114,107 @@ const tests: ComponentTest[] = [
       await delay(interactionsDelay);
     },
   },
+  {
+    name: "version 33 props with empty document",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Recent Reviews",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "center" },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "reviewsSection",
+      },
+      liveVisibility: true,
+    },
+    version: 33,
+  },
+  {
+    name: "version 33 props with document data",
+    document: {
+      businessId: 70452,
+      _env: {
+        YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_REVIEWS_APP_API_KEY,
+      },
+      uid: 25897322,
+      ref_reviewsAgg: [
+        {
+          averageRating: 3.7142856,
+          publisher: "FIRSTPARTY",
+          reviewCount: 7,
+        },
+      ],
+      _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+    },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Recent Reviews",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "center" },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "reviewsSection",
+      },
+      liveVisibility: true,
+    },
+    version: 33,
+    interactions: async (page) => {
+      const expandButton = page.getByText("Show More");
+      await act(async () => {
+        await expandButton.click();
+      });
+      await delay(interactionsDelay);
+    },
+  },
 ];
 
 describe("ReviewsSection", async () => {
   const puckConfig: Config = {
-    components: { ReviewsSection },
+    components: { ReviewsSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -134,7 +231,7 @@ describe("ReviewsSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -152,6 +249,10 @@ describe("ReviewsSection", async () => {
         puckConfig,
         document
       );
+
+      data = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>

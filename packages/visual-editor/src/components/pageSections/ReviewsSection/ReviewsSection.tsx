@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import * as React from "react";
 import {
   backgroundColors,
@@ -11,7 +11,6 @@ import {
   fetchReviewsForEntity,
   getAggregateRating,
   getAnalyticsScopeHash,
-  Heading,
   msg,
   PageSection,
   ReviewStars,
@@ -20,6 +19,8 @@ import {
   useBackground,
   useDocument,
   YextField,
+  VisibilityWrapper,
+  HeadingTextProps,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
@@ -30,21 +31,56 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
   year: "numeric",
 };
 
-export type ReviewsSectionProps = {
-  backgroundColor: BackgroundStyle;
+export interface ReviewsSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 1
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+  };
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
-};
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility: boolean;
+}
 
 const reviewsFields: Fields<ReviewsSectionProps> = {
-  backgroundColor: YextField(
-    msg("fields.backgroundColor", "Background Color"),
-    {
-      type: "select",
-      options: "BACKGROUND_COLOR",
-    }
-  ),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+    },
+  }),
+  slots: {
+    type: "object",
+    objectFields: {
+      SectionHeadingSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -54,11 +90,22 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
       }),
     },
   }),
+  liveVisibility: YextField(
+    msg("fields.visibleOnLivePage", "Visible on Live Page"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
 };
 
-const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
+const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (
   props: ReviewsSectionProps
 ) => {
+  const { styles, slots } = props;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
   if (!apiKey) {
@@ -130,8 +177,9 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   return (
     <PageSection
       className="flex flex-col gap-12"
-      background={props.backgroundColor}
+      background={styles?.backgroundColor}
     >
+      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
       <ReviewsHeader {...headerProps} />
       {reviews && (
         <>
@@ -153,20 +201,12 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
   const { averageRating, reviewCount, isLoading } = props;
   const { t } = useTranslation();
   return (
-    <div className="flex flex-col gap-3">
-      <Heading level={3} className="text-center">
-        {t("recentReviews", "Recent Reviews")}
-      </Heading>
-      <div className="flex flex-row gap-3 items-center justify-center">
-        {isLoading ? (
-          <Body>{t("loadingReviews", "Loading reviews...")}</Body>
-        ) : (
-          <ReviewStars
-            averageRating={averageRating}
-            reviewCount={reviewCount}
-          />
-        )}
-      </div>
+    <div className="flex flex-row gap-3 items-center justify-center">
+      {isLoading ? (
+        <Body>{t("loadingReviews", "Loading reviews...")}</Body>
+      ) : (
+        <ReviewStars averageRating={averageRating} reviewCount={reviewCount} />
+      )}
     </div>
   );
 };
@@ -450,20 +490,52 @@ const ShowMoreButton: React.FC<{
   );
 };
 
+/**
+ * The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps.
+ * Available on Location templates.
+ */
 export const ReviewsSection: ComponentConfig<{ props: ReviewsSectionProps }> = {
   fields: reviewsFields,
   label: msg("components.reviewsSection", "Reviews Section"),
   defaultProps: {
-    backgroundColor: backgroundColors.background1.value,
+    styles: {
+      backgroundColor: backgroundColors.background1.value,
+    },
+    slots: {
+      SectionHeadingSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            data: {
+              text: {
+                constantValue: {
+                  en: "Recent Reviews",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+                field: "",
+              },
+            },
+            styles: { level: 3, align: "center" },
+          } satisfies HeadingTextProps,
+        },
+      ],
+    },
     analytics: {
       scope: "reviewsSection",
     },
+    liveVisibility: true,
   },
   render: (props) => (
     <AnalyticsScopeProvider
       name={`${props.analytics?.scope ?? "reviewsSection"}${getAnalyticsScopeHash(props.id)}`}
     >
-      <ReviewsSectionInternal {...props} />
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <ReviewsSectionInternal {...props} />
+      </VisibilityWrapper>
     </AnalyticsScopeProvider>
   ),
 };

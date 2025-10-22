@@ -36,7 +36,7 @@ import { FAQSection, FAQSectionProps } from "../pageSections/FAQsSection.tsx";
 import {
   ReviewsSection,
   ReviewsSectionProps,
-} from "../pageSections/ReviewsSection.tsx";
+} from "../pageSections/ReviewsSection/ReviewsSection.tsx";
 import {
   TestimonialSection,
   TestimonialSectionProps,
