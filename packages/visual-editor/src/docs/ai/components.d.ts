@@ -973,11 +973,6 @@ type PromoSectionType = {
   cta: EnhancedTranslatableCTA;
 };
 
-/** Data for the TestimonialSection */
-type TestimonialSectionType = {
-  testimonials: Array<TestimonialStruct>;
-};
-
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
   name?: string;
@@ -1044,16 +1039,6 @@ type EnhancedTranslatableCTA = TranslatableCTA & {
    */
   latitude?: number;
   longitude?: number;
-};
-
-/** An individual testimonial for the TestimonialSection */
-type TestimonialStruct = {
-  /** The testimonial text */
-  description?: TranslatableRichText;
-  /** The name of the person who contributed the testimonial */
-  contributorName?: TranslatableString;
-  /** A UTC string for the contribution's date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
-  contributionDate?: string;
 };
 
 /** Describes the data corresponding to a single image. */
