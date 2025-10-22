@@ -43,7 +43,10 @@ export {
   type NearbyLocationsData,
   type NearbyLocationsStyles,
 } from "./NearbyLocations.tsx";
-export { TeamSection, type TeamSectionProps } from "./TeamSection.tsx";
+export {
+  TeamSection,
+  type TeamSectionProps,
+} from "./TeamSection/TeamSection.tsx";
 export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
