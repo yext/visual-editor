@@ -403,6 +403,7 @@
     "xLink": "X -linkki",
     "youtubeLink": "YouTube -linkki"
   },
+  "filter": "Suodattaa",
   "filters": "Suodattimet",
   "findALocation": "Etsi sijainti",
   "fontSize": "Fontin koko",
@@ -444,7 +445,6 @@
   "locationWithCount_one": "{{count}} sijainti",
   "locationWithCount_other": "{{count}} sijainnit",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Suodattaa:",
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "mediaType": "Mediatyyppi",
@@ -516,6 +516,7 @@
   "recentReviews": "Viimeaikaiset arvostelut",
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
+  "refineYourSearch": "Tarkenna hakuasi",
   "reopenDate": "Avata päivämäärä uudelleen",
   "responseFrom": "Vastaus {{businessName}}}",
   "saturday": "Lauantai",

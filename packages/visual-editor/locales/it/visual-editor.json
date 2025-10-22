@@ -403,6 +403,7 @@
     "xLink": "X link",
     "youtubeLink": "Link YouTube"
   },
+  "filter": "Filtro",
   "filters": "Filtri",
   "findALocation": "Trova una posizione",
   "fontSize": "Dimensione del carattere",
@@ -444,7 +445,6 @@
   "locationWithCount_one": "{{count}} posizione",
   "locationWithCount_other": "{{count}} Località",
   "locationsNear_one": "{{count}} posizione vicino a \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filtro:",
   "map": "Mappa",
   "maxWidthTip": "Per un allineamento ottimale dei contenuti, si consiglia di impostare la larghezza di intestazione e piè di pagina per abbinare o superare la griglia di contenuto della pagina.",
   "mediaType": "Tipo di media",
@@ -516,6 +516,7 @@
   "recentReviews": "Recensioni recenti",
   "recommendedColors": "Colori consigliati",
   "redo": "Rifare",
+  "refineYourSearch": "Perfeziona la tua ricerca",
   "reopenDate": "Rinnova la data",
   "responseFrom": "Risposta da {{businessName}}",
   "saturday": "Sabato",

@@ -404,6 +404,7 @@
     "xLink": "X Link",
     "youtubeLink": "Odkaz na YouTube"
   },
+  "filter": "Filter",
   "filters": "Filtre",
   "findALocation": "Nájdite miesto",
   "fontSize": "Veľkosť písma",
@@ -445,7 +446,6 @@
   "locationWithCount_one": "{{count}} Umiestnenie",
   "locationWithCount_other": "{{count}} lokality",
   "locationsNear_one": "{{count}} Umiestnenie blízko \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filter:",
   "map": "Mapovať",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "mediaType": "Typ médií",
@@ -517,6 +517,7 @@
   "recentReviews": "Posledné recenzie",
   "recommendedColors": "Odporúčané farby",
   "redo": "Opätovne prekážať",
+  "refineYourSearch": "Upravte svoje vyhľadávanie",
   "reopenDate": "Znovu otvoriť dátum",
   "responseFrom": "Odpoveď z {{businessName}}",
   "saturday": "Sobota",

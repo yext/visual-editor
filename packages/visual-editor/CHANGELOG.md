@@ -1,3 +1,9 @@
+#### 0.0.63 (2025-10-21)
+
+##### New Features
+
+- add canonical url to pages ([#827](https://github.com/yext/visual-editor/pull/827)) ([f9d86987](https://github.com/yext/visual-editor/commit/f9d86987338df39335588962a628a0717ce592f3))
+
 #### 0.0.62 (2025-10-16)
 
 ##### Bug Fixes

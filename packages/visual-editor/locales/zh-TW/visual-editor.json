@@ -403,6 +403,7 @@
     "xLink": "x鏈接",
     "youtubeLink": "YouTube鏈接"
   },
+  "filter": "篩選",
   "filters": "過濾器",
   "findALocation": "找到一個位置",
   "fontSize": "字體大小",
@@ -444,7 +445,6 @@
   "locationWithCount_one": "{{count}}位置",
   "locationWithCount_other": "{{count}}位置",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
-  "locatorFilterLabel": "篩選：",
   "map": "地圖",
   "maxWidthTip": "對於最佳內容對齊，我們建議將標題和頁腳寬度設置為匹配或超過頁面內容網格。",
   "mediaType": "媒體類型",
@@ -516,6 +516,7 @@
   "recentReviews": "最近的評論",
   "recommendedColors": "推薦的顏色",
   "redo": "重做",
+  "refineYourSearch": "優化您的搜索",
   "reopenDate": "重新開放日期",
   "responseFrom": "{{businessName}}的響應",
   "saturday": "週六",
