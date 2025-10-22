@@ -1,20 +1,14 @@
-import { ArrayField } from "@measured/puck";
 import { TestimonialStruct } from "../../../types/types.ts";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { pt } from "../../../utils/i18n/platform.ts";
+import { ArrayField } from "@measured/puck";
 
 export const defaultTestimonial: TestimonialStruct = {
   description: {
-    en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    ),
+    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     hasLocalizedValue: "true",
   },
-  contributorName: {
-    en: "Customer Name",
-    hasLocalizedValue: "true",
-  },
-  contributionDate: "2024-01-01",
+  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  contributionDate: "July 22, 2022",
 };
 
 // This config is used by TestimonialCardsWrapper when constantValueEnabled is true
