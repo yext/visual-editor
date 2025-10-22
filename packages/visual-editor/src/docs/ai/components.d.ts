@@ -203,15 +203,14 @@ interface EventSectionProps {
 
 interface FAQSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: FAQData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
   styles: FAQStyles;
+  slots: {
+    HeadingSlot: Slot;
+    FAQsWrapperSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -651,30 +650,12 @@ type BackgroundStyle = {
   isDarkBackground?: boolean;
 };
 
-interface FAQData {
-  /**
-   * The main heading for the entire events section.
-   * @defaultValue "Frequently Asked Questions" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the FAQ data (questions and answers), which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder FAQs.
-   */
-  faqs: YextEntityField<FAQSectionType>;
-}
-
 interface FAQStyles {
   /**
    * The background color of the section.
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for the heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
 }
 
 interface HeroData {
@@ -950,11 +931,6 @@ type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
 
-/** Data for the FAQSection */
-type FAQSectionType = {
-  faqs: Array<FAQStruct>;
-};
-
 /** Corresponds to the different semantic heading levels */
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -1003,14 +979,6 @@ type LocalizedValues = {
 type RichText = {
   html?: string;
   json?: string;
-};
-
-/** An individual FAQ */
-type FAQStruct = {
-  /** The question (always visible on the page) */
-  question: TranslatableString;
-  /** The answer (visible when the question is clicked) */
-  answer: TranslatableRichText;
 };
 
 type AssetVideo = {

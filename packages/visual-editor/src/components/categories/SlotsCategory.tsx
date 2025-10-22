@@ -52,6 +52,11 @@ import {
   InsightCardProps,
 } from "../pageSections/InsightSection/InsightCard.tsx";
 import {
+  FAQsWrapperSlot,
+  FAQsWrapperSlotProps,
+} from "../pageSections/FAQsSection/FAQsWrapperSlot.tsx";
+import { FAQSlot, FAQSlotProps } from "../pageSections/FAQsSection/FAQSlot.tsx";
+import {
   TeamCardsWrapper,
   TeamCardsWrapperProps,
 } from "../pageSections/TeamSection/TeamCardsWrapper.tsx";
@@ -75,6 +80,8 @@ export interface SlotsCategoryProps {
   EmailsSlot: EmailsProps;
   EventCard: EventCardProps;
   EventCardsWrapper: EventCardsWrapperProps;
+  FAQsWrapperSlot: FAQsWrapperSlotProps;
+  FAQSlot: FAQSlotProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;
@@ -109,6 +116,8 @@ export const SlotsCategoryComponents = {
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   EventCard: { ...EventCard, permissions: lockedPermissions },
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
+  FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
+  FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
