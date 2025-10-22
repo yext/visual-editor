@@ -298,35 +298,26 @@ This object contains properties for customizing the appearance of both header ti
 
 ## FAQSection
 
-The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer. Available on Location templates.
+The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer.
 
 ### Props
-
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop           | Type                                  | Description                                                                                                        | Default                                   |
-| :------------- | :------------------------------------ | :----------------------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| `data.faqs`    | `YextEntityField<FAQSectionType>`     | The source of the FAQ data (questions and answers), which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder FAQs.`           |
-| `data.heading` | `YextEntityField<TranslatableString>` | The main heading for the entire events section.                                                                    | `"Frequently Asked Questions" (constant)` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                          | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color of the section. | `Background Color 3` |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the heading.             |                      |
+| Prop                     | Type              | Description                          | Default              |
+| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 3` |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                            | Description                                                                    | Default |
+| :--------------- | :---------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                       | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ HeadingSlot: Slot; FAQsWrapperSlot: Slot; }` |                                                                                |         |
 
 ---
 
