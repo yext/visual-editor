@@ -1,9 +1,9 @@
 import { Migration } from "../../utils/migrate.ts";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { WithId } from "@measured/puck";
 import { BodyTextProps } from "../index.ts";
-import { FAQSectionType } from "../../types/types";
+import { FAQSectionType } from "../../types/types.ts";
 import { FAQSlotProps } from "../pageSections/FAQsSection/FAQSlot.tsx";
 import { FAQsWrapperSlotProps } from "../pageSections/FAQsSection/FAQsWrapperSlot.tsx";
 
