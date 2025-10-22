@@ -51,6 +51,10 @@ import {
   InsightCard,
   InsightCardProps,
 } from "../pageSections/InsightSection/InsightCard.tsx";
+import {
+  PhotoGalleryWrapperProps,
+  PhotoGalleryWrapper,
+} from "../pageSections/PhotoGallerySection/PhotoGalleryWrapper.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -67,6 +71,7 @@ export interface SlotsCategoryProps {
   InsightCardsWrapper: InsightCardsWrapperProps;
   InsightCard: InsightCardProps;
   PhoneNumbersSlot: PhoneListProps;
+  PhotoGalleryWrapper: PhotoGalleryWrapperProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
   ServicesListSlot: TextListProps;
@@ -100,6 +105,10 @@ export const SlotsCategoryComponents = {
   },
   InsightCard: { ...InsightCard, permissions: lockedPermissions },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
+  PhotoGalleryWrapper: {
+    ...PhotoGalleryWrapper,
+    permissions: lockedPermissions,
+  },
   ProductCardsWrapper: {
     ...ProductCardsWrapper,
     permissions: lockedPermissions,

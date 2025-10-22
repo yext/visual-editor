@@ -1,6 +1,26 @@
-import { useTranslation } from "react-i18next";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
+import {
+  ImageStylingFields,
+  ImageStylingProps,
+} from "../../contentBlocks/image/styling.ts";
+import {
+  EntityField,
+  Image,
+  ImageProps,
+  themeManagerCn,
+  useBackground,
+  useDocument,
+  YextEntityField,
+  YextField,
+  msg,
+  pt,
+  resolveComponentData,
+} from "@yext/visual-editor";
+import { AssetImageType } from "../../../types/images";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { useTranslation } from "react-i18next";
 import {
   CarouselProvider,
   Slider,
@@ -10,89 +30,50 @@ import {
   Dot,
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  EntityField,
-  Image,
-  ImageProps,
-  PageSection,
-  themeManagerCn,
-  useBackground,
-  useDocument,
-  YextEntityField,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  pt,
-  resolveComponentData,
-  HeadingTextProps,
-} from "@yext/visual-editor";
-import {
-  ImageStylingFields,
-  ImageStylingProps,
-} from "../contentBlocks/image/styling.ts";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { AssetImageType } from "../../types/images";
 
-const PLACEHOLDER_WIDTH = 1000;
-const PLACEHOLDER_HEIGHT = 570;
-const PLACEHOLDER_IMAGE_URL = `https://placehold.co/${PLACEHOLDER_WIDTH}x${PLACEHOLDER_HEIGHT}/png`;
-const PLACEHOLDER: AssetImageType = {
-  url: PLACEHOLDER_IMAGE_URL,
-  width: PLACEHOLDER_WIDTH,
-  height: PLACEHOLDER_HEIGHT,
-  assetImage: {
-    name: "Placeholder",
-  },
-};
-
-export interface PhotoGalleryData {
-  /**
-   * The source of the image data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder images.
-   */
-  images: YextEntityField<
-    ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
-  >;
-}
-
-export interface PhotoGalleryStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 1
-   */
-  backgroundColor?: BackgroundStyle;
-
-  /** Styling options for the gallery images, such as aspect ratio. */
-  image: ImageStylingProps;
-}
-
-export interface PhotoGallerySectionProps {
-  /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: PhotoGalleryData;
-
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
-  styles: PhotoGalleryStyles;
-
-  /** @internal */
-  slots: {
-    HeadingSlot: Slot;
+export interface PhotoGalleryWrapperProps {
+  data: {
+    /**
+     * The source of the image data, which can be linked to a Yext field or provided as a constant.
+     * @defaultValue A list of 3 placeholder images.
+     */
+    images: YextEntityField<
+      ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
+    >;
   };
-
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
-  liveVisibility: boolean;
+  styles: {
+    /** Styling options for the gallery images, such as aspect ratio. */
+    image: ImageStylingProps;
+  };
 }
+
+const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      images: YextField<
+        any,
+        ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
+      >(msg("fields.images", "Images"), {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+          includeListsOnly: true,
+        },
+      }),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      image: YextField(msg("fields.image", "Image"), {
+        type: "object",
+        objectFields: ImageStylingFields,
+      }),
+    },
+  }),
+};
 
 interface DynamicChildColorsProps {
   children: React.ReactElement;
@@ -120,63 +101,38 @@ const DynamicChildColors = ({
   });
 };
 
-const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      images: YextField<
-        any,
-        ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
-      >(msg("fields.images", "Images"), {
-        type: "entityField",
-        filter: {
-          types: ["type.image"],
-          includeListsOnly: true,
-        },
-      }),
+export const PhotoGalleryWrapper: ComponentConfig<{
+  props: PhotoGalleryWrapperProps;
+}> = {
+  label: msg("components.photoGalleryWrapper", "Photo Gallery Wrapper"),
+  fields: photoGalleryWrapperFields,
+  defaultProps: {
+    data: {
+      images: {
+        field: "",
+        constantValue: [
+          { assetImage: PLACEHOLDER },
+          { assetImage: PLACEHOLDER },
+          { assetImage: PLACEHOLDER },
+        ],
+        constantValueEnabled: true,
+      },
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-      image: YextField(msg("fields.image", "Image"), {
-        type: "object",
-        objectFields: ImageStylingFields,
-      }),
+    styles: {
+      image: {
+        aspectRatio: 1.78,
+      },
     },
-  }),
-  slots: {
-    type: "object",
-    objectFields: {
-      HeadingSlot: { type: "slot" },
-    },
-    visible: false,
   },
-  liveVisibility: YextField(
-    msg("fields.visibleOnLivePage", "Visible on Live Page"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.show", "Show"), value: true },
-        { label: msg("fields.options.hide", "Hide"), value: false },
-      ],
-    }
-  ),
+  render: (props) => <PhotoGalleryWrapperComponent {...props} />,
 };
 
-const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
+const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
   data,
   styles,
-  slots,
+  puck,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
 
@@ -219,19 +175,14 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
           height: "height" in image && image.height ? image.height : 570,
           width: "width" in image && image.width ? image.width : 1000,
         },
-        aspectRatio: styles.image.aspectRatio,
-        width: styles.image.width || 1000,
+        aspectRatio: styles.image?.aspectRatio,
+        width: styles.image?.width || 1000,
       };
     }) ?? [];
 
   return (
-    <PageSection
-      aria-label={t("photoGallerySection", "Photo Gallery Section")}
-      background={styles.backgroundColor}
-      className="flex flex-col gap-8"
-    >
-      <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
-      {filteredImages && filteredImages.length > 0 && (
+    <>
+      {filteredImages && filteredImages.length > 0 ? (
         <CarouselProvider
           className="flex flex-col gap-8"
           naturalSlideWidth={100}
@@ -243,7 +194,7 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
             <div
               className="flex items-center gap-2"
               style={{
-                width: `${(styles.image.width || 1000) + 96}px`,
+                width: `${(styles.image?.width || 1000) + 96}px`,
                 maxWidth: "calc(100vw - 2rem)",
                 minWidth: "fit-content",
               }}
@@ -262,7 +213,7 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
                   <Slider
                     className="w-auto"
                     style={{
-                      width: `min(${styles.image.width || 1000}px, calc(100vw - 6rem))`,
+                      width: `min(${styles.image?.width || 1000}px, calc(100vw - 6rem))`,
                       maxWidth: "100%",
                     }}
                   >
@@ -362,69 +313,11 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
             </div>
           </div>
         </CarouselProvider>
+      ) : puck?.isEditing ? (
+        <div className="h-50"></div>
+      ) : (
+        <></>
       )}
-    </PageSection>
+    </>
   );
-};
-
-/**
- * The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation.
- * Available on Location templates.
- */
-export const PhotoGallerySection: ComponentConfig<{
-  props: PhotoGallerySectionProps;
-}> = {
-  label: msg("components.photoGallerySection", "Photo Gallery Section"),
-  fields: photoGallerySectionFields,
-  defaultProps: {
-    data: {
-      images: {
-        field: "",
-        constantValue: [
-          { assetImage: PLACEHOLDER },
-          { assetImage: PLACEHOLDER },
-          { assetImage: PLACEHOLDER },
-        ],
-        constantValueEnabled: true,
-      },
-    },
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      image: {
-        aspectRatio: 1.78,
-      },
-    },
-    slots: {
-      HeadingSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            data: {
-              text: {
-                field: "",
-                constantValue: {
-                  en: "Gallery",
-                  hasLocalizedValue: "true",
-                },
-                constantValueEnabled: true,
-              },
-            },
-            styles: {
-              level: 2,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-    },
-    liveVisibility: true,
-  },
-  render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
-      isEditing={props.puck.isEditing}
-    >
-      <PhotoGallerySectionComponent {...props} />
-    </VisibilityWrapper>
-  ),
 };

@@ -4,7 +4,7 @@ import {
   axe,
   ComponentTest,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import {
   PhotoGallerySection,
@@ -324,7 +324,7 @@ const tests: ComponentTest[] = [
     version: 1,
   },
   {
-    name: "version 0 props with constant value",
+    name: "version 1 props with constant value",
     document: { photoGallery: photoGalleryData },
     props: {
       data: {
@@ -371,6 +371,130 @@ const tests: ComponentTest[] = [
       },
     },
     version: 1,
+  },
+  {
+    name: "version 33 props with entity values",
+    document: { photoGallery: photoGalleryData, name: "Test Name" },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "name",
+                  constantValue: "Gallery",
+                  constantValueEnabled: false,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            },
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              data: {
+                images: {
+                  field: "photoGallery",
+                  constantValue: [],
+                  constantValueEnabled: false,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.25,
+                  width: 1000,
+                },
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 33,
+  },
+  {
+    name: "version 33 props with constant value",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: "Gallery Slots",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 5,
+                align: "left",
+              },
+            },
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              data: {
+                images: {
+                  field: "photoGallery",
+                  constantValue: [
+                    {
+                      height: 570,
+                      url: "https://placehold.co/1000x570/png",
+                      width: 1000,
+                    },
+                    {
+                      height: 570,
+                      url: "https://placehold.co/1000x570/png",
+                      width: 1000,
+                    },
+                    {
+                      height: 570,
+                      url: "https://placehold.co/1000x570/png",
+                      width: 1000,
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.25,
+                  width: 1000,
+                },
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 33,
   },
 ];
 
@@ -422,7 +546,7 @@ describe("PhotoGallerySection", async () => {
       await page.viewport(width, height);
       const images = Array.from(container.querySelectorAll("img"));
       await waitFor(() => {
-        // The gallery only loads the first iamge
+        // The gallery only loads the first image
         expect(images[0].complete).toBe(true);
       });
 

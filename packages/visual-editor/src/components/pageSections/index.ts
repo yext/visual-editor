@@ -47,9 +47,8 @@ export { TeamSection, type TeamSectionProps } from "./TeamSection.tsx";
 export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
-  type PhotoGalleryData,
   type PhotoGalleryStyles,
-} from "./PhotoGallerySection.tsx";
+} from "./PhotoGallerySection/PhotoGallerySection.tsx";
 export {
   PromoSection,
   type PromoSectionProps,

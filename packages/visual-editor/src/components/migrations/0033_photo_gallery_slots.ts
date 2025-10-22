@@ -17,9 +17,12 @@ export const photoGallerySlots: Migration = {
         level: props.styles?.heading?.level ?? 2,
         align: props.styles?.heading?.align ?? "left",
       };
+      const imagesData = props.data.images;
+      const imagesStyles = props.styles?.image;
 
-      delete props.data.heading;
+      delete props.data;
       delete props.styles?.heading;
+      delete props.styles?.image;
 
       return {
         ...props,
@@ -33,6 +36,19 @@ export const photoGallerySlots: Migration = {
                 },
                 styles: headingStyles,
               } satisfies HeadingTextProps,
+            },
+          ],
+          PhotoGalleryWrapper: [
+            {
+              type: "PhotoGalleryWrapper",
+              props: {
+                data: {
+                  images: imagesData,
+                },
+                styles: {
+                  image: imagesStyles,
+                },
+              },
             },
           ],
         },
