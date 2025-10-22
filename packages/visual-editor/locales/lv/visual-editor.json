@@ -326,6 +326,7 @@
       "width": "Platums",
       "yes": "Jā"
     },
+    "phone": "Tālrunis",
     "phoneFormat": "Tālruņa formāts",
     "phoneNumber": "Tālruņa numurs",
     "phoneNumberFormat": "Tālruņa numura formāts",
@@ -526,6 +527,7 @@
   "slots": {
     "insightCard": "Ieskatu karte",
     "insightCards": "Ieskatu kartes",
+    "nearbyLocationCards": "Tuvumā esošās atrašanās vietu kartes",
     "productCard": "Produktu karte",
     "productCards": "Produktu kartes"
   },
