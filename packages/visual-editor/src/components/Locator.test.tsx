@@ -99,7 +99,7 @@ const tests: ComponentTest[] = [
         },
       }),
     },
-    props: {},
+    props: { ...LocatorComponent.defaultProps },
     version: migrationRegistry.length,
   },
   {

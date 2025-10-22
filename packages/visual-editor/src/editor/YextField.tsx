@@ -146,7 +146,9 @@ type YextFieldConfig<Props = any> =
   | YextTranslatableStringField
   | YextImageField
   | YextVideoField
-  | YextDynamicSelectField<string | number | boolean>;
+  | YextDynamicSelectField<
+      Props extends DynamicOptionValueTypes ? Props[] : any
+    >;
 
 export function YextField<T = any>(
   fieldName: MsgString,

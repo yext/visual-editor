@@ -476,7 +476,8 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
-  filters: YextField(msg("filters", "Filters"), {
+  filters: {
+    label: msg("fields.filters", "Filters"),
     type: "object",
     objectFields: {
       openNowButton: YextField(
@@ -502,7 +503,7 @@ const locatorFields: Fields<LocatorProps> = {
         ),
       }),
     },
-  }),
+  },
   mapStartingLocation: YextField(
     msg("fields.options.mapStartingLocation", "Map Starting Location"),
     {

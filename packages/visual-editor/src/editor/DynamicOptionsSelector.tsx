@@ -5,16 +5,9 @@ import {
   Field,
   FieldLabel,
 } from "@measured/puck";
-import { useMemo } from "react";
 import { pt } from "../utils/i18n/platform.ts";
 
-export type DynamicOptionValueTypes =
-  | string
-  | number
-  | boolean
-  | object
-  | null
-  | undefined;
+export type DynamicOptionValueTypes = string | number | boolean | object;
 
 type DynamicOptionsSelectorProps<T extends DynamicOptionValueTypes> = {
   label: string;
@@ -23,23 +16,23 @@ type DynamicOptionsSelectorProps<T extends DynamicOptionValueTypes> = {
   placeholderOptionLabel?: string;
 };
 
-interface DynamicOptionItem<T extends DynamicOptionValueTypes> {
-  value: T;
+interface DynamicOptionSelection<T extends DynamicOptionValueTypes> {
+  value: T | undefined;
 }
 
 export interface DynamicOptionsSelectorType<T extends DynamicOptionValueTypes> {
-  options: DynamicOption<T>[];
+  selections: DynamicOptionSelection<T>[];
 }
 
 export interface DynamicOption<T extends DynamicOptionValueTypes> {
   label: string;
-  value: T;
+  value: T | undefined;
 }
 
-const getDefaultDynamicOptions = <
+const getDefaultSelection = <
   T extends DynamicOptionValueTypes,
->(): DynamicOptionItem<T> => ({
-  value: undefined as T,
+>(): DynamicOptionSelection<T> => ({
+  value: undefined,
 });
 
 /**
@@ -60,19 +53,19 @@ export const DynamicOptionsSelector = <T extends DynamicOptionValueTypes>(
         uiState?: Partial<UiState>
       ) => void;
     }) => {
-      const options = props.getOptions();
-      const optionsValue = value?.options ?? [];
+      const allOptions = props.getOptions();
+      const selectedValues = value?.selections ?? [];
       return (
         <FieldLabel label={pt(props.label)}>
           <AutoField
             field={DynamicOptionsArrayField(
-              options,
+              allOptions,
               props.dropdownLabel,
               props.placeholderOptionLabel
             )}
-            value={optionsValue}
+            value={selectedValues}
             onChange={(newValue, uiState) =>
-              onChange({ options: newValue }, uiState)
+              onChange({ selections: newValue }, uiState)
             }
           />
         </FieldLabel>
@@ -85,34 +78,31 @@ const DynamicOptionsArrayField = <T extends DynamicOptionValueTypes>(
   options: DynamicOption<T>[],
   dropdownLabel: string,
   placeholderOptionLabel?: string
-): ArrayField<DynamicOptionItem<T>[]> => {
-  // Memoize the dropdown field definition
-  const dropdownField = useMemo(() => {
-    const dropdownOptions = options.map((opt) => ({
-      label: opt.label,
-      value: opt.value,
-    }));
-    if (placeholderOptionLabel) {
-      dropdownOptions.unshift({
-        label: placeholderOptionLabel,
-        value: undefined as T,
-      });
-    }
-    return {
-      label: dropdownLabel,
-      type: "select" as const,
-      options: dropdownOptions,
-    };
-  }, [options]);
+): ArrayField<DynamicOptionSelection<T>[]> => {
+  const dropdownOptions = options.map((opt) => ({
+    label: opt.label,
+    value: opt.value,
+  }));
+  if (placeholderOptionLabel) {
+    dropdownOptions.unshift({
+      label: placeholderOptionLabel,
+      value: undefined,
+    });
+  }
+  const dropdownField = {
+    label: dropdownLabel,
+    type: "select" as const,
+    options: dropdownOptions,
+  };
 
   return {
     type: "array",
     arrayFields: {
       value: dropdownField,
     },
-    defaultItemProps: getDefaultDynamicOptions<T>(),
+    defaultItemProps: getDefaultSelection<T>(),
     getItemSummary: (item, i) => {
-      const opt = options.find((opt) => String(opt.value) === item.value);
+      const opt = options.find((opt) => opt.value === item.value);
       if (opt) {
         return pt(opt.label);
       }
