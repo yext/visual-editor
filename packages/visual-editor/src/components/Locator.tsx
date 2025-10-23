@@ -19,6 +19,8 @@ import {
   useCardAnalyticsCallback,
   VerticalResults,
   SearchI18nextProvider,
+  Facets,
+  AppliedFilters,
 } from "@yext/search-ui-react";
 import {
   Matcher,
@@ -29,6 +31,7 @@ import {
   useSearchActions,
   useSearchState,
 } from "@yext/search-headless-react";
+import { NearFilterValue } from "@yext/search-core";
 import * as React from "react";
 import {
   Background,
@@ -57,18 +60,21 @@ import {
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
   FaAngleRight,
-  FaCheckSquare,
-  FaRegSquare,
+  FaChevronUp,
+  FaDotCircle,
+  FaRegCircle,
   FaSlidersH,
   FaTimes,
 } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
+import { useCollapse } from "react-collapsed";
 
-const DEFAULT_FIELD = "builtin.location";
+const LOCATION_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
-const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
+const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
+const MILES_TO_METERS = 1609.34;
 
 // Keep only digits and at most one leading plus for tel: links.
 // If the input already starts with "tel:", return it as-is.
@@ -578,7 +584,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  filters,
+  filters: { openNowButton, facetFields },
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
@@ -638,6 +644,11 @@ const LocatorInternal = ({
   };
 
   const searchActions = useSearchActions();
+  const selectedFacets: string[] =
+    facetFields?.selections
+      ?.filter((selection) => selection.value !== undefined)
+      ?.map((selection) => selection.value as string) ?? [];
+  searchActions.setFacetAllowList(selectedFacets);
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
   );
@@ -655,6 +666,11 @@ const LocatorInternal = ({
     searchActions.setStaticFilters([locationFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
+
+    const filterValue = params.newFilter.value as NearFilterValue;
+    if (filterValue?.lat && filterValue?.lng) {
+      setMapCenter(new mapboxgl.LngLat(filterValue.lng, filterValue.lat));
+    }
   };
 
   const searchLoading = useSearchState((state) => state.searchStatus.isLoading);
@@ -721,6 +737,9 @@ const LocatorInternal = ({
     markerOptionsOverride: markerOptionsOverride,
   });
 
+  const [selectedDistance, setSelectedDistance] =
+    React.useState<number>(DEFAULT_RADIUS_MILES);
+
   React.useEffect(() => {
     let centerCoords = DEFAULT_MAP_CENTER;
     let displayName: string | undefined;
@@ -775,7 +794,7 @@ const LocatorInternal = ({
               value: {
                 lat: centerCoords[1],
                 lng: centerCoords[0],
-                radius: DEFAULT_RADIUS_METERS,
+                radius: selectedDistance,
               },
               matcher: Matcher.Near,
             },
@@ -784,11 +803,16 @@ const LocatorInternal = ({
         searchActions.executeVerticalQuery();
         setSearchState("loading");
         setMapProps((prev) => ({ ...prev, centerCoords }));
+        setMapCenter(mapboxgl.LngLat.convert(centerCoords));
       });
   }, []);
 
-  const [isSelected, setIsSelected] = React.useState(false);
+  const [isOpenNowSelected, setIsOpenNowSelected] = React.useState(false);
   const handleOpenNowClick = (selected: boolean) => {
+    if (selected === isOpenNowSelected) {
+      // Prevents us from trying to set Open Now filter to false when it's not set
+      return;
+    }
     searchActions.setFilterOption({
       filter: {
         kind: "fieldValue",
@@ -799,17 +823,104 @@ const LocatorInternal = ({
       selected,
       displayName: t("openNow", "Open Now"),
     });
-    setIsSelected(isSelected);
+    setIsOpenNowSelected(selected);
     searchActions.setOffset(0);
-    searchActions.resetFacets();
     executeSearch(searchActions);
   };
 
   const searchFilters = useSearchState((state) => state.filters);
+  const handleDistanceClick = (distance: number) => {
+    // Update existing distance filter if present
+    const existingFilters = searchFilters.static || [];
+    const nonLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind !== "fieldValue" ||
+        filter.filter.fieldId !== LOCATION_FIELD
+    );
+    const oldLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === LOCATION_FIELD
+    );
+    const updatedLocationFilters = oldLocationFilters.map((filter) => ({
+      ...filter,
+      filter: {
+        ...filter.filter,
+        value: {
+          lat: mapCenter ? mapCenter.lat : 0,
+          lng: mapCenter ? mapCenter.lng : 0,
+          radius: distance * MILES_TO_METERS,
+        },
+      },
+    }));
+
+    searchActions.setStaticFilters(
+      nonLocationFilters.concat(updatedLocationFilters)
+    );
+    setSelectedDistance(distance);
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+  };
+
+  const handleClearFiltersClick = () => {
+    const existingFilters = searchFilters.static || [];
+
+    // There shouldn't be any other static filters besides location and open now, but leave
+    // them untouched for safety
+    const unaffectedStaticFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind !== "fieldValue" ||
+        (filter.filter.fieldId !== LOCATION_FIELD &&
+          filter.filter.fieldId !== HOURS_FIELD)
+    );
+
+    // Make Open Now filter unselected
+    const oldOpenNowFilter = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === HOURS_FIELD
+    );
+    const updatedOpenNowFilters = oldOpenNowFilter.map((filter) => ({
+      ...filter,
+      selected: false,
+    }));
+
+    // Update location filters to default radius
+    const oldLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === LOCATION_FIELD
+    );
+    const updatedLocationFilters = oldLocationFilters.map((filter) => ({
+      ...filter,
+      filter: {
+        ...filter.filter,
+        value: {
+          lat: mapCenter ? mapCenter.lat : 0,
+          lng: mapCenter ? mapCenter.lng : 0,
+          radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+        },
+      },
+    }));
+
+    // Both open now and distance filters must be updated in the same setStaticFilters call to
+    // avoid problems due to the asynchronous nature of state updates.
+    searchActions.setStaticFilters(
+      unaffectedStaticFilters.concat(
+        updatedLocationFilters,
+        updatedOpenNowFilters
+      )
+    );
+    searchActions.resetFacets();
+    // Execute search to update AppliedFilters components
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+  };
+
   // If something else causes the filters to update, check if the hours filter is still present
-  // - toggle off the Open Now toggle if not.
+  // and toggle off the Open Now toggle if not.
   React.useEffect(() => {
-    setIsSelected(
+    setIsOpenNowSelected(
       searchFilters.static
         ? !!searchFilters.static.find((staticFilter) => {
             return (
@@ -832,7 +943,7 @@ const LocatorInternal = ({
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
             searchFields={[
-              { fieldApiName: DEFAULT_FIELD, entityType: entityType },
+              { fieldApiName: LOCATION_FIELD, entityType: entityType },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={t("searchHere", "Search here...")}
@@ -878,7 +989,7 @@ const LocatorInternal = ({
                       count: resultCount,
                     }))}
             </div>
-            {filters?.openNowButton && (
+            {openNowButton && (
               <button
                 className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
                 onClick={() => setShowFilter((prev) => !prev)}
@@ -891,9 +1002,9 @@ const LocatorInternal = ({
           {showFilter && (
             <div
               id="popup"
-              className="absolute top-0 z-50 w-80 flex flex-col bg-white shadow-lg absolute left-full top-0 ml-2 rounded-md shadow-lg"
+              className="absolute top-0 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[758px]"
             >
-              <div className="inline-flex justify-between items-center px-6 py-4 gap-4 border-b border-gray-300">
+              <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
                 <div className="font-bold">
                   {t("refineYourSearch", "Refine Your Search")}
                 </div>
@@ -904,28 +1015,56 @@ const LocatorInternal = ({
                   <FaTimes />
                 </button>
               </div>
-              <div className="flex flex-col p-6 gap-6">
+              <div className="px-6 border-b border-gray-300">
+                <AppliedFilters
+                  hiddenFields={[LOCATION_FIELD]}
+                  customCssClasses={{
+                    removableFilter: "text-md font-normal",
+                    clearAllButton: "hidden",
+                  }}
+                />
+              </div>
+              <div className="flex flex-col p-6 gap-6 overflow-y-auto">
                 <div className="flex flex-col gap-8">
-                  <div className="flex flex-col gap-4">
-                    <div className="font-bold">{t("hours", "Hours")}</div>
-                    <div className="flex flex-row gap-1">
-                      <button
-                        className="inline-flex bg-white"
-                        onClick={() => handleOpenNowClick(!isSelected)}
-                      >
-                        <div className="inline-flex items-center gap-4">
-                          {t("openNow", "Open Now")}
-                          <div className="text-palette-primary-dark">
-                            {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
-                          </div>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
+                  <OpenNowFilter
+                    isSelected={isOpenNowSelected}
+                    onChange={handleOpenNowClick}
+                  />
+                  <DistanceFilter
+                    onChange={handleDistanceClick}
+                    selectedDistance={selectedDistance}
+                  />
+                  <Facets
+                    customCssClasses={{
+                      divider: "bg-white",
+                      titleLabel: "font-bold text-md",
+                      optionInput: "h-4 w-4",
+                      optionLabel: "text-md",
+                      option: "space-x-4",
+                    }}
+                  />
                 </div>
+              </div>
+              <div className="border-y border-gray-300 justify-center ve-align-middle">
+                <button
+                  className="w-full py-4 text-center font-bold text-palette-primary-dark"
+                  onClick={handleClearFiltersClick}
+                >
+                  {t("clearAll", "Clear All")}
+                </button>
               </div>
             </div>
           )}
+          <div className="flex flex-row justify-between">
+            <AppliedFilters
+              hiddenFields={[LOCATION_FIELD]}
+              customCssClasses={{
+                removableFilter: "text-md font-normal mt-2 mb-0",
+                clearAllButton: "hidden",
+                appliedFiltersContainer: "mt-0 mb-0",
+              }}
+            />
+          </div>
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -1201,6 +1340,104 @@ const LocationCard = React.memo(
     );
   }
 );
+
+interface OpenNowFilterProps {
+  isSelected: boolean;
+  onChange: (selected: boolean) => void;
+}
+
+const OpenNowFilter = (props: OpenNowFilterProps) => {
+  const { isSelected, onChange } = props;
+  const { t } = useTranslation();
+  const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
+    defaultExpanded: true,
+  });
+  const iconClassName = isExpanded
+    ? "w-3 text-gray-400"
+    : "w-3 text-gray-400 transform rotate-180";
+
+  const openNowCheckBoxId = "openNowCheckBox";
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        className="w-full flex justify-between items-center"
+        {...getToggleProps()}
+      >
+        <div className="font-bold">{t("hours", "Hours")}</div>
+        <FaChevronUp className={iconClassName} />
+      </button>
+      <div className="flex flex-row gap-1" {...getCollapseProps()}>
+        <div className="inline-flex items-center gap-4">
+          <input
+            type="checkbox"
+            id={openNowCheckBoxId}
+            checked={isSelected}
+            className={
+              "w-4 h-4 form-checkbox cursor-pointer border border-gray-300" +
+              " rounded-sm text-primary focus:ring-primary filterCheckBox"
+            }
+            onChange={() => onChange(!isSelected)}
+          />
+          <label htmlFor={openNowCheckBoxId}>{t("openNow", "Open Now")}</label>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface DistanceFilterProps {
+  onChange: (distance: number) => void;
+  selectedDistance?: number;
+}
+
+const DistanceFilter = (props: DistanceFilterProps) => {
+  const { selectedDistance, onChange } = props;
+  const { t } = useTranslation();
+  const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
+    defaultExpanded: true,
+  });
+  const iconClassName = isExpanded
+    ? "w-3 text-gray-400"
+    : "w-3 text-gray-400 transform rotate-180";
+  const distanceOptions = [5, 10, 25, 50];
+
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        className="w-full flex justify-between items-center"
+        {...getToggleProps()}
+      >
+        <div className="font-bold">{t("distance", "Distance")}</div>
+        <FaChevronUp className={iconClassName} />
+      </button>
+      <div {...getCollapseProps()}>
+        {distanceOptions.map((distance) => (
+          <div
+            className="flex flex-row gap-4 items-center"
+            id={"distanceOption" + distance}
+            key={distance}
+          >
+            <button
+              className="inline-flex bg-white"
+              onClick={() => onChange(distance)}
+            >
+              <div className="text-palette-primary-dark">
+                {selectedDistance === distance ? (
+                  <FaDotCircle />
+                ) : (
+                  <FaRegCircle />
+                )}
+              </div>
+            </button>
+            <div className="inline-flex">
+              {"< " + distance + " " + t("miles", "miles")}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
   if (!divElement) {
