@@ -102,9 +102,7 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
   ),
 };
 
-const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (
-  props: ReviewsSectionProps
-) => {
+const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
   const { styles, slots } = props;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;

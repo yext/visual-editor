@@ -5,7 +5,7 @@ import {
   ComponentTest,
   delay,
   transformTests,
-} from "../testing/componentTests.setup.ts";
+} from "../../testing/componentTests.setup.ts";
 import {
   act,
   render as reactRender,
@@ -115,7 +115,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 33 props with empty document",
+    name: "version 35 props with empty document",
     document: {},
     props: {
       styles: {
@@ -149,10 +149,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 33,
+    version: 35,
   },
   {
-    name: "version 33 props with document data",
+    name: "version 35 props with document data",
     document: {
       businessId: 70452,
       _env: {
@@ -201,7 +201,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 33,
+    version: 35,
     interactions: async (page) => {
       const expandButton = page.getByText("Show More");
       await act(async () => {
