@@ -323,6 +323,7 @@
       "width": "Šírka",
       "yes": "Áno"
     },
+    "phone": "Telefón",
     "phoneFormat": "Formát telefónu",
     "phoneNumber": "Telefónne číslo",
     "phoneNumberFormat": "Formát telefónneho čísla",
@@ -523,6 +524,7 @@
   "slots": {
     "insightCard": "Karta",
     "insightCards": "Karty prehľadov",
+    "nearbyLocationCards": "Karty polohy v okolí",
     "productCard": "Karta",
     "productCards": "Produktové karty"
   },

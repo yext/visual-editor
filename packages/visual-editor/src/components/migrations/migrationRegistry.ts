@@ -31,6 +31,7 @@ import { productSectionSlots } from "./0029_product_section_slots.ts";
 import { insightSectionSlots } from "./0030_insight_section_slots.ts";
 import { teamsSectionSlots } from "./0031_teams_section_slots.ts";
 import { faqsSectionSlots } from "./0032_slotify_faq_section.ts";
+import { nearbyLocationSlots } from "./0033_nearby_location_slots.ts";
 import { photoGallerySlots } from "./0034_photo_gallery_slots.ts";
 
 // To add a migration:
@@ -71,6 +72,7 @@ export const migrationRegistry: MigrationRegistry = [
   insightSectionSlots,
   teamsSectionSlots,
   faqsSectionSlots,
+  nearbyLocationSlots,
   {},
   photoGallerySlots,
 ];

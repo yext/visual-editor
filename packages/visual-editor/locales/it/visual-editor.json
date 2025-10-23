@@ -323,6 +323,7 @@
       "width": "Larghezza",
       "yes": "SÌ"
     },
+    "phone": "Telefono",
     "phoneFormat": "Formato del telefono",
     "phoneNumber": "Numero di telefono",
     "phoneNumberFormat": "Formato numero di telefono",
@@ -523,6 +524,7 @@
   "slots": {
     "insightCard": "Scheda di approfondimento",
     "insightCards": "Carte di approfondimento",
+    "nearbyLocationCards": "Schede di posizione nelle vicinanze",
     "productCard": "Scheda Prodotto",
     "productCards": "Schede Prodotto"
   },

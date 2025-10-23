@@ -44,6 +44,10 @@ import {
 } from "../contentBlocks/image/HeroImage.tsx";
 import { Timestamp, TimestampProps } from "../contentBlocks/Timestamp.tsx";
 import {
+  NearbyLocationCardsWrapper,
+  NearbyLocationCardsWrapperProps,
+} from "../pageSections/NearbyLocations/NearbyLocationsCardsWrapper.tsx";
+import {
   InsightCardsWrapper,
   InsightCardsWrapperProps,
 } from "../pageSections/InsightSection/InsightCardsWrapper.tsx";
@@ -85,6 +89,7 @@ export interface SlotsCategoryProps {
   ImageSlot: ImageWrapperProps;
   InsightCardsWrapper: InsightCardsWrapperProps;
   InsightCard: InsightCardProps;
+  NearbyLocationCardsWrapper: NearbyLocationCardsWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
   PhotoGalleryWrapper: PhotoGalleryWrapperProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
@@ -123,6 +128,10 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   InsightCard: { ...InsightCard, permissions: lockedPermissions },
+  NearbyLocationCardsWrapper: {
+    ...NearbyLocationCardsWrapper,
+    permissions: lockedPermissions,
+  },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
   PhotoGalleryWrapper: {
     ...PhotoGalleryWrapper,

@@ -323,6 +323,7 @@
       "width": "宽度",
       "yes": "是的"
     },
+    "phone": "电话",
     "phoneFormat": "电话格式",
     "phoneNumber": "电话号码",
     "phoneNumberFormat": "电话号码格式",
@@ -523,6 +524,7 @@
   "slots": {
     "insightCard": "洞察卡",
     "insightCards": "洞察卡",
+    "nearbyLocationCards": "附近位置卡",
     "productCard": "产品卡",
     "productCards": "产品卡"
   },

@@ -323,6 +323,7 @@
       "width": "Breedte",
       "yes": "Ja"
     },
+    "phone": "Telefoon",
     "phoneFormat": "Telefoonformaat",
     "phoneNumber": "Telefoonnummer",
     "phoneNumberFormat": "Telefoonnummerformaat",
@@ -523,6 +524,7 @@
   "slots": {
     "insightCard": "Inzichtkaart",
     "insightCards": "Inzichtkaarten",
+    "nearbyLocationCards": "Locatiekaarten in de buurt",
     "productCard": "Productkaart",
     "productCards": "Productkaarten"
   },
