@@ -72,7 +72,5 @@ export {
 export {
   TestimonialSection,
   type TestimonialSectionProps,
-  type TestimonialData,
-  type TestimonialStyles,
-} from "./TestimonialSection.tsx";
+} from "./TestimonialSection/TestimonialSection.tsx";
 export { VideoSection, type VideoSectionProps } from "./VideoSection.tsx";

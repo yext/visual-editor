@@ -72,6 +72,14 @@ import {
   TeamCard,
   TeamCardProps,
 } from "../pageSections/TeamSection/TeamCard.tsx";
+import {
+  TestimonialCardsWrapper,
+  TestimonialCardsWrapperProps,
+} from "../pageSections/TestimonialSection/TestimonialCardsWrapper.tsx";
+import {
+  TestimonialCard,
+  TestimonialCardProps,
+} from "../pageSections/TestimonialSection/TestimonialCard.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -97,6 +105,8 @@ export interface SlotsCategoryProps {
   ServicesListSlot: TextListProps;
   TeamCard: TeamCardProps;
   TeamCardsWrapper: TeamCardsWrapperProps;
+  TestimonialCard: TestimonialCardProps;
+  TestimonialCardsWrapper: TestimonialCardsWrapperProps;
   TextListSlot: TextListProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
@@ -145,6 +155,11 @@ export const SlotsCategoryComponents = {
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TeamCard: { ...TeamCard, permissions: lockedPermissions },
   TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },
+  TestimonialCard: { ...TestimonialCard, permissions: lockedPermissions },
+  TestimonialCardsWrapper: {
+    ...TestimonialCardsWrapper,
+    permissions: lockedPermissions,
+  },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },

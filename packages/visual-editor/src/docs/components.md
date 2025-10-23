@@ -689,24 +689,13 @@ The Testimonial Section is used to display a list of customer testimonials or re
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop                | Type                                      | Description                                                                                        | Default                                 |
-| :------------------ | :---------------------------------------- | :------------------------------------------------------------------------------------------------- | :-------------------------------------- |
-| `data.heading`      | `YextEntityField<TranslatableString>`     | The main heading for the entire testimonials section.                                              | `"Featured Testimonials" (constant)`    |
-| `data.testimonials` | `YextEntityField<TestimonialSectionType>` | The source of the testimonial data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder testimonials.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                 | Description                                                           | Default              |
-| :----------------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                    | The background color for the entire section, selected from the theme. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }` | Styling for the individual testimonial cards.                         |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`     | Styling for the main section heading.                                 |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 

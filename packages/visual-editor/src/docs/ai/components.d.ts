@@ -441,15 +441,25 @@ interface TeamSectionProps {
 
 interface TestimonialSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: TestimonialData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: TestimonialStyles;
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
+  };
+  /** @internal */
+  analytics: {
+    scope?: string;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -763,37 +773,6 @@ interface StaticMapStyles {
   mapStyle: string;
 }
 
-interface TestimonialData {
-  /**
-   * The main heading for the entire testimonials section.
-   * @defaultValue "Featured Testimonials" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the testimonial data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder testimonials.
-   */
-  testimonials: YextEntityField<TestimonialSectionType>;
-}
-
-interface TestimonialStyles {
-  /**
-   * The background color for the entire section, selected from the theme.
-   * @defaultValue Background Color 2
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual testimonial cards. */
-  cards: {
-    headingLevel: HeadingLevel;
-    backgroundColor?: BackgroundStyle;
-  };
-}
-
 type AssetImageType = Omit<ImageType, "alternateText"> & {
   alternateText?: TranslatableString;
   assetImage?: ImageContentData;
@@ -886,14 +865,6 @@ type PromoSectionType = {
   cta: EnhancedTranslatableCTA;
 };
 
-/** Data for the TestimonialSection */
-type TestimonialSectionType = {
-  testimonials: Array<TestimonialStruct>;
-};
-
-/** Corresponds to the different semantic heading levels */
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
   name?: string;
@@ -952,16 +923,6 @@ type EnhancedTranslatableCTA = TranslatableCTA & {
    */
   latitude?: number;
   longitude?: number;
-};
-
-/** An individual testimonial for the TestimonialSection */
-type TestimonialStruct = {
-  /** The testimonial text */
-  description?: TranslatableRichText;
-  /** The name of the person who contributed the testimonial */
-  contributorName?: TranslatableString;
-  /** A UTC string for the contribution's date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
-  contributionDate?: string;
 };
 
 /** Describes the data corresponding to a single image. */

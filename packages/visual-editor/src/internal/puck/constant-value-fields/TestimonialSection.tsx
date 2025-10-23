@@ -1,18 +1,6 @@
-import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { useTranslation } from "react-i18next";
-import {
-  TestimonialSectionType,
-  TestimonialStruct,
-  TranslatableRichText,
-  TranslatableString,
-} from "../../../types/types.ts";
-import { DateSelector } from "../components/DateSelector.tsx";
-import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { useMemo } from "react";
-import { useDocument } from "../../../hooks/useDocument.tsx";
+import { TestimonialStruct } from "../../../types/types.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
+import { ArrayField } from "@measured/puck";
 
 export const defaultTestimonial: TestimonialStruct = {
   description: {
@@ -23,71 +11,17 @@ export const defaultTestimonial: TestimonialStruct = {
   contributionDate: "July 22, 2022",
 };
 
-export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: CustomField<TestimonialSectionType> =
-  {
-    type: "custom",
-    render: ({
-      onChange,
-      value,
-    }: {
-      value: TestimonialSectionType;
-      onChange: (
-        value: TestimonialSectionType,
-        uiState?: Partial<UiState>
-      ) => void;
-    }) => {
-      return (
-        <div className={"ve-mt-4"}>
-          <AutoField
-            field={TestimonialStructArrayField()}
-            value={value.testimonials}
-            onChange={(newValue, uiState) =>
-              onChange({ testimonials: newValue }, uiState)
-            }
-          />
-        </div>
-      );
+// This config is used by TestimonialCardsWrapper when constantValueEnabled is true
+// It just manages an array of card IDs, not the full TestimonialStruct data
+export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
+  type: "array",
+  arrayFields: {
+    id: {
+      type: "text",
+      visible: false,
     },
-  };
-
-const TestimonialStructArrayField = (): ArrayField<TestimonialStruct[]> => {
-  const streamDocument = useDocument();
-
-  const contributorNameField = useMemo(() => {
-    return TranslatableStringField<TranslatableString | undefined>(
-      msg("fields.contributorName", "Contributor Name"),
-      { types: ["type.string"] }
-    );
-  }, []);
-
-  const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>(
-      msg("fields.description", "Description")
-    );
-  }, []);
-
-  return {
-    label: pt("arrayField", "Array Field"),
-    type: "array",
-    arrayFields: {
-      description: descriptionField,
-      contributorName: contributorNameField,
-      contributionDate: DateSelector,
-    },
-    defaultItemProps: defaultTestimonial,
-    getItemSummary: (item, i) => {
-      const { i18n } = useTranslation();
-      const translation =
-        item?.contributorName &&
-        resolveComponentData(
-          item.contributorName,
-          i18n.language,
-          streamDocument
-        );
-      if (translation) {
-        return translation;
-      }
-      return pt("testimonial", "Testimonial") + " " + ((i ?? 0) + 1);
-    },
-  };
+  },
+  label: "",
+  getItemSummary: (item, index) =>
+    pt("testimonial", "Testimonial") + " " + ((index ?? 0) + 1),
 };
