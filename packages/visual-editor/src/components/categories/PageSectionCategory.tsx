@@ -31,7 +31,7 @@ import {
 import {
   PhotoGallerySection,
   PhotoGallerySectionProps,
-} from "../pageSections/PhotoGallerySection.tsx";
+} from "../pageSections/PhotoGallerySection/PhotoGallerySection.tsx";
 import {
   FAQSection,
   FAQSectionProps,
