@@ -291,7 +291,7 @@ const tests: ComponentTest[] = [
     },
     version: 36,
     interactions: async (page) => {
-      const expandButton = page.getByText(/Show More|Montrer plus/);
+      const expandButton = page.getByText("Show more");
       await act(async () => {
         await expandButton.click();
       });
