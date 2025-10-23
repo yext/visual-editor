@@ -51,6 +51,7 @@ const tests: ComponentTest[] = [
         },
       ],
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+      locale: "en",
     },
     props: {
       ...ReviewsSection.defaultProps,
@@ -95,6 +96,7 @@ const tests: ComponentTest[] = [
         },
       ],
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+      locale: "en",
     },
     props: {
       backgroundColor: {
@@ -229,6 +231,7 @@ const tests: ComponentTest[] = [
         },
       ],
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+      locale: "en",
     },
     props: {
       styles: {
