@@ -6,10 +6,7 @@ export const setOpenNowDefault: Migration = {
     propTransformation: (props) => {
       return {
         ...props,
-        filters: {
-          ...props?.filters,
-          openNowButton: props?.openNow ?? false,
-        },
+        openNowButton: props?.openNow ?? false,
       };
     },
   },

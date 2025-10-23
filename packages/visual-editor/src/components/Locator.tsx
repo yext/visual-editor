@@ -147,7 +147,7 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
         },
         {
           label: msg("fields.options.facets.specialties", "Specialties"),
-          value: "specialties",
+          value: "specialities",
         },
       ];
       break;
@@ -217,7 +217,7 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
         },
         {
           label: msg("fields.options.facets.specialties", "Specialties"),
-          value: "specialties",
+          value: "specialities",
         },
       ];
       break;
@@ -403,8 +403,8 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
           value: "services",
         },
         {
-          label: msg("fields.options.facets.specialities", "Specialities"),
-          value: "specialities",
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialties",
         },
         {
           label: msg(
