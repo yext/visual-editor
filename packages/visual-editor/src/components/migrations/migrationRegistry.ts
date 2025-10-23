@@ -74,6 +74,6 @@ export const migrationRegistry: MigrationRegistry = [
   teamsSectionSlots,
   faqsSectionSlots,
   nearbyLocationSlots,
-  testimonialsSectionSlots
+  testimonialsSectionSlots,
   photoGallerySlots,
 ];
