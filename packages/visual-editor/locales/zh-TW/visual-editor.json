@@ -57,6 +57,7 @@
   "closed": "關閉",
   "closesAt": "關閉",
   "components": {
+    "DirectoryGrid": "目錄網格",
     "Video": "影片",
     "address": "地址",
     "bannerSection": "橫幅部分",

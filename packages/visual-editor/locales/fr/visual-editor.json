@@ -57,6 +57,7 @@
   "closed": "Fermé",
   "closesAt": "Se ferme à",
   "components": {
+    "DirectoryGrid": "Grille de répertoire",
     "Video": "Vidéo",
     "address": "Adresse",
     "bannerSection": "Section de bannière",

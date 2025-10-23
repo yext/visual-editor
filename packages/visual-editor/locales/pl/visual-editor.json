@@ -57,6 +57,7 @@
   "closed": "Zamknięte",
   "closesAt": "Zamyka się",
   "components": {
+    "DirectoryGrid": "Siatka katalogów",
     "Video": "Wideo",
     "address": "Adres",
     "bannerSection": "Sekcja banerowa",

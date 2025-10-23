@@ -57,6 +57,7 @@
   "closed": "Lukket",
   "closesAt": "Lukkes kl",
   "components": {
+    "DirectoryGrid": "Katalognett",
     "Video": "Video",
     "address": "Adresse",
     "bannerSection": "Bannerdel",

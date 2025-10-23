@@ -57,6 +57,7 @@
   "closed": "Closed",
   "closesAt": "Closes at",
   "components": {
+    "DirectoryGrid": "Directory Grid",
     "Video": "Video",
     "address": "Address",
     "bannerSection": "Banner Section",

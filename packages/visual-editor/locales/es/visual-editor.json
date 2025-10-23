@@ -57,6 +57,7 @@
   "closed": "Cerrado",
   "closesAt": "Cierra",
   "components": {
+    "DirectoryGrid": "Cuadrícula de directorio",
     "Video": "Video",
     "address": "DIRECCIÓN",
     "bannerSection": "Banner",

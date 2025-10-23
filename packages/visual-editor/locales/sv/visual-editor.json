@@ -57,6 +57,7 @@
   "closed": "Stängd",
   "closesAt": "Avslutas",
   "components": {
+    "DirectoryGrid": "Katalogrutnät",
     "Video": "Video",
     "address": "Adress",
     "bannerSection": "Sektor",

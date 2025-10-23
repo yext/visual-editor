@@ -57,6 +57,7 @@
   "closed": "ZAVŘENO",
   "closesAt": "Uzavírá",
   "components": {
+    "DirectoryGrid": "Adresářová mřížka",
     "Video": "Video",
     "address": "Adresa",
     "bannerSection": "Sekce banneru",

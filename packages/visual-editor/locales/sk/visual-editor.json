@@ -57,6 +57,7 @@
   "closed": "ZATVORENÉ",
   "closesAt": "Uzatvára sa",
   "components": {
+    "DirectoryGrid": "Mriežka adresára",
     "Video": "Video",
     "address": "Osloviť",
     "bannerSection": "Banner",

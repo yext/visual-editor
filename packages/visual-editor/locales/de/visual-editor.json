@@ -57,6 +57,7 @@
   "closed": "Geschlossen",
   "closesAt": "Schließt bei",
   "components": {
+    "DirectoryGrid": "Verzeichnisraster",
     "Video": "Video",
     "address": "Adresse",
     "bannerSection": "Bannerabschnitt",

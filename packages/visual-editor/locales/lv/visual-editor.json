@@ -57,6 +57,7 @@
   "closed": "Slēgts",
   "closesAt": "Aizveras plkst",
   "components": {
+    "DirectoryGrid": "Direktoriju režģis",
     "Video": "Video",
     "address": "Uzruna",
     "bannerSection": "Reklāmkarogu nodaļa",

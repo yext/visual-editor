@@ -57,6 +57,7 @@
   "closed": "Zárt",
   "closesAt": "Bezár",
   "components": {
+    "DirectoryGrid": "Címtárrács",
     "Video": "Videó",
     "address": "Cím",
     "bannerSection": "Szalaghirdetés",

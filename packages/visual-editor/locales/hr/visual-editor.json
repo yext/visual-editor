@@ -57,6 +57,7 @@
   "closed": "Zatvoreno",
   "closesAt": "Zatvara se",
   "components": {
+    "DirectoryGrid": "Rešetka imenika",
     "Video": "Video",
     "address": "Adresa",
     "bannerSection": "Odjeljak",

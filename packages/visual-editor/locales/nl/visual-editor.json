@@ -57,6 +57,7 @@
   "closed": "Gesloten",
   "closesAt": "Sluit af aan",
   "components": {
+    "DirectoryGrid": "Directoryraster",
     "Video": "Video",
     "address": "Adres",
     "bannerSection": "Bannersectie",

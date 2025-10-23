@@ -57,6 +57,7 @@
   "closed": "Uždarytas",
   "closesAt": "Uždaroma",
   "components": {
+    "DirectoryGrid": "Katalogų tinklelis",
     "Video": "Vaizdo įrašas",
     "address": "Adresas",
     "bannerSection": "Reklamjuostės skyrius",

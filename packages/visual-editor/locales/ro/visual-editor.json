@@ -57,6 +57,7 @@
   "closed": "Închis",
   "closesAt": "Se închide la",
   "components": {
+    "DirectoryGrid": "Director Grid",
     "Video": "Video",
     "address": "Adresa",
     "bannerSection": "Secțiunea Banner",

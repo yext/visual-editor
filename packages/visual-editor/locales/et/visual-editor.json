@@ -57,6 +57,7 @@
   "closed": "Suletud",
   "closesAt": "Sulgub",
   "components": {
+    "DirectoryGrid": "Kataloogivõrk",
     "Video": "Video",
     "address": "Aadress",
     "bannerSection": "Ribaosa",
