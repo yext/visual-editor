@@ -1,6 +1,6 @@
-import { ArrayField } from "@measured/puck";
 import { TestimonialStruct } from "../../../types/types.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
+import { ArrayField } from "@measured/puck";
 
 export const defaultTestimonial: TestimonialStruct = {
   description: {

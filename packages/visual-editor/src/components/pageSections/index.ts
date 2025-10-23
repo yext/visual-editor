@@ -77,6 +77,4 @@ export {
   TestimonialSection,
   type TestimonialSectionProps,
 } from "./TestimonialSection/TestimonialSection.tsx";
-export { TestimonialCardsWrapper } from "./TestimonialSection/TestimonialCardsWrapper.tsx";
-export { TestimonialCard } from "./TestimonialSection/TestimonialCard.tsx";
 export { VideoSection, type VideoSectionProps } from "./VideoSection.tsx";

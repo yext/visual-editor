@@ -139,17 +139,13 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
             data: {
               field: "",
               constantValueEnabled: true,
-              constantValue: [
-                { id: "TeamCard-1" },
-                { id: "TeamCard-2" },
-                { id: "TeamCard-3" },
-              ],
+              constantValue: [{}, {}, {}], // leave ids blank to auto-generate
             },
             slots: {
               CardSlot: [
-                defaultTeamCardSlotData("TeamCard-1", 0),
-                defaultTeamCardSlotData("TeamCard-2", 1),
-                defaultTeamCardSlotData("TeamCard-3", 2),
+                defaultTeamCardSlotData(undefined, 0),
+                defaultTeamCardSlotData(undefined, 1),
+                defaultTeamCardSlotData(undefined, 2),
               ],
             },
           } satisfies TeamCardsWrapperProps,
