@@ -48,6 +48,7 @@
   "change": "Change",
   "chooseImage": "Choose Image",
   "chooseVideo": "Choose Video",
+  "clearAll": "Clear All",
   "close": "Close",
   "closeHeaderMenu": "Close header menu",
   "closeMenu": "Close menu",
@@ -112,6 +113,7 @@
     "discardChanges": "Discard Changes",
     "warning": "This action will remove your local changes. It cannot be undone."
   },
+  "distance": "Distance",
   "emailList": "Email List",
   "enterSchemaMarkup": "Enter schema markup...",
   "entityTypeField": "{{entityType}} Field",
@@ -446,6 +448,7 @@
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "mediaType": "Media Type",
+  "miles": "miles",
   "missingHtmlWidget": "Add HTML to view component",
   "monday": "Monday",
   "name": "Name",

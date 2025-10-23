@@ -48,6 +48,7 @@
   "change": "Mudar",
   "chooseImage": "Escolha a imagem",
   "chooseVideo": "Escolha o vídeo",
+  "clearAll": "Limpar tudo",
   "close": "Fechar",
   "closeHeaderMenu": "Feche o menu do cabeçalho",
   "closeMenu": "Feche o menu",
@@ -113,6 +114,7 @@
     "discardChanges": "Descarte as mudanças",
     "warning": "Esta ação removerá suas alterações locais. Não pode ser desfeito."
   },
+  "distance": "Distância",
   "emailList": "Lista de e -mails",
   "enterSchemaMarkup": "Digite a marcação do esquema ...",
   "entityTypeField": "{{entityType}} campo",
@@ -447,6 +449,7 @@
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "mediaType": "Tipo de mídia",
+  "miles": "milhas",
   "missingHtmlWidget": "Adicione HTML para visualizar o componente",
   "monday": "Segunda-feira",
   "name": "Nome",

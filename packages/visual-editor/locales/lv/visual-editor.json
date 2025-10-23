@@ -48,6 +48,7 @@
   "change": "Mainīt",
   "chooseImage": "Izvēlieties attēlu",
   "chooseVideo": "Izvēlieties video",
+  "clearAll": "Notīrīt visu",
   "close": "Tuvs",
   "closeHeaderMenu": "Aizvērt galvenes izvēlni",
   "closeMenu": "Aizvērt ēdienkarti",
@@ -113,6 +114,7 @@
     "discardChanges": "Izmest izmaiņas",
     "warning": "Šī darbība noņems jūsu vietējās izmaiņas. To nevar atsaukt."
   },
+  "distance": "Attālums",
   "emailList": "E -pasta saraksts",
   "enterSchemaMarkup": "Ievadiet shēmas marķējumu ...",
   "entityTypeField": "{{entityType}} lauks",
@@ -447,6 +449,7 @@
   "map": "Karte",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
   "mediaType": "Multivides tips",
+  "miles": "jūdzes",
   "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu",
   "monday": "Pirmdiena",
   "name": "Nosaukt",

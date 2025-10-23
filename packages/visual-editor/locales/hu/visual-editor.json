@@ -48,6 +48,7 @@
   "change": "Változás",
   "chooseImage": "Válassza ki a képet",
   "chooseVideo": "Válassza ki a videót",
+  "clearAll": "Összes törlése",
   "close": "Közeli",
   "closeHeaderMenu": "Zárja be a Fejléc menüjét",
   "closeMenu": "Zárja be a menüt",
@@ -113,6 +114,7 @@
     "discardChanges": "Dobja el a változásokat",
     "warning": "Ez a művelet eltávolítja a helyi változtatásokat. Nem lehet visszavonni."
   },
+  "distance": "Távolság",
   "emailList": "E -mail lista",
   "enterSchemaMarkup": "Írja be a séma jelölését ...",
   "entityTypeField": "{{entityType}} mező",
@@ -447,6 +449,7 @@
   "map": "Térkép",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
   "mediaType": "Média típus",
+  "miles": "mérföldre",
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
   "monday": "hétfő",
   "name": "Név",
