@@ -203,15 +203,14 @@ interface EventSectionProps {
 
 interface FAQSectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: FAQData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
   styles: FAQStyles;
+  slots: {
+    HeadingSlot: Slot;
+    FAQsWrapperSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -286,18 +285,24 @@ interface InsightSectionProps {
 
 interface NearbyLocationsSectionProps {
   /**
-   * This object defines the search parameters for finding nearby locations.
-   * @propCategory Data Props
-   */
-  data: NearbyLocationsData;
-  /**
    * This object contains extensive properties for customizing the component's appearance.
    * @propCategory Style Props
    */
-  styles: NearbyLocationsStyles;
+  styles: {
+    /**
+     * The background color for the entire section.
+     * @defaultValue Background Color 1
+     */
+    backgroundColor?: BackgroundStyle;
+  };
   /** @internal */
   analytics: {
     scope?: string;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    CardsWrapperSlot: Slot;
   };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
@@ -651,30 +656,12 @@ type BackgroundStyle = {
   isDarkBackground?: boolean;
 };
 
-interface FAQData {
-  /**
-   * The main heading for the entire events section.
-   * @defaultValue "Frequently Asked Questions" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the FAQ data (questions and answers), which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder FAQs.
-   */
-  faqs: YextEntityField<FAQSectionType>;
-}
-
 interface FAQStyles {
   /**
    * The background color of the section.
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for the heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
 }
 
 interface HeroData {
@@ -729,67 +716,6 @@ interface HeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
-}
-
-interface NearbyLocationsData {
-  /**
-   * The main heading for the entire section.
-   * @defaultValue "Nearby Locations" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The central coordinate (`latitude`, `longitude`) to search from.
-   * @defaultValue 'yextDisplayCoordinate' field
-   */
-  coordinate: YextEntityField<Coordinate>;
-  /**
-   * The search radius in miles.
-   * @defaultValue 10
-   */
-  radius: number;
-  /**
-   * The maximum number of locations to find and display.
-   * @defaultValue 3
-   */
-  limit: number;
-}
-
-interface NearbyLocationsStyles {
-  /**
-   * The background color for the entire section.
-   * @defaultValue Background Color 1
-   */
-  backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling for the individual location cards. */
-  cards: {
-    headingLevel: HeadingLevel;
-    backgroundColor?: BackgroundStyle;
-  };
-  /**
-   * The display format for phone numbers on the cards.
-   * @defaultValue 'domestic'
-   */
-  phoneNumberFormat: "domestic" | "international";
-  /**
-   * If `true`, wraps phone numbers in a clickable `tel:` hyperlink.
-   * @defaultValue false
-   */
-  phoneNumberLink: boolean;
-  /** Styling for the hours display on each card. */
-  hours: {
-    /** Whether to display the current status ("Open Now" or "Closed") */
-    showCurrentStatus: boolean;
-    timeFormat?: "12h" | "24h";
-    /** How to format the days of the week (short:Mon, long:Monday) */
-    dayOfWeekFormat?: "short" | "long";
-    /** Whether to include the day of the week */
-    showDayNames?: boolean;
-  };
 }
 
 interface PhotoGalleryData {
@@ -950,11 +876,6 @@ type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
 
-/** Data for the FAQSection */
-type FAQSectionType = {
-  faqs: Array<FAQStruct>;
-};
-
 /** Corresponds to the different semantic heading levels */
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -971,11 +892,6 @@ type PromoSectionType = {
   description?: TranslatableRichText;
   /** The CTA button for the promo */
   cta: EnhancedTranslatableCTA;
-};
-
-/** Data for the TestimonialSection */
-type TestimonialSectionType = {
-  testimonials: Array<TestimonialStruct>;
 };
 
 /** Describes the data corresponding to a piece of image content. */
@@ -1010,14 +926,6 @@ type RichText = {
   json?: string;
 };
 
-/** An individual FAQ */
-type FAQStruct = {
-  /** The question (always visible on the page) */
-  question: TranslatableString;
-  /** The answer (visible when the question is clicked) */
-  answer: TranslatableRichText;
-};
-
 type AssetVideo = {
   video: Video$1;
   /** Asset video description field */
@@ -1044,16 +952,6 @@ type EnhancedTranslatableCTA = TranslatableCTA & {
    */
   latitude?: number;
   longitude?: number;
-};
-
-/** An individual testimonial for the TestimonialSection */
-type TestimonialStruct = {
-  /** The testimonial text */
-  description?: TranslatableRichText;
-  /** The name of the person who contributed the testimonial */
-  contributorName?: TranslatableString;
-  /** A UTC string for the contribution's date and time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
-  contributionDate?: string;
 };
 
 /** Describes the data corresponding to a single image. */

@@ -44,6 +44,10 @@ import {
 } from "../contentBlocks/image/HeroImage.tsx";
 import { Timestamp, TimestampProps } from "../contentBlocks/Timestamp.tsx";
 import {
+  NearbyLocationCardsWrapper,
+  NearbyLocationCardsWrapperProps,
+} from "../pageSections/NearbyLocations/NearbyLocationsCardsWrapper.tsx";
+import {
   InsightCardsWrapper,
   InsightCardsWrapperProps,
 } from "../pageSections/InsightSection/InsightCardsWrapper.tsx";
@@ -51,6 +55,11 @@ import {
   InsightCard,
   InsightCardProps,
 } from "../pageSections/InsightSection/InsightCard.tsx";
+import {
+  FAQsWrapperSlot,
+  FAQsWrapperSlotProps,
+} from "../pageSections/FAQsSection/FAQsWrapperSlot.tsx";
+import { FAQSlot, FAQSlotProps } from "../pageSections/FAQsSection/FAQSlot.tsx";
 import {
   TeamCardsWrapper,
   TeamCardsWrapperProps,
@@ -75,6 +84,8 @@ export interface SlotsCategoryProps {
   EmailsSlot: EmailsProps;
   EventCard: EventCardProps;
   EventCardsWrapper: EventCardsWrapperProps;
+  FAQsWrapperSlot: FAQsWrapperSlotProps;
+  FAQSlot: FAQSlotProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;
@@ -82,6 +93,7 @@ export interface SlotsCategoryProps {
   ImageSlot: ImageWrapperProps;
   InsightCardsWrapper: InsightCardsWrapperProps;
   InsightCard: InsightCardProps;
+  NearbyLocationCardsWrapper: NearbyLocationCardsWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
@@ -109,6 +121,8 @@ export const SlotsCategoryComponents = {
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   EventCard: { ...EventCard, permissions: lockedPermissions },
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
+  FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
+  FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
@@ -119,6 +133,10 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   InsightCard: { ...InsightCard, permissions: lockedPermissions },
+  NearbyLocationCardsWrapper: {
+    ...NearbyLocationCardsWrapper,
+    permissions: lockedPermissions,
+  },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
   ProductCardsWrapper: {
     ...ProductCardsWrapper,

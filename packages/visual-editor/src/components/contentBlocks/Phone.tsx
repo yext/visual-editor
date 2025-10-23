@@ -21,11 +21,18 @@ export interface PhoneProps {
     /** The text to display before the phone number */
     label: TranslatableString;
   };
+
   styles: {
     /** Whether to format the phone number like a domestic or international number */
     phoneFormat: "domestic" | "international";
     /** Whether to make the phone number a clickable link */
     includePhoneHyperlink: boolean;
+  };
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    phoneNumber: string;
   };
 }
 
@@ -87,14 +94,12 @@ const PhoneFields: Fields<PhoneProps> = {
   }),
 };
 
-const PhoneComponent = ({ data, styles }: PhoneProps) => {
+const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedPhone = resolveComponentData(
-    data.number,
-    i18n.language,
-    streamDocument
-  );
+  const resolvedPhone = parentData
+    ? parentData.phoneNumber
+    : resolveComponentData(data.number, i18n.language, streamDocument);
 
   if (!resolvedPhone) {
     return;
@@ -102,9 +107,11 @@ const PhoneComponent = ({ data, styles }: PhoneProps) => {
 
   return (
     <EntityField
-      displayName={pt("fields.phoneNumber", "Phone Number")}
+      displayName={
+        parentData ? parentData.field : pt("fields.phoneNumber", "Phone Number")
+      }
       fieldId={data.number.field}
-      constantValueEnabled={data.number.constantValueEnabled}
+      constantValueEnabled={!parentData && data.number.constantValueEnabled}
     >
       <PhoneAtom
         backgroundColor={backgroundColors.background2.value}

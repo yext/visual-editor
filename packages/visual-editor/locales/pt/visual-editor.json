@@ -326,6 +326,7 @@
       "width": "Largura",
       "yes": "Sim"
     },
+    "phone": "Telefone",
     "phoneFormat": "Formato de telefone",
     "phoneNumber": "Número de telefone",
     "phoneNumberFormat": "Formato do número de telefone",
@@ -526,6 +527,7 @@
   "slots": {
     "insightCard": "Cartão de insights",
     "insightCards": "Cartões de insights",
+    "nearbyLocationCards": "Cartões de localização próximos",
     "productCard": "Cartão de produto",
     "productCards": "Cartões de produto"
   },

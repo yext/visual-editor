@@ -19,7 +19,7 @@ import {
 import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,
-} from "../pageSections/NearbyLocations.tsx";
+} from "../pageSections/NearbyLocations/NearbyLocations.tsx";
 import {
   ProductSection,
   ProductSectionProps,
@@ -32,7 +32,10 @@ import {
   PhotoGallerySection,
   PhotoGallerySectionProps,
 } from "../pageSections/PhotoGallerySection.tsx";
-import { FAQSection, FAQSectionProps } from "../pageSections/FAQsSection.tsx";
+import {
+  FAQSection,
+  FAQSectionProps,
+} from "../pageSections/FAQsSection/FAQsSection.tsx";
 import {
   ReviewsSection,
   ReviewsSectionProps,

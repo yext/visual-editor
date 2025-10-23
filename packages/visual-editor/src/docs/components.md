@@ -298,35 +298,26 @@ This object contains properties for customizing the appearance of both header ti
 
 ## FAQSection
 
-The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer. Available on Location templates.
+The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer.
 
 ### Props
-
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop           | Type                                  | Description                                                                                                        | Default                                   |
-| :------------- | :------------------------------------ | :----------------------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| `data.faqs`    | `YextEntityField<FAQSectionType>`     | The source of the FAQ data (questions and answers), which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder FAQs.`           |
-| `data.heading` | `YextEntityField<TranslatableString>` | The main heading for the entire events section.                                                                    | `"Frequently Asked Questions" (constant)` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                          | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color of the section. | `Background Color 3` |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the heading.             |                      |
+| Prop                     | Type              | Description                          | Default              |
+| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 3` |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                            | Description                                                                    | Default |
+| :--------------- | :---------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                       | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ HeadingSlot: Slot; FAQsWrapperSlot: Slot; }` |                                                                                |         |
 
 ---
 
@@ -507,29 +498,13 @@ The Nearby Locations Section dynamically finds and displays a list of business l
 
 ### Props
 
-#### Data Props
-
-This object defines the search parameters for finding nearby locations.
-
-| Prop              | Type                                  | Description                                          | Default                         |
-| :---------------- | :------------------------------------ | :--------------------------------------------------- | :------------------------------ |
-| `data.coordinate` | `YextEntityField<Coordinate>`         | The central coordinate (, ) to search from.          | `'yextDisplayCoordinate' field` |
-| `data.heading`    | `YextEntityField<TranslatableString>` | The main heading for the entire section.             | `"Nearby Locations" (constant)` |
-| `data.limit`      | `number`                              | The maximum number of locations to find and display. | `3`                             |
-| `data.radius`     | `number`                              | The search radius in miles.                          | `10`                            |
-
 #### Style Props
 
 This object contains extensive properties for customizing the component's appearance.
 
-| Prop                       | Type                                                                                                                        | Description                                        | Default              |
-| :------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`   | `BackgroundStyle`                                                                                                           | The background color for the entire section.       | `Background Color 1` |
-| `styles.cards`             | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }`                                                        | Styling for the individual location cards.         |                      |
-| `styles.heading`           | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                            | Styling for the main section heading.              |                      |
-| `styles.hours`             | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.        |                      |
-| `styles.phoneNumberFormat` | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards. | `'domestic'`         |
-| `styles.phoneNumberLink`   | `boolean`                                                                                                                   | If , wraps phone numbers in a clickable hyperlink. | `false`              |
+| Prop     | Type                                     | Description                                                                           | Default |
+| :------- | :--------------------------------------- | :------------------------------------------------------------------------------------ | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains extensive properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -725,24 +700,13 @@ The Testimonial Section is used to display a list of customer testimonials or re
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop                | Type                                      | Description                                                                                        | Default                                 |
-| :------------------ | :---------------------------------------- | :------------------------------------------------------------------------------------------------- | :-------------------------------------- |
-| `data.heading`      | `YextEntityField<TranslatableString>`     | The main heading for the entire testimonials section.                                              | `"Featured Testimonials" (constant)`    |
-| `data.testimonials` | `YextEntityField<TestimonialSectionType>` | The source of the testimonial data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder testimonials.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                 | Description                                                           | Default              |
-| :----------------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                    | The background color for the entire section, selected from the theme. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }` | Styling for the individual testimonial cards.                         |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`     | Styling for the main section heading.                                 |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 

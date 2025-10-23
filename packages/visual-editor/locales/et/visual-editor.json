@@ -326,6 +326,7 @@
       "width": "Laius",
       "yes": "Jah"
     },
+    "phone": "Telefon",
     "phoneFormat": "Telefonivorming",
     "phoneNumber": "Telefoninumber",
     "phoneNumberFormat": "Telefoninumbri vorming",
@@ -526,6 +527,7 @@
   "slots": {
     "insightCard": "Ülevaatekaart",
     "insightCards": "Insight -kaardid",
+    "nearbyLocationCards": "Läheduses asuvad asukohakaardid",
     "productCard": "Tootekaart",
     "productCards": "Tootekaardid"
   },

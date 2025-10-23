@@ -22,9 +22,8 @@ export {
 export {
   FAQSection,
   type FAQSectionProps,
-  type FAQData,
   type FAQStyles,
-} from "./FAQsSection.tsx";
+} from "./FAQsSection/FAQsSection.tsx";
 export {
   HeroSection,
   type HeroSectionProps,
@@ -40,9 +39,7 @@ export { InsightCard } from "./InsightSection/InsightCard.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,
-  type NearbyLocationsData,
-  type NearbyLocationsStyles,
-} from "./NearbyLocations.tsx";
+} from "./NearbyLocations/NearbyLocations.tsx";
 export {
   TeamSection,
   type TeamSectionProps,

@@ -143,17 +143,13 @@ export const TestimonialSection: ComponentConfig<{
             data: {
               field: "",
               constantValueEnabled: true,
-              constantValue: [
-                { id: "TestimonialCard-1" },
-                { id: "TestimonialCard-2" },
-                { id: "TestimonialCard-3" },
-              ],
+              constantValue: [{}, {}, {}],
             },
             slots: {
               CardSlot: [
-                defaultTestimonialCardSlotData("TestimonialCard-1", 0),
-                defaultTestimonialCardSlotData("TestimonialCard-2", 1),
-                defaultTestimonialCardSlotData("TestimonialCard-3", 2),
+                defaultTestimonialCardSlotData(undefined, 0),
+                defaultTestimonialCardSlotData(undefined, 1),
+                defaultTestimonialCardSlotData(undefined, 2),
               ],
             },
           } satisfies TestimonialCardsWrapperProps,

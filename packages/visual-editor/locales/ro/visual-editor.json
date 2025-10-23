@@ -326,6 +326,7 @@
       "width": "Lăţime",
       "yes": "Da"
     },
+    "phone": "Telefon",
     "phoneFormat": "Format telefonic",
     "phoneNumber": "Număr de telefon",
     "phoneNumberFormat": "Formatul numărului de telefon",
@@ -526,6 +527,7 @@
   "slots": {
     "insightCard": "Card de perspectivă",
     "insightCards": "Carduri Insight",
+    "nearbyLocationCards": "Carduri de locație în apropiere",
     "productCard": "Card de produs",
     "productCards": "Cărți de produs"
   },
