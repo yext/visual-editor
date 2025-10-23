@@ -137,7 +137,9 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
-      openNowButton: true,
+      filters: {
+        openNowButton: true,
+      },
     },
     version: migrationRegistry.length,
   },
