@@ -177,8 +177,10 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
       className="flex flex-col gap-12"
       background={styles?.backgroundColor}
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      <ReviewsHeader {...headerProps} />
+      <div className="flex flex-col gap-3">
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+        <ReviewsHeader {...headerProps} />
+      </div>
       {reviews && (
         <>
           <ReviewsList reviews={reviews?.response?.docs} />
