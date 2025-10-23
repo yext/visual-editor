@@ -115,6 +115,43 @@ const tests: ComponentTest[] = [
     },
   },
   {
+    name: "version 10 props with French locale",
+    document: {
+      businessId: 70452,
+      _env: {
+        YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_REVIEWS_APP_API_KEY,
+      },
+      uid: 25897322,
+      ref_reviewsAgg: [
+        {
+          averageRating: 3.7142856,
+          publisher: "FIRSTPARTY",
+          reviewCount: 7,
+        },
+      ],
+      _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
+      locale: "fr",
+    },
+    props: {
+      backgroundColor: {
+        bgColor: "bg-palette-primary-dark",
+        textColor: "text-white",
+      },
+      analytics: {
+        scope: "reviewsSection",
+      },
+    },
+    version: 10,
+    interactions: async (page) => {
+      const expandButton = page.getByText("Show More");
+      await act(async () => {
+        await expandButton.click();
+      });
+      await delay(interactionsDelay);
+    },
+  },
+  {
     name: "version 36 props with empty document",
     document: {},
     props: {
@@ -132,7 +169,31 @@ const tests: ComponentTest[] = [
               data: {
                 text: {
                   constantValue: {
+                    cs: "Nedávné recenze",
+                    da: "Nylige anmeldelser",
+                    de: "Neuere Bewertungen",
                     en: "Recent Reviews",
+                    "en-GB": "Recent Reviews",
+                    es: "Revisiones recientes",
+                    et: "Viimased ülevaated",
+                    fi: "Viimeaikaiset arvostelut",
+                    fr: "Revues récentes",
+                    hr: "Nedavne recenzije",
+                    hu: "Legutóbbi vélemények",
+                    it: "Recensioni recenti",
+                    ja: "最近のレビュー",
+                    lt: "Naujausios apžvalgos",
+                    lv: "Nesenie pārskati",
+                    nb: "Nyere anmeldelser",
+                    nl: "Recente beoordelingen",
+                    pl: "Ostatnie recenzje",
+                    pt: "Revisões recentes",
+                    ro: "Recenzii recente",
+                    sk: "Posledné recenzie",
+                    sv: "Senaste recensioner",
+                    tr: "Son İncelemeler",
+                    zh: "最近的评论",
+                    "zh-TW": "最近的評論",
                     hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
@@ -184,7 +245,31 @@ const tests: ComponentTest[] = [
               data: {
                 text: {
                   constantValue: {
+                    cs: "Nedávné recenze",
+                    da: "Nylige anmeldelser",
+                    de: "Neuere Bewertungen",
                     en: "Recent Reviews",
+                    "en-GB": "Recent Reviews",
+                    es: "Revisiones recientes",
+                    et: "Viimased ülevaated",
+                    fi: "Viimeaikaiset arvostelut",
+                    fr: "Revues récentes",
+                    hr: "Nedavne recenzije",
+                    hu: "Legutóbbi vélemények",
+                    it: "Recensioni recenti",
+                    ja: "最近のレビュー",
+                    lt: "Naujausios apžvalgos",
+                    lv: "Nesenie pārskati",
+                    nb: "Nyere anmeldelser",
+                    nl: "Recente beoordelingen",
+                    pl: "Ostatnie recenzje",
+                    pt: "Revisões recentes",
+                    ro: "Recenzii recente",
+                    sk: "Posledné recenzie",
+                    sv: "Senaste recensioner",
+                    tr: "Son İncelemeler",
+                    zh: "最近的评论",
+                    "zh-TW": "最近的評論",
                     hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
