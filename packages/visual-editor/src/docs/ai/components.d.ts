@@ -708,25 +708,6 @@ interface HeroStyles {
   mobileImagePosition: "bottom" | "top";
 }
 
-interface PhotoGalleryData {
-  /**
-   * The main heading for the photo gallery.
-   * @defaultValue "Gallery" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the image data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder images.
-   */
-  images: YextEntityField<
-    | ImageType[]
-    | ComplexImageType[]
-    | {
-        assetImage: AssetImageType;
-      }[]
-  >;
-}
-
 interface PhotoGalleryStyles {
   /**
    * The background color for the entire section, selected from the theme.
@@ -890,9 +871,6 @@ type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
 
-/** Corresponds to the different semantic heading levels */
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
 /** Data for the PromoSection */
 type PromoSectionType = {
   /**
@@ -912,6 +890,9 @@ type PromoSectionType = {
 type TestimonialSectionType = {
   testimonials: Array<TestimonialStruct>;
 };
+
+/** Corresponds to the different semantic heading levels */
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
