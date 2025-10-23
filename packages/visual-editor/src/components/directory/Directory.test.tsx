@@ -5,15 +5,16 @@ import {
   ComponentTest,
   testHours,
   transformTests,
-} from "./testing/componentTests.setup.ts";
+} from ".././testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
   Directory,
   migrate,
   migrationRegistry,
+  SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const rootDocument = {
@@ -723,11 +724,23 @@ const tests: ComponentTest[] = [
     },
     version: 18,
   },
+  {
+    name: "version 37 with cityDocument and default props",
+    document: cityDocument,
+    props: { ...Directory.defaultProps },
+    version: 37,
+  },
+  {
+    name: "version 37 with countryDocument and default props",
+    document: countryDocument,
+    props: { ...Directory.defaultProps },
+    version: 37,
+  },
 ];
 
 describe("Directory", async () => {
   const puckConfig: Config = {
-    components: { Directory },
+    components: { Directory, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -744,7 +757,7 @@ describe("Directory", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -762,6 +775,10 @@ describe("Directory", async () => {
         puckConfig,
         document
       );
+
+      data = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
