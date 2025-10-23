@@ -386,12 +386,32 @@ interface PromoSectionProps {
   liveVisibility?: boolean;
 }
 
-type ReviewsSectionProps = {
-  backgroundColor: BackgroundStyle;
+interface ReviewsSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 1
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+  };
+  /** @internal */
   analytics: {
     scope?: string;
   };
-};
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility: boolean;
+}
 
 interface StaticMapSectionProps {
   /**
