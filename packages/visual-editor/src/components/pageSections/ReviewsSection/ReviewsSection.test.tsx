@@ -144,7 +144,7 @@ const tests: ComponentTest[] = [
     },
     version: 10,
     interactions: async (page) => {
-      const expandButton = page.getByText("Show More");
+      const expandButton = page.getByText("Montrer plus");
       await act(async () => {
         await expandButton.click();
       });
