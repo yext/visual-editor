@@ -139,7 +139,6 @@ const tests: ComponentTest[] = [
       mapStyle: "mapbox://styles/mapbox/dark-v11",
       filters: {
         openNowButton: true,
-        facetFields: [],
       },
     },
     version: migrationRegistry.length,
