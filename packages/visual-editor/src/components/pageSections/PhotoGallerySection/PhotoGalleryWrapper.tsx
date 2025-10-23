@@ -104,7 +104,7 @@ const DynamicChildColors = ({
 export const PhotoGalleryWrapper: ComponentConfig<{
   props: PhotoGalleryWrapperProps;
 }> = {
-  label: msg("components.photoGalleryWrapper", "Photo Gallery Wrapper"),
+  label: msg("components.gallery", "Gallery"),
   fields: photoGalleryWrapperFields,
   defaultProps: {
     data: {
