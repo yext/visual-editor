@@ -313,15 +313,15 @@ interface NearbyLocationsSectionProps {
 
 interface PhotoGallerySectionProps {
   /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: PhotoGalleryData;
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
   styles: PhotoGalleryStyles;
+  /** @internal */
+  slots: {
+    HeadingSlot: Slot;
+    PhotoGalleryWrapper: Slot;
+  };
   /**
    * If 'true', the component is visible on the live page; if 'false', it's hidden.
    * @defaultValue true
@@ -718,38 +718,12 @@ interface HeroStyles {
   mobileImagePosition: "bottom" | "top";
 }
 
-interface PhotoGalleryData {
-  /**
-   * The main heading for the photo gallery.
-   * @defaultValue "Gallery" (constant)
-   */
-  heading: YextEntityField<TranslatableString>;
-  /**
-   * The source of the image data, which can be linked to a Yext field or provided as a constant.
-   * @defaultValue A list of 3 placeholder images.
-   */
-  images: YextEntityField<
-    | ImageType[]
-    | ComplexImageType[]
-    | {
-        assetImage: AssetImageType;
-      }[]
-  >;
-}
-
 interface PhotoGalleryStyles {
   /**
    * The background color for the entire section, selected from the theme.
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
-  /** Styling for the main section heading. */
-  heading: {
-    level: HeadingLevel;
-    align: "left" | "center" | "right";
-  };
-  /** Styling options for the gallery images, such as aspect ratio. */
-  image: ImageStylingProps;
 }
 
 interface PromoData {
@@ -875,9 +849,6 @@ type YextEntityField<T> = {
 type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
-
-/** Corresponds to the different semantic heading levels */
-type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Data for the PromoSection */
 type PromoSectionType = {
