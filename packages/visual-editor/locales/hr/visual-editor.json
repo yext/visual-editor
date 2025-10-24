@@ -48,6 +48,7 @@
   "change": "Promijeniti",
   "chooseImage": "Odaberite sliku",
   "chooseVideo": "Odaberite video",
+  "clearAll": "Obriši sve",
   "close": "Zatvoriti",
   "closeHeaderMenu": "Zatvori izbornik zaglavlja",
   "closeMenu": "Zatvori izbornik",
@@ -113,6 +114,7 @@
     "discardChanges": "Odbaciti promjene",
     "warning": "Ova će radnja ukloniti vaše lokalne promjene. Ne može se poništiti."
   },
+  "distance": "Udaljenost",
   "emailList": "Popis e -pošte",
   "enterSchemaMarkup": "Unesite shemu oznaku ...",
   "entityTypeField": "Polje {{entityType}}",
@@ -447,6 +449,7 @@
   "map": "Karta",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
   "mediaType": "Medijska vrsta",
+  "miles": "milja",
   "missingHtmlWidget": "Dodajte HTML za pregled komponente",
   "monday": "ponedjeljak",
   "name": "Ime",

@@ -48,6 +48,7 @@
   "change": "Forandring",
   "chooseImage": "Vælg billede",
   "chooseVideo": "Vælg video",
+  "clearAll": "Ryd alle",
   "close": "Tæt",
   "closeHeaderMenu": "Luk header -menu",
   "closeMenu": "Luk menu",
@@ -114,6 +115,7 @@
     "discardChanges": "Kasser ændringer",
     "warning": "Denne handling fjerner dine lokale ændringer. Det kan ikke fortrydes."
   },
+  "distance": "Afstand",
   "emailList": "E -mail -liste",
   "enterSchemaMarkup": "Indtast skema markering ...",
   "entityTypeField": "{{entityType}} felt",
@@ -448,6 +450,7 @@
   "map": "Kort",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "mediaType": "Medietype",
+  "miles": "miles",
   "missingHtmlWidget": "Tilføj HTML for at se komponent",
   "monday": "mandag",
   "name": "Navn",

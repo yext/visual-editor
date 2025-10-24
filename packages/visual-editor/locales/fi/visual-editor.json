@@ -48,6 +48,7 @@
   "change": "Muuttaa",
   "chooseImage": "Valitse kuva",
   "chooseVideo": "Valitse video",
+  "clearAll": "Tyhjennä kaikki",
   "close": "Lähellä",
   "closeHeaderMenu": "Sulje otsikkovalikko",
   "closeMenu": "Suljevalikko",
@@ -113,6 +114,7 @@
     "discardChanges": "Hylätä muutokset",
     "warning": "Tämä toiminto poistaa paikalliset muutokset. Sitä ei voida peruuttaa."
   },
+  "distance": "Etäisyys",
   "emailList": "Sähköpostiluettelo",
   "enterSchemaMarkup": "Kirjoita Schema -merkinnät ...",
   "entityTypeField": "{{entityType}}kenttä",
@@ -447,6 +449,7 @@
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "mediaType": "Mediatyyppi",
+  "miles": "mailia",
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
   "monday": "maanantai",
   "name": "Nimi",

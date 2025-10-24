@@ -48,6 +48,7 @@
   "change": "Vahetus",
   "chooseImage": "Valige pilt",
   "chooseVideo": "Valige video",
+  "clearAll": "Kustuta kõik",
   "close": "Sulgur",
   "closeHeaderMenu": "Sulgemenüü",
   "closeMenu": "Sulgemenüü",
@@ -113,6 +114,7 @@
     "discardChanges": "Muudatused äraviskamine",
     "warning": "See toiming eemaldab teie kohalikud muudatused. Seda ei saa teha."
   },
+  "distance": "Kaugus",
   "emailList": "E -posti nimekiri",
   "enterSchemaMarkup": "Sisestage skeemi märgistus ...",
   "entityTypeField": "{{entitytype}} väli",
@@ -447,6 +449,7 @@
   "map": "Kaardistama",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "mediaType": "Meediumitüüp",
+  "miles": "miili",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
   "monday": "Esmaspäev",
   "name": "Nimetus",

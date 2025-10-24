@@ -48,6 +48,7 @@
   "change": "Zmena",
   "chooseImage": "Vyberte obrázok",
   "chooseVideo": "Vyberte video",
+  "clearAll": "Vymazať všetko",
   "close": "Zatvoriť",
   "closeHeaderMenu": "Zavrieť ponuku hlavičky",
   "closeMenu": "Menu",
@@ -114,6 +115,7 @@
     "discardChanges": "Zlikvidovať zmeny",
     "warning": "Táto akcia odstráni vaše miestne zmeny. Nedá sa to vrátiť späť."
   },
+  "distance": "Vzdialenosť",
   "emailList": "Zoznam e -mailov",
   "enterSchemaMarkup": "Zadajte značku schémy ...",
   "entityTypeField": "{{entityType}} pole",
@@ -448,6 +450,7 @@
   "map": "Mapovať",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "mediaType": "Typ médií",
+  "miles": "míľ",
   "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent",
   "monday": "Pondelok",
   "name": "Menovať",
