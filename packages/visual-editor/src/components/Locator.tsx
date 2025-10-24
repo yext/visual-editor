@@ -933,7 +933,8 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
-  const [showFilter, setShowFilter] = React.useState(false);
+  const hasFilterModalToggle = openNowButton || selectedFacets.length > 0;
+  const [showFilterModal, setShowFilterModal] = React.useState(false);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
@@ -989,17 +990,17 @@ const LocatorInternal = ({
                       count: resultCount,
                     }))}
             </div>
-            {openNowButton && (
+            {hasFilterModalToggle && (
               <button
                 className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
-                onClick={() => setShowFilter((prev) => !prev)}
+                onClick={() => setShowFilterModal((prev) => !prev)}
               >
                 {t("filter", "Filter")}
                 {<FaSlidersH />}
               </button>
             )}
           </div>
-          {showFilter && (
+          {showFilterModal && (
             <div
               id="popup"
               className="absolute top-0 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[758px]"
@@ -1010,7 +1011,7 @@ const LocatorInternal = ({
                 </div>
                 <button
                   className="text-palette-primary-dark"
-                  onClick={() => setShowFilter(false)}
+                  onClick={() => setShowFilterModal(false)}
                 >
                   <FaTimes />
                 </button>
@@ -1026,10 +1027,12 @@ const LocatorInternal = ({
               </div>
               <div className="flex flex-col p-6 gap-6 overflow-y-auto">
                 <div className="flex flex-col gap-8">
-                  <OpenNowFilter
-                    isSelected={isOpenNowSelected}
-                    onChange={handleOpenNowClick}
-                  />
+                  {openNowButton && (
+                    <OpenNowFilter
+                      isSelected={isOpenNowSelected}
+                      onChange={handleOpenNowClick}
+                    />
+                  )}
                   <DistanceFilter
                     onChange={handleDistanceClick}
                     selectedDistanceMiles={selectedDistanceMiles}
