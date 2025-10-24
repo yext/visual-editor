@@ -1,10 +1,4 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
   Background,
   HeadingTextProps,
@@ -25,11 +19,15 @@ import { useCardContext } from "../../hooks/useCardContext";
 import { useGetCardSlots } from "../../hooks/useGetCardSlots";
 import React from "react";
 
-export const defaultDirectoryCardSlotData = (id?: string, index?: number) => ({
+export const defaultDirectoryCardSlotData = (
+  id: string,
+  index: number,
+  profile: any
+) => ({
   type: "DirectoryCard",
   props: {
-    ...(id && { id }),
-    ...(index !== undefined && { index }),
+    id,
+    index,
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
@@ -48,6 +46,10 @@ export const defaultDirectoryCardSlotData = (id?: string, index?: number) => ({
             styles: {
               level: 3,
               align: "left",
+            },
+            parentData: {
+              field: "profile.name",
+              text: profile["name"],
             },
           } satisfies HeadingTextProps,
         },
@@ -73,6 +75,10 @@ export const defaultDirectoryCardSlotData = (id?: string, index?: number) => ({
               includePhoneHyperlink: true,
               includeIcon: false,
             },
+            parentData: {
+              field: "profile.mainPhone",
+              phoneNumber: profile["mainPhone"],
+            },
           } satisfies PhoneProps,
         },
       ],
@@ -91,10 +97,20 @@ export const defaultDirectoryCardSlotData = (id?: string, index?: number) => ({
               dayOfWeekFormat: "long",
               showDayNames: true,
               showCurrentStatus: true,
+              className:
+                "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
+            },
+            parentData: {
+              field: "profile.hours",
+              hours: profile["hours"],
+              timezone: profile["timezone"],
             },
           } satisfies HoursStatusProps,
         },
       ],
+    },
+    parentData: {
+      profile,
     },
   },
 });
@@ -288,34 +304,6 @@ export const DirectoryCard: ComponentConfig<{
       PhoneSlot: [],
       HoursSlot: [],
     },
-  },
-  resolveData: (data) => {
-    if (!data.props.parentData) {
-      return data;
-    }
-
-    // If the data has already been resolved, return data
-    if (data.props.slots.HeadingSlot[0]?.props.parentData) {
-      return data;
-    }
-
-    data = setDeep(data, "props.slots.HeadingSlot[0].props.parentData", {
-      field: "profile.name",
-      text: data.props.parentData?.profile.name || "",
-    } satisfies HeadingTextProps["parentData"]);
-
-    data = setDeep(data, "props.slots.HoursSlot[0].props.parentData", {
-      field: "profile.hours",
-      hours: data.props.parentData?.profile.hours || {},
-      timezone: data.props.parentData?.profile.timezone || "",
-    } satisfies HoursStatusProps["parentData"]);
-
-    data = setDeep(data, "props.slots.PhoneSlot[0].props.parentData", {
-      field: "profile.mainPhone",
-      phoneNumber: data.props.parentData?.profile.mainPhone || "",
-    } satisfies PhoneProps["parentData"]);
-
-    return data;
   },
   render: (props) => <DirectoryCardComponent {...props} />,
 };

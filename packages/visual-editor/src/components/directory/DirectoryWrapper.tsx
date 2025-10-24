@@ -1,6 +1,5 @@
 import {
   ComponentConfig,
-  ComponentData,
   Fields,
   PuckComponent,
   setDeep,
@@ -16,10 +15,7 @@ import {
 } from "@yext/visual-editor";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
 import { sortAlphabetically } from "../../utils/directory/utils";
-import {
-  defaultDirectoryCardSlotData,
-  DirectoryCardProps,
-} from "./DirectoryCard.tsx";
+import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
 
 export type DirectoryGridProps = {
   slots: {
@@ -127,38 +123,30 @@ export const DirectoryGrid: ComponentConfig<{
     );
 
     const requiredLength = sortedDirectoryChildren?.length ?? 0;
-    const currentLength = data.props.slots.CardSlot.length;
 
-    if (requiredLength === currentLength) {
+    // If the current CardSlots match the directory children
+    // and length is correct, return data with no changes
+    if (
+      data.props.slots.CardSlot.map(
+        (card, i) =>
+          card.props.parentData?.profile === sortedDirectoryChildren[i]
+      ).every((match) => match) &&
+      data.props.slots.CardSlot.length === requiredLength
+    ) {
       return data;
     }
 
-    const cardsToAdd =
-      currentLength < requiredLength
-        ? Array(requiredLength - currentLength)
-            .fill(null)
-            .map(() =>
-              defaultDirectoryCardSlotData(
-                `DirectoryCard-${crypto.randomUUID()}`
-              )
-            )
-        : [];
+    const updatedCards = Array(requiredLength)
+      .fill(null)
+      .map((_, i) =>
+        defaultDirectoryCardSlotData(
+          `DirectoryCard-${crypto.randomUUID()}`,
+          i,
+          sortedDirectoryChildren[i]
+        )
+      );
 
-    const updatedCardSlot = [...data.props.slots.CardSlot, ...cardsToAdd].slice(
-      0,
-      requiredLength
-    ) as ComponentData<DirectoryCardProps>[];
-
-    data = setDeep(
-      data,
-      "props.slots.CardSlot",
-      updatedCardSlot.map((card, i) => {
-        card.props.index = i;
-        return setDeep(card, "props.parentData", {
-          profile: sortedDirectoryChildren[i],
-        });
-      })
-    );
+    data = setDeep(data, "props.slots.CardSlot", updatedCards);
     return data;
   },
   render: (props) => <DirectoryGridWrapper {...props} />,
