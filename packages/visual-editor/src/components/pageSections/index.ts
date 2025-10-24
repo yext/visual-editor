@@ -59,7 +59,10 @@ export {
   ProductSection,
   type ProductSectionProps,
 } from "./ProductSection/ProductSection.tsx";
-export { ReviewsSection, type ReviewsSectionProps } from "./ReviewsSection.tsx";
+export {
+  ReviewsSection,
+  type ReviewsSectionProps,
+} from "./ReviewsSection/ReviewsSection.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,

@@ -605,6 +605,32 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## ReviewsSection
+
+The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps. Available on Location templates.
+
+![Preview of the ReviewsSection component](<../components/testing/screenshots/ReviewsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data%20(after%20interactions).png>)
+
+### Props
+
+#### Style Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
 ## StaticMapSection
 
 The Static Map Section displays a non-interactive map image of a business's location. It uses the entity's address or coordinates to generate the map and requires a valid API key from mapbox. Available on Location templates.
