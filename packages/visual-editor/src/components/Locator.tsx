@@ -878,7 +878,7 @@ const LocatorInternal = ({
                       count: resultCount,
                     }))}
             </div>
-            {filters.openNowButton && (
+            {filters?.openNowButton && (
               <button
                 className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
                 onClick={() => setShowFilter((prev) => !prev)}
