@@ -71,6 +71,7 @@ export const defaultDirectoryCardSlotData = (id?: string, index?: number) => ({
             styles: {
               phoneFormat: "domestic",
               includePhoneHyperlink: true,
+              includeIcon: false,
             },
           } satisfies PhoneProps,
         },

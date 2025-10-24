@@ -74,6 +74,7 @@ export const directorySlots: Migration = {
                         styles: {
                           phoneFormat: props.styles.phoneNumberFormat,
                           includePhoneHyperlink: props.styles.phoneNumberLink,
+                          includeIcon: false,
                         },
                         parentData: {
                           phoneNumber: child["mainPhone"],
