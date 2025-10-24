@@ -10,6 +10,7 @@ import {
   walkTree,
   ComponentDataOptionalId,
   FieldLabel,
+  createUsePuck,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -31,6 +32,7 @@ import { cn } from "../../utils/cn.ts";
 import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
 
 const devLogger = new DevLogger();
+const usePuck = createUsePuck();
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -361,9 +363,13 @@ export const InternalLayoutEditor = ({
           actionBar: ({ children, label }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
+            const itemSelectorState = usePuck(
+              (s) => s.appState.ui.itemSelector
+            );
 
-            // run slightly after this function to wait for puck to update
-            setTimeout(removeDuplicateImageActionBars, 3);
+            React.useEffect(removeDuplicateImageActionBars, [
+              itemSelectorState,
+            ]);
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
