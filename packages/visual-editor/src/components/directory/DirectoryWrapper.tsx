@@ -143,7 +143,7 @@ export const DirectoryGrid: ComponentConfig<{
           `DirectoryCard-${crypto.randomUUID()}`,
           i,
           sortedDirectoryChildren[i],
-          data.props.slots.CardSlot[i].props.styles
+          data.props.slots?.CardSlot[i]?.props.styles
         )
       );
 
