@@ -11,6 +11,7 @@ import {
   YextField,
   TranslatableString,
   backgroundColors,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 
 /** The props for the Phone component */
@@ -138,5 +139,6 @@ export const Phone: ComponentConfig<{ props: PhoneProps }> = {
       includePhoneHyperlink: true,
     },
   },
+  resolveFields: (data) => resolveDataFromParent(PhoneFields, data),
   render: (props) => <PhoneComponent {...props} />,
 };
