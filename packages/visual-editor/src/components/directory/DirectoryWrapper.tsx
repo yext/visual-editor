@@ -101,6 +101,7 @@ const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
         <slots.CardSlot
           className="flex min-h-0 min-w-0 mx-auto flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
           allow={[]}
+          style={{ height: "auto" }}
         />
       </PageSection>
     </CardContextProvider>

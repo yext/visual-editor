@@ -230,10 +230,14 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         className="mb-2 max-w-full text-wrap break-words"
         href={resolvedUrl}
       >
-        <slots.HeadingSlot />
+        <slots.HeadingSlot style={{ height: "auto" }} />
       </MaybeLink>
-      {parentData?.profile?.hours && <slots.HoursSlot />}
-      {parentData?.profile?.mainPhone && <slots.PhoneSlot />}
+      {parentData?.profile?.hours && (
+        <slots.HoursSlot style={{ height: "auto" }} />
+      )}
+      {parentData?.profile?.mainPhone && (
+        <slots.PhoneSlot style={{ height: "auto" }} />
+      )}
       {parentData?.profile?.address && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
