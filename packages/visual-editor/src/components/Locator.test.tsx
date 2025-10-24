@@ -99,7 +99,7 @@ const tests: ComponentTest[] = [
         },
       }),
     },
-    props: { ...LocatorComponent.defaultProps },
+    props: {},
     version: migrationRegistry.length,
   },
   {
@@ -137,9 +137,7 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
-      filters: {
-        openNowButton: true,
-      },
+      openNowButton: true,
     },
     version: migrationRegistry.length,
   },
