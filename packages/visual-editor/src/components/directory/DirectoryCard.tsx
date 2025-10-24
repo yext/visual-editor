@@ -232,7 +232,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         <slots.HeadingSlot />
       </MaybeLink>
       {parentData?.profile?.hours && <slots.HoursSlot />}
-      {parentData?.profile?.phone && <slots.PhoneSlot />}
+      {parentData?.profile?.mainPhone && <slots.PhoneSlot />}
       {parentData?.profile?.address && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
@@ -306,8 +306,8 @@ export const DirectoryCard: ComponentConfig<{
     } satisfies HoursStatusProps["parentData"]);
 
     data = setDeep(data, "props.slots.PhoneSlot[0].props.parentData", {
-      field: "profile.phone",
-      phoneNumber: data.props.parentData?.profile.phone || "",
+      field: "profile.mainPhone",
+      phoneNumber: data.props.parentData?.profile.mainPhone || "",
     } satisfies PhoneProps["parentData"]);
 
     return data;
