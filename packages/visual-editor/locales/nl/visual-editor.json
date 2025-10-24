@@ -57,6 +57,7 @@
   "closed": "Gesloten",
   "closesAt": "Sluit af aan",
   "components": {
+    "DirectoryGrid": "Directoryraster",
     "Video": "Video",
     "address": "Adres",
     "bannerSection": "Bannersectie",
@@ -526,6 +527,7 @@
   "showMore": "Laat meer zien",
   "siteColors": "Sitekleuren",
   "slots": {
+    "directoryCard": "Adresboekkaart",
     "insightCard": "Inzichtkaart",
     "insightCards": "Inzichtkaarten",
     "nearbyLocationCards": "Locatiekaarten in de buurt",

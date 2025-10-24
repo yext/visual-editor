@@ -1,4 +1,4 @@
-import { Directory, DirectoryProps } from "../Directory";
+import { Directory, DirectoryProps } from "../directory/Directory";
 
 export interface DirectoryCategoryProps {
   Directory: DirectoryProps;

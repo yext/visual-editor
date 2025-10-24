@@ -5,15 +5,16 @@ import {
   ComponentTest,
   testHours,
   transformTests,
-} from "./testing/componentTests.setup.ts";
+} from ".././testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
 import {
   Directory,
   migrate,
   migrationRegistry,
+  SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const rootDocument = {
@@ -266,6 +267,86 @@ const cityDocument = {
     },
   ],
   slug: "us/va/arlington",
+};
+
+const version37Props = {
+  styles: {
+    backgroundColor: {
+      bgColor: "bg-palette-primary-dark",
+      textColor: "text-white",
+    },
+  },
+  slots: {
+    TitleSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          data: {
+            text: {
+              constantValue: {
+                en: "[[name]]",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "",
+            },
+          },
+          styles: { level: 2, align: "center" },
+        },
+      },
+    ],
+    SiteNameSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          data: {
+            text: {
+              constantValue: {
+                en: "",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "name",
+            },
+          },
+          styles: { level: 4, align: "center" },
+        },
+      },
+    ],
+    BreadcrumbsSlot: [
+      {
+        type: "BreadcrumbsSlot",
+        props: {
+          data: {
+            directoryRoot: {
+              en: "Directory Root",
+              hasLocalizedValue: "true",
+            },
+          },
+          styles: {
+            backgroundColor: {
+              bgColor: "bg-palette-secondary-dark",
+              textColor: "text-white",
+            },
+          },
+          analytics: {
+            scope: "directory",
+          },
+          liveVisibility: true,
+        },
+      },
+    ],
+    DirectoryGrid: [
+      {
+        type: "DirectoryGrid",
+        props: {
+          slots: {
+            CardSlot: [],
+          },
+        },
+      },
+    ],
+  },
 };
 
 const tests: ComponentTest[] = [
@@ -723,11 +804,23 @@ const tests: ComponentTest[] = [
     },
     version: 18,
   },
+  {
+    name: "version 37 with cityDocument and default props",
+    document: cityDocument,
+    props: version37Props,
+    version: 37,
+  },
+  {
+    name: "version 37 with countryDocument and default props",
+    document: countryDocument,
+    props: version37Props,
+    version: 37,
+  },
 ];
 
 describe("Directory", async () => {
   const puckConfig: Config = {
-    components: { Directory },
+    components: { Directory, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -744,7 +837,7 @@ describe("Directory", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -763,9 +856,17 @@ describe("Directory", async () => {
         document
       );
 
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

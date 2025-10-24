@@ -57,6 +57,7 @@
   "closed": "ZAVŘENO",
   "closesAt": "Uzavírá",
   "components": {
+    "DirectoryGrid": "Adresářová mřížka",
     "Video": "Video",
     "address": "Adresa",
     "bannerSection": "Sekce banneru",
@@ -527,6 +528,7 @@
   "showMore": "Ukázat více",
   "siteColors": "Barvy webu",
   "slots": {
+    "directoryCard": "Karta adresáře",
     "insightCard": "Přehledová karta",
     "insightCards": "Karty statistik",
     "nearbyLocationCards": "Karty polohy v okolí",

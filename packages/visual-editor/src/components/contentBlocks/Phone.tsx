@@ -11,6 +11,7 @@ import {
   YextField,
   TranslatableString,
   backgroundColors,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 
 /** The props for the Phone component */
@@ -27,6 +28,8 @@ export interface PhoneProps {
     phoneFormat: "domestic" | "international";
     /** Whether to make the phone number a clickable link */
     includePhoneHyperlink: boolean;
+    /** Whether to include the phone icon, defaults to true */
+    includeIcon?: boolean;
   };
 
   /** @internal */
@@ -120,7 +123,7 @@ const PhoneComponent = ({ data, styles, parentData }: PhoneProps) => {
         label={resolveComponentData(data.label, i18n.language, streamDocument)}
         phoneNumber={resolvedPhone}
         includeHyperlink={styles.includePhoneHyperlink}
-        includeIcon={true}
+        includeIcon={styles.includeIcon ?? true}
       />
     </EntityField>
   );
@@ -136,5 +139,6 @@ export const Phone: ComponentConfig<{ props: PhoneProps }> = {
       includePhoneHyperlink: true,
     },
   },
+  resolveFields: (data) => resolveDataFromParent(PhoneFields, data),
   render: (props) => <PhoneComponent {...props} />,
 };

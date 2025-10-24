@@ -57,6 +57,7 @@
   "closed": "閉じた",
   "closesAt": "で閉じます",
   "components": {
+    "DirectoryGrid": "ディレクトリグリッド",
     "Video": "ビデオ",
     "address": "住所",
     "bannerSection": "バナーセクション",
@@ -526,6 +527,7 @@
   "showMore": "もっと見せてください",
   "siteColors": "サイトの色",
   "slots": {
+    "directoryCard": "ディレクトリカード",
     "insightCard": "インサイトカード",
     "insightCards": "インサイトカード",
     "nearbyLocationCards": "近くの場所カード",

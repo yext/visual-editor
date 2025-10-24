@@ -10,6 +10,7 @@ import {
   msg,
   pt,
   HoursStatusAtom,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 
 export interface HoursStatusProps {
@@ -145,5 +146,7 @@ export const HoursStatus: ComponentConfig<HoursStatusProps> = {
       className: "",
     },
   },
+  resolveFields: (data) =>
+    resolveDataFromParent(hoursStatusWrapperFields, data),
   render: (props) => <HoursStatusWrapper {...props} />,
 };
