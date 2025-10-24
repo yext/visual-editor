@@ -509,10 +509,10 @@ The props for the Phone component
 
 #### Other Props
 
-| Prop     | Type                                                                              | Description | Default |
-| :------- | :-------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                 |             |         |
-| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; }` |             |         |
+| Prop     | Type                                                                                                     | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                        |             |         |
+| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; }` |             |         |
 
 ---
 
