@@ -269,6 +269,86 @@ const cityDocument = {
   slug: "us/va/arlington",
 };
 
+const version37Props = {
+  styles: {
+    backgroundColor: {
+      bgColor: "bg-palette-quaternary-light",
+      textColor: "text-black",
+    },
+  },
+  slots: {
+    TitleSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          data: {
+            text: {
+              constantValue: {
+                en: "[[name]]",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "",
+            },
+          },
+          styles: { level: 2, align: "center" },
+        },
+      },
+    ],
+    SiteNameSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          data: {
+            text: {
+              constantValue: {
+                en: "",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "name",
+            },
+          },
+          styles: { level: 4, align: "center" },
+        },
+      },
+    ],
+    BreadcrumbsSlot: [
+      {
+        type: "BreadcrumbsSlot",
+        props: {
+          data: {
+            directoryRoot: {
+              en: "Directory Root",
+              hasLocalizedValue: "true",
+            },
+          },
+          styles: {
+            backgroundColor: {
+              bgColor: "bg-palette-tertiary-light",
+              textColor: "text-black",
+            },
+          },
+          analytics: {
+            scope: "directory",
+          },
+          liveVisibility: true,
+        },
+      },
+    ],
+    DirectoryGrid: [
+      {
+        type: "DirectoryGrid",
+        props: {
+          slots: {
+            CardSlot: [],
+          },
+        },
+      },
+    ],
+  },
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props - no document",
@@ -727,13 +807,13 @@ const tests: ComponentTest[] = [
   {
     name: "version 37 with cityDocument and default props",
     document: cityDocument,
-    props: { ...Directory.defaultProps },
+    props: version37Props,
     version: 37,
   },
   {
     name: "version 37 with countryDocument and default props",
     document: countryDocument,
-    props: { ...Directory.defaultProps },
+    props: version37Props,
     version: 37,
   },
 ];
@@ -776,13 +856,17 @@ describe("Directory", async () => {
         document
       );
 
-      data = await resolveAllData(data, puckConfig, {
+      const updatedData = await resolveAllData(data, puckConfig, {
         streamDocument: document,
       });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

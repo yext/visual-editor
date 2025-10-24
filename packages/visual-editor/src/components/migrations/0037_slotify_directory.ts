@@ -78,7 +78,7 @@ export const directorySlots: Migration = {
                         },
                         parentData: {
                           phoneNumber: child["mainPhone"],
-                          field: "profile.phone",
+                          field: "profile.mainPhone",
                         },
                       } satisfies PhoneProps,
                     },
