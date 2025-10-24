@@ -28,6 +28,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
+import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
 
 const devLogger = new DevLogger();
 
@@ -360,6 +361,9 @@ export const InternalLayoutEditor = ({
           actionBar: ({ children, label }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
+
+            // run slightly after this function to wait for puck to update
+            setTimeout(removeDuplicateImageActionBars, 3);
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
