@@ -1,3 +1,13 @@
+#### 0.0.64 (2025-10-24)
+
+##### Chores
+
+- move Open Now in locator to filters modal ([#821](https://github.com/yext/visual-editor/pull/821)) ([809f4401](https://github.com/yext/visual-editor/commit/809f44019a9392f9620ddd33c62a86ad0b63d8ce))
+
+##### Bug Fixes
+
+- use timezone in HoursStatus content block ([#834](https://github.com/yext/visual-editor/pull/834)) ([9c73c51e](https://github.com/yext/visual-editor/commit/9c73c51eea9eeccf334bf0807d007ef268cabccb))
+
 #### 0.0.63 (2025-10-21)
 
 ##### New Features
