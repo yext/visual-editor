@@ -737,7 +737,7 @@ const LocatorInternal = ({
     markerOptionsOverride: markerOptionsOverride,
   });
 
-  const [selectedDistance, setSelectedDistance] =
+  const [selectedDistanceMiles, setSelectedDistanceMiles] =
     React.useState<number>(DEFAULT_RADIUS_MILES);
 
   React.useEffect(() => {
@@ -794,7 +794,7 @@ const LocatorInternal = ({
               value: {
                 lat: centerCoords[1],
                 lng: centerCoords[0],
-                radius: selectedDistance,
+                radius: selectedDistanceMiles * MILES_TO_METERS,
               },
               matcher: Matcher.Near,
             },
@@ -829,7 +829,7 @@ const LocatorInternal = ({
   };
 
   const searchFilters = useSearchState((state) => state.filters);
-  const handleDistanceClick = (distance: number) => {
+  const handleDistanceClick = (distanceMiles: number) => {
     // Update existing distance filter if present
     const existingFilters = searchFilters.static || [];
     const nonLocationFilters = existingFilters.filter(
@@ -849,7 +849,7 @@ const LocatorInternal = ({
         value: {
           lat: mapCenter ? mapCenter.lat : 0,
           lng: mapCenter ? mapCenter.lng : 0,
-          radius: distance * MILES_TO_METERS,
+          radius: distanceMiles * MILES_TO_METERS,
         },
       },
     }));
@@ -857,7 +857,7 @@ const LocatorInternal = ({
     searchActions.setStaticFilters(
       nonLocationFilters.concat(updatedLocationFilters)
     );
-    setSelectedDistance(distance);
+    setSelectedDistanceMiles(distanceMiles);
     searchActions.setOffset(0);
     executeSearch(searchActions);
   };
@@ -956,7 +956,7 @@ const LocatorInternal = ({
             }}
             showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
-              radius: 25,
+              radius: DEFAULT_RADIUS_MILES, // this component uses miles, not meters
             }}
           />
         </div>
@@ -1032,13 +1032,13 @@ const LocatorInternal = ({
                   />
                   <DistanceFilter
                     onChange={handleDistanceClick}
-                    selectedDistance={selectedDistance}
+                    selectedDistanceMiles={selectedDistanceMiles}
                   />
                   <Facets
                     customCssClasses={{
                       divider: "bg-white",
                       titleLabel: "font-bold text-md",
-                      optionInput: "h-4 w-4",
+                      optionInput: "h-4 w-4 accent-palette-primary-dark",
                       optionLabel: "text-md",
                       option: "space-x-4",
                     }}
@@ -1374,7 +1374,7 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
             checked={isSelected}
             className={
               "w-4 h-4 form-checkbox cursor-pointer border border-gray-300" +
-              " rounded-sm text-primary focus:ring-primary filterCheckBox"
+              " rounded-sm text-primary focus:ring-primary accent-palette-primary-dark"
             }
             onChange={() => onChange(!isSelected)}
           />
@@ -1387,11 +1387,11 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 
 interface DistanceFilterProps {
   onChange: (distance: number) => void;
-  selectedDistance?: number;
+  selectedDistanceMiles?: number;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
-  const { selectedDistance, onChange } = props;
+  const { selectedDistanceMiles, onChange } = props;
   const { t } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
@@ -1399,7 +1399,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
   const iconClassName = isExpanded
     ? "w-3 text-gray-400"
     : "w-3 text-gray-400 transform rotate-180";
-  const distanceOptions = [5, 10, 25, 50];
+  const distanceOptionsMiles = [5, 10, 25, 50];
 
   return (
     <div className="flex flex-col gap-4">
@@ -1411,18 +1411,18 @@ const DistanceFilter = (props: DistanceFilterProps) => {
         <FaChevronUp className={iconClassName} />
       </button>
       <div {...getCollapseProps()}>
-        {distanceOptions.map((distance) => (
+        {distanceOptionsMiles.map((distanceMiles) => (
           <div
             className="flex flex-row gap-4 items-center"
-            id={"distanceOption" + distance}
-            key={distance}
+            id={"distanceOption" + distanceMiles}
+            key={distanceMiles}
           >
             <button
               className="inline-flex bg-white"
-              onClick={() => onChange(distance)}
+              onClick={() => onChange(distanceMiles)}
             >
               <div className="text-palette-primary-dark">
-                {selectedDistance === distance ? (
+                {selectedDistanceMiles === distanceMiles ? (
                   <FaDotCircle />
                 ) : (
                   <FaRegCircle />
@@ -1430,7 +1430,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <div className="inline-flex">
-              {"< " + distance + " " + t("miles", "miles")}
+              {"< " + distanceMiles + " " + t("miles", "miles")}
             </div>
           </div>
         ))}
