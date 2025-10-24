@@ -272,8 +272,8 @@ const cityDocument = {
 const version37Props = {
   styles: {
     backgroundColor: {
-      bgColor: "bg-palette-quaternary-light",
-      textColor: "text-black",
+      bgColor: "bg-palette-primary-dark",
+      textColor: "text-white",
     },
   },
   slots: {
@@ -325,8 +325,8 @@ const version37Props = {
           },
           styles: {
             backgroundColor: {
-              bgColor: "bg-palette-tertiary-light",
-              textColor: "text-black",
+              bgColor: "bg-palette-secondary-dark",
+              textColor: "text-white",
             },
           },
           analytics: {
