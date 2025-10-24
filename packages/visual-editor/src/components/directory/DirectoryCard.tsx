@@ -22,14 +22,17 @@ import React from "react";
 export const defaultDirectoryCardSlotData = (
   id: string,
   index: number,
-  profile: any
+  profile: any,
+  existingCardStyle?: DirectoryCardProps["styles"]
 ) => ({
   type: "DirectoryCard",
   props: {
     id,
     index,
     styles: {
-      backgroundColor: backgroundColors.background1.value,
+      backgroundColor:
+        existingCardStyle?.backgroundColor ??
+        backgroundColors.background1.value,
     },
     slots: {
       HeadingSlot: [
@@ -293,7 +296,7 @@ const directoryCardFields: Fields<DirectoryCardProps> = {
 export const DirectoryCard: ComponentConfig<{
   props: DirectoryCardProps;
 }> = {
-  label: "Directory Card",
+  label: msg("slots.directoryCard", "Directory Card"),
   fields: directoryCardFields,
   defaultProps: {
     styles: {

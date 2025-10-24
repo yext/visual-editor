@@ -11,7 +11,6 @@ import {
   MaybeLink,
   msg,
   PageSection,
-  themeManagerCn,
 } from "@yext/visual-editor";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
 import { sortAlphabetically } from "../../utils/directory/utils";
@@ -92,7 +91,7 @@ const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
       <PageSection
         verticalPadding="sm"
         background={backgroundColors.background1.value}
-        className={themeManagerCn("flex min-h-0 min-w-0 mx-auto")}
+        className={"flex min-h-0 min-w-0 mx-auto"}
       >
         <slots.CardSlot
           className="flex min-h-0 min-w-0 mx-auto flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
@@ -136,13 +135,15 @@ export const DirectoryGrid: ComponentConfig<{
       return data;
     }
 
+    // Update CardSlots data but not styles
     const updatedCards = Array(requiredLength)
       .fill(null)
       .map((_, i) =>
         defaultDirectoryCardSlotData(
           `DirectoryCard-${crypto.randomUUID()}`,
           i,
-          sortedDirectoryChildren[i]
+          sortedDirectoryChildren[i],
+          data.props.slots.CardSlot[i].props.styles
         )
       );
 
