@@ -2,7 +2,7 @@ import {
   AnalyticsScopeProvider,
   ComplexImageType,
 } from "@yext/pages-components";
-import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
+import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
 import {
   EntityField,
   MaybeLink,
@@ -107,7 +107,6 @@ export interface ExpandedFooterData {
   secondaryFooter: {
     /** Whether to hide or show the secondary footer */
     show: boolean;
-    copyrightMessage: TranslatableString;
     secondaryFooterLinks: TranslatableCTA[];
   };
 }
@@ -143,14 +142,18 @@ export interface ExpandedFooterProps {
   styles: ExpandedFooterStyles;
 
   /** @internal */
+  slots: {
+    CopyrightSlot: Slot;
+  };
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
 
   /**
    * Indicates which props should not be checked for missing translations.
-   * @internal
-   */
+   * @internal */
   ignoreLocaleWarning?: string[];
 }
 
@@ -304,13 +307,6 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
                 { label: msg("fields.options.no", "No"), value: false },
               ],
             }),
-            copyrightMessage: YextField(
-              msg("fields.copyrightMessage", "Copyright Message"),
-              {
-                type: "translatableString",
-                filter: { types: ["type.string"] },
-              }
-            ),
             secondaryFooterLinks: YextField(
               msg("fields.secondaryFooterLinks", "Secondary Footer Links"),
               {
@@ -432,6 +428,13 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
       }),
     },
   }),
+  slots: {
+    type: "object",
+    objectFields: {
+      CopyrightSlot: { type: "slot" },
+    },
+    visible: false,
+  },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -443,11 +446,12 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
   }),
 };
 
-const ExpandedFooterWrapper = ({
+const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
   data,
   styles,
+  slots,
   puck,
-}: WithId<WithPuckProps<ExpandedFooterProps>>) => {
+}) => {
   const { primaryFooter, secondaryFooter } = data;
   const {
     primaryFooter: primaryFooterStyle,
@@ -468,7 +472,7 @@ const ExpandedFooterWrapper = ({
     expandedFooterLinks,
     expandedFooter,
   } = primaryFooter;
-  const { show, copyrightMessage, secondaryFooterLinks } = secondaryFooter;
+  const { show, secondaryFooterLinks } = secondaryFooter;
   const {
     linksAlignment: primaryLinksAlignment,
     backgroundColor,
@@ -649,20 +653,9 @@ const ExpandedFooterWrapper = ({
               <FooterLinks links={secondaryFooterLinks} type="Secondary" />
             </EntityField>
           )}
-          {copyrightMessage && (
-            <EntityField
-              constantValueEnabled
-              displayName={pt("fields.copyrightMessage", "Copyright Message")}
-            >
-              <Body variant="xs" className="text-center md:text-left">
-                {resolveComponentData(
-                  copyrightMessage,
-                  i18n.language,
-                  streamDocument
-                )}
-              </Body>
-            </EntityField>
-          )}
+          <div className="text-center md:text-left">
+            <slots.CopyrightSlot style={{ height: "auto" }} allow={[]} />
+          </div>
         </PageSection>
       )}
     </Background>
@@ -947,7 +940,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
       },
       secondaryFooter: {
         show: false,
-        copyrightMessage: { en: "", hasLocalizedValue: "true" },
         secondaryFooterLinks: [
           defaultFooterLink,
           defaultFooterLink,
@@ -956,6 +948,25 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
           defaultFooterLink,
         ],
       },
+    },
+    slots: {
+      CopyrightSlot: [
+        {
+          type: "BodyTextSlot",
+          props: {
+            data: {
+              text: {
+                field: "",
+                constantValue: { en: "", hasLocalizedValue: "true" },
+                constantValueEnabled: true,
+              },
+            },
+            styles: {
+              variant: "xs",
+            },
+          },
+        },
+      ],
     },
     styles: {
       primaryFooter: {
@@ -1009,7 +1020,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
 
     if (!showSecondaryFooter) {
       delete secondaryFooterFields.secondaryFooterLinks;
-      delete secondaryFooterFields.copyrightMessage;
       delete stylesFields.secondaryFooter;
     } else {
       stylesFields.secondaryFooter = {

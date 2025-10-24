@@ -9,6 +9,7 @@ import {
   migrate,
   migrationRegistry,
   VisualEditorProvider,
+  SlotsCategoryComponents,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
@@ -546,6 +547,91 @@ const tests: ComponentTest[] = [
     },
     version: 20,
   },
+  {
+    name: "version 39 props with copyright slot",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          logo: {
+            url: testLogoUrl,
+            height: 100,
+            width: 100,
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          },
+          footerLinks: testFooterLinks,
+          xLink: "",
+          facebookLink: "",
+          instagramLink: "",
+          pinterestLink: "",
+          linkedInLink: "",
+          youtubeLink: "",
+          tiktokLink: "",
+          utilityImages: [],
+          expandedFooter: false,
+          expandedFooterLinks: [
+            {
+              label: { en: "Footer Label", hasLocalizedValue: "true" },
+              links: testFooterLinks,
+            },
+          ],
+        },
+        secondaryFooter: {
+          show: true,
+          secondaryFooterLinks: testFooterLinks,
+        },
+      },
+      slots: {
+        CopyrightSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "© 2025 Yext. All rights reserved.",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "xs",
+              },
+            },
+          },
+        ],
+      },
+      styles: {
+        primaryFooter: {
+          logo: {
+            width: 0,
+            aspectRatio: 1.78,
+          },
+          utilityImages: {
+            width: 0,
+            aspectRatio: 1,
+          },
+          backgroundColor: {
+            bgColor: "bg-palette-primary-dark",
+            textColor: "text-white",
+          },
+          linksAlignment: "right",
+        },
+        secondaryFooter: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+          linksAlignment: "left",
+        },
+        maxWidth: "theme",
+      },
+      analytics: { scope: "expandedFooter" },
+    },
+    version: 39,
+  },
 ];
 
 const socialLinkTestCases = [
@@ -579,7 +665,7 @@ const socialLinkTestCases = [
 
 describe("ExpandedFooter", async () => {
   const puckConfig: Config = {
-    components: { ExpandedFooter },
+    components: { ExpandedFooter, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
