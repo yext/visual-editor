@@ -527,6 +527,7 @@
   "showMore": "Pokažite više",
   "siteColors": "Boje mjesta",
   "slots": {
+    "directoryCard": "Kartica imenika",
     "insightCard": "Kartica uvida",
     "insightCards": "Kartice uvida",
     "nearbyLocationCards": "Kartice obližnjih lokacija",

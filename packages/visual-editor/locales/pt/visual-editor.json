@@ -527,6 +527,7 @@
   "showMore": "Mostre mais",
   "siteColors": "Cores do site",
   "slots": {
+    "directoryCard": "Cartão de diretório",
     "insightCard": "Cartão de insights",
     "insightCards": "Cartões de insights",
     "nearbyLocationCards": "Cartões de localização próximos",

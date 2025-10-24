@@ -527,6 +527,7 @@
   "showMore": "Arată mai mult",
   "siteColors": "Culorile site -ului",
   "slots": {
+    "directoryCard": "Card de director",
     "insightCard": "Card de perspectivă",
     "insightCards": "Carduri Insight",
     "nearbyLocationCards": "Carduri de locație în apropiere",

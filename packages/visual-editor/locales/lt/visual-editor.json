@@ -527,6 +527,7 @@
   "showMore": "Parodyk daugiau",
   "siteColors": "Svetainės spalvos",
   "slots": {
+    "directoryCard": "Katalogo kortelė",
     "insightCard": "Įžvalgos kortelė",
     "insightCards": "Įžvalgos kortelės",
     "nearbyLocationCards": "Netoliese esančios vietos kortelės",

@@ -526,6 +526,7 @@
   "showMore": "Zeigen Sie mehr",
   "siteColors": "Standortfarben",
   "slots": {
+    "directoryCard": "Verzeichniskarte",
     "insightCard": "Insight-Karte",
     "insightCards": "Einblickkarten",
     "nearbyLocationCards": "Karten mit Standorten in der Nähe",

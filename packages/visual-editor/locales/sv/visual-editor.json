@@ -527,6 +527,7 @@
   "showMore": "Visa mer",
   "siteColors": "Platsfärger",
   "slots": {
+    "directoryCard": "Katalogkort",
     "insightCard": "Insiktskort",
     "insightCards": "Insiktskort",
     "nearbyLocationCards": "Närliggande platskort",

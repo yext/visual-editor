@@ -526,6 +526,7 @@
   "showMore": "Montrer plus",
   "siteColors": "Couleurs du site",
   "slots": {
+    "directoryCard": "Carte d'annuaire",
     "insightCard": "Carte d'information",
     "insightCards": "Cartes perspicaces",
     "nearbyLocationCards": "Cartes de localisation à proximité",

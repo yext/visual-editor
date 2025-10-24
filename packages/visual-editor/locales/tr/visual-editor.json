@@ -527,6 +527,7 @@
   "showMore": "Daha Fazla Göster",
   "siteColors": "Site Renkleri",
   "slots": {
+    "directoryCard": "Rehber Kartı",
     "insightCard": "İçgörü Kartı",
     "insightCards": "İçgörü Kartları",
     "nearbyLocationCards": "Yakındaki Konum Kartları",

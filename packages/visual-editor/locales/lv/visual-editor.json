@@ -527,6 +527,7 @@
   "showMore": "Parādīt vairāk",
   "siteColors": "Vietnes krāsas",
   "slots": {
+    "directoryCard": "Direktoriju karte",
     "insightCard": "Ieskatu karte",
     "insightCards": "Ieskatu kartes",
     "nearbyLocationCards": "Tuvumā esošās atrašanās vietu kartes",

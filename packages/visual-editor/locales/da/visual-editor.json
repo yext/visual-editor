@@ -527,6 +527,7 @@
   "showMore": "Vis mere",
   "siteColors": "Webstedsfarver",
   "slots": {
+    "directoryCard": "Vejviserkort",
     "insightCard": "Insight Card",
     "insightCards": "Insight Cards",
     "nearbyLocationCards": "Lokalitetskort i nærheden",

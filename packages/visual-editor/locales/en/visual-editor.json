@@ -526,6 +526,7 @@
   "showMore": "Show more",
   "siteColors": "Site Colors",
   "slots": {
+    "directoryCard": "Directory Card",
     "insightCard": "Insight Card",
     "insightCards": "Insight Cards",
     "nearbyLocationCards": "Nearby Location Cards",

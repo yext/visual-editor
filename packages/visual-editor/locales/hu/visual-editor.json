@@ -527,6 +527,7 @@
   "showMore": "Mutasson többet",
   "siteColors": "Helyszínek",
   "slots": {
+    "directoryCard": "Címtárkártya",
     "insightCard": "Insight Card",
     "insightCards": "Betekintéskártyák",
     "nearbyLocationCards": "Közeli helykártyák",

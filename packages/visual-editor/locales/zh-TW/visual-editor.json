@@ -527,6 +527,7 @@
   "showMore": "顯示更多",
   "siteColors": "站點顏色",
   "slots": {
+    "directoryCard": "名錄卡",
     "insightCard": "洞察卡",
     "insightCards": "洞察卡",
     "nearbyLocationCards": "附近位置卡",
