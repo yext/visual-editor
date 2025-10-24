@@ -92,9 +92,3 @@
 .CodeField:hover {
   border-color: var(--puck-color-grey-05);
 }
-
-input[type="checkbox"] {
-  accent-color: hsl(
-    from var(--colors-palette-primary) h s 20
-  ) !important; /* palette-primary-dark */
-}
