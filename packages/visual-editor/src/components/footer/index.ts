@@ -26,3 +26,7 @@ export {
   FooterExpandedLinksWrapper,
   type FooterExpandedLinksWrapperProps,
 } from "./FooterExpandedLinksWrapper.tsx";
+export {
+  CopyrightMessageSlot,
+  type CopyrightMessageSlotProps,
+} from "./CopyrightMessageSlot.tsx";

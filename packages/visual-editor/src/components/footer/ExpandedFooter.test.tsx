@@ -681,7 +681,7 @@ const tests: ComponentTest[] = [
         ],
         CopyrightSlot: [
           {
-            type: "BodyTextSlot",
+            type: "CopyrightMessageSlot",
             props: {
               data: {
                 text: {
@@ -692,9 +692,6 @@ const tests: ComponentTest[] = [
                   },
                   constantValueEnabled: true,
                 },
-              },
-              styles: {
-                variant: "xs",
               },
             },
           },

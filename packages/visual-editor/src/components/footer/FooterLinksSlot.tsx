@@ -72,7 +72,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 
 export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
   {
-    label: msg("components.footerLinksSlot", "Footer Links"),
+    label: msg("components.footerLinksSlot", "Links"),
     fields: {
       data: YextField(msg("fields.data", "Data"), {
         type: "object",

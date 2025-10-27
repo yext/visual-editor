@@ -104,6 +104,10 @@ import {
   FooterExpandedLinksWrapper,
   FooterExpandedLinksWrapperProps,
 } from "../footer/FooterExpandedLinksWrapper.tsx";
+import {
+  CopyrightMessageSlot,
+  CopyrightMessageSlotProps,
+} from "../footer/CopyrightMessageSlot.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -120,6 +124,7 @@ export interface SlotsCategoryProps {
   FooterLinksSlot: FooterLinksSlotProps;
   FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
   FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
+  CopyrightMessageSlot: CopyrightMessageSlotProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;
@@ -174,6 +179,10 @@ export const SlotsCategoryComponents = {
   },
   FooterExpandedLinksWrapper: {
     ...FooterExpandedLinksWrapper,
+    permissions: lockedPermissions,
+  },
+  CopyrightMessageSlot: {
+    ...CopyrightMessageSlot,
     permissions: lockedPermissions,
   },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },

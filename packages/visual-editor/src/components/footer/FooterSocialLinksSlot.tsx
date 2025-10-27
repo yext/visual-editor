@@ -91,7 +91,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
 export const FooterSocialLinksSlot: ComponentConfig<{
   props: FooterSocialLinksSlotProps;
 }> = {
-  label: msg("components.footerSocialLinksSlot", "Footer Social Links"),
+  label: msg("components.footerSocialLinksSlot", "Social Links"),
   fields: {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",

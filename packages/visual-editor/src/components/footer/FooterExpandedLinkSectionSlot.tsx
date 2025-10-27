@@ -82,7 +82,7 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
 }> = {
   label: msg(
     "components.footerExpandedLinkSectionSlot",
-    "Footer Expanded Link Section"
+    "Expanded Link Section"
   ),
   fields: {
     data: YextField(msg("fields.data", "Data"), {
@@ -116,8 +116,11 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
             label: { en: "Footer Link", hasLocalizedValue: "true" },
             link: "#",
           },
-          getItemSummary: (item, index) =>
-            (item.label?.en as string) || `Link ${(index ?? 0) + 1}`,
+          getItemSummary: (item, index) => {
+            const label =
+              typeof item.label === "string" ? item.label : item.label?.en;
+            return label || `Link ${(index ?? 0) + 1}`;
+          },
         }),
       },
     }),

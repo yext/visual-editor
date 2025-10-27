@@ -35,10 +35,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
 export const FooterExpandedLinksWrapper: ComponentConfig<{
   props: FooterExpandedLinksWrapperProps;
 }> = {
-  label: msg(
-    "components.footerExpandedLinksWrapper",
-    "Footer Expanded Links Wrapper"
-  ),
+  label: msg("components.footerExpandedLinksWrapper", "Expanded Links Wrapper"),
   fields: {
     data: YextField(
       msg("fields.expandedFooterLinks", "Expanded Footer Links"),
@@ -73,16 +70,22 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
               label: { en: "Footer Link", hasLocalizedValue: "true" },
               link: "#",
             },
-            getItemSummary: (item, index) =>
-              (item.label?.en as string) || `Link ${(index ?? 0) + 1}`,
+            getItemSummary: (item, index) => {
+              const label =
+                typeof item.label === "string" ? item.label : item.label?.en;
+              return label || `Link ${(index ?? 0) + 1}`;
+            },
           }),
         },
         defaultItemProps: {
           label: { en: "Footer Section", hasLocalizedValue: "true" },
           links: [],
         },
-        getItemSummary: (item, index) =>
-          (item.label?.en as string) || `Section ${(index ?? 0) + 1}`,
+        getItemSummary: (item, index) => {
+          const label =
+            typeof item.label === "string" ? item.label : item.label?.en;
+          return label || `Section ${(index ?? 0) + 1}`;
+        },
       }
     ),
     slots: {

@@ -411,7 +411,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
               utilityImages: [],
             },
             styles: {
-              width: 60,
+              width: 0,
               aspectRatio: 1,
             },
           },
@@ -604,7 +604,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
       ],
       CopyrightSlot: [
         {
-          type: "BodyTextSlot",
+          type: "CopyrightMessageSlot",
           props: {
             data: {
               text: {
@@ -612,9 +612,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                 constantValue: { en: "", hasLocalizedValue: "true" },
                 constantValueEnabled: true,
               },
-            },
-            styles: {
-              variant: "xs",
             },
           },
         },

@@ -158,7 +158,7 @@ export const expandedFooterSlots: Migration = {
           ],
           CopyrightSlot: [
             {
-              type: "BodyTextSlot",
+              type: "CopyrightMessageSlot",
               props: {
                 data: {
                   text: {
@@ -169,9 +169,6 @@ export const expandedFooterSlots: Migration = {
                     },
                     constantValueEnabled: true,
                   },
-                },
-                styles: {
-                  variant: "xs",
                 },
               },
             },
