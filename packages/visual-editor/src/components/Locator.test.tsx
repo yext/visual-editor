@@ -100,7 +100,7 @@ const tests: ComponentTest[] = [
       }),
     },
     props: {},
-    version: migrationRegistry.length,
+    version: 10,
   },
   {
     name: "version 10 non-default props",
@@ -139,7 +139,7 @@ const tests: ComponentTest[] = [
       mapStyle: "mapbox://styles/mapbox/dark-v11",
       openNowButton: true,
     },
-    version: migrationRegistry.length,
+    version: 10,
   },
   {
     name: "version 22 non-default props",
@@ -180,7 +180,7 @@ const tests: ComponentTest[] = [
         openNowButton: true,
       },
     },
-    version: migrationRegistry.length,
+    version: 22,
   },
 ];
 
