@@ -12,6 +12,7 @@ import {
   ExpandedHeader,
   migrate,
   migrationRegistry,
+  SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
@@ -48,7 +49,12 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "https://placehold.co/100",
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -107,7 +113,12 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "https://placehold.co/100",
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -169,7 +180,12 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "",
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
           links: [],
           primaryCTA: {
             label: { en: "", hasLocalizedValue: "true" },
@@ -216,7 +232,12 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "https://placehold.co/100",
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -274,7 +295,12 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "https://placehold.co/100",
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -333,7 +359,12 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "https://placehold.co/100",
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -393,7 +424,12 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "https://placehold.co/100",
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -445,13 +481,14 @@ const tests: ComponentTest[] = [
 
 describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
-    components: { ExpandedHeader, BannerSection },
+    components: { ExpandedHeader, BannerSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
