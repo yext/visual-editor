@@ -277,19 +277,28 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
         {/** Desktop left footer logos and icons / Mobile top footer logo */}
         <div
           className={themeManagerCn(
-            `flex flex-col gap-6 md:gap-6`,
-            primaryLinksAlignment === "left" ? `md:hidden` : `items-start`
+            `flex flex-col gap-6 md:gap-6 items-start`,
+            primaryLinksAlignment === "left" ? `md:hidden` : ``
           )}
         >
-          <slots.LogoSlot style={{ height: "auto" }} allow={[]} />
+          <slots.LogoSlot
+            style={{ height: "auto", maxWidth: "max-content" }}
+            allow={[]}
+          />
           <div
             className={themeManagerCn(
-              "space-y-6",
-              puck.isEditing ? "" : "hidden md:block"
+              "flex flex-col gap-6 items-start",
+              puck.isEditing ? "" : "hidden md:flex"
             )}
           >
-            <slots.SocialLinksSlot style={{ height: "auto" }} allow={[]} />
-            <slots.UtilityImagesSlot style={{ height: "auto" }} allow={[]} />
+            <slots.SocialLinksSlot
+              style={{ height: "auto", maxWidth: "max-content" }}
+              allow={[]}
+            />
+            <slots.UtilityImagesSlot
+              style={{ height: "auto", maxWidth: "max-content" }}
+              allow={[]}
+            />
           </div>
         </div>
         {expandedFooter ? (
@@ -307,22 +316,39 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
         {!puck.isEditing && (
           <div
             className={themeManagerCn(
-              `flex flex-col gap-6 md:gap-6 hidden sm:block`,
-              primaryLinksAlignment === "left" ? `items-end` : `md:hidden`
+              `flex flex-col gap-6 md:gap-6 hidden sm:flex`,
+              primaryLinksAlignment === "left"
+                ? `items-end`
+                : `items-start md:hidden`
             )}
           >
-            <slots.LogoSlot style={{ height: "auto" }} allow={[]} />
-            <div className="hidden md:block space-y-6">
-              <slots.SocialLinksSlot style={{ height: "auto" }} allow={[]} />
-              <slots.UtilityImagesSlot style={{ height: "auto" }} allow={[]} />
+            <slots.LogoSlot
+              style={{ height: "auto", maxWidth: "max-content" }}
+              allow={[]}
+            />
+            <div className="hidden md:flex flex-col gap-6 items-start">
+              <slots.SocialLinksSlot
+                style={{ height: "auto", maxWidth: "max-content" }}
+                allow={[]}
+              />
+              <slots.UtilityImagesSlot
+                style={{ height: "auto", maxWidth: "max-content" }}
+                allow={[]}
+              />
             </div>
           </div>
         )}
         {/** Mobile footer icons and utility images */}
         {!puck.isEditing && (
-          <div className="md:hidden block space-y-6">
-            <slots.SocialLinksSlot style={{ height: "auto" }} allow={[]} />
-            <slots.UtilityImagesSlot style={{ height: "auto" }} allow={[]} />
+          <div className="md:hidden flex flex-col gap-6 items-start">
+            <slots.SocialLinksSlot
+              style={{ height: "auto", maxWidth: "max-content" }}
+              allow={[]}
+            />
+            <slots.UtilityImagesSlot
+              style={{ height: "auto", maxWidth: "max-content" }}
+              allow={[]}
+            />
           </div>
         )}
       </PageSection>
@@ -332,7 +358,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
           verticalPadding={"none"}
           background={secondaryBackgroundColor}
           maxWidth={maxWidth}
-          className={`py-4 sm:py-6 flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"}`}
+          className={`py-4 sm:py-6 flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"} min-h-[60px]`}
         >
           <slots.SecondaryLinksWrapperSlot
             style={{ height: "auto" }}
@@ -360,7 +386,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
         expandedFooter: false,
       },
       secondaryFooter: {
-        show: true,
+        show: false,
       },
     },
     slots: {

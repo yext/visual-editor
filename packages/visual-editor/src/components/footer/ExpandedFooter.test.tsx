@@ -548,7 +548,7 @@ const tests: ComponentTest[] = [
     version: 20,
   },
   {
-    name: "version 39 props with all slots",
+    name: "version 38 props with all slots",
     document: {},
     props: {
       data: {
@@ -724,7 +724,7 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 39,
+    version: 38,
   },
 ];
 

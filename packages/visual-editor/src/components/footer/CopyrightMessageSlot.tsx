@@ -25,33 +25,29 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
-  const text = resolveComponentData(data.text, i18n.language, streamDocument);
+  const resolvedText = resolveComponentData(
+    data.text,
+    i18n.language,
+    streamDocument
+  );
 
-  // Show EntityField if there's any content (including empty string after resolving)
-  let hasContent = false;
-  if (data.text.constantValueEnabled) {
-    const val = data.text.constantValue;
-    hasContent =
-      typeof val === "string"
-        ? val !== undefined
-        : val && "en" in val && val.en !== undefined;
-  } else {
-    hasContent = !!data.text.field;
+  // In edit mode, show EntityField if there's content, otherwise show placeholder
+  if (puck.isEditing) {
+    return resolvedText ? (
+      <EntityField
+        displayName={pt("copyrightMessage", "Copyright Message")}
+        fieldId={data.text.field}
+        constantValueEnabled={data.text.constantValueEnabled}
+      >
+        <p className="text-xs">{resolvedText}</p>
+      </EntityField>
+    ) : (
+      <div className="h-[20px] min-w-[100px]" />
+    );
   }
 
-  return hasContent ? (
-    <EntityField
-      displayName={pt("copyrightMessage", "Copyright Message")}
-      fieldId={data.text.field}
-      constantValueEnabled={data.text.constantValueEnabled}
-    >
-      <p className="text-xs">{text || ""}</p>
-    </EntityField>
-  ) : puck.isEditing ? (
-    <div className="h-[20px] min-w-[100px]" />
-  ) : (
-    <></>
-  );
+  // On live page, only show if there's content
+  return resolvedText ? <p className="text-xs">{resolvedText}</p> : <></>;
 };
 
 export const CopyrightMessageSlot: ComponentConfig<{
@@ -59,15 +55,21 @@ export const CopyrightMessageSlot: ComponentConfig<{
 }> = {
   label: msg("components.copyrightMessageSlot", "Copyright Message"),
   fields: {
-    data: YextField(msg("fields.data", "Data"), {
+    data: {
+      label: msg("fields.data", "Data"),
       type: "object",
       objectFields: {
-        text: YextField(msg("fields.copyrightMessage", "Copyright Message"), {
-          type: "translatableString",
-          filter: { types: ["type.string"] },
-        }),
+        text: YextField<any, TranslatableString>(
+          msg("fields.copyrightMessage", "Copyright Message"),
+          {
+            type: "entityField",
+            filter: {
+              types: ["type.string"],
+            },
+          }
+        ),
       },
-    }),
+    },
   },
   defaultProps: {
     data: {

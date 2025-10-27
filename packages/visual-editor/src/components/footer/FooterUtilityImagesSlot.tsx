@@ -23,34 +23,24 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
 > = (props) => {
   const { data, styles, puck } = props;
 
-  if (!data.utilityImages || data.utilityImages.length === 0) {
-    return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
-  }
-
   const width = styles.width || 60;
   const aspectRatio = styles.aspectRatio || 1;
 
+  // Filter to only valid images with URLs
+  const validImages = (data.utilityImages || []).filter(
+    (item) => item.image?.url
+  );
+
+  if (validImages.length === 0) {
+    return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
+  }
+
   return (
-    <div className="flex gap-8 flex-wrap">
-      {data.utilityImages.map((item, index) => {
-        const imageData = item.image;
-
-        if (!imageData?.url) {
-          return puck.isEditing ? (
-            <div
-              key={index}
-              style={{
-                width: `${width}px`,
-                aspectRatio: String(aspectRatio),
-              }}
-              className="bg-gray-200"
-            />
-          ) : null;
-        }
-
+    <div className="flex gap-8" style={{ width: "fit-content" }}>
+      {validImages.map((item, index) => {
         const imgElement = (
           <Image
-            image={imageData}
+            image={item.image}
             aspectRatio={aspectRatio}
             width={width}
             className="object-contain"

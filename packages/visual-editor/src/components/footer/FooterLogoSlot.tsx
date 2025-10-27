@@ -53,13 +53,15 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
     />
   );
 
-  return data.linkTarget ? (
+  const content = data.linkTarget ? (
     <MaybeLink href={data.linkTarget} className="block">
       {imgElement}
     </MaybeLink>
   ) : (
     imgElement
   );
+
+  return <div style={{ width: "fit-content" }}>{content}</div>;
 };
 
 export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
