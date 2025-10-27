@@ -57,6 +57,7 @@
   "closed": "Suljettu",
   "closesAt": "Sulkeutuu jhk",
   "components": {
+    "DirectoryGrid": "Hakemistoruudukko",
     "Video": "Video",
     "address": "Osoite",
     "bannerSection": "Banneriosa",
@@ -526,6 +527,7 @@
   "showMore": "Näyttää enemmän",
   "siteColors": "Sivuston värit",
   "slots": {
+    "directoryCard": "Hakemistokortti",
     "insightCard": "Oivalluskortti",
     "insightCards": "Insight-kortit",
     "nearbyLocationCards": "Läheiset sijaintikortit",

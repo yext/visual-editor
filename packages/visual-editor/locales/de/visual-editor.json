@@ -57,6 +57,7 @@
   "closed": "Geschlossen",
   "closesAt": "Schließt bei",
   "components": {
+    "DirectoryGrid": "Verzeichnisraster",
     "Video": "Video",
     "address": "Adresse",
     "bannerSection": "Bannerabschnitt",
@@ -525,6 +526,7 @@
   "showMore": "Zeigen Sie mehr",
   "siteColors": "Standortfarben",
   "slots": {
+    "directoryCard": "Verzeichniskarte",
     "insightCard": "Insight-Karte",
     "insightCards": "Einblickkarten",
     "nearbyLocationCards": "Karten mit Standorten in der Nähe",
