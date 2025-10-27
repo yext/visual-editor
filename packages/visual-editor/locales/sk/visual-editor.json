@@ -57,6 +57,7 @@
   "closed": "ZATVORENÉ",
   "closesAt": "Uzatvára sa",
   "components": {
+    "DirectoryGrid": "Mriežka adresára",
     "Video": "Video",
     "address": "Osloviť",
     "bannerSection": "Banner",
@@ -538,6 +539,7 @@
   "showMore": "Ukázať viac",
   "siteColors": "Farby stránok",
   "slots": {
+    "directoryCard": "Karta adresára",
     "insightCard": "Karta",
     "insightCards": "Karty prehľadov",
     "nearbyLocationCards": "Karty polohy v okolí",

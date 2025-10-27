@@ -57,6 +57,7 @@
   "closed": "关闭",
   "closesAt": "关闭",
   "components": {
+    "DirectoryGrid": "目录网格",
     "Video": "视频",
     "address": "地址",
     "bannerSection": "横幅部分",
@@ -538,6 +539,7 @@
   "showMore": "显示更多",
   "siteColors": "站点颜色",
   "slots": {
+    "directoryCard": "名录卡",
     "insightCard": "洞察卡",
     "insightCards": "洞察卡",
     "nearbyLocationCards": "附近位置卡",

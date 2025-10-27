@@ -57,6 +57,7 @@
   "closed": "Slēgts",
   "closesAt": "Aizveras plkst",
   "components": {
+    "DirectoryGrid": "Direktoriju režģis",
     "Video": "Video",
     "address": "Uzruna",
     "bannerSection": "Reklāmkarogu nodaļa",
@@ -538,6 +539,7 @@
   "showMore": "Parādīt vairāk",
   "siteColors": "Vietnes krāsas",
   "slots": {
+    "directoryCard": "Direktoriju karte",
     "insightCard": "Ieskatu karte",
     "insightCards": "Ieskatu kartes",
     "nearbyLocationCards": "Tuvumā esošās atrašanās vietu kartes",

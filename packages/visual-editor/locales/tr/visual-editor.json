@@ -57,6 +57,7 @@
   "closed": "Kapalı",
   "closesAt": "Kapanır",
   "components": {
+    "DirectoryGrid": "Dizin Izgarası",
     "Video": "Video",
     "address": "Adres",
     "bannerSection": "Banner bölümü",
@@ -538,6 +539,7 @@
   "showMore": "Daha Fazla Göster",
   "siteColors": "Site Renkleri",
   "slots": {
+    "directoryCard": "Rehber Kartı",
     "insightCard": "İçgörü Kartı",
     "insightCards": "İçgörü Kartları",
     "nearbyLocationCards": "Yakındaki Konum Kartları",

@@ -51,7 +51,7 @@ export const eventSectionSlots: Migration = {
           return {
             type: "EventCard",
             props: {
-              id: "EventCard-migrated-" + i,
+              id: `${props.id}-Card-${i}`,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
                 truncateDescription: props.styles.cards.truncateDescription,

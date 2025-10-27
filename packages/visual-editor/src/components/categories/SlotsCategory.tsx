@@ -108,11 +108,27 @@ import {
   CopyrightMessageSlot,
   CopyrightMessageSlotProps,
 } from "../footer/CopyrightMessageSlot.tsx";
+import {
+  DirectoryCard,
+  DirectoryCardProps,
+} from "../directory/DirectoryCard.tsx";
+import {
+  DirectoryGrid,
+  DirectoryGridProps,
+} from "../directory/DirectoryWrapper.tsx";
+import { Phone, PhoneProps } from "../contentBlocks/Phone.tsx";
+import {
+  BreadcrumbsSection,
+  BreadcrumbsSectionProps,
+} from "../pageSections/Breadcrumbs.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
+  BreadcrumbsSlot: BreadcrumbsSectionProps;
   BodyTextSlot: BodyTextProps;
   CTASlot: CTAWrapperProps;
+  DirectoryCard: DirectoryCardProps;
+  DirectoryGrid: DirectoryGridProps;
   EmailsSlot: EmailsProps;
   EventCard: EventCardProps;
   EventCardsWrapper: EventCardsWrapperProps;
@@ -134,6 +150,7 @@ export interface SlotsCategoryProps {
   InsightCard: InsightCardProps;
   NearbyLocationCardsWrapper: NearbyLocationCardsWrapperProps;
   PhoneNumbersSlot: PhoneListProps;
+  PhoneSlot: PhoneProps;
   PhotoGalleryWrapper: PhotoGalleryWrapperProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
@@ -157,7 +174,10 @@ const lockedPermissions = {
 export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
+  BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
   CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
+  DirectoryCard: { ...DirectoryCard, permissions: lockedPermissions },
+  DirectoryGrid: { ...DirectoryGrid, permissions: lockedPermissions },
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   EventCard: { ...EventCard, permissions: lockedPermissions },
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
@@ -200,6 +220,7 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
+  PhoneSlot: { ...Phone, permissions: lockedPermissions },
   PhotoGalleryWrapper: {
     ...PhotoGalleryWrapper,
     permissions: lockedPermissions,

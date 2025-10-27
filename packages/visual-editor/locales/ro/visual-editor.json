@@ -57,6 +57,7 @@
   "closed": "Închis",
   "closesAt": "Se închide la",
   "components": {
+    "DirectoryGrid": "Director Grid",
     "Video": "Video",
     "address": "Adresa",
     "bannerSection": "Secțiunea Banner",
@@ -538,6 +539,7 @@
   "showMore": "Arată mai mult",
   "siteColors": "Culorile site -ului",
   "slots": {
+    "directoryCard": "Card de director",
     "insightCard": "Card de perspectivă",
     "insightCards": "Carduri Insight",
     "nearbyLocationCards": "Carduri de locație în apropiere",

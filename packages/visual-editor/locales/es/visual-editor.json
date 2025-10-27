@@ -57,6 +57,7 @@
   "closed": "Cerrado",
   "closesAt": "Cierra",
   "components": {
+    "DirectoryGrid": "Cuadrícula de directorio",
     "Video": "Video",
     "address": "DIRECCIÓN",
     "bannerSection": "Banner",
@@ -537,6 +538,7 @@
   "showMore": "Mostrar más",
   "siteColors": "Colores del sitio",
   "slots": {
+    "directoryCard": "Tarjeta de directorio",
     "insightCard": "Tarjeta de información",
     "insightCards": "Tarjetas de información",
     "nearbyLocationCards": "Tarjetas de ubicación cercana",
