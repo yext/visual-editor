@@ -48,15 +48,15 @@ interface PageSectionCategoryProps {
 
 interface ExpandedHeaderProps {
   /**
-   * This object contains all the content for both header tiers.
-   * @propCategory Data Props
-   */
-  data: ExpandedHeaderData;
-  /**
    * This object contains properties for customizing the appearance of both header tiers.
    * @propCategory Style Props
    */
   styles: ExpandedHeaderStyles;
+  /** @internal */
+  slots: {
+    PrimaryHeaderSlot: Slot;
+    SecondaryHeaderSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -510,45 +510,7 @@ interface VideoSectionProps {
   liveVisibility: boolean;
 }
 
-interface ExpandedHeaderData {
-  /** Content for the main primary header bar. */
-  primaryHeader: {
-    /** The main logo (top left) */
-    logo: AssetImageType;
-    /** The links to display in the primary header */
-    links: TranslatableCTA[];
-    /** Content for the first CTA (top right) */
-    primaryCTA?: TranslatableCTA;
-    /** Whether to show or hide the primary CTA */
-    showPrimaryCTA: boolean;
-    /** Content for the second CTA (top right) */
-    secondaryCTA?: TranslatableCTA;
-    /** Whether to show or hide the secondary CTA */
-    showSecondaryCTA: boolean;
-  };
-  /** Content for the secondary header (above the main header). */
-  secondaryHeader: {
-    /** Whether to show or hide the secondary header */
-    show: boolean;
-    /** Whether to include the locale dropdown for multi-locale pages */
-    showLanguageDropdown: boolean;
-    /** The links to display in the secondary header */
-    secondaryLinks: TranslatableCTA[];
-  };
-}
-
 interface ExpandedHeaderStyles {
-  /** Styling for the main, primary header bar. */
-  primaryHeader: {
-    logo: ImageStylingProps;
-    backgroundColor?: BackgroundStyle;
-    primaryCtaVariant: CTAVariant;
-    secondaryCtaVariant: CTAVariant;
-  };
-  /** Styling for the secondary header (top bar). */
-  secondaryHeader: {
-    backgroundColor?: BackgroundStyle;
-  };
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
   /** Whether the header is "sticky" or not */
@@ -793,6 +755,16 @@ interface StaticMapStyles {
   mapStyle: string;
 }
 
+interface PageSectionProps
+  extends VariantProps<typeof maxWidthVariants>,
+    React.HTMLAttributes<HTMLDivElement> {
+  background?: BackgroundStyle;
+  verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
+  as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
+  outerClassName?: string;
+  outerStyle?: React.CSSProperties;
+}
+
 type AssetImageType = Omit<ImageType, "alternateText"> & {
   alternateText?: TranslatableString;
   assetImage?: ImageContentData;
@@ -808,39 +780,18 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   link: TranslatableString;
 };
 
+/**
+ * A string that can be translated for different locales.
+ * @ai This should always be the LocalizedValues type
+ */
+type TranslatableString = string | LocalizedValues;
+
 /** Props for displaying an image */
 interface ImageStylingProps {
   /** The aspect ratio of the image */
   aspectRatio: number;
   width?: number;
 }
-
-/**
- * The different visual variants for CTA buttons.
- * "primary": the default button style. A button filled with the primary theme color.
- * "secondary": an outlined button style. A button with a border in the primary theme color and transparent background.
- * "link": a text link style. A button with no border or background, just a hyperlink in the link theme color.
- * "directoryLink": a text link style optimized for directory listings.
- * "headerFooterMainLink": a text link style optimized for main links in the header and footer.
- * "headerFooterSecondaryLink": a text link style optimized for secondary links in the header and footer.
- */
-type CTAVariant = ButtonProps["variant"];
-
-interface PageSectionProps
-  extends VariantProps<typeof maxWidthVariants>,
-    React.HTMLAttributes<HTMLDivElement> {
-  background?: BackgroundStyle;
-  verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
-  as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
-  outerClassName?: string;
-  outerStyle?: React.CSSProperties;
-}
-
-/**
- * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
- */
-type TranslatableString = string | LocalizedValues;
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 type YextEntityField<T> = {
@@ -895,12 +846,6 @@ type ImageContentData = {
   sourceUrl?: string;
   altText?: string;
 };
-
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
 type LocalizedValues = {
