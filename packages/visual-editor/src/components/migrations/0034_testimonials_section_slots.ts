@@ -34,7 +34,7 @@ export const testimonialsSectionSlots: Migration = {
           return {
             type: "TestimonialCard",
             props: {
-              id: `TestimonialCard-${props.id}-${i}`,
+              id: `${props.id}-Card-${i}`,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },
