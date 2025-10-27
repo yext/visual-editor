@@ -30,6 +30,7 @@ import {
   ImageWrapperProps,
   VideoProps,
   i18nComponentsInstance,
+  getDefaultRTF,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 
@@ -296,7 +297,9 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               text: {
                 field: "",
                 constantValue: {
-                  en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
+                  en: getDefaultRTF(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
+                  ),
                   hasLocalizedValue: "true",
                 },
                 constantValueEnabled: true,

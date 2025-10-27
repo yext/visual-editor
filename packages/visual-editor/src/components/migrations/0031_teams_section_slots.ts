@@ -36,7 +36,7 @@ export const teamsSectionSlots: Migration = {
           return {
             type: "TeamCard",
             props: {
-              id: "TeamCard-migrated-" + i,
+              id: `${props.id}-Card-${i}`,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },

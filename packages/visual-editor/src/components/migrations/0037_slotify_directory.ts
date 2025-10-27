@@ -31,7 +31,7 @@ export const directorySlots: Migration = {
             return {
               type: "DirectoryCard",
               props: {
-                id: "DirectoryCard-migrated-" + i,
+                id: `${props.id}-Card-${i}`,
                 slots: {
                   HeadingSlot: [
                     {
