@@ -25,13 +25,13 @@ import mapboxPackageJson from "mapbox-gl/package.json";
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
 const tests: ComponentTest[] = [
   {
-    name: "default props with empty document",
+    name: "latest version default props with empty document",
     document: {},
     props: { ...LocatorComponent.defaultProps },
     version: migrationRegistry.length,
   },
   {
-    name: "default props",
+    name: "latest version default props",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -64,6 +64,47 @@ const tests: ComponentTest[] = [
       }),
     },
     props: { ...LocatorComponent.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
+    name: "latest version non-default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      mapStyle: "mapbox://styles/mapbox/dark-v11",
+      filters: {
+        openNowButton: true,
+      },
+    },
     version: migrationRegistry.length,
   },
   {
@@ -100,7 +141,7 @@ const tests: ComponentTest[] = [
       }),
     },
     props: { ...LocatorComponent.defaultProps },
-    version: migrationRegistry.length,
+    version: 10,
   },
   {
     name: "version 10 non-default props",
@@ -141,7 +182,7 @@ const tests: ComponentTest[] = [
         openNowButton: true,
       },
     },
-    version: migrationRegistry.length,
+    version: 10,
   },
 ];
 
