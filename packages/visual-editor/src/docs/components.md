@@ -89,6 +89,18 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## CopyrightMessageSlot
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                                             | Description | Default |
+| :----- | :----------------------------------------------- | :---------- | :------ |
+| `data` | `{ text: YextEntityField<TranslatableString>; }` |             |         |
+
+---
+
 ## CoreInfoSection
 
 The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization. Available on Location templates.
@@ -234,10 +246,10 @@ The Expanded Footer is a comprehensive, two-tiered site-wide component for large
 
 This object contains all the content for both footer tiers.
 
-| Prop                   | Type                                                                                                                                                                                                                                                                                                                                                                                      | Description                           | Default |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.primaryFooter`   | `{ logo: AssetImageType; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; xLink: string; utilityImages: { image: AssetImageType; linkTarget?: string; }[]; expandedFooter: boolean; footerLinks: TranslatableCTA[]; expandedFooterLinks: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` | Content for the primary footer bar.   |         |
-| `data.secondaryFooter` | `{ show: boolean; copyrightMessage: TranslatableString; secondaryFooterLinks: TranslatableCTA[]; }`                                                                                                                                                                                                                                                                                       | Content for the secondary header bar. |         |
+| Prop                   | Type                           | Description                           | Default |
+| :--------------------- | :----------------------------- | :------------------------------------ | :------ |
+| `data.primaryFooter`   | `{ expandedFooter: boolean; }` | Content for the primary footer bar.   |         |
+| `data.secondaryFooter` | `{ show: boolean; }`           | Content for the secondary footer bar. |         |
 
 #### Style Props
 
@@ -321,6 +333,84 @@ The background color for the entire footer section.
 | Prop              | Type              | Description                                         | Default              |
 | :---------------- | :---------------- | :-------------------------------------------------- | :------------------- |
 | `backgroundColor` | `BackgroundStyle` | The background color for the entire footer section. | `Background Color 1` |
+
+---
+
+## FooterExpandedLinkSectionSlot
+
+### Props
+
+#### Other Props
+
+| Prop    | Type                                                                                         | Description | Default |
+| :------ | :------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`  | `{ label: YextEntityField<TranslatableString>; links: YextEntityField<TranslatableCTA[]>; }` |             |         |
+| `index` | `number`                                                                                     |             |         |
+
+---
+
+## FooterExpandedLinksWrapper
+
+### Props
+
+#### Other Props
+
+| Prop    | Type                                                                          | Description | Default |
+| :------ | :---------------------------------------------------------------------------- | :---------- | :------ |
+| `data`  | `YextEntityField<{ label: TranslatableString; links: TranslatableCTA[]; }[]>` |             |         |
+| `slots` | `{ ExpandedSectionsSlot: Slot; }`                                             |             |         |
+
+---
+
+## FooterLinksSlot
+
+### Props
+
+#### Other Props
+
+| Prop              | Type                            | Description | Default |
+| :---------------- | :------------------------------ | :---------- | :------ |
+| `data`            | `{ links: TranslatableCTA[]; }` |             |         |
+| `eventNamePrefix` | `string`                        |             |         |
+| `variant`         | `"primary" \| "secondary"`      |             |         |
+
+---
+
+## FooterLogoSlot
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                                                                                                | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data`   | `{ image: { field: string; constantValue: AssetImageType; constantValueEnabled: boolean; }; linkTarget?: string; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                                                                         |             |         |
+
+---
+
+## FooterSocialLinksSlot
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                                                                                                                                                    | Description | Default |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data` | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
+
+---
+
+## FooterUtilityImagesSlot
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                                                    | Description | Default |
+| :------- | :---------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ utilityImages: { image: AssetImageType; linkTarget?: string; }[]; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                             |             |         |
 
 ---
 

@@ -80,13 +80,22 @@ interface ExpandedFooterProps {
    */
   styles: ExpandedFooterStyles;
   /** @internal */
+  slots: {
+    LogoSlot: Slot;
+    SocialLinksSlot: Slot;
+    UtilityImagesSlot: Slot;
+    PrimaryLinksWrapperSlot: Slot;
+    ExpandedLinksWrapperSlot: Slot;
+    SecondaryLinksWrapperSlot: Slot;
+    CopyrightSlot: Slot;
+  };
+  /** @internal */
   analytics: {
     scope?: string;
   };
   /**
    * Indicates which props should not be checked for missing translations.
-   * @internal
-   */
+   * @internal */
   ignoreLocaleWarning?: string[];
 }
 
@@ -558,39 +567,17 @@ interface ExpandedHeaderStyles {
 interface ExpandedFooterData {
   /** Content for the primary footer bar. */
   primaryFooter: {
-    logo: AssetImageType;
-    facebookLink: string;
-    instagramLink: string;
-    linkedInLink: string;
-    pinterestLink: string;
-    tiktokLink: string;
-    youtubeLink: string;
-    xLink: string;
-    /** Small images to show under the main logo */
-    utilityImages: {
-      image: AssetImageType;
-      linkTarget?: string;
-    }[];
     /**
      * Whether to expand the footer to show additional link categories.
      * expandedFooter: false uses a single row of footerLinks.
      * expandedFooter: true uses multiple columns of expandedFooterLinks.
      */
     expandedFooter: boolean;
-    /** Links for the default footer */
-    footerLinks: TranslatableCTA[];
-    /** Links for the expanded footer */
-    expandedFooterLinks: {
-      label: TranslatableString;
-      links: TranslatableCTA[];
-    }[];
   };
-  /** Content for the secondary header bar. */
+  /** Content for the secondary footer bar. */
   secondaryFooter: {
     /** Whether to hide or show the secondary footer */
     show: boolean;
-    copyrightMessage: TranslatableString;
-    secondaryFooterLinks: TranslatableCTA[];
   };
 }
 
@@ -836,12 +823,6 @@ interface PageSectionProps
   outerStyle?: React.CSSProperties;
 }
 
-/**
- * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
- */
-type TranslatableString = string | LocalizedValues;
-
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 type YextEntityField<T> = {
   /** The api name of the Yext field */
@@ -869,6 +850,12 @@ type YextEntityField<T> = {
 type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
+
+/**
+ * A string that can be translated for different locales.
+ * @ai This should always be the LocalizedValues type
+ */
+type TranslatableString = string | LocalizedValues;
 
 /** Data for the PromoSection */
 type PromoSectionType = {
@@ -902,11 +889,6 @@ interface ButtonProps
   asChild?: boolean;
 }
 
-/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
-type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
-
 /**
  * A rich text object with HTML and JSON (LexicalRichText) representations.
  * The HTML representation is used on the live page.
@@ -916,6 +898,11 @@ type RichText = {
   html?: string;
   json?: string;
 };
+
+/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
+type LocalizedValues = {
+  hasLocalizedValue: "true";
+} & Record<string, string>;
 
 type AssetVideo = {
   video: Video$1;
