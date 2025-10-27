@@ -57,6 +57,7 @@
   "closed": "Zamknięte",
   "closesAt": "Zamyka się",
   "components": {
+    "DirectoryGrid": "Siatka katalogów",
     "Video": "Wideo",
     "address": "Adres",
     "bannerSection": "Sekcja banerowa",
@@ -526,6 +527,7 @@
   "showMore": "Pokaż więcej",
   "siteColors": "Kolory strony",
   "slots": {
+    "directoryCard": "Karta katalogowa",
     "insightCard": "Karta Wglądu",
     "insightCards": "Karty Wglądu",
     "nearbyLocationCards": "Karty lokalizacji w pobliżu",

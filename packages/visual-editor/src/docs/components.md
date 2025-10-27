@@ -173,28 +173,13 @@ The Directory Page component serves as a navigational hub, displaying a list of 
 
 ### Props
 
-#### Data Props
-
-This object contains the content used by the component.
-
-| Prop                 | Type                                  | Description                                                        | Default                                       |
-| :------------------- | :------------------------------------ | :----------------------------------------------------------------- | :-------------------------------------------- |
-| `data.directoryRoot` | `TranslatableString`                  | The display label for the root link in the breadcrumbs navigation. | `"Directory Root" (constant)`                 |
-| `data.siteName`      | `YextEntityField<TranslatableString>` | The site name to display above the title.                          | `"" (empty string)`                           |
-| `data.title`         | `YextEntityField<TranslatableString>` | The title for the Directory Section.                               | `"[[name]]" (constant using embedded fields)` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                                | Type                                                                                                                        | Description                                                     | Default              |
-| :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`            | `BackgroundStyle`                                                                                                           | The main background color for the directory page content.       | `Background Color 1` |
-| `styles.breadcrumbsBackgroundColor` | `BackgroundStyle`                                                                                                           | A specific background color for the breadcrumbs navigation bar. | `Background Color 1` |
-| `styles.cards`                      | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }`                                                        | Style properties for directory cards.                           |                      |
-| `styles.hours`                      | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.                     |                      |
-| `styles.phoneNumberFormat`          | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards.              | `'domestic'`         |
-| `styles.phoneNumberLink`            | `boolean`                                                                                                                   | If "true", wraps phone numbers in a clickable "tel:" hyperlink. | `false`              |
+| Prop                     | Type              | Description                                               | Default              |
+| :----------------------- | :---------------- | :-------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The main background color for the directory page content. | `Background Color 1` |
 
 ---
 
@@ -524,10 +509,10 @@ The props for the Phone component
 
 #### Other Props
 
-| Prop     | Type                                                                              | Description | Default |
-| :------- | :-------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                 |             |         |
-| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; }` |             |         |
+| Prop     | Type                                                                                                     | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                        |             |         |
+| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; }` |             |         |
 
 ---
 
@@ -609,6 +594,32 @@ This object contains properties for customizing the component's appearance.
 | :----------------------- | :------------------ | :------------------------------------------------------------ | :------------------- |
 | `styles.backgroundColor` | `BackgroundStyle`   | The background color for the entire section.                  | `Background Color 1` |
 | `styles.orientation`     | `"left" \| "right"` | Positions the image to the left or right of the text content. | `'left'`             |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
+## ReviewsSection
+
+The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps. Available on Location templates.
+
+![Preview of the ReviewsSection component](<../components/testing/screenshots/ReviewsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data%20(after%20interactions).png>)
+
+### Props
+
+#### Style Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
