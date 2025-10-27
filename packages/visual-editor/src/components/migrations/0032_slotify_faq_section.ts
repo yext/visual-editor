@@ -36,7 +36,7 @@ export const faqsSectionSlots: Migration = {
           return {
             type: "FAQSlot",
             props: {
-              id: "FAQSlot-migrated-" + i,
+              id: `FAQSlot-${props.id}-${i}`,
               slots: {
                 QuestionSlot: [
                   {

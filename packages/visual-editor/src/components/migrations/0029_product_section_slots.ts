@@ -43,7 +43,7 @@ export const productSectionSlots: Migration = {
           return {
             type: "ProductCard",
             props: {
-              id: "ProductCard-migrated-" + i,
+              id: `ProductCard-${props.id}-${i}`,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },

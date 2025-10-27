@@ -36,7 +36,7 @@ export const insightSectionSlots: Migration = {
           return {
             type: "InsightCard",
             props: {
-              id: "InsightCard-migrated-" + i,
+              id: `InsightCard-${props.id}-${i}`,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },
