@@ -10,6 +10,7 @@ import {
   walkTree,
   ComponentDataOptionalId,
   FieldLabel,
+  createUsePuck,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -28,8 +29,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
+import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
 
 const devLogger = new DevLogger();
+const usePuck = createUsePuck();
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -360,6 +363,13 @@ export const InternalLayoutEditor = ({
           actionBar: ({ children, label }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
+            const itemSelectorState = usePuck(
+              (s) => s.appState.ui.itemSelector
+            );
+
+            React.useEffect(removeDuplicateImageActionBars, [
+              itemSelectorState,
+            ]);
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
