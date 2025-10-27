@@ -548,40 +548,137 @@ const tests: ComponentTest[] = [
     version: 20,
   },
   {
-    name: "version 39 props with copyright slot",
+    name: "version 39 props with all slots",
     document: {},
     props: {
       data: {
         primaryFooter: {
-          logo: {
-            url: testLogoUrl,
-            height: 100,
-            width: 100,
-            alternateText: { en: "Logo", hasLocalizedValue: "true" },
-          },
-          footerLinks: testFooterLinks,
-          xLink: "",
-          facebookLink: "",
-          instagramLink: "",
-          pinterestLink: "",
-          linkedInLink: "",
-          youtubeLink: "",
-          tiktokLink: "",
-          utilityImages: [],
           expandedFooter: false,
-          expandedFooterLinks: [
-            {
-              label: { en: "Footer Label", hasLocalizedValue: "true" },
-              links: testFooterLinks,
-            },
-          ],
         },
         secondaryFooter: {
           show: true,
-          secondaryFooterLinks: testFooterLinks,
         },
       },
       slots: {
+        LogoSlot: [
+          {
+            type: "FooterLogoSlot",
+            props: {
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: testLogoUrl,
+                    height: 100,
+                    width: 100,
+                    alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                width: 100,
+                aspectRatio: 1.78,
+              },
+            },
+          },
+        ],
+        SocialLinksSlot: [
+          {
+            type: "FooterSocialLinksSlot",
+            props: {
+              data: {
+                xLink: "",
+                facebookLink: "",
+                instagramLink: "",
+                linkedInLink: "",
+                pinterestLink: "",
+                tiktokLink: "",
+                youtubeLink: "",
+              },
+            },
+          },
+        ],
+        UtilityImagesSlot: [
+          {
+            type: "FooterUtilityImagesSlot",
+            props: {
+              data: {
+                utilityImages: [],
+              },
+              styles: {
+                width: 60,
+                aspectRatio: 1,
+              },
+            },
+          },
+        ],
+        PrimaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              data: {
+                links: testFooterLinks,
+              },
+              variant: "primary",
+              eventNamePrefix: "primary",
+            },
+          },
+        ],
+        ExpandedLinksWrapperSlot: [
+          {
+            type: "FooterExpandedLinksWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValue: [
+                  {
+                    label: { en: "Footer Label", hasLocalizedValue: "true" },
+                    links: testFooterLinks,
+                  },
+                ],
+                constantValueEnabled: true,
+              },
+              slots: {
+                ExpandedSectionsSlot: [
+                  {
+                    type: "FooterExpandedLinkSectionSlot",
+                    props: {
+                      data: {
+                        label: {
+                          field: "",
+                          constantValue: {
+                            en: "Footer Label",
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                        links: {
+                          field: "",
+                          constantValue: testFooterLinks,
+                          constantValueEnabled: true,
+                        },
+                      },
+                      index: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        SecondaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              data: {
+                links: testFooterLinks,
+              },
+              variant: "secondary",
+              eventNamePrefix: "secondary",
+            },
+          },
+        ],
         CopyrightSlot: [
           {
             type: "BodyTextSlot",

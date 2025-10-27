@@ -63,8 +63,9 @@ const FooterSocialLinksSlotInternal: PuckComponent<
     (link) => link.url && link.pattern.test(link.url)
   );
 
+  // Always show placeholder in editing mode, hide on live if empty
   if (validLinks.length === 0) {
-    return puck.isEditing ? <div className="h-10" /> : <></>;
+    return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
   return (

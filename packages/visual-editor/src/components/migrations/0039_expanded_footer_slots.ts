@@ -4,23 +4,158 @@ export const expandedFooterSlots: Migration = {
   ExpandedFooter: {
     action: "updated",
     propTransformation: (props) => {
-      const copyrightMessage = props.data.secondaryFooter?.copyrightMessage || {
-        en: "",
-        hasLocalizedValue: "true",
-      };
+      // Extract all data from primaryFooter
+      const {
+        logo,
+        xLink,
+        facebookLink,
+        instagramLink,
+        linkedInLink,
+        pinterestLink,
+        tiktokLink,
+        youtubeLink,
+        utilityImages,
+        footerLinks,
+        expandedFooterLinks,
+        expandedFooter,
+      } = props.data.primaryFooter || {};
 
-      // Remove copyrightMessage from data.secondaryFooter since it's now in a slot
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { copyrightMessage: _removed, ...restSecondaryFooter } =
+      // Extract data from secondaryFooter
+      const { secondaryFooterLinks, copyrightMessage, show } =
         props.data.secondaryFooter || {};
+
+      // Get logo styles
+      const logoWidth = props.styles?.primaryFooter?.logo?.width || 100;
+      const logoAspectRatio =
+        props.styles?.primaryFooter?.logo?.aspectRatio || 1.78;
+      const utilityImagesWidth =
+        props.styles?.primaryFooter?.utilityImages?.width || 60;
+      const utilityImagesAspectRatio =
+        props.styles?.primaryFooter?.utilityImages?.aspectRatio || 1;
 
       return {
         ...props,
         data: {
           ...props.data,
-          secondaryFooter: restSecondaryFooter,
+          primaryFooter: {
+            expandedFooter: expandedFooter ?? false,
+          },
+          secondaryFooter: {
+            show: show ?? false,
+          },
         },
         slots: {
+          LogoSlot: [
+            {
+              type: "FooterLogoSlot",
+              props: {
+                data: {
+                  image: {
+                    field: "",
+                    constantValue: logo || {
+                      url: "",
+                      height: 100,
+                      width: 100,
+                      alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  width: logoWidth,
+                  aspectRatio: logoAspectRatio,
+                },
+              },
+            },
+          ],
+          SocialLinksSlot: [
+            {
+              type: "FooterSocialLinksSlot",
+              props: {
+                data: {
+                  xLink: xLink || "",
+                  facebookLink: facebookLink || "",
+                  instagramLink: instagramLink || "",
+                  linkedInLink: linkedInLink || "",
+                  pinterestLink: pinterestLink || "",
+                  tiktokLink: tiktokLink || "",
+                  youtubeLink: youtubeLink || "",
+                },
+              },
+            },
+          ],
+          UtilityImagesSlot: [
+            {
+              type: "FooterUtilityImagesSlot",
+              props: {
+                data: {
+                  utilityImages: utilityImages || [],
+                },
+                styles: {
+                  width: utilityImagesWidth,
+                  aspectRatio: utilityImagesAspectRatio,
+                },
+              },
+            },
+          ],
+          PrimaryLinksWrapperSlot: [
+            {
+              type: "FooterLinksSlot",
+              props: {
+                data: {
+                  links: footerLinks || [],
+                },
+                variant: "primary",
+                eventNamePrefix: "primary",
+              },
+            },
+          ],
+          ExpandedLinksWrapperSlot: [
+            {
+              type: "FooterExpandedLinksWrapper",
+              props: {
+                data: {
+                  field: "",
+                  constantValue: expandedFooterLinks || [],
+                  constantValueEnabled: true,
+                },
+                slots: {
+                  ExpandedSectionsSlot: (expandedFooterLinks || []).map(
+                    (section: any, sectionIndex: number) => ({
+                      type: "FooterExpandedLinkSectionSlot",
+                      props: {
+                        data: {
+                          label: {
+                            field: "",
+                            constantValue: section.label,
+                            constantValueEnabled: true,
+                          },
+                          links: {
+                            field: "",
+                            constantValue: section.links,
+                            constantValueEnabled: true,
+                          },
+                        },
+                        index: sectionIndex,
+                      },
+                    })
+                  ),
+                },
+              },
+            },
+          ],
+          SecondaryLinksWrapperSlot: [
+            {
+              type: "FooterLinksSlot",
+              props: {
+                data: {
+                  links: secondaryFooterLinks || [],
+                },
+                variant: "secondary",
+                eventNamePrefix: "secondary",
+              },
+            },
+          ],
           CopyrightSlot: [
             {
               type: "BodyTextSlot",
@@ -28,7 +163,10 @@ export const expandedFooterSlots: Migration = {
                 data: {
                   text: {
                     field: "",
-                    constantValue: copyrightMessage,
+                    constantValue: copyrightMessage || {
+                      en: "",
+                      hasLocalizedValue: "true",
+                    },
                     constantValueEnabled: true,
                   },
                 },

@@ -80,6 +80,30 @@ import {
   TestimonialCard,
   TestimonialCardProps,
 } from "../pageSections/TestimonialSection/TestimonialCard.tsx";
+import {
+  FooterLogoSlot,
+  FooterLogoSlotProps,
+} from "../footer/FooterLogoSlot.tsx";
+import {
+  FooterSocialLinksSlot,
+  FooterSocialLinksSlotProps,
+} from "../footer/FooterSocialLinksSlot.tsx";
+import {
+  FooterUtilityImagesSlot,
+  FooterUtilityImagesSlotProps,
+} from "../footer/FooterUtilityImagesSlot.tsx";
+import {
+  FooterLinksSlot,
+  FooterLinksSlotProps,
+} from "../footer/FooterLinksSlot.tsx";
+import {
+  FooterExpandedLinkSectionSlot,
+  FooterExpandedLinkSectionSlotProps,
+} from "../footer/FooterExpandedLinkSectionSlot.tsx";
+import {
+  FooterExpandedLinksWrapper,
+  FooterExpandedLinksWrapperProps,
+} from "../footer/FooterExpandedLinksWrapper.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -90,6 +114,12 @@ export interface SlotsCategoryProps {
   EventCardsWrapper: EventCardsWrapperProps;
   FAQsWrapperSlot: FAQsWrapperSlotProps;
   FAQSlot: FAQSlotProps;
+  FooterLogoSlot: FooterLogoSlotProps;
+  FooterSocialLinksSlot: FooterSocialLinksSlotProps;
+  FooterUtilityImagesSlot: FooterUtilityImagesSlotProps;
+  FooterLinksSlot: FooterLinksSlotProps;
+  FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
+  FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;
@@ -128,6 +158,24 @@ export const SlotsCategoryComponents = {
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
   FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
   FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
+  FooterLogoSlot: { ...FooterLogoSlot, permissions: lockedPermissions },
+  FooterSocialLinksSlot: {
+    ...FooterSocialLinksSlot,
+    permissions: lockedPermissions,
+  },
+  FooterUtilityImagesSlot: {
+    ...FooterUtilityImagesSlot,
+    permissions: lockedPermissions,
+  },
+  FooterLinksSlot: { ...FooterLinksSlot, permissions: lockedPermissions },
+  FooterExpandedLinkSectionSlot: {
+    ...FooterExpandedLinkSectionSlot,
+    permissions: lockedPermissions,
+  },
+  FooterExpandedLinksWrapper: {
+    ...FooterExpandedLinksWrapper,
+    permissions: lockedPermissions,
+  },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },

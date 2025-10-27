@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent, Slot, setDeep } from "@measured/puck";
+import { ComponentConfig, PuckComponent, Slot } from "@measured/puck";
 import {
   YextField,
   msg,
@@ -7,17 +7,14 @@ import {
   TranslatableCTA,
   YextEntityField,
 } from "@yext/visual-editor";
-import { FooterExpandedLinkSectionSlotProps } from "./FooterExpandedLinkSectionSlot";
 
 export interface FooterExpandedLinksWrapperProps {
-  data: {
-    expandedFooterLinks: YextEntityField<
-      {
-        label: TranslatableString;
-        links: TranslatableCTA[];
-      }[]
-    >;
-  };
+  data: YextEntityField<
+    {
+      label: TranslatableString;
+      links: TranslatableCTA[];
+    }[]
+  >;
   slots: {
     ExpandedSectionsSlot: Slot;
   };
@@ -43,44 +40,51 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
     "Footer Expanded Links Wrapper"
   ),
   fields: {
-    data: YextField(msg("fields.data", "Data"), {
-      type: "object",
-      objectFields: {
-        expandedFooterLinks: YextField(
-          msg("fields.expandedFooterLinks", "Expanded Footer Links"),
-          {
+    data: YextField(
+      msg("fields.expandedFooterLinks", "Expanded Footer Links"),
+      {
+        type: "array",
+        arrayFields: {
+          label: YextField(msg("fields.sectionLabel", "Section Label"), {
+            type: "translatableString",
+            filter: { types: ["type.string"] },
+          }),
+          links: YextField(msg("fields.links", "Links"), {
             type: "array",
             arrayFields: {
-              label: YextField(msg("fields.label", "Label"), {
+              linkType: YextField(msg("fields.linkType", "Link Type"), {
+                type: "radio",
+                options: [
+                  { label: "URL", value: "URL" },
+                  { label: "Phone", value: "Phone" },
+                  { label: "Email", value: "Email" },
+                ],
+              }),
+              label: YextField(msg("fields.linkLabel", "Link Label"), {
                 type: "translatableString",
                 filter: { types: ["type.string"] },
               }),
-              links: YextField(msg("fields.links", "Links"), {
-                type: "array",
-                arrayFields: {
-                  linkType: YextField(msg("fields.linkType", "Link Type"), {
-                    type: "radio",
-                    options: [
-                      { label: "URL", value: "URL" },
-                      { label: "Phone", value: "Phone" },
-                      { label: "Email", value: "Email" },
-                    ],
-                  }),
-                  label: YextField(msg("fields.label", "Label"), {
-                    type: "translatableString",
-                    filter: { types: ["type.string"] },
-                  }),
-                  link: YextField(msg("fields.link", "Link"), {
-                    type: "text",
-                  }),
-                },
+              link: YextField(msg("fields.link", "Link"), {
+                type: "text",
               }),
             },
-            getItemSummary: (item, index) => `Section ${(index ?? 0) + 1}`,
-          }
-        ),
-      },
-    }),
+            defaultItemProps: {
+              linkType: "URL",
+              label: { en: "Footer Link", hasLocalizedValue: "true" },
+              link: "#",
+            },
+            getItemSummary: (item, index) =>
+              (item.label?.en as string) || `Link ${(index ?? 0) + 1}`,
+          }),
+        },
+        defaultItemProps: {
+          label: { en: "Footer Section", hasLocalizedValue: "true" },
+          links: [],
+        },
+        getItemSummary: (item, index) =>
+          (item.label?.en as string) || `Section ${(index ?? 0) + 1}`,
+      }
+    ),
     slots: {
       type: "object",
       objectFields: {
@@ -91,33 +95,31 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
   },
   defaultProps: {
     data: {
-      expandedFooterLinks: {
-        field: "",
-        constantValue: [],
-        constantValueEnabled: true,
-      },
+      field: "",
+      constantValue: [],
+      constantValueEnabled: true,
     },
     slots: {
       ExpandedSectionsSlot: [],
     },
   },
-  resolveData: async (data, { changed }) => {
-    const expandedFooterLinks = data.props.data.expandedFooterLinks
-      .constantValueEnabled
-      ? data.props.data.expandedFooterLinks.constantValue
+  resolveData: async (data) => {
+    // Ensure data structure exists
+    if (!data?.props?.data) {
+      return data;
+    }
+
+    const expandedFooterLinks = data.props.data.constantValueEnabled
+      ? data.props.data.constantValue
       : [];
 
     if (!expandedFooterLinks || !Array.isArray(expandedFooterLinks)) {
       return data;
     }
 
-    // If expanded footer links data changed, sync the slots
-    if (
-      changed?.data?.expandedFooterLinks ||
-      data.props.slots.ExpandedSectionsSlot.length !==
-        expandedFooterLinks.length
-    ) {
-      const newSlots = expandedFooterLinks.map((section, index) => ({
+    // Always rebuild slots to sync with expandedFooterLinks array
+    const newSlots = expandedFooterLinks.map(
+      (section: any, sectionIndex: number) => ({
         type: "FooterExpandedLinkSectionSlot",
         props: {
           data: {
@@ -132,17 +134,21 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
               constantValueEnabled: true,
             },
           },
-          slots: {
-            LinksSlot: [],
-          },
-          index,
-        } satisfies FooterExpandedLinkSectionSlotProps,
-      }));
+          index: sectionIndex,
+        },
+      })
+    );
 
-      return setDeep(data, "props.slots.ExpandedSectionsSlot", newSlots);
-    }
-
-    return data;
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        slots: {
+          ...data.props.slots,
+          ExpandedSectionsSlot: newSlots,
+        },
+      },
+    };
   },
   render: (props) => <FooterExpandedLinksWrapperInternal {...props} />,
 };

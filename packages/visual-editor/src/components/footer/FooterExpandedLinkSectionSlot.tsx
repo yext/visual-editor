@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent, Slot, setDeep } from "@measured/puck";
+import { ComponentConfig, PuckComponent } from "@measured/puck";
 import {
   YextField,
   msg,
@@ -8,17 +8,14 @@ import {
   TranslatableString,
   TranslatableCTA,
   YextEntityField,
+  CTA,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
-import { FooterLinkSlotProps } from "./FooterLinkSlot";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
     label: YextEntityField<TranslatableString>;
     links: YextEntityField<TranslatableCTA[]>;
-  };
-  slots: {
-    LinksSlot: Slot;
   };
   index?: number;
 }
@@ -26,11 +23,16 @@ export interface FooterExpandedLinkSectionSlotProps {
 const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   FooterExpandedLinkSectionSlotProps
 > = (props) => {
-  const { data, slots, puck } = props;
+  const { data, puck } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
   const label = resolveComponentData(data.label, i18n.language, streamDocument);
+  const links = resolveComponentData(
+    data.links,
+    i18n.language,
+    streamDocument
+  ) as TranslatableCTA[];
 
   if (!label && !puck.isEditing) {
     return <></>;
@@ -43,9 +45,34 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   return (
     <div className="flex flex-col gap-6">
       <h3 className="font-bold">{label}</h3>
-      <ul className="flex flex-col gap-4">
-        <slots.LinksSlot style={{ height: "auto" }} allow={[]} />
-      </ul>
+      <div className="flex flex-col gap-4">
+        {links && links.length > 0
+          ? links.map((linkData, index) => {
+              const linkLabel = resolveComponentData(
+                linkData.label,
+                i18n.language,
+                streamDocument
+              );
+              const link = resolveComponentData(
+                linkData.link,
+                i18n.language,
+                streamDocument
+              );
+
+              return (
+                <CTA
+                  key={index}
+                  variant="headerFooterMainLink"
+                  eventName={`cta.expandedFooter.${index}-Link-${index + 1}`}
+                  label={linkLabel}
+                  linkType={linkData.linkType}
+                  link={link}
+                  className="justify-center md:justify-start block break-words whitespace-normal"
+                />
+              );
+            })
+          : puck.isEditing && <div className="h-6 min-w-[100px]" />}
+      </div>
     </div>
   );
 };
@@ -84,15 +111,18 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
               type: "text",
             }),
           },
-          getItemSummary: (item, index) => `Link ${(index ?? 0) + 1}`,
+          defaultItemProps: {
+            linkType: "URL",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
+            link: "#",
+          },
+          getItemSummary: (item, index) =>
+            (item.label?.en as string) || `Link ${(index ?? 0) + 1}`,
         }),
       },
     }),
-    slots: {
-      type: "object",
-      objectFields: {
-        LinksSlot: { type: "slot" },
-      },
+    index: {
+      type: "number",
       visible: false,
     },
   },
@@ -109,44 +139,6 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
         constantValueEnabled: true,
       },
     },
-    slots: {
-      LinksSlot: [],
-    },
-  },
-  resolveData: async (data, { changed }) => {
-    const links = data.props.data.links.constantValueEnabled
-      ? data.props.data.links.constantValue
-      : [];
-
-    if (!links || !Array.isArray(links)) {
-      return data;
-    }
-
-    // If links data changed, sync the slots
-    if (
-      changed?.data?.links ||
-      data.props.slots.LinksSlot.length !== links.length
-    ) {
-      const newSlots = links.map((link, index) => ({
-        type: "FooterLinkSlot",
-        props: {
-          data: {
-            link: {
-              field: "",
-              constantValue: link,
-              constantValueEnabled: true,
-            },
-          },
-          variant: "primary",
-          eventNamePrefix: "expandedFooter",
-          index: (data.props.index || 0) * 100 + index,
-        } satisfies FooterLinkSlotProps,
-      }));
-
-      return setDeep(data, "props.slots.LinksSlot", newSlots);
-    }
-
-    return data;
   },
   render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
 };

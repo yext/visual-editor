@@ -6,8 +6,6 @@ import {
   msg,
   useDocument,
   resolveComponentData,
-  Image,
-  ComplexImageType,
   MaybeLink,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
@@ -32,40 +30,44 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
-  const imageData = resolveComponentData(
+  const imageDataUrl = resolveComponentData(
     data.image,
     i18n.language,
     streamDocument
   ) as AssetImageType;
 
-  if (!imageData?.url) {
+  if (!imageDataUrl?.url) {
     return puck.isEditing ? <div className="h-20" /> : <></>;
   }
 
-  const complexImage: ComplexImageType = {
-    image: imageData,
-    width: styles.width || 100,
-  };
+  const altText =
+    typeof imageDataUrl.alternateText === "string"
+      ? imageDataUrl.alternateText
+      : imageDataUrl.alternateText?.en || "Logo";
 
-  const logo = (
-    <Image
-      image={complexImage}
-      className="max-w-full h-auto"
+  return data.linkTarget ? (
+    <MaybeLink href={data.linkTarget} className="block w-full">
+      <img
+        src={imageDataUrl.url}
+        alt={altText}
+        style={{
+          width: `${styles.width || 100}px`,
+          height: "auto",
+        }}
+        className="object-contain"
+      />
+    </MaybeLink>
+  ) : (
+    <img
+      src={imageDataUrl.url}
+      alt={altText}
       style={{
-        aspectRatio: styles.aspectRatio || 1.78,
+        width: `${styles.width || 100}px`,
+        height: "auto",
       }}
+      className="object-contain"
     />
   );
-
-  if (data.linkTarget) {
-    return (
-      <MaybeLink href={data.linkTarget} className="block">
-        {logo}
-      </MaybeLink>
-    );
-  }
-
-  return logo;
 };
 
 export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {

@@ -1,13 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@measured/puck";
-import {
-  YextField,
-  AssetImageType,
-  msg,
-  Image,
-  ComplexImageType,
-  MaybeLink,
-} from "@yext/visual-editor";
+import { YextField, AssetImageType, msg, MaybeLink } from "@yext/visual-editor";
 
 export interface FooterUtilityImagesSlotProps {
   data: {
@@ -25,7 +18,7 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
   const { data, styles, puck } = props;
 
   if (!data.utilityImages || data.utilityImages.length === 0) {
-    return puck.isEditing ? <div className="h-10" /> : <></>;
+    return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
   return (
@@ -39,31 +32,37 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
           ) : null;
         }
 
-        const complexImage: ComplexImageType = {
-          image: imageData,
-          width: styles.width || 60,
-        };
+        const altText =
+          typeof imageData.alternateText === "string"
+            ? imageData.alternateText
+            : imageData.alternateText?.en || "Utility Image";
 
-        const image = (
-          <Image
-            key={index}
-            image={complexImage}
-            className="max-w-full h-auto"
-            style={{
-              aspectRatio: styles.aspectRatio || 1,
-            }}
+        const imgElement = (
+          <img
+            src={imageData.url}
+            alt={altText}
+            className="w-full h-full object-contain"
           />
         );
 
-        if (item.linkTarget) {
-          return (
-            <MaybeLink key={index} href={item.linkTarget} className="block">
-              {image}
-            </MaybeLink>
-          );
-        }
-
-        return image;
+        return (
+          <div
+            key={index}
+            style={{
+              width: `${styles.width || 60}px`,
+              aspectRatio: String(styles.aspectRatio || 1),
+            }}
+            className="max-w-full"
+          >
+            {item.linkTarget ? (
+              <MaybeLink href={item.linkTarget} className="block w-full h-full">
+                {imgElement}
+              </MaybeLink>
+            ) : (
+              imgElement
+            )}
+          </div>
+        );
       })}
     </div>
   );
