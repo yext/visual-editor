@@ -9,9 +9,8 @@ export * from "./footer/index.ts";
 export {
   Directory,
   type DirectoryProps,
-  type DirectoryData,
   type DirectoryStyles,
-} from "./Directory.tsx";
+} from "./directory/Directory.tsx";
 export { LocatorComponent, type LocatorProps } from "./Locator.tsx";
 export {
   CustomCodeSection,
