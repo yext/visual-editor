@@ -11,6 +11,7 @@ import {
   YextEntityField,
   CTA,
   Body,
+  i18nComponentsInstance,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -119,8 +120,11 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
             link: "#",
           },
           getItemSummary: (item, index) => {
+            const locale = i18nComponentsInstance.language || "en";
             const label =
-              typeof item.label === "string" ? item.label : item.label?.en;
+              typeof item.label === "string"
+                ? item.label
+                : item.label?.[locale];
             return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
           },
         }),

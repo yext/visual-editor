@@ -7,6 +7,7 @@ import {
   TranslatableString,
   TranslatableCTA,
   YextEntityField,
+  i18nComponentsInstance,
 } from "@yext/visual-editor";
 
 export interface FooterExpandedLinksWrapperProps {
@@ -76,8 +77,11 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
               link: "#",
             },
             getItemSummary: (item, index) => {
+              const locale = i18nComponentsInstance.language || "en";
               const label =
-                typeof item.label === "string" ? item.label : item.label?.en;
+                typeof item.label === "string"
+                  ? item.label
+                  : item.label?.[locale];
               return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
             },
           }),
@@ -87,8 +91,9 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
           links: [],
         },
         getItemSummary: (item, index) => {
+          const locale = i18nComponentsInstance.language || "en";
           const label =
-            typeof item.label === "string" ? item.label : item.label?.en;
+            typeof item.label === "string" ? item.label : item.label?.[locale];
           return label || pt("section", "Section") + " " + ((index ?? 0) + 1);
         },
       }
