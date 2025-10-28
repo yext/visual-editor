@@ -636,6 +636,18 @@ const tests: ComponentTest[] = [
                     label: { en: "Footer Label", hasLocalizedValue: "true" },
                     links: testFooterLinks,
                   },
+                  {
+                    label: { en: "Footer Label", hasLocalizedValue: "true" },
+                    links: testFooterLinks,
+                  },
+                  {
+                    label: { en: "Footer Label", hasLocalizedValue: "true" },
+                    links: testFooterLinks,
+                  },
+                  {
+                    label: { en: "Footer Label", hasLocalizedValue: "true" },
+                    links: testFooterLinks,
+                  },
                 ],
                 constantValueEnabled: true,
               },

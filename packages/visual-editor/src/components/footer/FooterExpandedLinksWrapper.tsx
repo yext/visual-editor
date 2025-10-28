@@ -26,9 +26,16 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
   const { slots } = props;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 w-full text-center md:text-left justify-items-center md:justify-items-start gap-6">
-      <slots.ExpandedSectionsSlot style={{ height: "auto" }} allow={[]} />
-    </div>
+    <slots.ExpandedSectionsSlot
+      style={{
+        height: "auto",
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: "1.5rem",
+        width: "100%",
+      }}
+      allow={[]}
+    />
   );
 };
 

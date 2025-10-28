@@ -44,7 +44,7 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
 
   return (
     <div className="flex flex-col gap-6">
-      <h3 className="font-bold">{label}</h3>
+      <h3>{label}</h3>
       <div className="flex flex-col gap-4">
         {links && links.length > 0
           ? links.map((linkData, index) => {
@@ -138,7 +138,33 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
       },
       links: {
         field: "",
-        constantValue: [],
+        constantValue: [
+          {
+            linkType: "URL",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
+            link: "#",
+          },
+          {
+            linkType: "URL",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
+            link: "#",
+          },
+          {
+            linkType: "URL",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
+            link: "#",
+          },
+          {
+            linkType: "URL",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
+            link: "#",
+          },
+          {
+            linkType: "URL",
+            label: { en: "Footer Link", hasLocalizedValue: "true" },
+            link: "#",
+          },
+        ],
         constantValueEnabled: true,
       },
     },
