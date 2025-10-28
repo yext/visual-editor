@@ -23,7 +23,7 @@ export type HeaderLinksProps = {
     links: TranslatableCTA[];
   };
 
-  /** @internal */
+  /** @internal data from the parent section */
   parentData?: {
     type: "Primary" | "Secondary";
   };

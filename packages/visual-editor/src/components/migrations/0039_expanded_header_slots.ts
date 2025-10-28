@@ -113,7 +113,16 @@ export const expandedHeaderSlots: Migration = {
                         data: {
                           image: {
                             field: "",
-                            constantValue: props.data?.primaryHeader.logo,
+                            constantValue:
+                              typeof props.data?.primaryHeader.logo === "string"
+                                ? {
+                                    url: props.data?.primaryHeader.logo,
+                                    alternateText: {
+                                      en: "Logo",
+                                      hasLocalizedValue: "true",
+                                    },
+                                  }
+                                : props.data?.primaryHeader.logo,
                             constantValueEnabled: true,
                           },
                         },

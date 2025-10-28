@@ -49,12 +49,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: {
-            url: "https://placehold.co/100",
-            alternateText: { en: "Logo", hasLocalizedValue: "true" },
-            width: 100,
-            height: 100,
-          },
+          logo: "https://placehold.co/100",
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -113,12 +108,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: {
-            url: "https://placehold.co/100",
-            alternateText: { en: "Logo", hasLocalizedValue: "true" },
-            width: 100,
-            height: 100,
-          },
+          logo: "https://placehold.co/100",
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -180,12 +170,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: {
-            url: "https://placehold.co/100",
-            alternateText: { en: "Logo", hasLocalizedValue: "true" },
-            width: 100,
-            height: 100,
-          },
+          logo: "https://placehold.co/100",
           links: [],
           primaryCTA: {
             label: { en: "", hasLocalizedValue: "true" },
@@ -232,12 +217,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: {
-            url: "https://placehold.co/100",
-            alternateText: { en: "Logo", hasLocalizedValue: "true" },
-            width: 100,
-            height: 100,
-          },
+          logo: "https://placehold.co/100",
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -295,12 +275,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: {
-            url: "https://placehold.co/100",
-            alternateText: { en: "Logo", hasLocalizedValue: "true" },
-            width: 100,
-            height: 100,
-          },
+          logo: "https://placehold.co/100",
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -359,12 +334,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: {
-            url: "https://placehold.co/100",
-            alternateText: { en: "Logo", hasLocalizedValue: "true" },
-            width: 100,
-            height: 100,
-          },
+          logo: "https://placehold.co/100",
           links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
           primaryCTA: {
             label: { en: "Call to Action", hasLocalizedValue: "true" },
@@ -424,6 +394,60 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+        headerPosition: "fixed",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 15,
+  },
+  {
+    name: "version 20 props",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
           logo: {
             url: "https://placehold.co/100",
             alternateText: { en: "Logo", hasLocalizedValue: "true" },
@@ -475,7 +499,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: 15,
+    version: 20,
   },
   {
     name: "version 39 props - no secondary header",
