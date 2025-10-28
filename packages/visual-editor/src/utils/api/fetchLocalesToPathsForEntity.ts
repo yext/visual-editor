@@ -1,3 +1,4 @@
+import { mergeMeta, StreamDocument } from "../index.ts";
 import { normalizeLocale } from "../normalizeLocale.ts";
 import { resolveUrlTemplate } from "../resolveUrlTemplate.ts";
 
@@ -9,12 +10,14 @@ export const fetchLocalesToPathsForEntity = async ({
   contentEndpointId,
   contentDeliveryAPIDomain,
   entityId,
+  streamDocument,
 }: {
   businessId: string;
   apiKey: string;
   contentEndpointId: string;
   contentDeliveryAPIDomain: string;
   entityId: string;
+  streamDocument: StreamDocument;
 }): Promise<Record<string, string>> => {
   const url = new URL(
     `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
@@ -39,11 +42,16 @@ export const fetchLocalesToPathsForEntity = async ({
           console.log("profile:", profile);
           // Use resolveUrlTemplate with useCurrentPageSetTemplate option
           // to get the URL based on the current page set template
-          const path = resolveUrlTemplate(profile, "", undefined, {
-            useCurrentPageSetTemplate: true,
-          });
-          console.log("path:", path);
-          localeToPath[normalizeLocale(profile.meta.locale)] = path;
+          const resolvedUrl = resolveUrlTemplate(
+            mergeMeta(profile, streamDocument),
+            "",
+            undefined,
+            {
+              useCurrentPageSetTemplate: true,
+            }
+          );
+          console.log("resolvedUrl:", resolvedUrl);
+          localeToPath[normalizeLocale(profile.meta.locale)] = resolvedUrl;
         } catch (e) {
           console.warn(
             `Failed to resolve URL template for locale ${profile.meta.locale}`,
