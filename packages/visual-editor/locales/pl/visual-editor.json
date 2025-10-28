@@ -510,6 +510,7 @@
     "uberEats": "Uber je"
   },
   "primaryHeader": "Główny nagłówek",
+  "primaryHeaderLinks": "Podstawowe linki nagłówkowe",
   "product": "Produkt",
   "promoMedia": "Media promocyjne",
   "recentReviews": "Ostatnie recenzje",
@@ -524,6 +525,7 @@
   "searchHere": "Wyszukaj tutaj ...",
   "searchThisArea": "Przeszukaj ten obszar",
   "secondaryHeader": "Wtórny nagłówek",
+  "secondaryHeaderLinks": "Dodatkowe linki nagłówkowe",
   "selectAnOption": "Wybierz opcję",
   "servicesSection": "Sekcja usług",
   "showLabels": "Pokaż etykiety",

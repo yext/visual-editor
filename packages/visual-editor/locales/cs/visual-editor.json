@@ -511,6 +511,7 @@
     "uberEats": "Uber jí"
   },
   "primaryHeader": "Primární záhlaví",
+  "primaryHeaderLinks": "Primární odkazy záhlaví",
   "product": "Produkt",
   "promoMedia": "Promo média",
   "recentReviews": "Nedávné recenze",
@@ -525,6 +526,7 @@
   "searchHere": "Hledejte zde ...",
   "searchThisArea": "Prohledejte tuto oblast",
   "secondaryHeader": "Sekundární záhlaví",
+  "secondaryHeaderLinks": "Sekundární odkazy záhlaví",
   "selectAnOption": "Vyberte možnost",
   "servicesSection": "Sekce služeb",
   "showLabels": "Zobrazit štítky",

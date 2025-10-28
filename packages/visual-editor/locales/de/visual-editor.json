@@ -509,6 +509,7 @@
     "uberEats": "Uber isst"
   },
   "primaryHeader": "Primärkopf",
+  "primaryHeaderLinks": "Primäre Header-Links",
   "product": "Produkt",
   "promoMedia": "Promo -Medien",
   "recentReviews": "Neuere Bewertungen",
@@ -523,6 +524,7 @@
   "searchHere": "Suche hier ...",
   "searchThisArea": "Suchen Sie diesen Bereich",
   "secondaryHeader": "Sekundärer Header",
+  "secondaryHeaderLinks": "Sekundäre Header-Links",
   "selectAnOption": "Wählen Sie eine Option aus",
   "servicesSection": "Dienstleistungsabschnitt",
   "showLabels": "Etiketten zeigen",

@@ -510,6 +510,7 @@
     "uberEats": "Uber ēd"
   },
   "primaryHeader": "Primārā galvene",
+  "primaryHeaderLinks": "Primārās galvenes saites",
   "product": "Produkts",
   "promoMedia": "Promo Media",
   "recentReviews": "Nesenie pārskati",
@@ -524,6 +525,7 @@
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",
   "secondaryHeader": "Sekundārā galvene",
+  "secondaryHeaderLinks": "Sekundārās galvenes saites",
   "selectAnOption": "Atlasiet opciju",
   "servicesSection": "Pakalpojumu nodaļa",
   "showLabels": "Izrādes etiķetes",

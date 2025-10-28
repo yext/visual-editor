@@ -510,6 +510,7 @@
     "uberEats": "Uber sööb"
   },
   "primaryHeader": "Esmane päis",
+  "primaryHeaderLinks": "Peamised päise lingid",
   "product": "Toode",
   "promoMedia": "Promo meedia",
   "recentReviews": "Viimased ülevaated",
@@ -524,6 +525,7 @@
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
   "secondaryHeader": "Teisene päis",
+  "secondaryHeaderLinks": "Teisese päise lingid",
   "selectAnOption": "Valige suvand",
   "servicesSection": "Teenuste sektsioon",
   "showLabels": "Näita silte",

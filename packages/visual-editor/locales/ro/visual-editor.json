@@ -510,6 +510,7 @@
     "uberEats": "Uber mănâncă"
   },
   "primaryHeader": "Antet primar",
+  "primaryHeaderLinks": "Linkuri antet primare",
   "product": "Produs",
   "promoMedia": "Media promo",
   "recentReviews": "Recenzii recente",
@@ -524,6 +525,7 @@
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",
   "secondaryHeader": "Antet secundar",
+  "secondaryHeaderLinks": "Linkuri de antet secundare",
   "selectAnOption": "Selectați o opțiune",
   "servicesSection": "Secțiunea Servicii",
   "showLabels": "Arată etichete",

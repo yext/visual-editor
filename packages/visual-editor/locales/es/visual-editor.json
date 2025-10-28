@@ -509,6 +509,7 @@
     "uberEats": "Uber come"
   },
   "primaryHeader": "Encabezado principal",
+  "primaryHeaderLinks": "Enlaces de encabezado principal",
   "product": "Producto",
   "promoMedia": "Medios promocionales",
   "recentReviews": "Revisiones recientes",
@@ -523,6 +524,7 @@
   "searchHere": "Buscar aquí ...",
   "searchThisArea": "Busca esta área",
   "secondaryHeader": "Encabezado secundario",
+  "secondaryHeaderLinks": "Enlaces de encabezado secundario",
   "selectAnOption": "Seleccione una opción",
   "servicesSection": "Sección de servicios",
   "showLabels": "Espectáculo de etiquetas",

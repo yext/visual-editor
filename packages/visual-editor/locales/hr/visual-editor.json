@@ -510,6 +510,7 @@
     "uberEats": "Uber jede"
   },
   "primaryHeader": "Primarno zaglavlje",
+  "primaryHeaderLinks": "Primarne veze zaglavlja",
   "product": "Proizvod",
   "promoMedia": "Promo medija",
   "recentReviews": "Nedavne recenzije",
@@ -524,6 +525,7 @@
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",
   "secondaryHeader": "Sekundarno zaglavlje",
+  "secondaryHeaderLinks": "Veze sekundarnog zaglavlja",
   "selectAnOption": "Odaberite opciju",
   "servicesSection": "Odjeljak za usluge",
   "showLabels": "Prikaži naljepnice",

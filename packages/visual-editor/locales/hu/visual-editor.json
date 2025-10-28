@@ -510,6 +510,7 @@
     "uberEats": "Uber eszik"
   },
   "primaryHeader": "Elsődleges fejléc",
+  "primaryHeaderLinks": "Elsődleges fejléc hivatkozások",
   "product": "Termék",
   "promoMedia": "Promóciós média",
   "recentReviews": "Legutóbbi vélemények",
@@ -524,6 +525,7 @@
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",
   "secondaryHeader": "Másodlagos fejléc",
+  "secondaryHeaderLinks": "Másodlagos fejléc hivatkozások",
   "selectAnOption": "Válasszon egy opciót",
   "servicesSection": "Szolgáltatási szakasz",
   "showLabels": "A címkék megjelenítését",

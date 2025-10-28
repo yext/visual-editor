@@ -510,6 +510,7 @@
     "uberEats": "Uber äter"
   },
   "primaryHeader": "Primärhuvud",
+  "primaryHeaderLinks": "Primära rubriklänkar",
   "product": "Produkt",
   "promoMedia": "Promo media",
   "recentReviews": "Senaste recensioner",
@@ -524,6 +525,7 @@
   "searchHere": "Sök här ...",
   "searchThisArea": "Sök på detta område",
   "secondaryHeader": "Sekundärrubrik",
+  "secondaryHeaderLinks": "Sekundära rubriklänkar",
   "selectAnOption": "Välj ett alternativ",
   "servicesSection": "Serviceavdelning",
   "showLabels": "Visa etiketter",

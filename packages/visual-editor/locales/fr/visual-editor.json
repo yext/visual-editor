@@ -509,6 +509,7 @@
     "uberEats": "Uber mange"
   },
   "primaryHeader": "En-tête primaire",
+  "primaryHeaderLinks": "Liens d'en-tête principaux",
   "product": "Produit",
   "promoMedia": "Médias promotionnels",
   "recentReviews": "Revues récentes",
@@ -523,6 +524,7 @@
   "searchHere": "Recherche ici ...",
   "searchThisArea": "Recherchez cette zone",
   "secondaryHeader": "Tête secondaire",
+  "secondaryHeaderLinks": "Liens d'en-tête secondaires",
   "selectAnOption": "Sélectionnez une option",
   "servicesSection": "Section des services",
   "showLabels": "Montrer les étiquettes",

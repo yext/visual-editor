@@ -510,6 +510,7 @@
     "uberEats": "Uber mangia"
   },
   "primaryHeader": "Testa primaria",
+  "primaryHeaderLinks": "Collegamenti di intestazione primari",
   "product": "Prodotto",
   "promoMedia": "Media promozionale",
   "recentReviews": "Recensioni recenti",
@@ -524,6 +525,7 @@
   "searchHere": "Cerca qui ...",
   "searchThisArea": "Cerca in quest'area",
   "secondaryHeader": "Intestazione secondaria",
+  "secondaryHeaderLinks": "Collegamenti di intestazione secondari",
   "selectAnOption": "Seleziona un'opzione",
   "servicesSection": "Sezione Servizi",
   "showLabels": "Etichette per mostrare",

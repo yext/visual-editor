@@ -510,6 +510,7 @@
     "uberEats": "„Uber“ valgo"
   },
   "primaryHeader": "Pirminė antraštė",
+  "primaryHeaderLinks": "Pirminės antraštės nuorodos",
   "product": "Produktas",
   "promoMedia": "Promo žiniasklaida",
   "recentReviews": "Naujausios apžvalgos",
@@ -524,6 +525,7 @@
   "searchHere": "Ieškokite čia ...",
   "searchThisArea": "Ieškokite šioje srityje",
   "secondaryHeader": "Antrinė antraštė",
+  "secondaryHeaderLinks": "Antrinės antraštės nuorodos",
   "selectAnOption": "Pasirinkite parinktį",
   "servicesSection": "Paslaugų skyrius",
   "showLabels": "Rodyti etiketes",

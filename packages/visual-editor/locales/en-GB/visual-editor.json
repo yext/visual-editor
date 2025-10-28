@@ -509,6 +509,7 @@
     "uberEats": "Uber Eats"
   },
   "primaryHeader": "Primary Header",
+  "primaryHeaderLinks": "Primary Header Links",
   "product": "Product",
   "promoMedia": "Promo Media",
   "recentReviews": "Recent Reviews",
@@ -523,6 +524,7 @@
   "searchHere": "Search here...",
   "searchThisArea": "Search This Area",
   "secondaryHeader": "Secondary Header",
+  "secondaryHeaderLinks": "Secondary Header Links",
   "selectAnOption": "Select an option",
   "servicesSection": "Services Section",
   "showLabels": "Show Labels",

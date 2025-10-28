@@ -510,6 +510,7 @@
     "uberEats": "Uber syö"
   },
   "primaryHeader": "Pääotsikko",
+  "primaryHeaderLinks": "Ensisijaiset otsikkolinkit",
   "product": "Tuote",
   "promoMedia": "Promootio",
   "recentReviews": "Viimeaikaiset arvostelut",
@@ -524,6 +525,7 @@
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
   "secondaryHeader": "Toissijainen otsikko",
+  "secondaryHeaderLinks": "Toissijaiset otsikkolinkit",
   "selectAnOption": "Valitse vaihtoehto",
   "servicesSection": "Palvelusosasto",
   "showLabels": "Näyttötarrat",

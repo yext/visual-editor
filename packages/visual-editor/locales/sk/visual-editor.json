@@ -510,6 +510,7 @@
     "uberEats": "Uber jesť"
   },
   "primaryHeader": "Hlavná hlavička",
+  "primaryHeaderLinks": "Primárne odkazy hlavičky",
   "product": "Produkt",
   "promoMedia": "Promo médiá",
   "recentReviews": "Posledné recenzie",
@@ -524,6 +525,7 @@
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",
   "secondaryHeader": "Sekundárna hlavička",
+  "secondaryHeaderLinks": "Sekundárne odkazy hlavičky",
   "selectAnOption": "Vyberte možnosť",
   "servicesSection": "Sekcia",
   "showLabels": "Ukazovať štítky",

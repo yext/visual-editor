@@ -510,6 +510,7 @@
     "uberEats": "优步吃"
   },
   "primaryHeader": "主要标题",
+  "primaryHeaderLinks": "主要标题链接",
   "product": "产品",
   "promoMedia": "促销媒体",
   "recentReviews": "最近的评论",
@@ -524,6 +525,7 @@
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",
   "secondaryHeader": "次要标题",
+  "secondaryHeaderLinks": "二级标题链接",
   "selectAnOption": "选择一个选项",
   "servicesSection": "服务部分",
   "showLabels": "显示标签",

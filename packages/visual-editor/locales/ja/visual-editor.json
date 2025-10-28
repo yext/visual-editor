@@ -510,6 +510,7 @@
     "uberEats": "Uberは食べます"
   },
   "primaryHeader": "プライマリヘッダー",
+  "primaryHeaderLinks": "プライマリヘッダーリンク",
   "product": "製品",
   "promoMedia": "プロモーションメディア",
   "recentReviews": "最近のレビュー",
@@ -524,6 +525,7 @@
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",
   "secondaryHeader": "セカンダリヘッダー",
+  "secondaryHeaderLinks": "セカンダリヘッダーリンク",
   "selectAnOption": "オプションを選択します",
   "servicesSection": "サービスセクション",
   "showLabels": "ラベルを表示します",

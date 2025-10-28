@@ -510,6 +510,7 @@
     "uberEats": "Uber spiser"
   },
   "primaryHeader": "Primær header",
+  "primaryHeaderLinks": "Primære overskriftslinks",
   "product": "Produkt",
   "promoMedia": "Promo Media",
   "recentReviews": "Nylige anmeldelser",
@@ -524,6 +525,7 @@
   "searchHere": "Søg her ...",
   "searchThisArea": "Søg i dette område",
   "secondaryHeader": "Sekundær header",
+  "secondaryHeaderLinks": "Sekundære overskriftslinks",
   "selectAnOption": "Vælg en mulighed",
   "servicesSection": "Servicesektion",
   "showLabels": "Vis etiketter",

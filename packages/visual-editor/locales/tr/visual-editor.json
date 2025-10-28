@@ -510,6 +510,7 @@
     "uberEats": "Uber Eats"
   },
   "primaryHeader": "Birincil başlık",
+  "primaryHeaderLinks": "Birincil Başlık Bağlantıları",
   "product": "Ürün",
   "promoMedia": "Promosyon medyası",
   "recentReviews": "Son İncelemeler",
@@ -524,6 +525,7 @@
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",
   "secondaryHeader": "İkincil başlık",
+  "secondaryHeaderLinks": "İkincil Başlık Bağlantıları",
   "selectAnOption": "Bir seçenek seçin",
   "servicesSection": "Hizmetler Bölümü",
   "showLabels": "Etiketleri Göster",

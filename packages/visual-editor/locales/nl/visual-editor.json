@@ -510,6 +510,7 @@
     "uberEats": "Uber eet"
   },
   "primaryHeader": "Primaire koptekst",
+  "primaryHeaderLinks": "Primaire koptekstkoppelingen",
   "product": "Product",
   "promoMedia": "Promo media",
   "recentReviews": "Recente beoordelingen",
@@ -524,6 +525,7 @@
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",
   "secondaryHeader": "Secundaire header",
+  "secondaryHeaderLinks": "Secundaire koptekstkoppelingen",
   "selectAnOption": "Selecteer een optie",
   "servicesSection": "Dienstensectie",
   "showLabels": "Toon labels",
