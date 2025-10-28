@@ -26,6 +26,8 @@ export const fetchLocalesToPathsForEntity = async ({
   url.searchParams.append("v", V_PARAM);
   url.searchParams.append("id", entityId);
 
+  console.log("content url:", url);
+
   const response = await fetch(url);
 
   const localeToPath: Record<string, string> = {};
@@ -36,6 +38,7 @@ export const fetchLocalesToPathsForEntity = async ({
 
   try {
     const json = await response.json();
+    console.log("json:", json);
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale) {
         try {
