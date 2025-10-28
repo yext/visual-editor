@@ -68,7 +68,7 @@ export const fetchLocalesToPathsForEntity = async ({
           const mergedDocument = mergeMeta(profile, streamDocument);
           // Override with the profile's locale to ensure we resolve the URL for the correct language
           mergedDocument.locale = profile.meta.locale || profile.locale;
-          mergedDocument.isPrimaryLocale =
+          mergedDocument.__.isPrimaryLocale =
             normalizeLocale(mergedDocument.locale) === normalizedPrimaryLocale;
 
           console.log("mergedDocument:", mergedDocument);
