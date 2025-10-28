@@ -22,7 +22,11 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
       ? JSON.parse(resolveSchemaJson(document, schemaMarkup))
       : getDefaultSchema(document);
 
-    if (entityTypeId && LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
+    if (
+      entityTypeId &&
+      !entityTypeId.startsWith("dm_") &&
+      entityTypeId !== "locator"
+    ) {
       const breadcrumbsSchema = getBreadcrumbsSchema(data);
       const reviewsSchema = getReviewsSchema(document);
 
