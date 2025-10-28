@@ -40,10 +40,18 @@ export const fetchLocalesToPathsForEntity = async ({
       if (profile?.meta?.locale) {
         try {
           console.log("profile:", profile);
+
+          // Merge profile with streamDocument metadata, but preserve the profile's locale
+          const mergedDocument = mergeMeta(profile, streamDocument);
+          // Override with the profile's locale to ensure we resolve the URL for the correct language
+          mergedDocument.locale = profile.meta.locale || profile.locale;
+
+          console.log("mergedDocument locale:", mergedDocument.locale);
+
           // Use resolveUrlTemplate with useCurrentPageSetTemplate option
           // to get the URL based on the current page set template
           const resolvedUrl = resolveUrlTemplate(
-            mergeMeta(profile, streamDocument),
+            mergedDocument,
             "",
             undefined,
             {
