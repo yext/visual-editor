@@ -17,6 +17,15 @@ import {
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
+const defaultLink = {
+  linkType: "URL" as const,
+  label: {
+    en: "Footer Link",
+    hasLocalizedValue: "true" as const,
+  },
+  link: "#",
+};
+
 export const validPatterns: Record<string, RegExp> = {
   xLink: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/,
   facebookLink: /^https:\/\/(www\.)?facebook\.com\/.+/,
@@ -462,29 +471,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             data: {
               links: [
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
               ],
             },
@@ -504,29 +503,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
                   links: [
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                   ],
                 },
@@ -534,29 +523,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
                   links: [
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                   ],
                 },
@@ -564,29 +543,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
                   links: [
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                   ],
                 },
@@ -594,29 +563,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
                   links: [
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                     {
-                      linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      ...defaultLink,
                     },
                   ],
                 },
@@ -641,44 +600,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                         field: "",
                         constantValue: [
                           {
-                            linkType: "URL",
-                            label: {
-                              en: "Footer Link",
-                              hasLocalizedValue: "true",
-                            },
-                            link: "#",
+                            ...defaultLink,
                           },
                           {
-                            linkType: "URL",
-                            label: {
-                              en: "Footer Link",
-                              hasLocalizedValue: "true",
-                            },
-                            link: "#",
+                            ...defaultLink,
                           },
                           {
-                            linkType: "URL",
-                            label: {
-                              en: "Footer Link",
-                              hasLocalizedValue: "true",
-                            },
-                            link: "#",
+                            ...defaultLink,
                           },
                           {
-                            linkType: "URL",
-                            label: {
-                              en: "Footer Link",
-                              hasLocalizedValue: "true",
-                            },
-                            link: "#",
+                            ...defaultLink,
                           },
                           {
-                            linkType: "URL",
-                            label: {
-                              en: "Footer Link",
-                              hasLocalizedValue: "true",
-                            },
-                            link: "#",
+                            ...defaultLink,
                           },
                         ],
                         constantValueEnabled: true,
@@ -699,29 +633,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             data: {
               links: [
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
                 {
-                  linkType: "URL",
-                  label: { en: "Footer Link", hasLocalizedValue: "true" },
-                  link: "#",
+                  ...defaultLink,
                 },
               ],
             },

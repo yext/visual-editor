@@ -134,13 +134,13 @@ export interface SlotsCategoryProps {
   EventCardsWrapper: EventCardsWrapperProps;
   FAQsWrapperSlot: FAQsWrapperSlotProps;
   FAQSlot: FAQSlotProps;
+  CopyrightMessageSlot: CopyrightMessageSlotProps;
+  FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
+  FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
+  FooterLinksSlot: FooterLinksSlotProps;
   FooterLogoSlot: FooterLogoSlotProps;
   FooterSocialLinksSlot: FooterSocialLinksSlotProps;
   FooterUtilityImagesSlot: FooterUtilityImagesSlotProps;
-  FooterLinksSlot: FooterLinksSlotProps;
-  FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
-  FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
-  CopyrightMessageSlot: CopyrightMessageSlotProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;

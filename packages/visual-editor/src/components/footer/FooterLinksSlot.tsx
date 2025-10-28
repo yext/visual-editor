@@ -97,9 +97,15 @@ export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
               linkType: YextField(msg("fields.linkType", "Link Type"), {
                 type: "radio",
                 options: [
-                  { label: "URL", value: "URL" },
-                  { label: "Phone", value: "Phone" },
-                  { label: "Email", value: "Email" },
+                  { label: msg("fields.options.url", "URL"), value: "URL" },
+                  {
+                    label: msg("fields.options.phone", "Phone"),
+                    value: "Phone",
+                  },
+                  {
+                    label: msg("fields.options.email", "Email"),
+                    value: "Email",
+                  },
                 ],
               }),
               label: YextField(msg("fields.label", "Label"), {
