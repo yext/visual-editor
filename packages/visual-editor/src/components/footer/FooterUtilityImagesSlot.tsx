@@ -47,10 +47,20 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
           />
         );
 
+        const altText = item.image?.alternateText;
+        const ariaLabel =
+          typeof altText === "string"
+            ? altText
+            : altText?.en || `Utility Image ${index + 1}`;
+
         return (
           <div key={index}>
             {item.linkTarget ? (
-              <MaybeLink href={item.linkTarget} className="block">
+              <MaybeLink
+                href={item.linkTarget}
+                className="block"
+                aria-label={ariaLabel}
+              >
                 {imgElement}
               </MaybeLink>
             ) : (
