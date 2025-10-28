@@ -46,7 +46,7 @@ export const resolveUrlTemplate = (
     streamDocument?.__?.codeTemplate === "locator";
 
   if (isDirectoryOrLocator && !options?.useCurrentPageSetTemplate) {
-    // Use base entity template for directory/locator (legacy behavior)
+    // Use base entity template for directory/locator
     urlTemplates = JSON.parse(
       streamDocument?.__?.entityPageSetUrlTemplates || "{}"
     );
@@ -55,8 +55,6 @@ export const resolveUrlTemplate = (
     const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
     urlTemplates = pagesetJson?.config?.urlTemplate || {};
   }
-
-  console.log("urlTemplates:", urlTemplates);
 
   let urlTemplate: string | undefined;
   if (isPrimaryLocale && urlTemplates.primary) {

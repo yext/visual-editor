@@ -26,8 +26,6 @@ export const fetchLocalesToPathsForEntity = async ({
   url.searchParams.append("v", V_PARAM);
   url.searchParams.append("id", entityId);
 
-  console.log("content url:", url);
-
   const response = await fetch(url);
 
   const localeToPath: Record<string, string> = {};
@@ -38,8 +36,8 @@ export const fetchLocalesToPathsForEntity = async ({
 
   try {
     const json = await response.json();
-    console.log("json:", json);
 
+    // Find the primary locale
     let primaryLocale: string = "";
     for (const profile of json.response.docs) {
       if (profile?.$key?.locale === "" && profile?.meta?.locale) {
@@ -62,16 +60,12 @@ export const fetchLocalesToPathsForEntity = async ({
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale) {
         try {
-          console.log("profile:", profile);
-
           // Merge profile with streamDocument metadata, but preserve the profile's locale
           const mergedDocument = mergeMeta(profile, streamDocument);
           // Override with the profile's locale to ensure we resolve the URL for the correct language
           mergedDocument.locale = profile.meta.locale || profile.locale;
           mergedDocument.__.isPrimaryLocale =
             normalizeLocale(mergedDocument.locale) === normalizedPrimaryLocale;
-
-          console.log("mergedDocument:", mergedDocument);
 
           // Use resolveUrlTemplate with useCurrentPageSetTemplate option
           // to get the URL based on the current page set template
@@ -83,7 +77,6 @@ export const fetchLocalesToPathsForEntity = async ({
               useCurrentPageSetTemplate: true,
             }
           );
-          console.log("resolvedUrl:", resolvedUrl);
           localeToPath[normalizeLocale(profile.meta.locale)] = resolvedUrl;
         } catch (e) {
           console.warn(
