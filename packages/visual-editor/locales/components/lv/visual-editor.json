@@ -1,4 +1,6 @@
 {
+  "closed": "Slēgts",
+  "closesAt": "Aizveras plkst",
   "friday": "Piektdiena",
   "monday": "Pirmdiena",
   "open24Hours": "Atveriet 24 stundas",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Īslaicīgi slēgts",
   "thursday": "Ceturtdiena",
   "tuesday": "Otrdiena",
-  "wednesday": "Trešdiena",
-  "closed": "Slēgts",
-  "closesAt": "Aizveras plkst"
+  "wednesday": "Trešdiena"
 }

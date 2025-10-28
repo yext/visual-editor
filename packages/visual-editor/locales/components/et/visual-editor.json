@@ -1,4 +1,6 @@
 {
+  "closed": "Suletud",
+  "closesAt": "Sulgub",
   "friday": "Reede",
   "monday": "Esmaspäev",
   "open24Hours": "Avatud 24 tundi",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Ajutiselt suletud",
   "thursday": "Neljapäev",
   "tuesday": "Teisipäev",
-  "wednesday": "Kolmapäev",
-  "closed": "Suletud",
-  "closesAt": "Sulgub"
+  "wednesday": "Kolmapäev"
 }

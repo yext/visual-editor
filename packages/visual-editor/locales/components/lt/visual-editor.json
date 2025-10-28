@@ -1,4 +1,6 @@
 {
+  "closed": "Uždarytas",
+  "closesAt": "Uždaroma",
   "friday": "Penktadienis",
   "monday": "Pirmadienis",
   "open24Hours": "Atidarykite 24 valandas",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Laikinai uždarytas",
   "thursday": "Ketvirtadienis",
   "tuesday": "Antradienis",
-  "wednesday": "Trečiadienis",
-  "closed": "Uždarytas",
-  "closesAt": "Uždaroma"
+  "wednesday": "Trečiadienis"
 }

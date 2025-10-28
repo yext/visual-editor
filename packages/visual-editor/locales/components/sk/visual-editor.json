@@ -1,4 +1,6 @@
 {
+  "closed": "ZATVORENÉ",
+  "closesAt": "Uzatvára sa",
   "friday": "Piatok",
   "monday": "Pondelok",
   "open24Hours": "Otvorené 24 hodín",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Dočasne zatvorené",
   "thursday": "Štvrtok",
   "tuesday": "Utorok",
-  "wednesday": "Streda",
-  "closed": "ZATVORENÉ",
-  "closesAt": "Uzatvára sa"
+  "wednesday": "Streda"
 }

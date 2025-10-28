@@ -1,4 +1,6 @@
 {
+  "closed": "关闭",
+  "closesAt": "关闭",
   "friday": "Friday",
   "monday": "Monday",
   "open24Hours": "打开24小时",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "暂时关闭",
   "thursday": "Thursday",
   "tuesday": "Tuesday",
-  "wednesday": "Wednesday",
-  "closed": "关闭",
-  "closesAt": "关闭"
+  "wednesday": "Wednesday"
 }

@@ -1,4 +1,6 @@
 {
+  "closed": "Suljettu",
+  "closesAt": "Sulkeutuu jhk",
   "friday": "perjantai",
   "monday": "maanantai",
   "open24Hours": "Avoinna 24 tuntia",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Väliaikaisesti suljettu",
   "thursday": "torstai",
   "tuesday": "tiistai",
-  "wednesday": "keskiviikko",
-  "closed": "Suljettu",
-  "closesAt": "Sulkeutuu jhk"
+  "wednesday": "keskiviikko"
 }

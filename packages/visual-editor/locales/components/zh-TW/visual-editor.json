@@ -1,4 +1,6 @@
 {
+  "closed": "關閉",
+  "closesAt": "關閉",
   "friday": "星期五",
   "monday": "週一",
   "open24Hours": "打開24小時",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "暫時關閉",
   "thursday": "週四",
   "tuesday": "週二",
-  "wednesday": "週三",
-  "closed": "關閉",
-  "closesAt": "關閉"
+  "wednesday": "週三"
 }

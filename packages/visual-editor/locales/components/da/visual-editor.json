@@ -1,4 +1,6 @@
 {
+  "closed": "Lukket",
+  "closesAt": "Lukker kl",
   "friday": "fredag",
   "monday": "mandag",
   "open24Hours": "Åben 24 timer",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Midlertidigt lukket",
   "thursday": "torsdag",
   "tuesday": "tirsdag",
-  "wednesday": "onsdag",
-  "closed": "Lukket",
-  "closesAt": "Lukker kl"
+  "wednesday": "onsdag"
 }

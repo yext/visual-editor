@@ -1,4 +1,6 @@
 {
+  "closed": "Închis",
+  "closesAt": "Se închide la",
   "friday": "vineri",
   "monday": "luni",
   "open24Hours": "Deschis 24 de ore",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Închis temporar",
   "thursday": "joi",
   "tuesday": "marţi",
-  "wednesday": "miercuri",
-  "closed": "Închis",
-  "closesAt": "Se închide la"
+  "wednesday": "miercuri"
 }

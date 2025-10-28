@@ -1,4 +1,6 @@
 {
+  "closed": "Chiuso",
+  "closesAt": "Chiude a",
   "friday": "Venerdì",
   "monday": "Lunedi",
   "open24Hours": "Apri 24 ore",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Temporaneamente chiuso",
   "thursday": "Giovedì",
   "tuesday": "Martedì",
-  "wednesday": "Mercoledì",
-  "closed": "Chiuso",
-  "closesAt": "Chiude a"
+  "wednesday": "Mercoledì"
 }

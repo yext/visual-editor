@@ -1,4 +1,6 @@
 {
+  "closed": "Zárt",
+  "closesAt": "Bezár",
   "friday": "péntek",
   "monday": "hétfő",
   "open24Hours": "Nyitva 24 órát",
@@ -8,7 +10,5 @@
   "temporarilyClosed": "Ideiglenesen bezárt",
   "thursday": "csütörtök",
   "tuesday": "kedd",
-  "wednesday": "szerda",
-  "closed": "Zárt",
-  "closesAt": "Bezár"
+  "wednesday": "szerda"
 }
