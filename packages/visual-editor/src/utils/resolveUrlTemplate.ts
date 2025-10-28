@@ -56,6 +56,8 @@ export const resolveUrlTemplate = (
     urlTemplates = pagesetJson?.config?.urlTemplate || {};
   }
 
+  console.log("urlTemplates:", urlTemplates);
+
   let urlTemplate: string | undefined;
   if (isPrimaryLocale && urlTemplates.primary) {
     urlTemplate = urlTemplates.primary;

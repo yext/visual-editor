@@ -36,11 +36,13 @@ export const fetchLocalesToPathsForEntity = async ({
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale) {
         try {
+          console.log("profile:", profile);
           // Use resolveUrlTemplate with useCurrentPageSetTemplate option
           // to get the URL based on the current page set template
           const path = resolveUrlTemplate(profile, "", undefined, {
             useCurrentPageSetTemplate: true,
           });
+          console.log("path:", path);
           localeToPath[normalizeLocale(profile.meta.locale)] = path;
         } catch (e) {
           console.warn(
