@@ -34,7 +34,6 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   const { document } = data;
   const { title, description } = getPageMetadata(document);
   const schema = getSchema(data);
-  console.log("headconfig schema", schema);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
 
   return {

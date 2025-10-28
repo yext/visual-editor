@@ -21,13 +21,7 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const resolvedSchemaMarkup: Record<string, any> = schemaMarkup
       ? JSON.parse(resolveSchemaJson(document, schemaMarkup))
       : getDefaultSchema(document);
-    console.log("resolvedSchemaMarkup", resolvedSchemaMarkup);
 
-    console.log(
-      "if condition",
-      entityTypeId,
-      entityTypeId && !entityTypeId.startsWith("dm_")
-    );
     if (
       entityTypeId &&
       !entityTypeId.startsWith("dm_") &&
@@ -59,9 +53,7 @@ const getDefaultSchema = (
   document: Record<string, any>
 ): Record<string, any> => {
   const entityTypeId = (document as any)?.meta?.entityType?.id;
-  console.log("getting default schema for", entityTypeId);
   const defaultSchemaTemplate = getSchemaTemplate(entityTypeId);
-  console.log("defaultSchemaTemplate", defaultSchemaTemplate);
   try {
     return JSON.parse(resolveSchemaJson(document, defaultSchemaTemplate));
   } catch (e) {
