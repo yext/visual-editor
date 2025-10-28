@@ -280,12 +280,12 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
             {/* LEFT ALIGNED: Links first, then slots */}
             {expandedFooter ? (
               <slots.ExpandedLinksWrapperSlot
-                style={{ height: "auto" }}
+                style={{ height: "auto", flex: 1 }}
                 allow={[]}
               />
             ) : (
               <slots.PrimaryLinksWrapperSlot
-                style={{ height: "auto" }}
+                style={{ height: "auto", flex: 1 }}
                 allow={[]}
               />
             )}
@@ -337,12 +337,12 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
             </div>
             {expandedFooter ? (
               <slots.ExpandedLinksWrapperSlot
-                style={{ height: "auto" }}
+                style={{ height: "auto", flex: 1 }}
                 allow={[]}
               />
             ) : (
               <slots.PrimaryLinksWrapperSlot
-                style={{ height: "auto" }}
+                style={{ height: "auto", flex: 1 }}
                 allow={[]}
               />
             )}
