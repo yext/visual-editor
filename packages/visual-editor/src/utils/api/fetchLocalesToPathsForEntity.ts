@@ -39,6 +39,26 @@ export const fetchLocalesToPathsForEntity = async ({
   try {
     const json = await response.json();
     console.log("json:", json);
+
+    let primaryLocale: string = "";
+    for (const profile of json.response.docs) {
+      if (profile?.$key?.locale === "" && profile?.meta?.locale) {
+        // If multiple locales appear to be the primary, throw a warning
+        if (primaryLocale) {
+          console.warn("Unable to determine primary locale");
+          break;
+        }
+        primaryLocale = profile?.meta?.locale;
+      }
+    }
+    // If no locale appears to be the primary, throw a warning
+    if (!primaryLocale) {
+      console.warn("Unable to determine primary locale");
+    }
+    const normalizedPrimaryLocale = primaryLocale
+      ? normalizeLocale(primaryLocale)
+      : "";
+
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale) {
         try {
@@ -48,6 +68,8 @@ export const fetchLocalesToPathsForEntity = async ({
           const mergedDocument = mergeMeta(profile, streamDocument);
           // Override with the profile's locale to ensure we resolve the URL for the correct language
           mergedDocument.locale = profile.meta.locale || profile.locale;
+          mergedDocument.isPrimaryLocale =
+            normalizeLocale(mergedDocument.locale) === normalizedPrimaryLocale;
 
           console.log("mergedDocument:", mergedDocument);
 
