@@ -21,7 +21,9 @@ import {
   SearchI18nextProvider,
 } from "@yext/search-ui-react";
 import {
+  FilterSearchResponse,
   Matcher,
+  NearFilterValue,
   provideHeadless,
   Result,
   SearchHeadlessProvider,
@@ -59,12 +61,15 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
+import { useSaveToQueryString } from "../hooks/useSaveToQueryString";
+import { getValueFromQueryString } from "../utils/urlQueryString";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 const HOURS_FIELD = "builtin.hours";
+const INITIAL_LOCATION_KEY = "initialLocation";
 
 // Keep only digits and at most one leading plus for tel: links.
 // If the input already starts with "tel:", return it as-is.
@@ -649,12 +654,25 @@ const LocatorInternal = ({
   };
 
   const searchActions = useSearchActions();
+  console.log("Query string:", window.location.search);
+  const [initialLocationParam, setInitialLocationParam] = React.useState<
+    string | null
+  >(getValueFromQueryString(INITIAL_LOCATION_KEY, window.location.search));
+  console.log("initialLocationParam:", initialLocationParam);
+  useSaveToQueryString(
+    initialLocationParam,
+    (initialLocation) => setInitialLocationParam(initialLocation),
+    INITIAL_LOCATION_KEY
+  );
+
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
+    const newDisplayName = params.newDisplayName;
+    setInitialLocationParam(newDisplayName);
     const locationFilter: SelectableStaticFilter = {
-      displayName: params.newDisplayName,
+      displayName: newDisplayName,
       selected: true,
       filter: {
         kind: "fieldValue",
@@ -733,49 +751,11 @@ const LocatorInternal = ({
   });
 
   React.useEffect(() => {
-    let centerCoords = DEFAULT_MAP_CENTER;
-    let displayName: string | undefined;
-    getUserLocation()
-      .then(async (location) => {
-        centerCoords = [location.coords.longitude, location.coords.latitude];
-        setUserLocationRetrieved(true);
-
-        // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
-        try {
-          if (mapboxApiKey) {
-            const lang =
-              (streamDocument.locale as string) ||
-              (typeof navigator !== "undefined"
-                ? navigator.language
-                : undefined) ||
-              "en";
-            const lon = centerCoords[0];
-            const lat = centerCoords[1];
-            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
-              lang
-            )}`;
-
-            const res = await fetch(url);
-            if (res.ok) {
-              const data = await res.json();
-              const feature = data.features && data.features[0];
-              displayName = feature?.place_name || undefined;
-            }
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      })
-      .catch(() => {
-        try {
-          if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
-            centerCoords = parseMapStartingLocation(mapStartingLocation);
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      })
-      .finally(() => {
+    const resolveLocationAndSearch = async () => {
+      let centerCoords = DEFAULT_MAP_CENTER;
+      let displayName: string | undefined;
+      const doSearch = () => {
+        console.log("Doing search with coords:", centerCoords);
         searchActions.setStaticFilters([
           {
             selected: true,
@@ -795,8 +775,90 @@ const LocatorInternal = ({
         searchActions.executeVerticalQuery();
         setSearchState("loading");
         setMapProps((prev) => ({ ...prev, centerCoords }));
-      });
-  }, []);
+      };
+
+      const foundStartingLocationFromQueryParam = async (
+        queryParam: string
+      ): Promise<boolean> => {
+        return searchActions
+          .executeFilterSearch(queryParam, false, [
+            {
+              fieldApiName: DEFAULT_FIELD,
+              entityType: entityType,
+              fetchEntities: false,
+            },
+          ])
+          .then((response: FilterSearchResponse | undefined) => {
+            const firstResult = response?.sections[0]?.results[0];
+            const filterFromResult = firstResult?.filter
+              ?.value as NearFilterValue;
+
+            if (
+              firstResult &&
+              firstResult.filter &&
+              filterFromResult.lat &&
+              filterFromResult.lng
+            ) {
+              displayName = firstResult.value;
+              centerCoords = [filterFromResult.lng, filterFromResult.lat];
+              return true;
+            }
+            return false;
+          });
+      };
+
+      // 1. Check if a location could be determined from the initialLocation query parameter
+      if (
+        initialLocationParam &&
+        (await foundStartingLocationFromQueryParam(initialLocationParam))
+      ) {
+        doSearch();
+        return;
+      }
+
+      try {
+        // 2. Try to get user location via Geolocation API
+        const location = await getUserLocation();
+        centerCoords = [location.coords.longitude, location.coords.latitude];
+        setUserLocationRetrieved(true);
+
+        // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
+        if (mapboxApiKey) {
+          const lang =
+            (streamDocument.locale as string) ||
+            (typeof navigator !== "undefined"
+              ? navigator.language
+              : undefined) ||
+            "en";
+          const lon = centerCoords[0];
+          const lat = centerCoords[1];
+          const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+            lang
+          )}`;
+
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            const feature = data.features && data.features[0];
+            displayName = feature?.place_name || undefined;
+          }
+        }
+      } catch {
+        // 3. Fall back to mapStartingLocation prop
+        try {
+          if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
+            centerCoords = parseMapStartingLocation(mapStartingLocation);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      } finally {
+        doSearch();
+      }
+    };
+
+    resolveLocationAndSearch();
+  }, [initialLocationParam]);
 
   const handleOpenNowClick = (selected: boolean) => {
     searchActions.setFilterOption({
