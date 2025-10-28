@@ -1,6 +1,5 @@
-import { normalizeSlug } from "../slugifier.ts";
 import { normalizeLocale } from "../normalizeLocale.ts";
-import { StreamDocument } from "../applyTheme.ts";
+import { resolveUrlTemplate } from "../resolveUrlTemplate.ts";
 
 const V_PARAM = "20250407";
 
@@ -35,8 +34,20 @@ export const fetchLocalesToPathsForEntity = async ({
   try {
     const json = await response.json();
     for (const profile of json.response.docs) {
-      if (profile?.meta?.locale && getPath(profile)) {
-        localeToPath[normalizeLocale(profile.meta.locale)] = getPath(profile);
+      if (profile?.meta?.locale) {
+        try {
+          // Use resolveUrlTemplate with useCurrentPageSetTemplate option
+          // to get the URL based on the current page set template
+          const path = resolveUrlTemplate(profile, "", undefined, {
+            useCurrentPageSetTemplate: true,
+          });
+          localeToPath[normalizeLocale(profile.meta.locale)] = path;
+        } catch (e) {
+          console.warn(
+            `Failed to resolve URL template for locale ${profile.meta.locale}`,
+            e
+          );
+        }
       }
     }
   } catch (e) {
@@ -44,23 +55,4 @@ export const fetchLocalesToPathsForEntity = async ({
   }
 
   return localeToPath;
-};
-
-// getPath assumes the user is using Visual Editor in-platform. This does not work with some hybrid cases.
-// This should use the exact same logic as getPath in packages/visual-editor/src/vite-plugin/templates/main.tsx
-// as that is the code all in-platform developers are using.
-const getPath = (streamDocument: StreamDocument): string => {
-  if (streamDocument.slug) {
-    return streamDocument.slug;
-  }
-
-  const localePath =
-    streamDocument.meta?.locale !== "en"
-      ? `${streamDocument.meta?.locale}/`
-      : "";
-  const path = streamDocument.address
-    ? `${localePath}${streamDocument.address.region}/${streamDocument.address.city}/${streamDocument.address.line1}-${streamDocument.id}`
-    : `${localePath}${streamDocument.id}`;
-
-  return normalizeSlug(path);
 };

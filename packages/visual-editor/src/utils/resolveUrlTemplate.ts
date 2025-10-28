@@ -13,6 +13,8 @@ import { normalizeLocalesInObject } from "./normalizeLocale.ts";
  * @param streamDocument - The document containing the URL template and data.
  * @param relativePrefixToRoot - Prefix to prepend to the resolved URL.
  * @param alternateFunction - Alternate function to resolve the URL template (optional).
+ * @param options - Additional options for URL template resolution.
+ * @param options.useCurrentPageSetTemplate - If true, uses the current page set template instead of the base entity template for directory/locator pages (default: false).
  * @returns The resolved and normalized URL.
  */
 export const resolveUrlTemplate = (
@@ -21,7 +23,10 @@ export const resolveUrlTemplate = (
   alternateFunction?: (
     streamDocument: StreamDocument,
     relativePrefixToRoot: string
-  ) => string
+  ) => string,
+  options?: {
+    useCurrentPageSetTemplate?: boolean;
+  }
 ): string => {
   streamDocument = normalizeLocalesInObject(streamDocument);
   const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
@@ -36,14 +41,17 @@ export const resolveUrlTemplate = (
   const isPrimaryLocale = streamDocument.__?.isPrimaryLocale !== false;
 
   let urlTemplates;
-  if (
+  const isDirectoryOrLocator =
     streamDocument?.__?.codeTemplate === "directory" ||
-    streamDocument?.__?.codeTemplate === "locator"
-  ) {
+    streamDocument?.__?.codeTemplate === "locator";
+
+  if (isDirectoryOrLocator && !options?.useCurrentPageSetTemplate) {
+    // Use base entity template for directory/locator (legacy behavior)
     urlTemplates = JSON.parse(
       streamDocument?.__?.entityPageSetUrlTemplates || "{}"
     );
   } else {
+    // Use current page set template
     const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
     urlTemplates = pagesetJson?.config?.urlTemplate || {};
   }

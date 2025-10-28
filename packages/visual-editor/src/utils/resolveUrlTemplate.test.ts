@@ -314,4 +314,71 @@ describe("resolveUrlTemplate", () => {
       )
     ).toBe("es/ny/location/123");
   });
+
+  it("uses current page set template when useCurrentPageSetTemplate option is true for directory pages", () => {
+    const directoryDocWithPageSetTemplate = {
+      ...mockDirectoryMergedDocument,
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary: "directory/[[address.city]]/[[id]]",
+            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
+          },
+        },
+      }),
+    };
+
+    const result = resolveUrlTemplate(
+      directoryDocWithPageSetTemplate,
+      "",
+      undefined,
+      { useCurrentPageSetTemplate: true }
+    );
+
+    expect(result).toBe("directory/new-york/123");
+  });
+
+  it("uses current page set template for alternate locale when useCurrentPageSetTemplate is true", () => {
+    const directoryDocWithPageSetTemplate = {
+      ...mockDirectoryMergedDocument,
+      __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
+      locale: "es",
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary: "directory/[[address.city]]/[[id]]",
+            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
+          },
+        },
+      }),
+    };
+
+    const result = resolveUrlTemplate(
+      directoryDocWithPageSetTemplate,
+      "",
+      undefined,
+      { useCurrentPageSetTemplate: true }
+    );
+
+    expect(result).toBe("es/directory/new-york/123");
+  });
+
+  it("uses base entity template by default for directory pages (backward compatibility)", () => {
+    const directoryDocWithBothTemplates = {
+      ...mockDirectoryMergedDocument,
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary: "directory/[[address.city]]/[[id]]",
+            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
+          },
+        },
+      }),
+    };
+
+    // Without the option, should use entityPageSetUrlTemplates
+    const result = resolveUrlTemplate(directoryDocWithBothTemplates, "");
+
+    expect(result).toBe("ny/page/123");
+  });
 });
