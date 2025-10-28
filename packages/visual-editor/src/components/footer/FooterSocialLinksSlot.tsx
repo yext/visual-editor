@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@measured/puck";
-import { YextField, msg } from "@yext/visual-editor";
+import { YextField, msg, useBackground } from "@yext/visual-editor";
 import {
   FaFacebook,
   FaInstagram,
@@ -28,6 +28,8 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   FooterSocialLinksSlotProps
 > = (props) => {
   const { data, puck } = props;
+  const background = useBackground();
+  const isDarkBackground = background?.isDarkBackground ?? false;
 
   const links = [
     {
@@ -83,6 +85,10 @@ const FooterSocialLinksSlotInternal: PuckComponent<
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
+  const textColorClass = isDarkBackground
+    ? "text-white"
+    : "text-palette-primary-dark";
+
   return (
     <div
       className="flex gap-4 items-center justify-center md:justify-start"
@@ -96,7 +102,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-2xl hover:opacity-80 transition-opacity"
+            className={`text-2xl hover:opacity-80 transition-opacity ${textColorClass}`}
             aria-label={link.label}
           >
             <Icon />

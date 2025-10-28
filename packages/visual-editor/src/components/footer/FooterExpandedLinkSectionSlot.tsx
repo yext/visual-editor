@@ -3,12 +3,14 @@ import { ComponentConfig, PuckComponent } from "@measured/puck";
 import {
   YextField,
   msg,
+  pt,
   useDocument,
   resolveComponentData,
   TranslatableString,
   TranslatableCTA,
   YextEntityField,
   CTA,
+  Body,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -44,7 +46,7 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
 
   return (
     <div className="flex flex-col gap-6">
-      <h3>{label}</h3>
+      <Body className="break-words">{label}</Body>
       <div className="flex flex-col gap-4">
         {links && links.length > 0
           ? links.map((linkData, index) => {
@@ -119,7 +121,7 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
           getItemSummary: (item, index) => {
             const label =
               typeof item.label === "string" ? item.label : item.label?.en;
-            return label || `Link ${(index ?? 0) + 1}`;
+            return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
           },
         }),
       },

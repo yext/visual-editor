@@ -3,6 +3,7 @@ import { ComponentConfig, PuckComponent, Slot } from "@measured/puck";
 import {
   YextField,
   msg,
+  pt,
   TranslatableString,
   TranslatableCTA,
   YextEntityField,
@@ -39,7 +40,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
 export const FooterExpandedLinksWrapper: ComponentConfig<{
   props: FooterExpandedLinksWrapperProps;
 }> = {
-  label: msg("components.footerExpandedLinksWrapper", "Expanded Links Wrapper"),
+  label: msg("components.footerExpandedLinksWrapper", "Expanded Links"),
   fields: {
     data: YextField(
       msg("fields.expandedFooterLinks", "Expanded Footer Links"),
@@ -77,7 +78,7 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
             getItemSummary: (item, index) => {
               const label =
                 typeof item.label === "string" ? item.label : item.label?.en;
-              return label || `Link ${(index ?? 0) + 1}`;
+              return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
             },
           }),
         },
@@ -88,7 +89,7 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
         getItemSummary: (item, index) => {
           const label =
             typeof item.label === "string" ? item.label : item.label?.en;
-          return label || `Section ${(index ?? 0) + 1}`;
+          return label || pt("section", "Section") + " " + ((index ?? 0) + 1);
         },
       }
     ),

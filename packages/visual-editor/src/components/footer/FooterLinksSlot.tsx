@@ -3,6 +3,7 @@ import { ComponentConfig, PuckComponent } from "@measured/puck";
 import {
   YextField,
   msg,
+  pt,
   useDocument,
   resolveComponentData,
   CTA,
@@ -116,7 +117,7 @@ export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
             getItemSummary: (item, index) => {
               const label =
                 typeof item.label === "string" ? item.label : item.label?.en;
-              return label || `Link ${(index ?? 0) + 1}`;
+              return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
             },
           }),
         },

@@ -175,6 +175,10 @@ export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
   BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
+  CopyrightMessageSlot: {
+    ...CopyrightMessageSlot,
+    permissions: lockedPermissions,
+  },
   CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
   DirectoryCard: { ...DirectoryCard, permissions: lockedPermissions },
   DirectoryGrid: { ...DirectoryGrid, permissions: lockedPermissions },
@@ -183,16 +187,6 @@ export const SlotsCategoryComponents = {
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
   FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
   FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
-  FooterLogoSlot: { ...FooterLogoSlot, permissions: lockedPermissions },
-  FooterSocialLinksSlot: {
-    ...FooterSocialLinksSlot,
-    permissions: lockedPermissions,
-  },
-  FooterUtilityImagesSlot: {
-    ...FooterUtilityImagesSlot,
-    permissions: lockedPermissions,
-  },
-  FooterLinksSlot: { ...FooterLinksSlot, permissions: lockedPermissions },
   FooterExpandedLinkSectionSlot: {
     ...FooterExpandedLinkSectionSlot,
     permissions: lockedPermissions,
@@ -201,8 +195,14 @@ export const SlotsCategoryComponents = {
     ...FooterExpandedLinksWrapper,
     permissions: lockedPermissions,
   },
-  CopyrightMessageSlot: {
-    ...CopyrightMessageSlot,
+  FooterLinksSlot: { ...FooterLinksSlot, permissions: lockedPermissions },
+  FooterLogoSlot: { ...FooterLogoSlot, permissions: lockedPermissions },
+  FooterSocialLinksSlot: {
+    ...FooterSocialLinksSlot,
+    permissions: lockedPermissions,
+  },
+  FooterUtilityImagesSlot: {
+    ...FooterUtilityImagesSlot,
     permissions: lockedPermissions,
   },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
