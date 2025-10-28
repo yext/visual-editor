@@ -370,6 +370,7 @@ The background color for the entire footer section.
 
 | Prop              | Type                            | Description | Default |
 | :---------------- | :------------------------------ | :---------- | :------ |
+| `alignment`       | `"left" \| "right"`             |             |         |
 | `data`            | `{ links: TranslatableCTA[]; }` |             |         |
 | `eventNamePrefix` | `string`                        |             |         |
 | `variant`         | `"primary" \| "secondary"`      |             |         |
