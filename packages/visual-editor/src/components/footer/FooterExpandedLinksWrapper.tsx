@@ -27,12 +27,9 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
 
   return (
     <slots.ExpandedSectionsSlot
+      className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full text-center md:text-left justify-items-center md:justify-items-start"
       style={{
         height: "auto",
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: "1.5rem",
-        width: "100%",
       }}
       allow={[]}
     />

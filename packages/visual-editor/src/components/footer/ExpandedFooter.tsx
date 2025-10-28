@@ -274,69 +274,79 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
         maxWidth={maxWidth}
         className={`py-6 sm:py-12 flex flex-col md:flex-row md:justify-start w-full md:items-start gap-6 md:gap-8`}
       >
-        {/** Desktop left footer logos and icons / Mobile top footer logo */}
-        <div
-          className={themeManagerCn(
-            `flex flex-col gap-6 md:gap-6 items-start`,
-            primaryLinksAlignment === "left" ? `md:hidden` : ``
-          )}
-        >
-          <slots.LogoSlot
-            style={{ height: "auto", maxWidth: "max-content" }}
-            allow={[]}
-          />
-          <div
-            className={themeManagerCn(
-              "flex flex-col gap-6 items-start",
-              puck.isEditing ? "" : "hidden md:flex"
+        {/* Render in different order based on alignment */}
+        {primaryLinksAlignment === "left" ? (
+          <>
+            {/* LEFT ALIGNED: Links first, then slots */}
+            {expandedFooter ? (
+              <slots.ExpandedLinksWrapperSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            ) : (
+              <slots.PrimaryLinksWrapperSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
             )}
-          >
-            <slots.SocialLinksSlot
-              style={{ height: "auto", maxWidth: "max-content" }}
-              allow={[]}
-            />
-            <slots.UtilityImagesSlot
-              style={{ height: "auto", maxWidth: "max-content" }}
-              allow={[]}
-            />
-          </div>
-        </div>
-        {expandedFooter ? (
-          <slots.ExpandedLinksWrapperSlot
-            style={{ height: "auto" }}
-            allow={[]}
-          />
-        ) : (
-          <slots.PrimaryLinksWrapperSlot
-            style={{ height: "auto" }}
-            allow={[]}
-          />
-        )}
-        {/** Desktop right aligned footer logos and icons */}
-        {!puck.isEditing && (
-          <div
-            className={themeManagerCn(
-              `flex flex-col gap-6 md:gap-6 hidden sm:flex`,
-              primaryLinksAlignment === "left"
-                ? `items-end`
-                : `items-start md:hidden`
-            )}
-          >
-            <slots.LogoSlot
-              style={{ height: "auto", maxWidth: "max-content" }}
-              allow={[]}
-            />
-            <div className="hidden md:flex flex-col gap-6 items-start">
-              <slots.SocialLinksSlot
+            <div className="flex flex-col gap-6 md:gap-6 items-start">
+              <slots.LogoSlot
                 style={{ height: "auto", maxWidth: "max-content" }}
                 allow={[]}
               />
-              <slots.UtilityImagesSlot
-                style={{ height: "auto", maxWidth: "max-content" }}
-                allow={[]}
-              />
+              <div
+                className={themeManagerCn(
+                  "flex flex-col gap-6 items-start",
+                  puck.isEditing ? "" : "hidden md:flex"
+                )}
+              >
+                <slots.SocialLinksSlot
+                  style={{ height: "auto", maxWidth: "max-content" }}
+                  allow={[]}
+                />
+                <slots.UtilityImagesSlot
+                  style={{ height: "auto", maxWidth: "max-content" }}
+                  allow={[]}
+                />
+              </div>
             </div>
-          </div>
+          </>
+        ) : (
+          <>
+            {/* RIGHT ALIGNED (default): Slots first, then links */}
+            <div className="flex flex-col gap-6 md:gap-6 items-start">
+              <slots.LogoSlot
+                style={{ height: "auto", maxWidth: "max-content" }}
+                allow={[]}
+              />
+              <div
+                className={themeManagerCn(
+                  "flex flex-col gap-6 items-start",
+                  puck.isEditing ? "" : "hidden md:flex"
+                )}
+              >
+                <slots.SocialLinksSlot
+                  style={{ height: "auto", maxWidth: "max-content" }}
+                  allow={[]}
+                />
+                <slots.UtilityImagesSlot
+                  style={{ height: "auto", maxWidth: "max-content" }}
+                  allow={[]}
+                />
+              </div>
+            </div>
+            {expandedFooter ? (
+              <slots.ExpandedLinksWrapperSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            ) : (
+              <slots.PrimaryLinksWrapperSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            )}
+          </>
         )}
         {/** Mobile footer icons and utility images */}
         {!puck.isEditing && (
@@ -358,13 +368,15 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
           verticalPadding={"none"}
           background={secondaryBackgroundColor}
           maxWidth={maxWidth}
-          className={`py-4 sm:py-6 flex flex-col gap-5 ${secondaryLinksAlignment === "left" ? "md:items-start" : "md:items-end"} min-h-[60px]`}
+          className={`py-4 sm:py-6 flex flex-col gap-5`}
         >
           <slots.SecondaryLinksWrapperSlot
             style={{ height: "auto" }}
             allow={[]}
           />
-          <div className="text-center md:text-left">
+          <div
+            className={`text-center ${secondaryLinksAlignment === "left" ? "md:text-left" : "md:text-right"}`}
+          >
             <slots.CopyrightSlot style={{ height: "auto" }} allow={[]} />
           </div>
         </PageSection>
@@ -715,6 +727,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             },
             variant: "secondary",
             eventNamePrefix: "secondary",
+            alignment: "left",
           },
         },
       ],
@@ -791,6 +804,27 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
         },
       },
     };
+  },
+  resolveData: async (data) => {
+    // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
+    const secondaryLinksAlignment =
+      data?.props?.styles?.secondaryFooter?.linksAlignment || "left";
+
+    if (
+      data?.props?.slots?.SecondaryLinksWrapperSlot &&
+      Array.isArray(data.props.slots.SecondaryLinksWrapperSlot)
+    ) {
+      data.props.slots.SecondaryLinksWrapperSlot =
+        data.props.slots.SecondaryLinksWrapperSlot.map((slot: any) => ({
+          ...slot,
+          props: {
+            ...slot.props,
+            alignment: secondaryLinksAlignment,
+          },
+        }));
+    }
+
+    return data;
   },
   inline: true,
   render: (props) => (

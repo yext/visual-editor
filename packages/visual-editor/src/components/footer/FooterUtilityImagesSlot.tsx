@@ -60,6 +60,7 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
                 href={item.linkTarget}
                 className="block"
                 ariaLabel={ariaLabel}
+                alwaysHideCaret={true}
               >
                 {imgElement}
               </MaybeLink>

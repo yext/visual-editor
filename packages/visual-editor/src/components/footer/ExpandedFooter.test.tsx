@@ -688,6 +688,7 @@ const tests: ComponentTest[] = [
               },
               variant: "secondary",
               eventNamePrefix: "secondary",
+              alignment: "left",
             },
           },
         ],

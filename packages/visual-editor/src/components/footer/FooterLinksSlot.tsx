@@ -16,12 +16,19 @@ export interface FooterLinksSlotProps {
   };
   variant?: "primary" | "secondary";
   eventNamePrefix?: string;
+  alignment?: "left" | "right";
 }
 
 const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
   props
 ) => {
-  const { data, variant = "primary", eventNamePrefix = "footer", puck } = props;
+  const {
+    data,
+    variant = "primary",
+    eventNamePrefix = "footer",
+    alignment = "left",
+    puck,
+  } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -29,12 +36,17 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
+  const secondaryAlignment =
+    variant === "secondary" && alignment === "right"
+      ? "md:justify-end"
+      : "md:justify-start";
+
   return (
     <div
-      className={`w-full ${
+      className={`${
         variant === "secondary"
-          ? "gap-4 flex flex-col md:flex-row"
-          : "grid grid-cols-1 md:grid-cols-5 gap-6"
+          ? `gap-4 flex flex-col md:flex-row w-full ${secondaryAlignment}`
+          : "w-full grid grid-cols-1 md:grid-cols-5 gap-6"
       }`}
     >
       {data.links.map((linkData, index) => {
@@ -62,7 +74,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
             label={label}
             linkType={linkData.linkType}
             link={link}
-            className="justify-center md:justify-start block break-words whitespace-normal"
+            className={`justify-center block break-words whitespace-normal`}
           />
         );
       })}
@@ -121,6 +133,14 @@ export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
         type: "text",
         visible: false,
       },
+      alignment: {
+        type: "radio",
+        options: [
+          { label: "Left", value: "left" },
+          { label: "Right", value: "right" },
+        ],
+        visible: false,
+      },
     },
     defaultProps: {
       data: {
@@ -153,6 +173,7 @@ export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
         ],
       },
       variant: "primary",
+      alignment: "left",
     },
     render: (props) => <FooterLinksSlotInternal {...props} />,
   };

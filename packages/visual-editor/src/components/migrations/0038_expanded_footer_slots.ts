@@ -153,6 +153,7 @@ export const expandedFooterSlots: Migration = {
                 },
                 variant: "secondary",
                 eventNamePrefix: "secondary",
+                alignment: "left",
               },
             },
           ],
