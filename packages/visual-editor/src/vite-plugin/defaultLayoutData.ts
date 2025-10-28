@@ -1487,7 +1487,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 21,
+      version: 22,
       title: { field: "", constantValue: "", constantValueEnabled: false },
       description: {
         field: "",
