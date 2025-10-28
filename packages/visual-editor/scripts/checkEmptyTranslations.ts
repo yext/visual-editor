@@ -12,38 +12,50 @@ const errorMessages: string[] = [];
 console.log(`Checking for empty translations in: ${localesDir}`);
 
 try {
-  const localeDirs = fs
+  const localeSubfolders = fs
     .readdirSync(localesDir, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name);
 
-  for (const locale of localeDirs) {
-    const filePath = path.join(localesDir, locale, "visual-editor.json");
-    if (fs.existsSync(filePath)) {
-      const content = fs.readFileSync(filePath, "utf8");
-      const json = JSON.parse(content);
-      for (const key in json) {
-        if (Object.prototype.hasOwnProperty.call(json, key)) {
-          if (typeof json[key] === "string" && json[key].trim() === "") {
-            errorMessages.push(
-              `Empty translation for key "${key}" in locale "${locale}" (${filePath})`
-            );
-            foundEmptyTranslation = true;
+  for (const subfolder of localeSubfolders) {
+    const locales = fs
+      .readdirSync(path.join(localesDir, subfolder), { withFileTypes: true })
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => dirent.name);
+
+    for (const locale of locales) {
+      const filePath = path.join(
+        localesDir,
+        subfolder,
+        locale,
+        "visual-editor.json"
+      );
+      if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, "utf8");
+        const json = JSON.parse(content);
+        for (const key in json) {
+          if (Object.prototype.hasOwnProperty.call(json, key)) {
+            if (typeof json[key] === "string" && json[key].trim() === "") {
+              errorMessages.push(
+                `Empty translation for key "${key}" in locale "${locale}" (${filePath})`
+              );
+              foundEmptyTranslation = true;
+            }
           }
         }
+      } else {
+        console.warn(`File not found, skipping: ${filePath}`);
       }
-    } else {
-      console.warn(`File not found, skipping: ${filePath}`);
     }
-  }
 
-  if (foundEmptyTranslation) {
-    console.error("\nFound empty translation strings:");
-    errorMessages.forEach((msg) => console.error(msg));
-    process.exit(1); // Exit with error code
-  } else {
-    console.log("\nSuccess: no empty translation strings found.");
-    process.exit(0);
+    if (foundEmptyTranslation) {
+      console.error("\nFound empty translation strings:");
+      errorMessages.forEach((msg) => console.error(msg));
+      process.exit(1); // Exit with error code
+    } else {
+      console.log("\nSuccess: no empty translation strings found.");
+      process.exit(0);
+    }
   }
 } catch (error) {
   console.error("Error during script execution:", error);
