@@ -109,6 +109,10 @@ import {
   CopyrightMessageSlotProps,
 } from "../footer/CopyrightMessageSlot.tsx";
 import {
+  SecondaryFooterSlot,
+  SecondaryFooterSlotProps,
+} from "../footer/SecondaryFooterSlot.tsx";
+import {
   DirectoryCard,
   DirectoryCardProps,
 } from "../directory/DirectoryCard.tsx";
@@ -154,6 +158,7 @@ export interface SlotsCategoryProps {
   PhotoGalleryWrapper: PhotoGalleryWrapperProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
+  SecondaryFooterSlot: SecondaryFooterSlotProps;
   ServicesListSlot: TextListProps;
   TeamCard: TeamCardProps;
   TeamCardsWrapper: TeamCardsWrapperProps;
@@ -230,6 +235,10 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
+  SecondaryFooterSlot: {
+    ...SecondaryFooterSlot,
+    permissions: lockedPermissions,
+  },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TeamCard: { ...TeamCard, permissions: lockedPermissions },
   TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },

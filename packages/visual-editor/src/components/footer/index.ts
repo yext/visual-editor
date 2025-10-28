@@ -31,3 +31,7 @@ export {
   type CopyrightMessageSlotProps,
   defaultCopyrightMessageSlotProps,
 } from "./CopyrightMessageSlot.tsx";
+export {
+  SecondaryFooterSlot,
+  type SecondaryFooterSlotProps,
+} from "./SecondaryFooterSlot.tsx";

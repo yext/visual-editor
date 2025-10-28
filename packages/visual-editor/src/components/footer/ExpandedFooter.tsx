@@ -55,11 +55,6 @@ export interface ExpandedFooterData {
      */
     expandedFooter: boolean;
   };
-  /** Content for the secondary footer bar. */
-  secondaryFooter: {
-    /** Whether to hide or show the secondary footer */
-    show: boolean;
-  };
 }
 
 export interface ExpandedFooterStyles {
@@ -69,11 +64,6 @@ export interface ExpandedFooterStyles {
     linksAlignment: "left" | "right";
     logo: ImageStylingProps;
     utilityImages: ImageStylingProps;
-  };
-  /** Styling for the secondary footer bar. */
-  secondaryFooter: {
-    backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -99,8 +89,7 @@ export interface ExpandedFooterProps {
     UtilityImagesSlot: Slot;
     PrimaryLinksWrapperSlot: Slot;
     ExpandedLinksWrapperSlot: Slot;
-    SecondaryLinksWrapperSlot: Slot;
-    CopyrightSlot: Slot;
+    SecondaryFooterSlot: Slot;
   };
 
   /** @internal */
@@ -133,21 +122,6 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           ),
         },
       }),
-      secondaryFooter: YextField(
-        msg("fields.secondaryFooter", "Secondary Footer"),
-        {
-          type: "object",
-          objectFields: {
-            show: YextField(msg("fields.show", "Show"), {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }),
-          },
-        }
-      ),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -197,42 +171,6 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
           ),
         },
       }),
-      secondaryFooter: YextField(
-        msg("fields.secondaryFooter", "Secondary Footer"),
-        {
-          type: "object",
-          objectFields: {
-            backgroundColor: YextField(
-              msg("fields.backgroundColor", "Background Color"),
-              {
-                type: "select",
-                hasSearch: true,
-                options: "BACKGROUND_COLOR",
-              }
-            ),
-            linksAlignment: YextField(
-              msg("fields.linksAlignment", "Links Alignment"),
-              {
-                type: "radio",
-                options: [
-                  {
-                    label: msg("fields.options.left", "Left", {
-                      context: "direction",
-                    }),
-                    value: "left",
-                  },
-                  {
-                    label: msg("fields.options.right", "Right", {
-                      context: "direction",
-                    }),
-                    value: "right",
-                  },
-                ],
-              }
-            ),
-          },
-        }
-      ),
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
       }),
@@ -246,8 +184,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
       UtilityImagesSlot: { type: "slot" },
       PrimaryLinksWrapperSlot: { type: "slot" },
       ExpandedLinksWrapperSlot: { type: "slot" },
-      SecondaryLinksWrapperSlot: { type: "slot" },
-      CopyrightSlot: { type: "slot" },
+      SecondaryFooterSlot: { type: "slot" },
     },
     visible: false,
   },
@@ -268,20 +205,11 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
   slots,
   puck,
 }) => {
-  const { primaryFooter, secondaryFooter } = data;
-  const {
-    primaryFooter: primaryFooterStyle,
-    secondaryFooter: secondaryFooterStyle,
-    maxWidth,
-  } = styles;
+  const { primaryFooter } = data;
+  const { primaryFooter: primaryFooterStyle, maxWidth } = styles;
   const { expandedFooter } = primaryFooter;
-  const { show } = secondaryFooter;
   const { linksAlignment: primaryLinksAlignment, backgroundColor } =
     primaryFooterStyle;
-  const {
-    backgroundColor: secondaryBackgroundColor,
-    linksAlignment: secondaryLinksAlignment,
-  } = secondaryFooterStyle;
 
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
@@ -381,24 +309,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
         )}
       </PageSection>
       {/* Secondary footer section */}
-      {show && (
-        <PageSection
-          verticalPadding={"none"}
-          background={secondaryBackgroundColor}
-          maxWidth={maxWidth}
-          className={`py-4 sm:py-6 flex flex-col gap-5`}
-        >
-          <slots.SecondaryLinksWrapperSlot
-            style={{ height: "auto" }}
-            allow={[]}
-          />
-          <div
-            className={`text-center ${secondaryLinksAlignment === "left" ? "md:text-left" : "md:text-right"}`}
-          >
-            <slots.CopyrightSlot style={{ height: "auto" }} allow={[]} />
-          </div>
-        </PageSection>
-      )}
+      <slots.SecondaryFooterSlot style={{ height: "auto" }} allow={[]} />
     </Background>
   );
 };
@@ -414,9 +325,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     data: {
       primaryFooter: {
         expandedFooter: false,
-      },
-      secondaryFooter: {
-        show: false,
       },
     },
     slots: {
@@ -539,23 +447,40 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
           },
         },
       ],
-      SecondaryLinksWrapperSlot: [
+      SecondaryFooterSlot: [
         {
-          type: "FooterLinksSlot",
+          type: "SecondaryFooterSlot",
           props: {
             data: {
-              links: defaultLinks,
+              show: true,
             },
-            variant: "secondary",
-            eventNamePrefix: "secondary",
-            alignment: "left",
+            styles: {
+              backgroundColor: backgroundColors.background2.value,
+              linksAlignment: "left",
+            },
+            maxWidth: "theme",
+            slots: {
+              SecondaryLinksWrapperSlot: [
+                {
+                  type: "FooterLinksSlot",
+                  props: {
+                    data: {
+                      links: defaultLinks,
+                    },
+                    variant: "secondary",
+                    eventNamePrefix: "secondary",
+                    alignment: "left",
+                  },
+                },
+              ],
+              CopyrightSlot: [
+                {
+                  type: "CopyrightMessageSlot",
+                  props: defaultCopyrightMessageSlotProps,
+                },
+              ],
+            },
           },
-        },
-      ],
-      CopyrightSlot: [
-        {
-          type: "CopyrightMessageSlot",
-          props: defaultCopyrightMessageSlotProps,
         },
       ],
     },
@@ -572,10 +497,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
         backgroundColor: backgroundColors.background6.value,
         linksAlignment: "right",
       },
-      secondaryFooter: {
-        backgroundColor: backgroundColors.background2.value,
-        linksAlignment: "left",
-      },
       maxWidth: "theme",
     },
     analytics: {
@@ -583,74 +504,25 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     },
   },
   resolveFields: (_data, { fields }) => {
-    const showSecondaryFooter = _data.props.data.secondaryFooter.show;
-
-    const stylesFields = {
-      // @ts-expect-error ts(2339) objectFields exists
-      ...fields.styles.objectFields,
-    };
-    const secondaryFooterStyles = {
-      // @ts-expect-error ts(2339) objectFields exists
-      ...fields.styles.objectFields.secondaryFooter.objectFields,
-    };
-
-    if (!showSecondaryFooter) {
-      delete stylesFields.secondaryFooter;
-    } else {
-      stylesFields.secondaryFooter = {
-        // @ts-expect-error ts(2339) objectFields exists ts(2339) objectFields exists
-        ...fields.styles.objectFields.secondaryFooter,
-        objectFields: secondaryFooterStyles,
-      };
-    }
-
-    return {
-      ...fields,
-      styles: {
-        ...fields.styles,
-        objectFields: {
-          ...stylesFields,
-          // re-generate max width options
-          maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
-            type: "maxWidth",
-          }),
-        },
-      },
-    };
+    return fields;
   },
   resolveData: async (data) => {
-    const hiddenProps: string[] = [];
-
-    // Track hidden fields for locale warnings
-    if (!data.props.data.secondaryFooter?.show) {
-      hiddenProps.push("data.secondaryFooter");
-    }
-
-    // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
-    const secondaryLinksAlignment =
-      data?.props?.styles?.secondaryFooter?.linksAlignment || "left";
-
+    // Pass maxWidth to SecondaryFooterSlot
     if (
-      data?.props?.slots?.SecondaryLinksWrapperSlot &&
-      Array.isArray(data.props.slots.SecondaryLinksWrapperSlot)
+      data?.props?.slots?.SecondaryFooterSlot &&
+      Array.isArray(data.props.slots.SecondaryFooterSlot)
     ) {
-      data.props.slots.SecondaryLinksWrapperSlot =
-        data.props.slots.SecondaryLinksWrapperSlot.map((slot: any) => ({
+      data.props.slots.SecondaryFooterSlot =
+        data.props.slots.SecondaryFooterSlot.map((slot: any) => ({
           ...slot,
           props: {
             ...slot.props,
-            alignment: secondaryLinksAlignment,
+            maxWidth: data.props.styles.maxWidth || "theme",
           },
         }));
     }
 
-    return {
-      ...data,
-      props: {
-        ...data.props,
-        ignoreLocaleWarning: hiddenProps,
-      },
-    };
+    return data;
   },
   inline: true,
   render: (props) => (

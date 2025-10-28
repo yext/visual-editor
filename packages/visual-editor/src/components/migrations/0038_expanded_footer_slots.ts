@@ -24,6 +24,12 @@ export const expandedFooterSlots: Migration = {
       const { secondaryFooterLinks, copyrightMessage, show } =
         props.data.secondaryFooter || {};
 
+      // Get secondary footer styles
+      const secondaryBackgroundColor =
+        props.styles?.secondaryFooter?.backgroundColor;
+      const secondaryLinksAlignment =
+        props.styles?.secondaryFooter?.linksAlignment || "left";
+
       // Get logo styles
       const logoWidth = props.styles?.primaryFooter?.logo?.width || 100;
       const logoAspectRatio =
@@ -39,9 +45,6 @@ export const expandedFooterSlots: Migration = {
           ...props.data,
           primaryFooter: {
             expandedFooter: expandedFooter ?? false,
-          },
-          secondaryFooter: {
-            show: show ?? false,
           },
         },
         slots: {
@@ -144,32 +147,49 @@ export const expandedFooterSlots: Migration = {
               },
             },
           ],
-          SecondaryLinksWrapperSlot: [
+          SecondaryFooterSlot: [
             {
-              type: "FooterLinksSlot",
+              type: "SecondaryFooterSlot",
               props: {
                 data: {
-                  links: secondaryFooterLinks || [],
+                  show: show ?? true,
                 },
-                variant: "secondary",
-                eventNamePrefix: "secondary",
-                alignment: "left",
-              },
-            },
-          ],
-          CopyrightSlot: [
-            {
-              type: "CopyrightMessageSlot",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: copyrightMessage || {
-                      en: "",
-                      hasLocalizedValue: "true",
+                styles: {
+                  backgroundColor: secondaryBackgroundColor,
+                  linksAlignment: secondaryLinksAlignment,
+                },
+                maxWidth: props.styles?.maxWidth || "theme",
+                slots: {
+                  SecondaryLinksWrapperSlot: [
+                    {
+                      type: "FooterLinksSlot",
+                      props: {
+                        data: {
+                          links: secondaryFooterLinks || [],
+                        },
+                        variant: "secondary",
+                        eventNamePrefix: "secondary",
+                        alignment: secondaryLinksAlignment,
+                      },
                     },
-                    constantValueEnabled: true,
-                  },
+                  ],
+                  CopyrightSlot: [
+                    {
+                      type: "CopyrightMessageSlot",
+                      props: {
+                        data: {
+                          text: {
+                            field: "",
+                            constantValue: copyrightMessage || {
+                              en: "",
+                              hasLocalizedValue: "true",
+                            },
+                            constantValueEnabled: true,
+                          },
+                        },
+                      },
+                    },
+                  ],
                 },
               },
             },
