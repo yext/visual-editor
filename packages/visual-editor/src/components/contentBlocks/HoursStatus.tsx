@@ -94,6 +94,7 @@ const HoursStatusWrapper: React.FC<HoursStatusProps> = ({
         showDayNames={showDayNames}
         timeFormat={timeFormat}
         dayOfWeekFormat={dayOfWeekFormat}
+        timezone={streamDocument.timezone}
       />
     </EntityField>
   );

@@ -103,7 +103,6 @@
     "presetImage": "Image prédéfinie",
     "textAndLink": "Texte et lien"
   },
-  "currentLocation": "Emplacement actuel",
   "customSearchArea": "Zone de recherche personnalisée",
   "date": "Date",
   "dateAndTime": "Date et heure",
@@ -365,6 +364,7 @@
     "xLink": "X lien",
     "youtubeLink": "Lien youtube"
   },
+  "filter": "Filtre",
   "findALocation": "Trouver un emplacement",
   "fontSize": "Taille de la police",
   "fontSizeDefaultLabel": "Défaut",
@@ -405,7 +405,6 @@
   "locationWithCount_one": "{{count}} emplacement",
   "locationWithCount_other": "{{count}} emplacements",
   "locationsNear_one": "{{count}} Emplacement près de \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filtre:",
   "map": "Carte",
   "maxWidthTip": "Pour l'alignement optimal du contenu, nous vous recommandons de définir la largeur de l'en-tête et du pied de page pour correspondre ou dépasser la grille de contenu de la page.",
   "mediaType": "Type de support",
@@ -477,6 +476,7 @@
   "recentReviews": "Revues récentes",
   "recommendedColors": "Couleurs recommandées",
   "redo": "Refaire",
+  "refineYourSearch": "Affinez votre recherche",
   "reopenDate": "Rouvrir la date",
   "responseFrom": "Réponse de {{businessName}}",
   "saturday": "Samedi",

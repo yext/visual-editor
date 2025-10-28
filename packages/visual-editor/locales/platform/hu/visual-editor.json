@@ -104,7 +104,6 @@
     "presetImage": "Előre beállított kép",
     "textAndLink": "Szöveg és link"
   },
-  "currentLocation": "Aktuális hely",
   "customSearchArea": "Egyedi keresési terület",
   "date": "Dátum",
   "dateAndTime": "Dátum és idő",
@@ -366,6 +365,7 @@
     "xLink": "X link",
     "youtubeLink": "YouTube link"
   },
+  "filter": "Szűrő",
   "findALocation": "Keressen egy helyet",
   "fontSize": "Betűkészlet",
   "fontSizeDefaultLabel": "Mulasztás",
@@ -406,7 +406,6 @@
   "locationWithCount_one": "{{count}} hely",
   "locationWithCount_other": "{{count}} helyek",
   "locationsNear_one": "{{count}} A hely közelében \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Szűrő:",
   "map": "Térkép",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
   "mediaType": "Média típus",
@@ -478,6 +477,7 @@
   "recentReviews": "Legutóbbi vélemények",
   "recommendedColors": "Ajánlott színek",
   "redo": "Újra felújít",
+  "refineYourSearch": "Finomítsa a keresést",
   "reopenDate": "Újra megnyitja a dátumot",
   "responseFrom": "Válasz a {{businessName}}ból",
   "saturday": "szombat",

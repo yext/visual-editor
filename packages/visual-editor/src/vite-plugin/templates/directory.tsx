@@ -25,12 +25,14 @@ import {
   directoryConfig,
   getSchema,
   injectTranslations,
+  getCanonicalUrl,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
-export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
-  document,
-}): HeadConfig => {
+export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
+  data: TemplateRenderProps
+): HeadConfig => {
+  const { document } = data;
   const { title, description } = getPageMetadata(document);
   const schema = getSchema(document);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
@@ -47,6 +49,17 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
           type: "image/x-icon",
         },
       },
+      ...(data.document.siteDomain
+        ? [
+            {
+              type: "link",
+              attributes: {
+                rel: "canonical",
+                href: getCanonicalUrl(data),
+              },
+            },
+          ]
+        : []),
       ...(description
         ? [
             {

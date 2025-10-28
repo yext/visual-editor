@@ -104,7 +104,6 @@
     "presetImage": "预设图像",
     "textAndLink": "文字和链接"
   },
-  "currentLocation": "当前位置",
   "customSearchArea": "自定义搜索区域",
   "date": "日期",
   "dateAndTime": "日期和时间",
@@ -366,6 +365,7 @@
     "xLink": "x链接",
     "youtubeLink": "YouTube链接"
   },
+  "filter": "筛选",
   "findALocation": "找到一个位置",
   "fontSize": "字体大小",
   "fontSizeDefaultLabel": "默认",
@@ -406,7 +406,6 @@
   "locationWithCount_one": "{{count}}位置",
   "locationWithCount_other": "{{count}}位置",
   "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
-  "locatorFilterLabel": "筛选：",
   "map": "地图",
   "maxWidthTip": "对于最佳内容对齐，我们建议将标题和页脚宽度设置为匹配或超过页面内容网格。",
   "mediaType": "媒体类型",
@@ -478,6 +477,7 @@
   "recentReviews": "最近的评论",
   "recommendedColors": "推荐的颜色",
   "redo": "重做",
+  "refineYourSearch": "优化您的搜索",
   "reopenDate": "重新开放日期",
   "responseFrom": "{{businessName}}的响应",
   "saturday": "周六",

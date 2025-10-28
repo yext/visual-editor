@@ -1,6 +1,5 @@
 import React from "react";
 import { Field, FieldLabel } from "@measured/puck";
-import { ChevronDown } from "lucide-react";
 import {
   Combobox,
   ComboboxOption,
@@ -15,7 +14,6 @@ type BasicSelectorProps = {
   noOptionsPlaceholder?: string;
   noOptionsMessage?: string;
   disableSearch?: boolean;
-  icon?: React.ReactNode;
 } & (
   | {
       options: ComboboxOption[];
@@ -39,7 +37,6 @@ export const BasicSelector = <T,>(props: BasicSelectorProps): Field<T> => {
     ),
     noOptionsMessage,
     disableSearch,
-    icon = <ChevronDown size={16} />,
   } = props;
 
   return {
@@ -72,7 +69,7 @@ export const BasicSelector = <T,>(props: BasicSelectorProps): Field<T> => {
       if (noOptions) {
         return (
           <>
-            {label && <FieldLabel label={label} icon={icon} />}
+            {label && <FieldLabel label={label} />}
             <Button variant="puckSelect" disabled={true}>
               {noOptionsPlaceholder}
             </Button>
@@ -98,9 +95,7 @@ export const BasicSelector = <T,>(props: BasicSelectorProps): Field<T> => {
       );
 
       return label ? (
-        <FieldLabel label={pt(label)} icon={icon}>
-          {Selector}
-        </FieldLabel>
+        <FieldLabel label={pt(label)}>{Selector}</FieldLabel>
       ) : (
         Selector
       );

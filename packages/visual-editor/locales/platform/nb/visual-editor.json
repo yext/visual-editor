@@ -104,7 +104,6 @@
     "presetImage": "Forhåndsinnstilt bilde",
     "textAndLink": "Tekst og lenke"
   },
-  "currentLocation": "Nåværende plassering",
   "customSearchArea": "Tilpasset søkeområde",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
@@ -366,6 +365,7 @@
     "xLink": "X lenke",
     "youtubeLink": "YouTube -lenke"
   },
+  "filter": "Filter",
   "findALocation": "Finn et sted",
   "fontSize": "Fontstørrelse",
   "fontSizeDefaultLabel": "Misligholde",
@@ -406,7 +406,6 @@
   "locationWithCount_one": "{{count}} plassering",
   "locationWithCount_other": "{{count}} lokasjoner",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filter:",
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "mediaType": "Medietype",
@@ -478,6 +477,7 @@
   "recentReviews": "Nyere anmeldelser",
   "recommendedColors": "Anbefalte farger",
   "redo": "Gjøre om",
+  "refineYourSearch": "Avgrens søket ditt",
   "reopenDate": "Åpne dato på nytt",
   "responseFrom": "Svar fra {{businessName}}",
   "saturday": "lørdag",

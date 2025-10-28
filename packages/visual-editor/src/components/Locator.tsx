@@ -40,7 +40,6 @@ import {
   Heading,
   msg,
   useDocument,
-  Toggle,
   YextField,
   useTemplateProps,
   resolveUrlTemplate,
@@ -54,15 +53,35 @@ import {
   HoursType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
-import { FaAngleRight, FaCheckSquare, FaRegSquare } from "react-icons/fa";
+import {
+  FaAngleRight,
+  FaCheckSquare,
+  FaRegSquare,
+  FaSlidersH,
+  FaTimes,
+} from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
-import { FaSliders } from "react-icons/fa6";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 const HOURS_FIELD = "builtin.hours";
+
+// Keep only digits and at most one leading plus for tel: links.
+// If the input already starts with "tel:", return it as-is.
+function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
+  if (!rawPhone) {
+    return undefined;
+  }
+  if (rawPhone.startsWith("tel:")) {
+    return rawPhone;
+  }
+
+  // Remove any '+' that is not the leading character and strip non-digits.
+  const cleaned = rawPhone.replace(/(?!^\+)\+|[^\d+]/g, "");
+  return `tel:${cleaned}`;
+}
 
 export interface LocatorProps {
   /**
@@ -200,9 +219,24 @@ const LocatorInternal = ({
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
+  const streamDocument = useDocument();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
+
+  const iframe =
+    typeof document === "undefined"
+      ? undefined
+      : (document.getElementById("preview-frame") as HTMLIFrameElement);
+
+  let mapboxApiKey = streamDocument._env?.YEXT_MAPBOX_API_KEY;
+  if (
+    iframe?.contentDocument &&
+    streamDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+  ) {
+    // If we are in the layout editor, use the non-URL-restricted Mapbox API key
+    mapboxApiKey = streamDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+  }
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
@@ -326,10 +360,35 @@ const LocatorInternal = ({
     let centerCoords = DEFAULT_MAP_CENTER;
     let displayName: string | undefined;
     getUserLocation()
-      .then((location) => {
+      .then(async (location) => {
         centerCoords = [location.coords.longitude, location.coords.latitude];
         setUserLocationRetrieved(true);
-        displayName = t("currentLocation", "Current Location");
+
+        // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
+        try {
+          if (mapboxApiKey) {
+            const lang =
+              (streamDocument.locale as string) ||
+              (typeof navigator !== "undefined"
+                ? navigator.language
+                : undefined) ||
+              "en";
+            const lon = centerCoords[0];
+            const lat = centerCoords[1];
+            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+              lang
+            )}`;
+
+            const res = await fetch(url);
+            if (res.ok) {
+              const data = await res.json();
+              const feature = data.features && data.features[0];
+              displayName = feature?.place_name || undefined;
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
       })
       .catch(() => {
         try {
@@ -398,6 +457,8 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
+  const [showFilter, setShowFilter] = React.useState(false);
+
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
@@ -422,50 +483,84 @@ const LocatorInternal = ({
               radius: 25,
             }}
           />
-          {openNowButton && (
-            <div className={"flex flex-row gap-2 items-center"}>
-              <div className={"flex items-center gap-1"}>
-                <FaSliders />
-                <span className="font-bold">
-                  {t("locatorFilterLabel", "Filter:")}
-                </span>
-              </div>
-              <Toggle
-                pressed={isSelected}
-                onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-                className="inline-flex py-1 px-3 w-auto"
+        </div>
+        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 relative inline-block">
+          <div className="flex flex-row justify-between">
+            <div>
+              {resultCount === 0 &&
+                searchState === "not started" &&
+                t(
+                  "useOurLocatorToFindALocationNearYou",
+                  "Use our locator to find a location near you"
+                )}
+              {resultCount === 0 &&
+                searchState === "complete" &&
+                t(
+                  "noResultsFoundForThisArea",
+                  "No results found for this area"
+                )}
+              {resultCount > 0 &&
+                (filterDisplayName
+                  ? t(
+                      "locationsNear",
+                      `${resultCount} locations near "${filterDisplayName}"`,
+                      {
+                        count: resultCount,
+                        filterDisplayName,
+                      }
+                    )
+                  : t("locationWithCount", `${resultCount} locations`, {
+                      count: resultCount,
+                    }))}
+            </div>
+            {openNowButton && (
+              <button
+                className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                onClick={() => setShowFilter((prev) => !prev)}
               >
-                <span className="inline-flex items-center gap-2">
-                  {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
-                  {t("openNow", "Open Now")}
-                </span>
-              </Toggle>
+                {t("filter", "Filter")}
+                {<FaSlidersH />}
+              </button>
+            )}
+          </div>
+          {showFilter && (
+            <div
+              id="popup"
+              className="absolute top-0 z-50 w-80 flex flex-col bg-white shadow-lg absolute left-full top-0 ml-2 rounded-md shadow-lg"
+            >
+              <div className="inline-flex justify-between items-center px-6 py-4 gap-4 border-b border-gray-300">
+                <div className="font-bold">
+                  {t("refineYourSearch", "Refine Your Search")}
+                </div>
+                <button
+                  className="text-palette-primary-dark"
+                  onClick={() => setShowFilter(false)}
+                >
+                  <FaTimes />
+                </button>
+              </div>
+              <div className="flex flex-col p-6 gap-6">
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-4">
+                    <div className="font-bold">{t("hours", "Hours")}</div>
+                    <div className="flex flex-row gap-1">
+                      <button
+                        className="inline-flex bg-white"
+                        onClick={() => handleOpenNowClick(!isSelected)}
+                      >
+                        <div className="inline-flex items-center gap-4">
+                          {t("openNow", "Open Now")}
+                          <div className="text-palette-primary-dark">
+                            {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
-        </div>
-        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
-          {resultCount === 0 &&
-            searchState === "not started" &&
-            t(
-              "useOurLocatorToFindALocationNearYou",
-              "Use our locator to find a location near you"
-            )}
-          {resultCount === 0 &&
-            searchState === "complete" &&
-            t("noResultsFoundForThisArea", "No results found for this area")}
-          {resultCount > 0 &&
-            (filterDisplayName
-              ? t(
-                  "locationsNear",
-                  `${resultCount} locations near "${filterDisplayName}"`,
-                  {
-                    count: resultCount,
-                    filterDisplayName,
-                  }
-                )
-              : t("locationWithCount", `${resultCount} locations`, {
-                  count: resultCount,
-                }))}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -651,6 +746,8 @@ const LocationCard = React.memo(
         )
       : null;
 
+    const telHref = sanitizePhoneForTelHref(location.mainPhone);
+
     const googleMapsLink = (() => {
       if (!location.yextDisplayCoordinate) {
         return null;
@@ -697,7 +794,7 @@ const LocationCard = React.memo(
             )}
             {location.mainPhone && (
               <a
-                href={location.mainPhone}
+                href={telHref}
                 onClick={handlePhoneNumberClick}
                 className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
               >

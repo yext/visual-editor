@@ -366,6 +366,7 @@
     "xLink": "X -länk",
     "youtubeLink": "YouTube -länk"
   },
+  "filter": "Filtrera",
   "findALocation": "Hitta en plats",
   "fontSize": "Fontstorlek",
   "fontSizeDefaultLabel": "Standard",
@@ -406,7 +407,6 @@
   "locationWithCount_one": "{{count}} Plats",
   "locationWithCount_other": "{{count}} Platser",
   "locationsNear_one": "{{count}} Plats nära \"{{filterDisplayName}}\"",
-  "locatorFilterLabel": "Filtrera:",
   "map": "Karta",
   "maxWidthTip": "För optimal innehållsinriktning rekommenderar vi att du ställer in huvud- och sidfotbredden för att matcha eller överskrida sidinnehållsnätet.",
   "mediaType": "Medietyp",
@@ -478,6 +478,7 @@
   "recentReviews": "Senaste recensioner",
   "recommendedColors": "Rekommenderade färger",
   "redo": "Göra om",
+  "refineYourSearch": "Förfina din sökning",
   "reopenDate": "Öppna datum igen",
   "responseFrom": "Svar från {{businessName}}",
   "saturday": "Lördag",
