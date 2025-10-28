@@ -803,6 +803,8 @@ const LocationCard = React.memo(
                 <HoursStatusAtom
                   hours={location.hours}
                   timezone={location.timezone}
+                  className="text-body-fontSize"
+                  boldCurrentStatus={false}
                 />
               </div>
             )}
