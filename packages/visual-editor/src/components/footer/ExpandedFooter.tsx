@@ -14,6 +14,7 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../contentBlocks/image/styling.ts";
+import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
@@ -25,6 +26,14 @@ const defaultLink = {
   },
   link: "#",
 };
+
+const defaultLinks = [
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+];
 
 export const validPatterns: Record<string, RegExp> = {
   xLink: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/,
@@ -469,23 +478,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
           type: "FooterLinksSlot",
           props: {
             data: {
-              links: [
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-              ],
+              links: defaultLinks,
             },
             variant: "primary",
             eventNamePrefix: "primary",
@@ -501,83 +494,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
               constantValue: [
                 {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
-                  links: [
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                  ],
+                  links: defaultLinks,
                 },
                 {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
-                  links: [
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                  ],
+                  links: defaultLinks,
                 },
                 {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
-                  links: [
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                  ],
+                  links: defaultLinks,
                 },
                 {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
-                  links: [
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                    {
-                      ...defaultLink,
-                    },
-                  ],
+                  links: defaultLinks,
                 },
               ],
               constantValueEnabled: true,
@@ -598,23 +527,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                       },
                       links: {
                         field: "",
-                        constantValue: [
-                          {
-                            ...defaultLink,
-                          },
-                          {
-                            ...defaultLink,
-                          },
-                          {
-                            ...defaultLink,
-                          },
-                          {
-                            ...defaultLink,
-                          },
-                          {
-                            ...defaultLink,
-                          },
-                        ],
+                        constantValue: defaultLinks,
                         constantValueEnabled: true,
                       },
                     },
@@ -631,23 +544,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
           type: "FooterLinksSlot",
           props: {
             data: {
-              links: [
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-                {
-                  ...defaultLink,
-                },
-              ],
+              links: defaultLinks,
             },
             variant: "secondary",
             eventNamePrefix: "secondary",
@@ -658,15 +555,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
       CopyrightSlot: [
         {
           type: "CopyrightMessageSlot",
-          props: {
-            data: {
-              text: {
-                field: "",
-                constantValue: { en: "", hasLocalizedValue: "true" },
-                constantValueEnabled: true,
-              },
-            },
-          },
+          props: defaultCopyrightMessageSlotProps,
         },
       ],
     },
@@ -730,6 +619,13 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     };
   },
   resolveData: async (data) => {
+    const hiddenProps: string[] = [];
+
+    // Track hidden fields for locale warnings
+    if (!data.props.data.secondaryFooter?.show) {
+      hiddenProps.push("data.secondaryFooter");
+    }
+
     // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
     const secondaryLinksAlignment =
       data?.props?.styles?.secondaryFooter?.linksAlignment || "left";
@@ -748,7 +644,13 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
         }));
     }
 
-    return data;
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        ignoreLocaleWarning: hiddenProps,
+      },
+    };
   },
   inline: true,
   render: (props) => (

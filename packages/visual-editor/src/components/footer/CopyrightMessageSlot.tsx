@@ -50,10 +50,20 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   return resolvedText ? <p className="text-xs">{resolvedText}</p> : <></>;
 };
 
+export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
+  data: {
+    text: {
+      field: "",
+      constantValue: { en: "", hasLocalizedValue: "true" },
+      constantValueEnabled: true,
+    },
+  },
+};
+
 export const CopyrightMessageSlot: ComponentConfig<{
   props: CopyrightMessageSlotProps;
 }> = {
-  label: msg("components.copyrightMessageSlot", "Copyright Message"),
+  label: msg("components.copyrightMessage", "Copyright Message"),
   fields: {
     data: {
       label: msg("fields.data", "Data"),
@@ -71,14 +81,6 @@ export const CopyrightMessageSlot: ComponentConfig<{
       },
     },
   },
-  defaultProps: {
-    data: {
-      text: {
-        field: "",
-        constantValue: { en: "", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
-      },
-    },
-  },
+  defaultProps: defaultCopyrightMessageSlotProps,
   render: (props) => <CopyrightMessageSlotInternal {...props} />,
 };

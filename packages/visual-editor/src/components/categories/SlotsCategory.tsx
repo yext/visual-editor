@@ -126,6 +126,7 @@ export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
   BreadcrumbsSlot: BreadcrumbsSectionProps;
   BodyTextSlot: BodyTextProps;
+  CopyrightMessageSlot: CopyrightMessageSlotProps;
   CTASlot: CTAWrapperProps;
   DirectoryCard: DirectoryCardProps;
   DirectoryGrid: DirectoryGridProps;
@@ -134,7 +135,6 @@ export interface SlotsCategoryProps {
   EventCardsWrapper: EventCardsWrapperProps;
   FAQsWrapperSlot: FAQsWrapperSlotProps;
   FAQSlot: FAQSlotProps;
-  CopyrightMessageSlot: CopyrightMessageSlotProps;
   FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
   FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
   FooterLinksSlot: FooterLinksSlotProps;

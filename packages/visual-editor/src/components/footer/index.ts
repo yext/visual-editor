@@ -29,4 +29,5 @@ export {
 export {
   CopyrightMessageSlot,
   type CopyrightMessageSlotProps,
+  defaultCopyrightMessageSlotProps,
 } from "./CopyrightMessageSlot.tsx";
