@@ -30,33 +30,48 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   const { data, puck } = props;
 
   const links = [
-    { url: data.xLink, icon: FaXTwitter, pattern: validPatterns.xLink },
+    {
+      url: data.xLink,
+      icon: FaXTwitter,
+      pattern: validPatterns.xLink,
+      label: "X (Twitter)",
+    },
     {
       url: data.facebookLink,
       icon: FaFacebook,
       pattern: validPatterns.facebookLink,
+      label: "Facebook",
     },
     {
       url: data.instagramLink,
       icon: FaInstagram,
       pattern: validPatterns.instagramLink,
+      label: "Instagram",
     },
     {
       url: data.pinterestLink,
       icon: FaPinterest,
       pattern: validPatterns.pinterestLink,
+      label: "Pinterest",
     },
     {
       url: data.linkedInLink,
       icon: FaLinkedinIn,
       pattern: validPatterns.linkedInLink,
+      label: "LinkedIn",
     },
     {
       url: data.youtubeLink,
       icon: FaYoutube,
       pattern: validPatterns.youtubeLink,
+      label: "YouTube",
     },
-    { url: data.tiktokLink, icon: FaTiktok, pattern: validPatterns.tiktokLink },
+    {
+      url: data.tiktokLink,
+      icon: FaTiktok,
+      pattern: validPatterns.tiktokLink,
+      label: "TikTok",
+    },
   ];
 
   const validLinks = links.filter(
@@ -82,6 +97,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
             target="_blank"
             rel="noopener noreferrer"
             className="text-2xl hover:opacity-80 transition-opacity"
+            aria-label={link.label}
           >
             <Icon />
           </a>
