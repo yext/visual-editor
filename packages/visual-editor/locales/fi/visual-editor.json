@@ -109,6 +109,7 @@
     "productsSection": "Tuoteosio",
     "promoSection": "Promoosio",
     "reviewsSection": "Arvosteluosa",
+    "secondaryFooterSlot": "Toissijainen alatunniste",
     "servicesList": "Palvelulista",
     "staticMapSection": "Staattinen karttaosa",
     "team": "Joukkue",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Haku avattavasta tulosta",
   "searchHere": "Etsi täältä ...",
   "searchThisArea": "Etsi tätä aluetta",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Toissijainen alatunniste (piilotettu live-sivulla)"
+  },
   "secondaryHeader": "Toissijainen otsikko",
   "section": "osio",
   "selectAnOption": "Valitse vaihtoehto",

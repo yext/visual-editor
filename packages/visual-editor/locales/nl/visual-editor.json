@@ -109,6 +109,7 @@
     "productsSection": "Producten sectie",
     "promoSection": "Promotectie",
     "reviewsSection": "Beoordelingen sectie",
+    "secondaryFooterSlot": "Secundaire voettekst",
     "servicesList": "Dienstenlijst",
     "staticMapSection": "Statische kaartsectie",
     "team": "Team",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Zoek de vervolgkeuzeveld",
   "searchHere": "Zoek hier ...",
   "searchThisArea": "Zoek dit gebied",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Secundaire voettekst (verborgen op livepagina)"
+  },
   "secondaryHeader": "Secundaire header",
   "section": "Sectie",
   "selectAnOption": "Selecteer een optie",

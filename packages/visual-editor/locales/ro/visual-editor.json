@@ -109,6 +109,7 @@
     "productsSection": "Secțiunea Produse",
     "promoSection": "Secțiunea promo",
     "reviewsSection": "Secțiunea de recenzii",
+    "secondaryFooterSlot": "Subsol secundar",
     "servicesList": "Lista serviciilor",
     "staticMapSection": "Secțiunea hărții statice",
     "team": "Echipă",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Căutați intrarea derulantă",
   "searchHere": "Căutați aici ...",
   "searchThisArea": "Căutați în această zonă",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Subsol secundar (ascuns pe pagina live)"
+  },
   "secondaryHeader": "Antet secundar",
   "section": "Secțiune",
   "selectAnOption": "Selectați o opțiune",

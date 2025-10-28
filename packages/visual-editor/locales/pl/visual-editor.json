@@ -109,6 +109,7 @@
     "productsSection": "Sekcja produktów",
     "promoSection": "Sekcja promocyjna",
     "reviewsSection": "Sekcja recenzji",
+    "secondaryFooterSlot": "Stopka pomocnicza",
     "servicesList": "Lista usług",
     "staticMapSection": "Sekcja mapy statycznej",
     "team": "Zespół",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Wyszukaj wejście rozwijane",
   "searchHere": "Wyszukaj tutaj ...",
   "searchThisArea": "Przeszukaj ten obszar",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Dodatkowa stopka (ukryta na aktywnej stronie)"
+  },
   "secondaryHeader": "Wtórny nagłówek",
   "section": "Sekcja",
   "selectAnOption": "Wybierz opcję",

@@ -109,6 +109,7 @@
     "productsSection": "製品セクション",
     "promoSection": "プロモーションセクション",
     "reviewsSection": "レビューセクション",
+    "secondaryFooterSlot": "セカンダリフッター",
     "servicesList": "サービスリスト",
     "staticMapSection": "静的マップセクション",
     "team": "チーム",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "ドロップダウン入力を検索します",
   "searchHere": "ここで検索してください...",
   "searchThisArea": "このエリアを検索します",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "セカンダリ フッター (ライブ ページでは非表示)"
+  },
   "secondaryHeader": "セカンダリヘッダー",
   "section": "セクション",
   "selectAnOption": "オプションを選択します",

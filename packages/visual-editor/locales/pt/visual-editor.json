@@ -109,6 +109,7 @@
     "productsSection": "Seção de produtos",
     "promoSection": "Seção promocional",
     "reviewsSection": "Seção de revisões",
+    "secondaryFooterSlot": "Rodapé Secundário",
     "servicesList": "Lista de serviços",
     "staticMapSection": "Seção de mapa estático",
     "team": "Equipe",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Pesquise a entrada suspensa",
   "searchHere": "Pesquise aqui ...",
   "searchThisArea": "Pesquise nesta área",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Rodapé secundário (oculto na página ao vivo)"
+  },
   "secondaryHeader": "Cabeçalho secundário",
   "section": "Seção",
   "selectAnOption": "Selecione uma opção",

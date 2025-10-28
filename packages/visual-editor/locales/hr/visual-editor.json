@@ -109,6 +109,7 @@
     "productsSection": "Odjeljak o proizvodima",
     "promoSection": "Promotivni dio",
     "reviewsSection": "Odjeljak za preglede",
+    "secondaryFooterSlot": "Sekundarno podnožje",
     "servicesList": "Popis usluga",
     "staticMapSection": "Odjeljak statičke karte",
     "team": "Momčad",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Pretražite unos pada",
   "searchHere": "Pretražite ovdje ...",
   "searchThisArea": "Pretražite ovo područje",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Sekundarno podnožje (skriveno na stranici uživo)"
+  },
   "secondaryHeader": "Sekundarno zaglavlje",
   "section": "Odjeljak",
   "selectAnOption": "Odaberite opciju",

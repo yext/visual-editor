@@ -109,6 +109,7 @@
     "productsSection": "Produktsektion",
     "promoSection": "Promo -sektion",
     "reviewsSection": "Recensionsavsnitt",
+    "secondaryFooterSlot": "Sekundär sidfot",
     "servicesList": "Tjänstelista",
     "staticMapSection": "Statisk kartavsnitt",
     "team": "Team",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Sökrullningsingång",
   "searchHere": "Sök här ...",
   "searchThisArea": "Sök på detta område",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Sekundär sidfot (dold på livesida)"
+  },
   "secondaryHeader": "Sekundärrubrik",
   "section": "Avsnitt",
   "selectAnOption": "Välj ett alternativ",

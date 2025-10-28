@@ -109,6 +109,7 @@
     "productsSection": "Produktafsnit",
     "promoSection": "Promo -sektion",
     "reviewsSection": "Afsnittet",
+    "secondaryFooterSlot": "Sekundær sidefod",
     "servicesList": "Tjenesteliste",
     "staticMapSection": "Statisk kortafsnit",
     "team": "Hold",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Søg rullelinjet",
   "searchHere": "Søg her ...",
   "searchThisArea": "Søg i dette område",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Sekundær sidefod (skjult på liveside)"
+  },
   "secondaryHeader": "Sekundær header",
   "section": "Afsnit",
   "selectAnOption": "Vælg en mulighed",

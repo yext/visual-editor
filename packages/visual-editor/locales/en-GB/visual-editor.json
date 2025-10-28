@@ -108,6 +108,7 @@
     "productsSection": "Products Section",
     "promoSection": "Promo Section",
     "reviewsSection": "Reviews Section",
+    "secondaryFooterSlot": "Secondary Footer",
     "servicesList": "Services List",
     "staticMapSection": "Static Map Section",
     "team": "Team",
@@ -534,6 +535,9 @@
   "searchDropdownHere": "Search Dropdown Input",
   "searchHere": "Search here...",
   "searchThisArea": "Search This Area",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Secondary Footer (Hidden on live page)"
+  },
   "secondaryHeader": "Secondary Header",
   "section": "Section",
   "selectAnOption": "Select an option",

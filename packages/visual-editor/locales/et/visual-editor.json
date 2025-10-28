@@ -109,6 +109,7 @@
     "productsSection": "Osade sektsioon",
     "promoSection": "Promo osakond",
     "reviewsSection": "Arvustuste jaotis",
+    "secondaryFooterSlot": "Teisene jalus",
     "servicesList": "Teenuste nimekiri",
     "staticMapSection": "Staatiline kaardiosa",
     "team": "Meeskond",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Otsi rippseant",
   "searchHere": "Otsige siit ...",
   "searchThisArea": "Otsige sellest piirkonnast",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Teisene jalus (reaalajas lehel peidetud)"
+  },
   "secondaryHeader": "Teisene päis",
   "section": "jaotis",
   "selectAnOption": "Valige suvand",

@@ -109,6 +109,7 @@
     "productsSection": "Sekcia výrobkov",
     "promoSection": "Promo sekcia",
     "reviewsSection": "Sekcia recenzií",
+    "secondaryFooterSlot": "Sekundárna päta",
     "servicesList": "Zoznam služieb",
     "staticMapSection": "Sekcia statickej mapy",
     "team": "Tím",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Vyhľadajte rozbaľovací vstup",
   "searchHere": "Vyhľadajte tu ...",
   "searchThisArea": "Hľadať túto oblasť",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Sekundárna päta (skrytá na aktívnej stránke)"
+  },
   "secondaryHeader": "Sekundárna hlavička",
   "section": "oddiel",
   "selectAnOption": "Vyberte možnosť",

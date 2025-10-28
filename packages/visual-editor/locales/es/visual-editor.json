@@ -108,6 +108,7 @@
     "productsSection": "Sección de productos",
     "promoSection": "Sección promocional",
     "reviewsSection": "Sección de revisiones",
+    "secondaryFooterSlot": "Pie de página secundario",
     "servicesList": "Lista de servicios",
     "staticMapSection": "Sección de mapa estático",
     "team": "Equipo",
@@ -534,6 +535,9 @@
   "searchDropdownHere": "Entrada desplegable de búsqueda",
   "searchHere": "Buscar aquí ...",
   "searchThisArea": "Busca esta área",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Pie de página secundario (oculto en la página activa)"
+  },
   "secondaryHeader": "Encabezado secundario",
   "section": "Sección",
   "selectAnOption": "Seleccione una opción",

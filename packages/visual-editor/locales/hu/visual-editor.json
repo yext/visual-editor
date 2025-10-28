@@ -109,6 +109,7 @@
     "productsSection": "Termékek szakasz",
     "promoSection": "Promóciós szakasz",
     "reviewsSection": "Áttekintési szakasz",
+    "secondaryFooterSlot": "Másodlagos lábléc",
     "servicesList": "Szolgáltatási lista",
     "staticMapSection": "Statikus térképszakasz",
     "team": "Csapat",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Keresési legördülő bemenet",
   "searchHere": "Keressen itt ...",
   "searchThisArea": "Keresse meg ezt a területet",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Másodlagos lábléc (rejtett az élő oldalon)"
+  },
   "secondaryHeader": "Másodlagos fejléc",
   "section": "Szakasz",
   "selectAnOption": "Válasszon egy opciót",

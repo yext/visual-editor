@@ -109,6 +109,7 @@
     "productsSection": "Produktu sadaļa",
     "promoSection": "Promo sadaļa",
     "reviewsSection": "Atsauksmju sadaļa",
+    "secondaryFooterSlot": "Sekundārā kājene",
     "servicesList": "Pakalpojumu saraksts",
     "staticMapSection": "Statiskās kartes sadaļa",
     "team": "Komanda",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Meklēt nolaižamās ieejas",
   "searchHere": "Meklēt šeit ...",
   "searchThisArea": "Meklējiet šo apgabalu",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Sekundārā kājene (paslēpta tiešsaistes lapā)"
+  },
   "secondaryHeader": "Sekundārā galvene",
   "section": "sadaļa",
   "selectAnOption": "Atlasiet opciju",

@@ -108,6 +108,7 @@
     "productsSection": "Produktabschnitt",
     "promoSection": "Promo -Abschnitt",
     "reviewsSection": "Bewertungen Abschnitt",
+    "secondaryFooterSlot": "Sekundäre Fußzeile",
     "servicesList": "Dienstleistungsliste",
     "staticMapSection": "Statischer Kartenabschnitt",
     "team": "Team",
@@ -534,6 +535,9 @@
   "searchDropdownHere": "Dropdown -Eingabe suchen",
   "searchHere": "Suche hier ...",
   "searchThisArea": "Suchen Sie diesen Bereich",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "Sekundäre Fußzeile (auf der Live-Seite ausgeblendet)"
+  },
   "secondaryHeader": "Sekundärer Header",
   "section": "Abschnitt",
   "selectAnOption": "Wählen Sie eine Option aus",

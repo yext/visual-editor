@@ -109,6 +109,7 @@
     "productsSection": "Ürünler Bölümü",
     "promoSection": "Promosyon bölümü",
     "reviewsSection": "İncelemeler Bölümü",
+    "secondaryFooterSlot": "İkincil Alt Bilgi",
     "servicesList": "Hizmetler Listesi",
     "staticMapSection": "Statik Harita Bölümü",
     "team": "Takım",
@@ -535,6 +536,9 @@
   "searchDropdownHere": "Arama açılır girişi",
   "searchHere": "Burada ara ...",
   "searchThisArea": "Bu alanı arayın",
+  "secondaryFooter": {
+    "hiddenOnLivePage": "İkincil Alt Bilgi (Yayınlanan sayfada gizli)"
+  },
   "secondaryHeader": "İkincil başlık",
   "section": "Bölüm",
   "selectAnOption": "Bir seçenek seçin",
