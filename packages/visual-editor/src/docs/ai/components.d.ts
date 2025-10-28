@@ -86,8 +86,7 @@ interface ExpandedFooterProps {
     UtilityImagesSlot: Slot;
     PrimaryLinksWrapperSlot: Slot;
     ExpandedLinksWrapperSlot: Slot;
-    SecondaryLinksWrapperSlot: Slot;
-    CopyrightSlot: Slot;
+    SecondaryFooterSlot: Slot;
   };
   /** @internal */
   analytics: {
@@ -574,11 +573,6 @@ interface ExpandedFooterData {
      */
     expandedFooter: boolean;
   };
-  /** Content for the secondary footer bar. */
-  secondaryFooter: {
-    /** Whether to hide or show the secondary footer */
-    show: boolean;
-  };
 }
 
 interface ExpandedFooterStyles {
@@ -588,11 +582,6 @@ interface ExpandedFooterStyles {
     linksAlignment: "left" | "right";
     logo: ImageStylingProps;
     utilityImages: ImageStylingProps;
-  };
-  /** Styling for the secondary footer bar. */
-  secondaryFooter: {
-    backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];

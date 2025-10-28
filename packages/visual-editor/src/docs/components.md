@@ -246,20 +246,18 @@ The Expanded Footer is a comprehensive, two-tiered site-wide component for large
 
 This object contains all the content for both footer tiers.
 
-| Prop                   | Type                           | Description                           | Default |
-| :--------------------- | :----------------------------- | :------------------------------------ | :------ |
-| `data.primaryFooter`   | `{ expandedFooter: boolean; }` | Content for the primary footer bar.   |         |
-| `data.secondaryFooter` | `{ show: boolean; }`           | Content for the secondary footer bar. |         |
+| Prop                 | Type                           | Description                         | Default |
+| :------------------- | :----------------------------- | :---------------------------------- | :------ |
+| `data.primaryFooter` | `{ expandedFooter: boolean; }` | Content for the primary footer bar. |         |
 
 #### Style Props
 
 This object contains properties for customizing the appearance of both footer tiers.
 
-| Prop                     | Type                                                                                                                                   | Description                           | Default |
-| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                         | The maximum width of the footer.      |         |
-| `styles.primaryFooter`   | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; logo: ImageStylingProps; utilityImages: ImageStylingProps; }` | Styling for the primary footer bar.   |         |
-| `styles.secondaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }`                                                            | Styling for the secondary footer bar. |         |
+| Prop                   | Type                                                                                                                                   | Description                         | Default |
+| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------- | :------ |
+| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                                                                                         | The maximum width of the footer.    |         |
+| `styles.primaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; logo: ImageStylingProps; utilityImages: ImageStylingProps; }` | Styling for the primary footer bar. |         |
 
 ---
 
@@ -719,6 +717,30 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 | Prop             | Type      | Description                                                                    | Default |
 | :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
 | `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
+## SecondaryFooterSlot
+
+The Secondary Footer Slot is a sub-section of the Expanded Footer that contains copyright information and secondary links.
+
+### Props
+
+#### Data Props
+
+Data configuration for the secondary footer.
+
+| Prop   | Type                 | Description                                  | Default |
+| :----- | :------------------- | :------------------------------------------- | :------ |
+| `data` | `{ show: boolean; }` | Data configuration for the secondary footer. |         |
+
+#### Style Props
+
+Styling configuration for the secondary footer.
+
+| Prop     | Type                                                                        | Description                                     | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }` | Styling configuration for the secondary footer. |         |
 
 ---
 
