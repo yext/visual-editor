@@ -56,6 +56,9 @@ export interface CTAWrapperProps {
     classNameFn?: (variant: CTAVariant) => string;
   };
 
+  /** @internal Fields to hide from the editor i.e. styles.displayType */
+  fieldsToHide?: string[];
+
   /** @internal Event name to be used for click analytics */
   eventName?: string;
 }
@@ -216,9 +219,14 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
       setDeep(updatedFields, "styles.objectFields.presetImage.visible", false);
     }
 
-    // if the show field exists, make it visible in the editor
+    // If the show field exists, make it visible in the editor
     if (data.props.data.show !== undefined) {
       setDeep(updatedFields, "data.objectFields.show.visible", true);
+    }
+
+    // If fieldsToHide is defined, hide those fields in the editor
+    for (const field of data.props.fieldsToHide ?? []) {
+      setDeep(updatedFields, field, { visible: false });
     }
 
     return updatedFields;

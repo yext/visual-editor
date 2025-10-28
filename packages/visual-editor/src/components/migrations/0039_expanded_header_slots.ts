@@ -80,6 +80,7 @@ export const expandedHeaderSlots: Migration = {
                           variant:
                             props.styles?.primaryHeader.primaryCtaVariant,
                         },
+                        fieldsToHide: ["styles.displayType"],
                       } satisfies CTAWrapperProps,
                     },
                   ],
@@ -101,6 +102,7 @@ export const expandedHeaderSlots: Migration = {
                           variant:
                             props.styles?.primaryHeader.secondaryCtaVariant,
                         },
+                        fieldsToHide: ["styles.displayType"],
                       } satisfies CTAWrapperProps,
                     },
                   ],

@@ -81,5 +81,6 @@ export const migrationRegistry: MigrationRegistry = [
   photoGallerySlots,
   reviewsSectionSlots,
   directorySlots,
+  {},
   expandedHeaderSlots,
 ];

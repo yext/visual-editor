@@ -20,6 +20,7 @@ export interface PrimaryHeaderSlotProps {
     backgroundColor?: BackgroundStyle;
   };
 
+  /** @internal values that come from the parent ExpandedHeader */
   parentValues?: {
     maxWidth?: PageSectionProps["maxWidth"];
     SecondaryHeaderSlot: Slot;
@@ -60,10 +61,10 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
   },
   parentValues: {
     type: "object",
-    visible: false,
     objectFields: {
       SecondaryHeaderSlot: { type: "slot", allow: [] },
     },
+    visible: false,
   },
 };
 
@@ -256,6 +257,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             displayType: "textAndLink",
             variant: "primary",
           },
+          fieldsToHide: ["styles.displayType"],
         } satisfies CTAWrapperProps,
       },
     ],
@@ -279,6 +281,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             displayType: "textAndLink",
             variant: "secondary",
           },
+          fieldsToHide: ["styles.displayType"],
         } satisfies CTAWrapperProps,
       },
     ],

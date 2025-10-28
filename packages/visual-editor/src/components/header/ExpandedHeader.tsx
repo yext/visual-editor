@@ -175,6 +175,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
     },
   },
   resolveData: (data) => {
+    // Determine which fields to add to ignoreLocaleWarning
     const hiddenProps: string[] = [];
 
     if (!data.props.slots.SecondaryHeaderSlot[0].props.styles.show) {
@@ -220,6 +221,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
       );
     }
 
+    // Ensure SecondaryHeaderSlot is passed down to PrimaryHeaderSlot's parentValues
     if (
       data.props.slots.PrimaryHeaderSlot[0]?.props.parentValues
         .SecondaryHeaderSlot !== data.props.slots.SecondaryHeaderSlot
