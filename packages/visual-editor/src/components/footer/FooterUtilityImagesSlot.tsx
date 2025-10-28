@@ -59,7 +59,7 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
               <MaybeLink
                 href={item.linkTarget}
                 className="block"
-                aria-label={ariaLabel}
+                ariaLabel={ariaLabel}
               >
                 {imgElement}
               </MaybeLink>

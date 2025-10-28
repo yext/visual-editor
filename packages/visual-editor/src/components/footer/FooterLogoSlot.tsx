@@ -58,7 +58,7 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
     typeof altText === "string" ? altText : altText?.en || "Logo";
 
   const content = data.linkTarget ? (
-    <MaybeLink href={data.linkTarget} className="block" aria-label={ariaLabel}>
+    <MaybeLink href={data.linkTarget} className="block" ariaLabel={ariaLabel}>
       {imgElement}
     </MaybeLink>
   ) : (
