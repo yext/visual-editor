@@ -15,7 +15,7 @@ import {
   SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 import { defaultBannerProps } from "../pageSections/Banner.tsx";
 
@@ -891,9 +891,17 @@ describe("ExpandedHeader", async () => {
         document
       );
 
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

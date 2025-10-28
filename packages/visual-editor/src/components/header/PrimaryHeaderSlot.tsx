@@ -10,6 +10,7 @@ import {
   CTAWrapperProps,
   useOverflow,
   ImageWrapperProps,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -24,6 +25,11 @@ export interface PrimaryHeaderSlotProps {
   parentValues?: {
     maxWidth?: PageSectionProps["maxWidth"];
     SecondaryHeaderSlot: Slot;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    CTAs: boolean;
   };
 
   /** @internal */
@@ -69,9 +75,11 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
 };
 
 const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
-  parentValues,
   styles,
   slots,
+  parentValues,
+  conditionalRender,
+  puck,
 }) => {
   const { t } = useTranslation();
 
@@ -81,13 +89,17 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const contentRef = React.useRef<HTMLDivElement>(null);
   const showHamburger = useOverflow(containerRef, contentRef);
 
+  const showCTAs = puck.isEditing || conditionalRender?.CTAs;
+
   const navContent = (
     <>
       <slots.LinksSlot style={{ height: "auto" }} />
-      <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-        <slots.PrimaryCTASlot style={{ height: "auto" }} />
-        <slots.SecondaryCTASlot style={{ height: "auto" }} />
-      </div>
+      {showCTAs && (
+        <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
+          <slots.PrimaryCTASlot style={{ height: "auto" }} />
+          <slots.SecondaryCTASlot style={{ height: "auto" }} />
+        </div>
+      )}
     </>
   );
 
@@ -183,16 +195,18 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
             </div>
           )}
 
-          <PageSection
-            verticalPadding={"sm"}
-            background={styles.backgroundColor}
-            maxWidth={parentValues?.maxWidth}
-          >
-            <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-              <slots.PrimaryCTASlot style={{ height: "auto" }} />
-              <slots.SecondaryCTASlot style={{ height: "auto" }} />
-            </div>
-          </PageSection>
+          {showCTAs && (
+            <PageSection
+              verticalPadding={"sm"}
+              background={styles.backgroundColor}
+              maxWidth={parentValues?.maxWidth}
+            >
+              <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
+                <slots.PrimaryCTASlot style={{ height: "auto" }} />
+                <slots.SecondaryCTASlot style={{ height: "auto" }} />
+              </div>
+            </PageSection>
+          )}
         </div>
       )}
     </>
@@ -293,6 +307,41 @@ export const PrimaryHeaderSlot: ComponentConfig<{
 }> = {
   label: msg("components.primaryHeader", "Primary Header"),
   fields: primaryHeaderSlotFields,
+  resolveData: (data, params) => {
+    const streamDocument = params.metadata.streamDocument;
+    const locale = streamDocument?.locale ?? "en";
+
+    if (!streamDocument || !locale) {
+      return data;
+    }
+
+    // Check if PrimaryCTA has data to display
+    const showPrimaryCTA: boolean =
+      data.props.slots.PrimaryCTASlot[0]?.props.data.show &&
+      resolveComponentData(
+        data.props.slots.PrimaryCTASlot[0]?.props.data.entityField,
+        streamDocument,
+        locale
+      );
+
+    const showSecondaryCTA: boolean =
+      data.props.slots.SecondaryCTASlot[0]?.props.data.show &&
+      resolveComponentData(
+        data.props.slots.SecondaryCTASlot[0]?.props.data.entityField,
+        streamDocument,
+        locale
+      );
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        conditionalRender: {
+          CTAs: showPrimaryCTA || showSecondaryCTA,
+        },
+      },
+    };
+  },
   defaultProps: defaultPrimaryHeaderProps,
   render: (props) => <PrimaryHeaderSlotWrapper {...props} />,
 };
