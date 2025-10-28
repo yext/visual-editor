@@ -46,7 +46,7 @@ export const fetchLocalesToPathsForEntity = async ({
           // Override with the profile's locale to ensure we resolve the URL for the correct language
           mergedDocument.locale = profile.meta.locale || profile.locale;
 
-          console.log("mergedDocument locale:", mergedDocument.locale);
+          console.log("mergedDocument:", mergedDocument);
 
           // Use resolveUrlTemplate with useCurrentPageSetTemplate option
           // to get the URL based on the current page set template
