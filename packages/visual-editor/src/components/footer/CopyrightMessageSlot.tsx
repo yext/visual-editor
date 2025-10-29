@@ -9,6 +9,7 @@ import {
   YextEntityField,
   EntityField,
   pt,
+  Body,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -39,7 +40,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
         fieldId={data.text.field}
         constantValueEnabled={data.text.constantValueEnabled}
       >
-        <p className="text-xs">{resolvedText}</p>
+        <Body variant="xs">{resolvedText}</Body>
       </EntityField>
     ) : (
       <div className="h-[20px] min-w-[100px]" />
@@ -47,7 +48,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   }
 
   // On live page, only show if there's content
-  return resolvedText ? <p className="text-xs">{resolvedText}</p> : <></>;
+  return resolvedText ? <Body variant="xs">{resolvedText}</Body> : <></>;
 };
 
 export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
