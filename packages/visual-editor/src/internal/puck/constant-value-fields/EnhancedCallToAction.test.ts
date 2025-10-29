@@ -157,7 +157,7 @@ describe("getCTAType", () => {
         field: "c_cta",
         constantValue: {
           ctaType: "getDirections",
-          coordinate: { latitude: 40.7128, longitude: -74.0060 },
+          coordinate: { latitude: 40.7128, longitude: -74.006 },
         },
         constantValueEnabled: true,
       };
@@ -175,7 +175,7 @@ describe("getCTAType", () => {
         field: "yextDisplayCoordinate",
         constantValue: {
           latitude: 40.7128,
-          longitude: -74.0060,
+          longitude: -74.006,
         },
         selectedType: "getDirections",
       };

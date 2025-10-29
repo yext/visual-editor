@@ -21,11 +21,13 @@ vi.mock("@yext/pages-components", () => ({
       {children}
     </a>
   ),
-  getDirections: vi.fn((address, listings, searchQuery, options, coordinate) => {
-    if (listings) return "https://maps.google.com/?listings=true";
-    if (coordinate) return "https://maps.google.com/?coordinate=true";
-    return "https://maps.google.com/?default=true";
-  }),
+  getDirections: vi.fn(
+    (address, listings, searchQuery, options, coordinate) => {
+      if (listings) return "https://maps.google.com/?listings=true";
+      if (coordinate) return "https://maps.google.com/?coordinate=true";
+      return "https://maps.google.com/?default=true";
+    }
+  ),
 }));
 
 vi.mock("./button", () => ({
@@ -206,7 +208,10 @@ describe("CTA Component", () => {
       );
 
       const link = screen.getByRole("link");
-      expect(link).toHaveAttribute("href", "https://maps.google.com/?listings=true");
+      expect(link).toHaveAttribute(
+        "href",
+        "https://maps.google.com/?listings=true"
+      );
     });
 
     it("falls back to # when ref_listings is not available", async () => {
@@ -409,7 +414,10 @@ describe("CTA Component", () => {
       render(<CTA {...props} />);
 
       const link = screen.getByRole("link");
-      expect(link).toHaveAttribute("aria-label", "Button with galaxy-store icon");
+      expect(link).toHaveAttribute(
+        "aria-label",
+        "Button with galaxy-store icon"
+      );
     });
   });
 

@@ -13,7 +13,15 @@ vi.mock("react-i18next", () => ({
 
 vi.mock("@yext/visual-editor", () => ({
   useDocument: vi.fn(() => ({})),
-  CTA: ({ label, link, linkType, variant, eventName, className, target }: any) => (
+  CTA: ({
+    label,
+    link,
+    linkType,
+    variant,
+    eventName,
+    className,
+    target,
+  }: any) => (
     <a
       href={link}
       data-link-type={linkType}
@@ -28,7 +36,10 @@ vi.mock("@yext/visual-editor", () => ({
   msg: (key: string, defaultValue: string) => defaultValue,
   YextField: (label: string, config: any) => config,
   resolveComponentData: vi.fn((field, language, document) => {
-    if (field.field === "yextDisplayCoordinate" && document.yextDisplayCoordinate) {
+    if (
+      field.field === "yextDisplayCoordinate" &&
+      document.yextDisplayCoordinate
+    ) {
       return document.yextDisplayCoordinate;
     }
     return field.constantValue;
@@ -36,11 +47,13 @@ vi.mock("@yext/visual-editor", () => ({
 }));
 
 vi.mock("@yext/pages-components", () => ({
-  getDirections: vi.fn((address, listings, searchQuery, options, coordinate) => {
-    if (listings) return "https://maps.google.com/?listings=listing-123";
-    if (coordinate) return "https://maps.google.com/?coord=40,-74";
-    return null;
-  }),
+  getDirections: vi.fn(
+    (address, listings, searchQuery, options, coordinate) => {
+      if (listings) return "https://maps.google.com/?listings=listing-123";
+      if (coordinate) return "https://maps.google.com/?coord=40,-74";
+      return null;
+    }
+  ),
 }));
 
 describe("GetDirections Component", () => {
@@ -72,7 +85,10 @@ describe("GetDirections Component", () => {
       );
 
       const link = screen.getByRole("link");
-      expect(link).toHaveAttribute("href", "https://maps.google.com/?listings=listing-123");
+      expect(link).toHaveAttribute(
+        "href",
+        "https://maps.google.com/?listings=listing-123"
+      );
       expect(link).toHaveTextContent("Get Directions");
     });
 
@@ -82,7 +98,7 @@ describe("GetDirections Component", () => {
 
       vi.mocked(useDocument).mockReturnValue({
         ref_listings: "listing-456",
-        yextDisplayCoordinate: { latitude: 40.7128, longitude: -74.0060 },
+        yextDisplayCoordinate: { latitude: 40.7128, longitude: -74.006 },
       });
 
       const props = {
@@ -108,7 +124,7 @@ describe("GetDirections Component", () => {
       const { getDirections } = await import("@yext/pages-components");
 
       vi.mocked(useDocument).mockReturnValue({
-        yextDisplayCoordinate: { latitude: 40.7128, longitude: -74.0060 },
+        yextDisplayCoordinate: { latitude: 40.7128, longitude: -74.006 },
       });
 
       const props = {
@@ -122,11 +138,14 @@ describe("GetDirections Component", () => {
         undefined,
         undefined,
         { provider: "google" },
-        { latitude: 40.7128, longitude: -74.0060 }
+        { latitude: 40.7128, longitude: -74.006 }
       );
 
       const link = screen.getByRole("link");
-      expect(link).toHaveAttribute("href", "https://maps.google.com/?coord=40,-74");
+      expect(link).toHaveAttribute(
+        "href",
+        "https://maps.google.com/?coord=40,-74"
+      );
     });
 
     it("falls back to # when neither listings nor coordinates are available", async () => {
@@ -279,7 +298,7 @@ describe("GetDirections Component", () => {
 
       vi.mocked(useDocument).mockReturnValue({
         ref_listings: "listing-123",
-        yextDisplayCoordinate: { latitude: 40.7128, longitude: -74.0060 },
+        yextDisplayCoordinate: { latitude: 40.7128, longitude: -74.006 },
       });
 
       const props = {
