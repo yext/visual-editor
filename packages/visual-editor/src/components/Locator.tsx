@@ -23,6 +23,7 @@ import {
   AppliedFilters,
 } from "@yext/search-ui-react";
 import {
+  FieldValueStaticFilter,
   Matcher,
   provideHeadless,
   Result,
@@ -71,7 +72,7 @@ import { useCollapse } from "react-collapsed";
 
 const LOCATION_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
-const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
+const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
 const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
 const MILES_TO_METERS = 1609.34;
@@ -844,17 +845,30 @@ const LocatorInternal = ({
         filter.filter.kind === "fieldValue" &&
         filter.filter.fieldId === LOCATION_FIELD
     );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => ({
-      ...filter,
-      filter: {
-        ...filter.filter,
-        value: {
-          lat: mapCenter ? mapCenter.lat : 0,
-          lng: mapCenter ? mapCenter.lng : 0,
-          radius: distanceMiles * MILES_TO_METERS,
+    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+      const previousFilter = filter.filter as
+        | FieldValueStaticFilter
+        | undefined;
+      const previousValue = previousFilter?.value as
+        | NearFilterValue
+        | undefined;
+      // mapCenter should always be defined here, but fall back to previous value or default
+      // just in case
+      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
+      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            lat,
+            lng,
+            radius: distanceMiles * MILES_TO_METERS,
+          },
         },
-      },
-    }));
+      } as SelectableStaticFilter;
+    });
 
     searchActions.setStaticFilters(
       nonLocationFilters.concat(updatedLocationFilters)
@@ -917,6 +931,7 @@ const LocatorInternal = ({
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
     executeSearch(searchActions);
+    setSelectedDistanceMiles(DEFAULT_RADIUS_MILES);
   };
 
   // If something else causes the filters to update, check if the hours filter is still present
