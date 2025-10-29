@@ -334,12 +334,18 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
   )?.map((translatableString: TranslatableString) =>
     resolveComponentData(translatableString, i18n.language)
   );
-  const coordinates = getDirections(
+
+  const addressLink = getDirections(
     resolvedAddress as AddressType,
     undefined,
     undefined,
     { provider: "google" }
   );
+
+  // If ref_listings doesn't exist or the address field selected isn't just address, use the address link.
+  const useAddressLink: boolean =
+    data.info.address.field !== "address" || !streamDocument.ref_listings;
+
   const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
   };
@@ -352,7 +358,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
     !!resolvedAddress?.countryCode ||
     (resolvedPhoneNumbers?.length ?? 0) > 0 ||
     (resolvedEmails?.length ?? 0) > 0 ||
-    !!(coordinates && styles?.info?.showGetDirectionsLink);
+    !!(addressLink && styles?.info?.showGetDirectionsLink);
 
   const justifyClass = styles?.heading?.align
     ? {
@@ -413,11 +419,11 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
                 />
               </EntityField>
             )}
-            {coordinates && styles.info.showGetDirectionsLink && (
+            {addressLink && styles.info.showGetDirectionsLink && (
               <CTA
                 eventName={`getDirections`}
                 className="font-bold"
-                link={coordinates}
+                link={useAddressLink ? addressLink : undefined}
                 label={t("getDirections", "Get Directions")}
                 linkType="DRIVING_DIRECTIONS"
                 target="_blank"
@@ -639,6 +645,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             constantValue: {
               line1: "",
               city: "",
+              region: "",
               postalCode: "",
               countryCode: "",
             },

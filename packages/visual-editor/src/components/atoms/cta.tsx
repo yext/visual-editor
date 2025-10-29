@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { themeManagerCn } from "@yext/visual-editor";
+import { themeManagerCn, useDocument } from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType } from "../../types/types";
@@ -17,7 +17,6 @@ export type CTAProps = {
   // ctaType specific props
   link?: string;
   linkType?: LinkType;
-  coordinate?: { latitude: number; longitude: number };
   presetImageType?: PresetImageType;
 
   // Styling and behavior props
@@ -50,24 +49,25 @@ const useResolvedCtaProps = (props: CTAProps) => {
     ariaLabel,
   } = props;
   const { t } = useTranslation();
+  const streamDocument = useDocument();
 
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
       case "getDirections":
-        const getDirectionsLink = props.coordinate
+        const listingsLink = streamDocument.ref_listings
           ? getDirections(
               undefined,
-              undefined,
+              streamDocument.ref_listings,
               undefined,
               { provider: "google" },
-              props.coordinate
+              undefined
             )
           : "#";
         return {
-          link: getDirectionsLink || "#",
+          link: props.link || listingsLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
-          label: props.label || "Get Directions",
-          ariaLabel: ariaLabel || "Get Directions",
+          label: props.label || t("getDirections", "Get Directions"),
+          ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
         };
       case "presetImage":
         if (!props.presetImageType) {

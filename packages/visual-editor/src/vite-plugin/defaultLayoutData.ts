@@ -226,12 +226,7 @@ const mainDefaultLayout = {
             emails: { field: "emails", constantValue: [] },
             address: {
               field: "address",
-              constantValue: {
-                city: "",
-                line1: "",
-                postalCode: "",
-                countryCode: "",
-              },
+              constantValue: {},
             },
             headingText: {
               field: "",

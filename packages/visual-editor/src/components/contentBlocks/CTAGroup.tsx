@@ -12,7 +12,7 @@ import { CTAWrapperProps } from "./CtaWrapper.tsx";
 import {
   ctaTypeOptions,
   ctaTypeToEntityFieldType,
-  getCTATypeAndCoordinate,
+  getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 const defaultButton: CTAWrapperProps = {
@@ -78,10 +78,7 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
           locale,
           streamDocument
         );
-        const { ctaType, coordinate } = getCTATypeAndCoordinate(
-          button.entityField,
-          cta
-        );
+        const { ctaType } = getCTAType(button.entityField);
 
         return (
           cta && (
@@ -92,7 +89,6 @@ const CTAGroupComponent = ({ buttons }: CTAGroupProps) => {
                 linkType={cta.linkType}
                 variant={button.variant}
                 ctaType={ctaType}
-                coordinate={coordinate}
                 presetImageType={cta.presetImageType}
                 className="truncate w-full"
               />

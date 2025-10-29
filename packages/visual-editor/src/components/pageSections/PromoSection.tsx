@@ -323,7 +323,6 @@ const PromoWrapper: React.FC<PromoSectionProps> = ({ data, styles }) => {
               )}
               linkType={resolvedPromo.cta.linkType}
               ctaType={resolvedPromo.cta.ctaType || "textAndLink"}
-              coordinate={resolvedPromo.cta.coordinate}
               presetImageType={resolvedPromo.cta.presetImageType}
             />
           </EntityField>
