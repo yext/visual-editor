@@ -555,9 +555,6 @@ const tests: ComponentTest[] = [
         primaryFooter: {
           expandedFooter: false,
         },
-        secondaryFooter: {
-          show: true,
-        },
       },
       slots: {
         LogoSlot: [
@@ -679,32 +676,52 @@ const tests: ComponentTest[] = [
             },
           },
         ],
-        SecondaryLinksWrapperSlot: [
+        SecondaryFooterSlot: [
           {
-            type: "FooterLinksSlot",
+            type: "SecondaryFooterSlot",
             props: {
               data: {
-                links: testFooterLinks,
+                show: true,
               },
-              variant: "secondary",
-              eventNamePrefix: "secondary",
-              alignment: "left",
-            },
-          },
-        ],
-        CopyrightSlot: [
-          {
-            type: "CopyrightMessageSlot",
-            props: {
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: "© 2025 Yext. All rights reserved.",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-primary-light",
+                  textColor: "text-black",
                 },
+                linksAlignment: "left",
+              },
+              maxWidth: "theme",
+              slots: {
+                SecondaryLinksWrapperSlot: [
+                  {
+                    type: "FooterLinksSlot",
+                    props: {
+                      data: {
+                        links: testFooterLinks,
+                      },
+                      variant: "secondary",
+                      eventNamePrefix: "secondary",
+                      alignment: "left",
+                    },
+                  },
+                ],
+                CopyrightSlot: [
+                  {
+                    type: "CopyrightMessageSlot",
+                    props: {
+                      data: {
+                        text: {
+                          field: "",
+                          constantValue: {
+                            en: "© 2025 Yext. All rights reserved.",
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                    },
+                  },
+                ],
               },
             },
           },
@@ -725,13 +742,6 @@ const tests: ComponentTest[] = [
             textColor: "text-white",
           },
           linksAlignment: "right",
-        },
-        secondaryFooter: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          linksAlignment: "left",
         },
         maxWidth: "theme",
       },
