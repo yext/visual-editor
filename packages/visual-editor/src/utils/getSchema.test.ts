@@ -373,10 +373,10 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@type": "ListItem",
-          position: "4",
+          position: "1",
           item: {
             "@type": "Place",
-            name: "Test City",
+            name: "Test Root",
             address: {
               "@type": "PostalAddress",
               streetAddress: "[[address.line1]]",
