@@ -1463,7 +1463,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <div className="inline-flex">
-              {"< " + distanceMiles + " " + t("miles", "miles")}
+              {`< ${distanceMiles} ${t("miles", "miles")}`}
             </div>
           </div>
         ))}
