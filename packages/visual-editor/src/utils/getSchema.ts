@@ -60,16 +60,8 @@ const DIRECTORY_LIST_ITEM_SCHEMA = `{
   "@type": "ListItem",
   "position": "[[position]]",
   "item": {
-    "@type": "Place",
-    "name": "[[name]]",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "[[address.line1]]",
-      "addressLocality": "[[address.city]]",
-      "addressRegion": "[[address.region]]",
-      "postalCode": "[[address.postalCode]]",
-      "addressCountry": "[[address.countryCode]]"
-    }
+    "@type": "Thing",
+    "name": "[[name]]"
   }
 }`
   .replace(schemaWhitespaceRegex, " ")
