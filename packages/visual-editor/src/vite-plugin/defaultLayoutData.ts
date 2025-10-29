@@ -1487,7 +1487,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 21,
+      version: 22,
       title: { field: "", constantValue: "", constantValueEnabled: false },
       description: {
         field: "",
@@ -1503,7 +1503,9 @@ const locatorDefaultLayout = {
       props: {
         id: "Locator-2ae506f4-a3ee-46ea-b5f9-e4c3236243a7",
         mapStyle: "mapbox://styles/mapbox/streets-v12",
-        openNowButton: false,
+        filters: {
+          openNowButton: false,
+        },
       },
     },
   ],
