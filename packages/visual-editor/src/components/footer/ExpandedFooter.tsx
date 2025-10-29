@@ -507,6 +507,21 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     return fields;
   },
   resolveData: async (data) => {
+    const hiddenProps: string[] = [];
+
+    // Track hidden fields based on expandedFooter toggle
+    if (data.props.data.primaryFooter.expandedFooter) {
+      hiddenProps.push("slots.PrimaryLinksWrapperSlot");
+    } else {
+      hiddenProps.push("slots.ExpandedLinksWrapperSlot");
+    }
+
+    // Check if secondary footer is hidden
+    const secondaryFooterSlot = data?.props?.slots?.SecondaryFooterSlot?.[0];
+    if (secondaryFooterSlot?.props?.data?.show === false) {
+      hiddenProps.push("slots.SecondaryFooterSlot");
+    }
+
     // Pass maxWidth to SecondaryFooterSlot
     if (
       data?.props?.slots?.SecondaryFooterSlot &&
@@ -522,7 +537,13 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
         }));
     }
 
-    return data;
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        ignoreLocaleWarning: hiddenProps,
+      },
+    };
   },
   inline: true,
   render: (props) => (
