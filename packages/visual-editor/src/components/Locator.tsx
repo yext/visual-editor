@@ -907,17 +907,30 @@ const LocatorInternal = ({
         filter.filter.kind === "fieldValue" &&
         filter.filter.fieldId === LOCATION_FIELD
     );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => ({
-      ...filter,
-      filter: {
-        ...filter.filter,
-        value: {
-          lat: mapCenter ? mapCenter.lat : 0,
-          lng: mapCenter ? mapCenter.lng : 0,
-          radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+      const previousFilter = filter.filter as
+        | FieldValueStaticFilter
+        | undefined;
+      const previousValue = previousFilter?.value as
+        | NearFilterValue
+        | undefined;
+      // mapCenter should always be defined here, but fall back to previous value or default
+      // just in case
+      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
+      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            lat,
+            lng,
+            radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+          },
         },
-      },
-    }));
+      } as SelectableStaticFilter;
+    });
 
     // Both open now and distance filters must be updated in the same setStaticFilters call to
     // avoid problems due to the asynchronous nature of state updates.
