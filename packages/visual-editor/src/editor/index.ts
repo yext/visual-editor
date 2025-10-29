@@ -23,3 +23,9 @@ export { TranslatableRichTextField } from "./TranslatableRichTextField.tsx";
 export { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
 export { CodeField, type CodeFieldProps } from "./CodeField.tsx";
 export { getMaxWidthOptions, filterMaxWidths } from "./MaxWidthSelector.tsx";
+export {
+  type DynamicOption,
+  DynamicOptionsSelector,
+  type DynamicOptionsSelectorType,
+  type DynamicOptionValueTypes,
+} from "./DynamicOptionsSelector.tsx";
