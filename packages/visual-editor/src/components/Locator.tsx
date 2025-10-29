@@ -648,7 +648,9 @@ const LocatorInternal = ({
     facetFields?.selections
       ?.filter((selection) => selection.value !== undefined)
       ?.map((selection) => selection.value as string) ?? [];
-  searchActions.setFacetAllowList(selectedFacets);
+  React.useEffect(() => {
+    searchActions.setFacetAllowList(selectedFacets);
+  }, [searchActions, selectedFacets]);
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
   );
@@ -1417,7 +1419,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
         {distanceOptionsMiles.map((distanceMiles) => (
           <div
             className="flex flex-row gap-4 items-center"
-            id={"distanceOption" + distanceMiles}
+            id={`distanceOption-${distanceMiles}`}
             key={distanceMiles}
           >
             <button
