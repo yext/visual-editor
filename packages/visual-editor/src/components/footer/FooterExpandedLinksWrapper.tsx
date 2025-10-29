@@ -41,7 +41,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
 export const FooterExpandedLinksWrapper: ComponentConfig<{
   props: FooterExpandedLinksWrapperProps;
 }> = {
-  label: msg("components.footerExpandedLinksWrapper", "Expanded Links"),
+  label: msg("components.expandedLinks", "Expanded Links"),
   fields: {
     data: YextField(
       msg("fields.expandedFooterLinks", "Expanded Footer Links"),
