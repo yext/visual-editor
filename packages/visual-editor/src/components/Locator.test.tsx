@@ -294,7 +294,7 @@ const tests: ComponentTest[] = [
         },
       }),
     },
-    props: {},
+    props: { ...LocatorComponent.defaultProps },
     version: 22,
   },
   {
