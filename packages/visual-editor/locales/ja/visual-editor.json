@@ -529,6 +529,7 @@
   "searchThisArea": "このエリアを検索します",
   "secondaryHeader": "セカンダリヘッダー",
   "selectAnOption": "オプションを選択します",
+  "selectDistanceLessThan": "より短い距離を選択してください",
   "servicesSection": "サービスセクション",
   "showLabels": "ラベルを表示します",
   "showLess": "少なく表示します",

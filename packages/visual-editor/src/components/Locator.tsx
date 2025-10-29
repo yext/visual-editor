@@ -645,10 +645,13 @@ const LocatorInternal = ({
   };
 
   const searchActions = useSearchActions();
-  const selectedFacets: string[] =
-    facetFields?.selections
-      ?.filter((selection) => selection.value !== undefined)
-      ?.map((selection) => selection.value as string) ?? [];
+  const selectedFacets: string[] = React.useMemo(
+    () =>
+      facetFields?.selections
+        ?.filter((selection) => selection.value !== undefined)
+        ?.map((selection) => selection.value as string) ?? [],
+    [facetFields]
+  );
   React.useEffect(() => {
     searchActions.setFacetAllowList(selectedFacets);
   }, [searchActions, selectedFacets]);
@@ -1453,6 +1456,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
             <button
               className="inline-flex bg-white"
               onClick={() => onChange(distanceMiles)}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
             >
               <div className="text-palette-primary-dark">
                 {selectedDistanceMiles === distanceMiles ? (
