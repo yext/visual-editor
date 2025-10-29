@@ -32,23 +32,19 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
     streamDocument
   );
 
-  // In edit mode, show EntityField if there's content, otherwise show placeholder
-  if (puck.isEditing) {
-    return resolvedText ? (
-      <EntityField
-        displayName={pt("copyrightMessage", "Copyright Message")}
-        fieldId={data.text.field}
-        constantValueEnabled={data.text.constantValueEnabled}
-      >
-        <Body variant="xs">{resolvedText}</Body>
-      </EntityField>
-    ) : (
-      <div className="h-[20px] min-w-[100px]" />
-    );
-  }
-
-  // On live page, only show if there's content
-  return resolvedText ? <Body variant="xs">{resolvedText}</Body> : <></>;
+  return resolvedText ? (
+    <EntityField
+      displayName={pt("copyrightMessage", "Copyright Message")}
+      fieldId={data.text.field}
+      constantValueEnabled={data.text.constantValueEnabled}
+    >
+      <Body variant="xs">{resolvedText}</Body>
+    </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-[20px] min-w-[100px]" />
+  ) : (
+    <></>
+  );
 };
 
 export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
