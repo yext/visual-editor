@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getSchema } from "./getSchema";
 
 describe("getSchema", () => {
-  it("location with schemaMarkup and no directory/reviews", async () => {
+  it("resolves schemaMarkup for a location with no directory/reviews", async () => {
     const testData = {
       relativePrefixToRoot: "./",
       document: {
@@ -26,9 +26,8 @@ describe("getSchema", () => {
       },
     };
     const schema = getSchema(testData);
-    console.log("schema", schema);
 
-    expect(schema).toMatchObject({
+    expect(schema).toEqual({
       "@graph": [
         {
           name: "Test Name",
@@ -37,7 +36,7 @@ describe("getSchema", () => {
     });
   });
 
-  it("location with no schema markup and no directory/reviews", async () => {
+  it("returns the default schema for a location with no schema markup and no directory/reviews", async () => {
     const testData = {
       relativePrefixToRoot: "./",
       document: {
@@ -60,7 +59,7 @@ describe("getSchema", () => {
     };
     const schema = getSchema(testData);
 
-    expect(schema).toMatchObject({
+    expect(schema).toEqual({
       "@graph": [
         {
           "@context": "https://schema.org",
@@ -85,7 +84,7 @@ describe("getSchema", () => {
     });
   });
 
-  it("location with schemaMarkup, directory, and reviews", async () => {
+  it("resolves schemaMarkup for a location with directory and reviews", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
       document: {
@@ -188,7 +187,7 @@ describe("getSchema", () => {
     };
     const schema = getSchema(testData);
 
-    expect(schema).toMatchObject({
+    expect(schema).toEqual({
       "@graph": [
         {
           "@type": "LocalBusiness",
@@ -201,6 +200,7 @@ describe("getSchema", () => {
         },
         {
           "@type": "BreadcrumbList",
+          "@context": "https://schema.org",
           itemListElement: [
             {
               "@type": "ListItem",
@@ -235,6 +235,186 @@ describe("getSchema", () => {
               name: "Brooklyn",
               item: {
                 "@id": "../../us/ny/brooklyn",
+                "@type": "Thing",
+              },
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("returns schema for a directory city with no schemaMarkup", async () => {
+    const testData = {
+      relativePrefixToRoot: "../../",
+      document: {
+        name: "Test City",
+        __: {
+          layout: JSON.stringify({
+            root: {
+              props: {},
+            },
+          }),
+        },
+        meta: {
+          entityType: {
+            id: "dm_city",
+          },
+        },
+        dm_directoryParents_63590_locations: [
+          { name: "Locations Directory", slug: "index.html" },
+          {
+            name: "US",
+            slug: "us",
+            dm_addressCountryDisplayName: "United States",
+          },
+          {
+            name: "NY",
+            slug: "us/ny",
+            dm_addressCountryDisplayName: "United States",
+            dm_addressRegionDisplayName: "New York",
+          },
+        ],
+      },
+    };
+    const schema = getSchema(testData);
+
+    expect(schema).toEqual({
+      "@graph": [
+        {
+          "@type": "ListItem",
+          position: "4",
+          item: {
+            "@type": "Place",
+            name: "Test City",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "[[address.line1]]",
+              addressLocality: "[[address.city]]",
+              addressRegion: "[[address.region]]",
+              postalCode: "[[address.postalCode]]",
+              addressCountry: "[[address.countryCode]]",
+            },
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@context": "https://schema.org",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Locations Directory",
+              item: {
+                "@id": "../../index.html",
+                "@type": "Thing",
+              },
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "US",
+              item: {
+                "@id": "../../us",
+                "@type": "Thing",
+              },
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: "NY",
+              item: {
+                "@id": "../../us/ny",
+                "@type": "Thing",
+              },
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("returns schema for a directory root with no schemaMarkup", async () => {
+    const testData = {
+      relativePrefixToRoot: "../../",
+      document: {
+        name: "Test Root",
+        __: {
+          layout: JSON.stringify({
+            root: {
+              props: {},
+            },
+          }),
+        },
+        meta: {
+          entityType: {
+            id: "dm_root",
+          },
+        },
+        dm_directoryParents_63590_locations: [
+          { name: "Locations Directory", slug: "index.html" },
+          {
+            name: "US",
+            slug: "us",
+            dm_addressCountryDisplayName: "United States",
+          },
+          {
+            name: "NY",
+            slug: "us/ny",
+            dm_addressCountryDisplayName: "United States",
+            dm_addressRegionDisplayName: "New York",
+          },
+        ],
+      },
+    };
+    const schema = getSchema(testData);
+
+    expect(schema).toEqual({
+      "@graph": [
+        {
+          "@type": "ListItem",
+          position: "4",
+          item: {
+            "@type": "Place",
+            name: "Test City",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "[[address.line1]]",
+              addressLocality: "[[address.city]]",
+              addressRegion: "[[address.region]]",
+              postalCode: "[[address.postalCode]]",
+              addressCountry: "[[address.countryCode]]",
+            },
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@context": "https://schema.org",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Locations Directory",
+              item: {
+                "@id": "../../index.html",
+                "@type": "Thing",
+              },
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "US",
+              item: {
+                "@id": "../../us",
+                "@type": "Thing",
+              },
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: "NY",
+              item: {
+                "@id": "../../us/ny",
                 "@type": "Thing",
               },
             },
