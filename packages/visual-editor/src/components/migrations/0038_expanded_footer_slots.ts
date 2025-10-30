@@ -120,9 +120,6 @@ export const expandedFooterSlots: Migration = {
                 data: {
                   sections: expandedFooterLinks || [],
                 },
-                slots: {
-                  ExpandedSectionsSlot: [],
-                },
               },
             },
           ],

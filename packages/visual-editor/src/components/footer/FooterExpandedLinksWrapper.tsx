@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, PuckComponent } from "@measured/puck";
 import {
   YextField,
   msg,
@@ -7,7 +7,13 @@ import {
   TranslatableString,
   TranslatableCTA,
   i18nComponentsInstance,
+  useDocument,
+  resolveComponentData,
+  CTA,
+  Body,
+  useBackground,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 
 const defaultSection = {
@@ -22,24 +28,70 @@ export interface FooterExpandedLinksWrapperProps {
       links: TranslatableCTA[];
     }[];
   };
-  slots: {
-    ExpandedSectionsSlot: Slot;
-  };
 }
 
 const FooterExpandedLinksWrapperInternal: PuckComponent<
   FooterExpandedLinksWrapperProps
 > = (props) => {
-  const { slots } = props;
+  const { data } = props;
+  const streamDocument = useDocument();
+  const { i18n } = useTranslation();
+  const background = useBackground();
+  const isDarkBackground = background?.isDarkBackground ?? false;
+
+  const sections = data.sections || [];
+
+  const textColorClass = isDarkBackground
+    ? "text-white"
+    : "text-palette-primary-dark";
 
   return (
-    <slots.ExpandedSectionsSlot
-      className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full text-center md:text-left justify-items-center md:justify-items-start"
-      style={{
-        height: "auto",
-      }}
-      allow={["FooterExpandedLinkSectionSlot"]}
-    />
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full text-center md:text-left justify-items-center md:justify-items-start">
+      {sections.map((section, sectionIndex) => {
+        const label = resolveComponentData(
+          section.label,
+          i18n.language,
+          streamDocument
+        );
+        const links = section.links || [];
+
+        return (
+          <div key={sectionIndex} className="flex flex-col gap-6">
+            <Body
+              className={`break-words font-link-fontWeight ${textColorClass}`}
+            >
+              {label}
+            </Body>
+            <div className="flex flex-col gap-4">
+              {links.map((linkData, linkIndex) => {
+                const linkLabel = resolveComponentData(
+                  linkData.label,
+                  i18n.language,
+                  streamDocument
+                );
+                const link = resolveComponentData(
+                  linkData.link,
+                  i18n.language,
+                  streamDocument
+                );
+
+                return (
+                  <CTA
+                    key={linkIndex}
+                    variant="headerFooterMainLink"
+                    eventName={`cta.expandedFooter.${sectionIndex}-Link-${linkIndex + 1}`}
+                    label={linkLabel}
+                    linkType={linkData.linkType}
+                    link={link}
+                    className="justify-center md:justify-start block break-words whitespace-normal"
+                  />
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
@@ -111,13 +163,6 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
         ),
       },
     }),
-    slots: {
-      type: "object",
-      objectFields: {
-        ExpandedSectionsSlot: { type: "slot" },
-      },
-      visible: false,
-    },
   },
   defaultProps: {
     data: {
@@ -128,48 +173,6 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
         { ...defaultSection },
       ],
     },
-    slots: {
-      ExpandedSectionsSlot: [],
-    },
-  },
-  resolveData: async (data) => {
-    if (!data?.props?.data?.sections) {
-      return data;
-    }
-
-    const sections = data.props.data.sections;
-
-    if (!sections || !Array.isArray(sections)) {
-      return data;
-    }
-
-    // Create slots from the sections array
-    const newSlots = sections.map((section: any, index: number) => ({
-      type: "FooterExpandedLinkSectionSlot",
-      props: {
-        data: {
-          label: {
-            field: "",
-            constantValue: section.label,
-            constantValueEnabled: true,
-          },
-          links: section.links || [],
-        },
-        styles: {},
-        index,
-      },
-    }));
-
-    return {
-      ...data,
-      props: {
-        ...data.props,
-        slots: {
-          ...data.props.slots,
-          ExpandedSectionsSlot: newSlots,
-        },
-      },
-    };
   },
   render: (props) => <FooterExpandedLinksWrapperInternal {...props} />,
 };

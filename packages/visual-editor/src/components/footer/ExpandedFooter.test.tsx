@@ -634,9 +634,6 @@ const tests: ComponentTest[] = [
                   },
                 ],
               },
-              slots: {
-                ExpandedSectionsSlot: [],
-              },
             },
           },
         ],

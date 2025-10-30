@@ -417,9 +417,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                 },
               ],
             },
-            slots: {
-              ExpandedSectionsSlot: [],
-            },
           },
         },
       ],
