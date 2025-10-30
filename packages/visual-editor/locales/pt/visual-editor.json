@@ -111,7 +111,7 @@
     "productsSection": "Seção de produtos",
     "promoSection": "Seção promocional",
     "reviewsSection": "Seção de revisões",
-    "secondaryFooterSlot": "Rodapé Secundário",
+    "secondaryFooter": "Rodapé Secundário",
     "secondaryHeader": "Cabeçalho secundário",
     "servicesList": "Lista de serviços",
     "staticMapSection": "Seção de mapa estático",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Rodapé secundário (oculto na página ao vivo)"
   },
   "secondaryHeader": "Cabeçalho secundário",
-  "section": "Seção",
   "secondaryHeaderLinks": "Links de cabeçalho secundários",
+  "section": "Seção",
   "selectAnOption": "Selecione uma opção",
   "servicesSection": "Seção de serviços",
   "showLabels": "Mostrar rótulos",

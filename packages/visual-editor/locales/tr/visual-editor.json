@@ -111,7 +111,7 @@
     "productsSection": "Ürünler Bölümü",
     "promoSection": "Promosyon bölümü",
     "reviewsSection": "İncelemeler Bölümü",
-    "secondaryFooterSlot": "İkincil Alt Bilgi",
+    "secondaryFooter": "İkincil Alt Bilgi",
     "secondaryHeader": "İkincil Başlık",
     "servicesList": "Hizmetler Listesi",
     "staticMapSection": "Statik Harita Bölümü",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "İkincil Alt Bilgi (Yayınlanan sayfada gizli)"
   },
   "secondaryHeader": "İkincil başlık",
-  "section": "Bölüm",
   "secondaryHeaderLinks": "İkincil Başlık Bağlantıları",
+  "section": "Bölüm",
   "selectAnOption": "Bir seçenek seçin",
   "servicesSection": "Hizmetler Bölümü",
   "showLabels": "Etiketleri Göster",

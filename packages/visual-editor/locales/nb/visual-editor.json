@@ -111,7 +111,7 @@
     "productsSection": "Produkter",
     "promoSection": "Promo -seksjon",
     "reviewsSection": "Anmeldelser",
-    "secondaryFooterSlot": "Sekundær bunntekst",
+    "secondaryFooter": "Sekundær bunntekst",
     "secondaryHeader": "Sekundær overskrift",
     "servicesList": "Tjenesteliste",
     "staticMapSection": "Statisk kartseksjon",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Sekundær bunntekst (skjult på live-side)"
   },
   "secondaryHeader": "Sekundær header",
-  "section": "Del",
   "secondaryHeaderLinks": "Sekundære overskriftskoblinger",
+  "section": "Del",
   "selectAnOption": "Velg et alternativ",
   "servicesSection": "Serviceseksjonen",
   "showLabels": "Vis etiketter",

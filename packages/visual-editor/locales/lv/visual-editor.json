@@ -111,7 +111,7 @@
     "productsSection": "Produktu sadaļa",
     "promoSection": "Promo sadaļa",
     "reviewsSection": "Atsauksmju sadaļa",
-    "secondaryFooterSlot": "Sekundārā kājene",
+    "secondaryFooter": "Sekundārā kājene",
     "secondaryHeader": "Sekundārā galvene",
     "servicesList": "Pakalpojumu saraksts",
     "staticMapSection": "Statiskās kartes sadaļa",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Sekundārā kājene (paslēpta tiešsaistes lapā)"
   },
   "secondaryHeader": "Sekundārā galvene",
-  "section": "sadaļa",
   "secondaryHeaderLinks": "Sekundārās galvenes saites",
+  "section": "sadaļa",
   "selectAnOption": "Atlasiet opciju",
   "servicesSection": "Pakalpojumu nodaļa",
   "showLabels": "Izrādes etiķetes",

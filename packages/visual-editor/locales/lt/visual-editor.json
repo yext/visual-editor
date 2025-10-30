@@ -111,7 +111,7 @@
     "productsSection": "Produktų skyrius",
     "promoSection": "Promo skyrius",
     "reviewsSection": "Apžvalgų skyrius",
-    "secondaryFooterSlot": "Antrinė poraštė",
+    "secondaryFooter": "Antrinė poraštė",
     "secondaryHeader": "Antrinė antraštė",
     "servicesList": "Paslaugų sąrašas",
     "staticMapSection": "Statinio žemėlapio skyrius",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Antrinė poraštė (paslėpta tiesioginiame puslapyje)"
   },
   "secondaryHeader": "Antrinė antraštė",
-  "section": "Skyrius",
   "secondaryHeaderLinks": "Antrinės antraštės nuorodos",
+  "section": "Skyrius",
   "selectAnOption": "Pasirinkite parinktį",
   "servicesSection": "Paslaugų skyrius",
   "showLabels": "Rodyti etiketes",

@@ -111,7 +111,7 @@
     "productsSection": "Osade sektsioon",
     "promoSection": "Promo osakond",
     "reviewsSection": "Arvustuste jaotis",
-    "secondaryFooterSlot": "Teisene jalus",
+    "secondaryFooter": "Teisene jalus",
     "secondaryHeader": "Sekundaarne päis",
     "servicesList": "Teenuste nimekiri",
     "staticMapSection": "Staatiline kaardiosa",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Teisene jalus (reaalajas lehel peidetud)"
   },
   "secondaryHeader": "Teisene päis",
-  "section": "jaotis",
   "secondaryHeaderLinks": "Teisese päise lingid",
+  "section": "jaotis",
   "selectAnOption": "Valige suvand",
   "servicesSection": "Teenuste sektsioon",
   "showLabels": "Näita silte",

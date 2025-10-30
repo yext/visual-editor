@@ -111,7 +111,7 @@
     "productsSection": "Sekcia výrobkov",
     "promoSection": "Promo sekcia",
     "reviewsSection": "Sekcia recenzií",
-    "secondaryFooterSlot": "Sekundárna päta",
+    "secondaryFooter": "Sekundárna päta",
     "secondaryHeader": "Sekundárna hlavička",
     "servicesList": "Zoznam služieb",
     "staticMapSection": "Sekcia statickej mapy",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Sekundárna päta (skrytá na aktívnej stránke)"
   },
   "secondaryHeader": "Sekundárna hlavička",
-  "section": "oddiel",
   "secondaryHeaderLinks": "Sekundárne odkazy hlavičky",
+  "section": "oddiel",
   "selectAnOption": "Vyberte možnosť",
   "servicesSection": "Sekcia",
   "showLabels": "Ukazovať štítky",

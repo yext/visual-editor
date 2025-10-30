@@ -173,7 +173,7 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
 export const SecondaryFooterSlot: ComponentConfig<{
   props: SecondaryFooterSlotProps;
 }> = {
-  label: msg("components.secondaryFooterSlot", "Secondary Footer"),
+  label: msg("components.secondaryFooter", "Secondary Footer"),
   fields: secondaryFooterSlotFields,
   defaultProps: {
     data: {

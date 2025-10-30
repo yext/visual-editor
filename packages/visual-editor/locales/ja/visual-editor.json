@@ -111,7 +111,7 @@
     "productsSection": "製品セクション",
     "promoSection": "プロモーションセクション",
     "reviewsSection": "レビューセクション",
-    "secondaryFooterSlot": "セカンダリフッター",
+    "secondaryFooter": "セカンダリフッター",
     "secondaryHeader": "二次ヘッダー",
     "servicesList": "サービスリスト",
     "staticMapSection": "静的マップセクション",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "セカンダリ フッター (ライブ ページでは非表示)"
   },
   "secondaryHeader": "セカンダリヘッダー",
-  "section": "セクション",
   "secondaryHeaderLinks": "セカンダリヘッダーリンク",
+  "section": "セクション",
   "selectAnOption": "オプションを選択します",
   "servicesSection": "サービスセクション",
   "showLabels": "ラベルを表示します",

@@ -474,9 +474,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
       scope: "expandedFooter",
     },
   },
-  resolveFields: (_data, { fields }) => {
-    return fields;
-  },
   resolveData: async (data) => {
     const hiddenProps: string[] = [];
 

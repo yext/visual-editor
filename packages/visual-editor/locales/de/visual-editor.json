@@ -110,7 +110,7 @@
     "productsSection": "Produktabschnitt",
     "promoSection": "Promo -Abschnitt",
     "reviewsSection": "Bewertungen Abschnitt",
-    "secondaryFooterSlot": "Sekundäre Fußzeile",
+    "secondaryFooter": "Sekundäre Fußzeile",
     "secondaryHeader": "Sekundärer Header",
     "servicesList": "Dienstleistungsliste",
     "staticMapSection": "Statischer Kartenabschnitt",
@@ -545,8 +545,8 @@
     "hiddenOnLivePage": "Sekundäre Fußzeile (auf der Live-Seite ausgeblendet)"
   },
   "secondaryHeader": "Sekundärer Header",
-  "section": "Abschnitt",
   "secondaryHeaderLinks": "Sekundäre Header-Links",
+  "section": "Abschnitt",
   "selectAnOption": "Wählen Sie eine Option aus",
   "servicesSection": "Dienstleistungsabschnitt",
   "showLabels": "Etiketten zeigen",

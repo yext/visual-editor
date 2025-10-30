@@ -22,7 +22,6 @@ export interface FooterExpandedLinkSectionSlotProps {
     label: YextEntityField<TranslatableString>;
     links: TranslatableCTA[];
   };
-  styles: {};
   /** @internal */
   index?: number;
 }
@@ -45,9 +44,7 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
 
   return (
     <div className="flex flex-col gap-6">
-      <Body className={`break-words font-link-fontWeight ${textColorClass}`}>
-        {label}
-      </Body>
+      <Body className={`break-words ${textColorClass}`}>{label}</Body>
       <div className="flex flex-col gap-4">
         {links && links.length > 0
           ? links.map((linkData, index) => {

@@ -111,7 +111,7 @@
     "productsSection": "產品部分",
     "promoSection": "促銷部分",
     "reviewsSection": "評論部分",
-    "secondaryFooterSlot": "二級頁腳",
+    "secondaryFooter": "二級頁腳",
     "secondaryHeader": "二級標頭",
     "servicesList": "服務清單",
     "staticMapSection": "靜態地圖部分",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "輔助頁腳（隱藏在實時頁面上）"
   },
   "secondaryHeader": "次要標題",
-  "section": "部分",
   "secondaryHeaderLinks": "二級標題鏈接",
+  "section": "部分",
   "selectAnOption": "選擇一個選項",
   "servicesSection": "服務部分",
   "showLabels": "顯示標籤",

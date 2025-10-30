@@ -110,7 +110,7 @@
     "productsSection": "Sección de productos",
     "promoSection": "Sección promocional",
     "reviewsSection": "Sección de revisiones",
-    "secondaryFooterSlot": "Pie de página secundario",
+    "secondaryFooter": "Pie de página secundario",
     "secondaryHeader": "Encabezado secundario",
     "servicesList": "Lista de servicios",
     "staticMapSection": "Sección de mapa estático",
@@ -545,8 +545,8 @@
     "hiddenOnLivePage": "Pie de página secundario (oculto en la página activa)"
   },
   "secondaryHeader": "Encabezado secundario",
-  "section": "Sección",
   "secondaryHeaderLinks": "Enlaces de encabezado secundario",
+  "section": "Sección",
   "selectAnOption": "Seleccione una opción",
   "servicesSection": "Sección de servicios",
   "showLabels": "Espectáculo de etiquetas",

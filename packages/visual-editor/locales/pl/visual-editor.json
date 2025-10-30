@@ -111,7 +111,7 @@
     "productsSection": "Sekcja produktów",
     "promoSection": "Sekcja promocyjna",
     "reviewsSection": "Sekcja recenzji",
-    "secondaryFooterSlot": "Stopka pomocnicza",
+    "secondaryFooter": "Stopka pomocnicza",
     "secondaryHeader": "Nagłówek dodatkowy",
     "servicesList": "Lista usług",
     "staticMapSection": "Sekcja mapy statycznej",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Dodatkowa stopka (ukryta na aktywnej stronie)"
   },
   "secondaryHeader": "Wtórny nagłówek",
-  "section": "Sekcja",
   "secondaryHeaderLinks": "Dodatkowe linki nagłówkowe",
+  "section": "Sekcja",
   "selectAnOption": "Wybierz opcję",
   "servicesSection": "Sekcja usług",
   "showLabels": "Pokaż etykiety",

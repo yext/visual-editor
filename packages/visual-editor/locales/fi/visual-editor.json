@@ -111,7 +111,7 @@
     "productsSection": "Tuoteosio",
     "promoSection": "Promoosio",
     "reviewsSection": "Arvosteluosa",
-    "secondaryFooterSlot": "Toissijainen alatunniste",
+    "secondaryFooter": "Toissijainen alatunniste",
     "secondaryHeader": "Toissijainen otsikko",
     "servicesList": "Palvelulista",
     "staticMapSection": "Staattinen karttaosa",
@@ -546,8 +546,8 @@
     "hiddenOnLivePage": "Toissijainen alatunniste (piilotettu live-sivulla)"
   },
   "secondaryHeader": "Toissijainen otsikko",
-  "section": "osio",
   "secondaryHeaderLinks": "Toissijaiset otsikkolinkit",
+  "section": "osio",
   "selectAnOption": "Valitse vaihtoehto",
   "servicesSection": "Palvelusosasto",
   "showLabels": "Näyttötarrat",

@@ -110,7 +110,7 @@
     "productsSection": "Section des produits",
     "promoSection": "Section promotionnelle",
     "reviewsSection": "Section des avis",
-    "secondaryFooterSlot": "Pied de page secondaire",
+    "secondaryFooter": "Pied de page secondaire",
     "secondaryHeader": "En-tête secondaire",
     "servicesList": "Liste des services",
     "staticMapSection": "Section de carte statique",
@@ -545,8 +545,8 @@
     "hiddenOnLivePage": "Pied de page secondaire (caché sur la page en direct)"
   },
   "secondaryHeader": "Tête secondaire",
-  "section": "Section",
   "secondaryHeaderLinks": "Liens d'en-tête secondaires",
+  "section": "Section",
   "selectAnOption": "Sélectionnez une option",
   "servicesSection": "Section des services",
   "showLabels": "Montrer les étiquettes",
