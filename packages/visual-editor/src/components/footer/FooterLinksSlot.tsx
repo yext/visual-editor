@@ -11,6 +11,7 @@ import {
   i18nComponentsInstance,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
+import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 
 export interface FooterLinksSlotProps {
   data: {
@@ -90,33 +91,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 
 const defaultFooterLinkProps: FooterLinksSlotProps = {
   data: {
-    links: [
-      {
-        linkType: "URL",
-        label: { en: "Footer Link", hasLocalizedValue: "true" },
-        link: "#",
-      },
-      {
-        linkType: "URL",
-        label: { en: "Footer Link", hasLocalizedValue: "true" },
-        link: "#",
-      },
-      {
-        linkType: "URL",
-        label: { en: "Footer Link", hasLocalizedValue: "true" },
-        link: "#",
-      },
-      {
-        linkType: "URL",
-        label: { en: "Footer Link", hasLocalizedValue: "true" },
-        link: "#",
-      },
-      {
-        linkType: "URL",
-        label: { en: "Footer Link", hasLocalizedValue: "true" },
-        link: "#",
-      },
-    ],
+    links: defaultLinks,
   },
   styles: {},
   variant: "primary",
@@ -152,11 +127,7 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
             type: "text",
           }),
         },
-        defaultItemProps: {
-          linkType: "URL",
-          label: { en: "Footer Link", hasLocalizedValue: "true" },
-          link: "#",
-        },
+        defaultItemProps: defaultLink,
         getItemSummary: (item: any, index?: number) => {
           const locale = i18nComponentsInstance.language || "en";
           const label =

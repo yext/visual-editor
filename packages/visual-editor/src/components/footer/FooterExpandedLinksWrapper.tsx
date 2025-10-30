@@ -8,23 +8,7 @@ import {
   TranslatableCTA,
   i18nComponentsInstance,
 } from "@yext/visual-editor";
-
-const defaultLink = {
-  linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
-  link: "#",
-};
-
-const defaultLinks = [
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-];
+import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 
 const defaultSection = {
   label: { en: "Footer Label", hasLocalizedValue: "true" as const },

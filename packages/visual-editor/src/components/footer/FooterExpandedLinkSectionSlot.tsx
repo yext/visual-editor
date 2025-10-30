@@ -15,23 +15,7 @@ import {
   useBackground,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
-
-const defaultLink = {
-  linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
-  link: "#",
-};
-
-const defaultLinks = [
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-];
+import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
@@ -54,14 +38,6 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
 
   const label = resolveComponentData(data.label, i18n.language, streamDocument);
   const links = data.links;
-
-  if (!label && !puck.isEditing) {
-    return <></>;
-  }
-
-  if (!label && puck.isEditing) {
-    return <div className="h-10" />;
-  }
 
   const textColorClass = isDarkBackground
     ? "text-white"

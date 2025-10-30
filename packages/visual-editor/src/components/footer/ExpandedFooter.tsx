@@ -18,7 +18,7 @@ import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
 
-const defaultLink = {
+export const defaultLink = {
   linkType: "URL" as const,
   label: {
     en: "Footer Link",
@@ -27,7 +27,7 @@ const defaultLink = {
   link: "#",
 };
 
-const defaultLinks = [
+export const defaultLinks = [
   { ...defaultLink },
   { ...defaultLink },
   { ...defaultLink },
