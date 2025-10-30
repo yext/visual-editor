@@ -340,10 +340,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop    | Type                                                                                         | Description | Default |
-| :------ | :------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`  | `{ label: YextEntityField<TranslatableString>; links: YextEntityField<TranslatableCTA[]>; }` |             |         |
-| `index` | `number`                                                                                     |             |         |
+| Prop     | Type                                                                        | Description | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
+| `styles` | `{}`                                                                        |             |         |
 
 ---
 
@@ -353,10 +353,9 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop    | Type                                                                          | Description | Default |
-| :------ | :---------------------------------------------------------------------------- | :---------- | :------ |
-| `data`  | `YextEntityField<{ label: TranslatableString; links: TranslatableCTA[]; }[]>` |             |         |
-| `slots` | `{ ExpandedSectionsSlot: Slot; }`                                             |             |         |
+| Prop   | Type                                                                        | Description | Default |
+| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data` | `{ sections: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` |             |         |
 
 ---
 
@@ -366,12 +365,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop              | Type                            | Description | Default |
-| :---------------- | :------------------------------ | :---------- | :------ |
-| `alignment`       | `"left" \| "right"`             |             |         |
-| `data`            | `{ links: TranslatableCTA[]; }` |             |         |
-| `eventNamePrefix` | `string`                        |             |         |
-| `variant`         | `"primary" \| "secondary"`      |             |         |
+| Prop     | Type                            | Description | Default |
+| :------- | :------------------------------ | :---------- | :------ |
+| `data`   | `{ links: TranslatableCTA[]; }` |             |         |
+| `styles` | `{}`                            |             |         |
 
 ---
 
@@ -381,10 +378,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
-| `data`   | `{ image: { field: string; constantValue: AssetImageType; constantValueEnabled: boolean; }; linkTarget?: string; }` |             |         |
-| `styles` | `{ width?: number; aspectRatio?: number; }`                                                                         |             |         |
+| Prop     | Type                                                               | Description | Default |
+| :------- | :----------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ image: YextEntityField<AssetImageType>; linkTarget?: string; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                        |             |         |
 
 ---
 
