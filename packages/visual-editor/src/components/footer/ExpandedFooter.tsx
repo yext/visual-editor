@@ -215,10 +215,10 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
       {/* Primary footer section. */}
       <PageSection
-        verticalPadding={"none"}
+        verticalPadding={"footer"}
         background={backgroundColor}
         maxWidth={maxWidth}
-        className={`py-6 sm:py-12 flex flex-col md:flex-row md:justify-start w-full md:items-start gap-6 md:gap-8`}
+        className={`flex flex-col md:flex-row md:justify-start w-full md:items-start gap-6 md:gap-8`}
       >
         {/* Render in different order based on alignment */}
         {primaryLinksAlignment === "left" ? (

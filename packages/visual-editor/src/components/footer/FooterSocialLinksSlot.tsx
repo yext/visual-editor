@@ -90,10 +90,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
     : "text-palette-primary-dark";
 
   return (
-    <div
-      className="flex gap-4 items-center justify-center md:justify-start"
-      style={{ width: "fit-content" }}
-    >
+    <div className="flex gap-4 items-center justify-center md:justify-start w-fit">
       {validLinks.map((link, index) => {
         const Icon = link.icon;
         return (

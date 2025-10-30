@@ -152,10 +152,10 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
   return (
     <PageSection
       ref={puck.dragRef}
-      verticalPadding={"none"}
+      verticalPadding={"footerSecondary"}
       background={backgroundColor}
       maxWidth={maxWidth}
-      className={`py-4 sm:py-6 flex flex-col gap-5`}
+      className={`flex flex-col gap-5`}
     >
       <slots.SecondaryLinksWrapperSlot style={{ height: "auto" }} allow={[]} />
       <div
