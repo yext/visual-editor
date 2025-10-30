@@ -653,16 +653,23 @@ const LocatorInternal = ({
     }
   };
 
+  const isWindowUndefined = typeof window === "undefined";
+  let queryParamString = "";
+  if (!isWindowUndefined) {
+    console.log("window.location.search:", window.location.search);
+    queryParamString = window.location.search;
+  }
+
   const searchActions = useSearchActions();
-  console.log("Query string:", window.location.search);
   const [initialLocationParam, setInitialLocationParam] = React.useState<
     string | null
-  >(getValueFromQueryString(INITIAL_LOCATION_KEY, window.location.search));
+  >(getValueFromQueryString(INITIAL_LOCATION_KEY, queryParamString));
   console.log("initialLocationParam:", initialLocationParam);
   useSaveToQueryString(
     initialLocationParam,
     (initialLocation) => setInitialLocationParam(initialLocation),
-    INITIAL_LOCATION_KEY
+    INITIAL_LOCATION_KEY,
+    isWindowUndefined
   );
 
   const filterDisplayName = useSearchState(

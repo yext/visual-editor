@@ -11,8 +11,14 @@ import {
 export const useSaveToQueryString = (
   state: string | null,
   onChangeState: (state: string) => void,
-  stateKey: string
+  stateKey: string,
+  isWindowUndefined: boolean = false
 ) => {
+  // Window is not defined during page generation, so no-op because we can't access the URL
+  if (isWindowUndefined) {
+    return;
+  }
+
   const oldHistory = useRef({ ...window.history.state });
 
   useEffect(() => {
