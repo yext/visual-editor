@@ -54,17 +54,24 @@ const useResolvedCtaProps = (props: CTAProps) => {
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
       case "getDirections":
-        const listingsLink = streamDocument.ref_listings?.length
-          ? getDirections(
-              undefined,
-              streamDocument.ref_listings,
-              undefined,
-              { provider: "google" },
-              undefined
-            )
-          : "#";
+        const listings = streamDocument.ref_listings ?? [];
+        const listingsLink = getDirections(
+          undefined,
+          listings,
+          undefined,
+          { provider: "google" },
+          undefined
+        );
+        const coordinateLink = getDirections(
+          undefined,
+          undefined,
+          undefined,
+          { provider: "google" },
+          streamDocument.yextDisplayCoordinate
+        );
+        // Prefer user-provided link, then listings link, then coordinate link
         return {
-          link: props.link || listingsLink || "#",
+          link: props.link || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
           label: props.label || t("getDirections", "Get Directions"),
           ariaLabel: ariaLabel || t("getDirections", "Get Directions"),

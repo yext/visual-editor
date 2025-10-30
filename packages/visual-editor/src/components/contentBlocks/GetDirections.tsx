@@ -1,16 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields } from "@measured/puck";
-import { Coordinate, getDirections } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
-import {
-  useDocument,
-  CTA,
-  CTAVariant,
-  YextField,
-  msg,
-  resolveComponentData,
-  YextEntityField,
-} from "@yext/visual-editor";
+import { CTA, CTAVariant, YextField, msg } from "@yext/visual-editor";
 
 export type GetDirectionsProps = {
   variant: CTAVariant;
@@ -24,35 +15,14 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
 };
 
 const GetDirectionsComponent = ({ variant }: GetDirectionsProps) => {
-  const { i18n, t } = useTranslation();
-  const streamDocument = useDocument();
-  const coordinate = resolveComponentData(
-    {
-      field: "yextDisplayCoordinate",
-      constantValue: {},
-    } as YextEntityField<Coordinate>,
-    i18n.language,
-    streamDocument
-  );
-  const listings = streamDocument.ref_listings;
-  const useListings = listings && listings.length > 0;
-
-  // Use listings if it exists, else use coordinate.
-  const link =
-    getDirections(
-      undefined,
-      useListings ? listings : undefined,
-      undefined,
-      { provider: "google" },
-      !useListings ? coordinate : undefined
-    ) ?? "#";
+  const { t } = useTranslation();
 
   return (
     <CTA
+      ctaType="getDirections"
       className="font-bold"
       eventName={`getDirections`}
       label={t("getDirections", "Get Directions")}
-      link={link}
       linkType={"DRIVING_DIRECTIONS"}
       target="_blank"
       variant={variant}

@@ -422,6 +422,7 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
             )}
             {addressLink && styles.info.showGetDirectionsLink && (
               <CTA
+                ctaType="getDirections"
                 eventName={`getDirections`}
                 className="font-bold"
                 link={useAddressLink ? addressLink : undefined}

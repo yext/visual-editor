@@ -110,6 +110,7 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
           </div>
           {addressLink && styles.showGetDirectionsLink && (
             <CTA
+              ctaType="getDirections"
               eventName={`getDirections`}
               className="font-bold"
               link={useAddressLink ? addressLink : undefined}
