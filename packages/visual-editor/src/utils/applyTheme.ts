@@ -23,7 +23,6 @@ export type StreamDocument = {
     locale?: string;
     entityType?: {
       id?: string;
-      uid?: number;
     };
   };
   __?: {
