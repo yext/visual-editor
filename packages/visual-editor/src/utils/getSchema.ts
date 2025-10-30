@@ -110,31 +110,50 @@ const getBreadcrumbsSchema = (
   data: TemplateRenderProps,
   pageId: string
 ): Record<string, any> | undefined => {
-  const directoryParents = getDirectoryParents(data.document);
-  if (!directoryParents?.length) {
-    return;
-  }
-
-  const breadcrumbItems = directoryParents.map((parent, index) => ({
+  // Helper to create a ListItem object
+  const fillBreadcrumbsItem = (position: number, name: string, id: string) => ({
     "@type": "ListItem",
-    position: index + 1,
-    name: parent.name,
+    position,
+    name,
     item: {
-      "@id": data.relativePrefixToRoot + parent.slug,
+      "@id": id,
       "@type": "Thing",
     },
-  }));
+  });
 
+  const directoryParents = getDirectoryParents(data.document);
+
+  if (!directoryParents?.length) {
+    // If dm_root, return a single breadcrumb item for the current page
+    if (data.document.meta?.entityType?.id === "dm_root") {
+      return {
+        "@type": "BreadcrumbList",
+        "@context": "https://schema.org",
+        itemListElement: [fillBreadcrumbsItem(1, data.document.name, pageId)],
+      };
+    }
+    // If no parents, do not return breadcrumbs
+    return undefined;
+  }
+
+  // Create the breadcrumbs for the directory parents
+  const breadcrumbItems = directoryParents.map((parent, index) =>
+    fillBreadcrumbsItem(
+      index + 1,
+      parent.name,
+      data.relativePrefixToRoot + parent.slug
+    )
+  );
+
+  // Add the current page as the last breadcrumb item
   if (data.document?.name) {
-    breadcrumbItems.push({
-      "@type": "ListItem",
-      position: breadcrumbItems.length + 1,
-      name: data.document.name,
-      item: {
-        "@id": pageId,
-        "@type": "Thing",
-      },
-    });
+    breadcrumbItems.push(
+      fillBreadcrumbsItem(
+        breadcrumbItems.length + 1,
+        data.document.name,
+        pageId
+      )
+    );
   }
 
   return {

@@ -394,6 +394,21 @@ describe("getSchema", () => {
             itemListElement: "[[dm_directoryChildren]]",
           },
         },
+        {
+          "@type": "BreadcrumbList",
+          "@context": "https://schema.org",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Test Root",
+              item: {
+                "@id": "yext.com/index.html",
+                "@type": "Thing",
+              },
+            },
+          ],
+        },
       ],
     });
   });
