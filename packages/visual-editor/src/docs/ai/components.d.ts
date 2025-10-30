@@ -542,8 +542,6 @@ interface ExpandedFooterStyles {
   primaryFooter: {
     backgroundColor?: BackgroundStyle;
     linksAlignment: "left" | "right";
-    logo: ImageStylingProps;
-    utilityImages: ImageStylingProps;
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -739,13 +737,6 @@ interface PageSectionProps
   as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
   outerClassName?: string;
   outerStyle?: React.CSSProperties;
-}
-
-/** Props for displaying an image */
-interface ImageStylingProps {
-  /** The aspect ratio of the image */
-  aspectRatio: number;
-  width?: number;
 }
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
