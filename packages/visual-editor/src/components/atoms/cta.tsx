@@ -53,7 +53,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
 
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
-      case "getDirections":
+      case "getDirections": {
         const listings = streamDocument.ref_listings ?? [];
         const listingsLink = getDirections(
           undefined,
@@ -76,6 +76,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           label: props.label || t("getDirections", "Get Directions"),
           ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
         };
+      }
       case "presetImage":
         if (!props.presetImageType) {
           return null;
