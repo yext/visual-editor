@@ -670,21 +670,24 @@ const LocatorInternal = ({
     (state) => state.filters.static?.[0]?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
+    const filterValue = params.newFilter.value as NearFilterValue;
     const locationFilter: SelectableStaticFilter = {
       displayName: params.newDisplayName,
       selected: true,
       filter: {
         kind: "fieldValue",
         fieldId: params.newFilter.fieldId,
-        value: params.newFilter.value,
+        value: {
+          ...filterValue,
+          radius: selectedDistanceMiles * MILES_TO_METERS,
+        },
         matcher: Matcher.Near,
       },
     };
+
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
-
-    const filterValue = params.newFilter.value as NearFilterValue;
     if (filterValue?.lat && filterValue?.lng) {
       setMapCenter(new mapboxgl.LngLat(filterValue.lng, filterValue.lat));
     }
