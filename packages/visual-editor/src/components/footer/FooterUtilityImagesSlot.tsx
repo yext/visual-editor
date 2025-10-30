@@ -44,7 +44,7 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
   }
 
   return (
-    <div className="flex gap-16 w-fit">
+    <div className="flex gap-0 md:grid md:grid-cols-3 md:gap-8">
       {validImages.map((item, index) => {
         const imgElement = (
           <Image
