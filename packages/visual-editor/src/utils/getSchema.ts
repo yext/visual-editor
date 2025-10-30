@@ -168,6 +168,7 @@ export const schemaWhitespaceRegex = /\n\s*/g;
 const LOCAL_BUSINESS_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": "[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "address": {
     "@type": "PostalAddress",
@@ -187,21 +188,24 @@ const LOCAL_BUSINESS_SCHEMA = `{
   .replace(schemaWhitespaceRegex, " ")
   .trim();
 
-const DIRECTORY_LIST_ITEM_SCHEMA = `{
-  "@type": "ListItem",
-  "position": "[[position]]",
-  "item": {
-    "@type": "Place",
-    "name": "[[name]]",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "[[address.line1]]",
-      "addressLocality": "[[address.city]]",
-      "addressRegion": "[[address.region]]",
-      "postalCode": "[[address.postalCode]]",
-      "addressCountry": "[[address.countryCode]]"
-    }
+const DIRECTORY_SCHEMA = `{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "[[siteDomain]]/[[path]]",
+  "name": "[[name]]",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": "[[dm_directoryChildren]]"
   }
+}`
+  .replace(schemaWhitespaceRegex, " ")
+  .trim();
+
+const LOCATOR_SCHEMA = `{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "[[siteDomain]]/[[path]]",
+  "name": "[[name]]"
 }`
   .replace(schemaWhitespaceRegex, " ")
   .trim();
@@ -209,8 +213,9 @@ const DIRECTORY_LIST_ITEM_SCHEMA = `{
 const FALLBACK_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "Thing",
+  "@id": "[[siteDomain]]/[[path]]",
   "name": "[[name]]",
-  "description": "[[description]]",
+  "description": "[[description]]"
 }`
   .replace(schemaWhitespaceRegex, " ")
   .trim();
@@ -231,29 +236,12 @@ const LOCAL_BUSINESS_ENTITY_TYPES = [
 export const getSchemaTemplate = (entityTypeId?: string): string => {
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
-  }
-
-  if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
+  } else if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
     return LOCAL_BUSINESS_SCHEMA;
   } else if (entityTypeId.startsWith("dm_")) {
-    // Determine position based on entity type
-    let position = 1; // default for dm_root
-    if (entityTypeId === "dm_root") {
-      position = 1;
-    } else if (entityTypeId === "dm_country") {
-      position = 2;
-    } else if (entityTypeId === "dm_region") {
-      position = 3;
-    } else if (entityTypeId === "dm_city") {
-      position = 4;
-    }
-
-    return DIRECTORY_LIST_ITEM_SCHEMA.replace(
-      "[[position]]",
-      position.toString()
-    )
-      .replace(/\n\s*/g, " ")
-      .trim();
+    return DIRECTORY_SCHEMA;
+  } else if (entityTypeId === "locator") {
+    return LOCATOR_SCHEMA;
   } else {
     return FALLBACK_SCHEMA;
   }
