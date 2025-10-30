@@ -456,6 +456,7 @@
   "locationWithCount_other": "{{count}} locations",
   "locationsNear_one": "{{count}} location near \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
+  "logo": "Logo",
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "mediaType": "Media Type",

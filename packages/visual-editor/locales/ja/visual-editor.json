@@ -457,6 +457,7 @@
   "locationWithCount_other": "{{count}}場所",
   "locationsNear_one": "{{count}}近くの場所 \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "フィルター：",
+  "logo": "ロゴ",
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "mediaType": "メディアタイプ",

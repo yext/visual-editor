@@ -457,6 +457,7 @@
   "locationWithCount_other": "{{count}} lokality",
   "locationsNear_one": "{{count}} Umiestnenie blízko \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filter:",
+  "logo": "Logo",
   "map": "Mapovať",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "mediaType": "Typ médií",

@@ -457,6 +457,7 @@
   "locationWithCount_other": "{{count}} Lokalizacje",
   "locationsNear_one": "{{count}} Lokalizacja w pobliżu „{{filterDisplayName}}”",
   "locatorFilterLabel": "Filtr:",
+  "logo": "Logo",
   "map": "Mapa",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "mediaType": "Typ mediów",

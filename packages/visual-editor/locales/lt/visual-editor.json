@@ -457,6 +457,7 @@
   "locationWithCount_other": "{{count}} vietos",
   "locationsNear_one": "{{count}} vieta prie \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "FiltRas:",
+  "logo": "Logotipas",
   "map": "Žemėlapis",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
   "mediaType": "Žiniasklaidos tipas",

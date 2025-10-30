@@ -457,6 +457,7 @@
   "locationWithCount_other": "{{count}} localizações",
   "locationsNear_one": "{{count}} localização próxima a \"{{filterDisplayName}}\"",
   "locatorFilterLabel": "Filtro:",
+  "logo": "Logotipo",
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "mediaType": "Tipo de mídia",

@@ -457,6 +457,7 @@
   "locationWithCount_other": "{{count}} asukohad",
   "locationsNear_one": "{{count}} asukoht \"{{filterDisplayName}}\"  lähedal",
   "locatorFilterLabel": "Filter:",
+  "logo": "Logo",
   "map": "Kaardistama",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "mediaType": "Meediumitüüp",
