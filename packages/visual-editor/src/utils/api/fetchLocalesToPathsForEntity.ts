@@ -37,35 +37,25 @@ export const fetchLocalesToPathsForEntity = async ({
   try {
     const json = await response.json();
 
-    // Find the primary locale
-    let primaryLocale: string = "";
-    for (const profile of json.response.docs) {
-      if (profile?.$key?.locale === "" && profile?.meta?.locale) {
-        // If multiple locales appear to be the primary, throw a warning
-        if (primaryLocale) {
-          console.warn("Unable to determine primary locale");
-          break;
-        }
-        primaryLocale = profile?.meta?.locale;
-      }
-    }
-    // If no locale appears to be the primary, throw a warning
-    if (!primaryLocale) {
-      console.warn("Unable to determine primary locale");
-    }
-    const normalizedPrimaryLocale = primaryLocale
-      ? normalizeLocale(primaryLocale)
-      : "";
-
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale) {
         try {
-          // Merge profile with streamDocument metadata, but preserve the profile's locale
+          const locale: string = profile.meta.locale;
+
+          let isPrimaryLocale: boolean;
+          if (profile?.meta?.isPrimaryLocale === true) {
+            isPrimaryLocale = true;
+          } else if (profile?.meta?.isPrimaryLocale === false) {
+            isPrimaryLocale = false;
+          } else {
+            isPrimaryLocale = locale === "en";
+          }
+
+          // Merge profile with streamDocument metadata
           const mergedDocument = mergeMeta(profile, streamDocument);
           // Override with the profile's locale to ensure we resolve the URL for the correct language
-          mergedDocument.locale = profile.meta.locale || profile.locale;
-          mergedDocument.__.isPrimaryLocale =
-            normalizeLocale(mergedDocument.locale) === normalizedPrimaryLocale;
+          mergedDocument.locale = locale;
+          mergedDocument.__.isPrimaryLocale = isPrimaryLocale;
 
           // Use resolveUrlTemplate with useCurrentPageSetTemplate option
           // to get the URL based on the current page set template
