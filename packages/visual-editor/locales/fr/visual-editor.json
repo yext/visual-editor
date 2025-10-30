@@ -86,7 +86,7 @@
     "footerLogoSlot": "Logo",
     "footerSocialLinksSlot": "Liens sociaux",
     "footerUtilityImagesSlot": {
-      "defaultAlt": "Image utilitaire {{numéro}}"
+      "defaultAlt": "Image utilitaire {{number}}"
     },
     "gallery": "Galerie",
     "getDirections": "Obtenir des itinéraires",

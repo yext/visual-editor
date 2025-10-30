@@ -86,7 +86,7 @@
     "footerLogoSlot": "Logó",
     "footerSocialLinksSlot": "Közösségi linkek",
     "footerUtilityImagesSlot": {
-      "defaultAlt": "Segédkép {{szám}}"
+      "defaultAlt": "Segédkép {{number}}"
     },
     "gallery": "Galéria",
     "getDirections": "Szerezzen útmutatásokat",
