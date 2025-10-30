@@ -13,6 +13,7 @@ import {
   resolveComponentData,
   EnhancedTranslatableCTA,
   YextEntityField,
+  TranslatableCTA,
 } from "@yext/visual-editor";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -348,12 +349,12 @@ export const PrimaryHeaderSlot: ComponentConfig<{
       showPrimaryCTA ||
       showSecondaryCTA ||
       !!data.props.slots.LinksSlot?.[0]?.props.data.links?.some(
-        (l) => l.label && l.link
+        (l: TranslatableCTA) => l.label && l.link
       ) ||
       !!(
         data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.show &&
         data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.links?.some(
-          (l) => l.label && l.link
+          (l: TranslatableCTA) => l.label && l.link
         )
       );
 
