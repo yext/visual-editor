@@ -37,6 +37,7 @@ const schemaWhitespaceRegex = /\n\s*/g;
 const LOCAL_BUSINESS_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": "[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "address": {
     "@type": "PostalAddress",
@@ -59,6 +60,7 @@ const LOCAL_BUSINESS_SCHEMA = `{
 const DIRECTORY_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "CollectionPage",
+  "@id": "[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "mainEntity": {
     "@type": "ItemList",
@@ -71,6 +73,7 @@ const DIRECTORY_SCHEMA = `{
 const LOCATOR_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "[[siteDomain]]/[[path]]",
   "name": "[[name]]"
 }`
   .replace(schemaWhitespaceRegex, " ")
@@ -79,6 +82,7 @@ const LOCATOR_SCHEMA = `{
 const FALLBACK_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "Thing",
+  "@id": "[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "description": "[[description]]"
 }`
