@@ -5,6 +5,7 @@ describe("getSchema", () => {
   it("resolves schemaMarkup for a location with no directory/reviews", async () => {
     const testData = {
       relativePrefixToRoot: "./",
+      path: "/us/va/123-main-street",
       document: {
         name: "Test Name",
         __: {
@@ -39,6 +40,7 @@ describe("getSchema", () => {
   it("returns the default schema for a location with no schema markup and no directory/reviews", async () => {
     const testData = {
       relativePrefixToRoot: "./",
+      path: "/us/va/123-main-street",
       document: {
         name: "Test Name",
         __: {
@@ -87,6 +89,7 @@ describe("getSchema", () => {
   it("resolves schemaMarkup for a location with directory and reviews", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
+      path: "/us/va/123-main-street",
       document: {
         name: "Test Name",
         __: {
@@ -247,6 +250,7 @@ describe("getSchema", () => {
   it("returns schema for a directory city with no schemaMarkup", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
+      path: "/us/va",
       document: {
         name: "Test City",
         __: {
@@ -337,6 +341,7 @@ describe("getSchema", () => {
   it("returns schema for a directory root with no schemaMarkup", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
+      path: "/index.html",
       document: {
         name: "Test Root",
         __: {

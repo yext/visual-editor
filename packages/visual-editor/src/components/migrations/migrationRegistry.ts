@@ -20,6 +20,8 @@ import { addDirectorySiteNameMigration } from "./0018_add_directory_site_name.ts
 import { refactorContentBlocks } from "./0019_refactor_content_blocks.ts";
 import { updateFooterForAssetImages } from "./0020_footer_asset_images.ts";
 import { setOpenNowDefault } from "./0021_set_open_now_default.ts";
+import { adjustLocatorOpenNowSchema } from "./0022_adjust_locator_open_now_schema.ts";
+import { addIdToSchema } from "./0023_add_id_to_schema.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -48,4 +50,6 @@ export const migrationRegistry: MigrationRegistry = [
   refactorContentBlocks,
   updateFooterForAssetImages,
   setOpenNowDefault,
+  adjustLocatorOpenNowSchema,
+  addIdToSchema,
 ];
