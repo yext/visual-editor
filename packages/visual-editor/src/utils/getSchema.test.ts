@@ -40,9 +40,10 @@ describe("getSchema", () => {
   it("returns the default schema for a location with no schema markup and no directory/reviews", async () => {
     const testData = {
       relativePrefixToRoot: "./",
-      path: "/us/va/123-main-street",
+      path: "us/va/123-main-street",
       document: {
         name: "Test Name",
+        siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
             root: {
@@ -65,6 +66,7 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
+          "@id": "yext.com/us/va/123-main-street",
           "@type": "LocalBusiness",
           name: "Test Name",
           address: {
@@ -89,9 +91,10 @@ describe("getSchema", () => {
   it("resolves schemaMarkup for a location with directory and reviews", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
-      path: "/us/va/123-main-street",
+      path: "us/va/123-main-street",
       document: {
         name: "Test Name",
+        siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
             root: {
@@ -195,11 +198,6 @@ describe("getSchema", () => {
         {
           "@type": "LocalBusiness",
           name: "Test Name",
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "3.7142856",
-            reviewCount: "7",
-          },
         },
         {
           "@type": "BreadcrumbList",
@@ -243,6 +241,14 @@ describe("getSchema", () => {
             },
           ],
         },
+        {
+          "@type": "AggregateRating",
+          ratingValue: "3.7142856",
+          reviewCount: "7",
+          itemReviewed: {
+            "@id": "yext.com/us/va/123-main-street",
+          },
+        },
       ],
     });
   });
@@ -250,9 +256,10 @@ describe("getSchema", () => {
   it("returns schema for a directory city with no schemaMarkup", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
-      path: "/us/va",
+      path: "us/va",
       document: {
         name: "Test City",
+        siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
             root: {
@@ -286,19 +293,13 @@ describe("getSchema", () => {
     expect(schema).toEqual({
       "@graph": [
         {
-          "@type": "ListItem",
-          position: "4",
-          item: {
-            "@type": "Place",
-            name: "Test City",
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: "[[address.line1]]",
-              addressLocality: "[[address.city]]",
-              addressRegion: "[[address.region]]",
-              postalCode: "[[address.postalCode]]",
-              addressCountry: "[[address.countryCode]]",
-            },
+          "@context": "https://schema.org",
+          "@id": "yext.com/us/va",
+          "@type": "CollectionPage",
+          name: "Test City",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: "[[dm_directoryChildren]]",
           },
         },
         {
@@ -341,9 +342,10 @@ describe("getSchema", () => {
   it("returns schema for a directory root with no schemaMarkup", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
-      path: "/index.html",
+      path: "index.html",
       document: {
         name: "Test Root",
+        siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
             root: {
@@ -377,19 +379,13 @@ describe("getSchema", () => {
     expect(schema).toEqual({
       "@graph": [
         {
-          "@type": "ListItem",
-          position: "1",
-          item: {
-            "@type": "Place",
-            name: "Test Root",
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: "[[address.line1]]",
-              addressLocality: "[[address.city]]",
-              addressRegion: "[[address.region]]",
-              postalCode: "[[address.postalCode]]",
-              addressCountry: "[[address.countryCode]]",
-            },
+          "@context": "https://schema.org",
+          "@id": "yext.com/index.html",
+          "@type": "CollectionPage",
+          name: "Test Root",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: "[[dm_directoryChildren]]",
           },
         },
         {

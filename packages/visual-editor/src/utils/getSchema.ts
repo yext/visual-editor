@@ -34,19 +34,20 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const resolvedSchemaMarkup: Record<string, any> = schemaMarkup
       ? JSON.parse(resolveSchemaJson(document, schemaMarkup))
       : getDefaultSchema(document);
+    const pageId = resolveSchemaJson(document, "[[siteDomain]]/[[path]]");
 
     if (entityTypeId && entityTypeId !== "locator") {
       const breadcrumbsSchema = getBreadcrumbsSchema(data);
-      const reviewsSchema = getReviewsSchema(document);
-
-      if (reviewsSchema) {
-        resolvedSchemaMarkup["aggregateRating"] = reviewsSchema;
-      }
+      const aggregateRatingSchemaBlock = getAggregateRatingSchemaBlock(
+        document,
+        pageId
+      );
 
       return {
         "@graph": [
           resolvedSchemaMarkup,
           breadcrumbsSchema && { ...breadcrumbsSchema },
+          aggregateRatingSchemaBlock && { ...aggregateRatingSchemaBlock },
         ].filter(Boolean),
       };
     }
@@ -130,8 +131,14 @@ const getBreadcrumbsSchema = (
   };
 };
 
-const getReviewsSchema = (
-  document: StreamDocument
+/**
+ * If reviews are present in the stream, return a AggregateRating object that is
+ * connected to the main page schema block via the '@id' property.
+ */
+const getAggregateRatingSchemaBlock = (
+  document: StreamDocument,
+  /** The resolved id of the main schema block */
+  pageId: string
 ): Record<string, any> | undefined => {
   const reviewsAgg = document.ref_reviewsAgg as
     | Array<{
@@ -154,8 +161,11 @@ const getReviewsSchema = (
       // there should be at most one "FIRSTPARTY" so return early when found
       return {
         "@type": "AggregateRating",
-        ratingValue: review.averageRating?.toString() ?? "0",
-        reviewCount: review.reviewCount?.toString() ?? "0",
+        ratingValue: review.averageRating.toString(),
+        reviewCount: review.reviewCount.toString(),
+        itemReviewed: {
+          "@id": pageId,
+        },
       };
     }
   }
