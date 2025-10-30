@@ -140,7 +140,7 @@ const tests: ComponentTest[] = [
         },
       }),
     },
-    props: { ...LocatorComponent.defaultProps },
+    props: {},
     version: 10,
   },
   {
@@ -178,9 +178,6 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
-      filters: {
-        openNowButton: true,
-      },
     },
     version: 10,
   },
@@ -255,9 +252,6 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
-      filters: {
-        openNowButton: true,
-      },
     },
     version: 21,
   },
@@ -294,7 +288,11 @@ const tests: ComponentTest[] = [
         },
       }),
     },
-    props: { ...LocatorComponent.defaultProps },
+    props: {
+      filters: {
+        openNowButton: false,
+      },
+    },
     version: 22,
   },
   {
