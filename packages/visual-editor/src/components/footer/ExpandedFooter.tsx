@@ -295,7 +295,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
           </>
         )}
         {/** Mobile footer icons and utility images */}
-        <div className="md:hidden flex flex-col gap-6 items-center">
+        <div className="md:hidden flex flex-col gap-6 items-center [&:not(:has(img,a,svg))]:hidden">
           <slots.SocialLinksSlot
             style={{ height: "auto", maxWidth: "max-content" }}
             allow={[]}
