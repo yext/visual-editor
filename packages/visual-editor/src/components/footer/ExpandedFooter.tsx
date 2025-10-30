@@ -398,8 +398,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
           type: "FooterExpandedLinksWrapper",
           props: {
             data: {
-              field: "",
-              constantValue: [
+              sections: [
                 {
                   label: { en: "Footer Label", hasLocalizedValue: "true" },
                   links: defaultLinks,
@@ -417,32 +416,9 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   links: defaultLinks,
                 },
               ],
-              constantValueEnabled: true,
             },
             slots: {
-              ExpandedSectionsSlot: [
-                {
-                  type: "FooterExpandedLinkSectionSlot",
-                  props: {
-                    data: {
-                      label: {
-                        field: "",
-                        constantValue: {
-                          en: "Footer Label",
-                          hasLocalizedValue: "true",
-                        },
-                        constantValueEnabled: true,
-                      },
-                      links: {
-                        field: "",
-                        constantValue: defaultLinks,
-                        constantValueEnabled: true,
-                      },
-                    },
-                    index: 0,
-                  },
-                },
-              ],
+              ExpandedSectionsSlot: [],
             },
           },
         },

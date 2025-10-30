@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   YextField,
   msg,
@@ -12,14 +12,34 @@ import {
   CTA,
   Body,
   i18nComponentsInstance,
+  useBackground,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
+
+const defaultLink = {
+  linkType: "URL" as const,
+  label: {
+    en: "Footer Link",
+    hasLocalizedValue: "true" as const,
+  },
+  link: "#",
+};
+
+const defaultLinks = [
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+];
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
     label: YextEntityField<TranslatableString>;
-    links: YextEntityField<TranslatableCTA[]>;
+    links: TranslatableCTA[];
   };
+  styles: {};
+  /** @internal */
   index?: number;
 }
 
@@ -29,13 +49,11 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   const { data, puck } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
+  const background = useBackground();
+  const isDarkBackground = background?.isDarkBackground ?? false;
 
   const label = resolveComponentData(data.label, i18n.language, streamDocument);
-  const links = resolveComponentData(
-    data.links,
-    i18n.language,
-    streamDocument
-  ) as TranslatableCTA[];
+  const links = data.links;
 
   if (!label && !puck.isEditing) {
     return <></>;
@@ -45,9 +63,15 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
     return <div className="h-10" />;
   }
 
+  const textColorClass = isDarkBackground
+    ? "text-white"
+    : "text-palette-primary-dark";
+
   return (
     <div className="flex flex-col gap-6">
-      <Body className="break-words">{label}</Body>
+      <Body className={`break-words font-link-fontWeight ${textColorClass}`}>
+        {label}
+      </Body>
       <div className="flex flex-col gap-4">
         {links && links.length > 0
           ? links.map((linkData, index) => {
@@ -80,14 +104,21 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
   );
 };
 
-export const FooterExpandedLinkSectionSlot: ComponentConfig<{
-  props: FooterExpandedLinkSectionSlotProps;
-}> = {
-  label: msg(
-    "components.footerExpandedLinkSectionSlot",
-    "Expanded Link Section"
-  ),
-  fields: {
+const defaultFooterExpandedLinkSectionProps: FooterExpandedLinkSectionSlotProps =
+  {
+    data: {
+      label: {
+        field: "",
+        constantValue: { en: "Footer Label", hasLocalizedValue: "true" },
+        constantValueEnabled: true,
+      },
+      links: defaultLinks,
+    },
+    styles: {},
+  };
+
+const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotProps> =
+  {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
@@ -114,12 +145,8 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
               type: "text",
             }),
           },
-          defaultItemProps: {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          getItemSummary: (item, index) => {
+          defaultItemProps: defaultLink,
+          getItemSummary: (item: any, index?: number) => {
             const locale = i18nComponentsInstance.language || "en";
             const label =
               typeof item.label === "string"
@@ -130,50 +157,25 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
         }),
       },
     }),
+    styles: {
+      type: "object",
+      objectFields: {},
+      visible: false,
+    },
     index: {
       type: "number",
       visible: false,
     },
-  },
-  defaultProps: {
-    data: {
-      label: {
-        field: "",
-        constantValue: { en: "Footer Label", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
-      },
-      links: {
-        field: "",
-        constantValue: [
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-        ],
-        constantValueEnabled: true,
-      },
-    },
-  },
+  };
+
+export const FooterExpandedLinkSectionSlot: ComponentConfig<{
+  props: FooterExpandedLinkSectionSlotProps;
+}> = {
+  label: msg(
+    "components.footerExpandedLinkSectionSlot",
+    "Expanded Link Section"
+  ),
+  fields: footerExpandedLinkSectionSlotFields,
+  defaultProps: defaultFooterExpandedLinkSectionProps,
   render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
 };

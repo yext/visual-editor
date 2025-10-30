@@ -118,31 +118,10 @@ export const expandedFooterSlots: Migration = {
               type: "FooterExpandedLinksWrapper",
               props: {
                 data: {
-                  field: "",
-                  constantValue: expandedFooterLinks || [],
-                  constantValueEnabled: true,
+                  sections: expandedFooterLinks || [],
                 },
                 slots: {
-                  ExpandedSectionsSlot: (expandedFooterLinks || []).map(
-                    (section: any, sectionIndex: number) => ({
-                      type: "FooterExpandedLinkSectionSlot",
-                      props: {
-                        data: {
-                          label: {
-                            field: "",
-                            constantValue: section.label,
-                            constantValueEnabled: true,
-                          },
-                          links: {
-                            field: "",
-                            constantValue: section.links,
-                            constantValueEnabled: true,
-                          },
-                        },
-                        index: sectionIndex,
-                      },
-                    })
-                  ),
+                  ExpandedSectionsSlot: [],
                 },
               },
             },

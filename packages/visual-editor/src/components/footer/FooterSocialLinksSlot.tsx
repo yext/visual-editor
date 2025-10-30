@@ -102,7 +102,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`text-2xl hover:opacity-80 transition-opacity ${textColorClass}`}
+            className={`text-heading-5-fontSize hover:opacity-80 transition-opacity ${textColorClass}`}
             aria-label={link.label}
           >
             <Icon />

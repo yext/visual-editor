@@ -627,51 +627,15 @@ const tests: ComponentTest[] = [
             type: "FooterExpandedLinksWrapper",
             props: {
               data: {
-                field: "",
-                constantValue: [
-                  {
-                    label: { en: "Footer Label", hasLocalizedValue: "true" },
-                    links: testFooterLinks,
-                  },
-                  {
-                    label: { en: "Footer Label", hasLocalizedValue: "true" },
-                    links: testFooterLinks,
-                  },
-                  {
-                    label: { en: "Footer Label", hasLocalizedValue: "true" },
-                    links: testFooterLinks,
-                  },
+                sections: [
                   {
                     label: { en: "Footer Label", hasLocalizedValue: "true" },
                     links: testFooterLinks,
                   },
                 ],
-                constantValueEnabled: true,
               },
               slots: {
-                ExpandedSectionsSlot: [
-                  {
-                    type: "FooterExpandedLinkSectionSlot",
-                    props: {
-                      data: {
-                        label: {
-                          field: "",
-                          constantValue: {
-                            en: "Footer Label",
-                            hasLocalizedValue: "true",
-                          },
-                          constantValueEnabled: true,
-                        },
-                        links: {
-                          field: "",
-                          constantValue: testFooterLinks,
-                          constantValueEnabled: true,
-                        },
-                      },
-                      index: 0,
-                    },
-                  },
-                ],
+                ExpandedSectionsSlot: [],
               },
             },
           },

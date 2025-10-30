@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   YextField,
   msg,
@@ -16,8 +16,12 @@ export interface FooterLinksSlotProps {
   data: {
     links: TranslatableCTA[];
   };
+  styles: {};
+  /** @internal */
   variant?: "primary" | "secondary";
+  /** @internal */
   eventNamePrefix?: string;
+  /** @internal */
   alignment?: "left" | "right";
 }
 
@@ -84,107 +88,114 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
   );
 };
 
+const defaultFooterLinkProps: FooterLinksSlotProps = {
+  data: {
+    links: [
+      {
+        linkType: "URL",
+        label: { en: "Footer Link", hasLocalizedValue: "true" },
+        link: "#",
+      },
+      {
+        linkType: "URL",
+        label: { en: "Footer Link", hasLocalizedValue: "true" },
+        link: "#",
+      },
+      {
+        linkType: "URL",
+        label: { en: "Footer Link", hasLocalizedValue: "true" },
+        link: "#",
+      },
+      {
+        linkType: "URL",
+        label: { en: "Footer Link", hasLocalizedValue: "true" },
+        link: "#",
+      },
+      {
+        linkType: "URL",
+        label: { en: "Footer Link", hasLocalizedValue: "true" },
+        link: "#",
+      },
+    ],
+  },
+  styles: {},
+  variant: "primary",
+  alignment: "left",
+};
+
+const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      links: YextField(msg("fields.links", "Links"), {
+        type: "array",
+        arrayFields: {
+          linkType: YextField(msg("fields.linkType", "Link Type"), {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.url", "URL"), value: "URL" },
+              {
+                label: msg("fields.options.phone", "Phone"),
+                value: "Phone",
+              },
+              {
+                label: msg("fields.options.email", "Email"),
+                value: "Email",
+              },
+            ],
+          }),
+          label: YextField(msg("fields.label", "Label"), {
+            type: "translatableString",
+            filter: { types: ["type.string"] },
+          }),
+          link: YextField(msg("fields.link", "Link"), {
+            type: "text",
+          }),
+        },
+        defaultItemProps: {
+          linkType: "URL",
+          label: { en: "Footer Link", hasLocalizedValue: "true" },
+          link: "#",
+        },
+        getItemSummary: (item: any, index?: number) => {
+          const locale = i18nComponentsInstance.language || "en";
+          const label =
+            typeof item.label === "string" ? item.label : item.label?.[locale];
+          return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
+        },
+      }),
+    },
+  }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {},
+  }),
+  variant: {
+    type: "radio",
+    options: [
+      { label: "Primary", value: "primary" },
+      { label: "Secondary", value: "secondary" },
+    ],
+    visible: false,
+  },
+  eventNamePrefix: {
+    type: "text",
+    visible: false,
+  },
+  alignment: {
+    type: "radio",
+    options: [
+      { label: "Left", value: "left" },
+      { label: "Right", value: "right" },
+    ],
+    visible: false,
+  },
+};
+
 export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
   {
     label: msg("components.footerLinksSlot", "Links"),
-    fields: {
-      data: YextField(msg("fields.data", "Data"), {
-        type: "object",
-        objectFields: {
-          links: YextField(msg("fields.links", "Links"), {
-            type: "array",
-            arrayFields: {
-              linkType: YextField(msg("fields.linkType", "Link Type"), {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.url", "URL"), value: "URL" },
-                  {
-                    label: msg("fields.options.phone", "Phone"),
-                    value: "Phone",
-                  },
-                  {
-                    label: msg("fields.options.email", "Email"),
-                    value: "Email",
-                  },
-                ],
-              }),
-              label: YextField(msg("fields.label", "Label"), {
-                type: "translatableString",
-                filter: { types: ["type.string"] },
-              }),
-              link: YextField(msg("fields.link", "Link"), {
-                type: "text",
-              }),
-            },
-            defaultItemProps: {
-              linkType: "URL",
-              label: { en: "Footer Link", hasLocalizedValue: "true" },
-              link: "#",
-            },
-            getItemSummary: (item, index) => {
-              const locale = i18nComponentsInstance.language || "en";
-              const label =
-                typeof item.label === "string"
-                  ? item.label
-                  : item.label?.[locale];
-              return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
-            },
-          }),
-        },
-      }),
-      variant: {
-        type: "radio",
-        options: [
-          { label: "Primary", value: "primary" },
-          { label: "Secondary", value: "secondary" },
-        ],
-        visible: false,
-      },
-      eventNamePrefix: {
-        type: "text",
-        visible: false,
-      },
-      alignment: {
-        type: "radio",
-        options: [
-          { label: "Left", value: "left" },
-          { label: "Right", value: "right" },
-        ],
-        visible: false,
-      },
-    },
-    defaultProps: {
-      data: {
-        links: [
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-          {
-            linkType: "URL",
-            label: { en: "Footer Link", hasLocalizedValue: "true" },
-            link: "#",
-          },
-        ],
-      },
-      variant: "primary",
-      alignment: "left",
-    },
+    fields: footerLinksSlotFields,
+    defaultProps: defaultFooterLinkProps,
     render: (props) => <FooterLinksSlotInternal {...props} />,
   };

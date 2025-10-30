@@ -6,17 +6,38 @@ import {
   pt,
   TranslatableString,
   TranslatableCTA,
-  YextEntityField,
   i18nComponentsInstance,
 } from "@yext/visual-editor";
 
+const defaultLink = {
+  linkType: "URL" as const,
+  label: {
+    en: "Footer Link",
+    hasLocalizedValue: "true" as const,
+  },
+  link: "#",
+};
+
+const defaultLinks = [
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+  { ...defaultLink },
+];
+
+const defaultSection = {
+  label: { en: "Footer Label", hasLocalizedValue: "true" as const },
+  links: defaultLinks,
+};
+
 export interface FooterExpandedLinksWrapperProps {
-  data: YextEntityField<
-    {
+  data: {
+    sections: {
       label: TranslatableString;
       links: TranslatableCTA[];
-    }[]
-  >;
+    }[];
+  };
   slots: {
     ExpandedSectionsSlot: Slot;
   };
@@ -33,7 +54,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
       style={{
         height: "auto",
       }}
-      allow={[]}
+      allow={["FooterExpandedLinkSectionSlot"]}
     />
   );
 };
@@ -43,67 +64,69 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
 }> = {
   label: msg("components.expandedLinks", "Expanded Links"),
   fields: {
-    data: YextField(
-      msg("fields.expandedFooterLinks", "Expanded Footer Links"),
-      {
-        type: "array",
-        arrayFields: {
-          label: YextField(msg("fields.sectionLabel", "Section Label"), {
-            type: "translatableString",
-            filter: { types: ["type.string"] },
-          }),
-          links: YextField(msg("fields.links", "Links"), {
+    data: YextField(msg("fields.data", "Data"), {
+      type: "object",
+      objectFields: {
+        sections: YextField(
+          msg("fields.expandedFooterLinks", "Expanded Footer Links"),
+          {
             type: "array",
             arrayFields: {
-              linkType: YextField(msg("fields.linkType", "Link Type"), {
-                type: "radio",
-                options: [
-                  { label: msg("fields.options.url", "URL"), value: "URL" },
-                  {
-                    label: msg("fields.options.phone", "Phone"),
-                    value: "Phone",
-                  },
-                  {
-                    label: msg("fields.options.email", "Email"),
-                    value: "Email",
-                  },
-                ],
-              }),
-              label: YextField(msg("fields.linkLabel", "Link Label"), {
+              label: YextField(msg("fields.sectionLabel", "Section Label"), {
                 type: "translatableString",
                 filter: { types: ["type.string"] },
               }),
-              link: YextField(msg("fields.link", "Link"), {
-                type: "text",
+              links: YextField(msg("fields.links", "Links"), {
+                type: "array",
+                arrayFields: {
+                  linkType: YextField(msg("fields.linkType", "Link Type"), {
+                    type: "radio",
+                    options: [
+                      { label: msg("fields.options.url", "URL"), value: "URL" },
+                      {
+                        label: msg("fields.options.phone", "Phone"),
+                        value: "Phone",
+                      },
+                      {
+                        label: msg("fields.options.email", "Email"),
+                        value: "Email",
+                      },
+                    ],
+                  }),
+                  label: YextField(msg("fields.linkLabel", "Link Label"), {
+                    type: "translatableString",
+                    filter: { types: ["type.string"] },
+                  }),
+                  link: YextField(msg("fields.link", "Link"), {
+                    type: "text",
+                  }),
+                },
+                defaultItemProps: defaultLink,
+                getItemSummary: (item: any, index?: number) => {
+                  const locale = i18nComponentsInstance.language || "en";
+                  const label =
+                    typeof item.label === "string"
+                      ? item.label
+                      : item.label?.[locale];
+                  return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
+                },
               }),
             },
-            defaultItemProps: {
-              linkType: "URL",
-              label: { en: "Footer Link", hasLocalizedValue: "true" },
-              link: "#",
-            },
-            getItemSummary: (item, index) => {
+            defaultItemProps: defaultSection,
+            getItemSummary: (item: any, index?: number) => {
               const locale = i18nComponentsInstance.language || "en";
               const label =
                 typeof item.label === "string"
                   ? item.label
                   : item.label?.[locale];
-              return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
+              return (
+                label || pt("section", "Section") + " " + ((index ?? 0) + 1)
+              );
             },
-          }),
-        },
-        defaultItemProps: {
-          label: { en: "Footer Section", hasLocalizedValue: "true" },
-          links: [],
-        },
-        getItemSummary: (item, index) => {
-          const locale = i18nComponentsInstance.language || "en";
-          const label =
-            typeof item.label === "string" ? item.label : item.label?.[locale];
-          return label || pt("section", "Section") + " " + ((index ?? 0) + 1);
-        },
-      }
-    ),
+          }
+        ),
+      },
+    }),
     slots: {
       type: "object",
       objectFields: {
@@ -114,49 +137,44 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
   },
   defaultProps: {
     data: {
-      field: "",
-      constantValue: [],
-      constantValueEnabled: true,
+      sections: [
+        { ...defaultSection },
+        { ...defaultSection },
+        { ...defaultSection },
+        { ...defaultSection },
+      ],
     },
     slots: {
       ExpandedSectionsSlot: [],
     },
   },
   resolveData: async (data) => {
-    // Ensure data structure exists
-    if (!data?.props?.data) {
+    if (!data?.props?.data?.sections) {
       return data;
     }
 
-    const expandedFooterLinks = data.props.data.constantValueEnabled
-      ? data.props.data.constantValue
-      : [];
+    const sections = data.props.data.sections;
 
-    if (!expandedFooterLinks || !Array.isArray(expandedFooterLinks)) {
+    if (!sections || !Array.isArray(sections)) {
       return data;
     }
 
-    // Always rebuild slots to sync with expandedFooterLinks array
-    const newSlots = expandedFooterLinks.map(
-      (section: any, sectionIndex: number) => ({
-        type: "FooterExpandedLinkSectionSlot",
-        props: {
-          data: {
-            label: {
-              field: "",
-              constantValue: section.label,
-              constantValueEnabled: true,
-            },
-            links: {
-              field: "",
-              constantValue: section.links,
-              constantValueEnabled: true,
-            },
+    // Create slots from the sections array
+    const newSlots = sections.map((section: any, index: number) => ({
+      type: "FooterExpandedLinkSectionSlot",
+      props: {
+        data: {
+          label: {
+            field: "",
+            constantValue: section.label,
+            constantValueEnabled: true,
           },
-          index: sectionIndex,
+          links: section.links || [],
         },
-      })
-    );
+        styles: {},
+        index,
+      },
+    }));
 
     return {
       ...data,
