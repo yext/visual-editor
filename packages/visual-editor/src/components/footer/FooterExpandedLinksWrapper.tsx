@@ -40,10 +40,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
   const isDarkBackground = background?.isDarkBackground ?? false;
 
   const sections = data.sections || [];
-
-  const textColorClass = isDarkBackground
-    ? "text-white"
-    : "text-palette-primary-dark";
+  const labelColorClass = isDarkBackground ? "text-white" : "text-black";
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 w-full text-center md:text-left justify-items-center md:justify-items-start">
@@ -58,7 +55,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
         return (
           <div key={sectionIndex} className="flex flex-col gap-6">
             <Body
-              className={`break-words font-link-fontWeight ${textColorClass}`}
+              className={`break-words font-link-fontWeight ${labelColorClass}`}
             >
               {label}
             </Body>
