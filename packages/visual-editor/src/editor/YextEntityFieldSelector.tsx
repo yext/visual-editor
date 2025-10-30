@@ -13,7 +13,6 @@ import {
   TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   TRANSLATABLE_STRING_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
-import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
 import {
   TEXT_LIST_CONSTANT_CONFIG,
   TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
@@ -103,7 +102,6 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
-  "type.address": ADDRESS_CONSTANT_CONFIG,
   "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,

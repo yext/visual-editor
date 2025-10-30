@@ -257,7 +257,6 @@ const InsightCard = ({
             link={resolveComponentData(insight.cta.link, i18n.language)}
             linkType={insight.cta.linkType ?? "URL"}
             ctaType={insight.cta.ctaType}
-            coordinate={insight.cta.coordinate}
             presetImageType={insight.cta.presetImageType}
             className="mt-auto"
           />
