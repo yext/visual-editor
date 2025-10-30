@@ -125,6 +125,15 @@ import {
   BreadcrumbsSection,
   BreadcrumbsSectionProps,
 } from "../pageSections/Breadcrumbs.tsx";
+import {
+  PrimaryHeaderSlot,
+  PrimaryHeaderSlotProps,
+} from "../header/PrimaryHeaderSlot.tsx";
+import {
+  SecondaryHeaderSlot,
+  SecondaryHeaderSlotProps,
+} from "../header/SecondaryHeaderSlot.tsx";
+import { HeaderLinks, HeaderLinksProps } from "../header/HeaderLinks.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -145,6 +154,7 @@ export interface SlotsCategoryProps {
   FooterLogoSlot: FooterLogoSlotProps;
   FooterSocialLinksSlot: FooterSocialLinksSlotProps;
   FooterUtilityImagesSlot: FooterUtilityImagesSlotProps;
+  HeaderLinks: HeaderLinksProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
   HoursStatusSlot: HoursStatusProps;
@@ -156,9 +166,11 @@ export interface SlotsCategoryProps {
   PhoneNumbersSlot: PhoneListProps;
   PhoneSlot: PhoneProps;
   PhotoGalleryWrapper: PhotoGalleryWrapperProps;
+  PrimaryHeaderSlot: PrimaryHeaderSlotProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
   SecondaryFooterSlot: SecondaryFooterSlotProps;
+  SecondaryHeaderSlot: SecondaryHeaderSlotProps;
   ServicesListSlot: TextListProps;
   TeamCard: TeamCardProps;
   TeamCardsWrapper: TeamCardsWrapperProps;
@@ -176,6 +188,15 @@ const lockedPermissions = {
   insert: false,
 };
 
+const ExpandedHeaderComponents = {
+  HeaderLinks: { ...HeaderLinks, permissions: lockedPermissions },
+  PrimaryHeaderSlot: { ...PrimaryHeaderSlot, permissions: lockedPermissions },
+  SecondaryHeaderSlot: {
+    ...SecondaryHeaderSlot,
+    permissions: lockedPermissions,
+  },
+};
+
 export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
@@ -190,6 +211,7 @@ export const SlotsCategoryComponents = {
   EmailsSlot: { ...Emails, permissions: lockedPermissions },
   EventCard: { ...EventCard, permissions: lockedPermissions },
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
+  ...ExpandedHeaderComponents,
   FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
   FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
   FooterExpandedLinkSectionSlot: {

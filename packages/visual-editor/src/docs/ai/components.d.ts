@@ -48,15 +48,15 @@ interface PageSectionCategoryProps {
 
 interface ExpandedHeaderProps {
   /**
-   * This object contains all the content for both header tiers.
-   * @propCategory Data Props
-   */
-  data: ExpandedHeaderData;
-  /**
    * This object contains properties for customizing the appearance of both header tiers.
    * @propCategory Style Props
    */
   styles: ExpandedHeaderStyles;
+  /** @internal */
+  slots: {
+    PrimaryHeaderSlot: Slot;
+    SecondaryHeaderSlot: Slot;
+  };
   /** @internal */
   analytics: {
     scope?: string;
@@ -518,45 +518,7 @@ interface VideoSectionProps {
   liveVisibility: boolean;
 }
 
-interface ExpandedHeaderData {
-  /** Content for the main primary header bar. */
-  primaryHeader: {
-    /** The main logo (top left) */
-    logo: AssetImageType;
-    /** The links to display in the primary header */
-    links: TranslatableCTA[];
-    /** Content for the first CTA (top right) */
-    primaryCTA?: TranslatableCTA;
-    /** Whether to show or hide the primary CTA */
-    showPrimaryCTA: boolean;
-    /** Content for the second CTA (top right) */
-    secondaryCTA?: TranslatableCTA;
-    /** Whether to show or hide the secondary CTA */
-    showSecondaryCTA: boolean;
-  };
-  /** Content for the secondary header (above the main header). */
-  secondaryHeader: {
-    /** Whether to show or hide the secondary header */
-    show: boolean;
-    /** Whether to include the locale dropdown for multi-locale pages */
-    showLanguageDropdown: boolean;
-    /** The links to display in the secondary header */
-    secondaryLinks: TranslatableCTA[];
-  };
-}
-
 interface ExpandedHeaderStyles {
-  /** Styling for the main, primary header bar. */
-  primaryHeader: {
-    logo: ImageStylingProps;
-    backgroundColor?: BackgroundStyle;
-    primaryCtaVariant: CTAVariant;
-    secondaryCtaVariant: CTAVariant;
-  };
-  /** Styling for the secondary header (top bar). */
-  secondaryHeader: {
-    backgroundColor?: BackgroundStyle;
-  };
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
   /** Whether the header is "sticky" or not */
@@ -769,6 +731,16 @@ interface StaticMapStyles {
   mapStyle: string;
 }
 
+interface PageSectionProps
+  extends VariantProps<typeof maxWidthVariants>,
+    React.HTMLAttributes<HTMLDivElement> {
+  background?: BackgroundStyle;
+  verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
+  as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
+  outerClassName?: string;
+  outerStyle?: React.CSSProperties;
+}
+
 type AssetImageType = Omit<ImageType, "alternateText"> & {
   alternateText?: TranslatableString;
   assetImage?: ImageContentData;
@@ -783,6 +755,12 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   /** The link the for the CTA */
   link: TranslatableString;
 };
+
+/**
+ * A string that can be translated for different locales.
+ * @ai This should always be the LocalizedValues type
+ */
+type TranslatableString = string | LocalizedValues;
 
 /** Props for displaying an image */
 interface ImageStylingProps {

@@ -36,7 +36,8 @@ import { testimonialsSectionSlots } from "./0034_testimonials_section_slots.ts";
 import { photoGallerySlots } from "./0035_photo_gallery_slots.ts";
 import { reviewsSectionSlots } from "./0036_reviews_section_slots.ts";
 import { directorySlots } from "./0037_slotify_directory.ts";
-import { expandedFooterSlots } from "./0038_expanded_footer_slots.ts";
+import { expandedHeaderSlots } from "./0038_expanded_header_slots.ts";
+import { expandedFooterSlots } from "./0039_expanded_footer_slots.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -81,5 +82,6 @@ export const migrationRegistry: MigrationRegistry = [
   photoGallerySlots,
   reviewsSectionSlots,
   directorySlots,
+  expandedHeaderSlots,
   expandedFooterSlots,
 ];
