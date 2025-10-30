@@ -329,10 +329,9 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                                        | Description | Default |
-| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
-| `styles` | `{}`                                                                        |             |         |
+| Prop   | Type                                                                        | Description | Default |
+| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data` | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
 
 ---
 
