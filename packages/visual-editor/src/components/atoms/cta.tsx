@@ -101,7 +101,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, ariaLabel]);
+  }, [props, streamDocument]);
 
   if (!resolvedDynamicProps) {
     return null;
