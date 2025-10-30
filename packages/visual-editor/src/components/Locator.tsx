@@ -46,14 +46,10 @@ import {
   useTemplateProps,
   resolveUrlTemplate,
   mergeMeta,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
-import {
-  Address,
-  AddressType,
-  HoursStatus,
-  HoursType,
-} from "@yext/pages-components";
+import { Address, AddressType, HoursType } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
   FaAngleRight,
@@ -613,6 +609,21 @@ const LocatorInternal = ({
     setShowSearchAreaButton(true);
   };
 
+  const [isOpenNowSelected, setIsOpenNowSelected] = React.useState(false);
+  const openNowFilter: SelectableStaticFilter = React.useMemo(
+    () => ({
+      filter: {
+        kind: "fieldValue",
+        fieldId: HOURS_FIELD,
+        matcher: Matcher.OpenAt,
+        value: "now",
+      },
+      selected: isOpenNowSelected,
+      displayName: t("openNow", "Open Now"),
+    }),
+    [isOpenNowSelected]
+  );
+
   const handleSearchAreaClick = () => {
     if (mapCenter && mapBounds) {
       const locationFilter: SelectableStaticFilter = {
@@ -630,7 +641,7 @@ const LocatorInternal = ({
           matcher: Matcher.Near,
         },
       };
-      searchActions.setStaticFilters([locationFilter]);
+      searchActions.setStaticFilters([locationFilter, openNowFilter]);
       searchActions.executeVerticalQuery();
       setSearchState("loading");
       setShowSearchAreaButton(false);
@@ -652,7 +663,7 @@ const LocatorInternal = ({
         matcher: Matcher.Near,
       },
     };
-    searchActions.setStaticFilters([locationFilter]);
+    searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
   };
@@ -787,7 +798,6 @@ const LocatorInternal = ({
       });
   }, []);
 
-  const [isSelected, setIsSelected] = React.useState(false);
   const handleOpenNowClick = (selected: boolean) => {
     searchActions.setFilterOption({
       filter: {
@@ -799,7 +809,7 @@ const LocatorInternal = ({
       selected,
       displayName: t("openNow", "Open Now"),
     });
-    setIsSelected(isSelected);
+    setIsOpenNowSelected(selected);
     searchActions.setOffset(0);
     searchActions.resetFacets();
     executeSearch(searchActions);
@@ -809,7 +819,7 @@ const LocatorInternal = ({
   // If something else causes the filters to update, check if the hours filter is still present
   // - toggle off the Open Now toggle if not.
   React.useEffect(() => {
-    setIsSelected(
+    setIsOpenNowSelected(
       searchFilters.static
         ? !!searchFilters.static.find((staticFilter) => {
             return (
@@ -911,12 +921,16 @@ const LocatorInternal = ({
                     <div className="flex flex-row gap-1">
                       <button
                         className="inline-flex bg-white"
-                        onClick={() => handleOpenNowClick(!isSelected)}
+                        onClick={() => handleOpenNowClick(!isOpenNowSelected)}
                       >
                         <div className="inline-flex items-center gap-4">
                           {t("openNow", "Open Now")}
                           <div className="text-palette-primary-dark">
-                            {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
+                            {isOpenNowSelected ? (
+                              <FaCheckSquare />
+                            ) : (
+                              <FaRegSquare />
+                            )}
                           </div>
                         </div>
                       </button>
@@ -1151,9 +1165,11 @@ const LocationCard = React.memo(
             </div>
             {location.hours && (
               <div className="font-body-fontFamily text-body-fontSize gap-8">
-                <HoursStatus
+                <HoursStatusAtom
                   hours={location.hours}
                   timezone={location.timezone}
+                  className="text-body-fontSize"
+                  boldCurrentStatus={false}
                 />
               </div>
             )}
