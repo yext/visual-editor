@@ -139,7 +139,7 @@ Additional CSS classes to apply to the CTA.
 | Prop        | Type                                                                                   | Description                                 | Default |
 | :---------- | :------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
 | `className` | `string`                                                                               | Additional CSS classes to apply to the CTA. |         |
-| `data`      | `{ entityField: YextEntityField<EnhancedTranslatableCTA>; }`                           |                                             |         |
+| `data`      | `{ show?: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; }`           |                                             |         |
 | `styles`    | `{ displayType: CTADisplayType; variant: CTAVariant; presetImage?: PresetImageType; }` |                                             |         |
 
 ---
@@ -259,25 +259,14 @@ The Expanded Header is a two-tiered component for websites with complex navigati
 
 ### Props
 
-#### Data Props
-
-This object contains all the content for both header tiers.
-
-| Prop                   | Type                                                                                                                                                                    | Description                                               | Default |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :------ |
-| `data.primaryHeader`   | `{ logo: AssetImageType; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.                  |         |
-| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                                  | Content for the secondary header (above the main header). |         |
-
 #### Style Props
 
 This object contains properties for customizing the appearance of both header tiers.
 
-| Prop                     | Type                                                                                                                              | Description                                 | Default |
-| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `styles.headerPosition`  | `"sticky" \| "fixed" \| "scrollsWithPage"`                                                                                        | Whether the header is "sticky" or not       |         |
-| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                    | The maximum width of the header             |         |
-| `styles.primaryHeader`   | `{ logo: ImageStylingProps; backgroundColor?: BackgroundStyle; primaryCtaVariant: CTAVariant; secondaryCtaVariant: CTAVariant; }` | Styling for the main, primary header bar.   |         |
-| `styles.secondaryHeader` | `{ backgroundColor?: BackgroundStyle; }`                                                                                          | Styling for the secondary header (top bar). |         |
+| Prop                    | Type                                       | Description                           | Default |
+| :---------------------- | :----------------------------------------- | :------------------------------------ | :------ |
+| `styles.headerPosition` | `"sticky" \| "fixed" \| "scrollsWithPage"` | Whether the header is "sticky" or not |         |
+| `styles.maxWidth`       | `PageSectionProps["maxWidth"]`             | The maximum width of the header       |         |
 
 ---
 
