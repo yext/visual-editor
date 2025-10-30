@@ -22,7 +22,15 @@ export type MigrationAction =
         oldProps: { id: string } & Record<string, any>
       ) => { id: string } & Record<string, any>;
     };
-export type Migration = Record<string, MigrationAction>;
+export type Migration =
+  | Record<string, MigrationAction>
+  | {
+      root: {
+        propTransformation: (
+          oldProps: Record<string, any>
+        ) => Record<string, any>;
+      };
+    };
 export type MigrationRegistry = Migration[];
 
 interface RootProps extends DefaultRootProps {
@@ -48,6 +56,14 @@ export const migrate = (
 
   migrationsToApply.forEach((migration) => {
     Object.entries(migration).forEach(([componentName, migrationAction]) => {
+      if (componentName === "root") {
+        if (!data.root.props) {
+          data.root.props = {};
+        }
+        data.root.props = migrationAction.propTransformation(data.root.props);
+        return;
+      }
+
       data = walkTree(data, config, (content) => {
         switch (migrationAction.action) {
           case "removed":
