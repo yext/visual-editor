@@ -37,7 +37,7 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const pageId = resolveSchemaJson(document, "[[siteDomain]]/[[path]]");
 
     if (entityTypeId && entityTypeId !== "locator") {
-      const breadcrumbsSchema = getBreadcrumbsSchema(data);
+      const breadcrumbsSchema = getBreadcrumbsSchema(data, pageId);
       const aggregateRatingSchemaBlock = getAggregateRatingSchemaBlock(
         document,
         pageId
@@ -107,7 +107,8 @@ export const getDirectoryParents = (
 };
 
 const getBreadcrumbsSchema = (
-  data: TemplateRenderProps
+  data: TemplateRenderProps,
+  pageId: string
 ): Record<string, any> | undefined => {
   const directoryParents = getDirectoryParents(data.document);
   if (!directoryParents?.length) {
@@ -123,6 +124,18 @@ const getBreadcrumbsSchema = (
       "@type": "Thing",
     },
   }));
+
+  if (data.document?.name) {
+    breadcrumbItems.push({
+      "@type": "ListItem",
+      position: breadcrumbItems.length + 1,
+      name: data.document.name,
+      item: {
+        "@id": pageId,
+        "@type": "Thing",
+      },
+    });
+  }
 
   return {
     "@type": "BreadcrumbList",

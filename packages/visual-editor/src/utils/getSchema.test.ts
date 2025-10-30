@@ -101,6 +101,7 @@ describe("getSchema", () => {
               props: {
                 schemaMarkup: `{
                 "@type": "LocalBusiness",
+                "@id": "[[siteDomain]]/[[path]]",
                 "name": "[[name]]"
               }`,
               },
@@ -197,6 +198,7 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@type": "LocalBusiness",
+          "@id": "yext.com/us/va/123-main-street",
           name: "Test Name",
         },
         {
@@ -239,6 +241,15 @@ describe("getSchema", () => {
                 "@type": "Thing",
               },
             },
+            {
+              "@type": "ListItem",
+              position: 5,
+              name: "Test Name",
+              item: {
+                "@id": "yext.com/us/va/123-main-street",
+                "@type": "Thing",
+              },
+            },
           ],
         },
         {
@@ -256,9 +267,9 @@ describe("getSchema", () => {
   it("returns schema for a directory city with no schemaMarkup", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
-      path: "us/va",
+      path: "us/ny/nyc",
       document: {
-        name: "Test City",
+        name: "New York City",
         siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
@@ -294,9 +305,9 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "yext.com/us/va",
+          "@id": "yext.com/us/ny/nyc",
           "@type": "CollectionPage",
-          name: "Test City",
+          name: "New York City",
           mainEntity: {
             "@type": "ItemList",
             itemListElement: "[[dm_directoryChildren]]",
@@ -330,6 +341,15 @@ describe("getSchema", () => {
               name: "NY",
               item: {
                 "@id": "../../us/ny",
+                "@type": "Thing",
+              },
+            },
+            {
+              "@type": "ListItem",
+              position: 4,
+              name: "New York City",
+              item: {
+                "@id": "yext.com/us/ny/nyc",
                 "@type": "Thing",
               },
             },
@@ -358,20 +378,6 @@ describe("getSchema", () => {
             id: "dm_root",
           },
         },
-        dm_directoryParents_63590_locations: [
-          { name: "Locations Directory", slug: "index.html" },
-          {
-            name: "US",
-            slug: "us",
-            dm_addressCountryDisplayName: "United States",
-          },
-          {
-            name: "NY",
-            slug: "us/ny",
-            dm_addressCountryDisplayName: "United States",
-            dm_addressRegionDisplayName: "New York",
-          },
-        ],
       },
     };
     const schema = getSchema(testData);
@@ -387,39 +393,6 @@ describe("getSchema", () => {
             "@type": "ItemList",
             itemListElement: "[[dm_directoryChildren]]",
           },
-        },
-        {
-          "@type": "BreadcrumbList",
-          "@context": "https://schema.org",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Locations Directory",
-              item: {
-                "@id": "../../index.html",
-                "@type": "Thing",
-              },
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "US",
-              item: {
-                "@id": "../../us",
-                "@type": "Thing",
-              },
-            },
-            {
-              "@type": "ListItem",
-              position: 3,
-              name: "NY",
-              item: {
-                "@id": "../../us/ny",
-                "@type": "Thing",
-              },
-            },
-          ],
         },
       ],
     });
