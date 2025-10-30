@@ -88,7 +88,7 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
 
   // If ref_listings doesn't exist or the address field selected isn't just address, use the address link.
   const useAddressLink: boolean =
-    data.address.field !== "address" || !streamDocument.ref_listings;
+    data.address.field !== "address" || !streamDocument.ref_listings?.length;
 
   return (
     <>

@@ -54,7 +54,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
       case "getDirections":
-        const listingsLink = streamDocument.ref_listings
+        const listingsLink = streamDocument.ref_listings?.length
           ? getDirections(
               undefined,
               streamDocument.ref_listings,

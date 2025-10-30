@@ -35,15 +35,16 @@ const GetDirectionsComponent = ({ variant }: GetDirectionsProps) => {
     streamDocument
   );
   const listings = streamDocument.ref_listings;
+  const useListings = listings && listings.length > 0;
 
   // Use listings if it exists, else use coordinate.
   const link =
     getDirections(
       undefined,
-      listings,
+      useListings ? listings : undefined,
       undefined,
       { provider: "google" },
-      !listings ? coordinate : undefined
+      !useListings ? coordinate : undefined
     ) ?? "#";
 
   return (

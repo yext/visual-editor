@@ -344,7 +344,8 @@ const CoreInfoSectionWrapper = ({ data, styles }: CoreInfoSectionProps) => {
 
   // If ref_listings doesn't exist or the address field selected isn't just address, use the address link.
   const useAddressLink: boolean =
-    data.info.address.field !== "address" || !streamDocument.ref_listings;
+    data.info.address.field !== "address" ||
+    !streamDocument.ref_listings?.length;
 
   const { additionalHoursText } = streamDocument as {
     additionalHoursText: string;
