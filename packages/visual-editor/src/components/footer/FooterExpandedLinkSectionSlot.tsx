@@ -87,7 +87,6 @@ const defaultFooterExpandedLinkSectionProps: FooterExpandedLinkSectionSlotProps 
       },
       links: defaultLinks,
     },
-    styles: {},
   };
 
 const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotProps> =
@@ -130,11 +129,6 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
         }),
       },
     }),
-    styles: {
-      type: "object",
-      objectFields: {},
-      visible: false,
-    },
     index: {
       type: "number",
       visible: false,
