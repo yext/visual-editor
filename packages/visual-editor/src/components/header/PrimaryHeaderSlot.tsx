@@ -330,8 +330,8 @@ export const PrimaryHeaderSlot: ComponentConfig<{
     );
     const showPrimaryCTA: boolean =
       data.props.slots.PrimaryCTASlot[0]?.props.data.show &&
-      !!primaryCTA.label &&
-      !!primaryCTA.link;
+      !!primaryCTA?.label &&
+      !!primaryCTA?.link;
 
     const secondaryCTA = resolveComponentData(
       data.props.slots.SecondaryCTASlot[0]?.props.data
@@ -341,8 +341,8 @@ export const PrimaryHeaderSlot: ComponentConfig<{
     );
     const showSecondaryCTA: boolean =
       data.props.slots.SecondaryCTASlot[0]?.props.data.show &&
-      !!secondaryCTA.label &&
-      !!secondaryCTA.link;
+      !!secondaryCTA?.label &&
+      !!secondaryCTA?.link;
 
     const showNavContent: boolean =
       showPrimaryCTA ||
@@ -351,8 +351,8 @@ export const PrimaryHeaderSlot: ComponentConfig<{
         (l) => l.label && l.link
       ) ||
       !!(
-        data.props.parentValues?.secondaryHeaderSlot?.[0]?.props.data.show &&
-        data.props.parentValues?.secondaryHeaderSlot?.[0]?.props.data.links?.some(
+        data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.show &&
+        data.props.parentValues?.SecondaryHeaderSlot?.[0]?.props.data.links?.some(
           (l) => l.label && l.link
         )
       );
