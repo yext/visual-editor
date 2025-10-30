@@ -252,6 +252,7 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
+      openNowButton: true,
     },
     version: 21,
   },
