@@ -1,4 +1,5 @@
 export * from "./i18n/index.ts";
+export * from "./schema/index.ts";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
 export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
 export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
@@ -9,7 +10,6 @@ export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
-export { getSchema, getDirectoryParents } from "./getSchema.ts";
 export {
   migrate,
   type Migration,
@@ -20,7 +20,6 @@ export { resolveComponentData } from "./resolveComponentData.tsx";
 export {
   resolveYextEntityField,
   resolveYextStructField,
-  resolveSchemaJson,
 } from "./resolveYextEntityField.ts";
 export { resolveUrlTemplate } from "./resolveUrlTemplate.ts";
 export {
