@@ -1,5 +1,5 @@
-import { StructEntityFieldTypes } from "../editor/YextStructFieldSelector.tsx";
-import { EntityFieldTypes } from "../internal/utils/getFilteredEntityFields.ts";
+import { type StructEntityFieldTypes } from "../editor/YextStructFieldSelector.tsx";
+import { type EntityFieldTypes } from "../internal/utils/getFilteredEntityFields.ts";
 
 export type ComponentField = {
   name: string;
