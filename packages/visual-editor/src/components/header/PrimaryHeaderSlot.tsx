@@ -11,6 +11,8 @@ import {
   useOverflow,
   ImageWrapperProps,
   resolveComponentData,
+  EnhancedTranslatableCTA,
+  YextEntityField,
 } from "@yext/visual-editor";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -29,6 +31,7 @@ export interface PrimaryHeaderSlotProps {
 
   /** @internal */
   conditionalRender?: {
+    navContent: boolean;
     CTAs: boolean;
   };
 
@@ -90,6 +93,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const showHamburger = useOverflow(containerRef, contentRef);
 
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
+  const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
   const navContent = (
     <>
@@ -121,49 +125,51 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
             <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
           </div>
           {/* Desktop Navigation & Mobile Hamburger */}
-          <div
-            className="flex-grow flex justify-end items-center min-w-0"
-            ref={containerRef}
-          >
-            {/* 1. The "Measure" Div: Always rendered but visually hidden. */}
-            {/* Its width is our source of truth. */}
+          {showNavContent && (
             <div
-              ref={contentRef}
-              className="flex items-center gap-8 invisible h-0"
+              className="flex-grow flex justify-end items-center min-w-0"
+              ref={containerRef}
             >
-              {navContent}
-            </div>
+              {/* 1. The "Measure" Div: Always rendered but visually hidden. */}
+              {/* Its width is our source of truth. */}
+              <div
+                ref={contentRef}
+                className="flex items-center gap-8 invisible h-0"
+              >
+                {navContent}
+              </div>
 
-            {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
-            <div
-              className={`hidden md:flex items-center gap-8 absolute ${
-                showHamburger
-                  ? "opacity-0 pointer-events-none"
-                  : "opacity-100 pointer-events-auto"
-              }`}
-            >
-              {navContent}
-            </div>
+              {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
+              <div
+                className={`hidden md:flex items-center gap-8 absolute ${
+                  showHamburger
+                    ? "opacity-0 pointer-events-none"
+                    : "opacity-100 pointer-events-auto"
+                }`}
+              >
+                {navContent}
+              </div>
 
-            {/* Hamburger Button - Shown when nav overflows or on small screens */}
-            <button
-              onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={
-                isMobileMenuOpen
-                  ? t("closeMenu", "Close menu")
-                  : t("openMenu", "Open menu")
-              }
-              aria-expanded={isMobileMenuOpen}
-              aria-controls="mobile-menu"
-              className={`text-xl z-10 ${showHamburger ? "md:block" : "md:hidden"}`}
-            >
-              {isMobileMenuOpen ? (
-                <FaTimes size="1.5rem" />
-              ) : (
-                <FaBars size="1.5rem" />
-              )}
-            </button>
-          </div>
+              {/* Hamburger Button - Shown when nav overflows or on small screens */}
+              <button
+                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={
+                  isMobileMenuOpen
+                    ? t("closeMenu", "Close menu")
+                    : t("openMenu", "Open menu")
+                }
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
+                className={`text-xl z-10 ${showHamburger ? "md:block" : "md:hidden"}`}
+              >
+                {isMobileMenuOpen ? (
+                  <FaTimes size="1.5rem" />
+                ) : (
+                  <FaBars size="1.5rem" />
+                )}
+              </button>
+            </div>
+          )}
         </PageSection>
       </div>
 
@@ -316,20 +322,39 @@ export const PrimaryHeaderSlot: ComponentConfig<{
     }
 
     // Check if PrimaryCTA has data to display
+    const primaryCTA = resolveComponentData(
+      data.props.slots.PrimaryCTASlot[0]?.props.data
+        .entityField as YextEntityField<EnhancedTranslatableCTA>,
+      locale,
+      streamDocument
+    );
     const showPrimaryCTA: boolean =
       data.props.slots.PrimaryCTASlot[0]?.props.data.show &&
-      resolveComponentData(
-        data.props.slots.PrimaryCTASlot[0]?.props.data.entityField,
-        streamDocument,
-        locale
-      );
+      !!primaryCTA.label &&
+      !!primaryCTA.link;
 
+    const secondaryCTA = resolveComponentData(
+      data.props.slots.SecondaryCTASlot[0]?.props.data
+        .entityField as YextEntityField<EnhancedTranslatableCTA>,
+      locale,
+      streamDocument
+    );
     const showSecondaryCTA: boolean =
       data.props.slots.SecondaryCTASlot[0]?.props.data.show &&
-      resolveComponentData(
-        data.props.slots.SecondaryCTASlot[0]?.props.data.entityField,
-        streamDocument,
-        locale
+      !!secondaryCTA.label &&
+      !!secondaryCTA.link;
+
+    const showNavContent: boolean =
+      showPrimaryCTA ||
+      showSecondaryCTA ||
+      !!data.props.slots.LinksSlot?.[0]?.props.data.links?.some(
+        (l) => l.label && l.link
+      ) ||
+      !!(
+        data.props.parentValues?.secondaryHeaderSlot?.[0]?.props.data.show &&
+        data.props.parentValues?.secondaryHeaderSlot?.[0]?.props.data.links?.some(
+          (l) => l.label && l.link
+        )
       );
 
     return {
@@ -337,6 +362,7 @@ export const PrimaryHeaderSlot: ComponentConfig<{
       props: {
         ...data.props,
         conditionalRender: {
+          navContent: showNavContent,
           CTAs: showPrimaryCTA || showSecondaryCTA,
         },
       },
