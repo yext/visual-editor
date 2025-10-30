@@ -741,53 +741,11 @@ interface PageSectionProps
   outerStyle?: React.CSSProperties;
 }
 
-type AssetImageType = Omit<ImageType, "alternateText"> & {
-  alternateText?: TranslatableString;
-  assetImage?: ImageContentData;
-};
-
-/**
- * A pages-components CTA with a translatable label and link
- */
-type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
-  /** The text to display in the CTA */
-  label: TranslatableString;
-  /** The link the for the CTA */
-  link: TranslatableString;
-};
-
-/**
- * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
- */
-type TranslatableString = string | LocalizedValues;
-
 /** Props for displaying an image */
 interface ImageStylingProps {
   /** The aspect ratio of the image */
   aspectRatio: number;
   width?: number;
-}
-
-/**
- * The different visual variants for CTA buttons.
- * "primary": the default button style. A button filled with the primary theme color.
- * "secondary": an outlined button style. A button with a border in the primary theme color and transparent background.
- * "link": a text link style. A button with no border or background, just a hyperlink in the link theme color.
- * "directoryLink": a text link style optimized for directory listings.
- * "headerFooterMainLink": a text link style optimized for main links in the header and footer.
- * "headerFooterSecondaryLink": a text link style optimized for secondary links in the header and footer.
- */
-type CTAVariant = ButtonProps["variant"];
-
-interface PageSectionProps
-  extends VariantProps<typeof maxWidthVariants>,
-    React.HTMLAttributes<HTMLDivElement> {
-  background?: BackgroundStyle;
-  verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
-  as?: "div" | "section" | "nav" | "header" | "footer" | "main" | "aside";
-  outerClassName?: string;
-  outerStyle?: React.CSSProperties;
 }
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
@@ -824,6 +782,11 @@ type TranslatableRichText =
  */
 type TranslatableString = string | LocalizedValues;
 
+type AssetImageType = Omit<ImageType, "alternateText"> & {
+  alternateText?: TranslatableString;
+  assetImage?: ImageContentData;
+};
+
 /** Data for the PromoSection */
 type PromoSectionType = {
   /**
@@ -839,23 +802,6 @@ type PromoSectionType = {
   cta: EnhancedTranslatableCTA;
 };
 
-/** Describes the data corresponding to a piece of image content. */
-type ImageContentData = {
-  name?: string;
-  transformedImage?: ImageData;
-  originalImage?: ImageData;
-  childImages?: ImageData[];
-  transformations?: ImageTransformations;
-  sourceUrl?: string;
-  altText?: string;
-};
-
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
-
 /**
  * A rich text object with HTML and JSON (LexicalRichText) representations.
  * The HTML representation is used on the live page.
@@ -870,6 +816,17 @@ type RichText = {
 type LocalizedValues = {
   hasLocalizedValue: "true";
 } & Record<string, string>;
+
+/** Describes the data corresponding to a piece of image content. */
+type ImageContentData = {
+  name?: string;
+  transformedImage?: ImageData;
+  originalImage?: ImageData;
+  childImages?: ImageData[];
+  transformations?: ImageTransformations;
+  sourceUrl?: string;
+  altText?: string;
+};
 
 type AssetVideo = {
   video: Video$1;
@@ -923,6 +880,16 @@ type Video$1 = {
   duration: string;
   /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
   embeddedUrl: string;
+};
+
+/**
+ * A pages-components CTA with a translatable label and link
+ */
+type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
+  /** The text to display in the CTA */
+  label: TranslatableString;
+  /** The link the for the CTA */
+  link: TranslatableString;
 };
 
 type CTADisplayType = "textAndLink" | "presetImage";
