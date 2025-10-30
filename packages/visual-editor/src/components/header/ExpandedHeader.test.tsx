@@ -502,7 +502,7 @@ const tests: ComponentTest[] = [
     version: 20,
   },
   {
-    name: "version 39 props - no secondary header",
+    name: "version 38 props - no secondary header",
     document: {},
     props: {
       styles: {
@@ -666,10 +666,10 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: 39,
+    version: 38,
   },
   {
-    name: "version 39 props - with secondary header",
+    name: "version 38 props - with secondary header",
     document: {},
     props: {
       styles: {
@@ -833,7 +833,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: 39,
+    version: 38,
   },
 ];
 

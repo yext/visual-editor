@@ -114,7 +114,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
 
 export const defaultSecondaryHeaderProps: SecondaryHeaderSlotProps = {
   data: {
-    show: false,
+    show: true,
     showLanguageDropdown: false,
   },
   styles: {
