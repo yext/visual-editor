@@ -38,7 +38,9 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
       fieldId={data.text.field}
       constantValueEnabled={data.text.constantValueEnabled}
     >
-      <Body variant="xs">{resolvedText}</Body>
+      <Body variant="xs" className="text-center md:text-left">
+        {resolvedText}
+      </Body>
     </EntityField>
   ) : puck.isEditing ? (
     <div className="h-[20px] min-w-[100px]" />
@@ -62,21 +64,15 @@ export const CopyrightMessageSlot: ComponentConfig<{
 }> = {
   label: msg("components.copyrightMessage", "Copyright Message"),
   fields: {
-    data: {
-      label: msg("fields.data", "Data"),
+    data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
-        text: YextField<any, TranslatableString>(
-          msg("fields.copyrightMessage", "Copyright Message"),
-          {
-            type: "entityField",
-            filter: {
-              types: ["type.string"],
-            },
-          }
-        ),
+        text: YextField(msg("fields.copyrightMessage", "Copyright Message"), {
+          type: "translatableString",
+          filter: { types: ["type.string"] },
+        }),
       },
-    },
+    }),
   },
   defaultProps: defaultCopyrightMessageSlotProps,
   render: (props) => <CopyrightMessageSlotInternal {...props} />,

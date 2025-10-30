@@ -43,16 +43,16 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
-  const secondaryAlignment =
+  const secondaryItemsAlignment =
     variant === "secondary" && alignment === "right"
-      ? "md:justify-end"
-      : "md:justify-start";
+      ? "md:items-end"
+      : "md:items-start";
 
   return (
     <div
       className={`${
         variant === "secondary"
-          ? `gap-4 flex flex-col md:flex-row w-full ${secondaryAlignment}`
+          ? `gap-5 flex flex-col md:flex-row w-full ${secondaryItemsAlignment}`
           : "w-full grid grid-cols-1 md:grid-cols-5 gap-6"
       }`}
     >

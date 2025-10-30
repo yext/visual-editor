@@ -10,10 +10,6 @@ import {
   PageSectionProps,
   themeManagerCn,
 } from "@yext/visual-editor";
-import {
-  ImageStylingFields,
-  ImageStylingProps,
-} from "../contentBlocks/image/styling.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
@@ -62,8 +58,6 @@ export interface ExpandedFooterStyles {
   primaryFooter: {
     backgroundColor?: BackgroundStyle;
     linksAlignment: "left" | "right";
-    logo: ImageStylingProps;
-    utilityImages: ImageStylingProps;
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -158,17 +152,7 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               ],
             }
           ),
-          logo: YextField(msg("fields.logo", "Logo"), {
-            type: "object",
-            objectFields: ImageStylingFields,
-          }),
-          utilityImages: YextField(
-            msg("fields.utilityImages", "Utility Images"),
-            {
-              type: "object",
-              objectFields: ImageStylingFields,
-            }
-          ),
+          // Logo and utility image styles are controlled within their respective slots
         },
       }),
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
@@ -457,14 +441,6 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     },
     styles: {
       primaryFooter: {
-        logo: {
-          width: 0,
-          aspectRatio: 1.78,
-        },
-        utilityImages: {
-          width: 0,
-          aspectRatio: 1,
-        },
         backgroundColor: backgroundColors.background6.value,
         linksAlignment: "right",
       },
