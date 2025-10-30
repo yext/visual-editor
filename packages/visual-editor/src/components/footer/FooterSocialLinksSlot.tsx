@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@measured/puck";
-import { YextField, msg, useBackground } from "@yext/visual-editor";
+import { YextField, msg, CTA } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 import {
   FaFacebook,
   FaInstagram,
@@ -28,8 +29,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   FooterSocialLinksSlotProps
 > = (props) => {
   const { data, puck } = props;
-  const background = useBackground();
-  const isDarkBackground = background?.isDarkBackground ?? false;
+  const { t } = useTranslation();
 
   const links = [
     {
@@ -85,25 +85,23 @@ const FooterSocialLinksSlotInternal: PuckComponent<
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
-  const textColorClass = isDarkBackground
-    ? "text-white"
-    : "text-palette-primary-dark";
-
   return (
-    <div className="flex gap-4 items-center justify-center md:justify-start w-fit">
+    <div className="flex gap-6 items-center justify-center md:justify-start">
       {validLinks.map((link, index) => {
         const Icon = link.icon;
+        const iconElement = <Icon className="h-6 w-6 md:h-5 md:w-5" />;
         return (
-          <a
+          <CTA
             key={index}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`text-heading-5-fontSize hover:opacity-80 transition-opacity ${textColorClass}`}
-            aria-label={link.label}
-          >
-            <Icon />
-          </a>
+            label={iconElement}
+            link={link.url}
+            linkType="URL"
+            variant="link"
+            eventName={`socialLink.${link.label.toLowerCase()}`}
+            ariaLabel={`${link.label} ${t("link", "link")}`}
+            alwaysHideCaret
+            className="block break-words whitespace-normal"
+          />
         );
       })}
     </div>

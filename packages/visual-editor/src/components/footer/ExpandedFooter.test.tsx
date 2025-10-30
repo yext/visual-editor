@@ -548,7 +548,7 @@ const tests: ComponentTest[] = [
     version: 20,
   },
   {
-    name: "version 38 props with all slots",
+    name: "version 38 props - basic",
     document: {},
     props: {
       data: {
@@ -642,7 +642,7 @@ const tests: ComponentTest[] = [
             type: "SecondaryFooterSlot",
             props: {
               data: {
-                show: true,
+                show: false,
               },
               styles: {
                 backgroundColor: {
@@ -674,7 +674,7 @@ const tests: ComponentTest[] = [
                         text: {
                           field: "",
                           constantValue: {
-                            en: "© 2025 Yext. All rights reserved.",
+                            en: "",
                             hasLocalizedValue: "true",
                           },
                           constantValueEnabled: true,
@@ -701,6 +701,367 @@ const tests: ComponentTest[] = [
           backgroundColor: {
             bgColor: "bg-palette-primary-dark",
             textColor: "text-white",
+          },
+          linksAlignment: "right",
+        },
+        maxWidth: "theme",
+      },
+      analytics: { scope: "expandedFooter" },
+    },
+    version: 38,
+  },
+  {
+    name: "version 38 props - expanded with all data",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          expandedFooter: true,
+        },
+      },
+      slots: {
+        LogoSlot: [
+          {
+            type: "FooterLogoSlot",
+            props: {
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: testLogoUrl,
+                    height: 100,
+                    width: 100,
+                    alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                width: 200,
+                aspectRatio: 4,
+              },
+            },
+          },
+        ],
+        SocialLinksSlot: [
+          {
+            type: "FooterSocialLinksSlot",
+            props: {
+              data: {
+                xLink: "https://x.com/yext",
+                facebookLink: "https://facebook.com/yext",
+                instagramLink: "https://instagram.com/yext",
+                linkedInLink: "https://linkedin.com/in/yext",
+                pinterestLink: "https://pinterest.com/yext",
+                tiktokLink: "https://tiktok.com/@yext",
+                youtubeLink: "https://youtube.com/c/yext",
+              },
+            },
+          },
+        ],
+        UtilityImagesSlot: [
+          {
+            type: "FooterUtilityImagesSlot",
+            props: {
+              data: {
+                utilityImages: [
+                  {
+                    image: {
+                      url: "https://placehold.co/20",
+                      width: 20,
+                      height: 20,
+                      alternateText: {
+                        en: "Placeholder 1",
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    linkTarget: "https://yext.com",
+                  },
+                  {
+                    image: {
+                      url: "https://placehold.co/50x20",
+                      width: 50,
+                      height: 20,
+                      alternateText: {
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                  },
+                ],
+              },
+              styles: {
+                width: 50,
+                aspectRatio: 1.78,
+              },
+            },
+          },
+        ],
+        PrimaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              data: {
+                links: testFooterLinks,
+              },
+              variant: "primary",
+              eventNamePrefix: "primary",
+            },
+          },
+        ],
+        ExpandedLinksWrapperSlot: [
+          {
+            type: "FooterExpandedLinksWrapper",
+            props: {
+              data: {
+                sections: [
+                  {
+                    label: {
+                      en: "Footer Label LONG LONG LONG",
+                      hasLocalizedValue: "true",
+                    },
+                    links: [testFooterLink, testFooterLink],
+                  },
+                  {
+                    label: { en: "Footer Label", hasLocalizedValue: "true" },
+                    links: [
+                      testFooterLink,
+                      {
+                        linkType: "URL",
+                        label: {
+                          en: "Footer Link LONG LONG LONG LONG",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                      },
+                      ...testFooterLinks,
+                    ],
+                  },
+                  {
+                    label: { en: "Footer Label", hasLocalizedValue: "true" },
+                    links: testFooterLinks,
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        SecondaryFooterSlot: [
+          {
+            type: "SecondaryFooterSlot",
+            props: {
+              data: {
+                show: true,
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-tertiary-light",
+                  textColor: "text-black",
+                },
+                linksAlignment: "right",
+              },
+              maxWidth: "theme",
+              slots: {
+                SecondaryLinksWrapperSlot: [
+                  {
+                    type: "FooterLinksSlot",
+                    props: {
+                      data: {
+                        links: testFooterLinks,
+                      },
+                      variant: "secondary",
+                      eventNamePrefix: "secondary",
+                      alignment: "right",
+                    },
+                  },
+                ],
+                CopyrightSlot: [
+                  {
+                    type: "CopyrightMessageSlot",
+                    props: {
+                      data: {
+                        text: {
+                          field: "",
+                          constantValue: {
+                            en: "Copyright 2025",
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      styles: {
+        primaryFooter: {
+          logo: {
+            width: 200,
+            aspectRatio: 4,
+          },
+          utilityImages: {
+            width: 50,
+            aspectRatio: 1.78,
+          },
+          backgroundColor: {
+            bgColor: "bg-palette-primary-dark",
+            textColor: "text-white",
+          },
+          linksAlignment: "right",
+        },
+        maxWidth: "theme",
+      },
+      analytics: { scope: "expandedFooter" },
+    },
+    version: 38,
+  },
+  {
+    name: "version 38 props - no data",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          expandedFooter: false,
+        },
+      },
+      slots: {
+        LogoSlot: [
+          {
+            type: "FooterLogoSlot",
+            props: {
+              data: {
+                image: {
+                  field: "",
+                  constantValue: undefined,
+                  constantValueEnabled: false,
+                },
+              },
+              styles: {
+                width: 0,
+                aspectRatio: 1.78,
+              },
+            },
+          },
+        ],
+        SocialLinksSlot: [
+          {
+            type: "FooterSocialLinksSlot",
+            props: {
+              data: {
+                xLink: "",
+                facebookLink: "",
+                instagramLink: "",
+                linkedInLink: "",
+                pinterestLink: "",
+                tiktokLink: "",
+                youtubeLink: "",
+              },
+            },
+          },
+        ],
+        UtilityImagesSlot: [
+          {
+            type: "FooterUtilityImagesSlot",
+            props: {
+              data: {
+                utilityImages: [],
+              },
+              styles: {
+                width: 0,
+                aspectRatio: 1,
+              },
+            },
+          },
+        ],
+        PrimaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              data: {
+                links: [],
+              },
+              variant: "primary",
+              eventNamePrefix: "primary",
+            },
+          },
+        ],
+        ExpandedLinksWrapperSlot: [
+          {
+            type: "FooterExpandedLinksWrapper",
+            props: {
+              data: {
+                sections: [],
+              },
+            },
+          },
+        ],
+        SecondaryFooterSlot: [
+          {
+            type: "SecondaryFooterSlot",
+            props: {
+              data: {
+                show: true,
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-white",
+                  textColor: "text-black",
+                },
+                linksAlignment: "right",
+              },
+              maxWidth: "theme",
+              slots: {
+                SecondaryLinksWrapperSlot: [
+                  {
+                    type: "FooterLinksSlot",
+                    props: {
+                      data: {
+                        links: [],
+                      },
+                      variant: "secondary",
+                      eventNamePrefix: "secondary",
+                      alignment: "right",
+                    },
+                  },
+                ],
+                CopyrightSlot: [
+                  {
+                    type: "CopyrightMessageSlot",
+                    props: {
+                      data: {
+                        text: {
+                          field: "",
+                          constantValue: {
+                            en: "",
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      styles: {
+        primaryFooter: {
+          logo: {
+            width: 0,
+            aspectRatio: 1.78,
+          },
+          utilityImages: {
+            width: 0,
+            aspectRatio: 1,
+          },
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
           },
           linksAlignment: "right",
         },

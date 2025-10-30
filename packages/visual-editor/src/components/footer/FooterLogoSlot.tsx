@@ -39,7 +39,7 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
     return puck.isEditing ? <div className="h-20" /> : <></>;
   }
 
-  const width = styles.width || 100;
+  const width = styles.width || 150;
   const aspectRatio = styles.aspectRatio || 1.78;
 
   const imgElement = (

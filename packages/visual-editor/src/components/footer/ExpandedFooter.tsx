@@ -242,8 +242,8 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
               />
               <div
                 className={themeManagerCn(
-                  "flex flex-col gap-6 items-start",
-                  puck.isEditing ? "" : "hidden md:flex"
+                  "hidden md:flex flex-col gap-6 items-start",
+                  puck.isEditing ? "" : ""
                 )}
               >
                 <slots.SocialLinksSlot
@@ -267,8 +267,8 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
               />
               <div
                 className={themeManagerCn(
-                  "flex flex-col gap-6 items-start",
-                  puck.isEditing ? "" : "hidden md:flex"
+                  "hidden md:flex flex-col gap-6 items-start",
+                  puck.isEditing ? "" : ""
                 )}
               >
                 <slots.SocialLinksSlot
@@ -295,18 +295,16 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
           </>
         )}
         {/** Mobile footer icons and utility images */}
-        {!puck.isEditing && (
-          <div className="md:hidden flex flex-col gap-6 items-start">
-            <slots.SocialLinksSlot
-              style={{ height: "auto", maxWidth: "max-content" }}
-              allow={[]}
-            />
-            <slots.UtilityImagesSlot
-              style={{ height: "auto", maxWidth: "max-content" }}
-              allow={[]}
-            />
-          </div>
-        )}
+        <div className="md:hidden flex flex-col gap-6 items-center">
+          <slots.SocialLinksSlot
+            style={{ height: "auto", maxWidth: "max-content" }}
+            allow={[]}
+          />
+          <slots.UtilityImagesSlot
+            style={{ height: "auto", maxWidth: "max-content" }}
+            allow={[]}
+          />
+        </div>
       </PageSection>
       {/* Secondary footer section */}
       <slots.SecondaryFooterSlot style={{ height: "auto" }} allow={[]} />
