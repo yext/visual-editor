@@ -8,17 +8,14 @@ import {
   resolveComponentData,
   MaybeLink,
   Image,
+  YextEntityField,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling";
 
 export interface FooterLogoSlotProps {
   data: {
-    image: {
-      field: string;
-      constantValue: AssetImageType;
-      constantValueEnabled: boolean;
-    };
+    image: YextEntityField<AssetImageType>;
     linkTarget?: string;
   };
   styles: {
@@ -30,7 +27,7 @@ export interface FooterLogoSlotProps {
 const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const { data, styles, puck } = props;
   const streamDocument = useDocument();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const imageDataUrl = resolveComponentData(
     data.image,
@@ -59,22 +56,20 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
     i18n.language,
     streamDocument
   );
-  const ariaLabel = altText || "Logo";
+  const ariaLabel = altText || t("logo", "Logo");
 
-  const content = data.linkTarget ? (
-    <MaybeLink
-      href={data.linkTarget}
-      className="block"
-      ariaLabel={ariaLabel}
-      alwaysHideCaret={true}
-    >
-      {imgElement}
-    </MaybeLink>
-  ) : (
-    imgElement
+  return (
+    <div className="w-fit">
+      <MaybeLink
+        href={data.linkTarget}
+        className="block"
+        ariaLabel={ariaLabel}
+        alwaysHideCaret={true}
+      >
+        {imgElement}
+      </MaybeLink>
+    </div>
   );
-
-  return <div style={{ width: "fit-content" }}>{content}</div>;
 };
 
 export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
