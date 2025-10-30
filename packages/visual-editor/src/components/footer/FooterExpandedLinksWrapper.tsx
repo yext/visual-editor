@@ -11,6 +11,7 @@ import {
   resolveComponentData,
   CTA,
   useBackground,
+  Body,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
@@ -53,11 +54,11 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
 
         return (
           <div key={sectionIndex} className="flex flex-col gap-6">
-            <div
+            <Body
               className={`break-words font-link-fontWeight font-body-fontFamily font-body-fontWeight ${labelColorClass}`}
             >
               {label}
-            </div>
+            </Body>
             <div className="flex flex-col gap-4">
               {links.map((linkData, linkIndex) => {
                 const linkLabel = resolveComponentData(
