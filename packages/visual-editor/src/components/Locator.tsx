@@ -61,7 +61,6 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
-import { useSaveToQueryString } from "../hooks/useSaveToQueryString";
 import { getValueFromQueryString } from "../utils/urlQueryString";
 
 const DEFAULT_FIELD = "builtin.location";
@@ -654,23 +653,12 @@ const LocatorInternal = ({
   };
 
   const isWindowUndefined = typeof window === "undefined";
-  let queryParamString = "";
-  if (!isWindowUndefined) {
-    console.log("window.location.search:", window.location.search);
-    queryParamString = window.location.search;
-  }
+  const queryParamString = isWindowUndefined ? "" : window.location.search;
 
   const searchActions = useSearchActions();
   const [initialLocationParam, setInitialLocationParam] = React.useState<
     string | null
   >(getValueFromQueryString(INITIAL_LOCATION_KEY, queryParamString));
-  console.log("initialLocationParam:", initialLocationParam);
-  useSaveToQueryString(
-    initialLocationParam,
-    (initialLocation) => setInitialLocationParam(initialLocation),
-    INITIAL_LOCATION_KEY,
-    isWindowUndefined
-  );
 
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
@@ -762,7 +750,6 @@ const LocatorInternal = ({
       let centerCoords = DEFAULT_MAP_CENTER;
       let displayName: string | undefined;
       const doSearch = () => {
-        console.log("Doing search with coords:", centerCoords);
         searchActions.setStaticFilters([
           {
             selected: true,
