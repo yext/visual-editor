@@ -1,6 +1,6 @@
 import { assert, describe, it, expect } from "vitest";
 import {
-  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
   resolvePageSetUrlTemplate,
 } from "./resolveUrlTemplate";
 import { StreamDocument } from "./applyTheme";
@@ -72,9 +72,101 @@ const mockLocatorMergedDocument: StreamDocument = {
   _pageset: JSON.stringify({}),
 };
 
-describe("resolveUrlTemplate", () => {
+describe("resolveUrlTemplateOfChild", () => {
+  it("handles primary url template on directory pages", () => {
+    expect(resolveUrlTemplateOfChild(mockDirectoryMergedDocument, "")).toBe(
+      "ny/page/123"
+    );
+  });
+
+  it("handles alternate url templates on directory pages", () => {
+    expect(
+      resolveUrlTemplateOfChild(
+        {
+          ...mockDirectoryMergedDocument,
+          __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
+          locale: "es",
+        },
+        ""
+      )
+    ).toBe("es/ny/page/123");
+  });
+
+  it("handles primary url template on locator pages", () => {
+    expect(resolveUrlTemplateOfChild(mockLocatorMergedDocument, "")).toBe(
+      "ny/location/123"
+    );
+  });
+
+  it("handles alternate url templates on locator pages", () => {
+    expect(
+      resolveUrlTemplateOfChild(
+        {
+          ...mockLocatorMergedDocument,
+          __: { ...mockLocatorMergedDocument.__, isPrimaryLocale: false },
+          locale: "es",
+        },
+        ""
+      )
+    ).toBe("es/ny/location/123");
+  });
+
+  it("uses base entity template (entityPageSetUrlTemplates) for directory pages", () => {
+    const directoryDocWithBothTemplates = {
+      ...mockDirectoryMergedDocument,
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary: "directory/[[address.city]]/[[id]]",
+            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
+          },
+        },
+      }),
+    };
+
+    // Should use entityPageSetUrlTemplates, not _pageset urlTemplate
+    const result = resolveUrlTemplateOfChild(directoryDocWithBothTemplates, "");
+
+    expect(result).toBe("ny/page/123");
+  });
+
+  it("use alternateFunction when provided to resolve URL template", () => {
+    const alternateFunction = (
+      streamDocument: StreamDocument,
+      relativePrefixToRoot: string
+    ) => {
+      return (
+        relativePrefixToRoot +
+        normalizeSlug(
+          `custom-url-for-${streamDocument.name}-${streamDocument?.locale || streamDocument?.meta?.locale}`
+        )
+      );
+    };
+
+    const result = resolveUrlTemplateOfChild(
+      mockDirectoryMergedDocument,
+      "../",
+      alternateFunction
+    );
+
+    assert.equal(result, "../custom-url-for-yext-en");
+  });
+
+  it("throw error when locale cannot be determined", () => {
+    const alternateLocaleDoc = {
+      ...mockDirectoryMergedDocument,
+      locale: undefined,
+      __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
+    };
+    expect(() =>
+      resolveUrlTemplateOfChild(alternateLocaleDoc, "")
+    ).toThrowError();
+  });
+});
+
+describe("resolvePageSetUrlTemplate", () => {
   it("resolves primary template for primary locale", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "");
+    const result = resolvePageSetUrlTemplate(mockStreamDocument, "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
@@ -84,7 +176,7 @@ describe("resolveUrlTemplate", () => {
       __: { isPrimaryLocale: false },
       locale: "es",
     };
-    const result = resolveUrlTemplate(alternateLocaleDoc, "");
+    const result = resolvePageSetUrlTemplate(alternateLocaleDoc, "");
     assert.equal(result, "es/ny/new-york/61-9th-ave");
   });
 
@@ -98,7 +190,7 @@ describe("resolveUrlTemplate", () => {
     };
 
     assert.equal(
-      resolveUrlTemplate(alternateLocaleDoc, ""),
+      resolvePageSetUrlTemplate(alternateLocaleDoc, ""),
       "zh-hans-hk/ny/new-york/61-9th-ave"
     );
   });
@@ -106,7 +198,7 @@ describe("resolveUrlTemplate", () => {
   it("defaults to primary template if '__' is missing", () => {
     // eslint-disable-next-line no-unused-vars
     const { __, ...docWithoutPrimaryInfo } = mockStreamDocument;
-    const result = resolveUrlTemplate(docWithoutPrimaryInfo, "");
+    const result = resolvePageSetUrlTemplate(docWithoutPrimaryInfo, "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
@@ -122,7 +214,7 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithMissingField, "");
+    const result = resolvePageSetUrlTemplate(docWithMissingField, "");
     assert.equal(result, "ny/new-york");
   });
 
@@ -138,12 +230,12 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithMissingField, "");
+    const result = resolvePageSetUrlTemplate(docWithMissingField, "");
     assert.equal(result, "foo/ny/new-york");
   });
 
   it("prepends relativePrefixToRoot to primary URL", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "../");
+    const result = resolvePageSetUrlTemplate(mockStreamDocument, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -153,24 +245,24 @@ describe("resolveUrlTemplate", () => {
       __: { isPrimaryLocale: false },
       locale: "es",
     };
-    const result = resolveUrlTemplate(alternateLocaleDoc, "../../");
+    const result = resolvePageSetUrlTemplate(alternateLocaleDoc, "../../");
     assert.equal(result, "../../es/ny/new-york/61-9th-ave");
   });
 
   it("handles empty string prefix without altering URL", () => {
-    const result = resolveUrlTemplate(mockStreamDocument, "");
+    const result = resolvePageSetUrlTemplate(mockStreamDocument, "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
   it("use fallback if _pageset is undefined", () => {
     const docWithoutPageset = { ...mockStreamDocument, _pageset: undefined };
-    const result = resolveUrlTemplate(docWithoutPageset, "../");
+    const result = resolvePageSetUrlTemplate(docWithoutPageset, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
   it("use fallback if _pageset is an empty string", () => {
     const docWithoutPageset = { ...mockStreamDocument, _pageset: "" };
-    const result = resolveUrlTemplate(docWithoutPageset, "../");
+    const result = resolvePageSetUrlTemplate(docWithoutPageset, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -179,7 +271,7 @@ describe("resolveUrlTemplate", () => {
       ...mockStreamDocument,
       _pageset: JSON.stringify({ config: {} }),
     };
-    const result = resolveUrlTemplate(docWithoutUrlTemplate, "../");
+    const result = resolvePageSetUrlTemplate(docWithoutUrlTemplate, "../");
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -194,7 +286,7 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutPrimaryTemplate, "../");
+    const result = resolvePageSetUrlTemplate(docWithoutPrimaryTemplate, "../");
     assert.equal(result, "../en/ny/new-york");
   });
 
@@ -211,7 +303,10 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "../");
+    const result = resolvePageSetUrlTemplate(
+      docWithoutAlternateTemplate,
+      "../"
+    );
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
@@ -226,7 +321,10 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "../");
+    const result = resolvePageSetUrlTemplate(
+      docWithoutAlternateTemplate,
+      "../"
+    );
     assert.equal(result, "../es/ny/new-york/61-9th-ave");
   });
 
@@ -245,30 +343,11 @@ describe("resolveUrlTemplate", () => {
         },
       }),
     };
-    const result = resolveUrlTemplate(docWithoutAlternateTemplate, "../");
-    assert.equal(result, "../ny/new-york/61-9th-ave");
-  });
-
-  it("use alternateFunction when provided to resolve URL template", () => {
-    const alternateFunction = (
-      streamDocument: StreamDocument,
-      relativePrefixToRoot: string
-    ) => {
-      return (
-        relativePrefixToRoot +
-        normalizeSlug(
-          `custom-url-for-${streamDocument.name}-${streamDocument?.locale || streamDocument?.meta?.locale}`
-        )
-      );
-    };
-
-    const result = resolveUrlTemplate(
-      mockStreamDocument,
-      "../",
-      alternateFunction
+    const result = resolvePageSetUrlTemplate(
+      docWithoutAlternateTemplate,
+      "../"
     );
-
-    assert.equal(result, "../custom-url-for-yext-en");
+    assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
   it("throw error when locale cannot be determined", () => {
@@ -277,68 +356,11 @@ describe("resolveUrlTemplate", () => {
       locale: undefined,
       __: { isPrimaryLocale: false },
     };
-    expect(() => resolveUrlTemplate(alternateLocaleDoc, "")).toThrowError();
+    expect(() =>
+      resolvePageSetUrlTemplate(alternateLocaleDoc, "")
+    ).toThrowError();
   });
 
-  it("handles primary url template on directory pages", () => {
-    expect(resolveUrlTemplate(mockDirectoryMergedDocument, "")).toBe(
-      "ny/page/123"
-    );
-  });
-
-  it("handles alternate url templates on directory pages", () => {
-    expect(
-      resolveUrlTemplate(
-        {
-          ...mockDirectoryMergedDocument,
-          __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
-          locale: "es",
-        },
-        ""
-      )
-    ).toBe("es/ny/page/123");
-  });
-
-  it("handles primary url template on locator pages", () => {
-    expect(resolveUrlTemplate(mockLocatorMergedDocument, "")).toBe(
-      "ny/location/123"
-    );
-  });
-
-  it("handles alternate url templates on locator pages", () => {
-    expect(
-      resolveUrlTemplate(
-        {
-          ...mockLocatorMergedDocument,
-          __: { ...mockLocatorMergedDocument.__, isPrimaryLocale: false },
-          locale: "es",
-        },
-        ""
-      )
-    ).toBe("es/ny/location/123");
-  });
-
-  it("uses base entity template by default for directory pages (backward compatibility)", () => {
-    const directoryDocWithBothTemplates = {
-      ...mockDirectoryMergedDocument,
-      _pageset: JSON.stringify({
-        config: {
-          urlTemplate: {
-            primary: "directory/[[address.city]]/[[id]]",
-            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
-          },
-        },
-      }),
-    };
-
-    // Should use entityPageSetUrlTemplates by default
-    const result = resolveUrlTemplate(directoryDocWithBothTemplates, "");
-
-    expect(result).toBe("ny/page/123");
-  });
-});
-
-describe("resolvePageSetUrlTemplate", () => {
   it("uses current page set template for directory pages", () => {
     const directoryDocWithPageSetTemplate = {
       ...mockDirectoryMergedDocument,

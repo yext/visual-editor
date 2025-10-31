@@ -41,22 +41,8 @@ export const fetchLocalesToPathsForEntity = async ({
     for (const profile of json.response.docs) {
       if (profile?.meta?.locale) {
         try {
-          const locale: string = profile.meta.locale;
-
-          let isPrimaryLocale: boolean;
-          if (profile?.meta?.isPrimaryLocale === true) {
-            isPrimaryLocale = true;
-          } else if (profile?.meta?.isPrimaryLocale === false) {
-            isPrimaryLocale = false;
-          } else {
-            isPrimaryLocale = locale === "en";
-          }
-
           // Merge profile with streamDocument metadata
           const mergedDocument = mergeMeta(profile, streamDocument);
-          // Override with the profile's locale to ensure we resolve the URL for the correct language
-          mergedDocument.locale = locale;
-          mergedDocument.__.isPrimaryLocale = isPrimaryLocale;
 
           // Use resolvePageSetUrlTemplate to get the URL based on the current page set template
           const resolvedUrl = resolvePageSetUrlTemplate(mergedDocument, "");

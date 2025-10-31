@@ -42,7 +42,7 @@ import {
   useDocument,
   YextField,
   useTemplateProps,
-  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
   mergeMeta,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
@@ -733,7 +733,7 @@ const LocationCard = React.memo(
       "TAP_TO_CALL"
     );
 
-    const resolvedUrl = resolveUrlTemplate(
+    const resolvedUrl = resolveUrlTemplateOfChild(
       mergeMeta(location, streamDocument),
       relativePrefixToRoot,
       puck.metadata?.resolveUrlTemplate

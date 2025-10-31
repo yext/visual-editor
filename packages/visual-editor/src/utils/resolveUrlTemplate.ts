@@ -5,7 +5,9 @@ import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 
 /**
- * Resolves a URL template using the entity page set's URL template (for directory/locator base entities).
+ * Resolves a URL template using the base entity page set's URL template.
+ * This function is specifically for resolving URLs of child entities (locations)
+ * that are children of directory or locator pages, using the entityPageSetUrlTemplates.
  * The URL template can be either primary or alternate based on __.isPrimaryLocale.
  * It replaces embedded fields in the URL template with their corresponding values from the document.
  * If an alternate function is provided, it will be used to resolve the URL template instead of the default logic.
@@ -15,7 +17,7 @@ import { normalizeLocalesInObject } from "./normalizeLocale.ts";
  * @param alternateFunction - Alternate function to resolve the URL template (optional).
  * @returns The resolved and normalized URL.
  */
-export const resolveUrlTemplate = (
+export const resolveUrlTemplateOfChild = (
   streamDocument: StreamDocument,
   relativePrefixToRoot: string = "",
   alternateFunction?: (
@@ -23,46 +25,16 @@ export const resolveUrlTemplate = (
     relativePrefixToRoot: string
   ) => string
 ): string => {
-  streamDocument = normalizeLocalesInObject(streamDocument);
-  const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
-  if (!locale) {
-    throw new Error(`Could not determine locale from streamDocument`);
-  }
+  // Use base entity template (entityPageSetUrlTemplates)
+  const urlTemplates = JSON.parse(
+    streamDocument?.__?.entityPageSetUrlTemplates || "{}"
+  );
 
-  if (alternateFunction) {
-    return alternateFunction(streamDocument, relativePrefixToRoot);
-  }
-
-  const isDirectoryOrLocator =
-    streamDocument?.__?.codeTemplate === "directory" ||
-    streamDocument?.__?.codeTemplate === "locator";
-
-  let urlTemplates;
-  if (isDirectoryOrLocator) {
-    // Use base entity template for directory/locator
-    urlTemplates = JSON.parse(
-      streamDocument?.__?.entityPageSetUrlTemplates || "{}"
-    );
-  } else {
-    // Use current page set template
-    const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-    urlTemplates = pagesetJson?.config?.urlTemplate || {};
-  }
-
-  const urlTemplate = selectUrlTemplate(streamDocument, urlTemplates);
-
-  if (!urlTemplate) {
-    return getLocationPath(
-      streamDocument as LocationDocument,
-      relativePrefixToRoot
-    );
-  }
-
-  return buildUrlFromTemplate(
-    urlTemplate,
+  return resolveUrlTemplateWithTemplates(
     streamDocument,
-    locale,
-    relativePrefixToRoot
+    relativePrefixToRoot,
+    urlTemplates,
+    alternateFunction
   );
 };
 
@@ -86,6 +58,31 @@ export const resolvePageSetUrlTemplate = (
     relativePrefixToRoot: string
   ) => string
 ): string => {
+  // Use current page set template
+  const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
+  const urlTemplates = pagesetJson?.config?.urlTemplate || {};
+
+  return resolveUrlTemplateWithTemplates(
+    streamDocument,
+    relativePrefixToRoot,
+    urlTemplates,
+    alternateFunction
+  );
+};
+
+/**
+ * Core URL template resolution logic used by both resolveUrlTemplateOfChild and resolvePageSetUrlTemplate.
+ * Resolves a URL template using the provided URL templates object.
+ */
+const resolveUrlTemplateWithTemplates = (
+  streamDocument: StreamDocument,
+  relativePrefixToRoot: string,
+  urlTemplates: { primary?: string; alternate?: string },
+  alternateFunction?: (
+    streamDocument: StreamDocument,
+    relativePrefixToRoot: string
+  ) => string
+): string => {
   streamDocument = normalizeLocalesInObject(streamDocument);
   const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
   if (!locale) {
@@ -95,10 +92,6 @@ export const resolvePageSetUrlTemplate = (
   if (alternateFunction) {
     return alternateFunction(streamDocument, relativePrefixToRoot);
   }
-
-  // Always use current page set template
-  const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-  const urlTemplates = pagesetJson?.config?.urlTemplate || {};
 
   const urlTemplate = selectUrlTemplate(streamDocument, urlTemplates);
 

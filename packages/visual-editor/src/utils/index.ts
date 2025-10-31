@@ -23,7 +23,7 @@ export {
   resolveSchemaJson,
 } from "./resolveYextEntityField.ts";
 export {
-  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
   resolvePageSetUrlTemplate,
 } from "./resolveUrlTemplate.ts";
 export {

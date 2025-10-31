@@ -6,8 +6,19 @@
  * @returns {Object}
  */
 export function mergeMeta(profile: any, streamDocument: any): any {
+  const locale: string = profile?.meta?.locale || streamDocument?.locale;
+
+  let isPrimaryLocale: boolean;
+  if (profile?.meta?.isPrimaryLocale === true) {
+    isPrimaryLocale = true;
+  } else if (profile?.meta?.isPrimaryLocale === false) {
+    isPrimaryLocale = false;
+  } else {
+    isPrimaryLocale = locale === "en";
+  }
+
   return {
-    locale: profile?.meta?.locale || streamDocument?.locale,
+    locale: locale,
     ...profile,
     meta: {
       ...streamDocument?.meta,
@@ -16,6 +27,7 @@ export function mergeMeta(profile: any, streamDocument: any): any {
     __: {
       ...streamDocument.__,
       ...profile.__,
+      isPrimaryLocale: isPrimaryLocale,
     },
     _pageset: streamDocument._pageset,
   };
