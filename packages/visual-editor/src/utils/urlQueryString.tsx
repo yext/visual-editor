@@ -6,11 +6,11 @@ export function getValueFromQueryString(
   name: string,
   queryString: string
 ): string | null {
-  return getValuesFromQueryString(queryString)[name];
+  return getRecordFromQueryString(queryString)[name] ?? null;
 }
 
 /** Converts a URL query string into an object */
-export const getValuesFromQueryString = (
+export const getRecordFromQueryString = (
   queryString: string
 ): Record<string, string> => {
   return queryString

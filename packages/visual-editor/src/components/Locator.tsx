@@ -588,6 +588,12 @@ const LocatorInternal = ({
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
+  const queryParamString =
+    typeof window === "undefined" ? "" : window.location.search;
+  const initialLocationParam = getValueFromQueryString(
+    INITIAL_LOCATION_KEY,
+    queryParamString
+  );
 
   const iframe =
     typeof document === "undefined"
@@ -652,20 +658,13 @@ const LocatorInternal = ({
     }
   };
 
-  const isWindowUndefined = typeof window === "undefined";
-  const queryParamString = isWindowUndefined ? "" : window.location.search;
-
   const searchActions = useSearchActions();
-  const [initialLocationParam, setInitialLocationParam] = React.useState<
-    string | null
-  >(getValueFromQueryString(INITIAL_LOCATION_KEY, queryParamString));
 
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
-    setInitialLocationParam(newDisplayName);
     const locationFilter: SelectableStaticFilter = {
       displayName: newDisplayName,
       selected: true,
@@ -797,6 +796,10 @@ const LocatorInternal = ({
               centerCoords = [filterFromResult.lng, filterFromResult.lat];
               return true;
             }
+            return false;
+          })
+          .catch((e) => {
+            console.warn("Filter search for initial location failed:", e);
             return false;
           });
       };
