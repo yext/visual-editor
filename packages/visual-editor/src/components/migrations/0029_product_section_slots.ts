@@ -164,7 +164,6 @@ export const productSectionSlots: Migration = {
                         },
                       },
                       styles: {
-                        displayType: "textAndLink",
                         variant: props.styles.cards.ctaVariant,
                         presetImage: "app-store",
                       },

@@ -20,6 +20,10 @@ import { addDirectorySiteNameMigration } from "./0018_add_directory_site_name.ts
 import { refactorContentBlocks } from "./0019_refactor_content_blocks.ts";
 import { updateFooterForAssetImages } from "./0020_footer_asset_images.ts";
 import { setOpenNowDefault } from "./0021_set_open_now_default.ts";
+
+import { adjustLocatorOpenNowSchema } from "./0022_adjust_locator_open_now_schema.ts";
+import { addIdToSchema } from "./0023_add_id_to_schema.ts";
+
 import { organizeHeadingTextProps } from "./0022_organize_heading_text_props.ts";
 import { eventSectionSlots } from "./0023_event_section_slots.ts";
 import { coreInfoSectionSlots } from "./0024_core_info_section_slots.ts";
@@ -66,6 +70,10 @@ export const migrationRegistry: MigrationRegistry = [
   refactorContentBlocks,
   updateFooterForAssetImages,
   setOpenNowDefault,
+
+  adjustLocatorOpenNowSchema,
+  addIdToSchema,
+
   organizeHeadingTextProps,
   eventSectionSlots,
   coreInfoSectionSlots,

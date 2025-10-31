@@ -12,26 +12,23 @@ export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
   link: TranslatableString;
 };
 
-export type CTADisplayType = "textAndLink" | "presetImage";
-
 /** Enhanced CTA options */
 export type EnhancedTranslatableCTA = TranslatableCTA & {
   /**
    * The type of CTA button to display.
    * textAndLink is a standard button
+   * getDirections is a button that opens a map based on the coordinate field
    * presetImage uses a preset image such as app store or food delivery logos for the button
    * @defaultValue "textAndLink"
+   * @ai If the CTA is for getting directions, use "getDirections" and provide the coordinate field.
+   * If the CTA is for app downloads or food delivery, use "presetImage" and select the appropriate presetImageType. Otherwise, use "textAndLink".
    */
-  ctaType?: CTADisplayType;
-
-  selectedTypes?: string[];
-
-  /**
-   * A coordinate to use instead of a link for Get Directions CTAs.
-   * If undefined, the link will be used.
-   */
-  latitude?: number;
-  longitude?: number;
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
+  coordinate?: {
+    latitude: number;
+    longitude: number;
+  };
+  presetImageType?: PresetImageType;
 };
 
 /** Preset image types for CTA buttons - app store or food delivery logos */

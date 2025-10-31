@@ -8,10 +8,11 @@ export const organizeCTAWrapperProps: Migration = {
     action: "updated",
     propTransformation: (props) => {
       const presetImage = props.entityField?.constantValue?.presetImageType;
-      const displayType =
-        props.entityField?.constantValue?.ctaType === "presetImage"
-          ? "presetImage"
-          : "textAndLink";
+      // TODO: make sure the CTA migrations are good
+      // const displayType =
+      //   props.entityField?.constantValue?.ctaType === "presetImage"
+      //     ? "presetImage"
+      //     : "textAndLink";
       const selectedTypes =
         props.entityField?.selectedType === "getDirections"
           ? ["type.coordinate"]
@@ -25,7 +26,6 @@ export const organizeCTAWrapperProps: Migration = {
           entityField: { ...props.entityField, selectedTypes: selectedTypes },
         },
         styles: {
-          displayType,
           presetImage,
           variant: props.variant,
         },

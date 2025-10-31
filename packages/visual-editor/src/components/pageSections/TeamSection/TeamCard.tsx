@@ -166,7 +166,6 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             },
             styles: {
               variant: "primary",
-              displayType: "textAndLink",
             },
             eventName: index !== undefined ? `cta${index}` : undefined,
           } satisfies CTAWrapperProps,

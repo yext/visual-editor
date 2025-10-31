@@ -185,7 +185,6 @@ export const teamsSectionSlots: Migration = {
                       },
                       styles: {
                         variant: "primary",
-                        displayType: "textAndLink",
                         presetImage: "app-store",
                       },
                       parentData: constantValueEnabled

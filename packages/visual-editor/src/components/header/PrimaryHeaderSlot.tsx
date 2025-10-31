@@ -275,7 +275,6 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             },
           },
           styles: {
-            displayType: "textAndLink",
             variant: "primary",
           },
           fieldsToHide: ["styles.displayType"],
@@ -299,10 +298,8 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             },
           },
           styles: {
-            displayType: "textAndLink",
             variant: "secondary",
           },
-          fieldsToHide: ["styles.displayType"],
         } satisfies CTAWrapperProps,
       },
     ],

@@ -13,15 +13,11 @@ import {
   TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   TRANSLATABLE_STRING_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
-import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
 import {
   TEXT_LIST_CONSTANT_CONFIG,
   TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/TextList.tsx";
-import {
-  ENHANCED_CTA_COORDINATE_CONSTANT_CONFIG,
-  ENHANCED_CTA_LINK_CONSTANT_CONFIG,
-} from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
@@ -70,7 +66,7 @@ export type YextEntityField<T> = {
    * Filter the embedded field input to this type.
    * @ai always omit this property
    */
-  selectedTypes?: string[];
+  selectedType?: string;
 };
 
 /**
@@ -100,9 +96,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
-  "type.address": ADDRESS_CONSTANT_CONFIG,
-  "type.cta": ENHANCED_CTA_LINK_CONSTANT_CONFIG,
-  "type.coordinate": ENHANCED_CTA_COORDINATE_CONSTANT_CONFIG,
+  "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
   "type.datetime": DATE_TIME_CONSTANT_CONFIG,
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
@@ -338,6 +332,7 @@ type InputProps<T extends Record<string, any>> = {
   disallowTranslation?: boolean;
   hideSelectAFieldOption?: boolean;
   label?: string;
+  typeSelectorConfig?: TypeSelectorConfigProps;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -441,9 +436,26 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   className,
   hideSelectAFieldOption,
   label,
+  typeSelectorConfig,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
+
+  const typeSelectorField = React.useMemo(() => {
+    if (!typeSelectorConfig) {
+      return;
+    }
+    return BasicSelector({
+      label: typeSelectorConfig.typeLabel,
+      options: typeSelectorConfig.options,
+      translateOptions: false,
+      noOptionsPlaceholder: pt("noAvailableTypes", "No available types"),
+      noOptionsMessage: pt(
+        "noTypesFoundMsg",
+        "No types found. Please check your configuration."
+      ),
+    });
+  }, [typeSelectorConfig]);
 
   const basicSelectorField = React.useMemo(() => {
     const filteredEntityFields = getFieldsForSelector(entityFields, filter);
@@ -492,6 +504,22 @@ export const EntityFieldInput = <T extends Record<string, any>>({
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>
+      {typeSelectorConfig && (
+        <AutoField
+          field={typeSelectorField!}
+          onChange={(selectedType, uiState) => {
+            onChange(
+              {
+                ...value,
+                field: "",
+                selectedType: selectedType,
+              },
+              uiState
+            );
+          }}
+          value={value?.selectedType}
+        />
+      )}
       <AutoField
         key={value?.selectedTypes} // reset when filter changes
         field={basicSelectorField}

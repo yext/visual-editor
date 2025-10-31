@@ -22,8 +22,8 @@ import {
   ComplexImageType,
   HoursType,
   AddressType,
-  Coordinate,
   DayOfWeekNames,
+  Coordinate,
 } from "@yext/pages-components";
 import { VariantProps } from "class-variance-authority";
 

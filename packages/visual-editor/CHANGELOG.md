@@ -1,3 +1,25 @@
+#### 0.0.64 (2025-10-24)
+
+##### Chores
+
+- move Open Now in locator to filters modal ([#821](https://github.com/yext/visual-editor/pull/821)) ([809f4401](https://github.com/yext/visual-editor/commit/809f44019a9392f9620ddd33c62a86ad0b63d8ce))
+
+##### Bug Fixes
+
+- use timezone in HoursStatus content block ([#834](https://github.com/yext/visual-editor/pull/834)) ([9c73c51e](https://github.com/yext/visual-editor/commit/9c73c51eea9eeccf334bf0807d007ef268cabccb))
+
+#### 0.0.63 (2025-10-21)
+
+##### New Features
+
+- add canonical url to pages ([#827](https://github.com/yext/visual-editor/pull/827)) ([f9d86987](https://github.com/yext/visual-editor/commit/f9d86987338df39335588962a628a0717ce592f3))
+
+#### 0.0.62 (2025-10-16)
+
+##### Bug Fixes
+
+- locator phone number and search input ([#818](https://github.com/yext/visual-editor/pull/818)) ([e4b3fb09](https://github.com/yext/visual-editor/commit/e4b3fb09e378c850763d38037237ecf0b4aaaf3f))
+
 #### 0.0.61 (2025-10-10)
 
 ##### New Features

@@ -76,7 +76,6 @@ export const expandedHeaderSlots: Migration = {
                           },
                         },
                         styles: {
-                          displayType: "textAndLink",
                           variant:
                             props.styles?.primaryHeader.primaryCtaVariant,
                         },
@@ -98,7 +97,6 @@ export const expandedHeaderSlots: Migration = {
                           },
                         },
                         styles: {
-                          displayType: "textAndLink",
                           variant:
                             props.styles?.primaryHeader.secondaryCtaVariant,
                         },
