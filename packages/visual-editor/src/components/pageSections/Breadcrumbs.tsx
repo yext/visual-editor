@@ -10,10 +10,10 @@ import {
   BackgroundStyle,
   backgroundColors,
   resolveComponentData,
+  getDirectoryParents,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { StreamDocument } from "../../utils/applyTheme";
 
 export interface BreadcrumbsData {
   /**
@@ -106,36 +106,6 @@ const breadcrumbsSectionFields: Fields<BreadcrumbsSectionProps> = {
     }
   ),
 };
-
-// getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
-// the directory parent are not the expected objects, returns an empty array.
-const getDirectoryParents = (
-  streamDocument: StreamDocument
-): Array<{ slug: string; name: string }> => {
-  for (const key in streamDocument) {
-    if (
-      key.startsWith("dm_directoryParents_") &&
-      isValidDirectoryParents(streamDocument[key])
-    ) {
-      return streamDocument[key];
-    }
-  }
-  return [];
-};
-
-// isValidDirectoryParents returns true if the array from dm_directoryParents
-// matches this type: Array<{ slug: string; name: string }>
-function isValidDirectoryParents(value: any[]): boolean {
-  return (
-    Array.isArray(value) &&
-    value.every(
-      (item) =>
-        typeof item === "object" &&
-        typeof item?.name === "string" &&
-        typeof item?.slug === "string"
-    )
-  );
-}
 
 // BreadcrumbsComponent renders breadcrumbs for DM related pages.
 // If there are no dm_directoryParents nor dm_directoryChildren,

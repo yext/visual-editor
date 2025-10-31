@@ -63,6 +63,7 @@ export const config = {
       "emails",
       "services",
       "c_deliveryPromo",
+      "ref_listings",
     ],
     localization: {
       locales: ["en", "zh_hans_hk", "fr-CA"],

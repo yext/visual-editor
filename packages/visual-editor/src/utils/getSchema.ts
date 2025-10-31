@@ -28,13 +28,34 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
   }
   try {
     const layout = JSON.parse(layoutString);
+    const entityTypeId = document?.meta?.entityType?.id;
+
     const schemaMarkup: string = layout?.root?.props?.schemaMarkup;
-    return schemaMarkup
+    const resolvedSchemaMarkup: Record<string, any> = schemaMarkup
       ? JSON.parse(resolveSchemaJson(document, schemaMarkup))
       : getDefaultSchema(document);
+    const pageId = resolveSchemaJson(document, "[[siteDomain]]/[[path]]");
+
+    if (entityTypeId && entityTypeId !== "locator") {
+      const breadcrumbsSchema = getBreadcrumbsSchema(data, pageId);
+      const aggregateRatingSchemaBlock = getAggregateRatingSchemaBlock(
+        document,
+        pageId
+      );
+
+      return {
+        "@graph": [
+          resolvedSchemaMarkup,
+          breadcrumbsSchema && { ...breadcrumbsSchema },
+          aggregateRatingSchemaBlock && { ...aggregateRatingSchemaBlock },
+        ].filter(Boolean),
+      };
+    }
+
+    return { "@graph": [resolvedSchemaMarkup] };
   } catch (e) {
     console.warn("Error resolving schema:", e);
-    return getDefaultSchema(document);
+    return { "@graph": [getDefaultSchema(document)] };
   }
 };
 
@@ -49,6 +70,139 @@ const getDefaultSchema = (
     console.warn("Error resolving default schema:", e);
     return {};
   }
+};
+
+/**
+ * isValidDirectoryParents returns true if the array from dm_directoryParents
+ * matches this type: Array<{ slug: string; name: string }>
+ */
+const isValidDirectoryParents = (value: any[]): boolean => {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (item) =>
+        typeof item === "object" &&
+        typeof item?.name === "string" &&
+        typeof item?.slug === "string"
+    )
+  );
+};
+
+/**
+ * getDirectoryParents returns an array of objects. If no dm_directoryParents or children of
+ * the directory parent are not the expected objects, returns an empty array.
+ */
+export const getDirectoryParents = (
+  streamDocument: StreamDocument
+): Array<{ slug: string; name: string }> => {
+  for (const key in streamDocument) {
+    if (
+      key.startsWith("dm_directoryParents_") &&
+      isValidDirectoryParents(streamDocument[key])
+    ) {
+      return streamDocument[key];
+    }
+  }
+  return [];
+};
+
+const getBreadcrumbsSchema = (
+  data: TemplateRenderProps,
+  pageId: string
+): Record<string, any> | undefined => {
+  // Helper to create a ListItem object
+  const fillBreadcrumbsItem = (position: number, name: string, id: string) => ({
+    "@type": "ListItem",
+    position,
+    name,
+    item: {
+      "@id": id,
+      "@type": "Thing",
+    },
+  });
+
+  const directoryParents = getDirectoryParents(data.document);
+
+  if (!directoryParents?.length) {
+    // If dm_root, return a single breadcrumb item for the current page
+    if (data.document.meta?.entityType?.id === "dm_root") {
+      return {
+        "@type": "BreadcrumbList",
+        "@context": "https://schema.org",
+        itemListElement: [fillBreadcrumbsItem(1, data.document.name, pageId)],
+      };
+    }
+    // If no parents, do not return breadcrumbs
+    return undefined;
+  }
+
+  // Create the breadcrumbs for the directory parents
+  const breadcrumbItems = directoryParents.map((parent, index) =>
+    fillBreadcrumbsItem(
+      index + 1,
+      parent.name,
+      data.relativePrefixToRoot + parent.slug
+    )
+  );
+
+  // Add the current page as the last breadcrumb item
+  if (data.document?.name) {
+    breadcrumbItems.push(
+      fillBreadcrumbsItem(
+        breadcrumbItems.length + 1,
+        data.document.name,
+        pageId
+      )
+    );
+  }
+
+  return {
+    "@type": "BreadcrumbList",
+    "@context": "https://schema.org",
+    itemListElement: breadcrumbItems,
+  };
+};
+
+/**
+ * If reviews are present in the stream, return a AggregateRating object that is
+ * connected to the main page schema block via the '@id' property.
+ */
+const getAggregateRatingSchemaBlock = (
+  document: StreamDocument,
+  /** The resolved id of the main schema block */
+  pageId: string
+): Record<string, any> | undefined => {
+  const reviewsAgg = document.ref_reviewsAgg as
+    | Array<{
+        publisher?: string;
+        averageRating?: number;
+        reviewCount?: number;
+      }>
+    | undefined;
+
+  if (!reviewsAgg || !Array.isArray(reviewsAgg) || reviewsAgg.length === 0) {
+    return;
+  }
+
+  for (const review of reviewsAgg) {
+    if (
+      review.publisher === "FIRSTPARTY" &&
+      review.averageRating !== undefined &&
+      review.reviewCount !== undefined
+    ) {
+      // there should be at most one "FIRSTPARTY" so return early when found
+      return {
+        "@type": "AggregateRating",
+        ratingValue: review.averageRating.toString(),
+        reviewCount: review.reviewCount.toString(),
+        itemReviewed: {
+          "@id": pageId,
+        },
+      };
+    }
+  }
+
+  return;
 };
 
 export const schemaWhitespaceRegex = /\n\s*/g;

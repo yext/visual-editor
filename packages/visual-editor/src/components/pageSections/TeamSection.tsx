@@ -269,7 +269,6 @@ const PersonCard = ({
                 link={resolveComponentData(person.cta.link, i18n.language)}
                 linkType={person.cta.linkType}
                 ctaType={person.cta.ctaType}
-                coordinate={person.cta.coordinate}
                 presetImageType={person.cta.presetImageType}
                 variant={ctaVariant}
               />

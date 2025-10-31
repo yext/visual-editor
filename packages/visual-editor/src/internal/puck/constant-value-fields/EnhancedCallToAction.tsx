@@ -29,48 +29,25 @@ export const ctaTypeOptions = () => {
 
 export const ctaTypeToEntityFieldType = {
   textAndLink: "type.cta",
-  getDirections: "type.coordinate",
   presetImage: "type.cta",
 };
 
-// The CTA object can have coordinates in two different formats.
-type CtaWithPossibleCoordinateFormats =
-  | {
-      coordinate?: { latitude: number; longitude: number };
-      [key: string]: any;
-    }
-  | {
-      latitude: number;
-      longitude: number;
-      [key: string]: any;
-    };
-
 /**
- * Determines the CTA type and coordinate data from an entity field and resolved CTA object.
+ * Determines the CTA type
  *
  * @param entityField - The Yext entity field containing CTA configuration.
- * @param cta - The resolved CTA object, which may have coordinate data in different places depending on the field type.
- * @returns An object containing the CTA type and coordinate (if available).
+ * @returns An object containing the CTA type
  */
-export const getCTATypeAndCoordinate = <T extends Record<string, any>>(
-  entityField: YextEntityField<T>,
-  cta: CtaWithPossibleCoordinateFormats | null | undefined
+export const getCTAType = <T extends Record<string, any>>(
+  entityField: YextEntityField<T>
 ): {
   ctaType: "textAndLink" | "getDirections" | "presetImage" | undefined;
-  coordinate?: { latitude: number; longitude: number };
 } => {
   const ctaType = entityField.constantValueEnabled
     ? entityField.constantValue.ctaType
     : entityField.selectedType;
-  const coordinate =
-    cta && "latitude" in cta && "longitude" in cta
-      ? {
-          latitude: (cta as any).latitude,
-          longitude: (cta as any).longitude,
-        }
-      : cta?.coordinate;
 
-  return { ctaType, coordinate };
+  return { ctaType };
 };
 
 export const presetImageTypeOptions = (): {
@@ -106,7 +83,6 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
         );
       }, []);
       const showLabel = value?.ctaType !== "presetImage";
-      const showCoordinate = value?.ctaType === "getDirections";
       const showPresetImage = value?.ctaType === "presetImage";
       const showLinkFields = value?.ctaType !== "getDirections";
       return (
@@ -130,10 +106,6 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                     updatedValue.label = updatedValue?.label || {
                       en: "Get Directions",
                       hasLocalizedValue: "true",
-                    };
-                    updatedValue.coordinate = updatedValue?.coordinate || {
-                      latitude: 0,
-                      longitude: 0,
                     };
                   } else if (newValue === "textAndLink") {
                     updatedValue.label = updatedValue?.label || {
@@ -204,44 +176,6 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
               </FieldLabel>
             </div>
           )}
-          {showCoordinate && (
-            <>
-              <div className="ve-mb-3">
-                <FieldLabel label={pt("fields.latitude", "Latitude")}>
-                  <AutoField
-                    field={{ type: "number" }}
-                    value={value?.coordinate?.latitude ?? 0}
-                    onChange={(newValue) =>
-                      onChange({
-                        ...value,
-                        coordinate: {
-                          latitude: newValue,
-                          longitude: value?.coordinate?.longitude ?? 0,
-                        },
-                      })
-                    }
-                  />
-                </FieldLabel>
-              </div>
-              <div className="ve-mb-3">
-                <FieldLabel label={pt("fields.longitude", "Longitude")}>
-                  <AutoField
-                    field={{ type: "number" }}
-                    value={value?.coordinate?.longitude ?? 0}
-                    onChange={(newValue) =>
-                      onChange({
-                        ...value,
-                        coordinate: {
-                          latitude: value?.coordinate?.latitude ?? 0,
-                          longitude: newValue,
-                        },
-                      })
-                    }
-                  />
-                </FieldLabel>
-              </div>
-            </>
-          )}
         </div>
       );
     },
@@ -276,20 +210,6 @@ export const enhancedTranslatableCTAFields =
           label: pt("fields.presetImageType", "Preset Image Type"),
           type: "select",
           options: presetImageTypeOptions(),
-        },
-        coordinate: {
-          label: pt("fields.coordinate", "Coordinate"),
-          type: "object",
-          objectFields: {
-            latitude: {
-              label: pt("fields.latitude", "Latitude"),
-              type: "number",
-            },
-            longitude: {
-              label: pt("fields.longitude", "Longitude"),
-              type: "number",
-            },
-          },
         },
       },
     };
