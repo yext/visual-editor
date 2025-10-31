@@ -25,7 +25,7 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 22 props with entity heading text and no video",
+    name: "version 23 props with entity heading text and no video",
     document: { name: "Test Name" },
     props: {
       styles: {
@@ -48,10 +48,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 22,
+    version: 23,
   },
   {
-    name: "version 22 props with constant heading text and video",
+    name: "version 23 props with constant heading text and video",
     document: { name: "Test Name" },
     props: {
       styles: {
@@ -79,10 +79,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 22,
+    version: 23,
   },
   {
-    name: "version 25 props with entity heading text and no video",
+    name: "version 27 props with entity heading text and no video",
     document: { name: "Test Name" },
     props: {
       styles: {
@@ -120,10 +120,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 25,
+    version: 27,
   },
   {
-    name: "version 25 props with constant heading text and video",
+    name: "version 27 props with constant heading text and video",
     document: { name: "Test Name" },
     props: {
       styles: {
@@ -170,7 +170,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 25,
+    version: 27,
   },
 ];
 

@@ -248,7 +248,7 @@ const tests: ComponentTest[] = [
     version: 10,
   },
   {
-    name: "version 33 with multiple nearby locations",
+    name: "version 35 with multiple nearby locations",
     document: {
       locale: "en",
       id: "1101-wilson-blvd",
@@ -336,10 +336,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 33,
+    version: 35,
   },
   {
-    name: "version 33 with no nearby locations",
+    name: "version 35 with no nearby locations",
     document: {
       locale: "en",
       id: "7751-bird-rd",
@@ -430,7 +430,7 @@ const tests: ComponentTest[] = [
       vi.unstubAllGlobals();
       await delay(interactionsDelay);
     },
-    version: 33,
+    version: 35,
   },
 ];
 

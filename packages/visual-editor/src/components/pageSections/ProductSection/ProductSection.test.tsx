@@ -341,7 +341,7 @@ const tests: ComponentTest[] = [
     version: 15,
   },
   {
-    name: "version 29 props with static values",
+    name: "version 31 props with static values",
     document: { c_products: productsData, name: "Test" },
     props: {
       styles: {
@@ -753,10 +753,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "productsSection" },
       liveVisibility: true,
     },
-    version: 29,
+    version: 31,
   },
   {
-    name: "version 29 props with entity values",
+    name: "version 31 props with entity values",
     document: { c_products: productsData, name: "Product Section" },
     props: {
       styles: {
@@ -1167,7 +1167,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "productsSection" },
       liveVisibility: true,
     },
-    version: 29,
+    version: 31,
   },
 ];
 

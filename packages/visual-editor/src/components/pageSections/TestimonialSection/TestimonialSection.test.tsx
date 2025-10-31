@@ -254,7 +254,7 @@ const tests: ComponentTest[] = [
     version: 7,
   },
   {
-    name: "version 34 props with entity values",
+    name: "version 36 props with entity values",
     document: { c_testimonials: testimonialData, name: "Test Name" },
     props: {
       styles: {
@@ -370,10 +370,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 34,
+    version: 36,
   },
   {
-    name: "version 34 props with constant values",
+    name: "version 36 props with constant values",
     document: { c_testimonials: testimonialData },
     props: {
       styles: {
@@ -636,7 +636,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 34,
+    version: 36,
   },
 ];
 

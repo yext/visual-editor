@@ -329,7 +329,7 @@ const tests: ComponentTest[] = [
     version: 16,
   },
   {
-    name: "version 27 props with entity values",
+    name: "version 29 props with entity values",
     document: { c_examplePromo: promoData },
     props: {
       data: {
@@ -479,7 +479,6 @@ const tests: ComponentTest[] = [
               },
               styles: {
                 variant: "secondary",
-                displayType: "textAndLink",
                 presetImage: undefined,
               },
               parentData: {
@@ -497,10 +496,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "promoSection" },
       liveVisibility: true,
     },
-    version: 27,
+    version: 29,
   },
   {
-    name: "version 27 props with mixed values",
+    name: "version 29 props with mixed values",
     document: { c_examplePromo: promoData },
     props: {
       data: {
@@ -612,7 +611,6 @@ const tests: ComponentTest[] = [
               },
               styles: {
                 variant: "link",
-                displayType: "presetImage",
                 presetImage: "app-store",
               },
             },
@@ -622,7 +620,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "promoSection" },
       liveVisibility: true,
     },
-    version: 27,
+    version: 29,
   },
 ];
 

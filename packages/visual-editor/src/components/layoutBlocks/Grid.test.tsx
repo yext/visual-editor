@@ -657,7 +657,7 @@ const tests: ComponentTest[] = [
     version: 19,
   },
   {
-    name: "version 26 - various CTAs",
+    name: "version 28 - various CTAs",
     document: {
       c_callToAction_Phone: {
         label: "Call Us",
@@ -868,7 +868,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       analytics: { scope: "gridSection" },
     },
-    version: 26,
+    version: 28,
   },
 ];
 
