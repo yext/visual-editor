@@ -31,6 +31,11 @@ export const resolveSchemaJson = (
 ): string => {
   return schema.replace(embeddedFieldRegex, (_, fieldName) => {
     const resolvedValue = findField(streamDocument, fieldName);
-    return resolvedValue ? stringifyResolvedField(resolvedValue) : "";
+
+    if (resolvedValue === undefined || resolvedValue === null) {
+      return "";
+    }
+
+    return stringifyResolvedField(resolvedValue);
   });
 };
