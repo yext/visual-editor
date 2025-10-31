@@ -820,25 +820,29 @@ const LocatorInternal = ({
         setUserLocationRetrieved(true);
 
         // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
-        if (mapboxApiKey) {
-          const lang =
-            (streamDocument.locale as string) ||
-            (typeof navigator !== "undefined"
-              ? navigator.language
-              : undefined) ||
-            "en";
-          const lon = centerCoords[0];
-          const lat = centerCoords[1];
-          const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
-            lang
-          )}`;
+        try {
+          if (mapboxApiKey) {
+            const lang =
+              (streamDocument.locale as string) ||
+              (typeof navigator !== "undefined"
+                ? navigator.language
+                : undefined) ||
+              "en";
+            const lon = centerCoords[0];
+            const lat = centerCoords[1];
+            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+              lang
+            )}`;
 
-          const res = await fetch(url);
-          if (res.ok) {
-            const data = await res.json();
-            const feature = data.features && data.features[0];
-            displayName = feature?.place_name || undefined;
+            const res = await fetch(url);
+            if (res.ok) {
+              const data = await res.json();
+              const feature = data.features && data.features[0];
+              displayName = feature?.place_name || undefined;
+            }
           }
+        } catch (e) {
+          console.error("Reverse geocoding failed:", e);
         }
       } catch {
         // 3. Fall back to mapStartingLocation prop
