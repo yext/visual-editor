@@ -7,7 +7,7 @@
  */
 export function mergeMeta(profile: any, streamDocument: any): any {
   return {
-    locale: streamDocument?.locale,
+    locale: profile?.meta?.locale || streamDocument?.locale,
     ...profile,
     meta: {
       ...streamDocument?.meta,

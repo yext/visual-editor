@@ -315,7 +315,31 @@ describe("resolveUrlTemplate", () => {
     ).toBe("es/ny/location/123");
   });
 
-  it("uses current page set template when useCurrentPageSetTemplate option is true for directory pages", () => {
+  it("uses base entity template by default for directory pages (backward compatibility)", () => {
+    const directoryDocWithBothTemplates = {
+      ...mockDirectoryMergedDocument,
+      _pageset: JSON.stringify({
+        config: {
+          urlTemplate: {
+            primary: "directory/[[address.city]]/[[id]]",
+            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
+          },
+        },
+      }),
+    };
+
+    // Should use entityPageSetUrlTemplates by default
+    const result = resolveUrlTemplate(directoryDocWithBothTemplates, "");
+
+    expect(result).toBe("ny/page/123");
+  });
+});
+
+describe("resolvePageSetUrlTemplate", () => {
+  // Need to import the function first
+  const { resolvePageSetUrlTemplate } = require("./resolveUrlTemplate");
+
+  it("uses current page set template for directory pages", () => {
     const directoryDocWithPageSetTemplate = {
       ...mockDirectoryMergedDocument,
       _pageset: JSON.stringify({
@@ -328,17 +352,15 @@ describe("resolveUrlTemplate", () => {
       }),
     };
 
-    const result = resolveUrlTemplate(
+    const result = resolvePageSetUrlTemplate(
       directoryDocWithPageSetTemplate,
-      "",
-      undefined,
-      { useCurrentPageSetTemplate: true }
+      ""
     );
 
     expect(result).toBe("directory/new-york/123");
   });
 
-  it("uses current page set template for alternate locale when useCurrentPageSetTemplate is true", () => {
+  it("uses current page set template for alternate locale", () => {
     const directoryDocWithPageSetTemplate = {
       ...mockDirectoryMergedDocument,
       __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
@@ -353,32 +375,61 @@ describe("resolveUrlTemplate", () => {
       }),
     };
 
-    const result = resolveUrlTemplate(
+    const result = resolvePageSetUrlTemplate(
       directoryDocWithPageSetTemplate,
-      "",
-      undefined,
-      { useCurrentPageSetTemplate: true }
+      ""
     );
 
     expect(result).toBe("es/directory/new-york/123");
   });
 
-  it("uses base entity template by default for directory pages (backward compatibility)", () => {
-    const directoryDocWithBothTemplates = {
-      ...mockDirectoryMergedDocument,
+  it("uses page set template for locator pages", () => {
+    const locatorDocWithPageSetTemplate = {
+      ...mockLocatorMergedDocument,
       _pageset: JSON.stringify({
         config: {
           urlTemplate: {
-            primary: "directory/[[address.city]]/[[id]]",
-            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
+            primary: "locator/[[address.city]]",
+            alternate: "[[locale]]/locator/[[address.city]]",
           },
         },
       }),
     };
 
-    // Without the option, should use entityPageSetUrlTemplates
-    const result = resolveUrlTemplate(directoryDocWithBothTemplates, "");
+    const result = resolvePageSetUrlTemplate(locatorDocWithPageSetTemplate, "");
 
-    expect(result).toBe("ny/page/123");
+    expect(result).toBe("locator/new-york");
+  });
+
+  it("uses page set template for regular entity pages", () => {
+    const result = resolvePageSetUrlTemplate(mockStreamDocument, "");
+    expect(result).toBe("ny/new-york/61-9th-ave");
+  });
+
+  it("resolves with relativePrefixToRoot for page set templates", () => {
+    const result = resolvePageSetUrlTemplate(mockStreamDocument, "../");
+    expect(result).toBe("../ny/new-york/61-9th-ave");
+  });
+
+  it("uses alternateFunction when provided for page set templates", () => {
+    const alternateFunction = (
+      streamDocument: StreamDocument,
+      relativePrefixToRoot: string
+    ) => {
+      return (
+        relativePrefixToRoot +
+        normalizeSlug(
+          `custom-pageset-url-for-${streamDocument.name}-${streamDocument?.locale || streamDocument?.meta?.locale}`
+        )
+      );
+    };
+
+    const result = resolvePageSetUrlTemplate(
+      mockStreamDocument,
+      "../",
+      alternateFunction
+    );
+
+    expect(result).toBe("../custom-pageset-url-for-yext-en");
   });
 });

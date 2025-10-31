@@ -22,7 +22,10 @@ export {
   resolveYextStructField,
   resolveSchemaJson,
 } from "./resolveYextEntityField.ts";
-export { resolveUrlTemplate } from "./resolveUrlTemplate.ts";
+export {
+  resolveUrlTemplate,
+  resolvePageSetUrlTemplate,
+} from "./resolveUrlTemplate.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
