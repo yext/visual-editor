@@ -269,7 +269,6 @@ const ProductCard = ({
             )}
             linkType={product.cta.linkType}
             ctaType={product.cta.ctaType}
-            coordinate={product.cta.coordinate}
             presetImageType={product.cta.presetImageType}
             className="mt-auto"
           />

@@ -8,6 +8,9 @@ import {
 import {
   ThemeOptions,
   BasicSelector,
+  DynamicOption,
+  DynamicOptionsSelector,
+  DynamicOptionValueTypes,
   OptionalNumberFieldProps,
   OptionalNumberField,
   CodeFieldProps,
@@ -113,6 +116,14 @@ type YextVideoField = YextBaseField & {
   type: "video";
 };
 
+type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
+  YextBaseField & {
+    type: "dynamicSelect";
+    dropdownLabel: string;
+    getOptions: () => DynamicOption<T>[];
+    placeholderOptionLabel?: string;
+  };
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -134,7 +145,10 @@ type YextFieldConfig<Props = any> =
   | YextMaxWidthField
   | YextTranslatableStringField
   | YextImageField
-  | YextVideoField;
+  | YextVideoField
+  | YextDynamicSelectField<
+      Props extends DynamicOptionValueTypes ? Props[] : any
+    >;
 
 export function YextField<T = any>(
   fieldName: MsgString,
@@ -252,6 +266,15 @@ export function YextField<T, U>(
       ...VIDEO_CONSTANT_CONFIG,
       label: fieldName,
     };
+  }
+
+  if (config.type === "dynamicSelect") {
+    return DynamicOptionsSelector({
+      label: fieldName,
+      dropdownLabel: config.dropdownLabel,
+      getOptions: config.getOptions,
+      placeholderOptionLabel: config.placeholderOptionLabel,
+    });
   }
 
   return {

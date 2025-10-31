@@ -179,7 +179,6 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                   )}
                   linkType={resolvedHero.primaryCta.linkType}
                   ctaType={resolvedHero.primaryCta.ctaType || "textAndLink"}
-                  coordinate={resolvedHero.primaryCta.coordinate}
                   presetImageType={resolvedHero.primaryCta.presetImageType}
                   className={heroCtaLinkVariantCn(styles, "primary")}
                 />
@@ -208,7 +207,6 @@ export const HeroContent: React.FC<HeroVariantProps> = ({ data, styles }) => {
                   )}
                   linkType={resolvedHero.secondaryCta.linkType}
                   ctaType={resolvedHero.secondaryCta.ctaType || "textAndLink"}
-                  coordinate={resolvedHero.secondaryCta.coordinate}
                   presetImageType={resolvedHero.secondaryCta.presetImageType}
                   className={heroCtaLinkVariantCn(styles, "secondary")}
                 />
