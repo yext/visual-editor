@@ -1010,74 +1010,76 @@ const LocatorInternal = ({
             }}
           />
         </div>
-        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
-          <div className="flex flex-row justify-between">
-            <div>
-              {resultCount === 0 &&
-                searchState === "not started" &&
-                t(
-                  "useOurLocatorToFindALocationNearYou",
-                  "Use our locator to find a location near you"
-                )}
-              {resultCount === 0 &&
-                searchState === "complete" &&
-                t(
-                  "noResultsFoundForThisArea",
-                  "No results found for this area"
-                )}
-              {resultCount > 0 &&
-                (filterDisplayName
-                  ? t(
-                      "locationsNear",
-                      `${resultCount} locations near "${filterDisplayName}"`,
-                      {
+        <div className="relative flex-1 flex flex-col min-h-0">
+          <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
+            <div className="flex flex-row justify-between" id="levelWithModal">
+              <div>
+                {resultCount === 0 &&
+                  searchState === "not started" &&
+                  t(
+                    "useOurLocatorToFindALocationNearYou",
+                    "Use our locator to find a location near you"
+                  )}
+                {resultCount === 0 &&
+                  searchState === "complete" &&
+                  t(
+                    "noResultsFoundForThisArea",
+                    "No results found for this area"
+                  )}
+                {resultCount > 0 &&
+                  (filterDisplayName
+                    ? t(
+                        "locationsNear",
+                        `${resultCount} locations near "${filterDisplayName}"`,
+                        {
+                          count: resultCount,
+                          filterDisplayName,
+                        }
+                      )
+                    : t("locationWithCount", `${resultCount} locations`, {
                         count: resultCount,
-                        filterDisplayName,
-                      }
-                    )
-                  : t("locationWithCount", `${resultCount} locations`, {
-                      count: resultCount,
-                    }))}
+                      }))}
+              </div>
+              {hasFilterModalToggle && (
+                <button
+                  className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                  onClick={() => setShowFilterModal((prev) => !prev)}
+                >
+                  {t("filter", "Filter")}
+                  {<FaSlidersH />}
+                </button>
+              )}
             </div>
-            {hasFilterModalToggle && (
-              <button
-                className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
-                onClick={() => setShowFilterModal((prev) => !prev)}
-              >
-                {t("filter", "Filter")}
-                {<FaSlidersH />}
-              </button>
+            <div className="flex flex-row justify-between">
+              <AppliedFilters
+                hiddenFields={[LOCATION_FIELD]}
+                customCssClasses={{
+                  removableFilter: "text-md font-normal mt-2 mb-0",
+                  clearAllButton: "hidden",
+                  appliedFiltersContainer: "mt-0 mb-0",
+                }}
+              />
+            </div>
+          </div>
+          <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
+            {resultCount > 0 && (
+              <VerticalResults
+                CardComponent={CardComponent}
+                setResultsRef={setResultsRef}
+              />
             )}
           </div>
-          <div className="flex flex-row justify-between">
-            <AppliedFilters
-              hiddenFields={[LOCATION_FIELD]}
-              customCssClasses={{
-                removableFilter: "text-md font-normal mt-2 mb-0",
-                clearAllButton: "hidden",
-                appliedFiltersContainer: "mt-0 mb-0",
-              }}
-            />
-          </div>
+          <FilterModal
+            showFilterModal={showFilterModal}
+            showOpenNowOption={openNowButton}
+            isOpenNowSelected={isOpenNowSelected}
+            handleOpenNowClick={handleOpenNowClick}
+            selectedDistanceMiles={selectedDistanceMiles}
+            handleDistanceClick={handleDistanceClick}
+            handleCloseModalClick={() => setShowFilterModal(false)}
+            handleClearFiltersClick={handleClearFiltersClick}
+          />
         </div>
-        <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
-          {resultCount > 0 && (
-            <VerticalResults
-              CardComponent={CardComponent}
-              setResultsRef={setResultsRef}
-            />
-          )}
-        </div>
-        <FilterModal
-          showFilterModal={showFilterModal}
-          showOpenNowOption={openNowButton}
-          isOpenNowSelected={isOpenNowSelected}
-          handleOpenNowClick={handleOpenNowClick}
-          selectedDistanceMiles={selectedDistanceMiles}
-          handleDistanceClick={handleDistanceClick}
-          handleCloseModalClick={() => setShowFilterModal(false)}
-          handleClearFiltersClick={handleClearFiltersClick}
-        />
       </div>
 
       {/* Right Section: Map. Hidden for small screens */}
