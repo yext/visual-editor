@@ -86,7 +86,7 @@
     "footerLogoSlot": "Logo",
     "footerSocialLinksSlot": "Odkazy na sociálne siete",
     "footerUtilityImagesSlot": {
-      "defaultAlt": "Pomocný obrázok {{číslo}}"
+      "defaultAlt": "Pomocný obrázok {{number}}"
     },
     "gallery": "Galéria",
     "getDirections": "Získajte pokyny",
