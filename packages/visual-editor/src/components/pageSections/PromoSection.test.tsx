@@ -605,6 +605,7 @@ const tests: ComponentTest[] = [
                     label: { en: "", hasLocalizedValue: "true" },
                     link: "#",
                     linkType: "URL",
+                    ctaType: "presetImage",
                   },
                   constantValueEnabled: true,
                 },
