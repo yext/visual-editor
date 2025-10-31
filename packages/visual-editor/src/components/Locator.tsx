@@ -985,7 +985,10 @@ const LocatorInternal = ({
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div className="h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col">
+      <div
+        className="relative h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col"
+        id="locatorLeftDiv"
+      >
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
@@ -1007,7 +1010,7 @@ const LocatorInternal = ({
             }}
           />
         </div>
-        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 relative inline-block">
+        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
           <div className="flex flex-row justify-between">
             <div>
               {resultCount === 0 &&
@@ -1046,64 +1049,6 @@ const LocatorInternal = ({
               </button>
             )}
           </div>
-          {showFilterModal && (
-            <div
-              id="popup"
-              className="absolute top-0 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[758px]"
-            >
-              <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
-                <div className="font-bold">
-                  {t("refineYourSearch", "Refine Your Search")}
-                </div>
-                <button
-                  className="text-palette-primary-dark"
-                  onClick={() => setShowFilterModal(false)}
-                >
-                  <FaTimes />
-                </button>
-              </div>
-              <div className="px-6 border-b border-gray-300">
-                <AppliedFilters
-                  hiddenFields={[LOCATION_FIELD]}
-                  customCssClasses={{
-                    removableFilter: "text-md font-normal",
-                    clearAllButton: "hidden",
-                  }}
-                />
-              </div>
-              <div className="flex flex-col p-6 gap-6 overflow-y-auto">
-                <div className="flex flex-col gap-8">
-                  {openNowButton && (
-                    <OpenNowFilter
-                      isSelected={isOpenNowSelected}
-                      onChange={handleOpenNowClick}
-                    />
-                  )}
-                  <DistanceFilter
-                    onChange={handleDistanceClick}
-                    selectedDistanceMiles={selectedDistanceMiles}
-                  />
-                  <Facets
-                    customCssClasses={{
-                      divider: "bg-white",
-                      titleLabel: "font-bold text-md",
-                      optionInput: "h-4 w-4 accent-palette-primary-dark",
-                      optionLabel: "text-md",
-                      option: "space-x-4",
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="border-y border-gray-300 justify-center ve-align-middle">
-                <button
-                  className="w-full py-4 text-center font-bold text-palette-primary-dark"
-                  onClick={handleClearFiltersClick}
-                >
-                  {t("clearAll", "Clear All")}
-                </button>
-              </div>
-            </div>
-          )}
           <div className="flex flex-row justify-between">
             <AppliedFilters
               hiddenFields={[LOCATION_FIELD]}
@@ -1123,6 +1068,16 @@ const LocatorInternal = ({
             />
           )}
         </div>
+        <FilterModal
+          showFilterModal={showFilterModal}
+          showOpenNowOption={openNowButton}
+          isOpenNowSelected={isOpenNowSelected}
+          handleOpenNowClick={handleOpenNowClick}
+          selectedDistanceMiles={selectedDistanceMiles}
+          handleDistanceClick={handleDistanceClick}
+          handleCloseModalClick={() => setShowFilterModal(false)}
+          handleClearFiltersClick={handleClearFiltersClick}
+        />
       </div>
 
       {/* Right Section: Map. Hidden for small screens */}
@@ -1391,6 +1346,92 @@ const LocationCard = React.memo(
     );
   }
 );
+
+interface FilterModalProps {
+  showFilterModal: boolean;
+  showOpenNowOption: boolean; // whether to show the Open Now filter option
+  isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
+  selectedDistanceMiles?: number;
+  handleCloseModalClick: () => void;
+  handleOpenNowClick: (selected: boolean) => void;
+  handleDistanceClick: (distance: number) => void;
+  handleClearFiltersClick: () => void;
+}
+
+const FilterModal = (props: FilterModalProps) => {
+  const {
+    showFilterModal,
+    showOpenNowOption,
+    isOpenNowSelected,
+    selectedDistanceMiles,
+    handleCloseModalClick,
+    handleOpenNowClick,
+    handleDistanceClick,
+    handleClearFiltersClick,
+  } = props;
+  const { t } = useTranslation();
+  const popupRef = React.useRef<HTMLDivElement>(null);
+
+  return showFilterModal ? (
+    <div
+      id="popup"
+      className="absolute top-4 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      ref={popupRef}
+    >
+      <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
+        <div className="font-bold">
+          {t("refineYourSearch", "Refine Your Search")}
+        </div>
+        <button
+          className="text-palette-primary-dark"
+          onClick={handleCloseModalClick}
+        >
+          <FaTimes />
+        </button>
+      </div>
+      <div className="px-6 border-b border-gray-300">
+        <AppliedFilters
+          hiddenFields={[LOCATION_FIELD]}
+          customCssClasses={{
+            removableFilter: "text-md font-normal",
+            clearAllButton: "hidden",
+          }}
+        />
+      </div>
+      <div className="flex flex-col p-6 gap-6 overflow-y-auto">
+        <div className="flex flex-col gap-8">
+          {showOpenNowOption && (
+            <OpenNowFilter
+              isSelected={isOpenNowSelected}
+              onChange={handleOpenNowClick}
+            />
+          )}
+          <DistanceFilter
+            onChange={handleDistanceClick}
+            selectedDistanceMiles={selectedDistanceMiles}
+          />
+          <Facets
+            customCssClasses={{
+              divider: "bg-white",
+              titleLabel: "font-bold text-md",
+              optionInput: "h-4 w-4 accent-palette-primary-dark",
+              optionLabel: "text-md",
+              option: "space-x-4",
+            }}
+          />
+        </div>
+      </div>
+      <div className="border-y border-gray-300 justify-center align-middle">
+        <button
+          className="w-full py-4 text-center font-bold text-palette-primary-dark"
+          onClick={handleClearFiltersClick}
+        >
+          {t("clearAll", "Clear All")}
+        </button>
+      </div>
+    </div>
+  ) : null;
+};
 
 interface OpenNowFilterProps {
   isSelected: boolean;
