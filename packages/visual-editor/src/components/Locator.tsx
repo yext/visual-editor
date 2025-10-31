@@ -854,7 +854,9 @@ const LocatorInternal = ({
       }
     };
 
-    resolveLocationAndSearch();
+    resolveLocationAndSearch().catch((e) =>
+      console.error("Failed perform search:", e)
+    );
   }, [initialLocationParam]);
 
   const handleOpenNowClick = (selected: boolean) => {
