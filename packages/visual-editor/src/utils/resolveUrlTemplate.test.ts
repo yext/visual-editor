@@ -1,5 +1,8 @@
 import { assert, describe, it, expect } from "vitest";
-import { resolveUrlTemplate } from "./resolveUrlTemplate";
+import {
+  resolveUrlTemplate,
+  resolvePageSetUrlTemplate,
+} from "./resolveUrlTemplate";
 import { StreamDocument } from "./applyTheme";
 import { normalizeSlug } from "./slugifier";
 
@@ -336,9 +339,6 @@ describe("resolveUrlTemplate", () => {
 });
 
 describe("resolvePageSetUrlTemplate", () => {
-  // Need to import the function first
-  const { resolvePageSetUrlTemplate } = require("./resolveUrlTemplate");
-
   it("uses current page set template for directory pages", () => {
     const directoryDocWithPageSetTemplate = {
       ...mockDirectoryMergedDocument,
