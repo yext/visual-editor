@@ -60,6 +60,10 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
           typeLabel: msg("fields.ctaType", "CTA Type"),
           fieldLabel: msg("fields.ctaField", "CTA Field"),
           options: ctaTypeOptions(),
+          optionValueToEntityFieldType: {
+            presetImage: "type.cta",
+            textAndLink: "type.cta",
+          },
         },
       }),
       variant: YextField(msg("fields.variant", "Variant"), {
@@ -77,7 +81,7 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
 
 const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
   const streamDocument = useDocument();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
   if (!buttons || buttons.length === 0) {
@@ -98,6 +102,15 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
         );
         const { ctaType } = getCTAType(button.entityField);
 
+        let resolvedLabel =
+          cta && resolveComponentData(cta.label, i18n.language, streamDocument);
+        if (
+          !button.entityField.constantValueEnabled &&
+          ctaType === "getDirections"
+        ) {
+          resolvedLabel = t("getDirections", "Get Directions");
+        }
+
         return (
           cta && (
             <div
@@ -107,7 +120,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
               }
             >
               <CTA
-                label={resolveComponentData(cta.label, locale, streamDocument)}
+                label={resolvedLabel}
                 link={resolveComponentData(cta.link, locale, streamDocument)}
                 linkType={cta.linkType}
                 variant={button.variant}

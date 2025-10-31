@@ -40,7 +40,7 @@ export interface CTAWrapperProps {
     /** The visual style of the CTA. */
     variant: CTAVariant;
     /** The image to use if the CTA is set to preset image */
-    presetImage: PresetImageType;
+    presetImage?: PresetImageType;
   };
 
   /** Additional CSS classes to apply to the CTA. */
@@ -111,7 +111,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
 };
 
 const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data, styles, className, parentData, puck, parentStyles, eventName } =
     props;
   const streamDocument = useDocument();
@@ -121,8 +121,6 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     : resolveComponentData(data.entityField, i18n.language, streamDocument);
   const { ctaType } = getCTAType(data.entityField);
 
-  console.log("cta", cta, ctaType, styles.presetImage);
-
   let combinedClassName = className;
   if (parentStyles?.classNameFn) {
     combinedClassName = themeManagerCn(
@@ -131,13 +129,15 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     );
   }
 
-  const resolvedLabel =
+  let resolvedLabel =
     cta && resolveComponentData(cta.label, i18n.language, streamDocument);
+  if (
+    (parentData || !data.entityField.constantValueEnabled) &&
+    ctaType === "getDirections"
+  ) {
+    resolvedLabel = t("getDirections", "Get Directions");
+  }
 
-  // showCTA is true if there is a cta and one of the following is true:
-  // 1. ctaType is presetImage
-  // 2. there is a resolved label (for textAndLink or linkOnly)
-  // 3. data.show is not set to false
   const showCTA =
     cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
 
@@ -151,7 +151,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     >
       {cta && (
         <CTA
-          label={resolveComponentData(cta.label, i18n.language, streamDocument)}
+          label={resolvedLabel}
           link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
           ctaType={ctaType}
