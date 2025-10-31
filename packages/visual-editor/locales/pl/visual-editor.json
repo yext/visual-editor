@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Obraz użytkowy {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Obrazy użytkowe",
     "gallery": "Galeria",
     "getDirections": "Uzyskaj wskazówki",
     "gridSection": "Sekcja siatki",
     "header": "Chodnikowiec",
     "headerLinks": "Linki nagłówkowe",
     "headingText": "Tekst nagłówka",
+    "heroImage": "Obraz bohatera",
     "heroSection": "Sekcja bohatera",
     "hoursStatus": "Status godzin",
     "hoursTable": "Tabela godzin",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Uzyskaj wskazówki",
-    "link": "Połączyć"
+    "link": "Połączyć",
+    "presetImage": "Wstępnie ustawiony obraz",
+    "textAndLink": "Tekst i link"
   },
   "currentLocation": "Aktualna lokalizacja",
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
@@ -281,10 +285,6 @@
       "center_direction": "Środkowy",
       "classic": "Klasyczny",
       "compact": "Kompaktowy",
-      "ctaDisplayType": {
-        "presetImage": "Wstępnie ustawiony obraz",
-        "textAndLink": "Tekst i link"
-      },
       "ctaVariant": {
         "link": "Połączyć",
         "primary": "Podstawowy",
@@ -426,6 +426,7 @@
     "showLanguageDropdown": "Pokaż rozwijanie języka",
     "showPrimaryCTA": "Pokaż podstawowy CTA",
     "showSecondaryCTA": "Pokaż wtórną CTA",
+    "showSecondaryHeader": "Pokaż dodatkowy nagłówek",
     "siteName": "Nazwa witryny",
     "socialLinks": "Linki społeczne",
     "startOfTheWeek": "Początek tygodnia",

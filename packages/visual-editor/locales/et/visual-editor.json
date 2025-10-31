@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Kasulik pilt {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Kasulikud pildid",
     "gallery": "Galerii",
     "getDirections": "Hankige juhiseid",
     "gridSection": "Ruudustik",
     "header": "Päis",
     "headerLinks": "Päise lingid",
     "headingText": "Pealkiri",
+    "heroImage": "Kangelase pilt",
     "heroSection": "Kangelasosa",
     "hoursStatus": "Töötundide olek",
     "hoursTable": "Tundide laud",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Hankige juhised",
-    "link": "Link"
+    "link": "Link",
+    "presetImage": "Eelseadistatud pilt",
+    "textAndLink": "Tekst ja link"
   },
   "customSearchArea": "Kohandatud otsinguala",
   "date": "Kuupäev",
@@ -280,10 +284,6 @@
       "center_direction": "Keskus",
       "classic": "Klassikaline",
       "compact": "Kompaktne",
-      "ctaDisplayType": {
-        "presetImage": "Eelseadistatud pilt",
-        "textAndLink": "Tekst ja link"
-      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Alg-",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Näita keele rippmenüü",
     "showPrimaryCTA": "Näita esmast CTA -d",
     "showSecondaryCTA": "Näidake sekundaarset CTA -d",
+    "showSecondaryHeader": "Näita teisest päist",
     "siteName": "Saidi nimi",
     "socialLinks": "Sotsiaalsed lingid",
     "startOfTheWeek": "Nädala algus",

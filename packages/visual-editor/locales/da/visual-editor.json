@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Hjælpebillede {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Hjælpebilleder",
     "gallery": "Galleri",
     "getDirections": "Få rutevejledning",
     "gridSection": "Sektion af gitter",
     "header": "Header",
     "headerLinks": "Overskriftslinks",
     "headingText": "Overskriftstekst",
+    "heroImage": "Heltebillede",
     "heroSection": "Heltafsnit",
     "hoursStatus": "Timer status",
     "hoursTable": "TIMER TABEL",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Få rutevejledning",
-    "link": "Forbindelse"
+    "link": "Forbindelse",
+    "presetImage": "Forudindstillet billede",
+    "textAndLink": "Tekst og link"
   },
   "currentLocation": "Nuværende placering",
   "customSearchArea": "Brugerdefineret søgeområde",
@@ -281,10 +285,6 @@
       "center_direction": "Center",
       "classic": "Klassisk",
       "compact": "Kompakt",
-      "ctaDisplayType": {
-        "presetImage": "Forudindstillet billede",
-        "textAndLink": "Tekst og link"
-      },
       "ctaVariant": {
         "link": "Forbindelse",
         "primary": "Primær",
@@ -426,6 +426,7 @@
     "showLanguageDropdown": "Vis sprog dropdown",
     "showPrimaryCTA": "Vis primær CTA",
     "showSecondaryCTA": "Vis sekundær CTA",
+    "showSecondaryHeader": "Vis sekundær overskrift",
     "siteName": "Webstedsnavn",
     "socialLinks": "Sociale links",
     "startOfTheWeek": "Ugens start",

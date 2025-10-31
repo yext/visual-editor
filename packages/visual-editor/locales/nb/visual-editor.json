@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Verktøybilde {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Verktøybilder",
     "gallery": "Galleri",
     "getDirections": "Få veibeskrivelse",
     "gridSection": "Rutenett",
     "header": "Header",
     "headerLinks": "Overskriftskoblinger",
     "headingText": "Overskrift",
+    "heroImage": "Heltebilde",
     "heroSection": "Heltseksjon",
     "hoursStatus": "Timer status",
     "hoursTable": "Timerbord",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Få veibeskrivelse",
-    "link": "Link"
+    "link": "Link",
+    "presetImage": "Forhåndsinnstilt bilde",
+    "textAndLink": "Tekst og lenke"
   },
   "customSearchArea": "Tilpasset søkeområde",
   "date": "Dato",
@@ -280,10 +284,6 @@
       "center_direction": "Sentrum",
       "classic": "Klassisk",
       "compact": "Kompakt",
-      "ctaDisplayType": {
-        "presetImage": "Forhåndsinnstilt bilde",
-        "textAndLink": "Tekst og lenke"
-      },
       "ctaVariant": {
         "link": "Lenke",
         "primary": "Primær",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Vis nedtrekk i språk",
     "showPrimaryCTA": "Vis primær CTA",
     "showSecondaryCTA": "Vis sekundær CTA",
+    "showSecondaryHeader": "Vis sekundær overskrift",
     "siteName": "Nettnavn",
     "socialLinks": "Sosiale koblinger",
     "startOfTheWeek": "Ukens start",

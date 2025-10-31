@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "ユーティリティ イメージ {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "ユーティリティ画像",
     "gallery": "ギャラリー",
     "getDirections": "道順を取得します",
     "gridSection": "グリッドセクション",
     "header": "ヘッダ",
     "headerLinks": "ヘッダーリンク",
     "headingText": "見出しテキスト",
+    "heroImage": "ヒーロー画像",
     "heroSection": "ヒーローセクション",
     "hoursStatus": "時間ステータス",
     "hoursTable": "時間のテーブル",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "道順を調べる",
-    "link": "リンク"
+    "link": "リンク",
+    "presetImage": "プリセット画像",
+    "textAndLink": "テキストとリンク"
   },
   "customSearchArea": "カスタム検索領域",
   "date": "日付",
@@ -280,10 +284,6 @@
       "center_direction": "センター",
       "classic": "クラシック",
       "compact": "コンパクト",
-      "ctaDisplayType": {
-        "presetImage": "プリセット画像",
-        "textAndLink": "テキストとリンク"
-      },
       "ctaVariant": {
         "link": "リンク",
         "primary": "主要な",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "言語ドロップダウンを表示します",
     "showPrimaryCTA": "プライマリCTAを表示します",
     "showSecondaryCTA": "二次CTAを表示します",
+    "showSecondaryHeader": "セカンダリヘッダーを表示",
     "siteName": "サイト名",
     "socialLinks": "ソーシャルリンク",
     "startOfTheWeek": "今週の始まり",

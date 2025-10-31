@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Verktygsbild {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Verktygsbilder",
     "gallery": "Galleri",
     "getDirections": "Få vägbeskrivning",
     "gridSection": "Rutnät",
     "header": "Rubrik",
     "headerLinks": "Rubriklänkar",
     "headingText": "Rubriktext",
+    "heroImage": "Hjältebild",
     "heroSection": "Hjältesektion",
     "hoursStatus": "Timmars status",
     "hoursTable": "Timmar",
@@ -134,7 +136,9 @@
   "cta": "Cta",
   "ctaTypes": {
     "getDirections": "Få vägbeskrivningar",
-    "link": "Länk"
+    "link": "Länk",
+    "presetImage": "Förinställd bild",
+    "textAndLink": "Text & länk"
   },
   "currentLocation": "Nuvarande plats",
   "customSearchArea": "Anpassad sökområde",
@@ -281,10 +285,6 @@
       "center_direction": "Center",
       "classic": "Klassisk",
       "compact": "Kompakt",
-      "ctaDisplayType": {
-        "presetImage": "Förinställd bild",
-        "textAndLink": "Text och länk"
-      },
       "ctaVariant": {
         "link": "Länk",
         "primary": "Primär",
@@ -426,6 +426,7 @@
     "showLanguageDropdown": "Visa språkfall",
     "showPrimaryCTA": "Visa primär CTA",
     "showSecondaryCTA": "Visa sekundär CTA",
+    "showSecondaryHeader": "Visa sekundär rubrik",
     "siteName": "Webbplatsnamn",
     "socialLinks": "Sociala länkar",
     "startOfTheWeek": "Veckans början",

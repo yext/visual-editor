@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Immagine utilità {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Immagini di utilità",
     "gallery": "Galleria",
     "getDirections": "Ottieni indicazioni",
     "gridSection": "Sezione griglia",
     "header": "Intestazione",
     "headerLinks": "Collegamenti di intestazione",
     "headingText": "Testo di testa",
+    "heroImage": "Immagine dell'eroe",
     "heroSection": "Sezione di eroi",
     "hoursStatus": "Stato delle ore",
     "hoursTable": "Tavolo per ore",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Ottieni indicazioni stradali",
-    "link": "Collegamento"
+    "link": "Collegamento",
+    "presetImage": "Immagine preimpostata",
+    "textAndLink": "Testo e collegamento"
   },
   "customSearchArea": "Area di ricerca personalizzata",
   "date": "Data",
@@ -280,10 +284,6 @@
       "center_direction": "Center",
       "classic": "Classico",
       "compact": "Compatto",
-      "ctaDisplayType": {
-        "presetImage": "Immagine preimpostata",
-        "textAndLink": "Testo e collegamento"
-      },
       "ctaVariant": {
         "link": "Collegamento",
         "primary": "Primario",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Mostra il menu a discesa linguistica",
     "showPrimaryCTA": "Mostra CTA primario",
     "showSecondaryCTA": "Mostra CTA secondario",
+    "showSecondaryHeader": "Mostra intestazione secondaria",
     "siteName": "Nome del sito",
     "socialLinks": "Collegamenti sociali",
     "startOfTheWeek": "Inizio della settimana",

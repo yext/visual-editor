@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Utility Image {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Utility Images",
     "gallery": "Gallery",
     "getDirections": "Get Directions",
     "gridSection": "Grid Section",
     "header": "Header",
     "headerLinks": "Header Links",
     "headingText": "Heading Text",
+    "heroImage": "Hero Image",
     "heroSection": "Hero Section",
     "hoursStatus": "Hours Status",
     "hoursTable": "Hours Table",
@@ -133,7 +135,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Get Directions",
-    "link": "Link"
+    "link": "Link",
+    "presetImage": "Preset Image",
+    "textAndLink": "Text & Link"
   },
   "customSearchArea": "Custom Search Area",
   "date": "Date",
@@ -279,10 +283,6 @@
       "center_direction": "Center",
       "classic": "Classic",
       "compact": "Compact",
-      "ctaDisplayType": {
-        "presetImage": "Preset Image",
-        "textAndLink": "Text and Link"
-      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Primary",
@@ -424,6 +424,7 @@
     "showLanguageDropdown": "Show Language Dropdown",
     "showPrimaryCTA": "Show Primary CTA",
     "showSecondaryCTA": "Show Secondary CTA",
+    "showSecondaryHeader": "Show Secondary Header",
     "siteName": "Site Name",
     "socialLinks": "Social Links",
     "startOfTheWeek": "Start of the Week",

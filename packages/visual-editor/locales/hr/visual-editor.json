@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Uslužna slika {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Korisne slike",
     "gallery": "Galerija",
     "getDirections": "Dobiti upute",
     "gridSection": "Rešetka",
     "header": "Zaglavlje",
     "headerLinks": "Linkovi zaglavlja",
     "headingText": "Tekst naslova",
+    "heroImage": "Slika heroja",
     "heroSection": "Odjeljak za heroj",
     "hoursStatus": "Status sati",
     "hoursTable": "Sate stol",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Preuzmite upute",
-    "link": "Link"
+    "link": "Link",
+    "presetImage": "Unaprijed postavljena slika",
+    "textAndLink": "Tekst i veza"
   },
   "customSearchArea": "Područje prilagođenog pretraživanja",
   "date": "Datum",
@@ -280,10 +284,6 @@
       "center_direction": "Centar",
       "classic": "Klasičan",
       "compact": "Kompaktan",
-      "ctaDisplayType": {
-        "presetImage": "Unaprijed postavljena slika",
-        "textAndLink": "Tekst i veza"
-      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Osnovan",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Prikaži padajući jezik",
     "showPrimaryCTA": "Pokažite primarni CTA",
     "showSecondaryCTA": "Pokažite sekundarni CTA",
+    "showSecondaryHeader": "Prikaži sekundarno zaglavlje",
     "siteName": "Naziv stranice",
     "socialLinks": "Društvene veze",
     "startOfTheWeek": "Početak tjedna",

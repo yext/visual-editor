@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Hyötykuva {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Hyödyllisyyskuvat",
     "gallery": "Galleria",
     "getDirections": "Hanki reittiohjeet",
     "gridSection": "Ruudukkoosasto",
     "header": "Otsikko",
     "headerLinks": "Otsikkolinkit",
     "headingText": "Testi",
+    "heroImage": "Sankarin kuva",
     "heroSection": "Sankari -osasto",
     "hoursStatus": "Tuntien tila",
     "hoursTable": "Työpöytä",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Hanki reittiohjeet",
-    "link": "Linkki"
+    "link": "Linkki",
+    "presetImage": "Esiasetettu kuva",
+    "textAndLink": "Teksti & Linkki"
   },
   "customSearchArea": "Mukautettu hakualue",
   "date": "Päivämäärä",
@@ -280,10 +284,6 @@
       "center_direction": "Keskusta",
       "classic": "Klassinen",
       "compact": "Kompakti",
-      "ctaDisplayType": {
-        "presetImage": "Esiasetettu kuva",
-        "textAndLink": "Teksti ja linkki"
-      },
       "ctaVariant": {
         "link": "Linkki",
         "primary": "Ensisijainen",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Näytä kieli avattava",
     "showPrimaryCTA": "Näytä ensisijainen CTA",
     "showSecondaryCTA": "Näytä toissijainen CTA",
+    "showSecondaryHeader": "Näytä toissijainen otsikko",
     "siteName": "Sivuston nimi",
     "socialLinks": "Sosiaaliset yhteydet",
     "startOfTheWeek": "Viikon alku",

@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Segédkép {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Hasznos képek",
     "gallery": "Galéria",
     "getDirections": "Szerezzen útmutatásokat",
     "gridSection": "Rács szakasz",
     "header": "Fejléc",
     "headerLinks": "Fejléc hivatkozások",
     "headingText": "Fejléc",
+    "heroImage": "Hős kép",
     "heroSection": "Hősszakasz",
     "hoursStatus": "Órás állapot",
     "hoursTable": "Órás asztal",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Útvonaltervezés",
-    "link": "Link"
+    "link": "Link",
+    "presetImage": "Előre beállított kép",
+    "textAndLink": "Szöveg és hivatkozás"
   },
   "customSearchArea": "Egyedi keresési terület",
   "date": "Dátum",
@@ -280,10 +284,6 @@
       "center_direction": "Központ",
       "classic": "Klasszikus",
       "compact": "Kompakt",
-      "ctaDisplayType": {
-        "presetImage": "Előre beállított kép",
-        "textAndLink": "Szöveg és link"
-      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Elsődleges",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Mutasd meg a nyelv legördülő menüjét",
     "showPrimaryCTA": "Mutassa meg az elsődleges CTA -t",
     "showSecondaryCTA": "Mutasd meg a másodlagos CTA -t",
+    "showSecondaryHeader": "Másodlagos fejléc megjelenítése",
     "siteName": "Webhelynév",
     "socialLinks": "Társadalmi kapcsolatok",
     "startOfTheWeek": "A hét kezdete",

@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Obslužný obrázek {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Užitkové obrázky",
     "gallery": "Galerie",
     "getDirections": "Získejte pokyny",
     "gridSection": "Sekce mřížky",
     "header": "Záhlaví",
     "headerLinks": "Odkazy v záhlaví",
     "headingText": "Text nadpisu",
+    "heroImage": "Obrázek hrdiny",
     "heroSection": "Hrdina sekce",
     "hoursStatus": "Stav hodin",
     "hoursTable": "TABULKA HODINY",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Získejte trasu",
-    "link": "Odkaz"
+    "link": "Odkaz",
+    "presetImage": "Přednastavený obrázek",
+    "textAndLink": "Text a odkaz"
   },
   "customSearchArea": "Vlastní vyhledávací oblast",
   "date": "Datum",
@@ -281,10 +285,6 @@
       "center_direction": "Centrum",
       "classic": "Klasický",
       "compact": "Kompaktní",
-      "ctaDisplayType": {
-        "presetImage": "Přednastavený obrázek",
-        "textAndLink": "Text a odkaz"
-      },
       "ctaVariant": {
         "link": "Odkaz",
         "primary": "Primární",
@@ -426,6 +426,7 @@
     "showLanguageDropdown": "Zobrazit rozbalovací nabídku jazyka",
     "showPrimaryCTA": "Zobrazit primární CTA",
     "showSecondaryCTA": "Zobrazit sekundární CTA",
+    "showSecondaryHeader": "Zobrazit sekundární záhlaví",
     "siteName": "Název webu",
     "socialLinks": "Sociální odkazy",
     "startOfTheWeek": "Začátek týdne",

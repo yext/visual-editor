@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Naudingumo vaizdas {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Naudingi vaizdai",
     "gallery": "Galerija",
     "getDirections": "Gaukite nurodymus",
     "gridSection": "Tinklo skyrius",
     "header": "Antraštė",
     "headerLinks": "Antraštės nuorodos",
     "headingText": "Antraštės tekstas",
+    "heroImage": "Herojaus vaizdas",
     "heroSection": "Herojaus skyrius",
     "hoursStatus": "Valandų būsena",
     "hoursTable": "Valandų lentelė",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Gaukite nuorodas",
-    "link": "Nuoroda"
+    "link": "Nuoroda",
+    "presetImage": "Iš anksto nustatytas vaizdas",
+    "textAndLink": "Tekstas ir nuoroda"
   },
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "date": "Data",
@@ -280,10 +284,6 @@
       "center_direction": "Centras",
       "classic": "Klasikinis",
       "compact": "Kompaktiškas",
-      "ctaDisplayType": {
-        "presetImage": "Iš anksto nustatytas vaizdas",
-        "textAndLink": "Tekstas ir nuoroda"
-      },
       "ctaVariant": {
         "link": "Nuoroda",
         "primary": "Pirminis",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Rodyti išskleidžiamąjį kalbą",
     "showPrimaryCTA": "Rodyti pirminę CTA",
     "showSecondaryCTA": "Parodykite antrinę CTA",
+    "showSecondaryHeader": "Rodyti antrinę antraštę",
     "siteName": "Svetainės pavadinimas",
     "socialLinks": "Socialinės nuorodos",
     "startOfTheWeek": "Savaitės pradžia",

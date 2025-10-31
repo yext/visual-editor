@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Hulpprogramma-afbeelding {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Hulpprogramma-afbeeldingen",
     "gallery": "Galerij",
     "getDirections": "Krijg een routebeschrijving",
     "gridSection": "Roostergedeelte",
     "header": "Koptekst",
     "headerLinks": "Koptekstkoppelingen",
     "headingText": "Koptekst",
+    "heroImage": "Heldenbeeld",
     "heroSection": "Heldsectie",
     "hoursStatus": "Urenstatus",
     "hoursTable": "Urentafel",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Routebeschrijving opvragen",
-    "link": "Link"
+    "link": "Link",
+    "presetImage": "Vooraf ingesteld beeld",
+    "textAndLink": "Tekst en link"
   },
   "customSearchArea": "Aangepast zoekgebied",
   "date": "Datum",
@@ -280,10 +284,6 @@
       "center_direction": "Centrum",
       "classic": "Klassiek",
       "compact": "Compact",
-      "ctaDisplayType": {
-        "presetImage": "Vooraf ingesteld beeld",
-        "textAndLink": "Tekst en link"
-      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Primair",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Toon de vervolgkeuzelijst",
     "showPrimaryCTA": "Toon primaire CTA",
     "showSecondaryCTA": "Toon secundaire CTA",
+    "showSecondaryHeader": "Secundaire koptekst weergeven",
     "siteName": "Sitenaam",
     "socialLinks": "Sociale links",
     "startOfTheWeek": "Begin van de week",

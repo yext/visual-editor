@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Dienstprogramm-Image {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Utility-Bilder",
     "gallery": "Galerie",
     "getDirections": "Wegbeschreibung bekommen",
     "gridSection": "Gitterabschnitt",
     "header": "Kopfball",
     "headerLinks": "Header-Links",
     "headingText": "Übergangstext",
+    "heroImage": "Heldenbild",
     "heroSection": "Heldenabteilung",
     "hoursStatus": "Stunden Status",
     "hoursTable": "Stunden Tisch",
@@ -133,7 +135,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Wegbeschreibung abrufen",
-    "link": "Link"
+    "link": "Link",
+    "presetImage": "Voreingestelltes Bild",
+    "textAndLink": "Text & Link"
   },
   "customSearchArea": "Benutzerdefinierte Suchbereich",
   "date": "Datum",
@@ -279,10 +283,6 @@
       "center_direction": "Zentrum",
       "classic": "Klassiker",
       "compact": "Kompakt",
-      "ctaDisplayType": {
-        "presetImage": "Voreingestelltes Bild",
-        "textAndLink": "Text und Link"
-      },
       "ctaVariant": {
         "link": "Link",
         "primary": "Primär",
@@ -424,6 +424,7 @@
     "showLanguageDropdown": "Sprache Dropdown anzeigen",
     "showPrimaryCTA": "Primär CTA zeigen",
     "showSecondaryCTA": "Sekundäre CTA zeigen",
+    "showSecondaryHeader": "Sekundären Header anzeigen",
     "siteName": "Standortname",
     "socialLinks": "Soziale Links",
     "startOfTheWeek": "Beginn der Woche",

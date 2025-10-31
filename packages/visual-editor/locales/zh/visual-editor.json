@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "实用程序图像 {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "实用图像",
     "gallery": "画廊",
     "getDirections": "获取指示",
     "gridSection": "网格部分",
     "header": "标题",
     "headerLinks": "标题链接",
     "headingText": "标题文字",
+    "heroImage": "英雄形象",
     "heroSection": "英雄部分",
     "hoursStatus": "小时状态",
     "hoursTable": "小时表",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "获取路线",
-    "link": "关联"
+    "link": "关联",
+    "presetImage": "预设图像",
+    "textAndLink": "文本和链接"
   },
   "customSearchArea": "自定义搜索区域",
   "date": "日期",
@@ -280,10 +284,6 @@
       "center_direction": "中心",
       "classic": "经典的",
       "compact": "袖珍的",
-      "ctaDisplayType": {
-        "presetImage": "预设图像",
-        "textAndLink": "文本和链接"
-      },
       "ctaVariant": {
         "link": "关联",
         "primary": "基本的",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "显示语言下拉",
     "showPrimaryCTA": "显示主要CTA",
     "showSecondaryCTA": "显示次要CTA",
+    "showSecondaryHeader": "显示辅助标题",
     "siteName": "站点名称",
     "socialLinks": "社会联系",
     "startOfTheWeek": "一周开始",

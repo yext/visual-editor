@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Imagine utilitar {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Imagini utilitare",
     "gallery": "Galerie",
     "getDirections": "Obțineți indicații",
     "gridSection": "Secțiune Grila",
     "header": "Antet",
     "headerLinks": "Linkuri antet",
     "headingText": "Text de îndreptare",
+    "heroImage": "Imagine Erou",
     "heroSection": "Secțiunea erou",
     "hoursStatus": "Stare de ore",
     "hoursTable": "Ore de masă",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Obțineți indicații",
-    "link": "Legătură"
+    "link": "Legătură",
+    "presetImage": "Imagine prestabilită",
+    "textAndLink": "Text și link"
   },
   "customSearchArea": "Zona de căutare personalizată",
   "date": "Data",
@@ -280,10 +284,6 @@
       "center_direction": "Centru",
       "classic": "Clasic",
       "compact": "Compact",
-      "ctaDisplayType": {
-        "presetImage": "Imagine prestabilită",
-        "textAndLink": "Text și link"
-      },
       "ctaVariant": {
         "link": "Legătură",
         "primary": "Primar",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Afișați dropdown -ul limbajului",
     "showPrimaryCTA": "Arată CTA primară",
     "showSecondaryCTA": "Arată CTA secundară",
+    "showSecondaryHeader": "Afișați antetul secundar",
     "siteName": "Numele site -ului",
     "socialLinks": "Legături sociale",
     "startOfTheWeek": "Începutul săptămânii",

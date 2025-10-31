@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Yardımcı Resim {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Yardımcı Görseller",
     "gallery": "Galeri",
     "getDirections": "Yol tarifi alın",
     "gridSection": "Izgara bölümü",
     "header": "Başlık",
     "headerLinks": "Başlık Bağlantıları",
     "headingText": "Başlık metni",
+    "heroImage": "Kahraman Resmi",
     "heroSection": "Kahraman Bölümü",
     "hoursStatus": "Saat Durumu",
     "hoursTable": "Saatler Tablosu",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Yol Tarifi Al",
-    "link": "Bağlantı"
+    "link": "Bağlantı",
+    "presetImage": "Önceden Ayarlanmış Görüntü",
+    "textAndLink": "Metin ve Bağlantı"
   },
   "customSearchArea": "Özel arama alanı",
   "date": "Tarih",
@@ -280,10 +284,6 @@
       "center_direction": "Merkez",
       "classic": "Klasik",
       "compact": "Kompakt",
-      "ctaDisplayType": {
-        "presetImage": "Önceden Ayarlanmış Görüntü",
-        "textAndLink": "Metin ve Bağlantı"
-      },
       "ctaVariant": {
         "link": "Bağlantı",
         "primary": "Öncelik",
@@ -425,6 +425,7 @@
     "showLanguageDropdown": "Dil açılışını göster",
     "showPrimaryCTA": "Birincil CTA'yı göster",
     "showSecondaryCTA": "İkincil CTA göster",
+    "showSecondaryHeader": "İkincil Başlığı Göster",
     "siteName": "Site adı",
     "socialLinks": "Sosyal Bağlantılar",
     "startOfTheWeek": "Haftanın başlangıcı",

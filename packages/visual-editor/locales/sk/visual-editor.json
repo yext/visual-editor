@@ -88,12 +88,14 @@
     "footerUtilityImagesSlot": {
       "defaultAlt": "Pomocný obrázok {{number}}"
     },
+    "footerUtilityImagesSlotLabel": "Úžitkové obrázky",
     "gallery": "Galéria",
     "getDirections": "Získajte pokyny",
     "gridSection": "Mriežka",
     "header": "Hlavička",
     "headerLinks": "Odkazy v hlavičke",
     "headingText": "Hlavný text",
+    "heroImage": "Obrázok hrdinu",
     "heroSection": "Sekcia hrdinky",
     "hoursStatus": "Stav",
     "hoursTable": "Stôl",
@@ -134,7 +136,9 @@
   "cta": "CTA",
   "ctaTypes": {
     "getDirections": "Získajte trasu",
-    "link": "Odkaz"
+    "link": "Odkaz",
+    "presetImage": "Prednastavený obrázok",
+    "textAndLink": "Text a odkaz"
   },
   "currentLocation": "Súčasná lokalita",
   "customSearchArea": "Oblasť vyhľadávania",
@@ -281,10 +285,6 @@
       "center_direction": "Centrum",
       "classic": "Klasický",
       "compact": "Kompaktný",
-      "ctaDisplayType": {
-        "presetImage": "Prednastavený obrázok",
-        "textAndLink": "Text a odkaz"
-      },
       "ctaVariant": {
         "link": "Prepojiť",
         "primary": "Primárny",
@@ -426,6 +426,7 @@
     "showLanguageDropdown": "Zobraziť rozbaľovače jazyka",
     "showPrimaryCTA": "Ukazovať primárnu CTA",
     "showSecondaryCTA": "Ukazovať sekundárne CTA",
+    "showSecondaryHeader": "Zobraziť sekundárnu hlavičku",
     "siteName": "Názov stránok",
     "socialLinks": "Sociálne prepojenia",
     "startOfTheWeek": "Začiatok týždňa",
