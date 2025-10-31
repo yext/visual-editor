@@ -756,7 +756,7 @@ type YextEntityField<T> = {
    * Filter the embedded field input to this type.
    * @ai always omit this property
    */
-  selectedTypes?: string[];
+  selectedType?: string;
 };
 
 /**
@@ -834,17 +834,11 @@ type EnhancedTranslatableCTA = TranslatableCTA & {
   /**
    * The type of CTA button to display.
    * textAndLink is a standard button
+   * getDirections is a button that opens a map based on the coordinate field
    * presetImage uses a preset image such as app store or food delivery logos for the button
    * @defaultValue "textAndLink"
    */
-  ctaType?: CTADisplayType;
-  selectedTypes?: string[];
-  /**
-   * A coordinate to use instead of a link for Get Directions CTAs.
-   * If undefined, the link will be used.
-   */
-  latitude?: number;
-  longitude?: number;
+  ctaType?: "textAndLink" | "getDirections" | "presetImage";
 };
 
 /** Describes the data corresponding to a single image. */
@@ -882,8 +876,6 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   /** The link the for the CTA */
   link: TranslatableString;
 };
-
-type CTADisplayType = "textAndLink" | "presetImage";
 
 /** Describes the dimensions of an image. */
 type ImageDimension = {
