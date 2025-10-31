@@ -164,7 +164,6 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
               },
               styles: {
                 variant: "primary",
-                displayType: "textAndLink",
                 presetImage: "app-store",
               },
               eventName: index !== undefined ? `cta${index}` : undefined,

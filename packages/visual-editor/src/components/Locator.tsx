@@ -37,32 +37,385 @@ import {
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
+  DynamicOption,
+  DynamicOptionsSelectorType,
   Heading,
   msg,
   useDocument,
-  Toggle,
   YextField,
   useTemplateProps,
   resolveUrlTemplate,
   mergeMeta,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
-import {
-  Address,
-  AddressType,
-  HoursStatus,
-  HoursType,
-} from "@yext/pages-components";
+import { Address, AddressType, HoursType } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
-import { FaAngleRight, FaCheckSquare, FaRegSquare } from "react-icons/fa";
+import {
+  FaAngleRight,
+  FaCheckSquare,
+  FaRegSquare,
+  FaSlidersH,
+  FaTimes,
+} from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
-import { FaSliders } from "react-icons/fa6";
 
 const DEFAULT_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
 const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
 const HOURS_FIELD = "builtin.hours";
+
+// Keep only digits and at most one leading plus for tel: links.
+// If the input already starts with "tel:", return it as-is.
+function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
+  if (!rawPhone) {
+    return undefined;
+  }
+  if (rawPhone.startsWith("tel:")) {
+    return rawPhone;
+  }
+
+  // Remove any '+' that is not the leading character and strip non-digits.
+  const cleaned = rawPhone.replace(/(?!^\+)\+|[^\d+]/g, "");
+  return `tel:${cleaned}`;
+}
+
+const getEntityType = (entityTypeEnvVar?: string) => {
+  const entityDocument: any = useDocument();
+  if (!entityDocument._pageset && entityTypeEnvVar) {
+    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
+  }
+
+  try {
+    const entityType = JSON.parse(entityDocument._pageset).typeConfig
+      .locatorConfig.entityType;
+    return entityType || DEFAULT_ENTITY_TYPE;
+  } catch {
+    return DEFAULT_ENTITY_TYPE;
+  }
+};
+
+function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
+  let filterOptions: DynamicOption<string>[] = [];
+  switch (entityType) {
+    case "location":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg("fields.options.facets.associations", "Associations"),
+          value: "associations",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.keywords", "Keywords"),
+          value: "keywords",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg("fields.options.facets.products", "Products"),
+          value: "products",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialities",
+        },
+      ];
+      break;
+    case "restaurant":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptsReservations",
+            "Accepts Reservations"
+          ),
+          value: "acceptsReservations",
+        },
+        {
+          label: msg("fields.options.facets.associations", "Associations"),
+          value: "associations",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.keywords", "Keywords"),
+          value: "keywords",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.mealsServed", "Meals Served"),
+          value: "mealsServed",
+        },
+        {
+          label: msg("fields.options.facets.neighborhood", "Neighborhood"),
+          value: "neighborhood",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg(
+            "fields.options.facets.pickupAndDeliveryServices",
+            "Pickup and Delivery Services"
+          ),
+          value: "pickupAndDeliveryServices",
+        },
+        {
+          label: msg("fields.options.facets.priceRange", "Price Range"),
+          value: "priceRange",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialities",
+        },
+      ];
+      break;
+    case "healthcareFacility":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptingNewPatients",
+            "Accepting New Patients"
+          ),
+          value: "acceptingNewPatients",
+        },
+        {
+          label: msg(
+            "fields.options.facets.conditionsTreated",
+            "Conditions Treated"
+          ),
+          value: "conditionsTreated",
+        },
+        {
+          label: msg(
+            "fields.options.facets.insuranceAccepted",
+            "Insurance Accepted"
+          ),
+          value: "insuranceAccepted",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+      ];
+      break;
+    case "healthcareProfessional":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptingNewPatients",
+            "Accepting New Patients"
+          ),
+          value: "acceptingNewPatients",
+        },
+        {
+          label: msg(
+            "fields.options.facets.admittingHospitals",
+            "Admitting Hospitals"
+          ),
+          value: "admittingHospitals",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.certifications", "Certifications"),
+          value: "certifications",
+        },
+        {
+          label: msg(
+            "fields.options.facets.conditionsTreated",
+            "Conditions Treated"
+          ),
+          value: "conditionsTreated",
+        },
+        {
+          label: msg("fields.options.facets.degrees", "Degrees"),
+          value: "degrees",
+        },
+        {
+          label: msg("fields.options.facets.gender", "Gender"),
+          value: "gender",
+        },
+        {
+          label: msg(
+            "fields.options.facets.insuranceAccepted",
+            "Insurance Accepted"
+          ),
+          value: "insuranceAccepted",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.neighborhood", "Neighborhood"),
+          value: "neighborhood",
+        },
+        {
+          label: msg("fields.options.facets.officeName", "Office Name"),
+          value: "officeName",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+      ];
+      break;
+    case "hotel":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        { label: msg("fields.options.facets.bar", "Bar"), value: "bar" },
+        {
+          label: msg("fields.options.facets.catsAllowed", "Cats Allowed"),
+          value: "catsAllowed",
+        },
+        {
+          label: msg("fields.options.facets.dogsAllowed", "Dogs Allowed"),
+          value: "dogsAllowed",
+        },
+        {
+          label: msg("fields.options.facets.parking", "Parking"),
+          value: "parking",
+        },
+        { label: msg("fields.options.facets.pools", "Pools"), value: "pools" },
+      ];
+      break;
+    case "financialProfessional":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg("fields.options.facets.certifications", "Certifications"),
+          value: "certifications",
+        },
+        {
+          label: msg("fields.options.facets.interests", "Interests"),
+          value: "interests",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialties",
+        },
+        {
+          label: msg(
+            "fields.options.facets.yearsOfExperience",
+            "Years of Experience"
+          ),
+          value: "yearsOfExperience",
+        },
+      ];
+      break;
+    default:
+      filterOptions = [];
+  }
+  return filterOptions.sort((a, b) => a.label.localeCompare(b.label));
+}
 
 export interface LocatorProps {
   /**
@@ -72,10 +425,17 @@ export interface LocatorProps {
   mapStyle?: string;
 
   /**
-   * If 'true', displays a button to filter for locations that are currently open.
-   * @defaultValue false
+   * Configuration for the filters available in the locator search experience.
    */
-  openNowButton: boolean;
+  filters: {
+    /**
+     * If 'true', displays a button to filter for locations that are currently open.
+     * @defaultValue false
+     */
+    openNowButton: boolean;
+    /** Which fields are facetable in the search experience */
+    facetFields?: DynamicOptionsSelectorType<string>;
+  };
 
   /**
    * The starting location for the map.
@@ -116,16 +476,34 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
-  openNowButton: YextField(
-    msg("fields.options.includeOpenNow", "Include Open Now Button"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+  filters: {
+    label: msg("fields.filters", "Filters"),
+    type: "object",
+    objectFields: {
+      openNowButton: YextField(
+        msg("fields.options.includeOpenNow", "Include Open Now Button"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
+      facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
+        type: "dynamicSelect",
+        dropdownLabel: msg("fields.field", "Field"),
+        getOptions: () => {
+          const entityType = getEntityType();
+          return getFacetFieldOptions(entityType);
+        },
+        placeholderOptionLabel: msg(
+          "fields.options.selectAField",
+          "Select a field"
+        ),
+      }),
+    },
+  },
   mapStartingLocation: YextField(
     msg("fields.options.mapStartingLocation", "Map Starting Location"),
     {
@@ -148,7 +526,9 @@ const locatorFields: Fields<LocatorProps> = {
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
   defaultProps: {
-    openNowButton: false,
+    filters: {
+      openNowButton: false,
+    },
   },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
@@ -194,15 +574,30 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  openNowButton,
+  filters,
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
+  const streamDocument = useDocument();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
+
+  const iframe =
+    typeof document === "undefined"
+      ? undefined
+      : (document.getElementById("preview-frame") as HTMLIFrameElement);
+
+  let mapboxApiKey = streamDocument._env?.YEXT_MAPBOX_API_KEY;
+  if (
+    iframe?.contentDocument &&
+    streamDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY
+  ) {
+    // If we are in the layout editor, use the non-URL-restricted Mapbox API key
+    mapboxApiKey = streamDocument._env.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+  }
 
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
@@ -213,6 +608,21 @@ const LocatorInternal = ({
     setMapBounds(bounds);
     setShowSearchAreaButton(true);
   };
+
+  const [isOpenNowSelected, setIsOpenNowSelected] = React.useState(false);
+  const openNowFilter: SelectableStaticFilter = React.useMemo(
+    () => ({
+      filter: {
+        kind: "fieldValue",
+        fieldId: HOURS_FIELD,
+        matcher: Matcher.OpenAt,
+        value: "now",
+      },
+      selected: isOpenNowSelected,
+      displayName: t("openNow", "Open Now"),
+    }),
+    [isOpenNowSelected]
+  );
 
   const handleSearchAreaClick = () => {
     if (mapCenter && mapBounds) {
@@ -231,7 +641,7 @@ const LocatorInternal = ({
           matcher: Matcher.Near,
         },
       };
-      searchActions.setStaticFilters([locationFilter]);
+      searchActions.setStaticFilters([locationFilter, openNowFilter]);
       searchActions.executeVerticalQuery();
       setSearchState("loading");
       setShowSearchAreaButton(false);
@@ -253,7 +663,7 @@ const LocatorInternal = ({
         matcher: Matcher.Near,
       },
     };
-    searchActions.setStaticFilters([locationFilter]);
+    searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
   };
@@ -326,10 +736,35 @@ const LocatorInternal = ({
     let centerCoords = DEFAULT_MAP_CENTER;
     let displayName: string | undefined;
     getUserLocation()
-      .then((location) => {
+      .then(async (location) => {
         centerCoords = [location.coords.longitude, location.coords.latitude];
         setUserLocationRetrieved(true);
-        displayName = t("currentLocation", "Current Location");
+
+        // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
+        try {
+          if (mapboxApiKey) {
+            const lang =
+              (streamDocument.locale as string) ||
+              (typeof navigator !== "undefined"
+                ? navigator.language
+                : undefined) ||
+              "en";
+            const lon = centerCoords[0];
+            const lat = centerCoords[1];
+            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+              lang
+            )}`;
+
+            const res = await fetch(url);
+            if (res.ok) {
+              const data = await res.json();
+              const feature = data.features && data.features[0];
+              displayName = feature?.place_name || undefined;
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
       })
       .catch(() => {
         try {
@@ -363,7 +798,6 @@ const LocatorInternal = ({
       });
   }, []);
 
-  const [isSelected, setIsSelected] = React.useState(false);
   const handleOpenNowClick = (selected: boolean) => {
     searchActions.setFilterOption({
       filter: {
@@ -375,7 +809,7 @@ const LocatorInternal = ({
       selected,
       displayName: t("openNow", "Open Now"),
     });
-    setIsSelected(isSelected);
+    setIsOpenNowSelected(selected);
     searchActions.setOffset(0);
     searchActions.resetFacets();
     executeSearch(searchActions);
@@ -385,7 +819,7 @@ const LocatorInternal = ({
   // If something else causes the filters to update, check if the hours filter is still present
   // - toggle off the Open Now toggle if not.
   React.useEffect(() => {
-    setIsSelected(
+    setIsOpenNowSelected(
       searchFilters.static
         ? !!searchFilters.static.find((staticFilter) => {
             return (
@@ -397,6 +831,8 @@ const LocatorInternal = ({
         : false
     );
   }, [searchFilters]);
+
+  const [showFilter, setShowFilter] = React.useState(false);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
@@ -422,50 +858,88 @@ const LocatorInternal = ({
               radius: 25,
             }}
           />
-          {openNowButton && (
-            <div className={"flex flex-row gap-2 items-center"}>
-              <div className={"flex items-center gap-1"}>
-                <FaSliders />
-                <span className="font-bold">
-                  {t("locatorFilterLabel", "Filter:")}
-                </span>
-              </div>
-              <Toggle
-                pressed={isSelected}
-                onPressedChange={(pressed) => handleOpenNowClick(pressed)}
-                className="inline-flex py-1 px-3 w-auto"
+        </div>
+        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 relative inline-block">
+          <div className="flex flex-row justify-between">
+            <div>
+              {resultCount === 0 &&
+                searchState === "not started" &&
+                t(
+                  "useOurLocatorToFindALocationNearYou",
+                  "Use our locator to find a location near you"
+                )}
+              {resultCount === 0 &&
+                searchState === "complete" &&
+                t(
+                  "noResultsFoundForThisArea",
+                  "No results found for this area"
+                )}
+              {resultCount > 0 &&
+                (filterDisplayName
+                  ? t(
+                      "locationsNear",
+                      `${resultCount} locations near "${filterDisplayName}"`,
+                      {
+                        count: resultCount,
+                        filterDisplayName,
+                      }
+                    )
+                  : t("locationWithCount", `${resultCount} locations`, {
+                      count: resultCount,
+                    }))}
+            </div>
+            {filters?.openNowButton && (
+              <button
+                className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                onClick={() => setShowFilter((prev) => !prev)}
               >
-                <span className="inline-flex items-center gap-2">
-                  {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
-                  {t("openNow", "Open Now")}
-                </span>
-              </Toggle>
+                {t("filter", "Filter")}
+                {<FaSlidersH />}
+              </button>
+            )}
+          </div>
+          {showFilter && (
+            <div
+              id="popup"
+              className="absolute top-0 z-50 w-80 flex flex-col bg-white shadow-lg absolute left-full top-0 ml-2 rounded-md shadow-lg"
+            >
+              <div className="inline-flex justify-between items-center px-6 py-4 gap-4 border-b border-gray-300">
+                <div className="font-bold">
+                  {t("refineYourSearch", "Refine Your Search")}
+                </div>
+                <button
+                  className="text-palette-primary-dark"
+                  onClick={() => setShowFilter(false)}
+                >
+                  <FaTimes />
+                </button>
+              </div>
+              <div className="flex flex-col p-6 gap-6">
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-4">
+                    <div className="font-bold">{t("hours", "Hours")}</div>
+                    <div className="flex flex-row gap-1">
+                      <button
+                        className="inline-flex bg-white"
+                        onClick={() => handleOpenNowClick(!isOpenNowSelected)}
+                      >
+                        <div className="inline-flex items-center gap-4">
+                          {t("openNow", "Open Now")}
+                          <div className="text-palette-primary-dark">
+                            {isOpenNowSelected ? (
+                              <FaCheckSquare />
+                            ) : (
+                              <FaRegSquare />
+                            )}
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
-        </div>
-        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300">
-          {resultCount === 0 &&
-            searchState === "not started" &&
-            t(
-              "useOurLocatorToFindALocationNearYou",
-              "Use our locator to find a location near you"
-            )}
-          {resultCount === 0 &&
-            searchState === "complete" &&
-            t("noResultsFoundForThisArea", "No results found for this area")}
-          {resultCount > 0 &&
-            (filterDisplayName
-              ? t(
-                  "locationsNear",
-                  `${resultCount} locations near "${filterDisplayName}"`,
-                  {
-                    count: resultCount,
-                    filterDisplayName,
-                  }
-                )
-              : t("locationWithCount", `${resultCount} locations`, {
-                  count: resultCount,
-                }))}
         </div>
         <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
           {resultCount > 0 && (
@@ -651,6 +1125,8 @@ const LocationCard = React.memo(
         )
       : null;
 
+    const telHref = sanitizePhoneForTelHref(location.mainPhone);
+
     const googleMapsLink = (() => {
       if (!location.yextDisplayCoordinate) {
         return null;
@@ -689,15 +1165,17 @@ const LocationCard = React.memo(
             </div>
             {location.hours && (
               <div className="font-body-fontFamily text-body-fontSize gap-8">
-                <HoursStatus
+                <HoursStatusAtom
                   hours={location.hours}
                   timezone={location.timezone}
+                  className="text-body-fontSize"
+                  boldCurrentStatus={false}
                 />
               </div>
             )}
             {location.mainPhone && (
               <a
-                href={location.mainPhone}
+                href={telHref}
                 onClick={handlePhoneNumberClick}
                 className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
               >
@@ -739,21 +1217,6 @@ const LocationCard = React.memo(
     );
   }
 );
-
-const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: any = useDocument();
-  if (!entityDocument._pageset && entityTypeEnvVar) {
-    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
-  }
-
-  try {
-    const entityType = JSON.parse(entityDocument._pageset).typeConfig
-      .locatorConfig.entityType;
-    return entityType || DEFAULT_ENTITY_TYPE;
-  } catch {
-    return DEFAULT_ENTITY_TYPE;
-  }
-};
 
 const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
   if (!divElement) {

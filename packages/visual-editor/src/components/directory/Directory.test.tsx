@@ -269,7 +269,7 @@ const cityDocument = {
   slug: "us/va/arlington",
 };
 
-const version37Props = {
+const version39Props = {
   styles: {
     backgroundColor: {
       bgColor: "bg-palette-primary-dark",
@@ -805,16 +805,16 @@ const tests: ComponentTest[] = [
     version: 18,
   },
   {
-    name: "version 37 with cityDocument and default props",
+    name: "version 39 with cityDocument and default props",
     document: cityDocument,
-    props: version37Props,
-    version: 37,
+    props: version39Props,
+    version: 39,
   },
   {
-    name: "version 37 with countryDocument and default props",
+    name: "version 39 with countryDocument and default props",
     document: countryDocument,
-    props: version37Props,
-    version: 37,
+    props: version39Props,
+    version: 39,
   },
 ];
 

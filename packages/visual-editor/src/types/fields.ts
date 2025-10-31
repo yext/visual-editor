@@ -1,4 +1,4 @@
-import { EntityFieldTypes } from "../internal/utils/getFilteredEntityFields.ts";
+import { type EntityFieldTypes } from "../internal/utils/getFilteredEntityFields.ts";
 
 export type ComponentField = {
   name: string;

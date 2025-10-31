@@ -100,7 +100,7 @@ const tests: ComponentTest[] = [
       }),
     },
     props: {},
-    version: migrationRegistry.length,
+    version: 10,
   },
   {
     name: "version 10 non-default props",
@@ -137,9 +137,160 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
+    },
+    version: 10,
+  },
+  {
+    name: "version 21 default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {},
+    version: 21,
+  },
+  {
+    name: "version 21 non-default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      mapStyle: "mapbox://styles/mapbox/dark-v11",
       openNowButton: true,
     },
-    version: migrationRegistry.length,
+    version: 21,
+  },
+  {
+    name: "version 22 default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {},
+    version: 22,
+  },
+  {
+    name: "version 22 non-default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      mapStyle: "mapbox://styles/mapbox/dark-v11",
+      filters: {
+        openNowButton: true,
+      },
+    },
+    version: 22,
   },
 ];
 

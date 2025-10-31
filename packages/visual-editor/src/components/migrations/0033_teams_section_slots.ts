@@ -1,60 +1,44 @@
 import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
+import { TeamSectionProps } from "../pageSections/TeamSection/TeamSection";
+import { TeamCardProps } from "../pageSections/TeamSection/TeamCard";
+import { TeamCardsWrapperProps } from "../pageSections/TeamSection/TeamCardsWrapper";
 import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { EventSectionType } from "../../types/types";
+import { TeamSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { ImageWrapperProps } from "../contentBlocks/image/Image";
 import { BodyTextProps } from "../contentBlocks/BodyText";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
-import { EventCardProps } from "../pageSections/EventSection/EventCard";
-import { EventCardsWrapperProps } from "../pageSections/EventSection/EventCardsWrapper";
-import { EventSectionProps } from "../pageSections";
-import { TimestampProps } from "../contentBlocks";
 
-export const eventSectionSlots: Migration = {
-  EventSection: {
+export const teamsSectionSlots: Migration = {
+  TeamSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const constantValueEnabled: boolean = props.data.constantValueEnabled;
-      const events = resolveYextEntityField(
+      const constantValueEnabled: boolean =
+        props.data.people.constantValueEnabled;
+      const team = resolveYextEntityField(
         streamDocument,
-        props.data.events as YextEntityField<EventSectionType>,
-        streamDocument?.locale
-      )?.events;
+        props.data.people as YextEntityField<TeamSectionType>,
+        streamDocument.meta?.locale
+      )?.people;
 
       const cards =
-        events?.map((event, i) => {
-          const resolvedTitle = event.title
+        team?.map((person, i) => {
+          const resolvedName = person.name
             ? resolveComponentData(
-                event.title,
+                person.name,
                 streamDocument.locale || "en",
                 streamDocument
               )
             : "";
-          const resolvedDescription = event.description
-            ? resolveComponentData(
-                event.description,
-                streamDocument.locale || "en",
-                streamDocument
-              )
-            : "";
-          const resolvedDateTime = event.dateTime
-            ? resolveComponentData(
-                event.dateTime,
-                streamDocument.locale || "en",
-                streamDocument
-              )
-            : "";
-
           return {
-            type: "EventCard",
+            type: "TeamCard",
             props: {
               id: `${props.id}-Card-${i}`,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
-                truncateDescription: props.styles.cards.truncateDescription,
               },
               slots: {
                 ImageSlot: [
@@ -65,19 +49,16 @@ export const eventSectionSlots: Migration = {
                         image: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: event.image || {
+                          constantValue: person.headshot || {
                             url: "",
-                            height: 360,
-                            width: 640,
+                            height: 80,
+                            width: 80,
                           },
                         },
                       },
                       styles: {
-                        width: event.image?.width || 640,
-                        aspectRatio:
-                          event.image?.width && event.image?.height
-                            ? event.image.width / event.image.height
-                            : 16 / 9,
+                        width: person.headshot?.width || 80,
+                        aspectRatio: 1,
                       },
                       className: "max-w-full h-full object-cover",
                       sizes: {
@@ -88,42 +69,13 @@ export const eventSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
-                            image: event.image,
+                            field: props.data.people.field,
+                            image: person.headshot,
                           },
                     } satisfies ImageWrapperProps,
                   },
                 ],
-                DateTimeSlot: [
-                  {
-                    type: "Timestamp",
-                    props: {
-                      data: {
-                        date: {
-                          field: "",
-                          constantValueEnabled,
-                          constantValue: resolvedDateTime || "",
-                        },
-                        endDate: {
-                          field: "",
-                          constantValueEnabled: false,
-                          constantValue: resolvedDateTime || "",
-                        },
-                      },
-                      styles: {
-                        includeTime: true,
-                        includeRange: false,
-                      },
-                      parentData: constantValueEnabled
-                        ? undefined
-                        : {
-                            field: props.data.field,
-                            date: resolvedDateTime,
-                          },
-                    } satisfies TimestampProps,
-                  },
-                ],
-                TitleSlot: [
+                NameSlot: [
                   {
                     type: "HeadingTextSlot",
                     props: {
@@ -131,7 +83,7 @@ export const eventSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: event.title ?? "",
+                          constantValue: person.name ?? "",
                         },
                       },
                       styles: {
@@ -141,13 +93,13 @@ export const eventSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
-                            text: resolvedTitle,
+                            field: props.data.people.field,
+                            text: resolvedName,
                           },
                     } satisfies HeadingTextProps,
                   },
                 ],
-                DescriptionSlot: [
+                TitleSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
@@ -155,22 +107,64 @@ export const eventSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: event.description ?? "",
+                          constantValue: person.title ?? "",
                         },
                       },
                       styles: { variant: "base" },
-                      parentStyles: {
-                        className: props.styles.cards.truncateDescription
-                          ? "md:line-clamp-3"
-                          : "",
-                      },
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
-                            richText: event.description,
+                            field: props.data.people.field,
+                            richText: person.title,
                           },
                     } satisfies BodyTextProps,
+                  },
+                ],
+                PhoneSlot: [
+                  {
+                    type: "PhoneNumbersSlot",
+                    props: {
+                      data: {
+                        phoneNumbers: person.phoneNumber
+                          ? [
+                              {
+                                number: {
+                                  field: "",
+                                  constantValueEnabled: true,
+                                  constantValue: person.phoneNumber,
+                                },
+                                label: {
+                                  en: "",
+                                  hasLocalizedValue: "true",
+                                },
+                              },
+                            ]
+                          : [],
+                      },
+                      styles: {
+                        phoneFormat:
+                          person.phoneNumber?.slice(0, 2) === "+1"
+                            ? "domestic"
+                            : "international",
+                        includePhoneHyperlink: true,
+                      },
+                      eventName: `phone${i}`,
+                    },
+                  },
+                ],
+                EmailSlot: [
+                  {
+                    type: "EmailsSlot",
+                    props: {
+                      data: {
+                        list: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: person.email ? [person.email] : [],
+                        },
+                      },
+                      eventName: `email${i}`,
+                    },
                   },
                 ],
                 CTASlot: [
@@ -182,43 +176,35 @@ export const eventSectionSlots: Migration = {
                           field: "",
                           constantValueEnabled: true,
                           constantValue: {
-                            label: event.cta?.label,
-                            link: event.cta?.link,
-                            linkType: event.cta?.linkType,
+                            label: person.cta?.label ?? "Visit Profile",
+                            link: person.cta?.link ?? "#",
+                            linkType: person.cta?.linkType ?? "URL",
                             ctaType: "textAndLink",
                           },
                         },
                       },
                       styles: {
-                        displayType: "textAndLink",
-                        variant: props.styles.cards.ctaVariant,
+                        variant: "primary",
                         presetImage: "app-store",
                       },
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
-                            cta: event.cta,
+                            field: props.data.people.field,
+                            cta: person.cta,
                           },
                       eventName: `cta${i}`,
                     } satisfies CTAWrapperProps,
                   },
                 ],
               },
-              conditionalRender: {
-                image: !!event?.image?.url,
-                title: !!resolvedTitle,
-                dateTime: !!resolvedDateTime,
-                description: !!resolvedDescription,
-                cta: !!event?.cta?.label,
-              },
               parentData: constantValueEnabled
                 ? undefined
                 : {
-                    field: props.data.field,
-                    event,
+                    field: props.data.people.field,
+                    person,
                   },
-            } satisfies WithId<EventCardProps>,
+            } satisfies WithId<TeamCardProps>,
           };
         }) || [];
 
@@ -248,23 +234,21 @@ export const eventSectionSlots: Migration = {
           ],
           CardsWrapperSlot: [
             {
-              type: "EventCardsWrapper",
+              type: "TeamCardsWrapper",
               props: {
                 data: {
-                  field: props.data.events.field,
-                  constantValueEnabled: props.data.events.constantValueEnabled,
-                  constantValue: cards.map((c) => ({
-                    id: c.props.id,
-                  })),
+                  field: props.data.people.field,
+                  constantValueEnabled: props.data.people.constantValueEnabled,
+                  constantValue: cards.map((c) => ({ id: c.props.id })),
                 },
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies EventCardsWrapperProps,
+              } satisfies TeamCardsWrapperProps,
             },
           ],
         },
-      } satisfies WithId<EventSectionProps>;
+      } satisfies WithId<TeamSectionProps>;
     },
   },
 };

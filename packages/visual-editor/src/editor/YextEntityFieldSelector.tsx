@@ -13,15 +13,11 @@ import {
   TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   TRANSLATABLE_STRING_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/Text.tsx";
-import { ADDRESS_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Address.tsx";
 import {
   TEXT_LIST_CONSTANT_CONFIG,
   TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG,
 } from "../internal/puck/constant-value-fields/TextList.tsx";
-import {
-  ENHANCED_CTA_COORDINATE_CONSTANT_CONFIG,
-  ENHANCED_CTA_LINK_CONSTANT_CONFIG,
-} from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { ENHANCED_CTA_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { PHONE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Phone.tsx";
 import { BasicSelector } from "./BasicSelector.tsx";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
@@ -70,7 +66,7 @@ export type YextEntityField<T> = {
    * Filter the embedded field input to this type.
    * @ai always omit this property
    */
-  selectedTypes?: string[];
+  selectedType?: string;
 };
 
 /**
@@ -84,6 +80,11 @@ export type TypeSelectorConfigProps = {
   fieldLabel: string;
   /** The options to display in the type selector dropdown. */
   options: ComboboxOption[];
+  /**
+   * An optional mapping from a type selector option's value to an entity field type.
+   * This is useful when multiple type options should filter for the same underlying entity field type.
+   */
+  optionValueToEntityFieldType?: Record<string, string>;
 };
 
 export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
@@ -100,9 +101,7 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.rich_text_v2": TRANSLATABLE_RICH_TEXT_CONSTANT_CONFIG,
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
-  "type.address": ADDRESS_CONSTANT_CONFIG,
-  "type.cta": ENHANCED_CTA_LINK_CONSTANT_CONFIG,
-  "type.coordinate": ENHANCED_CTA_COORDINATE_CONSTANT_CONFIG,
+  "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
   "type.datetime": DATE_TIME_CONSTANT_CONFIG,
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
@@ -207,10 +206,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   return {
     type: "custom",
     render: ({ value, onChange }: RenderProps) => {
-      const filter = value?.selectedTypes
-        ? { ...props.filter, types: value.selectedTypes }
-        : props.filter;
-
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           ...value,
@@ -221,7 +216,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
       return (
         <>
           <ConstantValueModeToggler
-            fieldTypeFilter={filter.types}
+            fieldTypeFilter={props.filter.types ?? []}
             constantValueEnabled={value?.constantValueEnabled}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             disableConstantValue={props.disableConstantValueToggle}
@@ -231,25 +226,11 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               !props.disallowTranslation
             }
           />
-          {props.typeSelectorConfig && (
-            <TypeSelectorField
-              typeSelectorConfig={props.typeSelectorConfig}
-              onChange={(v) => {
-                onChange({
-                  ...value,
-                  field: "",
-                  constantValue: undefined,
-                  selectedTypes: v as EntityFieldTypes[],
-                }); // reset selected field
-              }}
-              fieldTypeFilter={filter.types}
-            />
-          )}
           {value?.constantValueEnabled && (
             <ConstantValueInput<T>
               onChange={onChange}
               value={value}
-              filter={filter}
+              filter={props.filter}
               disallowTranslation={props.disallowTranslation}
             />
           )}
@@ -258,8 +239,8 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
               className="ve-pt-3"
               onChange={onChange}
               value={value}
-              filter={filter}
-              label={props.typeSelectorConfig?.fieldLabel}
+              filter={props.filter}
+              typeSelectorConfig={props.typeSelectorConfig}
             />
           )}
         </>
@@ -336,8 +317,8 @@ type InputProps<T extends Record<string, any>> = {
   value: any;
   className?: string;
   disallowTranslation?: boolean;
-  hideSelectAFieldOption?: boolean;
   label?: string;
+  typeSelectorConfig?: TypeSelectorConfigProps;
 };
 
 export const ConstantValueInput = <T extends Record<string, any>>({
@@ -383,7 +364,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     </div>
   ) : (
     <AutoField
-      key={value?.selectedTypes} // reset when type changes
+      key={value?.selectedType} // reset when type changes
       onChange={(newConstantValue, uiState) =>
         onChange(
           {
@@ -439,62 +420,100 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
   className,
-  hideSelectAFieldOption,
-  label,
+  typeSelectorConfig,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
 
-  const basicSelectorField = React.useMemo(() => {
-    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+  const typeSelector = React.useMemo(() => {
+    if (!typeSelectorConfig) {
+      return;
+    }
+    return BasicSelector({
+      label: typeSelectorConfig.typeLabel,
+      options: typeSelectorConfig.options,
+      translateOptions: false,
+      noOptionsPlaceholder: pt("noAvailableTypes", "No available types"),
+      noOptionsMessage: pt(
+        "noTypesFoundMsg",
+        "No types found. Please check your configuration."
+      ),
+    });
+  }, [typeSelectorConfig]);
+
+  const entityFieldSelector = React.useMemo(() => {
+    // If a selectedType is provided, filter the entity fields by that type.
+    // If optionValueToEntityFieldType is provided, use it to map the selectedType to an EntityFieldType.
+    // Otherwise, use the selectedType directly.
+    // This allows for type selections that map to the same entity field type.
+    let selectedEntityFieldType;
+    if (value?.selectedType) {
+      if (typeSelectorConfig?.optionValueToEntityFieldType) {
+        if (
+          typeSelectorConfig.optionValueToEntityFieldType[value.selectedType]
+        ) {
+          selectedEntityFieldType =
+            typeSelectorConfig.optionValueToEntityFieldType[value.selectedType];
+        } else {
+          // If the selected type does not map to any entity field type, hide the selector.
+          return {
+            type: "custom",
+            render: () => <></>,
+          } satisfies CustomField<undefined>;
+        }
+      } else {
+        selectedEntityFieldType = value.selectedType;
+      }
+    }
+
+    const filteredEntityFields = getFieldsForSelector(entityFields, {
+      ...filter,
+      types: selectedEntityFieldType ? [selectedEntityFieldType] : filter.types,
+    });
     const entityFieldOptions = filteredEntityFields.map((field) => ({
       label: field.displayName ?? field.name,
       value: field.name,
     }));
 
-    const options = hideSelectAFieldOption
-      ? [...entityFieldOptions]
-      : [
-          {
-            value: "",
-            label: pt("entityTypeField", "{{entityType}} Field", {
-              entityType: templateMetadata.entityTypeDisplayName,
-            }),
-          },
-          ...entityFieldOptions,
-        ];
-
-    // If hideSelectAFieldOption, set to the first available field,
-    // or unset if there are no fields available.
-    if (hideSelectAFieldOption && !value.constantValueEnabled) {
-      if (filteredEntityFields.length > 0 && value.field === "") {
-        onChange({
-          ...value,
-          field: filteredEntityFields[0].name,
-        });
-      }
-      if (filteredEntityFields.length === 0 && value.field !== "") {
-        onChange({
-          ...value,
-          field: "",
-        });
-      }
-    }
+    const options = [
+      {
+        value: "",
+        label: pt("entityTypeField", "{{entityType}} Field", {
+          entityType: templateMetadata.entityTypeDisplayName,
+        }),
+      },
+      ...entityFieldOptions,
+    ];
 
     return BasicSelector({
-      label: label,
+      label: typeSelectorConfig?.fieldLabel,
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
-      noOptionsMessage: getNoFieldsFoundMessage(filter),
     });
-  }, [entityFields, filter]);
+  }, [entityFields, filter, value?.selectedType]);
 
   return (
     <div className={"ve-inline-block ve-w-full " + className}>
+      {typeSelectorConfig && (
+        <AutoField
+          field={typeSelector!}
+          onChange={(selectedType, uiState) => {
+            onChange(
+              {
+                ...value,
+                field: "",
+                selectedType: selectedType,
+              },
+              uiState
+            );
+          }}
+          value={value?.selectedType}
+        />
+      )}
       <AutoField
-        key={value?.selectedTypes} // reset when filter changes
-        field={basicSelectorField}
+        key={value?.selectedType}
+        field={entityFieldSelector}
         onChange={(selectedEntityField, uiState) => {
           onChange(
             {
@@ -508,57 +527,4 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       />
     </div>
   );
-};
-
-const TypeSelectorField = ({
-  typeSelectorConfig,
-  onChange,
-  fieldTypeFilter,
-}: {
-  typeSelectorConfig: TypeSelectorConfigProps | undefined;
-  onChange: (value: any, uiState?: any) => void;
-  fieldTypeFilter: EntityFieldTypes[];
-}) => {
-  if (!typeSelectorConfig) {
-    return <></>;
-  }
-
-  const typeSelectorField = React.useMemo(() => {
-    return BasicSelector({
-      label: typeSelectorConfig.typeLabel,
-      options: typeSelectorConfig.options,
-      disableSearch: true,
-      translateOptions: true,
-      noOptionsPlaceholder: pt("noAvailableTypes", "No available types"),
-      noOptionsMessage: pt(
-        "noTypesFoundMsg",
-        "No types found. Please check your configuration."
-      ),
-    });
-  }, [typeSelectorConfig]);
-
-  return (
-    <div className="ve-mt-3">
-      <AutoField
-        field={typeSelectorField}
-        onChange={onChange}
-        value={fieldTypeFilter}
-      />
-    </div>
-  );
-};
-
-const getNoFieldsFoundMessage = (
-  filter: RenderEntityFieldFilter<any>
-): string | undefined => {
-  if (!filter.types?.length || filter.allowList) {
-    return;
-  }
-
-  if (filter.types.includes("type.promo_section")) {
-    return pt(
-      "noPromoFieldsMsg",
-      "To use entity content for this section, add a Promo Section field to your page group's entity type."
-    );
-  }
 };

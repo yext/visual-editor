@@ -1,40 +1,47 @@
 import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { TeamSectionProps } from "../pageSections/TeamSection/TeamSection";
-import { TeamCardProps } from "../pageSections/TeamSection/TeamCard";
-import { TeamCardsWrapperProps } from "../pageSections/TeamSection/TeamCardsWrapper";
+import { ProductSectionProps } from "../pageSections/ProductSection/ProductSection";
+import { ProductCardProps } from "../pageSections/ProductSection/ProductCard";
+import { ProductCardsWrapperProps } from "../pageSections/ProductSection/ProductCardsWrapper";
 import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { TeamSectionType } from "../../types/types";
+import { ProductSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { ImageWrapperProps } from "../contentBlocks/image/Image";
 import { BodyTextProps } from "../contentBlocks/BodyText";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
 
-export const teamsSectionSlots: Migration = {
-  TeamSection: {
+export const productSectionSlots: Migration = {
+  ProductSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const constantValueEnabled: boolean =
-        props.data.people.constantValueEnabled;
-      const team = resolveYextEntityField(
+      const constantValueEnabled: boolean = props.data.constantValueEnabled;
+      const products = resolveYextEntityField(
         streamDocument,
-        props.data.people as YextEntityField<TeamSectionType>,
-        streamDocument.meta?.locale
-      )?.people;
+        props.data.products as YextEntityField<ProductSectionType>,
+        streamDocument?.locale
+      )?.products;
 
       const cards =
-        team?.map((person, i) => {
-          const resolvedName = person.name
+        products?.map((product, i) => {
+          const resolvedName = product.name
             ? resolveComponentData(
-                person.name,
+                product.name,
                 streamDocument.locale || "en",
                 streamDocument
               )
             : "";
+          const resolvedCategory = product.category
+            ? resolveComponentData(
+                product.category,
+                streamDocument.locale || "en",
+                streamDocument
+              )
+            : "";
+
           return {
-            type: "TeamCard",
+            type: "ProductCard",
             props: {
               id: `${props.id}-Card-${i}`,
               styles: {
@@ -49,33 +56,53 @@ export const teamsSectionSlots: Migration = {
                         image: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: person.headshot || {
+                          constantValue: product.image || {
                             url: "",
-                            height: 80,
-                            width: 80,
+                            height: 360,
+                            width: 640,
                           },
                         },
                       },
                       styles: {
-                        width: person.headshot?.width || 80,
-                        aspectRatio: 1,
+                        width: 640,
+                        aspectRatio: 16 / 9,
                       },
-                      className: "max-w-full h-full object-cover",
                       sizes: {
                         base: "calc(100vw - 32px)",
-                        lg: "calc(maxWidth * 0.45)",
+                        md: "calc((maxWidth - 32px) / 2)",
+                        lg: "calc((maxWidth - 32px) / 3)",
                       },
-                      hideWidthProp: true,
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.people.field,
-                            image: person.headshot,
+                            field: props.data.field,
+                            image: product.image,
                           },
                     } satisfies ImageWrapperProps,
                   },
                 ],
-                NameSlot: [
+                CategorySlot: [
+                  {
+                    type: "BodyTextSlot",
+                    props: {
+                      data: {
+                        text: {
+                          field: "",
+                          constantValueEnabled: true,
+                          constantValue: product.category ?? "",
+                        },
+                      },
+                      styles: { variant: "base" },
+                      parentData: constantValueEnabled
+                        ? undefined
+                        : {
+                            field: props.data.field,
+                            richText: product.category,
+                          },
+                    } satisfies BodyTextProps,
+                  },
+                ],
+                TitleSlot: [
                   {
                     type: "HeadingTextSlot",
                     props: {
@@ -83,7 +110,7 @@ export const teamsSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: person.name ?? "",
+                          constantValue: product.name ?? "",
                         },
                       },
                       styles: {
@@ -93,13 +120,13 @@ export const teamsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.people.field,
+                            field: props.data.field,
                             text: resolvedName,
                           },
                     } satisfies HeadingTextProps,
                   },
                 ],
-                TitleSlot: [
+                DescriptionSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
@@ -107,64 +134,17 @@ export const teamsSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: person.title ?? "",
+                          constantValue: product.description ?? "",
                         },
                       },
                       styles: { variant: "base" },
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.people.field,
-                            richText: person.title,
+                            field: props.data.field,
+                            richText: product.description,
                           },
                     } satisfies BodyTextProps,
-                  },
-                ],
-                PhoneSlot: [
-                  {
-                    type: "PhoneNumbersSlot",
-                    props: {
-                      data: {
-                        phoneNumbers: person.phoneNumber
-                          ? [
-                              {
-                                number: {
-                                  field: "",
-                                  constantValueEnabled: true,
-                                  constantValue: person.phoneNumber,
-                                },
-                                label: {
-                                  en: "",
-                                  hasLocalizedValue: "true",
-                                },
-                              },
-                            ]
-                          : [],
-                      },
-                      styles: {
-                        phoneFormat:
-                          person.phoneNumber?.slice(0, 2) === "+1"
-                            ? "domestic"
-                            : "international",
-                        includePhoneHyperlink: true,
-                      },
-                      eventName: `phone${i}`,
-                    },
-                  },
-                ],
-                EmailSlot: [
-                  {
-                    type: "EmailsSlot",
-                    props: {
-                      data: {
-                        list: {
-                          field: "",
-                          constantValueEnabled: true,
-                          constantValue: person.email ? [person.email] : [],
-                        },
-                      },
-                      eventName: `email${i}`,
-                    },
                   },
                 ],
                 CTASlot: [
@@ -176,25 +156,24 @@ export const teamsSectionSlots: Migration = {
                           field: "",
                           constantValueEnabled: true,
                           constantValue: {
-                            label: person.cta?.label ?? "Visit Profile",
-                            link: person.cta?.link ?? "#",
-                            linkType: person.cta?.linkType ?? "URL",
+                            label: product.cta?.label ?? "Learn More",
+                            link: product.cta?.link ?? "#",
+                            linkType: product.cta?.linkType ?? "URL",
                             ctaType: "textAndLink",
                           },
                         },
                       },
                       styles: {
-                        variant: "primary",
-                        displayType: "textAndLink",
+                        variant: props.styles.cards.ctaVariant,
                         presetImage: "app-store",
                       },
+                      eventName: `cta${i}`,
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.people.field,
-                            cta: person.cta,
+                            field: props.data.field,
+                            cta: product.cta,
                           },
-                      eventName: `cta${i}`,
                     } satisfies CTAWrapperProps,
                   },
                 ],
@@ -202,10 +181,13 @@ export const teamsSectionSlots: Migration = {
               parentData: constantValueEnabled
                 ? undefined
                 : {
-                    field: props.data.people.field,
-                    person,
+                    field: props.data.field,
+                    product,
                   },
-            } satisfies WithId<TeamCardProps>,
+              conditionalRender: {
+                category: resolvedCategory !== "",
+              },
+            } satisfies WithId<ProductCardProps>,
           };
         }) || [];
 
@@ -223,10 +205,10 @@ export const teamsSectionSlots: Migration = {
               props: {
                 data: {
                   text: {
-                    field: props.data.heading?.field ?? "",
+                    field: props.data.heading.field,
                     constantValueEnabled:
-                      props.data.heading?.constantValueEnabled ?? true,
-                    constantValue: props.data.heading?.constantValue ?? "",
+                      props.data.heading.constantValueEnabled,
+                    constantValue: props.data.heading.constantValue,
                   },
                 },
                 styles: props.styles.heading,
@@ -235,21 +217,22 @@ export const teamsSectionSlots: Migration = {
           ],
           CardsWrapperSlot: [
             {
-              type: "TeamCardsWrapper",
+              type: "ProductCardsWrapper",
               props: {
                 data: {
-                  field: props.data.people.field,
-                  constantValueEnabled: props.data.people.constantValueEnabled,
+                  field: props.data.products.field,
+                  constantValueEnabled:
+                    props.data.products.constantValueEnabled,
                   constantValue: cards.map((c) => ({ id: c.props.id })),
                 },
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies TeamCardsWrapperProps,
+              } satisfies ProductCardsWrapperProps,
             },
           ],
         },
-      } satisfies WithId<TeamSectionProps>;
+      } satisfies WithId<ProductSectionProps>;
     },
   },
 };

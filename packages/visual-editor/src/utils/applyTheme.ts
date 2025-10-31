@@ -21,6 +21,9 @@ export type StreamDocument = {
   locale?: string;
   meta?: {
     locale?: string;
+    entityType?: {
+      id?: string;
+    };
   };
   __?: {
     layout?: string;

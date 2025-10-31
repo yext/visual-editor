@@ -60,7 +60,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = ({
 };
 
 export const HeroImage: ComponentConfig<{ props: HeroImageProps }> = {
-  label: msg("components.image", "Hero Image"),
+  label: msg("components.heroImage", "Hero Image"),
   fields: ImageWrapperFields,
   defaultProps: imageDefaultProps,
   resolveFields: (data) => {

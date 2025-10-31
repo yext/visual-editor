@@ -1,7 +1,7 @@
 import { Migration } from "../../utils/migrate.ts";
 
 export const setOpenNowDefault: Migration = {
-  Locator: {
+  LocatorComponent: {
     action: "updated",
     propTransformation: (props) => {
       return {

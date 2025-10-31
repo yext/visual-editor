@@ -548,7 +548,7 @@ const tests: ComponentTest[] = [
     version: 20,
   },
   {
-    name: "version 39 props - basic",
+    name: "version 41 props - basic",
     document: {},
     props: {
       data: {
@@ -708,10 +708,10 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 39,
+    version: 41,
   },
   {
-    name: "version 39 props - expanded with all data",
+    name: "version 41 props - expanded with all data",
     document: {},
     props: {
       data: {
@@ -916,10 +916,10 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 39,
+    version: 41,
   },
   {
-    name: "version 39 props - no data",
+    name: "version 41 props - no data",
     document: {},
     props: {
       data: {
@@ -1069,7 +1069,7 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 39,
+    version: 41,
   },
 ];
 

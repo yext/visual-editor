@@ -1,51 +1,60 @@
 import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { ProductSectionProps } from "../pageSections/ProductSection/ProductSection";
-import { ProductCardProps } from "../pageSections/ProductSection/ProductCard";
-import { ProductCardsWrapperProps } from "../pageSections/ProductSection/ProductCardsWrapper";
 import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { ProductSectionType } from "../../types/types";
+import { EventSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { ImageWrapperProps } from "../contentBlocks/image/Image";
 import { BodyTextProps } from "../contentBlocks/BodyText";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
+import { EventCardProps } from "../pageSections/EventSection/EventCard";
+import { EventCardsWrapperProps } from "../pageSections/EventSection/EventCardsWrapper";
+import { EventSectionProps } from "../pageSections";
+import { TimestampProps } from "../contentBlocks";
 
-export const productSectionSlots: Migration = {
-  ProductSection: {
+export const eventSectionSlots: Migration = {
+  EventSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
       const constantValueEnabled: boolean = props.data.constantValueEnabled;
-      const products = resolveYextEntityField(
+      const events = resolveYextEntityField(
         streamDocument,
-        props.data.products as YextEntityField<ProductSectionType>,
+        props.data.events as YextEntityField<EventSectionType>,
         streamDocument?.locale
-      )?.products;
+      )?.events;
 
       const cards =
-        products?.map((product, i) => {
-          const resolvedName = product.name
+        events?.map((event, i) => {
+          const resolvedTitle = event.title
             ? resolveComponentData(
-                product.name,
+                event.title,
                 streamDocument.locale || "en",
                 streamDocument
               )
             : "";
-          const resolvedCategory = product.category
+          const resolvedDescription = event.description
             ? resolveComponentData(
-                product.category,
+                event.description,
+                streamDocument.locale || "en",
+                streamDocument
+              )
+            : "";
+          const resolvedDateTime = event.dateTime
+            ? resolveComponentData(
+                event.dateTime,
                 streamDocument.locale || "en",
                 streamDocument
               )
             : "";
 
           return {
-            type: "ProductCard",
+            type: "EventCard",
             props: {
               id: `${props.id}-Card-${i}`,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
+                truncateDescription: props.styles.cards.truncateDescription,
               },
               slots: {
                 ImageSlot: [
@@ -56,7 +65,7 @@ export const productSectionSlots: Migration = {
                         image: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: product.image || {
+                          constantValue: event.image || {
                             url: "",
                             height: 360,
                             width: 640,
@@ -64,42 +73,54 @@ export const productSectionSlots: Migration = {
                         },
                       },
                       styles: {
-                        width: 640,
-                        aspectRatio: 16 / 9,
+                        width: event.image?.width || 640,
+                        aspectRatio:
+                          event.image?.width && event.image?.height
+                            ? event.image.width / event.image.height
+                            : 16 / 9,
                       },
+                      className: "max-w-full h-full object-cover",
                       sizes: {
                         base: "calc(100vw - 32px)",
-                        md: "calc((maxWidth - 32px) / 2)",
-                        lg: "calc((maxWidth - 32px) / 3)",
+                        lg: "calc(maxWidth * 0.45)",
                       },
+                      hideWidthProp: true,
                       parentData: constantValueEnabled
                         ? undefined
                         : {
                             field: props.data.field,
-                            image: product.image,
+                            image: event.image,
                           },
                     } satisfies ImageWrapperProps,
                   },
                 ],
-                CategorySlot: [
+                DateTimeSlot: [
                   {
-                    type: "BodyTextSlot",
+                    type: "Timestamp",
                     props: {
                       data: {
-                        text: {
+                        date: {
                           field: "",
-                          constantValueEnabled: true,
-                          constantValue: product.category ?? "",
+                          constantValueEnabled,
+                          constantValue: resolvedDateTime || "",
+                        },
+                        endDate: {
+                          field: "",
+                          constantValueEnabled: false,
+                          constantValue: resolvedDateTime || "",
                         },
                       },
-                      styles: { variant: "base" },
+                      styles: {
+                        includeTime: true,
+                        includeRange: false,
+                      },
                       parentData: constantValueEnabled
                         ? undefined
                         : {
                             field: props.data.field,
-                            richText: product.category,
+                            date: resolvedDateTime,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies TimestampProps,
                   },
                 ],
                 TitleSlot: [
@@ -110,7 +131,7 @@ export const productSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: product.name ?? "",
+                          constantValue: event.title ?? "",
                         },
                       },
                       styles: {
@@ -121,7 +142,7 @@ export const productSectionSlots: Migration = {
                         ? undefined
                         : {
                             field: props.data.field,
-                            text: resolvedName,
+                            text: resolvedTitle,
                           },
                     } satisfies HeadingTextProps,
                   },
@@ -134,15 +155,20 @@ export const productSectionSlots: Migration = {
                         text: {
                           field: "",
                           constantValueEnabled: true,
-                          constantValue: product.description ?? "",
+                          constantValue: event.description ?? "",
                         },
                       },
                       styles: { variant: "base" },
+                      parentStyles: {
+                        className: props.styles.cards.truncateDescription
+                          ? "md:line-clamp-3"
+                          : "",
+                      },
                       parentData: constantValueEnabled
                         ? undefined
                         : {
                             field: props.data.field,
-                            richText: product.description,
+                            richText: event.description,
                           },
                     } satisfies BodyTextProps,
                   },
@@ -156,39 +182,42 @@ export const productSectionSlots: Migration = {
                           field: "",
                           constantValueEnabled: true,
                           constantValue: {
-                            label: product.cta?.label ?? "Learn More",
-                            link: product.cta?.link ?? "#",
-                            linkType: product.cta?.linkType ?? "URL",
+                            label: event.cta?.label,
+                            link: event.cta?.link,
+                            linkType: event.cta?.linkType,
                             ctaType: "textAndLink",
                           },
                         },
                       },
                       styles: {
-                        displayType: "textAndLink",
                         variant: props.styles.cards.ctaVariant,
                         presetImage: "app-store",
                       },
-                      eventName: `cta${i}`,
                       parentData: constantValueEnabled
                         ? undefined
                         : {
                             field: props.data.field,
-                            cta: product.cta,
+                            cta: event.cta,
                           },
+                      eventName: `cta${i}`,
                     } satisfies CTAWrapperProps,
                   },
                 ],
+              },
+              conditionalRender: {
+                image: !!event?.image?.url,
+                title: !!resolvedTitle,
+                dateTime: !!resolvedDateTime,
+                description: !!resolvedDescription,
+                cta: !!event?.cta?.label,
               },
               parentData: constantValueEnabled
                 ? undefined
                 : {
                     field: props.data.field,
-                    product,
+                    event,
                   },
-              conditionalRender: {
-                category: resolvedCategory !== "",
-              },
-            } satisfies WithId<ProductCardProps>,
+            } satisfies WithId<EventCardProps>,
           };
         }) || [];
 
@@ -206,10 +235,10 @@ export const productSectionSlots: Migration = {
               props: {
                 data: {
                   text: {
-                    field: props.data.heading.field,
+                    field: props.data.heading?.field ?? "",
                     constantValueEnabled:
-                      props.data.heading.constantValueEnabled,
-                    constantValue: props.data.heading.constantValue,
+                      props.data.heading?.constantValueEnabled ?? true,
+                    constantValue: props.data.heading?.constantValue ?? "",
                   },
                 },
                 styles: props.styles.heading,
@@ -218,22 +247,23 @@ export const productSectionSlots: Migration = {
           ],
           CardsWrapperSlot: [
             {
-              type: "ProductCardsWrapper",
+              type: "EventCardsWrapper",
               props: {
                 data: {
-                  field: props.data.products.field,
-                  constantValueEnabled:
-                    props.data.products.constantValueEnabled,
-                  constantValue: cards.map((c) => ({ id: c.props.id })),
+                  field: props.data.events.field,
+                  constantValueEnabled: props.data.events.constantValueEnabled,
+                  constantValue: cards.map((c) => ({
+                    id: c.props.id,
+                  })),
                 },
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies ProductCardsWrapperProps,
+              } satisfies EventCardsWrapperProps,
             },
           ],
         },
-      } satisfies WithId<ProductSectionProps>;
+      } satisfies WithId<EventSectionProps>;
     },
   },
 };

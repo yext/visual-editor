@@ -15,6 +15,7 @@ export interface HoursStatusAtomProps {
   timeFormat?: "12h" | "24h";
   dayOfWeekFormat?: "short" | "long";
   timezone?: string;
+  boldCurrentStatus?: boolean;
 }
 
 export const HoursStatusAtom = React.memo(
@@ -26,6 +27,7 @@ export const HoursStatusAtom = React.memo(
     timeFormat,
     dayOfWeekFormat = "long",
     timezone,
+    boldCurrentStatus = true,
   }: HoursStatusAtomProps): any => {
     const { t, i18n } = useTranslation();
 
@@ -39,7 +41,7 @@ export const HoursStatusAtom = React.memo(
         currentTemplate={
           showCurrentStatus
             ? (params: HoursStatusParams) =>
-                hoursCurrentTemplateOverride(params, t)
+                hoursCurrentTemplateOverride(params, t, boldCurrentStatus)
             : () => <></>
         }
         futureTemplate={(params: HoursStatusParams) =>
@@ -65,27 +67,31 @@ export const HoursStatusAtom = React.memo(
  * Overrides the current status text to incorporate i18n
  * @param params used to determine the status
  * @param t translation function
+ * @param boldCurrentStatus whether to bold the current status
  */
 function hoursCurrentTemplateOverride(
   params: HoursStatusParams,
-  t: TFunction
+  t: TFunction,
+  boldCurrentStatus: boolean
 ): React.ReactNode {
+  const style = boldCurrentStatus ? { fontWeight: "bolder" } : undefined;
+
   if (params?.currentInterval?.is24h?.()) {
     return (
-      <span className="HoursStatus-current" style={{ fontWeight: "bolder" }}>
+      <span className="HoursStatus-current" style={style}>
         {t("open24Hours", "Open 24 Hours")}
       </span>
     );
   }
   if (!params.futureInterval) {
     return (
-      <span className="HoursStatus-current" style={{ fontWeight: "bolder" }}>
+      <span className="HoursStatus-current" style={style}>
         {t("temporarilyClosed", "Temporarily Closed")}
       </span>
     );
   }
   return (
-    <span className="HoursStatus-current" style={{ fontWeight: "bolder" }}>
+    <span className="HoursStatus-current" style={style}>
       {params.isOpen ? t("openNow", "Open Now") : t("closed", "Closed")}
     </span>
   );

@@ -94,7 +94,7 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
 export const FooterUtilityImagesSlot: ComponentConfig<{
   props: FooterUtilityImagesSlotProps;
 }> = {
-  label: msg("components.footerUtilityImagesSlot", "Utility Images"),
+  label: msg("components.footerUtilityImagesSlotLabel", "Utility Images"),
   fields: {
     data: YextField(msg("fields.data", "Data"), {
       type: "object",

@@ -154,7 +154,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 36 props with empty document",
+    name: "version 38 props with empty document",
     document: {},
     props: {
       styles: {
@@ -212,10 +212,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 36,
+    version: 38,
   },
   {
-    name: "version 36 props with document data",
+    name: "version 38 props with document data",
     document: {
       businessId: 70452,
       _env: {
@@ -289,7 +289,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 36,
+    version: 38,
     interactions: async (page) => {
       const expandButton = page.getByText("Show more");
       await act(async () => {
