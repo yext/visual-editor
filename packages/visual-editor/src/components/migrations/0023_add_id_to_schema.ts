@@ -1,4 +1,4 @@
-import { schemaWhitespaceRegex } from "../../utils/getSchema";
+import { schemaWhitespaceRegex } from "../../utils/schema/defaultSchemas.ts";
 import { Migration } from "../../utils/migrate";
 
 export const addIdToSchema: Migration = {

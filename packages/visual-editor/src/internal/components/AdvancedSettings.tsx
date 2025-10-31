@@ -6,7 +6,7 @@ import {
   useReceiveMessage,
   TARGET_ORIGINS,
 } from "../hooks/useMessage";
-import { getSchemaTemplate } from "../../utils/getSchema.ts";
+import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
 
 export interface AdvancedSettingsProps {
   /**
