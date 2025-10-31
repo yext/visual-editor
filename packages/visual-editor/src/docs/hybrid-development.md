@@ -199,7 +199,7 @@ Various existing components require additional data from the hybrid-developer. T
 This could look like:
 
 ```ts
-function resolveUrlTemplate(
+function resolveUrlTemplateOfChild(
   streamDocument: any,
   locale: string,
   relativePrefixToRoot: string,

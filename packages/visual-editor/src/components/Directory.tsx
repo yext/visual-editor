@@ -16,7 +16,7 @@ import {
   YextEntityField,
   resolveComponentData,
   HoursStatusAtom,
-  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
   mergeMeta,
 } from "@yext/visual-editor";
 import { BreadcrumbsComponent } from "./pageSections/Breadcrumbs.tsx";
@@ -294,7 +294,7 @@ const DirectoryCard = ({
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const cardStyles: DirectoryProps["styles"]["cards"] = styles["cards"];
 
-  const resolvedUrl = resolveUrlTemplate(
+  const resolvedUrl = resolveUrlTemplateOfChild(
     mergeMeta(profile, streamDocument),
     relativePrefixToRoot,
     puck.metadata?.resolveUrlTemplate

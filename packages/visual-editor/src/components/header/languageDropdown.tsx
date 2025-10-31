@@ -12,6 +12,7 @@ import {
   BackgroundStyle,
   Body,
   fetchLocalesToPathsForEntity,
+  useDocument,
 } from "@yext/visual-editor";
 import {
   Accordion,
@@ -43,6 +44,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   currentLocale,
   background,
 }) => {
+  const streamDocument = useDocument();
   const scopedLocales = new Set<string>(locales);
   const [validLocalesToPaths, setValidLocalesToPaths] = React.useState<
     Record<string, string>
@@ -72,6 +74,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           contentEndpointId,
           contentDeliveryAPIDomain,
           entityId,
+          streamDocument,
         });
 
         const filtered: Record<string, string> = {};

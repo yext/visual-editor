@@ -1,5 +1,8 @@
 import { StreamDocument } from "./applyTheme.ts";
-import { resolveUrlTemplate } from "./resolveUrlTemplate.ts";
+import {
+  resolvePageSetUrlTemplate,
+  resolveUrlTemplateOfChild,
+} from "./resolveUrlTemplate.ts";
 import { resolveSchemaJson } from "./resolveYextEntityField.ts";
 
 interface TemplateRenderProps {
@@ -19,7 +22,20 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     document.path = data.path;
   } else {
     // TODO (SUMO-7941): Check that this resolves correctly for the schema drawer preview
-    document.path = resolveUrlTemplate(document, data.relativePrefixToRoot);
+    if (
+      document?.__?.codeTemplate === "directory" ||
+      document?.__?.codeTemplate === "locator"
+    ) {
+      document.path = resolveUrlTemplateOfChild(
+        document,
+        data.relativePrefixToRoot
+      );
+    } else {
+      document.path = resolvePageSetUrlTemplate(
+        document,
+        data.relativePrefixToRoot
+      );
+    }
   }
 
   const layoutString = document?.__?.layout;
