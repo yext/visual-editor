@@ -166,6 +166,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             },
             styles: {
               variant: "primary",
+              presetImage: "app-store",
             },
             eventName: index !== undefined ? `cta${index}` : undefined,
           } satisfies CTAWrapperProps,

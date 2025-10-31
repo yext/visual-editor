@@ -445,6 +445,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             eventName: "primaryCta",
             styles: {
               variant: "primary",
+              presetImage: "app-store",
             },
           } satisfies CTAWrapperProps,
         },
@@ -465,10 +466,12 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
+                selectedType: "textAndLink",
               },
             },
             styles: {
               variant: "secondary",
+              presetImage: "app-store",
             },
             eventName: "secondaryCta",
           } satisfies CTAWrapperProps,

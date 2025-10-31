@@ -78,6 +78,7 @@ export const expandedHeaderSlots: Migration = {
                         styles: {
                           variant:
                             props.styles?.primaryHeader.primaryCtaVariant,
+                          presetImage: "app-store",
                         },
                         fieldsToHide: ["styles.displayType"],
                       } satisfies CTAWrapperProps,
@@ -99,6 +100,7 @@ export const expandedHeaderSlots: Migration = {
                         styles: {
                           variant:
                             props.styles?.primaryHeader.secondaryCtaVariant,
+                          presetImage: "app-store",
                         },
                         fieldsToHide: ["styles.displayType"],
                       } satisfies CTAWrapperProps,

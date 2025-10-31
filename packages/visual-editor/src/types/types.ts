@@ -20,15 +20,8 @@ export type EnhancedTranslatableCTA = TranslatableCTA & {
    * getDirections is a button that opens a map based on the coordinate field
    * presetImage uses a preset image such as app store or food delivery logos for the button
    * @defaultValue "textAndLink"
-   * @ai If the CTA is for getting directions, use "getDirections" and provide the coordinate field.
-   * If the CTA is for app downloads or food delivery, use "presetImage" and select the appropriate presetImageType. Otherwise, use "textAndLink".
    */
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
-  coordinate?: {
-    latitude: number;
-    longitude: number;
-  };
-  presetImageType?: PresetImageType;
 };
 
 /** Preset image types for CTA buttons - app store or food delivery logos */

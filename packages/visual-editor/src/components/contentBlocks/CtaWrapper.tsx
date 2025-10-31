@@ -40,7 +40,7 @@ export interface CTAWrapperProps {
     /** The visual style of the CTA. */
     variant: CTAVariant;
     /** The image to use if the CTA is set to preset image */
-    presetImage?: PresetImageType;
+    presetImage: PresetImageType;
   };
 
   /** Additional CSS classes to apply to the CTA. */
@@ -86,6 +86,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
           typeLabel: msg("fields.ctaType", "CTA Type"),
           fieldLabel: msg("fields.ctaField", "CTA Field"),
           options: ctaTypeOptions(),
+          optionValueToEntityFieldType: {
+            presetImage: "type.cta",
+            textAndLink: "type.cta",
+          },
         },
       }),
     },
@@ -116,6 +120,8 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     ? parentData.cta
     : resolveComponentData(data.entityField, i18n.language, streamDocument);
   const { ctaType } = getCTAType(data.entityField);
+
+  console.log("cta", cta, ctaType, styles.presetImage);
 
   let combinedClassName = className;
   if (parentStyles?.classNameFn) {
@@ -149,7 +155,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
           ctaType={ctaType}
-          presetImageType={cta.presetImageType}
+          presetImageType={styles.presetImage}
           variant={styles.variant}
           className={combinedClassName}
           eventName={eventName}
@@ -174,8 +180,8 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
           label: "Call to Action",
           link: "#",
           linkType: "URL",
-          ctaType: "textAndLink",
         },
+        selectedType: "textAndLink",
       },
     },
     styles: {
@@ -186,20 +192,14 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
 
-    // if (data.props.data.entityField.selectedType === "type.coordinate") {
-    //   data.props.styles.displayType = "textAndLink";
-    //   setDeep(updatedFields, "styles.objectFields.displayType.visible", false);
-    // } else {
-    //   setDeep(updatedFields, "styles.objectFields.displayType.visible", true);
-    // }
-
-    // if (data.props.styles.displayType === "presetImage") {
-    //   setDeep(updatedFields, "styles.objectFields.variant.visible", false);
-    //   setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);
-    // } else {
-    //   setDeep(updatedFields, "styles.objectFields.variant.visible", true);
-    //   setDeep(updatedFields, "styles.objectFields.presetImage.visible", false);
-    // }
+    const ctaType = getCTAType(data.props.data.entityField).ctaType;
+    if (ctaType === "presetImage") {
+      setDeep(updatedFields, "styles.objectFields.variant.visible", false);
+      setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);
+    } else {
+      setDeep(updatedFields, "styles.objectFields.variant.visible", true);
+      setDeep(updatedFields, "styles.objectFields.presetImage.visible", false);
+    }
 
     // If the show field exists, make it visible in the editor
     if (data.props.data.show !== undefined) {

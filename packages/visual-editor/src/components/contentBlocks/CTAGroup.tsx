@@ -1,15 +1,20 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   msg,
   resolveComponentData,
   CTA,
   PresetImageType,
+  YextField,
+  pt,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
 import { CTAVariant } from "../atoms/cta.tsx";
-import { getCTAType } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import {
+  ctaTypeOptions,
+  getCTAType,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 // TODO: re-enable CTA Group
 
@@ -40,39 +45,35 @@ export interface CTAGroupProps {
   buttons: BasicCTAProps[];
 }
 
-// const ctaGroupFields: Fields<CTAGroupProps> = {
-//   buttons: YextField(msg("fields.buttons", "Buttons"), {
-//     type: "array",
-//     max: 9,
-//     defaultItemProps: defaultButton,
-//     arrayFields: {
-//       entityField: YextField(msg("fields.cta", "CTA"), {
-//         type: "entityField",
-//         filter: {
-//           types: ["type.cta"],
-//         },
-//         typeSelectorConfig: {
-//           typeLabel: msg("fields.ctaType", "CTA Type"),
-//           fieldLabel: msg("fields.ctaField", "CTA Field"),
-//           options: ctaTypeOptions(),
-//         },
-//       }),
-//       displayType: YextField(msg("fields.displayType", "Display Type"), {
-//         type: "select",
-//         options: "CTA_DISPLAY_TYPE",
-//       }),
-//       variant: YextField(msg("fields.variant", "Variant"), {
-//         type: "radio",
-//         options: "CTA_VARIANT",
-//       }),
-//       presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
-//         type: "select",
-//         options: "PRESET_IMAGE",
-//       }),
-//     },
-//     getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
-//   }),
-// };
+const ctaGroupFields: Fields<CTAGroupProps> = {
+  buttons: YextField(msg("fields.buttons", "Buttons"), {
+    type: "array",
+    max: 9,
+    defaultItemProps: defaultButton,
+    arrayFields: {
+      entityField: YextField(msg("fields.cta", "CTA"), {
+        type: "entityField",
+        filter: {
+          types: ["type.cta"],
+        },
+        typeSelectorConfig: {
+          typeLabel: msg("fields.ctaType", "CTA Type"),
+          fieldLabel: msg("fields.ctaField", "CTA Field"),
+          options: ctaTypeOptions(),
+        },
+      }),
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
+      presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
+        type: "select",
+        options: "PRESET_IMAGE",
+      }),
+    },
+    getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
+  }),
+};
 
 const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
   const streamDocument = useDocument();
@@ -111,7 +112,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                 linkType={cta.linkType}
                 variant={button.variant}
                 ctaType={ctaType}
-                presetImageType={cta.presetImageType}
+                presetImageType={button.presetImage}
                 className="truncate w-full"
               />
             </div>
@@ -124,7 +125,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
 
 export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   label: msg("components.ctaGroup", "CTA Group"),
-  // fields: ctaGroupFields,
+  fields: ctaGroupFields,
   defaultProps: {
     buttons: [defaultButton, defaultButton],
   },
