@@ -81,6 +81,38 @@ import {
   TestimonialCardProps,
 } from "../pageSections/TestimonialSection/TestimonialCard.tsx";
 import {
+  FooterLogoSlot,
+  FooterLogoSlotProps,
+} from "../footer/FooterLogoSlot.tsx";
+import {
+  FooterSocialLinksSlot,
+  FooterSocialLinksSlotProps,
+} from "../footer/FooterSocialLinksSlot.tsx";
+import {
+  FooterUtilityImagesSlot,
+  FooterUtilityImagesSlotProps,
+} from "../footer/FooterUtilityImagesSlot.tsx";
+import {
+  FooterLinksSlot,
+  FooterLinksSlotProps,
+} from "../footer/FooterLinksSlot.tsx";
+import {
+  FooterExpandedLinkSectionSlot,
+  FooterExpandedLinkSectionSlotProps,
+} from "../footer/FooterExpandedLinkSectionSlot.tsx";
+import {
+  FooterExpandedLinksWrapper,
+  FooterExpandedLinksWrapperProps,
+} from "../footer/FooterExpandedLinksWrapper.tsx";
+import {
+  CopyrightMessageSlot,
+  CopyrightMessageSlotProps,
+} from "../footer/CopyrightMessageSlot.tsx";
+import {
+  SecondaryFooterSlot,
+  SecondaryFooterSlotProps,
+} from "../footer/SecondaryFooterSlot.tsx";
+import {
   DirectoryCard,
   DirectoryCardProps,
 } from "../directory/DirectoryCard.tsx";
@@ -107,6 +139,7 @@ export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
   BreadcrumbsSlot: BreadcrumbsSectionProps;
   BodyTextSlot: BodyTextProps;
+  CopyrightMessageSlot: CopyrightMessageSlotProps;
   CTASlot: CTAWrapperProps;
   DirectoryCard: DirectoryCardProps;
   DirectoryGrid: DirectoryGridProps;
@@ -115,6 +148,12 @@ export interface SlotsCategoryProps {
   EventCardsWrapper: EventCardsWrapperProps;
   FAQsWrapperSlot: FAQsWrapperSlotProps;
   FAQSlot: FAQSlotProps;
+  FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
+  FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
+  FooterLinksSlot: FooterLinksSlotProps;
+  FooterLogoSlot: FooterLogoSlotProps;
+  FooterSocialLinksSlot: FooterSocialLinksSlotProps;
+  FooterUtilityImagesSlot: FooterUtilityImagesSlotProps;
   HeaderLinks: HeaderLinksProps;
   HeadingTextSlot: HeadingTextProps;
   HeroImageSlot: HeroImageProps;
@@ -130,6 +169,7 @@ export interface SlotsCategoryProps {
   PrimaryHeaderSlot: PrimaryHeaderSlotProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
+  SecondaryFooterSlot: SecondaryFooterSlotProps;
   SecondaryHeaderSlot: SecondaryHeaderSlotProps;
   ServicesListSlot: TextListProps;
   TeamCard: TeamCardProps;
@@ -161,6 +201,10 @@ export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
   BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
+  CopyrightMessageSlot: {
+    ...CopyrightMessageSlot,
+    permissions: lockedPermissions,
+  },
   CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
   DirectoryCard: { ...DirectoryCard, permissions: lockedPermissions },
   DirectoryGrid: { ...DirectoryGrid, permissions: lockedPermissions },
@@ -170,6 +214,24 @@ export const SlotsCategoryComponents = {
   ...ExpandedHeaderComponents,
   FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
   FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
+  FooterExpandedLinkSectionSlot: {
+    ...FooterExpandedLinkSectionSlot,
+    permissions: lockedPermissions,
+  },
+  FooterExpandedLinksWrapper: {
+    ...FooterExpandedLinksWrapper,
+    permissions: lockedPermissions,
+  },
+  FooterLinksSlot: { ...FooterLinksSlot, permissions: lockedPermissions },
+  FooterLogoSlot: { ...FooterLogoSlot, permissions: lockedPermissions },
+  FooterSocialLinksSlot: {
+    ...FooterSocialLinksSlot,
+    permissions: lockedPermissions,
+  },
+  FooterUtilityImagesSlot: {
+    ...FooterUtilityImagesSlot,
+    permissions: lockedPermissions,
+  },
   HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
   HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
   HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
@@ -195,6 +257,10 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
+  SecondaryFooterSlot: {
+    ...SecondaryFooterSlot,
+    permissions: lockedPermissions,
+  },
   ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TeamCard: { ...TeamCard, permissions: lockedPermissions },
   TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },

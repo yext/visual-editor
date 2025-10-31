@@ -80,13 +80,21 @@ interface ExpandedFooterProps {
    */
   styles: ExpandedFooterStyles;
   /** @internal */
+  slots: {
+    LogoSlot: Slot;
+    SocialLinksSlot: Slot;
+    UtilityImagesSlot: Slot;
+    PrimaryLinksWrapperSlot: Slot;
+    ExpandedLinksWrapperSlot: Slot;
+    SecondaryFooterSlot: Slot;
+  };
+  /** @internal */
   analytics: {
     scope?: string;
   };
   /**
    * Indicates which props should not be checked for missing translations.
-   * @internal
-   */
+   * @internal */
   ignoreLocaleWarning?: string[];
 }
 
@@ -520,52 +528,18 @@ interface ExpandedHeaderStyles {
 interface ExpandedFooterData {
   /** Content for the primary footer bar. */
   primaryFooter: {
-    logo: AssetImageType;
-    facebookLink: string;
-    instagramLink: string;
-    linkedInLink: string;
-    pinterestLink: string;
-    tiktokLink: string;
-    youtubeLink: string;
-    xLink: string;
-    /** Small images to show under the main logo */
-    utilityImages: {
-      image: AssetImageType;
-      linkTarget?: string;
-    }[];
     /**
      * Whether to expand the footer to show additional link categories.
      * expandedFooter: false uses a single row of footerLinks.
      * expandedFooter: true uses multiple columns of expandedFooterLinks.
      */
     expandedFooter: boolean;
-    /** Links for the default footer */
-    footerLinks: TranslatableCTA[];
-    /** Links for the expanded footer */
-    expandedFooterLinks: {
-      label: TranslatableString;
-      links: TranslatableCTA[];
-    }[];
-  };
-  /** Content for the secondary header bar. */
-  secondaryFooter: {
-    /** Whether to hide or show the secondary footer */
-    show: boolean;
-    copyrightMessage: TranslatableString;
-    secondaryFooterLinks: TranslatableCTA[];
   };
 }
 
 interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
-    backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
-    logo: ImageStylingProps;
-    utilityImages: ImageStylingProps;
-  };
-  /** Styling for the secondary footer bar. */
-  secondaryFooter: {
     backgroundColor?: BackgroundStyle;
     linksAlignment: "left" | "right";
   };
@@ -765,34 +739,6 @@ interface PageSectionProps
   outerStyle?: React.CSSProperties;
 }
 
-type AssetImageType = Omit<ImageType, "alternateText"> & {
-  alternateText?: TranslatableString;
-  assetImage?: ImageContentData;
-};
-
-/**
- * A pages-components CTA with a translatable label and link
- */
-type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
-  /** The text to display in the CTA */
-  label: TranslatableString;
-  /** The link the for the CTA */
-  link: TranslatableString;
-};
-
-/**
- * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
- */
-type TranslatableString = string | LocalizedValues;
-
-/** Props for displaying an image */
-interface ImageStylingProps {
-  /** The aspect ratio of the image */
-  aspectRatio: number;
-  width?: number;
-}
-
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 type YextEntityField<T> = {
   /** The api name of the Yext field */
@@ -821,6 +767,17 @@ type TranslatableRichText =
   | (string | RichText)
   | Record<string, string | RichText>;
 
+/**
+ * A string that can be translated for different locales.
+ * @ai This should always be the LocalizedValues type
+ */
+type TranslatableString = string | LocalizedValues;
+
+type AssetImageType = Omit<ImageType, "alternateText"> & {
+  alternateText?: TranslatableString;
+  assetImage?: ImageContentData;
+};
+
 /** Data for the PromoSection */
 type PromoSectionType = {
   /**
@@ -836,6 +793,21 @@ type PromoSectionType = {
   cta: EnhancedTranslatableCTA;
 };
 
+/**
+ * A rich text object with HTML and JSON (LexicalRichText) representations.
+ * The HTML representation is used on the live page.
+ * The JSON representation is used in the editor for rich text editing.
+ */
+type RichText = {
+  html?: string;
+  json?: string;
+};
+
+/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
+type LocalizedValues = {
+  hasLocalizedValue: "true";
+} & Record<string, string>;
+
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
   name?: string;
@@ -845,21 +817,6 @@ type ImageContentData = {
   transformations?: ImageTransformations;
   sourceUrl?: string;
   altText?: string;
-};
-
-/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
-type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
-
-/**
- * A rich text object with HTML and JSON (LexicalRichText) representations.
- * The HTML representation is used on the live page.
- * The JSON representation is used in the editor for rich text editing.
- */
-type RichText = {
-  html?: string;
-  json?: string;
 };
 
 type AssetVideo = {
@@ -914,6 +871,16 @@ type Video$1 = {
   duration: string;
   /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
   embeddedUrl: string;
+};
+
+/**
+ * A pages-components CTA with a translatable label and link
+ */
+type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
+  /** The text to display in the CTA */
+  label: TranslatableString;
+  /** The link the for the CTA */
+  link: TranslatableString;
 };
 
 type CTADisplayType = "textAndLink" | "presetImage";
