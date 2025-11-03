@@ -804,7 +804,7 @@ const LocatorInternal = ({
         return searchActions
           .executeFilterSearch(queryParam, false, [
             {
-              fieldApiName: DEFAULT_FIELD,
+              fieldApiName: LOCATION_FIELD,
               entityType: entityType,
               fetchEntities: false,
             },
