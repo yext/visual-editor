@@ -115,7 +115,7 @@ export const testimonialsSectionSlots: Migration = {
                             field: props.data.testimonials.field,
                             date: testimonial.contributionDate,
                           },
-                    } satisfies TimestampProps,
+                    } satisfies WithId<TimestampProps>,
                   },
                 ],
               },
