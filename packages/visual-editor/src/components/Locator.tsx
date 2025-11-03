@@ -28,12 +28,12 @@ import {
   Matcher,
   provideHeadless,
   Result,
+  NearFilterValue,
   SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
 } from "@yext/search-headless-react";
-import { NearFilterValue } from "@yext/search-core";
 import * as React from "react";
 import {
   Background,
