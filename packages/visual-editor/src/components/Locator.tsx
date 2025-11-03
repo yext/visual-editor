@@ -23,16 +23,17 @@ import {
   AppliedFilters,
 } from "@yext/search-ui-react";
 import {
+  FilterSearchResponse,
   FieldValueStaticFilter,
   Matcher,
   provideHeadless,
   Result,
+  NearFilterValue,
   SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
 } from "@yext/search-headless-react";
-import { NearFilterValue } from "@yext/search-core";
 import * as React from "react";
 import {
   Background,
@@ -65,6 +66,7 @@ import {
 } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
 import { useCollapse } from "react-collapsed";
+import { getValueFromQueryString } from "../utils/urlQueryString";
 
 const LOCATION_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -72,6 +74,7 @@ const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New Yor
 const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
 const MILES_TO_METERS = 1609.34;
+const INITIAL_LOCATION_KEY = "initialLocation";
 
 // Keep only digits and at most one leading plus for tel: links.
 // If the input already starts with "tel:", return it as-is.
@@ -591,6 +594,12 @@ const LocatorInternal = ({
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
+  const queryParamString =
+    typeof window === "undefined" ? "" : window.location.search;
+  const initialLocationParam = getValueFromQueryString(
+    INITIAL_LOCATION_KEY,
+    queryParamString
+  );
 
   const iframe =
     typeof document === "undefined"
@@ -666,13 +675,15 @@ const LocatorInternal = ({
   React.useEffect(() => {
     searchActions.setFacetAllowList(selectedFacets);
   }, [searchActions, selectedFacets]);
+
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
+    const newDisplayName = params.newDisplayName;
     const filterValue = params.newFilter.value as NearFilterValue;
     const locationFilter: SelectableStaticFilter = {
-      displayName: params.newDisplayName,
+      displayName: newDisplayName,
       selected: true,
       filter: {
         kind: "fieldValue",
@@ -761,10 +772,79 @@ const LocatorInternal = ({
     React.useState<number>(DEFAULT_RADIUS_MILES);
 
   React.useEffect(() => {
-    let centerCoords = DEFAULT_MAP_CENTER;
-    let displayName: string | undefined;
-    getUserLocation()
-      .then(async (location) => {
+    const resolveLocationAndSearch = async () => {
+      let centerCoords = DEFAULT_MAP_CENTER;
+      let displayName: string | undefined;
+      const doSearch = () => {
+        searchActions.setStaticFilters([
+          {
+            selected: true,
+            displayName,
+            filter: {
+              kind: "fieldValue",
+              fieldId: "builtin.location",
+              value: {
+                lat: centerCoords[1],
+                lng: centerCoords[0],
+                radius: selectedDistanceMiles * MILES_TO_METERS,
+              },
+              matcher: Matcher.Near,
+            },
+          },
+        ]);
+        searchActions.executeVerticalQuery();
+        setSearchState("loading");
+        setMapProps((prev) => ({ ...prev, centerCoords }));
+        setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+      };
+
+      const foundStartingLocationFromQueryParam = async (
+        queryParam: string
+      ): Promise<boolean> => {
+        return searchActions
+          .executeFilterSearch(queryParam, false, [
+            {
+              fieldApiName: LOCATION_FIELD,
+              entityType: entityType,
+              fetchEntities: false,
+            },
+          ])
+          .then((response: FilterSearchResponse | undefined) => {
+            const firstResult = response?.sections[0]?.results[0];
+            const filterFromResult = firstResult?.filter?.value as
+              | NearFilterValue
+              | undefined;
+
+            if (
+              firstResult &&
+              firstResult.filter &&
+              filterFromResult?.lat &&
+              filterFromResult?.lng
+            ) {
+              displayName = firstResult.value;
+              centerCoords = [filterFromResult.lng, filterFromResult.lat];
+              return true;
+            }
+            return false;
+          })
+          .catch((e) => {
+            console.warn("Filter search for initial location failed:", e);
+            return false;
+          });
+      };
+
+      // 1. Check if a location could be determined from the initialLocation query parameter
+      if (
+        initialLocationParam &&
+        (await foundStartingLocationFromQueryParam(initialLocationParam))
+      ) {
+        doSearch();
+        return;
+      }
+
+      try {
+        // 2. Try to get user location via Geolocation API
+        const location = await getUserLocation();
         centerCoords = [location.coords.longitude, location.coords.latitude];
         setUserLocationRetrieved(true);
 
@@ -791,10 +871,10 @@ const LocatorInternal = ({
             }
           }
         } catch (e) {
-          console.error(e);
+          console.warn("Reverse geocoding failed:", e);
         }
-      })
-      .catch(() => {
+      } catch {
+        // 3. Fall back to mapStartingLocation prop
         try {
           if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
             centerCoords = parseMapStartingLocation(mapStartingLocation);
@@ -802,30 +882,15 @@ const LocatorInternal = ({
         } catch (e) {
           console.error(e);
         }
-      })
-      .finally(() => {
-        searchActions.setStaticFilters([
-          {
-            selected: true,
-            displayName,
-            filter: {
-              kind: "fieldValue",
-              fieldId: "builtin.location",
-              value: {
-                lat: centerCoords[1],
-                lng: centerCoords[0],
-                radius: selectedDistanceMiles * MILES_TO_METERS,
-              },
-              matcher: Matcher.Near,
-            },
-          },
-        ]);
-        searchActions.executeVerticalQuery();
-        setSearchState("loading");
-        setMapProps((prev) => ({ ...prev, centerCoords }));
-        setMapCenter(mapboxgl.LngLat.convert(centerCoords));
-      });
-  }, []);
+      } finally {
+        doSearch();
+      }
+    };
+
+    resolveLocationAndSearch().catch((e) =>
+      console.error("Failed perform search:", e)
+    );
+  }, [searchActions, mapStartingLocation, initialLocationParam]);
 
   const handleOpenNowClick = (selected: boolean) => {
     if (selected === isOpenNowSelected) {
