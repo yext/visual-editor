@@ -287,6 +287,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             }}
             onMouseDown={(e) => {
               e.stopPropagation();
+              e.preventDefault();
             }}
             onMouseUp={(e) => {
               e.stopPropagation();
@@ -295,6 +296,12 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             }}
             onPointerDown={(e) => {
               e.stopPropagation();
+              e.preventDefault();
+            }}
+            onPointerUp={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleEmptyImageClick(e as any, imageData.originalIndex);
             }}
             type="button"
             aria-label={pt("addImage", "Add Image")}
@@ -438,6 +445,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                               }}
                               onMouseDown={(e) => {
                                 e.stopPropagation();
+                                e.preventDefault();
                               }}
                               onMouseUp={(e) => {
                                 e.stopPropagation();
@@ -449,6 +457,15 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                               }}
                               onPointerDown={(e) => {
                                 e.stopPropagation();
+                                e.preventDefault();
+                              }}
+                              onPointerUp={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handleEmptyImageClick(
+                                  e as any,
+                                  imageData.originalIndex
+                                );
                               }}
                               type="button"
                               aria-label={pt("addImage", "Add Image")}

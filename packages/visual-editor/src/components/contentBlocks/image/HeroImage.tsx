@@ -134,6 +134,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
               }}
               onMouseDown={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
               }}
               onMouseUp={(e) => {
                 e.stopPropagation();
@@ -142,6 +143,12 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
               }}
               onPointerDown={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
+              }}
+              onPointerUp={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleEmptyImageClick(e as any);
               }}
               type="button"
               aria-label={pt("addImage", "Add Image")}

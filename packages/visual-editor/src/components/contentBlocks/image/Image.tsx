@@ -199,8 +199,8 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
                 handleEmptyImageClick(e);
               }}
               onMouseDown={(e) => {
-                // Don't prevent default here - let it become a click
                 e.stopPropagation();
+                e.preventDefault();
               }}
               onMouseUp={(e) => {
                 e.stopPropagation();
@@ -209,6 +209,12 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
               }}
               onPointerDown={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
+              }}
+              onPointerUp={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleEmptyImageClick(e as any);
               }}
               type="button"
               aria-label={pt("addImage", "Add Image")}
