@@ -27,6 +27,7 @@ import {
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { getRandomUnsplashImageObject } from "../../../utils/unsplashPlaceholders";
 
 export const defaultEventCardSlotData = (id?: string, index?: number) => ({
   type: "EventCard",
@@ -46,11 +47,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               image: {
                 field: "",
-                constantValue: {
-                  url: "https://placehold.co/640x360",
-                  height: 360,
-                  width: 640,
-                },
+                constantValue: getRandomUnsplashImageObject(640, 360),
                 constantValueEnabled: true,
               },
             },

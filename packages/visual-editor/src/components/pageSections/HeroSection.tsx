@@ -28,8 +28,7 @@ import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
-
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+import { getRandomUnsplashImageObject } from "../../utils/unsplashPlaceholders";
 
 export interface HeroData {
   backgroundImage: YextEntityField<ImageType | AssetImageType>;
@@ -328,11 +327,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     data: {
       backgroundImage: {
         field: "",
-        constantValue: {
-          url: PLACEHOLDER_IMAGE_URL,
-          height: 360,
-          width: 640,
-        },
+        constantValue: getRandomUnsplashImageObject(640, 360),
         constantValueEnabled: true,
       },
     },
@@ -409,11 +404,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             data: {
               image: {
                 field: "",
-                constantValue: {
-                  url: PLACEHOLDER_IMAGE_URL,
-                  height: 360,
-                  width: 640,
-                },
+                constantValue: getRandomUnsplashImageObject(640, 360),
                 constantValueEnabled: true,
               },
             },

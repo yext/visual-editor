@@ -12,14 +12,14 @@ import {
 } from "@yext/visual-editor";
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
+import { getRandomUnsplashImageObject } from "../../../utils/unsplashPlaceholders";
 
 const PLACEHOLDER_WIDTH = 1000;
 const PLACEHOLDER_HEIGHT = 570;
-const PLACEHOLDER_IMAGE_URL = `https://placehold.co/${PLACEHOLDER_WIDTH}x${PLACEHOLDER_HEIGHT}/png`;
+
+// Generate 3 random Unsplash images for the gallery
 export const PLACEHOLDER: AssetImageType = {
-  url: PLACEHOLDER_IMAGE_URL,
-  width: PLACEHOLDER_WIDTH,
-  height: PLACEHOLDER_HEIGHT,
+  ...getRandomUnsplashImageObject(PLACEHOLDER_WIDTH, PLACEHOLDER_HEIGHT),
   assetImage: {
     name: "Placeholder",
   },
@@ -147,9 +147,33 @@ export const PhotoGallerySection: ComponentConfig<{
               images: {
                 field: "",
                 constantValue: [
-                  { assetImage: PLACEHOLDER },
-                  { assetImage: PLACEHOLDER },
-                  { assetImage: PLACEHOLDER },
+                  {
+                    assetImage: {
+                      ...getRandomUnsplashImageObject(
+                        PLACEHOLDER_WIDTH,
+                        PLACEHOLDER_HEIGHT
+                      ),
+                      assetImage: { name: "Placeholder" },
+                    },
+                  },
+                  {
+                    assetImage: {
+                      ...getRandomUnsplashImageObject(
+                        PLACEHOLDER_WIDTH,
+                        PLACEHOLDER_HEIGHT
+                      ),
+                      assetImage: { name: "Placeholder" },
+                    },
+                  },
+                  {
+                    assetImage: {
+                      ...getRandomUnsplashImageObject(
+                        PLACEHOLDER_WIDTH,
+                        PLACEHOLDER_HEIGHT
+                      ),
+                      assetImage: { name: "Placeholder" },
+                    },
+                  },
                 ],
                 constantValueEnabled: true,
               },

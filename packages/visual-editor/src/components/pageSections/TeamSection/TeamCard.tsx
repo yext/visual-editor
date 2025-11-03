@@ -27,6 +27,7 @@ import {
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { defaultPerson } from "../../../internal/puck/constant-value-fields/TeamSection.tsx";
+import { getRandomUnsplashImageObject } from "../../../utils/unsplashPlaceholders";
 
 export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
   type: "TeamCard",
@@ -45,11 +46,9 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             data: {
               image: {
                 field: "",
-                constantValue: defaultPerson.headshot || {
-                  url: "https://placehold.co/80x80",
-                  height: 80,
-                  width: 80,
-                },
+                constantValue:
+                  defaultPerson.headshot ||
+                  getRandomUnsplashImageObject(80, 80),
                 constantValueEnabled: true,
               },
             },

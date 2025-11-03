@@ -33,8 +33,7 @@ import {
   getDefaultRTF,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+import { getRandomUnsplashImageObject } from "../../utils/unsplashPlaceholders";
 
 export interface PromoData {
   /**
@@ -326,11 +325,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             data: {
               image: {
                 field: "",
-                constantValue: {
-                  url: PLACEHOLDER_IMAGE_URL,
-                  height: 360,
-                  width: 640,
-                },
+                constantValue: getRandomUnsplashImageObject(640, 360),
                 constantValueEnabled: true,
               },
             },

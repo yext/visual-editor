@@ -19,9 +19,16 @@ import {
   ImgSizesByBreakpoint,
   resolveDataFromParent,
   AssetImageType,
+  themeManagerCn,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
+import { ImagePlus } from "lucide-react";
+import {
+  TARGET_ORIGINS,
+  useSendMessageToParent,
+} from "../../../internal/hooks/useMessage";
+import { Button } from "../../../internal/puck/ui/button";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -92,8 +99,104 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     ? parentData?.image
     : resolveComponentData(data.image, i18n.language, streamDocument);
 
-  if (!resolvedImage) {
-    return puck.isEditing ? <div className="h-[200px] w-full" /> : <></>;
+  const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
+    "constantValueEditorOpened",
+    TARGET_ORIGINS
+  );
+
+  // Helper function to get image URL regardless of type
+  const getImageUrl = (
+    image: ImageType | ComplexImageType | AssetImageType | undefined
+  ): string | undefined => {
+    if (!image) return undefined;
+    if ("image" in image) {
+      // ComplexImageType - url is nested in image.image.url
+      return image.image?.url;
+    }
+    // ImageType or AssetImageType (AssetImageType extends ImageType, so it has url directly)
+    return (image as ImageType | AssetImageType).url;
+  };
+
+  const imageUrl = getImageUrl(resolvedImage);
+  const isEmpty =
+    !resolvedImage ||
+    !imageUrl ||
+    (typeof imageUrl === "string" && imageUrl.trim() === "");
+
+  const handleEmptyImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // Only open asset drawer if we're in constant value mode
+    if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
+      /** Handles local development testing outside of Storm */
+      if (window.location.href.includes("http://localhost:5173")) {
+        const userInput = prompt("Enter Image URL:");
+        if (!userInput) {
+          return;
+        }
+        // This won't work directly - would need to access the onChange handler
+        // But this is just for local dev testing
+        console.log("Would set image URL to:", userInput);
+      } else {
+        /** Instructs Storm to open the image asset selector drawer */
+        const messageId = `ImageAsset-${Date.now()}`;
+        openImageAssetSelector({
+          payload: {
+            type: "ImageAsset",
+            value: data.image.constantValue as AssetImageType | undefined,
+            id: messageId,
+          },
+        });
+      }
+    }
+  };
+
+  if (isEmpty) {
+    return puck.isEditing ? (
+      <EntityField
+        displayName={pt("fields.image", "Image")}
+        fieldId={parentData ? parentData.field : data.image.field}
+        constantValueEnabled={!parentData && data.image.constantValueEnabled}
+        fullHeight
+        ref={puck.dragRef}
+      >
+        <div className="w-full h-full">
+          <div
+            className={themeManagerCn(
+              className ||
+                "max-w-full rounded-image-borderRadius w-full h-full",
+              "border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
+            )}
+            style={{
+              ...(hideWidthProp
+                ? {}
+                : styles.width
+                  ? { width: `${styles.width}px` }
+                  : {}),
+              ...(styles.aspectRatio
+                ? { aspectRatio: styles.aspectRatio }
+                : {}),
+            }}
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-400 hover:text-gray-600 hover:bg-transparent"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEmptyImageClick(e);
+              }}
+              type="button"
+              aria-label={pt("addImage", "Add Image")}
+            >
+              <ImagePlus size={24} className="stroke-2" />
+            </Button>
+          </div>
+        </div>
+      </EntityField>
+    ) : (
+      <></>
+    );
   }
 
   const transformedSizes = imgSizesHelper(sizes, `${styles.width}px`);
