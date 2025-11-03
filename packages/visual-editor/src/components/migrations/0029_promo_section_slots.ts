@@ -28,7 +28,7 @@ export const promoSectionSlots: Migration = {
       const isVideo =
         !constantValueEnabled &&
         !constantValueOverride.image &&
-        constantValue?.image.video;
+        constantValue?.image?.video;
 
       const imageStyle = props.styles.image;
       const headingStyle = props.styles.heading;
