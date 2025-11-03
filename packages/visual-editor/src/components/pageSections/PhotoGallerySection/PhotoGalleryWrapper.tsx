@@ -215,12 +215,25 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     }
   );
 
-  const handleEmptyImageClick = (e: React.MouseEvent, index: number) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const handleEmptyImageClick = (
+    e: React.MouseEvent | undefined,
+    index: number
+  ) => {
+    console.log("[PhotoGalleryWrapper] handleEmptyImageClick called", {
+      index,
+      constantValueEnabled: data.images.constantValueEnabled,
+      isEditing: puck?.isEditing,
+      eventTarget: e?.target,
+    });
+
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
 
     if (data.images.constantValueEnabled && puck?.isEditing) {
       if (window.location.href.includes("http://localhost:5173")) {
+        console.log("[PhotoGalleryWrapper] Local dev mode - showing prompt");
         const userInput = prompt("Enter Image URL:");
         if (!userInput) return;
         console.log("Would set image URL to:", userInput);
@@ -234,6 +247,11 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             ? (currentImageValue as { assetImage?: AssetImageTypeImport })
                 .assetImage
             : undefined;
+        console.log("[PhotoGalleryWrapper] Opening image asset selector", {
+          messageId,
+          index,
+          currentValue: assetImageValue,
+        });
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
@@ -242,6 +260,11 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
           },
         });
       }
+    } else {
+      console.log("[PhotoGalleryWrapper] Conditions not met to open drawer", {
+        constantValueEnabled: data.images.constantValueEnabled,
+        isEditing: puck?.isEditing,
+      });
     }
   };
 
@@ -259,17 +282,59 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             width: `${imageData.width}px`,
             aspectRatio: imageData.aspectRatio,
           }}
+          onClick={(e) => {
+            // Only handle clicks that aren't on the button
+            const target = e.target as HTMLElement;
+            const isButton = target.closest('button[aria-label*="Add Image"]');
+            console.log("[PhotoGalleryWrapper] Parent container clicked", {
+              target: target.tagName,
+              isButton,
+              buttonElement: isButton ? isButton.tagName : null,
+            });
+            if (isButton) {
+              // Let the button handle its own click
+              return;
+            }
+            // For clicks elsewhere, let them propagate to select the slot
+          }}
         >
           <Button
             variant="ghost"
             size="icon"
-            className="text-gray-400 hover:text-gray-600 hover:bg-transparent z-10 relative"
+            className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
+            style={{
+              position: "absolute",
+              zIndex: 100,
+              inset: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
             onClick={(e) => {
+              console.log("[PhotoGalleryWrapper] Button onClick fired", {
+                target: e.target,
+                currentTarget: e.currentTarget,
+                buttonType: e.currentTarget.type,
+                originalIndex: imageData.originalIndex,
+              });
               e.stopPropagation();
               e.preventDefault();
               handleEmptyImageClick(e, imageData.originalIndex);
             }}
             onMouseDown={(e) => {
+              console.log("[PhotoGalleryWrapper] Button onMouseDown fired");
+              e.stopPropagation();
+            }}
+            onMouseUp={(e) => {
+              console.log("[PhotoGalleryWrapper] Button onMouseUp fired");
+              e.stopPropagation();
+              e.preventDefault();
+              // Call handler directly since onClick might be blocked
+              console.log(
+                "[PhotoGalleryWrapper] Calling handleEmptyImageClick from onMouseUp"
+              );
+              handleEmptyImageClick(e as any, imageData.originalIndex);
+            }}
+            onPointerDown={(e) => {
+              console.log("[PhotoGalleryWrapper] Button onPointerDown fired");
               e.stopPropagation();
             }}
             type="button"
@@ -332,7 +397,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                       return (
                         <Slide index={idx} key={idx}>
                           <div className="flex justify-center">
-                            {renderImageOrEmpty(imageData, idx)}
+                            {renderImageOrEmpty(imageData)}
                           </div>
                         </Slide>
                       );
@@ -384,12 +449,49 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                               width: "100%",
                               aspectRatio: imageData.aspectRatio,
                             }}
+                            onClick={(e) => {
+                              // Only handle clicks that aren't on the button
+                              const target = e.target as HTMLElement;
+                              const isButton = target.closest(
+                                'button[aria-label*="Add Image"]'
+                              );
+                              console.log(
+                                "[PhotoGalleryWrapper Mobile] Parent container clicked",
+                                {
+                                  target: target.tagName,
+                                  isButton,
+                                  buttonElement: isButton
+                                    ? isButton.tagName
+                                    : null,
+                                }
+                              );
+                              if (isButton) {
+                                // Let the button handle its own click
+                                return;
+                              }
+                              // For clicks elsewhere, let them propagate to select the slot
+                            }}
                           >
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="text-gray-400 hover:text-gray-600 hover:bg-transparent z-10 relative"
+                              className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
+                              style={{
+                                position: "absolute",
+                                zIndex: 100,
+                                inset: "50%",
+                                transform: "translate(-50%, -50%)",
+                              }}
                               onClick={(e) => {
+                                console.log(
+                                  "[PhotoGalleryWrapper Mobile] Button onClick fired",
+                                  {
+                                    target: e.target,
+                                    currentTarget: e.currentTarget,
+                                    buttonType: e.currentTarget.type,
+                                    originalIndex: imageData.originalIndex,
+                                  }
+                                );
                                 e.stopPropagation();
                                 e.preventDefault();
                                 handleEmptyImageClick(
@@ -398,6 +500,30 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                                 );
                               }}
                               onMouseDown={(e) => {
+                                console.log(
+                                  "[PhotoGalleryWrapper Mobile] Button onMouseDown fired"
+                                );
+                                e.stopPropagation();
+                              }}
+                              onMouseUp={(e) => {
+                                console.log(
+                                  "[PhotoGalleryWrapper Mobile] Button onMouseUp fired"
+                                );
+                                e.stopPropagation();
+                                e.preventDefault();
+                                // Call handler directly since onClick might be blocked
+                                console.log(
+                                  "[PhotoGalleryWrapper Mobile] Calling handleEmptyImageClick from onMouseUp"
+                                );
+                                handleEmptyImageClick(
+                                  e as any,
+                                  imageData.originalIndex
+                                );
+                              }}
+                              onPointerDown={(e) => {
+                                console.log(
+                                  "[PhotoGalleryWrapper Mobile] Button onPointerDown fired"
+                                );
                                 e.stopPropagation();
                               }}
                               type="button"
