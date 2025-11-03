@@ -811,14 +811,15 @@ const LocatorInternal = ({
           ])
           .then((response: FilterSearchResponse | undefined) => {
             const firstResult = response?.sections[0]?.results[0];
-            const filterFromResult = firstResult?.filter
-              ?.value as NearFilterValue;
+            const filterFromResult = firstResult?.filter?.value as
+              | NearFilterValue
+              | undefined;
 
             if (
               firstResult &&
               firstResult.filter &&
-              filterFromResult.lat &&
-              filterFromResult.lng
+              filterFromResult?.lat &&
+              filterFromResult?.lng
             ) {
               displayName = firstResult.value;
               centerCoords = [filterFromResult.lng, filterFromResult.lat];
@@ -870,7 +871,7 @@ const LocatorInternal = ({
             }
           }
         } catch (e) {
-          console.error("Reverse geocoding failed:", e);
+          console.warn("Reverse geocoding failed:", e);
         }
       } catch {
         // 3. Fall back to mapStartingLocation prop
@@ -889,7 +890,7 @@ const LocatorInternal = ({
     resolveLocationAndSearch().catch((e) =>
       console.error("Failed perform search:", e)
     );
-  }, [initialLocationParam]);
+  }, [searchActions, mapStartingLocation, initialLocationParam]);
 
   const handleOpenNowClick = (selected: boolean) => {
     if (selected === isOpenNowSelected) {
