@@ -16,11 +16,12 @@ export const productSectionSlots: Migration = {
   ProductSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const constantValueEnabled: boolean = props.data.constantValueEnabled;
+      const constantValueEnabled: boolean =
+        props.data.products.constantValueEnabled;
       const products = resolveYextEntityField(
         streamDocument,
         props.data.products as YextEntityField<ProductSectionType>,
-        streamDocument?.locale
+        streamDocument?.locale || "en"
       )?.products;
 
       const cards =
@@ -39,11 +40,12 @@ export const productSectionSlots: Migration = {
                 streamDocument
               )
             : "";
+          const cardId = `${props.id}-Card-${i}`;
 
           return {
             type: "ProductCard",
             props: {
-              id: `${props.id}-Card-${i}`,
+              id: cardId,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },
@@ -52,6 +54,7 @@ export const productSectionSlots: Migration = {
                   {
                     type: "ImageSlot",
                     props: {
+                      id: `${cardId}-ImageSlot`,
                       data: {
                         image: {
                           field: "",
@@ -78,13 +81,14 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             image: product.image,
                           },
-                    } satisfies ImageWrapperProps,
+                    } satisfies WithId<ImageWrapperProps>,
                   },
                 ],
                 CategorySlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-CategorySlot`,
                       data: {
                         text: {
                           field: "",
@@ -99,13 +103,14 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             richText: product.category,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 TitleSlot: [
                   {
                     type: "HeadingTextSlot",
                     props: {
+                      id: `${cardId}-TitleSlot`,
                       data: {
                         text: {
                           field: "",
@@ -123,13 +128,14 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             text: resolvedName,
                           },
-                    } satisfies HeadingTextProps,
+                    } satisfies WithId<HeadingTextProps>,
                   },
                 ],
                 DescriptionSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-DescriptionSlot`,
                       data: {
                         text: {
                           field: "",
@@ -144,13 +150,14 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             richText: product.description,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 CTASlot: [
                   {
                     type: "CTASlot",
                     props: {
+                      id: `${cardId}-CTASlot`,
                       data: {
                         entityField: {
                           field: "",
@@ -174,7 +181,7 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             cta: product.cta,
                           },
-                    } satisfies CTAWrapperProps,
+                    } satisfies WithId<CTAWrapperProps>,
                   },
                 ],
               },
@@ -203,6 +210,7 @@ export const productSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HeadingSlot`,
                 data: {
                   text: {
                     field: props.data.heading.field,
@@ -212,13 +220,14 @@ export const productSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           CardsWrapperSlot: [
             {
               type: "ProductCardsWrapper",
               props: {
+                id: `${props.id}-CardsWrapperSlot`,
                 data: {
                   field: props.data.products.field,
                   constantValueEnabled:
@@ -228,7 +237,7 @@ export const productSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies ProductCardsWrapperProps,
+              } satisfies WithId<ProductCardsWrapperProps>,
             },
           ],
         },

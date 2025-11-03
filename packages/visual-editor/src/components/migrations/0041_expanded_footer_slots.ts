@@ -52,6 +52,7 @@ export const expandedFooterSlots: Migration = {
             {
               type: "FooterLogoSlot",
               props: {
+                id: `${props.id}-FooterLogoSlot`,
                 data: {
                   image: {
                     field: "",
@@ -75,6 +76,7 @@ export const expandedFooterSlots: Migration = {
             {
               type: "FooterSocialLinksSlot",
               props: {
+                id: `${props.id}-FooterSocialLinksSlot`,
                 data: {
                   xLink: xLink || "",
                   facebookLink: facebookLink || "",
@@ -91,6 +93,7 @@ export const expandedFooterSlots: Migration = {
             {
               type: "FooterUtilityImagesSlot",
               props: {
+                id: `${props.id}-FooterUtilityImagesSlot`,
                 data: {
                   utilityImages: utilityImages || [],
                 },
@@ -105,6 +108,7 @@ export const expandedFooterSlots: Migration = {
             {
               type: "FooterLinksSlot",
               props: {
+                id: `${props.id}-FooterPrimaryLinksSlot`,
                 data: {
                   links: footerLinks || [],
                 },
@@ -117,6 +121,7 @@ export const expandedFooterSlots: Migration = {
             {
               type: "FooterExpandedLinksWrapper",
               props: {
+                id: `${props.id}-FooterExpandedLinksWrapper`,
                 data: {
                   sections: expandedFooterLinks || [],
                 },
@@ -127,6 +132,7 @@ export const expandedFooterSlots: Migration = {
             {
               type: "SecondaryFooterSlot",
               props: {
+                id: `${props.id}-SecondaryFooterSlot`,
                 data: {
                   show: show ?? true,
                 },
@@ -140,6 +146,7 @@ export const expandedFooterSlots: Migration = {
                     {
                       type: "FooterLinksSlot",
                       props: {
+                        id: `${props.id}-FooterSecondaryLinksSlot`,
                         data: {
                           links: secondaryFooterLinks || [],
                         },
@@ -153,6 +160,7 @@ export const expandedFooterSlots: Migration = {
                     {
                       type: "CopyrightMessageSlot",
                       props: {
+                        id: `${props.id}-CopyrightSlot`,
                         data: {
                           text: {
                             field: "",

@@ -29,6 +29,7 @@ export const videoSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-SectionHeadingSlot`,
                 data: {
                   text: headingText,
                 },
@@ -40,6 +41,7 @@ export const videoSectionSlots: Migration = {
             {
               type: "VideoSlot",
               props: {
+                id: `${props.id}-VideoSlot`,
                 data: {
                   assetVideo,
                 },

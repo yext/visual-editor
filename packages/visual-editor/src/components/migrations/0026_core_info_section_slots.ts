@@ -93,6 +93,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-InfoHeadingSlot`,
                 data: {
                   text: infoHeadingText,
                 },
@@ -107,6 +108,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "AddressSlot",
               props: {
+                id: `${props.id}-AddressSlot`,
                 data: {
                   address: address,
                 },
@@ -120,6 +122,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "PhoneNumbersSlot",
               props: {
+                id: `${props.id}-PhoneNumbersSlot`,
                 data: {
                   phoneNumbers: phoneNumbers,
                 },
@@ -131,6 +134,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "EmailsSlot",
               props: {
+                id: `${props.id}-EmailsSlot`,
                 data: {
                   list: emails,
                 },
@@ -144,6 +148,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HoursHeadingSlot`,
                 data: {
                   text: hoursHeadingText,
                 },
@@ -158,6 +163,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "HoursTableSlot",
               props: {
+                id: `${props.id}-HoursTableSlot`,
                 data: {
                   hours: hours,
                 },
@@ -171,6 +177,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-ServicesHeadingSlot`,
                 data: {
                   text: servicesHeadingText,
                 },
@@ -185,6 +192,7 @@ export const coreInfoSectionSlots: Migration = {
             {
               type: "ServicesListSlot",
               props: {
+                id: `${props.id}-ServicesListSlot`,
                 list: services,
               },
             },

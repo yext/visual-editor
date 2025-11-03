@@ -7,6 +7,7 @@ import { BodyTextProps } from "../contentBlocks/BodyText.tsx";
 import { VideoProps } from "../contentBlocks/Video.tsx";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { WithId } from "@measured/puck";
 
 export const promoSectionSlots: Migration = {
   PromoSection: {
@@ -61,6 +62,7 @@ export const promoSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HeadingSlot`,
                 data: {
                   text: {
                     field,
@@ -75,13 +77,14 @@ export const promoSectionSlots: Migration = {
                       field,
                     }
                   : undefined,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           DescriptionSlot: [
             {
               type: "BodyTextSlot",
               props: {
+                id: `${props.id}-DescriptionSlot`,
                 data: {
                   text: {
                     field,
@@ -99,7 +102,7 @@ export const promoSectionSlots: Migration = {
                       field,
                     }
                   : undefined,
-              } satisfies BodyTextProps,
+              } satisfies WithId<BodyTextProps>,
             },
           ],
           VideoSlot: isVideo
@@ -107,13 +110,14 @@ export const promoSectionSlots: Migration = {
                 {
                   type: "VideoSlot",
                   props: {
+                    id: `${props.id}-VideoSlot`,
                     data: {
                       assetVideo:
                         "video" in constantValue.image
                           ? constantValue.image
                           : {},
                     },
-                  } satisfies VideoProps,
+                  } satisfies WithId<VideoProps>,
                 },
               ]
             : [],
@@ -123,6 +127,7 @@ export const promoSectionSlots: Migration = {
                 {
                   type: "ImageSlot",
                   props: {
+                    id: `${props.id}-ImageSlot`,
                     data: {
                       image: {
                         field,
@@ -156,13 +161,14 @@ export const promoSectionSlots: Migration = {
                       md: "min(width, 450px)",
                       lg: "width",
                     },
-                  } satisfies ImageWrapperProps,
+                  } satisfies WithId<ImageWrapperProps>,
                 },
               ],
           CTASlot: [
             {
               type: "CTASlot",
               props: {
+                id: `${props.id}-CTASlot`,
                 data: {
                   entityField: {
                     field,
@@ -190,7 +196,7 @@ export const promoSectionSlots: Migration = {
                     }
                   : undefined,
                 eventName: "cta",
-              } satisfies CTAWrapperProps,
+              } satisfies WithId<CTAWrapperProps>,
             },
           ],
         },
