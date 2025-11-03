@@ -590,6 +590,19 @@ The props for the Phone component
 
 ---
 
+## PhoneList
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                           | Description | Default |
+| :------- | :--------------------------------------------- | :---------- | :------ |
+| `data`   | `{ phoneNumbers: Array<PhoneProps["data"]>; }` |             |         |
+| `styles` | `PhoneProps["styles"]`                         |             |         |
+
+---
+
 ## PhotoGallerySection
 
 The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation. Available on Location templates.
