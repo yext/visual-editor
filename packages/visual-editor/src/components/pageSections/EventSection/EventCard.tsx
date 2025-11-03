@@ -348,6 +348,13 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
+  console.log(
+    showImage,
+    showDescription,
+    showDateTime,
+    showDescription,
+    showCTA
+  );
   return (
     <Background
       background={styles.backgroundColor}
@@ -442,7 +449,12 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
             ))
     );
     const showDateTime = Boolean(
-      dateTimeSlotProps?.parentData?.date || dateTimeSlotProps?.data?.date
+      dateTimeSlotProps?.parentData?.date?.trim() ||
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          dateTimeSlotProps.data.date,
+          i18nComponentsInstance.language || "en"
+        )?.trim()
     );
     const showCTA = Boolean(
       ctaSlotProps &&
