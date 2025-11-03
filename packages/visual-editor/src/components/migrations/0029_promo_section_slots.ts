@@ -28,7 +28,7 @@ export const promoSectionSlots: Migration = {
       const isVideo =
         !constantValueEnabled &&
         !constantValueOverride.image &&
-        constantValue?.image.video;
+        constantValue?.image?.video;
 
       const imageStyle = props.styles.image;
       const headingStyle = props.styles.heading;
@@ -105,65 +105,61 @@ export const promoSectionSlots: Migration = {
               } satisfies WithId<BodyTextProps>,
             },
           ],
-          VideoSlot: isVideo
-            ? [
-                {
-                  type: "VideoSlot",
-                  props: {
-                    id: `${props.id}-VideoSlot`,
-                    data: {
-                      assetVideo:
-                        "video" in constantValue.image
-                          ? constantValue.image
-                          : {},
-                    },
-                  } satisfies WithId<VideoProps>,
+          VideoSlot: [
+            {
+              type: "VideoSlot",
+              props: {
+                id: `${props.id}-VideoSlot`,
+                data: {
+                  assetVideo:
+                    isVideo && "video" in constantValue.image
+                      ? constantValue.image
+                      : {},
                 },
-              ]
-            : [],
-          ImageSlot: isVideo
-            ? []
-            : [
-                {
-                  type: "ImageSlot",
-                  props: {
-                    id: `${props.id}-ImageSlot`,
-                    data: {
-                      image: {
-                        field,
-                        constantValue: constantValue.image ?? {},
-                        constantValueEnabled:
-                          constantValueOverride.image ?? false,
-                      },
-                    },
-                    styles: {
-                      aspectRatio: imageStyle?.aspectRatio ?? "1.78",
-                      width: imageStyle?.width ?? 640,
-                    },
-                    className:
-                      "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
-                    parentData: !constantValueOverride.image
-                      ? {
-                          field,
-                          image:
-                            resolvedPromo?.image &&
-                            !("video" in resolvedPromo.image)
-                              ? resolvedPromo.image
-                              : {
-                                  url: "https://placehold.co/640x360",
-                                  height: 360,
-                                  width: 640,
-                                },
-                        }
-                      : undefined,
-                    sizes: {
-                      base: "calc(100vw - 32px)",
-                      md: "min(width, 450px)",
-                      lg: "width",
-                    },
-                  } satisfies WithId<ImageWrapperProps>,
+              } satisfies WithId<VideoProps>,
+            },
+          ],
+          ImageSlot: [
+            {
+              type: "ImageSlot",
+              props: {
+                id: `${props.id}-ImageSlot`,
+                data: {
+                  image: {
+                    field: isVideo ? "" : field,
+                    constantValue: isVideo ? {} : (constantValue.image ?? {}),
+                    constantValueEnabled: constantValueOverride.image ?? false,
+                  },
                 },
-              ],
+                styles: {
+                  aspectRatio: imageStyle?.aspectRatio ?? "1.78",
+                  width: imageStyle?.width ?? 640,
+                },
+                className:
+                  "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
+                parentData: !constantValueOverride.image
+                  ? {
+                      field: isVideo ? "" : field,
+                      image:
+                        !isVideo &&
+                        resolvedPromo?.image &&
+                        !("video" in resolvedPromo.image)
+                          ? resolvedPromo.image
+                          : {
+                              url: "https://placehold.co/640x360",
+                              height: 360,
+                              width: 640,
+                            },
+                    }
+                  : undefined,
+                sizes: {
+                  base: "calc(100vw - 32px)",
+                  md: "min(width, 450px)",
+                  lg: "width",
+                },
+              } satisfies WithId<ImageWrapperProps>,
+            },
+          ],
           CTASlot: [
             {
               type: "CTASlot",
