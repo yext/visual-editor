@@ -34,7 +34,7 @@ export function getRandomUnsplashImageObject(
   height: number = 360
 ): { url: string; width: number; height: number } {
   return {
-    url: getRandomUnsplashImage(width, height),
+    url: getRandomUnsplashImage(width),
     width,
     height,
   };

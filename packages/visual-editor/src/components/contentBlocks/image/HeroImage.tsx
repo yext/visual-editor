@@ -8,24 +8,30 @@ import {
   msg,
   pt,
   imgSizesHelper,
+  AssetImageType,
+  themeManagerCn,
 } from "@yext/visual-editor";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { updateFields } from "../../pageSections/HeroSection";
 import {
   imageDefaultProps,
   ImageWrapperFields,
   ImageWrapperProps,
 } from "./Image.tsx";
+import { ImagePlus } from "lucide-react";
+import { Button } from "../../../internal/puck/ui/button";
+import {
+  TARGET_ORIGINS,
+  useSendMessageToParent,
+} from "../../../internal/hooks/useMessage";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
   variant?: "classic" | "compact" | "immersive" | "spotlight";
 }
 
-const HeroImageComponent: PuckComponent<HeroImageProps> = ({
-  data,
-  styles,
-  className,
-}: HeroImageProps) => {
+const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
+  const { data, styles, className, puck } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = resolveComponentData(
@@ -34,8 +40,95 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = ({
     streamDocument
   );
 
-  if (!resolvedImage) {
-    return <></>;
+  const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
+    "constantValueEditorOpened",
+    TARGET_ORIGINS
+  );
+
+  // Helper function to get image URL regardless of type
+  const getImageUrl = (
+    image: ImageType | ComplexImageType | AssetImageType | undefined
+  ): string | undefined => {
+    if (!image) return undefined;
+    if ("image" in image) {
+      // ComplexImageType - url is nested in image.image.url
+      return image.image?.url;
+    }
+    // ImageType or AssetImageType (AssetImageType extends ImageType, so it has url directly)
+    return (image as ImageType | AssetImageType).url;
+  };
+
+  const imageUrl = getImageUrl(resolvedImage);
+  const isEmpty =
+    !resolvedImage ||
+    !imageUrl ||
+    (typeof imageUrl === "string" && imageUrl.trim() === "");
+
+  const handleEmptyImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // Only open asset drawer if we're in constant value mode
+    if (data.image.constantValueEnabled && puck?.isEditing) {
+      /** Handles local development testing outside of Storm */
+      if (window.location.href.includes("http://localhost:5173")) {
+        const userInput = prompt("Enter Image URL:");
+        if (!userInput) {
+          return;
+        }
+        console.log("Would set image URL to:", userInput);
+      } else {
+        /** Instructs Storm to open the image asset selector drawer */
+        const messageId = `ImageAsset-${Date.now()}`;
+        openImageAssetSelector({
+          payload: {
+            type: "ImageAsset",
+            value: data.image.constantValue as AssetImageType | undefined,
+            id: messageId,
+          },
+        });
+      }
+    }
+  };
+
+  if (isEmpty) {
+    return puck?.isEditing ? (
+      <EntityField
+        displayName={pt("fields.image", "Image")}
+        fieldId={data.image.field}
+        constantValueEnabled={data.image.constantValueEnabled}
+        fullHeight={true}
+      >
+        <div className="w-full h-full">
+          <div
+            className={themeManagerCn(
+              className ||
+                "max-w-full rounded-image-borderRadius w-full h-full",
+              "border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
+            )}
+            style={
+              styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : {}
+            }
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-400 hover:text-gray-600 hover:bg-transparent z-10"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleEmptyImageClick(e);
+              }}
+              type="button"
+              aria-label={pt("addImage", "Add Image")}
+            >
+              <ImagePlus size={24} className="stroke-2" />
+            </Button>
+          </div>
+        </div>
+      </EntityField>
+    ) : (
+      <></>
+    );
   }
 
   return (

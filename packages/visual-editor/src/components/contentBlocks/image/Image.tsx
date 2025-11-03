@@ -181,10 +181,14 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
             <Button
               variant="ghost"
               size="icon"
-              className="text-gray-400 hover:text-gray-600 hover:bg-transparent"
+              className="text-gray-400 hover:text-gray-600 hover:bg-transparent z-10 relative"
               onClick={(e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 handleEmptyImageClick(e);
+              }}
+              onMouseDown={(e) => {
+                e.stopPropagation();
               }}
               type="button"
               aria-label={pt("addImage", "Add Image")}
