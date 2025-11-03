@@ -24,7 +24,7 @@ import {
   MaybeLink,
   resolveComponentData,
   Body,
-  resolveUrlTemplate,
+  resolvePageSetUrlTemplate,
   useTemplateProps,
   mergeMeta,
 } from "@yext/visual-editor";
@@ -314,7 +314,7 @@ const LocationCard = ({
   } = locationData;
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
-  const resolvedUrl = resolveUrlTemplate(
+  const resolvedUrl = resolvePageSetUrlTemplate(
     mergeMeta(locationData, streamDocument),
     relativePrefixToRoot,
     puck.metadata?.resolveUrlTemplate

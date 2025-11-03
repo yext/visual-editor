@@ -44,7 +44,7 @@ import {
   useDocument,
   YextField,
   useTemplateProps,
-  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
   mergeMeta,
   HoursStatusAtom,
 } from "@yext/visual-editor";
@@ -1112,7 +1112,7 @@ const LocationCard = React.memo(
       "TAP_TO_CALL"
     );
 
-    const resolvedUrl = resolveUrlTemplate(
+    const resolvedUrl = resolveUrlTemplateOfChild(
       mergeMeta(location, streamDocument),
       relativePrefixToRoot,
       puck.metadata?.resolveUrlTemplate
