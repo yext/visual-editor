@@ -157,9 +157,7 @@ export const testimonialsSectionSlots: Migration = {
                   field: props.data.testimonials.field,
                   constantValueEnabled:
                     props.data.testimonials.constantValueEnabled,
-                  constantValue: constantValueEnabled
-                    ? cards.map((c) => ({ id: c.props.id }))
-                    : [],
+                  constantValue: cards.map((c) => ({ id: c.props.id })),
                 },
                 slots: {
                   CardSlot: cards,
