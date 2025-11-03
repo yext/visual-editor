@@ -25,7 +25,7 @@ const defaultInsight = {
     height: 360,
     width: 640,
   },
-  name: { en: "Insight Title", hasLocalizedValue: "true" },
+  name: { en: "Article Name", hasLocalizedValue: "true" },
   category: {
     en: getDefaultRTF("Category"),
     hasLocalizedValue: "true",
