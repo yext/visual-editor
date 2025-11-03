@@ -54,7 +54,13 @@ import {
   HoursStatusAtom,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
-import { Address, AddressType, HoursType } from "@yext/pages-components";
+import {
+  Address,
+  AddressType,
+  getDirections,
+  HoursType,
+  ListingType,
+} from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
   FaAngleRight,
@@ -1284,10 +1290,6 @@ const LocationCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const getGoogleMapsLink = (coordinate: Coordinate): string => {
-      return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
-    };
-
     const distanceInMiles = distance
       ? (distance / 1609.344).toFixed(1)
       : undefined;
@@ -1323,11 +1325,24 @@ const LocationCard = React.memo(
 
     const telHref = sanitizePhoneForTelHref(location.mainPhone);
 
-    const googleMapsLink = (() => {
-      if (!location.yextDisplayCoordinate) {
-        return null;
-      }
-      return getGoogleMapsLink(location.yextDisplayCoordinate);
+    const getDirectionsLink: string | undefined = (() => {
+      const listings = location.ref_listings ?? [];
+      const listingsLink = getDirections(
+        undefined,
+        listings,
+        undefined,
+        { provider: "google" },
+        undefined
+      );
+      const coordinateLink = getDirections(
+        undefined,
+        undefined,
+        undefined,
+        { provider: "google" },
+        location.yextDisplayCoordinate
+      );
+
+      return listingsLink || coordinateLink;
     })();
 
     return (
@@ -1391,9 +1406,9 @@ const LocationCard = React.memo(
                   />
                 </div>
               )}
-              {googleMapsLink && (
+              {getDirectionsLink && (
                 <a
-                  href={googleMapsLink}
+                  href={getDirectionsLink}
                   onClick={handleGetDirectionsClick}
                   className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
                 >
@@ -1646,4 +1661,5 @@ interface Location {
   slug?: string;
   timezone: string;
   yextDisplayCoordinate?: Coordinate;
+  ref_listings?: ListingType[];
 }
