@@ -314,7 +314,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
           </div>
         </CarouselProvider>
       ) : puck?.isEditing ? (
-        <div className="h-50"></div>
+        <div className="h-24"></div>
       ) : (
         <></>
       )}

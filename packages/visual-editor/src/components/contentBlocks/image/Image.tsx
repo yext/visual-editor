@@ -92,8 +92,16 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     ? parentData?.image
     : resolveComponentData(data.image, i18n.language, streamDocument);
 
-  if (!resolvedImage) {
-    return puck.isEditing ? <div className="h-[200px] w-full" /> : <></>;
+  if (
+    !resolvedImage ||
+    ("url" in resolvedImage && !resolvedImage.url) ||
+    ("image" in resolvedImage && !resolvedImage.image.url)
+  ) {
+    return puck.isEditing ? (
+      <div className="h-[250px] w-full" ref={puck.dragRef}></div>
+    ) : (
+      <></>
+    );
   }
 
   const transformedSizes = imgSizesHelper(sizes, `${styles.width}px`);

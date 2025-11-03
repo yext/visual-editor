@@ -22,11 +22,30 @@ import {
   ImgSizesByBreakpoint,
   resolveYextEntityField,
   i18nComponentsInstance,
+  EmailsProps,
+  PhoneListProps,
   getDefaultRTF,
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { defaultPerson } from "../../../internal/puck/constant-value-fields/TeamSection.tsx";
+
+const defaultPerson = {
+  name: { en: "First Last", hasLocalizedValue: "true" },
+  title: { en: getDefaultRTF("Associate Agent"), hasLocalizedValue: "true" },
+  phoneNumber: "(202) 770-6619",
+  email: "jkelley@[company].com",
+  cta: {
+    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+    ctaType: "textAndLink",
+  },
+  headshot: {
+    url: "https://placehold.co/80x80",
+    height: 80,
+    width: 80,
+  },
+} satisfies PersonStruct;
 
 export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
   type: "TeamCard",
@@ -45,11 +64,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             data: {
               image: {
                 field: "",
-                constantValue: defaultPerson.headshot || {
-                  url: "https://placehold.co/80x80",
-                  height: 80,
-                  width: 80,
-                },
+                constantValue: defaultPerson.headshot,
                 constantValueEnabled: true,
               },
             },
@@ -69,10 +84,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             data: {
               text: {
                 field: "",
-                constantValue: defaultPerson.name || {
-                  en: "First Last",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultPerson.name,
                 constantValueEnabled: true,
               },
             },
@@ -91,10 +103,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             data: {
               text: {
                 field: "",
-                constantValue: defaultPerson.title || {
-                  en: getDefaultRTF("Associate Agent"),
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultPerson.title,
                 constantValueEnabled: true,
               },
             },
@@ -114,8 +123,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
                 {
                   number: {
                     field: "",
-                    constantValue:
-                      defaultPerson.phoneNumber || "(202) 770-6619",
+                    constantValue: defaultPerson.phoneNumber,
                     constantValueEnabled: true,
                   },
                   label: {
@@ -129,7 +137,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
               phoneFormat: "domestic",
               includePhoneHyperlink: true,
             },
-          },
+          } satisfies PhoneListProps,
         },
       ],
       EmailSlot: [
@@ -140,11 +148,14 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             data: {
               list: {
                 field: "",
-                constantValue: [defaultPerson.email || "jkelley@[company].com"],
+                constantValue: [defaultPerson.email],
                 constantValueEnabled: true,
               },
             },
-          },
+            styles: {
+              listLength: 1,
+            },
+          } satisfies EmailsProps,
         },
       ],
       CTASlot: [
@@ -155,12 +166,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             data: {
               entityField: {
                 field: "",
-                constantValue: defaultPerson.cta || {
-                  label: { en: "Visit Profile", hasLocalizedValue: "true" },
-                  link: "#",
-                  linkType: "URL",
-                  ctaType: "textAndLink",
-                },
+                constantValue: defaultPerson.cta,
                 constantValueEnabled: true,
               },
             },
@@ -339,7 +345,10 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
   }, [styles, slotStyles]);
 
   return (
-    <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
+    <div
+      ref={puck.dragRef}
+      className="flex flex-col rounded-lg overflow-hidden border bg-white h-full"
+    >
       <Background
         background={styles.backgroundColor}
         className="flex p-8 gap-6"
@@ -380,6 +389,7 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
 export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
   label: msg("components.teamCard", "Team Card"),
   fields: teamCardFields,
+  inline: true,
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,

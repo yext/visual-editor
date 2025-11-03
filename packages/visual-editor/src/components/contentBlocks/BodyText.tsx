@@ -13,6 +13,7 @@ import {
   TranslatableRichText,
   useBackground,
   resolveDataFromParent,
+  Body,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
@@ -85,7 +86,11 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
       fieldId={parentData ? parentData.field : data.text.field}
       constantValueEnabled={data.text.constantValueEnabled}
     >
-      {resolvedData}
+      {React.isValidElement(resolvedData) ? (
+        resolvedData
+      ) : (
+        <Body variant={styles.variant}>{resolvedData}</Body>
+      )}
     </EntityField>
   ) : puck.isEditing ? (
     <div className="h-[60px] min-w-[100px]" />

@@ -163,6 +163,9 @@ export const teamsSectionSlots: Migration = {
                           constantValue: person.email ? [person.email] : [],
                         },
                       },
+                      styles: {
+                        listLength: 1,
+                      },
                       eventName: `email${i}`,
                     },
                   },
