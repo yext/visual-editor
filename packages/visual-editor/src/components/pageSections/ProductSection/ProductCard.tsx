@@ -43,7 +43,7 @@ const defaultProduct = {
     hasLocalizedValue: "true",
   },
   cta: {
-    label: "Learn More",
+    label: { en: "Learn More", hasLocalizedValue: "true" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",

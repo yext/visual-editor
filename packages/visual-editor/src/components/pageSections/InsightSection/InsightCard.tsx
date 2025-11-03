@@ -38,7 +38,7 @@ const defaultInsight = {
   },
   publishTime: "2022-08-02T14:00:00",
   cta: {
-    label: "Read More",
+    label: { en: "Read More", hasLocalizedValue: "true" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",

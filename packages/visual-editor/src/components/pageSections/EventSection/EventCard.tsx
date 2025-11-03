@@ -23,6 +23,7 @@ import {
   ImgSizesByBreakpoint,
   resolveYextEntityField,
   i18nComponentsInstance,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
@@ -453,9 +454,10 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
       ctaSlotProps &&
         (ctaSlotProps.parentData
           ? ctaSlotProps.parentData.cta?.label
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              ctaSlotProps.data.entityField
+          : resolveComponentData(
+              ctaSlotProps.data.entityField,
+              i18nComponentsInstance.language || "en",
+              params.metadata.streamDocument
             )?.label)
     );
 
