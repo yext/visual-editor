@@ -7,6 +7,7 @@ import { BodyTextProps } from "../contentBlocks/BodyText.tsx";
 import { VideoProps } from "../contentBlocks/Video.tsx";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { WithId } from "@measured/puck";
 
 export const promoSectionSlots: Migration = {
   PromoSection: {
@@ -27,7 +28,7 @@ export const promoSectionSlots: Migration = {
       const isVideo =
         !constantValueEnabled &&
         !constantValueOverride.image &&
-        constantValue?.image.video;
+        constantValue?.image?.video;
 
       const imageStyle = props.styles.image;
       const headingStyle = props.styles.heading;
@@ -61,6 +62,7 @@ export const promoSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HeadingSlot`,
                 data: {
                   text: {
                     field,
@@ -75,13 +77,14 @@ export const promoSectionSlots: Migration = {
                       field,
                     }
                   : undefined,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           DescriptionSlot: [
             {
               type: "BodyTextSlot",
               props: {
+                id: `${props.id}-DescriptionSlot`,
                 data: {
                   text: {
                     field,
@@ -99,70 +102,69 @@ export const promoSectionSlots: Migration = {
                       field,
                     }
                   : undefined,
-              } satisfies BodyTextProps,
+              } satisfies WithId<BodyTextProps>,
             },
           ],
-          VideoSlot: isVideo
-            ? [
-                {
-                  type: "VideoSlot",
-                  props: {
-                    data: {
-                      assetVideo:
-                        "video" in constantValue.image
-                          ? constantValue.image
-                          : {},
-                    },
-                  } satisfies VideoProps,
+          VideoSlot: [
+            {
+              type: "VideoSlot",
+              props: {
+                id: `${props.id}-VideoSlot`,
+                data: {
+                  assetVideo:
+                    isVideo && "video" in constantValue.image
+                      ? constantValue.image
+                      : {},
                 },
-              ]
-            : [],
-          ImageSlot: isVideo
-            ? []
-            : [
-                {
-                  type: "ImageSlot",
-                  props: {
-                    data: {
-                      image: {
-                        field,
-                        constantValue: constantValue.image ?? {},
-                        constantValueEnabled:
-                          constantValueOverride.image ?? false,
-                      },
-                    },
-                    styles: {
-                      aspectRatio: imageStyle?.aspectRatio ?? "1.78",
-                      width: imageStyle?.width ?? 640,
-                    },
-                    className:
-                      "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
-                    parentData: !constantValueOverride.image
-                      ? {
-                          field,
-                          image:
-                            resolvedPromo?.image &&
-                            !("video" in resolvedPromo.image)
-                              ? resolvedPromo.image
-                              : {
-                                  url: "https://placehold.co/640x360",
-                                  height: 360,
-                                  width: 640,
-                                },
-                        }
-                      : undefined,
-                    sizes: {
-                      base: "calc(100vw - 32px)",
-                      md: "min(width, 450px)",
-                      lg: "width",
-                    },
-                  } satisfies ImageWrapperProps,
+              } satisfies WithId<VideoProps>,
+            },
+          ],
+          ImageSlot: [
+            {
+              type: "ImageSlot",
+              props: {
+                id: `${props.id}-ImageSlot`,
+                data: {
+                  image: {
+                    field: isVideo ? "" : field,
+                    constantValue: isVideo ? {} : (constantValue.image ?? {}),
+                    constantValueEnabled: constantValueOverride.image ?? false,
+                  },
                 },
-              ],
+                styles: {
+                  aspectRatio: imageStyle?.aspectRatio ?? "1.78",
+                  width: imageStyle?.width ?? 640,
+                },
+                className:
+                  "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
+                parentData: !constantValueOverride.image
+                  ? {
+                      field: isVideo ? "" : field,
+                      image:
+                        !isVideo &&
+                        resolvedPromo?.image &&
+                        !("video" in resolvedPromo.image)
+                          ? resolvedPromo.image
+                          : {
+                              url: "https://placehold.co/640x360",
+                              height: 360,
+                              width: 640,
+                            },
+                    }
+                  : undefined,
+                sizes: {
+                  base: "calc(100vw - 32px)",
+                  md: "min(width, 450px)",
+                  lg: "width",
+                },
+              } satisfies WithId<ImageWrapperProps>,
+            },
+          ],
           CTASlot: [
             {
               type: "CTASlot",
               props: {
+                id: `${props.id}-CTASlot`,
                 data: {
                   entityField: {
                     field,
@@ -190,7 +192,7 @@ export const promoSectionSlots: Migration = {
                     }
                   : undefined,
                 eventName: "cta",
-              } satisfies CTAWrapperProps,
+              } satisfies WithId<CTAWrapperProps>,
             },
           ],
         },

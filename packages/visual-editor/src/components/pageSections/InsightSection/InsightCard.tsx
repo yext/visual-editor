@@ -20,6 +20,32 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
+const defaultInsight = {
+  image: {
+    url: "https://placehold.co/640x360",
+    height: 360,
+    width: 640,
+  },
+  name: { en: "Article Name", hasLocalizedValue: "true" },
+  category: {
+    en: getDefaultRTF("Category"),
+    hasLocalizedValue: "true",
+  },
+  description: {
+    en: getDefaultRTF(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters"
+    ),
+    hasLocalizedValue: "true",
+  },
+  publishTime: "2022-08-02T14:00:00",
+  cta: {
+    label: { en: "Read More", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+    ctaType: "textAndLink",
+  },
+} satisfies InsightStruct;
+
 export const defaultInsightCardSlotData = (id?: string, index?: number) => {
   return {
     type: "InsightCard",
@@ -60,10 +86,7 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
               data: {
                 text: {
                   field: "",
-                  constantValue: {
-                    en: "Article Name",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultInsight.name,
                   constantValueEnabled: true,
                 },
               },
@@ -82,10 +105,7 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
               data: {
                 text: {
                   field: "",
-                  constantValue: {
-                    en: getDefaultRTF("Category"),
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultInsight.category,
                   constantValueEnabled: true,
                 },
               },
@@ -103,12 +123,7 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
               data: {
                 text: {
                   field: "",
-                  constantValue: {
-                    en: getDefaultRTF(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters"
-                    ),
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultInsight.description,
                   constantValueEnabled: true,
                 },
               },
@@ -126,7 +141,7 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
               data: {
                 date: {
                   field: "",
-                  constantValue: "2022-08-02T14:00:00",
+                  constantValue: defaultInsight.publishTime,
                   constantValueEnabled: true,
                 },
                 endDate: {
@@ -150,12 +165,7 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
               data: {
                 entityField: {
                   field: "",
-                  constantValue: {
-                    label: "Read More",
-                    link: "#",
-                    linkType: "URL",
-                    ctaType: "textAndLink",
-                  },
+                  constantValue: defaultInsight.cta,
                   constantValueEnabled: true,
                 },
               },
@@ -252,7 +262,7 @@ const SlotsWithSeparator: React.FC<{
 };
 
 const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
-  const { styles, slots } = props;
+  const { styles, slots, puck } = props;
   const { i18n } = useTranslation();
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: BackgroundStyle | undefined;
@@ -423,6 +433,7 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
     <Background
       className="rounded flex flex-col"
       background={mergedStyles.backgroundColor}
+      ref={puck.dragRef}
     >
       <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
       <div className="flex flex-col gap-4 p-6 flex-grow">
@@ -474,6 +485,7 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
 export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
   label: msg("slots.insightCard", "Insight Card"),
   fields: insightCardFields,
+  inline: true,
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,

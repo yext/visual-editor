@@ -55,39 +55,42 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
     resolvedEmailList = [resolvedEmailList];
   }
 
-  return resolvedEmailList?.length ? (
+  const filteredEmailList = resolvedEmailList?.length
+    ? resolvedEmailList
+        .slice(
+          0,
+          data.list.constantValueEnabled
+            ? resolvedEmailList.length
+            : Math.min(resolvedEmailList.length, styles?.listLength ?? 1)
+        )
+        .filter((e) => !!e)
+    : [];
+
+  return filteredEmailList?.length ? (
     <EntityField
       displayName={pt("fields.emailList", "Email List")}
       fieldId={data.list.field}
       constantValueEnabled={data.list.constantValueEnabled}
     >
       <ul className="list-inside flex flex-col gap-4">
-        {resolvedEmailList
-          .slice(
-            0,
-            data.list.constantValueEnabled
-              ? resolvedEmailList.length
-              : Math.min(resolvedEmailList.length, styles?.listLength ?? 1)
-          )
-          .filter((e) => !!e)
-          .map((email, index) => (
-            <li key={index} className={`flex items-center gap-3`}>
-              <Background
-                background={backgroundColors.background2.value}
-                className={`h-10 w-10 flex justify-center rounded-full items-center`}
-              >
-                <FaRegEnvelope className="w-4 h-4" />
-              </Background>
-              <CTA
-                eventName={`email${index}`}
-                link={email}
-                label={email}
-                linkType="EMAIL"
-                variant="link"
-                alwaysHideCaret={true}
-              />
-            </li>
-          ))}
+        {filteredEmailList.map((email, index) => (
+          <li key={index} className={`flex items-center gap-3`}>
+            <Background
+              background={backgroundColors.background2.value}
+              className={`h-10 w-10 flex justify-center rounded-full items-center`}
+            >
+              <FaRegEnvelope className="w-4 h-4" />
+            </Background>
+            <CTA
+              eventName={`email${index}`}
+              link={email}
+              label={email}
+              linkType="EMAIL"
+              variant="link"
+              alwaysHideCaret={true}
+            />
+          </li>
+        ))}
       </ul>
     </EntityField>
   ) : puck.isEditing ? (

@@ -26,6 +26,7 @@ export const reviewsSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-SectionHeadingSlot`,
                 data: {
                   text: {
                     field: "",
@@ -61,7 +62,7 @@ export const reviewsSectionSlots: Migration = {
                   },
                 },
                 styles: { level: 3, align: "center" },
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
         },

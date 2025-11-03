@@ -17,11 +17,12 @@ export const insightSectionSlots: Migration = {
   InsightSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const constantValueEnabled: boolean = props.data.constantValueEnabled;
+      const constantValueEnabled: boolean =
+        props.data.insights.constantValueEnabled;
       const insights = resolveYextEntityField(
         streamDocument,
         props.data.insights as YextEntityField<InsightSectionType>,
-        streamDocument.meta?.locale
+        streamDocument.meta?.locale || "en"
       )?.insights;
 
       const cards =
@@ -33,10 +34,11 @@ export const insightSectionSlots: Migration = {
                 streamDocument
               )
             : "";
+          const cardId = `${props.id}-Card-${i}`;
           return {
             type: "InsightCard",
             props: {
-              id: `${props.id}-Card-${i}`,
+              id: cardId,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },
@@ -45,6 +47,7 @@ export const insightSectionSlots: Migration = {
                   {
                     type: "ImageSlot",
                     props: {
+                      id: `${cardId}-ImageSlot`,
                       data: {
                         image: {
                           field: "",
@@ -75,13 +78,14 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             image: insight.image,
                           },
-                    } satisfies ImageWrapperProps,
+                    } satisfies WithId<ImageWrapperProps>,
                   },
                 ],
                 TitleSlot: [
                   {
                     type: "HeadingTextSlot",
                     props: {
+                      id: `${cardId}-TitleSlot`,
                       data: {
                         text: {
                           field: "",
@@ -99,13 +103,14 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             text: resolvedName,
                           },
-                    } satisfies HeadingTextProps,
+                    } satisfies WithId<HeadingTextProps>,
                   },
                 ],
                 CategorySlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-CategorySlot`,
                       data: {
                         text: {
                           field: "",
@@ -120,13 +125,14 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             richText: insight.category,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 DescriptionSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-DescriptionSlot`,
                       data: {
                         text: {
                           field: "",
@@ -141,13 +147,14 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             richText: insight.description,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 PublishTimeSlot: [
                   {
                     type: "Timestamp",
                     props: {
+                      id: `${cardId}-PublishTimeSlot`,
                       data: {
                         date: {
                           field: "",
@@ -170,13 +177,14 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             date: insight.publishTime,
                           },
-                    } satisfies TimestampProps,
+                    } satisfies WithId<TimestampProps>,
                   },
                 ],
                 CTASlot: [
                   {
                     type: "CTASlot",
                     props: {
+                      id: `${cardId}-CTASlot`,
                       data: {
                         entityField: {
                           field: "",
@@ -200,7 +208,7 @@ export const insightSectionSlots: Migration = {
                             cta: insight.cta,
                           },
                       eventName: `cta${i}`,
-                    } satisfies CTAWrapperProps,
+                    } satisfies WithId<CTAWrapperProps>,
                   },
                 ],
               },
@@ -226,6 +234,7 @@ export const insightSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HeadingSlot`,
                 data: {
                   text: {
                     field: props.data.heading?.field ?? "",
@@ -235,13 +244,14 @@ export const insightSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           CardsWrapperSlot: [
             {
               type: "InsightCardsWrapper",
               props: {
+                id: `${props.id}-CardsWrapperSlot`,
                 data: {
                   field: props.data.insights.field,
                   constantValueEnabled:
@@ -251,7 +261,7 @@ export const insightSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies InsightCardsWrapperProps,
+              } satisfies WithId<InsightCardsWrapperProps>,
             },
           ],
         },

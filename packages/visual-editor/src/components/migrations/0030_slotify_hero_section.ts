@@ -66,6 +66,7 @@ export const heroSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-BusinessNameSlot`,
                 data: {
                   text: businessName,
                 },
@@ -80,6 +81,7 @@ export const heroSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-GeomodifierSlot`,
                 data: {
                   text: geomodifier,
                 },
@@ -93,6 +95,7 @@ export const heroSectionSlots: Migration = {
             {
               type: "HoursStatusSlot",
               props: {
+                id: `${props.id}-HoursStatusSlot`,
                 data: {
                   hours: hours,
                 },
@@ -104,6 +107,7 @@ export const heroSectionSlots: Migration = {
             {
               type: "HeroImageSlot",
               props: {
+                id: `${props.id}-ImageSlot`,
                 data: {
                   image: {
                     field: field ? field + ".image" : "",
@@ -124,6 +128,7 @@ export const heroSectionSlots: Migration = {
             {
               type: "CTASlot",
               props: {
+                id: `${props.id}-PrimaryCTASlot`,
                 data: {
                   entityField: {
                     field: field ? field + ".primaryCta" : "",
@@ -162,6 +167,7 @@ export const heroSectionSlots: Migration = {
             {
               type: "CTASlot",
               props: {
+                id: `${props.id}-SecondaryCTASlot`,
                 data: {
                   entityField: {
                     field: field ? field + ".secondaryCta" : "",

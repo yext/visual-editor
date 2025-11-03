@@ -80,7 +80,7 @@ export type ProductStruct = {
    * The product's category
    * @ai This should not be more than a few words
    */
-  category?: TranslatableString;
+  category?: TranslatableString | TranslatableRichText;
   /** The product's CTA */
   cta: EnhancedTranslatableCTA;
 };
@@ -115,7 +115,7 @@ export type FAQSectionType = {
 /** An individual FAQ */
 export type FAQStruct = {
   /** The question (always visible on the page) */
-  question: TranslatableString;
+  question: TranslatableString | TranslatableRichText;
   /** The answer (visible when the question is clicked) */
   answer: TranslatableRichText;
 };
@@ -148,7 +148,7 @@ export type InsightStruct = {
    * The insight's category
    * @ai This should not be more than a few words
    */
-  category?: TranslatableString;
+  category?: TranslatableString | TranslatableRichText;
   /** A UTC string for the insight's publish time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
   publishTime?: string;
   /** The insight's description */
@@ -177,7 +177,7 @@ export type PersonStruct = {
   /** The person's name */
   name?: TranslatableString;
   /** The person's job title */
-  title?: TranslatableString;
+  title?: TranslatableString | TranslatableRichText;
   /** The person's phone number. Format: +1234567890 */
   phoneNumber?: string;
   /** The person's email address */

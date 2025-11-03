@@ -23,7 +23,17 @@ import {
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { defaultTestimonial } from "../../../internal/puck/constant-value-fields/TestimonialSection.tsx";
+
+const defaultTestimonial = {
+  description: {
+    en: getDefaultRTF(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    ),
+    hasLocalizedValue: "true",
+  },
+  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  contributionDate: "July 22, 2022",
+} satisfies TestimonialStruct;
 
 export const defaultTestimonialCardSlotData = (
   id?: string,
@@ -45,12 +55,7 @@ export const defaultTestimonialCardSlotData = (
             data: {
               text: {
                 field: "",
-                constantValue: defaultTestimonial.description || {
-                  en: getDefaultRTF(
-                    "This is an amazing product! Highly recommend to everyone."
-                  ),
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultTestimonial.description,
                 constantValueEnabled: true,
               },
             },
@@ -68,10 +73,7 @@ export const defaultTestimonialCardSlotData = (
             data: {
               text: {
                 field: "",
-                constantValue: defaultTestimonial.contributorName || {
-                  en: "John Doe",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultTestimonial.contributorName,
                 constantValueEnabled: true,
               },
             },
@@ -90,8 +92,7 @@ export const defaultTestimonialCardSlotData = (
             data: {
               date: {
                 field: "",
-                constantValue:
-                  defaultTestimonial.contributionDate || "2024-01-01",
+                constantValue: defaultTestimonial.contributionDate,
                 constantValueEnabled: true,
               },
             },
@@ -262,7 +263,10 @@ const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   }, [styles, slotStyles]);
 
   return (
-    <div className="flex flex-col rounded-lg overflow-hidden border bg-white h-full">
+    <div
+      ref={puck.dragRef}
+      className="flex flex-col rounded-lg overflow-hidden border bg-white h-full"
+    >
       <Background
         background={backgroundColors.background1.value}
         className="p-8 grow"
@@ -289,6 +293,7 @@ export const TestimonialCard: ComponentConfig<{ props: TestimonialCardProps }> =
   {
     label: msg("components.testimonialCard", "Testimonial Card"),
     fields: testimonialCardFields,
+    inline: true,
     defaultProps: {
       styles: {
         backgroundColor: backgroundColors.background1.value,

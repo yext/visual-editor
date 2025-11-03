@@ -31,10 +31,11 @@ export const testimonialsSectionSlots: Migration = {
                 streamDocument
               )
             : "";
+          const cardId = `${props.id}-Card-${i}`;
           return {
             type: "TestimonialCard",
             props: {
-              id: `${props.id}-Card-${i}`,
+              id: cardId,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },
@@ -43,6 +44,7 @@ export const testimonialsSectionSlots: Migration = {
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-DescriptionSlot`,
                       data: {
                         text: {
                           field: "",
@@ -57,13 +59,14 @@ export const testimonialsSectionSlots: Migration = {
                             field: props.data.testimonials.field,
                             richText: testimonial.description,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 ContributorNameSlot: [
                   {
                     type: "HeadingTextSlot",
                     props: {
+                      id: `${cardId}-ContributorNameSlot`,
                       data: {
                         text: {
                           field: "",
@@ -81,13 +84,14 @@ export const testimonialsSectionSlots: Migration = {
                             field: props.data.testimonials.field,
                             text: resolvedContributorName,
                           },
-                    } satisfies HeadingTextProps,
+                    } satisfies WithId<HeadingTextProps>,
                   },
                 ],
                 ContributionDateSlot: [
                   {
                     type: "Timestamp",
                     props: {
+                      id: `${cardId}-ContributionDateSlot`,
                       data: {
                         date: {
                           field: "",
@@ -131,6 +135,7 @@ export const testimonialsSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-SectionHeadingSlot`,
                 data: {
                   text: {
                     field: props.data.heading?.field ?? "",
@@ -140,25 +145,24 @@ export const testimonialsSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           CardsWrapperSlot: [
             {
               type: "TestimonialCardsWrapper",
               props: {
+                id: `${props.id}-CardsWrapperSlot`,
                 data: {
                   field: props.data.testimonials.field,
                   constantValueEnabled:
                     props.data.testimonials.constantValueEnabled,
-                  constantValue: constantValueEnabled
-                    ? cards.map((c) => ({ id: c.props.id }))
-                    : [],
+                  constantValue: cards.map((c) => ({ id: c.props.id })),
                 },
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies TestimonialCardsWrapperProps,
+              } satisfies WithId<TestimonialCardsWrapperProps>,
             },
           ],
         },

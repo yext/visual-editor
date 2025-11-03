@@ -26,6 +26,31 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
+const defaultProduct = {
+  image: {
+    url: "https://placehold.co/640x360",
+    height: 360,
+    width: 640,
+  },
+  name: { en: "Product Name", hasLocalizedValue: "true" },
+  category: {
+    en: getDefaultRTF("Category, Pricing, etc"),
+    hasLocalizedValue: "true",
+  },
+  description: {
+    en: getDefaultRTF(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    ),
+    hasLocalizedValue: "true",
+  },
+  cta: {
+    label: { en: "Learn More", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+    ctaType: "textAndLink",
+  },
+} satisfies ProductStruct;
+
 export const defaultProductCardSlotData = (id?: string, index?: number) => {
   return {
     type: "ProductCard",
@@ -63,10 +88,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
               data: {
                 text: {
                   field: "",
-                  constantValue: {
-                    en: "Product Title",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultProduct.name,
                   constantValueEnabled: true,
                 },
               },
@@ -85,10 +107,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
               data: {
                 text: {
                   field: "",
-                  constantValue: {
-                    en: getDefaultRTF("Category, Pricing, etc"),
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultProduct.category,
                   constantValueEnabled: true,
                 },
               },
@@ -106,12 +125,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
               data: {
                 text: {
                   field: "",
-                  constantValue: {
-                    en: getDefaultRTF(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    ),
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultProduct.description,
                   constantValueEnabled: true,
                 },
               },
@@ -129,12 +143,7 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
               data: {
                 entityField: {
                   field: "",
-                  constantValue: {
-                    label: "Learn More",
-                    link: "#",
-                    linkType: "URL",
-                    ctaType: "textAndLink",
-                  },
+                  constantValue: defaultProduct.cta,
                   constantValueEnabled: true,
                 },
               },
@@ -305,6 +314,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     <Background
       className="flex flex-col rounded-lg overflow-hidden border h-full"
       background={styles.backgroundColor}
+      ref={puck.dragRef}
     >
       <slots.ImageSlot className="h-auto sm:h-[200px]" allow={[]} />
       <div className="p-8 gap-8 flex flex-col">
@@ -329,6 +339,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
 export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   label: msg("slots.productCard", "Product Card"),
   fields: ProductCardFields,
+  inline: true,
   resolveData: (data) => {
     const categorySlotProps = data.props.slots.CategorySlot?.[0]?.props as
       | WithId<BodyTextProps>

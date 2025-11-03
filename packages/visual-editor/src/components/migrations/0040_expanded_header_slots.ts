@@ -30,13 +30,14 @@ export const expandedHeaderSlots: Migration = {
                 {
                   type: "HeaderLinks",
                   props: {
+                    id: `${props.id}-SecondaryHeaderLinksSlot`,
                     data: {
                       links: props.data?.secondaryHeader.secondaryLinks,
                     },
                     parentData: {
                       type: "Secondary",
                     },
-                  } satisfies HeaderLinksProps,
+                  } satisfies WithId<HeaderLinksProps>,
                 },
               ],
             },
@@ -55,6 +56,7 @@ export const expandedHeaderSlots: Migration = {
             {
               type: "PrimaryHeaderSlot",
               props: {
+                id: `${props.id}-PrimaryHeaderSlot`,
                 styles: {
                   backgroundColor: props.styles?.primaryHeader?.backgroundColor,
                 },
@@ -67,6 +69,7 @@ export const expandedHeaderSlots: Migration = {
                     {
                       type: "CTASlot",
                       props: {
+                        id: `${props.id}-PrimaryCTASlot`,
                         data: {
                           show: props.data?.primaryHeader.showPrimaryCTA,
                           entityField: {
@@ -81,13 +84,14 @@ export const expandedHeaderSlots: Migration = {
                           presetImage: "app-store",
                         },
                         fieldsToHide: ["styles.displayType"],
-                      } satisfies CTAWrapperProps,
+                      } satisfies WithId<CTAWrapperProps>,
                     },
                   ],
                   SecondaryCTASlot: [
                     {
                       type: "CTASlot",
                       props: {
+                        id: `${props.id}-SecondaryCTASlot`,
                         data: {
                           show: props.data?.primaryHeader.showSecondaryCTA,
                           entityField: {
@@ -103,13 +107,14 @@ export const expandedHeaderSlots: Migration = {
                           presetImage: "app-store",
                         },
                         fieldsToHide: ["styles.displayType"],
-                      } satisfies CTAWrapperProps,
+                      } satisfies WithId<CTAWrapperProps>,
                     },
                   ],
                   LogoSlot: [
                     {
                       type: "ImageSlot",
                       props: {
+                        id: `${props.id}-LogoSlot`,
                         data: {
                           image: {
                             field: "",
@@ -131,24 +136,25 @@ export const expandedHeaderSlots: Migration = {
                           aspectRatio:
                             props.styles?.primaryHeader.logo?.aspectRatio ?? 1,
                         },
-                      } satisfies ImageWrapperProps,
+                      } satisfies WithId<ImageWrapperProps>,
                     },
                   ],
                   LinksSlot: [
                     {
                       type: "HeaderLinks",
                       props: {
+                        id: `${props.id}-PrimaryHeaderLinksSlot`,
                         data: {
                           links: props.data?.primaryHeader.links,
                         },
                         parentData: {
                           type: "Primary",
                         },
-                      } satisfies HeaderLinksProps,
+                      } satisfies WithId<HeaderLinksProps>,
                     },
                   ],
                 },
-              } satisfies PrimaryHeaderSlotProps,
+              } satisfies WithId<PrimaryHeaderSlotProps>,
             },
           ],
           SecondaryHeaderSlot: secondaryHeaderSlot,

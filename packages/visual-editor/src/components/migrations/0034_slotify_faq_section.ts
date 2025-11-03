@@ -24,24 +24,27 @@ export const faqsSectionSlots: Migration = {
         align: props.styles?.heading?.align ?? "left",
       };
 
-      const constantValueEnabled: boolean = props.data.constantValueEnabled;
+      const constantValueEnabled: boolean =
+        props.data.faqs.constantValueEnabled;
       const faqs = resolveYextEntityField(
         streamDocument,
         props.data.faqs as YextEntityField<FAQSectionType>,
-        streamDocument?.locale
+        streamDocument?.locale || "en"
       )?.faqs;
 
       const cards =
         faqs?.map((faq, i) => {
+          const cardId = `${props.id}-Card-${i}`;
           return {
             type: "FAQSlot",
             props: {
-              id: `${props.id}-Card-${i}`,
+              id: cardId,
               slots: {
                 QuestionSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-QuestionSlot`,
                       data: {
                         text: {
                           field: "",
@@ -56,13 +59,14 @@ export const faqsSectionSlots: Migration = {
                             field: props.data.field,
                             richText: faq.question,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 AnswerSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-AnswerSlot`,
                       data: {
                         text: {
                           field: "",
@@ -77,7 +81,7 @@ export const faqsSectionSlots: Migration = {
                             field: props.data.field,
                             richText: faq.answer,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
               },
@@ -103,6 +107,7 @@ export const faqsSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HeadingSlot`,
                 data: {
                   text: headingText,
                 },
@@ -114,6 +119,7 @@ export const faqsSectionSlots: Migration = {
             {
               type: "FAQsWrapperSlot",
               props: {
+                id: `${props.id}-FAQsWrapperSlot`,
                 data: {
                   field: props.data.faqs.field,
                   constantValueEnabled: props.data.faqs.constantValueEnabled,
@@ -124,7 +130,7 @@ export const faqsSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies FAQsWrapperSlotProps,
+              } satisfies WithId<FAQsWrapperSlotProps>,
             },
           ],
         },

@@ -18,6 +18,19 @@ import {
 } from "../../atoms/accordion";
 import { useAnalytics } from "@yext/pages-components";
 
+const defaultFAQ = {
+  question: {
+    en: getDefaultRTF("Question Lorem ipsum dolor sit amet?"),
+    hasLocalizedValue: "true",
+  },
+  answer: {
+    en: getDefaultRTF(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    ),
+    hasLocalizedValue: "true",
+  },
+} satisfies FAQStruct;
+
 export const defaultFAQSlotData = (id?: string, index?: number) => ({
   type: "FAQSlot",
   props: {
@@ -32,10 +45,7 @@ export const defaultFAQSlotData = (id?: string, index?: number) => ({
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: getDefaultRTF("Question Lorem ipsum dolor sit amet?"),
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultFAQ.question,
                 constantValueEnabled: true,
               },
             },
@@ -53,12 +63,7 @@ export const defaultFAQSlotData = (id?: string, index?: number) => ({
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: getDefaultRTF(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                  ),
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultFAQ.answer,
                 constantValueEnabled: true,
               },
             },

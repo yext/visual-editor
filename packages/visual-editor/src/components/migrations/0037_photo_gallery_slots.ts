@@ -1,3 +1,4 @@
+import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
 import { HeadingTextProps } from "../contentBlocks";
 
@@ -31,17 +32,19 @@ export const photoGallerySlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HeadingSlot`,
                 data: {
                   text: headingText,
                 },
                 styles: headingStyles,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           PhotoGalleryWrapper: [
             {
               type: "PhotoGalleryWrapper",
               props: {
+                id: `${props.id}-PhotoGalleryWrapper`,
                 data: {
                   images: imagesData,
                 },

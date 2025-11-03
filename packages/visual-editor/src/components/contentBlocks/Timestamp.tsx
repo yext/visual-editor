@@ -84,7 +84,7 @@ const timestampFields: Fields<TimestampProps> = {
 };
 
 const TimestampComponent: PuckComponent<TimestampProps> = (props) => {
-  const { data, styles, parentData } = props;
+  const { data, styles, parentData, puck } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -97,7 +97,7 @@ const TimestampComponent: PuckComponent<TimestampProps> = (props) => {
     : resolveYextEntityField(streamDocument, data.endDate);
 
   if (!resolvedDate) {
-    return <></>;
+    return puck.isEditing ? <div className="h-8 w-32" /> : <></>;
   }
 
   let option = (styles.includeTime ? "DATE_TIME" : "DATE") as TimestampOption;

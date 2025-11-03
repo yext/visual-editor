@@ -23,11 +23,34 @@ import {
   ImgSizesByBreakpoint,
   resolveYextEntityField,
   i18nComponentsInstance,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+
+const defaultEvent = {
+  image: {
+    url: "https://placehold.co/640x360",
+    height: 360,
+    width: 640,
+  },
+  title: { en: "Event Title", hasLocalizedValue: "true" },
+  dateTime: "2022-12-12T14:00:00",
+  description: {
+    en: getDefaultRTF(
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+    ),
+    hasLocalizedValue: "true",
+  },
+  cta: {
+    label: { en: "Learn More", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+    ctaType: "textAndLink",
+  },
+} satisfies EventStruct;
 
 export const defaultEventCardSlotData = (id?: string, index?: number) => ({
   type: "EventCard",
@@ -67,10 +90,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Event Title",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultEvent.title,
                 constantValueEnabled: true,
               },
             },
@@ -89,12 +109,12 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               date: {
                 field: "",
-                constantValue: "2022-12-12T14:00:00",
+                constantValue: defaultEvent.dateTime,
                 constantValueEnabled: true,
               },
               endDate: {
                 field: "",
-                constantValue: "2022-12-12T15:00:00",
+                constantValue: "",
                 constantValueEnabled: true,
               },
             },
@@ -113,12 +133,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: getDefaultRTF(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
-                  ),
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultEvent.description,
                 constantValueEnabled: true,
               },
             },
@@ -139,12 +154,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               entityField: {
                 field: "",
-                constantValue: {
-                  label: "Learn More",
-                  link: "#",
-                  linkType: "URL",
-                  ctaType: "textAndLink",
-                },
+                constantValue: defaultEvent.cta,
                 constantValueEnabled: true,
               },
             },
@@ -434,15 +444,21 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
             ))
     );
     const showDateTime = Boolean(
-      dateTimeSlotProps?.parentData?.date || dateTimeSlotProps?.data?.date
+      dateTimeSlotProps?.parentData?.date?.trim() ||
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          dateTimeSlotProps.data.date,
+          i18nComponentsInstance.language || "en"
+        )?.trim()
     );
     const showCTA = Boolean(
       ctaSlotProps &&
         (ctaSlotProps.parentData
           ? ctaSlotProps.parentData.cta?.label
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              ctaSlotProps.data.entityField
+          : resolveComponentData(
+              ctaSlotProps.data.entityField,
+              i18nComponentsInstance.language || "en",
+              params.metadata.streamDocument
             )?.label)
     );
 
