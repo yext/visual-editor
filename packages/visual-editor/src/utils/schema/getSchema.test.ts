@@ -8,12 +8,17 @@ describe("getSchema", () => {
       path: "/us/va/123-main-street",
       document: {
         name: "Test Name",
+        services: [],
         __: {
           layout: JSON.stringify({
             root: {
               props: {
                 schemaMarkup: `{
-                "name": "[[name]]"
+                "name": "[[name]]",
+                "description": "",
+                "brand": "[[brand]]",
+                "services": "[[services]]",
+                "address": "[[address]]"
               }`,
               },
             },
@@ -44,6 +49,15 @@ describe("getSchema", () => {
       document: {
         name: "Test Name",
         siteDomain: "yext.com",
+        address: {
+          line1: "123 Test St",
+          city: "Washington",
+          region: "DC",
+          postalCode: "20000",
+          countryCode: "US",
+        },
+        mainPhone: "123-456-7890",
+        description: "test description",
         __: {
           layout: JSON.stringify({
             root: {
@@ -71,18 +85,14 @@ describe("getSchema", () => {
           name: "Test Name",
           address: {
             "@type": "PostalAddress",
-            streetAddress: "[[address.line1]]",
-            addressLocality: "[[address.city]]",
-            addressRegion: "[[address.region]]",
-            postalCode: "[[address.postalCode]]",
-            addressCountry: "[[address.countryCode]]",
+            streetAddress: "123 Test St",
+            addressLocality: "Washington",
+            addressRegion: "DC",
+            postalCode: "20000",
+            addressCountry: "US",
           },
-          openingHours: "[[hours]]",
-          image: "[[photoGallery]]",
-          description: "[[description]]",
-          telephone: "[[mainPhone]]",
-          paymentAccepted: "[[paymentOptions]]",
-          hasOfferCatalog: "[[services]]",
+          description: "test description",
+          telephone: "123-456-7890",
         },
       ],
     });
@@ -308,10 +318,6 @@ describe("getSchema", () => {
           "@id": "yext.com/us/ny/nyc",
           "@type": "CollectionPage",
           name: "New York City",
-          mainEntity: {
-            "@type": "ItemList",
-            itemListElement: "[[dm_directoryChildren]]",
-          },
         },
         {
           "@type": "BreadcrumbList",
@@ -389,10 +395,6 @@ describe("getSchema", () => {
           "@id": "yext.com/index.html",
           "@type": "CollectionPage",
           name: "Test Root",
-          mainEntity: {
-            "@type": "ItemList",
-            itemListElement: "[[dm_directoryChildren]]",
-          },
         },
         {
           "@type": "BreadcrumbList",
