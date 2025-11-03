@@ -27,8 +27,26 @@ import {
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { defaultPerson } from "../../../internal/puck/constant-value-fields/TeamSection.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+
+const defaultPerson = {
+  name: { en: "First Last", hasLocalizedValue: "true" },
+  title: { en: getDefaultRTF("Associate Agent"), hasLocalizedValue: "true" },
+  phoneNumber: "(202) 770-6619",
+  email: "jkelley@[company].com",
+  cta: {
+    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    link: "#",
+    linkType: "URL",
+    ctaType: "textAndLink",
+  },
+  headshot: {
+    url: "https://placehold.co/80x80",
+    height: 80,
+    width: 80,
+  },
+} satisfies PersonStruct;
 
 export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
   type: "TeamCard",
