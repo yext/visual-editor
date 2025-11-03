@@ -21,7 +21,10 @@ export {
   resolveYextEntityField,
   resolveYextStructField,
 } from "./resolveYextEntityField.ts";
-export { resolveUrlTemplate } from "./resolveUrlTemplate.ts";
+export {
+  resolveUrlTemplateOfChild,
+  resolvePageSetUrlTemplate,
+} from "./resolveUrlTemplate.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
