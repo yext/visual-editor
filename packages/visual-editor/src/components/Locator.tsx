@@ -19,8 +19,11 @@ import {
   useCardAnalyticsCallback,
   VerticalResults,
   SearchI18nextProvider,
+  Facets,
+  AppliedFilters,
 } from "@yext/search-ui-react";
 import {
+  FieldValueStaticFilter,
   Matcher,
   provideHeadless,
   Result,
@@ -29,6 +32,7 @@ import {
   useSearchActions,
   useSearchState,
 } from "@yext/search-headless-react";
+import { NearFilterValue } from "@yext/search-core";
 import * as React from "react";
 import {
   Background,
@@ -53,18 +57,21 @@ import { Address, AddressType, HoursType } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
   FaAngleRight,
-  FaCheckSquare,
-  FaRegSquare,
+  FaChevronUp,
+  FaDotCircle,
+  FaRegCircle,
   FaSlidersH,
   FaTimes,
 } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
+import { useCollapse } from "react-collapsed";
 
-const DEFAULT_FIELD = "builtin.location";
+const LOCATION_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
-const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
-const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
+const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
+const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
+const MILES_TO_METERS = 1609.34;
 
 // Keep only digits and at most one leading plus for tel: links.
 // If the input already starts with "tel:", return it as-is.
@@ -574,7 +581,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  filters,
+  filters: { openNowButton, facetFields },
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
@@ -649,23 +656,41 @@ const LocatorInternal = ({
   };
 
   const searchActions = useSearchActions();
+  const selectedFacets: string[] = React.useMemo(
+    () =>
+      facetFields?.selections
+        ?.filter((selection) => selection.value !== undefined)
+        ?.map((selection) => selection.value as string) ?? [],
+    [facetFields]
+  );
+  React.useEffect(() => {
+    searchActions.setFacetAllowList(selectedFacets);
+  }, [searchActions, selectedFacets]);
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
+    const filterValue = params.newFilter.value as NearFilterValue;
     const locationFilter: SelectableStaticFilter = {
       displayName: params.newDisplayName,
       selected: true,
       filter: {
         kind: "fieldValue",
         fieldId: params.newFilter.fieldId,
-        value: params.newFilter.value,
+        value: {
+          ...filterValue,
+          radius: selectedDistanceMiles * MILES_TO_METERS,
+        },
         matcher: Matcher.Near,
       },
     };
+
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
+    if (filterValue?.lat && filterValue?.lng) {
+      setMapCenter(new mapboxgl.LngLat(filterValue.lng, filterValue.lat));
+    }
   };
 
   const searchLoading = useSearchState((state) => state.searchStatus.isLoading);
@@ -732,6 +757,9 @@ const LocatorInternal = ({
     markerOptionsOverride: markerOptionsOverride,
   });
 
+  const [selectedDistanceMiles, setSelectedDistanceMiles] =
+    React.useState<number>(DEFAULT_RADIUS_MILES);
+
   React.useEffect(() => {
     let centerCoords = DEFAULT_MAP_CENTER;
     let displayName: string | undefined;
@@ -786,7 +814,7 @@ const LocatorInternal = ({
               value: {
                 lat: centerCoords[1],
                 lng: centerCoords[0],
-                radius: DEFAULT_RADIUS_METERS,
+                radius: selectedDistanceMiles * MILES_TO_METERS,
               },
               matcher: Matcher.Near,
             },
@@ -795,10 +823,15 @@ const LocatorInternal = ({
         searchActions.executeVerticalQuery();
         setSearchState("loading");
         setMapProps((prev) => ({ ...prev, centerCoords }));
+        setMapCenter(mapboxgl.LngLat.convert(centerCoords));
       });
   }, []);
 
   const handleOpenNowClick = (selected: boolean) => {
+    if (selected === isOpenNowSelected) {
+      // Prevents us from trying to set Open Now filter to false when it's not set
+      return;
+    }
     searchActions.setFilterOption({
       filter: {
         kind: "fieldValue",
@@ -811,13 +844,127 @@ const LocatorInternal = ({
     });
     setIsOpenNowSelected(selected);
     searchActions.setOffset(0);
-    searchActions.resetFacets();
     executeSearch(searchActions);
   };
 
   const searchFilters = useSearchState((state) => state.filters);
+  const handleDistanceClick = (distanceMiles: number) => {
+    // Update existing distance filter if present
+    const existingFilters = searchFilters.static || [];
+    const nonLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind !== "fieldValue" ||
+        filter.filter.fieldId !== LOCATION_FIELD
+    );
+    const oldLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === LOCATION_FIELD
+    );
+    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+      const previousFilter = filter.filter as
+        | FieldValueStaticFilter
+        | undefined;
+      const previousValue = previousFilter?.value as
+        | NearFilterValue
+        | undefined;
+      // mapCenter should always be defined here, but fall back to previous value or default
+      // just in case
+      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
+      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            lat,
+            lng,
+            radius: distanceMiles * MILES_TO_METERS,
+          },
+        },
+      } as SelectableStaticFilter;
+    });
+
+    searchActions.setStaticFilters(
+      nonLocationFilters.concat(updatedLocationFilters)
+    );
+    setSelectedDistanceMiles(distanceMiles);
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+  };
+
+  const handleClearFiltersClick = () => {
+    const existingFilters = searchFilters.static || [];
+
+    // There shouldn't be any other static filters besides location and open now, but leave
+    // them untouched for safety
+    const unaffectedStaticFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind !== "fieldValue" ||
+        (filter.filter.fieldId !== LOCATION_FIELD &&
+          filter.filter.fieldId !== HOURS_FIELD)
+    );
+
+    // Make Open Now filter unselected
+    const oldOpenNowFilter = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === HOURS_FIELD
+    );
+    const updatedOpenNowFilters = oldOpenNowFilter.map((filter) => ({
+      ...filter,
+      selected: false,
+    }));
+
+    // Update location filters to default radius
+    const oldLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === LOCATION_FIELD
+    );
+    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+      const previousFilter = filter.filter as
+        | FieldValueStaticFilter
+        | undefined;
+      const previousValue = previousFilter?.value as
+        | NearFilterValue
+        | undefined;
+      // mapCenter should always be defined here, but fall back to previous value or default
+      // just in case
+      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
+      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            lat,
+            lng,
+            radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+          },
+        },
+      } as SelectableStaticFilter;
+    });
+
+    // Both open now and distance filters must be updated in the same setStaticFilters call to
+    // avoid problems due to the asynchronous nature of state updates.
+    searchActions.setStaticFilters(
+      unaffectedStaticFilters.concat(
+        updatedLocationFilters,
+        updatedOpenNowFilters
+      )
+    );
+    searchActions.resetFacets();
+    // Execute search to update AppliedFilters components
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+    setSelectedDistanceMiles(DEFAULT_RADIUS_MILES);
+  };
+
   // If something else causes the filters to update, check if the hours filter is still present
-  // - toggle off the Open Now toggle if not.
+  // and toggle off the Open Now toggle if not.
   React.useEffect(() => {
     setIsOpenNowSelected(
       searchFilters.static
@@ -832,17 +979,21 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
-  const [showFilter, setShowFilter] = React.useState(false);
+  const hasFilterModalToggle = openNowButton || selectedFacets.length > 0;
+  const [showFilterModal, setShowFilterModal] = React.useState(false);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div className="h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col">
+      <div
+        className="relative h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col"
+        id="locatorLeftDiv"
+      >
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
             searchFields={[
-              { fieldApiName: DEFAULT_FIELD, entityType: entityType },
+              { fieldApiName: LOCATION_FIELD, entityType: entityType },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={t("searchHere", "Search here...")}
@@ -855,99 +1006,79 @@ const LocatorInternal = ({
             }}
             showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
-              radius: 25,
+              radius: DEFAULT_RADIUS_MILES, // this component uses miles, not meters
             }}
           />
         </div>
-        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 relative inline-block">
-          <div className="flex flex-row justify-between">
-            <div>
-              {resultCount === 0 &&
-                searchState === "not started" &&
-                t(
-                  "useOurLocatorToFindALocationNearYou",
-                  "Use our locator to find a location near you"
-                )}
-              {resultCount === 0 &&
-                searchState === "complete" &&
-                t(
-                  "noResultsFoundForThisArea",
-                  "No results found for this area"
-                )}
-              {resultCount > 0 &&
-                (filterDisplayName
-                  ? t(
-                      "locationsNear",
-                      `${resultCount} locations near "${filterDisplayName}"`,
-                      {
+        <div className="relative flex-1 flex flex-col min-h-0">
+          <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
+            <div className="flex flex-row justify-between" id="levelWithModal">
+              <div>
+                {resultCount === 0 &&
+                  searchState === "not started" &&
+                  t(
+                    "useOurLocatorToFindALocationNearYou",
+                    "Use our locator to find a location near you"
+                  )}
+                {resultCount === 0 &&
+                  searchState === "complete" &&
+                  t(
+                    "noResultsFoundForThisArea",
+                    "No results found for this area"
+                  )}
+                {resultCount > 0 &&
+                  (filterDisplayName
+                    ? t(
+                        "locationsNear",
+                        `${resultCount} locations near "${filterDisplayName}"`,
+                        {
+                          count: resultCount,
+                          filterDisplayName,
+                        }
+                      )
+                    : t("locationWithCount", `${resultCount} locations`, {
                         count: resultCount,
-                        filterDisplayName,
-                      }
-                    )
-                  : t("locationWithCount", `${resultCount} locations`, {
-                      count: resultCount,
-                    }))}
+                      }))}
+              </div>
+              {hasFilterModalToggle && (
+                <button
+                  className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                  onClick={() => setShowFilterModal((prev) => !prev)}
+                >
+                  {t("filter", "Filter")}
+                  {<FaSlidersH />}
+                </button>
+              )}
             </div>
-            {filters?.openNowButton && (
-              <button
-                className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
-                onClick={() => setShowFilter((prev) => !prev)}
-              >
-                {t("filter", "Filter")}
-                {<FaSlidersH />}
-              </button>
+            <div className="flex flex-row justify-between">
+              <AppliedFilters
+                hiddenFields={[LOCATION_FIELD]}
+                customCssClasses={{
+                  removableFilter: "text-md font-normal mt-2 mb-0",
+                  clearAllButton: "hidden",
+                  appliedFiltersContainer: "mt-0 mb-0",
+                }}
+              />
+            </div>
+          </div>
+          <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
+            {resultCount > 0 && (
+              <VerticalResults
+                CardComponent={CardComponent}
+                setResultsRef={setResultsRef}
+              />
             )}
           </div>
-          {showFilter && (
-            <div
-              id="popup"
-              className="absolute top-0 z-50 w-80 flex flex-col bg-white shadow-lg absolute left-full top-0 ml-2 rounded-md shadow-lg"
-            >
-              <div className="inline-flex justify-between items-center px-6 py-4 gap-4 border-b border-gray-300">
-                <div className="font-bold">
-                  {t("refineYourSearch", "Refine Your Search")}
-                </div>
-                <button
-                  className="text-palette-primary-dark"
-                  onClick={() => setShowFilter(false)}
-                >
-                  <FaTimes />
-                </button>
-              </div>
-              <div className="flex flex-col p-6 gap-6">
-                <div className="flex flex-col gap-8">
-                  <div className="flex flex-col gap-4">
-                    <div className="font-bold">{t("hours", "Hours")}</div>
-                    <div className="flex flex-row gap-1">
-                      <button
-                        className="inline-flex bg-white"
-                        onClick={() => handleOpenNowClick(!isOpenNowSelected)}
-                      >
-                        <div className="inline-flex items-center gap-4">
-                          {t("openNow", "Open Now")}
-                          <div className="text-palette-primary-dark">
-                            {isOpenNowSelected ? (
-                              <FaCheckSquare />
-                            ) : (
-                              <FaRegSquare />
-                            )}
-                          </div>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
-          {resultCount > 0 && (
-            <VerticalResults
-              CardComponent={CardComponent}
-              setResultsRef={setResultsRef}
-            />
-          )}
+          <FilterModal
+            showFilterModal={showFilterModal}
+            showOpenNowOption={openNowButton}
+            isOpenNowSelected={isOpenNowSelected}
+            handleOpenNowClick={handleOpenNowClick}
+            selectedDistanceMiles={selectedDistanceMiles}
+            handleDistanceClick={handleDistanceClick}
+            handleCloseModalClick={() => setShowFilterModal(false)}
+            handleClearFiltersClick={handleClearFiltersClick}
+          />
         </div>
       </div>
 
@@ -1217,6 +1348,191 @@ const LocationCard = React.memo(
     );
   }
 );
+
+interface FilterModalProps {
+  showFilterModal: boolean;
+  showOpenNowOption: boolean; // whether to show the Open Now filter option
+  isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
+  selectedDistanceMiles?: number;
+  handleCloseModalClick: () => void;
+  handleOpenNowClick: (selected: boolean) => void;
+  handleDistanceClick: (distance: number) => void;
+  handleClearFiltersClick: () => void;
+}
+
+const FilterModal = (props: FilterModalProps) => {
+  const {
+    showFilterModal,
+    showOpenNowOption,
+    isOpenNowSelected,
+    selectedDistanceMiles,
+    handleCloseModalClick,
+    handleOpenNowClick,
+    handleDistanceClick,
+    handleClearFiltersClick,
+  } = props;
+  const { t } = useTranslation();
+  const popupRef = React.useRef<HTMLDivElement>(null);
+
+  return showFilterModal ? (
+    <div
+      id="popup"
+      className="absolute top-4 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      ref={popupRef}
+    >
+      <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
+        <div className="font-bold">
+          {t("refineYourSearch", "Refine Your Search")}
+        </div>
+        <button
+          className="text-palette-primary-dark"
+          onClick={handleCloseModalClick}
+        >
+          <FaTimes />
+        </button>
+      </div>
+      <div className="px-6 border-b border-gray-300">
+        <AppliedFilters
+          hiddenFields={[LOCATION_FIELD]}
+          customCssClasses={{
+            removableFilter: "text-md font-normal",
+            clearAllButton: "hidden",
+          }}
+        />
+      </div>
+      <div className="flex flex-col p-6 gap-6 overflow-y-auto">
+        <div className="flex flex-col gap-8">
+          {showOpenNowOption && (
+            <OpenNowFilter
+              isSelected={isOpenNowSelected}
+              onChange={handleOpenNowClick}
+            />
+          )}
+          <DistanceFilter
+            onChange={handleDistanceClick}
+            selectedDistanceMiles={selectedDistanceMiles}
+          />
+          <Facets
+            customCssClasses={{
+              divider: "bg-white",
+              titleLabel: "font-bold text-md",
+              optionInput: "h-4 w-4 accent-palette-primary-dark",
+              optionLabel: "text-md",
+              option: "space-x-4",
+            }}
+          />
+        </div>
+      </div>
+      <div className="border-y border-gray-300 justify-center align-middle">
+        <button
+          className="w-full py-4 text-center font-bold text-palette-primary-dark"
+          onClick={handleClearFiltersClick}
+        >
+          {t("clearAll", "Clear All")}
+        </button>
+      </div>
+    </div>
+  ) : null;
+};
+
+interface OpenNowFilterProps {
+  isSelected: boolean;
+  onChange: (selected: boolean) => void;
+}
+
+const OpenNowFilter = (props: OpenNowFilterProps) => {
+  const { isSelected, onChange } = props;
+  const { t } = useTranslation();
+  const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
+    defaultExpanded: true,
+  });
+  const iconClassName = isExpanded
+    ? "w-3 text-gray-400"
+    : "w-3 text-gray-400 transform rotate-180";
+
+  const openNowCheckBoxId = "openNowCheckBox";
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        className="w-full flex justify-between items-center"
+        {...getToggleProps()}
+      >
+        <div className="font-bold">{t("hours", "Hours")}</div>
+        <FaChevronUp className={iconClassName} />
+      </button>
+      <div className="flex flex-row gap-1" {...getCollapseProps()}>
+        <div className="inline-flex items-center gap-4">
+          <input
+            type="checkbox"
+            id={openNowCheckBoxId}
+            checked={isSelected}
+            className={
+              "w-4 h-4 form-checkbox cursor-pointer border border-gray-300" +
+              " rounded-sm text-primary focus:ring-primary accent-palette-primary-dark"
+            }
+            onChange={() => onChange(!isSelected)}
+          />
+          <label htmlFor={openNowCheckBoxId}>{t("openNow", "Open Now")}</label>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface DistanceFilterProps {
+  onChange: (distance: number) => void;
+  selectedDistanceMiles?: number;
+}
+
+const DistanceFilter = (props: DistanceFilterProps) => {
+  const { selectedDistanceMiles, onChange } = props;
+  const { t } = useTranslation();
+  const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
+    defaultExpanded: true,
+  });
+  const iconClassName = isExpanded
+    ? "w-3 text-gray-400"
+    : "w-3 text-gray-400 transform rotate-180";
+  const distanceOptionsMiles = [5, 10, 25, 50];
+
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        className="w-full flex justify-between items-center"
+        {...getToggleProps()}
+      >
+        <div className="font-bold">{t("distance", "Distance")}</div>
+        <FaChevronUp className={iconClassName} />
+      </button>
+      <div {...getCollapseProps()}>
+        {distanceOptionsMiles.map((distanceMiles) => (
+          <div
+            className="flex flex-row gap-4 items-center"
+            id={`distanceOption-${distanceMiles}`}
+            key={distanceMiles}
+          >
+            <button
+              className="inline-flex bg-white"
+              onClick={() => onChange(distanceMiles)}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+            >
+              <div className="text-palette-primary-dark">
+                {selectedDistanceMiles === distanceMiles ? (
+                  <FaDotCircle />
+                ) : (
+                  <FaRegCircle />
+                )}
+              </div>
+            </button>
+            <div className="inline-flex">
+              {`< ${distanceMiles} ${t("miles", "miles")}`}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
   if (!divElement) {
