@@ -657,7 +657,7 @@ const tests: ComponentTest[] = [
     version: 19,
   },
   {
-    name: "version 26 - various CTAs",
+    name: "version 28 - various CTAs",
     document: {
       c_callToAction_Phone: {
         label: "Call Us",
@@ -685,16 +685,12 @@ const tests: ComponentTest[] = [
                       label: "Call to Action",
                       link: "#",
                       linkType: "URL",
-                      ctaType: "textAndLink",
                     },
+                    selectedType: "textAndLink",
                   },
                 },
-                styles: {
-                  displayType: "textAndLink",
-                  variant: "link",
-                  presetImage: "app-store",
-                },
-                id: "CTAWrapper-c2de5c91-3079-4c1a-9cad-c70dc978a3e6",
+                styles: { variant: "primary", presetImage: "app-store" },
+                id: "CTAWrapper-25d9b02a-ad1e-4d87-abff-c5e540517b80",
               },
             },
             {
@@ -707,17 +703,12 @@ const tests: ComponentTest[] = [
                       label: "Call to Action",
                       link: "#",
                       linkType: "URL",
-                      ctaType: "textAndLink",
                     },
-                    constantValueEnabled: true,
+                    selectedType: "getDirections",
                   },
                 },
-                styles: {
-                  displayType: "presetImage",
-                  variant: "primary",
-                  presetImage: "app-store",
-                },
-                id: "CTAWrapper-22bcdff1-f2c4-4339-9d1f-da7c993296d0",
+                styles: { variant: "primary", presetImage: "app-store" },
+                id: "CTAWrapper-bb3ec413-207a-44fb-b66b-69e6cf14aa8c",
               },
             },
             {
@@ -725,16 +716,17 @@ const tests: ComponentTest[] = [
               props: {
                 data: {
                   entityField: {
-                    field: "yextDisplayCoordinate",
-                    selectedTypes: ["type.coordinate"],
+                    field: "",
+                    constantValue: {
+                      label: "Call to Action",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
                   },
                 },
-                styles: {
-                  displayType: "textAndLink",
-                  variant: "primary",
-                  presetImage: "app-store",
-                },
-                id: "CTAWrapper-8b4e693b-a2a1-4dc4-b92f-30536ffe9a5e",
+                styles: { variant: "primary", presetImage: "google-play" },
+                id: "CTAWrapper-a48f6b5a-a2c0-470f-b425-79c4a37f4898",
               },
             },
             {
@@ -745,22 +737,58 @@ const tests: ComponentTest[] = [
                     field: "",
                     constantValue: {
                       label: {
-                        en: "Location",
+                        en: "Constant Directions",
                         hasLocalizedValue: "true",
                       },
-                      latitude: 50,
-                      longitude: 5,
+                      link: "#",
+                      linkType: "URL",
+                      ctaType: "getDirections",
                     },
+                    selectedType: "textAndLink",
                     constantValueEnabled: true,
-                    selectedTypes: ["type.coordinate"],
                   },
                 },
-                styles: {
-                  displayType: "textAndLink",
-                  variant: "secondary",
-                  presetImage: "app-store",
+                styles: { variant: "link", presetImage: "app-store" },
+                id: "CTAWrapper-dafb4772-bdd5-4fa3-9c4f-317bd5ee7a0b",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: { en: "", hasLocalizedValue: "true" },
+                      link: "http://yext.com",
+                      linkType: "URL",
+                      ctaType: "presetImage",
+                    },
+                    selectedType: "presetImage",
+                    constantValueEnabled: true,
+                  },
                 },
-                id: "CTAWrapper-fae7349e-b8b5-46c4-b13c-fe93178d2eab",
+                styles: { variant: "primary", presetImage: "app-store" },
+                id: "CTAWrapper-4c986d7d-07be-472c-a615-4277bd78edae",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: { en: "Button", hasLocalizedValue: "true" },
+                      link: "tel:+18005551010",
+                      linkType: "PHONE",
+                    },
+                    selectedType: "textAndLink",
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "secondary", presetImage: "app-store" },
+                id: "CTAWrapper-265d7a64-33ef-4061-8e26-13c6fca3eed8",
               },
             },
           ],
@@ -773,53 +801,31 @@ const tests: ComponentTest[] = [
                 buttons: [
                   {
                     entityField: {
-                      field: "",
-                      constantValueEnabled: true,
+                      field: "c_callToAction_Phone",
+                      constantValueEnabled: false,
                       constantValue: {
                         ctaType: "textAndLink",
-                        label: {
-                          en: "Constant Button with Text",
-                          hasLocalizedValue: "true",
-                        },
+                        label: "Button",
                         link: "#",
                       },
+                      selectedType: "textAndLink",
                     },
                     variant: "primary",
-                    displayType: "textAndLink",
+                    presetImage: "app-store",
                   },
                   {
                     entityField: {
                       field: "",
-                      constantValueEnabled: true,
+                      constantValueEnabled: false,
                       constantValue: {
-                        ctaType: "textAndLink",
-                        label: {
-                          en: "Constant Button with Image",
-                          hasLocalizedValue: "true",
-                        },
+                        ctaType: "getDirections",
+                        label: { en: "Directions", hasLocalizedValue: "true" },
                         link: "#",
                       },
-                    },
-                    variant: "primary",
-                    displayType: "presetImage",
-                    presetImage: "google-play",
-                  },
-                  {
-                    entityField: {
-                      field: "",
-                      constantValueEnabled: true,
-                      constantValue: {
-                        label: {
-                          en: "Constant Coord",
-                          hasLocalizedValue: "true",
-                        },
-                        latitude: 10,
-                        longitude: -10,
-                      },
-                      selectedTypes: ["type.coordinate"],
+                      selectedType: "getDirections",
                     },
                     variant: "secondary",
-                    displayType: "textAndLink",
+                    presetImage: "app-store",
                   },
                   {
                     entityField: {
@@ -830,34 +836,60 @@ const tests: ComponentTest[] = [
                         label: "Button",
                         link: "#",
                       },
+                      selectedType: "presetImage",
                     },
-                    variant: "secondary",
-                    displayType: "textAndLink",
+                    variant: "primary",
+                    presetImage: "uber-eats",
                   },
                   {
                     entityField: {
-                      field: "yextDisplayCoordinate",
-                      constantValueEnabled: false,
-                      selectedTypes: ["type.coordinate"],
-                    },
-                    variant: "link",
-                    displayType: "textAndLink",
-                  },
-                  {
-                    entityField: {
-                      field: "c_callToAction_Phone",
-                      constantValueEnabled: false,
+                      field: "",
+                      constantValueEnabled: true,
                       constantValue: {
                         ctaType: "textAndLink",
-                        label: "Button",
-                        link: "#",
+                        label: {
+                          en: "Constant Email",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "mailto:sumo@yext.com",
+                        linkType: "EMAIL",
                       },
                     },
                     variant: "link",
-                    displayType: "textAndLink",
+                    presetImage: "app-store",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "getDirections",
+                        label: {
+                          en: "Get Directions (constant)",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                      },
+                    },
+                    variant: "primary",
+                    presetImage: "app-store",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "presetImage",
+                        label: { en: "", hasLocalizedValue: "true" },
+                        link: "/app",
+                        linkType: "OTHER",
+                      },
+                    },
+                    variant: "primary",
+                    presetImage: "galaxy-store",
                   },
                 ],
-                id: "CTAGroup-f66ac48c-20e6-4c3b-a8c7-b5aa4996b790",
+                id: "CTAGroup-5dd9fff9-96db-4de6-a195-8c52c86b2dd2",
               },
             },
           ],
@@ -868,7 +900,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       analytics: { scope: "gridSection" },
     },
-    version: 26,
+    version: 28,
   },
 ];
 

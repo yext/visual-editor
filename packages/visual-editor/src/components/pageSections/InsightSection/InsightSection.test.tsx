@@ -402,7 +402,7 @@ const tests: ComponentTest[] = [
     version: 15,
   },
   {
-    name: "version 30 props with entity values",
+    name: "version 32 props with entity values",
     document: { c_insights: insightsData, name: "test name" },
     props: {
       styles: {
@@ -586,10 +586,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 30,
+    version: 32,
   },
   {
-    name: "version 30 props with constant values",
+    name: "version 32 props with constant values",
     document: { c_insights: insightsData },
     props: {
       styles: {
@@ -1072,7 +1072,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 30,
+    version: 32,
   },
 ];
 

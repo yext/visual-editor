@@ -20,10 +20,13 @@ import {
   resolveDataFromParent,
   themeManagerCn,
   PresetImageType,
-  CTADisplayType,
 } from "@yext/visual-editor";
-import { ctaTypeOptions } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
-import { CTAProps } from "../atoms/cta.tsx";
+import {
+  ctaTypeOptions,
+  getCTAType,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+
+// TODO: ensure CTAwrapper works as expected
 
 export interface CTAWrapperProps {
   data: {
@@ -34,8 +37,6 @@ export interface CTAWrapperProps {
   };
 
   styles: {
-    /** The CTA display type */
-    displayType: CTADisplayType;
     /** The visual style of the CTA. */
     variant: CTAVariant;
     /** The image to use if the CTA is set to preset image */
@@ -85,6 +86,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
           typeLabel: msg("fields.ctaType", "CTA Type"),
           fieldLabel: msg("fields.ctaField", "CTA Field"),
           options: ctaTypeOptions(),
+          optionValueToEntityFieldType: {
+            presetImage: "type.cta",
+            textAndLink: "type.cta",
+          },
         },
       }),
     },
@@ -93,10 +98,6 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
     type: "object",
     label: msg("fields.styles", "Styles"),
     objectFields: {
-      displayType: YextField(msg("fields.displayType", "Display Type"), {
-        type: "select",
-        options: "CTA_DISPLAY_TYPE",
-      }),
       variant: YextField(msg("fields.variant", "Variant"), {
         type: "radio",
         options: "CTA_VARIANT",
@@ -110,7 +111,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
 };
 
 const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data, styles, className, parentData, puck, parentStyles, eventName } =
     props;
   const streamDocument = useDocument();
@@ -118,19 +119,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
   const cta = parentData
     ? parentData.cta
     : resolveComponentData(data.entityField, i18n.language, streamDocument);
-
-  let coordinate = undefined;
-  let ctaType: CTAProps["ctaType"] =
-    data.entityField.selectedTypes?.[0] === "type.coordinate"
-      ? "getDirections"
-      : styles.displayType;
-  if (
-    ctaType === "getDirections" &&
-    cta?.latitude !== undefined &&
-    cta?.longitude !== undefined
-  ) {
-    coordinate = { latitude: cta.latitude, longitude: cta.longitude };
-  }
+  const { ctaType } = getCTAType(data.entityField);
 
   let combinedClassName = className;
   if (parentStyles?.classNameFn) {
@@ -140,18 +129,17 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     );
   }
 
-  const resolvedLabel =
+  let resolvedLabel =
     cta && resolveComponentData(cta.label, i18n.language, streamDocument);
+  if (
+    (parentData || !data.entityField.constantValueEnabled) &&
+    ctaType === "getDirections"
+  ) {
+    resolvedLabel = t("getDirections", "Get Directions");
+  }
 
-  // showCTA is true if there is a cta and one of the following is true:
-  // 1. there is a coordinate (for get directions)
-  // 2. ctaType is presetImage
-  // 3. there is a resolved label (for textAndLink or linkOnly)
-  // and data.show is not set to false
   const showCTA =
-    cta &&
-    (coordinate || ctaType === "presetImage" || resolvedLabel) &&
-    (data.show ?? true);
+    cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
 
   return showCTA ? (
     <EntityField
@@ -161,17 +149,18 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
         !parentData && data.entityField.constantValueEnabled
       }
     >
-      <CTA
-        label={resolvedLabel}
-        link={resolveComponentData(cta.link, i18n.language, streamDocument)}
-        linkType={cta.linkType}
-        ctaType={ctaType}
-        coordinate={coordinate}
-        presetImageType={styles.presetImage}
-        variant={styles.variant}
-        className={combinedClassName}
-        eventName={eventName}
-      />
+      {cta && (
+        <CTA
+          label={resolvedLabel}
+          link={resolveComponentData(cta.link, i18n.language, streamDocument)}
+          linkType={cta.linkType}
+          ctaType={ctaType}
+          presetImageType={styles.presetImage}
+          variant={styles.variant}
+          className={combinedClassName}
+          eventName={eventName}
+        />
+      )}
     </EntityField>
   ) : puck.isEditing ? (
     <div className="h-[50px] min-w-[130px]" />
@@ -191,12 +180,11 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
           label: "Call to Action",
           link: "#",
           linkType: "URL",
-          ctaType: "textAndLink",
         },
+        selectedType: "textAndLink",
       },
     },
     styles: {
-      displayType: "textAndLink",
       variant: "primary",
       presetImage: "app-store",
     },
@@ -204,14 +192,8 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
 
-    if (data.props.data.entityField.selectedTypes?.[0] === "type.coordinate") {
-      data.props.styles.displayType = "textAndLink";
-      setDeep(updatedFields, "styles.objectFields.displayType.visible", false);
-    } else {
-      setDeep(updatedFields, "styles.objectFields.displayType.visible", true);
-    }
-
-    if (data.props.styles.displayType === "presetImage") {
+    const ctaType = getCTAType(data.props.data.entityField).ctaType;
+    if (ctaType === "presetImage") {
       setDeep(updatedFields, "styles.objectFields.variant.visible", false);
       setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);
     } else {

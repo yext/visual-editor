@@ -82,6 +82,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   const { data, styles, puck, parentData } = props;
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
+
   const address = parentData
     ? parentData.address
     : (resolveComponentData(
@@ -89,9 +90,17 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
         i18n.language,
         streamDocument
       ) as unknown as AddressType | undefined);
-  const coordinates = getDirections(address, undefined, undefined, {
-    provider: "google",
-  });
+
+  const addressLink = getDirections(
+    address as AddressType,
+    undefined,
+    undefined,
+    { provider: "google" }
+  );
+
+  // If ref_listings doesn't exist or the address field selected isn't just address, use the address link.
+  const useAddressLink: boolean =
+    data.address.field !== "address" || !streamDocument.ref_listings?.length;
 
   // Only show the address component if there's at least one line of the address
   const showAddress = !!(
@@ -114,11 +123,12 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
           lines={[["line1"], ["line2"], ["city", ",", "region", "postalCode"]]}
         />
       </EntityField>
-      {coordinates && styles.showGetDirectionsLink && (
+      {addressLink && styles.showGetDirectionsLink && (
         <CTA
+          ctaType="getDirections"
           eventName={`getDirections`}
           className="font-bold"
-          link={coordinates}
+          link={useAddressLink ? addressLink : undefined}
           label={t("getDirections", "Get Directions")}
           linkType="DRIVING_DIRECTIONS"
           target="_blank"

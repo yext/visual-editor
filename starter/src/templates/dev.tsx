@@ -63,6 +63,7 @@ export const config = {
       "emails",
       "services",
       "c_deliveryPromo",
+      "ref_listings",
     ],
     localization: {
       locales: ["en", "zh_hans_hk", "fr-CA"],
@@ -73,10 +74,11 @@ export const config = {
   },
 } as const satisfies TemplateConfig;
 
-export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
-  document,
-}): HeadConfig => {
-  const schema = getSchema(document);
+export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
+  data,
+): HeadConfig => {
+  const { document } = data;
+  const schema = getSchema(data);
 
   return {
     title: document.name,

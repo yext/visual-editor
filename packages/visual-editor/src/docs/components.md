@@ -148,11 +148,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 Additional CSS classes to apply to the CTA.
 
-| Prop        | Type                                                                                   | Description                                 | Default |
-| :---------- | :------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `className` | `string`                                                                               | Additional CSS classes to apply to the CTA. |         |
-| `data`      | `{ show?: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; }`           |                                             |         |
-| `styles`    | `{ displayType: CTADisplayType; variant: CTAVariant; presetImage?: PresetImageType; }` |                                             |         |
+| Prop        | Type                                                                         | Description                                 | Default |
+| :---------- | :--------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                                     | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ show?: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; }` |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; }`                    |                                             |         |
 
 ---
 
@@ -539,13 +539,13 @@ Available on Locator templates.
 
 #### Other Props
 
-The starting location for the map.
+Configuration for the filters available in the locator search experience.
 
-| Prop                  | Type                                       | Description                                                                         | Default                                |
-| :-------------------- | :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------- |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }` | The starting location for the map.                                                  |                                        |
-| `mapStyle`            | `string`                                   | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
-| `openNowButton`       | `boolean`                                  | If 'true', displays a button to filter for locations that are currently open.       | `false`                                |
+| Prop                  | Type                                                                            | Description                                                                         | Default                                |
+| :-------------------- | :------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `filters`             | `{ openNowButton: boolean; facetFields?: DynamicOptionsSelectorType<string>; }` | Configuration for the filters available in the locator search experience.           |                                        |
+| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                      | The starting location for the map.                                                  |                                        |
+| `mapStyle`            | `string`                                                                        | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
 
 ---
 

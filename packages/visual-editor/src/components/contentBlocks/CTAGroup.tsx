@@ -2,23 +2,25 @@ import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
-  YextField,
   msg,
   resolveComponentData,
   CTA,
-  pt,
-  CTADisplayType,
   PresetImageType,
+  YextField,
+  pt,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
-import { ctaTypeOptions } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
-import { CTAProps, CTAVariant } from "../atoms/cta.tsx";
+import { CTAVariant } from "../atoms/cta.tsx";
+import {
+  ctaTypeOptions,
+  getCTAType,
+} from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+
+// TODO: re-enable CTA Group
 
 type BasicCTAProps = {
   /** The CTA entity field or static value */
   entityField: CTAWrapperProps["data"]["entityField"];
-  /** The CTA display type */
-  displayType: CTADisplayType;
   /** The visual style of the CTA. */
   variant: CTAVariant;
   /** The image to use if the CTA is set to preset image */
@@ -36,7 +38,6 @@ const defaultButton: BasicCTAProps = {
     },
   },
   variant: "primary",
-  displayType: "textAndLink",
   presetImage: "app-store",
 };
 
@@ -59,11 +60,11 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
           typeLabel: msg("fields.ctaType", "CTA Type"),
           fieldLabel: msg("fields.ctaField", "CTA Field"),
           options: ctaTypeOptions(),
+          optionValueToEntityFieldType: {
+            presetImage: "type.cta",
+            textAndLink: "type.cta",
+          },
         },
-      }),
-      displayType: YextField(msg("fields.displayType", "Display Type"), {
-        type: "select",
-        options: "CTA_DISPLAY_TYPE",
       }),
       variant: YextField(msg("fields.variant", "Variant"), {
         type: "radio",
@@ -80,7 +81,7 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
 
 const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
   const streamDocument = useDocument();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
   if (!buttons || buttons.length === 0) {
@@ -99,18 +100,15 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
           locale,
           streamDocument
         );
+        const { ctaType } = getCTAType(button.entityField);
 
-        let coordinate = undefined;
-        let ctaType: CTAProps["ctaType"] =
-          button.entityField.selectedTypes?.[0] === "type.coordinate"
-            ? "getDirections"
-            : button.displayType;
+        let resolvedLabel =
+          cta && resolveComponentData(cta.label, i18n.language, streamDocument);
         if (
-          ctaType === "getDirections" &&
-          cta?.latitude !== undefined &&
-          cta?.longitude !== undefined
+          !button.entityField.constantValueEnabled &&
+          ctaType === "getDirections"
         ) {
-          coordinate = { latitude: cta.latitude, longitude: cta.longitude };
+          resolvedLabel = t("getDirections", "Get Directions");
         }
 
         return (
@@ -122,12 +120,11 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
               }
             >
               <CTA
-                label={resolveComponentData(cta.label, locale, streamDocument)}
+                label={resolvedLabel}
                 link={resolveComponentData(cta.link, locale, streamDocument)}
                 linkType={cta.linkType}
                 variant={button.variant}
                 ctaType={ctaType}
-                coordinate={coordinate}
                 presetImageType={button.presetImage}
                 className="truncate w-full"
               />
