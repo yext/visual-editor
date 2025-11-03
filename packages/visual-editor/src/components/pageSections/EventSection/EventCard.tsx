@@ -43,7 +43,7 @@ const defaultEvent = {
     hasLocalizedValue: "true",
   },
   cta: {
-    label: "Learn More",
+    label: { en: "Learn More", hasLocalizedValue: "true" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -348,13 +348,6 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
-  console.log(
-    showImage,
-    showDescription,
-    showDateTime,
-    showDescription,
-    showCTA
-  );
   return (
     <Background
       background={styles.backgroundColor}
