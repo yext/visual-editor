@@ -33,7 +33,7 @@ export function resolveComponentData(
 export function resolveComponentData(
   data: TranslatableRichText | YextEntityField<TranslatableRichText>,
   locale: string,
-  streamDocument?: any,
+  streamDocument?: Record<string, any>,
   options?: {
     variant?: BodyProps["variant"];
     isDarkBackground?: boolean;
@@ -45,14 +45,14 @@ export function resolveComponentData(
 export function resolveComponentData<T>(
   data: YextEntityField<T>,
   locale: string,
-  streamDocument?: any
+  streamDocument?: Record<string, any>
 ): T | undefined;
 
 // --- Implementation ---
 export function resolveComponentData<T>(
   data: YextEntityField<T> | TranslatableString | TranslatableRichText,
   locale: string,
-  streamDocument?: any,
+  streamDocument?: Record<string, any>,
   options?: {
     variant?: BodyProps["variant"];
     isDarkBackground?: boolean;

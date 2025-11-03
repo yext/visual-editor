@@ -21,11 +21,8 @@ export interface HeroImageProps extends ImageWrapperProps {
   variant?: "classic" | "compact" | "immersive" | "spotlight";
 }
 
-const HeroImageComponent: PuckComponent<HeroImageProps> = ({
-  data,
-  styles,
-  className,
-}: HeroImageProps) => {
+const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
+  const { data, styles, className, puck } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = resolveComponentData(
@@ -34,8 +31,12 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = ({
     streamDocument
   );
 
-  if (!resolvedImage) {
-    return <></>;
+  if (
+    !resolvedImage ||
+    ("url" in resolvedImage && !resolvedImage.url) ||
+    ("image" in resolvedImage && !resolvedImage.image.url)
+  ) {
+    return puck.isEditing ? <div className="h-[250px] w-full" /> : <></>;
   }
 
   return (
