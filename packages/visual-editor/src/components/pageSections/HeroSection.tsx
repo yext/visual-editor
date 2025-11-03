@@ -28,7 +28,7 @@ import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
-import { getRandomUnsplashImageObject } from "../../utils/unsplashPlaceholders";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 
 export interface HeroData {
   backgroundImage: YextEntityField<ImageType | AssetImageType>;
@@ -327,7 +327,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     data: {
       backgroundImage: {
         field: "",
-        constantValue: getRandomUnsplashImageObject(),
+        constantValue: getRandomPlaceholderImageObject(),
         constantValueEnabled: true,
       },
     },
@@ -404,7 +404,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             data: {
               image: {
                 field: "",
-                constantValue: getRandomUnsplashImageObject(),
+                constantValue: getRandomPlaceholderImageObject(),
                 constantValueEnabled: true,
               },
             },

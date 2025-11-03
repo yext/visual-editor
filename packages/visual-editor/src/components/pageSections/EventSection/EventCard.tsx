@@ -27,7 +27,7 @@ import {
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomUnsplashImageObject } from "../../../utils/unsplashPlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
 export const defaultEventCardSlotData = (id?: string, index?: number) => ({
   type: "EventCard",
@@ -47,7 +47,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               image: {
                 field: "",
-                constantValue: getRandomUnsplashImageObject(),
+                constantValue: getRandomPlaceholderImageObject(),
                 constantValueEnabled: true,
               },
             },

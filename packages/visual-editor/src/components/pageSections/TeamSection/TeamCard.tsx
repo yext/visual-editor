@@ -27,7 +27,7 @@ import {
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { defaultPerson } from "../../../internal/puck/constant-value-fields/TeamSection.tsx";
-import { getRandomUnsplashImageObject } from "../../../utils/unsplashPlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
 export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
   type: "TeamCard",
@@ -47,7 +47,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
               image: {
                 field: "",
                 constantValue:
-                  defaultPerson.headshot || getRandomUnsplashImageObject(),
+                  defaultPerson.headshot || getRandomPlaceholderImageObject(),
                 constantValueEnabled: true,
               },
             },

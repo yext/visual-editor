@@ -153,7 +153,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     streamDocument
   );
 
-  // Helper to get image URL
   const getImageUrl = (image: any): string | undefined => {
     if (!image) return undefined;
     if ("assetImage" in image) {
@@ -165,7 +164,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     return image.url;
   };
 
-  // Keep all images, including empty ones, so we can show the empty state
   const allImages = (resolvedImages || []).map(
     (image: any, originalIndex: number) => {
       const url = getImageUrl(image);
@@ -219,13 +217,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     e: React.MouseEvent | undefined,
     index: number
   ) => {
-    console.log("[PhotoGalleryWrapper] handleEmptyImageClick called", {
-      index,
-      constantValueEnabled: data.images.constantValueEnabled,
-      isEditing: puck?.isEditing,
-      eventTarget: e?.target,
-    });
-
     if (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -233,10 +224,8 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
 
     if (data.images.constantValueEnabled && puck?.isEditing) {
       if (window.location.href.includes("http://localhost:5173")) {
-        console.log("[PhotoGalleryWrapper] Local dev mode - showing prompt");
         const userInput = prompt("Enter Image URL:");
         if (!userInput) return;
-        console.log("Would set image URL to:", userInput);
       } else {
         const messageId = `ImageAsset-${Date.now()}-${index}`;
         const currentImageValue = Array.isArray(data.images.constantValue)
@@ -247,11 +236,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             ? (currentImageValue as { assetImage?: AssetImageTypeImport })
                 .assetImage
             : undefined;
-        console.log("[PhotoGalleryWrapper] Opening image asset selector", {
-          messageId,
-          index,
-          currentValue: assetImageValue,
-        });
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
@@ -260,11 +244,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
           },
         });
       }
-    } else {
-      console.log("[PhotoGalleryWrapper] Conditions not met to open drawer", {
-        constantValueEnabled: data.images.constantValueEnabled,
-        isEditing: puck?.isEditing,
-      });
     }
   };
 
@@ -286,16 +265,9 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             // Only handle clicks that aren't on the button
             const target = e.target as HTMLElement;
             const isButton = target.closest('button[aria-label*="Add Image"]');
-            console.log("[PhotoGalleryWrapper] Parent container clicked", {
-              target: target.tagName,
-              isButton,
-              buttonElement: isButton ? isButton.tagName : null,
-            });
             if (isButton) {
-              // Let the button handle its own click
               return;
             }
-            // For clicks elsewhere, let them propagate to select the slot
           }}
         >
           <Button
@@ -309,32 +281,19 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
               transform: "translate(-50%, -50%)",
             }}
             onClick={(e) => {
-              console.log("[PhotoGalleryWrapper] Button onClick fired", {
-                target: e.target,
-                currentTarget: e.currentTarget,
-                buttonType: e.currentTarget.type,
-                originalIndex: imageData.originalIndex,
-              });
               e.stopPropagation();
               e.preventDefault();
               handleEmptyImageClick(e, imageData.originalIndex);
             }}
             onMouseDown={(e) => {
-              console.log("[PhotoGalleryWrapper] Button onMouseDown fired");
               e.stopPropagation();
             }}
             onMouseUp={(e) => {
-              console.log("[PhotoGalleryWrapper] Button onMouseUp fired");
               e.stopPropagation();
               e.preventDefault();
-              // Call handler directly since onClick might be blocked
-              console.log(
-                "[PhotoGalleryWrapper] Calling handleEmptyImageClick from onMouseUp"
-              );
               handleEmptyImageClick(e as any, imageData.originalIndex);
             }}
             onPointerDown={(e) => {
-              console.log("[PhotoGalleryWrapper] Button onPointerDown fired");
               e.stopPropagation();
             }}
             type="button"
@@ -450,26 +409,13 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                               aspectRatio: imageData.aspectRatio,
                             }}
                             onClick={(e) => {
-                              // Only handle clicks that aren't on the button
                               const target = e.target as HTMLElement;
                               const isButton = target.closest(
                                 'button[aria-label*="Add Image"]'
                               );
-                              console.log(
-                                "[PhotoGalleryWrapper Mobile] Parent container clicked",
-                                {
-                                  target: target.tagName,
-                                  isButton,
-                                  buttonElement: isButton
-                                    ? isButton.tagName
-                                    : null,
-                                }
-                              );
                               if (isButton) {
-                                // Let the button handle its own click
                                 return;
                               }
-                              // For clicks elsewhere, let them propagate to select the slot
                             }}
                           >
                             <Button
@@ -483,15 +429,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                                 transform: "translate(-50%, -50%)",
                               }}
                               onClick={(e) => {
-                                console.log(
-                                  "[PhotoGalleryWrapper Mobile] Button onClick fired",
-                                  {
-                                    target: e.target,
-                                    currentTarget: e.currentTarget,
-                                    buttonType: e.currentTarget.type,
-                                    originalIndex: imageData.originalIndex,
-                                  }
-                                );
                                 e.stopPropagation();
                                 e.preventDefault();
                                 handleEmptyImageClick(
@@ -500,30 +437,17 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                                 );
                               }}
                               onMouseDown={(e) => {
-                                console.log(
-                                  "[PhotoGalleryWrapper Mobile] Button onMouseDown fired"
-                                );
                                 e.stopPropagation();
                               }}
                               onMouseUp={(e) => {
-                                console.log(
-                                  "[PhotoGalleryWrapper Mobile] Button onMouseUp fired"
-                                );
                                 e.stopPropagation();
                                 e.preventDefault();
-                                // Call handler directly since onClick might be blocked
-                                console.log(
-                                  "[PhotoGalleryWrapper Mobile] Calling handleEmptyImageClick from onMouseUp"
-                                );
                                 handleEmptyImageClick(
                                   e as any,
                                   imageData.originalIndex
                                 );
                               }}
                               onPointerDown={(e) => {
-                                console.log(
-                                  "[PhotoGalleryWrapper Mobile] Button onPointerDown fired"
-                                );
                                 e.stopPropagation();
                               }}
                               type="button"

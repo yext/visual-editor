@@ -33,7 +33,7 @@ import {
   getDefaultRTF,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { getRandomUnsplashImageObject } from "../../utils/unsplashPlaceholders";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 
 export interface PromoData {
   /**
@@ -325,7 +325,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             data: {
               image: {
                 field: "",
-                constantValue: getRandomUnsplashImageObject(),
+                constantValue: getRandomPlaceholderImageObject(),
                 constantValueEnabled: true,
               },
             },

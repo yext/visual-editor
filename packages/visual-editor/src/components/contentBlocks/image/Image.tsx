@@ -104,16 +104,13 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     TARGET_ORIGINS
   );
 
-  // Helper function to get image URL regardless of type
   const getImageUrl = (
     image: ImageType | ComplexImageType | AssetImageType | undefined
   ): string | undefined => {
     if (!image) return undefined;
     if ("image" in image) {
-      // ComplexImageType - url is nested in image.image.url
       return image.image?.url;
     }
-    // ImageType or AssetImageType (AssetImageType extends ImageType, so it has url directly)
     return (image as ImageType | AssetImageType).url;
   };
 
@@ -124,36 +121,20 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
   const handleEmptyImageClick = (e?: React.MouseEvent) => {
-    console.log("[ImageWrapper] handleEmptyImageClick called", {
-      hasParentData: !!parentData,
-      constantValueEnabled: data.image.constantValueEnabled,
-      isEditing: puck.isEditing,
-      eventTarget: e?.target,
-    });
-
     if (e) {
       e.stopPropagation();
     }
 
-    // Only open asset drawer if we're in constant value mode
     if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
       /** Handles local development testing outside of Storm */
       if (window.location.href.includes("http://localhost:5173")) {
-        console.log("[ImageWrapper] Local dev mode - showing prompt");
         const userInput = prompt("Enter Image URL:");
         if (!userInput) {
           return;
         }
-        // This won't work directly - would need to access the onChange handler
-        // But this is just for local dev testing
-        console.log("Would set image URL to:", userInput);
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
-        console.log("[ImageWrapper] Opening image asset selector", {
-          messageId,
-          currentValue: data.image.constantValue,
-        });
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
@@ -162,12 +143,6 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
           },
         });
       }
-    } else {
-      console.log("[ImageWrapper] Conditions not met to open drawer", {
-        parentDataCheck: !parentData,
-        constantValueEnabled: data.image.constantValueEnabled,
-        isEditing: puck.isEditing,
-      });
     }
   };
 
@@ -203,16 +178,9 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
               const isButton = target.closest(
                 'button[aria-label*="Add Image"]'
               );
-              console.log("[ImageWrapper] Parent container clicked", {
-                target: target.tagName,
-                isButton,
-                buttonElement: isButton ? isButton.tagName : null,
-              });
               if (isButton) {
-                // Let the button handle its own click
                 return;
               }
-              // For clicks elsewhere, let them propagate to select the slot
             }}
           >
             <Button
@@ -226,32 +194,20 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
                 transform: "translate(-50%, -50%)",
               }}
               onClick={(e) => {
-                console.log("[ImageWrapper] Button onClick fired", {
-                  target: e.target,
-                  currentTarget: e.currentTarget,
-                  buttonType: e.currentTarget.type,
-                });
                 e.stopPropagation();
                 e.preventDefault();
                 handleEmptyImageClick(e);
               }}
               onMouseDown={(e) => {
-                console.log("[ImageWrapper] Button onMouseDown fired");
                 // Don't prevent default here - let it become a click
                 e.stopPropagation();
               }}
               onMouseUp={(e) => {
-                console.log("[ImageWrapper] Button onMouseUp fired");
                 e.stopPropagation();
                 e.preventDefault();
-                // Call handler directly since onClick might be blocked
-                console.log(
-                  "[ImageWrapper] Calling handleEmptyImageClick from onMouseUp"
-                );
                 handleEmptyImageClick(e as any);
               }}
               onPointerDown={(e) => {
-                console.log("[ImageWrapper] Button onPointerDown fired");
                 e.stopPropagation();
               }}
               type="button"

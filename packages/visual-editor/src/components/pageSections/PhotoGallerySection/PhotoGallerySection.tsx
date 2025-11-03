@@ -12,11 +12,11 @@ import {
 } from "@yext/visual-editor";
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
-import { getRandomUnsplashImageObject } from "../../../utils/unsplashPlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
-// Generate 3 random Unsplash images for the gallery
+// Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
-  ...getRandomUnsplashImageObject(),
+  ...getRandomPlaceholderImageObject(),
   assetImage: {
     name: "Placeholder",
   },
@@ -146,19 +146,19 @@ export const PhotoGallerySection: ComponentConfig<{
                 constantValue: [
                   {
                     assetImage: {
-                      ...getRandomUnsplashImageObject(),
+                      ...getRandomPlaceholderImageObject(),
                       assetImage: { name: "Placeholder" },
                     },
                   },
                   {
                     assetImage: {
-                      ...getRandomUnsplashImageObject(),
+                      ...getRandomPlaceholderImageObject(),
                       assetImage: { name: "Placeholder" },
                     },
                   },
                   {
                     assetImage: {
-                      ...getRandomUnsplashImageObject(),
+                      ...getRandomPlaceholderImageObject(),
                       assetImage: { name: "Placeholder" },
                     },
                   },
