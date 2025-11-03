@@ -47,8 +47,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
               image: {
                 field: "",
                 constantValue:
-                  defaultPerson.headshot ||
-                  getRandomUnsplashImageObject(80, 80),
+                  defaultPerson.headshot || getRandomUnsplashImageObject(),
                 constantValueEnabled: true,
               },
             },

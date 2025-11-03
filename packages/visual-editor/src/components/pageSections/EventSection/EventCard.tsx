@@ -47,7 +47,7 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               image: {
                 field: "",
-                constantValue: getRandomUnsplashImageObject(640, 360),
+                constantValue: getRandomUnsplashImageObject(),
                 constantValueEnabled: true,
               },
             },

@@ -14,12 +14,9 @@ import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomUnsplashImageObject } from "../../../utils/unsplashPlaceholders";
 
-const PLACEHOLDER_WIDTH = 1000;
-const PLACEHOLDER_HEIGHT = 570;
-
 // Generate 3 random Unsplash images for the gallery
 export const PLACEHOLDER: AssetImageType = {
-  ...getRandomUnsplashImageObject(PLACEHOLDER_WIDTH, PLACEHOLDER_HEIGHT),
+  ...getRandomUnsplashImageObject(),
   assetImage: {
     name: "Placeholder",
   },
@@ -149,28 +146,19 @@ export const PhotoGallerySection: ComponentConfig<{
                 constantValue: [
                   {
                     assetImage: {
-                      ...getRandomUnsplashImageObject(
-                        PLACEHOLDER_WIDTH,
-                        PLACEHOLDER_HEIGHT
-                      ),
+                      ...getRandomUnsplashImageObject(),
                       assetImage: { name: "Placeholder" },
                     },
                   },
                   {
                     assetImage: {
-                      ...getRandomUnsplashImageObject(
-                        PLACEHOLDER_WIDTH,
-                        PLACEHOLDER_HEIGHT
-                      ),
+                      ...getRandomUnsplashImageObject(),
                       assetImage: { name: "Placeholder" },
                     },
                   },
                   {
                     assetImage: {
-                      ...getRandomUnsplashImageObject(
-                        PLACEHOLDER_WIDTH,
-                        PLACEHOLDER_HEIGHT
-                      ),
+                      ...getRandomUnsplashImageObject(),
                       assetImage: { name: "Placeholder" },
                     },
                   },

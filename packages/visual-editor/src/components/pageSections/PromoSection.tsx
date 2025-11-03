@@ -325,7 +325,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             data: {
               image: {
                 field: "",
-                constantValue: getRandomUnsplashImageObject(640, 360),
+                constantValue: getRandomUnsplashImageObject(),
                 constantValueEnabled: true,
               },
             },

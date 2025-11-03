@@ -327,7 +327,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     data: {
       backgroundImage: {
         field: "",
-        constantValue: getRandomUnsplashImageObject(640, 360),
+        constantValue: getRandomUnsplashImageObject(),
         constantValueEnabled: true,
       },
     },
@@ -404,7 +404,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             data: {
               image: {
                 field: "",
-                constantValue: getRandomUnsplashImageObject(640, 360),
+                constantValue: getRandomUnsplashImageObject(),
                 constantValueEnabled: true,
               },
             },
