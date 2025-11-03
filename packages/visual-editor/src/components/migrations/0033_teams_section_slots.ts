@@ -21,7 +21,7 @@ export const teamsSectionSlots: Migration = {
       const team = resolveYextEntityField(
         streamDocument,
         props.data.people as YextEntityField<TeamSectionType>,
-        streamDocument.meta?.locale
+        streamDocument.meta?.locale || "en"
       )?.people;
 
       const cards =
@@ -33,10 +33,11 @@ export const teamsSectionSlots: Migration = {
                 streamDocument
               )
             : "";
+          const cardId = `${props.id}-Card-${i}`;
           return {
             type: "TeamCard",
             props: {
-              id: `${props.id}-Card-${i}`,
+              id: cardId,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
               },
@@ -45,6 +46,7 @@ export const teamsSectionSlots: Migration = {
                   {
                     type: "ImageSlot",
                     props: {
+                      id: `${cardId}-ImageSlot`,
                       data: {
                         image: {
                           field: "",
@@ -72,13 +74,14 @@ export const teamsSectionSlots: Migration = {
                             field: props.data.people.field,
                             image: person.headshot,
                           },
-                    } satisfies ImageWrapperProps,
+                    } satisfies WithId<ImageWrapperProps>,
                   },
                 ],
                 NameSlot: [
                   {
                     type: "HeadingTextSlot",
                     props: {
+                      id: `${cardId}-NameSlot`,
                       data: {
                         text: {
                           field: "",
@@ -96,13 +99,14 @@ export const teamsSectionSlots: Migration = {
                             field: props.data.people.field,
                             text: resolvedName,
                           },
-                    } satisfies HeadingTextProps,
+                    } satisfies WithId<HeadingTextProps>,
                   },
                 ],
                 TitleSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-TitleSlot`,
                       data: {
                         text: {
                           field: "",
@@ -117,13 +121,14 @@ export const teamsSectionSlots: Migration = {
                             field: props.data.people.field,
                             richText: person.title,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 PhoneSlot: [
                   {
                     type: "PhoneNumbersSlot",
                     props: {
+                      id: `${cardId}-PhoneSlot`,
                       data: {
                         phoneNumbers: person.phoneNumber
                           ? [
@@ -156,6 +161,7 @@ export const teamsSectionSlots: Migration = {
                   {
                     type: "EmailsSlot",
                     props: {
+                      id: `${cardId}-EmailSlot`,
                       data: {
                         list: {
                           field: "",
@@ -171,6 +177,7 @@ export const teamsSectionSlots: Migration = {
                   {
                     type: "CTASlot",
                     props: {
+                      id: `${cardId}-CTASlot`,
                       data: {
                         entityField: {
                           field: "",
@@ -194,7 +201,7 @@ export const teamsSectionSlots: Migration = {
                             cta: person.cta,
                           },
                       eventName: `cta${i}`,
-                    } satisfies CTAWrapperProps,
+                    } satisfies WithId<CTAWrapperProps>,
                   },
                 ],
               },
@@ -220,6 +227,7 @@ export const teamsSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-HeadingSlot`,
                 data: {
                   text: {
                     field: props.data.heading?.field ?? "",
@@ -229,13 +237,14 @@ export const teamsSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           CardsWrapperSlot: [
             {
               type: "TeamCardsWrapper",
               props: {
+                id: `${props.id}-CardsWrapperSlot`,
                 data: {
                   field: props.data.people.field,
                   constantValueEnabled: props.data.people.constantValueEnabled,
@@ -244,7 +253,7 @@ export const teamsSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies TeamCardsWrapperProps,
+              } satisfies WithId<TeamCardsWrapperProps>,
             },
           ],
         },

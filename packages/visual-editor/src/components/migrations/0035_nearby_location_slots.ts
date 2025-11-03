@@ -20,6 +20,7 @@ export const nearbyLocationSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-SectionHeadingSlot`,
                 data: {
                   text: {
                     field: props.data.heading.field,
@@ -29,13 +30,14 @@ export const nearbyLocationSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           CardsWrapperSlot: [
             {
               type: "NearbyLocationCardsWrapper",
               props: {
+                id: `${props.id}-CardsWrapperSlot`,
                 data: {
                   coordinate: props.data.coordinate,
                   radius: props.data.radius,
@@ -51,7 +53,7 @@ export const nearbyLocationSlots: Migration = {
                   },
                 },
                 sectionHeadingLevel: props.styles.heading.level,
-              } satisfies NearbyLocationCardsWrapperProps,
+              } satisfies WithId<NearbyLocationCardsWrapperProps>,
             },
           ],
         },

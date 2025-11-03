@@ -17,11 +17,12 @@ export const eventSectionSlots: Migration = {
   EventSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const constantValueEnabled: boolean = props.data.constantValueEnabled;
+      const constantValueEnabled: boolean =
+        props.data.events.constantValueEnabled;
       const events = resolveYextEntityField(
         streamDocument,
         props.data.events as YextEntityField<EventSectionType>,
-        streamDocument?.locale
+        streamDocument?.locale || "en"
       )?.events;
 
       const cards =
@@ -48,10 +49,11 @@ export const eventSectionSlots: Migration = {
               )
             : "";
 
+          const cardId = `${props.id}-Card-${i}`;
           return {
             type: "EventCard",
             props: {
-              id: `${props.id}-Card-${i}`,
+              id: cardId,
               styles: {
                 backgroundColor: props.styles.cards.backgroundColor,
                 truncateDescription: props.styles.cards.truncateDescription,
@@ -61,6 +63,7 @@ export const eventSectionSlots: Migration = {
                   {
                     type: "ImageSlot",
                     props: {
+                      id: `${cardId}-ImageSlot`,
                       data: {
                         image: {
                           field: "",
@@ -91,13 +94,14 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             image: event.image,
                           },
-                    } satisfies ImageWrapperProps,
+                    } satisfies WithId<ImageWrapperProps>,
                   },
                 ],
                 DateTimeSlot: [
                   {
                     type: "Timestamp",
                     props: {
+                      id: `${cardId}-DateTimeSlot`,
                       data: {
                         date: {
                           field: "",
@@ -120,13 +124,14 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             date: resolvedDateTime,
                           },
-                    } satisfies TimestampProps,
+                    } satisfies WithId<TimestampProps>,
                   },
                 ],
                 TitleSlot: [
                   {
                     type: "HeadingTextSlot",
                     props: {
+                      id: `${cardId}-TitleSlot`,
                       data: {
                         text: {
                           field: "",
@@ -144,13 +149,14 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             text: resolvedTitle,
                           },
-                    } satisfies HeadingTextProps,
+                    } satisfies WithId<HeadingTextProps>,
                   },
                 ],
                 DescriptionSlot: [
                   {
                     type: "BodyTextSlot",
                     props: {
+                      id: `${cardId}-DescriptionSlot`,
                       data: {
                         text: {
                           field: "",
@@ -170,13 +176,14 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             richText: event.description,
                           },
-                    } satisfies BodyTextProps,
+                    } satisfies WithId<BodyTextProps>,
                   },
                 ],
                 CTASlot: [
                   {
                     type: "CTASlot",
                     props: {
+                      id: `${cardId}-CTASlot`,
                       data: {
                         entityField: {
                           field: "",
@@ -200,7 +207,7 @@ export const eventSectionSlots: Migration = {
                             cta: event.cta,
                           },
                       eventName: `cta${i}`,
-                    } satisfies CTAWrapperProps,
+                    } satisfies WithId<CTAWrapperProps>,
                   },
                 ],
               },
@@ -233,6 +240,7 @@ export const eventSectionSlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-SectionHeadingSlot`,
                 data: {
                   text: {
                     field: props.data.heading?.field ?? "",
@@ -242,13 +250,14 @@ export const eventSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           CardsWrapperSlot: [
             {
               type: "EventCardsWrapper",
               props: {
+                id: `${props.id}-CardsWrapperSlot`,
                 data: {
                   field: props.data.events.field,
                   constantValueEnabled: props.data.events.constantValueEnabled,
@@ -259,7 +268,7 @@ export const eventSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies EventCardsWrapperProps,
+              } satisfies WithId<EventCardsWrapperProps>,
             },
           ],
         },

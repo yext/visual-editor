@@ -28,16 +28,17 @@ export const directorySlots: Migration = {
 
       const cards = isGrid
         ? sortedDirectoryChildren?.map((child, i) => {
+            const cardId = `${props.id}-Card-${i}`;
             return {
               type: "DirectoryCard",
               props: {
-                id: `${props.id}-Card-${i}`,
+                id: cardId,
                 slots: {
                   HeadingSlot: [
                     {
                       type: "HeadingTextSlot",
                       props: {
-                        ...(props.id && { id: `${props.id}-heading-${i}` }),
+                        id: `${cardId}-HeadingSlot`,
                         data: {
                           text: {
                             constantValue: "",
@@ -52,14 +53,14 @@ export const directorySlots: Migration = {
                           text: child["name"],
                           field: "profile.name",
                         },
-                      } satisfies HeadingTextProps,
+                      } satisfies WithId<HeadingTextProps>,
                     },
                   ],
                   PhoneSlot: [
                     {
                       type: "PhoneSlot",
                       props: {
-                        ...(props.id && { id: `${props.id}-phone-${i}` }),
+                        id: `${cardId}-PhoneSlot`,
                         data: {
                           number: {
                             constantValue: "",
@@ -80,14 +81,14 @@ export const directorySlots: Migration = {
                           phoneNumber: child["mainPhone"],
                           field: "profile.mainPhone",
                         },
-                      } satisfies PhoneProps,
+                      } satisfies WithId<PhoneProps>,
                     },
                   ],
                   HoursSlot: [
                     {
                       type: "HoursStatusSlot",
                       props: {
-                        ...(props.id && { id: `${props.id}-hours-${i}` }),
+                        id: `${cardId}-HoursSlot`,
                         data: {
                           hours: {
                             constantValue: {},
@@ -108,7 +109,7 @@ export const directorySlots: Migration = {
                           field: "profile.hours",
                           timezone: child["timezone"],
                         },
-                      } satisfies HoursStatusProps,
+                      } satisfies WithId<HoursStatusProps>,
                     },
                   ],
                 },
@@ -137,6 +138,7 @@ export const directorySlots: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-TitleSlot`,
                 data: {
                   text: title,
                 },
@@ -144,13 +146,14 @@ export const directorySlots: Migration = {
                   align: "center",
                   level: 2,
                 },
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           SiteNameSlot: [
             {
               type: "HeadingTextSlot",
               props: {
+                id: `${props.id}-SiteNameSlot`,
                 data: {
                   text: siteName,
                 },
@@ -158,13 +161,14 @@ export const directorySlots: Migration = {
                   align: "center",
                   level: 4,
                 },
-              } satisfies HeadingTextProps,
+              } satisfies WithId<HeadingTextProps>,
             },
           ],
           BreadcrumbsSlot: [
             {
               type: "BreadcrumbsSlot",
               props: {
+                id: `${props.id}-BreadcrumbsSlot`,
                 data: {
                   directoryRoot: breadcrumbRoot,
                 },
@@ -173,13 +177,14 @@ export const directorySlots: Migration = {
                 },
                 liveVisibility: true,
                 analytics: props.analytics,
-              } satisfies BreadcrumbsSectionProps,
+              } satisfies WithId<BreadcrumbsSectionProps>,
             },
           ],
           DirectoryGrid: [
             {
               type: "DirectoryGrid",
               props: {
+                id: `${props.id}-DirectoryGrid`,
                 slots: {
                   CardSlot: cards,
                 },
