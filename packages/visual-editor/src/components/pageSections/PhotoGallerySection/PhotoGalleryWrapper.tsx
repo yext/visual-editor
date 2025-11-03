@@ -269,6 +269,14 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
               return;
             }
           }}
+          onPointerDown={(e) => {
+            // Stop Puck from capturing pointer events on the button
+            const target = e.target as HTMLElement;
+            const isButton = target.closest('button[aria-label*="Add Image"]');
+            if (isButton) {
+              e.stopPropagation();
+            }
+          }}
         >
           <Button
             variant="ghost"
@@ -297,11 +305,16 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
             onPointerDown={(e) => {
               e.stopPropagation();
               e.preventDefault();
+              // Prevent Puck drag handlers from activating
+              e.nativeEvent.stopImmediatePropagation();
             }}
             onPointerUp={(e) => {
               e.stopPropagation();
               e.preventDefault();
               handleEmptyImageClick(e as any, imageData.originalIndex);
+            }}
+            onClickCapture={(e) => {
+              e.stopPropagation();
             }}
             type="button"
             aria-label={pt("addImage", "Add Image")}
@@ -424,6 +437,16 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                                 return;
                               }
                             }}
+                            onPointerDown={(e) => {
+                              // Stop Puck from capturing pointer events on the button
+                              const target = e.target as HTMLElement;
+                              const isButton = target.closest(
+                                'button[aria-label*="Add Image"]'
+                              );
+                              if (isButton) {
+                                e.stopPropagation();
+                              }
+                            }}
                           >
                             <Button
                               variant="ghost"
@@ -458,6 +481,8 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                               onPointerDown={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
+                                // Prevent Puck drag handlers from activating
+                                e.nativeEvent.stopImmediatePropagation();
                               }}
                               onPointerUp={(e) => {
                                 e.stopPropagation();
@@ -466,6 +491,9 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                                   e as any,
                                   imageData.originalIndex
                                 );
+                              }}
+                              onClickCapture={(e) => {
+                                e.stopPropagation();
                               }}
                               type="button"
                               aria-label={pt("addImage", "Add Image")}

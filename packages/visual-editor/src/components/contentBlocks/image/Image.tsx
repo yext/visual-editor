@@ -182,6 +182,16 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
                 return;
               }
             }}
+            onPointerDown={(e) => {
+              // Stop Puck from capturing pointer events on the button
+              const target = e.target as HTMLElement;
+              const isButton = target.closest(
+                'button[aria-label*="Add Image"]'
+              );
+              if (isButton) {
+                e.stopPropagation();
+              }
+            }}
           >
             <Button
               variant="ghost"
@@ -210,11 +220,16 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
               onPointerDown={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
+                // Prevent Puck drag handlers from activating
+                e.nativeEvent.stopImmediatePropagation();
               }}
               onPointerUp={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 handleEmptyImageClick(e as any);
+              }}
+              onClickCapture={(e) => {
+                e.stopPropagation();
               }}
               type="button"
               aria-label={pt("addImage", "Add Image")}
