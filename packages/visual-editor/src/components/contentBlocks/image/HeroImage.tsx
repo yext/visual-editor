@@ -60,9 +60,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
       constantValueEnabled={data.image.constantValueEnabled ?? false}
       constantValue={data.image.constantValue as AssetImageType | undefined}
       fieldId={data.image.field}
-      containerStyle={
-        styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : undefined
-      }
+      containerStyle={{ minHeight: "250px" }}
       containerClassName={
         className || "max-w-full rounded-image-borderRadius w-full h-full"
       }
