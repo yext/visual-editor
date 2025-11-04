@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import {
   EntityField,
   pt,
@@ -11,6 +10,7 @@ import { Button } from "../../../internal/puck/ui/button";
 import {
   TARGET_ORIGINS,
   useSendMessageToParent,
+  useReceiveMessage,
 } from "../../../internal/hooks/useMessage";
 
 interface EmptyImageStateProps {
@@ -24,6 +24,7 @@ interface EmptyImageStateProps {
   fullHeight?: boolean;
   dragRef?: React.Ref<HTMLDivElement>;
   hasParentData?: boolean;
+  onImageSelected?: (imageData: AssetImageType) => void;
 }
 
 export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
@@ -34,22 +35,68 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
   fieldId,
   containerStyle,
   containerClassName,
-  fullHeight,
   dragRef,
   hasParentData = false,
+  onImageSelected,
 }) => {
   const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
     "constantValueEditorOpened",
     TARGET_ORIGINS
   );
 
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const [buttonPosition, setButtonPosition] = React.useState<{
-    top: number;
-    left: number;
-    width: number;
-    height: number;
-  } | null>(null);
+  const [pendingMessageId, setPendingMessageId] = React.useState<
+    string | undefined
+  >();
+
+  // Listen for image selection response
+  useReceiveMessage(
+    "constantValueEditorClosed",
+    TARGET_ORIGINS,
+    React.useCallback(
+      (_, payload) => {
+        const imagePayload = payload as {
+          id: string;
+          value: {
+            transformedImage?: {
+              url: string;
+              dimension?: { width: number; height: number };
+            };
+            originalImage?: {
+              url: string;
+              dimension?: { width: number; height: number };
+            };
+            altText?: string;
+          };
+          locale: string;
+        };
+        if (
+          pendingMessageId &&
+          pendingMessageId === imagePayload.id &&
+          onImageSelected
+        ) {
+          const imageData =
+            imagePayload.value.transformedImage ??
+            imagePayload.value.originalImage;
+          if (!imageData) {
+            return;
+          }
+          onImageSelected({
+            alternateText: imagePayload.value.altText
+              ? {
+                  [imagePayload.locale]: imagePayload.value.altText,
+                  hasLocalizedValue: "true",
+                }
+              : "",
+            url: imageData.url,
+            height: imageData.dimension?.height ?? 0,
+            width: imageData.dimension?.width ?? 0,
+            assetImage: payload.value,
+          } as AssetImageType);
+        }
+      },
+      [pendingMessageId, onImageSelected]
+    )
+  );
 
   const handleImageSelection = React.useCallback(() => {
     if (!hasParentData && constantValueEnabled && isEditing) {
@@ -58,8 +105,17 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
         if (!userInput) {
           return;
         }
+        if (onImageSelected) {
+          onImageSelected({
+            url: userInput,
+            height: 1,
+            width: 1,
+            alternateText: "",
+          } as AssetImageType);
+        }
       } else {
         const messageId = `ImageAsset-${Date.now()}`;
+        setPendingMessageId(messageId);
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
@@ -75,53 +131,8 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     isEditing,
     constantValue,
     openImageAssetSelector,
+    onImageSelected,
   ]);
-
-  // Update button position when container moves/resizes
-  React.useEffect(() => {
-    if (!containerRef.current || !isEmpty || !isEditing) {
-      setButtonPosition(null);
-      return;
-    }
-
-    const updatePosition = () => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setButtonPosition({
-          top: rect.top + rect.height / 2,
-          left: rect.left + rect.width / 2,
-          width: rect.width,
-          height: rect.height,
-        });
-      }
-    };
-
-    updatePosition();
-
-    // Update on scroll/resize
-    window.addEventListener("scroll", updatePosition, true);
-    window.addEventListener("resize", updatePosition);
-
-    // Use MutationObserver to detect DOM changes
-    const observer = new MutationObserver(updatePosition);
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["style", "class"],
-    });
-
-    // Use ResizeObserver for container size changes
-    const resizeObserver = new ResizeObserver(updatePosition);
-    resizeObserver.observe(containerRef.current);
-
-    return () => {
-      window.removeEventListener("scroll", updatePosition, true);
-      window.removeEventListener("resize", updatePosition);
-      observer.disconnect();
-      resizeObserver.disconnect();
-    };
-  }, [isEmpty, isEditing]);
 
   if (!isEmpty || !isEditing) {
     return null;
@@ -133,55 +144,35 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
         displayName={pt("fields.image", "Image")}
         fieldId={fieldId}
         constantValueEnabled={!hasParentData && constantValueEnabled}
-        fullHeight={fullHeight}
+        fullHeight={false}
         ref={dragRef}
       >
-        <div className="w-full h-full relative">
+        <div className="w-full relative">
           <div
-            ref={containerRef}
             className={themeManagerCn(
               containerClassName ||
-                "max-w-full rounded-image-borderRadius w-full h-full",
+                "max-w-full rounded-image-borderRadius w-full",
               "border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
             )}
             style={containerStyle}
           >
-            {/* Placeholder for visual alignment */}
-            <div className="text-gray-400">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-400 hover:text-gray-600 hover:bg-transparent"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleImageSelection();
+              }}
+              type="button"
+              aria-label={pt("addImage", "Add Image")}
+            >
               <ImagePlus size={24} className="stroke-2" />
-            </div>
+            </Button>
           </div>
         </div>
       </EntityField>
-
-      {/* Portal the actual clickable button */}
-      {buttonPosition &&
-        ReactDOM.createPortal(
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-gray-400 hover:text-gray-600 hover:bg-transparent"
-            style={{
-              position: "fixed",
-              top: buttonPosition.top,
-              left: buttonPosition.left,
-              transform: "translate(-50%, -50%)",
-              zIndex: 999999,
-              cursor: "pointer",
-              pointerEvents: "auto",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              handleImageSelection();
-            }}
-            type="button"
-            aria-label={pt("addImage", "Add Image")}
-          >
-            <ImagePlus size={24} className="stroke-2" />
-          </Button>,
-          document.body
-        )}
     </>
   );
 };
