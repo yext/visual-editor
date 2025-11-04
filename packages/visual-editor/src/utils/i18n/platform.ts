@@ -6,37 +6,71 @@ const NAMESPACE = "visual-editor";
 
 export const i18nPlatformInstance = i18next.createInstance();
 
-const resources: Record<string, any> = {};
-const modules = import.meta.glob(
-  "../../../locales/platform/*/visual-editor.json",
-  {
-    eager: true,
-  }
-);
-const translationRegex = new RegExp(
-  `locales/platform/([^/]+)/${NAMESPACE}\\.json$`
-);
-
-for (const path in modules) {
-  const match = path.match(translationRegex);
-  if (match) {
-    const lang = match[1];
-    resources[lang] = {
-      [NAMESPACE]: (modules[path] as any).default,
-    };
-  }
-}
-
-applyI18nFallbacks(resources, defaultI18nFallbacks);
-
 i18nPlatformInstance.use(initReactI18next).init({
+  lng: "en",
   fallbackLng: "en",
   ns: [NAMESPACE],
   defaultNS: NAMESPACE,
   interpolation: { escapeValue: false },
   nsSeparator: false,
-  resources: resources,
+  resources: {},
 });
+
+/**
+ * Dynamically imports the translation file for the given locale.
+ */
+const getTranslations = async (
+  locale: string,
+  isRetry = false
+): Promise<Record<string, string>> => {
+  if (!locale) {
+    return {};
+  }
+
+  try {
+    const module = await import(
+      `../../../locales/platform/${locale}/visual-editor.json`
+    );
+    return module.default;
+  } catch (e) {
+    if (isRetry || locale === "en") {
+      console.error(
+        "Error loading translations for locale",
+        locale,
+        e,
+        "No fallback available."
+      );
+      return {};
+    }
+    console.error(
+      "Error loading translations for locale",
+      locale,
+      e,
+      "Falling back to en."
+    );
+    return getTranslations("en", true);
+  }
+};
+
+/**
+ * Loads translations into the i18n instance for the given locale.
+ */
+export const loadPlatformTranslations = async (locale: string) => {
+  if (i18nPlatformInstance.hasResourceBundle(locale, NAMESPACE)) {
+    return;
+  }
+
+  const translationsToInject = await getTranslations(locale);
+  applyI18nFallbacks(translationsToInject, defaultI18nFallbacks);
+
+  if (translationsToInject && Object.keys(translationsToInject).length > 0) {
+    i18nPlatformInstance.addResourceBundle(
+      locale,
+      NAMESPACE,
+      translationsToInject
+    );
+  }
+};
 
 export const usePlatformTranslation = () => {
   return useTranslation(NAMESPACE, { i18n: i18nPlatformInstance });

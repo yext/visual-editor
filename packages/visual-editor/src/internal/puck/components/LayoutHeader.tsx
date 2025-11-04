@@ -15,12 +15,13 @@ import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import {
   i18nComponentsInstance,
-  loadTranslations,
+  loadComponentTranslations,
 } from "../../../utils/i18n/components.ts";
 import {
   i18nPlatformInstance,
   usePlatformTranslation,
   pt,
+  loadPlatformTranslations,
 } from "../../../utils/i18n/platform.ts";
 
 const usePuck = createUsePuck();
@@ -222,7 +223,7 @@ export const LocalDevOverrideButtons = () => {
       <Button
         onClick={() => {
           const locale = prompt("Enter components locale:") || "en";
-          loadTranslations(locale);
+          loadComponentTranslations(locale);
           i18nComponentsInstance.changeLanguage(locale);
         }}
         variant="outline"
@@ -232,8 +233,9 @@ export const LocalDevOverrideButtons = () => {
       </Button>
       <Button
         onClick={() => {
-          const locale = prompt("Enter platform locale:");
-          i18nPlatformInstance.changeLanguage(locale ?? "en");
+          const locale = prompt("Enter platform locale:") || "en";
+          loadPlatformTranslations(locale);
+          i18nPlatformInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"

@@ -16,7 +16,10 @@ import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
-import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
+import {
+  i18nPlatformInstance,
+  loadPlatformTranslations,
+} from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
 import {
   defaultFonts,
@@ -140,7 +143,8 @@ export const Editor = ({
 
   useEffect(() => {
     if (templateMetadata?.platformLocale) {
-      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
+      loadPlatformTranslations(templateMetadata.platformLocale);
+      i18nPlatformInstance.changeLanguage(templateMetadata.platformLocale);
     }
   }, [templateMetadata?.platformLocale]);
 

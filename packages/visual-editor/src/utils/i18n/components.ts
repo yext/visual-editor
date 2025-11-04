@@ -74,7 +74,7 @@ const getTranslations = async (
  * translations are provided they will be used directly, otherwise they
  * will be dynamically imported.
  */
-export const loadTranslations = async (
+export const loadComponentTranslations = async (
   locale: string,
   translations?: Record<string, string>
 ) => {

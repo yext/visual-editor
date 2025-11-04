@@ -6,7 +6,10 @@ import { StreamFields } from "../types/entityFields.ts";
 import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nextProvider } from "react-i18next";
-import { i18nComponentsInstance, loadTranslations } from "./i18n/components.ts";
+import {
+  i18nComponentsInstance,
+  loadComponentTranslations,
+} from "./i18n/components.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 
 type AllOrNothing<T extends Record<string, any>> =
@@ -39,7 +42,7 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   );
 
   if (normalizedTemplateProps?.document?.locale) {
-    loadTranslations(
+    loadComponentTranslations(
       normalizedTemplateProps.document.locale,
       normalizedTemplateProps?.translations
     );
