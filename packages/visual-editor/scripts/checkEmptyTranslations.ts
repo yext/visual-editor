@@ -47,15 +47,16 @@ try {
         console.warn(`File not found, skipping: ${filePath}`);
       }
     }
+  }
 
-    if (foundEmptyTranslation) {
-      console.error("\nFound empty translation strings:");
-      errorMessages.forEach((msg) => console.error(msg));
-      process.exit(1); // Exit with error code
-    } else {
-      console.log("\nSuccess: no empty translation strings found.");
-      process.exit(0);
-    }
+  // Check results after processing all subfolders
+  if (foundEmptyTranslation) {
+    console.error("\nFound empty translation strings:");
+    errorMessages.forEach((msg) => console.error(msg));
+    process.exit(1); // Exit with error code
+  } else {
+    console.log("\nSuccess: no empty translation strings found.");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error during script execution:", error);

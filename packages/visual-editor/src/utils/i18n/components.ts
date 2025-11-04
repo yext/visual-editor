@@ -37,7 +37,8 @@ export const injectTranslations = async (templateProps: any) => {
  * Dynamically imports the translation file for the given locale.
  */
 const getTranslations = async (
-  locale: string
+  locale: string,
+  isRetry = false
 ): Promise<Record<string, string>> => {
   if (!locale) {
     return {};
@@ -49,13 +50,22 @@ const getTranslations = async (
     );
     return module.default;
   } catch (e) {
+    if (isRetry || locale === "en") {
+      console.error(
+        "Error loading translations for locale",
+        locale,
+        e,
+        "No fallback available."
+      );
+      return {};
+    }
     console.error(
       "Error loading translations for locale",
       locale,
       e,
       "Falling back to en."
     );
-    return getTranslations("en");
+    return getTranslations("en", true);
   }
 };
 
