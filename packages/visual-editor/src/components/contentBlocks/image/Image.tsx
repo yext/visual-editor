@@ -19,16 +19,10 @@ import {
   ImgSizesByBreakpoint,
   resolveDataFromParent,
   AssetImageType,
-  themeManagerCn,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
-import { ImagePlus } from "lucide-react";
-import {
-  TARGET_ORIGINS,
-  useSendMessageToParent,
-} from "../../../internal/hooks/useMessage";
-import { Button } from "../../../internal/puck/ui/button";
+import { EmptyImageState } from "./EmptyImageState";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -99,13 +93,6 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     ? parentData?.image
     : resolveComponentData(data.image, i18n.language, streamDocument);
 
-  const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
-    "constantValueEditorOpened",
-    TARGET_ORIGINS
-  );
-
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-
   const getImageUrl = (
     image: ImageType | ComplexImageType | AssetImageType | undefined
   ): string | undefined => {
@@ -122,188 +109,32 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
-  const handleEmptyImageClick = (
-    e?: React.MouseEvent | MouseEvent | PointerEvent
-  ) => {
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-
-    if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
-      /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173")) {
-        const userInput = prompt("Enter Image URL:");
-        if (!userInput) {
-          return;
-        }
-      } else {
-        /** Instructs Storm to open the image asset selector drawer */
-        const messageId = `ImageAsset-${Date.now()}`;
-        openImageAssetSelector({
-          payload: {
-            type: "ImageAsset",
-            value: data.image.constantValue as AssetImageType | undefined,
-            id: messageId,
-          },
-        });
+  const emptyImageState = (
+    <EmptyImageState
+      isEmpty={isEmpty}
+      isEditing={puck.isEditing ?? false}
+      constantValueEnabled={data.image.constantValueEnabled ?? false}
+      constantValue={data.image.constantValue as AssetImageType | undefined}
+      fieldId={parentData ? parentData.field : data.image.field}
+      containerStyle={{
+        ...(hideWidthProp
+          ? {}
+          : styles.width
+            ? { width: `${styles.width}px` }
+            : {}),
+        ...(styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : {}),
+      }}
+      containerClassName={
+        className || "max-w-full rounded-image-borderRadius w-full h-full"
       }
-    }
-  };
-
-  // Attach native event listeners to bypass React's synthetic events and intercept before Puck
-  React.useEffect(() => {
-    const button = buttonRef.current;
-    if (!button || !isEmpty) return;
-
-    const handlePointerDown = (e: PointerEvent) => {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      e.preventDefault();
-    };
-
-    const handlePointerUp = (e: PointerEvent) => {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
-        /** Handles local development testing outside of Storm */
-        if (window.location.href.includes("http://localhost:5173")) {
-          const userInput = prompt("Enter Image URL:");
-          if (!userInput) {
-            return;
-          }
-        } else {
-          /** Instructs Storm to open the image asset selector drawer */
-          const messageId = `ImageAsset-${Date.now()}`;
-          openImageAssetSelector({
-            payload: {
-              type: "ImageAsset",
-              value: data.image.constantValue as AssetImageType | undefined,
-              id: messageId,
-            },
-          });
-        }
-      }
-    };
-
-    const handleClick = (e: MouseEvent) => {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
-        /** Handles local development testing outside of Storm */
-        if (window.location.href.includes("http://localhost:5173")) {
-          const userInput = prompt("Enter Image URL:");
-          if (!userInput) {
-            return;
-          }
-        } else {
-          /** Instructs Storm to open the image asset selector drawer */
-          const messageId = `ImageAsset-${Date.now()}`;
-          openImageAssetSelector({
-            payload: {
-              type: "ImageAsset",
-              value: data.image.constantValue as AssetImageType | undefined,
-              id: messageId,
-            },
-          });
-        }
-      }
-    };
-
-    // Use capture phase to intercept before Puck's handlers
-    button.addEventListener("pointerdown", handlePointerDown, true);
-    button.addEventListener("pointerup", handlePointerUp, true);
-    button.addEventListener("click", handleClick, true);
-
-    return () => {
-      button.removeEventListener("pointerdown", handlePointerDown, true);
-      button.removeEventListener("pointerup", handlePointerUp, true);
-      button.removeEventListener("click", handleClick, true);
-    };
-  }, [
-    isEmpty,
-    parentData,
-    data.image.constantValueEnabled,
-    puck.isEditing,
-    openImageAssetSelector,
-  ]);
+      fullHeight
+      dragRef={puck.dragRef ?? undefined}
+      hasParentData={!!parentData}
+    />
+  );
 
   if (isEmpty) {
-    return puck.isEditing ? (
-      <EntityField
-        displayName={pt("fields.image", "Image")}
-        fieldId={parentData ? parentData.field : data.image.field}
-        constantValueEnabled={!parentData && data.image.constantValueEnabled}
-        fullHeight
-        ref={puck.dragRef}
-      >
-        <div className="w-full h-full relative">
-          <div
-            className={themeManagerCn(
-              className ||
-                "max-w-full rounded-image-borderRadius w-full h-full",
-              "border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
-            )}
-            style={{
-              ...(hideWidthProp
-                ? {}
-                : styles.width
-                  ? { width: `${styles.width}px` }
-                  : {}),
-              ...(styles.aspectRatio
-                ? { aspectRatio: styles.aspectRatio }
-                : {}),
-            }}
-            onClick={(e) => {
-              // Only handle clicks that aren't on the button
-              const target = e.target as HTMLElement;
-              const isButton = target.closest(
-                'button[aria-label*="Add Image"]'
-              );
-              if (isButton) {
-                return;
-              }
-            }}
-            onPointerDown={(e) => {
-              // Stop Puck from capturing pointer events on the button
-              const target = e.target as HTMLElement;
-              const isButton = target.closest(
-                'button[aria-label*="Add Image"]'
-              );
-              if (isButton) {
-                e.stopPropagation();
-              }
-            }}
-          >
-            <Button
-              ref={buttonRef}
-              variant="ghost"
-              size="icon"
-              className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
-              style={{
-                position: "absolute",
-                zIndex: 100,
-                inset: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleEmptyImageClick(e);
-              }}
-              type="button"
-              aria-label={pt("addImage", "Add Image")}
-            >
-              <ImagePlus size={24} className="stroke-2" />
-            </Button>
-          </div>
-        </div>
-      </EntityField>
-    ) : (
-      <></>
-    );
+    return emptyImageState;
   }
 
   const transformedSizes = imgSizesHelper(sizes, `${styles.width}px`);

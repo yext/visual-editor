@@ -10,7 +10,6 @@ import {
   pt,
   imgSizesHelper,
   AssetImageType,
-  themeManagerCn,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { updateFields } from "../../pageSections/HeroSection";
@@ -19,12 +18,7 @@ import {
   ImageWrapperFields,
   ImageWrapperProps,
 } from "./Image.tsx";
-import { ImagePlus } from "lucide-react";
-import { Button } from "../../../internal/puck/ui/button";
-import {
-  TARGET_ORIGINS,
-  useSendMessageToParent,
-} from "../../../internal/hooks/useMessage";
+import { EmptyImageState } from "./EmptyImageState";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -41,17 +35,12 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
     streamDocument
   );
 
-  const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
-    "constantValueEditorOpened",
-    TARGET_ORIGINS
-  );
-
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-
   const getImageUrl = (
     image: ImageType | ComplexImageType | AssetImageType | undefined
   ): string | undefined => {
-    if (!image) return undefined;
+    if (!image) {
+      return undefined;
+    }
     if ("image" in image) {
       return image.image?.url;
     }
@@ -64,180 +53,26 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
-  const handleEmptyImageClick = (
-    e?: React.MouseEvent | MouseEvent | PointerEvent
-  ) => {
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-
-    // Only open asset drawer if we're in constant value mode
-    if (data.image.constantValueEnabled && puck?.isEditing) {
-      /** Handles local development testing outside of Storm */
-      if (window.location.href.includes("http://localhost:5173")) {
-        const userInput = prompt("Enter Image URL:");
-        if (!userInput) {
-          return;
-        }
-      } else {
-        /** Instructs Storm to open the image asset selector drawer */
-        const messageId = `ImageAsset-${Date.now()}`;
-        openImageAssetSelector({
-          payload: {
-            type: "ImageAsset",
-            value: data.image.constantValue as AssetImageType | undefined,
-            id: messageId,
-          },
-        });
+  const emptyImageState = (
+    <EmptyImageState
+      isEmpty={isEmpty}
+      isEditing={puck?.isEditing ?? false}
+      constantValueEnabled={data.image.constantValueEnabled ?? false}
+      constantValue={data.image.constantValue as AssetImageType | undefined}
+      fieldId={data.image.field}
+      containerStyle={
+        styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : undefined
       }
-    }
-  };
-
-  // Attach native event listeners to bypass React's synthetic events and intercept before Puck
-  React.useEffect(() => {
-    const button = buttonRef.current;
-    if (!button || !isEmpty) return;
-
-    const handlePointerDown = (e: PointerEvent) => {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      e.preventDefault();
-    };
-
-    const handlePointerUp = (e: PointerEvent) => {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      if (data.image.constantValueEnabled && puck?.isEditing) {
-        /** Handles local development testing outside of Storm */
-        if (window.location.href.includes("http://localhost:5173")) {
-          const userInput = prompt("Enter Image URL:");
-          if (!userInput) {
-            return;
-          }
-        } else {
-          /** Instructs Storm to open the image asset selector drawer */
-          const messageId = `ImageAsset-${Date.now()}`;
-          openImageAssetSelector({
-            payload: {
-              type: "ImageAsset",
-              value: data.image.constantValue as AssetImageType | undefined,
-              id: messageId,
-            },
-          });
-        }
+      containerClassName={
+        className || "max-w-full rounded-image-borderRadius w-full h-full"
       }
-    };
-
-    const handleClick = (e: MouseEvent) => {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      e.preventDefault();
-      if (data.image.constantValueEnabled && puck?.isEditing) {
-        /** Handles local development testing outside of Storm */
-        if (window.location.href.includes("http://localhost:5173")) {
-          const userInput = prompt("Enter Image URL:");
-          if (!userInput) {
-            return;
-          }
-        } else {
-          /** Instructs Storm to open the image asset selector drawer */
-          const messageId = `ImageAsset-${Date.now()}`;
-          openImageAssetSelector({
-            payload: {
-              type: "ImageAsset",
-              value: data.image.constantValue as AssetImageType | undefined,
-              id: messageId,
-            },
-          });
-        }
-      }
-    };
-
-    // Use capture phase to intercept before Puck's handlers
-    button.addEventListener("pointerdown", handlePointerDown, true);
-    button.addEventListener("pointerup", handlePointerUp, true);
-    button.addEventListener("click", handleClick, true);
-
-    return () => {
-      button.removeEventListener("pointerdown", handlePointerDown, true);
-      button.removeEventListener("pointerup", handlePointerUp, true);
-      button.removeEventListener("click", handleClick, true);
-    };
-  }, [
-    isEmpty,
-    data.image.constantValueEnabled,
-    puck?.isEditing,
-    openImageAssetSelector,
-  ]);
+      fullHeight={true}
+      hasParentData={false}
+    />
+  );
 
   if (isEmpty) {
-    return puck?.isEditing ? (
-      <EntityField
-        displayName={pt("fields.image", "Image")}
-        fieldId={data.image.field}
-        constantValueEnabled={data.image.constantValueEnabled}
-        fullHeight={true}
-      >
-        <div className="w-full h-full relative">
-          <div
-            className={themeManagerCn(
-              className ||
-                "max-w-full rounded-image-borderRadius w-full h-full",
-              "border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
-            )}
-            style={
-              styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : {}
-            }
-            onClick={(e) => {
-              // Only handle clicks that aren't on the button
-              const target = e.target as HTMLElement;
-              const isButton = target.closest(
-                'button[aria-label*="Add Image"]'
-              );
-              if (isButton) {
-                return;
-              }
-            }}
-            onPointerDown={(e) => {
-              // Stop Puck from capturing pointer events on the button
-              const target = e.target as HTMLElement;
-              const isButton = target.closest(
-                'button[aria-label*="Add Image"]'
-              );
-              if (isButton) {
-                e.stopPropagation();
-              }
-            }}
-          >
-            <Button
-              ref={buttonRef}
-              variant="ghost"
-              size="icon"
-              className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
-              style={{
-                position: "absolute",
-                zIndex: 100,
-                inset: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleEmptyImageClick(e);
-              }}
-              type="button"
-              aria-label={pt("addImage", "Add Image")}
-            >
-              <ImagePlus size={24} className="stroke-2" />
-            </Button>
-          </div>
-        </div>
-      </EntityField>
-    ) : (
-      <></>
-    );
+    return emptyImageState;
   }
 
   return (

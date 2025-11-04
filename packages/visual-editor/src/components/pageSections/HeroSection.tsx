@@ -327,7 +327,11 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     data: {
       backgroundImage: {
         field: "",
-        constantValue: getRandomPlaceholderImageObject(),
+        constantValue: {
+          ...getRandomPlaceholderImageObject(),
+          width: 640,
+          height: 360,
+        },
         constantValueEnabled: true,
       },
     },
@@ -404,7 +408,11 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             data: {
               image: {
                 field: "",
-                constantValue: getRandomPlaceholderImageObject(),
+                constantValue: {
+                  ...getRandomPlaceholderImageObject(),
+                  width: 640,
+                  height: 360,
+                },
                 constantValueEnabled: true,
               },
             },

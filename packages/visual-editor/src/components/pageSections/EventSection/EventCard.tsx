@@ -70,7 +70,11 @@ export const defaultEventCardSlotData = (id?: string, index?: number) => ({
             data: {
               image: {
                 field: "",
-                constantValue: getRandomPlaceholderImageObject(),
+                constantValue: {
+                  ...getRandomPlaceholderImageObject(),
+                  width: 640,
+                  height: 360,
+                },
                 constantValueEnabled: true,
               },
             },

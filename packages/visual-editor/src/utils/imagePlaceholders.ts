@@ -2,9 +2,9 @@
  * Placeholder images for default image placeholders in page sections.
  */
 const PLACEHOLDER_IMAGE_IDS = [
-  "tiBUJ0Hiwx8", // Crashing ocean wave
-  "OYFHT4X5isg", // Aerial view of pine trees in mist
-  "7Y0NshQLohk", // Sand dune
+  "photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Ocean wave
+  "photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Pine Trees
+  "photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Sand dune
 ] as const;
 
 /**
@@ -23,32 +23,21 @@ export function getRandomPlaceholderImage(): string {
     ? 0
     : Math.floor(Math.random() * PLACEHOLDER_IMAGE_IDS.length);
 
-  const photoId = PLACEHOLDER_IMAGE_IDS[randomIndex];
+  const photoUrl = PLACEHOLDER_IMAGE_IDS[randomIndex];
 
   // Using Unsplash's download endpoint which redirects to the CDN
   // The "Invalid host" error is likely a validation warning but doesn't affect rendering
-  return `https://unsplash.com/photos/${photoId}/download?force=true`;
+  return `https://images.unsplash.com/${photoUrl}`;
 }
 
 /**
  * Gets a random placeholder image object with default metadata.
- * @returns A randomly selected placeholder image object
+ * @returns A randomly selected placeholder image object with url
  */
 export function getRandomPlaceholderImageObject(): {
   url: string;
-  width: number;
-  height: number;
 } {
   return {
     url: getRandomPlaceholderImage(),
-    width: 640,
-    height: 360,
   };
-}
-
-/**
- * Gets all available placeholder image IDs.
- */
-export function getPlaceholderImageIds(): readonly string[] {
-  return PLACEHOLDER_IMAGE_IDS;
 }
