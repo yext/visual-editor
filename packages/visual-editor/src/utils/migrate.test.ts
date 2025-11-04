@@ -2,8 +2,6 @@ import { describe, expect, it } from "vitest";
 import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
 import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 
-//TODO: add test for document-based migration
-
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
     const migratedData = migrate(
@@ -28,6 +26,28 @@ describe("migrate", () => {
     );
 
     expect(migratedData).toEqual(exampleRootDataAfter);
+  });
+
+  it("successfully applies migration based on document data", async () => {
+    const migratedData = migrate(
+      exampleBasicDataBefore,
+      [
+        {
+          BasicSection: {
+            action: "updated",
+            propTransformation: (props, document) => {
+              return { ...props, text: document.fieldB };
+            },
+          },
+        },
+      ],
+      {
+        components: {},
+      },
+      exampleDocument
+    );
+
+    expect(migratedData).toEqual(exampleBasicDataAfter);
   });
 });
 
@@ -296,4 +316,39 @@ const exampleRootDataAfter = {
   },
   content: [],
   zones: {},
+};
+
+const exampleBasicDataBefore = {
+  root: {},
+  zones: {},
+  content: [
+    {
+      type: "BasicSection",
+      props: {
+        text: "Some text",
+      },
+    },
+  ],
+};
+
+const exampleDocument = {
+  fieldA: "Value A",
+  fieldB: "Value B",
+};
+
+const exampleBasicDataAfter = {
+  root: {
+    props: {
+      version: 1,
+    },
+  },
+  zones: {},
+  content: [
+    {
+      type: "BasicSection",
+      props: {
+        text: "Value B",
+      },
+    },
+  ],
 };
