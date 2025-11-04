@@ -133,6 +133,11 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
       entityField.addEventListener("pointerup", handlePointerUp, true);
     }
 
+    // Attach at document level in capture phase as last resort - this catches events before slot wrappers
+    document.addEventListener("click", handleClick, true);
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    document.addEventListener("pointerup", handlePointerUp, true);
+
     return () => {
       button.removeEventListener("click", handleClick, true);
       button.removeEventListener("pointerdown", handlePointerDown, true);
@@ -145,6 +150,9 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
         entityField.removeEventListener("pointerdown", handlePointerDown, true);
         entityField.removeEventListener("pointerup", handlePointerUp, true);
       }
+      document.removeEventListener("click", handleClick, true);
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+      document.removeEventListener("pointerup", handlePointerUp, true);
     };
   }, [
     isEmpty,
@@ -212,6 +220,82 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
               zIndex: 100,
               inset: "50%",
               transform: "translate(-50%, -50%)",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (!hasParentData && constantValueEnabled && isEditing) {
+                if (window.location.href.includes("http://localhost:5173")) {
+                  const userInput = prompt("Enter Image URL:");
+                  if (!userInput) {
+                    return;
+                  }
+                } else {
+                  const messageId = `ImageAsset-${Date.now()}`;
+                  openImageAssetSelector({
+                    payload: {
+                      type: "ImageAsset",
+                      value: constantValue,
+                      id: messageId,
+                    },
+                  });
+                }
+              }
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+            onMouseUp={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (!hasParentData && constantValueEnabled && isEditing) {
+                if (window.location.href.includes("http://localhost:5173")) {
+                  const userInput = prompt("Enter Image URL:");
+                  if (!userInput) {
+                    return;
+                  }
+                } else {
+                  const messageId = `ImageAsset-${Date.now()}`;
+                  openImageAssetSelector({
+                    payload: {
+                      type: "ImageAsset",
+                      value: constantValue,
+                      id: messageId,
+                    },
+                  });
+                }
+              }
+            }}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              // Prevent Puck drag handlers from activating
+              e.nativeEvent.stopImmediatePropagation();
+            }}
+            onPointerUp={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              if (!hasParentData && constantValueEnabled && isEditing) {
+                if (window.location.href.includes("http://localhost:5173")) {
+                  const userInput = prompt("Enter Image URL:");
+                  if (!userInput) {
+                    return;
+                  }
+                } else {
+                  const messageId = `ImageAsset-${Date.now()}`;
+                  openImageAssetSelector({
+                    payload: {
+                      type: "ImageAsset",
+                      value: constantValue,
+                      id: messageId,
+                    },
+                  });
+                }
+              }
+            }}
+            onClickCapture={(e) => {
+              e.stopPropagation();
             }}
             type="button"
             aria-label={pt("addImage", "Add Image")}
