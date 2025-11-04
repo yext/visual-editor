@@ -8,10 +8,13 @@ import {
   YextField,
   msg,
   pt,
+  themeManagerCn,
+  Body,
 } from "@yext/visual-editor";
 import { ComponentConfig, Field, Fields } from "@measured/puck";
 import { StreamDocument } from "../../utils/applyTheme";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
+import { Map } from "lucide-react";
 
 export type MapboxStaticProps = {
   apiKey: string;
@@ -83,7 +86,8 @@ export const MapboxStaticMapComponent = ({
   coordinate: coordinateField,
   zoom = 14,
   mapStyle = "light-v11",
-}: MapboxStaticProps) => {
+  isEditing = false,
+}: MapboxStaticProps & { isEditing?: boolean }) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
 
@@ -93,11 +97,39 @@ export const MapboxStaticMapComponent = ({
     streamDocument
   );
 
+  // Show empty state in editor mode when API key is missing
+  if (!apiKey) {
+    if (isEditing) {
+      return (
+        <div
+          className={themeManagerCn(
+            "relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+          )}
+        >
+          <Map className="w-12 h-12 text-gray-400" />
+          <div className="flex flex-col items-center gap-0">
+            <Body variant="base" className="text-gray-500 font-medium">
+              {t(
+                "map.emptyState.sectionHidden",
+                "Section hidden for all locations"
+              )}
+            </Body>
+            <Body variant="base" className="text-gray-500 font-normal">
+              {t(
+                "map.emptyState.addApiKey",
+                "Add an API key to preview your map"
+              )}
+            </Body>
+          </div>
+        </div>
+      );
+    }
+    console.warn("API Key is required for MapboxStaticMap");
+    return <></>;
+  }
+
   if (!coordinate) {
     console.warn(`${coordinateField.field} is not present in the stream`);
-    return <></>;
-  } else if (!apiKey) {
-    console.warn("API Key is required for MapboxStaticMap");
     return <></>;
   }
 
@@ -169,5 +201,8 @@ export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
     },
     mapStyle: "streets-v12",
   },
-  render: (props: MapboxStaticProps) => <MapboxStaticMapComponent {...props} />,
+  render: (props: MapboxStaticProps & { puck?: { isEditing?: boolean } }) => {
+    const isEditing = props.puck?.isEditing ?? false;
+    return <MapboxStaticMapComponent {...props} isEditing={isEditing} />;
+  },
 };

@@ -88,7 +88,12 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
   }),
 };
 
-const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
+const StaticMapSectionWrapper = ({
+  data,
+  styles,
+  puck,
+}: StaticMapSectionProps & { puck?: { isEditing?: boolean } }) => {
+  const isEditing = puck?.isEditing ?? false;
   return (
     <PageSection
       background={styles?.backgroundColor}
@@ -104,6 +109,7 @@ const StaticMapSectionWrapper = ({ data, styles }: StaticMapSectionProps) => {
           },
         }}
         mapStyle={styles?.mapStyle}
+        isEditing={isEditing}
       />
     </PageSection>
   );
@@ -133,7 +139,7 @@ export const StaticMapSection: ComponentConfig<{
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
     >
-      <StaticMapSectionWrapper {...props} />
+      <StaticMapSectionWrapper {...props} puck={props.puck} />
     </VisibilityWrapper>
   ),
 };
