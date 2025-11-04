@@ -15,6 +15,9 @@ beforeEach(() => {
   // July 1, 2025 Noon (month is 0-indexed)
   vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
 
+  // This ensures that getRandomPlaceholderImage() always selects the same image
+  vi.spyOn(Math, "random").mockReturnValue(0.5);
+
   const tag = document.createElement("style");
   const themeTags = applyTheme({}, defaultThemeConfig);
 
