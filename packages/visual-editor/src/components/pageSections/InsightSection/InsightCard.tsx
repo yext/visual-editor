@@ -22,9 +22,7 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 
 const defaultInsight = {
   image: {
-    url: "https://placehold.co/640x360",
-    height: 360,
-    width: 640,
+    ...getRandomPlaceholderImageObject(),
   },
   name: { en: "Article Name", hasLocalizedValue: "true" },
   category: {
