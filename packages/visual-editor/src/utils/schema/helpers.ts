@@ -46,7 +46,7 @@ export const removeEmptyValues = (
     return obj;
   }
 
-  // Step 1: Recurse into child objects
+  // Step 1: Recurse into child objects and arrays
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       const value = obj[key];
@@ -57,6 +57,10 @@ export const removeEmptyValues = (
         !Array.isArray(value)
       ) {
         removeEmptyValues(value);
+      }
+
+      if (typeof value === "object" && value !== null && Array.isArray(value)) {
+        value.map(removeEmptyValues);
       }
     }
   }
