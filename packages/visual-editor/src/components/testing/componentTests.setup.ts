@@ -6,14 +6,22 @@ import "./componentTests.css";
 import "../../../dist/style.css";
 // Enabled expect().toHaveNoViolations()
 import "jest-axe/extend-expect";
-import { expect, vi } from "vitest";
+import { expect, vi, beforeAll } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
 import { act } from "@testing-library/react";
+
+beforeAll(() => {
+  vi.spyOn(Math, "random").mockReturnValue(0.0);
+});
 
 // Applies the theme variables and mocks the date
 beforeEach(() => {
   // July 1, 2025 Noon (month is 0-indexed)
   vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
+
+  if (!vi.isMockFunction(Math.random)) {
+    vi.spyOn(Math, "random").mockReturnValue(0.0);
+  }
 
   const tag = document.createElement("style");
   const themeTags = applyTheme({}, defaultThemeConfig);
