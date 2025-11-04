@@ -142,14 +142,28 @@ export const Editor = ({
   }, [templateMetadata?.isDevMode, devPageSets]);
 
   useEffect(() => {
+    let isCurrent = true;
+
     const handlePlatformLocaleChange = async () => {
       if (templateMetadata?.platformLocale) {
-        await loadPlatformTranslations(templateMetadata.platformLocale);
-        i18nPlatformInstance.changeLanguage(templateMetadata.platformLocale);
+        try {
+          await loadPlatformTranslations(templateMetadata.platformLocale);
+          if (isCurrent) {
+            i18nPlatformInstance.changeLanguage(
+              templateMetadata.platformLocale
+            );
+          }
+        } catch (error) {
+          console.error("Failed to load platform translations:", error);
+        }
       }
     };
 
     handlePlatformLocaleChange();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({
