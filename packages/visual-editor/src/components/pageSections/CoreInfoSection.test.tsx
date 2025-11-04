@@ -769,6 +769,160 @@ const tests: ComponentTest[] = [
     },
     version: 10,
   },
+  {
+    name: "version 26 props with mixed values",
+    document: {
+      locale: "en",
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+      },
+      slots: {
+        CoreInfoHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-13c80a69-4194-41a6-86d0-1ded6367ed98",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Information",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        CoreInfoAddressSlot: [
+          {
+            type: "AddressSlot",
+            props: {
+              id: "AddressSlot-07cfe7a6-e9c7-41c4-b1ae-03558c90c6b9",
+              data: {
+                address: {
+                  constantValue: {
+                    line1: "",
+                    city: "",
+                    postalCode: "",
+                    countryCode: "",
+                  },
+                  field: "address",
+                },
+              },
+              styles: { showGetDirectionsLink: true, ctaVariant: "link" },
+            },
+          },
+        ],
+        CoreInfoPhoneNumbersSlot: [
+          {
+            type: "PhoneNumbersSlot",
+            props: {
+              id: "PhoneNumbersSlot-c82bd20b-7393-4994-87fb-26a53cd82880",
+              data: {
+                phoneNumbers: [
+                  {
+                    number: { field: "mainPhone", constantValue: "" },
+                    label: { en: "Phone", hasLocalizedValue: "true" },
+                  },
+                ],
+              },
+              styles: { phoneFormat: "domestic", includePhoneHyperlink: true },
+            },
+          },
+        ],
+        CoreInfoEmailsSlot: [
+          {
+            type: "EmailsSlot",
+            props: {
+              id: "EmailsSlot-4d584104-463f-4569-86e4-19c137697f60",
+              data: { list: { field: "emails", constantValue: [] } },
+              styles: { listLength: 1 },
+            },
+          },
+        ],
+        HoursHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-383eb893-a76f-4457-bf3b-7909b520a384",
+              data: {
+                text: {
+                  constantValue: { en: "Hours", hasLocalizedValue: "true" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        HoursTableSlot: [
+          {
+            type: "HoursTableSlot",
+            props: {
+              id: "HoursTableSlot-ada7341a-2420-4ef2-b9e4-1d2e26945e43",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                startOfWeek: "today",
+                collapseDays: false,
+                showAdditionalHoursText: true,
+                alignment: "items-start",
+              },
+            },
+          },
+        ],
+        ServicesHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-1b445bc3-cc01-4fa9-9fb8-3c8dc1361ca5",
+              data: {
+                text: {
+                  constantValue: { en: "Services", hasLocalizedValue: "true" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        ServicesListSlot: [
+          {
+            type: "ServicesListSlot",
+            props: {
+              id: "ServicesListSlot-88d05408-381e-4a03-a5a0-8b8c9781d6fc",
+              list: { field: "services", constantValue: [] },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "coreInfoSection" },
+      liveVisibility: true,
+      conditionalRender: {
+        coreInfoCol: true,
+        hoursCol: true,
+        servicesCol: true,
+      },
+    },
+    version: 26,
+  },
 ];
 
 describe("CoreInfoSection", async () => {

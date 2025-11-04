@@ -76,6 +76,7 @@ export const coreInfoSectionSlots: Migration = {
         startOfWeek: "today",
         collapseDays: false,
         showAdditionalHoursText: true,
+        alignment: "items-start",
       };
 
       const services = props.data.services.servicesList;

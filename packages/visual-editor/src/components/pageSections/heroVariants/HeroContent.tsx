@@ -67,24 +67,18 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
       </header>
       <div
         className={themeManagerCn(
-          "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full flex-wrap ",
+          "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full flex-wrap sm:items-center ",
           styles.mobileContentAlignment === "center"
-            ? "sm:items-center"
-            : "sm:items-start",
+            ? "items-center"
+            : "items-start",
           desktopContainerPosition === "center"
             ? "justify-center"
             : "justify-start"
         )}
         aria-label={t("callToActions", "Call to Actions")}
       >
-        <slots.PrimaryCTASlot
-          style={{ height: "auto", width: "auto" }}
-          allow={[]}
-        />
-        <slots.SecondaryCTASlot
-          style={{ height: "auto", width: "auto" }}
-          allow={[]}
-        />
+        <slots.PrimaryCTASlot className="sm:w-fit w-full h-auto" allow={[]} />
+        <slots.SecondaryCTASlot className="sm:w-fit w-full h-auto" allow={[]} />
       </div>
     </>
   );
