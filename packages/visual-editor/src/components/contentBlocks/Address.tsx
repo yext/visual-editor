@@ -99,7 +99,6 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
     { provider: "google" },
     undefined
   );
-
   const addressLink = getDirections(
     address as AddressType,
     undefined,
