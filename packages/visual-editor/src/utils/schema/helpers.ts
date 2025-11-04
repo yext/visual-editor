@@ -60,7 +60,7 @@ export const removeEmptyValues = (
       }
 
       if (typeof value === "object" && value !== null && Array.isArray(value)) {
-        value.map(removeEmptyValues);
+        obj[key] = value.map(removeEmptyValues);
       }
     }
   }

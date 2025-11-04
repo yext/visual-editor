@@ -41,7 +41,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     viewport: "width=device-width, initial-scale=1",
     tags: [
       {
-        type: "link",
+        type: "link" as TagType,
         attributes: {
           rel: "icon",
           type: "image/x-icon",

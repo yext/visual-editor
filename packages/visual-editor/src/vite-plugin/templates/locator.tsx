@@ -49,7 +49,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       ...(data.document.siteDomain
         ? [
             {
-              type: "link",
+              type: "link" as TagType,
               attributes: {
                 rel: "canonical",
                 href: getCanonicalUrl(data),

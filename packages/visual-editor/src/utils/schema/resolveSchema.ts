@@ -121,7 +121,7 @@ const resolveSpecialCases = (
 
     return resolvedValue.map((child: any, index: number) => {
       const childUrl = `${streamDocument.siteDomain}/${
-        streamDocument.address
+        child.address // if the child has an address, we're at the city level
           ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
           : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "")
       }`;
@@ -149,7 +149,7 @@ const resolveSpecialCases = (
   }
 
   switch (key) {
-    case "openingHours":
+    case "openingHours": {
       const hoursSchema = OpeningHoursSchema(resolvedValue);
 
       if (Object.keys(hoursSchema).length === 0) {
@@ -157,7 +157,8 @@ const resolveSpecialCases = (
       }
 
       return hoursSchema.openingHours;
-    case "image":
+    }
+    case "image": {
       const gallerySchema = PhotoGallerySchema(resolvedValue);
 
       if (!gallerySchema?.image?.length) {
@@ -165,7 +166,8 @@ const resolveSpecialCases = (
       }
 
       return gallerySchema.image;
-    case "hasOfferCatalog":
+    }
+    case "hasOfferCatalog": {
       if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
         return resolveNode(streamDocument, value);
       }
@@ -180,7 +182,9 @@ const resolveSpecialCases = (
           },
         })),
       };
-    default:
+    }
+    default: {
       return resolveNode(streamDocument, value);
+    }
   }
 };
