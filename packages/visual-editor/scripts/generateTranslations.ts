@@ -67,9 +67,18 @@ function removeEmbeddedContext(text: string): string {
 async function getTargetLanguages(
   type: "components" | "platform"
 ): Promise<string[]> {
-  const entries = await fs.readdir(path.join(localesDir, type), {
-    withFileTypes: true,
-  });
+  const dir = path.join(localesDir, type);
+  let entries;
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch (err) {
+    const error = err as NodeJS.ErrnoException;
+    if (error.code === "ENOENT") {
+      console.warn(`Skipping missing locales directory for ${type} at ${dir}.`);
+      return [];
+    }
+    throw err;
+  }
   // Filter directories only
   return entries.filter((entry) => entry.isDirectory()).map((dir) => dir.name);
 }

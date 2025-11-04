@@ -142,10 +142,14 @@ export const Editor = ({
   }, [templateMetadata?.isDevMode, devPageSets]);
 
   useEffect(() => {
-    if (templateMetadata?.platformLocale) {
-      loadPlatformTranslations(templateMetadata.platformLocale);
-      i18nPlatformInstance.changeLanguage(templateMetadata.platformLocale);
-    }
+    const handlePlatformLocaleChange = async () => {
+      if (templateMetadata?.platformLocale) {
+        await loadPlatformTranslations(templateMetadata.platformLocale);
+        i18nPlatformInstance.changeLanguage(templateMetadata.platformLocale);
+      }
+    };
+
+    handlePlatformLocaleChange();
   }, [templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({

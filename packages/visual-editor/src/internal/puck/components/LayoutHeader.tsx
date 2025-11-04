@@ -221,9 +221,9 @@ export const LocalDevOverrideButtons = () => {
         Set Layout Data
       </Button>
       <Button
-        onClick={() => {
+        onClick={async () => {
           const locale = prompt("Enter components locale:") || "en";
-          loadComponentTranslations(locale);
+          await loadComponentTranslations(locale);
           i18nComponentsInstance.changeLanguage(locale);
         }}
         variant="outline"
@@ -232,9 +232,9 @@ export const LocalDevOverrideButtons = () => {
         Set Components Locale
       </Button>
       <Button
-        onClick={() => {
+        onClick={async () => {
           const locale = prompt("Enter platform locale:") || "en";
-          loadPlatformTranslations(locale);
+          await loadPlatformTranslations(locale);
           i18nPlatformInstance.changeLanguage(locale);
         }}
         variant="outline"
