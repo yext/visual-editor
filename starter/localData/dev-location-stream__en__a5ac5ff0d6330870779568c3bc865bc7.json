@@ -130,6 +130,16 @@
     "postalCode": "33155",
     "region": "FL"
   },
+  "ref_listings": [
+    {
+      "listingUrl": "https://www.simulatedurls.yext.com/bing-link",
+      "publisher": "BING"
+    },
+    {
+      "listingUrl": "https://www.simulatedurls.yext.com/google-link",
+      "publisher": "GOOGLEMYBUSINESS"
+    }
+  ],
   "businessId": 1000146856,
   "emails": ["yext@gmail.com", "yext2@gmail.com"],
   "c_exampleEvents": {

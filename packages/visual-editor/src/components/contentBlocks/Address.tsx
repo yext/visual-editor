@@ -91,6 +91,15 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
         streamDocument
       ) as unknown as AddressType | undefined);
 
+  const listings = streamDocument.ref_listings ?? [];
+  const listingsLink = getDirections(
+    undefined,
+    listings,
+    undefined,
+    { provider: "google" },
+    undefined
+  );
+
   const addressLink = getDirections(
     address as AddressType,
     undefined,
@@ -123,18 +132,19 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
           lines={[["line1"], ["line2"], ["city", ",", "region", "postalCode"]]}
         />
       </EntityField>
-      {addressLink && styles.showGetDirectionsLink && (
-        <CTA
-          ctaType="getDirections"
-          eventName={`getDirections`}
-          className="font-bold"
-          link={useAddressLink ? addressLink : undefined}
-          label={t("getDirections", "Get Directions")}
-          linkType="DRIVING_DIRECTIONS"
-          target="_blank"
-          variant={styles.ctaVariant}
-        />
-      )}
+      {(useAddressLink ? !!addressLink : !!listingsLink) &&
+        styles.showGetDirectionsLink && (
+          <CTA
+            ctaType="getDirections"
+            eventName={`getDirections`}
+            className="font-bold"
+            link={useAddressLink ? addressLink : listingsLink}
+            label={t("getDirections", "Get Directions")}
+            linkType="DRIVING_DIRECTIONS"
+            target="_blank"
+            variant={styles.ctaVariant}
+          />
+        )}
     </div>
   ) : puck.isEditing ? (
     <div className="min-h-[40px]"></div>
