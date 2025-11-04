@@ -18,7 +18,7 @@ const stringifyResolvedField = (fieldValue: any): string => {
     // If the value is already a string, that's what we want to embed.
     return fieldValue;
   } else if (typeof fieldValue === "object" && Array.isArray(fieldValue)) {
-    return fieldValue.join(",");
+    stringToEmbed = fieldValue.join(",");
   } else {
     // For non-string types (objects, arrays, numbers, booleans, null),
     // we first convert them to their standard JSON string representation.
