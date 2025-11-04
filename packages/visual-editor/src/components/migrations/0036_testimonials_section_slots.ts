@@ -9,6 +9,7 @@ import { TestimonialSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { BodyTextProps } from "../contentBlocks/BodyText";
 import { resolveComponentData } from "../../utils/resolveComponentData";
+import { TimestampProps } from "../contentBlocks";
 
 export const testimonialsSectionSlots: Migration = {
   TestimonialSection: {
@@ -98,10 +99,15 @@ export const testimonialsSectionSlots: Migration = {
                           constantValueEnabled: true,
                           constantValue: testimonial.contributionDate ?? "",
                         },
+                        endDate: {
+                          field: "",
+                          constantValue: "",
+                          constantValueEnabled: true,
+                        },
                       },
                       styles: {
-                        option: "DATE",
-                        hideTimeZone: true,
+                        includeRange: false,
+                        includeTime: false,
                       },
                       parentData: constantValueEnabled
                         ? undefined
@@ -109,7 +115,7 @@ export const testimonialsSectionSlots: Migration = {
                             field: props.data.testimonials.field,
                             date: testimonial.contributionDate,
                           },
-                    },
+                    } satisfies WithId<TimestampProps>,
                   },
                 ],
               },

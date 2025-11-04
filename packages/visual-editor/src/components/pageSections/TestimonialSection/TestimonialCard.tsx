@@ -20,6 +20,7 @@ import {
   resolveYextEntityField,
   i18nComponentsInstance,
   getDefaultRTF,
+  TimestampProps,
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
@@ -32,7 +33,7 @@ const defaultTestimonial = {
     hasLocalizedValue: "true",
   },
   contributorName: { en: "Name", hasLocalizedValue: "true" },
-  contributionDate: "July 22, 2022",
+  contributionDate: "2022-07-22T00:00",
 } satisfies TestimonialStruct;
 
 export const defaultTestimonialCardSlotData = (
@@ -95,12 +96,17 @@ export const defaultTestimonialCardSlotData = (
                 constantValue: defaultTestimonial.contributionDate,
                 constantValueEnabled: true,
               },
+              endDate: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: "",
+              },
             },
             styles: {
-              option: "DATE",
-              hideTimeZone: true,
+              includeTime: false,
+              includeRange: false,
             },
-          },
+          } satisfies TimestampProps,
         },
       ],
     },

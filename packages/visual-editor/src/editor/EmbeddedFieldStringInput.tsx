@@ -108,7 +108,7 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
     <div className="ve-relative ve-w-full">
       <input
         type="text"
-        className="ve-w-full ve-text-gray-700 ve-text-sm ve-rounded ve-border ve-border-gray-300 ve-p-2 ve-pr-10" // Add padding-right for the button
+        className="ve-w-full ve-text-gray-700 ve-text-sm ve-rounded ve-border ve-border-gray-300 ve-px-[15px] ve-py-[12px] hover:ve-bg-[color:var(--puck-color-azure-12)] hover:ve-border-[color:var(--puck-color-grey-05)]"
         value={inputValue}
         onClick={(e) => setCursorPosition(e.currentTarget.selectionStart)}
         onKeyUp={(e) => setCursorPosition(e.currentTarget.selectionStart)}
@@ -117,7 +117,7 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
           setInputValue(e.target.value);
         }}
       />
-      <div className="ve-absolute ve-right-2 ve-top-[1.4rem] -ve-translate-y-1/2">
+      <div className="ve-absolute ve-right-[12px] ve-top-[1.65rem] -ve-translate-y-1/2">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <button

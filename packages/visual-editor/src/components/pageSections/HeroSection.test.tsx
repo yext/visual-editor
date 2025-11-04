@@ -17,6 +17,36 @@ import {
 import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
+const testDocument = {
+  locale: "en",
+  name: "name",
+  address: {
+    city: "city",
+  },
+  hours: testHours,
+  c_hero: {
+    image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
+    primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
+    secondaryCta: {
+      label: "Learn More",
+      link: "#",
+      linkType: "URL",
+    },
+  },
+  c_cta: {
+    label: "Click Here",
+    link: "tel:+18005551010",
+    linkType: "PHONE",
+  },
+  ref_reviewsAgg: [
+    {
+      averageRating: 4.1,
+      publisher: "FIRSTPARTY",
+      reviewCount: 26,
+    },
+  ],
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with no data",
@@ -518,30 +548,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "[classic] version 17 props using constant values",
-    document: {
-      locale: "en",
-      name: "name",
-      address: {
-        city: "city",
-      },
-      hours: testHours,
-      c_hero: {
-        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
-        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
-        secondaryCta: {
-          label: "Learn More",
-          link: "#",
-          linkType: "URL",
-        },
-      },
-      ref_reviewsAgg: [
-        {
-          averageRating: 4.1,
-          publisher: "FIRSTPARTY",
-          reviewCount: 26,
-        },
-      ],
-    },
+    document: testDocument,
     props: {
       data: {
         businessName: {
@@ -622,30 +629,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "[classic] version 17 props using entity values",
-    document: {
-      locale: "en",
-      name: "name",
-      address: {
-        city: "city",
-      },
-      hours: testHours,
-      c_hero: {
-        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
-        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
-        secondaryCta: {
-          label: "Learn More",
-          link: "#",
-          linkType: "URL",
-        },
-      },
-      ref_reviewsAgg: [
-        {
-          averageRating: 4.1,
-          publisher: "FIRSTPARTY",
-          reviewCount: 26,
-        },
-      ],
-    },
+    document: testDocument,
     props: {
       data: {
         businessName: {
@@ -723,30 +707,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "[immersive] version 17 props using constant values",
-    document: {
-      locale: "en",
-      name: "name",
-      address: {
-        city: "city",
-      },
-      hours: testHours,
-      c_hero: {
-        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
-        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
-        secondaryCta: {
-          label: "Learn More",
-          link: "#",
-          linkType: "URL",
-        },
-      },
-      ref_reviewsAgg: [
-        {
-          averageRating: 4.1,
-          publisher: "FIRSTPARTY",
-          reviewCount: 26,
-        },
-      ],
-    },
+    document: testDocument,
     props: {
       data: {
         businessName: {
@@ -830,30 +791,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "[spotlight] version 17 props using constant values",
-    document: {
-      locale: "en",
-      name: "name",
-      address: {
-        city: "city",
-      },
-      hours: testHours,
-      c_hero: {
-        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
-        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
-        secondaryCta: {
-          label: "Learn More",
-          link: "#",
-          linkType: "URL",
-        },
-      },
-      ref_reviewsAgg: [
-        {
-          averageRating: 4.1,
-          publisher: "FIRSTPARTY",
-          reviewCount: 26,
-        },
-      ],
-    },
+    document: testDocument,
     props: {
       data: {
         businessName: {
@@ -931,30 +869,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "[compact] version 17 props using constant values",
-    document: {
-      locale: "en",
-      name: "name",
-      address: {
-        city: "city",
-      },
-      hours: testHours,
-      c_hero: {
-        image: { url: "https://placehold.co/100x100", height: 100, width: 100 },
-        primaryCta: { label: "Get Directions", link: "#", linkType: "URL" },
-        secondaryCta: {
-          label: "Learn More",
-          link: "#",
-          linkType: "URL",
-        },
-      },
-      ref_reviewsAgg: [
-        {
-          averageRating: 4.1,
-          publisher: "FIRSTPARTY",
-          reviewCount: 26,
-        },
-      ],
-    },
+    document: testDocument,
     props: {
       data: {
         businessName: {
@@ -1029,6 +944,1265 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 17,
+  },
+  {
+    name: "[classic] version 30 props with entity values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "logo",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        showAverageReview: true,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "right",
+        desktopContainerPosition: "center",
+        mobileContentAlignment: "center",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "name",
+                },
+              },
+              styles: { level: 4, align: "center", semanticLevelOverride: 3 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "address.city",
+                },
+              },
+              styles: { level: 2, align: "center" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "short",
+                showDayNames: false,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "c_hero.image",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { aspectRatio: 1, width: 640 },
+              variant: "classic",
+              className:
+                "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "c_hero.primaryCta",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "link", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "c_hero.secondaryCta",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "textAndLink",
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      conditionalRender: { hours: true },
+    },
+    version: 30,
+  },
+  {
+    name: "[classic] version 30 props with constant values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "classic",
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        showAverageReview: true,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "left",
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "left",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left", semanticLevelOverride: 2 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 1, align: "left" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "long",
+                showDayNames: true,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              variant: "classic",
+              className:
+                "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "primary", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      conditionalRender: { hours: true },
+    },
+    version: 30,
+  },
+  {
+    name: "[immersive] version 30 props using entity values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "c_hero.image",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "immersive",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        showAverageReview: true,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "right",
+        desktopContainerPosition: "center",
+        mobileContentAlignment: "center",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "name",
+                },
+              },
+              styles: { level: 4, align: "center", semanticLevelOverride: 5 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "address.city",
+                },
+              },
+              styles: { level: 2, align: "center" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "short",
+                showDayNames: true,
+                showCurrentStatus: false,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "logo",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              variant: "immersive",
+              className: "w-full sm:w-fit h-full ml-auto",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "c_cta1",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "link", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "c_hero.secondaryCta",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "textAndLink",
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      id: "HeroSection-1d9fd3d4-5d88-49ac-913e-28921acfc378",
+      conditionalRender: { hours: true },
+    },
+    version: 30,
+  },
+  {
+    name: "[immersive] version 30 props using constant values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "immersive",
+        backgroundColor: {
+          bgColor: "bg-palette-primary-light",
+          textColor: "text-black",
+        },
+        showAverageReview: true,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "left",
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "left",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left", semanticLevelOverride: 2 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 1, align: "left" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "long",
+                showDayNames: true,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              variant: "immersive",
+              className:
+                "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "primary", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      conditionalRender: { hours: true },
+    },
+    version: 30,
+  },
+  {
+    name: "[spotlight] version 30 props with entity values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "c_hero.image",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "spotlight",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        showAverageReview: true,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "right",
+        desktopContainerPosition: "left",
+        mobileContentAlignment: "center",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "name",
+                },
+              },
+              styles: { level: 3, align: "center", semanticLevelOverride: 5 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "address.city",
+                },
+              },
+              styles: { level: 4, align: "center" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "long",
+                showDayNames: true,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "logo",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              variant: "spotlight",
+              className: "w-full sm:w-fit h-full ml-auto",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "c_hero.primaryCta",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "secondary", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "c_cta",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      id: "HeroSection-1d9fd3d4-5d88-49ac-913e-28921acfc378",
+      conditionalRender: { hours: true },
+    },
+    version: 30,
+  },
+  {
+    name: "[spotlight] version 30 props with constant values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "spotlight",
+        backgroundColor: {
+          bgColor: "bg-palette-quaternary",
+          textColor: "text-palette-quaternary-contrast",
+        },
+        showAverageReview: false,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "left",
+        desktopContainerPosition: "center",
+        mobileContentAlignment: "left",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "center", semanticLevelOverride: 2 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 4, align: "center" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "long",
+                showDayNames: true,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              variant: "spotlight",
+              className:
+                "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "link", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      conditionalRender: { hours: true },
+    },
+    version: 30,
+  },
+  {
+    name: "[compact] version 30 props with entity values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "c_hero.image",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        variant: "compact",
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        showAverageReview: true,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "right",
+        desktopContainerPosition: "center",
+        mobileContentAlignment: "center",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "name",
+                },
+              },
+              styles: { level: 3, align: "center", semanticLevelOverride: 5 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: false,
+                  field: "address.city",
+                },
+              },
+              styles: { level: 4, align: "center" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "long",
+                showDayNames: true,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              variant: "compact",
+              className: "w-full sm:w-fit h-full ml-auto",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "c_cta",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: false,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "secondary", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "c_hero.secondaryCta",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: false,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      id: "HeroSection-1d9fd3d4-5d88-49ac-913e-28921acfc378",
+      conditionalRender: { hours: true },
+    },
+    version: 30,
+  },
+  {
+    name: "[compact] version 30 props with constant values",
+    document: testDocument,
+    props: {
+      data: {
+        backgroundImage: {
+          field: "",
+          constantValue: {
+            url: "https://placehold.co/640x360",
+            height: 360,
+            width: 640,
+          },
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        variant: "compact",
+        backgroundColor: {
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
+        },
+        showAverageReview: true,
+        showImage: true,
+        imageHeight: 500,
+        desktopImagePosition: "right",
+        desktopContainerPosition: "center",
+        mobileContentAlignment: "left",
+        mobileImagePosition: "bottom",
+      },
+      slots: {
+        BusinessNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-6ecbe797-3521-4429-b6cc-c66b3ce71fd8",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Welcome to [[name]] ",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "center", semanticLevelOverride: 5 },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-810a913f-60f0-435a-892a-5222c51656ac",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Geomodifier",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 4, align: "center" },
+            },
+          },
+        ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-1abddaae-e619-4693-9762-71b5731761d0",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                dayOfWeekFormat: "long",
+                showDayNames: true,
+                showCurrentStatus: true,
+              },
+            },
+          },
+        ],
+        ImageSlot: [
+          {
+            type: "HeroImageSlot",
+            props: {
+              id: "HeroImageSlot-91467e5b-84ed-4497-8eaa-9699d8926f51",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+              variant: "compact",
+              className: "w-full sm:w-fit h-full ml-auto",
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-f45f99e3-0c03-4471-aa48-56e833dc79e0",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "Learn More", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              eventName: "primaryCta",
+              styles: { variant: "link", presetImage: "app-store" },
+              parentStyles: {},
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-648b48d4-27b7-4910-89e9-62f570c17bb2",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: { en: "", hasLocalizedValue: "true" },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "secondary", presetImage: "app-store" },
+              eventName: "secondaryCta",
+              parentStyles: {},
+            },
+          },
+        ],
+      },
+      analytics: { scope: "heroSection" },
+      liveVisibility: true,
+      conditionalRender: { hours: true },
+    },
+    version: 30,
   },
 ];
 

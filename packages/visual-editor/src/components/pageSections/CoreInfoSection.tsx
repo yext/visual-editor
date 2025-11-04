@@ -12,8 +12,16 @@ import {
   getAnalyticsScopeHash,
   resolveComponentData,
   TranslatableString,
+  HeadingTextProps,
+  HoursTableProps,
+  TextListProps,
+  EmailsProps,
+  AddressProps,
 } from "@yext/visual-editor";
-import { resolvePhoneNumbers } from "../contentBlocks/PhoneList";
+import {
+  PhoneListProps,
+  resolvePhoneNumbers,
+} from "../contentBlocks/PhoneList";
 
 export interface CoreInfoStyles {
   /**
@@ -201,7 +209,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 },
               },
               styles: { level: 3, align: "left" },
-            },
+            } satisfies HeadingTextProps,
           },
         ],
         CoreInfoAddressSlot: [
@@ -223,7 +231,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 showGetDirectionsLink: true,
                 ctaVariant: "link",
               },
-            },
+            } satisfies AddressProps,
           },
         ],
         CoreInfoPhoneNumbersSlot: [
@@ -248,7 +256,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 phoneFormat: "domestic",
                 includePhoneHyperlink: true,
               },
-            },
+            } satisfies PhoneListProps,
           },
         ],
         CoreInfoEmailsSlot: [
@@ -264,7 +272,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
               styles: {
                 listLength: 1,
               },
-            },
+            } satisfies EmailsProps,
           },
         ],
         HoursHeadingSlot: [
@@ -282,7 +290,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 },
               },
               styles: { level: 3, align: "left" },
-            },
+            } satisfies HeadingTextProps,
           },
         ],
         HoursTableSlot: [
@@ -299,8 +307,9 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 startOfWeek: "today",
                 collapseDays: false,
                 showAdditionalHoursText: true,
+                alignment: "items-start",
               },
-            },
+            } satisfies HoursTableProps,
           },
         ],
         ServicesHeadingSlot: [
@@ -318,7 +327,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 },
               },
               styles: { level: 3, align: "left" },
-            },
+            } satisfies HeadingTextProps,
           },
         ],
         ServicesListSlot: [
@@ -329,7 +338,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 field: "services",
                 constantValue: [],
               },
-            },
+            } satisfies TextListProps,
           },
         ],
       },
