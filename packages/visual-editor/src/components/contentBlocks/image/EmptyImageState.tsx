@@ -44,15 +44,45 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
 
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const entityFieldRef = React.useRef<HTMLDivElement | null>(null);
 
-  // Attach native event listeners to intercept before Puck
+  // Attach native event listeners to intercept before Puck slot handlers
   React.useEffect(() => {
     const button = buttonRef.current;
     const container = containerRef.current;
+    const entityField = entityFieldRef.current;
     if (!button || !container || !isEmpty) return;
 
+    const handleClick = (e: MouseEvent) => {
+      // Check if the click is on the button or inside it
+      if (button.contains(e.target as Node) || e.target === button) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        if (!hasParentData && constantValueEnabled && isEditing) {
+          if (window.location.href.includes("http://localhost:5173")) {
+            const userInput = prompt("Enter Image URL:");
+            if (!userInput) {
+              return;
+            }
+          } else {
+            /** Instructs Storm to open the image asset selector drawer */
+            const messageId = `ImageAsset-${Date.now()}`;
+            openImageAssetSelector({
+              payload: {
+                type: "ImageAsset",
+                value: constantValue,
+                id: messageId,
+              },
+            });
+          }
+        }
+      }
+    };
+
     const handlePointerDown = (e: PointerEvent) => {
-      if (button.contains(e.target as Node)) {
+      // Check if the pointer down is on the button or inside it
+      if (button.contains(e.target as Node) || e.target === button) {
         e.stopPropagation();
         e.stopImmediatePropagation();
         e.preventDefault();
@@ -60,7 +90,8 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     };
 
     const handlePointerUp = (e: PointerEvent) => {
-      if (button.contains(e.target as Node)) {
+      // Check if the pointer up is on the button or inside it
+      if (button.contains(e.target as Node) || e.target === button) {
         e.stopPropagation();
         e.stopImmediatePropagation();
         e.preventDefault();
@@ -85,40 +116,35 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
       }
     };
 
-    const handleClick = (e: MouseEvent) => {
-      if (button.contains(e.target as Node)) {
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        e.preventDefault();
-        if (!hasParentData && constantValueEnabled && isEditing) {
-          if (window.location.href.includes("http://localhost:5173")) {
-            const userInput = prompt("Enter Image URL:");
-            if (!userInput) {
-              return;
-            }
-          } else {
-            /** Instructs Storm to open the image asset selector drawer */
-            const messageId = `ImageAsset-${Date.now()}`;
-            openImageAssetSelector({
-              payload: {
-                type: "ImageAsset",
-                value: constantValue,
-                id: messageId,
-              },
-            });
-          }
-        }
-      }
-    };
+    // Attach to button directly in capture phase - this intercepts before slot handlers
+    button.addEventListener("click", handleClick, true);
+    button.addEventListener("pointerdown", handlePointerDown, true);
+    button.addEventListener("pointerup", handlePointerUp, true);
 
+    // Also attach to container as backup
+    container.addEventListener("click", handleClick, true);
     container.addEventListener("pointerdown", handlePointerDown, true);
     container.addEventListener("pointerup", handlePointerUp, true);
-    container.addEventListener("click", handleClick, true);
+
+    // Also attach to entityField if available to catch events even earlier
+    if (entityField) {
+      entityField.addEventListener("click", handleClick, true);
+      entityField.addEventListener("pointerdown", handlePointerDown, true);
+      entityField.addEventListener("pointerup", handlePointerUp, true);
+    }
 
     return () => {
+      button.removeEventListener("click", handleClick, true);
+      button.removeEventListener("pointerdown", handlePointerDown, true);
+      button.removeEventListener("pointerup", handlePointerUp, true);
+      container.removeEventListener("click", handleClick, true);
       container.removeEventListener("pointerdown", handlePointerDown, true);
       container.removeEventListener("pointerup", handlePointerUp, true);
-      container.removeEventListener("click", handleClick, true);
+      if (entityField) {
+        entityField.removeEventListener("click", handleClick, true);
+        entityField.removeEventListener("pointerdown", handlePointerDown, true);
+        entityField.removeEventListener("pointerup", handlePointerUp, true);
+      }
     };
   }, [
     isEmpty,
@@ -139,7 +165,17 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
       fieldId={fieldId}
       constantValueEnabled={!hasParentData && constantValueEnabled}
       fullHeight={fullHeight}
-      ref={dragRef}
+      ref={(node) => {
+        entityFieldRef.current = node;
+        if (dragRef) {
+          if (typeof dragRef === "function") {
+            dragRef(node);
+          } else if ("current" in dragRef) {
+            (dragRef as React.MutableRefObject<HTMLDivElement | null>).current =
+              node;
+          }
+        }
+      }}
     >
       <div className="w-full h-full relative">
         <div
