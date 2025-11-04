@@ -12,19 +12,18 @@ const PLACEHOLDER_IMAGE_IDS = [
  * @returns A randomly selected placeholder image URL (or first image in tests)
  */
 export function getRandomPlaceholderImage(): string {
-  // In test environments, always return the first image (tiBUJ0Hiwx8) for deterministic screenshots
+  // In test environments, always return the first image for deterministic screenshots
+  // @ts-ignore - __VISUAL_EDITOR_TEST__ is injected by Vite define in test mode
   const isTestEnv =
-    (typeof process !== "undefined" &&
-      (process.env.NODE_ENV === "test" || process.env.VITEST === "true")) ||
-    (typeof window !== "undefined" &&
-      (window.location?.href?.includes("vitest") ||
-        (window as any).__vitest__ !== undefined));
+    typeof __VISUAL_EDITOR_TEST__ !== "undefined" &&
+    __VISUAL_EDITOR_TEST__ === true;
 
   const randomIndex = isTestEnv
     ? 0
     : Math.floor(Math.random() * PLACEHOLDER_IMAGE_IDS.length);
 
   const photoId = PLACEHOLDER_IMAGE_IDS[randomIndex];
+
   // Using Unsplash's download endpoint which redirects to the CDN
   // The "Invalid host" error is likely a validation warning but doesn't affect rendering
   return `https://unsplash.com/photos/${photoId}/download?force=true`;
