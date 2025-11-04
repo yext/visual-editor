@@ -9,10 +9,16 @@ const PLACEHOLDER_IMAGE_IDS = [
 
 /**
  * Gets a random placeholder image URL from the CDN.
- * @returns A randomly selected placeholder image URL (or first image in tests)
+ * @param existingUrl - If provided, returns this URL to ensure stability (prevents re-fetching)
+ * @returns A randomly selected placeholder image URL (or first image in tests), or the existing URL if provided
  */
-export function getRandomPlaceholderImage(): string {
-  // In test environments, always return the first image (tiBUJ0Hiwx8) for deterministic screenshots
+export function getRandomPlaceholderImage(existingUrl?: string): string {
+  // If an existing URL is provided, use it to prevent re-fetching
+  if (existingUrl && existingUrl.trim() !== "") {
+    return existingUrl;
+  }
+
+  // In test environments, always return the first image for deterministic screenshots
   // Check for __VISUAL_EDITOR_TEST__ flag set via Vite define (at build time) or globalThis (at runtime)
   const isTestEnv =
     (typeof __VISUAL_EDITOR_TEST__ !== "undefined" &&
@@ -32,12 +38,16 @@ export function getRandomPlaceholderImage(): string {
 
 /**
  * Gets a random placeholder image object with default metadata.
- * @returns A randomly selected placeholder image object with url
+ * @param existingConstantValue - If provided with a URL, uses it to ensure stability (prevents re-fetching)
+ * @returns A randomly selected placeholder image object with url, or reuses existing URL if provided
  */
-export function getRandomPlaceholderImageObject(): {
+export function getRandomPlaceholderImageObject(existingConstantValue?: {
+  url?: string;
+}): {
   url: string;
 } {
+  const existingUrl = existingConstantValue?.url;
   return {
-    url: getRandomPlaceholderImage(),
+    url: getRandomPlaceholderImage(existingUrl),
   };
 }

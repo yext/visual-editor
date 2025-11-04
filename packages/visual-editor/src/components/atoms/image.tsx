@@ -63,7 +63,7 @@ export const Image: React.FC<ImageProps> = ({
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
-          imgOverrides={{ sizes }}
+          imgOverrides={{ sizes, loading: "lazy" }}
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
@@ -72,13 +72,14 @@ export const Image: React.FC<ImageProps> = ({
           width={width}
           height={calculatedHeight}
           className="object-cover"
-          imgOverrides={{ sizes }}
+          imgOverrides={{ sizes, loading: "lazy" }}
         />
       ) : (
         <img
           src={isComplexImageType(image) ? image.image.url : image.url}
           alt={altText}
           className="object-cover w-full h-full"
+          loading="lazy"
         />
       )}
     </div>
