@@ -104,6 +104,8 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     TARGET_ORIGINS
   );
 
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
   const getImageUrl = (
     image: ImageType | ComplexImageType | AssetImageType | undefined
   ): string | undefined => {
@@ -120,9 +122,12 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
-  const handleEmptyImageClick = (e?: React.MouseEvent) => {
+  const handleEmptyImageClick = (
+    e?: React.MouseEvent | MouseEvent | PointerEvent
+  ) => {
     if (e) {
       e.stopPropagation();
+      e.preventDefault();
     }
 
     if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
@@ -145,6 +150,85 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       }
     }
   };
+
+  // Attach native event listeners to bypass React's synthetic events and intercept before Puck
+  React.useEffect(() => {
+    const button = buttonRef.current;
+    if (!button || !isEmpty) return;
+
+    const handlePointerDown = (e: PointerEvent) => {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    };
+
+    const handlePointerUp = (e: PointerEvent) => {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
+        /** Handles local development testing outside of Storm */
+        if (window.location.href.includes("http://localhost:5173")) {
+          const userInput = prompt("Enter Image URL:");
+          if (!userInput) {
+            return;
+          }
+        } else {
+          /** Instructs Storm to open the image asset selector drawer */
+          const messageId = `ImageAsset-${Date.now()}`;
+          openImageAssetSelector({
+            payload: {
+              type: "ImageAsset",
+              value: data.image.constantValue as AssetImageType | undefined,
+              id: messageId,
+            },
+          });
+        }
+      }
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      if (!parentData && data.image.constantValueEnabled && puck.isEditing) {
+        /** Handles local development testing outside of Storm */
+        if (window.location.href.includes("http://localhost:5173")) {
+          const userInput = prompt("Enter Image URL:");
+          if (!userInput) {
+            return;
+          }
+        } else {
+          /** Instructs Storm to open the image asset selector drawer */
+          const messageId = `ImageAsset-${Date.now()}`;
+          openImageAssetSelector({
+            payload: {
+              type: "ImageAsset",
+              value: data.image.constantValue as AssetImageType | undefined,
+              id: messageId,
+            },
+          });
+        }
+      }
+    };
+
+    // Use capture phase to intercept before Puck's handlers
+    button.addEventListener("pointerdown", handlePointerDown, true);
+    button.addEventListener("pointerup", handlePointerUp, true);
+    button.addEventListener("click", handleClick, true);
+
+    return () => {
+      button.removeEventListener("pointerdown", handlePointerDown, true);
+      button.removeEventListener("pointerup", handlePointerUp, true);
+      button.removeEventListener("click", handleClick, true);
+    };
+  }, [
+    isEmpty,
+    parentData,
+    data.image.constantValueEnabled,
+    puck.isEditing,
+    openImageAssetSelector,
+  ]);
 
   if (isEmpty) {
     return puck.isEditing ? (
@@ -194,6 +278,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
             }}
           >
             <Button
+              ref={buttonRef}
               variant="ghost"
               size="icon"
               className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
@@ -207,29 +292,6 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
                 e.stopPropagation();
                 e.preventDefault();
                 handleEmptyImageClick(e);
-              }}
-              onMouseDown={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-              }}
-              onMouseUp={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleEmptyImageClick(e as any);
-              }}
-              onPointerDown={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                // Prevent Puck drag handlers from activating
-                e.nativeEvent.stopImmediatePropagation();
-              }}
-              onPointerUp={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                handleEmptyImageClick(e as any);
-              }}
-              onClickCapture={(e) => {
-                e.stopPropagation();
               }}
               type="button"
               aria-label={pt("addImage", "Add Image")}
