@@ -7,9 +7,7 @@ import { compareScreenshot } from "./src/components/testing/compareScreenshot.ts
 
 export default defineConfig(() => ({
   define: {
-    __VISUAL_EDITOR_TEST__: JSON.stringify(
-      process.env.VITEST === "true" || !!process.env.VITEST
-    ),
+    __VISUAL_EDITOR_TEST__: JSON.stringify(!!process.env.VITEST),
   },
   plugins: [react(), ...(process.env.VITEST ? [cssStubPlugin] : [dts()])],
   resolve: {

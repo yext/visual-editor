@@ -12,11 +12,12 @@ const PLACEHOLDER_IMAGE_IDS = [
  * @returns A randomly selected placeholder image URL (or first image in tests)
  */
 export function getRandomPlaceholderImage(): string {
-  // In test environments, always return the first image for deterministic screenshots
-  // @ts-ignore - __VISUAL_EDITOR_TEST__ is injected by Vite define in test mode
+  // In test environments, always return the first image (tiBUJ0Hiwx8) for deterministic screenshots
+  // Check for __VISUAL_EDITOR_TEST__ flag set via Vite define (at build time) or globalThis (at runtime)
   const isTestEnv =
-    typeof __VISUAL_EDITOR_TEST__ !== "undefined" &&
-    __VISUAL_EDITOR_TEST__ === true;
+    (typeof __VISUAL_EDITOR_TEST__ !== "undefined" &&
+      __VISUAL_EDITOR_TEST__ === true) ||
+    (globalThis as any).__VISUAL_EDITOR_TEST__ === true;
 
   const randomIndex = isTestEnv
     ? 0
