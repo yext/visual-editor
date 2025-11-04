@@ -110,13 +110,13 @@ export const MapboxStaticMapComponent = ({
           <div className="flex flex-col items-center gap-0">
             <Body variant="base" className="text-gray-500 font-medium">
               {t(
-                "map.emptyState.sectionHidden",
+                "staticMapEmptyStateSectionHidden",
                 "Section hidden for all locations"
               )}
             </Body>
             <Body variant="base" className="text-gray-500 font-normal">
               {t(
-                "map.emptyState.addApiKey",
+                "staticMapEmptyStateAddApiKey",
                 "Add an API key to preview your map"
               )}
             </Body>
