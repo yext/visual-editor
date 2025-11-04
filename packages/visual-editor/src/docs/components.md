@@ -426,13 +426,13 @@ Available on Locator templates.
 
 #### Other Props
 
-The starting location for the map.
+Configuration for the filters available in the locator search experience.
 
-| Prop                  | Type                                       | Description                                                                         | Default                                |
-| :-------------------- | :----------------------------------------- | :---------------------------------------------------------------------------------- | :------------------------------------- |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }` | The starting location for the map.                                                  |                                        |
-| `mapStyle`            | `string`                                   | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
-| `openNowButton`       | `boolean`                                  | If 'true', displays a button to filter for locations that are currently open.       | `false`                                |
+| Prop                  | Type                                                                            | Description                                                                         | Default                                |
+| :-------------------- | :------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `filters`             | `{ openNowButton: boolean; facetFields?: DynamicOptionsSelectorType<string>; }` | Configuration for the filters available in the locator search experience.           |                                        |
+| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                      | The starting location for the map.                                                  |                                        |
+| `mapStyle`            | `string`                                                                        | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
 
 ---
 

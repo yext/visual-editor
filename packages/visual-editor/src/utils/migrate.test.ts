@@ -1,12 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { Migration, MigrationRegistry, migrate } from "./migrate.ts";
+import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts";
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
     const migratedData = migrate(exampleDataBefore, migrationRegistry, {
       components: {},
     });
-    expect(migratedData).toMatchObject(exampleDataAfter);
+    expect(migratedData).toEqual(exampleDataAfter);
+  });
+
+  it("successfully applies root migration", async () => {
+    const migratedData = migrate(exampleRootDataBefore, [addIdToSchema], {
+      components: {},
+    });
+
+    expect(migratedData).toEqual(exampleRootDataAfter);
   });
 });
 
@@ -250,5 +259,29 @@ const exampleDataAfter = {
       },
     },
   ],
+  zones: {},
+};
+
+const exampleRootDataBefore = {
+  root: {
+    props: {
+      version: 0,
+      schemaMarkup:
+        '{"@context":"https://schema.org","@type":"LocalBusiness","name":"[[name]]","address":{"@type":"PostalAddress","streetAddress":"[[address.line1]]","addressLocality":"[[address.city]]","addressRegion":"[[address.region]]","postalCode":"[[address.postalCode]]","addressCountry":"[[address.countryCode]]"},"openingHours":"[[hours]]","image":"[[photoGallery]]","description":"[[description]]","telephone":"[[mainPhone]]","paymentAccepted":"[[paymentOptions]]","hasOfferCatalog":"[[services]]"}',
+    },
+  },
+  content: [],
+  zones: {},
+};
+
+const exampleRootDataAfter = {
+  root: {
+    props: {
+      version: 1,
+      schemaMarkup:
+        '{"@context":"https://schema.org","@type":"LocalBusiness","name":"[[name]]","address":{"@type":"PostalAddress","streetAddress":"[[address.line1]]","addressLocality":"[[address.city]]","addressRegion":"[[address.region]]","postalCode":"[[address.postalCode]]","addressCountry":"[[address.countryCode]]"},"openingHours":"[[hours]]","image":"[[photoGallery]]","description":"[[description]]","telephone":"[[mainPhone]]","paymentAccepted":"[[paymentOptions]]","hasOfferCatalog":"[[services]]","@id":"[[siteDomain]]/[[path]]"}',
+    },
+  },
+  content: [],
   zones: {},
 };

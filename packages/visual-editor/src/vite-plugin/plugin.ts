@@ -5,7 +5,7 @@ import mainTemplate from "./templates/main.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
-import { ComponentField, ComponentFields } from "@yext/visual-editor";
+import { ComponentField, ComponentFields } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
 
 type TemplateManifestEntry = {

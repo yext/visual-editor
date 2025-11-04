@@ -1,8 +1,7 @@
-import { type StreamDocument } from "@yext/visual-editor";
 import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import { type YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
 
-const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
+export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
 export const resolveYextEntityField = <T>(
   streamDocument: any,
@@ -203,43 +202,10 @@ export const resolveYextStructField = <T extends Record<string, any>>(
   return finalStruct as T;
 };
 
-const stringifyResolvedField = (fieldValue: any): string => {
-  if (fieldValue === undefined || fieldValue === null) {
-    return "";
-  }
-
-  let stringToEmbed: string;
-  if (typeof fieldValue === "string") {
-    // If the value is already a string, that's what we want to embed.
-    stringToEmbed = fieldValue;
-  } else {
-    // For non-string types (objects, arrays, numbers, booleans, null),
-    // we first convert them to their standard JSON string representation.
-    stringToEmbed = JSON.stringify(fieldValue);
-  }
-
-  // Now, take the string we want to embed and prepare it to be a value
-  // in a JSON string. This requires escaping its special characters (like " and \).
-  // JSON.stringify() on a string does exactly this, and wraps the result in quotes.
-  const jsonStringLiteral = JSON.stringify(stringToEmbed);
-
-  // We return the content *inside* the quotes, which is the properly escaped string.
-  return jsonStringLiteral.slice(1, -1);
-};
-
-export const resolveSchemaJson = (
-  streamDocument: StreamDocument,
-  schema: string
-): string => {
-  return schema.replace(embeddedFieldRegex, (_, fieldName) => {
-    const resolvedValue = findField(streamDocument, fieldName);
-    return resolvedValue
-      ? stringifyResolvedField(resolvedValue)
-      : `[[${fieldName}]]`;
-  });
-};
-
-const findField = <T>(document: any, fieldName: string): T | undefined => {
+export const findField = <T>(
+  document: any,
+  fieldName: string
+): T | undefined => {
   if (fieldName === "") {
     return undefined;
   }

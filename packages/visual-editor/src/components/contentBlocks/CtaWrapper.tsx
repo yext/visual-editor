@@ -16,7 +16,7 @@ import {
 import {
   ctaTypeOptions,
   ctaTypeToEntityFieldType,
-  getCTATypeAndCoordinate,
+  getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
 export interface CTAWrapperProps {
@@ -52,7 +52,7 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const cta = resolveComponentData(entityField, i18n.language, streamDocument);
-  const { ctaType, coordinate } = getCTATypeAndCoordinate(entityField, cta);
+  const { ctaType } = getCTAType(entityField);
 
   return (
     <EntityField
@@ -66,7 +66,6 @@ const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
           link={resolveComponentData(cta.link, i18n.language, streamDocument)}
           linkType={cta.linkType}
           ctaType={ctaType}
-          coordinate={coordinate}
           presetImageType={cta.presetImageType}
           variant={variant}
           className={className}

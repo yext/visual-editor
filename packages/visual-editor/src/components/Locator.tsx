@@ -19,11 +19,16 @@ import {
   useCardAnalyticsCallback,
   VerticalResults,
   SearchI18nextProvider,
+  Facets,
+  AppliedFilters,
 } from "@yext/search-ui-react";
 import {
+  FilterSearchResponse,
+  FieldValueStaticFilter,
   Matcher,
   provideHeadless,
   Result,
+  NearFilterValue,
   SearchHeadlessProvider,
   SelectableStaticFilter,
   useSearchActions,
@@ -37,36 +42,45 @@ import {
   Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
+  DynamicOption,
+  DynamicOptionsSelectorType,
   Heading,
   msg,
   useDocument,
   YextField,
   useTemplateProps,
-  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
   mergeMeta,
+  HoursStatusAtom,
 } from "@yext/visual-editor";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
   Address,
   AddressType,
-  HoursStatus,
+  getDirections,
   HoursType,
+  ListingType,
 } from "@yext/pages-components";
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
   FaAngleRight,
-  FaCheckSquare,
-  FaRegSquare,
+  FaChevronUp,
+  FaDotCircle,
+  FaRegCircle,
   FaSlidersH,
   FaTimes,
 } from "react-icons/fa";
 import { formatPhoneNumber } from "./atoms/phone.js";
+import { useCollapse } from "react-collapsed";
+import { getValueFromQueryString } from "../utils/urlQueryString";
 
-const DEFAULT_FIELD = "builtin.location";
+const LOCATION_FIELD = "builtin.location";
 const DEFAULT_ENTITY_TYPE = "location";
-const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City
-const DEFAULT_RADIUS_METERS = 40233.6; // 25 miles
+const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
+const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
+const MILES_TO_METERS = 1609.34;
+const INITIAL_LOCATION_KEY = "initialLocation";
 
 // Keep only digits and at most one leading plus for tel: links.
 // If the input already starts with "tel:", return it as-is.
@@ -83,6 +97,342 @@ function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
   return `tel:${cleaned}`;
 }
 
+const getEntityType = (entityTypeEnvVar?: string) => {
+  const entityDocument: any = useDocument();
+  if (!entityDocument._pageset && entityTypeEnvVar) {
+    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
+  }
+
+  try {
+    const entityType = JSON.parse(entityDocument._pageset).typeConfig
+      .locatorConfig.entityType;
+    return entityType || DEFAULT_ENTITY_TYPE;
+  } catch {
+    return DEFAULT_ENTITY_TYPE;
+  }
+};
+
+function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
+  let filterOptions: DynamicOption<string>[] = [];
+  switch (entityType) {
+    case "location":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg("fields.options.facets.associations", "Associations"),
+          value: "associations",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.keywords", "Keywords"),
+          value: "keywords",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg("fields.options.facets.products", "Products"),
+          value: "products",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialities",
+        },
+      ];
+      break;
+    case "restaurant":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptsReservations",
+            "Accepts Reservations"
+          ),
+          value: "acceptsReservations",
+        },
+        {
+          label: msg("fields.options.facets.associations", "Associations"),
+          value: "associations",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.keywords", "Keywords"),
+          value: "keywords",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.mealsServed", "Meals Served"),
+          value: "mealsServed",
+        },
+        {
+          label: msg("fields.options.facets.neighborhood", "Neighborhood"),
+          value: "neighborhood",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg(
+            "fields.options.facets.pickupAndDeliveryServices",
+            "Pickup and Delivery Services"
+          ),
+          value: "pickupAndDeliveryServices",
+        },
+        {
+          label: msg("fields.options.facets.priceRange", "Price Range"),
+          value: "priceRange",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialities",
+        },
+      ];
+      break;
+    case "healthcareFacility":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptingNewPatients",
+            "Accepting New Patients"
+          ),
+          value: "acceptingNewPatients",
+        },
+        {
+          label: msg(
+            "fields.options.facets.conditionsTreated",
+            "Conditions Treated"
+          ),
+          value: "conditionsTreated",
+        },
+        {
+          label: msg(
+            "fields.options.facets.insuranceAccepted",
+            "Insurance Accepted"
+          ),
+          value: "insuranceAccepted",
+        },
+        {
+          label: msg("fields.options.facets.paymentOptions", "Payment Options"),
+          value: "paymentOptions",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+      ];
+      break;
+    case "healthcareProfessional":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg(
+            "fields.options.facets.acceptingNewPatients",
+            "Accepting New Patients"
+          ),
+          value: "acceptingNewPatients",
+        },
+        {
+          label: msg(
+            "fields.options.facets.admittingHospitals",
+            "Admitting Hospitals"
+          ),
+          value: "admittingHospitals",
+        },
+        {
+          label: msg("fields.options.facets.brands", "Brands"),
+          value: "brands",
+        },
+        {
+          label: msg("fields.options.facets.certifications", "Certifications"),
+          value: "certifications",
+        },
+        {
+          label: msg(
+            "fields.options.facets.conditionsTreated",
+            "Conditions Treated"
+          ),
+          value: "conditionsTreated",
+        },
+        {
+          label: msg("fields.options.facets.degrees", "Degrees"),
+          value: "degrees",
+        },
+        {
+          label: msg("fields.options.facets.gender", "Gender"),
+          value: "gender",
+        },
+        {
+          label: msg(
+            "fields.options.facets.insuranceAccepted",
+            "Insurance Accepted"
+          ),
+          value: "insuranceAccepted",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.neighborhood", "Neighborhood"),
+          value: "neighborhood",
+        },
+        {
+          label: msg("fields.options.facets.officeName", "Office Name"),
+          value: "officeName",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+      ];
+      break;
+    case "hotel":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        { label: msg("fields.options.facets.bar", "Bar"), value: "bar" },
+        {
+          label: msg("fields.options.facets.catsAllowed", "Cats Allowed"),
+          value: "catsAllowed",
+        },
+        {
+          label: msg("fields.options.facets.dogsAllowed", "Dogs Allowed"),
+          value: "dogsAllowed",
+        },
+        {
+          label: msg("fields.options.facets.parking", "Parking"),
+          value: "parking",
+        },
+        { label: msg("fields.options.facets.pools", "Pools"), value: "pools" },
+      ];
+      break;
+    case "financialProfessional":
+      filterOptions = [
+        {
+          label: msg("fields.options.facets.city", "City"),
+          value: "address.city",
+        },
+        {
+          label: msg("fields.options.facets.postalCode", "Postal Code"),
+          value: "address.postalCode",
+        },
+        {
+          label: msg("fields.options.facets.region", "Region"),
+          value: "address.region",
+        },
+        {
+          label: msg("fields.options.facets.certifications", "Certifications"),
+          value: "certifications",
+        },
+        {
+          label: msg("fields.options.facets.interests", "Interests"),
+          value: "interests",
+        },
+        {
+          label: msg("fields.options.facets.languages", "Languages"),
+          value: "languages",
+        },
+        {
+          label: msg("fields.options.facets.services", "Services"),
+          value: "services",
+        },
+        {
+          label: msg("fields.options.facets.specialties", "Specialties"),
+          value: "specialties",
+        },
+        {
+          label: msg(
+            "fields.options.facets.yearsOfExperience",
+            "Years of Experience"
+          ),
+          value: "yearsOfExperience",
+        },
+      ];
+      break;
+    default:
+      filterOptions = [];
+  }
+  return filterOptions.sort((a, b) => a.label.localeCompare(b.label));
+}
+
 export interface LocatorProps {
   /**
    * The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.
@@ -91,10 +441,17 @@ export interface LocatorProps {
   mapStyle?: string;
 
   /**
-   * If 'true', displays a button to filter for locations that are currently open.
-   * @defaultValue false
+   * Configuration for the filters available in the locator search experience.
    */
-  openNowButton: boolean;
+  filters: {
+    /**
+     * If 'true', displays a button to filter for locations that are currently open.
+     * @defaultValue false
+     */
+    openNowButton: boolean;
+    /** Which fields are facetable in the search experience */
+    facetFields?: DynamicOptionsSelectorType<string>;
+  };
 
   /**
    * The starting location for the map.
@@ -135,16 +492,34 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
-  openNowButton: YextField(
-    msg("fields.options.includeOpenNow", "Include Open Now Button"),
-    {
-      type: "radio",
-      options: [
-        { label: msg("fields.options.yes", "Yes"), value: true },
-        { label: msg("fields.options.no", "No"), value: false },
-      ],
-    }
-  ),
+  filters: {
+    label: msg("fields.filters", "Filters"),
+    type: "object",
+    objectFields: {
+      openNowButton: YextField(
+        msg("fields.options.includeOpenNow", "Include Open Now Button"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
+      facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
+        type: "dynamicSelect",
+        dropdownLabel: msg("fields.field", "Field"),
+        getOptions: () => {
+          const entityType = getEntityType();
+          return getFacetFieldOptions(entityType);
+        },
+        placeholderOptionLabel: msg(
+          "fields.options.selectAField",
+          "Select a field"
+        ),
+      }),
+    },
+  },
   mapStartingLocation: YextField(
     msg("fields.options.mapStartingLocation", "Map Starting Location"),
     {
@@ -167,7 +542,9 @@ const locatorFields: Fields<LocatorProps> = {
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
   defaultProps: {
-    openNowButton: false,
+    filters: {
+      openNowButton: false,
+    },
   },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
@@ -213,7 +590,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  openNowButton,
+  filters: { openNowButton, facetFields },
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
@@ -222,6 +599,12 @@ const LocatorInternal = ({
   const streamDocument = useDocument();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
+  );
+  const queryParamString =
+    typeof window === "undefined" ? "" : window.location.search;
+  const initialLocationParam = getValueFromQueryString(
+    INITIAL_LOCATION_KEY,
+    queryParamString
   );
 
   const iframe =
@@ -248,6 +631,21 @@ const LocatorInternal = ({
     setShowSearchAreaButton(true);
   };
 
+  const [isOpenNowSelected, setIsOpenNowSelected] = React.useState(false);
+  const openNowFilter: SelectableStaticFilter = React.useMemo(
+    () => ({
+      filter: {
+        kind: "fieldValue",
+        fieldId: HOURS_FIELD,
+        matcher: Matcher.OpenAt,
+        value: "now",
+      },
+      selected: isOpenNowSelected,
+      displayName: t("openNow", "Open Now"),
+    }),
+    [isOpenNowSelected]
+  );
+
   const handleSearchAreaClick = () => {
     if (mapCenter && mapBounds) {
       const locationFilter: SelectableStaticFilter = {
@@ -265,7 +663,7 @@ const LocatorInternal = ({
           matcher: Matcher.Near,
         },
       };
-      searchActions.setStaticFilters([locationFilter]);
+      searchActions.setStaticFilters([locationFilter, openNowFilter]);
       searchActions.executeVerticalQuery();
       setSearchState("loading");
       setShowSearchAreaButton(false);
@@ -273,23 +671,43 @@ const LocatorInternal = ({
   };
 
   const searchActions = useSearchActions();
+  const selectedFacets: string[] = React.useMemo(
+    () =>
+      facetFields?.selections
+        ?.filter((selection) => selection.value !== undefined)
+        ?.map((selection) => selection.value as string) ?? [],
+    [facetFields]
+  );
+  React.useEffect(() => {
+    searchActions.setFacetAllowList(selectedFacets);
+  }, [searchActions, selectedFacets]);
+
   const filterDisplayName = useSearchState(
     (state) => state.filters.static?.[0]?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
+    const newDisplayName = params.newDisplayName;
+    const filterValue = params.newFilter.value as NearFilterValue;
     const locationFilter: SelectableStaticFilter = {
-      displayName: params.newDisplayName,
+      displayName: newDisplayName,
       selected: true,
       filter: {
         kind: "fieldValue",
         fieldId: params.newFilter.fieldId,
-        value: params.newFilter.value,
+        value: {
+          ...filterValue,
+          radius: selectedDistanceMiles * MILES_TO_METERS,
+        },
         matcher: Matcher.Near,
       },
     };
-    searchActions.setStaticFilters([locationFilter]);
+
+    searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
+    if (filterValue?.lat && filterValue?.lng) {
+      setMapCenter(new mapboxgl.LngLat(filterValue.lng, filterValue.lat));
+    }
   };
 
   const searchLoading = useSearchState((state) => state.searchStatus.isLoading);
@@ -356,11 +774,83 @@ const LocatorInternal = ({
     markerOptionsOverride: markerOptionsOverride,
   });
 
+  const [selectedDistanceMiles, setSelectedDistanceMiles] =
+    React.useState<number>(DEFAULT_RADIUS_MILES);
+
   React.useEffect(() => {
-    let centerCoords = DEFAULT_MAP_CENTER;
-    let displayName: string | undefined;
-    getUserLocation()
-      .then(async (location) => {
+    const resolveLocationAndSearch = async () => {
+      let centerCoords = DEFAULT_MAP_CENTER;
+      let displayName: string | undefined;
+      const doSearch = () => {
+        searchActions.setStaticFilters([
+          {
+            selected: true,
+            displayName,
+            filter: {
+              kind: "fieldValue",
+              fieldId: "builtin.location",
+              value: {
+                lat: centerCoords[1],
+                lng: centerCoords[0],
+                radius: selectedDistanceMiles * MILES_TO_METERS,
+              },
+              matcher: Matcher.Near,
+            },
+          },
+        ]);
+        searchActions.executeVerticalQuery();
+        setSearchState("loading");
+        setMapProps((prev) => ({ ...prev, centerCoords }));
+        setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+      };
+
+      const foundStartingLocationFromQueryParam = async (
+        queryParam: string
+      ): Promise<boolean> => {
+        return searchActions
+          .executeFilterSearch(queryParam, false, [
+            {
+              fieldApiName: LOCATION_FIELD,
+              entityType: entityType,
+              fetchEntities: false,
+            },
+          ])
+          .then((response: FilterSearchResponse | undefined) => {
+            const firstResult = response?.sections[0]?.results[0];
+            const filterFromResult = firstResult?.filter?.value as
+              | NearFilterValue
+              | undefined;
+
+            if (
+              firstResult &&
+              firstResult.filter &&
+              filterFromResult?.lat &&
+              filterFromResult?.lng
+            ) {
+              displayName = firstResult.value;
+              centerCoords = [filterFromResult.lng, filterFromResult.lat];
+              return true;
+            }
+            return false;
+          })
+          .catch((e) => {
+            console.warn("Filter search for initial location failed:", e);
+            return false;
+          });
+      };
+
+      // 1. Check if a location could be determined from the initialLocation query parameter
+      if (
+        initialLocationParam &&
+        (await foundStartingLocationFromQueryParam(initialLocationParam))
+      ) {
+        doSearch();
+        return;
+      }
+
+      try {
+        // 2. Try to get user location via Geolocation API
+        const location = await getUserLocation();
         centerCoords = [location.coords.longitude, location.coords.latitude];
         setUserLocationRetrieved(true);
 
@@ -387,10 +877,10 @@ const LocatorInternal = ({
             }
           }
         } catch (e) {
-          console.error(e);
+          console.warn("Reverse geocoding failed:", e);
         }
-      })
-      .catch(() => {
+      } catch {
+        // 3. Fall back to mapStartingLocation prop
         try {
           if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
             centerCoords = parseMapStartingLocation(mapStartingLocation);
@@ -398,32 +888,21 @@ const LocatorInternal = ({
         } catch (e) {
           console.error(e);
         }
-      })
-      .finally(() => {
-        searchActions.setStaticFilters([
-          {
-            selected: true,
-            displayName,
-            filter: {
-              kind: "fieldValue",
-              fieldId: "builtin.location",
-              value: {
-                lat: centerCoords[1],
-                lng: centerCoords[0],
-                radius: DEFAULT_RADIUS_METERS,
-              },
-              matcher: Matcher.Near,
-            },
-          },
-        ]);
-        searchActions.executeVerticalQuery();
-        setSearchState("loading");
-        setMapProps((prev) => ({ ...prev, centerCoords }));
-      });
-  }, []);
+      } finally {
+        doSearch();
+      }
+    };
 
-  const [isSelected, setIsSelected] = React.useState(false);
+    resolveLocationAndSearch().catch((e) =>
+      console.error("Failed perform search:", e)
+    );
+  }, [searchActions, mapStartingLocation, initialLocationParam]);
+
   const handleOpenNowClick = (selected: boolean) => {
+    if (selected === isOpenNowSelected) {
+      // Prevents us from trying to set Open Now filter to false when it's not set
+      return;
+    }
     searchActions.setFilterOption({
       filter: {
         kind: "fieldValue",
@@ -434,17 +913,131 @@ const LocatorInternal = ({
       selected,
       displayName: t("openNow", "Open Now"),
     });
-    setIsSelected(isSelected);
+    setIsOpenNowSelected(selected);
     searchActions.setOffset(0);
-    searchActions.resetFacets();
     executeSearch(searchActions);
   };
 
   const searchFilters = useSearchState((state) => state.filters);
+  const handleDistanceClick = (distanceMiles: number) => {
+    // Update existing distance filter if present
+    const existingFilters = searchFilters.static || [];
+    const nonLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind !== "fieldValue" ||
+        filter.filter.fieldId !== LOCATION_FIELD
+    );
+    const oldLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === LOCATION_FIELD
+    );
+    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+      const previousFilter = filter.filter as
+        | FieldValueStaticFilter
+        | undefined;
+      const previousValue = previousFilter?.value as
+        | NearFilterValue
+        | undefined;
+      // mapCenter should always be defined here, but fall back to previous value or default
+      // just in case
+      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
+      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            lat,
+            lng,
+            radius: distanceMiles * MILES_TO_METERS,
+          },
+        },
+      } as SelectableStaticFilter;
+    });
+
+    searchActions.setStaticFilters(
+      nonLocationFilters.concat(updatedLocationFilters)
+    );
+    setSelectedDistanceMiles(distanceMiles);
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+  };
+
+  const handleClearFiltersClick = () => {
+    const existingFilters = searchFilters.static || [];
+
+    // There shouldn't be any other static filters besides location and open now, but leave
+    // them untouched for safety
+    const unaffectedStaticFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind !== "fieldValue" ||
+        (filter.filter.fieldId !== LOCATION_FIELD &&
+          filter.filter.fieldId !== HOURS_FIELD)
+    );
+
+    // Make Open Now filter unselected
+    const oldOpenNowFilter = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === HOURS_FIELD
+    );
+    const updatedOpenNowFilters = oldOpenNowFilter.map((filter) => ({
+      ...filter,
+      selected: false,
+    }));
+
+    // Update location filters to default radius
+    const oldLocationFilters = existingFilters.filter(
+      (filter) =>
+        filter.filter.kind === "fieldValue" &&
+        filter.filter.fieldId === LOCATION_FIELD
+    );
+    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+      const previousFilter = filter.filter as
+        | FieldValueStaticFilter
+        | undefined;
+      const previousValue = previousFilter?.value as
+        | NearFilterValue
+        | undefined;
+      // mapCenter should always be defined here, but fall back to previous value or default
+      // just in case
+      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
+      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            lat,
+            lng,
+            radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+          },
+        },
+      } as SelectableStaticFilter;
+    });
+
+    // Both open now and distance filters must be updated in the same setStaticFilters call to
+    // avoid problems due to the asynchronous nature of state updates.
+    searchActions.setStaticFilters(
+      unaffectedStaticFilters.concat(
+        updatedLocationFilters,
+        updatedOpenNowFilters
+      )
+    );
+    searchActions.resetFacets();
+    // Execute search to update AppliedFilters components
+    searchActions.setOffset(0);
+    executeSearch(searchActions);
+    setSelectedDistanceMiles(DEFAULT_RADIUS_MILES);
+  };
+
   // If something else causes the filters to update, check if the hours filter is still present
-  // - toggle off the Open Now toggle if not.
+  // and toggle off the Open Now toggle if not.
   React.useEffect(() => {
-    setIsSelected(
+    setIsOpenNowSelected(
       searchFilters.static
         ? !!searchFilters.static.find((staticFilter) => {
             return (
@@ -457,17 +1050,21 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
-  const [showFilter, setShowFilter] = React.useState(false);
+  const hasFilterModalToggle = openNowButton || selectedFacets.length > 0;
+  const [showFilterModal, setShowFilterModal] = React.useState(false);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
-      <div className="h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col">
+      <div
+        className="relative h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col"
+        id="locatorLeftDiv"
+      >
         <div className="px-8 py-6 gap-4 flex flex-col">
           <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
           <FilterSearch
             searchFields={[
-              { fieldApiName: DEFAULT_FIELD, entityType: entityType },
+              { fieldApiName: LOCATION_FIELD, entityType: entityType },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={t("searchHere", "Search here...")}
@@ -480,95 +1077,79 @@ const LocatorInternal = ({
             }}
             showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
-              radius: 25,
+              radius: DEFAULT_RADIUS_MILES, // this component uses miles, not meters
             }}
           />
         </div>
-        <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 relative inline-block">
-          <div className="flex flex-row justify-between">
-            <div>
-              {resultCount === 0 &&
-                searchState === "not started" &&
-                t(
-                  "useOurLocatorToFindALocationNearYou",
-                  "Use our locator to find a location near you"
-                )}
-              {resultCount === 0 &&
-                searchState === "complete" &&
-                t(
-                  "noResultsFoundForThisArea",
-                  "No results found for this area"
-                )}
-              {resultCount > 0 &&
-                (filterDisplayName
-                  ? t(
-                      "locationsNear",
-                      `${resultCount} locations near "${filterDisplayName}"`,
-                      {
+        <div className="relative flex-1 flex flex-col min-h-0">
+          <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
+            <div className="flex flex-row justify-between" id="levelWithModal">
+              <div>
+                {resultCount === 0 &&
+                  searchState === "not started" &&
+                  t(
+                    "useOurLocatorToFindALocationNearYou",
+                    "Use our locator to find a location near you"
+                  )}
+                {resultCount === 0 &&
+                  searchState === "complete" &&
+                  t(
+                    "noResultsFoundForThisArea",
+                    "No results found for this area"
+                  )}
+                {resultCount > 0 &&
+                  (filterDisplayName
+                    ? t(
+                        "locationsNear",
+                        `${resultCount} locations near "${filterDisplayName}"`,
+                        {
+                          count: resultCount,
+                          filterDisplayName,
+                        }
+                      )
+                    : t("locationWithCount", `${resultCount} locations`, {
                         count: resultCount,
-                        filterDisplayName,
-                      }
-                    )
-                  : t("locationWithCount", `${resultCount} locations`, {
-                      count: resultCount,
-                    }))}
+                      }))}
+              </div>
+              {hasFilterModalToggle && (
+                <button
+                  className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                  onClick={() => setShowFilterModal((prev) => !prev)}
+                >
+                  {t("filter", "Filter")}
+                  {<FaSlidersH />}
+                </button>
+              )}
             </div>
-            {openNowButton && (
-              <button
-                className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
-                onClick={() => setShowFilter((prev) => !prev)}
-              >
-                {t("filter", "Filter")}
-                {<FaSlidersH />}
-              </button>
+            <div className="flex flex-row justify-between">
+              <AppliedFilters
+                hiddenFields={[LOCATION_FIELD]}
+                customCssClasses={{
+                  removableFilter: "text-md font-normal mt-2 mb-0",
+                  clearAllButton: "hidden",
+                  appliedFiltersContainer: "mt-0 mb-0",
+                }}
+              />
+            </div>
+          </div>
+          <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
+            {resultCount > 0 && (
+              <VerticalResults
+                CardComponent={CardComponent}
+                setResultsRef={setResultsRef}
+              />
             )}
           </div>
-          {showFilter && (
-            <div
-              id="popup"
-              className="absolute top-0 z-50 w-80 flex flex-col bg-white shadow-lg absolute left-full top-0 ml-2 rounded-md shadow-lg"
-            >
-              <div className="inline-flex justify-between items-center px-6 py-4 gap-4 border-b border-gray-300">
-                <div className="font-bold">
-                  {t("refineYourSearch", "Refine Your Search")}
-                </div>
-                <button
-                  className="text-palette-primary-dark"
-                  onClick={() => setShowFilter(false)}
-                >
-                  <FaTimes />
-                </button>
-              </div>
-              <div className="flex flex-col p-6 gap-6">
-                <div className="flex flex-col gap-8">
-                  <div className="flex flex-col gap-4">
-                    <div className="font-bold">{t("hours", "Hours")}</div>
-                    <div className="flex flex-row gap-1">
-                      <button
-                        className="inline-flex bg-white"
-                        onClick={() => handleOpenNowClick(!isSelected)}
-                      >
-                        <div className="inline-flex items-center gap-4">
-                          {t("openNow", "Open Now")}
-                          <div className="text-palette-primary-dark">
-                            {isSelected ? <FaCheckSquare /> : <FaRegSquare />}
-                          </div>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
-          {resultCount > 0 && (
-            <VerticalResults
-              CardComponent={CardComponent}
-              setResultsRef={setResultsRef}
-            />
-          )}
+          <FilterModal
+            showFilterModal={showFilterModal}
+            showOpenNowOption={openNowButton}
+            isOpenNowSelected={isOpenNowSelected}
+            handleOpenNowClick={handleOpenNowClick}
+            selectedDistanceMiles={selectedDistanceMiles}
+            handleDistanceClick={handleDistanceClick}
+            handleCloseModalClick={() => setShowFilterModal(false)}
+            handleClearFiltersClick={handleClearFiltersClick}
+          />
         </div>
       </div>
 
@@ -709,10 +1290,6 @@ const LocationCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const getGoogleMapsLink = (coordinate: Coordinate): string => {
-      return `https://www.google.com/maps/dir/?api=1&destination=${coordinate.latitude},${coordinate.longitude}`;
-    };
-
     const distanceInMiles = distance
       ? (distance / 1609.344).toFixed(1)
       : undefined;
@@ -733,7 +1310,7 @@ const LocationCard = React.memo(
       "TAP_TO_CALL"
     );
 
-    const resolvedUrl = resolveUrlTemplate(
+    const resolvedUrl = resolveUrlTemplateOfChild(
       mergeMeta(location, streamDocument),
       relativePrefixToRoot,
       puck.metadata?.resolveUrlTemplate
@@ -748,11 +1325,24 @@ const LocationCard = React.memo(
 
     const telHref = sanitizePhoneForTelHref(location.mainPhone);
 
-    const googleMapsLink = (() => {
-      if (!location.yextDisplayCoordinate) {
-        return null;
-      }
-      return getGoogleMapsLink(location.yextDisplayCoordinate);
+    const getDirectionsLink: string | undefined = (() => {
+      const listings = location.ref_listings ?? [];
+      const listingsLink = getDirections(
+        undefined,
+        listings,
+        undefined,
+        { provider: "google" },
+        undefined
+      );
+      const coordinateLink = getDirections(
+        undefined,
+        undefined,
+        undefined,
+        { provider: "google" },
+        location.yextDisplayCoordinate
+      );
+
+      return listingsLink || coordinateLink;
     })();
 
     return (
@@ -786,9 +1376,11 @@ const LocationCard = React.memo(
             </div>
             {location.hours && (
               <div className="font-body-fontFamily text-body-fontSize gap-8">
-                <HoursStatus
+                <HoursStatusAtom
                   hours={location.hours}
                   timezone={location.timezone}
+                  className="text-body-fontSize"
+                  boldCurrentStatus={false}
                 />
               </div>
             )}
@@ -814,9 +1406,9 @@ const LocationCard = React.memo(
                   />
                 </div>
               )}
-              {googleMapsLink && (
+              {getDirectionsLink && (
                 <a
-                  href={googleMapsLink}
+                  href={getDirectionsLink}
                   onClick={handleGetDirectionsClick}
                   className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
                 >
@@ -837,19 +1429,189 @@ const LocationCard = React.memo(
   }
 );
 
-const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: any = useDocument();
-  if (!entityDocument._pageset && entityTypeEnvVar) {
-    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
-  }
+interface FilterModalProps {
+  showFilterModal: boolean;
+  showOpenNowOption: boolean; // whether to show the Open Now filter option
+  isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
+  selectedDistanceMiles?: number;
+  handleCloseModalClick: () => void;
+  handleOpenNowClick: (selected: boolean) => void;
+  handleDistanceClick: (distance: number) => void;
+  handleClearFiltersClick: () => void;
+}
 
-  try {
-    const entityType = JSON.parse(entityDocument._pageset).typeConfig
-      .locatorConfig.entityType;
-    return entityType || DEFAULT_ENTITY_TYPE;
-  } catch {
-    return DEFAULT_ENTITY_TYPE;
-  }
+const FilterModal = (props: FilterModalProps) => {
+  const {
+    showFilterModal,
+    showOpenNowOption,
+    isOpenNowSelected,
+    selectedDistanceMiles,
+    handleCloseModalClick,
+    handleOpenNowClick,
+    handleDistanceClick,
+    handleClearFiltersClick,
+  } = props;
+  const { t } = useTranslation();
+  const popupRef = React.useRef<HTMLDivElement>(null);
+
+  return showFilterModal ? (
+    <div
+      id="popup"
+      className="absolute top-4 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      ref={popupRef}
+    >
+      <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
+        <div className="font-bold">
+          {t("refineYourSearch", "Refine Your Search")}
+        </div>
+        <button
+          className="text-palette-primary-dark"
+          onClick={handleCloseModalClick}
+        >
+          <FaTimes />
+        </button>
+      </div>
+      <div className="px-6 border-b border-gray-300">
+        <AppliedFilters
+          hiddenFields={[LOCATION_FIELD]}
+          customCssClasses={{
+            removableFilter: "text-md font-normal",
+            clearAllButton: "hidden",
+          }}
+        />
+      </div>
+      <div className="flex flex-col p-6 gap-6 overflow-y-auto">
+        <div className="flex flex-col gap-8">
+          {showOpenNowOption && (
+            <OpenNowFilter
+              isSelected={isOpenNowSelected}
+              onChange={handleOpenNowClick}
+            />
+          )}
+          <DistanceFilter
+            onChange={handleDistanceClick}
+            selectedDistanceMiles={selectedDistanceMiles}
+          />
+          <Facets
+            customCssClasses={{
+              divider: "bg-white",
+              titleLabel: "font-bold text-md",
+              optionInput: "h-4 w-4 accent-palette-primary-dark",
+              optionLabel: "text-md",
+              option: "space-x-4",
+            }}
+          />
+        </div>
+      </div>
+      <div className="border-y border-gray-300 justify-center align-middle">
+        <button
+          className="w-full py-4 text-center font-bold text-palette-primary-dark"
+          onClick={handleClearFiltersClick}
+        >
+          {t("clearAll", "Clear All")}
+        </button>
+      </div>
+    </div>
+  ) : null;
+};
+
+interface OpenNowFilterProps {
+  isSelected: boolean;
+  onChange: (selected: boolean) => void;
+}
+
+const OpenNowFilter = (props: OpenNowFilterProps) => {
+  const { isSelected, onChange } = props;
+  const { t } = useTranslation();
+  const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
+    defaultExpanded: true,
+  });
+  const iconClassName = isExpanded
+    ? "w-3 text-gray-400"
+    : "w-3 text-gray-400 transform rotate-180";
+
+  const openNowCheckBoxId = "openNowCheckBox";
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        className="w-full flex justify-between items-center"
+        {...getToggleProps()}
+      >
+        <div className="font-bold">{t("hours", "Hours")}</div>
+        <FaChevronUp className={iconClassName} />
+      </button>
+      <div className="flex flex-row gap-1" {...getCollapseProps()}>
+        <div className="inline-flex items-center gap-4">
+          <input
+            type="checkbox"
+            id={openNowCheckBoxId}
+            checked={isSelected}
+            className={
+              "w-4 h-4 form-checkbox cursor-pointer border border-gray-300" +
+              " rounded-sm text-primary focus:ring-primary accent-palette-primary-dark"
+            }
+            onChange={() => onChange(!isSelected)}
+          />
+          <label htmlFor={openNowCheckBoxId}>{t("openNow", "Open Now")}</label>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface DistanceFilterProps {
+  onChange: (distance: number) => void;
+  selectedDistanceMiles?: number;
+}
+
+const DistanceFilter = (props: DistanceFilterProps) => {
+  const { selectedDistanceMiles, onChange } = props;
+  const { t } = useTranslation();
+  const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
+    defaultExpanded: true,
+  });
+  const iconClassName = isExpanded
+    ? "w-3 text-gray-400"
+    : "w-3 text-gray-400 transform rotate-180";
+  const distanceOptionsMiles = [5, 10, 25, 50];
+
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        className="w-full flex justify-between items-center"
+        {...getToggleProps()}
+      >
+        <div className="font-bold">{t("distance", "Distance")}</div>
+        <FaChevronUp className={iconClassName} />
+      </button>
+      <div {...getCollapseProps()}>
+        {distanceOptionsMiles.map((distanceMiles) => (
+          <div
+            className="flex flex-row gap-4 items-center"
+            id={`distanceOption-${distanceMiles}`}
+            key={distanceMiles}
+          >
+            <button
+              className="inline-flex bg-white"
+              onClick={() => onChange(distanceMiles)}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+            >
+              <div className="text-palette-primary-dark">
+                {selectedDistanceMiles === distanceMiles ? (
+                  <FaDotCircle />
+                ) : (
+                  <FaRegCircle />
+                )}
+              </div>
+            </button>
+            <div className="inline-flex">
+              {`< ${distanceMiles} ${t("miles", "miles")}`}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 const getMapboxMapPadding = (divElement: HTMLDivElement | null) => {
@@ -899,4 +1661,5 @@ interface Location {
   slug?: string;
   timezone: string;
   yextDisplayCoordinate?: Coordinate;
+  ref_listings?: ListingType[];
 }

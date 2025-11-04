@@ -21,7 +21,7 @@ import {
   migrate,
   migrationRegistry,
   filterComponentsFromConfig,
-  resolveUrlTemplate,
+  resolvePageSetUrlTemplate,
   defaultThemeConfig,
   mainConfig,
   getSchema,
@@ -35,7 +35,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
 ): HeadConfig => {
   const { document } = data;
   const { title, description } = getPageMetadata(document);
-  const schema = getSchema(document);
+  const schema = getSchema(data);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
 
   return {
@@ -104,7 +104,7 @@ export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
 }) => {
-  return resolveUrlTemplate(document, relativePrefixToRoot);
+  return resolvePageSetUrlTemplate(document, relativePrefixToRoot);
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {

@@ -79,12 +79,16 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
     i18n.language,
     streamDocument
   );
-  const coordinates = getDirections(
+  const addressLink = getDirections(
     address as AddressType,
     undefined,
     undefined,
     { provider: "google" }
   );
+
+  // If ref_listings doesn't exist or the address field selected isn't just address, use the address link.
+  const useAddressLink: boolean =
+    data.address.field !== "address" || !streamDocument.ref_listings?.length;
 
   return (
     <>
@@ -104,11 +108,12 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
               ]}
             />
           </div>
-          {coordinates && styles.showGetDirectionsLink && (
+          {addressLink && styles.showGetDirectionsLink && (
             <CTA
+              ctaType="getDirections"
               eventName={`getDirections`}
               className="font-bold"
-              link={coordinates}
+              link={useAddressLink ? addressLink : undefined}
               label={t("getDirections", "Get Directions")}
               linkType="DRIVING_DIRECTIONS"
               target="_blank"
