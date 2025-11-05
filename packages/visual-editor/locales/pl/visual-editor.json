@@ -538,6 +538,8 @@
   "siteColors": "Kolory strony",
   "spacingDefaultLabel": "Domyślny",
   "staticContent": "Treść statyczna",
+  "staticMapEmptyStateAddApiKey": "Dodaj klucz API, aby wyświetlić podgląd mapy",
+  "staticMapEmptyStateSectionHidden": "Sekcja ukryta dla wszystkich lokalizacji",
   "sunday": "Niedziela",
   "teamMember": "Członek zespołu",
   "temporarilyClosed": "Tymczasowo zamknięte",

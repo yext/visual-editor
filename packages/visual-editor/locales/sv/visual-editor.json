@@ -538,6 +538,8 @@
   "siteColors": "Platsfärger",
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statiskt innehåll",
+  "staticMapEmptyStateAddApiKey": "Lägg till en API-nyckel för att förhandsgranska din karta",
+  "staticMapEmptyStateSectionHidden": "Avsnittet är dolt för alla platser",
   "sunday": "Söndag",
   "teamMember": "Teammedlem",
   "temporarilyClosed": "Tillfälligt stängd",

@@ -537,6 +537,8 @@
   "siteColors": "Culorile site -ului",
   "spacingDefaultLabel": "Implicit",
   "staticContent": "Conținut static",
+  "staticMapEmptyStateAddApiKey": "Adăugați o cheie API pentru a vă previzualiza harta",
+  "staticMapEmptyStateSectionHidden": "Secțiune ascunsă pentru toate locațiile",
   "sunday": "duminică",
   "teamMember": "Membru al echipei",
   "temporarilyClosed": "Închis temporar",

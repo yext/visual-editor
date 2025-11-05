@@ -538,6 +538,8 @@
   "siteColors": "Barvy webu",
   "spacingDefaultLabel": "Výchozí",
   "staticContent": "Statický obsah",
+  "staticMapEmptyStateAddApiKey": "Chcete-li zobrazit náhled mapy, přidejte klíč API",
+  "staticMapEmptyStateSectionHidden": "Sekce skrytá pro všechna umístění",
   "sunday": "neděle",
   "teamMember": "Člen týmu",
   "temporarilyClosed": "Dočasně uzavřeno",

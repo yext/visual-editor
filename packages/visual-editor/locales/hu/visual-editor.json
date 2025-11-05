@@ -537,6 +537,8 @@
   "siteColors": "Helyszínek",
   "spacingDefaultLabel": "Mulasztás",
   "staticContent": "Statikus tartalom",
+  "staticMapEmptyStateAddApiKey": "Adjon hozzá egy API-kulcsot a térkép előnézetéhez",
+  "staticMapEmptyStateSectionHidden": "A szakasz minden helyen el van rejtve",
   "sunday": "vasárnap",
   "teamMember": "Csapattag",
   "temporarilyClosed": "Ideiglenesen bezárt",
