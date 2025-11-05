@@ -449,6 +449,12 @@ export interface LocatorProps {
      * @defaultValue false
      */
     openNowButton: boolean;
+    /**
+     * If 'true', displays several distance options to filter searches to only locations within
+     * a certain radius.
+     * @defaultValue false
+     */
+    showDistanceOptions: boolean;
     /** Which fields are facetable in the search experience */
     facetFields?: DynamicOptionsSelectorType<string>;
   };
@@ -506,6 +512,16 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
+      showDistanceOptions: YextField(
+        msg("fields.options.showDistanceOptions", "Include Distance Options"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
       facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
         type: "dynamicSelect",
         dropdownLabel: msg("fields.field", "Field"),
@@ -544,6 +560,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   defaultProps: {
     filters: {
       openNowButton: false,
+      showDistanceOptions: false,
     },
   },
   label: msg("components.locator", "Locator"),
@@ -590,7 +607,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  filters: { openNowButton, facetFields },
+  filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
@@ -687,25 +704,55 @@ const LocatorInternal = ({
   );
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
-    const filterValue = params.newFilter.value as NearFilterValue;
-    const locationFilter: SelectableStaticFilter = {
-      displayName: newDisplayName,
-      selected: true,
-      filter: {
-        kind: "fieldValue",
-        fieldId: params.newFilter.fieldId,
-        value: {
-          ...filterValue,
-          radius: selectedDistanceMiles * MILES_TO_METERS,
-        },
-        matcher: Matcher.Near,
-      },
-    };
+    const filter = params.newFilter;
+
+    let locationFilter: SelectableStaticFilter;
+    let nearFilterValue: NearFilterValue | undefined;
+    switch (filter.matcher) {
+      case Matcher.Near: {
+        nearFilterValue = filter.value as NearFilterValue;
+        // only overwrite radius from filter if display options are enabled
+        const radius = showDistanceOptions
+          ? selectedDistanceMiles * MILES_TO_METERS
+          : nearFilterValue.radius;
+        locationFilter = {
+          displayName: newDisplayName,
+          selected: true,
+          filter: {
+            kind: "fieldValue",
+            fieldId: filter.fieldId,
+            value: {
+              ...nearFilterValue,
+              radius,
+            },
+            matcher: Matcher.Near,
+          },
+        };
+        break;
+      }
+      case Matcher.Equals:
+        locationFilter = {
+          displayName: newDisplayName,
+          selected: true,
+          filter: {
+            kind: "fieldValue",
+            fieldId: filter.fieldId,
+            value: filter.value,
+            matcher: Matcher.Equals,
+          },
+        };
+        break;
+      default:
+        throw new Error(`Unsupported matcher type: ${filter.matcher}`);
+    }
+
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
-    if (filterValue?.lat && filterValue?.lng) {
-      setMapCenter(new mapboxgl.LngLat(filterValue.lng, filterValue.lat));
+    if (nearFilterValue?.lat && nearFilterValue?.lng) {
+      setMapCenter(
+        new mapboxgl.LngLat(nearFilterValue.lng, nearFilterValue.lat)
+      );
     }
   };
 
@@ -921,17 +968,13 @@ const LocatorInternal = ({
   const handleDistanceClick = (distanceMiles: number) => {
     // Update existing distance filter if present
     const existingFilters = searchFilters.static || [];
-    const nonLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind !== "fieldValue" ||
-        filter.filter.fieldId !== LOCATION_FIELD
+    const nonLocationNearFilters = existingFilters.filter(
+      (filter) => !isLocationNearFilter(filter)
     );
-    const oldLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === LOCATION_FIELD
+    const oldLocationNearFilters = existingFilters.filter((filter) =>
+      isLocationNearFilter(filter)
     );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+    const updatedLocationNearFilters = oldLocationNearFilters.map((filter) => {
       const previousFilter = filter.filter as
         | FieldValueStaticFilter
         | undefined;
@@ -957,7 +1000,7 @@ const LocatorInternal = ({
     });
 
     searchActions.setStaticFilters(
-      nonLocationFilters.concat(updatedLocationFilters)
+      nonLocationNearFilters.concat(updatedLocationNearFilters)
     );
     setSelectedDistanceMiles(distanceMiles);
     searchActions.setOffset(0);
@@ -970,17 +1013,12 @@ const LocatorInternal = ({
     // There shouldn't be any other static filters besides location and open now, but leave
     // them untouched for safety
     const unaffectedStaticFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind !== "fieldValue" ||
-        (filter.filter.fieldId !== LOCATION_FIELD &&
-          filter.filter.fieldId !== HOURS_FIELD)
+      (filter) => !isOpenNowFilter(filter) && !isLocationNearFilter(filter)
     );
 
     // Make Open Now filter unselected
-    const oldOpenNowFilter = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === HOURS_FIELD
+    const oldOpenNowFilter = existingFilters.filter((filter) =>
+      isOpenNowFilter(filter)
     );
     const updatedOpenNowFilters = oldOpenNowFilter.map((filter) => ({
       ...filter,
@@ -988,12 +1026,10 @@ const LocatorInternal = ({
     }));
 
     // Update location filters to default radius
-    const oldLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === LOCATION_FIELD
+    const oldLocationNearFilters = existingFilters.filter((filter) =>
+      isLocationNearFilter(filter)
     );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+    const updatedLocationNearFilters = oldLocationNearFilters.map((filter) => {
       const previousFilter = filter.filter as
         | FieldValueStaticFilter
         | undefined;
@@ -1004,6 +1040,9 @@ const LocatorInternal = ({
       // just in case
       const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
       const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      const radius = showDistanceOptions
+        ? DEFAULT_RADIUS_MILES * MILES_TO_METERS
+        : previousValue?.radius;
       return {
         ...filter,
         filter: {
@@ -1012,7 +1051,7 @@ const LocatorInternal = ({
             ...previousValue,
             lat,
             lng,
-            radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+            radius,
           },
         },
       } as SelectableStaticFilter;
@@ -1022,7 +1061,7 @@ const LocatorInternal = ({
     // avoid problems due to the asynchronous nature of state updates.
     searchActions.setStaticFilters(
       unaffectedStaticFilters.concat(
-        updatedLocationFilters,
+        updatedLocationNearFilters,
         updatedOpenNowFilters
       )
     );
@@ -1049,7 +1088,8 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
-  const hasFilterModalToggle = openNowButton || selectedFacets.length > 0;
+  const hasFilterModalToggle =
+    openNowButton || showDistanceOptions || selectedFacets.length > 0;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
 
   return (
@@ -1144,6 +1184,7 @@ const LocatorInternal = ({
             showOpenNowOption={openNowButton}
             isOpenNowSelected={isOpenNowSelected}
             handleOpenNowClick={handleOpenNowClick}
+            showDistanceOptions={showDistanceOptions}
             selectedDistanceMiles={selectedDistanceMiles}
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
@@ -1432,6 +1473,7 @@ interface FilterModalProps {
   showFilterModal: boolean;
   showOpenNowOption: boolean; // whether to show the Open Now filter option
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
+  showDistanceOptions: boolean; // whether to show the Distance filter option
   selectedDistanceMiles?: number;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
@@ -1444,6 +1486,7 @@ const FilterModal = (props: FilterModalProps) => {
     showFilterModal,
     showOpenNowOption,
     isOpenNowSelected,
+    showDistanceOptions,
     selectedDistanceMiles,
     handleCloseModalClick,
     handleOpenNowClick,
@@ -1456,7 +1499,7 @@ const FilterModal = (props: FilterModalProps) => {
   return showFilterModal ? (
     <div
       id="popup"
-      className="absolute top-4 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
@@ -1487,10 +1530,12 @@ const FilterModal = (props: FilterModalProps) => {
               onChange={handleOpenNowClick}
             />
           )}
-          <DistanceFilter
-            onChange={handleDistanceClick}
-            selectedDistanceMiles={selectedDistanceMiles}
-          />
+          {showDistanceOptions && (
+            <DistanceFilter
+              onChange={handleDistanceClick}
+              selectedDistanceMiles={selectedDistanceMiles}
+            />
+          )}
           <Facets
             customCssClasses={{
               divider: "bg-white",
@@ -1649,6 +1694,14 @@ const parseMapStartingLocation = (mapStartingLocation: {
 
   return [lng, lat];
 };
+
+const isLocationNearFilter = (filter: SelectableStaticFilter) =>
+  filter.filter.kind === "fieldValue" &&
+  filter.filter.fieldId === LOCATION_FIELD &&
+  filter.filter.matcher === Matcher.Near;
+
+const isOpenNowFilter = (filter: SelectableStaticFilter) =>
+  filter.filter.kind === "fieldValue" && filter.filter.fieldId === HOURS_FIELD;
 
 interface Location {
   address: AddressType;
