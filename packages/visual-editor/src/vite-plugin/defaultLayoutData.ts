@@ -1505,6 +1505,7 @@ const locatorDefaultLayout = {
         mapStyle: "mapbox://styles/mapbox/streets-v12",
         filters: {
           openNowButton: false,
+          showDistanceOptions: false,
         },
       },
     },
