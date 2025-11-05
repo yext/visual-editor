@@ -77,11 +77,8 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
         )}
         aria-label={t("callToActions", "Call to Actions")}
       >
-        <slots.PrimaryCTASlot className="sm:!w-fit !w-full h-auto" allow={[]} />
-        <slots.SecondaryCTASlot
-          className="sm:!w-fit !w-full h-auto"
-          allow={[]}
-        />
+        <slots.PrimaryCTASlot className="sm:w-fit w-full h-auto" allow={[]} />
+        <slots.SecondaryCTASlot className="sm:w-fit w-full h-auto" allow={[]} />
       </div>
     </>
   );

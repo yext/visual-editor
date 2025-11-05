@@ -298,7 +298,7 @@ const screenshotThreshold = 30;
 
 describe("Locator", async () => {
   const puckConfig: Config = {
-    components: { Locator: LocatorComponent },
+    components: { LocatorComponent },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -324,7 +324,7 @@ describe("Locator", async () => {
           },
           content: [
             {
-              type: "Locator",
+              type: "LocatorComponent",
               props: props,
             },
           ],
