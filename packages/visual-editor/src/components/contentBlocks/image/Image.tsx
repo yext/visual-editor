@@ -22,6 +22,7 @@ import {
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
+import { EmptyImageState } from "./EmptyImageState";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
@@ -92,15 +93,45 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     ? parentData?.image
     : resolveComponentData(data.image, i18n.language, streamDocument);
 
-  if (
+  const getImageUrl = (
+    image: ImageType | ComplexImageType | AssetImageType | undefined
+  ): string | undefined => {
+    if (!image) return undefined;
+    if ("image" in image) {
+      return image.image?.url;
+    }
+    return (image as ImageType | AssetImageType).url;
+  };
+
+  const imageUrl = getImageUrl(resolvedImage);
+  const isEmpty =
     !resolvedImage ||
-    ("url" in resolvedImage && !resolvedImage.url) ||
-    ("image" in resolvedImage && !resolvedImage.image.url)
-  ) {
-    return puck.isEditing ? (
-      <div className="h-[250px] w-full" ref={puck.dragRef}></div>
-    ) : (
-      <></>
+    !imageUrl ||
+    (typeof imageUrl === "string" && imageUrl.trim() === "");
+
+  if (isEmpty) {
+    return (
+      <EmptyImageState
+        isEmpty={isEmpty}
+        isEditing={puck.isEditing ?? false}
+        constantValueEnabled={data.image.constantValueEnabled ?? false}
+        constantValue={data.image.constantValue as AssetImageType | undefined}
+        fieldId={parentData ? parentData.field : data.image.field}
+        containerStyle={{
+          ...(hideWidthProp
+            ? {}
+            : styles.width
+              ? { width: `${styles.width}px` }
+              : {}),
+          ...(styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : {}),
+        }}
+        containerClassName={
+          className || "max-w-full rounded-image-borderRadius w-full h-full"
+        }
+        fullHeight
+        dragRef={puck.dragRef ?? undefined}
+        hasParentData={!!parentData}
+      />
     );
   }
 

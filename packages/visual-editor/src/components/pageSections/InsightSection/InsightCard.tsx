@@ -18,12 +18,13 @@ import { useTranslation } from "react-i18next";
 import { getDisplayValue } from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
 const defaultInsight = {
   image: {
-    url: "https://placehold.co/640x360",
-    height: 360,
+    ...getRandomPlaceholderImageObject(),
     width: 640,
+    height: 360,
   },
   name: { en: "Article Name", hasLocalizedValue: "true" },
   category: {
@@ -62,7 +63,11 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
               data: {
                 image: {
                   field: "",
-                  constantValue: defaultInsight.image,
+                  constantValue: {
+                    ...getRandomPlaceholderImageObject(),
+                    width: 640,
+                    height: 360,
+                  },
                   constantValueEnabled: true,
                 },
               },

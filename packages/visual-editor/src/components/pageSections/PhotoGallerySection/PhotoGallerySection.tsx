@@ -12,14 +12,13 @@ import {
 } from "@yext/visual-editor";
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
-const PLACEHOLDER_WIDTH = 1000;
-const PLACEHOLDER_HEIGHT = 570;
-const PLACEHOLDER_IMAGE_URL = `https://placehold.co/${PLACEHOLDER_WIDTH}x${PLACEHOLDER_HEIGHT}/png`;
+// Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
-  url: PLACEHOLDER_IMAGE_URL,
-  width: PLACEHOLDER_WIDTH,
-  height: PLACEHOLDER_HEIGHT,
+  ...getRandomPlaceholderImageObject(),
+  width: 640,
+  height: 360,
   assetImage: {
     name: "Placeholder",
   },
@@ -147,9 +146,30 @@ export const PhotoGallerySection: ComponentConfig<{
               images: {
                 field: "",
                 constantValue: [
-                  { assetImage: PLACEHOLDER },
-                  { assetImage: PLACEHOLDER },
-                  { assetImage: PLACEHOLDER },
+                  {
+                    assetImage: {
+                      ...getRandomPlaceholderImageObject(),
+                      width: 640,
+                      height: 360,
+                      assetImage: { name: "Placeholder" },
+                    },
+                  },
+                  {
+                    assetImage: {
+                      ...getRandomPlaceholderImageObject(),
+                      width: 640,
+                      height: 360,
+                      assetImage: { name: "Placeholder" },
+                    },
+                  },
+                  {
+                    assetImage: {
+                      ...getRandomPlaceholderImageObject(),
+                      width: 640,
+                      height: 360,
+                      assetImage: { name: "Placeholder" },
+                    },
+                  },
                 ],
                 constantValueEnabled: true,
               },
