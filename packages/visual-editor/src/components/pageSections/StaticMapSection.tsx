@@ -10,7 +10,7 @@ import {
   MapboxStaticMapComponent,
   mapStyleField,
 } from "../contentBlocks/MapboxStaticMap.tsx";
-import { ComponentConfig, Fields, PuckContext } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 
 export interface StaticMapData {
   /**
@@ -88,12 +88,12 @@ const staticMapSectionFields: Fields<StaticMapSectionProps> = {
   }),
 };
 
-const StaticMapSectionWrapper = ({
+const StaticMapSectionWrapper: PuckComponent<StaticMapSectionProps> = ({
   data,
   styles,
   puck,
   id,
-}: StaticMapSectionProps & { puck: PuckContext; id: string }) => {
+}) => {
   return (
     <PageSection
       background={styles?.backgroundColor}
@@ -140,7 +140,7 @@ export const StaticMapSection: ComponentConfig<{
       liveVisibility={props.liveVisibility}
       isEditing={props.puck.isEditing}
     >
-      <StaticMapSectionWrapper {...props} puck={props.puck} id={props.id} />
+      <StaticMapSectionWrapper {...props} />
     </VisibilityWrapper>
   ),
 };
