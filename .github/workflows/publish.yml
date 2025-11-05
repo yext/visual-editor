@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4.0.0
