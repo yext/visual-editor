@@ -21,7 +21,7 @@ import {
   migrate,
   migrationRegistry,
   filterComponentsFromConfig,
-  resolveUrlTemplate,
+  resolvePageSetUrlTemplate,
   defaultThemeConfig,
   mainConfig,
   getSchema,
@@ -97,7 +97,7 @@ export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
 }) => {
-  return resolveUrlTemplate(document, relativePrefixToRoot);
+  return resolvePageSetUrlTemplate(document, relativePrefixToRoot);
 };
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {

@@ -9,7 +9,7 @@ import {
   MaybeLink,
   mergeMeta,
   PhoneAtom,
-  resolveUrlTemplate,
+  resolvePageSetUrlTemplate,
   useTemplateProps,
 } from "@yext/visual-editor";
 import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper";
@@ -56,7 +56,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
 
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
-  const resolvedUrl = resolveUrlTemplate(
+  const resolvedUrl = resolvePageSetUrlTemplate(
     mergeMeta(locationData, streamDocument),
     relativePrefixToRoot,
     puck.metadata?.resolveUrlTemplate

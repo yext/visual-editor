@@ -1,4 +1,5 @@
 export * from "./i18n/index.ts";
+export * from "./schema/index.ts";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
 export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
@@ -8,7 +9,6 @@ export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
-export { getSchema, getDirectoryParents } from "./getSchema.ts";
 export {
   migrate,
   type Migration,
@@ -16,11 +16,11 @@ export {
   type MigrationRegistry,
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
+export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {
-  resolveYextEntityField,
-  resolveSchemaJson,
-} from "./resolveYextEntityField.ts";
-export { resolveUrlTemplate } from "./resolveUrlTemplate.ts";
+  resolveUrlTemplateOfChild,
+  resolvePageSetUrlTemplate,
+} from "./resolveUrlTemplate.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
