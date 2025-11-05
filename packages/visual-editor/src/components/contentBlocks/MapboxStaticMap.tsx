@@ -11,7 +11,7 @@ import {
   themeManagerCn,
   Body,
 } from "@yext/visual-editor";
-import { ComponentConfig, Field, Fields } from "@measured/puck";
+import { ComponentConfig, Field, Fields, PuckComponent } from "@measured/puck";
 import { StreamDocument } from "../../utils/applyTheme";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
@@ -81,13 +81,13 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
   }
 };
 
-export const MapboxStaticMapComponent = ({
+export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   apiKey,
   coordinate: coordinateField,
   zoom = 14,
   mapStyle = "light-v11",
-  isEditing = false,
-}: MapboxStaticProps & { isEditing?: boolean }) => {
+  puck,
+}) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
 
@@ -99,7 +99,7 @@ export const MapboxStaticMapComponent = ({
 
   // Show empty state in editor mode when API key is missing
   if (!apiKey) {
-    if (isEditing) {
+    if (puck?.isEditing) {
       return (
         <div
           className={themeManagerCn(
@@ -201,8 +201,5 @@ export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
     },
     mapStyle: "streets-v12",
   },
-  render: (props: MapboxStaticProps & { puck?: { isEditing?: boolean } }) => {
-    const isEditing = props.puck?.isEditing ?? false;
-    return <MapboxStaticMapComponent {...props} isEditing={isEditing} />;
-  },
+  render: (props) => <MapboxStaticMapComponent {...props} />,
 };
