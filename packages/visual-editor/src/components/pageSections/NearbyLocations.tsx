@@ -472,8 +472,12 @@ const NearbyLocationsComponent = ({
       }[styles.heading.align]
     : "justify-start";
 
-  // Show empty state in editor mode when API key is missing
-  if (!apiKey) {
+  // Show empty state in editor mode when there are no results
+  if (
+    !enableNearbyLocations ||
+    (!nearbyLocationsData?.response?.docs?.length &&
+      nearbyLocationsStatus != "pending")
+  ) {
     if (puck.isEditing) {
       return (
         <PageSection background={styles?.backgroundColor}>
@@ -501,15 +505,6 @@ const NearbyLocationsComponent = ({
         </PageSection>
       );
     }
-    return <></>;
-  }
-
-  // do not render the component if there's no data or it's not enabled
-  if (
-    !enableNearbyLocations ||
-    (!nearbyLocationsData?.response?.docs?.length &&
-      nearbyLocationsStatus != "pending")
-  ) {
     return <></>;
   }
 
