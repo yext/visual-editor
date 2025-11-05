@@ -20,7 +20,7 @@ import {
   useBackground,
   useDocument,
   YextField,
-  themeManagerCn,
+  pt,
 } from "@yext/visual-editor";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
@@ -35,24 +35,16 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
 const ReviewsEmptyState: React.FC<{ backgroundColor: BackgroundStyle }> = ({
   backgroundColor,
 }) => {
-  const { t } = useTranslation();
   return (
     <PageSection background={backgroundColor}>
-      <div
-        className={themeManagerCn(
-          "relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
-        )}
-      >
+      <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
         <StarOff className="w-12 h-12 text-gray-400" />
         <div className="flex flex-col items-center gap-0">
           <Body variant="base" className="text-gray-500 font-medium">
-            {t(
-              "reviewsEmptyStateSectionHidden",
-              "Section hidden for this location"
-            )}
+            {pt("emptyStateSectionHidden", "Section hidden for this location")}
           </Body>
           <Body variant="base" className="text-gray-500 font-normal">
-            {t(
+            {pt(
               "reviewsEmptyStateNoReviews",
               "Location has no first party reviews"
             )}
