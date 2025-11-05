@@ -641,6 +641,9 @@ const LocatorInternal = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
   const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
+  const [selectedDistanceMiles, setSelectedDistanceMiles] = React.useState<
+    number | null
+  >(null);
 
   const handleDrag: OnDragHandler = (center: LngLat, bounds: LngLatBounds) => {
     setMapCenter(center);
@@ -712,9 +715,10 @@ const LocatorInternal = ({
       case Matcher.Near: {
         nearFilterValue = filter.value as NearFilterValue;
         // only overwrite radius from filter if display options are enabled
-        const radius = showDistanceOptions
-          ? selectedDistanceMiles * MILES_TO_METERS
-          : nearFilterValue.radius;
+        const radius =
+          showDistanceOptions && selectedDistanceMiles
+            ? selectedDistanceMiles * MILES_TO_METERS
+            : nearFilterValue.radius;
         locationFilter = {
           displayName: newDisplayName,
           selected: true,
@@ -820,12 +824,13 @@ const LocatorInternal = ({
     markerOptionsOverride: markerOptionsOverride,
   });
 
-  const [selectedDistanceMiles, setSelectedDistanceMiles] =
-    React.useState<number>(DEFAULT_RADIUS_MILES);
-
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
       let centerCoords = DEFAULT_MAP_CENTER;
+      let radius =
+        showDistanceOptions && selectedDistanceMiles
+          ? selectedDistanceMiles * MILES_TO_METERS
+          : DEFAULT_RADIUS_MILES * MILES_TO_METERS;
       let displayName: string | undefined;
       const doSearch = () => {
         searchActions.setStaticFilters([
@@ -838,7 +843,7 @@ const LocatorInternal = ({
               value: {
                 lat: centerCoords[1],
                 lng: centerCoords[0],
-                radius: selectedDistanceMiles * MILES_TO_METERS,
+                radius: radius,
               },
               matcher: Matcher.Near,
             },
@@ -871,10 +876,12 @@ const LocatorInternal = ({
               firstResult &&
               firstResult.filter &&
               filterFromResult?.lat &&
-              filterFromResult?.lng
+              filterFromResult?.lng &&
+              filterFromResult?.radius
             ) {
               displayName = firstResult.value;
               centerCoords = [filterFromResult.lng, filterFromResult.lat];
+              radius = filterFromResult.radius;
               return true;
             }
             return false;
@@ -966,6 +973,12 @@ const LocatorInternal = ({
 
   const searchFilters = useSearchState((state) => state.filters);
   const handleDistanceClick = (distanceMiles: number) => {
+    if (distanceMiles === selectedDistanceMiles) {
+      setSelectedDistanceMiles(null);
+      // we don't know what the previous radius was, so we won't update the filter, and since we
+      // didn't update the filter we don't update the search either
+      return;
+    }
     // Update existing distance filter if present
     const existingFilters = searchFilters.static || [];
     const nonLocationNearFilters = existingFilters.filter(
@@ -1474,7 +1487,7 @@ interface FilterModalProps {
   showOpenNowOption: boolean; // whether to show the Open Now filter option
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
   showDistanceOptions: boolean; // whether to show the Distance filter option
-  selectedDistanceMiles?: number;
+  selectedDistanceMiles: number | null;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
   handleDistanceClick: (distance: number) => void;
@@ -1605,7 +1618,7 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 
 interface DistanceFilterProps {
   onChange: (distance: number) => void;
-  selectedDistanceMiles?: number;
+  selectedDistanceMiles: number | null;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
