@@ -538,6 +538,8 @@
   "siteColors": "Sivuston värit",
   "spacingDefaultLabel": "Laiminlyönti",
   "staticContent": "Staattinen sisältö",
+  "staticMapEmptyStateAddApiKey": "Lisää API-avain esikatsellaksesi karttaasi",
+  "staticMapEmptyStateSectionHidden": "Osio piilotettu kaikille sijainneille",
   "sunday": "sunnuntai",
   "teamMember": "Tiimin jäsen",
   "temporarilyClosed": "Väliaikaisesti suljettu",

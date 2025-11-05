@@ -538,6 +538,8 @@
   "siteColors": "Vietnes krāsas",
   "spacingDefaultLabel": "Nepildīt",
   "staticContent": "Statisks saturs",
+  "staticMapEmptyStateAddApiKey": "Pievienojiet API atslēgu, lai priekšskatītu karti",
+  "staticMapEmptyStateSectionHidden": "Sadaļa ir paslēpta visām atrašanās vietām",
   "sunday": "Svētdiena",
   "teamMember": "Komandas loceklis",
   "temporarilyClosed": "Īslaicīgi slēgts",

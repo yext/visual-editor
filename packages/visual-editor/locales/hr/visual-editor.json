@@ -538,6 +538,8 @@
   "siteColors": "Boje mjesta",
   "spacingDefaultLabel": "Zadano",
   "staticContent": "Statički sadržaj",
+  "staticMapEmptyStateAddApiKey": "Dodajte API ključ za pregled svoje karte",
+  "staticMapEmptyStateSectionHidden": "Odjeljak skriven za sve lokacije",
   "sunday": "nedjelja",
   "teamMember": "Član tima",
   "temporarilyClosed": "Privremeno zatvoren",

@@ -537,6 +537,8 @@
   "siteColors": "Standortfarben",
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statischer Inhalt",
+  "staticMapEmptyStateAddApiKey": "Fügen Sie einen API-Schlüssel hinzu, um eine Vorschau Ihrer Karte anzuzeigen",
+  "staticMapEmptyStateSectionHidden": "Abschnitt für alle Standorte ausgeblendet",
   "sunday": "Sonntag",
   "teamMember": "Teammitglied",
   "temporarilyClosed": "Vorübergehend geschlossen",

@@ -537,6 +537,8 @@
   "siteColors": "Site Colors",
   "spacingDefaultLabel": "Default",
   "staticContent": "Static content",
+  "staticMapEmptyStateAddApiKey": "Add an API key to preview your map",
+  "staticMapEmptyStateSectionHidden": "Section hidden for all locations",
   "sunday": "Sunday",
   "teamMember": "Team Member",
   "temporarilyClosed": "Temporarily Closed",
