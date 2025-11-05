@@ -704,30 +704,55 @@ const LocatorInternal = ({
   );
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
-    const filterValue = params.newFilter.value as NearFilterValue;
-    // only overwrite radius from filter if display options are enabled
-    const radius = showDistanceOptions
-      ? selectedDistanceMiles * MILES_TO_METERS
-      : filterValue.radius;
-    const locationFilter: SelectableStaticFilter = {
-      displayName: newDisplayName,
-      selected: true,
-      filter: {
-        kind: "fieldValue",
-        fieldId: params.newFilter.fieldId,
-        value: {
-          ...filterValue,
-          radius,
-        },
-        matcher: Matcher.Near,
-      },
-    };
+    const filter = params.newFilter;
+
+    let locationFilter: SelectableStaticFilter;
+    let nearFilterValue: NearFilterValue | undefined;
+    switch (filter.matcher) {
+      case Matcher.Near: {
+        nearFilterValue = filter.value as NearFilterValue;
+        // only overwrite radius from filter if display options are enabled
+        const radius = showDistanceOptions
+            ? selectedDistanceMiles * MILES_TO_METERS
+            : nearFilterValue.radius;
+        locationFilter = {
+          displayName: newDisplayName,
+          selected: true,
+          filter: {
+            kind: "fieldValue",
+            fieldId: filter.fieldId,
+            value: {
+              ...nearFilterValue,
+              radius,
+            },
+            matcher: Matcher.Near,
+          },
+        };
+        break;
+      }
+      case Matcher.Equals:
+        locationFilter = {
+          displayName: newDisplayName,
+          selected: true,
+          filter: {
+            kind: "fieldValue",
+            fieldId: filter.fieldId,
+            value: filter.value,
+            matcher: Matcher.Equals,
+          },
+        };
+        break;
+      default:
+        throw new Error(`Unsupported matcher type: ${filter.matcher}`);
+    }
 
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
-    if (filterValue?.lat && filterValue?.lng) {
-      setMapCenter(new mapboxgl.LngLat(filterValue.lng, filterValue.lat));
+    if (nearFilterValue?.lat && nearFilterValue?.lng) {
+      setMapCenter(
+        new mapboxgl.LngLat(nearFilterValue.lng, nearFilterValue.lat)
+      );
     }
   };
 
@@ -943,17 +968,13 @@ const LocatorInternal = ({
   const handleDistanceClick = (distanceMiles: number) => {
     // Update existing distance filter if present
     const existingFilters = searchFilters.static || [];
-    const nonLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind !== "fieldValue" ||
-        filter.filter.fieldId !== LOCATION_FIELD
+    const nonLocationNearFilters = existingFilters.filter(
+      (filter) => !isLocationNearFilter(filter)
     );
-    const oldLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === LOCATION_FIELD
+    const oldLocationNearFilters = existingFilters.filter((filter) =>
+      isLocationNearFilter(filter)
     );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+    const updatedLocationNearFilters = oldLocationNearFilters.map((filter) => {
       const previousFilter = filter.filter as
         | FieldValueStaticFilter
         | undefined;
@@ -979,7 +1000,7 @@ const LocatorInternal = ({
     });
 
     searchActions.setStaticFilters(
-      nonLocationFilters.concat(updatedLocationFilters)
+      nonLocationNearFilters.concat(updatedLocationNearFilters)
     );
     setSelectedDistanceMiles(distanceMiles);
     searchActions.setOffset(0);
@@ -992,17 +1013,12 @@ const LocatorInternal = ({
     // There shouldn't be any other static filters besides location and open now, but leave
     // them untouched for safety
     const unaffectedStaticFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind !== "fieldValue" ||
-        (filter.filter.fieldId !== LOCATION_FIELD &&
-          filter.filter.fieldId !== HOURS_FIELD)
+      (filter) => !isOpenNowFilter(filter) || !isLocationNearFilter(filter)
     );
 
     // Make Open Now filter unselected
-    const oldOpenNowFilter = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === HOURS_FIELD
+    const oldOpenNowFilter = existingFilters.filter((filter) =>
+      isOpenNowFilter(filter)
     );
     const updatedOpenNowFilters = oldOpenNowFilter.map((filter) => ({
       ...filter,
@@ -1010,12 +1026,10 @@ const LocatorInternal = ({
     }));
 
     // Update location filters to default radius
-    const oldLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === LOCATION_FIELD
+    const oldLocationNearFilters = existingFilters.filter((filter) =>
+      isLocationNearFilter(filter)
     );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => {
+    const updatedLocationNearFilters = oldLocationNearFilters.map((filter) => {
       const previousFilter = filter.filter as
         | FieldValueStaticFilter
         | undefined;
@@ -1047,7 +1061,7 @@ const LocatorInternal = ({
     // avoid problems due to the asynchronous nature of state updates.
     searchActions.setStaticFilters(
       unaffectedStaticFilters.concat(
-        updatedLocationFilters,
+        updatedLocationNearFilters,
         updatedOpenNowFilters
       )
     );
@@ -1680,6 +1694,14 @@ const parseMapStartingLocation = (mapStartingLocation: {
 
   return [lng, lat];
 };
+
+const isLocationNearFilter = (filter: SelectableStaticFilter) =>
+  filter.filter.kind === "fieldValue" &&
+  filter.filter.fieldId === LOCATION_FIELD &&
+  filter.filter.matcher === Matcher.Near;
+
+const isOpenNowFilter = (filter: SelectableStaticFilter) =>
+  filter.filter.kind === "fieldValue" && filter.filter.fieldId === HOURS_FIELD;
 
 interface Location {
   address: AddressType;
