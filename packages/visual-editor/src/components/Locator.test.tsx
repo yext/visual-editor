@@ -370,7 +370,7 @@ describe("Locator", async () => {
           },
           content: [
             {
-              type: "LocatorComponent",
+              type: "Locator",
               props: props,
             },
           ],
