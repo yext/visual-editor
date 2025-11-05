@@ -537,6 +537,8 @@
   "siteColors": "站点颜色",
   "spacingDefaultLabel": "默认",
   "staticContent": "静态内容",
+  "staticMapEmptyStateAddApiKey": "添加 API 密钥以预览地图",
+  "staticMapEmptyStateSectionHidden": "所有位置均隐藏部分",
   "sunday": "星期日",
   "teamMember": "队员",
   "temporarilyClosed": "暂时关闭",

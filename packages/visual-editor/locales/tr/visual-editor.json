@@ -537,6 +537,8 @@
   "siteColors": "Site Renkleri",
   "spacingDefaultLabel": "Varsayılan",
   "staticContent": "Statik içerik",
+  "staticMapEmptyStateAddApiKey": "Haritanızı önizlemek için bir API anahtarı ekleyin",
+  "staticMapEmptyStateSectionHidden": "Bölüm tüm konumlar için gizlendi",
   "sunday": "Pazar",
   "teamMember": "Ekip üyesi",
   "temporarilyClosed": "Geçici olarak kapalı",

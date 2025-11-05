@@ -538,6 +538,8 @@
   "siteColors": "Webstedsfarver",
   "spacingDefaultLabel": "Misligholdelse",
   "staticContent": "Statisk indhold",
+  "staticMapEmptyStateAddApiKey": "Tilføj en API-nøgle for at få vist dit kort",
+  "staticMapEmptyStateSectionHidden": "Sektion skjult for alle lokationer",
   "sunday": "søndag",
   "teamMember": "Teammedlem",
   "temporarilyClosed": "Midlertidigt lukket",
