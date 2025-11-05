@@ -521,6 +521,8 @@
   "refineYourSearch": "検索を絞り込む",
   "reopenDate": "日付を再開します",
   "responseFrom": "{{businessName}}からの応答",
+  "reviewsEmptyStateNoReviews": "場所には第三者のレビューがありません",
+  "reviewsEmptyStateSectionHidden": "この場所では非表示のセクション",
   "saturday": "土曜日",
   "schemaMarkup": "スキーママークアップ",
   "search": "検索",

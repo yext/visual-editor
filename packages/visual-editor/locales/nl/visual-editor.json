@@ -521,6 +521,8 @@
   "refineYourSearch": "Verfijn uw zoekopdracht",
   "reopenDate": "Heropen datum",
   "responseFrom": "Reactie van {{businessName}}",
+  "reviewsEmptyStateNoReviews": "Locatie heeft geen first-party beoordelingen",
+  "reviewsEmptyStateSectionHidden": "Sectie verborgen voor deze locatie",
   "saturday": "Zaterdag",
   "schemaMarkup": "Schema -aanmelding",
   "search": "Zoekopdracht",

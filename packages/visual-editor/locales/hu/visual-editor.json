@@ -521,6 +521,8 @@
   "refineYourSearch": "Finomítsa a keresést",
   "reopenDate": "Újra megnyitja a dátumot",
   "responseFrom": "Válasz a {{businessName}}ból",
+  "reviewsEmptyStateNoReviews": "A helyről nem érkezett első felek véleménye",
+  "reviewsEmptyStateSectionHidden": "Elrejtett szakasz ehhez a helyhez",
   "saturday": "szombat",
   "schemaMarkup": "Séma jelölés",
   "search": "Keresés",

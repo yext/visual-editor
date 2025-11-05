@@ -521,6 +521,8 @@
   "refineYourSearch": "Avgrens søket ditt",
   "reopenDate": "Åpne dato på nytt",
   "responseFrom": "Svar fra {{businessName}}",
+  "reviewsEmptyStateNoReviews": "Stedet har ingen førstepartsanmeldelser",
+  "reviewsEmptyStateSectionHidden": "Seksjon skjult for denne plasseringen",
   "saturday": "lørdag",
   "schemaMarkup": "Skjema markering",
   "search": "Søk",

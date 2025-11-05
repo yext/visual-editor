@@ -521,6 +521,8 @@
   "refineYourSearch": "優化您的搜索",
   "reopenDate": "重新開放日期",
   "responseFrom": "{{businessName}}的響應",
+  "reviewsEmptyStateNoReviews": "位置沒有第一方評論",
+  "reviewsEmptyStateSectionHidden": "該位置隱藏了部分",
   "saturday": "週六",
   "schemaMarkup": "模式標記",
   "search": "搜尋",

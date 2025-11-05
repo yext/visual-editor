@@ -521,6 +521,8 @@
   "refineYourSearch": "Aramanızı Hassaslaştırın",
   "reopenDate": "Tarihi Yeniden Aç",
   "responseFrom": "{{businessName}} 'dan yanıt",
+  "reviewsEmptyStateNoReviews": "Konumda birinci taraf incelemesi yok",
+  "reviewsEmptyStateSectionHidden": "Bu konum için bölüm gizlendi",
   "saturday": "Cumartesi",
   "schemaMarkup": "Şema işaretlemesi",
   "search": "Aramak",

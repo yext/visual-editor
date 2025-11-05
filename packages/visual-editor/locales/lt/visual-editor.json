@@ -521,6 +521,8 @@
   "refineYourSearch": "Patikslinkite savo paiešką",
   "reopenDate": "Atnaujinti datą",
   "responseFrom": "Atsakymas iš {{businessName}}",
+  "reviewsEmptyStateNoReviews": "Vieta neturi pirmosios šalies atsiliepimų",
+  "reviewsEmptyStateSectionHidden": "Šios vietos skyrius paslėptas",
   "saturday": "Šeštadienis",
   "schemaMarkup": "Schemos žymėjimas",
   "search": "Ieškoti",

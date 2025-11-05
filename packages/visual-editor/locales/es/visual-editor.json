@@ -520,6 +520,8 @@
   "refineYourSearch": "Refina tu búsqueda",
   "reopenDate": "Reabrir fecha",
   "responseFrom": "Respuesta de {{businessName}}",
+  "reviewsEmptyStateNoReviews": "La ubicación no tiene reseñas propias.",
+  "reviewsEmptyStateSectionHidden": "Sección oculta para esta ubicación",
   "saturday": "Sábado",
   "schemaMarkup": "Marcado de esquema",
   "search": "Buscar",

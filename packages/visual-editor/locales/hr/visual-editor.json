@@ -521,6 +521,8 @@
   "refineYourSearch": "Pročistite svoju pretragu",
   "reopenDate": "Ponovno otvaranje datuma",
   "responseFrom": "Odgovor od {{businessName}}",
+  "reviewsEmptyStateNoReviews": "Lokacija nema recenzije prve strane",
+  "reviewsEmptyStateSectionHidden": "Odjeljak skriven za ovu lokaciju",
   "saturday": "subota",
   "schemaMarkup": "Oznaka sheme",
   "search": "Pretraživanje",

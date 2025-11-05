@@ -521,6 +521,8 @@
   "refineYourSearch": "Täpsustage oma otsingut",
   "reopenDate": "Taasavamine kuupäev",
   "responseFrom": "Vastus {{businessName}}",
+  "reviewsEmptyStateNoReviews": "Asukohal pole esimese osapoole arvustusi",
+  "reviewsEmptyStateSectionHidden": "Selle asukoha jaoks peidetud jaotis",
   "saturday": "Laupäev",
   "schemaMarkup": "Skeemi märgistus",
   "search": "Otsima",

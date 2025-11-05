@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import * as React from "react";
 import {
   backgroundColors,
@@ -20,7 +20,9 @@ import {
   useBackground,
   useDocument,
   YextField,
+  themeManagerCn,
 } from "@yext/visual-editor";
+import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 
 const REVIEWS_PER_PAGE = 5;
@@ -56,12 +58,43 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
   }),
 };
 
-const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
-  props: ReviewsSectionProps
-) => {
+const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = ({
+  backgroundColor,
+  puck,
+}) => {
   const streamDocument = useDocument();
+  const { t } = useTranslation();
   const apiKey = streamDocument?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
+
+  // Show empty state in editor mode when API key is missing
   if (!apiKey) {
+    if (puck.isEditing) {
+      return (
+        <PageSection background={backgroundColor}>
+          <div
+            className={themeManagerCn(
+              "relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+            )}
+          >
+            <StarOff className="w-12 h-12 text-gray-400" />
+            <div className="flex flex-col items-center gap-0">
+              <Body variant="base" className="text-gray-500 font-medium">
+                {t(
+                  "reviewsEmptyStateSectionHidden",
+                  "Section hidden for this location"
+                )}
+              </Body>
+              <Body variant="base" className="text-gray-500 font-normal">
+                {t(
+                  "reviewsEmptyStateNoReviews",
+                  "Location has no first party reviews"
+                )}
+              </Body>
+            </div>
+          </div>
+        </PageSection>
+      );
+    }
     console.warn(
       "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
     );
@@ -128,10 +161,7 @@ const ReviewsSectionInternal: React.FC<ReviewsSectionProps> = (
   };
 
   return (
-    <PageSection
-      className="flex flex-col gap-12"
-      background={props.backgroundColor}
-    >
+    <PageSection className="flex flex-col gap-12" background={backgroundColor}>
       <ReviewsHeader {...headerProps} />
       {reviews && (
         <>

@@ -521,6 +521,8 @@
   "refineYourSearch": "Uzlabojiet meklēšanu",
   "reopenDate": "Atkārtoti atvērt datumu",
   "responseFrom": "Atbilde no {{businessName}}",
+  "reviewsEmptyStateNoReviews": "Vietnei nav pirmās puses atsauksmju",
+  "reviewsEmptyStateSectionHidden": "Sadaļa paslēpta šai atrašanās vietai",
   "saturday": "Sestdiena",
   "schemaMarkup": "Shēmas uzcenojums",
   "search": "Meklēšana",

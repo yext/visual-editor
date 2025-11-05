@@ -520,6 +520,8 @@
   "refineYourSearch": "Refine Your Search",
   "reopenDate": "Reopen Date",
   "responseFrom": "Response from {{businessName}}",
+  "reviewsEmptyStateNoReviews": "Location has no first party reviews",
+  "reviewsEmptyStateSectionHidden": "Section hidden for this location",
   "saturday": "Saturday",
   "schemaMarkup": "Schema Markup",
   "search": "Search",

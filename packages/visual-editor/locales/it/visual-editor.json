@@ -521,6 +521,8 @@
   "refineYourSearch": "Perfeziona la tua ricerca",
   "reopenDate": "Rinnova la data",
   "responseFrom": "Risposta da {{businessName}}",
+  "reviewsEmptyStateNoReviews": "La posizione non ha recensioni proprietarie",
+  "reviewsEmptyStateSectionHidden": "Sezione nascosta per questa posizione",
   "saturday": "Sabato",
   "schemaMarkup": "Markup dello schema",
   "search": "Ricerca",
