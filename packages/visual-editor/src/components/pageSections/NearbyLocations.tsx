@@ -39,6 +39,8 @@ import {
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/applyTheme";
+import { MapPinOff } from "lucide-react";
+import { themeManagerCn } from "@yext/visual-editor";
 
 export interface NearbyLocationsData {
   /**
@@ -469,6 +471,38 @@ const NearbyLocationsComponent = ({
         right: "justify-end",
       }[styles.heading.align]
     : "justify-start";
+
+  // Show empty state in editor mode when API key is missing
+  if (!apiKey) {
+    if (puck.isEditing) {
+      return (
+        <PageSection background={styles?.backgroundColor}>
+          <div
+            className={themeManagerCn(
+              "relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+            )}
+          >
+            <MapPinOff className="w-12 h-12 text-gray-400" />
+            <div className="flex flex-col items-center gap-0">
+              <Body variant="base" className="text-gray-500 font-medium">
+                {t(
+                  "nearbyLocationsEmptyStateSectionHidden",
+                  "Section hidden for this location"
+                )}
+              </Body>
+              <Body variant="base" className="text-gray-500 font-normal">
+                {t(
+                  "nearbyLocationsEmptyStateNoLocations",
+                  `No locations within ${data?.radius ?? 10} miles`
+                )}
+              </Body>
+            </div>
+          </div>
+        </PageSection>
+      );
+    }
+    return <></>;
+  }
 
   // do not render the component if there's no data or it's not enabled
   if (
