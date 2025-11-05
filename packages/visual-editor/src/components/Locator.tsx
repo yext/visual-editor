@@ -1457,7 +1457,7 @@ const FilterModal = (props: FilterModalProps) => {
   return showFilterModal ? (
     <div
       id="popup"
-      className="absolute top-4 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
