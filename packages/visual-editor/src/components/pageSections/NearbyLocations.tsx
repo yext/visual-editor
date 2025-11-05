@@ -486,18 +486,14 @@ const NearbyLocationsComponent = ({
             <div className="flex flex-col items-center gap-0">
               <Body variant="base" className="text-gray-500 font-medium">
                 {pt(
-                  msg(
-                    "nearbyLocationsEmptyStateSectionHidden",
-                    "Section hidden for this location"
-                  )
+                  "emptyStateSectionHidden",
+                  "Section hidden for this location"
                 )}
               </Body>
               <Body variant="base" className="text-gray-500 font-normal">
                 {pt(
-                  msg(
-                    "nearbyLocationsEmptyStateNoLocations",
-                    `No locations within ${data?.radius ?? 10} miles`
-                  )
+                  "nearbyLocationsEmptyStateNoLocations",
+                  `No locations within ${data?.radius ?? 10} miles`
                 )}
               </Body>
             </div>
