@@ -486,7 +486,7 @@ const NearbyLocationsComponent = ({
             <div className="flex flex-col items-center gap-0">
               <Body variant="base" className="text-gray-500 font-medium">
                 {pt(
-                  "emptyStateSectionHidden",
+                  "nearbyLocationsEmptyStateSectionHidden",
                   "Section hidden for this location"
                 )}
               </Body>
