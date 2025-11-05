@@ -27,6 +27,7 @@ import {
   resolvePageSetUrlTemplate,
   useTemplateProps,
   mergeMeta,
+  pt,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -40,7 +41,6 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/applyTheme";
 import { MapPinOff } from "lucide-react";
-import { themeManagerCn } from "@yext/visual-editor";
 
 export interface NearbyLocationsData {
   /**
@@ -481,23 +481,23 @@ const NearbyLocationsComponent = ({
     if (puck.isEditing) {
       return (
         <PageSection background={styles?.backgroundColor}>
-          <div
-            className={themeManagerCn(
-              "relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
-            )}
-          >
+          <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
             <MapPinOff className="w-12 h-12 text-gray-400" />
             <div className="flex flex-col items-center gap-0">
               <Body variant="base" className="text-gray-500 font-medium">
-                {t(
-                  "nearbyLocationsEmptyStateSectionHidden",
-                  "Section hidden for this location"
+                {pt(
+                  msg(
+                    "nearbyLocationsEmptyStateSectionHidden",
+                    "Section hidden for this location"
+                  )
                 )}
               </Body>
               <Body variant="base" className="text-gray-500 font-normal">
-                {t(
-                  "nearbyLocationsEmptyStateNoLocations",
-                  `No locations within ${data?.radius ?? 10} miles`
+                {pt(
+                  msg(
+                    "nearbyLocationsEmptyStateNoLocations",
+                    `No locations within ${data?.radius ?? 10} miles`
+                  )
                 )}
               </Body>
             </div>
