@@ -428,11 +428,11 @@ Available on Locator templates.
 
 Configuration for the filters available in the locator search experience.
 
-| Prop                  | Type                                                                            | Description                                                                         | Default                                |
-| :-------------------- | :------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
-| `filters`             | `{ openNowButton: boolean; facetFields?: DynamicOptionsSelectorType<string>; }` | Configuration for the filters available in the locator search experience.           |                                        |
-| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                      | The starting location for the map.                                                  |                                        |
-| `mapStyle`            | `string`                                                                        | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
+| Prop                  | Type                                                                                                          | Description                                                                         | Default                                |
+| :-------------------- | :------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------- | :------------------------------------- |
+| `filters`             | `{ openNowButton: boolean; showDistanceOptions: boolean; facetFields?: DynamicOptionsSelectorType<string>; }` | Configuration for the filters available in the locator search experience.           |                                        |
+| `mapStartingLocation` | `{ latitude: string; longitude: string; }`                                                                    | The starting location for the map.                                                  |                                        |
+| `mapStyle`            | `string`                                                                                                      | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles. | `'mapbox://styles/mapbox/streets-v12'` |
 
 ---
 
