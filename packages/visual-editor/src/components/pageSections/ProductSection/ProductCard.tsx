@@ -24,6 +24,7 @@ import {
 } from "@measured/puck";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
 const defaultProduct = {
   image: {
@@ -68,7 +69,11 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
               data: {
                 image: {
                   field: "",
-                  constantValue: defaultProduct.image,
+                  constantValue: {
+                    ...getRandomPlaceholderImageObject(),
+                    width: 640,
+                    height: 360,
+                  },
                   constantValueEnabled: true,
                 },
               },

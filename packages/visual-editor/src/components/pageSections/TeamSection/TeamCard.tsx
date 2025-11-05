@@ -24,10 +24,11 @@ import {
   i18nComponentsInstance,
   EmailsProps,
   PhoneListProps,
-  getDefaultRTF,
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 const defaultPerson = {
   name: { en: "First Last", hasLocalizedValue: "true" },
@@ -64,7 +65,11 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             data: {
               image: {
                 field: "",
-                constantValue: defaultPerson.headshot,
+                constantValue: defaultPerson.headshot || {
+                  ...getRandomPlaceholderImageObject(),
+                  width: 640,
+                  height: 360,
+                },
                 constantValueEnabled: true,
               },
             },

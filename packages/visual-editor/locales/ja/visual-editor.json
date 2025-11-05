@@ -9,6 +9,7 @@
     "pasteFromClipboard": "クリップボードから貼り付けます"
   },
   "addEntityField": "エンティティフィールドを追加します",
+  "addImage": "画像を追加",
   "address": "住所",
   "addressInput": {
     "city": "市",

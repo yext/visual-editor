@@ -28,8 +28,7 @@ import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
-
-const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 
 export interface HeroData {
   backgroundImage: YextEntityField<ImageType | AssetImageType>;
@@ -329,9 +328,9 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
       backgroundImage: {
         field: "",
         constantValue: {
-          url: PLACEHOLDER_IMAGE_URL,
-          height: 360,
+          ...getRandomPlaceholderImageObject(),
           width: 640,
+          height: 360,
         },
         constantValueEnabled: true,
       },
@@ -410,9 +409,9 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
               image: {
                 field: "",
                 constantValue: {
-                  url: PLACEHOLDER_IMAGE_URL,
-                  height: 360,
+                  ...getRandomPlaceholderImageObject(),
                   width: 640,
+                  height: 360,
                 },
                 constantValueEnabled: true,
               },

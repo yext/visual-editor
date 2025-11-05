@@ -6,7 +6,6 @@ import {
 import {
   EntityField,
   Image,
-  ImageProps,
   themeManagerCn,
   useBackground,
   useDocument,
@@ -15,8 +14,9 @@ import {
   msg,
   pt,
   resolveComponentData,
+  AssetImageType,
 } from "@yext/visual-editor";
-import { AssetImageType } from "../../../types/images";
+import { AssetImageType as AssetImageTypeImport } from "../../../types/images";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
@@ -31,6 +31,12 @@ import {
 } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { ImagePlus } from "lucide-react";
+import { Button } from "../../../internal/puck/ui/button";
+import {
+  TARGET_ORIGINS,
+  useSendMessageToParent,
+} from "../../../internal/hooks/useMessage";
 
 export interface PhotoGalleryWrapperProps {
   data: {
@@ -136,27 +142,43 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
   const locale = i18n.language;
   const streamDocument = useDocument();
 
+  const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
+    "constantValueEditorOpened",
+    TARGET_ORIGINS
+  );
+
   const resolvedImages = resolveComponentData(
     data.images,
     locale,
     streamDocument
   );
 
-  const filteredImages: ImageProps[] =
-    resolvedImages?.map((image) => {
-      let url = "",
-        altText = "";
+  const getImageUrl = (image: any): string | undefined => {
+    if (!image) return undefined;
+    if ("assetImage" in image) {
+      return image.assetImage?.url;
+    }
+    if ("image" in image) {
+      return image.image?.url;
+    }
+    return image.url;
+  };
+
+  const allImages = (resolvedImages || []).map(
+    (image: any, originalIndex: number) => {
+      const url = getImageUrl(image);
+      const isEmpty = !url || (typeof url === "string" && url.trim() === "");
+
+      let altText = "";
       if ("assetImage" in image) {
-        url = image.assetImage.url;
         altText = resolveComponentData(
-          image.assetImage.alternateText ?? "",
+          image.assetImage?.alternateText ?? "",
           locale,
           streamDocument
         );
       } else if ("image" in image) {
-        url = image.image.url;
         altText = resolveComponentData(
-          image.image.alternateText ?? "",
+          image.image?.alternateText ?? "",
           locale,
           streamDocument
         );
@@ -166,35 +188,168 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
           locale,
           streamDocument
         );
-        url = image.url;
       }
+
       return {
-        image: {
-          url,
-          alternateText: altText,
-          height: "height" in image && image.height ? image.height : 570,
-          width: "width" in image && image.width ? image.width : 1000,
-        },
+        isEmpty,
+        originalIndex,
+        image: isEmpty
+          ? {
+              url: "",
+              alternateText: altText,
+              height: 570,
+              width: 1000,
+            }
+          : {
+              url,
+              alternateText: altText,
+              height: "height" in image && image.height ? image.height : 570,
+              width: "width" in image && image.width ? image.width : 1000,
+            },
         aspectRatio: styles.image?.aspectRatio,
         width: styles.image?.width || 1000,
+        originalImage: image,
       };
-    }) ?? [];
+    }
+  );
+
+  const handleEmptyImageClick = (
+    e: React.MouseEvent | undefined,
+    index: number
+  ) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    if (data.images.constantValueEnabled && puck?.isEditing) {
+      if (window.location.href.includes("http://localhost:5173")) {
+        const userInput = prompt("Enter Image URL:");
+        if (!userInput) return;
+      } else {
+        const messageId = `ImageAsset-${Date.now()}-${index}`;
+        const currentImageValue = Array.isArray(data.images.constantValue)
+          ? data.images.constantValue[index]
+          : undefined;
+        const assetImageValue =
+          currentImageValue && "assetImage" in currentImageValue
+            ? (currentImageValue as { assetImage?: AssetImageTypeImport })
+                .assetImage
+            : undefined;
+        openImageAssetSelector({
+          payload: {
+            type: "ImageAsset",
+            value: assetImageValue,
+            id: messageId,
+          },
+        });
+      }
+    }
+  };
+
+  const hasAnyImages = allImages.length > 0;
+  const imageWidth = styles.image?.width || 1000;
+
+  const renderImageOrEmpty = (imageData: (typeof allImages)[0]) => {
+    if (imageData.isEmpty && puck?.isEditing) {
+      return (
+        <div
+          className={themeManagerCn(
+            "rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
+          )}
+          style={{
+            width: `${imageData.width}px`,
+            aspectRatio: imageData.aspectRatio,
+          }}
+          onClick={(e) => {
+            // Only handle clicks that aren't on the button
+            const target = e.target as HTMLElement;
+            const isButton = target.closest('button[aria-label*="Add Image"]');
+            if (isButton) {
+              return;
+            }
+          }}
+          onPointerDown={(e) => {
+            // Stop Puck from capturing pointer events on the button
+            const target = e.target as HTMLElement;
+            const isButton = target.closest('button[aria-label*="Add Image"]');
+            if (isButton) {
+              e.stopPropagation();
+            }
+          }}
+        >
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
+            style={{
+              position: "absolute",
+              zIndex: 100,
+              inset: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleEmptyImageClick(e, imageData.originalIndex);
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+            onMouseUp={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleEmptyImageClick(e as any, imageData.originalIndex);
+            }}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              // Prevent Puck drag handlers from activating
+              e.nativeEvent.stopImmediatePropagation();
+            }}
+            onPointerUp={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleEmptyImageClick(e as any, imageData.originalIndex);
+            }}
+            onClickCapture={(e) => {
+              e.stopPropagation();
+            }}
+            type="button"
+            aria-label={pt("addImage", "Add Image")}
+          >
+            <ImagePlus size={24} className="stroke-2" />
+          </Button>
+        </div>
+      );
+    }
+    return (
+      <Image
+        image={imageData.image}
+        aspectRatio={imageData.aspectRatio}
+        width={imageData.width}
+        className="rounded-image-borderRadius"
+        sizes={`min(${imageWidth}px, calc(100vw - 6rem))`}
+      />
+    );
+  };
 
   return (
     <>
-      {filteredImages && filteredImages.length > 0 ? (
+      {hasAnyImages ? (
         <CarouselProvider
           className="flex flex-col gap-8"
           naturalSlideWidth={100}
           naturalSlideHeight={100}
-          totalSlides={filteredImages.length}
+          totalSlides={allImages.length}
           isIntrinsicHeight={true}
         >
           <div className="hidden md:flex justify-center w-full">
             <div
               className="flex items-center gap-2"
               style={{
-                width: `${(styles.image?.width || 1000) + 96}px`,
+                width: `${imageWidth + 96}px`,
                 maxWidth: "calc(100vw - 2rem)",
                 minWidth: "fit-content",
               }}
@@ -213,21 +368,15 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                   <Slider
                     className="w-auto"
                     style={{
-                      width: `min(${styles.image?.width || 1000}px, calc(100vw - 6rem))`,
+                      width: `min(${imageWidth}px, calc(100vw - 6rem))`,
                       maxWidth: "100%",
                     }}
                   >
-                    {filteredImages.map((image, idx) => {
+                    {allImages.map((imageData, idx) => {
                       return (
                         <Slide index={idx} key={idx}>
                           <div className="flex justify-center">
-                            <Image
-                              image={image.image}
-                              aspectRatio={image.aspectRatio}
-                              width={image.width}
-                              className="rounded-image-borderRadius"
-                              sizes={`min(${styles.image.width || 1000}px, calc(100vw - 6rem))`}
-                            />
+                            {renderImageOrEmpty(imageData)}
                           </div>
                         </Slide>
                       );
@@ -235,7 +384,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                   </Slider>
                 </EntityField>
                 <div className="hidden md:flex justify-center">
-                  {filteredImages.map((_, idx) => {
+                  {allImages.map((_, idx) => {
                     const afterStyles =
                       "after:content-[' '] after:py-2 after:block";
                     return (
@@ -265,24 +414,109 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
               constantValueEnabled={data.images.constantValueEnabled}
             >
               <Slider className="w-full">
-                {filteredImages.map((image, idx) => {
+                {allImages.map((imageData, idx) => {
                   return (
                     <Slide index={idx} key={idx}>
                       <div className="flex justify-center w-full px-4">
-                        <div
-                          className="w-full max-w-full overflow-hidden"
-                          style={{
-                            maxWidth: `${Math.min(image.width || 1000, 250)}px`,
-                            width: "100%",
-                          }}
-                        >
-                          <Image
-                            image={image.image}
-                            aspectRatio={image.aspectRatio}
-                            className="w-full h-auto object-contain"
-                            sizes={`${Math.min(image.width || 1000, 250)}px`}
-                          />
-                        </div>
+                        {imageData.isEmpty && puck?.isEditing ? (
+                          <div
+                            className={themeManagerCn(
+                              "w-full max-w-full rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
+                            )}
+                            style={{
+                              maxWidth: `${Math.min(imageData.width || 1000, 250)}px`,
+                              width: "100%",
+                              aspectRatio: imageData.aspectRatio,
+                            }}
+                            onClick={(e) => {
+                              const target = e.target as HTMLElement;
+                              const isButton = target.closest(
+                                'button[aria-label*="Add Image"]'
+                              );
+                              if (isButton) {
+                                return;
+                              }
+                            }}
+                            onPointerDown={(e) => {
+                              // Stop Puck from capturing pointer events on the button
+                              const target = e.target as HTMLElement;
+                              const isButton = target.closest(
+                                'button[aria-label*="Add Image"]'
+                              );
+                              if (isButton) {
+                                e.stopPropagation();
+                              }
+                            }}
+                          >
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
+                              style={{
+                                position: "absolute",
+                                zIndex: 100,
+                                inset: "50%",
+                                transform: "translate(-50%, -50%)",
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handleEmptyImageClick(
+                                  e,
+                                  imageData.originalIndex
+                                );
+                              }}
+                              onMouseDown={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                              }}
+                              onMouseUp={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handleEmptyImageClick(
+                                  e as any,
+                                  imageData.originalIndex
+                                );
+                              }}
+                              onPointerDown={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                // Prevent Puck drag handlers from activating
+                                e.nativeEvent.stopImmediatePropagation();
+                              }}
+                              onPointerUp={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handleEmptyImageClick(
+                                  e as any,
+                                  imageData.originalIndex
+                                );
+                              }}
+                              onClickCapture={(e) => {
+                                e.stopPropagation();
+                              }}
+                              type="button"
+                              aria-label={pt("addImage", "Add Image")}
+                            >
+                              <ImagePlus size={24} className="stroke-2" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <div
+                            className="w-full max-w-full overflow-hidden"
+                            style={{
+                              maxWidth: `${Math.min(imageData.width || 1000, 250)}px`,
+                              width: "100%",
+                            }}
+                          >
+                            <Image
+                              image={imageData.image}
+                              aspectRatio={imageData.aspectRatio}
+                              className="w-full h-auto object-contain"
+                              sizes={`${Math.min(imageData.width || 1000, 250)}px`}
+                            />
+                          </div>
+                        )}
                       </div>
                     </Slide>
                   );
@@ -296,7 +530,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
                 </ButtonBack>
               </DynamicChildColors>
               <div className="flex gap-2 justify-center flex-grow w-full">
-                {filteredImages.map((_, idx) => (
+                {allImages.map((_, idx) => (
                   <DynamicChildColors category="slide" key={idx}>
                     <Dot
                       slide={idx}

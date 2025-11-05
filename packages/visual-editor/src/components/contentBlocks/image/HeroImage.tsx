@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, PuckComponent } from "@measured/puck";
 import {
@@ -8,13 +9,16 @@ import {
   msg,
   pt,
   imgSizesHelper,
+  AssetImageType,
 } from "@yext/visual-editor";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { updateFields } from "../../pageSections/HeroSection";
 import {
   imageDefaultProps,
   ImageWrapperFields,
   ImageWrapperProps,
 } from "./Image.tsx";
+import { EmptyImageState } from "./EmptyImageState";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */
@@ -31,12 +35,40 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
     streamDocument
   );
 
-  if (
+  const getImageUrl = (
+    image: ImageType | ComplexImageType | AssetImageType | undefined
+  ): string | undefined => {
+    if (!image) {
+      return undefined;
+    }
+    if ("image" in image) {
+      return image.image?.url;
+    }
+    return (image as ImageType | AssetImageType).url;
+  };
+
+  const imageUrl = getImageUrl(resolvedImage);
+  const isEmpty =
     !resolvedImage ||
-    ("url" in resolvedImage && !resolvedImage.url) ||
-    ("image" in resolvedImage && !resolvedImage.image.url)
-  ) {
-    return puck.isEditing ? <div className="h-[250px] w-full" /> : <></>;
+    !imageUrl ||
+    (typeof imageUrl === "string" && imageUrl.trim() === "");
+
+  if (isEmpty) {
+    return (
+      <EmptyImageState
+        isEmpty={isEmpty}
+        isEditing={puck?.isEditing ?? false}
+        constantValueEnabled={data.image.constantValueEnabled ?? false}
+        constantValue={data.image.constantValue as AssetImageType | undefined}
+        fieldId={data.image.field}
+        containerStyle={{ minHeight: "250px" }}
+        containerClassName={
+          className || "max-w-full rounded-image-borderRadius w-full h-full"
+        }
+        fullHeight={true}
+        hasParentData={false}
+      />
+    );
   }
 
   return (
