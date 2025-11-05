@@ -454,6 +454,7 @@
   "missingHtmlWidget": "Přidejte HTML pro zobrazení komponenty",
   "monday": "pondělí",
   "name": "Jméno",
+  "nearbyLocationsEmptyStateSectionHidden": "Sekce je pro toto umístění skrytá",
   "noAvailableFields": "Žádná dostupná pole",
   "noAvailableTypes": "Žádné dostupné typy",
   "noHeroFieldsMsg": "Chcete -li použít obsah entity pro tuto sekci, přidejte do pole sekce hrdiny do typu entity skupiny vaší stránky.",

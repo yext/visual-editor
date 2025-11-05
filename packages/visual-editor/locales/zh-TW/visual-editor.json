@@ -453,6 +453,7 @@
   "missingHtmlWidget": "添加HTML以查看組件",
   "monday": "週一",
   "name": "姓名",
+  "nearbyLocationsEmptyStateSectionHidden": "該位置隱藏了部分",
   "noAvailableFields": "沒有可用的字段",
   "noAvailableTypes": "沒有可用類型",
   "noHeroFieldsMsg": "要在本節中使用實體內容，請在頁面組的實體類型中添加一個英雄部分字段。",

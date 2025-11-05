@@ -454,6 +454,7 @@
   "missingHtmlWidget": "Tilføj HTML for at se komponent",
   "monday": "mandag",
   "name": "Navn",
+  "nearbyLocationsEmptyStateSectionHidden": "Sektion skjult for denne placering",
   "noAvailableFields": "Ingen tilgængelige felter",
   "noAvailableTypes": "Ingen tilgængelige typer",
   "noHeroFieldsMsg": "For at bruge enhedsindhold til dette afsnit skal du tilføje et heltesektionsfelt til din sidegruppes enhedstype.",

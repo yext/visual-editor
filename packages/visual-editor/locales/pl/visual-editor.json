@@ -454,6 +454,7 @@
   "missingHtmlWidget": "Dodaj HTML, aby wyświetlić komponent",
   "monday": "Poniedziałek",
   "name": "Nazwa",
+  "nearbyLocationsEmptyStateSectionHidden": "Sekcja ukryta dla tej lokalizacji",
   "noAvailableFields": "Brak dostępnych pól",
   "noAvailableTypes": "Brak dostępnych rodzajów",
   "noHeroFieldsMsg": "Aby użyć treści encji w tej sekcji, dodaj pole sekcji bohatera do typu jednostki grupy strony.",

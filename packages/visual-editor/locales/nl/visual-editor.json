@@ -453,6 +453,7 @@
   "missingHtmlWidget": "Voeg HTML toe om component te bekijken",
   "monday": "Maandag",
   "name": "Naam",
+  "nearbyLocationsEmptyStateSectionHidden": "Sectie verborgen voor deze locatie",
   "noAvailableFields": "Geen beschikbare velden",
   "noAvailableTypes": "Geen beschikbare types",
   "noHeroFieldsMsg": "Als u entiteitsinhoud voor dit gedeelte kunt gebruiken, voegt u een Hero -sectieveld toe aan het entiteitstype van uw paginagroep.",

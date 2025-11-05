@@ -453,6 +453,7 @@
   "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu",
   "monday": "Pirmdiena",
   "name": "Nosaukt",
+  "nearbyLocationsEmptyStateSectionHidden": "Sadaļa paslēpta šai atrašanās vietai",
   "noAvailableFields": "Nav pieejamu lauku",
   "noAvailableTypes": "Nav pieejamo tipu",
   "noHeroFieldsMsg": "Lai šai sadaļai izmantotu entītijas saturu, pievienojiet varoņu sadaļas lauku savas lapas grupas entītijas tipam.",
