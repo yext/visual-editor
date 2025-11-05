@@ -539,6 +539,8 @@
   "siteColors": "Colori del sito",
   "spacingDefaultLabel": "Predefinito",
   "staticContent": "Contenuto statico",
+  "staticMapEmptyStateAddApiKey": "Aggiungi una chiave API per visualizzare l'anteprima della mappa",
+  "staticMapEmptyStateSectionHidden": "Sezione nascosta per tutte le località",
   "sunday": "Domenica",
   "teamMember": "Membro del team",
   "temporarilyClosed": "Temporaneamente chiuso",

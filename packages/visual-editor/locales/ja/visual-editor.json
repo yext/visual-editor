@@ -539,6 +539,8 @@
   "siteColors": "サイトの色",
   "spacingDefaultLabel": "デフォルト",
   "staticContent": "静的コンテンツ",
+  "staticMapEmptyStateAddApiKey": "API キーを追加してマップをプレビューする",
+  "staticMapEmptyStateSectionHidden": "すべての場所で非表示のセクション",
   "sunday": "日曜日",
   "teamMember": "チームメンバー",
   "temporarilyClosed": "一時的に閉じた",

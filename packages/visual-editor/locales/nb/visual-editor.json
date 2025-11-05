@@ -539,6 +539,8 @@
   "siteColors": "Nettstedsfarger",
   "spacingDefaultLabel": "Misligholde",
   "staticContent": "Statisk innhold",
+  "staticMapEmptyStateAddApiKey": "Legg til en API-nøkkel for å forhåndsvise kartet ditt",
+  "staticMapEmptyStateSectionHidden": "Seksjon skjult for alle lokasjoner",
   "sunday": "søndag",
   "teamMember": "Teammedlem",
   "temporarilyClosed": "Midlertidig stengt",

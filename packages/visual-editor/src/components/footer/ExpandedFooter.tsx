@@ -443,6 +443,97 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
   }),
 };
 
+const FooterLogos = ({
+  className,
+  logo,
+  logoWidth,
+  aspectRatioForLogo,
+  xLink,
+  facebookLink,
+  instagramLink,
+  pinterestLink,
+  linkedInLink,
+  youtubeLink,
+  tiktokLink,
+  utilityImages,
+  utilityImagesWidth,
+  aspectRatioForUtilityImages,
+  streamDocument,
+  locale,
+}: {
+  className: string;
+  logo: AssetImageType;
+  logoWidth: number;
+  aspectRatioForLogo: number;
+  xLink: string;
+  facebookLink: string;
+  instagramLink: string;
+  pinterestLink: string;
+  linkedInLink: string;
+  youtubeLink: string;
+  tiktokLink: string;
+  utilityImages: { image: AssetImageType; linkTarget?: string }[];
+  utilityImagesWidth: number;
+  aspectRatioForUtilityImages: number;
+  streamDocument: StreamDocument;
+  locale: string;
+}) => {
+  return (
+    <div className={themeManagerCn(`flex flex-col gap-10 md:gap-8`, className)}>
+      {logo && (
+        <EntityField
+          constantValueEnabled
+          displayName={pt("fields.logo", "Logo")}
+        >
+          <FooterLogo
+            aspectRatio={aspectRatioForLogo}
+            logo={buildComplexLogoImage(
+              logo,
+              logoWidth || 5,
+              streamDocument,
+              locale
+            )}
+            logoWidth={logoWidth || 100}
+          />
+        </EntityField>
+      )}
+      <div className="hidden md:block space-y-8">
+        <FooterIcons
+          xLink={xLink}
+          facebookLink={facebookLink}
+          instagramLink={instagramLink}
+          pinterestLink={pinterestLink}
+          linkedInLink={linkedInLink}
+          youtubeLink={youtubeLink}
+          tiktokLink={tiktokLink}
+        />
+        {utilityImages && utilityImages.length >= 1 && (
+          <EntityField
+            constantValueEnabled
+            displayName={pt("fields.utilityImages", "Utility Images")}
+          >
+            <div className="grid grid-cols-3 gap-8">
+              {utilityImages.map((item, index) => (
+                <FooterLogo
+                  aspectRatio={aspectRatioForUtilityImages}
+                  key={index}
+                  logo={buildComplexUtilityImage(
+                    item.image,
+                    utilityImagesWidth || 60,
+                    streamDocument,
+                    locale
+                  )}
+                  logoWidth={utilityImagesWidth || 60}
+                />
+              ))}
+            </div>
+          </EntityField>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const ExpandedFooterWrapper = ({
   data,
   styles,
@@ -485,65 +576,6 @@ const ExpandedFooterWrapper = ({
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
 
-  const FooterLogos = ({ className }: { className: string }) => {
-    return (
-      <div
-        className={themeManagerCn(`flex flex-col gap-10 md:gap-8`, className)}
-      >
-        {logo && (
-          <EntityField
-            constantValueEnabled
-            displayName={pt("fields.logo", "Logo")}
-          >
-            <FooterLogo
-              aspectRatio={aspectRatioForLogo}
-              logo={buildComplexLogoImage(
-                logo,
-                logoWidth || 5,
-                streamDocument,
-                i18n.language
-              )}
-              logoWidth={logoWidth || 100}
-            />
-          </EntityField>
-        )}
-        <div className="hidden md:block space-y-8">
-          <FooterIcons
-            xLink={xLink}
-            facebookLink={facebookLink}
-            instagramLink={instagramLink}
-            pinterestLink={pinterestLink}
-            linkedInLink={linkedInLink}
-            youtubeLink={youtubeLink}
-            tiktokLink={tiktokLink}
-          />
-          {utilityImages && utilityImages.length >= 1 && (
-            <EntityField
-              constantValueEnabled
-              displayName={pt("fields.utilityImages", "Utility Images")}
-            >
-              <div className="grid grid-cols-3 gap-8">
-                {utilityImages.map((item, index) => (
-                  <FooterLogo
-                    aspectRatio={aspectRatioForUtilityImages}
-                    key={index}
-                    logo={buildComplexUtilityImage(
-                      item.image,
-                      utilityImagesWidth || 60,
-                      streamDocument,
-                      i18n.language
-                    )}
-                    logoWidth={utilityImagesWidth || 60}
-                  />
-                ))}
-              </div>
-            </EntityField>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   return (
     <Background className="mt-auto" ref={puck.dragRef} as="footer">
       {/* Primary footer section. */}
@@ -556,6 +588,21 @@ const ExpandedFooterWrapper = ({
         {/** Desktop left footer logos and icons / Mobile top footer logo */}
         <FooterLogos
           className={`${primaryLinksAlignment === "left" ? `md:hidden` : `items-start`}`}
+          logo={logo}
+          logoWidth={logoWidth || 100}
+          aspectRatioForLogo={aspectRatioForLogo}
+          xLink={xLink}
+          facebookLink={facebookLink}
+          instagramLink={instagramLink}
+          pinterestLink={pinterestLink}
+          linkedInLink={linkedInLink}
+          youtubeLink={youtubeLink}
+          tiktokLink={tiktokLink}
+          utilityImages={utilityImages}
+          utilityImagesWidth={utilityImagesWidth || 60}
+          aspectRatioForUtilityImages={aspectRatioForUtilityImages}
+          streamDocument={streamDocument}
+          locale={i18n.language}
         />
         {expandedFooter ? (
           <EntityField
@@ -592,6 +639,21 @@ const ExpandedFooterWrapper = ({
         {/** Desktop right aligned footer logos and icons */}
         <FooterLogos
           className={`${primaryLinksAlignment === "left" ? `items-end` : `md:hidden`} hidden sm:block`}
+          logo={logo}
+          logoWidth={logoWidth || 100}
+          aspectRatioForLogo={aspectRatioForLogo}
+          xLink={xLink}
+          facebookLink={facebookLink}
+          instagramLink={instagramLink}
+          pinterestLink={pinterestLink}
+          linkedInLink={linkedInLink}
+          youtubeLink={youtubeLink}
+          tiktokLink={tiktokLink}
+          utilityImages={utilityImages}
+          utilityImagesWidth={utilityImagesWidth || 60}
+          aspectRatioForUtilityImages={aspectRatioForUtilityImages}
+          streamDocument={streamDocument}
+          locale={i18n.language}
         />
         {/** Mobile footer icons and utility images */}
         <div className="md:hidden block space-y-10">

@@ -139,9 +139,6 @@ importers:
       "@yext/pages-components":
         specifier: ^1.1.13
         version: 1.1.13(@lexical/clipboard@0.12.6(lexical@0.12.6))(@lexical/selection@0.12.6(lexical@0.12.6))(@types/react@18.3.24)(encoding@0.1.13)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(yjs@13.6.27)
-      "@yext/search-core":
-        specifier: ^2.7.0
-        version: 2.7.0(encoding@0.1.13)
       "@yext/search-headless-react":
         specifier: ^2.6.0
         version: 2.6.0(encoding@0.1.13)(react@18.3.1)

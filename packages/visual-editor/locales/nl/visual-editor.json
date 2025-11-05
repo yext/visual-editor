@@ -539,6 +539,8 @@
   "siteColors": "Sitekleuren",
   "spacingDefaultLabel": "Standaard",
   "staticContent": "Statische inhoud",
+  "staticMapEmptyStateAddApiKey": "Voeg een API-sleutel toe om een ​​voorbeeld van uw kaart te bekijken",
+  "staticMapEmptyStateSectionHidden": "Sectie verborgen voor alle locaties",
   "sunday": "Zondag",
   "teamMember": "Teamlid",
   "temporarilyClosed": "Tijdelijk gesloten",

@@ -539,6 +539,8 @@
   "siteColors": "Svetainės spalvos",
   "spacingDefaultLabel": "Numatytasis",
   "staticContent": "Statinis turinys",
+  "staticMapEmptyStateAddApiKey": "Pridėkite API raktą, kad peržiūrėtumėte žemėlapį",
+  "staticMapEmptyStateSectionHidden": "Skiltis paslėpta visose vietose",
   "sunday": "Sekmadienis",
   "teamMember": "Komandos narys",
   "temporarilyClosed": "Laikinai uždarytas",

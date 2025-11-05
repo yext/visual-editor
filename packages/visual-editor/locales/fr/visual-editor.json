@@ -538,6 +538,8 @@
   "siteColors": "Couleurs du site",
   "spacingDefaultLabel": "Défaut",
   "staticContent": "Contenu statique",
+  "staticMapEmptyStateAddApiKey": "Ajoutez une clé API pour prévisualiser votre carte",
+  "staticMapEmptyStateSectionHidden": "Section masquée pour tous les emplacements",
   "sunday": "Dimanche",
   "teamMember": "Membre de l'équipe",
   "temporarilyClosed": "Temporairement fermé",

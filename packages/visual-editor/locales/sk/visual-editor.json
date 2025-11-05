@@ -540,6 +540,8 @@
   "siteColors": "Farby stránok",
   "spacingDefaultLabel": "Predvolený",
   "staticContent": "Statický obsah",
+  "staticMapEmptyStateAddApiKey": "Ak chcete zobraziť ukážku mapy, pridajte kľúč API",
+  "staticMapEmptyStateSectionHidden": "Sekcia skrytá pre všetky miesta",
   "sunday": "Nedeľa",
   "teamMember": "Člen tímu",
   "temporarilyClosed": "Dočasne zatvorené",
