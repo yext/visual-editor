@@ -1,5 +1,5 @@
-import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
-import { YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
+import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { type YextStructEntityField } from "../editor/YextStructFieldSelector.tsx";
 
 export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
