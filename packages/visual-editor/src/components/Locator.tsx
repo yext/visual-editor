@@ -449,6 +449,12 @@ export interface LocatorProps {
      * @defaultValue false
      */
     openNowButton: boolean;
+    /**
+     * If 'true', displays several distance options to filter searches to only locations within
+     * a certain radius.
+     * @defaultValue false
+     */
+    showDistanceOptions: boolean;
     /** Which fields are facetable in the search experience */
     facetFields?: DynamicOptionsSelectorType<string>;
   };
@@ -506,6 +512,16 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
+      showDistanceOptions: YextField(
+        msg("fields.options.showDistanceOptions", "Include Distance Options"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
       facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
         type: "dynamicSelect",
         dropdownLabel: msg("fields.field", "Field"),
@@ -544,6 +560,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   defaultProps: {
     filters: {
       openNowButton: false,
+      showDistanceOptions: false,
     },
   },
   label: msg("components.locator", "Locator"),
@@ -590,7 +607,7 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  filters: { openNowButton, facetFields },
+  filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
@@ -688,6 +705,10 @@ const LocatorInternal = ({
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
     const filterValue = params.newFilter.value as NearFilterValue;
+    // only overwrite radius from filter if display options are enabled
+    const radius = showDistanceOptions
+      ? selectedDistanceMiles * MILES_TO_METERS
+      : filterValue.radius;
     const locationFilter: SelectableStaticFilter = {
       displayName: newDisplayName,
       selected: true,
@@ -696,7 +717,7 @@ const LocatorInternal = ({
         fieldId: params.newFilter.fieldId,
         value: {
           ...filterValue,
-          radius: selectedDistanceMiles * MILES_TO_METERS,
+          radius,
         },
         matcher: Matcher.Near,
       },
@@ -1005,6 +1026,9 @@ const LocatorInternal = ({
       // just in case
       const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
       const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
+      const radius = showDistanceOptions
+        ? DEFAULT_RADIUS_MILES * MILES_TO_METERS
+        : previousValue?.radius;
       return {
         ...filter,
         filter: {
@@ -1013,7 +1037,7 @@ const LocatorInternal = ({
             ...previousValue,
             lat,
             lng,
-            radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+            radius,
           },
         },
       } as SelectableStaticFilter;
@@ -1050,7 +1074,8 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
-  const hasFilterModalToggle = openNowButton || selectedFacets.length > 0;
+  const hasFilterModalToggle =
+    openNowButton || showDistanceOptions || selectedFacets.length > 0;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
 
   return (
@@ -1145,6 +1170,7 @@ const LocatorInternal = ({
             showOpenNowOption={openNowButton}
             isOpenNowSelected={isOpenNowSelected}
             handleOpenNowClick={handleOpenNowClick}
+            showDistanceOptions={showDistanceOptions}
             selectedDistanceMiles={selectedDistanceMiles}
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
@@ -1433,6 +1459,7 @@ interface FilterModalProps {
   showFilterModal: boolean;
   showOpenNowOption: boolean; // whether to show the Open Now filter option
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
+  showDistanceOptions: boolean; // whether to show the Distance filter option
   selectedDistanceMiles?: number;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
@@ -1445,6 +1472,7 @@ const FilterModal = (props: FilterModalProps) => {
     showFilterModal,
     showOpenNowOption,
     isOpenNowSelected,
+    showDistanceOptions,
     selectedDistanceMiles,
     handleCloseModalClick,
     handleOpenNowClick,
@@ -1488,10 +1516,12 @@ const FilterModal = (props: FilterModalProps) => {
               onChange={handleOpenNowClick}
             />
           )}
-          <DistanceFilter
-            onChange={handleDistanceClick}
-            selectedDistanceMiles={selectedDistanceMiles}
-          />
+          {showDistanceOptions && (
+            <DistanceFilter
+              onChange={handleDistanceClick}
+              selectedDistanceMiles={selectedDistanceMiles}
+            />
+          )}
           <Facets
             customCssClasses={{
               divider: "bg-white",
