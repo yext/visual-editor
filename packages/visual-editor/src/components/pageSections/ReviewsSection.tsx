@@ -24,6 +24,7 @@ import {
 } from "@yext/visual-editor";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 
 const REVIEWS_PER_PAGE = 5;
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
@@ -35,18 +36,40 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
 const ReviewsEmptyState: React.FC<{ backgroundColor: BackgroundStyle }> = ({
   backgroundColor,
 }) => {
+  let entityTypeDisplayName: string | undefined;
+  try {
+    const templateMetadata = useTemplateMetadata();
+    entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
+  } catch {
+    // Not in editor context, use default values
+  }
+
   return (
     <PageSection background={backgroundColor}>
       <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
         <StarOff className="w-12 h-12 text-gray-400" />
         <div className="flex flex-col items-center gap-0">
           <Body variant="base" className="text-gray-500 font-medium">
-            {pt("emptyStateSectionHidden", "Section hidden for this location")}
+            {pt(
+              "reviewsEmptyStateSectionHidden",
+              "Section hidden for this {{entityType}}",
+              {
+                entityType: entityTypeDisplayName
+                  ? entityTypeDisplayName.toLowerCase()
+                  : "page",
+              }
+            )}
           </Body>
           <Body variant="base" className="text-gray-500 font-normal">
             {pt(
               "reviewsEmptyStateNoReviews",
-              "Location has no first party reviews"
+              "{{entityType}} has no first party reviews",
+              {
+                entityType: entityTypeDisplayName
+                  ? entityTypeDisplayName.charAt(0).toUpperCase() +
+                    entityTypeDisplayName.slice(1)
+                  : "Entity",
+              }
             )}
           </Body>
         </div>
