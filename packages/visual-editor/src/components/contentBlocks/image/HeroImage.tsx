@@ -53,24 +53,22 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
-  const emptyImageState = (
-    <EmptyImageState
-      isEmpty={isEmpty}
-      isEditing={puck?.isEditing ?? false}
-      constantValueEnabled={data.image.constantValueEnabled ?? false}
-      constantValue={data.image.constantValue as AssetImageType | undefined}
-      fieldId={data.image.field}
-      containerStyle={{ minHeight: "250px" }}
-      containerClassName={
-        className || "max-w-full rounded-image-borderRadius w-full h-full"
-      }
-      fullHeight={true}
-      hasParentData={false}
-    />
-  );
-
   if (isEmpty) {
-    return emptyImageState;
+    return (
+      <EmptyImageState
+        isEmpty={isEmpty}
+        isEditing={puck?.isEditing ?? false}
+        constantValueEnabled={data.image.constantValueEnabled ?? false}
+        constantValue={data.image.constantValue as AssetImageType | undefined}
+        fieldId={data.image.field}
+        containerStyle={{ minHeight: "250px" }}
+        containerClassName={
+          className || "max-w-full rounded-image-borderRadius w-full h-full"
+        }
+        fullHeight={true}
+        hasParentData={false}
+      />
+    );
   }
 
   return (

@@ -109,32 +109,30 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
-  const emptyImageState = (
-    <EmptyImageState
-      isEmpty={isEmpty}
-      isEditing={puck.isEditing ?? false}
-      constantValueEnabled={data.image.constantValueEnabled ?? false}
-      constantValue={data.image.constantValue as AssetImageType | undefined}
-      fieldId={parentData ? parentData.field : data.image.field}
-      containerStyle={{
-        ...(hideWidthProp
-          ? {}
-          : styles.width
-            ? { width: `${styles.width}px` }
-            : {}),
-        ...(styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : {}),
-      }}
-      containerClassName={
-        className || "max-w-full rounded-image-borderRadius w-full h-full"
-      }
-      fullHeight
-      dragRef={puck.dragRef ?? undefined}
-      hasParentData={!!parentData}
-    />
-  );
-
   if (isEmpty) {
-    return emptyImageState;
+    return (
+      <EmptyImageState
+        isEmpty={isEmpty}
+        isEditing={puck.isEditing ?? false}
+        constantValueEnabled={data.image.constantValueEnabled ?? false}
+        constantValue={data.image.constantValue as AssetImageType | undefined}
+        fieldId={parentData ? parentData.field : data.image.field}
+        containerStyle={{
+          ...(hideWidthProp
+            ? {}
+            : styles.width
+              ? { width: `${styles.width}px` }
+              : {}),
+          ...(styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : {}),
+        }}
+        containerClassName={
+          className || "max-w-full rounded-image-borderRadius w-full h-full"
+        }
+        fullHeight
+        dragRef={puck.dragRef ?? undefined}
+        hasParentData={!!parentData}
+      />
+    );
   }
 
   const transformedSizes = imgSizesHelper(sizes, `${styles.width}px`);

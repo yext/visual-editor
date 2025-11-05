@@ -12,6 +12,7 @@ import {
   useSendMessageToParent,
   useReceiveMessage,
 } from "../../../internal/hooks/useMessage";
+import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image";
 
 interface EmptyImageStateProps {
   isEmpty: boolean;
@@ -54,21 +55,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     TARGET_ORIGINS,
     React.useCallback(
       (_, payload) => {
-        const imagePayload = payload as {
-          id: string;
-          value: {
-            transformedImage?: {
-              url: string;
-              dimension?: { width: number; height: number };
-            };
-            originalImage?: {
-              url: string;
-              dimension?: { width: number; height: number };
-            };
-            altText?: string;
-          };
-          locale: string;
-        };
+        const imagePayload = payload as ImagePayload;
         if (
           pendingMessageId &&
           pendingMessageId === imagePayload.id &&

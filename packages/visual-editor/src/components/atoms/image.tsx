@@ -63,7 +63,7 @@ export const Image: React.FC<ImageProps> = ({
           layout={"aspect"}
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
-          imgOverrides={{ sizes, loading: "lazy" }}
+          imgOverrides={{ sizes }}
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
