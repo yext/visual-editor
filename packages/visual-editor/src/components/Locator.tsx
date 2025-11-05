@@ -1013,7 +1013,7 @@ const LocatorInternal = ({
     // There shouldn't be any other static filters besides location and open now, but leave
     // them untouched for safety
     const unaffectedStaticFilters = existingFilters.filter(
-      (filter) => !isOpenNowFilter(filter) || !isLocationNearFilter(filter)
+      (filter) => !isOpenNowFilter(filter) && !isLocationNearFilter(filter)
     );
 
     // Make Open Now filter unselected
