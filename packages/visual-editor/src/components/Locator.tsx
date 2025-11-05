@@ -713,8 +713,8 @@ const LocatorInternal = ({
         nearFilterValue = filter.value as NearFilterValue;
         // only overwrite radius from filter if display options are enabled
         const radius = showDistanceOptions
-            ? selectedDistanceMiles * MILES_TO_METERS
-            : nearFilterValue.radius;
+          ? selectedDistanceMiles * MILES_TO_METERS
+          : nearFilterValue.radius;
         locationFilter = {
           displayName: newDisplayName,
           selected: true,
