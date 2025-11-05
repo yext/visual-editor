@@ -696,7 +696,6 @@ const LocatorInternal = ({
         fieldId: params.newFilter.fieldId,
         value: {
           ...filterValue,
-          radius: selectedDistanceMiles * MILES_TO_METERS,
         },
         matcher: Matcher.Near,
       },
@@ -1013,7 +1012,6 @@ const LocatorInternal = ({
             ...previousValue,
             lat,
             lng,
-            radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
           },
         },
       } as SelectableStaticFilter;
@@ -1489,6 +1487,7 @@ const FilterModal = (props: FilterModalProps) => {
             />
           )}
           <DistanceFilter
+            hidden={true}
             onChange={handleDistanceClick}
             selectedDistanceMiles={selectedDistanceMiles}
           />
@@ -1560,12 +1559,13 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 };
 
 interface DistanceFilterProps {
+  hidden: boolean;
   onChange: (distance: number) => void;
   selectedDistanceMiles?: number;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
-  const { selectedDistanceMiles, onChange } = props;
+  const { hidden, selectedDistanceMiles, onChange } = props;
   const { t } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
@@ -1576,41 +1576,43 @@ const DistanceFilter = (props: DistanceFilterProps) => {
   const distanceOptionsMiles = [5, 10, 25, 50];
 
   return (
-    <div className="flex flex-col gap-4">
-      <button
-        className="w-full flex justify-between items-center"
-        {...getToggleProps()}
-      >
-        <div className="font-bold">{t("distance", "Distance")}</div>
-        <FaChevronUp className={iconClassName} />
-      </button>
-      <div {...getCollapseProps()}>
-        {distanceOptionsMiles.map((distanceMiles) => (
-          <div
-            className="flex flex-row gap-4 items-center"
-            id={`distanceOption-${distanceMiles}`}
-            key={distanceMiles}
-          >
-            <button
-              className="inline-flex bg-white"
-              onClick={() => onChange(distanceMiles)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+    !hidden && (
+      <div className="flex flex-col gap-4">
+        <button
+          className="w-full flex justify-between items-center"
+          {...getToggleProps()}
+        >
+          <div className="font-bold">{t("distance", "Distance")}</div>
+          <FaChevronUp className={iconClassName} />
+        </button>
+        <div {...getCollapseProps()}>
+          {distanceOptionsMiles.map((distanceMiles) => (
+            <div
+              className="flex flex-row gap-4 items-center"
+              id={`distanceOption-${distanceMiles}`}
+              key={distanceMiles}
             >
-              <div className="text-palette-primary-dark">
-                {selectedDistanceMiles === distanceMiles ? (
-                  <FaDotCircle />
-                ) : (
-                  <FaRegCircle />
-                )}
+              <button
+                className="inline-flex bg-white"
+                onClick={() => onChange(distanceMiles)}
+                aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+              >
+                <div className="text-palette-primary-dark">
+                  {selectedDistanceMiles === distanceMiles ? (
+                    <FaDotCircle />
+                  ) : (
+                    <FaRegCircle />
+                  )}
+                </div>
+              </button>
+              <div className="inline-flex">
+                {`< ${distanceMiles} ${t("miles", "miles")}`}
               </div>
-            </button>
-            <div className="inline-flex">
-              {`< ${distanceMiles} ${t("miles", "miles")}`}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    )
   );
 };
 
