@@ -41,6 +41,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/applyTheme";
 import { MapPinOff } from "lucide-react";
+import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers";
 
 export interface NearbyLocationsData {
   /**
@@ -479,6 +480,10 @@ const NearbyLocationsComponent = ({
       nearbyLocationsStatus != "pending")
   ) {
     if (puck.isEditing) {
+      const templateMetadata = React.useContext(TemplateMetadataContext);
+      const entityTypeDisplayName =
+        templateMetadata?.entityTypeDisplayName?.toLowerCase();
+
       return (
         <PageSection background={styles?.backgroundColor}>
           <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
@@ -487,13 +492,24 @@ const NearbyLocationsComponent = ({
               <Body variant="base" className="text-gray-500 font-medium">
                 {pt(
                   "nearbyLocationsEmptyStateSectionHidden",
-                  "Section hidden for this location"
+                  "Section hidden for this {{entityType}}",
+                  {
+                    entityType: entityTypeDisplayName
+                      ? entityTypeDisplayName
+                      : "page",
+                  }
                 )}
               </Body>
               <Body variant="base" className="text-gray-500 font-normal">
                 {pt(
-                  "nearbyLocationsEmptyStateNoLocations",
-                  `No locations within ${data?.radius ?? 10} miles`
+                  "nearbyLocationsEmptyState",
+                  "No {{entityType}} within {{radius}} miles",
+                  {
+                    entityType: entityTypeDisplayName
+                      ? entityTypeDisplayName
+                      : "entity",
+                    radius: data?.radius ?? 10,
+                  }
                 )}
               </Body>
             </div>

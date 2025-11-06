@@ -453,7 +453,6 @@
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
   "monday": "月曜日",
   "name": "名前",
-  "nearbyLocationsEmptyStateSectionHidden": "この場所では非表示のセクション",
   "noAvailableFields": "利用可能なフィールドはありません",
   "noAvailableTypes": "利用可能なタイプはありません",
   "noHeroFieldsMsg": "このセクションにエンティティコンテンツを使用するには、ページグループのエンティティタイプにヒーローセクションフィールドを追加します。",
