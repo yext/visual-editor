@@ -19,7 +19,7 @@ import {
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
 import { CircleSlash2 } from "lucide-react";
-import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 
 export interface BannerData {
   /**
@@ -117,6 +117,7 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
   const locale = i18n.language;
   const streamDocument = useDocument();
   const resolvedText = resolveComponentData(data.text, locale, streamDocument);
+  const templateMetadata = useTemplateMetadata();
 
   const justifyClass = {
     left: "justify-start",
@@ -132,7 +133,6 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
   // Show empty state in editor mode when mapped field is empty
   if (isMappedField && isEmpty) {
     if (puck.isEditing) {
-      const templateMetadata = React.useContext(TemplateMetadataContext);
       const entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
 
       return (

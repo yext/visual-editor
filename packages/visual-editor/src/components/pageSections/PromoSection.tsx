@@ -37,7 +37,7 @@ import {
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 import { CircleSlash2 } from "lucide-react";
-import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 
 export interface PromoData {
   /**
@@ -224,6 +224,7 @@ const PromoWrapper: PuckComponent<PromoSectionProps> = (props) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
+  const templateMetadata = useTemplateMetadata();
 
   // Check if using mapped entity field (not constant value) and if it's empty
   const isMappedField = !data.promo.constantValueEnabled && !!data.promo.field;
@@ -237,7 +238,6 @@ const PromoWrapper: PuckComponent<PromoSectionProps> = (props) => {
   // Show empty state in editor mode when mapped field is empty
   if (isMappedField && isEmpty) {
     if (puck.isEditing) {
-      const templateMetadata = React.useContext(TemplateMetadataContext);
       const entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
 
       return (
