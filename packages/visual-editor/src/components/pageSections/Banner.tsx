@@ -11,12 +11,15 @@ import {
   TranslatableRichText,
   msg,
   pt,
+  Body,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
+import { CircleSlash2 } from "lucide-react";
+import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers";
 
 export interface BannerData {
   /**
@@ -105,7 +108,11 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   ),
 };
 
-const BannerComponent = ({ data, styles }: BannerSectionProps) => {
+const BannerComponent: PuckComponent<BannerSectionProps> = ({
+  data,
+  styles,
+  puck,
+}) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
@@ -116,6 +123,57 @@ const BannerComponent = ({ data, styles }: BannerSectionProps) => {
     center: "justify-center",
     right: "justify-end",
   }[styles.textAlignment];
+
+  const isMappedField = !data.text.constantValueEnabled && !!data.text.field;
+  const isEmpty =
+    !resolvedText ||
+    (typeof resolvedText === "string" && resolvedText.trim() === "");
+
+  // Show empty state in editor mode when mapped field is empty
+  if (isMappedField && isEmpty) {
+    if (puck.isEditing) {
+      const templateMetadata = React.useContext(TemplateMetadataContext);
+      const entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
+
+      return (
+        <PageSection
+          background={backgroundColors.background1.value}
+          verticalPadding="sm"
+          className="flex items-center justify-center"
+        >
+          <div className="relative h-20 w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-row items-center justify-center gap-3 px-4">
+            <CircleSlash2 className="w-10 h-10 text-gray-400 flex-shrink-0" />
+            <div className="flex flex-col items-start gap-0">
+              <Body variant="sm" className="text-gray-500 font-medium">
+                {pt(
+                  "emptyStateSectionHidden",
+                  "Section hidden for this {{entityType}}",
+                  {
+                    entityType: entityTypeDisplayName
+                      ? entityTypeDisplayName.toLowerCase()
+                      : "page",
+                  }
+                )}
+              </Body>
+              <Body variant="sm" className="text-gray-500 font-normal">
+                {pt(
+                  "emptyStateFieldEmpty",
+                  "{{entityType}}'s mapped field is empty",
+                  {
+                    entityType: entityTypeDisplayName
+                      ? entityTypeDisplayName.charAt(0).toUpperCase() +
+                        entityTypeDisplayName.slice(1)
+                      : "Entity",
+                  }
+                )}
+              </Body>
+            </div>
+          </div>
+        </PageSection>
+      );
+    }
+    return <></>;
+  }
 
   if (!resolvedText) {
     return <></>;
