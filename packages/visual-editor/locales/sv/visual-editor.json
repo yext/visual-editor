@@ -455,6 +455,8 @@
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",
   "monday": "Måndag",
   "name": "Namn",
+  "nearbyLocationsEmptyState": "Ingen {{entityType}} inom {{radius}} miles",
+  "nearbyLocationsEmptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "noAvailableFields": "Inga tillgängliga fält",
   "noAvailableTypes": "Inga tillgängliga typer",
   "noHeroFieldsMsg": "För att använda enhetsinnehåll för det här avsnittet, lägg till ett hjältesektionsfält i din sidgrupps enhetstyp.",

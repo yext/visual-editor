@@ -454,6 +454,8 @@
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
   "monday": "maanantai",
   "name": "Nimi",
+  "nearbyLocationsEmptyState": "Ei {{entityType}} {{radius}} mailin sisällä",
+  "nearbyLocationsEmptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
   "noAvailableFields": "Ei käytettävissä olevia kenttiä",
   "noAvailableTypes": "Ei käytettävissä olevia tyyppejä",
   "noHeroFieldsMsg": "Jos haluat käyttää Entity -sisältöä tähän osaan, lisää sankari -osiokenttä sivuryhmäsi kokonaisuuteen.",

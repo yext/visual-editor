@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Ajouter HTML pour afficher le composant",
   "monday": "Lundi",
   "name": "Nom",
+  "nearbyLocationsEmptyState": "Aucun {{entityType}} dans un rayon de {{radius}} miles",
+  "nearbyLocationsEmptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "noAvailableFields": "Pas de champs disponibles",
   "noAvailableTypes": "Pas de types disponibles",
   "noHeroFieldsMsg": "Pour utiliser le contenu de l'entité pour cette section, ajoutez un champ de section de héros au type d'entité de votre groupe de pages.",
