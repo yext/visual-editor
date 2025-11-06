@@ -8,6 +8,9 @@ import {
 } from "../resolveUrlTemplate";
 import { mergeMeta } from "../mergeMeta";
 
+// Recompile the embedded field regex to support matching
+const EMBEDDED_FIELD_REGEX = new RegExp(embeddedFieldRegex.source);
+
 const stringifyResolvedField = (fieldValue: any): string => {
   if (fieldValue === undefined || fieldValue === null) {
     return "";
@@ -107,11 +110,11 @@ const resolveSpecialCases = (
     return resolveNode(streamDocument, value);
   }
 
-  const fieldName = value.match(new RegExp(embeddedFieldRegex.source))?.[1];
-
+  const fieldName = value.match(EMBEDDED_FIELD_REGEX)?.[1];
   if (!fieldName) {
     return resolveNode(streamDocument, value);
   }
+
   const resolvedValue = findField(streamDocument, fieldName) as any;
 
   switch (key) {
@@ -163,13 +166,12 @@ const resolveDirectoryChildren = (
     return resolveNode(streamDocument, value);
   }
 
-  const fieldName = value.match(new RegExp(embeddedFieldRegex.source))?.[1];
-
+  const fieldName = value.match(EMBEDDED_FIELD_REGEX)?.[1];
   if (!fieldName) {
     return resolveNode(streamDocument, value);
   }
-  const resolvedValue = findField(streamDocument, fieldName) as any;
 
+  const resolvedValue = findField(streamDocument, fieldName) as any;
   if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
     return resolveNode(streamDocument, value);
   }
