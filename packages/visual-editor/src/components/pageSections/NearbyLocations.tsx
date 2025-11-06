@@ -41,7 +41,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/applyTheme";
 import { MapPinOff } from "lucide-react";
-import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 
 export interface NearbyLocationsData {
   /**
@@ -392,7 +392,7 @@ const NearbyLocationsComponent = ({
   const streamDocument = useDocument();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const templateMetadata = React.useContext(TemplateMetadataContext);
+  const templateMetadata = useTemplateMetadata();
 
   const coordinate = resolveComponentData(
     data?.coordinate,
