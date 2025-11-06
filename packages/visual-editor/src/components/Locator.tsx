@@ -612,6 +612,7 @@ const LocatorInternal = ({
   mapStartingLocation,
   puck,
 }: WithPuckProps<LocatorProps>) => {
+  console.log("foo");
   const { t } = useTranslation();
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const streamDocument = useDocument();
