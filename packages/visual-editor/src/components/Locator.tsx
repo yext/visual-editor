@@ -33,6 +33,7 @@ import {
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
+  FieldValueFilter,
 } from "@yext/search-headless-react";
 import * as React from "react";
 import {
@@ -641,9 +642,12 @@ const LocatorInternal = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
   const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
+  /** Explicit filter radius selected by the user */
   const [selectedDistanceMiles, setSelectedDistanceMiles] = React.useState<
     number | null
   >(null);
+  /** Radius of last location near filter returned by the filter search API */
+  const apiFilterRadius = React.useRef<number | null>(null);
 
   const handleDrag: OnDragHandler = (center: LngLat, bounds: LngLatBounds) => {
     setMapCenter(center);
@@ -714,37 +718,22 @@ const LocatorInternal = ({
     switch (filter.matcher) {
       case Matcher.Near: {
         nearFilterValue = filter.value as NearFilterValue;
+        apiFilterRadius.current = nearFilterValue.radius;
         // only overwrite radius from filter if display options are enabled
         const radius =
           showDistanceOptions && selectedDistanceMiles
             ? selectedDistanceMiles * MILES_TO_METERS
             : nearFilterValue.radius;
-        locationFilter = {
-          displayName: newDisplayName,
-          selected: true,
-          filter: {
-            kind: "fieldValue",
-            fieldId: filter.fieldId,
-            value: {
-              ...nearFilterValue,
-              radius,
-            },
-            matcher: Matcher.Near,
-          },
-        };
+        locationFilter = buildNearLocationFilterFromPrevious(
+          nearFilterValue,
+          newDisplayName,
+          radius
+        );
         break;
       }
       case Matcher.Equals:
-        locationFilter = {
-          displayName: newDisplayName,
-          selected: true,
-          filter: {
-            kind: "fieldValue",
-            fieldId: filter.fieldId,
-            value: filter.value,
-            matcher: Matcher.Equals,
-          },
-        };
+        apiFilterRadius.current = null;
+        locationFilter = buildEqualsLocationFilter(filter, newDisplayName);
         break;
       default:
         throw new Error(`Unsupported matcher type: ${filter.matcher}`);
@@ -826,33 +815,33 @@ const LocatorInternal = ({
 
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
-      let centerCoords = DEFAULT_MAP_CENTER;
-      let radius =
+      const radius =
         showDistanceOptions && selectedDistanceMiles
           ? selectedDistanceMiles * MILES_TO_METERS
           : DEFAULT_RADIUS_MILES * MILES_TO_METERS;
-      let displayName: string | undefined;
+      // default location filter to NYC
+      let initialLocationFilter = buildNearLocationFilterFromCoords(
+        DEFAULT_MAP_CENTER[1],
+        DEFAULT_MAP_CENTER[0],
+        radius
+      );
       const doSearch = () => {
-        searchActions.setStaticFilters([
-          {
-            selected: true,
-            displayName,
-            filter: {
-              kind: "fieldValue",
-              fieldId: "builtin.location",
-              value: {
-                lat: centerCoords[1],
-                lng: centerCoords[0],
-                radius: radius,
-              },
-              matcher: Matcher.Near,
-            },
-          },
-        ]);
+        searchActions.setStaticFilters([initialLocationFilter]);
         searchActions.executeVerticalQuery();
         setSearchState("loading");
-        setMapProps((prev) => ({ ...prev, centerCoords }));
-        setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+        if (
+          initialLocationFilter.filter.kind === "fieldValue" &&
+          initialLocationFilter.filter.matcher === Matcher.Near
+        ) {
+          const filterValue = initialLocationFilter.filter
+            .value as NearFilterValue;
+          const centerCoords: [number, number] = [
+            filterValue.lng,
+            filterValue.lat,
+          ];
+          setMapProps((prev) => ({ ...prev, centerCoords }));
+          setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+        }
       };
 
       const foundStartingLocationFromQueryParam = async (
@@ -868,23 +857,30 @@ const LocatorInternal = ({
           ])
           .then((response: FilterSearchResponse | undefined) => {
             const firstResult = response?.sections[0]?.results[0];
-            const filterFromResult = firstResult?.filter?.value as
-              | NearFilterValue
-              | undefined;
-
-            if (
-              firstResult &&
-              firstResult.filter &&
-              filterFromResult?.lat &&
-              filterFromResult?.lng &&
-              filterFromResult?.radius
-            ) {
-              displayName = firstResult.value;
-              centerCoords = [filterFromResult.lng, filterFromResult.lat];
-              radius = filterFromResult.radius;
-              return true;
+            const resultFilter = firstResult?.filter;
+            if (!firstResult || !resultFilter) {
+              return false;
             }
-            return false;
+
+            switch (resultFilter.matcher) {
+              case Matcher.Near:
+                const filterFromResult = resultFilter.value as NearFilterValue;
+                initialLocationFilter = buildNearLocationFilterFromPrevious(
+                  filterFromResult,
+                  firstResult.value
+                );
+                apiFilterRadius.current = filterFromResult.radius;
+                return true;
+              case Matcher.Equals:
+                initialLocationFilter = buildEqualsLocationFilter(
+                  resultFilter,
+                  firstResult.value
+                );
+                apiFilterRadius.current = null;
+                return true;
+              default:
+                return false;
+            }
           })
           .catch((e) => {
             console.warn("Filter search for initial location failed:", e);
@@ -904,10 +900,12 @@ const LocatorInternal = ({
       try {
         // 2. Try to get user location via Geolocation API
         const location = await getUserLocation();
-        centerCoords = [location.coords.longitude, location.coords.latitude];
+        const lat = location.coords.latitude;
+        const lng = location.coords.longitude;
         setUserLocationRetrieved(true);
 
         // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
+        let displayName: string | undefined;
         try {
           if (mapboxApiKey) {
             const lang =
@@ -916,9 +914,7 @@ const LocatorInternal = ({
                 ? navigator.language
                 : undefined) ||
               "en";
-            const lon = centerCoords[0];
-            const lat = centerCoords[1];
-            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
               lang
             )}`;
 
@@ -931,12 +927,24 @@ const LocatorInternal = ({
           }
         } catch (e) {
           console.warn("Reverse geocoding failed:", e);
+        } finally {
+          initialLocationFilter = buildNearLocationFilterFromCoords(
+            lat,
+            lng,
+            radius,
+            displayName
+          );
         }
       } catch {
         // 3. Fall back to mapStartingLocation prop
         try {
           if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
-            centerCoords = parseMapStartingLocation(mapStartingLocation);
+            const centerCoords = parseMapStartingLocation(mapStartingLocation);
+            initialLocationFilter = buildNearLocationFilterFromCoords(
+              centerCoords[1],
+              centerCoords[0],
+              radius
+            );
           }
         } catch (e) {
           console.error(e);
@@ -972,112 +980,84 @@ const LocatorInternal = ({
   };
 
   const searchFilters = useSearchState((state) => state.filters);
+
+  /**
+   * Helper function to iterate through a list of static filters and update all near filters on the
+   * location field to have the new radius and current map center coordinates.
+   */
+  const updateNearFiltersOnLocationField = (
+    filters: SelectableStaticFilter[],
+    newRadius: number | null
+  ): SelectableStaticFilter[] => {
+    return filters.map((filter) => {
+      if (isLocationNearFilter(filter)) {
+        const previousFilter = filter.filter as FieldValueStaticFilter;
+        const previousValue = previousFilter.value as NearFilterValue;
+        // mapCenter should always be defined here, but fall back to previous value or default
+        // just in case
+        const lat = mapCenter?.lat ?? previousValue.lat;
+        const lng = mapCenter?.lng ?? previousValue.lng;
+        const radius = newRadius ?? previousValue.radius;
+        console.log(
+          "Current map center: [",
+          mapCenter?.lat,
+          ", ",
+          mapCenter?.lng,
+          "] | Previous" + " value: [",
+          previousValue.lat,
+          ", ",
+          previousValue.lng,
+          "]"
+        );
+        return {
+          ...filter,
+          filter: {
+            ...previousFilter,
+            value: {
+              ...previousValue,
+              lat,
+              lng,
+              radius,
+            },
+          },
+        } as SelectableStaticFilter;
+      }
+      return filter;
+    });
+  };
+
   const handleDistanceClick = (distanceMiles: number) => {
+    const existingFilters = searchFilters.static || [];
+    let updatedFilters: SelectableStaticFilter[];
     if (distanceMiles === selectedDistanceMiles) {
       setSelectedDistanceMiles(null);
-      // we don't know what the previous radius was, so we won't update the filter, and since we
-      // didn't update the filter we don't update the search either
-      return;
+      updatedFilters = updateNearFiltersOnLocationField(
+        existingFilters,
+        apiFilterRadius.current
+      );
+    } else {
+      setSelectedDistanceMiles(distanceMiles);
+      updatedFilters = updateNearFiltersOnLocationField(
+        existingFilters,
+        distanceMiles * MILES_TO_METERS
+      );
     }
-    // Update existing distance filter if present
-    const existingFilters = searchFilters.static || [];
-    const nonLocationNearFilters = existingFilters.filter(
-      (filter) => !isLocationNearFilter(filter)
-    );
-    const oldLocationNearFilters = existingFilters.filter((filter) =>
-      isLocationNearFilter(filter)
-    );
-    const updatedLocationNearFilters = oldLocationNearFilters.map((filter) => {
-      const previousFilter = filter.filter as
-        | FieldValueStaticFilter
-        | undefined;
-      const previousValue = previousFilter?.value as
-        | NearFilterValue
-        | undefined;
-      // mapCenter should always be defined here, but fall back to previous value or default
-      // just in case
-      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
-      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
-      return {
-        ...filter,
-        filter: {
-          ...previousFilter,
-          value: {
-            ...previousValue,
-            lat,
-            lng,
-            radius: distanceMiles * MILES_TO_METERS,
-          },
-        },
-      } as SelectableStaticFilter;
-    });
-
-    searchActions.setStaticFilters(
-      nonLocationNearFilters.concat(updatedLocationNearFilters)
-    );
-    setSelectedDistanceMiles(distanceMiles);
+    searchActions.setStaticFilters(updatedFilters);
     searchActions.setOffset(0);
     executeSearch(searchActions);
   };
 
   const handleClearFiltersClick = () => {
     const existingFilters = searchFilters.static || [];
-
-    // There shouldn't be any other static filters besides location and open now, but leave
-    // them untouched for safety
-    const unaffectedStaticFilters = existingFilters.filter(
-      (filter) => !isOpenNowFilter(filter) && !isLocationNearFilter(filter)
+    const partiallyUpdatedFilters = updateNearFiltersOnLocationField(
+      existingFilters,
+      null
     );
-
-    // Make Open Now filter unselected
-    const oldOpenNowFilter = existingFilters.filter((filter) =>
-      isOpenNowFilter(filter)
-    );
-    const updatedOpenNowFilters = oldOpenNowFilter.map((filter) => ({
-      ...filter,
-      selected: false,
-    }));
-
-    // Update location filters to default radius
-    const oldLocationNearFilters = existingFilters.filter((filter) =>
-      isLocationNearFilter(filter)
-    );
-    const updatedLocationNearFilters = oldLocationNearFilters.map((filter) => {
-      const previousFilter = filter.filter as
-        | FieldValueStaticFilter
-        | undefined;
-      const previousValue = previousFilter?.value as
-        | NearFilterValue
-        | undefined;
-      // mapCenter should always be defined here, but fall back to previous value or default
-      // just in case
-      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
-      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
-      const radius = showDistanceOptions
-        ? DEFAULT_RADIUS_MILES * MILES_TO_METERS
-        : previousValue?.radius;
-      return {
-        ...filter,
-        filter: {
-          ...previousFilter,
-          value: {
-            ...previousValue,
-            lat,
-            lng,
-            radius,
-          },
-        },
-      } as SelectableStaticFilter;
-    });
+    const updatedFilters = deselectOpenNowFilters(partiallyUpdatedFilters);
 
     // Both open now and distance filters must be updated in the same setStaticFilters call to
     // avoid problems due to the asynchronous nature of state updates.
-    searchActions.setStaticFilters(
-      unaffectedStaticFilters.concat(
-        updatedLocationNearFilters,
-        updatedOpenNowFilters
-      )
-    );
+    searchActions.setStaticFilters(updatedFilters);
     searchActions.resetFacets();
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
@@ -1708,13 +1688,117 @@ const parseMapStartingLocation = (mapStartingLocation: {
   return [lng, lat];
 };
 
+/**
+ * Returns true if the given filter is a "near" filter on the builtin.location field; otherwise,
+ * returns false.
+ */
 const isLocationNearFilter = (filter: SelectableStaticFilter) =>
   filter.filter.kind === "fieldValue" &&
   filter.filter.fieldId === LOCATION_FIELD &&
   filter.filter.matcher === Matcher.Near;
 
+/**
+ * Returns true if the given filter is an "open at" filter on the builtin.hours field; otherwise,
+ * returns false.
+ */
 const isOpenNowFilter = (filter: SelectableStaticFilter) =>
-  filter.filter.kind === "fieldValue" && filter.filter.fieldId === HOURS_FIELD;
+  filter.filter.kind === "fieldValue" &&
+  filter.filter.fieldId === HOURS_FIELD &&
+  filter.filter.matcher === Matcher.OpenAt;
+
+/**
+ * Builds a "near" static filter on the builtin.location field from a previous near filter
+ * value, with optional overrides for display name and radius
+ */
+function buildNearLocationFilterFromPrevious(
+  previousValue: NearFilterValue,
+  displayName?: string,
+  radius?: number
+): SelectableStaticFilter {
+  return {
+    selected: true,
+    displayName,
+    filter: {
+      kind: "fieldValue",
+      fieldId: LOCATION_FIELD,
+      value: {
+        ...previousValue,
+        radius: radius ?? previousValue.radius,
+      },
+      matcher: Matcher.Near,
+    },
+  };
+}
+
+/**
+ * Builds a "near" static filter on the builtin.location field from given coordinates, with
+ * optional radius and display name.
+ */
+function buildNearLocationFilterFromCoords(
+  lat: number,
+  lng: number,
+  radius?: number,
+  displayName?: string
+): SelectableStaticFilter {
+  return {
+    selected: true,
+    displayName,
+    filter: {
+      kind: "fieldValue",
+      fieldId: LOCATION_FIELD,
+      value: {
+        lat,
+        lng,
+        radius: radius ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+      },
+      matcher: Matcher.Near,
+    },
+  };
+}
+
+/**
+ * Builds an "equals" static filter on the builtin.location field from a previous equals filter,
+ * with a new display name.
+ */
+function buildEqualsLocationFilter(
+  filter: FieldValueFilter,
+  newDisplayName: string
+): SelectableStaticFilter {
+  if (typeof filter.value !== "string") {
+    console.warn(
+      "Expected equals location filter value to be a string, but got:",
+      filter.value
+    );
+  }
+  return {
+    displayName: newDisplayName,
+    selected: true,
+    filter: {
+      kind: "fieldValue",
+      fieldId: filter.fieldId,
+      value: filter.value,
+      matcher: Matcher.Equals,
+    },
+  };
+}
+
+/**
+ * Helper function to iterate through a list of static filters and set the selected field to
+ * false on any Open Now filters.
+ */
+function deselectOpenNowFilters(
+  filters: SelectableStaticFilter[]
+): SelectableStaticFilter[] {
+  return filters.map((filter) => {
+    if (isOpenNowFilter(filter)) {
+      return {
+        ...filter,
+        selected: false,
+      };
+    }
+    return filter;
+  });
+}
 
 interface Location {
   address: AddressType;
