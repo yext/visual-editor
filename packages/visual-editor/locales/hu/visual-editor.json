@@ -446,7 +446,7 @@
   "localGeomodifier": "Helyi geomodifier",
   "locationWithCount_one": "{{count}} hely",
   "locationWithCount_other": "{{count}} helyek",
-  "locationsNear_one": "{{count}} A hely közelében \"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}} A hely közelében \"{{name}}\"",
   "map": "Térkép",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
   "mediaType": "Média típus",

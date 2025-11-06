@@ -446,7 +446,7 @@
   "localGeomodifier": "ローカルジオモジファイア",
   "locationWithCount_one": "{{count}}場所",
   "locationWithCount_other": "{{count}}場所",
-  "locationsNear_one": "{{count}}近くの場所 \"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}}近くの場所 \"{{name}}\"",
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "mediaType": "メディアタイプ",

@@ -446,7 +446,7 @@
   "localGeomodifier": "Geomodificatore locale",
   "locationWithCount_one": "{{count}} posizione",
   "locationWithCount_other": "{{count}} Località",
-  "locationsNear_one": "{{count}} posizione vicino a \"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}} posizione vicino a \"{{name}}\"",
   "map": "Mappa",
   "maxWidthTip": "Per un allineamento ottimale dei contenuti, si consiglia di impostare la larghezza di intestazione e piè di pagina per abbinare o superare la griglia di contenuto della pagina.",
   "mediaType": "Tipo di media",

@@ -446,7 +446,7 @@
   "localGeomodifier": "Yerel Geomodifikatör",
   "locationWithCount_one": "{{count}} Konum",
   "locationWithCount_other": "{{count}} konumlar",
-  "locationsNear_one": "{{count}} konum \"{{filterDisplayName}}\" yakınında yer",
+  "locationsNear_one": "{{count}} konum \"{{name}}\" yakınında yer",
   "map": "Harita",
   "maxWidthTip": "Optimal içerik hizalaması için, sayfa içerik şebekesini eşleştirecek veya aşacak şekilde üstbilgi ve altbilgi genişliğini ayarlamanızı öneririz.",
   "mediaType": "Medya türü",

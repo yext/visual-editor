@@ -447,7 +447,7 @@
   "localGeomodifier": "Lokalny geomodyfikator",
   "locationWithCount_one": "{{count}} Lokalizacja",
   "locationWithCount_other": "{{count}} Lokalizacje",
-  "locationsNear_one": "{{count}} Lokalizacja w pobliżu „{{filterDisplayName}}”",
+  "locationsNear_one": "{{count}} Lokalizacja w pobliżu „{{name}}”",
   "map": "Mapa",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "mediaType": "Typ mediów",

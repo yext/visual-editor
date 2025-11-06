@@ -446,7 +446,7 @@
   "localGeomodifier": "Vietinis geomodiferis",
   "locationWithCount_one": "{{count}} vieta",
   "locationWithCount_other": "{{count}} vietos",
-  "locationsNear_one": "{{count}} vieta prie \"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}} vieta prie \"{{name}}\"",
   "map": "Žemėlapis",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
   "mediaType": "Žiniasklaidos tipas",

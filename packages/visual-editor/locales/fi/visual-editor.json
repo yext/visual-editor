@@ -446,7 +446,7 @@
   "localGeomodifier": "Paikallinen geomodifoija",
   "locationWithCount_one": "{{count}} sijainti",
   "locationWithCount_other": "{{count}} sijainnit",
-  "locationsNear_one": "{{count}} sijainti lähellä \"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}} sijainti lähellä \"{{name}}\"",
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "mediaType": "Mediatyyppi",

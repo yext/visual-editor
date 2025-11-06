@@ -447,7 +447,7 @@
   "localGeomodifier": "Miestny geomodifikátor",
   "locationWithCount_one": "{{count}} Umiestnenie",
   "locationWithCount_other": "{{count}} lokality",
-  "locationsNear_one": "{{count}} Umiestnenie blízko \"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}} Umiestnenie blízko \"{{name}}\"",
   "map": "Mapovať",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "mediaType": "Typ médií",

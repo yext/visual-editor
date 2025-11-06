@@ -447,7 +447,7 @@
   "localGeomodifier": "Lokal geomodifier",
   "locationWithCount_one": "{{count}} placering",
   "locationWithCount_other": "{{count}} placeringer",
-  "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}} placering i nærheden af ​​\"{{name}}\"",
   "map": "Kort",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "mediaType": "Medietype",

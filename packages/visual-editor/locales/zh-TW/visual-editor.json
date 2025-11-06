@@ -446,7 +446,7 @@
   "localGeomodifier": "當地的土工改裝劑",
   "locationWithCount_one": "{{count}}位置",
   "locationWithCount_other": "{{count}}位置",
-  "locationsNear_one": "{{count}}位置附近“ {{filterDisplayName}}”",
+  "locationsNear_one": "{{count}}位置附近“ {{name}}”",
   "map": "地圖",
   "maxWidthTip": "對於最佳內容對齊，我們建議將標題和頁腳寬度設置為匹配或超過頁面內容網格。",
   "mediaType": "媒體類型",

@@ -445,7 +445,7 @@
   "localGeomodifier": "Géomodificateur local",
   "locationWithCount_one": "{{count}} emplacement",
   "locationWithCount_other": "{{count}} emplacements",
-  "locationsNear_one": "{{count}} Emplacement près de \"{{filterDisplayName}}\"",
+  "locationsNear_one": "{{count}} Emplacement près de \"{{name}}\"",
   "map": "Carte",
   "maxWidthTip": "Pour l'alignement optimal du contenu, nous vous recommandons de définir la largeur de l'en-tête et du pied de page pour correspondre ou dépasser la grille de contenu de la page.",
   "mediaType": "Type de support",
