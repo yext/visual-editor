@@ -998,17 +998,6 @@ const LocatorInternal = ({
         const lat = mapCenter?.lat ?? previousValue.lat;
         const lng = mapCenter?.lng ?? previousValue.lng;
         const radius = newRadius ?? previousValue.radius;
-        console.log(
-          "Current map center: [",
-          mapCenter?.lat,
-          ", ",
-          mapCenter?.lng,
-          "] | Previous" + " value: [",
-          previousValue.lat,
-          ", ",
-          previousValue.lng,
-          "]"
-        );
         return {
           ...filter,
           filter: {
@@ -1764,12 +1753,6 @@ function buildEqualsLocationFilter(
   filter: FieldValueFilter,
   newDisplayName: string
 ): SelectableStaticFilter {
-  if (typeof filter.value !== "string") {
-    console.warn(
-      "Expected equals location filter value to be a string, but got:",
-      filter.value
-    );
-  }
   return {
     displayName: newDisplayName,
     selected: true,
