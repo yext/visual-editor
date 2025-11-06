@@ -154,6 +154,8 @@
   },
   "distance": "距离",
   "emailList": "电子邮件列表",
+  "emptyStateFieldEmpty": "{{entityType}} 的映射字段为空",
+  "emptyStateSectionHidden": "此 {{entityType}} 的部分已隐藏",
   "enterSchemaMarkup": "输入模式标记...",
   "entityTypeField": "{{entityType}}字段",
   "event": "事件",

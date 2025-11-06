@@ -153,6 +153,8 @@
   },
   "distance": "Distance",
   "emailList": "Email List",
+  "emptyStateFieldEmpty": "{{entityType}}'s mapped field is empty",
+  "emptyStateSectionHidden": "Section hidden for this {{entityType}}",
   "enterSchemaMarkup": "Enter schema markup...",
   "entityTypeField": "{{entityType}} Field",
   "event": "Event",

@@ -154,6 +154,8 @@
   },
   "distance": "Avstand",
   "emailList": "E -postliste",
+  "emptyStateFieldEmpty": "Det kartlagte feltet til {{entityType}} er tomt",
+  "emptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "enterSchemaMarkup": "Skriv inn skjemadyring ...",
   "entityTypeField": "{{entityType}} felt",
   "event": "Hendelse",

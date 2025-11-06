@@ -155,6 +155,8 @@
   },
   "distance": "Afstand",
   "emailList": "E -mail -liste",
+  "emptyStateFieldEmpty": "Det tilknyttede felt for {{entityType}} er tomt",
+  "emptyStateSectionHidden": "Sektion skjult for denne {{entityType}}",
   "enterSchemaMarkup": "Indtast skema markering ...",
   "entityTypeField": "{{entityType}} felt",
   "event": "Tilfælde",

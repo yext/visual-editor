@@ -155,6 +155,8 @@
   },
   "distance": "Vzdialenosť",
   "emailList": "Zoznam e -mailov",
+  "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdne",
+  "emptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
   "enterSchemaMarkup": "Zadajte značku schémy ...",
   "entityTypeField": "{{entityType}} pole",
   "event": "Udalosť",

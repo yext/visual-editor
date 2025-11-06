@@ -154,6 +154,8 @@
   },
   "distance": "Mesafe",
   "emailList": "E -posta Listesi",
+  "emptyStateFieldEmpty": "{{entityType}}'ın eşlenen alanı boş",
+  "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "enterSchemaMarkup": "Şema İşaretlemesine girin ...",
   "entityTypeField": "{{entityType}} alanı",
   "event": "Etkinlik",

@@ -153,6 +153,8 @@
   },
   "distance": "Distanz",
   "emailList": "E -Mail -Liste",
+  "emptyStateFieldEmpty": "Das zugeordnete Feld von {{entityType}} ist leer",
+  "emptyStateSectionHidden": "Abschnitt für diesen {{entityType}} ausgeblendet",
   "enterSchemaMarkup": "Geben Sie Schema Markup ein ...",
   "entityTypeField": "{{entityType}} Feld",
   "event": "Ereignis",

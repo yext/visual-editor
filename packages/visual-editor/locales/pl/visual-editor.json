@@ -155,6 +155,8 @@
   },
   "distance": "Dystans",
   "emailList": "Lista e -mail",
+  "emptyStateFieldEmpty": "Mapowane pole elementu {{entityType}} jest puste",
+  "emptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "enterSchemaMarkup": "Wprowadź znaczniki schematu ...",
   "entityTypeField": "Pole {{entityType}}",
   "event": "Wydarzenie",

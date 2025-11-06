@@ -153,6 +153,8 @@
   },
   "distance": "Distancia",
   "emailList": "Lista de correo electrónico",
+  "emptyStateFieldEmpty": "El campo asignado de {{entityType}} está vacío",
+  "emptyStateSectionHidden": "Sección oculta para este {{entityType}}",
   "enterSchemaMarkup": "Ingrese el marcado de esquema ...",
   "entityTypeField": "Campo de {{entityType}}",
   "event": "Evento",

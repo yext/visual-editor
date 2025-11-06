@@ -154,6 +154,8 @@
   },
   "distance": "Distanza",
   "emailList": "Elenco e -mail",
+  "emptyStateFieldEmpty": "Il campo mappato di {{entityType}} è vuoto",
+  "emptyStateSectionHidden": "Sezione nascosta per questo {{entityType}}",
   "enterSchemaMarkup": "Immettere lo schema markup ...",
   "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
