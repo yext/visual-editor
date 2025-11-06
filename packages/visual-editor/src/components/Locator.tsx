@@ -702,12 +702,12 @@ const LocatorInternal = ({
 
   const filterDisplayName = useSearchState(
     (state) =>
-      state.filters?.static?.filter(
+      state.filters?.static?.find(
         (filter) =>
           filter.filter.kind === "fieldValue" &&
           (filter.filter.fieldId === LOCATION_FIELD ||
             filter.filter.fieldId === COUNTRY_CODE_FIELD)
-      )[0]?.displayName
+      )?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
