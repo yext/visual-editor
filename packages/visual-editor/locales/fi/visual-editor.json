@@ -154,6 +154,8 @@
   },
   "distance": "Etäisyys",
   "emailList": "Sähköpostiluettelo",
+  "emptyStateFieldEmpty": "Kohteen {{entityType}} kartoitettu kenttä on tyhjä",
+  "emptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
   "enterSchemaMarkup": "Kirjoita Schema -merkinnät ...",
   "entityTypeField": "{{entityType}}kenttä",
   "event": "Tapahtuma",

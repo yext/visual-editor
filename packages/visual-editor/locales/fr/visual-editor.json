@@ -153,6 +153,8 @@
   },
   "distance": "Distance",
   "emailList": "Liste de diffusion",
+  "emptyStateFieldEmpty": "Le champ mappé de {{entityType}} est vide",
+  "emptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "enterSchemaMarkup": "Entrez le balisage du schéma ...",
   "entityTypeField": "Champ de {{entityType}}",
   "event": "Événement",

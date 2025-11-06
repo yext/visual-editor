@@ -154,6 +154,8 @@
   },
   "distance": "Kaugus",
   "emailList": "E -posti nimekiri",
+  "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
+  "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "enterSchemaMarkup": "Sisestage skeemi märgistus ...",
   "entityTypeField": "{{entitytype}} väli",
   "event": "Sündmus",

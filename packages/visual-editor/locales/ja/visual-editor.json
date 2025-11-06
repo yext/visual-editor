@@ -154,6 +154,8 @@
   },
   "distance": "距離",
   "emailList": "メーリングリスト",
+  "emptyStateFieldEmpty": "{{entityType}} のマップされたフィールドが空です",
+  "emptyStateSectionHidden": "この {{entityType}} に対して非表示のセクション",
   "enterSchemaMarkup": "スキーママークアップを入力してください...",
   "entityTypeField": "{{entityType}}フィールド",
   "event": "イベント",

@@ -154,6 +154,8 @@
   },
   "distance": "Attālums",
   "emailList": "E -pasta saraksts",
+  "emptyStateFieldEmpty": "{{entityType}} kartētais lauks ir tukšs",
+  "emptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
   "enterSchemaMarkup": "Ievadiet shēmas marķējumu ...",
   "entityTypeField": "{{entityType}} lauks",
   "event": "Notikums",

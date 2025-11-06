@@ -154,6 +154,8 @@
   },
   "distance": "Atstumas",
   "emailList": "El. Pašto sąrašas",
+  "emptyStateFieldEmpty": "{{entityType}} susietas laukas tuščias",
+  "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "enterSchemaMarkup": "Įveskite schemos žymėjimą ...",
   "entityTypeField": "{{entityType}} laukas",
   "event": "Įvykis",

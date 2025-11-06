@@ -154,6 +154,8 @@
   },
   "distance": "Távolság",
   "emailList": "E -mail lista",
+  "emptyStateFieldEmpty": "A(z) {{entityType}} leképezett mezője üres",
+  "emptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "enterSchemaMarkup": "Írja be a séma jelölését ...",
   "entityTypeField": "{{entityType}} mező",
   "event": "Esemény",

@@ -154,6 +154,8 @@
   },
   "distance": "Afstand",
   "emailList": "E -maillijst",
+  "emptyStateFieldEmpty": "Het toegewezen veld van {{entityType}} is leeg",
+  "emptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "enterSchemaMarkup": "Voer schemamarkup in ...",
   "entityTypeField": "{{entityType}} veld",
   "event": "Evenement",

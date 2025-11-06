@@ -154,6 +154,8 @@
   },
   "distance": "Udaljenost",
   "emailList": "Popis e -pošte",
+  "emptyStateFieldEmpty": "Mapirano polje {{entityType}} je prazno",
+  "emptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "enterSchemaMarkup": "Unesite shemu oznaku ...",
   "entityTypeField": "Polje {{entityType}}",
   "event": "Događaj",

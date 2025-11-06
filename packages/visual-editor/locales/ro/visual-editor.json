@@ -154,6 +154,8 @@
   },
   "distance": "Distanţă",
   "emailList": "Lista de e -mailuri",
+  "emptyStateFieldEmpty": "Câmpul mapat al lui {{entityType}} este gol",
+  "emptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "enterSchemaMarkup": "Introduceți Schema Markup ...",
   "entityTypeField": "câmp {{entityType}}",
   "event": "Eveniment",
