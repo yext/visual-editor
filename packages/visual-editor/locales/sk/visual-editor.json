@@ -525,6 +525,8 @@
   "refineYourSearch": "Upravte svoje vyhľadávanie",
   "reopenDate": "Znovu otvoriť dátum",
   "responseFrom": "Odpoveď z {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} nemá žiadne recenzie prvej strany",
+  "reviewsEmptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
   "saturday": "Sobota",
   "schemaMarkup": "Označenie schémy",
   "search": "Prehliadka",

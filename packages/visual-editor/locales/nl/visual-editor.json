@@ -524,6 +524,8 @@
   "refineYourSearch": "Verfijn uw zoekopdracht",
   "reopenDate": "Heropen datum",
   "responseFrom": "Reactie van {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} heeft geen eigen beoordelingen",
+  "reviewsEmptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
   "saturday": "Zaterdag",
   "schemaMarkup": "Schema -aanmelding",
   "search": "Zoekopdracht",

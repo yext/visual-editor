@@ -524,6 +524,8 @@
   "refineYourSearch": "Uzlabojiet meklēšanu",
   "reopenDate": "Atkārtoti atvērt datumu",
   "responseFrom": "Atbilde no {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} nav pirmās puses atsauksmju",
+  "reviewsEmptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
   "saturday": "Sestdiena",
   "schemaMarkup": "Shēmas uzcenojums",
   "search": "Meklēšana",

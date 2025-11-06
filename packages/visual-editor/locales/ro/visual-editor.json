@@ -524,6 +524,8 @@
   "refineYourSearch": "Rafinați-vă căutarea",
   "reopenDate": "Data redeschiderii",
   "responseFrom": "Răspuns de la {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} nu are recenzii de la prima parte",
+  "reviewsEmptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
   "saturday": "sâmbătă",
   "schemaMarkup": "Schema Markup",
   "search": "Căutare",

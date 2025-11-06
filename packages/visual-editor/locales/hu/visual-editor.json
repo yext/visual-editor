@@ -524,6 +524,8 @@
   "refineYourSearch": "Finomítsa a keresést",
   "reopenDate": "Újra megnyitja a dátumot",
   "responseFrom": "Válasz a {{businessName}}ból",
+  "reviewsEmptyStateNoReviews": "A(z) {{entityType}} nem rendelkezik belső véleményekkel",
+  "reviewsEmptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "saturday": "szombat",
   "schemaMarkup": "Séma jelölés",
   "search": "Keresés",

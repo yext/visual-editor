@@ -524,6 +524,8 @@
   "refineYourSearch": "Avgrens søket ditt",
   "reopenDate": "Åpne dato på nytt",
   "responseFrom": "Svar fra {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} har ingen førstepartsanmeldelser",
+  "reviewsEmptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "saturday": "lørdag",
   "schemaMarkup": "Skjema markering",
   "search": "Søk",

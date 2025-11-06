@@ -525,6 +525,8 @@
   "refineYourSearch": "Sprecyzuj wyszukiwanie",
   "reopenDate": "Data ponownego otwarcia",
   "responseFrom": "Odpowiedź od {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} nie ma żadnych recenzji własnych",
+  "reviewsEmptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
   "saturday": "Sobota",
   "schemaMarkup": "Znacznik schematu",
   "search": "Szukaj",

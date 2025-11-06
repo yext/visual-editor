@@ -523,6 +523,8 @@
   "refineYourSearch": "Affinez votre recherche",
   "reopenDate": "Rouvrir la date",
   "responseFrom": "Réponse de {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} n'a aucun avis de première partie",
+  "reviewsEmptyStateSectionHidden": "Section masquée pour ce {{entityType}}",
   "saturday": "Samedi",
   "schemaMarkup": "Marquage du schéma",
   "search": "Recherche",

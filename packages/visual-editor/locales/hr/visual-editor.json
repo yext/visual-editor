@@ -524,6 +524,8 @@
   "refineYourSearch": "Pročistite svoju pretragu",
   "reopenDate": "Ponovno otvaranje datuma",
   "responseFrom": "Odgovor od {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} nema recenzije prve strane",
+  "reviewsEmptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "saturday": "subota",
   "schemaMarkup": "Oznaka sheme",
   "search": "Pretraživanje",

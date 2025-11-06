@@ -525,6 +525,8 @@
   "refineYourSearch": "Förfina din sökning",
   "reopenDate": "Öppna datum igen",
   "responseFrom": "Svar från {{businessName}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}} har inga förstapartsrecensioner",
+  "reviewsEmptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
   "saturday": "Lördag",
   "schemaMarkup": "Schematmarkering",
   "search": "Söka",

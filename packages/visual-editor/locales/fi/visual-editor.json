@@ -524,6 +524,8 @@
   "refineYourSearch": "Tarkenna hakuasi",
   "reopenDate": "Avata päivämäärä uudelleen",
   "responseFrom": "Vastaus {{businessName}}}",
+  "reviewsEmptyStateNoReviews": "{{entityType}}:lla ei ole ensimmäisen osapuolen arvosteluja",
+  "reviewsEmptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
   "saturday": "Lauantai",
   "schemaMarkup": "Kaavio",
   "search": "Haku",
