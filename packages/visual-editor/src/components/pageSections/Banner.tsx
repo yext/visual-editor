@@ -20,6 +20,7 @@ import {
 } from "../../utils/themeConfigOptions.js";
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
 
 export interface BannerData {
   /**
@@ -108,6 +109,27 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
   ),
 };
 
+function isRichTextEmpty(value: any): boolean {
+  if (!value) {
+    return true;
+  }
+  if (typeof value === "string") {
+    return value.trim() === "";
+  }
+  if (typeof value === "object") {
+    if ("html" in value) {
+      return !value.html || value.html.trim() === "";
+    }
+    if ("json" in value) {
+      return (
+        !value.json ||
+        (typeof value.json === "string" && value.json.trim() === "")
+      );
+    }
+  }
+  return false;
+}
+
 const BannerComponent: PuckComponent<BannerSectionProps> = ({
   data,
   styles,
@@ -116,19 +138,21 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedText = resolveComponentData(data.text, locale, streamDocument);
   const templateMetadata = useTemplateMetadata();
+
+  const isMappedField = !data.text.constantValueEnabled && !!data.text.field;
+  const rawValue = isMappedField
+    ? resolveYextEntityField(streamDocument, data.text, locale)
+    : undefined;
+  const isEmpty = isMappedField && isRichTextEmpty(rawValue);
+
+  const resolvedText = resolveComponentData(data.text, locale, streamDocument);
 
   const justifyClass = {
     left: "justify-start",
     center: "justify-center",
     right: "justify-end",
   }[styles.textAlignment];
-
-  const isMappedField = !data.text.constantValueEnabled && !!data.text.field;
-  const isEmpty =
-    !resolvedText ||
-    (typeof resolvedText === "string" && resolvedText.trim() === "");
 
   // Show empty state in editor mode when mapped field is empty
   if (isMappedField && isEmpty) {
