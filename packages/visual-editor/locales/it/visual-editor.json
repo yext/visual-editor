@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Aggiungi HTML al componente Visualizza",
   "monday": "Lunedi",
   "name": "Nome",
+  "nearbyLocationsEmptyState": "Nessun {{entityType}} entro {{radius}} miglia",
+  "nearbyLocationsEmptyStateSectionHidden": "Sezione nascosta per questo {{entityType}}",
   "noAvailableFields": "Nessun campo disponibile",
   "noAvailableTypes": "Nessun tipo disponibile",
   "noHeroFieldsMsg": "Per utilizzare il contenuto di entità per questa sezione, aggiungi un campo sezione Hero al tipo di entità del gruppo di pagina.",

@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Pridėkite HTML, kad peržiūrėtumėte komponentą",
   "monday": "Pirmadienis",
   "name": "Vardas",
+  "nearbyLocationsEmptyState": "Nėra {{entityType}} per {{radius}} mylių",
+  "nearbyLocationsEmptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
   "noAvailableFields": "Jokių laukų",
   "noAvailableTypes": "Nėra prieinamų tipų",
   "noHeroFieldsMsg": "Norėdami naudoti šio skyriaus subjekto turinį, pridėkite herojaus skyriaus lauką prie savo puslapio grupės subjekto tipo.",

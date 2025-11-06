@@ -452,6 +452,8 @@
   "missingHtmlWidget": "Add HTML to view component",
   "monday": "Monday",
   "name": "Name",
+  "nearbyLocationsEmptyState": "No {{entityType}} within {{radius}} miles",
+  "nearbyLocationsEmptyStateSectionHidden": "Section hidden for this {{entityType}}",
   "noAvailableFields": "No available fields",
   "noAvailableTypes": "No available types",
   "noHeroFieldsMsg": "To use entity content for this section, add a Hero Section field to your page group's entity type.",

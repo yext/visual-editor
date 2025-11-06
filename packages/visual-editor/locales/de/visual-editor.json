@@ -452,6 +452,8 @@
   "missingHtmlWidget": "Fügen Sie HTML hinzu, um die Komponente anzuzeigen",
   "monday": "Montag",
   "name": "Name",
+  "nearbyLocationsEmptyState": "Kein {{entityType}} innerhalb von {{radius}} Meilen",
+  "nearbyLocationsEmptyStateSectionHidden": "Abschnitt für diesen {{entityType}} ausgeblendet",
   "noAvailableFields": "Keine verfügbaren Felder",
   "noAvailableTypes": "Keine verfügbaren Typen",
   "noHeroFieldsMsg": "Um Entitätsinhalte für diesen Abschnitt zu verwenden, fügen Sie dem Entitätstyp Ihrer Seitengruppe ein Feld des Heldenbereichs hinzu.",

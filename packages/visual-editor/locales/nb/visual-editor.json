@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Legg til HTML for å se komponent",
   "monday": "mandag",
   "name": "Navn",
+  "nearbyLocationsEmptyState": "Ingen {{entityType}} innenfor {{radius}} miles",
+  "nearbyLocationsEmptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
   "noAvailableFields": "Ingen tilgjengelige felt",
   "noAvailableTypes": "Ingen tilgjengelige typer",
   "noHeroFieldsMsg": "For å bruke enhetsinnhold for denne delen, legg til et helte -seksjonsfelt i sidegruppens enhetstype.",

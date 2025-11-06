@@ -454,6 +454,8 @@
   "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent",
   "monday": "Pondelok",
   "name": "Menovať",
+  "nearbyLocationsEmptyState": "Žiadna {{entityType}} v okruhu {{radius}} míľ",
+  "nearbyLocationsEmptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
   "noAvailableFields": "Žiadne dostupné polia",
   "noAvailableTypes": "Žiadne dostupné typy",
   "noHeroFieldsMsg": "Ak chcete použiť obsah entity pre túto sekciu, pridajte do typu entity svojej skupiny svojej skupiny.",

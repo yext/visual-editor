@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Bileşeni görüntülemek için HTML ekle",
   "monday": "Pazartesi",
   "name": "İsim",
+  "nearbyLocationsEmptyState": "{{radius}} mil içerisinde {{entityType}} yok",
+  "nearbyLocationsEmptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
   "noAvailableFields": "Mevcut alan yok",
   "noAvailableTypes": "Mevcut tür yok",
   "noHeroFieldsMsg": "Bu bölüm için varlık içeriğini kullanmak için, sayfa grubunuzun varlık türüne bir kahraman bölümü alanı ekleyin.",

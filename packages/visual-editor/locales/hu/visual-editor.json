@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
   "monday": "hétfő",
   "name": "Név",
+  "nearbyLocationsEmptyState": "Nincs {{entityType}} {{radius}} mérföldön belül",
+  "nearbyLocationsEmptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
   "noAvailableFields": "Nincs elérhető mezők",
   "noAvailableTypes": "Nincs elérhető típus",
   "noHeroFieldsMsg": "Az entitás tartalmának ehhez a szakaszhoz történő használatához adjon hozzá egy hősszakasz mezőt az oldalcsoport entitás típusához.",

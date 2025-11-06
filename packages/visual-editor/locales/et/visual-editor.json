@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
   "monday": "Esmaspäev",
   "name": "Nimetus",
+  "nearbyLocationsEmptyState": "{{entityType}} pole {{radius}} miili raadiuses",
+  "nearbyLocationsEmptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
   "noAvailableFields": "Pole saadaval väljad",
   "noAvailableTypes": "Pole saadaval tüüpe",
   "noHeroFieldsMsg": "Selle jaotise olemi sisu kasutamiseks lisage oma lehe grupi olemi tüübile kangelase sektsiooni väli.",

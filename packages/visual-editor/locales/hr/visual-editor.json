@@ -453,6 +453,8 @@
   "missingHtmlWidget": "Dodajte HTML za pregled komponente",
   "monday": "ponedjeljak",
   "name": "Ime",
+  "nearbyLocationsEmptyState": "Nema {{entityType}} unutar {{radius}} milja",
+  "nearbyLocationsEmptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
   "noAvailableFields": "Nema dostupnih polja",
   "noAvailableTypes": "Nema dostupnih vrsta",
   "noHeroFieldsMsg": "Da biste koristili sadržaj entiteta za ovaj odjeljak, dodajte polje odjeljka Hero u vrstu entiteta svoje stranice.",
