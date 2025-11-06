@@ -24,7 +24,7 @@ import {
 } from "@yext/visual-editor";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
-import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 
 const REVIEWS_PER_PAGE = 5;
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
@@ -36,7 +36,7 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
 const ReviewsEmptyState: React.FC<{ backgroundColor: BackgroundStyle }> = ({
   backgroundColor,
 }) => {
-  const templateMetadata = React.useContext(TemplateMetadataContext);
+  const templateMetadata = useTemplateMetadata();
   const entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
 
   return (
@@ -121,11 +121,7 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = ({
     {}
   );
 
-  const {
-    data: reviews,
-    status: reviewsStatus,
-    isLoading,
-  } = useQuery({
+  const { data: reviews, isLoading } = useQuery({
     queryKey: [
       "reviews",
       entityId,
@@ -157,8 +153,8 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = ({
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
   // Show empty state in editor mode when there are no results
-  if (reviewsStatus !== "success" || (!isLoading && reviewCount === 0)) {
-    if (puck.isEditing) {
+  if (!isLoading && reviewCount === 0) {
+    if (puck?.isEditing) {
       return <ReviewsEmptyState backgroundColor={backgroundColor} />;
     }
     return <></>;
