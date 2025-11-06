@@ -1,15 +1,7 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { ProductSectionProps } from "../pageSections/ProductSection/ProductSection";
-import { ProductCardProps } from "../pageSections/ProductSection/ProductCard";
-import { ProductCardsWrapperProps } from "../pageSections/ProductSection/ProductCardsWrapper";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
 import { ProductSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { ImageWrapperProps } from "../contentBlocks/image/Image";
-import { BodyTextProps } from "../contentBlocks/BodyText";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
 
 export const productSectionSlots: Migration = {
@@ -81,7 +73,7 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             image: product.image,
                           },
-                    } satisfies WithId<ImageWrapperProps>,
+                    },
                   },
                 ],
                 CategorySlot: [
@@ -103,7 +95,7 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             richText: product.category,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 TitleSlot: [
@@ -128,7 +120,7 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             text: resolvedName,
                           },
-                    } satisfies WithId<HeadingTextProps>,
+                    },
                   },
                 ],
                 DescriptionSlot: [
@@ -150,7 +142,7 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             richText: product.description,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 CTASlot: [
@@ -181,7 +173,7 @@ export const productSectionSlots: Migration = {
                             field: props.data.field,
                             cta: product.cta,
                           },
-                    } satisfies WithId<CTAWrapperProps>,
+                    },
                   },
                 ],
               },
@@ -194,7 +186,7 @@ export const productSectionSlots: Migration = {
               conditionalRender: {
                 category: resolvedCategory !== "",
               },
-            } satisfies WithId<ProductCardProps>,
+            },
           };
         }) || [];
 
@@ -220,7 +212,7 @@ export const productSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           CardsWrapperSlot: [
@@ -237,11 +229,11 @@ export const productSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies WithId<ProductCardsWrapperProps>,
+              },
             },
           ],
         },
-      } satisfies WithId<ProductSectionProps>;
+      };
     },
   },
 };

@@ -1,15 +1,7 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { TeamSectionProps } from "../pageSections/TeamSection/TeamSection";
-import { TeamCardProps } from "../pageSections/TeamSection/TeamCard";
-import { TeamCardsWrapperProps } from "../pageSections/TeamSection/TeamCardsWrapper";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
 import { TeamSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { ImageWrapperProps } from "../contentBlocks/image/Image";
-import { BodyTextProps } from "../contentBlocks/BodyText";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
 
 export const teamsSectionSlots: Migration = {
@@ -74,7 +66,7 @@ export const teamsSectionSlots: Migration = {
                             field: props.data.people.field,
                             image: person.headshot,
                           },
-                    } satisfies WithId<ImageWrapperProps>,
+                    },
                   },
                 ],
                 NameSlot: [
@@ -99,7 +91,7 @@ export const teamsSectionSlots: Migration = {
                             field: props.data.people.field,
                             text: resolvedName,
                           },
-                    } satisfies WithId<HeadingTextProps>,
+                    },
                   },
                 ],
                 TitleSlot: [
@@ -121,7 +113,7 @@ export const teamsSectionSlots: Migration = {
                             field: props.data.people.field,
                             richText: person.title,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 PhoneSlot: [
@@ -204,7 +196,7 @@ export const teamsSectionSlots: Migration = {
                             cta: person.cta,
                           },
                       eventName: `cta${i}`,
-                    } satisfies WithId<CTAWrapperProps>,
+                    },
                   },
                 ],
               },
@@ -214,7 +206,7 @@ export const teamsSectionSlots: Migration = {
                     field: props.data.people.field,
                     person,
                   },
-            } satisfies WithId<TeamCardProps>,
+            },
           };
         }) || [];
 
@@ -240,7 +232,7 @@ export const teamsSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           CardsWrapperSlot: [
@@ -256,11 +248,11 @@ export const teamsSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies WithId<TeamCardsWrapperProps>,
+              },
             },
           ],
         },
-      } satisfies WithId<TeamSectionProps>;
+      };
     },
   },
 };

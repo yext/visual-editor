@@ -1,11 +1,7 @@
 import { Migration } from "../../utils/migrate.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
-import { WithId } from "@measured/puck";
-import { BodyTextProps } from "../index.ts";
 import { FAQSectionType } from "../../types/types.ts";
-import { FAQSlotProps } from "../pageSections/FAQsSection/FAQSlot.tsx";
-import { FAQsWrapperSlotProps } from "../pageSections/FAQsSection/FAQsWrapperSlot.tsx";
 
 export const faqsSectionSlots: Migration = {
   FAQSection: {
@@ -59,7 +55,7 @@ export const faqsSectionSlots: Migration = {
                             field: props.data.field,
                             richText: faq.question,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 AnswerSlot: [
@@ -81,7 +77,7 @@ export const faqsSectionSlots: Migration = {
                             field: props.data.field,
                             richText: faq.answer,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
               },
@@ -91,7 +87,7 @@ export const faqsSectionSlots: Migration = {
                     field: props.data.field,
                     faq,
                   },
-            } satisfies WithId<FAQSlotProps>,
+            },
           };
         }) || [];
 
@@ -130,7 +126,7 @@ export const faqsSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies WithId<FAQsWrapperSlotProps>,
+              },
             },
           ],
         },

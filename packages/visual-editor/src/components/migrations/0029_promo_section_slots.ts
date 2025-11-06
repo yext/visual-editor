@@ -1,13 +1,7 @@
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { Migration } from "../../utils/migrate.ts";
 import { PromoSectionType } from "../../types/types.ts";
-import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
-import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
-import { BodyTextProps } from "../contentBlocks/BodyText.tsx";
-import { VideoProps } from "../contentBlocks/Video.tsx";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { WithId } from "@measured/puck";
 
 export const promoSectionSlots: Migration = {
   PromoSection: {
@@ -77,7 +71,7 @@ export const promoSectionSlots: Migration = {
                       field,
                     }
                   : undefined,
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           DescriptionSlot: [
@@ -102,7 +96,7 @@ export const promoSectionSlots: Migration = {
                       field,
                     }
                   : undefined,
-              } satisfies WithId<BodyTextProps>,
+              },
             },
           ],
           VideoSlot: [
@@ -116,7 +110,7 @@ export const promoSectionSlots: Migration = {
                       ? constantValue.image
                       : {},
                 },
-              } satisfies WithId<VideoProps>,
+              },
             },
           ],
           ImageSlot: [
@@ -157,7 +151,7 @@ export const promoSectionSlots: Migration = {
                   md: "min(width, 450px)",
                   lg: "width",
                 },
-              } satisfies WithId<ImageWrapperProps>,
+              },
             },
           ],
           CTASlot: [
@@ -192,7 +186,7 @@ export const promoSectionSlots: Migration = {
                     }
                   : undefined,
                 eventName: "cta",
-              } satisfies WithId<CTAWrapperProps>,
+              },
             },
           ],
         },

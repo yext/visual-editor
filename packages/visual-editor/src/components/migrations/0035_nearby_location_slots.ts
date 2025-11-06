@@ -1,8 +1,4 @@
 import { Migration } from "../../utils/migrate";
-import { WithId } from "@measured/puck";
-import { NearbyLocationsSectionProps } from "../pageSections/NearbyLocations/NearbyLocations";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
-import { NearbyLocationCardsWrapperProps } from "../pageSections/NearbyLocations/NearbyLocationsCardsWrapper";
 
 export const nearbyLocationSlots: Migration = {
   NearbyLocationsSection: {
@@ -30,7 +26,7 @@ export const nearbyLocationSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           CardsWrapperSlot: [
@@ -53,11 +49,11 @@ export const nearbyLocationSlots: Migration = {
                   },
                 },
                 sectionHeadingLevel: props.styles.heading.level,
-              } satisfies WithId<NearbyLocationCardsWrapperProps>,
+              },
             },
           ],
         },
-      } satisfies WithId<NearbyLocationsSectionProps>;
+      };
     },
   },
 };

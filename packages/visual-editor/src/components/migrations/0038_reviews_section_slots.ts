@@ -1,7 +1,4 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { ReviewsSectionProps } from "../pageSections/ReviewsSection/ReviewsSection";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
 
 export const reviewsSectionSlots: Migration = {
   ReviewsSection: {
@@ -62,11 +59,11 @@ export const reviewsSectionSlots: Migration = {
                   },
                 },
                 styles: { level: 3, align: "center" },
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
         },
-      } satisfies WithId<ReviewsSectionProps>;
+      };
     },
   },
 };

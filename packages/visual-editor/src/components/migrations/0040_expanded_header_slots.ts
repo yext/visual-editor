@@ -1,9 +1,4 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { CTAWrapperProps, ImageWrapperProps } from "../contentBlocks";
-import { PrimaryHeaderSlotProps } from "../header/PrimaryHeaderSlot";
-import { SecondaryHeaderSlotProps } from "../header/SecondaryHeaderSlot";
-import { HeaderLinksProps } from "../header/HeaderLinks";
 
 export const expandedHeaderSlots: Migration = {
   ExpandedHeader: {
@@ -37,11 +32,11 @@ export const expandedHeaderSlots: Migration = {
                     parentData: {
                       type: "Secondary",
                     },
-                  } satisfies WithId<HeaderLinksProps>,
+                  },
                 },
               ],
             },
-          } satisfies WithId<SecondaryHeaderSlotProps>,
+          },
         },
       ];
 
@@ -84,7 +79,7 @@ export const expandedHeaderSlots: Migration = {
                           presetImage: "app-store",
                         },
                         fieldsToHide: ["styles.displayType"],
-                      } satisfies WithId<CTAWrapperProps>,
+                      },
                     },
                   ],
                   SecondaryCTASlot: [
@@ -107,7 +102,7 @@ export const expandedHeaderSlots: Migration = {
                           presetImage: "app-store",
                         },
                         fieldsToHide: ["styles.displayType"],
-                      } satisfies WithId<CTAWrapperProps>,
+                      },
                     },
                   ],
                   LogoSlot: [
@@ -136,7 +131,7 @@ export const expandedHeaderSlots: Migration = {
                           aspectRatio:
                             props.styles?.primaryHeader.logo?.aspectRatio ?? 1,
                         },
-                      } satisfies WithId<ImageWrapperProps>,
+                      },
                     },
                   ],
                   LinksSlot: [
@@ -150,11 +145,11 @@ export const expandedHeaderSlots: Migration = {
                         parentData: {
                           type: "Primary",
                         },
-                      } satisfies WithId<HeaderLinksProps>,
+                      },
                     },
                   ],
                 },
-              } satisfies WithId<PrimaryHeaderSlotProps>,
+              },
             },
           ],
           SecondaryHeaderSlot: secondaryHeaderSlot,

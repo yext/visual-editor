@@ -1,17 +1,8 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
 import { EventSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { ImageWrapperProps } from "../contentBlocks/image/Image";
-import { BodyTextProps } from "../contentBlocks/BodyText";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
-import { EventCardProps } from "../pageSections/EventSection/EventCard";
-import { EventCardsWrapperProps } from "../pageSections/EventSection/EventCardsWrapper";
-import { EventSectionProps } from "../pageSections";
-import { TimestampProps } from "../contentBlocks";
 
 export const eventSectionSlots: Migration = {
   EventSection: {
@@ -94,7 +85,7 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             image: event.image,
                           },
-                    } satisfies WithId<ImageWrapperProps>,
+                    },
                   },
                 ],
                 DateTimeSlot: [
@@ -124,7 +115,7 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             date: resolvedDateTime,
                           },
-                    } satisfies WithId<TimestampProps>,
+                    },
                   },
                 ],
                 TitleSlot: [
@@ -149,7 +140,7 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             text: resolvedTitle,
                           },
-                    } satisfies WithId<HeadingTextProps>,
+                    },
                   },
                 ],
                 DescriptionSlot: [
@@ -176,7 +167,7 @@ export const eventSectionSlots: Migration = {
                             field: props.data.field,
                             richText: event.description,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 CTASlot: [
@@ -207,7 +198,7 @@ export const eventSectionSlots: Migration = {
                             cta: event.cta,
                           },
                       eventName: `cta${i}`,
-                    } satisfies WithId<CTAWrapperProps>,
+                    },
                   },
                 ],
               },
@@ -224,7 +215,7 @@ export const eventSectionSlots: Migration = {
                     field: props.data.field,
                     event,
                   },
-            } satisfies WithId<EventCardProps>,
+            },
           };
         }) || [];
 
@@ -250,7 +241,7 @@ export const eventSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           CardsWrapperSlot: [
@@ -268,11 +259,11 @@ export const eventSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies WithId<EventCardsWrapperProps>,
+              },
             },
           ],
         },
-      } satisfies WithId<EventSectionProps>;
+      };
     },
   },
 };

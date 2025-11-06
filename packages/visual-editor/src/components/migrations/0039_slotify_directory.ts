@@ -1,14 +1,8 @@
 import { Migration } from "../../utils/migrate.ts";
-import { DirectoryCardProps } from "../directory/DirectoryCard.tsx";
-import { WithId } from "@measured/puck";
 import {
   isDirectoryGrid,
   sortAlphabetically,
 } from "../../utils/directory/utils.ts";
-import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
-import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs.tsx";
-import { PhoneProps } from "../contentBlocks/Phone.tsx";
-import { HoursStatusProps } from "../index.ts";
 
 export const directorySlots: Migration = {
   Directory: {
@@ -53,7 +47,7 @@ export const directorySlots: Migration = {
                           text: child["name"],
                           field: "profile.name",
                         },
-                      } satisfies WithId<HeadingTextProps>,
+                      },
                     },
                   ],
                   PhoneSlot: [
@@ -81,7 +75,7 @@ export const directorySlots: Migration = {
                           phoneNumber: child["mainPhone"],
                           field: "profile.mainPhone",
                         },
-                      } satisfies WithId<PhoneProps>,
+                      },
                     },
                   ],
                   HoursSlot: [
@@ -109,7 +103,7 @@ export const directorySlots: Migration = {
                           field: "profile.hours",
                           timezone: child["timezone"],
                         },
-                      } satisfies WithId<HoursStatusProps>,
+                      },
                     },
                   ],
                 },
@@ -120,7 +114,7 @@ export const directorySlots: Migration = {
                   profile: child,
                 },
                 index: i,
-              } satisfies WithId<DirectoryCardProps>,
+              },
             };
           }) || []
         : [];
@@ -146,7 +140,7 @@ export const directorySlots: Migration = {
                   align: "center",
                   level: 2,
                 },
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           SiteNameSlot: [
@@ -161,7 +155,7 @@ export const directorySlots: Migration = {
                   align: "center",
                   level: 4,
                 },
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           BreadcrumbsSlot: [
@@ -177,7 +171,7 @@ export const directorySlots: Migration = {
                 },
                 liveVisibility: true,
                 analytics: props.analytics,
-              } satisfies WithId<BreadcrumbsSectionProps>,
+              },
             },
           ],
           DirectoryGrid: [
