@@ -731,12 +731,14 @@ const LocatorInternal = ({
         );
         break;
       }
-      case Matcher.Equals:
+      case Matcher.Equals: {
         apiFilterRadius.current = null;
         locationFilter = buildEqualsLocationFilter(filter, newDisplayName);
         break;
-      default:
+      }
+      default: {
         throw new Error(`Unsupported matcher type: ${filter.matcher}`);
+      }
     }
 
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
@@ -863,7 +865,7 @@ const LocatorInternal = ({
             }
 
             switch (resultFilter.matcher) {
-              case Matcher.Near:
+              case Matcher.Near: {
                 const filterFromResult = resultFilter.value as NearFilterValue;
                 initialLocationFilter = buildNearLocationFilterFromPrevious(
                   filterFromResult,
@@ -871,15 +873,18 @@ const LocatorInternal = ({
                 );
                 apiFilterRadius.current = filterFromResult.radius;
                 return true;
-              case Matcher.Equals:
+              }
+              case Matcher.Equals: {
                 initialLocationFilter = buildEqualsLocationFilter(
                   resultFilter,
                   firstResult.value
                 );
                 apiFilterRadius.current = null;
                 return true;
-              default:
+              }
+              default: {
                 return false;
+              }
             }
           })
           .catch((e) => {
@@ -1051,7 +1056,7 @@ const LocatorInternal = ({
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
     executeSearch(searchActions);
-    setSelectedDistanceMiles(DEFAULT_RADIUS_MILES);
+    setSelectedDistanceMiles(null);
   };
 
   // If something else causes the filters to update, check if the hours filter is still present
