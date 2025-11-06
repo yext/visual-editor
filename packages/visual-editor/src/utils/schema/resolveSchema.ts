@@ -81,14 +81,14 @@ const resolveNode = (streamDocument: StreamDocument, node: any): any => {
   const newSchema: Record<string, any> = {};
   for (const key in node) {
     if (Object.prototype.hasOwnProperty.call(node, key)) {
-      // Handle special cases
-      if (
-        specialCases.includes(key) ||
-        node[key] === "[[dm_directoryChildren]]"
-      ) {
+      if (node[key] === "[[dm_directoryChildren]]") {
+        // handle directory children
+        newSchema[key] = resolveDirectoryChildren(streamDocument, node[key]);
+      } else if (specialCases.includes(key)) {
+        // Handle keys with special formatting
         newSchema[key] = resolveSpecialCases(streamDocument, key, node[key]);
       } else {
-        // Recursively resolve each property in the object
+        // Otherwise, recursively resolve each property in the object
         newSchema[key] = resolveNode(streamDocument, node[key]);
       }
     }
@@ -113,40 +113,6 @@ const resolveSpecialCases = (
     return resolveNode(streamDocument, value);
   }
   const resolvedValue = findField(streamDocument, fieldName) as any;
-
-  if (value === "[[dm_directoryChildren]]") {
-    if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
-      return resolveNode(streamDocument, value);
-    }
-
-    return resolvedValue.map((child: any, index: number) => {
-      const childUrl = `${streamDocument.siteDomain}/${
-        child.address // if the child has an address, we're at the city level
-          ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
-          : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "")
-      }`;
-
-      return {
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-          "@type": "Thing",
-          name: child.name,
-          url: childUrl,
-          openingHours: OpeningHoursSchema(child.hours)?.openingHours,
-          address: child.address && {
-            "@type": "PostalAddress",
-            streetAddress: child.address.line1,
-            addressLocality: child.address.city,
-            addressRegion: child.address.region,
-            postalCode: child.address.postalCode,
-            addressCountry: child.address.countryCode,
-          },
-          phone: child.mainPhone,
-        },
-      };
-    });
-  }
 
   switch (key) {
     case "openingHours": {
@@ -187,4 +153,52 @@ const resolveSpecialCases = (
       return resolveNode(streamDocument, value);
     }
   }
+};
+
+const resolveDirectoryChildren = (
+  streamDocument: StreamDocument,
+  value: any
+): any => {
+  if (typeof value !== "string") {
+    return resolveNode(streamDocument, value);
+  }
+
+  const fieldName = value.match(new RegExp(embeddedFieldRegex.source))?.[1];
+
+  if (!fieldName) {
+    return resolveNode(streamDocument, value);
+  }
+  const resolvedValue = findField(streamDocument, fieldName) as any;
+
+  if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
+    return resolveNode(streamDocument, value);
+  }
+
+  return resolvedValue.map((child: any, index: number) => {
+    const childUrl = `${streamDocument.siteDomain}/${
+      child.address // if the child has an address, we're at the city level
+        ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
+        : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "")
+    }`;
+
+    return {
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Thing",
+        name: child.name,
+        url: childUrl,
+        openingHours: OpeningHoursSchema(child.hours)?.openingHours,
+        address: child.address && {
+          "@type": "PostalAddress",
+          streetAddress: child.address.line1,
+          addressLocality: child.address.city,
+          addressRegion: child.address.region,
+          postalCode: child.address.postalCode,
+          addressCountry: child.address.countryCode,
+        },
+        phone: child.mainPhone,
+      },
+    };
+  });
 };
