@@ -1120,14 +1120,24 @@ const LocatorInternal = ({
                   )}
                 {resultCount > 0 &&
                   (filterDisplayName
-                    ? t(
-                        "locationsNear",
-                        `${resultCount} locations near "${filterDisplayName}"`,
-                        {
-                          count: resultCount,
-                          filterDisplayName,
-                        }
-                      )
+                    ? selectedDistanceMiles
+                      ? t(
+                          "locationsWithinDistanceOf",
+                          `${resultCount} locations within ${selectedDistanceMiles} miles of "${filterDisplayName}"`,
+                          {
+                            count: resultCount,
+                            distance: selectedDistanceMiles,
+                            filterDisplayName,
+                          }
+                        )
+                      : t(
+                          "locationsNear",
+                          `${resultCount} locations near "${filterDisplayName}"`,
+                          {
+                            count: resultCount,
+                            filterDisplayName,
+                          }
+                        )
                     : t("locationWithCount", `${resultCount} locations`, {
                         count: resultCount,
                       }))}
