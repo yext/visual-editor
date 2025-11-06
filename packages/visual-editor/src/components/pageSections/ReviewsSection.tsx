@@ -24,7 +24,7 @@ import {
 } from "@yext/visual-editor";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
-import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
+import { TemplateMetadataContext } from "../../internal/hooks/useMessageReceivers";
 
 const REVIEWS_PER_PAGE = 5;
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
@@ -36,13 +36,8 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
 const ReviewsEmptyState: React.FC<{ backgroundColor: BackgroundStyle }> = ({
   backgroundColor,
 }) => {
-  let entityTypeDisplayName: string | undefined;
-  try {
-    const templateMetadata = useTemplateMetadata();
-    entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
-  } catch {
-    // Not in editor context, use default values
-  }
+  const templateMetadata = React.useContext(TemplateMetadataContext);
+  const entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
 
   return (
     <PageSection background={backgroundColor}>
