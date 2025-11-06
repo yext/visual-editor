@@ -392,6 +392,7 @@ const NearbyLocationsComponent = ({
   const streamDocument = useDocument();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
+  const templateMetadata = React.useContext(TemplateMetadataContext);
 
   const coordinate = resolveComponentData(
     data?.coordinate,
@@ -480,7 +481,6 @@ const NearbyLocationsComponent = ({
       nearbyLocationsStatus != "pending")
   ) {
     if (puck.isEditing) {
-      const templateMetadata = React.useContext(TemplateMetadataContext);
       const entityTypeDisplayName =
         templateMetadata?.entityTypeDisplayName?.toLowerCase();
 
