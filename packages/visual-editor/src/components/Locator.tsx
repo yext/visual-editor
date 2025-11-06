@@ -1110,43 +1110,12 @@ const LocatorInternal = ({
         <div className="relative flex-1 flex flex-col min-h-0">
           <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
             <div className="flex flex-row justify-between" id="levelWithModal">
-              <div>
-                {resultCount === 0 &&
-                  searchState === "not started" &&
-                  t(
-                    "useOurLocatorToFindALocationNearYou",
-                    "Use our locator to find a location near you"
-                  )}
-                {resultCount === 0 &&
-                  searchState === "complete" &&
-                  t(
-                    "noResultsFoundForThisArea",
-                    "No results found for this area"
-                  )}
-                {resultCount > 0 &&
-                  (filterDisplayName
-                    ? selectedDistanceMiles
-                      ? t(
-                          "locationsWithinDistanceOf",
-                          `${resultCount} locations within ${selectedDistanceMiles} miles of "${filterDisplayName}"`,
-                          {
-                            count: resultCount,
-                            distance: selectedDistanceMiles,
-                            filterDisplayName,
-                          }
-                        )
-                      : t(
-                          "locationsNear",
-                          `${resultCount} locations near "${filterDisplayName}"`,
-                          {
-                            count: resultCount,
-                            filterDisplayName,
-                          }
-                        )
-                    : t("locationWithCount", `${resultCount} locations`, {
-                        count: resultCount,
-                      }))}
-              </div>
+              <ResultsCountSummary
+                searchState={searchState}
+                resultCount={resultCount}
+                selectedDistanceMiles={selectedDistanceMiles}
+                filterDisplayName={filterDisplayName}
+              />
               {hasFilterModalToggle && (
                 <button
                   className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
@@ -1209,6 +1178,75 @@ const LocatorInternal = ({
       </div>
     </div>
   );
+};
+
+interface ResultsCountSummaryProps {
+  searchState: SearchState;
+  resultCount: number;
+  selectedDistanceMiles: number | null;
+  filterDisplayName?: string;
+}
+
+const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
+  const { searchState, resultCount, selectedDistanceMiles, filterDisplayName } =
+    props;
+  const { t } = useTranslation();
+
+  if (resultCount === 0) {
+    if (searchState === "not started") {
+      return (
+        <div>
+          {t(
+            "useOurLocatorToFindALocationNearYou",
+            "Use our locator to find a location near you"
+          )}
+        </div>
+      );
+    } else if (searchState === "complete") {
+      return (
+        <div>
+          {t("noResultsFoundForThisArea", "No results found for this area")}
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
+  } else {
+    if (filterDisplayName) {
+      if (selectedDistanceMiles) {
+        return (
+          <div>
+            {t(
+              "locationsWithinDistanceOf",
+              '{{count}} locations within {{distance}} miles of "{{name}}"',
+              {
+                count: resultCount,
+                distance: selectedDistanceMiles,
+                name: filterDisplayName,
+              }
+            )}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            {t("locationsNear", '{{count}} locations near "{{name}}"', {
+              count: resultCount,
+              name: filterDisplayName,
+            })}
+          </div>
+        );
+      }
+    } else {
+      return (
+        <div>
+          {t("locationWithCount", "{{count}} locations", {
+            count: resultCount,
+          })}
+        </div>
+      );
+    }
+  }
 };
 
 interface MapProps {
