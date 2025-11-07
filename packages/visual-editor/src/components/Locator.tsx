@@ -1052,7 +1052,7 @@ const LocatorInternal = ({
     const existingFilters = searchFilters.static || [];
     const partiallyUpdatedFilters = updateNearFiltersOnLocationField(
       existingFilters,
-      null
+      apiFilterRadius.current
     );
     const updatedFilters = deselectOpenNowFilters(partiallyUpdatedFilters);
 
