@@ -27,6 +27,7 @@ import {
   resolvePageSetUrlTemplate,
   useTemplateProps,
   mergeMeta,
+  pt,
 } from "@yext/visual-editor";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -39,6 +40,8 @@ import {
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/applyTheme";
+import { MapPinOff } from "lucide-react";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 
 export interface NearbyLocationsData {
   /**
@@ -389,6 +392,7 @@ const NearbyLocationsComponent = ({
   const streamDocument = useDocument();
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
+  const templateMetadata = useTemplateMetadata();
 
   const coordinate = resolveComponentData(
     data?.coordinate,
@@ -470,12 +474,49 @@ const NearbyLocationsComponent = ({
       }[styles.heading.align]
     : "justify-start";
 
-  // do not render the component if there's no data or it's not enabled
+  // Show empty state in editor mode when there are no results
   if (
     !enableNearbyLocations ||
     (!nearbyLocationsData?.response?.docs?.length &&
       nearbyLocationsStatus != "pending")
   ) {
+    if (puck.isEditing) {
+      const entityTypeDisplayName =
+        templateMetadata?.entityTypeDisplayName?.toLowerCase();
+
+      return (
+        <PageSection background={styles?.backgroundColor}>
+          <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
+            <MapPinOff className="w-12 h-12 text-gray-400" />
+            <div className="flex flex-col items-center gap-0">
+              <Body variant="base" className="text-gray-500 font-medium">
+                {pt(
+                  "nearbyLocationsEmptyStateSectionHidden",
+                  "Section hidden for this {{entityType}}",
+                  {
+                    entityType: entityTypeDisplayName
+                      ? entityTypeDisplayName
+                      : "page",
+                  }
+                )}
+              </Body>
+              <Body variant="base" className="text-gray-500 font-normal">
+                {pt(
+                  "nearbyLocationsEmptyState",
+                  "No {{entityType}} within {{radius}} miles",
+                  {
+                    entityType: entityTypeDisplayName
+                      ? entityTypeDisplayName
+                      : "entity",
+                    radius: data?.radius ?? 10,
+                  }
+                )}
+              </Body>
+            </div>
+          </div>
+        </PageSection>
+      );
+    }
     return <></>;
   }
 
