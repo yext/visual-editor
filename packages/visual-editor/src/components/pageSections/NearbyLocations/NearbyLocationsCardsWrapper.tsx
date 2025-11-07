@@ -276,6 +276,10 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     (!nearbyLocationsData?.response?.docs?.length &&
       nearbyLocationsStatus != "pending")
   ) {
+    // Return a marker element so parent can detect empty state
+    if (puck.isEditing) {
+      return <div data-empty-state="true" style={{ display: "none" }} />;
+    }
     return <></>;
   }
 

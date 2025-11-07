@@ -100,6 +100,21 @@ export const getPath: GetPath<TemplateProps> = ({
   return resolvePageSetUrlTemplate(document, relativePrefixToRoot);
 };
 
+export const transformProps: TransformProps<TemplateProps> = async (props) => {
+  const { document } = props;
+  const migratedData = migrate(
+    JSON.parse(document.__.layout),
+    migrationRegistry,
+    mainConfig,
+    document
+  );
+  const updatedData = await resolveAllData(migratedData, mainConfig, {
+    streamDocument: document,
+  });
+
+  return { ...props, data: updatedData };
+};
+
 const Location: Template<TemplateRenderProps> = (props) => {
   const { document, data } = props;
   const filteredConfig = filterComponentsFromConfig(
