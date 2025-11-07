@@ -993,52 +993,19 @@ const LocatorInternal = ({
 
   const searchFilters = useSearchState((state) => state.filters);
 
-  /**
-   * Helper function to iterate through a list of static filters and update all near filters on the
-   * location field to have the new radius and current map center coordinates.
-   */
-  const updateNearFiltersOnLocationField = (
-    filters: SelectableStaticFilter[],
-    newRadius: number | null
-  ): SelectableStaticFilter[] => {
-    return filters.map((filter) => {
-      if (isLocationNearFilter(filter)) {
-        const previousFilter = filter.filter as FieldValueStaticFilter;
-        const previousValue = previousFilter.value as NearFilterValue;
-        // mapCenter should always be defined here, but fall back to previous value or default
-        // just in case
-        const lat = mapCenter?.lat ?? previousValue.lat;
-        const lng = mapCenter?.lng ?? previousValue.lng;
-        const radius = newRadius ?? previousValue.radius;
-        return {
-          ...filter,
-          filter: {
-            ...previousFilter,
-            value: {
-              ...previousValue,
-              lat,
-              lng,
-              radius,
-            },
-          },
-        } as SelectableStaticFilter;
-      }
-      return filter;
-    });
-  };
-
   const handleDistanceClick = (distanceMiles: number) => {
     const existingFilters = searchFilters.static || [];
     let updatedFilters: SelectableStaticFilter[];
     if (distanceMiles === selectedDistanceMiles) {
       setSelectedDistanceMiles(null);
-      updatedFilters = updateNearFiltersOnLocationField(
+      // revert to API radius (or default if none was found) if user clicks the same distance again
+      updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
-        apiFilterRadius.current
+        apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
       );
     } else {
       setSelectedDistanceMiles(distanceMiles);
-      updatedFilters = updateNearFiltersOnLocationField(
+      updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
         distanceMiles * MILES_TO_METERS
       );
@@ -1050,9 +1017,10 @@ const LocatorInternal = ({
 
   const handleClearFiltersClick = () => {
     const existingFilters = searchFilters.static || [];
-    const partiallyUpdatedFilters = updateNearFiltersOnLocationField(
+    // revert to API radius (or default if none was found)
+    const partiallyUpdatedFilters = updateRadiusInNearFiltersOnLocationField(
       existingFilters,
-      apiFilterRadius.current
+      apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
     );
     const updatedFilters = deselectOpenNowFilters(partiallyUpdatedFilters);
 
@@ -1823,6 +1791,33 @@ function buildEqualsLocationFilter(
       matcher: Matcher.Equals,
     },
   };
+}
+
+/**
+ * Helper function to iterate through a list of static filters and update all near filters on the
+ * location field to have the new radius.
+ */
+function updateRadiusInNearFiltersOnLocationField(
+  filters: SelectableStaticFilter[],
+  newRadius: number
+): SelectableStaticFilter[] {
+  return filters.map((filter) => {
+    if (isLocationNearFilter(filter)) {
+      const previousFilter = filter.filter as FieldValueStaticFilter;
+      const previousValue = previousFilter.value as NearFilterValue;
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            radius: newRadius,
+          },
+        },
+      } as SelectableStaticFilter;
+    }
+    return filter;
+  });
 }
 
 /**
