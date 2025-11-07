@@ -109,13 +109,13 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
           <Map className="w-12 h-12 text-gray-400" />
           <div className="flex flex-col items-center gap-0">
             <Body variant="base" className="text-gray-500 font-medium">
-              {t(
+              {pt(
                 "staticMapEmptyStateSectionHidden",
                 "Section hidden for all locations"
               )}
             </Body>
             <Body variant="base" className="text-gray-500 font-normal">
-              {t(
+              {pt(
                 "staticMapEmptyStateAddApiKey",
                 "Add an API key to preview your map"
               )}
