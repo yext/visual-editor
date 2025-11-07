@@ -167,7 +167,11 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
     {}
   );
 
-  const { data: reviews, isLoading } = useQuery({
+  const {
+    data: reviews,
+    isLoading,
+    status: reviewsStatus,
+  } = useQuery({
     queryKey: [
       "reviews",
       entityId,
@@ -198,8 +202,7 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
 
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
-  // Show empty state in editor mode when there are no results
-  if (!isLoading && reviewCount === 0) {
+  if (reviewsStatus !== "success" || (!isLoading && reviewCount === 0)) {
     if (puck?.isEditing) {
       return (
         <ReviewsEmptyState
