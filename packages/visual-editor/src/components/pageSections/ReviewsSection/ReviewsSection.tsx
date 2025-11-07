@@ -34,6 +34,7 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
   year: "numeric",
 };
 
+// for demoooo
 export interface ReviewsSectionProps {
   /**
    * This object contains properties for customizing the component's appearance.
@@ -62,9 +63,9 @@ export interface ReviewsSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-};
+}
 
-  /** @internal */
+/** @internal */
 const ReviewsEmptyState: React.FC<{ backgroundColor: BackgroundStyle }> = ({
   backgroundColor,
 }) => {
