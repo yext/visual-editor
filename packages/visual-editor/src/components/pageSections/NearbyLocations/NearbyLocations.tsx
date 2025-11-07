@@ -169,9 +169,9 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
         element.querySelector('[data-empty-state="true"]') !== null;
       const hasHeight = element.clientHeight > 0;
       const hasContent = element.querySelector('[id$="-wrapper"]') !== null; // Check for the cards wrapper div
-
-      // Show section only if it has height AND it's not the empty state
-      const shouldShow = hasHeight && !hasEmptyStateMarker && hasContent;
+      const isLoading = element.querySelector('[data-loading="true"]') !== null; // Check for loading state
+      const shouldShow =
+        hasContent || isLoading || (hasHeight && !hasEmptyStateMarker);
       setShowSection(shouldShow);
       setIsEmptyState(hasEmptyStateMarker && puck.isEditing);
     };

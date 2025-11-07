@@ -286,7 +286,7 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
   return (
     <>
       {nearbyLocationsStatus === "pending" && (
-        <Body>
+        <Body data-loading="true">
           {t("loadingNearbyLocations", "Loading nearby locations...")}
         </Body>
       )}
