@@ -148,7 +148,7 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
 };
 
 const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
-  const { styles, slots } = props;
+  const { styles, slots, puck } = props;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
 
@@ -201,7 +201,13 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
   // Show empty state in editor mode when there are no results
   if (!isLoading && reviewCount === 0) {
     if (puck?.isEditing) {
-      return <ReviewsEmptyState backgroundColor={backgroundColor} />;
+      return (
+        <ReviewsEmptyState
+          backgroundColor={
+            styles?.backgroundColor ?? backgroundColors.background1.value
+          }
+        />
+      );
     }
     return <></>;
   }
