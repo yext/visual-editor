@@ -270,8 +270,8 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     }
   );
 
-  // Show loading state when query is pending
-  if (nearbyLocationsStatus === "pending") {
+  // Show loading state only when query is enabled and pending
+  if (enableNearbyLocations && nearbyLocationsStatus === "pending") {
     return (
       <Body data-loading="true">
         {t("loadingNearbyLocations", "Loading nearby locations...")}
