@@ -22,8 +22,6 @@ import {
   defaultThemeConfig,
   locatorConfig,
   getSchema,
-  migrate,
-  migrationRegistry,
   getCanonicalUrl,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -43,7 +41,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     viewport: "width=device-width, initial-scale=1",
     tags: [
       {
-        type: "link",
+        type: "link" as TagType,
         attributes: {
           rel: "icon",
           type: "image/x-icon",
@@ -52,7 +50,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       ...(data.document.siteDomain
         ? [
             {
-              type: "link",
+              type: "link" as TagType,
               attributes: {
                 rel: "canonical",
                 href: getCanonicalUrl(data),

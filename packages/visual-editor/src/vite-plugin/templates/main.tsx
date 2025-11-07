@@ -43,7 +43,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     viewport: "width=device-width, initial-scale=1",
     tags: [
       {
-        type: "link",
+        type: "link" as TagType,
         attributes: {
           rel: "icon",
           type: "image/x-icon",
@@ -52,7 +52,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       ...(data.document.siteDomain
         ? [
             {
-              type: "link",
+              type: "link" as TagType,
               attributes: {
                 rel: "canonical",
                 href: getCanonicalUrl(data),
@@ -98,21 +98,6 @@ export const getPath: GetPath<TemplateProps> = ({
   relativePrefixToRoot,
 }) => {
   return resolvePageSetUrlTemplate(document, relativePrefixToRoot);
-};
-
-export const transformProps: TransformProps<TemplateProps> = async (props) => {
-  const { document } = props;
-  const migratedData = migrate(
-    JSON.parse(document.__.layout),
-    migrationRegistry,
-    mainConfig,
-    document
-  );
-  const updatedData = await resolveAllData(migratedData, mainConfig, {
-    streamDocument: document,
-  });
-
-  return { ...props, data: updatedData };
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {

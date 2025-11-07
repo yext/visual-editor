@@ -75,6 +75,7 @@ import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString";
 
 const LOCATION_FIELD = "builtin.location";
+const COUNTRY_CODE_FIELD = "address.countryCode";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
 const DEFAULT_RADIUS_MILES = 25;
@@ -700,7 +701,13 @@ const LocatorInternal = ({
   }, [searchActions, selectedFacets]);
 
   const filterDisplayName = useSearchState(
-    (state) => state.filters.static?.[0]?.displayName
+    (state) =>
+      state.filters?.static?.find(
+        (filter) =>
+          filter.filter.kind === "fieldValue" &&
+          (filter.filter.fieldId === LOCATION_FIELD ||
+            filter.filter.fieldId === COUNTRY_CODE_FIELD)
+      )?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
@@ -1162,7 +1169,7 @@ const LocatorInternal = ({
             </div>
             <div className="flex flex-row justify-between">
               <AppliedFilters
-                hiddenFields={[LOCATION_FIELD]}
+                hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
                 customCssClasses={{
                   removableFilter: "text-md font-normal mt-2 mb-0",
                   clearAllButton: "hidden",
@@ -1515,7 +1522,7 @@ const FilterModal = (props: FilterModalProps) => {
       </div>
       <div className="px-6 border-b border-gray-300">
         <AppliedFilters
-          hiddenFields={[LOCATION_FIELD]}
+          hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
           customCssClasses={{
             removableFilter: "text-md font-normal",
             clearAllButton: "hidden",
