@@ -270,12 +270,17 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     }
   );
 
+  // Show loading state when query is pending
+  if (nearbyLocationsStatus === "pending") {
+    return (
+      <Body data-loading="true">
+        {t("loadingNearbyLocations", "Loading nearby locations...")}
+      </Body>
+    );
+  }
+
   // do not render the component if there's no data or it's not enabled
-  if (
-    !enableNearbyLocations ||
-    (!nearbyLocationsData?.response?.docs?.length &&
-      nearbyLocationsStatus != "pending")
-  ) {
+  if (!enableNearbyLocations || !nearbyLocationsData?.response?.docs?.length) {
     // Return a marker element so parent can detect empty state
     if (puck.isEditing) {
       return <div data-empty-state="true" style={{ display: "none" }} />;
@@ -285,12 +290,6 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
 
   return (
     <>
-      {nearbyLocationsStatus === "pending" && (
-        <Body data-loading="true">
-          {t("loadingNearbyLocations", "Loading nearby locations...")}
-        </Body>
-      )}
-
       {nearbyLocationsStatus === "success" &&
         !!nearbyLocationsData?.response?.docs && (
           <div
