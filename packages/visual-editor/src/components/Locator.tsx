@@ -701,7 +701,13 @@ const LocatorInternal = ({
   }, [searchActions, selectedFacets]);
 
   const filterDisplayName = useSearchState(
-    (state) => state.filters.static?.[0]?.displayName
+    (state) =>
+      state.filters?.static?.find(
+        (filter) =>
+          filter.filter.kind === "fieldValue" &&
+          (filter.filter.fieldId === LOCATION_FIELD ||
+            filter.filter.fieldId === COUNTRY_CODE_FIELD)
+      )?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
