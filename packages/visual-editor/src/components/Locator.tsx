@@ -1095,14 +1095,14 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
-  const facetsInState = useSearchState((state) => state.filters.facets);
-  const selectableFacets = React.useMemo(
-    () => (facetsInState ?? []).filter((f) => f.options.length),
-    [facetsInState]
-  );
-
+  const hasFacetOptions =
+    (
+      useSearchState((state) =>
+        state.filters.facets?.filter((f) => f.options.length)
+      ) ?? []
+    ).length > 0;
   const hasFilterModalToggle =
-    openNowButton || showDistanceOptions || selectableFacets.length > 0;
+    openNowButton || showDistanceOptions || hasFacetOptions;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
 
   return (
