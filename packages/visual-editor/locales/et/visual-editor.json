@@ -451,7 +451,7 @@
   "locationWithCount_zero": "{{count}} asukohta",
   "locationsNear_few": "{{count}} asukohta \"{{name}}\" läheduses",
   "locationsNear_many": "{{count}} asukohta \"{{name}}\" läheduses",
-  "locationsNear_one": "{{count}} asukoht \"{{name}}\"  lähedal",
+  "locationsNear_one": "{{count}} asukoht \"{{name}}\" lähedal",
   "locationsNear_other": "{{count}} asukohta \"{{name}}\" läheduses",
   "locationsNear_zero": "{{count}} asukohta \"{{name}}\" läheduses",
   "locationsWithinDistanceOf_few": "{{count}} asukohta {{distance}} miili raadiuses \"{{name}}\"",
