@@ -15,9 +15,16 @@ import {
   VisibilityWrapper,
   msg,
   HeadingTextProps,
+  Body,
+  pt,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper";
+import {
+  defaultNearbyLocationsCardsProps,
+  NearbyLocationCardsWrapperProps,
+} from "./NearbyLocationsCardsWrapper";
+import { MapPinOff } from "lucide-react";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
 
 export interface NearbyLocationsSectionProps {
   /**
@@ -92,12 +99,63 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
   ),
 };
 
+/** @internal */
+const NearbyLocationsEmptyState: React.FC<{
+  backgroundColor?: BackgroundStyle;
+  radius?: number;
+}> = ({ backgroundColor, radius }) => {
+  const templateMetadata = useTemplateMetadata();
+  const entityTypeDisplayName =
+    templateMetadata?.entityTypeDisplayName?.toLowerCase();
+
+  return (
+    <PageSection background={backgroundColor}>
+      <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
+        <MapPinOff className="w-12 h-12 text-gray-400" />
+        <div className="flex flex-col items-center gap-0">
+          <Body variant="base" className="text-gray-500 font-medium">
+            {pt(
+              "nearbyLocationsEmptyStateSectionHidden",
+              "Section hidden for this {{entityType}}",
+              {
+                entityType: entityTypeDisplayName
+                  ? entityTypeDisplayName
+                  : "page",
+              }
+            )}
+          </Body>
+          <Body variant="base" className="text-gray-500 font-normal">
+            {pt(
+              "nearbyLocationsEmptyState",
+              "No {{entityType}} within {{radius}} miles",
+              {
+                entityType: entityTypeDisplayName
+                  ? entityTypeDisplayName
+                  : "entity",
+                radius: radius ?? 10,
+              }
+            )}
+          </Body>
+        </div>
+      </div>
+    </PageSection>
+  );
+};
+
 const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
   props
 ) => {
-  const { styles, slots } = props;
+  const { styles, slots, puck } = props;
   const cardsWrapperRef = React.useRef<HTMLDivElement>(null);
   const [showSection, setShowSection] = React.useState<boolean>(true);
+  const [isEmptyState, setIsEmptyState] = React.useState<boolean>(false);
+
+  // Get cards wrapper props to access radius for empty state
+  const cardsWrapperSlot = slots.CardsWrapperSlot;
+  const cardsWrapperProps =
+    Array.isArray(cardsWrapperSlot) && cardsWrapperSlot[0]
+      ? (cardsWrapperSlot[0].props as NearbyLocationCardsWrapperProps)
+      : undefined;
 
   React.useEffect(() => {
     // Watch the cards wrapper element to see if any cards are rendered
@@ -106,17 +164,51 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
       return;
     }
 
-    const observer = new ResizeObserver((entries) => {
-      const isHidden = entries?.[0].target.clientHeight === 0;
-      setShowSection(!isHidden);
+    const checkIfEmptyState = () => {
+      const hasEmptyStateMarker =
+        element.querySelector('[data-empty-state="true"]') !== null;
+      const hasHeight = element.clientHeight > 0;
+      const hasContent = element.querySelector('[id$="-wrapper"]') !== null; // Check for the cards wrapper div
+      const isLoading = element.querySelector('[data-loading="true"]') !== null; // Check for loading state
+      const shouldShow =
+        hasContent || isLoading || (hasHeight && !hasEmptyStateMarker);
+      setShowSection(shouldShow);
+      setIsEmptyState(hasEmptyStateMarker && puck.isEditing);
+    };
+
+    const observer = new ResizeObserver(() => {
+      checkIfEmptyState();
+    });
+
+    // Also use MutationObserver to detect when empty state is added/removed
+    const mutationObserver = new MutationObserver(() => {
+      checkIfEmptyState();
     });
 
     observer.observe(element);
+    mutationObserver.observe(element, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Initial check
+    checkIfEmptyState();
 
     return () => {
       observer.unobserve(element);
+      mutationObserver.disconnect();
     };
-  }, []);
+  }, [puck.isEditing]);
+
+  // Show empty state if detected
+  if (isEmptyState) {
+    return (
+      <NearbyLocationsEmptyState
+        backgroundColor={styles?.backgroundColor}
+        radius={cardsWrapperProps?.data?.radius}
+      />
+    );
+  }
 
   return (
     <PageSection

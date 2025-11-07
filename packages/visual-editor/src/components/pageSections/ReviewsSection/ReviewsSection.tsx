@@ -34,6 +34,7 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
   year: "numeric",
 };
 
+// for demoooo
 export interface ReviewsSectionProps {
   /**
    * This object contains properties for customizing the component's appearance.
@@ -62,9 +63,9 @@ export interface ReviewsSectionProps {
    * @defaultValue true
    */
   liveVisibility: boolean;
-};
+}
 
-  /** @internal */
+/** @internal */
 const ReviewsEmptyState: React.FC<{ backgroundColor: BackgroundStyle }> = ({
   backgroundColor,
 }) => {
@@ -147,7 +148,7 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
 };
 
 const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
-  const { styles, slots } = props;
+  const { styles, slots, puck } = props;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
 
@@ -166,7 +167,11 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
     {}
   );
 
-  const { data: reviews, isLoading } = useQuery({
+  const {
+    data: reviews,
+    isLoading,
+    status: reviewsStatus,
+  } = useQuery({
     queryKey: [
       "reviews",
       entityId,
@@ -197,10 +202,15 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
 
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
-  // Show empty state in editor mode when there are no results
-  if (!isLoading && reviewCount === 0) {
+  if (reviewsStatus !== "success" || (!isLoading && reviewCount === 0)) {
     if (puck?.isEditing) {
-      return <ReviewsEmptyState backgroundColor={backgroundColor} />;
+      return (
+        <ReviewsEmptyState
+          backgroundColor={
+            styles?.backgroundColor ?? backgroundColors.background1.value
+          }
+        />
+      );
     }
     return <></>;
   }
