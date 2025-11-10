@@ -780,6 +780,8 @@ const mainDefaultLayout = {
           cards: {
             headingLevel: 3,
             backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+            ctaVariant: "primary",
+            truncateDescription: true,
           },
           backgroundColor: {
             bgColor: "bg-palette-primary-light",
