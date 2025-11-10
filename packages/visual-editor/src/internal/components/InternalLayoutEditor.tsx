@@ -270,11 +270,11 @@ export const InternalLayoutEditor = ({
         };
 
         resolveData();
-      }, [streamDocument.id]);
+      }, [streamDocument]);
 
       return <>{props.children}</>;
     },
-    [streamDocument.id]
+    [streamDocument]
   );
 
   return (

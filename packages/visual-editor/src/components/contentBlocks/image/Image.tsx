@@ -93,7 +93,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     return parentData
       ? parentData?.image
       : resolveComponentData(data.image, i18n.language, streamDocument);
-  }, [parentData, data.image, i18n.language, streamDocument.id]);
+  }, [parentData, data.image, i18n.language, streamDocument]);
 
   const getImageUrl = (
     image: ImageType | ComplexImageType | AssetImageType | undefined
