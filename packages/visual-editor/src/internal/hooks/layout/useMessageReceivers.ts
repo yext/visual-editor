@@ -50,9 +50,9 @@ export const useLayoutMessageReceivers = (
 
     if (layoutSaveState?.hash !== receivedLayoutSaveState?.hash) {
       setLayoutSaveState(receivedLayoutSaveState);
-      setLayoutSaveStateFetched(true);
     }
 
+    setLayoutSaveStateFetched(true);
     send({
       status: "success",
       payload: { message: "layoutSaveState received" },
