@@ -3,11 +3,14 @@ import {
   isDirectoryGrid,
   sortAlphabetically,
 } from "../../utils/directory/utils.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 
 export const directorySlots: Migration = {
   Directory: {
     action: "updated",
-    propTransformation: (props, streamDocument) => {
+    propTransformation: (props) => {
+      const streamDocument = useDocument();
+
       const title = props.data.title;
       const siteName = props.data.siteName;
       const breadcrumbRoot = props.data.directoryRoot;
