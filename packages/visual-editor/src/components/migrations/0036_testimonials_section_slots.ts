@@ -1,15 +1,8 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { TestimonialSectionProps } from "../pageSections/TestimonialSection/TestimonialSection";
-import { TestimonialCardProps } from "../pageSections/TestimonialSection/TestimonialCard";
-import { TestimonialCardsWrapperProps } from "../pageSections/TestimonialSection/TestimonialCardsWrapper";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
 import { TestimonialSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { BodyTextProps } from "../contentBlocks/BodyText";
 import { resolveComponentData } from "../../utils/resolveComponentData";
-import { TimestampProps } from "../contentBlocks";
 
 export const testimonialsSectionSlots: Migration = {
   TestimonialSection: {
@@ -60,7 +53,7 @@ export const testimonialsSectionSlots: Migration = {
                             field: props.data.testimonials.field,
                             richText: testimonial.description,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 ContributorNameSlot: [
@@ -85,7 +78,7 @@ export const testimonialsSectionSlots: Migration = {
                             field: props.data.testimonials.field,
                             text: resolvedContributorName,
                           },
-                    } satisfies WithId<HeadingTextProps>,
+                    },
                   },
                 ],
                 ContributionDateSlot: [
@@ -115,7 +108,7 @@ export const testimonialsSectionSlots: Migration = {
                             field: props.data.testimonials.field,
                             date: testimonial.contributionDate,
                           },
-                    } satisfies WithId<TimestampProps>,
+                    },
                   },
                 ],
               },
@@ -125,7 +118,7 @@ export const testimonialsSectionSlots: Migration = {
                     field: props.data.testimonials.field,
                     testimonial,
                   },
-            } satisfies WithId<TestimonialCardProps>,
+            },
           };
         }) || [];
 
@@ -151,7 +144,7 @@ export const testimonialsSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           CardsWrapperSlot: [
@@ -168,11 +161,11 @@ export const testimonialsSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies WithId<TestimonialCardsWrapperProps>,
+              },
             },
           ],
         },
-      } satisfies WithId<TestimonialSectionProps>;
+      };
     },
   },
 };

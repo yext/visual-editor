@@ -1,7 +1,4 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate.ts";
-import { CTAGroupProps } from "../contentBlocks/CTAGroup.tsx";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 
 export const organizeCTAWrapperProps: Migration = {
   CTAWrapper: {
@@ -19,7 +16,7 @@ export const organizeCTAWrapperProps: Migration = {
           presetImage,
           variant: props.variant,
         },
-      } satisfies WithId<CTAWrapperProps>;
+      };
     },
   },
   CTAGroup: {
@@ -29,7 +26,7 @@ export const organizeCTAWrapperProps: Migration = {
         return {
           ...cta,
           presetImage: cta.entityField?.constantValue?.presetImageType,
-        } satisfies CTAGroupProps;
+        };
       });
       return props;
     },

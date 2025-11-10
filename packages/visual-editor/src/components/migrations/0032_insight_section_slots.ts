@@ -1,17 +1,8 @@
-import { WithId } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
-import { InsightSectionProps } from "../pageSections/InsightSection/InsightSection";
-import { InsightCardProps } from "../pageSections/InsightSection/InsightCard";
-import { InsightCardsWrapperProps } from "../pageSections/InsightSection/InsightCardsWrapper";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
 import { InsightSectionType } from "../../types/types";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { ImageWrapperProps } from "../contentBlocks/image/Image";
-import { BodyTextProps } from "../contentBlocks/BodyText";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { resolveComponentData } from "../../utils/resolveComponentData";
-import { TimestampProps } from "../contentBlocks/Timestamp";
 
 export const insightSectionSlots: Migration = {
   InsightSection: {
@@ -78,7 +69,7 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             image: insight.image,
                           },
-                    } satisfies WithId<ImageWrapperProps>,
+                    },
                   },
                 ],
                 TitleSlot: [
@@ -103,7 +94,7 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             text: resolvedName,
                           },
-                    } satisfies WithId<HeadingTextProps>,
+                    },
                   },
                 ],
                 CategorySlot: [
@@ -125,7 +116,7 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             richText: insight.category,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 DescriptionSlot: [
@@ -147,7 +138,7 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             richText: insight.description,
                           },
-                    } satisfies WithId<BodyTextProps>,
+                    },
                   },
                 ],
                 PublishTimeSlot: [
@@ -177,7 +168,7 @@ export const insightSectionSlots: Migration = {
                             field: props.data.field,
                             date: insight.publishTime,
                           },
-                    } satisfies WithId<TimestampProps>,
+                    },
                   },
                 ],
                 CTASlot: [
@@ -208,7 +199,7 @@ export const insightSectionSlots: Migration = {
                             cta: insight.cta,
                           },
                       eventName: `cta${i}`,
-                    } satisfies WithId<CTAWrapperProps>,
+                    },
                   },
                 ],
               },
@@ -218,7 +209,7 @@ export const insightSectionSlots: Migration = {
                     field: props.data.field,
                     insight,
                   },
-            } satisfies WithId<InsightCardProps>,
+            },
           };
         }) || [];
 
@@ -244,7 +235,7 @@ export const insightSectionSlots: Migration = {
                   },
                 },
                 styles: props.styles.heading,
-              } satisfies WithId<HeadingTextProps>,
+              },
             },
           ],
           CardsWrapperSlot: [
@@ -261,11 +252,11 @@ export const insightSectionSlots: Migration = {
                 slots: {
                   CardSlot: cards,
                 },
-              } satisfies WithId<InsightCardsWrapperProps>,
+              },
             },
           ],
         },
-      } satisfies WithId<InsightSectionProps>;
+      };
     },
   },
 };
