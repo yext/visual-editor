@@ -1,7 +1,7 @@
 import { setDeep } from "@measured/puck";
 import { Migration } from "../../utils/migrate";
 
-export const set_default_cta_variants: Migration = {
+export const setDefaultCtaVariants: Migration = {
   InsightCard: {
     action: "updated",
     propTransformation: (props) => {
