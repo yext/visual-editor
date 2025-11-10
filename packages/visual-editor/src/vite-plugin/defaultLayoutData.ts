@@ -1285,7 +1285,7 @@ const mainDefaultLayout = {
                                 data: {
                                   date: {
                                     field: "",
-                                    constantValue: "July 22, 2022",
+                                    constantValue: "2022-08-02T14:00:00",
                                     constantValueEnabled: true,
                                   },
                                   endDate: {
@@ -1371,7 +1371,7 @@ const mainDefaultLayout = {
                                 data: {
                                   date: {
                                     field: "",
-                                    constantValue: "July 22, 2022",
+                                    constantValue: "2022-08-02T14:00:00",
                                     constantValueEnabled: true,
                                   },
                                   endDate: {
@@ -1457,7 +1457,7 @@ const mainDefaultLayout = {
                                 data: {
                                   date: {
                                     field: "",
-                                    constantValue: "July 22, 2022",
+                                    constantValue: "2022-08-02T14:00:00",
                                     constantValueEnabled: true,
                                   },
                                   endDate: {
