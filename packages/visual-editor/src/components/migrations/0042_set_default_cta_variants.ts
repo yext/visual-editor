@@ -5,23 +5,21 @@ export const set_default_cta_variants: Migration = {
   InsightCard: {
     action: "updated",
     propTransformation: (props) => {
-      const ctaSlot =
-        props.slots?.CardsWrapperSlot?.[0]?.props?.slots?.CardSlot?.[0]?.props
-          ?.slots?.CTASlot?.[0];
+      const ctaSlot = props?.slots?.CTASlot?.[0];
       if (ctaSlot && ctaSlot.props.styles?.variant === undefined) {
         return setDeep(
           props,
-          "slots?.CardsWrapperSlot?.[0]?.props?.slots?.CardSlot?.[0]?.props?.slots?.CTASlot?.[0]",
+          "slots.CTASlot[0].props.styles.variant",
           "primary"
         );
       }
       return props;
     },
   },
-  CoreInfo: {
+  CoreInfoSection: {
     action: "updated",
     propTransformation: (props) => {
-      const addressCtaSlot = props.slots?.AddressCTASlot?.[0];
+      const addressCtaSlot = props.slots?.CoreInfoAddressSlot?.[0];
       if (
         addressCtaSlot &&
         addressCtaSlot.props.styles?.ctaVariant === undefined
