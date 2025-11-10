@@ -20,6 +20,8 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 
+// test for width
+
 const defaultInsight = {
   image: {
     ...getRandomPlaceholderImageObject(),
