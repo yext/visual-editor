@@ -16,7 +16,7 @@ import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.t
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeData, ThemeHistory } from "../types/themeData.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
-import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { StreamDocument, updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
@@ -34,6 +34,7 @@ type LayoutEditorProps = {
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
   metadata?: Metadata;
+  streamDocument: StreamDocument;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -45,6 +46,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeConfig,
     localDev,
     metadata,
+    streamDocument,
   } = props;
 
   const {
@@ -59,7 +61,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
 
   const { layoutSaveState, layoutSaveStateFetched } = useLayoutMessageReceivers(
     localDev,
-    puckConfig
+    puckConfig,
+    streamDocument
   );
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
