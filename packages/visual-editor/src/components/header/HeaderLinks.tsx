@@ -98,8 +98,33 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     />
   );
 
-  return data.links ? (
+  const validLinks = data.links?.filter((item) => !!item?.link) || [];
+
+  if (validLinks.length === 0) {
+    if (puck.isEditing) {
+      return (
+        <nav
+          ref={puck.dragRef}
+          aria-label={
+            type === "Primary"
+              ? t("primaryHeaderLinks", "Primary Header Links")
+              : t("secondaryHeaderLinks", "Secondary Header Links")
+          }
+        >
+          <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
+            <li className="py-4 md:py-0">
+              <div className="h-5 min-w-[100px]" />
+            </li>
+          </ul>
+        </nav>
+      );
+    }
+    return <></>;
+  }
+
+  return (
     <nav
+      ref={puck.dragRef}
       aria-label={
         type === "Primary"
           ? t("primaryHeaderLinks", "Primary Header Links")
@@ -107,21 +132,19 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       }
     >
       <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
-        {data.links
-          .filter((item) => !!item?.link)
-          .map((item, index) => {
-            const isOverflowed = isSecondary && index >= MAX_VISIBLE;
-            return (
-              <li
-                key={`${type.toLowerCase()}.${index}`}
-                className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
-              >
-                {renderLink(item, index, type.toLowerCase())}
-              </li>
-            );
-          })}
+        {validLinks.map((item, index) => {
+          const isOverflowed = isSecondary && index >= MAX_VISIBLE;
+          return (
+            <li
+              key={`${type.toLowerCase()}.${index}`}
+              className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
+            >
+              {renderLink(item, index, type.toLowerCase())}
+            </li>
+          );
+        })}
 
-        {isSecondary && data.links.length > MAX_VISIBLE && (
+        {isSecondary && validLinks.length > MAX_VISIBLE && (
           <li className="hidden md:block py-4 md:py-0">
             <DropdownMenu>
               <DropdownMenuTrigger className="flex flex-row md:items-center gap-4 justify-between w-full">
@@ -130,27 +153,20 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white border rounded shadow-md p-2 min-w-[200px] z-[9999]">
-                {data.links
-                  .filter((item) => !!item?.link)
-                  .slice(MAX_VISIBLE)
-                  .map((item, index) => (
-                    <DropdownMenuItem
-                      key={`overflow-${index}`}
-                      className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
-                    >
-                      {renderLink(item, index + MAX_VISIBLE, "overflow")}
-                    </DropdownMenuItem>
-                  ))}
+                {validLinks.slice(MAX_VISIBLE).map((item, index) => (
+                  <DropdownMenuItem
+                    key={`overflow-${index}`}
+                    className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
+                  >
+                    {renderLink(item, index + MAX_VISIBLE, "overflow")}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </li>
         )}
       </ul>
     </nav>
-  ) : puck.isEditing ? (
-    <div className="h-10" />
-  ) : (
-    <></>
   );
 };
 

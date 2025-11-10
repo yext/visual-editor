@@ -8,6 +8,7 @@ import {
   PageSection,
   PageSectionProps,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,
@@ -90,14 +91,38 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   puck,
 }) => {
   const streamDocument = useDocument();
+  const { t } = useTranslation();
 
   const languageDropDownProps =
     parseDocumentForLanguageDropdown(streamDocument);
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
 
-  return data.show ? (
+  const { show } = data;
+
+  if (puck.isEditing && !show) {
+    return (
+      <div
+        ref={puck.dragRef}
+        className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer"
+      >
+        <p className="text-sm text-gray-600">
+          {t(
+            "secondaryHeader.hiddenOnLivePage",
+            "Secondary Header (Hidden on live page)"
+          )}
+        </p>
+      </div>
+    );
+  }
+
+  if (!show) {
+    return <></>;
+  }
+
+  return (
     <PageSection
+      ref={puck.dragRef}
       maxWidth={parentStyles?.maxWidth}
       verticalPadding={"sm"}
       background={styles.backgroundColor}
@@ -108,10 +133,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
         <LanguageDropdown {...languageDropDownProps} />
       )}
     </PageSection>
-  ) : puck.isEditing ? (
-    <div className="h-20" />
-  ) : (
-    <></>
   );
 };
 
