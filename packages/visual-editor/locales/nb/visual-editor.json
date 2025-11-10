@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Sekundær bunntekst (skjult på live-side)"
   },
   "secondaryHeader": "Sekundær header",
+  "secondaryHeaderHiddenOnLivePage": "Sekundær topptekst (skjult på live-side)",
   "secondaryHeaderLinks": "Sekundære overskriftskoblinger",
   "section": "Del",
   "selectAnOption": "Velg et alternativ",

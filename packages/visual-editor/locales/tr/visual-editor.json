@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "İkincil Alt Bilgi (Yayınlanan sayfada gizli)"
   },
   "secondaryHeader": "İkincil başlık",
+  "secondaryHeaderHiddenOnLivePage": "İkincil Başlık (Yayınlanan sayfada gizli)",
   "secondaryHeaderLinks": "İkincil Başlık Bağlantıları",
   "section": "Bölüm",
   "selectAnOption": "Bir seçenek seçin",

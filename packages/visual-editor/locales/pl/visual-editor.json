@@ -599,6 +599,7 @@
     "hiddenOnLivePage": "Dodatkowa stopka (ukryta na aktywnej stronie)"
   },
   "secondaryHeader": "Wtórny nagłówek",
+  "secondaryHeaderHiddenOnLivePage": "Nagłówek dodatkowy (ukryty na aktywnej stronie)",
   "secondaryHeaderLinks": "Dodatkowe linki nagłówkowe",
   "section": "Sekcja",
   "selectAnOption": "Wybierz opcję",

@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Teisene jalus (reaalajas lehel peidetud)"
   },
   "secondaryHeader": "Teisene päis",
+  "secondaryHeaderHiddenOnLivePage": "Sekundaarne päis (reaalajas lehel peidetud)",
   "secondaryHeaderLinks": "Teisese päise lingid",
   "section": "jaotis",
   "selectAnOption": "Valige suvand",

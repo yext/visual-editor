@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "輔助頁腳（隱藏在實時頁面上）"
   },
   "secondaryHeader": "次要標題",
+  "secondaryHeaderHiddenOnLivePage": "輔助標題（隱藏在實時頁面上）",
   "secondaryHeaderLinks": "二級標題鏈接",
   "section": "部分",
   "selectAnOption": "選擇一個選項",

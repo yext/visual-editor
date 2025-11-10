@@ -599,6 +599,7 @@
     "hiddenOnLivePage": "Sekundär sidfot (dold på livesida)"
   },
   "secondaryHeader": "Sekundärrubrik",
+  "secondaryHeaderHiddenOnLivePage": "Sekundär sidhuvud (dold på livesida)",
   "secondaryHeaderLinks": "Sekundära rubriklänkar",
   "section": "Avsnitt",
   "selectAnOption": "Välj ett alternativ",

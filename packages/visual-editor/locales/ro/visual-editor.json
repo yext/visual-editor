@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Subsol secundar (ascuns pe pagina live)"
   },
   "secondaryHeader": "Antet secundar",
+  "secondaryHeaderHiddenOnLivePage": "Antet secundar (ascuns pe pagina live)",
   "secondaryHeaderLinks": "Linkuri de antet secundare",
   "section": "Secțiune",
   "selectAnOption": "Selectați o opțiune",

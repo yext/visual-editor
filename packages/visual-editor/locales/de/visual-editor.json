@@ -597,6 +597,7 @@
     "hiddenOnLivePage": "Sekundäre Fußzeile (auf der Live-Seite ausgeblendet)"
   },
   "secondaryHeader": "Sekundärer Header",
+  "secondaryHeaderHiddenOnLivePage": "Sekundärer Header (auf der Live-Seite ausgeblendet)",
   "secondaryHeaderLinks": "Sekundäre Header-Links",
   "section": "Abschnitt",
   "selectAnOption": "Wählen Sie eine Option aus",

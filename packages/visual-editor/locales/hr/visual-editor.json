@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Sekundarno podnožje (skriveno na stranici uživo)"
   },
   "secondaryHeader": "Sekundarno zaglavlje",
+  "secondaryHeaderHiddenOnLivePage": "Sekundarno zaglavlje (skriveno na stranici uživo)",
   "secondaryHeaderLinks": "Veze sekundarnog zaglavlja",
   "section": "Odjeljak",
   "selectAnOption": "Odaberite opciju",

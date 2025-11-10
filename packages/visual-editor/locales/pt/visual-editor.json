@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Rodapé secundário (oculto na página ao vivo)"
   },
   "secondaryHeader": "Cabeçalho secundário",
+  "secondaryHeaderHiddenOnLivePage": "Cabeçalho secundário (oculto na página ao vivo)",
   "secondaryHeaderLinks": "Links de cabeçalho secundários",
   "section": "Seção",
   "selectAnOption": "Selecione uma opção",

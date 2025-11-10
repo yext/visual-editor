@@ -599,6 +599,7 @@
     "hiddenOnLivePage": "Sekundární zápatí (skryté na aktivní stránce)"
   },
   "secondaryHeader": "Sekundární záhlaví",
+  "secondaryHeaderHiddenOnLivePage": "Sekundární záhlaví (skryté na aktivní stránce)",
   "secondaryHeaderLinks": "Sekundární odkazy záhlaví",
   "section": "Sekce",
   "selectAnOption": "Vyberte možnost",

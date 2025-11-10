@@ -597,6 +597,7 @@
     "hiddenOnLivePage": "Secondary Footer (Hidden on live page)"
   },
   "secondaryHeader": "Secondary Header",
+  "secondaryHeaderHiddenOnLivePage": "Secondary Header (Hidden on live page)",
   "secondaryHeaderLinks": "Secondary Header Links",
   "section": "Section",
   "selectAnOption": "Select an option",

@@ -108,7 +108,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
       >
         <p className="text-sm text-gray-600">
           {t(
-            "secondaryHeader.hiddenOnLivePage",
+            "secondaryHeaderHiddenOnLivePage",
             "Secondary Header (Hidden on live page)"
           )}
         </p>

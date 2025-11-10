@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "辅助页脚（隐藏在实时页面上）"
   },
   "secondaryHeader": "次要标题",
+  "secondaryHeaderHiddenOnLivePage": "辅助标题（隐藏在实时页面上）",
   "secondaryHeaderLinks": "二级标题链接",
   "section": "部分",
   "selectAnOption": "选择一个选项",
