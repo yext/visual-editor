@@ -333,6 +333,7 @@ const mainDefaultLayout = {
           cards: {
             headingLevel: 3,
             backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+            ctaVariant: "primary",
           },
           backgroundColor: {
             bgColor: "bg-palette-primary-light",
@@ -640,6 +641,7 @@ const mainDefaultLayout = {
           cards: {
             headingLevel: 3,
             backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+            ctaVariant: "primary",
           },
           backgroundColor: {
             bgColor: "bg-palette-primary-light",
