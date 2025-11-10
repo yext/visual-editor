@@ -56,7 +56,7 @@ export const coreInfoSectionSlots: Migration = {
       };
       const addressStyles = {
         showGetDirectionsLink: props.styles.info.showGetDirectionsLink ?? true,
-        ctaVariant: props.styles.info.ctaVariant,
+        ctaVariant: props.styles.info.ctaVariant ?? "primary",
       };
 
       const phoneNumbers = props.data.info.phoneNumbers;
