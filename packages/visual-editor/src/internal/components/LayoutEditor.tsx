@@ -238,7 +238,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       return;
     }
     loadPuckInitialHistory();
-  }, [templateMetadata, layoutSaveStateFetched]);
+  }, [templateMetadata.layoutId, layoutSaveStateFetched]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {

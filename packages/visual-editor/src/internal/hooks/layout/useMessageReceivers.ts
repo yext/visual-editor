@@ -47,8 +47,12 @@ export const useLayoutMessageReceivers = (
       } as LayoutSaveState;
     }
     devLogger.logData("LAYOUT_SAVE_STATE", receivedLayoutSaveState);
-    setLayoutSaveState(receivedLayoutSaveState);
-    setLayoutSaveStateFetched(true);
+
+    if (layoutSaveState?.hash !== receivedLayoutSaveState?.hash) {
+      setLayoutSaveState(receivedLayoutSaveState);
+      setLayoutSaveStateFetched(true);
+    }
+
     send({
       status: "success",
       payload: { message: "layoutSaveState received" },
