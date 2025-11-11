@@ -11,5 +11,5 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
   },
   label: "",
   getItemSummary: (item, index) =>
-    pt("insight", "Insight") + " " + (index ?? 0 + 1),
+    pt("insight", "Insight") + " " + ((index ?? 0) + 1),
 };
