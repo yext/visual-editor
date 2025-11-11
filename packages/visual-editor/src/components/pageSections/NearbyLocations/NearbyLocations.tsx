@@ -26,8 +26,6 @@ import {
 import { MapPinOff } from "lucide-react";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
 
-// debug in platform
-
 export interface NearbyLocationsSectionProps {
   /**
    * This object contains extensive properties for customizing the component's appearance.
