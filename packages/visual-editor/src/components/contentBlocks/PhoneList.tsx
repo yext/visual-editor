@@ -23,6 +23,9 @@ export interface PhoneListProps {
     phoneNumbers: Array<PhoneProps["data"]>;
   };
   styles: PhoneProps["styles"];
+
+  /** @internal Event name to be used for click analytics */
+  eventName?: string;
 }
 
 export const phoneListFields: Fields<PhoneListProps> = {
@@ -116,7 +119,7 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
               <div className="flex items-center gap-3">
                 <div className="flex gap-2 items-center">
                   <PhoneAtom
-                    eventName={`phone${idx}`}
+                    eventName={`${props.eventName || "phone"}${idx}`}
                     backgroundColor={backgroundColors.background2.value}
                     label={phone.label}
                     phoneNumber={phone.number}

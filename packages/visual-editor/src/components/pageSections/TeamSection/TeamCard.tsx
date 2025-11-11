@@ -142,6 +142,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
               phoneFormat: "domestic",
               includePhoneHyperlink: true,
             },
+            eventName: index !== undefined ? `card${index}-phone` : undefined,
           } satisfies PhoneListProps,
         },
       ],
@@ -160,6 +161,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
             styles: {
               listLength: 1,
             },
+            eventName: index !== undefined ? `card${index}-email` : undefined,
           } satisfies EmailsProps,
         },
       ],
@@ -179,7 +181,7 @@ export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
               variant: "primary",
               presetImage: "app-store",
             },
-            eventName: index !== undefined ? `cta${index}` : undefined,
+            eventName: index !== undefined ? `card${index}-cta` : undefined,
           } satisfies CTAWrapperProps,
         },
       ],
@@ -518,21 +520,21 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
     updatedData = setDeep(
       updatedData,
       "props.slots.CTASlot[0].props.eventName",
-      `cta${data.props.index}`
+      `card${data.props.index}-cta`
     );
 
     // Set the Phone's event name
     updatedData = setDeep(
       updatedData,
       "props.slots.PhoneSlot[0].props.eventName",
-      `phone${data.props.index}`
+      `card${data.props.index}-phone`
     );
 
     // Set the Email's event name
     updatedData = setDeep(
       updatedData,
       "props.slots.EmailSlot[0].props.eventName",
-      `email${data.props.index}`
+      `card${data.props.index}-email`
     );
 
     // Set parentData for all slots if parentData is provided
