@@ -33,7 +33,7 @@ const defaultTestimonial = {
     hasLocalizedValue: "true",
   },
   contributorName: { en: "Name", hasLocalizedValue: "true" },
-  contributionDate: "2022-07-22T00:00",
+  contributionDate: "2022-08-02T14:00:00",
 } satisfies TestimonialStruct;
 
 export const defaultTestimonialCardSlotData = (
