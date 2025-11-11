@@ -89,18 +89,24 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
   } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedImage = parentData
-    ? parentData?.image
-    : resolveComponentData(data.image, i18n.language, streamDocument);
+  const resolvedImage = React.useMemo(() => {
+    return parentData
+      ? parentData?.image
+      : resolveComponentData(data.image, i18n.language, streamDocument);
+  }, [parentData, data.image, i18n.language, streamDocument]);
 
   const getImageUrl = (
     image: ImageType | ComplexImageType | AssetImageType | undefined
   ): string | undefined => {
-    if (!image) return undefined;
+    if (!image) {
+      return undefined;
+    }
+
     if ("image" in image) {
       return image.image?.url;
     }
-    return (image as ImageType | AssetImageType).url;
+
+    return image.url;
   };
 
   const imageUrl = getImageUrl(resolvedImage);

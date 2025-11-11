@@ -11,6 +11,7 @@ import {
   ComponentDataOptionalId,
   FieldLabel,
   createUsePuck,
+  resolveAllData,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -30,6 +31,7 @@ import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
 import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -100,10 +102,9 @@ export const InternalLayoutEditor = ({
   metadata,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
-  const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
-    useState<boolean>(false);
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
+  const streamDocument = useDocument();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -253,6 +254,29 @@ export const InternalLayoutEditor = ({
     } as Config;
   }, [puckConfig, i18n.language]);
 
+  // Resolve all data and slots when the document changes
+  // Implemented as an override so that the getPuck hook is available
+  const reloadDataOnDocumentChange = React.useCallback(
+    (props: { children: React.ReactNode }): React.ReactElement => {
+      const getPuck = useGetPuck();
+
+      React.useEffect(() => {
+        const resolveData = async () => {
+          const { appState, config, dispatch } = getPuck();
+          const resolvedData = await resolveAllData(appState.data, config, {
+            streamDocument,
+          });
+          dispatch({ type: "setData", data: resolvedData });
+        };
+
+        resolveData();
+      }, [streamDocument]);
+
+      return <>{props.children}</>;
+    },
+    [streamDocument]
+  );
+
   return (
     <EntityTooltipsProvider>
       <Puck
@@ -340,13 +364,10 @@ export const InternalLayoutEditor = ({
           header: () => (
             <LayoutHeader
               templateMetadata={templateMetadata}
-              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               onClearLocalChanges={handleClearLocalChanges}
               onHistoryChange={handleHistoryChange}
               onPublishLayout={handlePublishLayout}
               onSendLayoutForApproval={handleSendLayoutForApproval}
-              isDevMode={templateMetadata.isDevMode}
               localDev={localDev}
             />
           ),
@@ -485,6 +506,7 @@ export const InternalLayoutEditor = ({
           fieldLabel: ({ icon, children, ...rest }) => (
             <FieldLabel {...rest}>{children}</FieldLabel>
           ),
+          puck: reloadDataOnDocumentChange,
         }}
         metadata={metadata}
       />
