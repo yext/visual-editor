@@ -125,8 +125,11 @@ const useResolvedCtaProps = (props: CTAProps) => {
       // Special handling for Uber Eats to give it more visual prominence
       "!w-auto":
         ctaType === "presetImage" && props.presetImageType === "uber-eats",
-      // For link variants, allow full width so child components can control alignment
-      "w-full": variant === "link" || variant === "directoryLink",
+      // For link variants, use w-fit by default to keep caret next to text
+      // w-full can be added via className prop when needed (e.g., for DirectoryCard)
+      "w-fit":
+        (variant === "link" || variant === "directoryLink") &&
+        !className?.includes("w-full"),
     },
     className
   );
