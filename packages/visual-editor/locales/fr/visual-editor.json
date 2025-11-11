@@ -597,6 +597,7 @@
     "hiddenOnLivePage": "Pied de page secondaire (caché sur la page en direct)"
   },
   "secondaryHeader": "Tête secondaire",
+  "secondaryHeaderHiddenOnLivePage": "En-tête secondaire (caché sur la page en direct)",
   "secondaryHeaderLinks": "Liens d'en-tête secondaires",
   "section": "Section",
   "selectAnOption": "Sélectionnez une option",

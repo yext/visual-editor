@@ -597,6 +597,7 @@
     "hiddenOnLivePage": "Pie de página secundario (oculto en la página activa)"
   },
   "secondaryHeader": "Encabezado secundario",
+  "secondaryHeaderHiddenOnLivePage": "Encabezado secundario (oculto en la página activa)",
   "secondaryHeaderLinks": "Enlaces de encabezado secundario",
   "section": "Sección",
   "selectAnOption": "Seleccione una opción",

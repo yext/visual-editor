@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Másodlagos lábléc (rejtett az élő oldalon)"
   },
   "secondaryHeader": "Másodlagos fejléc",
+  "secondaryHeaderHiddenOnLivePage": "Másodlagos fejléc (rejtett az élő oldalon)",
   "secondaryHeaderLinks": "Másodlagos fejléc hivatkozások",
   "section": "Szakasz",
   "selectAnOption": "Válasszon egy opciót",

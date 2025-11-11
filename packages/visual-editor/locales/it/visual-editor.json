@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Piè di pagina secondario (nascosto nella pagina live)"
   },
   "secondaryHeader": "Intestazione secondaria",
+  "secondaryHeaderHiddenOnLivePage": "Intestazione secondaria (nascosta nella pagina live)",
   "secondaryHeaderLinks": "Collegamenti di intestazione secondari",
   "section": "Sezione",
   "selectAnOption": "Seleziona un'opzione",

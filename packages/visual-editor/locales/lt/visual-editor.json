@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Antrinė poraštė (paslėpta tiesioginiame puslapyje)"
   },
   "secondaryHeader": "Antrinė antraštė",
+  "secondaryHeaderHiddenOnLivePage": "Antrinė antraštė (paslėpta tiesioginiame puslapyje)",
   "secondaryHeaderLinks": "Antrinės antraštės nuorodos",
   "section": "Skyrius",
   "selectAnOption": "Pasirinkite parinktį",

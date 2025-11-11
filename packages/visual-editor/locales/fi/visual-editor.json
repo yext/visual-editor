@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Toissijainen alatunniste (piilotettu live-sivulla)"
   },
   "secondaryHeader": "Toissijainen otsikko",
+  "secondaryHeaderHiddenOnLivePage": "Toissijainen otsikko (piilotettu live-sivulla)",
   "secondaryHeaderLinks": "Toissijaiset otsikkolinkit",
   "section": "osio",
   "selectAnOption": "Valitse vaihtoehto",

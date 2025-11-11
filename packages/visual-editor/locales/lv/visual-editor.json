@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Sekundārā kājene (paslēpta tiešsaistes lapā)"
   },
   "secondaryHeader": "Sekundārā galvene",
+  "secondaryHeaderHiddenOnLivePage": "Sekundārā galvene (paslēpta tiešsaistes lapā)",
   "secondaryHeaderLinks": "Sekundārās galvenes saites",
   "section": "sadaļa",
   "selectAnOption": "Atlasiet opciju",

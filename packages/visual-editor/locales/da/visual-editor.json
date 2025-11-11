@@ -599,6 +599,7 @@
     "hiddenOnLivePage": "Sekundær sidefod (skjult på liveside)"
   },
   "secondaryHeader": "Sekundær header",
+  "secondaryHeaderHiddenOnLivePage": "Sekundær overskrift (skjult på live-side)",
   "secondaryHeaderLinks": "Sekundære overskriftslinks",
   "section": "Afsnit",
   "selectAnOption": "Vælg en mulighed",

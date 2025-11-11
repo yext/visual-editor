@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "Secundaire voettekst (verborgen op livepagina)"
   },
   "secondaryHeader": "Secundaire header",
+  "secondaryHeaderHiddenOnLivePage": "Secundaire koptekst (verborgen op livepagina)",
   "secondaryHeaderLinks": "Secundaire koptekstkoppelingen",
   "section": "Sectie",
   "selectAnOption": "Selecteer een optie",

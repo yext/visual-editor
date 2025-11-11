@@ -599,6 +599,7 @@
     "hiddenOnLivePage": "Sekundárna päta (skrytá na aktívnej stránke)"
   },
   "secondaryHeader": "Sekundárna hlavička",
+  "secondaryHeaderHiddenOnLivePage": "Sekundárna hlavička (skrytá na aktívnej stránke)",
   "secondaryHeaderLinks": "Sekundárne odkazy hlavičky",
   "section": "oddiel",
   "selectAnOption": "Vyberte možnosť",

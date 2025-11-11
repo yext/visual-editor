@@ -598,6 +598,7 @@
     "hiddenOnLivePage": "セカンダリ フッター (ライブ ページでは非表示)"
   },
   "secondaryHeader": "セカンダリヘッダー",
+  "secondaryHeaderHiddenOnLivePage": "セカンダリヘッダー (ライブページでは非表示)",
   "secondaryHeaderLinks": "セカンダリヘッダーリンク",
   "section": "セクション",
   "selectAnOption": "オプションを選択します",

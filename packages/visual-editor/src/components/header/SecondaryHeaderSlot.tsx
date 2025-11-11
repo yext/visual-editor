@@ -13,6 +13,7 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
+import { pt } from "../../utils/i18n/platform";
 
 export interface SecondaryHeaderSlotProps {
   data: {
@@ -96,7 +97,26 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   const showLanguageSelector =
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
 
-  return data.show ? (
+  const { show } = data;
+
+  if (puck.isEditing && !show) {
+    return (
+      <div className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer">
+        <p className="text-sm text-gray-600">
+          {pt(
+            "secondaryHeaderHiddenOnLivePage",
+            "Secondary Header (Hidden on live page)"
+          )}
+        </p>
+      </div>
+    );
+  }
+
+  if (!show) {
+    return <></>;
+  }
+
+  return (
     <PageSection
       maxWidth={parentStyles?.maxWidth}
       verticalPadding={"sm"}
@@ -108,10 +128,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
         <LanguageDropdown {...languageDropDownProps} />
       )}
     </PageSection>
-  ) : puck.isEditing ? (
-    <div className="h-20" />
-  ) : (
-    <></>
   );
 };
 
