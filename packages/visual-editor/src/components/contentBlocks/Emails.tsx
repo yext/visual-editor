@@ -18,9 +18,13 @@ export interface EmailsProps {
   data: {
     list: YextEntityField<string[]>;
   };
+
   styles?: {
     listLength?: number;
   };
+
+  /** @internal Event name to be used for click analytics */
+  eventName?: string;
 }
 
 // Email fields used in Emails and CoreInfoSection
@@ -42,7 +46,7 @@ export const EmailsFields: Fields<EmailsProps> = {
 };
 
 const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
-  const { data, styles, puck } = props;
+  const { data, styles, puck, eventName } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   let resolvedEmailList = resolveComponentData(
@@ -82,7 +86,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
               <FaRegEnvelope className="w-4 h-4" />
             </Background>
             <CTA
-              eventName={`email${index}`}
+              eventName={`${eventName || "email"}${index}`}
               link={email}
               label={email}
               linkType="EMAIL"
