@@ -64,7 +64,6 @@ export const defaultDirectoryCardSlotData = (
           type: "PhoneSlot",
           props: {
             ...(id && { id: `${id}-phone` }),
-            ...existingSlots?.PhoneSlot?.[0]?.props,
             data: {
               number: {
                 constantValue: "",
@@ -99,7 +98,6 @@ export const defaultDirectoryCardSlotData = (
           type: "HoursStatusSlot",
           props: {
             ...(id && { id: `${id}-hours` }),
-            ...existingSlots?.HoursSlot?.[0]?.props,
             data: {
               hours: {
                 constantValue: {},
