@@ -117,7 +117,6 @@ const useResolvedCtaProps = (props: CTAProps) => {
     resolvedDynamicProps.linkType !== "EMAIL" &&
     resolvedDynamicProps.linkType !== "PHONE";
 
-  const hasWFull = className?.includes("w-full");
   const buttonClassName = themeManagerCn(
     "flex",
     {
@@ -126,12 +125,6 @@ const useResolvedCtaProps = (props: CTAProps) => {
       // Special handling for Uber Eats to give it more visual prominence
       "!w-auto":
         ctaType === "presetImage" && props.presetImageType === "uber-eats",
-      // For link variants, use w-fit by default to keep caret next to text
-      // w-full can be added via className prop when needed (e.g., for DirectoryCard)
-      "w-fit": (variant === "link" || variant === "directoryLink") && !hasWFull,
-      // When w-full is used, override justify-between to allow child alignment control
-      "!justify-start":
-        hasWFull && (variant === "link" || variant === "directoryLink"),
     },
     className
   );
