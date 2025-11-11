@@ -85,7 +85,6 @@ export const ServicesList: ComponentConfig<{ props: TextListProps }> = {
       filter: {
         types: ["type.string"],
         includeListsOnly: true,
-        allowList: ["services"],
       },
     }),
   },
