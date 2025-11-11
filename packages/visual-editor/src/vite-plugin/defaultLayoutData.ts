@@ -584,9 +584,9 @@ const mainDefaultLayout = {
               },
             },
           ],
-          ServicesListSlot: [
+          TextListSlot: [
             {
-              type: "ServicesListSlot",
+              type: "TextListSlot",
               props: {
                 id: "ServicesListSlot-2ab9809e-7c31-4a55-934d-2dd7d2f3b105",
                 list: { field: "services", constantValue: [] },

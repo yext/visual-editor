@@ -46,7 +46,7 @@ export interface CoreInfoSectionProps {
     HoursHeadingSlot: Slot;
     HoursTableSlot: Slot;
     ServicesHeadingSlot: Slot;
-    ServicesListSlot: Slot;
+    TextListSlot: Slot;
   };
 
   /** @internal */
@@ -91,7 +91,7 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
       HoursHeadingSlot: { type: "slot" },
       HoursTableSlot: { type: "slot" },
       ServicesHeadingSlot: { type: "slot" },
-      ServicesListSlot: { type: "slot" },
+      TextListSlot: { type: "slot" },
     },
     visible: false,
   },
@@ -174,7 +174,7 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
           className="flex flex-col gap-4"
         >
           <slots.ServicesHeadingSlot style={{ height: "auto" }} allow={[]} />
-          <slots.ServicesListSlot style={{ height: "auto" }} allow={[]} />
+          <slots.TextListSlot style={{ height: "auto" }} allow={[]} />
         </section>
       )}
     </PageSection>
@@ -330,9 +330,9 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             } satisfies HeadingTextProps,
           },
         ],
-        ServicesListSlot: [
+        TextListSlot: [
           {
-            type: "ServicesListSlot",
+            type: "TextListSlot",
             props: {
               list: {
                 field: "services",
@@ -403,7 +403,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
       );
 
       let resolvedServicesList = resolveComponentData(
-        data.props?.slots?.ServicesListSlot?.map(
+        data.props?.slots?.TextListSlot?.map(
           (slot) => slot.props.list as YextEntityField<TranslatableString[]>
         )[0],
         locale,

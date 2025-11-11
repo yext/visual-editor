@@ -76,23 +76,3 @@ export const TextList: ComponentConfig<{ props: TextListProps }> = {
   },
   render: (props) => <TextListComponent {...props} />,
 };
-
-export const ServicesList: ComponentConfig<{ props: TextListProps }> = {
-  label: msg("components.servicesList", "Services List"),
-  fields: {
-    list: YextField(msg("fields.values", "Values"), {
-      type: "entityField",
-      filter: {
-        types: ["type.string"],
-        includeListsOnly: true,
-      },
-    }),
-  },
-  defaultProps: {
-    list: {
-      field: "services",
-      constantValue: [],
-    },
-  },
-  render: (props) => <TextListComponent {...props} />,
-};

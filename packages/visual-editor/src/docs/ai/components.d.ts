@@ -162,7 +162,7 @@ interface CoreInfoSectionProps {
     HoursHeadingSlot: Slot;
     HoursTableSlot: Slot;
     ServicesHeadingSlot: Slot;
-    ServicesListSlot: Slot;
+    TextListSlot: Slot;
   };
   /** @internal */
   conditionalRender?: {

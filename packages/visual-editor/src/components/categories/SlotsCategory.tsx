@@ -11,11 +11,7 @@ import {
   ImageWrapper,
 } from "../contentBlocks/image/Image.tsx";
 import { Video, VideoProps } from "../contentBlocks/Video.tsx";
-import {
-  TextList,
-  TextListProps,
-  ServicesList,
-} from "../contentBlocks/TextList.tsx";
+import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
 import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
 import {
   ProductCardsWrapper,
@@ -171,7 +167,6 @@ export interface SlotsCategoryProps {
   ProductCard: ProductCardProps;
   SecondaryFooterSlot: SecondaryFooterSlotProps;
   SecondaryHeaderSlot: SecondaryHeaderSlotProps;
-  ServicesListSlot: TextListProps;
   TeamCard: TeamCardProps;
   TeamCardsWrapper: TeamCardsWrapperProps;
   TestimonialCard: TestimonialCardProps;
@@ -261,7 +256,6 @@ export const SlotsCategoryComponents = {
     ...SecondaryFooterSlot,
     permissions: lockedPermissions,
   },
-  ServicesListSlot: { ...ServicesList, permissions: lockedPermissions },
   TeamCard: { ...TeamCard, permissions: lockedPermissions },
   TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },
   TestimonialCard: { ...TestimonialCard, permissions: lockedPermissions },
