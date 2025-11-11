@@ -247,7 +247,7 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
         eventName={`link${index}`}
         alwaysHideCaret={true}
         className="mb-2 max-w-full text-wrap break-words"
-        href={resolvedUrl}
+        href={puck.isEditing ? undefined : resolvedUrl}
       >
         <slots.HeadingSlot style={{ height: "auto" }} />
       </MaybeLink>
