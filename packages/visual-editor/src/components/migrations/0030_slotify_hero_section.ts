@@ -202,6 +202,8 @@ export const heroSectionSlots: Migration = {
                             }),
                       link: constantValue?.secondaryCta?.link ?? "#",
                       linkType: constantValue?.secondaryCta?.linkType ?? "URL",
+                      ctaType:
+                        constantValue?.secondaryCta?.ctaType ?? "textAndLink",
                     },
                     selectedTypes:
                       constantValue.secondaryCta?.ctaType === "getDirections"
@@ -209,8 +211,6 @@ export const heroSectionSlots: Migration = {
                         : ["type.cta"],
                     constantValueEnabled:
                       constantValueOverride.secondaryCta ?? false,
-                    ctaType:
-                      constantValue?.primaryCta?.ctaType ?? "textAndLink",
                   },
                 },
                 eventName: "secondaryCta",
