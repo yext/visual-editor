@@ -17,7 +17,6 @@ export interface FooterLinksSlotProps {
   data: {
     links: TranslatableCTA[];
   };
-  styles: {};
   /** @internal */
   variant?: "primary" | "secondary";
   /** @internal */
@@ -93,7 +92,6 @@ const defaultFooterLinkProps: FooterLinksSlotProps = {
   data: {
     links: defaultLinks,
   },
-  styles: {},
   variant: "primary",
   alignment: "left",
 };
@@ -136,10 +134,6 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
         },
       }),
     },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {},
   }),
   variant: {
     type: "radio",
