@@ -10,5 +10,5 @@ export const FAQ_SECTION_CONSTANT_CONFIG: Field<any> = {
     },
   },
   label: "",
-  getItemSummary: (item, index) => pt("faq", "FAQ") + " " + (index ?? 0 + 1),
+  getItemSummary: (item, index) => pt("faq", "FAQ") + " " + ((index ?? 0) + 1),
 };
