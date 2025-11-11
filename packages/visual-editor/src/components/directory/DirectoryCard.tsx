@@ -23,7 +23,8 @@ export const defaultDirectoryCardSlotData = (
   id: string,
   index: number,
   profile: any,
-  existingCardStyle?: DirectoryCardProps["styles"]
+  existingCardStyle?: DirectoryCardProps["styles"],
+  existingSlots?: DirectoryCardProps["slots"]
 ) => ({
   type: "DirectoryCard",
   props: {
@@ -47,8 +48,9 @@ export const defaultDirectoryCardSlotData = (
               },
             },
             styles: {
-              level: 3,
-              align: "left",
+              level: existingSlots?.HeadingSlot?.[0]?.props?.styles?.level ?? 3,
+              align:
+                existingSlots?.HeadingSlot?.[0]?.props?.styles?.align ?? "left",
             },
             parentData: {
               field: "profile.name",
@@ -62,6 +64,7 @@ export const defaultDirectoryCardSlotData = (
           type: "PhoneSlot",
           props: {
             ...(id && { id: `${id}-phone` }),
+            ...existingSlots?.PhoneSlot?.[0]?.props,
             data: {
               number: {
                 constantValue: "",
@@ -74,9 +77,15 @@ export const defaultDirectoryCardSlotData = (
               },
             },
             styles: {
-              phoneFormat: "domestic",
-              includePhoneHyperlink: true,
-              includeIcon: false,
+              phoneFormat:
+                existingSlots?.PhoneSlot?.[0]?.props?.styles?.phoneFormat ??
+                "domestic",
+              includePhoneHyperlink:
+                existingSlots?.PhoneSlot?.[0]?.props?.styles
+                  ?.includePhoneHyperlink ?? true,
+              includeIcon:
+                existingSlots?.PhoneSlot?.[0]?.props?.styles?.includeIcon ??
+                false,
             },
             parentData: {
               field: "profile.mainPhone",
@@ -90,6 +99,7 @@ export const defaultDirectoryCardSlotData = (
           type: "HoursStatusSlot",
           props: {
             ...(id && { id: `${id}-hours` }),
+            ...existingSlots?.HoursSlot?.[0]?.props,
             data: {
               hours: {
                 constantValue: {},
@@ -97,10 +107,17 @@ export const defaultDirectoryCardSlotData = (
               },
             },
             styles: {
-              dayOfWeekFormat: "long",
-              showDayNames: true,
-              showCurrentStatus: true,
+              dayOfWeekFormat:
+                existingSlots?.HoursSlot?.[0]?.props?.styles?.dayOfWeekFormat ??
+                "long",
+              showDayNames:
+                existingSlots?.HoursSlot?.[0]?.props?.styles?.showDayNames ??
+                true,
+              showCurrentStatus:
+                existingSlots?.HoursSlot?.[0]?.props?.styles
+                  ?.showCurrentStatus ?? true,
               className:
+                existingSlots?.HoursSlot?.[0]?.props?.styles?.className ??
                 "mb-2 font-semibold font-body-fontFamily text-body-fontSize h-full",
             },
             parentData: {
@@ -243,15 +260,17 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
       className="h-full flex flex-col p-8 border border-gray-400 rounded gap-4"
       background={styles.backgroundColor}
     >
-      <MaybeLink
-        eventName={`link${index}`}
-        alwaysHideCaret={true}
-        className="mb-2 max-w-full text-wrap break-words"
-        href={resolvedUrl}
-        disabled={puck.isEditing}
-      >
-        <slots.HeadingSlot style={{ height: "auto" }} />
-      </MaybeLink>
+      <div className="mb-2 max-w-full w-full">
+        <MaybeLink
+          eventName={`link${index}`}
+          alwaysHideCaret={true}
+          className="text-wrap break-words block w-full"
+          href={resolvedUrl}
+          disabled={puck.isEditing}
+        >
+          <slots.HeadingSlot style={{ height: "auto" }} />
+        </MaybeLink>
+      </div>
       {parentData?.profile?.hours && (
         <slots.HoursSlot style={{ height: "auto" }} />
       )}
