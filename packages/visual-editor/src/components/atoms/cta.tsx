@@ -26,6 +26,7 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
+  disabled?: boolean;
 };
 
 /**
@@ -137,7 +138,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
 };
 
 export const CTA = (props: CTAProps) => {
-  const { eventName, target, variant, ctaType } = props;
+  const { eventName, target, variant, ctaType, disabled = false } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
 
@@ -158,10 +159,16 @@ export const CTA = (props: CTAProps) => {
   return (
     <Button asChild className={buttonClassName} variant={buttonVariant}>
       <Link
-        cta={{ link, linkType }}
+        cta={{ link: disabled ? "#" : link, linkType }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}
+        onClick={(e) => {
+          if (disabled) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
       >
         {label}
         {ctaType !== "presetImage" && (
