@@ -63,7 +63,10 @@ export const migrate = (
         if (!data.root.props) {
           data.root.props = {};
         }
-        data.root.props = migrationAction.propTransformation(data.root.props);
+        data.root.props = migrationAction.propTransformation(
+          data.root.props,
+          streamDocument
+        );
         return;
       }
 
