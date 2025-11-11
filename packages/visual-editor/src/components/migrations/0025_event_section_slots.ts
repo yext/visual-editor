@@ -70,7 +70,11 @@ export const eventSectionSlots: Migration = {
                         width: event.image?.width || 640,
                         aspectRatio:
                           event.image?.width && event.image?.height
-                            ? event.image.width / event.image.height
+                            ? parseFloat(
+                                (
+                                  event.image.width / event.image.height
+                                ).toFixed(2)
+                              )
                             : 16 / 9,
                       },
                       className: "max-w-full h-full object-cover",
