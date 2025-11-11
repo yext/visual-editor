@@ -13,7 +13,7 @@ export const testimonialsSectionSlots: Migration = {
       const testimonials = resolveYextEntityField(
         streamDocument,
         props.data.testimonials as YextEntityField<TestimonialSectionType>,
-        streamDocument.locale || "en"
+        streamDocument?.locale || "en"
       )?.testimonials;
 
       const cards =
@@ -21,7 +21,7 @@ export const testimonialsSectionSlots: Migration = {
           const resolvedContributorName = testimonial.contributorName
             ? resolveComponentData(
                 testimonial.contributorName,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";

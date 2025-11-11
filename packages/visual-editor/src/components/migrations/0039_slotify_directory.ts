@@ -14,9 +14,11 @@ export const directorySlots: Migration = {
       const backgroundColor = props.styles.backgroundColor;
       const breadcrumbBackgroundColor = props.styles.breadcrumbsBackgroundColor;
 
-      const isGrid = isDirectoryGrid(streamDocument.dm_directoryChildren);
+      const isGrid = isDirectoryGrid(
+        streamDocument?.dm_directoryChildren || []
+      );
       const sortedDirectoryChildren = sortAlphabetically(
-        streamDocument.dm_directoryChildren,
+        streamDocument?.dm_directoryChildren || [],
         "name"
       );
 

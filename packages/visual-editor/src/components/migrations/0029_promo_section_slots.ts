@@ -44,7 +44,7 @@ export const promoSectionSlots: Migration = {
       const resolvedTitle = resolvedPromo?.title
         ? resolveComponentData(
             resolvedPromo.title,
-            streamDocument.locale ?? "en",
+            streamDocument?.locale || "en",
             streamDocument
           )
         : "";
