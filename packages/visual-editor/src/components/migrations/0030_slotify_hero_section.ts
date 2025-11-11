@@ -47,6 +47,24 @@ export const heroSectionSlots: Migration = {
       delete props.data.localGeoModifier;
       delete props.styles.localGeoModifierLevel;
 
+      if (constantValue?.primaryCta?.ctaType === "getDirections") {
+        if (
+          constantValue?.primaryCta?.label &&
+          !constantValue?.primaryCta?.label?.en
+        ) {
+          constantValue.primaryCta.label.en = "Get Directions";
+        }
+      }
+
+      if (constantValue?.secondaryCta?.ctaType === "getDirections") {
+        if (
+          constantValue?.secondaryCta?.label &&
+          !constantValue?.secondaryCta?.label?.en
+        ) {
+          constantValue.secondaryCta.label.en = "Get Directions";
+        }
+      }
+
       return {
         ...props,
         data: {
@@ -132,13 +150,19 @@ export const heroSectionSlots: Migration = {
                 data: {
                   entityField: {
                     field: field ? field + ".primaryCta" : "",
-                    constantValue: constantValue.primaryCta ?? {
-                      label: {
-                        en: "Call To Action",
-                        hasLocalizedValue: "true",
-                      },
-                      link: "#",
-                      linkType: "URL",
+                    constantValue: {
+                      label:
+                        constantValue?.primaryCta?.label ??
+                        (constantValue.primaryCta?.ctaType === "getDirections"
+                          ? { en: "Get Directions", hasLocalizedValue: "true" }
+                          : {
+                              en: "Call to Action",
+                              hasLocalizedValue: "true",
+                            }),
+                      link: constantValue?.primaryCta?.link ?? "#",
+                      linkType: constantValue?.primaryCta?.linkType ?? "URL",
+                      ctaType:
+                        constantValue?.primaryCta?.ctaType ?? "textAndLink",
                     },
                     selectedTypes:
                       constantValue.primaryCta?.ctaType === "getDirections"
@@ -151,10 +175,6 @@ export const heroSectionSlots: Migration = {
                 eventName: "primaryCta",
                 styles: {
                   variant: primaryCTA,
-                  displayType:
-                    constantValue.primaryCta.ctaType === "presetImage"
-                      ? "presetImage"
-                      : "textAndLink",
                   presetImage:
                     constantValue.primaryCta.ctaType === "presetImage"
                       ? constantValue.primaryCta.presetImageType
@@ -171,13 +191,19 @@ export const heroSectionSlots: Migration = {
                 data: {
                   entityField: {
                     field: field ? field + ".secondaryCta" : "",
-                    constantValue: constantValue.secondaryCta ?? {
-                      label: {
-                        en: "Learn More",
-                        hasLocalizedValue: "true",
-                      },
-                      link: "#",
-                      linkType: "URL",
+                    constantValue: {
+                      label:
+                        constantValue?.secondaryCta?.label ??
+                        (constantValue.secondaryCta?.ctaType === "getDirections"
+                          ? { en: "Get Directions", hasLocalizedValue: "true" }
+                          : {
+                              en: "Learn More",
+                              hasLocalizedValue: "true",
+                            }),
+                      link: constantValue?.secondaryCta?.link ?? "#",
+                      linkType: constantValue?.secondaryCta?.linkType ?? "URL",
+                      ctaType:
+                        constantValue?.secondaryCta?.ctaType ?? "textAndLink",
                     },
                     selectedTypes:
                       constantValue.secondaryCta?.ctaType === "getDirections"
@@ -190,10 +216,6 @@ export const heroSectionSlots: Migration = {
                 eventName: "secondaryCta",
                 styles: {
                   variant: secondaryCTA,
-                  displayType:
-                    constantValue.secondaryCta.ctaType === "presetImage"
-                      ? "presetImage"
-                      : "textAndLink",
                   presetImage:
                     constantValue.secondaryCta.ctaType === "presetImage"
                       ? constantValue.secondaryCta.presetImageType
