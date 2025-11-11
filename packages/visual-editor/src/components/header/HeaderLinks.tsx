@@ -73,7 +73,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   parentData,
   puck,
 }) => {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const MAX_VISIBLE = 5;
   const type = parentData?.type || "Primary";
@@ -106,8 +106,8 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
         <nav
           aria-label={
             type === "Primary"
-              ? t("primaryHeaderLinks", "Primary Header Links")
-              : t("secondaryHeaderLinks", "Secondary Header Links")
+              ? pt("primaryHeaderLinks", "Primary Header Links")
+              : pt("secondaryHeaderLinks", "Secondary Header Links")
           }
         >
           <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
@@ -125,8 +125,8 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     <nav
       aria-label={
         type === "Primary"
-          ? t("primaryHeaderLinks", "Primary Header Links")
-          : t("secondaryHeaderLinks", "Secondary Header Links")
+          ? pt("primaryHeaderLinks", "Primary Header Links")
+          : pt("secondaryHeaderLinks", "Secondary Header Links")
       }
     >
       <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
