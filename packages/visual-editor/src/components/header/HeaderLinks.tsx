@@ -104,7 +104,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     if (puck.isEditing) {
       return (
         <nav
-          ref={puck.dragRef}
           aria-label={
             type === "Primary"
               ? t("primaryHeaderLinks", "Primary Header Links")
@@ -124,7 +123,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
 
   return (
     <nav
-      ref={puck.dragRef}
       aria-label={
         type === "Primary"
           ? t("primaryHeaderLinks", "Primary Header Links")

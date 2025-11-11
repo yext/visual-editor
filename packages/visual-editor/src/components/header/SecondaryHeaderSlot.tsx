@@ -8,12 +8,12 @@ import {
   PageSection,
   PageSectionProps,
 } from "@yext/visual-editor";
-import { useTranslation } from "react-i18next";
 import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
+import { pt } from "../../utils/i18n/platform";
 
 export interface SecondaryHeaderSlotProps {
   data: {
@@ -91,7 +91,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   puck,
 }) => {
   const streamDocument = useDocument();
-  const { t } = useTranslation();
 
   const languageDropDownProps =
     parseDocumentForLanguageDropdown(streamDocument);
@@ -102,12 +101,9 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
 
   if (puck.isEditing && !show) {
     return (
-      <div
-        ref={puck.dragRef}
-        className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer"
-      >
+      <div className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer">
         <p className="text-sm text-gray-600">
-          {t(
+          {pt(
             "secondaryHeaderHiddenOnLivePage",
             "Secondary Header (Hidden on live page)"
           )}
@@ -122,7 +118,6 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
 
   return (
     <PageSection
-      ref={puck.dragRef}
       maxWidth={parentStyles?.maxWidth}
       verticalPadding={"sm"}
       background={styles.backgroundColor}
