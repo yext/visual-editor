@@ -156,37 +156,61 @@ export const CTA = (props: CTAProps) => {
     showCaret,
   } = resolvedProps;
 
+  const linkContent = (
+    <>
+      {label}
+      {ctaType !== "presetImage" && (
+        <FaAngleRight
+          size="12px"
+          // For directoryLink, the theme value for caret is ignored
+          className={variant === "directoryLink" ? "block sm:hidden" : ""}
+          // display does not support custom Tailwind utilities so the property must be set directly
+          style={{
+            display:
+              variant === "directoryLink"
+                ? undefined
+                : showCaret
+                  ? "inline-block"
+                  : "none",
+          }}
+        />
+      )}
+    </>
+  );
+
+  if (disabled) {
+    return (
+      <Button
+        className={buttonClassName}
+        variant={buttonVariant}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        style={{ cursor: "default", pointerEvents: "auto" }}
+      >
+        {linkContent}
+      </Button>
+    );
+  }
+
   return (
     <Button asChild className={buttonClassName} variant={buttonVariant}>
       <Link
-        cta={{ link: disabled ? "#" : link, linkType }}
+        cta={{ link, linkType }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}
-        onClick={(e) => {
-          if (disabled) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }}
       >
-        {label}
-        {ctaType !== "presetImage" && (
-          <FaAngleRight
-            size="12px"
-            // For directoryLink, the theme value for caret is ignored
-            className={variant === "directoryLink" ? "block sm:hidden" : ""}
-            // display does not support custom Tailwind utilities so the property must be set directly
-            style={{
-              display:
-                variant === "directoryLink"
-                  ? undefined
-                  : showCaret
-                    ? "inline-block"
-                    : "none",
-            }}
-          />
-        )}
+        {linkContent}
       </Link>
     </Button>
   );
