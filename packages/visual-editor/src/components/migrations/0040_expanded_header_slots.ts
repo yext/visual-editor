@@ -78,8 +78,8 @@ export const expandedHeaderSlots: Migration = {
                             props.styles?.primaryHeader.primaryCtaVariant,
                           presetImage: "app-store",
                         },
-                        fieldsToHide: ["styles.displayType"],
                       },
+                      eventName: "primaryCta",
                     },
                   ],
                   SecondaryCTASlot: [
@@ -101,7 +101,7 @@ export const expandedHeaderSlots: Migration = {
                             props.styles?.primaryHeader.secondaryCtaVariant,
                           presetImage: "app-store",
                         },
-                        fieldsToHide: ["styles.displayType"],
+                        eventName: "secondaryCta",
                       },
                     },
                   ],
