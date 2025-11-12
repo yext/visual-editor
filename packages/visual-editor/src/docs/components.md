@@ -95,9 +95,9 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop   | Type                                             | Description | Default |
-| :----- | :----------------------------------------------- | :---------- | :------ |
-| `data` | `{ text: YextEntityField<TranslatableString>; }` |             |         |
+| Prop   | Type                            | Description | Default |
+| :----- | :------------------------------ | :---------- | :------ |
+| `data` | `{ text: TranslatableString; }` |             |         |
 
 ---
 
