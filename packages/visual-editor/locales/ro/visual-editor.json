@@ -125,6 +125,7 @@
   "fields": {
     "address": "Adresa",
     "alignCard": "Aliniați cardul",
+    "alignContent": "Aliniați conținutul",
     "alignItems": "Aliniați articolele",
     "alignment": "Aliniere",
     "analytics": "Analitică",
@@ -308,6 +309,7 @@
       "navigationDay": "Navigare (zi)",
       "navigationNight": "Navigare (noapte)",
       "no": "Nu",
+      "one": "Unul",
       "right": "Corect",
       "right_direction": "Dreapta",
       "satellite": "Satelit",

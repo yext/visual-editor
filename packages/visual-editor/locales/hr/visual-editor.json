@@ -125,6 +125,7 @@
   "fields": {
     "address": "Adresa",
     "alignCard": "Poravnavanje",
+    "alignContent": "Uskladite sadržaj",
     "alignItems": "Poravnaj predmete",
     "alignment": "Poravnanje",
     "analytics": "Analitika",
@@ -308,6 +309,7 @@
       "navigationDay": "Navigacija (dan)",
       "navigationNight": "Navigacija (noć)",
       "no": "Ne",
+      "one": "Jedan",
       "right": "Pravo",
       "right_direction": "Desno",
       "satellite": "Satelit",

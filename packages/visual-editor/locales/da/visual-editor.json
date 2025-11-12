@@ -126,6 +126,7 @@
   "fields": {
     "address": "Adresse",
     "alignCard": "Juster kort",
+    "alignContent": "Juster indhold",
     "alignItems": "Juster genstande",
     "alignment": "Justering",
     "analytics": "Analytics",
@@ -309,6 +310,7 @@
       "navigationDay": "Navigation (dag)",
       "navigationNight": "Navigation (nat)",
       "no": "Ingen",
+      "one": "En",
       "right": "Højre",
       "right_direction": "Højre",
       "satellite": "Satellit",

@@ -125,6 +125,7 @@
   "fields": {
     "address": "Aadress",
     "alignCard": "Joondama kaart",
+    "alignContent": "Joonda sisu",
     "alignItems": "Esemeid joondama",
     "alignment": "Joondamine",
     "analytics": "Analüütika",
@@ -308,6 +309,7 @@
       "navigationDay": "Navigeerimine (päev)",
       "navigationNight": "Navigeerimine (öö)",
       "no": "Mitte",
+      "one": "Üks",
       "right": "Paremale",
       "right_direction": "Õige",
       "satellite": "Satelliit",

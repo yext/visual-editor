@@ -125,6 +125,7 @@
   "fields": {
     "address": "Osoite",
     "alignCard": "Kohdistaa kortti",
+    "alignContent": "Tasaa sisältö",
     "alignItems": "Kohdistaa kohteet",
     "alignment": "Linjaus",
     "analytics": "Analytiikka",
@@ -308,6 +309,7 @@
       "navigationDay": "Navigointi (päivä)",
       "navigationNight": "Navigointi (yö)",
       "no": "Ei",
+      "one": "Yksi",
       "right": "Oikea",
       "right_direction": "Oikea",
       "satellite": "Satelliitti",

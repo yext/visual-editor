@@ -125,6 +125,7 @@
   "fields": {
     "address": "Cím",
     "alignCard": "Igazítson kártya",
+    "alignContent": "Tartalom igazítása",
     "alignItems": "Hozzáigazítva az elemeket",
     "alignment": "Igazítás",
     "analytics": "Analitika",
@@ -308,6 +309,7 @@
       "navigationDay": "Navigáció (nap)",
       "navigationNight": "Navigáció (éjszaka)",
       "no": "Nem",
+      "one": "Egy",
       "right": "Jobbra",
       "right_direction": "Jobb",
       "satellite": "Műhold",

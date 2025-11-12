@@ -126,6 +126,7 @@
   "fields": {
     "address": "Adress",
     "alignCard": "Justera kort",
+    "alignContent": "Justera innehåll",
     "alignItems": "Justera föremål",
     "alignment": "Inriktning",
     "analytics": "Analys",
@@ -309,6 +310,7 @@
       "navigationDay": "Navigering (dag)",
       "navigationNight": "Navigering (natt)",
       "no": "Inga",
+      "one": "En",
       "right": "Rätt",
       "right_direction": "Höger",
       "satellite": "Satellit",

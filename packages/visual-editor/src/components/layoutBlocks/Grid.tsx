@@ -9,6 +9,7 @@ import {
   getAnalyticsScopeHash,
   msg,
   AdvancedCoreInfoCategory,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { layoutProps, layoutVariants } from "../Layout.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -18,6 +19,7 @@ export interface GridProps extends layoutProps {
   slots: { Column: Slot }[];
   liveVisibility: boolean;
   className?: string;
+  align?: "left" | "center" | "right";
   /** @internal */
   analytics: {
     scope?: string;
@@ -27,13 +29,15 @@ export interface GridProps extends layoutProps {
 const GridSection = React.forwardRef<
   HTMLDivElement,
   Parameters<PuckComponent<GridProps>>[0]
->(({ className, columns = 2, backgroundColor, slots }, ref) => {
+>(({ className, columns = 2, backgroundColor, slots, align }, ref) => {
   return (
     <PageSection background={backgroundColor} className={className}>
       <div
         className={
-          "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
-          columns
+          columns === 1
+            ? "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1"
+            : "grid w-full gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-" +
+              columns
         }
         ref={ref}
       >
@@ -42,7 +46,13 @@ const GridSection = React.forwardRef<
             key={idx}
             className={themeManagerCn(
               layoutVariants({ gap: "4" }),
-              `flex flex-col max-w-full overflow-hidden`
+              `flex flex-col max-w-full overflow-hidden`,
+              columns === 1 &&
+                (align === "left"
+                  ? `md:items-start text-start`
+                  : align === "right"
+                    ? `md:items-end text-end`
+                    : `md:items-center text-center`)
             )}
             allow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
           />
@@ -58,6 +68,7 @@ const gridSectionFields: Fields<GridProps> = {
   columns: YextField(msg("fields.columns", "Columns"), {
     type: "radio",
     options: [
+      { label: msg("fields.options.one", "One"), value: 1 },
       { label: msg("fields.options.two", "Two"), value: 2 },
       { label: msg("fields.options.three", "Three"), value: 3 },
     ],
@@ -76,6 +87,10 @@ const gridSectionFields: Fields<GridProps> = {
       options: "BACKGROUND_COLOR",
     }
   ),
+  align: YextField(msg("fields.alignContent", "Align Content"), {
+    type: "radio",
+    options: ThemeOptions.ALIGNMENT,
+  }),
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
@@ -111,6 +126,16 @@ export const Grid: ComponentConfig<{ props: GridProps }> = {
     analytics: {
       scope: "gridSection",
     },
+    align: "left",
+  },
+  resolveFields: (data, { fields }) => {
+    if (data.props.columns === 1) {
+      return fields;
+    }
+    const restFields = { ...fields };
+    delete restFields.align;
+
+    return restFields;
   },
   render: (props) => (
     <AnalyticsScopeProvider

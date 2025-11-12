@@ -125,6 +125,7 @@
   "fields": {
     "address": "Uzruna",
     "alignCard": "Izlīdzināt karti",
+    "alignContent": "Saskaņot saturu",
     "alignItems": "Izlīdzināt priekšmetus",
     "alignment": "Izlīdzināšana",
     "analytics": "Analītika",
@@ -308,6 +309,7 @@
       "navigationDay": "Navigācija (diena)",
       "navigationNight": "Navigācija (nakts)",
       "no": "Ne",
+      "one": "Viens",
       "right": "Taisnība",
       "right_direction": "Pa labi",
       "satellite": "Satelīts",

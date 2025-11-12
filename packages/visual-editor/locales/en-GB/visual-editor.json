@@ -124,6 +124,7 @@
   "fields": {
     "address": "Address",
     "alignCard": "Align card",
+    "alignContent": "Align Content",
     "alignItems": "Align Items",
     "alignment": "Alignment",
     "analytics": "Analytics",
@@ -307,6 +308,7 @@
       "navigationDay": "Navigation (Day)",
       "navigationNight": "Navigation (Night)",
       "no": "No",
+      "one": "One",
       "right": "Right",
       "right_direction": "Right",
       "satellite": "Satellite",
