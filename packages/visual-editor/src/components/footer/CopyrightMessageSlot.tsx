@@ -6,23 +6,22 @@ import {
   useDocument,
   resolveComponentData,
   TranslatableString,
-  YextEntityField,
-  EntityField,
-  pt,
   Body,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
 export interface CopyrightMessageSlotProps {
   data: {
-    text: YextEntityField<TranslatableString>;
+    text: TranslatableString;
   };
+  /** @internal */
+  alignment?: "left" | "right";
 }
 
 const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   props
 ) => {
-  const { data, puck } = props;
+  const { data, puck, alignment = "left" } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -33,15 +32,16 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   );
 
   return resolvedText ? (
-    <EntityField
-      displayName={pt("copyrightMessage", "Copyright Message")}
-      fieldId={data.text.field}
-      constantValueEnabled={data.text.constantValueEnabled}
+    <Body
+      variant="xs"
+      className={
+        alignment === "right"
+          ? "text-center md:text-right"
+          : "text-center md:text-left"
+      }
     >
-      <Body variant="xs" className="text-center md:text-left">
-        {resolvedText}
-      </Body>
-    </EntityField>
+      {resolvedText}
+    </Body>
   ) : puck.isEditing ? (
     <div className="h-[20px] min-w-[100px]" />
   ) : (
@@ -52,9 +52,8 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
 export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
   data: {
     text: {
-      field: "",
-      constantValue: { en: "", hasLocalizedValue: "true" },
-      constantValueEnabled: true,
+      en: "",
+      hasLocalizedValue: "true",
     },
   },
 };

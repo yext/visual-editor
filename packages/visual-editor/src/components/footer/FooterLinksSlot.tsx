@@ -44,8 +44,8 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 
   const secondaryItemsAlignment =
     variant === "secondary" && alignment === "right"
-      ? "md:items-end"
-      : "md:items-start";
+      ? "md:justify-end"
+      : "md:justify-start";
 
   return (
     <div
