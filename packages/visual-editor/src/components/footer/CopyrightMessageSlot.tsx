@@ -14,12 +14,14 @@ export interface CopyrightMessageSlotProps {
   data: {
     text: TranslatableString;
   };
+  /** @internal */
+  alignment?: "left" | "right";
 }
 
 const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   props
 ) => {
-  const { data, puck } = props;
+  const { data, puck, alignment = "left" } = props;
   const streamDocument = useDocument();
   const { i18n } = useTranslation();
 
@@ -30,7 +32,14 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
   );
 
   return resolvedText ? (
-    <Body variant="xs" className="text-center md:text-left">
+    <Body
+      variant="xs"
+      className={
+        alignment === "right"
+          ? "text-center md:text-right"
+          : "text-center md:text-left"
+      }
+    >
       {resolvedText}
     </Body>
   ) : puck.isEditing ? (

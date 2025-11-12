@@ -124,7 +124,7 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
   puck,
 }) => {
   const { show } = data;
-  const { backgroundColor, linksAlignment } = styles;
+  const { backgroundColor } = styles;
   const { t } = useTranslation();
 
   // In edit mode, show minimal clickable placeholder when hidden
@@ -158,11 +158,7 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
       className={`flex flex-col gap-5`}
     >
       <slots.SecondaryLinksWrapperSlot style={{ height: "auto" }} allow={[]} />
-      <div
-        className={`text-center ${linksAlignment === "left" ? "md:text-left" : "md:text-right"}`}
-      >
-        <slots.CopyrightSlot style={{ height: "auto" }} allow={[]} />
-      </div>
+      <slots.CopyrightSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
 };
@@ -244,6 +240,22 @@ export const SecondaryFooterSlot: ComponentConfig<{
             alignment: secondaryLinksAlignment,
           },
         }));
+    }
+
+    // Pass alignment to CopyrightSlot based on parent styles
+    if (
+      data?.props?.slots?.CopyrightSlot &&
+      Array.isArray(data.props.slots.CopyrightSlot)
+    ) {
+      data.props.slots.CopyrightSlot = data.props.slots.CopyrightSlot.map(
+        (slot: any) => ({
+          ...slot,
+          props: {
+            ...slot.props,
+            alignment: secondaryLinksAlignment,
+          },
+        })
+      );
     }
 
     return {
