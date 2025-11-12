@@ -26,6 +26,7 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
+  disabled?: boolean;
 };
 
 /**
@@ -137,7 +138,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
 };
 
 export const CTA = (props: CTAProps) => {
-  const { eventName, target, variant, ctaType } = props;
+  const { eventName, target, variant, ctaType, disabled = false } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
 
@@ -155,6 +156,52 @@ export const CTA = (props: CTAProps) => {
     showCaret,
   } = resolvedProps;
 
+  const linkContent = (
+    <>
+      {label}
+      {ctaType !== "presetImage" && (
+        <FaAngleRight
+          size="12px"
+          // For directoryLink, the theme value for caret is ignored
+          className={variant === "directoryLink" ? "block sm:hidden" : ""}
+          // display does not support custom Tailwind utilities so the property must be set directly
+          style={{
+            display:
+              variant === "directoryLink"
+                ? undefined
+                : showCaret
+                  ? "inline-block"
+                  : "none",
+          }}
+        />
+      )}
+    </>
+  );
+
+  if (disabled) {
+    return (
+      <Button
+        className={buttonClassName}
+        variant={buttonVariant}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        style={{ cursor: "default", pointerEvents: "auto" }}
+      >
+        {linkContent}
+      </Button>
+    );
+  }
+
   return (
     <Button asChild className={buttonClassName} variant={buttonVariant}>
       <Link
@@ -163,23 +210,7 @@ export const CTA = (props: CTAProps) => {
         target={target}
         aria-label={ariaLabel || undefined}
       >
-        {label}
-        {ctaType !== "presetImage" && (
-          <FaAngleRight
-            size="12px"
-            // For directoryLink, the theme value for caret is ignored
-            className={variant === "directoryLink" ? "block sm:hidden" : ""}
-            // display does not support custom Tailwind utilities so the property must be set directly
-            style={{
-              display:
-                variant === "directoryLink"
-                  ? undefined
-                  : showCaret
-                    ? "inline-block"
-                    : "none",
-            }}
-          />
-        )}
+        {linkContent}
       </Link>
     </Button>
   );
