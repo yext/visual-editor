@@ -54,7 +54,11 @@ export const insightSectionSlots: Migration = {
                         width: insight.image?.width || 640,
                         aspectRatio:
                           insight.image?.width && insight.image?.height
-                            ? insight.image.width / insight.image.height
+                            ? parseFloat(
+                                (
+                                  insight.image.width / insight.image.height
+                                ).toFixed(2)
+                              )
                             : 16 / 9,
                       },
                       className: "max-w-full h-full object-cover",
