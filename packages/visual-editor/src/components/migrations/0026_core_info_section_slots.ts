@@ -189,9 +189,9 @@ export const coreInfoSectionSlots: Migration = {
               },
             },
           ],
-          ServicesListSlot: [
+          TextListSlot: [
             {
-              type: "ServicesListSlot",
+              type: "TextListSlot",
               props: {
                 id: `${props.id}-ServicesListSlot`,
                 list: services,

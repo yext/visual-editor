@@ -20,8 +20,8 @@ import {
   Address,
   HoursTable,
   Emails,
+  TextList,
 } from "../contentBlocks/index.ts";
-import { ServicesList } from "../contentBlocks/TextList.tsx";
 import { PhoneList } from "../contentBlocks/PhoneList.tsx";
 
 const testAddress = {
@@ -903,9 +903,9 @@ const tests: ComponentTest[] = [
             },
           },
         ],
-        ServicesListSlot: [
+        TextListSlot: [
           {
-            type: "ServicesListSlot",
+            type: "TextListSlot",
             props: {
               id: "ServicesListSlot-88d05408-381e-4a03-a5a0-8b8c9781d6fc",
               list: { field: "services", constantValue: [] },
@@ -934,7 +934,7 @@ describe("CoreInfoSection", async () => {
       HeadingTextSlot: HeadingText,
       HoursTableSlot: HoursTable,
       PhoneNumbersSlot: PhoneList,
-      ServicesListSlot: ServicesList,
+      TextListSlot: TextList,
     },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
