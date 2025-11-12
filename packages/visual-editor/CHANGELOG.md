@@ -1,3 +1,43 @@
+#### 0.0.65 (2025-11-12)
+
+##### Chores
+
+- upgrade playwright ([#842](https://github.com/yext/visual-editor/pull/842)) ([c2d8558c](https://github.com/yext/visual-editor/commit/c2d8558cd48c3ca9b7c479bef2379965f86656fa))
+
+##### New Features
+
+- send schema preview to storm ([#876](https://github.com/yext/visual-editor/pull/876)) ([acd798ee](https://github.com/yext/visual-editor/commit/acd798ee0ffd1c79237ed4de100a8ecb1e844247))
+- empty state for reviews section ([#869](https://github.com/yext/visual-editor/pull/869)) ([f59cd8ec](https://github.com/yext/visual-editor/commit/f59cd8ec849634659b2ad968c5c4b245cc90e312))
+- empty state for NearbyLocations ([#868](https://github.com/yext/visual-editor/pull/868)) ([30f6b01c](https://github.com/yext/visual-editor/commit/30f6b01cec55e9b9fc873a677194214221cbb283))
+- make showing distance options in filters modal a toggleable prop ([#866](https://github.com/yext/visual-editor/pull/866)) ([cf036a04](https://github.com/yext/visual-editor/commit/cf036a04c833d428e2791626f43a0b12a7aed514))
+- add mapbox empty state ([#864](https://github.com/yext/visual-editor/pull/864)) ([de0ca722](https://github.com/yext/visual-editor/commit/de0ca72289bf7846b8d720ff33d08487bce9bd7c))
+- derive Get Directions link in locator from ref_listings if present ([#860](https://github.com/yext/visual-editor/pull/860)) ([068bd240](https://github.com/yext/visual-editor/commit/068bd240bbcc2a87fdc3ba1b06341d82c056be22))
+- read Locator starting location from initialLocation query parameter ([#849](https://github.com/yext/visual-editor/pull/849)) ([5e0ee30b](https://github.com/yext/visual-editor/commit/5e0ee30bb87b1c60e772bb903fa32729d1c410e7))
+- remove empty values from schema ([#850](https://github.com/yext/visual-editor/pull/850)) ([7be26926](https://github.com/yext/visual-editor/commit/7be269268df49c417b8a7b85a3b6751ff6ce1f8c))
+- add facets to locator component filter modal ([#833](https://github.com/yext/visual-editor/pull/833)) ([00dc6e45](https://github.com/yext/visual-editor/commit/00dc6e4593e65b73f61ea9a0e6f4708609be99fe))
+- add breadcrumbs and reviews schema ([#843](https://github.com/yext/visual-editor/pull/843)) ([eb209b5c](https://github.com/yext/visual-editor/commit/eb209b5cd8f2f3622b396c98ec41e0ee00935f61))
+- use ref_listings ([#846](https://github.com/yext/visual-editor/pull/846)) ([7e955c0a](https://github.com/yext/visual-editor/commit/7e955c0a2f8386fabb70b93ae92f91869b77dc8d))
+- add root migrations and migrate schema ([#848](https://github.com/yext/visual-editor/pull/848)) ([19562ae9](https://github.com/yext/visual-editor/commit/19562ae9ae38fcb4e5c9835386d36f3548d64ebe))
+- dynamic option selector field and locator dynamic fields setting ([#826](https://github.com/yext/visual-editor/pull/826)) ([05743973](https://github.com/yext/visual-editor/commit/057439732d361a7b9bbc1b83d32c7a44e50fc17d))
+
+##### Bug Fixes
+
+- allow selected distance to be unset ([#872](https://github.com/yext/visual-editor/pull/872)) ([16e94c7b](https://github.com/yext/visual-editor/commit/16e94c7b1446dbd9ae49a61dfed6054ba41e2657))
+- hide filter modal when there is no applicable filters ([#880](https://github.com/yext/visual-editor/pull/880)) ([137e4fee](https://github.com/yext/visual-editor/commit/137e4fee5aab9a85a76025876174bcd5ce5e70fe))
+- only derive results summary name from location/countryCode ([#877](https://github.com/yext/visual-editor/pull/877)) ([8bc0c75e](https://github.com/yext/visual-editor/commit/8bc0c75eece6b8c0aa2df9effae10f5567e734e5))
+- hide pill boxes for address.countryCode filters in locator ([#873](https://github.com/yext/visual-editor/pull/873)) ([4f3b28fc](https://github.com/yext/visual-editor/commit/4f3b28fcbee962abfee88093f24453c59f143ee3))
+- schema resolution for special cases ([#862](https://github.com/yext/visual-editor/pull/862)) ([ecf2edc4](https://github.com/yext/visual-editor/commit/ecf2edc44dad36eca07251fd4621fcad4820c90d))
+- locator migrations ([#865](https://github.com/yext/visual-editor/pull/865)) ([507da022](https://github.com/yext/visual-editor/commit/507da0222e3cf6d82bcc54e1305f58c27c6c3608))
+- handle the equals matcher for field value static filters in locator ([#870](https://github.com/yext/visual-editor/pull/870)) ([b3dc19ee](https://github.com/yext/visual-editor/commit/b3dc19ee99a108f681b59a0bfa09c5582ae83a1b))
+- adjust appearance and spacing of Locator Filter modal on small ([#867](https://github.com/yext/visual-editor/pull/867)) ([cca1907a](https://github.com/yext/visual-editor/commit/cca1907aeaf729dffe0fca8ea126188c09af0401))
+- prevent re-rendering footer logo ([#861](https://github.com/yext/visual-editor/pull/861)) ([8d394ba8](https://github.com/yext/visual-editor/commit/8d394ba82a0abcac11e6936afa413fbc4b5a6f45))
+- language picker when url templates are in use ([#840](https://github.com/yext/visual-editor/pull/840)) ([cefe7a6f](https://github.com/yext/visual-editor/commit/cefe7a6f2262a7e9b85e31d5aa45eca93b88a631))
+- starter template ([#852](https://github.com/yext/visual-editor/pull/852)) ([cccf72a2](https://github.com/yext/visual-editor/commit/cccf72a2e19ad1c1da45304005e107d1eeb3cb0a))
+- improve directory and locator schema ([#845](https://github.com/yext/visual-editor/pull/845)) ([1581ca46](https://github.com/yext/visual-editor/commit/1581ca46ce6ff56f6b5203c743c7769fba24ee0a))
+- hours status not localized, filter does not persist ([#841](https://github.com/yext/visual-editor/pull/841)) ([7422d792](https://github.com/yext/visual-editor/commit/7422d792cab3b9ca76220f92dff681dd42b8c467))
+- plugin build ([#844](https://github.com/yext/visual-editor/pull/844)) ([2cfbac9a](https://github.com/yext/visual-editor/commit/2cfbac9a55604897b7ad4b169cb47b41895ae741))
+- directory meta fields ([#839](https://github.com/yext/visual-editor/pull/839)) ([012c91ad](https://github.com/yext/visual-editor/commit/012c91ad87416f9ca098b9690030b98d71130336))
+
 #### 0.0.64 (2025-10-24)
 
 ##### Chores
