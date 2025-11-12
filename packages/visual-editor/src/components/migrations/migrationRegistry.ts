@@ -41,6 +41,7 @@ import { directorySlots } from "./0039_slotify_directory.ts";
 import { expandedHeaderSlots } from "./0040_expanded_header_slots.ts";
 import { expandedFooterSlots } from "./0041_expanded_footer_slots.ts";
 import { setDefaultCtaVariants } from "./0042_set_default_cta_variants.ts";
+import { addCopyrightAlignment } from "./0043_add_copyright_alignment.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -90,4 +91,5 @@ export const migrationRegistry: MigrationRegistry = [
   expandedHeaderSlots,
   expandedFooterSlots,
   setDefaultCtaVariants,
+  addCopyrightAlignment,
 ];
