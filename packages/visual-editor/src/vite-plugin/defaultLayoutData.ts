@@ -399,7 +399,7 @@ const mainDefaultLayout = {
                 styles: { aspectRatio: 1.78, width: 640 },
                 variant: "classic",
                 className:
-                  "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius",
+                  "mx-auto max-w-full sm:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius",
               },
             },
           ],
