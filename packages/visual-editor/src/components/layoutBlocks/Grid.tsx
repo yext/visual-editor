@@ -29,7 +29,7 @@ export interface GridProps extends layoutProps {
 const GridSection = React.forwardRef<
   HTMLDivElement,
   Parameters<PuckComponent<GridProps>>[0]
->(({ className, columns = 2, backgroundColor, slots, align }, ref) => {
+>(({ className, columns = 2, backgroundColor, slots, align = "left" }, ref) => {
   return (
     <PageSection background={backgroundColor} className={className}>
       <div
