@@ -396,7 +396,7 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { aspectRatio: 1.78, width: 640 },
+                styles: { aspectRatio: 1.78, width: 490 },
                 variant: "classic",
                 className:
                   "mx-auto max-w-full md:max-w-[350px] lg:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius",

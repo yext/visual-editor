@@ -418,7 +418,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             },
             styles: {
               aspectRatio: 1.78,
-              width: 640,
+              width: 490,
             },
           } satisfies ImageWrapperProps,
         },
