@@ -418,7 +418,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
             },
             styles: {
               aspectRatio: 1.78,
-              width: 640,
+              width: 490,
             },
           } satisfies ImageWrapperProps,
         },
@@ -540,7 +540,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
         data = setDeep(
           data,
           "props.slots.ImageSlot[0].props.className",
-          "max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
+          "mx-auto max-w-full md:max-w-[350px] lg:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius"
         );
         break;
       case "spotlight":

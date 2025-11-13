@@ -26,7 +26,7 @@ export interface HeroImageProps extends ImageWrapperProps {
 }
 
 const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
-  const { data, styles, className, puck } = props;
+  const { data, styles, className, puck, variant } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = resolveComponentData(
@@ -81,7 +81,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
       <Image
         image={resolvedImage}
         aspectRatio={styles.aspectRatio}
-        width={undefined}
+        width={variant === "classic" ? styles.width : undefined}
         className={className || "max-w-full rounded-image-borderRadius w-full"}
         sizes={imgSizesHelper({
           base: "calc(100vw - 32px)",
