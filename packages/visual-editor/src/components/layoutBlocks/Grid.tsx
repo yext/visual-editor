@@ -128,14 +128,15 @@ export const Grid: ComponentConfig<{ props: GridProps }> = {
     },
     align: "left",
   },
-  resolveFields: (data, { fields }) => {
+  resolveFields: (data) => {
     if (data.props.columns === 1) {
-      return fields;
+      return gridSectionFields;
     }
-    const restFields = { ...fields };
-    delete restFields.align;
 
-    return restFields;
+    const rest = { ...gridSectionFields };
+    delete rest.align;
+
+    return rest;
   },
   render: (props) => (
     <AnalyticsScopeProvider
