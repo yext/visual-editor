@@ -60,7 +60,7 @@ export const productSectionSlots: Migration = {
                       },
                       styles: {
                         width: 640,
-                        aspectRatio: 16 / 9,
+                        aspectRatio: 1.78,
                       },
                       sizes: {
                         base: "calc(100vw - 32px)",
