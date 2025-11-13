@@ -4,8 +4,8 @@ export const addCommaSeparatedToTextList: Migration = {
   TextList: {
     action: "updated",
     propTransformation: (props) => {
-      if (props.commaSeperated === undefined) {
-        props.commaSeperated = false;
+      if (props.commaSeparated === undefined) {
+        props.commaSeparated = false;
       }
       return props;
     },

@@ -14,7 +14,7 @@ import {
 
 export interface TextListProps {
   list: YextEntityField<TranslatableString[]>;
-  commaSeperated: boolean;
+  commaSeparated: boolean;
 }
 
 const textListFields: Fields<TextListProps> = {
@@ -25,8 +25,8 @@ const textListFields: Fields<TextListProps> = {
       includeListsOnly: true,
     },
   }),
-  commaSeperated: YextField<boolean>(
-    msg("fields.commaSeperated", "Comma Seperated"),
+  commaSeparated: YextField<boolean>(
+    msg("fields.commaSeparated", "Comma Separated"),
     {
       type: "radio",
       options: [
@@ -39,7 +39,7 @@ const textListFields: Fields<TextListProps> = {
 
 const TextListComponent: React.FC<TextListProps> = ({
   list: textListField,
-  commaSeperated,
+  commaSeparated,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -63,7 +63,7 @@ const TextListComponent: React.FC<TextListProps> = ({
       {resolvedTextList && resolvedTextList.length > 0 ? (
         <ul
           className={`components text-body-fontSize font-body-fontFamily font-body-fontWeight ${
-            commaSeperated
+            commaSeparated
               ? "flex flex-row flex-wrap list-none"
               : "list-disc list-inside"
           }`}
@@ -71,10 +71,10 @@ const TextListComponent: React.FC<TextListProps> = ({
           {resolvedTextList.map((text, index) => (
             <li
               key={index}
-              className={`${commaSeperated ? "inline mb-0" : "mb-2"}`}
+              className={`${commaSeparated ? "inline mb-0" : "mb-2"}`}
             >
               {resolveComponentData(text, i18n.language)}
-              {commaSeperated && index !== resolvedTextList.length - 1 && (
+              {commaSeparated && index !== resolvedTextList.length - 1 && (
                 <span>,&nbsp;</span>
               )}
             </li>
@@ -93,7 +93,7 @@ export const TextList: ComponentConfig<{ props: TextListProps }> = {
       field: "",
       constantValue: [],
     },
-    commaSeperated: false,
+    commaSeparated: false,
   },
   render: (props) => <TextListComponent {...props} />,
 };
