@@ -277,7 +277,7 @@ export const InternalLayoutEditor = ({
     [streamDocument]
   );
 
-  // Prevent setPointerCapture errors by wrapping the native method
+  // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
   React.useEffect(() => {
     const originalSetPointerCapture = Element.prototype.setPointerCapture;
     let failedCaptureAttempts = new Set<number>();
