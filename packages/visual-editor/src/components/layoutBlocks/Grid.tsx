@@ -29,7 +29,9 @@ export interface GridProps extends layoutProps {
 const GridSection = React.forwardRef<
   HTMLDivElement,
   Parameters<PuckComponent<GridProps>>[0]
->(({ className, columns = 2, backgroundColor, slots, align = "left" }, ref) => {
+>(({ className, columns = 2, backgroundColor, slots, align }, ref) => {
+  const resolvedAlign = align ?? "left";
+
   return (
     <PageSection background={backgroundColor} className={className}>
       <div
@@ -48,9 +50,9 @@ const GridSection = React.forwardRef<
               layoutVariants({ gap: "4" }),
               `flex flex-col max-w-full overflow-hidden`,
               columns === 1 &&
-                (align === "left"
+                (resolvedAlign === "left"
                   ? `md:items-start text-start`
-                  : align === "right"
+                  : resolvedAlign === "right"
                     ? `md:items-end text-end`
                     : `md:items-center text-center`)
             )}
