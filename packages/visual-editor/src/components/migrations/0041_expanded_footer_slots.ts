@@ -171,6 +171,7 @@ export const expandedFooterSlots: Migration = {
                             constantValueEnabled: true,
                           },
                         },
+                        alignment: secondaryLinksAlignment,
                       },
                     },
                   ],
