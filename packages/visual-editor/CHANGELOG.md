@@ -1,3 +1,9 @@
+#### 0.0.66 (2025-11-13)
+
+##### Bug Fixes
+
+- call migrate in locator template ([#904](https://github.com/yext/visual-editor/pull/904)) ([87abbf1d](https://github.com/yext/visual-editor/commit/87abbf1df499ff2e6dd31a3b986e5b778281daee))
+
 #### 0.0.65 (2025-11-13)
 
 ##### Chores
