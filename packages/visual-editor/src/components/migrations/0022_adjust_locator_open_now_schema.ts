@@ -11,6 +11,7 @@ export const adjustLocatorOpenNowSchema: Migration = {
         filters: {
           ...props?.filters,
           openNowButton: openNowButton ?? false,
+          showDistanceOptions: false,
         },
       };
     },
