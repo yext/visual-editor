@@ -8,12 +8,14 @@ import {
   MainConfigProps,
   mainConfig,
 } from "@yext/visual-editor";
+import { SlideshowSection } from "./component/Slideshow";
 
 interface DevProps extends MainConfigProps, DirectoryCategoryProps {}
 
 const components: Config<DevProps>["components"] = {
   ...mainConfig.components,
   ...DirectoryCategoryComponents,
+  SlideshowSection,
 };
 
 export const devConfig: Config<DevProps> = {
@@ -28,6 +30,7 @@ export const devConfig: Config<DevProps> = {
   root: mainConfig.root,
 };
 
+// ✅ Export your registry (used by local dev + visual editor)
 export const componentRegistry: Record<string, Config<DevProps>> = {
   dev: devConfig,
 };
