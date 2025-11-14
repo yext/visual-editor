@@ -277,6 +277,90 @@ export const InternalLayoutEditor = ({
     [streamDocument]
   );
 
+  // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
+  React.useEffect(() => {
+    const originalSetPointerCapture = Element.prototype.setPointerCapture;
+    let failedCaptureAttempts = new Set<number>();
+
+    // Wrap setPointerCapture to handle cases where the pointer is no longer active
+    Element.prototype.setPointerCapture = function (pointerId: number): void {
+      try {
+        originalSetPointerCapture.call(this, pointerId);
+        failedCaptureAttempts.delete(pointerId);
+      } catch (error) {
+        // If it's a NotFoundError (pointer no longer active), handle it gracefully
+        if (error instanceof DOMException && error.name === "NotFoundError") {
+          failedCaptureAttempts.add(pointerId);
+
+          // Reset Puck's drag state by dispatching pointer events
+          setTimeout(() => {
+            const cancelEvent = new PointerEvent("pointercancel", {
+              bubbles: true,
+              cancelable: true,
+              pointerId: pointerId,
+            });
+            this.dispatchEvent(cancelEvent);
+
+            const upEvent = new PointerEvent("pointerup", {
+              bubbles: true,
+              cancelable: true,
+              pointerId: pointerId,
+            });
+
+            this.dispatchEvent(upEvent);
+            document.dispatchEvent(cancelEvent);
+            document.dispatchEvent(upEvent);
+          }, 0);
+
+          return;
+        }
+        throw error;
+      }
+    };
+
+    // Global listeners to detect and reset stuck drag states
+    const handleGlobalPointerUp = (event: PointerEvent) => {
+      if (failedCaptureAttempts.has(event.pointerId)) {
+        failedCaptureAttempts.delete(event.pointerId);
+        const cancelEvent = new PointerEvent("pointercancel", {
+          bubbles: true,
+          cancelable: true,
+          pointerId: event.pointerId,
+        });
+        document.dispatchEvent(cancelEvent);
+      }
+    };
+
+    const handleMouseDown = () => {
+      if (failedCaptureAttempts.size > 0) {
+        failedCaptureAttempts.forEach((pointerId) => {
+          const cancelEvent = new PointerEvent("pointercancel", {
+            bubbles: true,
+            cancelable: true,
+            pointerId: pointerId,
+          });
+          document.dispatchEvent(cancelEvent);
+        });
+        failedCaptureAttempts.clear();
+      }
+    };
+
+    document.addEventListener("pointerup", handleGlobalPointerUp, true);
+    document.addEventListener("pointercancel", handleGlobalPointerUp, true);
+    document.addEventListener("mousedown", handleMouseDown, true);
+
+    return () => {
+      Element.prototype.setPointerCapture = originalSetPointerCapture;
+      document.removeEventListener("pointerup", handleGlobalPointerUp, true);
+      document.removeEventListener(
+        "pointercancel",
+        handleGlobalPointerUp,
+        true
+      );
+      document.removeEventListener("mousedown", handleMouseDown, true);
+    };
+  }, []);
+
   return (
     <EntityTooltipsProvider>
       <Puck
