@@ -27,7 +27,7 @@ import {
   useSearchActions,
   useSearchState,
 } from "@yext/search-headless-react";
-import * as React from "react";
+import React from "react";
 import {
   BasicSelector,
   Button,
@@ -38,10 +38,15 @@ import {
   Heading,
   Location,
   LocatorResultCard,
+  LocatorResultCardProps,
   msg,
   useDocument,
   YextField,
 } from "@yext/visual-editor";
+import {
+  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  LocatorResultCardFields,
+} from "./LocatorResultCard.tsx";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
@@ -432,6 +437,12 @@ export interface LocatorProps {
     latitude: string;
     longitude: string;
   };
+
+  /**
+   * Props to customize the locator result card component.
+   * Controls which fields are displayed and their styling.
+   */
+  resultCard: LocatorResultCardProps;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -516,6 +527,7 @@ const locatorFields: Fields<LocatorProps> = {
       },
     }
   ),
+  resultCard: LocatorResultCardFields,
 };
 
 /**
@@ -528,6 +540,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       openNowButton: false,
       showDistanceOptions: false,
     },
+    resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
@@ -575,6 +588,7 @@ const LocatorInternal = ({
   mapStyle,
   filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
+  resultCard: resultCardProps,
   puck,
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
@@ -780,7 +794,11 @@ const LocatorInternal = ({
 
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => (
-      <LocatorResultCard {...result} puck={puck} />
+      <LocatorResultCard
+        {...result}
+        puck={puck}
+        resultCardProps={resultCardProps}
+      />
     ),
     [puck]
   );
@@ -802,6 +820,7 @@ const LocatorInternal = ({
       let centerCoords = DEFAULT_MAP_CENTER;
       let displayName: string | undefined;
       const doSearch = () => {
+        searchActions.setVerticalLimit(50);
         searchActions.setStaticFilters([
           {
             selected: true,
@@ -1076,7 +1095,7 @@ const LocatorInternal = ({
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
       <div
-        className="relative h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col"
+        className="relative h-screen w-full md:w-2/5 lg:w-[40rem] flex flex-col md:min-w-[24rem]"
         id="locatorLeftDiv"
       >
         <div className="px-8 py-6 gap-4 flex flex-col">
@@ -1174,10 +1193,7 @@ const LocatorInternal = ({
       </div>
 
       {/* Right Section: Map. Hidden for small screens */}
-      <div
-        id="locatorMapDiv"
-        className="md:w-3/5 lg:w-2/3 md:flex hidden relative"
-      >
+      <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
         <Map {...mapProps} />
         {showSearchAreaButton && (
           <div className="absolute bottom-10 left-0 right-0 flex justify-center">

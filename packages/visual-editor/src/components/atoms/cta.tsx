@@ -26,6 +26,7 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
+  customClickHandler?: () => void;
 };
 
 /**
@@ -137,7 +138,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
 };
 
 export const CTA = (props: CTAProps) => {
-  const { eventName, target, variant, ctaType } = props;
+  const { eventName, target, variant, ctaType, customClickHandler } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
 
@@ -155,32 +156,54 @@ export const CTA = (props: CTAProps) => {
     showCaret,
   } = resolvedProps;
 
+  const caretIcon = ctaType !== "presetImage" && (
+    <FaAngleRight
+      size="12px"
+      // For directoryLink, the theme value for caret is ignored
+      className={variant === "directoryLink" ? "block sm:hidden" : ""}
+      // display does not support custom Tailwind utilities so the property must be set directly
+      style={{
+        display:
+          variant === "directoryLink"
+            ? undefined
+            : showCaret
+              ? "inline-block"
+              : "none",
+      }}
+    />
+  );
+
+  const linkContent = (
+    <>
+      {label}
+      {caretIcon}
+    </>
+  );
+
   return (
     <Button asChild className={buttonClassName} variant={buttonVariant}>
-      <Link
-        cta={{ link, linkType }}
-        eventName={eventName}
-        target={target}
-        aria-label={ariaLabel || undefined}
-      >
-        {label}
-        {ctaType !== "presetImage" && (
-          <FaAngleRight
-            size="12px"
-            // For directoryLink, the theme value for caret is ignored
-            className={variant === "directoryLink" ? "block sm:hidden" : ""}
-            // display does not support custom Tailwind utilities so the property must be set directly
-            style={{
-              display:
-                variant === "directoryLink"
-                  ? undefined
-                  : showCaret
-                    ? "inline-block"
-                    : "none",
-            }}
-          />
-        )}
-      </Link>
+      {customClickHandler ? (
+        <a
+          href={link}
+          onClick={(e) => {
+            e.preventDefault();
+            customClickHandler();
+          }}
+          target={target}
+          aria-label={ariaLabel || undefined}
+        >
+          {linkContent}
+        </a>
+      ) : (
+        <Link
+          cta={{ link, linkType }}
+          eventName={eventName}
+          target={target}
+          aria-label={ariaLabel || undefined}
+        >
+          {linkContent}
+        </Link>
+      )}
     </Button>
   );
 };
