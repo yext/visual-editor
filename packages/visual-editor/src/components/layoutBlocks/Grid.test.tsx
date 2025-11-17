@@ -52,8 +52,8 @@ const tests: ComponentTest[] = [
       name: "Galaxy Grill",
     },
     props: {
-      ...Grid.defaultProps,
       columns: 2,
+      align: "left",
       slots: [
         {
           Column: [
@@ -162,13 +162,12 @@ const tests: ComponentTest[] = [
             },
           ],
         },
-        {
-          Column: [],
-        },
+        { Column: [] },
       ],
     },
     version: 18,
   },
+
   {
     name: "version 18 - atoms used to make a CoreInfoSection",
     document: {
@@ -182,8 +181,8 @@ const tests: ComponentTest[] = [
       name: "Galaxy Grill",
     },
     props: {
-      ...Grid.defaultProps,
       columns: 3,
+      align: "left",
       slots: [
         {
           Column: [
@@ -291,22 +290,10 @@ const tests: ComponentTest[] = [
                 list: {
                   field: "",
                   constantValue: [
-                    {
-                      en: "Delivery",
-                      hasLocalizedValue: "true",
-                    },
-                    {
-                      en: "Catering",
-                      hasLocalizedValue: "true",
-                    },
-                    {
-                      en: "Carry Out",
-                      hasLocalizedValue: "true",
-                    },
-                    {
-                      en: "Dine In",
-                      hasLocalizedValue: "true",
-                    },
+                    { en: "Delivery", hasLocalizedValue: "true" },
+                    { en: "Catering", hasLocalizedValue: "true" },
+                    { en: "Carry Out", hasLocalizedValue: "true" },
+                    { en: "Dine In", hasLocalizedValue: "true" },
                   ],
                   constantValueEnabled: true,
                 },
@@ -319,6 +306,7 @@ const tests: ComponentTest[] = [
     },
     version: 18,
   },
+
   {
     name: "version 19 - various atoms",
     document: {
@@ -329,8 +317,8 @@ const tests: ComponentTest[] = [
       emails: ["sumo@yext.com"],
     },
     props: {
-      ...Grid.defaultProps,
       columns: 2,
+      align: "left",
       slots: [
         {
           Column: [
@@ -488,7 +476,7 @@ const tests: ComponentTest[] = [
                     constantValue: {
                       en: {
                         json: "",
-                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Large Text </span></p>',
+                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, -219); text-decoration: none;\\"><span>consectetur</span></a><span> Large Text </span></p>',
                       },
                       hasLocalizedValue: "true",
                     },
@@ -503,13 +491,12 @@ const tests: ComponentTest[] = [
             },
           ],
         },
-        {
-          Column: [],
-        },
+        { Column: [] },
       ],
     },
     version: 19,
   },
+
   {
     name: "version 19 - single grid - left align",
     document: {
@@ -520,7 +507,6 @@ const tests: ComponentTest[] = [
       emails: ["sumo@yext.com"],
     },
     props: {
-      ...Grid.defaultProps,
       columns: 1,
       align: "left",
       slots: [
@@ -599,16 +585,13 @@ const tests: ComponentTest[] = [
             },
           ],
         },
-        {
-          Column: [],
-        },
-        {
-          Column: [],
-        },
+        { Column: [] },
+        { Column: [] },
       ],
     },
     version: 19,
   },
+
   {
     name: "version 19 - single grid - right align",
     document: {
@@ -619,7 +602,6 @@ const tests: ComponentTest[] = [
       emails: ["sumo@yext.com"],
     },
     props: {
-      ...Grid.defaultProps,
       columns: 1,
       align: "right",
       slots: [
@@ -698,16 +680,13 @@ const tests: ComponentTest[] = [
             },
           ],
         },
-        {
-          Column: [],
-        },
-        {
-          Column: [],
-        },
+        { Column: [] },
+        { Column: [] },
       ],
     },
     version: 19,
   },
+
   {
     name: "version 19 - single grid - center align",
     document: {
@@ -718,7 +697,6 @@ const tests: ComponentTest[] = [
       emails: ["sumo@yext.com"],
     },
     props: {
-      ...Grid.defaultProps,
       columns: 1,
       align: "center",
       slots: [
@@ -797,12 +775,8 @@ const tests: ComponentTest[] = [
             },
           ],
         },
-        {
-          Column: [],
-        },
-        {
-          Column: [],
-        },
+        { Column: [] },
+        { Column: [] },
       ],
     },
     version: 19,
@@ -826,9 +800,7 @@ describe("Grid", async () => {
       TextList,
     },
     root: {
-      render: ({ children }: { children: React.ReactNode }) => {
-        return <>{children}</>;
-      },
+      render: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     },
   };
 
@@ -844,17 +816,8 @@ describe("Grid", async () => {
     }) => {
       const data = migrate(
         {
-          root: {
-            props: {
-              version,
-            },
-          },
-          content: [
-            {
-              type: "Grid",
-              props: props,
-            },
-          ],
+          root: { props: { version } },
+          content: [{ type: "Grid", props }],
         },
         migrationRegistry,
         puckConfig
@@ -867,12 +830,14 @@ describe("Grid", async () => {
       );
 
       await page.viewport(width, height);
+
       const images = Array.from(container.querySelectorAll("img"));
       await waitFor(() => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
 
       await expect(`Grid/[${viewportName}] ${name}`).toMatchScreenshot();
+
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -881,8 +846,8 @@ describe("Grid", async () => {
         await expect(
           `Grid/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
-        const results = await axe(container);
-        expect(results).toHaveNoViolations();
+        const results2 = await axe(container);
+        expect(results2).toHaveNoViolations();
       }
     }
   );
