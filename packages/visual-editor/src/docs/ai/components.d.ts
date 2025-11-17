@@ -9,7 +9,6 @@ import {
   DayOfWeekNames,
   Coordinate,
   ListingType,
-  AggregateRating as AggregateRating$1,
 } from "@yext/pages-components";
 import { VariantProps } from "class-variance-authority";
 
