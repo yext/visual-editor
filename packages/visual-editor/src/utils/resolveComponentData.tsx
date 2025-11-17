@@ -194,6 +194,9 @@ function toStringOrElement(
   value: string | RichText
 ): string | React.ReactElement {
   if (isRichText(value)) {
+    if (value.html === "" && value.json === "") {
+      return "";
+    }
     return <MaybeRTF data={value} />;
   }
   return value;
