@@ -53,7 +53,6 @@ const tests: ComponentTest[] = [
     },
     props: {
       columns: 2,
-      align: "left",
       slots: [
         {
           Column: [
@@ -182,7 +181,6 @@ const tests: ComponentTest[] = [
     },
     props: {
       columns: 3,
-      align: "left",
       slots: [
         {
           Column: [
@@ -318,7 +316,6 @@ const tests: ComponentTest[] = [
     },
     props: {
       columns: 2,
-      align: "left",
       slots: [
         {
           Column: [
@@ -496,7 +493,6 @@ const tests: ComponentTest[] = [
     },
     version: 19,
   },
-
   {
     name: "version 19 - single grid - left align",
     document: {
