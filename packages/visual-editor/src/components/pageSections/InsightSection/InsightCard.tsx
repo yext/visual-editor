@@ -415,7 +415,7 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
     },
   },
   resolveData: (data, params) => {
-    const streamDocument = params.metadata.streamDocument;
+    const streamDocument = params.metadata?.streamDocument;
     const locale = streamDocument?.locale ?? "en";
 
     if (!streamDocument || !locale) {
