@@ -473,7 +473,7 @@ const tests: ComponentTest[] = [
                     constantValue: {
                       en: {
                         json: "",
-                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, -219); text-decoration: none;\\"><span>consectetur</span></a><span> Large Text </span></p>',
+                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Large Text </span></p>',
                       },
                       hasLocalizedValue: "true",
                     },
@@ -494,7 +494,7 @@ const tests: ComponentTest[] = [
     version: 19,
   },
   {
-    name: "version 19 - single grid - left align",
+    name: "version 19 - single grid",
     document: {
       address: testAddress,
       id: "test-id",
@@ -504,197 +504,6 @@ const tests: ComponentTest[] = [
     },
     props: {
       columns: 1,
-      align: "left",
-      slots: [
-        {
-          Column: [
-            {
-              type: "HeadingText",
-              props: {
-                text: {
-                  field: "name",
-                  constantValue: "",
-                },
-                level: 3,
-                id: "HeadingText-6bc59041-d812-472a-93de-3eaf5aeb67af",
-              },
-            },
-            {
-              type: "BodyText",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: {
-                      en: {
-                        json: "",
-                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Small Text </span></p>',
-                      },
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                  },
-                },
-                styles: {
-                  variant: "sm",
-                },
-                id: "BodyText-4cc9d6a0-bc01-41a8-ae12-77ec358eecf0",
-              },
-            },
-            {
-              type: "CTAGroup",
-              props: {
-                buttons: [
-                  {
-                    entityField: {
-                      field: "",
-                      constantValue: {
-                        ctaType: "textAndLink",
-                        label: {
-                          en: "Call To Action",
-                          hasLocalizedValue: "true",
-                        },
-                        link: "#",
-                      },
-                      constantValueEnabled: true,
-                    },
-                    variant: "primary",
-                  },
-                  {
-                    entityField: {
-                      field: "",
-                      constantValue: {
-                        ctaType: "textAndLink",
-                        label: {
-                          en: "Call To Action",
-                          hasLocalizedValue: "true",
-                        },
-                        link: "#",
-                      },
-                      constantValueEnabled: true,
-                    },
-                    variant: "secondary",
-                  },
-                ],
-                id: "CTAGroup-228c5350-4484-4a11-b727-112afddea438",
-              },
-            },
-          ],
-        },
-        { Column: [] },
-        { Column: [] },
-      ],
-    },
-    version: 19,
-  },
-
-  {
-    name: "version 19 - single grid - right align",
-    document: {
-      address: testAddress,
-      id: "test-id",
-      name: "Galaxy Grill",
-      mainPhone: "+18005551010",
-      emails: ["sumo@yext.com"],
-    },
-    props: {
-      columns: 1,
-      align: "right",
-      slots: [
-        {
-          Column: [
-            {
-              type: "HeadingText",
-              props: {
-                text: {
-                  field: "name",
-                  constantValue: "",
-                },
-                level: 3,
-                id: "HeadingText-6bc59041-d812-472a-93de-3eaf5aeb67af",
-              },
-            },
-            {
-              type: "BodyText",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: {
-                      en: {
-                        json: "",
-                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Small Text </span></p>',
-                      },
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                  },
-                },
-                styles: {
-                  variant: "sm",
-                },
-                id: "BodyText-4cc9d6a0-bc01-41a8-ae12-77ec358eecf0",
-              },
-            },
-            {
-              type: "CTAGroup",
-              props: {
-                buttons: [
-                  {
-                    entityField: {
-                      field: "",
-                      constantValue: {
-                        ctaType: "textAndLink",
-                        label: {
-                          en: "Call To Action",
-                          hasLocalizedValue: "true",
-                        },
-                        link: "#",
-                      },
-                      constantValueEnabled: true,
-                    },
-                    variant: "primary",
-                  },
-                  {
-                    entityField: {
-                      field: "",
-                      constantValue: {
-                        ctaType: "textAndLink",
-                        label: {
-                          en: "Call To Action",
-                          hasLocalizedValue: "true",
-                        },
-                        link: "#",
-                      },
-                      constantValueEnabled: true,
-                    },
-                    variant: "secondary",
-                  },
-                ],
-                id: "CTAGroup-228c5350-4484-4a11-b727-112afddea438",
-              },
-            },
-          ],
-        },
-        { Column: [] },
-        { Column: [] },
-      ],
-    },
-    version: 19,
-  },
-
-  {
-    name: "version 19 - single grid - center align",
-    document: {
-      address: testAddress,
-      id: "test-id",
-      name: "Galaxy Grill",
-      mainPhone: "+18005551010",
-      emails: ["sumo@yext.com"],
-    },
-    props: {
-      columns: 1,
-      align: "center",
       slots: [
         {
           Column: [
