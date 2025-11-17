@@ -29,7 +29,6 @@ import {
 import {
   Address,
   AddressType,
-  AggregateRating,
   getDirections,
   HoursType,
   ListingType,
@@ -52,54 +51,115 @@ import {
 } from "react-icons/fa";
 
 export interface LocatorResultCardProps {
+  /** Settings for the main heading of the card */
   primaryHeading: {
+    /**
+     * The field from the data to use for the primary heading
+     * @defaultValue "name"
+     */
     field: string;
+    /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
   };
+
+  /** Settings for the secondary heading of the card */
   secondaryHeading: {
+    /** The field from the data to use for the secondary heading */
     field?: string;
+    /** The variant for the secondary heading */
     variant: BodyProps["variant"];
   };
+
+  /** Settings for the tertiary heading of the card */
   tertiaryHeading: {
+    /** The field from the data to use for the tertiary heading */
     field?: string;
+    /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
   };
+
+  /** Whether to show icons for certain fields */
   icons: boolean;
+
+  /** Settings for the hours block */
   hours: {
+    /** Styles for the hours table */
     table: Omit<
       HoursTableProps["styles"],
       "alignment" | "showAdditionalHoursText"
     >;
+    /** Whether the hours block is visible in live mode */
     liveVisibility: boolean;
   };
+
+  /** Settings for the address block */
   address: {
+    /** Whether to show the "Get Directions" link */
     showGetDirectionsLink: boolean;
+    /** Whether the address block is visible in live mode */
     liveVisibility: boolean;
   };
+
+  /** Settings for the phone block */
   phone: {
+    /**
+     * The field from the data to use for the phone number
+     * @defaultValue "mainPhone"
+     */
     field: string;
+    /**
+     * The format to use for the phone number
+     * @defaultValue "domestic"
+     */
     phoneFormat: "domestic" | "international";
+    /** Whether to include a hyperlink for the phone number */
     includePhoneHyperlink: boolean;
+    /** Whether the phone block is visible in live mode */
     liveVisibility: boolean;
   };
+
+  /** Settings for the email block */
   email: {
+    /**
+     * The field from the data to use for the email address
+     * @defaultValue "emails"
+     */
     field: string;
+    /** Whether the email block is visible in live mode */
     liveVisibility: boolean;
   };
+
+  /** Settings for the services block */
   services: {
+    /**The field from the data to use for the services
+     * @defaultValue "services"
+     */
     field: string;
+    /** Whether the services block is visible in live mode */
     liveVisibility: boolean;
   };
+
+  /** Settings for the primary CTA */
   primaryCTA: {
+    /** The variant for the primary CTA */
     variant: CTAVariant;
+    /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
   };
+
+  /** Settings for the secondary CTA */
   secondaryCTA: {
+    /** The variant for the secondary CTA */
     variant: CTAVariant;
+    /** Whether the secondary CTA is visible in live mode */
     liveVisibility: boolean;
   };
+
+  /** Settings for the image */
   image: {
+    /** The field from the data to use for the image */
     field?: string;
+    /** Whether the image block is visible in live mode */
     liveVisibility: boolean;
   };
 }
@@ -458,7 +518,6 @@ export interface Location {
   timezone: string;
   yextDisplayCoordinate?: Coordinate;
   ref_listings?: ListingType[];
-  ref_reviewsAgg?: AggregateRating;
   [key: string]: any; // Allow any other fields
 }
 
@@ -525,6 +584,13 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
+    const fieldExists = (field: string, type?: string) => {
+      return (
+        location.hasOwnProperty(field) &&
+        (type ? typeof location[field] === type : true)
+      );
+    };
+
     return (
       <Background
         background={backgroundColors.background1.value}
@@ -542,7 +608,8 @@ export const LocatorResultCard = React.memo(
             <div className="flex flex-row justify-between items-start gap-6">
               <div className="flex flex-row items-start gap-6">
                 {props.image.field &&
-                  location.hasOwnProperty(props.image.field) &&
+                  fieldExists(props.image.field, "object") &&
+                  location[props.image.field]?.url &&
                   props.image.liveVisibility && (
                     <img
                       src={location[props.image.field].url}
@@ -561,7 +628,7 @@ export const LocatorResultCard = React.memo(
                     {location[props.primaryHeading.field] ?? location.name}
                   </Heading>
                   {props.secondaryHeading.field &&
-                    location.hasOwnProperty(props.secondaryHeading.field) && (
+                    fieldExists(props.secondaryHeading.field, "string") && (
                       <Body
                         variant={props.secondaryHeading.variant}
                         className="font-bold"
@@ -570,7 +637,7 @@ export const LocatorResultCard = React.memo(
                       </Body>
                     )}
                   {props.tertiaryHeading.field &&
-                    location.hasOwnProperty(props.tertiaryHeading.field) && (
+                    fieldExists(props.tertiaryHeading.field, "string") && (
                       <Body
                         variant={props.tertiaryHeading.variant}
                         className=""
@@ -667,7 +734,7 @@ export const LocatorResultCard = React.memo(
                   </div>
                 )}
                 {props.phone.field &&
-                  location.hasOwnProperty(props.phone.field) &&
+                  fieldExists(props.phone.field, "string") &&
                   props.phone.liveVisibility && (
                     <PhoneAtom
                       backgroundColor={backgroundColors.background2.value}
@@ -681,7 +748,7 @@ export const LocatorResultCard = React.memo(
                     />
                   )}
                 {props.email.field &&
-                  location.hasOwnProperty(props.email.field) &&
+                  fieldExists(props.email.field) &&
                   Array.isArray(location[props.email.field]) &&
                   location[props.email.field].length > 0 &&
                   props.email.liveVisibility && (
@@ -704,7 +771,7 @@ export const LocatorResultCard = React.memo(
               {/** Secondary Info Section */}
               <div className="flex flex-col gap-4 lg:w-[240px]">
                 {props.services.field &&
-                  location.hasOwnProperty(props.services.field) &&
+                  fieldExists(props.services.field) &&
                   Array.isArray(location[props.services.field]) &&
                   location[props.services.field].length > 0 &&
                   props.services.liveVisibility && (
