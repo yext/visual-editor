@@ -55,6 +55,8 @@ const DEFAULT_RESULT_CARD = {
   },
 };
 
+// test
+
 export const locatorCardDefaultProps: Migration = {
   Locator: {
     action: "updated",
