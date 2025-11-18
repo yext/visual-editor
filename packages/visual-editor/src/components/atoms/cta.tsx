@@ -185,8 +185,7 @@ export const CTA = (props: CTAProps) => {
       {customClickHandler ? (
         <a
           href={link}
-          onClick={(e) => {
-            e.preventDefault();
+          onClick={() => {
             customClickHandler();
           }}
           target={target}

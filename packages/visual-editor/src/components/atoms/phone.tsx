@@ -20,7 +20,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
     props.format
   );
 
-  // If a custom click handler is provided, we the phone number doesn't get
+  // If a custom click handler is provided, the phone number doesn't get
   // link-ified in the pages-components Link component, so we have to
   // preemptively format it for tel: links here.
   const phoneNumberLink = props.customClickHandler

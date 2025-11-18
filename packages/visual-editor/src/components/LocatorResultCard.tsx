@@ -9,7 +9,6 @@ import {
 import {
   Background,
   backgroundColors,
-  BasicSelector,
   Body,
   BodyProps,
   Button,
@@ -20,6 +19,7 @@ import {
   msg,
   PhoneAtom,
   useTemplateProps,
+  resolveComponentData,
   resolveUrlTemplateOfChild,
   mergeMeta,
   HoursStatusAtom,
@@ -37,6 +37,7 @@ import {
   HoursTableProps,
   HoursTableStyleFields,
 } from "./contentBlocks/HoursTable.tsx";
+import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
 import {
   Accordion,
   AccordionContent,
@@ -65,7 +66,7 @@ export interface LocatorResultCardProps {
   /** Settings for the secondary heading of the card */
   secondaryHeading: {
     /** The field from the data to use for the secondary heading */
-    field?: string;
+    field: string;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
   };
@@ -73,7 +74,7 @@ export interface LocatorResultCardProps {
   /** Settings for the tertiary heading of the card */
   tertiaryHeading: {
     /** The field from the data to use for the tertiary heading */
-    field?: string;
+    field: string;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
   };
@@ -149,6 +150,10 @@ export interface LocatorResultCardProps {
 
   /** Settings for the secondary CTA */
   secondaryCTA: {
+    /** Label for the secondary CTA */
+    label: string;
+    /** Template for the secondary CTA link, which can contain entity field references */
+    link: string;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */
@@ -158,7 +163,7 @@ export interface LocatorResultCardProps {
   /** Settings for the image */
   image: {
     /** The field from the data to use for the image */
-    field?: string;
+    field: string;
     /** Whether the image block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -170,9 +175,11 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     headingLevel: 3,
   },
   secondaryHeading: {
+    field: "name",
     variant: "base",
   },
   tertiaryHeading: {
+    field: "name",
     variant: "base",
   },
   icons: true,
@@ -206,10 +213,13 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: true,
   },
   secondaryCTA: {
+    label: "Call to Action",
+    link: "#",
     variant: "secondary",
     liveVisibility: false,
   },
   image: {
+    field: "headshot",
     liveVisibility: false,
   },
 };
@@ -222,8 +232,9 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
       objectFields: {
-        field: BasicSelector<string>({
-          label: msg("fields.field", "Field"),
+        field: YextField(msg("fields.field", "Field"), {
+          type: "select",
+          hasSearch: true,
           options: [
             {
               label: msg("fields.name", "Name"),
@@ -242,13 +253,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryHeading", "Secondary Heading"),
       type: "object",
       objectFields: {
-        field: BasicSelector<string | undefined>({
-          label: msg("fields.field", "Field"),
+        field: YextField(msg("fields.field", "Field"), {
+          type: "select",
+          hasSearch: true,
           options: [
-            {
-              label: msg("fields.options.selectAField", "Select a field"),
-              value: undefined,
-            },
             {
               label: msg("fields.name", "Name"),
               value: "name",
@@ -265,13 +273,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.tertiaryHeading", "Tertiary Heading"),
       type: "object",
       objectFields: {
-        field: BasicSelector<string | undefined>({
-          label: msg("fields.field", "Field"),
+        field: YextField(msg("fields.field", "Field"), {
+          type: "select",
+          hasSearch: true,
           options: [
-            {
-              label: msg("fields.options.selectAField", "Select a field"),
-              value: undefined,
-            },
             {
               label: msg("fields.name", "Name"),
               value: "name",
@@ -341,8 +346,9 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.phone", "Phone"),
       type: "object",
       objectFields: {
-        field: BasicSelector<string>({
-          label: msg("fields.field", "Field"),
+        field: YextField(msg("fields.field", "Field"), {
+          type: "select",
+          hasSearch: true,
           options: [
             {
               label: msg("fields.mainPhone", "Main Phone"),
@@ -351,7 +357,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           ],
         }),
         phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
-          type: "select",
+          type: "radio",
           options: [
             {
               label: msg("fields.options.domestic", "Domestic"),
@@ -389,8 +395,9 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.email", "Email"),
       type: "object",
       objectFields: {
-        field: BasicSelector<string>({
-          label: msg("fields.field", "Field"),
+        field: YextField(msg("fields.field", "Field"), {
+          type: "select",
+          hasSearch: true,
           options: [
             {
               label: msg("fields.email", "Email"),
@@ -414,8 +421,9 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.services", "Services"),
       type: "object",
       objectFields: {
-        field: BasicSelector<string>({
-          label: msg("fields.field", "Field"),
+        field: YextField(msg("fields.field", "Field"), {
+          type: "select",
+          hasSearch: true,
           options: [
             {
               label: msg("fields.services", "Services"),
@@ -459,6 +467,13 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryCTA", "Secondary CTA"),
       type: "object",
       objectFields: {
+        label: TranslatableStringField<any>(msg("fields.label", "Label"), {
+          types: ["type.string"],
+        }),
+        link: {
+          label: msg("fields.link", "Link"),
+          type: "text",
+        },
         variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
@@ -479,13 +494,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.image", "Image"),
       type: "object",
       objectFields: {
-        field: BasicSelector<string | undefined>({
-          label: msg("fields.field", "Field"),
+        field: YextField(msg("fields.field", "Field"), {
+          type: "select",
+          hasSearch: true,
           options: [
-            {
-              label: msg("fields.options.selectAField", "Select a field"),
-              value: undefined,
-            },
             {
               label: msg("fields.headshot", "Headshot"),
               value: "headshot",
@@ -533,7 +545,7 @@ export const LocatorResultCard = React.memo(
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const location = result.rawData;
     const distance = result.distance;
@@ -552,6 +564,10 @@ export const LocatorResultCard = React.memo(
     const handleVisitPageClick = useCardAnalyticsCallback(
       result,
       "VIEW_WEBSITE"
+    );
+    const handleSecondaryCTAClick = useCardAnalyticsCallback(
+      result,
+      "CTA_CLICK"
     );
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
@@ -800,28 +816,38 @@ export const LocatorResultCard = React.memo(
               })}
             </div>
           )}
-          {props.primaryCTA.liveVisibility && (
-            <Button
-              asChild
-              className="basis-full"
-              variant={props.primaryCTA.variant}
-            >
-              <a href={resolvedUrl} onClick={handleVisitPageClick}>
-                {t("visitPage", "Visit Page")}
-              </a>
-            </Button>
-          )}
-          {props.secondaryCTA.liveVisibility && (
-            <Button
-              asChild
-              className="basis-full"
-              variant={props.secondaryCTA.variant}
-            >
-              <a href={resolvedUrl} onClick={handleVisitPageClick}>
-                {t("visitPage", "Visit Page")}
-              </a>
-            </Button>
-          )}
+          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full">
+            {props.primaryCTA.liveVisibility && (
+              <Button
+                asChild
+                className="basis-full sm:w-auto"
+                variant={props.primaryCTA.variant}
+              >
+                <a href={resolvedUrl} onClick={handleVisitPageClick}>
+                  {t("visitPage", "Visit Page")}
+                </a>
+              </Button>
+            )}
+            {props.secondaryCTA.liveVisibility && (
+              <CTA
+                link={resolveComponentData(
+                  props.secondaryCTA.link,
+                  i18n.language,
+                  location
+                )}
+                label={
+                  resolveComponentData(
+                    props.secondaryCTA.label,
+                    i18n.language,
+                    location
+                  ) || t("callToAction", "Call to Action")
+                }
+                variant={props.secondaryCTA.variant}
+                customClickHandler={handleSecondaryCTAClick}
+                className="basis-full sm:w-auto"
+              />
+            )}
+          </div>
         </div>
       </Background>
     );
