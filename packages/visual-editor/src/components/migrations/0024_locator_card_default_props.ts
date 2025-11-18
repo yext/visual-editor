@@ -59,59 +59,60 @@ export const locatorCardDefaultProps: Migration = {
   Locator: {
     action: "updated",
     propTransformation: (props) => {
+      const existingResultCard = props.resultCard || {};
       return {
         ...props,
         resultCard: {
           ...DEFAULT_RESULT_CARD,
-          ...props.resultCard,
+          ...existingResultCard,
           // Deep merge nested objects
           primaryHeading: {
             ...DEFAULT_RESULT_CARD.primaryHeading,
-            ...props.resultCard?.primaryHeading,
+            ...existingResultCard.primaryHeading,
           },
           secondaryHeading: {
             ...DEFAULT_RESULT_CARD.secondaryHeading,
-            ...props.resultCard?.secondaryHeading,
+            ...existingResultCard.secondaryHeading,
           },
           tertiaryHeading: {
             ...DEFAULT_RESULT_CARD.tertiaryHeading,
-            ...props.resultCard?.tertiaryHeading,
+            ...existingResultCard.tertiaryHeading,
           },
           hours: {
             ...DEFAULT_RESULT_CARD.hours,
-            ...props.resultCard?.hours,
+            ...existingResultCard.hours,
             table: {
               ...DEFAULT_RESULT_CARD.hours.table,
-              ...props.resultCard?.hours?.table,
+              ...(existingResultCard.hours && existingResultCard.hours.table),
             },
           },
           address: {
             ...DEFAULT_RESULT_CARD.address,
-            ...props.resultCard?.address,
+            ...existingResultCard.address,
           },
           phone: {
             ...DEFAULT_RESULT_CARD.phone,
-            ...props.resultCard?.phone,
+            ...existingResultCard.phone,
           },
           email: {
             ...DEFAULT_RESULT_CARD.email,
-            ...props.resultCard?.email,
+            ...existingResultCard.email,
           },
           services: {
             ...DEFAULT_RESULT_CARD.services,
-            ...props.resultCard?.services,
+            ...existingResultCard.services,
           },
           primaryCTA: {
             ...DEFAULT_RESULT_CARD.primaryCTA,
-            ...props.resultCard?.primaryCTA,
+            ...existingResultCard.primaryCTA,
           },
           secondaryCTA: {
             ...DEFAULT_RESULT_CARD.secondaryCTA,
-            ...props.resultCard?.secondaryCTA,
+            ...existingResultCard.secondaryCTA,
           },
           image: {
             ...DEFAULT_RESULT_CARD.image,
-            ...props.resultCard?.image,
+            ...existingResultCard.image,
           },
         },
       };
