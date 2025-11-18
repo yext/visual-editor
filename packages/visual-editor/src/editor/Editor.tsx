@@ -187,6 +187,7 @@ export const Editor = ({
               themeConfig={themeConfig}
               localDev={!!localDev}
               metadata={{ ...metadata, streamDocument: document }}
+              streamDocument={document}
             />
           )
         ) : (

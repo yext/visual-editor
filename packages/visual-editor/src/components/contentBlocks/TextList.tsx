@@ -13,6 +13,7 @@ import {
 
 export interface TextListProps {
   list: YextEntityField<TranslatableString[]>;
+  commaSeparated: boolean;
 }
 
 const textListFields: Fields<TextListProps> = {
@@ -23,10 +24,21 @@ const textListFields: Fields<TextListProps> = {
       includeListsOnly: true,
     },
   }),
+  commaSeparated: YextField<boolean>(
+    msg("fields.commaSeparated", "Comma Separated"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }
+  ),
 };
 
 const TextListComponent: PuckComponent<TextListProps> = ({
   list: textListField,
+  commaSeparated,
   puck,
 }) => {
   const { i18n } = useTranslation();
@@ -49,10 +61,22 @@ const TextListComponent: PuckComponent<TextListProps> = ({
       constantValueEnabled={textListField.constantValueEnabled}
     >
       {resolvedTextList && resolvedTextList.length > 0 ? (
-        <ul className="components list-disc list-inside text-body-fontSize font-body-fontFamily font-body-fontWeight">
+        <ul
+          className={`components text-body-fontSize font-body-fontFamily font-body-fontWeight ${
+            commaSeparated
+              ? "flex flex-row flex-wrap list-none"
+              : "list-disc list-inside"
+          }`}
+        >
           {resolvedTextList.map((text, index) => (
-            <li key={index} className="mb-2">
+            <li
+              key={index}
+              className={`${commaSeparated ? "inline mb-0" : "mb-2"}`}
+            >
               {resolveComponentData(text, i18n.language)}
+              {commaSeparated && index !== resolvedTextList.length - 1 && (
+                <span>,&nbsp;</span>
+              )}
             </li>
           ))}
         </ul>
@@ -73,6 +97,7 @@ export const TextList: ComponentConfig<{ props: TextListProps }> = {
       field: "",
       constantValue: [],
     },
+    commaSeparated: false,
   },
   render: (props) => <TextListComponent {...props} />,
 };
