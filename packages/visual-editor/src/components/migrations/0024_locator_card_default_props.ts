@@ -18,6 +18,7 @@ const DEFAULT_RESULT_CARD = {
     table: {
       startOfWeek: "today",
       collapseDays: false,
+      showAdditionalHoursText: false,
     },
     liveVisibility: true,
   },

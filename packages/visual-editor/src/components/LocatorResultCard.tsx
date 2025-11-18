@@ -85,10 +85,7 @@ export interface LocatorResultCardProps {
   /** Settings for the hours block */
   hours: {
     /** Styles for the hours table */
-    table: Omit<
-      HoursTableProps["styles"],
-      "alignment" | "showAdditionalHoursText"
-    >;
+    table: Omit<HoursTableProps["styles"], "alignment">;
     /** Whether the hours block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -187,6 +184,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     table: {
       startOfWeek: "today",
       collapseDays: false,
+      showAdditionalHoursText: false,
     },
     liveVisibility: true,
   },
@@ -522,6 +520,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
 export interface Location {
   address: AddressType;
   hours?: HoursType;
+  additionalHoursText?: string;
   id: string;
   mainPhone?: string;
   name: string;
@@ -701,12 +700,20 @@ export const LocatorResultCard = React.memo(
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <HoursTableAtom
-                        hours={location.hours}
-                        startOfWeek={props.hours.table.startOfWeek}
-                        collapseDays={props.hours.table.collapseDays}
-                        className="[&_.HoursTable-row]:w-fit"
-                      />
+                      <div className="flex flex-col gap-2">
+                        <HoursTableAtom
+                          hours={location.hours}
+                          startOfWeek={props.hours.table.startOfWeek}
+                          collapseDays={props.hours.table.collapseDays}
+                          className="[&_.HoursTable-row]:w-fit"
+                        />
+                        {location.additionalHoursText &&
+                          props.hours.table.showAdditionalHoursText && (
+                            <div className="text-body-sm-fontSize">
+                              {location.additionalHoursText}
+                            </div>
+                          )}
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
