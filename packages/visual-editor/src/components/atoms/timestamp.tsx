@@ -1,3 +1,5 @@
+import * as React from "react";
+
 const format1: Intl.DateTimeFormatOptions = {
   month: "short",
   day: "numeric",
@@ -114,35 +116,68 @@ export const TimestampAtom = ({
   dateFormatOverride,
   dateTimeFormatOverride,
 }: TimestampAtomProps): JSX.Element => {
-  let timestamp;
-  try {
-    // For date-only strings (YYYY-MM-DD), create the date in UTC
-    const startDate =
-      date.length === 10 ? new Date(date + "T12:00:00.000Z") : new Date(date);
-    const formattedEndDate = endDate
-      ? endDate.length === 10
-        ? new Date(endDate + "T12:00:00.000Z")
-        : new Date(endDate)
-      : undefined;
+  const [clientTimestamp, setClientTimestamp] = React.useState<string | null>(
+    null
+  );
 
-    timestamp = timestampFormatter({
-      date: startDate,
-      option,
-      endDate: formattedEndDate,
-      timeZone,
-      hideTimeZone,
-      locale,
-      dateFormatOverride,
-      dateTimeFormatOverride,
-    });
-  } catch (e) {
-    console.warn("error formatting timestamp:", e);
-    return <></>;
-  }
+  React.useEffect(() => {
+    try {
+      const startDate =
+        date.length === 10 ? new Date(date + "T12:00:00.000Z") : new Date(date);
+      const formattedEndDate = endDate
+        ? endDate.length === 10
+          ? new Date(endDate + "T12:00:00.000Z")
+          : new Date(endDate)
+        : undefined;
+
+      const formatted = timestampFormatter({
+        date: startDate,
+        option,
+        endDate: formattedEndDate,
+        timeZone,
+        hideTimeZone,
+        locale,
+        dateFormatOverride,
+        dateTimeFormatOverride,
+      });
+
+      setClientTimestamp(formatted);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("error formatting timestamp:", e);
+    }
+  }, [
+    date,
+    endDate,
+    option,
+    timeZone,
+    hideTimeZone,
+    locale,
+    dateFormatOverride,
+    dateTimeFormatOverride,
+  ]);
+
+  const serverFallback = (() => {
+    if (!date) {
+      return "";
+    }
+
+    try {
+      return date.length === 10
+        ? date
+        : new Date(date).toLocaleString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+    } catch {
+      return date;
+    }
+  })();
 
   return (
     <div className="components font-body-fontFamily font-body-fontWeight text-body-fontSize inline-block">
-      {timestamp}
+      {clientTimestamp ?? serverFallback}
     </div>
   );
 };
