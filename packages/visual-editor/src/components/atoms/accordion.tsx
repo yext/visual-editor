@@ -1,4 +1,5 @@
 import React from "react";
+import { themeManagerCn } from "@yext/visual-editor";
 
 export const Accordion = React.forwardRef<
   HTMLDivElement,
@@ -14,7 +15,10 @@ export const AccordionItem = React.forwardRef<
   return (
     <details
       ref={ref}
-      className={`group border-b py-4 last:border-none ${className}`}
+      className={themeManagerCn(
+        "group border-b py-4 last:border-none",
+        className
+      )}
       {...props}
     />
   );
@@ -27,7 +31,10 @@ export const AccordionTrigger = React.forwardRef<
   return (
     <summary
       ref={ref}
-      className={`flex cursor-pointer list-none items-center justify-between ${className}`}
+      className={themeManagerCn(
+        "flex cursor-pointer list-none items-center justify-between",
+        className
+      )}
       {...props}
     >
       <span>{children}</span>
@@ -49,5 +56,7 @@ export const AccordionContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(function AccordionContent({ className = "", ...props }, ref) {
-  return <div ref={ref} className={`pt-4 ${className}`} {...props} />;
+  return (
+    <div ref={ref} className={themeManagerCn("pt-4", className)} {...props} />
+  );
 });
