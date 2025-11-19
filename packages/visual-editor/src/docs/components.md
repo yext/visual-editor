@@ -442,9 +442,9 @@ Configuration for the filters available in the locator search experience.
 | `resultCard.primaryCTA`       | `{ variant: CTAVariant; liveVisibility: boolean; }`                                                                       | Settings for the primary CTA                                                        |                                        |
 | `resultCard.primaryHeading`   | `{ field: string; headingLevel: HeadingLevel; }`                                                                          | Settings for the main heading of the card                                           |                                        |
 | `resultCard.secondaryCTA`     | `{ label: string; link: string; variant: CTAVariant; liveVisibility: boolean; }`                                          | Settings for the secondary CTA                                                      |                                        |
-| `resultCard.secondaryHeading` | `{ field: string; variant: BodyProps["variant"]; }`                                                                       | Settings for the secondary heading of the card                                      |                                        |
+| `resultCard.secondaryHeading` | `{ field: string; variant: BodyProps["variant"]; liveVisibility: boolean; }`                                              | Settings for the secondary heading of the card                                      |                                        |
 | `resultCard.services`         | `{ field: string; liveVisibility: boolean; }`                                                                             | Settings for the services block                                                     |                                        |
-| `resultCard.tertiaryHeading`  | `{ field: string; variant: BodyProps["variant"]; }`                                                                       | Settings for the tertiary heading of the card                                       |                                        |
+| `resultCard.tertiaryHeading`  | `{ field: string; variant: BodyProps["variant"]; liveVisibility: boolean; }`                                              | Settings for the tertiary heading of the card                                       |                                        |
 
 ---
 
