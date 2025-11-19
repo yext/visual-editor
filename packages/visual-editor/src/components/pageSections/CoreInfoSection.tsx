@@ -338,6 +338,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                 field: "services",
                 constantValue: [],
               },
+              commaSeparated: false,
             } satisfies TextListProps,
           },
         ],
