@@ -616,8 +616,8 @@
   "siteColors": "Helyszínek",
   "slots": {
     "directoryCard": "Címtárkártya",
-    "insightCard": "Betekintéskártyák",
-    "insightCards": "Insight Cards",
+    "insightCard": "Betekintéskártya",
+    "insightCards": "Betekintéskártyák",
     "nearbyLocationCards": "Közeli helykártyák",
     "productCard": "Termékkártya",
     "productCards": "Termékkártyák"
