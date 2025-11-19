@@ -140,9 +140,12 @@ export const TimestampAtom = ({
     return <></>;
   }
 
+  // standardize spacing between server and client Intl output
+  const formattedTimestamp = timestamp.replaceAll("\u202F", " ");
+
   return (
     <div className="components font-body-fontFamily font-body-fontWeight text-body-fontSize inline-block">
-      {timestamp}
+      {formattedTimestamp}
     </div>
   );
 };
