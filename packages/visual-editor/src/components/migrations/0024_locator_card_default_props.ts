@@ -2,19 +2,36 @@ import { Migration } from "../../utils/migrate.ts";
 
 const DEFAULT_RESULT_CARD = {
   primaryHeading: {
-    field: "name",
+    field: {
+      selection: {
+        value: "name",
+      },
+    },
     headingLevel: 3,
   },
   secondaryHeading: {
-    field: "name",
+    field: {
+      selection: {
+        value: "name",
+      },
+    },
     variant: "base",
   },
   tertiaryHeading: {
-    field: "name",
+    field: {
+      selection: {
+        value: "name",
+      },
+    },
     variant: "base",
   },
   icons: true,
   hours: {
+    field: {
+      selection: {
+        value: "hours",
+      },
+    },
     table: {
       startOfWeek: "today",
       collapseDays: false,
@@ -27,17 +44,29 @@ const DEFAULT_RESULT_CARD = {
     liveVisibility: true,
   },
   phone: {
-    field: "mainPhone",
+    field: {
+      selection: {
+        value: "mainPhone",
+      },
+    },
     phoneFormat: "domestic",
     includePhoneHyperlink: true,
     liveVisibility: true,
   },
   email: {
-    field: "emails",
+    field: {
+      selection: {
+        value: "emails",
+      },
+    },
     liveVisibility: false,
   },
   services: {
-    field: "services",
+    field: {
+      selection: {
+        value: "services",
+      },
+    },
     liveVisibility: false,
   },
   primaryCTA: {
@@ -51,7 +80,11 @@ const DEFAULT_RESULT_CARD = {
     liveVisibility: false,
   },
   image: {
-    field: "headshot",
+    field: {
+      selection: {
+        value: "headshot",
+      },
+    },
     liveVisibility: false,
   },
 };

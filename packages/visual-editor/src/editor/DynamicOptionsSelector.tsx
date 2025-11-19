@@ -101,14 +101,7 @@ export const DynamicOptionsSingleSelector = <T extends DynamicOptionValueTypes>(
       ) => void;
     }) => {
       const allOptions = props.getOptions();
-      console.log(value?.selection.value);
       const selectedValue = value?.selection ?? { value: undefined };
-      console.log(
-        "Rendering DynamicOptionsSingleSelector with options:",
-        allOptions,
-        "and value:",
-        value
-      );
       return (
         <FieldLabel label={pt(props.label)}>
           <AutoField
@@ -118,13 +111,9 @@ export const DynamicOptionsSingleSelector = <T extends DynamicOptionValueTypes>(
               props.placeholderOptionLabel
             )}
             value={selectedValue.value}
-            onChange={(newValue, uiState) => {
-              console.log(
-                "DynamicOptionsSingleSelector onChange triggered with newValue:",
-                newValue
-              );
-              onChange({ selection: { value: newValue } }, uiState);
-            }}
+            onChange={(newValue, uiState) =>
+              onChange({ selection: { value: newValue } }, uiState)
+            }
           />
         </FieldLabel>
       );
