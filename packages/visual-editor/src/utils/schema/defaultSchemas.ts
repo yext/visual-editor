@@ -1,5 +1,3 @@
-import { resolveSchemaJson } from "./resolveSchema.ts";
-
 export const schemaWhitespaceRegex = /\n\s*/g;
 
 export const getDefaultSchema = (
@@ -8,7 +6,7 @@ export const getDefaultSchema = (
   const entityTypeId = (document as any)?.meta?.entityType?.id;
   const defaultSchemaTemplate = getSchemaTemplate(entityTypeId);
   try {
-    return JSON.parse(resolveSchemaJson(document, defaultSchemaTemplate));
+    return JSON.parse(defaultSchemaTemplate);
   } catch (e) {
     console.warn("Error resolving default schema:", e);
     return {};

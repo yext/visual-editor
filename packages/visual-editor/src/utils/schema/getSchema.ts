@@ -1,5 +1,5 @@
 import { StreamDocument } from "../applyTheme.ts";
-import { resolveSchemaJson } from "./resolveSchema.ts";
+import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema.ts";
 import { getDefaultSchema } from "./defaultSchemas.ts";
 import { removeEmptyValues } from "./helpers.ts";
 import {
@@ -32,11 +32,15 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const entityTypeId = document?.meta?.entityType?.id;
 
     const schemaMarkup: string = layout?.root?.props?.schemaMarkup;
-    const resolvedSchemaMarkup: Record<string, any> = schemaMarkup
-      ? JSON.parse(resolveSchemaJson(document, schemaMarkup))
+    const schemaMarkupJson: Record<string, any> = schemaMarkup
+      ? JSON.parse(schemaMarkup)
       : getDefaultSchema(document);
-    const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchemaMarkup);
-    const pageId = resolveSchemaJson(document, "[[siteDomain]]/[[path]]");
+
+    // Resolve all fields in the schema markup
+    const resolvedSchema = resolveSchemaJson(document, schemaMarkupJson);
+
+    const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchema);
+    const pageId = resolveSchemaString(document, "[[siteDomain]]/[[path]]");
 
     if (entityTypeId && entityTypeId !== "locator") {
       const breadcrumbsSchema = getBreadcrumbsSchema(data, pageId);
@@ -48,8 +52,8 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
       return {
         "@graph": [
           parsedSchemaEditorMarkup,
-          breadcrumbsSchema && { ...breadcrumbsSchema },
-          aggregateRatingSchemaBlock && { ...aggregateRatingSchemaBlock },
+          breadcrumbsSchema,
+          aggregateRatingSchemaBlock,
         ].filter(Boolean),
       };
     }
