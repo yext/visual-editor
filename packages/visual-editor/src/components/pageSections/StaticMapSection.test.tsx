@@ -183,7 +183,7 @@ describe("StaticMapSection", async () => {
       // The static image returned by mapbox can vary slightly
       const threshold =
         name.includes("with api key") && name.includes("with coordinate")
-          ? 20
+          ? 200
           : 0;
 
       await expect(

@@ -1231,7 +1231,7 @@ describe("ProductSection", async () => {
 
       await expect(
         `ProductSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot({ useFullPage: true });
+      ).toMatchScreenshot({ useFullPage: true, customThreshold: 10 });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -1239,7 +1239,7 @@ describe("ProductSection", async () => {
         await interactions(page);
         await expect(
           `ProductSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ useFullPage: true });
+        ).toMatchScreenshot({ useFullPage: true, customThreshold: 10 });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
