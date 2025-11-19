@@ -68,6 +68,8 @@ export interface LocatorResultCardProps {
     field: string;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
+    /** Whether the secondary heading is visible in live mode */
+    liveVisibility: boolean;
   };
 
   /** Settings for the tertiary heading of the card */
@@ -76,6 +78,8 @@ export interface LocatorResultCardProps {
     field: string;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
+    /** Whether the tertiary heading is visible in live mode */
+    liveVisibility: boolean;
   };
 
   /** Whether to show icons for certain fields */
@@ -173,10 +177,12 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   secondaryHeading: {
     field: "name",
     variant: "base",
+    liveVisibility: false,
   },
   tertiaryHeading: {
     field: "name",
     variant: "base",
+    liveVisibility: false,
   },
   icons: true,
   hours: {
@@ -264,6 +270,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           type: "radio",
           options: "BODY_VARIANT",
         }),
+        liveVisibility: YextField(
+          msg("fields.visibleOnLivePage", "Visible on Live Page"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          }
+        ),
       },
     },
     tertiaryHeading: {
@@ -284,6 +300,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           type: "radio",
           options: "BODY_VARIANT",
         }),
+        liveVisibility: YextField(
+          msg("fields.visibleOnLivePage", "Visible on Live Page"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          }
+        ),
       },
     },
     icons: YextField(msg("fields.icons", "Icons"), {
@@ -563,10 +589,10 @@ export const LocatorResultCard = React.memo(
       result,
       "VIEW_WEBSITE"
     );
-    const handleSecondaryCTAClick = useCardAnalyticsCallback(
-      result,
-      "CTA_CLICK"
-    );
+    const handleSecondaryCTAClick = () => {
+      console.log("Secondary CTA clicked");
+      useCardAnalyticsCallback(result, "CTA_CLICK");
+    };
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
       "TAP_TO_CALL"
@@ -642,6 +668,7 @@ export const LocatorResultCard = React.memo(
                     {location[props.primaryHeading.field] ?? location.name}
                   </Heading>
                   {props.secondaryHeading.field &&
+                    props.secondaryHeading.liveVisibility &&
                     fieldExists(props.secondaryHeading.field, "string") && (
                       <Body
                         variant={props.secondaryHeading.variant}
@@ -651,6 +678,7 @@ export const LocatorResultCard = React.memo(
                       </Body>
                     )}
                   {props.tertiaryHeading.field &&
+                    props.tertiaryHeading.liveVisibility &&
                     fieldExists(props.tertiaryHeading.field, "string") && (
                       <Body
                         variant={props.tertiaryHeading.variant}
@@ -766,7 +794,7 @@ export const LocatorResultCard = React.memo(
                       phoneNumber={location[props.phone.field]}
                       includeHyperlink={props.phone.includePhoneHyperlink}
                       includeIcon={props.icons}
-                      customClickHandler={handlePhoneNumberClick}
+                      onClick={handlePhoneNumberClick}
                     />
                   )}
                 {props.email.field &&
@@ -828,7 +856,7 @@ export const LocatorResultCard = React.memo(
                 link={resolvedUrl}
                 label={t("visitPage", "Visit Page")}
                 variant={props.primaryCTA.variant}
-                customClickHandler={handleVisitPageClick}
+                onClick={handleVisitPageClick}
                 className="basis-full sm:w-auto justify-center"
               />
             )}
@@ -847,7 +875,7 @@ export const LocatorResultCard = React.memo(
                   ) || t("callToAction", "Call to Action")
                 }
                 variant={props.secondaryCTA.variant}
-                customClickHandler={handleSecondaryCTAClick}
+                onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
               />
             )}

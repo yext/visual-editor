@@ -292,6 +292,7 @@ const tests: ComponentTest[] = [
     props: {
       filters: {
         openNowButton: false,
+        showDistanceOptions: false,
       },
     },
     version: 22,
@@ -333,6 +334,7 @@ const tests: ComponentTest[] = [
       mapStyle: "mapbox://styles/mapbox/dark-v11",
       filters: {
         openNowButton: true,
+        showDistanceOptions: true,
         facetFields: ["address.city", "address.region", "services"],
       },
     },
@@ -374,6 +376,64 @@ const tests: ComponentTest[] = [
     props: {
       filters: {
         openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          variant: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
       },
     },
     version: 24,

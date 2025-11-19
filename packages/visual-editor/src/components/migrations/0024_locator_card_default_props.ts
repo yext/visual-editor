@@ -8,10 +8,12 @@ const DEFAULT_RESULT_CARD = {
   secondaryHeading: {
     field: "name",
     variant: "base",
+    liveVisibility: false,
   },
   tertiaryHeading: {
     field: "name",
     variant: "base",
+    liveVisibility: false,
   },
   icons: true,
   hours: {

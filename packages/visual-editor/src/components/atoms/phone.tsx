@@ -11,7 +11,7 @@ export type PhoneAtomProps = {
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
   includeIcon: boolean;
-  customClickHandler?: () => void;
+  onClick?: () => void;
 };
 
 export const PhoneAtom = (props: PhoneAtomProps) => {
@@ -23,7 +23,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
   // If a custom click handler is provided, the phone number doesn't get
   // link-ified in the pages-components Link component, so we have to
   // preemptively format it for tel: links here.
-  const phoneNumberLink = props.customClickHandler
+  const phoneNumberLink = props.onClick
     ? sanitizePhoneForTelHref(props.phoneNumber)
     : props.phoneNumber;
 
@@ -47,7 +47,7 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
           linkType="PHONE"
           variant="link"
           eventName={props.eventName}
-          customClickHandler={props.customClickHandler}
+          onClick={props.onClick}
         />
       ) : (
         <Body>{formattedPhoneNumber}</Body>
