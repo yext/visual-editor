@@ -859,12 +859,12 @@ const HeadingTextSection = (props: {
       >
         {primaryHeadingText}
       </Heading>
-      {secondaryHeadingText && (
+      {secondaryHeadingText && secondaryHeading.liveVisibility && (
         <Body variant={secondaryHeading.variant} className="font-bold">
           {secondaryHeadingText}
         </Body>
       )}
-      {tertiaryHeadingText && (
+      {tertiaryHeadingText && secondaryHeading.liveVisibility && (
         <Body variant={tertiaryHeading.variant} className="">
           {tertiaryHeadingText}
         </Body>
@@ -955,7 +955,7 @@ const PhoneSection = (props: {
         phoneNumber={phoneNumber}
         includeHyperlink={phone.includePhoneHyperlink}
         includeIcon={icons}
-        customClickHandler={handlePhoneNumberClick}
+        onClick={handlePhoneNumberClick}
       />
     )
   );
