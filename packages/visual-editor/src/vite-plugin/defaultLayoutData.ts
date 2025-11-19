@@ -2311,6 +2311,10 @@ const mainDefaultLayout = {
                             textColor: "text-black",
                           },
                         },
+                        conditionalRender: {
+                          hasCategory: true,
+                          hasPublishTime: true,
+                        },
                         slots: {
                           ImageSlot: [
                             {
@@ -2433,7 +2437,10 @@ const mainDefaultLayout = {
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: "Read More",
+                                      label: {
+                                        en: "Read More",
+                                        hasLocalizedValue: "true",
+                                      },
                                       link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
@@ -2445,6 +2452,7 @@ const mainDefaultLayout = {
                                   variant: "primary",
                                   presetImage: "app-store",
                                 },
+                                eventName: "cta0",
                               },
                             },
                           ],
@@ -2460,6 +2468,10 @@ const mainDefaultLayout = {
                             bgColor: "bg-white",
                             textColor: "text-black",
                           },
+                        },
+                        conditionalRender: {
+                          hasCategory: true,
+                          hasPublishTime: true,
                         },
                         slots: {
                           ImageSlot: [
@@ -2583,7 +2595,10 @@ const mainDefaultLayout = {
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: "Read More",
+                                      label: {
+                                        en: "Read More",
+                                        hasLocalizedValue: "true",
+                                      },
                                       link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
@@ -2595,6 +2610,7 @@ const mainDefaultLayout = {
                                   variant: "primary",
                                   presetImage: "app-store",
                                 },
+                                eventName: "cta1",
                               },
                             },
                           ],
@@ -2610,6 +2626,10 @@ const mainDefaultLayout = {
                             bgColor: "bg-white",
                             textColor: "text-black",
                           },
+                        },
+                        conditionalRender: {
+                          hasCategory: true,
+                          hasPublishTime: true,
                         },
                         slots: {
                           ImageSlot: [
@@ -2733,7 +2753,10 @@ const mainDefaultLayout = {
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: "Read More",
+                                      label: {
+                                        en: "Read More",
+                                        hasLocalizedValue: "true",
+                                      },
                                       link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
@@ -2745,6 +2768,7 @@ const mainDefaultLayout = {
                                   variant: "primary",
                                   presetImage: "app-store",
                                 },
+                                eventName: "cta2",
                               },
                             },
                           ],
@@ -3736,17 +3760,9 @@ const mainDefaultLayout = {
                     {
                       type: "CopyrightMessageSlot",
                       props: {
-                        id: "CopyrightMessageSlot-a693ff67-53de-4654-a9bb-b6be0ef0af77",
-                        data: {
-                          text: {
-                            field: "",
-                            constantValue: {
-                              en: "",
-                              hasLocalizedValue: "true",
-                            },
-                            constantValueEnabled: true,
-                          },
-                        },
+                        id: "CopyrightMessageSlot-e0142469-df41-4ed7-9213-6a1ae84433e0",
+                        data: { text: { en: "", hasLocalizedValue: "true" } },
+                        alignment: "left",
                       },
                     },
                   ],
@@ -4479,17 +4495,9 @@ const directoryDefaultLayout = {
                     {
                       type: "CopyrightMessageSlot",
                       props: {
-                        id: "CopyrightMessageSlot-a693ff67-53de-4654-a9bb-b6be0ef0af77",
-                        data: {
-                          text: {
-                            field: "",
-                            constantValue: {
-                              en: "",
-                              hasLocalizedValue: "true",
-                            },
-                            constantValueEnabled: true,
-                          },
-                        },
+                        id: "CopyrightMessageSlot-e0142469-df41-4ed7-9213-6a1ae84433e0",
+                        data: { text: { en: "", hasLocalizedValue: "true" } },
+                        alignment: "left",
                       },
                     },
                   ],
