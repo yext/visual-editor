@@ -16,6 +16,7 @@ const DEFAULT_RESULT_CARD = {
       },
     },
     variant: "base",
+    liveVisibility: false,
   },
   tertiaryHeading: {
     field: {
@@ -24,8 +25,9 @@ const DEFAULT_RESULT_CARD = {
       },
     },
     variant: "base",
+    liveVisibility: false,
   },
-  icons: true,
+  icons: false,
   hours: {
     field: {
       selection: {

@@ -26,9 +26,7 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
-  customClickHandler?: (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => void;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 };
 
 /**
@@ -140,7 +138,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
 };
 
 export const CTA = (props: CTAProps) => {
-  const { eventName, target, variant, ctaType, customClickHandler } = props;
+  const { eventName, target, variant, ctaType, onClick } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
 
@@ -175,35 +173,18 @@ export const CTA = (props: CTAProps) => {
     />
   );
 
-  const linkContent = (
-    <>
-      {label}
-      {caretIcon}
-    </>
-  );
-
   return (
     <Button asChild className={buttonClassName} variant={buttonVariant}>
-      {customClickHandler ? (
-        <a
-          href={link}
-          onClick={customClickHandler}
-          target={target}
-          rel={target === "_blank" ? "noopener noreferrer" : undefined}
-          aria-label={ariaLabel || undefined}
-        >
-          {linkContent}
-        </a>
-      ) : (
-        <Link
-          cta={{ link, linkType }}
-          eventName={eventName}
-          target={target}
-          aria-label={ariaLabel || undefined}
-        >
-          {linkContent}
-        </Link>
-      )}
+      <Link
+        cta={{ link, linkType }}
+        eventName={eventName}
+        target={target}
+        aria-label={ariaLabel || undefined}
+        onClick={onClick}
+      >
+        {label}
+        {caretIcon}
+      </Link>
     </Button>
   );
 };

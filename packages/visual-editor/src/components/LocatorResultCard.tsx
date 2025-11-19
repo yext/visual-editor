@@ -72,6 +72,8 @@ export interface LocatorResultCardProps {
     field: DynamicOptionsSingleSelectorType<string>;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
+    /** Whether the secondary heading is visible in live mode */
+    liveVisibility: boolean;
   };
 
   /** Settings for the tertiary heading of the card */
@@ -80,6 +82,8 @@ export interface LocatorResultCardProps {
     field: DynamicOptionsSingleSelectorType<string>;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
+    /** Whether the tertiary heading is visible in live mode */
+    liveVisibility: boolean;
   };
 
   /** Whether to show icons for certain fields */
@@ -179,10 +183,12 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   secondaryHeading: {
     field: { selection: { value: "name" } },
     variant: "base",
+    liveVisibility: false,
   },
   tertiaryHeading: {
     field: { selection: { value: "name" } },
     variant: "base",
+    liveVisibility: false,
   },
   icons: true,
   hours: {
@@ -287,6 +293,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           type: "radio",
           options: "BODY_VARIANT",
         }),
+        liveVisibility: YextField(
+          msg("fields.visibleOnLivePage", "Visible on Live Page"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          }
+        ),
       },
     },
     tertiaryHeading: {
@@ -305,6 +321,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           type: "radio",
           options: "BODY_VARIANT",
         }),
+        liveVisibility: YextField(
+          msg("fields.visibleOnLivePage", "Visible on Live Page"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.show", "Show"), value: true },
+              { label: msg("fields.options.hide", "Hide"), value: false },
+            ],
+          }
+        ),
       },
     },
     icons: YextField(msg("fields.icons", "Icons"), {
@@ -743,7 +769,7 @@ export const LocatorResultCard = React.memo(
                 link={resolvedUrl}
                 label={t("visitPage", "Visit Page")}
                 variant={props.primaryCTA.variant}
-                customClickHandler={handleVisitPageClick}
+                onClick={handleVisitPageClick}
                 className="basis-full sm:w-auto justify-center"
               />
             )}
@@ -762,7 +788,7 @@ export const LocatorResultCard = React.memo(
                   ) || t("callToAction", "Call to Action")
                 }
                 variant={props.secondaryCTA.variant}
-                customClickHandler={handleSecondaryCTAClick}
+                onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
               />
             )}
