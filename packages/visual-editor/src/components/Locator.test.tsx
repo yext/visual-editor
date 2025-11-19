@@ -103,6 +103,64 @@ const tests: ComponentTest[] = [
       mapStyle: "mapbox://styles/mapbox/dark-v11",
       filters: {
         openNowButton: true,
+        showDistanceOptions: true,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          variant: 5,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "monday",
+            collapseDays: true,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: false,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "https://www.yext.com",
+          variant: "secondary",
+          liveVisibility: true,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
       },
     },
     version: migrationRegistry.length,
