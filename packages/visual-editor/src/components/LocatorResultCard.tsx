@@ -589,10 +589,10 @@ export const LocatorResultCard = React.memo(
       result,
       "VIEW_WEBSITE"
     );
-    const handleSecondaryCTAClick = () => {
-      console.log("Secondary CTA clicked");
-      useCardAnalyticsCallback(result, "CTA_CLICK");
-    };
+    const handleSecondaryCTAClick = useCardAnalyticsCallback(
+      result,
+      "CTA_CLICK"
+    );
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
       "TAP_TO_CALL"
