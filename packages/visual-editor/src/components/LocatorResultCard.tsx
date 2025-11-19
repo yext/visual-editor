@@ -25,6 +25,8 @@ import {
   HoursStatusAtom,
   HoursTableAtom,
   YextField,
+  DynamicOption,
+  DynamicOptionsSingleSelectorType,
 } from "@yext/visual-editor";
 import {
   Address,
@@ -50,6 +52,8 @@ import {
   FaRegClock,
   FaRegEnvelope,
 } from "react-icons/fa";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers";
+import { FieldTypeData } from "../internal/types/templateMetadata";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -58,7 +62,7 @@ export interface LocatorResultCardProps {
      * The field from the data to use for the primary heading
      * @defaultValue "name"
      */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
   };
@@ -66,7 +70,7 @@ export interface LocatorResultCardProps {
   /** Settings for the secondary heading of the card */
   secondaryHeading: {
     /** The field from the data to use for the secondary heading */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
   };
@@ -74,7 +78,7 @@ export interface LocatorResultCardProps {
   /** Settings for the tertiary heading of the card */
   tertiaryHeading: {
     /** The field from the data to use for the tertiary heading */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
   };
@@ -171,15 +175,15 @@ export interface LocatorResultCardProps {
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryHeading: {
-    field: "name",
+    field: { selection: { value: "name" } },
     headingLevel: 3,
   },
   secondaryHeading: {
-    field: "name",
+    field: { selection: { value: "name" } },
     variant: "base",
   },
   tertiaryHeading: {
-    field: "name",
+    field: { selection: { value: "name" } },
     variant: "base",
   },
   icons: true,
@@ -224,6 +228,28 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
 };
 
+const getDisplayFieldOptions = (
+  fieldTypeId: string
+): DynamicOption<string>[] => {
+  const templateMetadata = useTemplateMetadata();
+  if (!templateMetadata?.locatorDisplayFields) {
+    return [];
+  }
+  const displayFields = templateMetadata.locatorDisplayFields;
+  console.log("Locator display fields from template metadata:", displayFields);
+  const ret = Object.keys(templateMetadata.locatorDisplayFields)
+    .filter((key) => displayFields![key].field_type_id === fieldTypeId)
+    .map((key) => {
+      const fieldData: FieldTypeData = displayFields![key];
+      return {
+        label: fieldData.field_name,
+        value: key,
+      };
+    });
+  console.log("Generated display field options:", ret);
+  return ret as DynamicOption<string>[];
+};
+
 export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
   type: "object",
@@ -232,16 +258,17 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.name", "Name"),
-              value: "name",
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            // singleSelect: true,
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => {
+              return getDisplayFieldOptions("type.string");
             },
-          ],
-        }),
+          }
+        ),
         headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
           type: "select",
           hasSearch: true,
@@ -253,16 +280,17 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryHeading", "Secondary Heading"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.name", "Name"),
-              value: "name",
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            // singleSelect: true,
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => {
+              return getDisplayFieldOptions("type.string");
             },
-          ],
-        }),
+          }
+        ),
         variant: YextField(msg("fields.variant", "Variant"), {
           type: "radio",
           options: "BODY_VARIANT",
@@ -548,6 +576,7 @@ export const LocatorResultCard = React.memo(
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
+    console.log("Rendering LocatorResultCard for location:", location);
     const distance = result.distance;
 
     const distanceInMiles = distance
@@ -607,6 +636,42 @@ export const LocatorResultCard = React.memo(
       );
     };
 
+    const leafFieldExists = (field: string, type?: string) => {
+      let currentValue = location;
+      for (const subfield of field.split(".")) {
+        if (!currentValue || !currentValue.hasOwnProperty(subfield)) {
+          return false;
+        }
+        currentValue = currentValue[subfield];
+      }
+
+      return currentValue && (type ? typeof currentValue === type : true);
+    };
+
+    const parseFromLocation = (
+      fieldId: string | undefined
+    ): string | undefined => {
+      if (!fieldId) {
+        return undefined;
+      }
+      // We can get away with this simple implementation for now since we know exactly what fields we
+      // can be in the locator response
+      let current = location;
+      for (const field of fieldId.split(".")) {
+        if (current[field] === undefined) {
+          return undefined;
+        }
+        current = current[field];
+      }
+
+      try {
+        return String(current);
+      } catch {
+        return undefined;
+      }
+    };
+
+    console.log("primaryHeading field:", props.primaryHeading.field);
     return (
       <Background
         background={backgroundColors.background1.value}
@@ -641,24 +706,36 @@ export const LocatorResultCard = React.memo(
                     className="font-bold text-palette-primary-dark"
                     level={props.primaryHeading.headingLevel}
                   >
-                    {location[props.primaryHeading.field] ?? location.name}
+                    {parseFromLocation(
+                      props.primaryHeading.field.selection.value
+                    ) ?? location.name}
                   </Heading>
-                  {props.secondaryHeading.field &&
-                    fieldExists(props.secondaryHeading.field, "string") && (
+                  {props.secondaryHeading.field.selection.value &&
+                    leafFieldExists(
+                      props.secondaryHeading.field.selection.value,
+                      "string"
+                    ) && (
                       <Body
                         variant={props.secondaryHeading.variant}
                         className="font-bold"
                       >
-                        {location[props.secondaryHeading.field]}
+                        {parseFromLocation(
+                          props.secondaryHeading.field.selection.value
+                        )}
                       </Body>
                     )}
-                  {props.tertiaryHeading.field &&
-                    fieldExists(props.tertiaryHeading.field, "string") && (
+                  {props.tertiaryHeading.field.selection.value &&
+                    leafFieldExists(
+                      props.tertiaryHeading.field.selection.value,
+                      "string"
+                    ) && (
                       <Body
                         variant={props.tertiaryHeading.variant}
                         className=""
                       >
-                        {location[props.tertiaryHeading.field]}
+                        {parseFromLocation(
+                          props.tertiaryHeading.field.selection.value
+                        )}
                       </Body>
                     )}
                 </div>

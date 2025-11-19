@@ -26,6 +26,8 @@ export { getMaxWidthOptions, filterMaxWidths } from "./MaxWidthSelector.tsx";
 export {
   type DynamicOption,
   DynamicOptionsSelector,
+  DynamicOptionsSingleSelector,
   type DynamicOptionsSelectorType,
+  type DynamicOptionsSingleSelectorType,
   type DynamicOptionValueTypes,
 } from "./DynamicOptionsSelector.tsx";

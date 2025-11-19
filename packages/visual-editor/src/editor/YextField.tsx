@@ -10,6 +10,7 @@ import {
   BasicSelector,
   DynamicOption,
   DynamicOptionsSelector,
+  DynamicOptionsSingleSelector,
   DynamicOptionValueTypes,
   OptionalNumberFieldProps,
   OptionalNumberField,
@@ -18,6 +19,7 @@ import {
   getMaxWidthOptions,
   msg,
   TranslatableStringField,
+  DynamicOptionsSelectorType,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
@@ -28,6 +30,7 @@ import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFiel
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
+import { DynamicOptionsSingleSelectorType } from "./DynamicOptionsSelector";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {
@@ -124,6 +127,14 @@ type YextDynamicSelectField<T extends DynamicOptionValueTypes> =
     placeholderOptionLabel?: string;
   };
 
+type YextDynamicSingleSelectField<T extends DynamicOptionValueTypes> =
+  YextBaseField & {
+    type: "dynamicSingleSelect";
+    getOptions: () => DynamicOption<T>[];
+    dropdownLabel: string;
+    placeholderOptionLabel?: string;
+  };
+
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
 type YextEntitySelectorField<
   T extends Record<string, any> = Record<string, any>,
@@ -146,8 +157,9 @@ type YextFieldConfig<Props = any> =
   | YextTranslatableStringField
   | YextImageField
   | YextVideoField
-  | YextDynamicSelectField<
-      Props extends DynamicOptionValueTypes ? Props[] : any
+  | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
+  | YextDynamicSingleSelectField<
+      Props extends DynamicOptionValueTypes ? Props : any
     >;
 
 export function YextField<T = any>(
@@ -159,6 +171,19 @@ export function YextField<T extends Record<string, any>, U = any>(
   fieldName: MsgString,
   config: YextEntitySelectorField<T>
 ): Field<YextEntityField<U>>;
+
+export function YextField<
+  T extends DynamicOptionsSelectorType<U>,
+  U extends DynamicOptionValueTypes,
+>(
+  fieldName: MsgString,
+  config: YextDynamicSelectField<U>
+): Field<T | undefined>;
+
+export function YextField<
+  T extends DynamicOptionsSingleSelectorType<U>,
+  U extends DynamicOptionValueTypes,
+>(fieldName: MsgString, config: YextDynamicSingleSelectField<U>): Field<T>;
 
 export function YextField<T, U>(
   fieldName: MsgString,
@@ -270,6 +295,15 @@ export function YextField<T, U>(
 
   if (config.type === "dynamicSelect") {
     return DynamicOptionsSelector({
+      label: fieldName,
+      dropdownLabel: config.dropdownLabel,
+      getOptions: config.getOptions,
+      placeholderOptionLabel: config.placeholderOptionLabel,
+    });
+  }
+
+  if (config.type === "dynamicSingleSelect") {
+    return DynamicOptionsSingleSelector({
       label: fieldName,
       dropdownLabel: config.dropdownLabel,
       getOptions: config.getOptions,

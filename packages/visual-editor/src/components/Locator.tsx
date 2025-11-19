@@ -500,18 +500,21 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
-      facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
-        type: "dynamicSelect",
-        dropdownLabel: msg("fields.field", "Field"),
-        getOptions: () => {
-          const entityType = getEntityType();
-          return getFacetFieldOptions(entityType);
-        },
-        placeholderOptionLabel: msg(
-          "fields.options.selectAField",
-          "Select a field"
-        ),
-      }),
+      facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
+        msg("fields.dynamicFilters", "Dynamic Filters"),
+        {
+          type: "dynamicSelect",
+          dropdownLabel: msg("fields.field", "Field"),
+          getOptions: () => {
+            const entityType = getEntityType();
+            return getFacetFieldOptions(entityType);
+          },
+          placeholderOptionLabel: msg(
+            "fields.options.selectAField",
+            "Select a field"
+          ),
+        }
+      ),
     },
   },
   mapStartingLocation: YextField(
