@@ -140,9 +140,11 @@ export const TimestampAtom = ({
     return <></>;
   }
 
+  const formattedTimestamp = timestamp.replace(/\u202F|\u00A0/g, " ");
+
   return (
     <div className="components font-body-fontFamily font-body-fontWeight text-body-fontSize inline-block">
-      {timestamp.replace("\u202F", " ")}
+      {formattedTimestamp}
     </div>
   );
 };
