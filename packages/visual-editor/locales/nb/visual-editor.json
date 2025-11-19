@@ -510,7 +510,7 @@
   "locationsNear_zero": "{{count}} steder i nærheten av «{{name}}»",
   "locationsWithinDistanceOf_few": "{{count}} steder innenfor {{distance}} miles fra \"{{name}}\"",
   "locationsWithinDistanceOf_many": "{{count}} steder innenfor {{distance}} miles fra \"{{name}}\"",
-  "locationsWithinDistanceOf_one": "{{count}} sted innenfor {{distanse}} miles fra \"{{name}}\"",
+  "locationsWithinDistanceOf_one": "{{count}} sted innenfor {{distance}} miles fra \"{{name}}\"",
   "locationsWithinDistanceOf_other": "{{count}} steder innenfor {{distance}} miles fra \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} steder innenfor {{distance}} miles fra \"{{name}}\"",
   "logo": "Logo",

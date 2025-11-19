@@ -87,7 +87,7 @@
     "footerLogoSlot": "Logó",
     "footerSocialLinksSlot": "Közösségi linkek",
     "footerUtilityImagesSlot": {
-      "defaultAlt": "Segédkép {{szám}}"
+      "defaultAlt": "Segédkép {{number}}"
     },
     "footerUtilityImagesSlotLabel": "Hasznos képek",
     "gallery": "Galéria",
@@ -616,7 +616,7 @@
   "siteColors": "Helyszínek",
   "slots": {
     "directoryCard": "Címtárkártya",
-    "insightCard": "Insight Card",
+    "insightCard": "Betekintéskártyák",
     "insightCards": "Insight Cards",
     "nearbyLocationCards": "Közeli helykártyák",
     "productCard": "Termékkártya",
