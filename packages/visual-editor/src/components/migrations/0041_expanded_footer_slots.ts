@@ -162,13 +162,9 @@ export const expandedFooterSlots: Migration = {
                       props: {
                         id: `${props.id}-CopyrightSlot`,
                         data: {
-                          text: {
-                            field: "",
-                            constantValue: copyrightMessage || {
-                              en: "",
-                              hasLocalizedValue: "true",
-                            },
-                            constantValueEnabled: true,
+                          text: copyrightMessage || {
+                            en: "",
+                            hasLocalizedValue: "true",
                           },
                         },
                         alignment: secondaryLinksAlignment,
