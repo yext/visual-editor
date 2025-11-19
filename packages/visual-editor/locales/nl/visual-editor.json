@@ -125,6 +125,7 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Lijnkaart",
+    "alignContent": "Inhoud uitlijnen",
     "alignItems": "Lijn items uit",
     "alignment": "Uitlijning",
     "analytics": "Analyse",
@@ -309,6 +310,7 @@
       "navigationDay": "Navigatie (dag)",
       "navigationNight": "Navigatie (nacht)",
       "no": "Nee",
+      "one": "Een",
       "right": "Rechts",
       "right_direction": "Rechts",
       "satellite": "Satelliet",

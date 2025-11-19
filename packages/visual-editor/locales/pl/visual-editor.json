@@ -126,6 +126,7 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Karta wyrównania",
+    "alignContent": "Wyrównaj zawartość",
     "alignItems": "Wyrównaj elementy",
     "alignment": "Wyrównanie",
     "analytics": "Analityka",
@@ -310,6 +311,7 @@
       "navigationDay": "Nawigacja (dzień)",
       "navigationNight": "Nawigacja (noc)",
       "no": "NIE",
+      "one": "Jeden",
       "right": "Prawidłowy",
       "right_direction": "Racja",
       "satellite": "Satelita",

@@ -126,6 +126,7 @@
   "fields": {
     "address": "Osloviť",
     "alignCard": "Zarovnaná karta",
+    "alignContent": "Zarovnať obsah",
     "alignItems": "Vyrovnanie",
     "alignment": "Vyrovnanie",
     "analytics": "Analytika",
@@ -310,6 +311,7 @@
       "navigationDay": "Navigácia (deň)",
       "navigationNight": "Navigácia (noc)",
       "no": "Nie",
+      "one": "Jeden",
       "right": "Pravý",
       "right_direction": "Vpravo",
       "satellite": "Satelit",

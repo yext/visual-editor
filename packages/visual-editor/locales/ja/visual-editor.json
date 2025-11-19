@@ -125,6 +125,7 @@
   "fields": {
     "address": "住所",
     "alignCard": "カードを調整します",
+    "alignContent": "コンテンツの整列",
     "alignItems": "アイテムを調整します",
     "alignment": "アライメント",
     "analytics": "分析",
@@ -309,6 +310,7 @@
       "navigationDay": "ナビゲーション（日）",
       "navigationNight": "ナビゲーション（夜）",
       "no": "いいえ",
+      "one": "1つ",
       "right": "右",
       "right_direction": "右",
       "satellite": "衛星",

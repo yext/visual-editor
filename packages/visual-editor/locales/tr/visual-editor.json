@@ -125,6 +125,7 @@
   "fields": {
     "address": "Adres",
     "alignCard": "Kartı hizalayın",
+    "alignContent": "İçeriği Hizala",
     "alignItems": "Öğeleri hizalayın",
     "alignment": "Uyuşma",
     "analytics": "Analitik",
@@ -309,6 +310,7 @@
       "navigationDay": "Navigasyon (gün)",
       "navigationNight": "Navigasyon (gece)",
       "no": "HAYIR",
+      "one": "Bir",
       "right": "Sağ",
       "right_direction": "Doğru",
       "satellite": "Uydu",
