@@ -12,10 +12,11 @@ import {
   InsightStruct,
   deepMerge,
   getDefaultRTF,
+  TranslatableRichText,
+  YextEntityField,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
-import { useTranslation } from "react-i18next";
-import { getDisplayValue } from "../../../utils/resolveComponentData.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
@@ -54,6 +55,10 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
       styles: {
         backgroundColor: backgroundColors.background1.value,
       } satisfies InsightCardProps["styles"],
+      conditionalRender: {
+        hasCategory: true,
+        hasPublishTime: true,
+      },
       slots: {
         ImageSlot: [
           {
@@ -198,9 +203,17 @@ export type InsightCardProps = {
     PublishTimeSlot: Slot;
     CTASlot: Slot;
   };
+
+  /** @internal */
   parentData?: {
     field: string;
     insight: InsightStruct;
+  };
+
+  /** @internal */
+  conditionalRender?: {
+    hasCategory: boolean;
+    hasPublishTime: boolean;
   };
 
   /** @internal */
@@ -234,40 +247,8 @@ const insightCardFields: Fields<InsightCardProps> = {
   },
 };
 
-// Helper component to wrap slots and show separator only if both have content
-const SlotsWithSeparator: React.FC<{
-  categorySlot: React.ReactNode;
-  dateSlot: React.ReactNode;
-}> = ({ categorySlot, dateSlot }) => {
-  const categoryRef = React.useRef<HTMLDivElement>(null);
-  const dateRef = React.useRef<HTMLDivElement>(null);
-  const [showSeparator, setShowSeparator] = React.useState(false);
-
-  React.useEffect(() => {
-    // Check if both slots have rendered content
-    const categoryHasContent =
-      categoryRef.current && categoryRef.current.textContent?.trim() !== "";
-    const dateHasContent =
-      dateRef.current && dateRef.current.textContent?.trim() !== "";
-    setShowSeparator(Boolean(categoryHasContent && dateHasContent));
-  });
-
-  return (
-    <div className="flex items-center">
-      <div ref={categoryRef} className="flex items-center">
-        {categorySlot}
-      </div>
-      {showSeparator && <span className="px-3">|</span>}
-      <div ref={dateRef} className="flex items-center">
-        {dateSlot}
-      </div>
-    </div>
-  );
-};
-
 const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
-  const { styles, slots, puck } = props;
-  const { i18n } = useTranslation();
+  const { styles, slots, puck, conditionalRender } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: BackgroundStyle | undefined;
     slotStyles: Record<string, InsightCardProps["styles"]>;
@@ -371,67 +352,7 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
     styles
   );
 
-  const getCategoryValue = () => {
-    // If not in editor (slotsData unavailable), assume slot should be shown
-    // and let the BodyText component handle its own empty state
-    if (!slotsData) {
-      return true;
-    }
-
-    const slot = slotsData?.CategorySlot?.[0];
-    if (!slot) {
-      return false;
-    }
-
-    // Check parent data (from entity)
-    if (slot.props?.parentData?.richText) {
-      const displayValue = getDisplayValue(
-        slot.props.parentData.richText,
-        i18n.language
-      );
-      return displayValue.trim() !== "";
-    }
-
-    // Check constant value (can be string or object with localized values)
-    const constantValue = slot.props?.data?.text?.constantValue;
-    if (constantValue) {
-      const displayValue = getDisplayValue(constantValue, i18n.language);
-      return displayValue.trim() !== "";
-    }
-
-    return false;
-  };
-
-  const getPublishTimeValue = () => {
-    // If not in editor (slotsData unavailable), assume slot should be shown
-    // and let the Timestamp component handle its own empty state
-    if (!slotsData) {
-      return "placeholder"; // Return non-empty value to show the slot container
-    }
-
-    const slot = slotsData?.PublishTimeSlot?.[0];
-    if (!slot) return "";
-
-    // Check parent data (from entity)
-    if (slot.props?.parentData?.date) {
-      return slot.props.parentData.date;
-    }
-
-    // Check constant value or field
-    return (
-      slot.props?.data?.date?.constantValue ||
-      slot.props?.data?.date?.field ||
-      ""
-    );
-  };
-
-  const hasCategory = getCategoryValue();
-  const hasPublishTime = Boolean(getPublishTimeValue());
-
-  // When not in editor (slotsData unavailable), we can't determine if slots will render content
-  // before they render, so we use a dynamic component that checks after render
   const isInEditor = props.puck.isEditing;
-  const canDetermineSlotContent = Boolean(slotsData);
 
   return (
     <Background
@@ -442,38 +363,28 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
       <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
       <div className="flex flex-col gap-4 p-6 flex-grow">
         <div className="flex flex-col gap-2 flex-grow">
-          {canDetermineSlotContent ? (
-            // In editor: use conditional rendering with separator based on slot state
-            (hasCategory || hasPublishTime || isInEditor) && (
-              <div className="flex items-center">
-                {(hasCategory || isInEditor) && (
-                  <div className="flex items-center">
-                    <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
-                  </div>
-                )}
-                {hasCategory && hasPublishTime && (
+          {(conditionalRender?.hasCategory ||
+            conditionalRender?.hasPublishTime ||
+            isInEditor) && (
+            <div className="flex items-center">
+              {(conditionalRender?.hasCategory || isInEditor) && (
+                <div className="flex items-center">
+                  <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
+                </div>
+              )}
+              {conditionalRender?.hasCategory &&
+                conditionalRender?.hasPublishTime && (
                   <span className="px-3">|</span>
                 )}
-                {(hasPublishTime || isInEditor) && (
-                  <div className="flex items-center">
-                    <slots.PublishTimeSlot
-                      style={{ height: "auto" }}
-                      allow={[]}
-                    />
-                  </div>
-                )}
-              </div>
-            )
-          ) : (
-            // On live page/tests: use dynamic separator component that checks rendered content
-            <SlotsWithSeparator
-              categorySlot={
-                <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
-              }
-              dateSlot={
-                <slots.PublishTimeSlot style={{ height: "auto" }} allow={[]} />
-              }
-            />
+              {(conditionalRender?.hasPublishTime || isInEditor) && (
+                <div className="flex items-center">
+                  <slots.PublishTimeSlot
+                    style={{ height: "auto" }}
+                    allow={[]}
+                  />
+                </div>
+              )}
+            </div>
           )}
           <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
           <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
@@ -503,7 +414,14 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
       CTASlot: [],
     },
   },
-  resolveData: (data) => {
+  resolveData: (data, params) => {
+    const streamDocument = params.metadata?.streamDocument;
+    const locale = streamDocument?.locale ?? "en";
+
+    if (!streamDocument || !locale) {
+      return data;
+    }
+
     if (data.props.parentData) {
       const { field, insight } = data.props.parentData;
 
@@ -536,6 +454,17 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
         field: `${field}.cta`,
         cta: insight.cta,
       };
+
+      const category = resolveComponentData(
+        insight.category as TranslatableRichText,
+        locale,
+        streamDocument
+      );
+
+      data.props.conditionalRender = {
+        hasCategory: !!category,
+        hasPublishTime: !!insight.publishTime,
+      };
     } else {
       data.props.slots.ImageSlot[0].props.parentData = undefined;
       data.props.slots.TitleSlot[0].props.parentData = undefined;
@@ -543,6 +472,24 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
       data.props.slots.DescriptionSlot[0].props.parentData = undefined;
       data.props.slots.PublishTimeSlot[0].props.parentData = undefined;
       data.props.slots.CTASlot[0].props.parentData = undefined;
+
+      const category = resolveComponentData(
+        data.props.slots.CategorySlot[0]?.props.data
+          .text as YextEntityField<TranslatableRichText>,
+        locale,
+        streamDocument
+      );
+
+      const publishTime = resolveComponentData(
+        data.props.slots.PublishTimeSlot[0]?.props.data.date,
+        locale,
+        streamDocument
+      );
+
+      data.props.conditionalRender = {
+        hasCategory: !!category,
+        hasPublishTime: !!publishTime,
+      };
     }
 
     return data;
