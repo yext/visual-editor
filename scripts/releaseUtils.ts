@@ -148,17 +148,17 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
   } else if (currentAlpha) {
     versionChoices.push({
       title: "alpha",
-      value: inc("patch") + "-alpha.0",
+      value: inc("patch") + "-alpha.1",
     });
   } else if (currentBeta) {
     versionChoices.push({
       title: "beta",
-      value: inc("patch") + "-beta.0",
+      value: inc("patch") + "-beta.1",
     });
   } else if (currentRc) {
     versionChoices.push({
       title: "rc",
-      value: inc("patch") + "-rc.0",
+      value: inc("patch") + "-rc.1",
     });
   } else {
     versionChoices.push({
@@ -183,11 +183,12 @@ export function updateVersion(pkgPath: string, version: string): void {
 }
 
 export async function getLatestTag(): Promise<string> {
-  return (await run("git", ["tag"], { stdio: "pipe" })).stdout
-    .split(/\n/)
-    .filter(Boolean)
-    .sort()
-    .reverse()[0];
+  // -v:refname is a descending semver sort
+  const result = await run("git", ["tag", "--sort=-v:refname"], {
+    stdio: "pipe",
+  });
+
+  return result.stdout.trim().split(/\n/).filter(Boolean)[0];
 }
 
 export async function logRecentCommits(): Promise<void> {
