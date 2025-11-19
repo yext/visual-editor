@@ -15,7 +15,7 @@ const DEFAULT_RESULT_CARD = {
     variant: "base",
     liveVisibility: false,
   },
-  icons: true,
+  icons: false,
   hours: {
     table: {
       startOfWeek: "today",
