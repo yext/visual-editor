@@ -624,11 +624,24 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
+    const getFieldValue = (field: string): any => {
+      const keys = field.split(".");
+      let value: any = location;
+
+      for (const key of keys) {
+        if (value && Object.prototype.hasOwnProperty.call(value, key)) {
+          value = value[key];
+        } else {
+          return undefined;
+        }
+      }
+
+      return value;
+    };
+
     const fieldExists = (field: string, type?: string) => {
-      return (
-        Object.prototype.hasOwnProperty.call(location, field) &&
-        (type ? typeof location[field] === type : true)
-      );
+      const value = getFieldValue(field);
+      return value !== undefined && (type ? typeof value === type : true);
     };
 
     return (
@@ -649,12 +662,12 @@ export const LocatorResultCard = React.memo(
               <div className="flex flex-row items-start gap-6">
                 {props.image.field &&
                   fieldExists(props.image.field, "object") &&
-                  location[props.image.field]?.url &&
+                  getFieldValue(props.image.field)?.url &&
                   props.image.liveVisibility && (
                     <img
-                      src={location[props.image.field].url}
+                      src={getFieldValue(props.image.field).url}
                       alt={
-                        location[props.image.field].alternateText ||
+                        getFieldValue(props.image.field).alternateText ||
                         location.name
                       }
                       className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-md"
@@ -665,7 +678,7 @@ export const LocatorResultCard = React.memo(
                     className="font-bold text-palette-primary-dark"
                     level={props.primaryHeading.headingLevel}
                   >
-                    {location[props.primaryHeading.field] ?? location.name}
+                    {getFieldValue(props.primaryHeading.field) ?? location.name}
                   </Heading>
                   {props.secondaryHeading.field &&
                     props.secondaryHeading.liveVisibility &&
@@ -674,7 +687,7 @@ export const LocatorResultCard = React.memo(
                         variant={props.secondaryHeading.variant}
                         className="font-bold"
                       >
-                        {location[props.secondaryHeading.field]}
+                        {getFieldValue(props.secondaryHeading.field)}
                       </Body>
                     )}
                   {props.tertiaryHeading.field &&
@@ -684,7 +697,7 @@ export const LocatorResultCard = React.memo(
                         variant={props.tertiaryHeading.variant}
                         className=""
                       >
-                        {location[props.tertiaryHeading.field]}
+                        {getFieldValue(props.tertiaryHeading.field)}
                       </Body>
                     )}
                 </div>
@@ -791,7 +804,7 @@ export const LocatorResultCard = React.memo(
                       eventName={`phone`}
                       label={t("phone", "Phone")}
                       format={props.phone.phoneFormat}
-                      phoneNumber={location[props.phone.field]}
+                      phoneNumber={getFieldValue(props.phone.field)}
                       includeHyperlink={props.phone.includePhoneHyperlink}
                       includeIcon={props.icons}
                       onClick={handlePhoneNumberClick}
@@ -799,8 +812,8 @@ export const LocatorResultCard = React.memo(
                   )}
                 {props.email.field &&
                   fieldExists(props.email.field) &&
-                  Array.isArray(location[props.email.field]) &&
-                  location[props.email.field].length > 0 &&
+                  Array.isArray(getFieldValue(props.email.field)) &&
+                  getFieldValue(props.email.field).length > 0 &&
                   props.email.liveVisibility && (
                     <div className="flex flex-row items-center gap-2">
                       {props.icons && (
@@ -810,8 +823,8 @@ export const LocatorResultCard = React.memo(
                       )}
                       <CTA
                         eventName={`email${result.index}`}
-                        link={location[props.email.field][0]}
-                        label={location[props.email.field][0]}
+                        link={getFieldValue(props.email.field)[0]}
+                        label={getFieldValue(props.email.field)[0]}
                         linkType="EMAIL"
                         variant="link"
                       />
@@ -822,15 +835,15 @@ export const LocatorResultCard = React.memo(
               <div className="flex flex-col gap-4 lg:w-[240px]">
                 {props.services.field &&
                   fieldExists(props.services.field) &&
-                  Array.isArray(location[props.services.field]) &&
-                  location[props.services.field].length > 0 &&
+                  Array.isArray(getFieldValue(props.services.field)) &&
+                  getFieldValue(props.services.field).length > 0 &&
                   props.services.liveVisibility && (
                     <div className="flex flex-col gap-2">
                       <Body variant="base" className="font-bold">
                         {t("services", "Services")}
                       </Body>
                       <Body variant="base">
-                        {location[props.services.field].join(", ")}
+                        {getFieldValue(props.services.field).join(", ")}
                       </Body>
                     </div>
                   )}
