@@ -43,8 +43,8 @@
   "cancel": "Cancel",
   "categories": {
     "coreInformation": "Core Information",
-    "other": "OTHER",
-    "pageSections": "PAGE SECTIONS"
+    "other": "Other",
+    "pageSections": "Page Sections"
   },
   "category": "Category",
   "change": "Change",
@@ -439,7 +439,7 @@
     "text": "Text",
     "textAlignment": "Text Alignment",
     "textList": "Text List",
-    "tiktokLink": "Tiktok Link",
+    "tiktokLink": "TikTok Link",
     "timeFormat": "Time Format",
     "title": "Title",
     "truncateDescription": "Truncate Description",
