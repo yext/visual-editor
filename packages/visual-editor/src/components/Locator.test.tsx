@@ -108,7 +108,7 @@ const tests: ComponentTest[] = [
       resultCard: {
         primaryHeading: {
           field: "name",
-          variant: 5,
+          headingLevel: 5,
         },
         secondaryHeading: {
           field: "name",
@@ -439,7 +439,7 @@ const tests: ComponentTest[] = [
       resultCard: {
         primaryHeading: {
           field: "name",
-          variant: 3,
+          headingLevel: 3,
         },
         secondaryHeading: {
           field: "name",
