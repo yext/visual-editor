@@ -25,13 +25,13 @@ import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
-import { FaArrowLeft } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
 import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -369,82 +369,7 @@ export const InternalLayoutEditor = ({
         initialHistory={puckInitialHistory}
         onChange={change}
         overrides={{
-          fields: ({ children }) => {
-            const getPuck = useGetPuck();
-            const { appState } = getPuck();
-
-            const isAdvancedSettingsSelected =
-              appState?.ui?.itemSelector &&
-              appState.ui.itemSelector.zone === "root:advanced";
-
-            if (isAdvancedSettingsSelected) {
-              const advancedSettingsField = AdvancedSettings.fields?.data;
-
-              if (
-                advancedSettingsField &&
-                advancedSettingsField.type === "object" &&
-                advancedSettingsField.objectFields?.schemaMarkup
-              ) {
-                const schemaField = advancedSettingsField.objectFields
-                  .schemaMarkup as any;
-
-                if (schemaField.type === "custom" && schemaField.render) {
-                  return (
-                    <div className="ve-p-4 ve-mb-4">
-                      {/* Title */}
-                      <div className="ve-mb-4">
-                        <div className="ve-text-md ve-font-semibold ve-text-gray-900 ve-mb-2">
-                          {pt("advancedSettings", "Advanced Settings")}
-                        </div>
-                      </div>
-
-                      {/* Schema markup field */}
-                      {React.createElement(schemaField.render, {
-                        onChange: (newValue: string) => {
-                          const { dispatch } = getPuck();
-                          dispatch({
-                            type: "replaceRoot",
-                            root: {
-                              ...appState.data.root,
-                              props: {
-                                ...appState.data.root?.props,
-                                schemaMarkup: newValue,
-                              } as any,
-                            },
-                          });
-                        },
-                        value: appState.data.root?.props?.schemaMarkup || "",
-                        field: { label: msg("schemaMarkup", "Schema Markup") },
-                      })}
-
-                      {/* Back button */}
-                      <div className="ve-mt-4">
-                        <button
-                          onClick={() => {
-                            const { dispatch } = getPuck();
-                            dispatch({
-                              type: "setUi",
-                              ui: {
-                                ...appState.ui,
-                                itemSelector: null,
-                                rightSideBarVisible: true,
-                              },
-                            });
-                          }}
-                          className="ve-flex ve-items-center ve-gap-2 ve-text-sm ve-text-blue-600 hover:ve-text-blue-800 ve-bg-none ve-border-none ve-cursor-pointer ve-p-0"
-                        >
-                          <FaArrowLeft className="ve-w-4 ve-h-4" />
-                          {pt("back", "Back")}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                }
-              }
-            }
-
-            return <>{children}</>;
-          },
+          fields: fieldsOverride,
           header: () => (
             <LayoutHeader
               templateMetadata={templateMetadata}

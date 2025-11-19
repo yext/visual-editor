@@ -196,6 +196,7 @@ export const coreInfoSectionSlots: Migration = {
                 id: `${props.id}-ServicesListSlot`,
                 list: services,
               },
+              commaSeparated: false,
             },
           ],
         },

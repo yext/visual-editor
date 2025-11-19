@@ -23,6 +23,8 @@ import {
   locatorConfig,
   getSchema,
   getCanonicalUrl,
+  migrate,
+  migrationRegistry,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -139,7 +141,11 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         <VisualEditorProvider templateProps={props}>
           <Render
             config={locatorConfig}
-            data={data}
+            data={migrate(
+              JSON.parse(document.__.layout),
+              migrationRegistry,
+              locatorConfig
+            )}
             metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>

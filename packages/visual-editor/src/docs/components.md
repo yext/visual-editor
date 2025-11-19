@@ -834,9 +834,10 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop   | Type                                    | Description | Default |
-| :----- | :-------------------------------------- | :---------- | :------ |
-| `list` | `YextEntityField<TranslatableString[]>` |             |         |
+| Prop             | Type                                    | Description | Default |
+| :--------------- | :-------------------------------------- | :---------- | :------ |
+| `commaSeparated` | `boolean`                               |             |         |
+| `list`           | `YextEntityField<TranslatableString[]>` |             |         |
 
 ---
 
