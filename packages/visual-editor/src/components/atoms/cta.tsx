@@ -26,7 +26,9 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
-  customClickHandler?: () => void;
+  customClickHandler?: (
+    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => void;
 };
 
 /**
@@ -185,10 +187,9 @@ export const CTA = (props: CTAProps) => {
       {customClickHandler ? (
         <a
           href={link}
-          onClick={() => {
-            customClickHandler();
-          }}
+          onClick={customClickHandler}
           target={target}
+          rel={target === "_blank" ? "noopener noreferrer" : undefined}
           aria-label={ariaLabel || undefined}
         >
           {linkContent}

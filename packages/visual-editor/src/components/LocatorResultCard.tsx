@@ -11,7 +11,6 @@ import {
   backgroundColors,
   Body,
   BodyProps,
-  Button,
   CTA,
   CTAVariant,
   Heading,
@@ -89,10 +88,7 @@ export interface LocatorResultCardProps {
   /** Settings for the hours block */
   hours: {
     /** Styles for the hours table */
-    table: Omit<
-      HoursTableProps["styles"],
-      "alignment" | "showAdditionalHoursText"
-    >;
+    table: Omit<HoursTableProps["styles"], "alignment">;
     /** Whether the hours block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -191,6 +187,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     table: {
       startOfWeek: "today",
       collapseDays: false,
+      showAdditionalHoursText: false,
     },
     liveVisibility: true,
   },
@@ -550,6 +547,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
 export interface Location {
   address: AddressType;
   hours?: HoursType;
+  additionalHoursText?: string;
   id: string;
   mainPhone?: string;
   name: string;
@@ -631,7 +629,7 @@ export const LocatorResultCard = React.memo(
 
     const fieldExists = (field: string, type?: string) => {
       return (
-        location.hasOwnProperty(field) &&
+        Object.prototype.hasOwnProperty.call(location, field) &&
         (type ? typeof location[field] === type : true)
       );
     };
@@ -778,12 +776,20 @@ export const LocatorResultCard = React.memo(
                       </div>
                     </AccordionTrigger>
                     <AccordionContent>
-                      <HoursTableAtom
-                        hours={location.hours}
-                        startOfWeek={props.hours.table.startOfWeek}
-                        collapseDays={props.hours.table.collapseDays}
-                        className="[&_.HoursTable-row]:w-fit"
-                      />
+                      <div className="flex flex-col gap-2">
+                        <HoursTableAtom
+                          hours={location.hours}
+                          startOfWeek={props.hours.table.startOfWeek}
+                          collapseDays={props.hours.table.collapseDays}
+                          className="[&_.HoursTable-row]:w-fit"
+                        />
+                        {location.additionalHoursText &&
+                          props.hours.table.showAdditionalHoursText && (
+                            <div className="text-body-sm-fontSize">
+                              {location.additionalHoursText}
+                            </div>
+                          )}
+                      </div>
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -893,17 +899,15 @@ export const LocatorResultCard = React.memo(
               })}
             </div>
           )}
-          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full">
+          <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
             {props.primaryCTA.liveVisibility && (
-              <Button
-                asChild
-                className="basis-full sm:w-auto"
+              <CTA
+                link={resolvedUrl}
+                label={t("visitPage", "Visit Page")}
                 variant={props.primaryCTA.variant}
-              >
-                <a href={resolvedUrl} onClick={handleVisitPageClick}>
-                  {t("visitPage", "Visit Page")}
-                </a>
-              </Button>
+                customClickHandler={handleVisitPageClick}
+                className="basis-full sm:w-auto justify-center"
+              />
             )}
             {props.secondaryCTA.liveVisibility && (
               <CTA
@@ -921,7 +925,7 @@ export const LocatorResultCard = React.memo(
                 }
                 variant={props.secondaryCTA.variant}
                 customClickHandler={handleSecondaryCTAClick}
-                className="basis-full sm:w-auto"
+                className="basis-full sm:w-auto justify-center"
               />
             )}
           </div>
