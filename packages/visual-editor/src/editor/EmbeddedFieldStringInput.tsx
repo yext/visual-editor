@@ -25,7 +25,9 @@ import { useTranslation } from "react-i18next";
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
  */
-export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
+export const EmbeddedFieldStringInputFromEntity = <
+  T extends Record<string, any>,
+>({
   value,
   onChange,
   filter,
@@ -37,6 +39,41 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
   showFieldSelector: boolean;
 }) => {
   const entityFields = useEntityFields();
+
+  const entityFieldOptions = React.useMemo(() => {
+    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+    return filteredEntityFields.map((field) => {
+      return {
+        label: field.displayName ?? field.name,
+        value: field.name,
+      };
+    });
+  }, [entityFields, filter]);
+
+  return (
+    <EmbeddedFieldStringInputFromOptions
+      value={value}
+      onChange={onChange}
+      options={entityFieldOptions}
+      showFieldSelector={showFieldSelector}
+      useOptionValueSublabel={false}
+    />
+  );
+};
+
+export const EmbeddedFieldStringInputFromOptions = ({
+  value,
+  onChange,
+  options,
+  showFieldSelector,
+  useOptionValueSublabel = false,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: { label: string; value: string }[];
+  showFieldSelector: boolean;
+  useOptionValueSublabel?: boolean;
+}) => {
   const [open, setOpen] = React.useState(false);
   const [cursorPosition, setCursorPosition] = React.useState<number | null>(
     null
@@ -61,15 +98,9 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
     };
   }, [inputValue, onChange, value]);
 
-  const entityFieldOptions = React.useMemo(() => {
-    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
-    return filteredEntityFields.map((field) => {
-      return {
-        label: field.displayName ?? field.name,
-        value: field.name,
-      };
-    });
-  }, [entityFields, filter]);
+  const fieldOptions = React.useMemo(() => {
+    return options;
+  }, [options]);
 
   const handleFieldSelect = (fieldName: string) => {
     setOpen(false);
@@ -139,12 +170,13 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
                     {pt("noMatchesFound", "No matches found.")}
                   </CommandEmpty>
                   <CommandGroup>
-                    {entityFieldOptions.map((option) => (
+                    {fieldOptions.map((option) => (
                       <CommandItemWithResolvedValue
                         key={option.value}
                         option={option}
                         onSelect={() => handleFieldSelect(option.value)}
                         isOpen={open}
+                        useOptionValue={useOptionValueSublabel}
                       />
                     ))}
                   </CommandGroup>
@@ -162,10 +194,12 @@ const CommandItemWithResolvedValue = ({
   option,
   onSelect,
   isOpen,
+  useOptionValue,
 }: {
   option: { label: string; value: string };
   onSelect: () => void;
   isOpen: boolean;
+  useOptionValue?: boolean;
 }) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
@@ -204,9 +238,9 @@ const CommandItemWithResolvedValue = ({
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
           {option.label}
         </div>
-        {resolvedValue && (
+        {(resolvedValue || useOptionValue) && (
           <div className="ve-text-xs ve-text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-            {resolvedValue}
+            {useOptionValue ? option.value : resolvedValue}
           </div>
         )}
       </div>

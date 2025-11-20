@@ -5,10 +5,14 @@ import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
-import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
+import {
+  EmbeddedFieldStringInputFromEntity,
+  EmbeddedFieldStringInputFromOptions,
+} from "./EmbeddedFieldStringInput.tsx";
 import { Button } from "../internal/puck/ui/button.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
+import { DynamicOption } from "./DynamicOptionsSelector.tsx";
 
 /**
  * Generates a translatable string config
@@ -16,6 +20,7 @@ import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
  * @param filter optional filter for the entity fields that can be embedded.
  * @param showApplyAllOption enables the "Apply to All Locales" button
  * @param showFieldSelector enables the button to select an entity field to embed
+ * @param options optional options for the field selector. If provided, the entity field filter is ignored.
  */
 export function TranslatableStringField<
   T extends TranslatableString | undefined = TranslatableString,
@@ -23,7 +28,8 @@ export function TranslatableStringField<
   label?: MsgString,
   filter?: RenderEntityFieldFilter<any>,
   showApplyAllOption?: boolean,
-  showFieldSelector?: boolean
+  showFieldSelector?: boolean,
+  getOptions?: () => DynamicOption<string>[]
 ): CustomField<T> {
   return {
     type: "custom",
@@ -62,20 +68,41 @@ export function TranslatableStringField<
 
       const fieldEditor = (
         <>
-          <EmbeddedFieldStringInput
-            value={resolvedValue}
-            onChange={(val) => {
-              return onChange({
-                ...(typeof value === "object" && !Array.isArray(value)
-                  ? value
-                  : {}),
-                [locale]: val,
-                hasLocalizedValue: "true",
-              } as Record<string, string> as T);
-            }}
-            filter={filter ?? { types: ["type.string"] }}
-            showFieldSelector={showFieldSelector ?? true}
-          />
+          {getOptions ? (
+            <EmbeddedFieldStringInputFromOptions
+              value={resolvedValue}
+              onChange={(val: any) => {
+                return onChange({
+                  ...(typeof value === "object" && !Array.isArray(value)
+                    ? value
+                    : {}),
+                  [locale]: val,
+                  hasLocalizedValue: "true",
+                } as Record<string, string> as T);
+              }}
+              options={getOptions?.().map((opt) => ({
+                label: opt.label,
+                value: opt.value ?? "", // or some other default string
+              }))}
+              showFieldSelector={showFieldSelector ?? true}
+              useOptionValueSublabel={true}
+            />
+          ) : (
+            <EmbeddedFieldStringInputFromEntity
+              value={resolvedValue}
+              onChange={(val: any) => {
+                return onChange({
+                  ...(typeof value === "object" && !Array.isArray(value)
+                    ? value
+                    : {}),
+                  [locale]: val,
+                  hasLocalizedValue: "true",
+                } as Record<string, string> as T);
+              }}
+              filter={filter ?? { types: ["type.string"] }}
+              showFieldSelector={showFieldSelector ?? true}
+            />
+          )}
           {applyAllButton}
         </>
       );
