@@ -816,7 +816,6 @@ const ImageSection = (props: {
 
   const fieldId = image.field?.selection?.value;
   const imageRecord = parseRecordFromLocation(location, fieldId);
-  console.log("Image record for field", fieldId, ":", imageRecord);
   return (
     imageRecord &&
     image.liveVisibility && (
