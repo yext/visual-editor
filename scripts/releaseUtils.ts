@@ -95,7 +95,7 @@ export function getVersionChoices(currentVersion: string): VersionChoice[] {
     i: ReleaseType,
     tag = currentAlpha ? "alpha" : currentBeta ? "beta" : "rc",
   ) {
-    const incVersion = semver.inc(currentVersion, i, tag);
+    const incVersion = semver.inc(currentVersion, i, tag, "1");
     if (incVersion) {
       return incVersion;
     }
@@ -188,7 +188,13 @@ export async function getLatestTag(): Promise<string> {
     stdio: "pipe",
   });
 
-  return result.stdout.trim().split(/\n/).filter(Boolean)[0];
+  const allTags = result.stdout.trim().split(/\n/).filter(Boolean);
+  const versionStrings = allTags.map((tag) =>
+    tag.replace(`visual-editor@`, ""),
+  );
+  const sortedVersions = semver.rsort(versionStrings);
+
+  return `visual-editor@${sortedVersions[0]}`;
 }
 
 export async function logRecentCommits(): Promise<void> {
