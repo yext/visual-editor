@@ -20,6 +20,7 @@ import {
   msg,
   TranslatableStringField,
   DynamicOptionsSelectorType,
+  DynamicOptionsSingleSelectorType,
 } from "@yext/visual-editor";
 import {
   RenderYextEntityFieldSelectorProps,
@@ -30,7 +31,6 @@ import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFiel
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
-import { DynamicOptionsSingleSelectorType } from "./DynamicOptionsSelector";
 
 /** Copied from Puck, do not change */
 export type FieldOption = {

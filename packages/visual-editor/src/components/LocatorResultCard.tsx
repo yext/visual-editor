@@ -818,7 +818,8 @@ const ImageSection = (props: {
   const imageRecord = parseRecordFromLocation(location, fieldId);
   console.log("Image record for field", fieldId, ":", imageRecord);
   return (
-    imageRecord && (
+    imageRecord &&
+    image.liveVisibility && (
       <img
         src={imageRecord.url}
         alt={imageRecord.alternateText || location.name}
@@ -863,9 +864,7 @@ const HeadingTextSection = (props: {
         </Body>
       )}
       {tertiaryHeadingText && tertiaryHeading.liveVisibility && (
-        <Body variant={tertiaryHeading.variant} className="">
-          {tertiaryHeadingText}
-        </Body>
+        <Body variant={tertiaryHeading.variant}>{tertiaryHeadingText}</Body>
       )}
     </div>
   );

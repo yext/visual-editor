@@ -125,7 +125,7 @@ const DynamicOptionsSingleSelectField = <T extends DynamicOptionValueTypes>(
   options: DynamicOption<T>[],
   dropdownLabel: string,
   placeholderOptionLabel?: string
-): Field<DynamicOptionSelection<T>> => {
+): Field<DynamicOptionSelection<T> | undefined> => {
   const dropdownOptions = options.map((opt) => ({
     label: opt.label,
     value: opt.value,
