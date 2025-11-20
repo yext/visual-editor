@@ -15,6 +15,7 @@ import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
  * @param label optional label. Takes in a value from msg.
  * @param filter optional filter for the entity fields that can be embedded.
  * @param showApplyAllOption enables the "Apply to All Locales" button
+ * @param showFieldSelector enables the button to select an entity field to embed
  */
 export function TranslatableStringField<
   T extends TranslatableString | undefined = TranslatableString,
