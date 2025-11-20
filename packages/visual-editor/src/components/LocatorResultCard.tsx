@@ -15,6 +15,7 @@ import {
   CTAVariant,
   Heading,
   HeadingLevel,
+  Image,
   msg,
   PhoneAtom,
   useTemplateProps,
@@ -243,9 +244,9 @@ const getDisplayFieldOptions = (
   }
   const displayFields = templateMetadata.locatorDisplayFields;
   return Object.keys(templateMetadata.locatorDisplayFields)
-    .filter((key) => displayFields![key].field_type_id === fieldTypeId)
+    .filter((key) => displayFields[key].field_type_id === fieldTypeId)
     .map((key) => {
-      const fieldData: FieldTypeData = displayFields![key];
+      const fieldData: FieldTypeData = displayFields[key];
       return {
         label: fieldData.field_name,
         value: key,
@@ -819,12 +820,19 @@ const ImageSection = (props: {
 
   const fieldId = image.field?.selection?.value;
   const imageRecord = parseRecordFromLocation(location, fieldId);
+  const imageData = {
+    url: imageRecord?.url,
+    alternateText: imageRecord?.alternateText || location.name,
+    // these will probably get overridden by CSS but providing defaults for safety
+    height: imageRecord?.height ?? 80,
+    width: imageRecord?.width ?? 80,
+  };
   const showImageSection = imageRecord && image.liveVisibility;
+
   return (
     showImageSection && (
-      <img
-        src={imageRecord.url}
-        alt={imageRecord.alternateText || location.name}
+      <Image
+        image={imageData}
         className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-md"
       />
     )
@@ -932,8 +940,9 @@ const PhoneSection = (props: {
   handlePhoneNumberClick: () => void;
   location: Location;
   icons: boolean;
+  index?: number;
 }) => {
-  const { phone, handlePhoneNumberClick, location, icons } = props;
+  const { phone, handlePhoneNumberClick, location, icons, index } = props;
   const { t } = useTranslation();
 
   const phoneFieldId = phone.field?.selection?.value;
@@ -943,7 +952,7 @@ const PhoneSection = (props: {
     showPhoneNumber && (
       <PhoneAtom
         backgroundColor={backgroundColors.background2.value}
-        eventName={`phone`}
+        eventName={`phone${index}`}
         label={t("phone", "Phone")}
         format={phone.phoneFormat}
         phoneNumber={phoneNumber}
