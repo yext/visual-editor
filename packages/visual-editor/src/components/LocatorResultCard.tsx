@@ -235,15 +235,16 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
 };
 
 const getDisplayFieldOptions = (
-  fieldTypeId: string
+  fieldTypeId: string | string[]
 ): DynamicOption<string>[] => {
   const templateMetadata = useTemplateMetadata();
   if (!templateMetadata?.locatorDisplayFields) {
     return [];
   }
   const displayFields = templateMetadata.locatorDisplayFields;
+  const fieldTypeIds = Array.isArray(fieldTypeId) ? fieldTypeId : [fieldTypeId];
   return Object.keys(templateMetadata.locatorDisplayFields)
-    .filter((key) => displayFields![key].field_type_id === fieldTypeId)
+    .filter((key) => fieldTypeIds.includes(displayFields![key].field_type_id))
     .map((key) => {
       const fieldData: FieldTypeData = displayFields![key];
       return {
@@ -514,16 +515,18 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       objectFields: {
         label: TranslatableStringField<any>(
           msg("fields.label", "Label"),
-          {
-            types: ["type.string"],
-          },
+          undefined,
           false,
-          false
+          true,
+          () => getDisplayFieldOptions("type.string")
         ),
-        link: {
-          label: msg("fields.link", "Link"),
-          type: "text",
-        },
+        link: TranslatableStringField<any>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
