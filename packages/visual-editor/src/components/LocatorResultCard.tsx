@@ -348,9 +348,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           {
             type: "dynamicSingleSelect",
             dropdownLabel: msg("fields.field", "Field"),
-            getOptions: () => {
-              return getDisplayFieldOptions("type.hours");
-            },
+            getOptions: () => getDisplayFieldOptions("type.hours"),
           }
         ),
         table: YextField(msg("fields.hoursColumn", "Hours Column"), {
@@ -816,9 +814,9 @@ const ImageSection = (props: {
 
   const fieldId = image.field?.selection?.value;
   const imageRecord = parseRecordFromLocation(location, fieldId);
+  const showImageSection = imageRecord && image.liveVisibility;
   return (
-    imageRecord &&
-    image.liveVisibility && (
+    showImageSection && (
       <img
         src={imageRecord.url}
         alt={imageRecord.alternateText || location.name}
@@ -877,55 +875,50 @@ const HoursSection = (props: {
 }) => {
   const { location, result, hoursProps, showIcons } = props;
 
-  if (!location.hours || !hoursProps.liveVisibility) {
-    return <></>;
-  }
-
   const hoursField = hoursProps.field?.selection?.value;
   const hoursData = parseHoursFromLocation(location, hoursField);
-  if (!hoursData) {
-    return <></>;
-  }
-
+  const showHoursSection = hoursData && hoursProps.liveVisibility;
   return (
-    <div className="font-body-fontFamily text-body-fontSize gap-8">
-      <Accordion>
-        <AccordionItem key={`result-${result.index}-hours`} className="py-0">
-          <AccordionTrigger className="justify-start">
-            <div className="flex flex-row items-center gap-2">
-              {showIcons && (
-                <CardIcon>
-                  <FaRegClock className="w-4 h-4" />
-                </CardIcon>
-              )}
-              <HoursStatusAtom
-                hours={hoursData}
-                timezone={location.timezone}
-                className="text-body-fontSize mb-0"
-                showDayNames={false}
-                boldCurrentStatus={true}
-              />
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="flex flex-col gap-2">
-              <HoursTableAtom
-                hours={hoursData}
-                startOfWeek={hoursProps.table.startOfWeek}
-                collapseDays={hoursProps.table.collapseDays}
-                className="[&_.HoursTable-row]:w-fit"
-              />
-              {location.additionalHoursText &&
-                hoursProps.table.showAdditionalHoursText && (
-                  <div className="text-body-sm-fontSize">
-                    {location.additionalHoursText}
-                  </div>
+    showHoursSection && (
+      <div className="font-body-fontFamily text-body-fontSize gap-8">
+        <Accordion>
+          <AccordionItem key={`result-${result.index}-hours`} className="py-0">
+            <AccordionTrigger className="justify-start">
+              <div className="flex flex-row items-center gap-2">
+                {showIcons && (
+                  <CardIcon>
+                    <FaRegClock className="w-4 h-4" />
+                  </CardIcon>
                 )}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </div>
+                <HoursStatusAtom
+                  hours={hoursData}
+                  timezone={location.timezone}
+                  className="text-body-fontSize mb-0"
+                  showDayNames={false}
+                  boldCurrentStatus={true}
+                />
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col gap-2">
+                <HoursTableAtom
+                  hours={hoursData}
+                  startOfWeek={hoursProps.table.startOfWeek}
+                  collapseDays={hoursProps.table.collapseDays}
+                  className="[&_.HoursTable-row]:w-fit"
+                />
+                {location.additionalHoursText &&
+                  hoursProps.table.showAdditionalHoursText && (
+                    <div className="text-body-sm-fontSize">
+                      {location.additionalHoursText}
+                    </div>
+                  )}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    )
   );
 };
 
