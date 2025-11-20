@@ -846,7 +846,7 @@ const HeadingTextSection = (props: {
   );
   const tertiaryHeadingText = parseStringFromLocation(
     location,
-    tertiaryHeading.field.selection.value
+    tertiaryHeading.field?.selection?.value
   );
 
   return (
@@ -862,7 +862,7 @@ const HeadingTextSection = (props: {
           {secondaryHeadingText}
         </Body>
       )}
-      {tertiaryHeadingText && secondaryHeading.liveVisibility && (
+      {tertiaryHeadingText && tertiaryHeading.liveVisibility && (
         <Body variant={tertiaryHeading.variant} className="">
           {tertiaryHeadingText}
         </Body>
@@ -1022,7 +1022,11 @@ const parseStringFromLocation = (
   location: Location,
   fieldId: string | undefined
 ): string | undefined => {
-  return String(resolveProjectedField(location, fieldId));
+  const value = resolveProjectedField(location, fieldId);
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  return String(value);
 };
 
 /** Parses an array from the given location using the provided field ID. */
