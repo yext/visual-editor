@@ -242,7 +242,6 @@ const getDisplayFieldOptions = (
     return [];
   }
   const displayFields = templateMetadata.locatorDisplayFields;
-  console.log("Locator display fields from template metadata:", displayFields);
   return Object.keys(templateMetadata.locatorDisplayFields)
     .filter((key) => displayFields![key].field_type_id === fieldTypeId)
     .map((key) => {
@@ -595,7 +594,6 @@ export const LocatorResultCard = React.memo(
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
-    console.log("Rendering LocatorResultCard for location:", location);
     const distance = result.distance;
 
     const distanceInMiles = distance

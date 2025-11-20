@@ -552,7 +552,6 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
 
 const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
-  console.log("Locator stream document:", streamDocument);
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
       streamDocument,
