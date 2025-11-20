@@ -29,10 +29,12 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
   value,
   onChange,
   filter,
+  showFieldSelector = true,
 }: {
   value: string;
   onChange: (value: string) => void;
   filter: RenderEntityFieldFilter<T>;
+  showFieldSelector: boolean;
 }) => {
   const entityFields = useEntityFields();
   const [open, setOpen] = React.useState(false);
@@ -117,39 +119,41 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
           setInputValue(e.target.value);
         }}
       />
-      <div className="ve-absolute ve-right-2 ve-top-[1.4rem] -ve-translate-y-1/2">
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <button
-              type="button"
-              className="ve-cursor-pointer ve-text-gray-700 hover:ve-text-gray-800"
-              aria-label={pt("addEntityField", "Add entity field")}
-            >
-              <SquarePlus size={20} />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="ve-w-[300px] ve-p-0 ve-bg-opacity-100 ve-bg-white">
-            <Command>
-              <CommandInputRounded placeholder={pt("search", "Search")} />
-              <CommandList>
-                <CommandEmpty>
-                  {pt("noMatchesFound", "No matches found.")}
-                </CommandEmpty>
-                <CommandGroup>
-                  {entityFieldOptions.map((option) => (
-                    <CommandItemWithResolvedValue
-                      key={option.value}
-                      option={option}
-                      onSelect={() => handleFieldSelect(option.value)}
-                      isOpen={open}
-                    />
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      </div>
+      {showFieldSelector && (
+        <div className="ve-absolute ve-right-2 ve-top-[1.4rem] -ve-translate-y-1/2">
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="ve-cursor-pointer ve-text-gray-700 hover:ve-text-gray-800"
+                aria-label={pt("addEntityField", "Add entity field")}
+              >
+                <SquarePlus size={20} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="ve-w-[300px] ve-p-0 ve-bg-opacity-100 ve-bg-white">
+              <Command>
+                <CommandInputRounded placeholder={pt("search", "Search")} />
+                <CommandList>
+                  <CommandEmpty>
+                    {pt("noMatchesFound", "No matches found.")}
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {entityFieldOptions.map((option) => (
+                      <CommandItemWithResolvedValue
+                        key={option.value}
+                        option={option}
+                        onSelect={() => handleFieldSelect(option.value)}
+                        isOpen={open}
+                      />
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      )}
     </div>
   );
 };

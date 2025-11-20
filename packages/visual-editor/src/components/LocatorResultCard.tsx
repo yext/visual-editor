@@ -512,9 +512,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryCTA", "Secondary CTA"),
       type: "object",
       objectFields: {
-        label: TranslatableStringField<any>(msg("fields.label", "Label"), {
-          types: ["type.string"],
-        }),
+        label: TranslatableStringField<any>(
+          msg("fields.label", "Label"),
+          {
+            types: ["type.string"],
+          },
+          false,
+          false
+        ),
         link: {
           label: msg("fields.link", "Link"),
           type: "text",

@@ -360,6 +360,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           });
         }}
         filter={filter}
+        showFieldSelector={true}
       />
     </div>
   ) : (

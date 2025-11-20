@@ -21,7 +21,8 @@ export function TranslatableStringField<
 >(
   label?: MsgString,
   filter?: RenderEntityFieldFilter<any>,
-  showApplyAllOption?: boolean
+  showApplyAllOption?: boolean,
+  showFieldSelector?: boolean
 ): CustomField<T> {
   return {
     type: "custom",
@@ -72,6 +73,7 @@ export function TranslatableStringField<
               } as Record<string, string> as T);
             }}
             filter={filter ?? { types: ["type.string"] }}
+            showFieldSelector={showFieldSelector ?? true}
           />
           {applyAllButton}
         </>
