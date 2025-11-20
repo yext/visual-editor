@@ -58,7 +58,13 @@ export const formatPhoneNumber = (
   phoneNumberString: string,
   format: string = "domestic"
 ): string => {
-  const parsedPhoneNumber = parsePhoneNumber(phoneNumberString);
+  // Remove any '+' that is not the leading character and strip non-digits.
+  const cleanedPhoneNumberString = phoneNumberString.replace(
+    /(?!^\+)\+|[^\d+]/g,
+    ""
+  );
+
+  const parsedPhoneNumber = parsePhoneNumber(cleanedPhoneNumberString);
   if (!parsedPhoneNumber.valid || parsedPhoneNumber.number === undefined) {
     return phoneNumberString;
   }

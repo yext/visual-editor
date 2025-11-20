@@ -33,7 +33,7 @@ import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 const defaultPerson = {
   name: { en: "First Last", hasLocalizedValue: "true" },
   title: { en: getDefaultRTF("Associate Agent"), hasLocalizedValue: "true" },
-  phoneNumber: "(202) 770-6619",
+  phoneNumber: "+12027706619",
   email: "jkelley@[company].com",
   cta: {
     label: { en: "Visit Profile", hasLocalizedValue: "true" },
