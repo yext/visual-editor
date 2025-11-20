@@ -21,14 +21,14 @@ export const productSectionSlots: Migration = {
           const resolvedName = product.name
             ? resolveComponentData(
                 product.name,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";
           const resolvedCategory = product.category
             ? resolveComponentData(
                 product.category,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";

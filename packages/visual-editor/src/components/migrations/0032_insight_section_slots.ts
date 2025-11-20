@@ -13,7 +13,7 @@ export const insightSectionSlots: Migration = {
       const insights = resolveYextEntityField(
         streamDocument,
         props.data.insights as YextEntityField<InsightSectionType>,
-        streamDocument.meta?.locale || "en"
+        streamDocument?.meta?.locale || "en"
       )?.insights;
 
       const cards =
@@ -21,7 +21,7 @@ export const insightSectionSlots: Migration = {
           const resolvedName = insight.name
             ? resolveComponentData(
                 insight.name,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";

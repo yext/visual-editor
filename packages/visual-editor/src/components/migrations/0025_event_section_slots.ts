@@ -21,21 +21,21 @@ export const eventSectionSlots: Migration = {
           const resolvedTitle = event.title
             ? resolveComponentData(
                 event.title,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";
           const resolvedDescription = event.description
             ? resolveComponentData(
                 event.description,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";
           const resolvedDateTime = event.dateTime
             ? resolveComponentData(
                 event.dateTime,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";

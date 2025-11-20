@@ -13,7 +13,7 @@ export const teamsSectionSlots: Migration = {
       const team = resolveYextEntityField(
         streamDocument,
         props.data.people as YextEntityField<TeamSectionType>,
-        streamDocument.meta?.locale || "en"
+        streamDocument?.meta?.locale || "en"
       )?.people;
 
       const cards =
@@ -21,7 +21,7 @@ export const teamsSectionSlots: Migration = {
           const resolvedName = person.name
             ? resolveComponentData(
                 person.name,
-                streamDocument.locale || "en",
+                streamDocument?.locale || "en",
                 streamDocument
               )
             : "";
