@@ -209,6 +209,9 @@ const CommandItemWithResolvedValue = ({
   >();
 
   React.useEffect(() => {
+    if (useOptionValue) {
+      return;
+    }
     // Only resolve the value if the popover is open and we haven't resolved it yet.
     if (isOpen && resolvedValue === undefined) {
       const fieldToResolve: YextEntityField<unknown> = {
@@ -225,7 +228,7 @@ const CommandItemWithResolvedValue = ({
         typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
       setResolvedValue(String(finalValue ?? ""));
     }
-  }, [isOpen, option.value, streamDocument, resolvedValue]);
+  }, [isOpen, option.value, streamDocument, resolvedValue, useOptionValue]);
 
   return (
     <CommandItem

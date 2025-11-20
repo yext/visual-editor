@@ -27,6 +27,7 @@ import {
   YextField,
   DynamicOption,
   DynamicOptionsSingleSelectorType,
+  TranslatableString,
 } from "@yext/visual-editor";
 import {
   Address,
@@ -158,9 +159,9 @@ export interface LocatorResultCardProps {
   /** Settings for the secondary CTA */
   secondaryCTA: {
     /** Label for the secondary CTA */
-    label: string;
+    label: TranslatableString;
     /** Template for the secondary CTA link, which can contain entity field references */
-    link: string;
+    link: TranslatableString;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */

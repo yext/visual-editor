@@ -20,7 +20,7 @@ import { DynamicOption } from "./DynamicOptionsSelector.tsx";
  * @param filter optional filter for the entity fields that can be embedded.
  * @param showApplyAllOption enables the "Apply to All Locales" button
  * @param showFieldSelector enables the button to select an entity field to embed
- * @param options optional options for the field selector. If provided, the entity field filter is ignored.
+ * @param getOptions optional function to get options for the field selector. If provided, the entity field filter is ignored.
  */
 export function TranslatableStringField<
   T extends TranslatableString | undefined = TranslatableString,
@@ -80,10 +80,15 @@ export function TranslatableStringField<
                   hasLocalizedValue: "true",
                 } as Record<string, string> as T);
               }}
-              options={getOptions?.().map((opt) => ({
-                label: opt.label,
-                value: opt.value ?? "", // or some other default string
-              }))}
+              options={getOptions?.()
+                .filter(
+                  (opt): opt is { label: string; value: string } =>
+                    opt.value !== undefined
+                )
+                .map((opt) => ({
+                  label: opt.label,
+                  value: opt.value,
+                }))}
               showFieldSelector={showFieldSelector ?? true}
               useOptionValueSublabel={true}
             />
