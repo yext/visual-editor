@@ -961,7 +961,10 @@ const EmailSection = (props: {
   const emailFieldId = email.field?.selection?.value;
   const emailAddresses = parseArrayFromLocation(location, emailFieldId);
   const showEmailSection =
-    email.liveVisibility && emailAddresses && emailAddresses.length > 0;
+    email.liveVisibility &&
+    emailAddresses &&
+    emailAddresses.length > 0 &&
+    typeof emailAddresses[0] === "string";
   return (
     showEmailSection && (
       <div className="flex flex-row items-center gap-2">
@@ -992,10 +995,10 @@ const ServicesSection = (props: {
   const fieldId = services.field?.selection?.value;
   const servicesList = parseArrayFromLocation(location, fieldId);
   const showServicesSection =
-    fieldId &&
     services.liveVisibility &&
     servicesList &&
-    servicesList.length > 0;
+    servicesList.length > 0 &&
+    servicesList.every((service) => typeof service === "string");
   return (
     showServicesSection && (
       <div className="flex flex-col gap-2">
