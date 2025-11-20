@@ -5,6 +5,10 @@ type Fallback = {
 
 export const defaultI18nFallbacks: Fallback[] = [
   {
+    from: "en-US",
+    to: "en",
+  },
+  {
     from: "zh-Hans",
     to: "zh",
   },
