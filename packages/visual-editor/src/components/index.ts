@@ -13,6 +13,11 @@ export {
 } from "./Directory.tsx";
 export { LocatorComponent, type LocatorProps } from "./Locator.tsx";
 export {
+  LocatorResultCard,
+  type Location,
+  type LocatorResultCardProps,
+} from "./LocatorResultCard.tsx";
+export {
   CustomCodeSection,
   type CustomCodeSectionProps,
 } from "./CustomCodeSection.tsx";
