@@ -246,7 +246,7 @@ const getDisplayFieldOptions = (
   const displayFields = templateMetadata.locatorDisplayFields;
   const fieldTypeIds = Array.isArray(fieldTypeId) ? fieldTypeId : [fieldTypeId];
   return Object.keys(templateMetadata.locatorDisplayFields)
-    .filter((key) => fieldTypeIds.includes(displayFields![key].field_type_id))
+    .filter((key) => fieldTypeIds.includes(displayFields[key].field_type_id))
     .map((key) => {
       const fieldData: FieldTypeData = displayFields[key];
       return {
@@ -515,14 +515,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryCTA", "Secondary CTA"),
       type: "object",
       objectFields: {
-        label: TranslatableStringField<any>(
+        label: TranslatableStringField<TranslatableString>(
           msg("fields.label", "Label"),
           undefined,
           false,
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        link: TranslatableStringField<any>(
+        link: TranslatableStringField<TranslatableString>(
           msg("fields.link", "Link"),
           undefined,
           false,
