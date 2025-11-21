@@ -604,12 +604,12 @@ export const LocatorResultCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const distanceInMiles = distance
-      ? (distance / 1609.344).toFixed(1)
-      : undefined;
-    const distanceInKilometers = distance
-      ? (distance / 1000).toFixed(1)
-      : undefined;
+    const distanceInMiles =
+      typeof distance === "number"
+        ? (distance / 1609.344).toFixed(1)
+        : undefined;
+    const distanceInKilometers =
+      typeof distance === "number" ? (distance / 1000).toFixed(1) : undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -678,7 +678,7 @@ export const LocatorResultCard = React.memo(
                   location={location}
                 />
               </div>
-              {distance && (
+              {typeof distance === "number" && (
                 <div
                   className={
                     "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex"
@@ -756,7 +756,7 @@ export const LocatorResultCard = React.memo(
               </div>
             </div>
           </div>
-          {distance && (
+          {typeof distance === "number" && (
             <div
               className={`
               font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit

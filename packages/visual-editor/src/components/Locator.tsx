@@ -798,7 +798,7 @@ const LocatorInternal = ({
         resultCardProps={resultCardProps}
       />
     ),
-    [puck]
+    [puck, resultCardProps]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
