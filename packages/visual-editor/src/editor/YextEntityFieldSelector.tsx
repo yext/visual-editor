@@ -43,7 +43,7 @@ import { pt } from "../utils/i18n/platform.ts";
 import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
-import { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
+import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 
 const devLogger = new DevLogger();
@@ -344,7 +344,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
 
   const fieldEditor = isSingleStringField ? (
     <div className="ve-pt-3">
-      <EmbeddedFieldStringInput
+      <EmbeddedFieldStringInputFromEntity
         value={value?.constantValue?.[locale] ?? ""}
         onChange={(newInputValue) => {
           onChange({
@@ -360,6 +360,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           });
         }}
         filter={filter}
+        showFieldSelector={true}
       />
     </div>
   ) : (

@@ -15,6 +15,7 @@ import {
   CTAVariant,
   Heading,
   HeadingLevel,
+  Image,
   msg,
   PhoneAtom,
   useTemplateProps,
@@ -24,6 +25,9 @@ import {
   HoursStatusAtom,
   HoursTableAtom,
   YextField,
+  DynamicOption,
+  DynamicOptionsSingleSelectorType,
+  TranslatableString,
 } from "@yext/visual-editor";
 import {
   Address,
@@ -49,6 +53,8 @@ import {
   FaRegClock,
   FaRegEnvelope,
 } from "react-icons/fa";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers";
+import { FieldTypeData } from "../internal/types/templateMetadata";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -57,7 +63,7 @@ export interface LocatorResultCardProps {
      * The field from the data to use for the primary heading
      * @defaultValue "name"
      */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
   };
@@ -65,7 +71,7 @@ export interface LocatorResultCardProps {
   /** Settings for the secondary heading of the card */
   secondaryHeading: {
     /** The field from the data to use for the secondary heading */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
     /** Whether the secondary heading is visible in live mode */
@@ -75,7 +81,7 @@ export interface LocatorResultCardProps {
   /** Settings for the tertiary heading of the card */
   tertiaryHeading: {
     /** The field from the data to use for the tertiary heading */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
     /** Whether the tertiary heading is visible in live mode */
@@ -87,6 +93,8 @@ export interface LocatorResultCardProps {
 
   /** Settings for the hours block */
   hours: {
+    /** The field from the data to use for the hours */
+    field: DynamicOptionsSingleSelectorType<string>;
     /** Styles for the hours table */
     table: Omit<HoursTableProps["styles"], "alignment">;
     /** Whether the hours block is visible in live mode */
@@ -107,7 +115,7 @@ export interface LocatorResultCardProps {
      * The field from the data to use for the phone number
      * @defaultValue "mainPhone"
      */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /**
      * The format to use for the phone number
      * @defaultValue "domestic"
@@ -125,7 +133,7 @@ export interface LocatorResultCardProps {
      * The field from the data to use for the email address
      * @defaultValue "emails"
      */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** Whether the email block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -135,7 +143,7 @@ export interface LocatorResultCardProps {
     /**The field from the data to use for the services
      * @defaultValue "services"
      */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** Whether the services block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -151,9 +159,9 @@ export interface LocatorResultCardProps {
   /** Settings for the secondary CTA */
   secondaryCTA: {
     /** Label for the secondary CTA */
-    label: string;
+    label: TranslatableString;
     /** Template for the secondary CTA link, which can contain entity field references */
-    link: string;
+    link: TranslatableString;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */
@@ -163,7 +171,7 @@ export interface LocatorResultCardProps {
   /** Settings for the image */
   image: {
     /** The field from the data to use for the image */
-    field: string;
+    field: DynamicOptionsSingleSelectorType<string>;
     /** Whether the image block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -171,21 +179,22 @@ export interface LocatorResultCardProps {
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryHeading: {
-    field: "name",
+    field: { selection: { value: "name" } },
     headingLevel: 3,
   },
   secondaryHeading: {
-    field: "name",
+    field: { selection: { value: "name" } },
     variant: "base",
     liveVisibility: false,
   },
   tertiaryHeading: {
-    field: "name",
+    field: { selection: { value: "name" } },
     variant: "base",
     liveVisibility: false,
   },
   icons: true,
   hours: {
+    field: { selection: { value: "hours" } },
     table: {
       startOfWeek: "today",
       collapseDays: false,
@@ -198,17 +207,17 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: true,
   },
   phone: {
-    field: "mainPhone",
+    field: { selection: { value: "mainPhone" } },
     phoneFormat: "domestic",
     includePhoneHyperlink: true,
     liveVisibility: true,
   },
   email: {
-    field: "emails",
+    field: { selection: { value: "emails" } },
     liveVisibility: false,
   },
   services: {
-    field: "services",
+    field: { selection: { value: "services" } },
     liveVisibility: false,
   },
   primaryCTA: {
@@ -222,9 +231,29 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: false,
   },
   image: {
-    field: "headshot",
+    field: { selection: { value: "headshot" } },
     liveVisibility: false,
   },
+};
+
+const getDisplayFieldOptions = (
+  fieldTypeId: string | string[]
+): DynamicOption<string>[] => {
+  const templateMetadata = useTemplateMetadata();
+  if (!templateMetadata?.locatorDisplayFields) {
+    return [];
+  }
+  const displayFields = templateMetadata.locatorDisplayFields;
+  const fieldTypeIds = Array.isArray(fieldTypeId) ? fieldTypeId : [fieldTypeId];
+  return Object.keys(templateMetadata.locatorDisplayFields)
+    .filter((key) => fieldTypeIds.includes(displayFields[key].field_type_id))
+    .map((key) => {
+      const fieldData: FieldTypeData = displayFields[key];
+      return {
+        label: fieldData.field_name,
+        value: key,
+      };
+    });
 };
 
 export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
@@ -235,16 +264,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.name", "Name"),
-              value: "name",
-            },
-          ],
-        }),
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          }
+        ),
         headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
           type: "select",
           hasSearch: true,
@@ -256,16 +283,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryHeading", "Secondary Heading"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.name", "Name"),
-              value: "name",
-            },
-          ],
-        }),
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          }
+        ),
         variant: YextField(msg("fields.variant", "Variant"), {
           type: "radio",
           options: "BODY_VARIANT",
@@ -286,16 +311,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.tertiaryHeading", "Tertiary Heading"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.name", "Name"),
-              value: "name",
-            },
-          ],
-        }),
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          }
+        ),
         variant: YextField(msg("fields.variant", "Variant"), {
           type: "radio",
           options: "BODY_VARIANT",
@@ -323,6 +346,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.hours", "Hours"),
       type: "object",
       objectFields: {
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.hours"),
+          }
+        ),
         table: YextField(msg("fields.hoursColumn", "Hours Column"), {
           type: "object",
           objectFields: HoursTableStyleFields,
@@ -369,16 +400,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.phone", "Phone"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.mainPhone", "Main Phone"),
-              value: "mainPhone",
-            },
-          ],
-        }),
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.phone"),
+          }
+        ),
         phoneFormat: YextField(msg("fields.phoneFormat", "Phone Format"), {
           type: "radio",
           options: [
@@ -418,16 +447,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.email", "Email"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.email", "Email"),
-              value: "emails",
-            },
-          ],
-        }),
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          }
+        ),
         liveVisibility: YextField(
           msg("fields.visibleOnLivePage", "Visible on Live Page"),
           {
@@ -444,16 +471,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.services", "Services"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.services", "Services"),
-              value: "services",
-            },
-          ],
-        }),
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.string"),
+          }
+        ),
         liveVisibility: YextField(
           msg("fields.visibleOnLivePage", "Visible on Live Page"),
           {
@@ -490,13 +515,20 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryCTA", "Secondary CTA"),
       type: "object",
       objectFields: {
-        label: TranslatableStringField<any>(msg("fields.label", "Label"), {
-          types: ["type.string"],
-        }),
-        link: {
-          label: msg("fields.link", "Link"),
-          type: "text",
-        },
+        label: TranslatableStringField<TranslatableString>(
+          msg("fields.label", "Label"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
+        link: TranslatableStringField<TranslatableString>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
@@ -517,16 +549,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.image", "Image"),
       type: "object",
       objectFields: {
-        field: YextField(msg("fields.field", "Field"), {
-          type: "select",
-          hasSearch: true,
-          options: [
-            {
-              label: msg("fields.headshot", "Headshot"),
-              value: "headshot",
-            },
-          ],
-        }),
+        field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
+          msg("fields.field", "Field"),
+          {
+            type: "dynamicSingleSelect",
+            dropdownLabel: msg("fields.field", "Field"),
+            getOptions: () => getDisplayFieldOptions("type.image"),
+          }
+        ),
         liveVisibility: YextField(
           msg("fields.visibleOnLivePage", "Visible on Live Page"),
           {
@@ -624,26 +654,6 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
-    const getFieldValue = (field: string): any => {
-      const keys = field.split(".");
-      let value: any = location;
-
-      for (const key of keys) {
-        if (value && Object.prototype.hasOwnProperty.call(value, key)) {
-          value = value[key];
-        } else {
-          return undefined;
-        }
-      }
-
-      return value;
-    };
-
-    const fieldExists = (field: string, type?: string) => {
-      const value = getFieldValue(field);
-      return value !== undefined && (type ? typeof value === type : true);
-    };
-
     return (
       <Background
         background={backgroundColors.background1.value}
@@ -660,47 +670,13 @@ export const LocatorResultCard = React.memo(
             {/** Heading section */}
             <div className="flex flex-row justify-between items-start gap-6">
               <div className="flex flex-row items-start gap-6">
-                {props.image.field &&
-                  fieldExists(props.image.field, "object") &&
-                  getFieldValue(props.image.field)?.url &&
-                  props.image.liveVisibility && (
-                    <img
-                      src={getFieldValue(props.image.field).url}
-                      alt={
-                        getFieldValue(props.image.field).alternateText ||
-                        location.name
-                      }
-                      className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-md"
-                    />
-                  )}
-                <div className="flex flex-col gap-2">
-                  <Heading
-                    className="font-bold text-palette-primary-dark"
-                    level={props.primaryHeading.headingLevel}
-                  >
-                    {getFieldValue(props.primaryHeading.field) ?? location.name}
-                  </Heading>
-                  {props.secondaryHeading.field &&
-                    props.secondaryHeading.liveVisibility &&
-                    fieldExists(props.secondaryHeading.field, "string") && (
-                      <Body
-                        variant={props.secondaryHeading.variant}
-                        className="font-bold"
-                      >
-                        {getFieldValue(props.secondaryHeading.field)}
-                      </Body>
-                    )}
-                  {props.tertiaryHeading.field &&
-                    props.tertiaryHeading.liveVisibility &&
-                    fieldExists(props.tertiaryHeading.field, "string") && (
-                      <Body
-                        variant={props.tertiaryHeading.variant}
-                        className=""
-                      >
-                        {getFieldValue(props.tertiaryHeading.field)}
-                      </Body>
-                    )}
-                </div>
+                <ImageSection image={props.image} location={location} />
+                <HeadingTextSection
+                  primaryHeading={props.primaryHeading}
+                  secondaryHeading={props.secondaryHeading}
+                  tertiaryHeading={props.tertiaryHeading}
+                  location={location}
+                />
               </div>
               {distance && (
                 <div
@@ -715,50 +691,12 @@ export const LocatorResultCard = React.memo(
                 </div>
               )}
             </div>
-            {/** Hours section */}
-            {location.hours && props.hours.liveVisibility && (
-              <div className="font-body-fontFamily text-body-fontSize gap-8">
-                <Accordion>
-                  <AccordionItem
-                    key={`result-${result.index}-hours`}
-                    className="py-0"
-                  >
-                    <AccordionTrigger className="justify-start">
-                      <div className="flex flex-row items-center gap-2">
-                        {props.icons && (
-                          <CardIcon>
-                            <FaRegClock className="w-4 h-4" />
-                          </CardIcon>
-                        )}
-                        <HoursStatusAtom
-                          hours={location.hours}
-                          timezone={location.timezone}
-                          className="text-body-fontSize mb-0"
-                          showDayNames={false}
-                          boldCurrentStatus={true}
-                        />
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="flex flex-col gap-2">
-                        <HoursTableAtom
-                          hours={location.hours}
-                          startOfWeek={props.hours.table.startOfWeek}
-                          collapseDays={props.hours.table.collapseDays}
-                          className="[&_.HoursTable-row]:w-fit"
-                        />
-                        {location.additionalHoursText &&
-                          props.hours.table.showAdditionalHoursText && (
-                            <div className="text-body-sm-fontSize">
-                              {location.additionalHoursText}
-                            </div>
-                          )}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-            )}
+            <HoursSection
+              location={location}
+              result={result}
+              hoursProps={props.hours}
+              showIcons={props.icons}
+            />
 
             {/** Core Info section */}
             <div className="flex flex-col lg:flex-row gap-4">
@@ -796,57 +734,25 @@ export const LocatorResultCard = React.memo(
                     </div>
                   </div>
                 )}
-                {props.phone.field &&
-                  fieldExists(props.phone.field, "string") &&
-                  props.phone.liveVisibility && (
-                    <PhoneAtom
-                      backgroundColor={backgroundColors.background2.value}
-                      eventName={`phone`}
-                      label={t("phone", "Phone")}
-                      format={props.phone.phoneFormat}
-                      phoneNumber={getFieldValue(props.phone.field)}
-                      includeHyperlink={props.phone.includePhoneHyperlink}
-                      includeIcon={props.icons}
-                      onClick={handlePhoneNumberClick}
-                    />
-                  )}
-                {props.email.field &&
-                  fieldExists(props.email.field) &&
-                  Array.isArray(getFieldValue(props.email.field)) &&
-                  getFieldValue(props.email.field).length > 0 &&
-                  props.email.liveVisibility && (
-                    <div className="flex flex-row items-center gap-2">
-                      {props.icons && (
-                        <CardIcon>
-                          <FaRegEnvelope className="w-4 h-4" />
-                        </CardIcon>
-                      )}
-                      <CTA
-                        eventName={`email${result.index}`}
-                        link={getFieldValue(props.email.field)[0]}
-                        label={getFieldValue(props.email.field)[0]}
-                        linkType="EMAIL"
-                        variant="link"
-                      />
-                    </div>
-                  )}
+                <PhoneSection
+                  phone={props.phone}
+                  handlePhoneNumberClick={handlePhoneNumberClick}
+                  location={location}
+                  icons={props.icons}
+                />
+                <EmailSection
+                  email={props.email}
+                  location={location}
+                  icons={props.icons}
+                  index={result.index}
+                />
               </div>
               {/** Secondary Info Section */}
               <div className="flex flex-col gap-4 lg:w-[240px]">
-                {props.services.field &&
-                  fieldExists(props.services.field) &&
-                  Array.isArray(getFieldValue(props.services.field)) &&
-                  getFieldValue(props.services.field).length > 0 &&
-                  props.services.liveVisibility && (
-                    <div className="flex flex-col gap-2">
-                      <Body variant="base" className="font-bold">
-                        {t("services", "Services")}
-                      </Body>
-                      <Body variant="base">
-                        {getFieldValue(props.services.field).join(", ")}
-                      </Body>
-                    </div>
-                  )}
+                <ServicesSection
+                  services={props.services}
+                  location={location}
+                />
               </div>
             </div>
           </div>
@@ -908,4 +814,281 @@ const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {children}
     </div>
   );
+};
+
+const ImageSection = (props: {
+  image: LocatorResultCardProps["image"];
+  location: Location;
+}) => {
+  const { image, location } = props;
+
+  const fieldId = image.field?.selection?.value;
+  const imageRecord = parseRecordFromLocation(location, fieldId);
+  const imageData = {
+    url: imageRecord?.url,
+    alternateText: imageRecord?.alternateText || location.name,
+    // these will probably get overridden by CSS but providing defaults for safety
+    height: imageRecord?.height ?? 80,
+    width: imageRecord?.width ?? 80,
+  };
+  const showImageSection = imageRecord && image.liveVisibility;
+
+  return (
+    showImageSection && (
+      <Image
+        image={imageData}
+        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-md"
+      />
+    )
+  );
+};
+
+const HeadingTextSection = (props: {
+  primaryHeading: LocatorResultCardProps["primaryHeading"];
+  secondaryHeading: LocatorResultCardProps["secondaryHeading"];
+  tertiaryHeading: LocatorResultCardProps["tertiaryHeading"];
+  location: Location;
+}) => {
+  const { primaryHeading, secondaryHeading, tertiaryHeading, location } = props;
+
+  const primaryHeadingText =
+    parseStringFromLocation(location, primaryHeading.field?.selection?.value) ??
+    location.name;
+
+  const secondaryHeadingText = parseStringFromLocation(
+    location,
+    secondaryHeading.field?.selection?.value
+  );
+  const tertiaryHeadingText = parseStringFromLocation(
+    location,
+    tertiaryHeading.field?.selection?.value
+  );
+
+  return (
+    <div className="flex flex-col gap-2">
+      <Heading
+        className="font-bold text-palette-primary-dark"
+        level={primaryHeading.headingLevel}
+      >
+        {primaryHeadingText}
+      </Heading>
+      {secondaryHeadingText && secondaryHeading.liveVisibility && (
+        <Body variant={secondaryHeading.variant} className="font-bold">
+          {secondaryHeadingText}
+        </Body>
+      )}
+      {tertiaryHeadingText && tertiaryHeading.liveVisibility && (
+        <Body variant={tertiaryHeading.variant}>{tertiaryHeadingText}</Body>
+      )}
+    </div>
+  );
+};
+
+const HoursSection = (props: {
+  location: Location;
+  result: CardProps<Location>["result"];
+  hoursProps: LocatorResultCardProps["hours"];
+  showIcons: boolean;
+}) => {
+  const { location, result, hoursProps, showIcons } = props;
+
+  const hoursField = hoursProps.field?.selection?.value;
+  const hoursData = parseHoursFromLocation(location, hoursField);
+  const showHoursSection = hoursData && hoursProps.liveVisibility;
+  return (
+    showHoursSection && (
+      <div className="font-body-fontFamily text-body-fontSize gap-8">
+        <Accordion>
+          <AccordionItem key={`result-${result.index}-hours`} className="py-0">
+            <AccordionTrigger className="justify-start">
+              <div className="flex flex-row items-center gap-2">
+                {showIcons && (
+                  <CardIcon>
+                    <FaRegClock className="w-4 h-4" />
+                  </CardIcon>
+                )}
+                <HoursStatusAtom
+                  hours={hoursData}
+                  timezone={location.timezone}
+                  className="text-body-fontSize mb-0"
+                  showDayNames={false}
+                  boldCurrentStatus={true}
+                />
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="flex flex-col gap-2">
+                <HoursTableAtom
+                  hours={hoursData}
+                  startOfWeek={hoursProps.table.startOfWeek}
+                  collapseDays={hoursProps.table.collapseDays}
+                  className="[&_.HoursTable-row]:w-fit"
+                />
+                {location.additionalHoursText &&
+                  hoursProps.table.showAdditionalHoursText && (
+                    <div className="text-body-sm-fontSize">
+                      {location.additionalHoursText}
+                    </div>
+                  )}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    )
+  );
+};
+
+const PhoneSection = (props: {
+  phone: LocatorResultCardProps["phone"];
+  handlePhoneNumberClick: () => void;
+  location: Location;
+  icons: boolean;
+  index?: number;
+}) => {
+  const { phone, handlePhoneNumberClick, location, icons, index } = props;
+  const { t } = useTranslation();
+
+  const phoneFieldId = phone.field?.selection?.value;
+  const phoneNumber = parseStringFromLocation(location, phoneFieldId);
+  const showPhoneNumber = phoneFieldId && phone.liveVisibility && phoneNumber;
+  return (
+    showPhoneNumber && (
+      <PhoneAtom
+        backgroundColor={backgroundColors.background2.value}
+        eventName={`phone${index}`}
+        label={t("phone", "Phone")}
+        format={phone.phoneFormat}
+        phoneNumber={phoneNumber}
+        includeHyperlink={phone.includePhoneHyperlink}
+        includeIcon={icons}
+        onClick={handlePhoneNumberClick}
+      />
+    )
+  );
+};
+
+const EmailSection = (props: {
+  email: LocatorResultCardProps["email"];
+  location: Location;
+  icons: boolean;
+  index?: number;
+}) => {
+  const { email, location, index, icons } = props;
+
+  const emailFieldId = email.field?.selection?.value;
+  const emailAddresses = parseArrayFromLocation(location, emailFieldId);
+  const showEmailSection =
+    email.liveVisibility &&
+    emailAddresses &&
+    emailAddresses.length > 0 &&
+    typeof emailAddresses[0] === "string";
+  return (
+    showEmailSection && (
+      <div className="flex flex-row items-center gap-2">
+        {icons && (
+          <CardIcon>
+            <FaRegEnvelope className="w-4 h-4" />
+          </CardIcon>
+        )}
+        <CTA
+          eventName={`email${index}`}
+          link={emailAddresses[0]}
+          label={emailAddresses[0]}
+          linkType="EMAIL"
+          variant="link"
+        />
+      </div>
+    )
+  );
+};
+
+const ServicesSection = (props: {
+  services: LocatorResultCardProps["services"];
+  location: Location;
+}) => {
+  const { services, location } = props;
+  const { t } = useTranslation();
+
+  const fieldId = services.field?.selection?.value;
+  const servicesList = parseArrayFromLocation(location, fieldId);
+  const showServicesSection =
+    services.liveVisibility &&
+    servicesList &&
+    servicesList.length > 0 &&
+    servicesList.every((service) => typeof service === "string");
+  return (
+    showServicesSection && (
+      <div className="flex flex-col gap-2">
+        <Body variant="base" className="font-bold">
+          {t("services", "Services")}
+        </Body>
+        <Body variant="base">{servicesList.join(", ")}</Body>
+      </div>
+    )
+  );
+};
+
+/** Parses a string from the given location using the provided field ID. */
+const parseStringFromLocation = (
+  location: Location,
+  fieldId: string | undefined
+): string | undefined => {
+  const value = resolveProjectedField(location, fieldId);
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+  return String(value);
+};
+
+/** Parses an array from the given location using the provided field ID. */
+const parseArrayFromLocation = (
+  location: Location,
+  fieldId: string | undefined
+): Array<any> | undefined => {
+  const fieldValue = resolveProjectedField(location, fieldId);
+  if (Array.isArray(fieldValue)) {
+    return fieldValue;
+  }
+  return undefined;
+};
+
+/** Parses a record with string keys from the given location using the provided field ID. */
+const parseRecordFromLocation = (
+  location: Location,
+  fieldId: string | undefined
+): Record<string, any> | undefined => {
+  return resolveProjectedField(location, fieldId);
+};
+
+/** Parses an hours object from the given location using the provided hours field ID. */
+const parseHoursFromLocation = (
+  location: Location,
+  hoursFieldId: string | undefined
+): HoursType | undefined => {
+  return resolveProjectedField(location, hoursFieldId) as HoursType;
+};
+
+/**
+ * Dereferences a projected field ID that uses "." as its separator. Returns the value of the
+ * root field.
+ */
+const resolveProjectedField = (
+  object: Record<string, any>,
+  projectFieldId: string | undefined
+): any => {
+  if (!projectFieldId) {
+    return undefined;
+  }
+  // We can get away with this simple implementation for now since we know exactly what fields
+  // can be in the locator response
+  let current = object;
+  for (const fieldId of projectFieldId.split(".")) {
+    if (!current?.hasOwnProperty(fieldId)) {
+      return undefined;
+    }
+    current = current[fieldId];
+  }
+
+  return current;
 };
