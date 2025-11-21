@@ -837,7 +837,7 @@ const ImageSection = (props: {
     showImageSection && (
       <Image
         image={imageData}
-        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-md"
+        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius"
       />
     )
   );
