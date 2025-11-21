@@ -194,7 +194,7 @@ export async function getLatestTag(): Promise<string> {
   );
   const sortedVersions = semver.rsort(versionStrings);
 
-  return `visual-editor@${sortedVersions[0]}`;
+  return sortedVersions[0];
 }
 
 export async function logRecentCommits(): Promise<void> {

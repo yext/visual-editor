@@ -1,3 +1,19 @@
+#### 0.0.67 (2025-11-21)
+
+##### Chores
+
+- more release tag fixes ([#914](https://github.com/yext/visual-editor/pull/914)) ([d59311ef](https://github.com/yext/visual-editor/commit/d59311ef0a12f7822255eda6461eabd37507f70f))
+
+##### New Features
+
+- customizable locator result cards ([#916](https://github.com/yext/visual-editor/pull/916)) ([019f599f](https://github.com/yext/visual-editor/commit/019f599fda1daa1dda8e679c7d3ef2555dd836a7))
+- added grid-1 prop to existing grid layout ([#903](https://github.com/yext/visual-editor/pull/903)) ([6a08909a](https://github.com/yext/visual-editor/commit/6a08909a986e532e420b8b0014a47424b18f3471))
+- adding comma seperated prop for TextList Component ([#902](https://github.com/yext/visual-editor/pull/902)) ([68a8e554](https://github.com/yext/visual-editor/commit/68a8e554b04f4d4a1059e721f71ccf60d72bd528))
+
+##### Bug Fixes
+
+- release tag sorting ([#909](https://github.com/yext/visual-editor/pull/909)) ([1d50111e](https://github.com/yext/visual-editor/commit/1d50111e14f365673726b5c0430ca9f09c513fe4))
+
 #### 0.0.66 (2025-11-13)
 
 ##### Bug Fixes
