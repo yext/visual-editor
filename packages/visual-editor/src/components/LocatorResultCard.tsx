@@ -27,6 +27,7 @@ import {
   YextField,
   DynamicOption,
   DynamicOptionsSingleSelectorType,
+  TranslatableString,
 } from "@yext/visual-editor";
 import {
   Address,
@@ -158,9 +159,9 @@ export interface LocatorResultCardProps {
   /** Settings for the secondary CTA */
   secondaryCTA: {
     /** Label for the secondary CTA */
-    label: string;
+    label: TranslatableString;
     /** Template for the secondary CTA link, which can contain entity field references */
-    link: string;
+    link: TranslatableString;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */
@@ -236,15 +237,16 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
 };
 
 const getDisplayFieldOptions = (
-  fieldTypeId: string
+  fieldTypeId: string | string[]
 ): DynamicOption<string>[] => {
   const templateMetadata = useTemplateMetadata();
   if (!templateMetadata?.locatorDisplayFields) {
     return [];
   }
   const displayFields = templateMetadata.locatorDisplayFields;
+  const fieldTypeIds = Array.isArray(fieldTypeId) ? fieldTypeId : [fieldTypeId];
   return Object.keys(templateMetadata.locatorDisplayFields)
-    .filter((key) => displayFields[key].field_type_id === fieldTypeId)
+    .filter((key) => fieldTypeIds.includes(displayFields[key].field_type_id))
     .map((key) => {
       const fieldData: FieldTypeData = displayFields[key];
       return {
@@ -513,18 +515,20 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryCTA", "Secondary CTA"),
       type: "object",
       objectFields: {
-        label: TranslatableStringField<any>(
+        label: TranslatableStringField<TranslatableString>(
           msg("fields.label", "Label"),
-          {
-            types: ["type.string"],
-          },
+          undefined,
           false,
-          false
+          true,
+          () => getDisplayFieldOptions("type.string")
         ),
-        link: {
-          label: msg("fields.link", "Link"),
-          type: "text",
-        },
+        link: TranslatableStringField<TranslatableString>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
