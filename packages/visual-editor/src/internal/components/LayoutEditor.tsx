@@ -153,12 +153,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
           .map((history) => ({
             id: history.id,
             state: {
-              data: migrate(
-                history.state.data,
-                migrationRegistry,
-                puckConfig,
-                streamDocument
-              ),
+              data: migrate(history.state.data, migrationRegistry, puckConfig),
               ui: history.state.ui,
             },
           }));
