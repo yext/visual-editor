@@ -91,10 +91,12 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       const localHistoryIndex = localHistories.length - 1;
       if (localHistoryIndex >= 0) {
         devLogger.log("Theme Dev Mode - Using layout data from local storage");
-        const histories = localHistories.map((h) => {
-          // strip ui state
-          return { id: h.id, state: { data: { ...h.state.data } } };
-        });
+        const histories = localHistories
+          .filter((h) => h?.state)
+          .map((h) => {
+            // strip ui state
+            return { id: h.id, state: { data: { ...h.state.data } } };
+          });
         // @ts-expect-error https://github.com/measuredco/puck/issues/673
         setPuckInitialHistory({
           histories: histories,

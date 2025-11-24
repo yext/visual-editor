@@ -129,22 +129,22 @@ export const InternalLayoutEditor = ({
           }
         }
 
-        if (layoutSaveState?.hash !== histories[index].id) {
+        if (layoutSaveState?.hash !== histories[index]?.id) {
           if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
             devLogger.logFunc("sendDevSaveStateData");
             sendDevSaveStateData({
               payload: {
-                devSaveStateData: JSON.stringify(histories[index].state.data),
+                devSaveStateData: JSON.stringify(histories[index]?.state?.data),
               },
             });
           } else {
             devLogger.logFunc("saveLayoutSaveState");
             saveLayoutSaveState({
               payload: {
-                hash: histories[index].id,
+                hash: histories[index]?.id,
                 history: JSON.stringify({
-                  data: histories[index].state.data,
-                  ui: histories[index].state.ui,
+                  data: histories[index]?.state?.data,
+                  ui: histories[index]?.state?.ui,
                 }),
               },
             });
