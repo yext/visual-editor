@@ -1,3 +1,15 @@
+#### 1.0.0-beta.2 (2025-11-24)
+
+##### Chores
+
+- upgrade pages-components to 1.1.16 ([#918](https://github.com/yext/visual-editor/pull/918)) ([a846b1ca](https://github.com/yext/visual-editor/commit/a846b1ca07a8422b05fec9e81406f0dd4039e6fd))
+- increase threshold for recently flaky tests ([#911](https://github.com/yext/visual-editor/pull/911)) ([7a3cf1e3](https://github.com/yext/visual-editor/commit/7a3cf1e3d2928d6b622e04e35a6076cfa774e662))
+
+##### Bug Fixes
+
+- add optional chaining to streamDocument usages in migrations ([#888](https://github.com/yext/visual-editor/pull/888)) ([e5c119b0](https://github.com/yext/visual-editor/commit/e5c119b0624433fc9692c47a5978a2e15301eb8a))
+- update default phone numbers ([#913](https://github.com/yext/visual-editor/pull/913)) ([a029ce05](https://github.com/yext/visual-editor/commit/a029ce05d133d5bec61b86f4871c78397d292595))
+
 #### 1.0.0-beta.1 (2025-11-19)
 
 ##### Chores
