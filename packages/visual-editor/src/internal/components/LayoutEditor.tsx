@@ -164,9 +164,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
             index: localHistoryIndex,
             appendData: false,
           });
+          setPuckInitialHistoryFetched(true);
+          return;
         }
-        setPuckInitialHistoryFetched(true);
-        return;
       }
 
       // Otherwise start fresh from Content
@@ -255,6 +255,9 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     const historyToSend =
       puckInitialHistory?.histories?.[puckInitialHistory.histories.length - 1]
         ?.state?.data;
+    if (!historyToSend) {
+      return;
+    }
 
     devLogger.logFunc("sendDevSaveStateData useEffect");
     sendDevLayoutSaveStateData({
