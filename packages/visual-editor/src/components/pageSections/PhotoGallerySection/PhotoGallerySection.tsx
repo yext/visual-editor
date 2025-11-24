@@ -16,7 +16,7 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
-  ...getRandomPlaceholderImageObject(),
+  ...getRandomPlaceholderImageObject(undefined, 640, 360),
   width: 640,
   height: 360,
   assetImage: {
@@ -148,7 +148,7 @@ export const PhotoGallerySection: ComponentConfig<{
                 constantValue: [
                   {
                     assetImage: {
-                      ...getRandomPlaceholderImageObject(),
+                      ...getRandomPlaceholderImageObject(undefined, 640, 360),
                       width: 640,
                       height: 360,
                       assetImage: { name: "Placeholder" },
@@ -156,7 +156,7 @@ export const PhotoGallerySection: ComponentConfig<{
                   },
                   {
                     assetImage: {
-                      ...getRandomPlaceholderImageObject(),
+                      ...getRandomPlaceholderImageObject(undefined, 640, 360),
                       width: 640,
                       height: 360,
                       assetImage: { name: "Placeholder" },
@@ -164,7 +164,7 @@ export const PhotoGallerySection: ComponentConfig<{
                   },
                   {
                     assetImage: {
-                      ...getRandomPlaceholderImageObject(),
+                      ...getRandomPlaceholderImageObject(undefined, 640, 360),
                       width: 640,
                       height: 360,
                       assetImage: { name: "Placeholder" },

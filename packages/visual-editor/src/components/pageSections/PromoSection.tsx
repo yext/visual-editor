@@ -387,7 +387,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               image: {
                 field: "",
                 constantValue: {
-                  ...getRandomPlaceholderImageObject(),
+                  ...getRandomPlaceholderImageObject(undefined, 640, 360),
                   width: 640,
                   height: 360,
                 },
