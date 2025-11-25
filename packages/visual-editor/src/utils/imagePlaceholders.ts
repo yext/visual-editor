@@ -14,7 +14,7 @@ export interface PlaceholderImageOptions {
   width?: number;
   /** Height in pixels to append to the URL */
   height?: number;
-  /** Aspect ratio (width/height). If width is provided but height is not, height will be calculated from aspectRatio */
+  /** Aspect ratio (width/height). If width is provided but height is not, height will be calculated. If height is provided but width is not, width will be calculated. */
   aspectRatio?: number;
 }
 
@@ -51,15 +51,21 @@ export function getRandomPlaceholderImage(
       ? width / aspectRatio
       : height;
 
-  if (width !== undefined) {
-    photoUrl += `&width=${width}`;
-  }
   if (calculatedHeight !== undefined) {
     photoUrl += `&height=${Math.round(calculatedHeight)}`;
   }
 
+  const calculatedWidth =
+    height !== undefined && width === undefined && aspectRatio !== undefined
+      ? height * aspectRatio
+      : width;
+
+  if (calculatedWidth !== undefined) {
+    photoUrl += `&width=${Math.round(calculatedWidth)}`;
+  }
+
   // fit=max scales to fit within dimensions while preserving aspect ratio (no cropping)
-  if (width !== undefined && calculatedHeight !== undefined) {
+  if (calculatedWidth !== undefined && calculatedHeight !== undefined) {
     photoUrl += `&fit=max`;
   }
 
