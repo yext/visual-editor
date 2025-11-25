@@ -23,7 +23,7 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 
 const defaultInsight = {
   image: {
-    ...getRandomPlaceholderImageObject(),
+    ...getRandomPlaceholderImageObject({ width: 640, height: 360 }),
     width: 640,
     height: 360,
   },
@@ -69,7 +69,10 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
                 image: {
                   field: "",
                   constantValue: {
-                    ...getRandomPlaceholderImageObject(),
+                    ...getRandomPlaceholderImageObject({
+                      width: 640,
+                      height: 360,
+                    }),
                     width: 640,
                     height: 360,
                   },

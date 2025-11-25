@@ -16,9 +16,9 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
-  ...getRandomPlaceholderImageObject(),
-  width: 640,
-  height: 360,
+  ...getRandomPlaceholderImageObject({ width: 1000, height: 570 }),
+  width: 1000,
+  height: 570,
   assetImage: {
     name: "Placeholder",
   },
@@ -148,25 +148,34 @@ export const PhotoGallerySection: ComponentConfig<{
                 constantValue: [
                   {
                     assetImage: {
-                      ...getRandomPlaceholderImageObject(),
-                      width: 640,
-                      height: 360,
+                      ...getRandomPlaceholderImageObject({
+                        width: 1000,
+                        height: 570,
+                      }),
+                      width: 1000,
+                      height: 570,
                       assetImage: { name: "Placeholder" },
                     },
                   },
                   {
                     assetImage: {
-                      ...getRandomPlaceholderImageObject(),
-                      width: 640,
-                      height: 360,
+                      ...getRandomPlaceholderImageObject({
+                        width: 1000,
+                        height: 570,
+                      }),
+                      width: 1000,
+                      height: 570,
                       assetImage: { name: "Placeholder" },
                     },
                   },
                   {
                     assetImage: {
-                      ...getRandomPlaceholderImageObject(),
-                      width: 640,
-                      height: 360,
+                      ...getRandomPlaceholderImageObject({
+                        width: 1000,
+                        height: 570,
+                      }),
+                      width: 1000,
+                      height: 570,
                       assetImage: { name: "Placeholder" },
                     },
                   },

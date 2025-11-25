@@ -7,12 +7,27 @@ const PLACEHOLDER_IMAGE_IDS = [
   "photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Sand dune
 ] as const;
 
+export interface PlaceholderImageOptions {
+  /** If provided, returns this URL to ensure stability (prevents re-fetching) */
+  existingUrl?: string;
+  /** Width in pixels to append to the URL */
+  width?: number;
+  /** Height in pixels to append to the URL */
+  height?: number;
+  /** Aspect ratio (width/height). If width is provided but height is not, height will be calculated. If height is provided but width is not, width will be calculated. */
+  aspectRatio?: number;
+}
+
 /**
  * Gets a random placeholder image URL from the CDN.
- * @param existingUrl - If provided, returns this URL to ensure stability (prevents re-fetching)
+ * @param options - Options for generating the placeholder image URL
  * @returns A randomly selected placeholder image URL (or first image in tests), or the existing URL if provided
  */
-export function getRandomPlaceholderImage(existingUrl?: string): string {
+export function getRandomPlaceholderImage(
+  options: PlaceholderImageOptions = {}
+): string {
+  const { existingUrl, width, height, aspectRatio } = options;
+
   // If an existing URL is provided, use it to prevent re-fetching
   if (existingUrl && existingUrl.trim() !== "") {
     return existingUrl;
@@ -29,25 +44,66 @@ export function getRandomPlaceholderImage(existingUrl?: string): string {
     ? 0
     : Math.floor(Math.random() * PLACEHOLDER_IMAGE_IDS.length);
 
-  const photoUrl = PLACEHOLDER_IMAGE_IDS[randomIndex];
+  let photoUrl = PLACEHOLDER_IMAGE_IDS[randomIndex];
+
+  const calculatedHeight =
+    width !== undefined && height === undefined && aspectRatio !== undefined
+      ? width / aspectRatio
+      : height;
+
+  if (calculatedHeight !== undefined) {
+    photoUrl += `&height=${Math.round(calculatedHeight)}`;
+  }
+
+  const calculatedWidth =
+    height !== undefined && width === undefined && aspectRatio !== undefined
+      ? height * aspectRatio
+      : width;
+
+  if (calculatedWidth !== undefined) {
+    photoUrl += `&width=${Math.round(calculatedWidth)}`;
+  }
+
+  // fit=max scales to fit within dimensions while preserving aspect ratio (no cropping)
+  if (calculatedWidth !== undefined && calculatedHeight !== undefined) {
+    photoUrl += `&fit=max`;
+  }
 
   // Using Unsplash's download endpoint which redirects to the CDN
-  // The "Invalid host" error is likely a validation warning but doesn't affect rendering
   return `https://images.unsplash.com/${photoUrl}`;
 }
 
 /**
  * Gets a random placeholder image object with default metadata.
- * @param existingConstantValue - If provided with a URL, uses it to ensure stability (prevents re-fetching)
+ * @param options - Options for generating the placeholder image. Can include existingConstantValue for stability, or width/height/aspectRatio for dimensions.
  * @returns A randomly selected placeholder image object with url, or reuses existing URL if provided
  */
-export function getRandomPlaceholderImageObject(existingConstantValue?: {
-  url?: string;
-}): {
+export function getRandomPlaceholderImageObject(
+  options: PlaceholderImageOptions & {
+    /** If provided with a URL, uses it to ensure stability (prevents re-fetching) */
+    existingConstantValue?: {
+      url?: string;
+      width?: number;
+      height?: number;
+      aspectRatio?: number;
+    };
+  } = {}
+): {
   url: string;
 } {
-  const existingUrl = existingConstantValue?.url;
+  const { existingConstantValue, ...restOptions } = options;
+  const existingUrl = existingConstantValue?.url ?? restOptions.existingUrl;
+  const finalWidth = existingConstantValue?.width ?? restOptions.width;
+  const finalHeight = existingConstantValue?.height ?? restOptions.height;
+  const finalAspectRatio =
+    existingConstantValue?.aspectRatio ?? restOptions.aspectRatio;
+
   return {
-    url: getRandomPlaceholderImage(existingUrl),
+    url: getRandomPlaceholderImage({
+      existingUrl,
+      width: finalWidth,
+      height: finalHeight,
+      aspectRatio: finalAspectRatio,
+    }),
   };
 }

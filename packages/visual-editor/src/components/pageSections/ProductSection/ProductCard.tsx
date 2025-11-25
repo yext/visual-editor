@@ -70,7 +70,10 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
                 image: {
                   field: "",
                   constantValue: {
-                    ...getRandomPlaceholderImageObject(),
+                    ...getRandomPlaceholderImageObject({
+                      width: 640,
+                      height: 360,
+                    }),
                     width: 640,
                     height: 360,
                   },
