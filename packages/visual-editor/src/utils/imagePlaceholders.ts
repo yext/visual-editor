@@ -7,20 +7,27 @@ const PLACEHOLDER_IMAGE_IDS = [
   "photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Sand dune
 ] as const;
 
+export interface PlaceholderImageOptions {
+  /** If provided, returns this URL to ensure stability (prevents re-fetching) */
+  existingUrl?: string;
+  /** Width in pixels to append to the URL */
+  width?: number;
+  /** Height in pixels to append to the URL */
+  height?: number;
+  /** Aspect ratio (width/height). If width is provided but height is not, height will be calculated from aspectRatio */
+  aspectRatio?: number;
+}
+
 /**
  * Gets a random placeholder image URL from the CDN.
- * @param existingUrl - If provided, returns this URL to ensure stability (prevents re-fetching)
- * @param width - Optional width in pixels to append to the URL
- * @param height - Optional height in pixels to append to the URL
- * @param aspectRatio - Optional aspect ratio (width/height). If width is provided but height is not, height will be calculated from aspectRatio
+ * @param options - Options for generating the placeholder image URL
  * @returns A randomly selected placeholder image URL (or first image in tests), or the existing URL if provided
  */
 export function getRandomPlaceholderImage(
-  existingUrl?: string,
-  width?: number,
-  height?: number,
-  aspectRatio?: number
+  options: PlaceholderImageOptions = {}
 ): string {
+  const { existingUrl, width, height, aspectRatio } = options;
+
   // If an existing URL is provided, use it to prevent re-fetching
   if (existingUrl && existingUrl.trim() !== "") {
     return existingUrl;
@@ -51,9 +58,9 @@ export function getRandomPlaceholderImage(
     photoUrl += `&height=${Math.round(calculatedHeight)}`;
   }
 
-  // fit=crop ensures exact dimensions
+  // fit=max scales to fit within dimensions while preserving aspect ratio (no cropping)
   if (width !== undefined && calculatedHeight !== undefined) {
-    photoUrl += `&fit=crop`;
+    photoUrl += `&fit=max`;
   }
 
   // Using Unsplash's download endpoint which redirects to the CDN
@@ -62,35 +69,35 @@ export function getRandomPlaceholderImage(
 
 /**
  * Gets a random placeholder image object with default metadata.
- * @param existingConstantValue - If provided with a URL, uses it to ensure stability (prevents re-fetching)
- * @param width - Optional width in pixels to append to the URL
- * @param height - Optional height in pixels to append to the URL
- * @param aspectRatio - Optional aspect ratio (width/height). If width is provided but height is not, height will be calculated from aspectRatio
+ * @param options - Options for generating the placeholder image. Can include existingConstantValue for stability, or width/height/aspectRatio for dimensions.
  * @returns A randomly selected placeholder image object with url, or reuses existing URL if provided
  */
 export function getRandomPlaceholderImageObject(
-  existingConstantValue?: {
-    url?: string;
-    width?: number;
-    height?: number;
-    aspectRatio?: number;
-  },
-  width?: number,
-  height?: number,
-  aspectRatio?: number
+  options: PlaceholderImageOptions & {
+    /** If provided with a URL, uses it to ensure stability (prevents re-fetching) */
+    existingConstantValue?: {
+      url?: string;
+      width?: number;
+      height?: number;
+      aspectRatio?: number;
+    };
+  } = {}
 ): {
   url: string;
 } {
-  const existingUrl = existingConstantValue?.url;
-  const finalWidth = existingConstantValue?.width ?? width;
-  const finalHeight = existingConstantValue?.height ?? height;
-  const finalAspectRatio = existingConstantValue?.aspectRatio ?? aspectRatio;
+  const { existingConstantValue, ...restOptions } = options;
+  const existingUrl = existingConstantValue?.url ?? restOptions.existingUrl;
+  const finalWidth = existingConstantValue?.width ?? restOptions.width;
+  const finalHeight = existingConstantValue?.height ?? restOptions.height;
+  const finalAspectRatio =
+    existingConstantValue?.aspectRatio ?? restOptions.aspectRatio;
+
   return {
-    url: getRandomPlaceholderImage(
+    url: getRandomPlaceholderImage({
       existingUrl,
-      finalWidth,
-      finalHeight,
-      finalAspectRatio
-    ),
+      width: finalWidth,
+      height: finalHeight,
+      aspectRatio: finalAspectRatio,
+    }),
   };
 }
