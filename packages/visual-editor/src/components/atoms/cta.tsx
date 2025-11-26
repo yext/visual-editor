@@ -70,7 +70,8 @@ const useResolvedCtaProps = (props: CTAProps) => {
           { provider: "google" },
           streamDocument.yextDisplayCoordinate
         );
-        // Prefer user-provided link, then listings link, then coordinate link
+        // Prefer hardcoded link, then listings link, then coordinate link
+        // User settable link props should not be used for get directions
         return {
           link: props.link || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,

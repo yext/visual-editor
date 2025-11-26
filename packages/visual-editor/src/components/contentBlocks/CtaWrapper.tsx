@@ -149,7 +149,11 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
       {cta && (
         <CTA
           label={resolvedLabel}
-          link={resolveComponentData(cta.link, i18n.language, streamDocument)}
+          link={
+            ctaType === "getDirections"
+              ? undefined
+              : resolveComponentData(cta.link, i18n.language, streamDocument)
+          }
           linkType={cta.linkType}
           ctaType={ctaType}
           presetImageType={styles.presetImage}
