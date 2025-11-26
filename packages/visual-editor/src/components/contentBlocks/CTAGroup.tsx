@@ -121,7 +121,11 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
             >
               <CTA
                 label={resolvedLabel}
-                link={resolveComponentData(cta.link, locale, streamDocument)}
+                link={
+                  ctaType === "getDirections"
+                    ? undefined
+                    : resolveComponentData(cta.link, locale, streamDocument)
+                }
                 linkType={cta.linkType}
                 variant={button.variant}
                 ctaType={ctaType}
