@@ -1,7 +1,7 @@
 import { type Config } from "@measured/puck";
 
 // The components that are disallowed by default.
-const gatedLayoutComponents: string[] = ["CustomCodeSection"];
+const gatedLayoutComponents: string[] = [];
 
 // The categories that are disallowed by default.
 const gatedLayoutCategories: string[] = ["coreInformation"];
@@ -38,7 +38,9 @@ export const filterComponentsFromConfig = <C extends Config>(
   );
 
   // Step 2: Determine the allowed components
-  // A component is allowed if ((it is not gated or is explicitly allowed) AND belongs to an allowed category).
+  // A component is allowed if it belongs to an allowed category and one of the following is true:
+  // 1) it is explicitly allowed via payload from storm
+  // 2) it is not in the gatedLayoutComponents list
   const finalComponents = Object.fromEntries(
     Object.entries(config.components).filter(([componentKey]) => {
       const isGated = gatedLayoutComponents.includes(componentKey);
