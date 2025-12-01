@@ -19,6 +19,10 @@ import { useProgress } from "../internal/hooks/useProgress.ts";
 import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
 import {
+  createDefaultThemeConfig,
+  defaultThemeConfig,
+} from "../components/DefaultThemeConfig";
+import {
   defaultFonts,
   loadGoogleFontsIntoDocument,
 } from "../utils/visualEditorFonts.ts";
@@ -156,6 +160,12 @@ export const Editor = ({
     ],
   });
 
+  let finalThemeConfig = themeConfig;
+  // If themeConfig is the default and there are custom fonts, create a new default theme config with the custom fonts
+  if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
+    finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
+  }
+
   return (
     <TemplateMetadataContext.Provider value={templateMetadata!}>
       <ErrorBoundary fallback={<></>} onError={logError}>
@@ -166,7 +176,7 @@ export const Editor = ({
               templateMetadata={templateMetadata!}
               layoutData={layoutData!}
               themeData={themeData!}
-              themeConfig={themeConfig}
+              themeConfig={finalThemeConfig}
               localDev={!!localDev}
               metadata={metadata}
             />
@@ -176,7 +186,7 @@ export const Editor = ({
               templateMetadata={templateMetadata!}
               layoutData={layoutData!}
               themeData={themeData!}
-              themeConfig={themeConfig}
+              themeConfig={finalThemeConfig}
               localDev={!!localDev}
               metadata={metadata}
               streamDocument={document}

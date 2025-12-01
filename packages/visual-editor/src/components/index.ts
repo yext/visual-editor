@@ -21,4 +21,7 @@ export {
   CustomCodeSection,
   type CustomCodeSectionProps,
 } from "./CustomCodeSection.tsx";
-export { defaultThemeConfig } from "./DefaultThemeConfig.ts";
+export {
+  defaultThemeConfig,
+  createDefaultThemeConfig,
+} from "./DefaultThemeConfig.ts";
