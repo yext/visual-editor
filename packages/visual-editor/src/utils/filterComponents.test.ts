@@ -11,7 +11,7 @@ describe("filterComponentsFromConfig", () => {
     expect(Object.keys(config.components)).toContain("ExpandedHeader");
     expect(Object.keys(config.components)).not.toContain("Grid");
     expect(Object.keys(config.components)).not.toContain("BodyText");
-    expect(Object.keys(config.components)).not.toContain("CustomCodeSection");
+    expect(Object.keys(config.components)).toContain("CustomCodeSection");
 
     // Test list of categories
     expect(Object.keys(config.categories ?? {})).toContain("pageSections");
@@ -54,8 +54,6 @@ describe("filterComponentsFromConfig", () => {
     // Test component visibility within categories
     expect(config.categories?.other?.components).toContain("ExpandedHeader");
     expect(config.categories?.coreInformation?.components).toContain("Grid");
-    expect(config.categories?.other?.components).not.toContain(
-      "CustomCodeSection"
-    );
+    expect(config.categories?.other?.components).toContain("CustomCodeSection");
   });
 });
