@@ -210,7 +210,6 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
         onChange({
           ...value,
           constantValueEnabled: constantValueEnabled,
-          constantValue: value?.constantValue ?? "",
         });
       };
 
@@ -505,7 +504,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
                 ...value,
                 field: "",
                 selectedType: selectedType,
-                constantValue: value?.constantValue ?? "",
               },
               uiState
             );
@@ -521,7 +519,6 @@ export const EntityFieldInput = <T extends Record<string, any>>({
             {
               ...value,
               field: selectedEntityField,
-              constantValue: value?.constantValue ?? "",
             },
             uiState
           );
