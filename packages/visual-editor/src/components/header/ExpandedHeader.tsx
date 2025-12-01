@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   AnalyticsScopeProvider,
   ComplexImageType,
+  Link,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@measured/puck";
 import {
@@ -21,6 +22,7 @@ import {
   PageSectionProps,
   useOverflow,
   AssetImageType,
+  TranslatableString,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaTimes, FaBars } from "react-icons/fa";
@@ -42,6 +44,8 @@ import {
 import { cva } from "class-variance-authority";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
+const LOGO_LINK = "#";
+const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
 const defaultMainLink = {
   linkType: "URL" as const,
   label: { en: "Main Header Link", hasLocalizedValue: "true" as const },
@@ -71,6 +75,7 @@ export interface ExpandedHeaderData {
   primaryHeader: {
     /** The main logo (top left) */
     logo: AssetImageType;
+    logoLink: TranslatableString;
     /** The links to display in the primary header */
     links: TranslatableCTA[];
     /** Content for the first CTA (top right) */
@@ -146,6 +151,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
         objectFields: {
           logo: YextField(msg("fields.logo", "Logo"), {
             type: "image",
+          }),
+          logoLink: YextField(msg("fields.logoLink", "Logo Link"), {
+            type: "translatableString",
           }),
           links: YextField(msg("fields.links", "Links"), {
             type: "array",
@@ -382,6 +390,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     secondaryCTA,
     showPrimaryCTA,
     showSecondaryCTA,
+    logoLink,
   } = primaryHeader;
   const { show, showLanguageDropdown, secondaryLinks } = secondaryHeader;
   const {
@@ -390,6 +399,9 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     primaryCtaVariant,
     secondaryCtaVariant,
   } = primaryHeaderStyle;
+
+  const { i18n } = useTranslation();
+
   const { backgroundColor: secondaryBackgroundColor } = secondaryHeaderStyle;
   const languageDropDownProps =
     parseDocumentForLanguageDropdown(streamDocument);
@@ -403,6 +415,13 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
 
   const headerRef = React.useRef<HTMLDivElement>(null);
   const [headerHeight, setHeaderHeight] = React.useState(0);
+
+  const inputLink = resolveComponentData(logoLink, i18n.language);
+  const resolvedLink =
+    typeof inputLink === "string" &&
+    LINK_REGEX_VALIDATION.test(inputLink.trim())
+      ? inputLink.trim()
+      : "#";
 
   React.useEffect(() => {
     if (!headerRef.current) {
@@ -502,19 +521,31 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
             >
               {/* Mobile Logo */}
               <div className="block md:hidden">
-                <HeaderLogo
-                  logo={buildComplexImage(logo, logoStyle.width ?? 100)}
-                  logoWidth={logoStyle.width ?? 100}
-                  aspectRatio={logoStyle.aspectRatio}
-                />
+                <Link
+                  href={resolvedLink}
+                  eventName="clickedLogo"
+                  aria-label={t("logoLink", "Logo Link")}
+                >
+                  <HeaderLogo
+                    logo={buildComplexImage(logo, logoStyle.width ?? 100)}
+                    logoWidth={logoStyle.width ?? 100}
+                    aspectRatio={logoStyle.aspectRatio}
+                  />
+                </Link>
               </div>
               {/* Desktop Logo */}
               <div className="hidden md:block">
-                <HeaderLogo
-                  logo={buildComplexImage(logo, logoStyle.width ?? 200)}
-                  logoWidth={logoStyle.width ?? 200}
-                  aspectRatio={logoStyle.aspectRatio}
-                />
+                <Link
+                  href={resolvedLink}
+                  eventName="clickedLogo"
+                  aria-label={t("logoLink", "Logo Link")}
+                >
+                  <HeaderLogo
+                    logo={buildComplexImage(logo, logoStyle.width ?? 200)}
+                    logoWidth={logoStyle.width ?? 200}
+                    aspectRatio={logoStyle.aspectRatio}
+                  />
+                </Link>
               </div>
             </EntityField>
 
@@ -852,6 +883,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
           width: 100,
           height: 100,
         },
+        logoLink: { en: LOGO_LINK, hasLocalizedValue: "true" },
         links: [defaultMainLink, defaultMainLink, defaultMainLink],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },

@@ -441,6 +441,80 @@ const tests: ComponentTest[] = [
     },
     version: 15,
   },
+  {
+    name: "version 24 props - logo Link - Valid",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: { url: "https://placehold.co/100", width: 100, height: 100 },
+          logoLink: { en: "https://yext.com", hasLocalizedValue: "true" },
+          links: [],
+          primaryCTA: undefined,
+          secondaryCTA: undefined,
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: false,
+          showLanguageDropdown: false,
+          secondaryLinks: [],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: { width: undefined, aspectRatio: 2 },
+          backgroundColor: backgroundColors.background1.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background2.value,
+        },
+        maxWidth: "theme",
+        headerPosition: "scrollsWithPage",
+      },
+      analytics: { scope: "expandedHeader" },
+    },
+    version: 24,
+  },
+  {
+    name: "version 24 props - logo Link - Invald",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: { url: "https://placehold.co/100", width: 100, height: 100 },
+          logoLink: { en: "abcdefgh", hasLocalizedValue: "true" },
+          links: [],
+          primaryCTA: undefined,
+          secondaryCTA: undefined,
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: false,
+          showLanguageDropdown: false,
+          secondaryLinks: [],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: { width: undefined, aspectRatio: 2 },
+          backgroundColor: backgroundColors.background1.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background2.value,
+        },
+        maxWidth: "theme",
+        headerPosition: "scrollsWithPage",
+      },
+      analytics: { scope: "expandedHeader" },
+    },
+    version: 24,
+  },
 ];
 
 describe("ExpandedHeader", async () => {
