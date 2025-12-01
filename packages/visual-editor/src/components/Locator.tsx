@@ -986,15 +986,20 @@ const LocatorInternal = ({
 
   const searchFilters = useSearchState((state) => state.filters);
   const currentOffset = useSearchState((state) => state.vertical.offset);
+  const previousOffset = React.useRef<number | undefined>(undefined);
 
   // Scroll to top when pagination changes
   React.useEffect(() => {
-    if (currentOffset !== undefined && currentOffset > 0) {
+    if (
+      currentOffset !== previousOffset.current &&
+      previousOffset.current !== undefined
+    ) {
       resultsContainer.current?.scroll({
         top: 0,
         behavior: "smooth",
       });
     }
+    previousOffset.current = currentOffset;
   }, [currentOffset]);
 
   const handleDistanceClick = (distanceMiles: number) => {
