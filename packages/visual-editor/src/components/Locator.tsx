@@ -2,18 +2,19 @@ import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   AnalyticsProvider,
+  AppliedFilters,
   CardProps,
   executeSearch,
+  Facets,
   FilterSearch,
   getUserLocation,
   MapboxMap,
   OnDragHandler,
   OnSelectParams,
+  Pagination,
   PinComponent,
-  VerticalResults,
   SearchI18nextProvider,
-  Facets,
-  AppliedFilters,
+  VerticalResults,
 } from "@yext/search-ui-react";
 import {
   FilterSearchResponse,
@@ -655,6 +656,7 @@ const LocatorInternal = ({
 
   const handleSearchAreaClick = () => {
     if (mapCenter && mapBounds) {
+      searchActions.setOffset(0);
       const locationFilter: SelectableStaticFilter = {
         selected: true,
         displayName: "",
@@ -730,6 +732,7 @@ const LocatorInternal = ({
       }
     }
 
+    searchActions.setOffset(0);
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
@@ -823,7 +826,8 @@ const LocatorInternal = ({
         radius
       );
       const doSearch = () => {
-        searchActions.setVerticalLimit(50);
+        searchActions.setVerticalLimit(20);
+        searchActions.setOffset(0);
         searchActions.setStaticFilters([initialLocationFilter]);
         searchActions.executeVerticalQuery();
         setSearchState("loading");
@@ -981,6 +985,17 @@ const LocatorInternal = ({
   };
 
   const searchFilters = useSearchState((state) => state.filters);
+  const currentOffset = useSearchState((state) => state.vertical.offset);
+
+  // Scroll to top when pagination changes
+  React.useEffect(() => {
+    if (currentOffset !== undefined && currentOffset > 0) {
+      resultsContainer.current?.scroll({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [currentOffset]);
 
   const handleDistanceClick = (distanceMiles: number) => {
     const existingFilters = searchFilters.static || [];
@@ -1109,10 +1124,18 @@ const LocatorInternal = ({
           </div>
           <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
             {resultCount > 0 && (
-              <VerticalResults
-                CardComponent={CardComponent}
-                setResultsRef={setResultsRef}
-              />
+              <div className="flex flex-col gap-4">
+                <VerticalResults
+                  CardComponent={CardComponent}
+                  setResultsRef={setResultsRef}
+                />
+                <Pagination
+                  customCssClasses={{
+                    selectedLabel:
+                      "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+                  }}
+                />
+              </div>
             )}
           </div>
           <FilterModal
