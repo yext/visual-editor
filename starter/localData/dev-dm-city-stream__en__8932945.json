@@ -100,6 +100,9 @@
   "dm_childEntityIds": ["8725530"],
   "dm_directoryChildren": [
     {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
       "address": {
         "city": "Arlington",
         "countryCode": "US",
@@ -117,11 +120,18 @@
         "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
       },
       "mainPhone": "+12025551010",
+      "meta": {
+        "entityType": { "id": "location", "uid": 12345 },
+        "locale": "en"
+      },
       "name": "Galaxy Grill",
       "timezone": "America/New_York",
-      "slug": "#"
+      "slug": "va/arlington/1101-wilson-blvd"
     },
     {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
       "address": {
         "city": "Arlington",
         "countryCode": "US",
@@ -140,11 +150,18 @@
         "tuesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
         "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
       },
+      "meta": {
+        "entityType": { "id": "location", "uid": 12346 },
+        "locale": "en"
+      },
       "name": "Galaxy Grill To Go",
       "timezone": "America/New_York",
-      "slug": "#"
+      "slug": "va/arlington/2101-wilson-blvd"
     },
     {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
       "address": {
         "city": "Arlington",
         "countryCode": "US",
@@ -162,11 +179,18 @@
         "tuesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
         "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
       },
+      "meta": {
+        "entityType": { "id": "location", "uid": 12347 },
+        "locale": "en"
+      },
       "name": "Galaxy Grill 2",
       "timezone": "America/New_York",
-      "slug": "#"
+      "slug": "va/arlington/3101-wilson-blvd"
     },
     {
+      "__": {
+        "entityPageSetUrlTemplates": "{\"primary\":\"[[address.region]]/[[address.city]]/[[address.line1]]\"}"
+      },
       "address": {
         "city": "Arlington",
         "countryCode": "US",
@@ -185,9 +209,13 @@
         "tuesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] },
         "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
       },
+      "meta": {
+        "entityType": { "id": "location", "uid": 12348 },
+        "locale": "en"
+      },
       "name": "Galaxy Grill 3",
       "timezone": "America/New_York",
-      "slug": "#"
+      "slug": "va/arlington/4101-wilson-blvd"
     }
   ],
   "dm_directoryManagerId": "63590-locations",

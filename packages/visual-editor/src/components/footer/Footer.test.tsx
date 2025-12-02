@@ -76,7 +76,8 @@ describe("Footer", async () => {
           ],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
 
       const { container } = reactRender(

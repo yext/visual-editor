@@ -8,6 +8,8 @@ export type MaybeLinkProps = {
   eventName?: string;
   variant?: CTAVariant;
   alwaysHideCaret?: boolean;
+  ariaLabel?: string;
+  disabled?: boolean;
 };
 
 export const MaybeLink = (props: MaybeLinkProps) => {
@@ -18,6 +20,8 @@ export const MaybeLink = (props: MaybeLinkProps) => {
     eventName,
     alwaysHideCaret,
     variant = "link",
+    ariaLabel,
+    disabled = false,
   } = props;
 
   if (href) {
@@ -30,6 +34,8 @@ export const MaybeLink = (props: MaybeLinkProps) => {
         variant={variant}
         className={className}
         alwaysHideCaret={alwaysHideCaret}
+        ariaLabel={ariaLabel}
+        disabled={disabled}
       />
     );
   } else {

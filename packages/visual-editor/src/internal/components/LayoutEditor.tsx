@@ -148,22 +148,30 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         devLogger.log("Layout Dev Mode - Using layout data from localStorage");
         const localHistories = (
           JSON.parse(localHistoryArray) as History<AppState>[]
-        ).map((history) => ({
-          id: history.id,
-          state: {
-            data: migrate(history.state.data, migrationRegistry, puckConfig),
-            ui: history.state.ui,
-          },
-        }));
+        )
+          .filter((history): history is History<AppState> => !!history?.state)
+          .map((history) => ({
+            id: history.id,
+            state: {
+              data: migrate(
+                history.state.data,
+                migrationRegistry,
+                puckConfig,
+                streamDocument
+              ),
+              ui: history.state.ui,
+            },
+          }));
         const localHistoryIndex = localHistories.length - 1;
-        // @ts-expect-error https://github.com/measuredco/puck/issues/673
-        setPuckInitialHistory({
-          histories: localHistories,
-          index: localHistoryIndex,
-          appendData: false,
-        });
-        setPuckInitialHistoryFetched(true);
-        return;
+        if (localHistoryIndex >= 0) {
+          setPuckInitialHistory({
+            histories: localHistories as any,
+            index: localHistoryIndex,
+            appendData: false,
+          });
+          setPuckInitialHistoryFetched(true);
+          return;
+        }
       }
 
       // Otherwise start fresh from Content
@@ -233,7 +241,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       return;
     }
     loadPuckInitialHistory();
-  }, [templateMetadata, layoutSaveStateFetched]);
+  }, [templateMetadata.layoutId, layoutSaveStateFetched]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
@@ -250,8 +258,11 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     }
 
     const historyToSend =
-      puckInitialHistory?.histories[puckInitialHistory.histories.length - 1]
-        .state.data;
+      puckInitialHistory?.histories?.[puckInitialHistory.histories.length - 1]
+        ?.state?.data;
+    if (!historyToSend) {
+      return;
+    }
 
     devLogger.logFunc("sendDevSaveStateData useEffect");
     sendDevLayoutSaveStateData({
