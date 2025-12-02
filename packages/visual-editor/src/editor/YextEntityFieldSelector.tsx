@@ -26,10 +26,8 @@ import { IMAGE_LIST_CONSTANT_CONFIG } from "../internal/puck/constant-value-fiel
 import { EVENT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/EventSection.tsx";
 import { INSIGHT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/InsightSection.tsx";
 import { PRODUCT_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ProductSection.tsx";
-import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import { TEAM_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TeamSection.tsx";
 import { TESTIMONIAL_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/TestimonialSection.tsx";
-import { IMAGE_OR_VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/ImageOrVideo.tsx";
 import {
   Tooltip,
   TooltipArrow,
@@ -40,11 +38,12 @@ import {
 import { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 import { Switch } from "../internal/puck/ui/switch.tsx";
 import { pt } from "../utils/i18n/platform.ts";
-import { supportedStructEntityFieldTypes } from "./YextStructFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
+import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
+import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection";
 
 const devLogger = new DevLogger();
 
@@ -103,13 +102,17 @@ export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
   "type.phone": PHONE_CONSTANT_CONFIG,
   "type.image": IMAGE_CONSTANT_CONFIG,
   "type.cta": ENHANCED_CTA_CONSTANT_CONFIG,
+  "type.datetime": DATE_TIME_CONSTANT_CONFIG,
   "type.events_section": EVENT_SECTION_CONSTANT_CONFIG,
   "type.insights_section": INSIGHT_SECTION_CONSTANT_CONFIG,
   "type.products_section": PRODUCT_SECTION_CONSTANT_CONFIG,
   "type.faq_section": FAQ_SECTION_CONSTANT_CONFIG,
   "type.team_section": TEAM_SECTION_CONSTANT_CONFIG,
   "type.testimonials_section": TESTIMONIAL_SECTION_CONSTANT_CONFIG,
-  imageOrVideo: IMAGE_OR_VIDEO_CONSTANT_CONFIG,
+  "type.promo_section": {
+    type: "custom",
+    render: () => <></>,
+  },
 };
 
 const LIST_TYPE_TO_CONSTANT_CONFIG = (): Record<string, Field<any>> => {
@@ -265,14 +268,11 @@ export const ConstantValueModeToggler = ({
   // Else if the field type is supported by constant value input, constantValueInputSupported is true
   const constantValueInputSupported =
     !disableConstantValue &&
-    (fieldTypeFilter.some(
+    fieldTypeFilter.some(
       (fieldType) =>
         Object.keys(TYPE_TO_CONSTANT_CONFIG).includes(fieldType) ||
         Object.keys(LIST_TYPE_TO_CONSTANT_CONFIG).includes(fieldType)
-    ) ||
-      fieldTypeFilter.some((fieldType) =>
-        supportedStructEntityFieldTypes.includes(fieldType)
-      ));
+    );
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
@@ -317,7 +317,7 @@ type InputProps<T extends Record<string, any>> = {
   value: any;
   className?: string;
   disallowTranslation?: boolean;
-  hideSelectAFieldOption?: boolean;
+  label?: string;
   typeSelectorConfig?: TypeSelectorConfigProps;
 };
 
@@ -365,6 +365,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
     </div>
   ) : (
     <AutoField
+      key={value?.selectedType} // reset when type changes
       onChange={(newConstantValue, uiState) =>
         onChange(
           {
@@ -420,13 +421,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
   onChange,
   value,
   className,
-  hideSelectAFieldOption,
   typeSelectorConfig,
 }: InputProps<T>) => {
   const entityFields = useEntityFields();
   const templateMetadata = useTemplateMetadata();
 
-  const typeSelectorField = React.useMemo(() => {
+  const typeSelector = React.useMemo(() => {
     if (!typeSelectorConfig) {
       return;
     }
@@ -442,7 +442,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     });
   }, [typeSelectorConfig]);
 
-  const basicSelectorField = React.useMemo(() => {
+  const entityFieldSelector = React.useMemo(() => {
     // If a selectedType is provided, filter the entity fields by that type.
     // If optionValueToEntityFieldType is provided, use it to map the selectedType to an EntityFieldType.
     // Otherwise, use the selectedType directly.
@@ -455,6 +455,12 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         ) {
           selectedEntityFieldType =
             typeSelectorConfig.optionValueToEntityFieldType[value.selectedType];
+        } else {
+          // If the selected type does not map to any entity field type, hide the selector.
+          return {
+            type: "custom",
+            render: () => <></>,
+          } satisfies CustomField<undefined>;
         }
       } else {
         selectedEntityFieldType = value.selectedType;
@@ -470,41 +476,21 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       value: field.name,
     }));
 
-    const options = hideSelectAFieldOption
-      ? [...entityFieldOptions]
-      : [
-          {
-            value: "",
-            label: pt("entityTypeField", "{{entityType}} Field", {
-              entityType: templateMetadata.entityTypeDisplayName,
-            }),
-          },
-          ...entityFieldOptions,
-        ];
-
-    // If hideSelectAFieldOption, set to the first available field,
-    // or unset if there are no fields available.
-    if (hideSelectAFieldOption && !value.constantValueEnabled) {
-      if (filteredEntityFields.length > 0 && value.field === "") {
-        onChange({
-          ...value,
-          field: filteredEntityFields[0].name,
-        });
-      }
-      if (filteredEntityFields.length === 0 && value.field !== "") {
-        onChange({
-          ...value,
-          field: "",
-        });
-      }
-    }
+    const options = [
+      {
+        value: "",
+        label: pt("entityTypeField", "{{entityType}} Field", {
+          entityType: templateMetadata.entityTypeDisplayName,
+        }),
+      },
+      ...entityFieldOptions,
+    ];
 
     return BasicSelector({
       label: typeSelectorConfig?.fieldLabel,
       options,
       translateOptions: false,
       noOptionsPlaceholder: pt("noAvailableFields", "No available fields"),
-      noOptionsMessage: getNoFieldsFoundMessage(filter),
     });
   }, [entityFields, filter, value?.selectedType]);
 
@@ -512,7 +498,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
     <div className={"ve-inline-block ve-w-full " + className}>
       {typeSelectorConfig && (
         <AutoField
-          field={typeSelectorField!}
+          field={typeSelector!}
           onChange={(selectedType, uiState) => {
             onChange(
               {
@@ -527,7 +513,8 @@ export const EntityFieldInput = <T extends Record<string, any>>({
         />
       )}
       <AutoField
-        field={basicSelectorField}
+        key={value?.selectedType}
+        field={entityFieldSelector}
         onChange={(selectedEntityField, uiState) => {
           onChange(
             {
@@ -541,25 +528,4 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       />
     </div>
   );
-};
-
-const getNoFieldsFoundMessage = (
-  filter: RenderEntityFieldFilter<any>
-): string | undefined => {
-  if (!filter.types?.length || filter.allowList) {
-    return;
-  }
-
-  if (filter.types.includes("type.hero_section")) {
-    return pt(
-      "noHeroFieldsMsg",
-      "To use entity content for this section, add a Hero Section field to your page group's entity type."
-    );
-  }
-  if (filter.types.includes("type.promo_section")) {
-    return pt(
-      "noPromoFieldsMsg",
-      "To use entity content for this section, add a Promo Section field to your page group's entity type."
-    );
-  }
 };

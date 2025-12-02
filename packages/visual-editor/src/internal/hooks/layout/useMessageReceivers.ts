@@ -42,7 +42,12 @@ export const useLayoutMessageReceivers = (
       const history = JSON.parse(payload.history) as AppState;
       const migratedHistory = {
         ...history,
-        data: migrate(history.data, migrationRegistry, puckConfig),
+        data: migrate(
+          history.data,
+          migrationRegistry,
+          puckConfig,
+          streamDocument
+        ),
       };
 
       receivedLayoutSaveState = {
@@ -51,7 +56,11 @@ export const useLayoutMessageReceivers = (
       } as LayoutSaveState;
     }
     devLogger.logData("LAYOUT_SAVE_STATE", receivedLayoutSaveState);
-    setLayoutSaveState(receivedLayoutSaveState);
+
+    if (layoutSaveState?.hash !== receivedLayoutSaveState?.hash) {
+      setLayoutSaveState(receivedLayoutSaveState);
+    }
+
     setLayoutSaveStateFetched(true);
     send({
       status: "success",
