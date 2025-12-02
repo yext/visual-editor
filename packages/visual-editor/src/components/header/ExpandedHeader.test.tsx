@@ -479,7 +479,7 @@ const tests: ComponentTest[] = [
     version: 24,
   },
   {
-    name: "version 24 props - logo Link - Invald",
+    name: "version 24 props - logo Link - Invaild",
     document: {},
     props: {
       data: {
