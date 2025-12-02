@@ -1294,7 +1294,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - @tanstack/react-query@5.90.10
+ - @tanstack/react-query@5.90.11
 
 This package contains the following license:
 
@@ -1396,7 +1396,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - react-international-phone@4.6.0
+ - react-international-phone@4.6.1
 
 This package contains the following license:
 
@@ -1456,7 +1456,7 @@ SOFTWARE.
 
 The following npm package may be included in this product:
 
- - tsx@4.20.6
+ - tsx@4.21.0
 
 This package contains the following license:
 
@@ -1563,7 +1563,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following npm package may be included in this product:
 
- - i18next@25.6.3
+ - i18next@25.7.1
 
 This package contains the following license:
 
