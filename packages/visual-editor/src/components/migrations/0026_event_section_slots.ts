@@ -86,7 +86,7 @@ export const eventSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.events.field,
                             image: event.image,
                           },
                     },
@@ -116,7 +116,7 @@ export const eventSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.events.field,
                             date: resolvedDateTime,
                           },
                     },
@@ -141,7 +141,7 @@ export const eventSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.events.field,
                             text: resolvedTitle,
                           },
                     },
@@ -168,7 +168,7 @@ export const eventSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.events.field,
                             richText: event.description,
                           },
                     },
@@ -198,7 +198,7 @@ export const eventSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.events.field,
                             cta: event.cta,
                           },
                       eventName: `cta${i}`,
@@ -216,7 +216,7 @@ export const eventSectionSlots: Migration = {
               parentData: constantValueEnabled
                 ? undefined
                 : {
-                    field: props.data.field,
+                    field: props.data.events.field,
                     event,
                   },
             },

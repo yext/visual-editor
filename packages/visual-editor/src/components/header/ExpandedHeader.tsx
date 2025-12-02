@@ -178,7 +178,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
     // Determine which fields to add to ignoreLocaleWarning
     const hiddenProps: string[] = [];
 
-    if (!data.props.slots.SecondaryHeaderSlot[0].props.styles.show) {
+    if (!data.props.slots.SecondaryHeaderSlot[0]?.props.data.show) {
       hiddenProps.push("slots.SecondaryHeaderSlot");
     }
 
@@ -200,7 +200,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
 
     // Ensure maxWidth is passed down to header slots
     if (
-      data.props.slots.PrimaryHeaderSlot[0]?.props.parentStyles !=
+      data.props.slots.PrimaryHeaderSlot[0]?.props.parentStyles?.maxWidth !==
       data.props.styles.maxWidth
     ) {
       data = setDeep(
@@ -211,7 +211,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
     }
 
     if (
-      data.props.slots.SecondaryHeaderSlot[0]?.props.parentStyles !=
+      data.props.slots.SecondaryHeaderSlot[0]?.props.parentStyles?.maxWidth !==
       data.props.styles.maxWidth
     ) {
       data = setDeep(
@@ -224,7 +224,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
     // Ensure SecondaryHeaderSlot is passed down to PrimaryHeaderSlot's parentValues
     if (
       data.props.slots.PrimaryHeaderSlot[0]?.props.parentValues
-        .SecondaryHeaderSlot !== data.props.slots.SecondaryHeaderSlot
+        ?.SecondaryHeaderSlot !== data.props.slots.SecondaryHeaderSlot
     ) {
       data = setDeep(
         data,

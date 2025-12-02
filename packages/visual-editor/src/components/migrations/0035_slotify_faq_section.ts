@@ -52,7 +52,7 @@ export const faqsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.faqs.field,
                             richText: faq.question,
                           },
                     },
@@ -74,7 +74,7 @@ export const faqsSectionSlots: Migration = {
                       parentData: constantValueEnabled
                         ? undefined
                         : {
-                            field: props.data.field,
+                            field: props.data.faqs.field,
                             richText: faq.answer,
                           },
                     },
