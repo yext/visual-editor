@@ -195,7 +195,7 @@ const tests: ComponentTest[] = [
     version: 10,
   },
   {
-    name: "version 34 with constant values",
+    name: "version 35 with constant values",
     document: { locale: "en" },
     props: {
       styles: {
@@ -302,7 +302,7 @@ const tests: ComponentTest[] = [
         await delay(interactionsDelay);
       });
     },
-    version: 34,
+    version: 35,
   },
 ];
 

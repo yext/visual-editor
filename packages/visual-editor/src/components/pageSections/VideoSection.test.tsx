@@ -82,7 +82,7 @@ const tests: ComponentTest[] = [
     version: 23,
   },
   {
-    name: "version 27 props with entity heading text and no video",
+    name: "version 28 props with entity heading text and no video",
     document: { name: "Test Name" },
     props: {
       styles: {
@@ -120,10 +120,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 27,
+    version: 28,
   },
   {
-    name: "version 27 props with constant heading text and video",
+    name: "version 28 props with constant heading text and video",
     document: { name: "Test Name" },
     props: {
       styles: {
@@ -170,7 +170,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 27,
+    version: 28,
   },
 ];
 

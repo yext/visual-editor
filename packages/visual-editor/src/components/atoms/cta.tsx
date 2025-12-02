@@ -26,6 +26,7 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
 };
 
@@ -139,7 +140,14 @@ const useResolvedCtaProps = (props: CTAProps) => {
 };
 
 export const CTA = (props: CTAProps) => {
-  const { eventName, target, variant, ctaType, disabled = false } = props;
+  const {
+    eventName,
+    target,
+    variant,
+    ctaType,
+    onClick,
+    disabled = false,
+  } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
 
@@ -210,6 +218,7 @@ export const CTA = (props: CTAProps) => {
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}
+        onClick={onClick}
       >
         {linkContent}
       </Link>

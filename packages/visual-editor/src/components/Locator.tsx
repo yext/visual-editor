@@ -1,14 +1,8 @@
 import { useTranslation } from "react-i18next";
-import {
-  ComponentConfig,
-  Fields,
-  PuckContext,
-  WithPuckProps,
-} from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   AnalyticsProvider,
   CardProps,
-  Coordinate,
   executeSearch,
   FilterSearch,
   getUserLocation,
@@ -16,7 +10,6 @@ import {
   OnDragHandler,
   OnSelectParams,
   PinComponent,
-  useCardAnalyticsCallback,
   VerticalResults,
   SearchI18nextProvider,
   Facets,
@@ -35,10 +28,8 @@ import {
   useSearchState,
   FieldValueFilter,
 } from "@yext/search-headless-react";
-import * as React from "react";
+import React from "react";
 import {
-  Background,
-  backgroundColors,
   BasicSelector,
   Button,
   createSearchAnalyticsConfig,
@@ -46,32 +37,26 @@ import {
   DynamicOption,
   DynamicOptionsSelectorType,
   Heading,
+  Location,
+  LocatorResultCard,
+  LocatorResultCardProps,
   msg,
   useDocument,
   YextField,
-  useTemplateProps,
-  resolveUrlTemplateOfChild,
-  mergeMeta,
-  HoursStatusAtom,
 } from "@yext/visual-editor";
-import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
-  Address,
-  AddressType,
-  getDirections,
-  HoursType,
-  ListingType,
-} from "@yext/pages-components";
+  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  LocatorResultCardFields,
+} from "./LocatorResultCard.tsx";
+import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
-  FaAngleRight,
   FaChevronUp,
   FaDotCircle,
   FaRegCircle,
   FaSlidersH,
   FaTimes,
 } from "react-icons/fa";
-import { formatPhoneNumber } from "./atoms/phone.js";
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString";
 
@@ -83,21 +68,6 @@ const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
 const MILES_TO_METERS = 1609.34;
 const INITIAL_LOCATION_KEY = "initialLocation";
-
-// Keep only digits and at most one leading plus for tel: links.
-// If the input already starts with "tel:", return it as-is.
-function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
-  if (!rawPhone) {
-    return undefined;
-  }
-  if (rawPhone.startsWith("tel:")) {
-    return rawPhone;
-  }
-
-  // Remove any '+' that is not the leading character and strip non-digits.
-  const cleaned = rawPhone.replace(/(?!^\+)\+|[^\d+]/g, "");
-  return `tel:${cleaned}`;
-}
 
 const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();
@@ -468,6 +438,12 @@ export interface LocatorProps {
     latitude: string;
     longitude: string;
   };
+
+  /**
+   * Props to customize the locator result card component.
+   * Controls which fields are displayed and their styling.
+   */
+  resultCard: LocatorResultCardProps;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -524,18 +500,21 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
-      facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
-        type: "dynamicSelect",
-        dropdownLabel: msg("fields.field", "Field"),
-        getOptions: () => {
-          const entityType = getEntityType();
-          return getFacetFieldOptions(entityType);
-        },
-        placeholderOptionLabel: msg(
-          "fields.options.selectAField",
-          "Select a field"
-        ),
-      }),
+      facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
+        msg("fields.dynamicFilters", "Dynamic Filters"),
+        {
+          type: "dynamicSelect",
+          dropdownLabel: msg("fields.field", "Field"),
+          getOptions: () => {
+            const entityType = getEntityType();
+            return getFacetFieldOptions(entityType);
+          },
+          placeholderOptionLabel: msg(
+            "fields.options.selectAField",
+            "Select a field"
+          ),
+        }
+      ),
     },
   },
   mapStartingLocation: YextField(
@@ -552,6 +531,7 @@ const locatorFields: Fields<LocatorProps> = {
       },
     }
   ),
+  resultCard: LocatorResultCardFields,
 };
 
 /**
@@ -564,6 +544,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       openNowButton: false,
       showDistanceOptions: false,
     },
+    resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
@@ -611,6 +592,7 @@ const LocatorInternal = ({
   mapStyle,
   filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
+  resultCard: resultCardProps,
   puck,
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
@@ -809,8 +791,14 @@ const LocatorInternal = ({
   }, []);
 
   const CardComponent = React.useCallback(
-    (result: CardProps<Location>) => <LocationCard {...result} puck={puck} />,
-    [puck]
+    (result: CardProps<Location>) => (
+      <LocatorResultCard
+        {...result}
+        puck={puck}
+        resultCardProps={resultCardProps}
+      />
+    ),
+    [puck, resultCardProps]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
@@ -835,6 +823,7 @@ const LocatorInternal = ({
         radius
       );
       const doSearch = () => {
+        searchActions.setVerticalLimit(50);
         searchActions.setStaticFilters([initialLocationFilter]);
         searchActions.executeVerticalQuery();
         setSearchState("loading");
@@ -1064,7 +1053,7 @@ const LocatorInternal = ({
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
       <div
-        className="relative h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col"
+        className="relative h-screen w-full md:w-2/5 lg:w-[40rem] flex flex-col md:min-w-[24rem]"
         id="locatorLeftDiv"
       >
         <div className="px-8 py-6 gap-4 flex flex-col">
@@ -1141,10 +1130,7 @@ const LocatorInternal = ({
       </div>
 
       {/* Right Section: Map. Hidden for small screens */}
-      <div
-        id="locatorMapDiv"
-        className="md:w-3/5 lg:w-2/3 md:flex hidden relative"
-      >
+      <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
         <Map {...mapProps} />
         {showSearchAreaButton && (
           <div className="absolute bottom-10 left-0 right-0 flex justify-center">
@@ -1330,160 +1316,6 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
     />
   );
 };
-
-const LocationCard = React.memo(
-  ({
-    result,
-    puck,
-  }: {
-    result: CardProps<Location>["result"];
-    puck: PuckContext;
-  }): React.JSX.Element => {
-    const { document: streamDocument, relativePrefixToRoot } =
-      useTemplateProps();
-    const { t } = useTranslation();
-
-    const location = result.rawData;
-    const distance = result.distance;
-
-    const distanceInMiles = distance
-      ? (distance / 1609.344).toFixed(1)
-      : undefined;
-    const distanceInKilometers = distance
-      ? (distance / 1000).toFixed(1)
-      : undefined;
-
-    const handleGetDirectionsClick = useCardAnalyticsCallback(
-      result,
-      "DRIVING_DIRECTIONS"
-    );
-    const handleVisitPageClick = useCardAnalyticsCallback(
-      result,
-      "VIEW_WEBSITE"
-    );
-    const handlePhoneNumberClick = useCardAnalyticsCallback(
-      result,
-      "TAP_TO_CALL"
-    );
-
-    const resolvedUrl = resolveUrlTemplateOfChild(
-      mergeMeta(location, streamDocument),
-      relativePrefixToRoot,
-      puck.metadata?.resolveUrlTemplate
-    );
-
-    const formattedPhoneNumber = location.mainPhone
-      ? formatPhoneNumber(
-          location.mainPhone,
-          location.mainPhone.slice(0, 2) === "+1" ? "domestic" : "international"
-        )
-      : null;
-
-    const telHref = sanitizePhoneForTelHref(location.mainPhone);
-
-    const getDirectionsLink: string | undefined = (() => {
-      const listings = location.ref_listings ?? [];
-      const listingsLink = getDirections(
-        undefined,
-        listings,
-        undefined,
-        { provider: "google" },
-        undefined
-      );
-      const coordinateLink = getDirections(
-        undefined,
-        undefined,
-        undefined,
-        { provider: "google" },
-        location.yextDisplayCoordinate
-      );
-
-      return listingsLink || coordinateLink;
-    })();
-
-    return (
-      <Background
-        background={backgroundColors.background1.value}
-        className="container flex flex-row border-b border-gray-300 p-8 gap-4"
-      >
-        <Background
-          background={backgroundColors.background6.value}
-          className="flex-shrink-0 w-6 h-6 rounded-full font-bold flex items-center justify-center text-body-sm-fontSize"
-        >
-          {result.index}
-        </Background>
-        <div className="flex flex-wrap gap-6 w-full">
-          <div className="w-full flex flex-col gap-4">
-            <div className="flex flex-row justify-between items-center">
-              <Heading
-                className="font-bold text-palette-primary-dark"
-                level={4}
-              >
-                {location.name}
-              </Heading>
-              {distance && (
-                <div className="font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize">
-                  {t("distanceInUnit", `${distanceInMiles} mi`, {
-                    distanceInMiles,
-                    distanceInKilometers,
-                  })}
-                </div>
-              )}
-            </div>
-            {location.hours && (
-              <div className="font-body-fontFamily text-body-fontSize gap-8">
-                <HoursStatusAtom
-                  hours={location.hours}
-                  timezone={location.timezone}
-                  className="text-body-fontSize"
-                  boldCurrentStatus={false}
-                />
-              </div>
-            )}
-            {location.mainPhone && (
-              <a
-                href={telHref}
-                onClick={handlePhoneNumberClick}
-                className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
-              >
-                {formattedPhoneNumber}
-              </a>
-            )}
-            <div className="flex flex-col gap-1 w-full">
-              {location.address && (
-                <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
-                  <Address
-                    address={location.address}
-                    lines={[
-                      ["line1"],
-                      ["line2"],
-                      ["city", "region", "postalCode"],
-                    ]}
-                  />
-                </div>
-              )}
-              {getDirectionsLink && (
-                <a
-                  href={getDirectionsLink}
-                  onClick={handleGetDirectionsClick}
-                  className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
-                >
-                  {t("getDirections", "Get Directions")}
-                  <FaAngleRight size={"12px"} />
-                </a>
-              )}
-            </div>
-          </div>
-          <Button asChild className="basis-full" variant="primary">
-            <a href={resolvedUrl} onClick={handleVisitPageClick}>
-              {t("visitPage", "Visit Page")}
-            </a>
-          </Button>
-        </div>
-      </Background>
-    );
-  }
-);
 
 interface FilterModalProps {
   showFilterModal: boolean;
@@ -1842,17 +1674,4 @@ function deselectOpenNowFilters(
     }
     return filter;
   });
-}
-
-interface Location {
-  address: AddressType;
-  hours?: HoursType;
-  id: string;
-  mainPhone?: string;
-  name: string;
-  neighborhood?: string;
-  slug?: string;
-  timezone: string;
-  yextDisplayCoordinate?: Coordinate;
-  ref_listings?: ListingType[];
 }

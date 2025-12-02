@@ -341,7 +341,7 @@ const tests: ComponentTest[] = [
     version: 15,
   },
   {
-    name: "version 33 props with entity values",
+    name: "version 34 props with entity values",
     document: { c_team: teamData, name: "Test Name" },
     props: {
       styles: {
@@ -522,10 +522,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 33,
+    version: 34,
   },
   {
-    name: "version 33 props with constant values",
+    name: "version 34 props with constant values",
     document: { c_team: teamData },
     props: {
       styles: {
@@ -938,7 +938,7 @@ const tests: ComponentTest[] = [
                                   {
                                     number: {
                                       field: "",
-                                      constantValue: "+18005553333",
+                                      constantValue: "+18005553434",
                                       constantValueEnabled: true,
                                     },
                                     label: {
@@ -1008,7 +1008,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 33,
+    version: 34,
   },
 ];
 

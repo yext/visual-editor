@@ -22,26 +22,27 @@ import { updateFooterForAssetImages } from "./0020_footer_asset_images.ts";
 import { setOpenNowDefault } from "./0021_set_open_now_default.ts";
 import { adjustLocatorOpenNowSchema } from "./0022_adjust_locator_open_now_schema.ts";
 import { addIdToSchema } from "./0023_add_id_to_schema.ts";
-import { organizeHeadingTextProps } from "./0024_organize_heading_text_props.ts";
-import { eventSectionSlots } from "./0025_event_section_slots.ts";
-import { coreInfoSectionSlots } from "./0026_core_info_section_slots.ts";
-import { videoSectionSlots } from "./0027_video_section_slots.ts";
-import { organizeCTAWrapperProps } from "./0028_organize_cta_wrapper_props.ts";
-import { promoSectionSlots } from "./0029_promo_section_slots.ts";
-import { heroSectionSlots } from "./0030_slotify_hero_section.ts";
-import { productSectionSlots } from "./0031_product_section_slots.ts";
-import { insightSectionSlots } from "./0032_insight_section_slots.ts";
-import { teamsSectionSlots } from "./0033_teams_section_slots.ts";
-import { faqsSectionSlots } from "./0034_slotify_faq_section.ts";
-import { nearbyLocationSlots } from "./0035_nearby_location_slots.ts";
-import { testimonialsSectionSlots } from "./0036_testimonials_section_slots.ts";
-import { photoGallerySlots } from "./0037_photo_gallery_slots.ts";
-import { reviewsSectionSlots } from "./0038_reviews_section_slots.ts";
-import { directorySlots } from "./0039_slotify_directory.ts";
-import { expandedHeaderSlots } from "./0040_expanded_header_slots.ts";
-import { expandedFooterSlots } from "./0041_expanded_footer_slots.ts";
-import { setDefaultCtaVariants } from "./0042_set_default_cta_variants.ts";
-import { fixRootMetaFieldsMigration } from "./0043_fix_root_meta_fields.ts";
+import { locatorCardDefaultProps } from "./0024_locator_card_default_props.ts";
+import { organizeHeadingTextProps } from "./0025_organize_heading_text_props.ts";
+import { eventSectionSlots } from "./0026_event_section_slots.ts";
+import { coreInfoSectionSlots } from "./0027_core_info_section_slots.ts";
+import { videoSectionSlots } from "./0028_video_section_slots.ts";
+import { organizeCTAWrapperProps } from "./0029_organize_cta_wrapper_props.ts";
+import { promoSectionSlots } from "./0030_promo_section_slots.ts";
+import { heroSectionSlots } from "./0031_slotify_hero_section.ts";
+import { productSectionSlots } from "./0032_product_section_slots.ts";
+import { insightSectionSlots } from "./0033_insight_section_slots.ts";
+import { teamsSectionSlots } from "./0034_teams_section_slots.ts";
+import { faqsSectionSlots } from "./0035_slotify_faq_section.ts";
+import { nearbyLocationSlots } from "./0036_nearby_location_slots.ts";
+import { testimonialsSectionSlots } from "./0037_testimonials_section_slots.ts";
+import { photoGallerySlots } from "./0038_photo_gallery_slots.ts";
+import { reviewsSectionSlots } from "./0039_reviews_section_slots.ts";
+import { directorySlots } from "./0040_slotify_directory.ts";
+import { expandedHeaderSlots } from "./0041_expanded_header_slots.ts";
+import { expandedFooterSlots } from "./0042_expanded_footer_slots.ts";
+import { setDefaultCtaVariants } from "./0043_set_default_cta_variants.ts";
+import { fixRootMetaFieldsMigration } from "./0044_fix_root_meta_fields.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -72,6 +73,7 @@ export const migrationRegistry: MigrationRegistry = [
   setOpenNowDefault,
   adjustLocatorOpenNowSchema,
   addIdToSchema,
+  locatorCardDefaultProps,
   organizeHeadingTextProps,
   eventSectionSlots,
   coreInfoSectionSlots,

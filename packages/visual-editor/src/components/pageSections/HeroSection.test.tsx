@@ -946,7 +946,7 @@ const tests: ComponentTest[] = [
     version: 17,
   },
   {
-    name: "[classic] version 30 props with entity values",
+    name: "[classic] version 31 props with entity values",
     document: testDocument,
     props: {
       data: {
@@ -1099,10 +1099,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
   {
-    name: "[classic] version 30 props with constant values",
+    name: "[classic] version 31 props with constant values",
     document: testDocument,
     props: {
       data: {
@@ -1258,10 +1258,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
   {
-    name: "[immersive] version 30 props using entity values",
+    name: "[immersive] version 31 props using entity values",
     document: testDocument,
     props: {
       data: {
@@ -1414,10 +1414,10 @@ const tests: ComponentTest[] = [
       id: "HeroSection-1d9fd3d4-5d88-49ac-913e-28921acfc378",
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
   {
-    name: "[immersive] version 30 props using constant values",
+    name: "[immersive] version 31 props using constant values",
     document: testDocument,
     props: {
       data: {
@@ -1573,10 +1573,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
   {
-    name: "[spotlight] version 30 props with entity values",
+    name: "[spotlight] version 31 props with entity values",
     document: testDocument,
     props: {
       data: {
@@ -1729,10 +1729,10 @@ const tests: ComponentTest[] = [
       id: "HeroSection-1d9fd3d4-5d88-49ac-913e-28921acfc378",
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
   {
-    name: "[spotlight] version 30 props with constant values",
+    name: "[spotlight] version 31 props with constant values",
     document: testDocument,
     props: {
       data: {
@@ -1888,10 +1888,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
   {
-    name: "[compact] version 30 props with entity values",
+    name: "[compact] version 31 props with entity values",
     document: testDocument,
     props: {
       data: {
@@ -2044,10 +2044,10 @@ const tests: ComponentTest[] = [
       id: "HeroSection-1d9fd3d4-5d88-49ac-913e-28921acfc378",
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
   {
-    name: "[compact] version 30 props with constant values",
+    name: "[compact] version 31 props with constant values",
     document: testDocument,
     props: {
       data: {
@@ -2202,7 +2202,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       conditionalRender: { hours: true },
     },
-    version: 30,
+    version: 31,
   },
 ];
 

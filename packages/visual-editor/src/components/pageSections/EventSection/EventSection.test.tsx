@@ -342,7 +342,7 @@ const tests: ComponentTest[] = [
     version: 15,
   },
   {
-    name: "version 25 props with constant values",
+    name: "version 26 props with constant values",
     document: { c_events: eventsData, name: "Galaxy Grill" },
     props: {
       styles: {
@@ -825,10 +825,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "eventsSection" },
       liveVisibility: true,
     },
-    version: 25,
+    version: 26,
   },
   {
-    name: "version 25 props with entity values",
+    name: "version 26 props with entity values",
     document: { c_events: eventsData, name: "Galaxy Grill" },
     props: {
       styles: {
@@ -1164,7 +1164,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "eventsSection" },
       liveVisibility: true,
     },
-    version: 25,
+    version: 26,
   },
 ];
 
