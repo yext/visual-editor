@@ -78,8 +78,8 @@ export const expandedHeaderSlots: Migration = {
                             props.styles?.primaryHeader.primaryCtaVariant,
                           presetImage: "app-store",
                         },
+                        eventName: "primaryCta",
                       },
-                      eventName: "primaryCta",
                     },
                   ],
                   SecondaryCTASlot: [
