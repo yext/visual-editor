@@ -26,7 +26,7 @@ describe("createDefaultThemeConfig", () => {
       "Open Sans": {
         italics: true,
         weights: [300, 400, 500],
-        fallback: "sans-serif",
+        fallback: "serif",
       },
     };
 
@@ -37,7 +37,7 @@ describe("createDefaultThemeConfig", () => {
       (option: any) => option.label === "Open Sans"
     );
     expect(openSansOption).toBeDefined();
-    expect(openSansOption?.value).toBe("'Open Sans', sans-serif");
+    expect(openSansOption?.value).toBe("'Open Sans', serif");
   });
 
   it("should merge custom fonts with default fonts", () => {

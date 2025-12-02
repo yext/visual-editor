@@ -12,8 +12,8 @@ export function createDefaultThemeConfig(
   customFonts: FontRegistry = {}
 ): ThemeConfig {
   const fonts: FontRegistry = {
-    ...customFonts,
     ...defaultFonts,
+    ...customFonts,
   };
   const fontOptions = constructFontSelectOptions(fonts);
   const fontWeightOptions = (fontVariable?: string) => {
