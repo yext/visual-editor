@@ -61,6 +61,7 @@ import {
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString";
 
+const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
 const COUNTRY_CODE_FIELD = "address.countryCode";
 const DEFAULT_ENTITY_TYPE = "location";
@@ -826,7 +827,7 @@ const LocatorInternal = ({
         radius
       );
       const doSearch = () => {
-        searchActions.setVerticalLimit(20);
+        searchActions.setVerticalLimit(RESULTS_LIMIT);
         searchActions.setOffset(0);
         searchActions.setStaticFilters([initialLocationFilter]);
         searchActions.executeVerticalQuery();
@@ -1129,20 +1130,22 @@ const LocatorInternal = ({
           </div>
           <div id="innerDiv" className="overflow-y-auto" ref={resultsContainer}>
             {resultCount > 0 && (
-              <div className="flex flex-col gap-4">
-                <VerticalResults
-                  CardComponent={CardComponent}
-                  setResultsRef={setResultsRef}
-                />
-                <Pagination
-                  customCssClasses={{
-                    selectedLabel:
-                      "bg-palette-primary text-palette-primary-contrast border-palette-primary",
-                  }}
-                />
-              </div>
+              <VerticalResults
+                CardComponent={CardComponent}
+                setResultsRef={setResultsRef}
+              />
             )}
           </div>
+          {resultCount > RESULTS_LIMIT && (
+            <div className="border-t border-gray-300 pt-4">
+              <Pagination
+                customCssClasses={{
+                  selectedLabel:
+                    "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+                }}
+              />
+            </div>
+          )}
           <FilterModal
             showFilterModal={showFilterModal}
             showOpenNowOption={openNowButton}
