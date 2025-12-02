@@ -707,7 +707,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps. Available on Location templates.
 
-![Preview of the ReviewsSection component](../components/testing/screenshots/ReviewsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
+![Preview of the ReviewsSection component](<../components/testing/screenshots/ReviewsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data%20(after%20interactions).png>)
 
 ### Props
 
