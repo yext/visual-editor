@@ -44,7 +44,7 @@ import {
 import { cva } from "class-variance-authority";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/100";
-const LOGO_LINK = "#";
+const DEFAULT_LOGO_LINK = "#";
 const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
 const defaultMainLink = {
   linkType: "URL" as const,
@@ -421,7 +421,7 @@ const ExpandedHeaderWrapper: React.FC<ExpandedHeaderProps> = ({
     typeof inputLink === "string" &&
     LINK_REGEX_VALIDATION.test(inputLink.trim())
       ? inputLink.trim()
-      : "#";
+      : DEFAULT_LOGO_LINK;
 
   React.useEffect(() => {
     if (!headerRef.current) {
@@ -883,7 +883,7 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
           width: 100,
           height: 100,
         },
-        logoLink: { en: LOGO_LINK, hasLocalizedValue: "true" },
+        logoLink: { en: DEFAULT_LOGO_LINK, hasLocalizedValue: "true" },
         links: [defaultMainLink, defaultMainLink, defaultMainLink],
         primaryCTA: {
           label: { en: "Call to Action", hasLocalizedValue: "true" },
