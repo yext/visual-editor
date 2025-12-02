@@ -407,6 +407,7 @@ interface ExpandedHeaderData {
   primaryHeader: {
     /** The main logo (top left) */
     logo: AssetImageType;
+    logoLink: TranslatableString;
     /** The links to display in the primary header */
     links: TranslatableCTA[];
     /** Content for the first CTA (top right) */
@@ -1085,6 +1086,12 @@ type AssetImageType = Omit<ImageType, "alternateText"> & {
 };
 
 /**
+ * A string that can be translated for different locales.
+ * @ai This should always be the LocalizedValues type
+ */
+type TranslatableString = string | LocalizedValues;
+
+/**
  * A pages-components CTA with a translatable label and link
  */
 type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
@@ -1121,12 +1128,6 @@ interface PageSectionProps
   outerClassName?: string;
   outerStyle?: React.CSSProperties;
 }
-
-/**
- * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
- */
-type TranslatableString = string | LocalizedValues;
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 type YextEntityField<T> = {
@@ -1303,16 +1304,16 @@ type ImageContentData = {
   altText?: string;
 };
 
+/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
+type LocalizedValues = {
+  hasLocalizedValue: "true";
+} & Record<string, string>;
+
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
-
-/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
-type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
 
 /**
  * A rich text object with HTML and JSON (LexicalRichText) representations.
