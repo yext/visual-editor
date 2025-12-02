@@ -432,41 +432,41 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
     );
     const showDescription = Boolean(
       descriptionSlotProps &&
-        (descriptionSlotProps.parentData
-          ? descriptionSlotProps.parentData.richText
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              descriptionSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
+      (descriptionSlotProps.parentData
+        ? descriptionSlotProps.parentData.richText
+        : resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
     );
     const showTitle = Boolean(
       titleSlotProps &&
-        (titleSlotProps.parentData
-          ? titleSlotProps.parentData.text
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              titleSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
+      (titleSlotProps.parentData
+        ? titleSlotProps.parentData.text
+        : resolveYextEntityField(
+            params.metadata.streamDocument,
+            titleSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
     );
     const showDateTime = Boolean(
       dateTimeSlotProps?.parentData?.date?.trim() ||
-        resolveYextEntityField(
-          params.metadata.streamDocument,
-          dateTimeSlotProps.data.date,
-          i18nComponentsInstance.language || "en"
-        )?.trim()
+      resolveYextEntityField(
+        params.metadata.streamDocument,
+        dateTimeSlotProps.data.date,
+        i18nComponentsInstance.language || "en"
+      )?.trim()
     );
     const showCTA = Boolean(
       ctaSlotProps &&
-        (ctaSlotProps.parentData
-          ? ctaSlotProps.parentData.cta?.label
-          : resolveComponentData(
-              ctaSlotProps.data.entityField,
-              i18nComponentsInstance.language || "en",
-              params.metadata.streamDocument
-            )?.label)
+      (ctaSlotProps.parentData
+        ? ctaSlotProps.parentData.cta?.label
+        : resolveComponentData(
+            ctaSlotProps.data.entityField,
+            i18nComponentsInstance.language || "en",
+            params.metadata.streamDocument
+          )?.label)
     );
 
     let updatedData = {

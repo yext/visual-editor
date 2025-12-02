@@ -27,7 +27,8 @@ import {
 } from "../categories";
 
 export interface MainConfigProps
-  extends PageSectionCategoryProps,
+  extends
+    PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
     AdvancedCoreInfoCategoryProps,

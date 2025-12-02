@@ -67,7 +67,8 @@ export const headingVariants = cva("components", {
 
 // Omit 'color' from HTMLAttributes<HTMLHeadingElement> to avoid conflict
 export interface HeadingProps
-  extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
+  extends
+    Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
   level: HeadingLevel;
   semanticLevelOverride?: HeadingLevel | "span";

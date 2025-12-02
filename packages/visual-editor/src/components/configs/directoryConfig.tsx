@@ -22,7 +22,8 @@ import {
 } from "../categories/SlotsCategory";
 
 export interface DirectoryConfigProps
-  extends DirectoryCategoryProps,
+  extends
+    DirectoryCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {
