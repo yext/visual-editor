@@ -86,7 +86,6 @@
     color: hsl(
       from var(--colors-palette-primary) h s 20
     ) !important; /* palette-primary-dark */
-    text-transform: var(--textTransform-link-textTransform) !important;
     letter-spacing: var(--letterSpacing-link-letterSpacing) !important;
   }
   a:hover {
@@ -96,6 +95,7 @@
     /* streams outputs strong tags wrapped in <b> tags which automatically apply font-weight: bolder  */
     font-weight: inherit !important;
   }
+  text-transform: var(--textTransform-body-textTransform) !important;
 }
 
 /* Set the body variants */

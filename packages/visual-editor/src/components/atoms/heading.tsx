@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn, HeadingLevel } from "@yext/visual-editor";
+import { HeadingLevel, themeManagerCn } from "@yext/visual-editor";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -51,17 +51,17 @@ export const headingVariants = cva("components", {
       "800": "font-extrabold",
       "900": "font-black",
     },
-    transform: {
-      none: "",
-      uppercase: "uppercase",
-      lowercase: "lowercase",
-      capitalize: "capitalize",
-    },
+    // transform: {
+    //   none: "",
+    //   uppercase: "uppercase",
+    //   lowercase: "lowercase",
+    //   capitalize: "capitalize",
+    // },
   },
   defaultVariants: {
     fontSize: "default",
     weight: "default",
-    transform: "none",
+    // transform: "none",
   },
 });
 
@@ -79,7 +79,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       className,
       level = 1,
       weight,
-      transform,
+      // transform,
       fontSize,
       semanticLevelOverride,
       ...props
@@ -103,12 +103,16 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           headingVariants({
             fontSize,
             weight,
-            transform,
+            // transform,
             level,
           }),
           Tag === "span" && "block",
           className
         )}
+        style={{
+          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
+          textTransform: `var(--textTransform-h${level}-textTransform)`,
+        }}
         ref={ref}
         {...props}
       >
