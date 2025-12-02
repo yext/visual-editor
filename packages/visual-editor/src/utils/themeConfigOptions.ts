@@ -269,11 +269,11 @@ const imageBorderRadiusOptions: BorderRadiusOption[] = [
 
 const ctaVariantOptions = [
   {
-    label: msg("fields.options.ctaVariant.primary", "Primary"),
+    label: msg("fields.options.ctaVariant.solid", "Solid"),
     value: "primary",
   },
   {
-    label: msg("fields.options.ctaVariant.secondary", "Secondary"),
+    label: msg("fields.options.ctaVariant.outline", "Outline"),
     value: "secondary",
   },
   { label: msg("fields.options.ctaVariant.link", "Link"), value: "link" },

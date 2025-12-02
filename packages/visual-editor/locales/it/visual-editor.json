@@ -249,8 +249,10 @@
       "compact": "Compatto",
       "ctaVariant": {
         "link": "Collegamento",
+        "outline": "Contorno",
         "primary": "Primario",
-        "secondary": "Secondario"
+        "secondary": "Secondario",
+        "solid": "Solido"
       },
       "dark": "Buio",
       "default": "Predefinito",

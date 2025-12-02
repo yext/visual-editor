@@ -250,8 +250,10 @@
       "compact": "Kompaktowy",
       "ctaVariant": {
         "link": "Połączyć",
+        "outline": "Zarys",
         "primary": "Podstawowy",
-        "secondary": "Wtórny"
+        "secondary": "Wtórny",
+        "solid": "Solidny"
       },
       "dark": "Ciemny",
       "default": "Domyślny",

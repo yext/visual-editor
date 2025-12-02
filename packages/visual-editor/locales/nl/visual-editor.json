@@ -249,8 +249,10 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Link",
+        "outline": "Overzicht",
         "primary": "Primair",
-        "secondary": "Secundair"
+        "secondary": "Secundair",
+        "solid": "Stevig"
       },
       "dark": "Donker",
       "default": "Standaard",
