@@ -161,7 +161,9 @@ export const Editor = ({
   });
 
   let finalThemeConfig = themeConfig;
-  // If themeConfig is the default and there are custom fonts, create a new default theme config with the custom fonts
+  // If themeConfig is the default and there are custom fonts, create a new default theme config with the custom fonts.
+  // In the case of a hybrid developer with a custom themeConfig, we cannot adjust their themeConfig to have custom fonts.
+  // The hybrid developer must provide a themeConfig that includes their custom fonts if they want to use them.
   if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
