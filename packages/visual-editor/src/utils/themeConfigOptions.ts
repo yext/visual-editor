@@ -123,6 +123,24 @@ export const backgroundColors: Record<string, BackgroundOption> = {
   },
 };
 
+// Brand only colors is displayed in the dropdown.
+const brandColorOptions: ComboboxOptionGroup[] = [
+  {
+    title: msg("siteColors", "Site Colors"),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("color")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
+  },
+];
+
 // When used in BasicSelector, the color is displayed in the dropdown.
 const backgroundColorOptions: ComboboxOptionGroup[] = [
   {
@@ -369,6 +387,7 @@ export const ThemeOptions = {
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
+  BRAND_COLORS: brandColorOptions,
   CTA_VARIANT: ctaVariantOptions,
   ALIGNMENT: alignmentOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
