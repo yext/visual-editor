@@ -51,17 +51,10 @@ export const headingVariants = cva("components", {
       "800": "font-extrabold",
       "900": "font-black",
     },
-    // transform: {
-    //   none: "",
-    //   uppercase: "uppercase",
-    //   lowercase: "lowercase",
-    //   capitalize: "capitalize",
-    // },
   },
   defaultVariants: {
     fontSize: "default",
     weight: "default",
-    // transform: "none",
   },
 });
 
