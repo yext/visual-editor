@@ -9,8 +9,9 @@ import {
   GetHeadConfig,
   HeadConfig,
   TagType,
+  TransformProps,
 } from "@yext/pages";
-import { Render } from "@measured/puck";
+import { Render, resolveAllData } from "@measured/puck";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -103,8 +104,23 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
   return normalizeSlug(path);
 };
 
-const Locator: Template<TemplateRenderProps> = (props) => {
+export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
+  const migratedData = migrate(
+    JSON.parse(document.__.layout),
+    migrationRegistry,
+    locatorConfig,
+    document
+  );
+  const updatedData = await resolveAllData(migratedData, locatorConfig, {
+    streamDocument: document,
+  });
+
+  return { ...props, data: updatedData };
+};
+
+const Locator: Template<TemplateRenderProps> = (props) => {
+  const { document, data } = props;
 
   return (
     <>
@@ -130,6 +146,7 @@ const Locator: Template<TemplateRenderProps> = (props) => {
               migrationRegistry,
               locatorConfig
             )}
+            metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>
       </AnalyticsProvider>

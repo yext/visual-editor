@@ -27,6 +27,7 @@ export type CTAProps = {
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  disabled?: boolean;
 };
 
 /**
@@ -70,7 +71,8 @@ const useResolvedCtaProps = (props: CTAProps) => {
           { provider: "google" },
           streamDocument.yextDisplayCoordinate
         );
-        // Prefer user-provided link, then listings link, then coordinate link
+        // Prefer hardcoded link, then listings link, then coordinate link
+        // User settable link props should not be used for get directions
         return {
           link: props.link || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
@@ -138,7 +140,14 @@ const useResolvedCtaProps = (props: CTAProps) => {
 };
 
 export const CTA = (props: CTAProps) => {
-  const { eventName, target, variant, ctaType, onClick } = props;
+  const {
+    eventName,
+    target,
+    variant,
+    ctaType,
+    onClick,
+    disabled = false,
+  } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
 
@@ -156,22 +165,51 @@ export const CTA = (props: CTAProps) => {
     showCaret,
   } = resolvedProps;
 
-  const caretIcon = ctaType !== "presetImage" && (
-    <FaAngleRight
-      size="12px"
-      // For directoryLink, the theme value for caret is ignored
-      className={variant === "directoryLink" ? "block sm:hidden" : ""}
-      // display does not support custom Tailwind utilities so the property must be set directly
-      style={{
-        display:
-          variant === "directoryLink"
-            ? undefined
-            : showCaret
-              ? "inline-block"
-              : "none",
-      }}
-    />
+  const linkContent = (
+    <>
+      {label}
+      {ctaType !== "presetImage" && (
+        <FaAngleRight
+          size="12px"
+          // For directoryLink, the theme value for caret is ignored
+          className={variant === "directoryLink" ? "block sm:hidden" : ""}
+          // display does not support custom Tailwind utilities so the property must be set directly
+          style={{
+            display:
+              variant === "directoryLink"
+                ? undefined
+                : showCaret
+                  ? "inline-block"
+                  : "none",
+          }}
+        />
+      )}
+    </>
   );
+
+  if (disabled) {
+    return (
+      <Button
+        className={buttonClassName}
+        variant={buttonVariant}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        style={{ cursor: "default", pointerEvents: "auto" }}
+      >
+        {linkContent}
+      </Button>
+    );
+  }
 
   return (
     <Button asChild className={buttonClassName} variant={buttonVariant}>
@@ -182,8 +220,7 @@ export const CTA = (props: CTAProps) => {
         aria-label={ariaLabel || undefined}
         onClick={onClick}
       >
-        {label}
-        {caretIcon}
+        {linkContent}
       </Link>
     </Button>
   );

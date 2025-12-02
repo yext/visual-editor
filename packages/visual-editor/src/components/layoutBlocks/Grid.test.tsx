@@ -11,6 +11,7 @@ import {
   Address,
   BodyText,
   CTAGroup,
+  CTAWrapper,
   Emails,
   GetDirections,
   HeadingText,
@@ -586,6 +587,397 @@ const tests: ComponentTest[] = [
     },
     version: 19,
   },
+  {
+    name: "version 19 - various CTAs",
+    document: {
+      c_cta: { label: "CTA", link: "#" },
+      yextDisplayCoordinate: { latitude: 50, longitude: 50 },
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "CTAWrapper",
+              props: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Call to Action",
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "textAndLink",
+                },
+                variant: "primary",
+                id: "CTAWrapper-025363fe-ffa3-4365-b329-f4527728fccd",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                entityField: {
+                  field: "yextDisplayCoordinate",
+                  constantValue: {
+                    label: "Call to Action",
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "textAndLink",
+                  },
+                  selectedType: "getDirections",
+                },
+                variant: "link",
+                id: "CTAWrapper-11a27319-29b5-4255-912d-c538359d051f",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                entityField: {
+                  field: "c_cta",
+                  constantValue: {
+                    label: {
+                      en: "",
+                      hasLocalizedValue: "true",
+                    },
+                    link: "#",
+                    linkType: "URL",
+                    ctaType: "presetImage",
+                    presetImageType: "app-store",
+                  },
+                  selectedType: "presetImage",
+                  constantValueEnabled: true,
+                },
+                variant: "primary",
+                id: "CTAWrapper-70fad148-36c1-4ef3-ac60-48a1f852f320",
+              },
+            },
+          ],
+        },
+        {
+          Column: [
+            {
+              type: "CTAGroup",
+              props: {
+                buttons: [
+                  {
+                    entityField: {
+                      field: "c_cta",
+                      constantValueEnabled: false,
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: "Button",
+                        link: "#",
+                      },
+                    },
+                    variant: "secondary",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "getDirections",
+                        label: {
+                          en: "",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                        coordinate: {
+                          latitude: 50,
+                          longitude: 50,
+                        },
+                      },
+                    },
+                    variant: "secondary",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "presetImage",
+                        label: {
+                          en: "",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                        presetImageType: "galaxy-store",
+                      },
+                    },
+                    variant: "primary",
+                  },
+                ],
+                id: "CTAGroup-db66e810-ed11-47ce-b305-650f6028a01c",
+              },
+            },
+          ],
+        },
+        {
+          Column: [],
+        },
+      ],
+      backgroundColor: {
+        bgColor: "bg-white",
+        textColor: "text-black",
+      },
+      liveVisibility: true,
+      analytics: {
+        scope: "gridSection",
+      },
+    },
+    version: 19,
+  },
+  {
+    name: "version 29 - various CTAs",
+    document: {
+      c_callToAction_Phone: {
+        label: "Call Us",
+        link: "+18005551010",
+        linkType: "PHONE",
+      },
+      c_callToAction_Link: {
+        label: "Click Here",
+        link: "https://google.com",
+        linkType: "URL",
+      },
+    },
+    props: {
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "c_callToAction_Link",
+                    constantValue: {
+                      label: "Call to Action",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "textAndLink",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "app-store" },
+                id: "CTAWrapper-25d9b02a-ad1e-4d87-abff-c5e540517b80",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Call to Action",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "getDirections",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "app-store" },
+                id: "CTAWrapper-bb3ec413-207a-44fb-b66b-69e6cf14aa8c",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Call to Action",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "google-play" },
+                id: "CTAWrapper-a48f6b5a-a2c0-470f-b425-79c4a37f4898",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: {
+                        en: "Constant Directions",
+                        hasLocalizedValue: "true",
+                      },
+                      link: "#",
+                      linkType: "URL",
+                      ctaType: "getDirections",
+                    },
+                    selectedType: "textAndLink",
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "link", presetImage: "app-store" },
+                id: "CTAWrapper-dafb4772-bdd5-4fa3-9c4f-317bd5ee7a0b",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: { en: "", hasLocalizedValue: "true" },
+                      link: "http://yext.com",
+                      linkType: "URL",
+                      ctaType: "presetImage",
+                    },
+                    selectedType: "presetImage",
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "primary", presetImage: "app-store" },
+                id: "CTAWrapper-4c986d7d-07be-472c-a615-4277bd78edae",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: { en: "Button", hasLocalizedValue: "true" },
+                      link: "tel:+18005551010",
+                      linkType: "PHONE",
+                    },
+                    selectedType: "textAndLink",
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "secondary", presetImage: "app-store" },
+                id: "CTAWrapper-265d7a64-33ef-4061-8e26-13c6fca3eed8",
+              },
+            },
+          ],
+        },
+        {
+          Column: [
+            {
+              type: "CTAGroup",
+              props: {
+                buttons: [
+                  {
+                    entityField: {
+                      field: "c_callToAction_Phone",
+                      constantValueEnabled: false,
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: "Button",
+                        link: "#",
+                      },
+                      selectedType: "textAndLink",
+                    },
+                    variant: "primary",
+                    presetImage: "app-store",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: false,
+                      constantValue: {
+                        ctaType: "getDirections",
+                        label: { en: "Directions", hasLocalizedValue: "true" },
+                        link: "#",
+                      },
+                      selectedType: "getDirections",
+                    },
+                    variant: "secondary",
+                    presetImage: "app-store",
+                  },
+                  {
+                    entityField: {
+                      field: "c_callToAction_Link",
+                      constantValueEnabled: false,
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: "Button",
+                        link: "#",
+                      },
+                      selectedType: "presetImage",
+                    },
+                    variant: "primary",
+                    presetImage: "uber-eats",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: {
+                          en: "Constant Email",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "mailto:sumo@yext.com",
+                        linkType: "EMAIL",
+                      },
+                    },
+                    variant: "link",
+                    presetImage: "app-store",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "getDirections",
+                        label: {
+                          en: "Get Directions (constant)",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                      },
+                    },
+                    variant: "primary",
+                    presetImage: "app-store",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValueEnabled: true,
+                      constantValue: {
+                        ctaType: "presetImage",
+                        label: { en: "", hasLocalizedValue: "true" },
+                        link: "/app",
+                        linkType: "OTHER",
+                      },
+                    },
+                    variant: "primary",
+                    presetImage: "galaxy-store",
+                  },
+                ],
+                id: "CTAGroup-5dd9fff9-96db-4de6-a195-8c52c86b2dd2",
+              },
+            },
+          ],
+        },
+        { Column: [] },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 29,
+  },
 ];
 
 describe("Grid", async () => {
@@ -594,6 +986,7 @@ describe("Grid", async () => {
       Address,
       BodyText,
       CTAGroup,
+      CTAWrapper,
       Emails,
       GetDirections,
       Grid,
@@ -625,7 +1018,8 @@ describe("Grid", async () => {
           content: [{ type: "Grid", props }],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
 
       const { container } = reactRender(

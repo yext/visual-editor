@@ -1,113 +1,15 @@
-import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { useTranslation } from "react-i18next";
-import {
-  InsightSectionType,
-  InsightStruct,
-  TranslatableRichText,
-  TranslatableString,
-} from "../../../types/types.ts";
-import { LINK_ONLY_CTA_CONFIG } from "./EnhancedCallToAction.tsx";
-import { DateSelector } from "../components/DateSelector.tsx";
-import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { useMemo } from "react";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { useDocument } from "../../../hooks/useDocument.tsx";
-import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
+import { ArrayField } from "@measured/puck";
+import { pt } from "../../../utils/i18n/platform.ts";
 
-export const defaultInsight: InsightStruct = {
-  image: {
-    url: "https://placehold.co/640x360",
-    height: 360,
-    width: 640,
-  },
-  name: { en: "Article Name", hasLocalizedValue: "true" },
-  category: { en: "Category", hasLocalizedValue: "true" },
-  description: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters",
-    hasLocalizedValue: "true",
-  },
-  publishTime: "2022-08-02",
-  cta: {
-    link: "#",
-    label: { en: "Read More", hasLocalizedValue: "true" },
-    linkType: "URL",
-    ctaType: "textAndLink",
-  },
-};
-
-export const INSIGHT_SECTION_CONSTANT_CONFIG: CustomField<InsightSectionType> =
-  {
-    type: "custom",
-    render: ({
-      onChange,
-      value,
-    }: {
-      value: InsightSectionType;
-      onChange: (value: InsightSectionType, uiState?: Partial<UiState>) => void;
-    }) => {
-      return (
-        <div className={"ve-mt-4"}>
-          <AutoField
-            field={InsightStructArrayField()}
-            value={value.insights}
-            onChange={(newValue, uiState) =>
-              onChange({ insights: newValue }, uiState)
-            }
-          />
-        </div>
-      );
+export const INSIGHT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
+  type: "array",
+  arrayFields: {
+    id: {
+      type: "text",
+      visible: false,
     },
-  };
-
-const InsightStructArrayField = (): ArrayField<InsightStruct[]> => {
-  const streamDocument = useDocument();
-
-  const nameField = useMemo(() => {
-    return TranslatableStringField<TranslatableString | undefined>(
-      msg("name", "Name"),
-      { types: ["type.string"] }
-    );
-  }, []);
-
-  const categoryField = useMemo(() => {
-    return TranslatableStringField<TranslatableString | undefined>(
-      msg("category", "Category"),
-      { types: ["type.string"] }
-    );
-  }, []);
-
-  const descriptionField = useMemo(() => {
-    return TranslatableRichTextField<TranslatableRichText | undefined>(
-      msg("fields.description", "Description")
-    );
-  }, []);
-
-  return {
-    label: pt("arrayField", "Array Field"),
-    type: "array",
-    arrayFields: {
-      image: {
-        ...IMAGE_CONSTANT_CONFIG,
-        label: pt("fields.image", "Image"),
-      },
-      name: nameField,
-      category: categoryField,
-      publishTime: DateSelector,
-      description: descriptionField,
-      cta: LINK_ONLY_CTA_CONFIG,
-    },
-    defaultItemProps: defaultInsight,
-    getItemSummary: (item, i) => {
-      const { i18n } = useTranslation();
-      const translation =
-        item.name &&
-        resolveComponentData(item.name, i18n.language, streamDocument);
-      if (translation) {
-        return translation;
-      }
-      return pt("insight", "Insight") + " " + ((i ?? 0) + 1);
-    },
-  };
+  },
+  label: "",
+  getItemSummary: (item, index) =>
+    pt("insight", "Insight") + " " + ((index ?? 0) + 1),
 };
