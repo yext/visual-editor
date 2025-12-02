@@ -245,10 +245,10 @@ The Expanded Header is a two-tiered component for websites with complex navigati
 
 This object contains all the content for both header tiers.
 
-| Prop                   | Type                                                                                                                                                                    | Description                                               | Default |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :------ |
-| `data.primaryHeader`   | `{ logo: AssetImageType; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.                  |         |
-| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                                  | Content for the secondary header (above the main header). |         |
+| Prop                   | Type                                                                                                                                                                                                  | Description                                               | Default |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :------ |
+| `data.primaryHeader`   | `{ logo: AssetImageType; logoLink: TranslatableString; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.                  |         |
+| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                                                                | Content for the secondary header (above the main header). |         |
 
 #### Style Props
 
