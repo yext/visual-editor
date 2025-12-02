@@ -1,3 +1,17 @@
+#### 1.0.0-beta.3 (2025-12-02)
+
+##### Chores
+
+- merge fall-2025-slot-ify-components into main ([#928](https://github.com/yext/visual-editor/pull/928)) ([4418b6f2](https://github.com/yext/visual-editor/commit/4418b6f26b5a8213b8c143f9be43880fd90aa3c7))
+
+##### New Features
+
+- allow custom code component for all users ([#922](https://github.com/yext/visual-editor/pull/922)) ([fb049bb1](https://github.com/yext/visual-editor/commit/fb049bb1d912b939066c36d838e147380da4e4b3))
+
+##### Bug Fixes
+
+- undefined state error ([#917](https://github.com/yext/visual-editor/pull/917)) ([2c09fa18](https://github.com/yext/visual-editor/commit/2c09fa18cfb520d2eb4173b9dfcdb95cf59448d9))
+
 #### 1.0.0-beta.2 (2025-11-24)
 
 ##### Chores
