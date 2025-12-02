@@ -373,7 +373,7 @@ const tests: ComponentTest[] = [
     version: 1,
   },
   {
-    name: "version 37 props with entity values",
+    name: "version 38 props with entity values",
     document: { photoGallery: photoGalleryData, name: "Test Name" },
     props: {
       styles: {
@@ -424,10 +424,10 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 37,
+    version: 38,
   },
   {
-    name: "version 37 props with constant value",
+    name: "version 38 props with constant value",
     document: {},
     props: {
       styles: {
@@ -494,7 +494,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 37,
+    version: 38,
   },
 ];
 

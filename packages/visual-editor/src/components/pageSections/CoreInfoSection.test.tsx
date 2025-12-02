@@ -770,7 +770,7 @@ const tests: ComponentTest[] = [
     version: 10,
   },
   {
-    name: "version 26 props with mixed values",
+    name: "version 27 props with mixed values",
     document: {
       locale: "en",
       address: testAddress,
@@ -921,7 +921,7 @@ const tests: ComponentTest[] = [
         servicesCol: true,
       },
     },
-    version: 26,
+    version: 27,
   },
 ];
 

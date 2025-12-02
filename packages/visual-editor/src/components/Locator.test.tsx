@@ -103,6 +103,64 @@ const tests: ComponentTest[] = [
       mapStyle: "mapbox://styles/mapbox/dark-v11",
       filters: {
         openNowButton: true,
+        showDistanceOptions: true,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 5,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "monday",
+            collapseDays: true,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: false,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "https://www.yext.com",
+          variant: "secondary",
+          liveVisibility: true,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
       },
     },
     version: migrationRegistry.length,
@@ -292,6 +350,7 @@ const tests: ComponentTest[] = [
     props: {
       filters: {
         openNowButton: false,
+        showDistanceOptions: false,
       },
     },
     version: 22,
@@ -333,10 +392,109 @@ const tests: ComponentTest[] = [
       mapStyle: "mapbox://styles/mapbox/dark-v11",
       filters: {
         openNowButton: true,
+        showDistanceOptions: true,
         facetFields: ["address.city", "address.region", "services"],
       },
     },
     version: 22,
+  },
+  {
+    name: "version 24 default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
+      },
+    },
+    version: 24,
   },
 ];
 

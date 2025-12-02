@@ -13,6 +13,7 @@ import {
   Fields,
   ComponentData,
   Slot,
+  PuckContext,
 } from "@measured/puck";
 import {
   ImageType,
@@ -24,6 +25,7 @@ import {
   AddressType,
   DayOfWeekNames,
   Coordinate,
+  ListingType,
 } from "@yext/pages-components";
 import { VariantProps } from "class-variance-authority";
 

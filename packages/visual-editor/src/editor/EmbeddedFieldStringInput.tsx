@@ -25,16 +25,55 @@ import { useTranslation } from "react-i18next";
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
  */
-export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
+export const EmbeddedFieldStringInputFromEntity = <
+  T extends Record<string, any>,
+>({
   value,
   onChange,
   filter,
+  showFieldSelector = true,
 }: {
   value: string;
   onChange: (value: string) => void;
   filter: RenderEntityFieldFilter<T>;
+  showFieldSelector: boolean;
 }) => {
   const entityFields = useEntityFields();
+
+  const entityFieldOptions = React.useMemo(() => {
+    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
+    return filteredEntityFields.map((field) => {
+      return {
+        label: field.displayName ?? field.name,
+        value: field.name,
+      };
+    });
+  }, [entityFields, filter]);
+
+  return (
+    <EmbeddedFieldStringInputFromOptions
+      value={value}
+      onChange={onChange}
+      options={entityFieldOptions}
+      showFieldSelector={showFieldSelector}
+      useOptionValueSublabel={false}
+    />
+  );
+};
+
+export const EmbeddedFieldStringInputFromOptions = ({
+  value,
+  onChange,
+  options,
+  showFieldSelector,
+  useOptionValueSublabel = false,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: { label: string; value: string }[];
+  showFieldSelector: boolean;
+  useOptionValueSublabel?: boolean;
+}) => {
   const [open, setOpen] = React.useState(false);
   const [cursorPosition, setCursorPosition] = React.useState<number | null>(
     null
@@ -59,15 +98,9 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
     };
   }, [inputValue, onChange, value]);
 
-  const entityFieldOptions = React.useMemo(() => {
-    const filteredEntityFields = getFieldsForSelector(entityFields, filter);
-    return filteredEntityFields.map((field) => {
-      return {
-        label: field.displayName ?? field.name,
-        value: field.name,
-      };
-    });
-  }, [entityFields, filter]);
+  const fieldOptions = React.useMemo(() => {
+    return options;
+  }, [options]);
 
   const handleFieldSelect = (fieldName: string) => {
     setOpen(false);
@@ -117,39 +150,42 @@ export const EmbeddedFieldStringInput = <T extends Record<string, any>>({
           setInputValue(e.target.value);
         }}
       />
-      <div className="ve-absolute ve-right-[12px] ve-top-[1.65rem] -ve-translate-y-1/2">
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <button
-              type="button"
-              className="ve-cursor-pointer ve-text-gray-700 hover:ve-text-gray-800"
-              aria-label={pt("addEntityField", "Add entity field")}
-            >
-              <SquarePlus size={20} />
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="ve-w-[300px] ve-p-0 ve-bg-opacity-100 ve-bg-white">
-            <Command>
-              <CommandInputRounded placeholder={pt("search", "Search")} />
-              <CommandList>
-                <CommandEmpty>
-                  {pt("noMatchesFound", "No matches found.")}
-                </CommandEmpty>
-                <CommandGroup>
-                  {entityFieldOptions.map((option) => (
-                    <CommandItemWithResolvedValue
-                      key={option.value}
-                      option={option}
-                      onSelect={() => handleFieldSelect(option.value)}
-                      isOpen={open}
-                    />
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-      </div>
+      {showFieldSelector && (
+        <div className="ve-absolute ve-right-[12px] ve-top-[1.65rem] -ve-translate-y-1/2">
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                className="ve-cursor-pointer ve-text-gray-700 hover:ve-text-gray-800"
+                aria-label={pt("addEntityField", "Add entity field")}
+              >
+                <SquarePlus size={20} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="ve-w-[300px] ve-p-0 ve-bg-opacity-100 ve-bg-white">
+              <Command>
+                <CommandInputRounded placeholder={pt("search", "Search")} />
+                <CommandList>
+                  <CommandEmpty>
+                    {pt("noMatchesFound", "No matches found.")}
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {fieldOptions.map((option) => (
+                      <CommandItemWithResolvedValue
+                        key={option.value}
+                        option={option}
+                        onSelect={() => handleFieldSelect(option.value)}
+                        isOpen={open}
+                        useOptionValue={useOptionValueSublabel}
+                      />
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      )}
     </div>
   );
 };
@@ -158,10 +194,12 @@ const CommandItemWithResolvedValue = ({
   option,
   onSelect,
   isOpen,
+  useOptionValue,
 }: {
   option: { label: string; value: string };
   onSelect: () => void;
   isOpen: boolean;
+  useOptionValue?: boolean;
 }) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
@@ -171,6 +209,9 @@ const CommandItemWithResolvedValue = ({
   >();
 
   React.useEffect(() => {
+    if (useOptionValue) {
+      return;
+    }
     // Only resolve the value if the popover is open and we haven't resolved it yet.
     if (isOpen && resolvedValue === undefined) {
       const fieldToResolve: YextEntityField<unknown> = {
@@ -187,7 +228,7 @@ const CommandItemWithResolvedValue = ({
         typeof resolved === "object" ? JSON.stringify(resolved) : resolved;
       setResolvedValue(String(finalValue ?? ""));
     }
-  }, [isOpen, option.value, streamDocument, resolvedValue]);
+  }, [isOpen, option.value, streamDocument, resolvedValue, useOptionValue]);
 
   return (
     <CommandItem
@@ -200,9 +241,9 @@ const CommandItemWithResolvedValue = ({
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
           {option.label}
         </div>
-        {resolvedValue && (
+        {(resolvedValue || useOptionValue) && (
           <div className="ve-text-xs ve-text-gray-500 overflow-hidden text-ellipsis whitespace-nowrap">
-            {resolvedValue}
+            {useOptionValue ? option.value : resolvedValue}
           </div>
         )}
       </div>

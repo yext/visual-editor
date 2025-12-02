@@ -17,6 +17,14 @@ export type TemplateMetadata = {
   platformLocale?: string;
   locales: string[];
   layoutTaskApprovals: boolean;
+  locatorDisplayFields?: Record<string, FieldTypeData>;
+};
+
+export type FieldTypeData = {
+  field_id: string;
+  field_name: string;
+  field_type: object;
+  field_type_id: string;
 };
 
 export function generateTemplateMetadata(): TemplateMetadata {
@@ -37,6 +45,22 @@ export function generateTemplateMetadata(): TemplateMetadata {
     platformLocale: "en",
     locales: ["en", "es", "fr"],
     layoutTaskApprovals: false,
+    locatorDisplayFields: {
+      name: {
+        field_id: "name",
+        field_name: "Name",
+        field_type: {
+          variant_type: 1,
+        },
+        field_type_id: "type.string",
+      },
+      mainPhone: {
+        field_id: "mainPhone",
+        field_name: "Main Phone",
+        field_type: {},
+        field_type_id: "type.phone",
+      },
+    },
   };
 }
 

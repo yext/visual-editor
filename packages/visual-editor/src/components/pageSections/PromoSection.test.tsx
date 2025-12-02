@@ -329,7 +329,7 @@ const tests: ComponentTest[] = [
     version: 16,
   },
   {
-    name: "version 29 props with entity values",
+    name: "version 30 props with entity values",
     document: { c_examplePromo: promoData },
     props: {
       data: {
@@ -496,10 +496,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "promoSection" },
       liveVisibility: true,
     },
-    version: 29,
+    version: 30,
   },
   {
-    name: "version 29 props with mixed values",
+    name: "version 30 props with mixed values",
     document: { c_examplePromo: promoData },
     props: {
       data: {
@@ -621,7 +621,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "promoSection" },
       liveVisibility: true,
     },
-    version: 29,
+    version: 30,
   },
 ];
 

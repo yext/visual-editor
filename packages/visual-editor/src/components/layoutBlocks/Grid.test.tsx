@@ -1,19 +1,12 @@
-import { describe, it, expect } from "vitest";
-import {
-  axe,
-  ComponentTest,
-  testHours,
-  transformTests,
-} from "../testing/componentTests.setup.ts";
+import { Config, Render } from "@measured/puck";
 import { render as reactRender, waitFor } from "@testing-library/react";
+import { page } from "@vitest/browser/context";
 import {
   migrate,
   migrationRegistry,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
-import { page } from "@vitest/browser/context";
-import { Grid } from "./Grid.tsx";
+import { describe, expect, it } from "vitest";
 import {
   Address,
   BodyText,
@@ -28,6 +21,13 @@ import {
   Phone,
   TextList,
 } from "../contentBlocks/index.ts";
+import {
+  axe,
+  ComponentTest,
+  testHours,
+  transformTests,
+} from "../testing/componentTests.setup.ts";
+import { Grid } from "./Grid.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -53,7 +53,6 @@ const tests: ComponentTest[] = [
       name: "Galaxy Grill",
     },
     props: {
-      ...Grid.defaultProps,
       columns: 2,
       slots: [
         {
@@ -163,13 +162,12 @@ const tests: ComponentTest[] = [
             },
           ],
         },
-        {
-          Column: [],
-        },
+        { Column: [] },
       ],
     },
     version: 18,
   },
+
   {
     name: "version 18 - atoms used to make a CoreInfoSection",
     document: {
@@ -183,7 +181,6 @@ const tests: ComponentTest[] = [
       name: "Galaxy Grill",
     },
     props: {
-      ...Grid.defaultProps,
       columns: 3,
       slots: [
         {
@@ -292,22 +289,10 @@ const tests: ComponentTest[] = [
                 list: {
                   field: "",
                   constantValue: [
-                    {
-                      en: "Delivery",
-                      hasLocalizedValue: "true",
-                    },
-                    {
-                      en: "Catering",
-                      hasLocalizedValue: "true",
-                    },
-                    {
-                      en: "Carry Out",
-                      hasLocalizedValue: "true",
-                    },
-                    {
-                      en: "Dine In",
-                      hasLocalizedValue: "true",
-                    },
+                    { en: "Delivery", hasLocalizedValue: "true" },
+                    { en: "Catering", hasLocalizedValue: "true" },
+                    { en: "Carry Out", hasLocalizedValue: "true" },
+                    { en: "Dine In", hasLocalizedValue: "true" },
                   ],
                   constantValueEnabled: true,
                 },
@@ -320,6 +305,7 @@ const tests: ComponentTest[] = [
     },
     version: 18,
   },
+
   {
     name: "version 19 - various atoms",
     document: {
@@ -330,7 +316,6 @@ const tests: ComponentTest[] = [
       emails: ["sumo@yext.com"],
     },
     props: {
-      ...Grid.defaultProps,
       columns: 2,
       slots: [
         {
@@ -504,9 +489,100 @@ const tests: ComponentTest[] = [
             },
           ],
         },
+        { Column: [] },
+      ],
+    },
+    version: 19,
+  },
+  {
+    name: "version 19 - single grid",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+    },
+    props: {
+      columns: 1,
+      slots: [
         {
-          Column: [],
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                text: {
+                  field: "name",
+                  constantValue: "",
+                },
+                level: 3,
+                id: "HeadingText-6bc59041-d812-472a-93de-3eaf5aeb67af",
+              },
+            },
+            {
+              type: "BodyText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        json: "",
+                        html: '<p dir=\\"ltr\\" style=\\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\\"><b><strong style=\\"font-weight: bold;\\">Lorem</strong></b><span> </span><i><em style=\\"font-style: italic;\\">ipsum</em></i><span> </span><s><span style=\\"text-decoration: line-through;\\">dolor</span></s><span> </span><sup><span style=\\"font-size: 0.8em; vertical-align: super;\\">sit</span></sup><span> </span><sub><span style=\\"font-size: 0.8em; vertical-align: sub !important;\\">amet</span></sub><span>, </span><a href=\\"https://\\" rel=\\"noopener\\" style=\\"color: rgb(33, 111, 219); text-decoration: none;\\"><span>consectetur</span></a><span> Small Text </span></p>',
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  variant: "sm",
+                },
+                id: "BodyText-4cc9d6a0-bc01-41a8-ae12-77ec358eecf0",
+              },
+            },
+            {
+              type: "CTAGroup",
+              props: {
+                buttons: [
+                  {
+                    entityField: {
+                      field: "",
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: {
+                          en: "Call To Action",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                      },
+                      constantValueEnabled: true,
+                    },
+                    variant: "primary",
+                  },
+                  {
+                    entityField: {
+                      field: "",
+                      constantValue: {
+                        ctaType: "textAndLink",
+                        label: {
+                          en: "Call To Action",
+                          hasLocalizedValue: "true",
+                        },
+                        link: "#",
+                      },
+                      constantValueEnabled: true,
+                    },
+                    variant: "secondary",
+                  },
+                ],
+                id: "CTAGroup-228c5350-4484-4a11-b727-112afddea438",
+              },
+            },
+          ],
         },
+        { Column: [] },
+        { Column: [] },
       ],
     },
     version: 19,
@@ -657,7 +733,7 @@ const tests: ComponentTest[] = [
     version: 19,
   },
   {
-    name: "version 28 - various CTAs",
+    name: "version 29 - various CTAs",
     document: {
       c_callToAction_Phone: {
         label: "Call Us",
@@ -900,7 +976,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       analytics: { scope: "gridSection" },
     },
-    version: 28,
+    version: 29,
   },
 ];
 
@@ -922,9 +998,7 @@ describe("Grid", async () => {
       TextList,
     },
     root: {
-      render: ({ children }: { children: React.ReactNode }) => {
-        return <>{children}</>;
-      },
+      render: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     },
   };
 
@@ -940,17 +1014,8 @@ describe("Grid", async () => {
     }) => {
       const data = migrate(
         {
-          root: {
-            props: {
-              version,
-            },
-          },
-          content: [
-            {
-              type: "Grid",
-              props: props,
-            },
-          ],
+          root: { props: { version } },
+          content: [{ type: "Grid", props }],
         },
         migrationRegistry,
         puckConfig,
@@ -964,12 +1029,14 @@ describe("Grid", async () => {
       );
 
       await page.viewport(width, height);
+
       const images = Array.from(container.querySelectorAll("img"));
       await waitFor(() => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
 
       await expect(`Grid/[${viewportName}] ${name}`).toMatchScreenshot();
+
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -978,8 +1045,8 @@ describe("Grid", async () => {
         await expect(
           `Grid/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
-        const results = await axe(container);
-        expect(results).toHaveNoViolations();
+        const results2 = await axe(container);
+        expect(results2).toHaveNoViolations();
       }
     }
   );

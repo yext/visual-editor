@@ -11,6 +11,7 @@ export type PhoneAtomProps = {
   format: "domestic" | "international" | undefined;
   includeHyperlink: boolean;
   includeIcon: boolean;
+  onClick?: () => void;
 };
 
 export const PhoneAtom = (props: PhoneAtomProps) => {
@@ -18,6 +19,13 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
     props.phoneNumber,
     props.format
   );
+
+  // If a custom click handler is provided, the phone number doesn't get
+  // link-ified in the pages-components Link component, so we have to
+  // preemptively format it for tel: links here.
+  const phoneNumberLink = props.onClick
+    ? sanitizePhoneForTelHref(props.phoneNumber)
+    : props.phoneNumber;
 
   return (
     <div className={"components flex gap-2 items-center"}>
@@ -34,11 +42,12 @@ export const PhoneAtom = (props: PhoneAtomProps) => {
       {props.label && <Body className="font-bold">{props.label}</Body>}
       {props.includeHyperlink ? (
         <CTA
-          link={props.phoneNumber}
+          link={phoneNumberLink}
           label={formattedPhoneNumber}
           linkType="PHONE"
           variant="link"
           eventName={props.eventName}
+          onClick={props.onClick}
           alwaysHideCaret={true}
         />
       ) : (
@@ -73,3 +82,22 @@ export const formatPhoneNumber = (
     ? parsedPhoneNumber.number.international
     : parsedPhoneNumber.number.national;
 };
+
+/**
+ * sanitizePhoneForTelHref formats a phone number string for use in a tel: link.
+ * It keeps only digits and at most one leading plus. If the input already starts with "tel:", it returns it as-is.
+ * @param rawPhone The raw phone number string.
+ * @returns A sanitized tel: link string or undefined if input is invalid.
+ */
+function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
+  if (!rawPhone) {
+    return undefined;
+  }
+  if (rawPhone.startsWith("tel:")) {
+    return rawPhone;
+  }
+
+  // Remove any '+' that is not the leading character and strip non-digits.
+  const cleaned = rawPhone.replace(/(?!^\+)\+|[^\d+]/g, "");
+  return `tel:${cleaned}`;
+}
