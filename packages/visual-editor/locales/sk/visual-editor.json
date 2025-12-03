@@ -159,6 +159,10 @@
   "event": "Udalosť",
   "expandedHeaderDesktop": "Rozšírená plocha hlavičky",
   "expandedHeaderMobile": "Rozšírená hlavička Mobile",
+  "failedToCopyLayout": "Kopírovanie rozloženia zlyhalo.",
+  "failedToPasteComponentInvalidData": "Prilepenie zlyhalo: Neplatné údaje komponentu.",
+  "failedToPasteLayout": "Prilepenie rozloženia zlyhalo.",
+  "failedToPasteLayoutInvalidData": "Prilepenie zlyhalo: Neplatné údaje rozloženia.",
   "faq": "Často",
   "fields": {
     "CTAVariant": "Variant CTA",

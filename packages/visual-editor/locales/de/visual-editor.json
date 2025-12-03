@@ -162,6 +162,10 @@
   "event": "Ereignis",
   "expandedHeaderDesktop": "Erweiterter Header -Desktop",
   "expandedHeaderMobile": "Erweiterte Header Mobile",
+  "failedToCopyLayout": "Layout konnte nicht kopiert werden.",
+  "failedToPasteComponentInvalidData": "Einfügen fehlgeschlagen: Ungültige Komponentendaten.",
+  "failedToPasteLayout": "Das Layout konnte nicht eingefügt werden.",
+  "failedToPasteLayoutInvalidData": "Einfügen fehlgeschlagen: Ungültige Layoutdaten.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA-Variante",

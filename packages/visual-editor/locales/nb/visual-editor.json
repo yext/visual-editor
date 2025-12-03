@@ -158,6 +158,10 @@
   "event": "Hendelse",
   "expandedHeaderDesktop": "Utvidet topptopp",
   "expandedHeaderMobile": "Utvidet overskriftsmobil",
+  "failedToCopyLayout": "Kunne ikke kopiere layout.",
+  "failedToPasteComponentInvalidData": "Kunne ikke lime inn: Ugyldige komponentdata.",
+  "failedToPasteLayout": "Kunne ikke lime inn layout.",
+  "failedToPasteLayoutInvalidData": "Kunne ikke lime inn: Ugyldige layoutdata.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA-variant",

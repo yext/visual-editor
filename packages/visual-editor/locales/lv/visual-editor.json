@@ -158,6 +158,10 @@
   "event": "Notikums",
   "expandedHeaderDesktop": "Paplašināta galvenes darbvirsma",
   "expandedHeaderMobile": "Paplašināta galvenes mobilā telpa",
+  "failedToCopyLayout": "Neizdevās kopēt izkārtojumu.",
+  "failedToPasteComponentInvalidData": "Neizdevās ielīmēt: nederīgi komponenta dati.",
+  "failedToPasteLayout": "Neizdevās ielīmēt izkārtojumu.",
+  "failedToPasteLayoutInvalidData": "Neizdevās ielīmēt: nederīgi izkārtojuma dati.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA variants",

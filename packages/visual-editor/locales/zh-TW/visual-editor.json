@@ -158,6 +158,10 @@
   "event": "事件",
   "expandedHeaderDesktop": "擴展的標頭桌面",
   "expandedHeaderMobile": "擴展的標頭移動設備",
+  "failedToCopyLayout": "複製佈局失敗。",
+  "failedToPasteComponentInvalidData": "粘貼失敗：組件數據無效。",
+  "failedToPasteLayout": "粘貼佈局失敗。",
+  "failedToPasteLayoutInvalidData": "粘貼失敗：佈局數據無效。",
   "faq": "常問問題",
   "fields": {
     "CTAVariant": "CTA 變體",

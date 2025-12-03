@@ -158,6 +158,10 @@
   "event": "Etkinlik",
   "expandedHeaderDesktop": "Genişletilmiş başlık masaüstü",
   "expandedHeaderMobile": "Genişletilmiş başlık mobil",
+  "failedToCopyLayout": "Düzen kopyalanamadı.",
+  "failedToPasteComponentInvalidData": "Yapıştırılamadı: Geçersiz bileşen verileri.",
+  "failedToPasteLayout": "Düzen yapıştırılamadı.",
+  "failedToPasteLayoutInvalidData": "Yapıştırılamadı: Geçersiz düzen verileri.",
   "faq": "SSS",
   "fields": {
     "CTAVariant": "CTA Varyantı",

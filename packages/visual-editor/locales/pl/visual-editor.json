@@ -159,6 +159,10 @@
   "event": "Wydarzenie",
   "expandedHeaderDesktop": "Rozszerzony pulpit nagłówka",
   "expandedHeaderMobile": "Rozszerzone nagłówki mobilne",
+  "failedToCopyLayout": "Nie udało się skopiować układu.",
+  "failedToPasteComponentInvalidData": "Nie udało się wkleić: nieprawidłowe dane komponentu.",
+  "failedToPasteLayout": "Nie udało się wkleić układu.",
+  "failedToPasteLayoutInvalidData": "Nie udało się wkleić: nieprawidłowe dane układu.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Wariant CTA",

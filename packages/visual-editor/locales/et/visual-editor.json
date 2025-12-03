@@ -158,6 +158,10 @@
   "event": "Sündmus",
   "expandedHeaderDesktop": "Laiendatud päise töölaud",
   "expandedHeaderMobile": "Laiendatud päise mobiil",
+  "failedToCopyLayout": "Paigutuse kopeerimine ebaõnnestus.",
+  "failedToPasteComponentInvalidData": "Kleepimine ebaõnnestus: komponendi andmed on kehtetud.",
+  "failedToPasteLayout": "Paigutuse kleepimine ebaõnnestus.",
+  "failedToPasteLayoutInvalidData": "Kleepimine ebaõnnestus: küljenduse andmed on kehtetud.",
   "faq": "KKK",
   "fields": {
     "CTAVariant": "CTA variant",

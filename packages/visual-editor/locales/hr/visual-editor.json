@@ -158,6 +158,10 @@
   "event": "Događaj",
   "expandedHeaderDesktop": "Proširena radna površina zaglavlja",
   "expandedHeaderMobile": "Prošireni zaglavni mobitel",
+  "failedToCopyLayout": "Kopiranje izgleda nije uspjelo.",
+  "failedToPasteComponentInvalidData": "Nije uspjelo lijepljenje: nevažeći podaci komponente.",
+  "failedToPasteLayout": "Nije uspjelo lijepljenje izgleda.",
+  "failedToPasteLayoutInvalidData": "Nije uspjelo lijepljenje: nevažeći podaci o izgledu.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA varijanta",

@@ -157,6 +157,10 @@
   "event": "Event",
   "expandedHeaderDesktop": "Expanded Header Desktop",
   "expandedHeaderMobile": "Expanded Header Mobile",
+  "failedToCopyLayout": "Failed to copy layout.",
+  "failedToPasteComponentInvalidData": "Failed to paste: Invalid component data.",
+  "failedToPasteLayout": "Failed to paste layout.",
+  "failedToPasteLayoutInvalidData": "Failed to paste: Invalid layout data.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA Variant",

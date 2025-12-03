@@ -158,6 +158,10 @@
   "event": "Įvykis",
   "expandedHeaderDesktop": "Išplėstas antraštės darbalaukis",
   "expandedHeaderMobile": "Išplėstas antraštės mobilusis telefonas",
+  "failedToCopyLayout": "Nepavyko nukopijuoti išdėstymo.",
+  "failedToPasteComponentInvalidData": "Nepavyko įklijuoti: neteisingi komponento duomenys.",
+  "failedToPasteLayout": "Nepavyko įklijuoti išdėstymo.",
+  "failedToPasteLayoutInvalidData": "Nepavyko įklijuoti: neteisingi išdėstymo duomenys.",
   "faq": "DUK",
   "fields": {
     "CTAVariant": "CTA variantas",

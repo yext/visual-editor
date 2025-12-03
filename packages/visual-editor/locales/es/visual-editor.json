@@ -157,6 +157,10 @@
   "event": "Evento",
   "expandedHeaderDesktop": "Escritorio de encabezado expandido",
   "expandedHeaderMobile": "Móvil de encabezado expandido",
+  "failedToCopyLayout": "No se pudo copiar el diseño.",
+  "failedToPasteComponentInvalidData": "No se pudo pegar: datos del componente no válidos.",
+  "failedToPasteLayout": "No se pudo pegar el diseño.",
+  "failedToPasteLayoutInvalidData": "No se pudo pegar: datos de diseño no válidos.",
   "faq": "Preguntas frecuentes",
   "fields": {
     "CTAVariant": "Variante de CTA",

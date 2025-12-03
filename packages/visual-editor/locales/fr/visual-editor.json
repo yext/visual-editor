@@ -157,6 +157,10 @@
   "event": "Événement",
   "expandedHeaderDesktop": "Desktop en tête élargi",
   "expandedHeaderMobile": "En-tête expansé mobile",
+  "failedToCopyLayout": "Échec de la copie de la mise en page.",
+  "failedToPasteComponentInvalidData": "Échec du collage : données de composant non valides.",
+  "failedToPasteLayout": "Échec du collage de la mise en page.",
+  "failedToPasteLayoutInvalidData": "Échec du collage : données de mise en page non valides.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Variante CTA",

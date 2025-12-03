@@ -116,12 +116,16 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           />
           <Button
             variant="outline"
-            onClick={() => {
+            onClick={async () => {
               const { appState } = getPuck();
 
-              navigator.clipboard.writeText(
-                JSON.stringify(appState.data, null, 2)
-              );
+              try {
+                navigator.clipboard.writeText(
+                  JSON.stringify(appState.data, null, 2)
+                );
+              } catch {
+                alert(pt("failedToCopyLayout", "Failed to copy layout."));
+              }
             }}
             className="mr-2"
           >
@@ -144,7 +148,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   pastedData.root === undefined ||
                   pastedData.content === undefined
                 ) {
-                  alert("Failed to paste: Invalid component data.");
+                  alert(
+                    pt(
+                      "failedToPasteLayoutInvalidData",
+                      "Failed to paste: Invalid layout data."
+                    )
+                  );
                   return;
                 }
 
@@ -159,7 +168,10 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   ...histories,
                   {
                     state: {
-                      ui: histories[histories.length - 1].state.ui,
+                      ui:
+                        histories.length > 0
+                          ? histories[histories.length - 1].state.ui
+                          : undefined,
                       data: migratedPastedData,
                     },
                   },
@@ -168,7 +180,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 setHistories(newHistory);
                 setHistoryIndex(newHistory.length - 1);
               } catch {
-                alert("Failed to paste: Invalid component data.");
+                alert(pt("failedToPasteLayout", "Failed to paste layout."));
                 return;
               }
             }}

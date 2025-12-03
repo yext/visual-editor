@@ -158,6 +158,10 @@
   "event": "Tapahtuma",
   "expandedHeaderDesktop": "Laajennettu otsikkopöytä",
   "expandedHeaderMobile": "Laajennettu otsikko matkapuhelin",
+  "failedToCopyLayout": "Asettelun kopioiminen epäonnistui.",
+  "failedToPasteComponentInvalidData": "Liitäminen epäonnistui: virheelliset komponenttitiedot.",
+  "failedToPasteLayout": "Asettelun liittäminen epäonnistui.",
+  "failedToPasteLayoutInvalidData": "Liitäminen epäonnistui: Virheelliset asettelutiedot.",
   "faq": "Faq",
   "fields": {
     "CTAVariant": "CTA-variantti",

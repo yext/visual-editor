@@ -158,6 +158,10 @@
   "event": "Evenement",
   "expandedHeaderDesktop": "Uitgebreide header bureaublad",
   "expandedHeaderMobile": "Uitgebreide header mobiel",
+  "failedToCopyLayout": "Kan de lay-out niet kopiëren.",
+  "failedToPasteComponentInvalidData": "Kan niet plakken: ongeldige componentgegevens.",
+  "failedToPasteLayout": "Kan de lay-out niet plakken.",
+  "failedToPasteLayoutInvalidData": "Kan niet plakken: ongeldige lay-outgegevens.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA-variant",

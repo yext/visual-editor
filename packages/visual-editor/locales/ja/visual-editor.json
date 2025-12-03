@@ -158,6 +158,10 @@
   "event": "イベント",
   "expandedHeaderDesktop": "ヘッダーデスクトップの拡張",
   "expandedHeaderMobile": "拡張ヘッダーモバイル",
+  "failedToCopyLayout": "レイアウトのコピーに失敗しました。",
+  "failedToPasteComponentInvalidData": "貼り付けに失敗しました: コンポーネント データが無効です。",
+  "failedToPasteLayout": "レイアウトの貼り付けに失敗しました。",
+  "failedToPasteLayoutInvalidData": "貼り付けに失敗しました: 無効なレイアウト データです。",
   "faq": "よくある質問",
   "fields": {
     "CTAVariant": "CTA バリアント",

@@ -163,6 +163,10 @@
   "event": "Událost",
   "expandedHeaderDesktop": "Rozšířená plocha záhlaví",
   "expandedHeaderMobile": "Rozšířený mobilní záhlaví",
+  "failedToCopyLayout": "Kopírování rozvržení se nezdařilo.",
+  "failedToPasteComponentInvalidData": "Vložení se nezdařilo: Neplatná data komponenty.",
+  "failedToPasteLayout": "Vložení rozvržení se nezdařilo.",
+  "failedToPasteLayoutInvalidData": "Vložení se nezdařilo: Neplatná data rozvržení.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Varianta CTA",

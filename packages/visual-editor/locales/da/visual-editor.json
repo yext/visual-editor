@@ -164,6 +164,10 @@
   "event": "Tilfælde",
   "expandedHeaderDesktop": "Udvidet header Desktop",
   "expandedHeaderMobile": "Udvidet headermobil",
+  "failedToCopyLayout": "Kunne ikke kopiere layout.",
+  "failedToPasteComponentInvalidData": "Kunne ikke indsætte: Ugyldige komponentdata.",
+  "failedToPasteLayout": "Layoutet kunne ikke indsættes.",
+  "failedToPasteLayoutInvalidData": "Kunne ikke indsætte: Ugyldige layoutdata.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA-variant",
