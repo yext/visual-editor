@@ -217,6 +217,14 @@ export function YextField<T, U>(
       disableSearch: true,
     });
   }
+  if (config.type === "select" && config.options === "BRAND_COLORS") {
+    const options = ThemeOptions[config.options];
+    return BasicSelector({
+      label: fieldName,
+      optionGroups: options,
+      disableSearch: true,
+    });
+  }
 
   // use BasicSelector functionality
   if (config.type === "select" && config.hasSearch) {

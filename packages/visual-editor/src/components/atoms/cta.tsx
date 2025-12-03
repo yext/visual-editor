@@ -3,7 +3,11 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { themeManagerCn, useDocument } from "@yext/visual-editor";
+import {
+  BackgroundStyle,
+  themeManagerCn,
+  useDocument,
+} from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType } from "../../types/types";
@@ -28,6 +32,7 @@ export type CTAProps = {
   ariaLabel?: string;
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
+  color?: BackgroundStyle;
 };
 
 /**
@@ -147,7 +152,24 @@ export const CTA = (props: CTAProps) => {
     ctaType,
     onClick,
     disabled = false,
+    color,
   } = props;
+
+  const palette = color?.bgColor?.replace("bg-", "");
+
+  const dynamicStyle =
+    variant === "primary"
+      ? {
+          backgroundColor: `var(--colors-${color?.bgColor.replace("bg-", "")})`,
+          color: `var(--colors-${color?.textColor.replace("text-", "")})`,
+          borderColor: palette ? `var(--colors-${palette})` : undefined,
+        }
+      : variant === "secondary"
+        ? {
+            borderColor: palette ? `var(--colors-${palette})` : undefined,
+            color: palette ? `var(--colors-${palette})` : undefined,
+          }
+        : {};
 
   const resolvedProps = useResolvedCtaProps(props);
 
@@ -212,7 +234,12 @@ export const CTA = (props: CTAProps) => {
   }
 
   return (
-    <Button asChild className={buttonClassName} variant={buttonVariant}>
+    <Button
+      style={dynamicStyle}
+      asChild
+      className={buttonClassName}
+      variant={buttonVariant}
+    >
       <Link
         cta={{ link, linkType }}
         eventName={eventName}

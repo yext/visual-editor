@@ -20,6 +20,8 @@ import {
   resolveDataFromParent,
   themeManagerCn,
   PresetImageType,
+  BackgroundStyle,
+  backgroundColors,
 } from "@yext/visual-editor";
 import {
   ctaTypeOptions,
@@ -41,6 +43,8 @@ export interface CTAWrapperProps {
     variant: CTAVariant;
     /** The image to use if the CTA is set to preset image */
     presetImage?: PresetImageType;
+    /** CTA Color */
+    color?: BackgroundStyle;
   };
 
   /** Additional CSS classes to apply to the CTA. */
@@ -99,6 +103,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
         type: "radio",
         options: "CTA_VARIANT",
       }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "BRAND_COLORS",
+      }),
       presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
         type: "select",
         options: "PRESET_IMAGE",
@@ -134,6 +142,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
   ) {
     resolvedLabel = t("getDirections", "Get Directions");
   }
+  const resolvedColor = styles.color || backgroundColors.color1.value;
 
   const showCTA =
     cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
@@ -160,6 +169,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           variant={styles.variant}
           className={combinedClassName}
           eventName={eventName}
+          color={resolvedColor}
         />
       )}
     </EntityField>
@@ -188,6 +198,7 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     styles: {
       variant: "primary",
       presetImage: "app-store",
+      color: backgroundColors.color1.value,
     },
   },
   resolveFields: (data) => {
