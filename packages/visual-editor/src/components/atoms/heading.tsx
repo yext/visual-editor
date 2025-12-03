@@ -68,7 +68,15 @@ export interface HeadingProps
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   (
-    { className, level = 1, weight, fontSize, semanticLevelOverride, ...props },
+    {
+      className,
+      level = 1,
+      weight,
+      fontSize,
+      semanticLevelOverride,
+      style,
+      ...props
+    },
     ref
   ) => {
     const Tag = (
@@ -96,6 +104,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
         style={{
           // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-h${level}-textTransform)`,
+          ...style,
         }}
         ref={ref}
         {...props}
