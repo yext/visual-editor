@@ -6,7 +6,10 @@ import { exec } from "node:child_process";
 import { compareScreenshot } from "./src/components/testing/compareScreenshot.ts";
 
 export default defineConfig(() => ({
-  plugins: [react(), dts(), ...(process.env.VITEST ? [cssStubPlugin] : [])],
+  define: {
+    __VISUAL_EDITOR_TEST__: JSON.stringify(!!process.env.VITEST),
+  },
+  plugins: [react(), ...(process.env.VITEST ? [cssStubPlugin] : [dts()])],
   resolve: {
     alias: {
       "@yext/visual-editor": path.resolve(__dirname, "src"),

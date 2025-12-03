@@ -20,15 +20,8 @@ export type EnhancedTranslatableCTA = TranslatableCTA & {
    * getDirections is a button that opens a map based on the coordinate field
    * presetImage uses a preset image such as app store or food delivery logos for the button
    * @defaultValue "textAndLink"
-   * @ai If the CTA is for getting directions, use "getDirections" and provide the coordinate field.
-   * If the CTA is for app downloads or food delivery, use "presetImage" and select the appropriate presetImageType. Otherwise, use "textAndLink".
    */
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
-  coordinate?: {
-    latitude: number;
-    longitude: number;
-  };
-  presetImageType?: PresetImageType;
 };
 
 /** Preset image types for CTA buttons - app store or food delivery logos */
@@ -87,7 +80,7 @@ export type ProductStruct = {
    * The product's category
    * @ai This should not be more than a few words
    */
-  category?: TranslatableString;
+  category?: TranslatableString | TranslatableRichText;
   /** The product's CTA */
   cta: EnhancedTranslatableCTA;
 };
@@ -122,7 +115,7 @@ export type FAQSectionType = {
 /** An individual FAQ */
 export type FAQStruct = {
   /** The question (always visible on the page) */
-  question: TranslatableString;
+  question: TranslatableString | TranslatableRichText;
   /** The answer (visible when the question is clicked) */
   answer: TranslatableRichText;
 };
@@ -142,11 +135,6 @@ export type TestimonialStruct = {
   contributionDate?: string;
 };
 
-/** Data for the InsightSection */
-export type InsightSectionType = {
-  insights: Array<InsightStruct>;
-};
-
 /** An individual insight for the InsightSection */
 export type InsightStruct = {
   /**
@@ -160,13 +148,18 @@ export type InsightStruct = {
    * The insight's category
    * @ai This should not be more than a few words
    */
-  category?: TranslatableString;
+  category?: TranslatableString | TranslatableRichText;
   /** A UTC string for the insight's publish time (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ssZ) */
   publishTime?: string;
   /** The insight's description */
   description?: TranslatableRichText;
   /** The insight's CTA */
   cta: EnhancedTranslatableCTA;
+};
+
+/** Data for the InsightSection */
+export type InsightSectionType = {
+  insights: Array<InsightStruct>;
 };
 
 /** Data for the TeamSection */
@@ -184,7 +177,7 @@ export type PersonStruct = {
   /** The person's name */
   name?: TranslatableString;
   /** The person's job title */
-  title?: TranslatableString;
+  title?: TranslatableString | TranslatableRichText;
   /** The person's phone number. Format: +1234567890 */
   phoneNumber?: string;
   /** The person's email address */

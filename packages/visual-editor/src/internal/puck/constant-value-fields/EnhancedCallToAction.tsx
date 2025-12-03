@@ -2,7 +2,6 @@ import { AutoField, CustomField, Field, FieldLabel } from "@measured/puck";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   EnhancedTranslatableCTA,
-  PresetImageType,
   TranslatableString,
 } from "../../../types/types.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -50,28 +49,6 @@ export const getCTAType = <T extends Record<string, any>>(
   return { ctaType };
 };
 
-export const presetImageTypeOptions = (): {
-  label: string;
-  value: PresetImageType;
-}[] => {
-  return [
-    { label: pt("presetImages.appStore", "App Store"), value: "app-store" },
-    {
-      label: pt("presetImages.googlePlay", "Google Play"),
-      value: "google-play",
-    },
-    {
-      label: pt("presetImages.galaxyStore", "Galaxy Store"),
-      value: "galaxy-store",
-    },
-    {
-      label: pt("presetImages.appGallery", "App Gallery"),
-      value: "app-gallery",
-    },
-    { label: pt("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
-  ];
-};
-
 export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> =
   {
     type: "custom",
@@ -82,9 +59,10 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           { types: ["type.string"] }
         );
       }, []);
+
       const showLabel = value?.ctaType !== "presetImage";
-      const showPresetImage = value?.ctaType === "presetImage";
       const showLinkFields = value?.ctaType !== "getDirections";
+
       return (
         <div className={"ve-mt-3"}>
           <div className="ve-mb-3">
@@ -100,8 +78,6 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                   // Set defaults based on CTA type
                   if (newValue === "presetImage") {
                     updatedValue.label = { en: "", hasLocalizedValue: "true" };
-                    updatedValue.presetImageType =
-                      updatedValue?.presetImageType || "app-store";
                   } else if (newValue === "getDirections") {
                     updatedValue.label = updatedValue?.label || {
                       en: "Get Directions",
@@ -158,24 +134,6 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
               </div>
             </>
           )}
-          {showPresetImage && (
-            <div className="ve-mb-3">
-              <FieldLabel
-                label={pt("fields.presetImageType", "Preset Image Type")}
-              >
-                <AutoField
-                  field={{
-                    type: "select",
-                    options: presetImageTypeOptions(),
-                  }}
-                  value={value?.presetImageType ?? "app-store"}
-                  onChange={(newValue) =>
-                    onChange({ ...value, presetImageType: newValue })
-                  }
-                />
-              </FieldLabel>
-            </div>
-          )}
         </div>
       );
     },
@@ -205,11 +163,6 @@ export const enhancedTranslatableCTAFields =
           label: pt("fields.ctaType", "CTA Type"),
           type: "select",
           options: ctaTypeOptions(),
-        },
-        presetImageType: {
-          label: pt("fields.presetImageType", "Preset Image Type"),
-          type: "select",
-          options: presetImageTypeOptions(),
         },
       },
     };

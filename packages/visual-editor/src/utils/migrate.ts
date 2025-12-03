@@ -7,6 +7,7 @@ import {
   walkTree,
 } from "@measured/puck";
 import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { StreamDocument } from "./applyTheme.ts";
 
 export type MigrationAction =
   | {
@@ -19,7 +20,8 @@ export type MigrationAction =
   | {
       action: "updated";
       propTransformation: (
-        oldProps: { id: string } & Record<string, any>
+        oldProps: { id: string } & Record<string, any>,
+        streamDocument: StreamDocument
       ) => { id: string } & Record<string, any>;
     };
 export type Migration =
@@ -42,7 +44,8 @@ interface RootProps extends DefaultRootProps {
 export const migrate = (
   data: Data<DefaultComponentProps, RootProps>,
   migrationRegistry: MigrationRegistry = commonMigrationRegistry,
-  config: Config
+  config: Config,
+  streamDocument: StreamDocument
 ): Data => {
   const version = data.root?.props?.version ?? 0;
 
@@ -83,7 +86,10 @@ export const migrate = (
               }
               return {
                 ...c,
-                props: migrationAction.propTransformation(c.props),
+                props: migrationAction.propTransformation(
+                  c.props,
+                  streamDocument
+                ),
               };
             });
         }

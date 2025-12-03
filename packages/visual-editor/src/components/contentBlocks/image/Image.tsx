@@ -1,5 +1,11 @@
+import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@measured/puck";
 import {
   useDocument,
   resolveComponentData,
@@ -10,24 +16,44 @@ import {
   msg,
   pt,
   imgSizesHelper,
+  ImgSizesByBreakpoint,
+  resolveDataFromParent,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
+import { EmptyImageState } from "./EmptyImageState";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 
 export interface ImageWrapperProps {
   data: {
-    image: YextEntityField<ImageType | ComplexImageType>;
+    /** The image to display. */
+    image: YextEntityField<ImageType | ComplexImageType | AssetImageType>;
   };
+
+  /** Size and aspect ratio of the image. */
   styles: ImageStylingProps;
+
+  /** @internal Controlled data from the parent section. */
+  parentData?: {
+    field: string;
+    image: ImageType | ComplexImageType | AssetImageType | undefined;
+  };
+
+  /** Additional CSS classes to apply to the image. */
+  className?: string;
+
+  sizes?: ImgSizesByBreakpoint;
+
+  hideWidthProp?: boolean;
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      image: YextField<any, ImageType | ComplexImageType>(
+      image: YextField<any, ImageType | ComplexImageType | AssetImageType>(
         msg("fields.options.image", "Image"),
         {
           type: "entityField",
@@ -46,62 +72,132 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   }),
 };
 
-const ImageWrapperComponent = ({ data, styles }: ImageWrapperProps) => {
+const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
+  const {
+    data,
+    styles,
+    parentData,
+    className,
+    puck,
+    sizes = {
+      base: styles.width ? `min(100vw, width)` : "100vw",
+      md: styles.width
+        ? `min(width, calc((maxWidth - 32px) / 2))`
+        : "maxWidth / 2",
+    },
+    hideWidthProp,
+  } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  const resolvedImage = resolveComponentData(
-    data.image,
-    i18n.language,
-    streamDocument
-  );
+  const resolvedImage = React.useMemo(() => {
+    return parentData
+      ? parentData?.image
+      : resolveComponentData(data.image, i18n.language, streamDocument);
+  }, [parentData, data.image, i18n.language, streamDocument]);
 
-  if (!resolvedImage) {
-    return null;
+  const getImageUrl = (
+    image: ImageType | ComplexImageType | AssetImageType | undefined
+  ): string | undefined => {
+    if (!image) {
+      return undefined;
+    }
+
+    if ("image" in image) {
+      return image.image?.url;
+    }
+
+    return image.url;
+  };
+
+  const imageUrl = getImageUrl(resolvedImage);
+  const isEmpty =
+    !resolvedImage ||
+    !imageUrl ||
+    (typeof imageUrl === "string" && imageUrl.trim() === "");
+
+  if (isEmpty) {
+    return (
+      <EmptyImageState
+        isEmpty={isEmpty}
+        isEditing={puck.isEditing ?? false}
+        constantValueEnabled={data.image.constantValueEnabled ?? false}
+        constantValue={data.image.constantValue as AssetImageType | undefined}
+        fieldId={parentData ? parentData.field : data.image.field}
+        containerStyle={{
+          ...(hideWidthProp
+            ? {}
+            : styles.width
+              ? { width: `${styles.width}px` }
+              : {}),
+          ...(styles.aspectRatio ? { aspectRatio: styles.aspectRatio } : {}),
+        }}
+        containerClassName={
+          className || "max-w-full rounded-image-borderRadius w-full h-full"
+        }
+        fullHeight
+        dragRef={puck.dragRef ?? undefined}
+        hasParentData={!!parentData}
+      />
+    );
   }
+
+  const transformedSizes = imgSizesHelper(sizes, `${styles.width}px`);
 
   return (
     <EntityField
       displayName={pt("fields.image", "Image")}
-      fieldId={data.image.field}
-      constantValueEnabled={data.image.constantValueEnabled}
+      fieldId={parentData ? parentData.field : data.image.field}
+      constantValueEnabled={!parentData && data.image.constantValueEnabled}
+      fullHeight
+      ref={puck.dragRef}
     >
-      <div className="w-full">
+      <div className="w-full h-full">
         <Image
           image={resolvedImage}
           aspectRatio={styles.aspectRatio}
-          width={styles.width}
-          className="max-w-full rounded-image-borderRadius w-full"
-          sizes={imgSizesHelper({
-            base: styles.width ? `min(100vw, ${styles.width}px)` : "100vw",
-            md: styles.width
-              ? `min(${styles.width}px, calc((maxWidth - 32px) / 2))`
-              : "maxWidth / 2",
-          })}
+          width={hideWidthProp ? undefined : styles.width}
+          className={
+            className || "max-w-full rounded-image-borderRadius w-full h-full"
+          }
+          sizes={transformedSizes}
         />
       </div>
     </EntityField>
   );
 };
 
+export const imageDefaultProps = {
+  data: {
+    image: {
+      field: "",
+      constantValue: {
+        url: PLACEHOLDER_IMAGE_URL,
+        height: 360,
+        width: 640,
+      },
+      constantValueEnabled: true,
+    },
+  },
+  styles: {
+    aspectRatio: 1.78,
+    width: 640,
+  },
+  allowWidthProp: true,
+};
+
 export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   label: msg("components.image", "Image"),
+  inline: true,
   fields: ImageWrapperFields,
-  defaultProps: {
-    data: {
-      image: {
-        field: "",
-        constantValue: {
-          url: PLACEHOLDER_IMAGE_URL,
-          height: 360,
-          width: 640,
-        },
-        constantValueEnabled: true,
-      },
-    },
-    styles: {
-      aspectRatio: 1.78,
-      width: 640,
-    },
+  defaultProps: imageDefaultProps,
+  resolveFields: (data) => {
+    const fields = resolveDataFromParent(ImageWrapperFields, data);
+
+    if (data.props.hideWidthProp) {
+      return setDeep(fields, "styles.objectFields.width.visible", false);
+    }
+
+    return setDeep(fields, "styles.objectFields.width.visible", true);
   },
   render: (props) => <ImageWrapperComponent {...props} />,
 };

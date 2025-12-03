@@ -1,15 +1,20 @@
+import { useState } from "react";
 import {
   useReceiveMessage,
   TARGET_ORIGINS,
 } from "../internal/hooks/useMessage.ts";
 import { normalizeLocalesInObject } from "../utils/normalizeLocale.ts";
-import { useState } from "react";
+import { isDeepEqual } from "../utils/deepEqual.ts";
 
 export const usePlatformBridgeDocument = () => {
   const [entityDocument, setEntityDocument] = useState<any>(); // json data
 
   useReceiveMessage("getEntityDocument", TARGET_ORIGINS, (send, payload) => {
-    setEntityDocument(normalizeLocalesInObject(payload));
+    const receivedDocument = normalizeLocalesInObject(payload);
+    if (!isDeepEqual(entityDocument, receivedDocument)) {
+      setEntityDocument(receivedDocument);
+    }
+
     send({
       status: "success",
       payload: { message: "getEntityDocument received" },

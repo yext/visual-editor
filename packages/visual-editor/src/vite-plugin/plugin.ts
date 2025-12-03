@@ -41,7 +41,6 @@ const virtualFiles: VirtualFile[] = [
       layoutRequired: true,
       defaultLayoutData: defaultLayoutData.main,
       componentFields: [
-        ComponentFields.HeroSection,
         ComponentFields.PromoSection,
         ComponentFields.ProductSection,
         ComponentFields.EventSection,

@@ -12,12 +12,14 @@ import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { filterComponentsFromConfig } from "../../utils/filterComponents.ts";
+import { StreamDocument } from "../../utils/applyTheme.ts";
 
 const devLogger = new DevLogger();
 
 export const useCommonMessageReceivers = (
   componentRegistry: Record<string, Config<any>>,
-  localDev: boolean
+  localDev: boolean,
+  streamDocument: StreamDocument
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -61,7 +63,8 @@ export const useCommonMessageReceivers = (
             zones: {},
           },
           migrationRegistry,
-          puckConfig
+          puckConfig,
+          streamDocument
         )
       );
       setLayoutDataFetched(true);
@@ -115,8 +118,7 @@ export const useCommonMessageReceivers = (
   useReceiveMessage("getLayoutData", TARGET_ORIGINS, (send, payload) => {
     const data = JSON.parse(payload.layoutData) as Data;
     devLogger.logData("LAYOUT_DATA", data);
-    const migratedData = migrate(data, migrationRegistry, puckConfig);
-    setLayoutData(migratedData);
+    setLayoutData(data);
     setLayoutDataFetched(true);
     send({
       status: "success",

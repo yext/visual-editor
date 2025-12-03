@@ -4,18 +4,50 @@ import { addIdToSchema } from "../components/migrations/0023_add_id_to_schema.ts
 
 describe("migrate", () => {
   it("successfully applies a migration", async () => {
-    const migratedData = migrate(exampleDataBefore, migrationRegistry, {
-      components: {},
-    });
+    const migratedData = migrate(
+      exampleDataBefore,
+      migrationRegistry,
+      {
+        components: {},
+      },
+      {}
+    );
     expect(migratedData).toEqual(exampleDataAfter);
   });
 
   it("successfully applies root migration", async () => {
-    const migratedData = migrate(exampleRootDataBefore, [addIdToSchema], {
-      components: {},
-    });
+    const migratedData = migrate(
+      exampleRootDataBefore,
+      [addIdToSchema],
+      {
+        components: {},
+      },
+      {}
+    );
 
     expect(migratedData).toEqual(exampleRootDataAfter);
+  });
+
+  it("successfully applies migration based on document data", async () => {
+    const migratedData = migrate(
+      exampleBasicDataBefore,
+      [
+        {
+          BasicSection: {
+            action: "updated",
+            propTransformation: (props, document) => {
+              return { ...props, text: document.fieldB };
+            },
+          },
+        },
+      ],
+      {
+        components: {},
+      },
+      exampleDocument
+    );
+
+    expect(migratedData).toEqual(exampleBasicDataAfter);
   });
 });
 
@@ -284,4 +316,39 @@ const exampleRootDataAfter = {
   },
   content: [],
   zones: {},
+};
+
+const exampleBasicDataBefore = {
+  root: {},
+  zones: {},
+  content: [
+    {
+      type: "BasicSection",
+      props: {
+        text: "Some text",
+      },
+    },
+  ],
+};
+
+const exampleDocument = {
+  fieldA: "Value A",
+  fieldB: "Value B",
+};
+
+const exampleBasicDataAfter = {
+  root: {
+    props: {
+      version: 1,
+    },
+  },
+  zones: {},
+  content: [
+    {
+      type: "BasicSection",
+      props: {
+        text: "Value B",
+      },
+    },
+  ],
 };

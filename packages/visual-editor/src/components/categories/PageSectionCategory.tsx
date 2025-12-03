@@ -10,20 +10,20 @@ import {
 import {
   EventSection,
   EventSectionProps,
-} from "../pageSections/EventSection.tsx";
+} from "../pageSections/EventSection/EventSection.tsx";
 import { HeroSection, HeroSectionProps } from "../pageSections/HeroSection.tsx";
 import {
-  InsightSectionProps,
   InsightSection,
-} from "../pageSections/InsightSection.tsx";
+  InsightSectionProps,
+} from "../pageSections/InsightSection/InsightSection.tsx";
 import {
   NearbyLocationsSection,
   NearbyLocationsSectionProps,
-} from "../pageSections/NearbyLocations.tsx";
+} from "../pageSections/NearbyLocations/NearbyLocations.tsx";
 import {
   ProductSection,
   ProductSectionProps,
-} from "../pageSections/ProductSection.tsx";
+} from "../pageSections/ProductSection/ProductSection.tsx";
 import {
   PromoSection,
   PromoSectionProps,
@@ -31,17 +31,23 @@ import {
 import {
   PhotoGallerySection,
   PhotoGallerySectionProps,
-} from "../pageSections/PhotoGallerySection.tsx";
-import { FAQSection, FAQSectionProps } from "../pageSections/FAQsSection.tsx";
+} from "../pageSections/PhotoGallerySection/PhotoGallerySection.tsx";
+import {
+  FAQSection,
+  FAQSectionProps,
+} from "../pageSections/FAQsSection/FAQsSection.tsx";
 import {
   ReviewsSection,
   ReviewsSectionProps,
-} from "../pageSections/ReviewsSection.tsx";
+} from "../pageSections/ReviewsSection/ReviewsSection.tsx";
 import {
   TestimonialSection,
   TestimonialSectionProps,
-} from "../pageSections/TestimonialSection.tsx";
-import { TeamSection, TeamSectionProps } from "../pageSections/TeamSection.tsx";
+} from "../pageSections/TestimonialSection/TestimonialSection.tsx";
+import {
+  TeamSection,
+  TeamSectionProps,
+} from "../pageSections/TeamSection/TeamSection.tsx";
 import {
   StaticMapSection,
   StaticMapSectionProps,

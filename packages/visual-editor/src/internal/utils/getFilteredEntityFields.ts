@@ -44,6 +44,7 @@ export type EntityFieldTypes =
   | "type.cta"
   | "type.boolean"
   | "type.option"
+  | "type.datetime"
   | "type.faq_section"
   | "type.testimonials_section"
   | "type.products_section"
@@ -52,7 +53,6 @@ export type EntityFieldTypes =
   | "type.team_section"
   | "type.events_section"
   | "type.promo_section"
-  | "type.hero_section"
   | `c_${string}`;
 
 export type ConstantValueTypes = EntityFieldTypes | "imageOrVideo";

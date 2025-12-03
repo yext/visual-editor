@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   BodyProps,
   useDocument,
@@ -12,14 +12,32 @@ import {
   msg,
   TranslatableRichText,
   useBackground,
+  resolveDataFromParent,
+  Body,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
   data: {
+    /** The body text to display. */
     text: YextEntityField<TranslatableRichText>;
   };
+
   styles: {
+    /** The size of the body text. */
     variant: BodyProps["variant"];
+  };
+
+  /**
+   * @internal Controlled data from the parent section.
+   */
+  parentData?: {
+    field: string;
+    richText: TranslatableRichText | undefined;
+  };
+
+  /** @internal Controlled style from the parent section */
+  parentStyles?: {
+    className: string;
   };
 };
 
@@ -46,30 +64,45 @@ const bodyTextFields: Fields<BodyTextProps> = {
   }),
 };
 
-const BodyTextComponent = React.forwardRef<HTMLParagraphElement, BodyTextProps>(
-  ({ data, styles }) => {
-    const { i18n } = useTranslation();
-    const streamDocument = useDocument();
-    const background = useBackground();
+const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
+  const { data, styles, puck, parentData } = props;
+  const { i18n } = useTranslation();
+  const streamDocument = useDocument();
+  const background = useBackground();
 
-    return (
-      <EntityField
-        displayName={pt("body", "Body")}
-        fieldId={data.text.field}
-        constantValueEnabled={data.text.constantValueEnabled}
-      >
-        {resolveComponentData(data.text, i18n.language, streamDocument, {
-          variant: styles.variant,
-          isDarkBackground: background?.isDarkBackground,
-        })}
-      </EntityField>
-    );
-  }
-);
+  const sourceData = parentData ? parentData?.richText : data.text;
+
+  const resolvedData = sourceData
+    ? resolveComponentData(sourceData, i18n.language, streamDocument, {
+        variant: styles.variant,
+        isDarkBackground: background?.isDarkBackground,
+        className: props.parentStyles?.className,
+      })
+    : undefined;
+
+  return resolvedData ? (
+    <EntityField
+      displayName={pt("body", "Body")}
+      fieldId={parentData ? parentData.field : data.text.field}
+      constantValueEnabled={data.text.constantValueEnabled}
+    >
+      {React.isValidElement(resolvedData) ? (
+        resolvedData
+      ) : (
+        <Body variant={styles.variant}>{resolvedData}</Body>
+      )}
+    </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-[60px] min-w-[100px]" />
+  ) : (
+    <></>
+  );
+};
 
 export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
   label: msg("components.bodyText", "Body Text"),
   fields: bodyTextFields,
+  resolveFields: (data) => resolveDataFromParent(bodyTextFields, data),
   defaultProps: {
     data: {
       text: {

@@ -14,7 +14,7 @@ import { resolveComponentData } from "../../../utils/resolveComponentData";
 import { TranslatableString } from "../../../types/types";
 import { msg, pt } from "../../../utils/i18n/platform";
 
-type ImagePayload = {
+export type ImagePayload = {
   id: string;
   value: ImageContentData;
   locale: string;

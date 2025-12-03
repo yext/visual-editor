@@ -13,8 +13,16 @@ import {
   migrationRegistry,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
+import {
+  HeadingText,
+  Address,
+  HoursTable,
+  Emails,
+  TextList,
+} from "../contentBlocks/index.ts";
+import { PhoneList } from "../contentBlocks/PhoneList.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -28,14 +36,15 @@ const testAddress = {
 
 const tests: ComponentTest[] = [
   {
-    name: "default props with empty document",
-    document: {},
+    name: "default props with no additional document data",
+    document: { locale: "en" },
     props: { ...CoreInfoSection.defaultProps },
     version: migrationRegistry.length,
   },
   {
     name: "default props with document data",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -48,6 +57,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props with entity values",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -115,6 +125,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 0 props with constant value",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -210,6 +221,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with entity values",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -300,6 +312,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with constant value",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -400,6 +413,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 1",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -489,6 +503,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 2",
     document: {
+      locale: "en",
       address: testAddress,
       mainPhone: "+18005551010",
       emails: ["sumo@yext.com"],
@@ -578,6 +593,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 1 props with partial entity values 3",
     document: {
+      locale: "en",
       hours: testHours,
       services: ["Delivery", "Catering"],
       id: "test-id",
@@ -665,6 +681,7 @@ const tests: ComponentTest[] = [
   {
     name: "version 10 props with partial entity values align right",
     document: {
+      locale: "en",
       hours: testHours,
       services: ["Delivery", "Catering"],
       id: "test-id",
@@ -752,11 +769,173 @@ const tests: ComponentTest[] = [
     },
     version: 10,
   },
+  {
+    name: "version 27 props with mixed values",
+    document: {
+      locale: "en",
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-secondary-light",
+          textColor: "text-black",
+        },
+      },
+      slots: {
+        CoreInfoHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-13c80a69-4194-41a6-86d0-1ded6367ed98",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Information",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        CoreInfoAddressSlot: [
+          {
+            type: "AddressSlot",
+            props: {
+              id: "AddressSlot-07cfe7a6-e9c7-41c4-b1ae-03558c90c6b9",
+              data: {
+                address: {
+                  constantValue: {
+                    line1: "",
+                    city: "",
+                    postalCode: "",
+                    countryCode: "",
+                  },
+                  field: "address",
+                },
+              },
+              styles: { showGetDirectionsLink: true, ctaVariant: "link" },
+            },
+          },
+        ],
+        CoreInfoPhoneNumbersSlot: [
+          {
+            type: "PhoneNumbersSlot",
+            props: {
+              id: "PhoneNumbersSlot-c82bd20b-7393-4994-87fb-26a53cd82880",
+              data: {
+                phoneNumbers: [
+                  {
+                    number: { field: "mainPhone", constantValue: "" },
+                    label: { en: "Phone", hasLocalizedValue: "true" },
+                  },
+                ],
+              },
+              styles: { phoneFormat: "domestic", includePhoneHyperlink: true },
+            },
+          },
+        ],
+        CoreInfoEmailsSlot: [
+          {
+            type: "EmailsSlot",
+            props: {
+              id: "EmailsSlot-4d584104-463f-4569-86e4-19c137697f60",
+              data: { list: { field: "emails", constantValue: [] } },
+              styles: { listLength: 1 },
+            },
+          },
+        ],
+        HoursHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-383eb893-a76f-4457-bf3b-7909b520a384",
+              data: {
+                text: {
+                  constantValue: { en: "Hours", hasLocalizedValue: "true" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 3, align: "left" },
+            },
+          },
+        ],
+        HoursTableSlot: [
+          {
+            type: "HoursTableSlot",
+            props: {
+              id: "HoursTableSlot-ada7341a-2420-4ef2-b9e4-1d2e26945e43",
+              data: { hours: { field: "hours", constantValue: {} } },
+              styles: {
+                startOfWeek: "today",
+                collapseDays: false,
+                showAdditionalHoursText: true,
+                alignment: "items-start",
+              },
+            },
+          },
+        ],
+        ServicesHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-1b445bc3-cc01-4fa9-9fb8-3c8dc1361ca5",
+              data: {
+                text: {
+                  constantValue: { en: "Services", hasLocalizedValue: "true" },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        TextListSlot: [
+          {
+            type: "TextListSlot",
+            props: {
+              id: "ServicesListSlot-88d05408-381e-4a03-a5a0-8b8c9781d6fc",
+              list: { field: "services", constantValue: [] },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "coreInfoSection" },
+      liveVisibility: true,
+      conditionalRender: {
+        coreInfoCol: true,
+        hoursCol: true,
+        servicesCol: true,
+      },
+    },
+    version: 27,
+  },
 ];
 
 describe("CoreInfoSection", async () => {
   const puckConfig: Config = {
-    components: { CoreInfoSection },
+    components: {
+      CoreInfoSection,
+      AddressSlot: Address,
+      EmailsSlot: Emails,
+      HeadingTextSlot: HeadingText,
+      HoursTableSlot: HoursTable,
+      PhoneNumbersSlot: PhoneList,
+      TextListSlot: TextList,
+    },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
@@ -788,12 +967,21 @@ describe("CoreInfoSection", async () => {
           ],
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
+
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

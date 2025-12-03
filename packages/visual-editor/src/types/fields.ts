@@ -1,22 +1,14 @@
-import { type StructEntityFieldTypes } from "../editor/YextStructFieldSelector.tsx";
 import { type EntityFieldTypes } from "../internal/utils/getFilteredEntityFields.ts";
 
 export type ComponentField = {
   name: string;
-  type: StructEntityFieldTypes | EntityFieldTypes;
+  type: EntityFieldTypes;
   isList: boolean;
   tooltipDescription: string;
   altLanguageBehavior: "LANGUAGE_SPECIFIC" | "PRIMARY_ONLY" | "OVERRIDABLE";
 };
 
 export const ComponentFields = {
-  HeroSection: {
-    name: "Hero Section",
-    type: "type.hero_section",
-    isList: false,
-    tooltipDescription: "",
-    altLanguageBehavior: "LANGUAGE_SPECIFIC",
-  },
   PromoSection: {
     name: "Promo Section",
     type: "type.promo_section",

@@ -21,7 +21,7 @@ export enum TimestampOption {
   DATE_TIME_RANGE = "DATE_TIME_RANGE",
 }
 
-export type TimestampProps = {
+export type TimestampAtomProps = {
   date: string; // ISO 8601 from KG like "YYYY-MM-DDTHH:MM"
   option?: TimestampOption;
   endDate?: string; // ISO 8601 from KG like "YYYY-MM-DDTHH:MM"
@@ -104,7 +104,7 @@ export function timestampFormatter({
   }
 }
 
-export function Timestamp({
+export const TimestampAtom = ({
   date,
   option = TimestampOption.DATE,
   endDate = "",
@@ -113,7 +113,7 @@ export function Timestamp({
   locale,
   dateFormatOverride,
   dateTimeFormatOverride,
-}: TimestampProps): JSX.Element {
+}: TimestampAtomProps): JSX.Element => {
   let timestamp;
   try {
     // For date-only strings (YYYY-MM-DD), create the date in UTC
@@ -140,9 +140,12 @@ export function Timestamp({
     return <></>;
   }
 
+  // standardize spacing between server and client Intl output
+  const formattedTimestamp = timestamp.replaceAll("\u202F", " ");
+
   return (
     <div className="components font-body-fontFamily font-body-fontWeight text-body-fontSize inline-block">
-      {timestamp}
+      {formattedTimestamp}
     </div>
   );
-}
+};

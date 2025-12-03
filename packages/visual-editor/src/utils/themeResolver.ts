@@ -104,12 +104,7 @@ export const deepMerge = <T extends PlainObject, U extends PlainObject>(
         result[key] = deepMerge(value1, value2);
       } else {
         // Otherwise, prioritize obj2's value
-        if (value1 && value2) {
-          console.warn(
-            `Both theme.config.ts and tailwind.config.ts provided a value for ${key}. Using the value from theme.config.ts (${value2})`
-          );
-        }
-        result[key] = value2 ?? value1;
+        result[key] = value1 ?? value2;
       }
     }
   }

@@ -6,7 +6,7 @@ import {
 } from "./themeResolver.ts";
 import {
   testDeveloperTailwindConfig,
-  testMarketerTailwindConfig,
+  testMarketerTailwindConfig as testDefaultTailwindConfig,
   testMergedConfig,
   testThemeConfig,
 } from "./testData.ts";
@@ -18,35 +18,26 @@ describe("themeResolver", () => {
 
   test("convert theme config to tailwind config", () => {
     const result = convertToTailwindConfig(testThemeConfig);
-    expect(result).toEqual(testMarketerTailwindConfig);
+    expect(result).toEqual(testDefaultTailwindConfig);
   });
 
-  test("merge marketer and developer tailwind configs, prioritizing theme.config specifications", () => {
-    const consoleSpy = vi.spyOn(console, "warn");
+  test("merge marketer and developer tailwind configs, prioritizing developer config", () => {
     const result = deepMerge(
       testDeveloperTailwindConfig,
-      testMarketerTailwindConfig
+      testDefaultTailwindConfig
     );
     expect(result).toEqual(testMergedConfig);
-    expect(consoleSpy).toHaveBeenLastCalledWith(
-      "Both theme.config.ts and tailwind.config.ts provided a value for button-primary. Using the value from theme.config.ts (var(--colors-button-primary))"
-    );
   });
 
   test(
     "restructures theme config and merges with developer-specified tailwind config, " +
-      "prioritizing theme.config",
+      "prioritizing developer config",
     () => {
-      const consoleSpy = vi.spyOn(console, "warn");
       const result = themeResolver(
         testDeveloperTailwindConfig,
         testThemeConfig
       );
       expect(result).toEqual(testMergedConfig);
-      expect(consoleSpy).toHaveBeenCalledTimes(1);
-      expect(consoleSpy).toHaveBeenLastCalledWith(
-        "Both theme.config.ts and tailwind.config.ts provided a value for button-primary. Using the value from theme.config.ts (var(--colors-button-primary))"
-      );
     }
   );
 });

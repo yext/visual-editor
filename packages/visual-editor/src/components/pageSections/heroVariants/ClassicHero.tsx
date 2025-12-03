@@ -1,66 +1,31 @@
-import {
-  EntityField,
-  PageSection,
-  pt,
-  Image,
-  useDocument,
-  themeManagerCn,
-  resolveYextStructField,
-  imgSizesHelper,
-} from "@yext/visual-editor";
+import { PageSection, themeManagerCn } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { PuckComponent } from "@measured/puck";
 
-const ClassicHeroImage = ({
-  className,
-  resolvedHero,
-  styles,
-  data,
-}: HeroImageProps) => {
+const ClassicHeroImage: PuckComponent<HeroImageProps> = (props) => {
+  const { className, styles, slots, puck } = props;
   const { t } = useTranslation();
 
-  return (
-    resolvedHero?.image &&
-    styles.showImage && (
-      <div
-        className={themeManagerCn("w-full my-auto", className)}
-        role="region"
-        aria-label={t("heroImage", "Hero Image")}
-      >
-        <EntityField
-          displayName={pt("fields.image", "Image")}
-          fieldId={data.hero.field}
-          constantValueEnabled={data.hero.constantValueOverride.image}
-        >
-          <Image
-            image={resolvedHero?.image}
-            aspectRatio={styles.image.aspectRatio}
-            width={styles.image.width}
-            className="max-w-full sm:max-w-initial md:max-w-[350px] lg:max-w-none rounded-image-borderRadius"
-            sizes={imgSizesHelper({
-              base: "calc(100vw - 32px)",
-              md: "350px",
-              lg: styles.image.width
-                ? `${styles.image.width}px`
-                : "calc(maxWidth / 2)",
-            })}
-          />
-        </EntityField>
-      </div>
-    )
+  return styles.showImage ? (
+    <div
+      className={themeManagerCn("w-full my-auto", className)}
+      role="region"
+      aria-label={t("heroImage", "Hero Image")}
+    >
+      <slots.ImageSlot allow={[]} />
+    </div>
+  ) : puck.isEditing ? (
+    <div className="h-20" />
+  ) : (
+    <></>
   );
 };
 
-export const ClassicHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
-  const streamDocument = useDocument();
-  const resolvedHero = resolveYextStructField(
-    streamDocument,
-    data?.hero,
-    locale
-  );
+export const ClassicHero: PuckComponent<HeroVariantProps> = (props) => {
+  const { styles, slots, puck, id } = props;
+  const { t } = useTranslation();
 
   return (
     <PageSection
@@ -70,32 +35,33 @@ export const ClassicHero: React.FC<HeroVariantProps> = ({ data, styles }) => {
     >
       {/* Desktop left image / Mobile top image */}
       <ClassicHeroImage
+        id={id + "-image"}
         className={themeManagerCn(
           styles.mobileImagePosition === "bottom" && "hidden sm:block",
           styles.desktopImagePosition === "right" && "sm:hidden"
         )}
-        resolvedHero={resolvedHero}
         styles={styles}
-        data={data}
+        slots={slots}
+        puck={puck}
       />
-
       <div
         className={
           heroContentParentCn(styles) + " justify-center lg:min-w-[350px]"
         }
       >
-        <HeroContent data={data} styles={styles} />
+        <HeroContent {...props} />
       </div>
 
       {/* Desktop right image / Mobile bottom image */}
       <ClassicHeroImage
+        id={id + "-image"}
         className={themeManagerCn(
           styles.mobileImagePosition === "top" && "hidden sm:block",
           styles.desktopImagePosition === "left" && "sm:hidden"
         )}
-        resolvedHero={resolvedHero}
         styles={styles}
-        data={data}
+        slots={slots}
+        puck={puck}
       />
     </PageSection>
   );

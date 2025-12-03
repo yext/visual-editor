@@ -493,7 +493,7 @@ export const testMergedConfig: TailwindConfig = {
       light: "var(--colors-body-color-light)",
       dark: "var(--colors-body-color-dark)",
     },
-    "button-primary": "var(--colors-button-primary)", // theme.config takes priority
+    "button-primary": "#000000",
     "button-primaryForeground": "var(--colors-button-primaryForeground)",
   },
   fontSize: {

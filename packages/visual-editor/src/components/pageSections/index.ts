@@ -13,21 +13,17 @@ export {
 export {
   CoreInfoSection,
   type CoreInfoSectionProps,
-  type CoreInfoData,
   type CoreInfoStyles,
 } from "./CoreInfoSection.tsx";
 export {
   EventSection,
   type EventSectionProps,
-  type EventData,
-  type EventStyles,
-} from "./EventSection.tsx";
+} from "./EventSection/EventSection.tsx";
 export {
   FAQSection,
   type FAQSectionProps,
-  type FAQData,
   type FAQStyles,
-} from "./FAQsSection.tsx";
+} from "./FAQsSection/FAQsSection.tsx";
 export {
   HeroSection,
   type HeroSectionProps,
@@ -37,22 +33,22 @@ export {
 export {
   InsightSection,
   type InsightSectionProps,
-  type InsightData,
-  type InsightStyles,
-} from "./InsightSection.tsx";
+} from "./InsightSection/InsightSection.tsx";
+export { InsightCardsWrapper } from "./InsightSection/InsightCardsWrapper.tsx";
+export { InsightCard } from "./InsightSection/InsightCard.tsx";
 export {
   NearbyLocationsSection,
   type NearbyLocationsSectionProps,
-  type NearbyLocationsData,
-  type NearbyLocationsStyles,
-} from "./NearbyLocations.tsx";
-export { TeamSection, type TeamSectionProps } from "./TeamSection.tsx";
+} from "./NearbyLocations/NearbyLocations.tsx";
+export {
+  TeamSection,
+  type TeamSectionProps,
+} from "./TeamSection/TeamSection.tsx";
 export {
   PhotoGallerySection,
   type PhotoGallerySectionProps,
-  type PhotoGalleryData,
   type PhotoGalleryStyles,
-} from "./PhotoGallerySection.tsx";
+} from "./PhotoGallerySection/PhotoGallerySection.tsx";
 export {
   PromoSection,
   type PromoSectionProps,
@@ -62,10 +58,11 @@ export {
 export {
   ProductSection,
   type ProductSectionProps,
-  type ProductData,
-  type ProductStyles,
-} from "./ProductSection.tsx";
-export { ReviewsSection, type ReviewsSectionProps } from "./ReviewsSection.tsx";
+} from "./ProductSection/ProductSection.tsx";
+export {
+  ReviewsSection,
+  type ReviewsSectionProps,
+} from "./ReviewsSection/ReviewsSection.tsx";
 export {
   SectionContainer,
   type SectionContainerProps,
@@ -78,12 +75,5 @@ export {
 export {
   TestimonialSection,
   type TestimonialSectionProps,
-  type TestimonialData,
-  type TestimonialStyles,
-} from "./TestimonialSection.tsx";
-export {
-  VideoSection,
-  type VideoSectionProps,
-  type VideoData,
-  type VideoStyles,
-} from "./VideoSection.tsx";
+} from "./TestimonialSection/TestimonialSection.tsx";
+export { VideoSection, type VideoSectionProps } from "./VideoSection.tsx";
