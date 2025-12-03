@@ -132,6 +132,7 @@
   },
   "confirm": "Confirma",
   "coordinate": "Coordona",
+  "copyLayout": "Copiați aspectul",
   "coreInfoSection": "Secțiunea de informații de bază",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "Pagină",
   "pageSettings": "Setări de pagină",
   "pages": "Pagini",
+  "pasteLayout": "Lipiți aspectul",
   "phone": "Telefon",
   "photo": "Fotografie",
   "photoGallerySection": "Secțiunea Galerie foto",

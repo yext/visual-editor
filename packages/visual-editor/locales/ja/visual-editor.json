@@ -132,6 +132,7 @@
   },
   "confirm": "確認する",
   "coordinate": "座標",
+  "copyLayout": "レイアウトのコピー",
   "coreInfoSection": "コア情報セクション",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "ページ",
   "pageSettings": "ページ設定",
   "pages": "ページ",
+  "pasteLayout": "レイアウトの貼り付け",
   "phone": "電話",
   "photo": "写真",
   "photoGallerySection": "フォトギャラリーセクション",

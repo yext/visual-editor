@@ -132,6 +132,7 @@
   },
   "confirm": "Potvrdiť",
   "coordinate": "Koordinovať",
+  "copyLayout": "Kopírovať rozloženie",
   "coreInfoSection": "Sekcia",
   "cta": "CTA",
   "ctaTypes": {
@@ -552,6 +553,7 @@
   "page": "Strana",
   "pageSettings": "Nastavenia stránky",
   "pages": "Stránky",
+  "pasteLayout": "Prilepiť rozloženie",
   "phone": "Telefonovať",
   "photo": "Fotografia",
   "photoGallerySection": "Sekcia fotogalérie",

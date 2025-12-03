@@ -132,6 +132,7 @@
   },
   "confirm": "Confirmar",
   "coordinate": "Coordenada",
+  "copyLayout": "Copiar layout",
   "coreInfoSection": "Seção de informações principais",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "Página",
   "pageSettings": "Configurações da página",
   "pages": "Páginas",
+  "pasteLayout": "Colar layout",
   "phone": "Telefone",
   "photo": "Foto",
   "photoGallerySection": "Seção da galeria de fotos",

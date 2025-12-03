@@ -132,6 +132,7 @@
   },
   "confirm": "Bekrefte",
   "coordinate": "Koordinere",
+  "copyLayout": "Kopier layout",
   "coreInfoSection": "Kjerneinfo -seksjon",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "Side",
   "pageSettings": "Sideinnstillinger",
   "pages": "Sider",
+  "pasteLayout": "Lim inn layout",
   "phone": "Telefon",
   "photo": "Foto",
   "photoGallerySection": "Seksjon av fotogalleri",

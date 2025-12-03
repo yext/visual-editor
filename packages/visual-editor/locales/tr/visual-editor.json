@@ -132,6 +132,7 @@
   },
   "confirm": "Onaylamak",
   "coordinate": "Koordinat",
+  "copyLayout": "Düzeni Kopyala",
   "coreInfoSection": "Çekirdek Bilgi Bölümü",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "Sayfa",
   "pageSettings": "Sayfa Ayarları",
   "pages": "Sayfa",
+  "pasteLayout": "Düzeni Yapıştır",
   "phone": "Telefon",
   "photo": "Fotoğraf",
   "photoGallerySection": "Fotoğraf Galeri Bölümü",

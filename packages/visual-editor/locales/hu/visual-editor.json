@@ -132,6 +132,7 @@
   },
   "confirm": "Megerősít",
   "coordinate": "Koordináta",
+  "copyLayout": "Elrendezés másolása",
   "coreInfoSection": "Alapvető információ szakasz",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "Oldal",
   "pageSettings": "Oldalbeállítások",
   "pages": "Oldalak",
+  "pasteLayout": "Elrendezés beillesztése",
   "phone": "Telefon",
   "photo": "Fénykép",
   "photoGallerySection": "Fotógaléria szakasz",

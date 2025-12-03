@@ -132,6 +132,7 @@
   },
   "confirm": "Apstiprināt",
   "coordinate": "Koordinēt",
+  "copyLayout": "Kopēt izkārtojumu",
   "coreInfoSection": "Pamatinformācija",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "Lappuse",
   "pageSettings": "Lapas iestatījumi",
   "pages": "Lappuses",
+  "pasteLayout": "Ielīmēt izkārtojumu",
   "phone": "Telefons",
   "photo": "Foto",
   "photoGallerySection": "Foto galerijas sadaļa",

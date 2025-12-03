@@ -132,6 +132,7 @@
   },
   "confirm": "Patvirtinti",
   "coordinate": "Koordinatė",
+  "copyLayout": "Kopijuoti išdėstymą",
   "coreInfoSection": "Pagrindinės informacijos skyrius",
   "cta": "CTA",
   "ctaTypes": {
@@ -551,6 +552,7 @@
   "page": "Puslapis",
   "pageSettings": "Puslapio nustatymai",
   "pages": "Puslapiai",
+  "pasteLayout": "Įklijuoti išdėstymą",
   "phone": "Telefonas",
   "photo": "Nuotrauka",
   "photoGallerySection": "Nuotraukų galerijos skyrius",

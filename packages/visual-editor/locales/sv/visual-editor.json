@@ -132,6 +132,7 @@
   },
   "confirm": "Bekräfta",
   "coordinate": "Samordna",
+  "copyLayout": "Kopiera layout",
   "coreInfoSection": "Kärninfo -sektionen",
   "cta": "Cta",
   "ctaTypes": {
@@ -552,6 +553,7 @@
   "page": "Sida",
   "pageSettings": "Sidoinställningar",
   "pages": "Sidor",
+  "pasteLayout": "Klistra in layout",
   "phone": "Telefon",
   "photo": "Bild",
   "photoGallerySection": "Fotogalleriavsnitt",
