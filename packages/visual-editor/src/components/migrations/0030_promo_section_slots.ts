@@ -30,10 +30,10 @@ export const promoSectionSlots: Migration = {
 
       props.data.promo.constantValue = {};
       props.data.promo.constantValueEnabled =
-        !props.data.promo.constantValueOverride.title ||
-        !props.data.promo.constantValueOverride.description ||
-        !props.data.promo.constantValueOverride.image ||
-        !props.data.promo.constantValueOverride.cta;
+        props.data.promo.constantValueOverride.title ||
+        props.data.promo.constantValueOverride.description ||
+        props.data.promo.constantValueOverride.image ||
+        props.data.promo.constantValueOverride.cta;
 
       delete props.styles.heading;
       delete props.data.promo.constantValueOverride;
