@@ -132,6 +132,7 @@
   },
   "confirm": "Bekrefte",
   "coordinate": "Koordinere",
+  "copyLayout": "Kopier layout",
   "coreInfoSection": "Kjerneinfo -seksjon",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Hendelse",
   "expandedHeaderDesktop": "Utvidet topptopp",
   "expandedHeaderMobile": "Utvidet overskriftsmobil",
+  "failedToCopyLayout": "Kunne ikke kopiere layout.",
+  "failedToPasteComponentInvalidData": "Kunne ikke lime inn: Ugyldige komponentdata.",
+  "failedToPasteLayout": "Kunne ikke lime inn layout.",
+  "failedToPasteLayoutInvalidData": "Kunne ikke lime inn: Ugyldige layoutdata.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA-variant",
@@ -551,6 +556,7 @@
   "page": "Side",
   "pageSettings": "Sideinnstillinger",
   "pages": "Sider",
+  "pasteLayout": "Lim inn layout",
   "phone": "Telefon",
   "photo": "Foto",
   "photoGallerySection": "Seksjon av fotogalleri",

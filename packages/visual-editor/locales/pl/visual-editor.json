@@ -132,6 +132,7 @@
   },
   "confirm": "Potwierdzać",
   "coordinate": "Koordynować",
+  "copyLayout": "Skopiuj układ",
   "coreInfoSection": "Sekcja informacji podstawowych",
   "cta": "CTA",
   "ctaTypes": {
@@ -158,6 +159,10 @@
   "event": "Wydarzenie",
   "expandedHeaderDesktop": "Rozszerzony pulpit nagłówka",
   "expandedHeaderMobile": "Rozszerzone nagłówki mobilne",
+  "failedToCopyLayout": "Nie udało się skopiować układu.",
+  "failedToPasteComponentInvalidData": "Nie udało się wkleić: nieprawidłowe dane komponentu.",
+  "failedToPasteLayout": "Nie udało się wkleić układu.",
+  "failedToPasteLayoutInvalidData": "Nie udało się wkleić: nieprawidłowe dane układu.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Wariant CTA",
@@ -552,6 +557,7 @@
   "page": "Strona",
   "pageSettings": "Ustawienia strony",
   "pages": "Strony",
+  "pasteLayout": "Wklej układ",
   "phone": "Telefon",
   "photo": "Zdjęcie",
   "photoGallerySection": "Sekcja galerii zdjęć",

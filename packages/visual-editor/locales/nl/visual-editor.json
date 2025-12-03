@@ -132,6 +132,7 @@
   },
   "confirm": "Bevestigen",
   "coordinate": "Coördineren",
+  "copyLayout": "Kopieer lay-out",
   "coreInfoSection": "Core Info -sectie",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Evenement",
   "expandedHeaderDesktop": "Uitgebreide header bureaublad",
   "expandedHeaderMobile": "Uitgebreide header mobiel",
+  "failedToCopyLayout": "Kan de lay-out niet kopiëren.",
+  "failedToPasteComponentInvalidData": "Kan niet plakken: ongeldige componentgegevens.",
+  "failedToPasteLayout": "Kan de lay-out niet plakken.",
+  "failedToPasteLayoutInvalidData": "Kan niet plakken: ongeldige lay-outgegevens.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA-variant",
@@ -551,6 +556,7 @@
   "page": "Pagina",
   "pageSettings": "Pagina -instellingen",
   "pages": "Pagina's",
+  "pasteLayout": "Lay-out plakken",
   "phone": "Telefoon",
   "photo": "Foto",
   "photoGallerySection": "Sectie Fotogalerij",

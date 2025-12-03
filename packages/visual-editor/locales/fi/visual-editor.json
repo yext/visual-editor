@@ -132,6 +132,7 @@
   },
   "confirm": "Vahvistaa",
   "coordinate": "Koordinoida",
+  "copyLayout": "Kopioi asettelu",
   "coreInfoSection": "Ydintiedot -osio",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Tapahtuma",
   "expandedHeaderDesktop": "Laajennettu otsikkopöytä",
   "expandedHeaderMobile": "Laajennettu otsikko matkapuhelin",
+  "failedToCopyLayout": "Asettelun kopioiminen epäonnistui.",
+  "failedToPasteComponentInvalidData": "Liitäminen epäonnistui: virheelliset komponenttitiedot.",
+  "failedToPasteLayout": "Asettelun liittäminen epäonnistui.",
+  "failedToPasteLayoutInvalidData": "Liitäminen epäonnistui: Virheelliset asettelutiedot.",
   "faq": "Faq",
   "fields": {
     "CTAVariant": "CTA-variantti",
@@ -551,6 +556,7 @@
   "page": "Sivu",
   "pageSettings": "Page -asetukset",
   "pages": "Sivut",
+  "pasteLayout": "Liitä asettelu",
   "phone": "Puhelin",
   "photo": "Kuva",
   "photoGallerySection": "Valokuvagalleriaosa",

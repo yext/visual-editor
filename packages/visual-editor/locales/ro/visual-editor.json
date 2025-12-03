@@ -132,6 +132,7 @@
   },
   "confirm": "Confirma",
   "coordinate": "Coordona",
+  "copyLayout": "Copiați aspectul",
   "coreInfoSection": "Secțiunea de informații de bază",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Eveniment",
   "expandedHeaderDesktop": "Desktop de antet extins",
   "expandedHeaderMobile": "Mobile antet extins",
+  "failedToCopyLayout": "Nu s-a putut copia aspectul.",
+  "failedToPasteComponentInvalidData": "Lipirea eșuată: date ale componentelor nevalide.",
+  "failedToPasteLayout": "Nu s-a inserat aspectul.",
+  "failedToPasteLayoutInvalidData": "Lipirea eșuată: date de aspect nevalide.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Varianta CTA",
@@ -551,6 +556,7 @@
   "page": "Pagină",
   "pageSettings": "Setări de pagină",
   "pages": "Pagini",
+  "pasteLayout": "Lipiți aspectul",
   "phone": "Telefon",
   "photo": "Fotografie",
   "photoGallerySection": "Secțiunea Galerie foto",

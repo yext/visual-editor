@@ -457,7 +457,12 @@ export const InternalLayoutEditor = ({
                   !pastedData.type ||
                   pastedData.type !== selectedComponent?.type
                 ) {
-                  alert("Failed to paste: Invalid component data.");
+                  alert(
+                    pt(
+                      "failedToPasteComponentInvalidData",
+                      "Failed to paste: Invalid component data."
+                    )
+                  );
                   return;
                 }
 
@@ -484,7 +489,12 @@ export const InternalLayoutEditor = ({
                   data: newData,
                 });
               } catch (_) {
-                alert("Failed to paste: Invalid component data.");
+                alert(
+                  pt(
+                    "failedToPasteComponentInvalidData",
+                    "Failed to paste: Invalid component data."
+                  )
+                );
               }
             };
 

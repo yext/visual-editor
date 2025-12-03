@@ -131,6 +131,7 @@
   },
   "confirm": "Confirmer",
   "coordinate": "Coordonner",
+  "copyLayout": "Copier la mise en page",
   "coreInfoSection": "Section d'informations de base",
   "cta": "CTA",
   "ctaTypes": {
@@ -156,6 +157,10 @@
   "event": "Événement",
   "expandedHeaderDesktop": "Desktop en tête élargi",
   "expandedHeaderMobile": "En-tête expansé mobile",
+  "failedToCopyLayout": "Échec de la copie de la mise en page.",
+  "failedToPasteComponentInvalidData": "Échec du collage : données de composant non valides.",
+  "failedToPasteLayout": "Échec du collage de la mise en page.",
+  "failedToPasteLayoutInvalidData": "Échec du collage : données de mise en page non valides.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Variante CTA",
@@ -550,6 +555,7 @@
   "page": "Page",
   "pageSettings": "Paramètres de la page",
   "pages": "Pages",
+  "pasteLayout": "Coller la mise en page",
   "phone": "Téléphone",
   "photo": "Photo",
   "photoGallerySection": "Section de la galerie de photos",

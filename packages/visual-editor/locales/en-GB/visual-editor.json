@@ -131,6 +131,7 @@
   },
   "confirm": "Confirm",
   "coordinate": "Coordinate",
+  "copyLayout": "Copy Layout",
   "coreInfoSection": "Core Info Section",
   "cta": "CTA",
   "ctaTypes": {
@@ -156,6 +157,10 @@
   "event": "Event",
   "expandedHeaderDesktop": "Expanded Header Desktop",
   "expandedHeaderMobile": "Expanded Header Mobile",
+  "failedToCopyLayout": "Failed to copy layout.",
+  "failedToPasteComponentInvalidData": "Failed to paste: Invalid component data.",
+  "failedToPasteLayout": "Failed to paste layout.",
+  "failedToPasteLayoutInvalidData": "Failed to paste: Invalid layout data.",
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA Variant",
@@ -550,6 +555,7 @@
   "page": "Page",
   "pageSettings": "Page Settings",
   "pages": "Pages",
+  "pasteLayout": "Paste Layout",
   "phone": "Phone",
   "photo": "Photo",
   "photoGallerySection": "Photo Gallery Section",

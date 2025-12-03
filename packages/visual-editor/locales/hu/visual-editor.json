@@ -132,6 +132,7 @@
   },
   "confirm": "Megerősít",
   "coordinate": "Koordináta",
+  "copyLayout": "Elrendezés másolása",
   "coreInfoSection": "Alapvető információ szakasz",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Esemény",
   "expandedHeaderDesktop": "Kibővített fejléc asztal",
   "expandedHeaderMobile": "Kibővített fejléc mobil",
+  "failedToCopyLayout": "Nem sikerült másolni az elrendezést.",
+  "failedToPasteComponentInvalidData": "Nem sikerült beilleszteni: Érvénytelen összetevőadatok.",
+  "failedToPasteLayout": "Nem sikerült beilleszteni az elrendezést.",
+  "failedToPasteLayoutInvalidData": "Nem sikerült beilleszteni: Érvénytelen elrendezési adatok.",
   "faq": "GYIK",
   "fields": {
     "CTAVariant": "CTA-változat",
@@ -551,6 +556,7 @@
   "page": "Oldal",
   "pageSettings": "Oldalbeállítások",
   "pages": "Oldalak",
+  "pasteLayout": "Elrendezés beillesztése",
   "phone": "Telefon",
   "photo": "Fénykép",
   "photoGallerySection": "Fotógaléria szakasz",

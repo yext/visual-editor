@@ -132,6 +132,7 @@
   },
   "confirm": "確認",
   "coordinate": "協調",
+  "copyLayout": "複製佈局",
   "coreInfoSection": "核心信息部分",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "事件",
   "expandedHeaderDesktop": "擴展的標頭桌面",
   "expandedHeaderMobile": "擴展的標頭移動設備",
+  "failedToCopyLayout": "複製佈局失敗。",
+  "failedToPasteComponentInvalidData": "粘貼失敗：組件數據無效。",
+  "failedToPasteLayout": "粘貼佈局失敗。",
+  "failedToPasteLayoutInvalidData": "粘貼失敗：佈局數據無效。",
   "faq": "常問問題",
   "fields": {
     "CTAVariant": "CTA 變體",
@@ -551,6 +556,7 @@
   "page": "頁",
   "pageSettings": "頁面設置",
   "pages": "頁面",
+  "pasteLayout": "粘貼佈局",
   "phone": "電話",
   "photo": "照片",
   "photoGallerySection": "照片庫部分",

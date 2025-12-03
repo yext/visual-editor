@@ -132,6 +132,7 @@
   },
   "confirm": "Confirmar",
   "coordinate": "Coordenada",
+  "copyLayout": "Copiar layout",
   "coreInfoSection": "Seção de informações principais",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Evento",
   "expandedHeaderDesktop": "Desktop de cabeçalho expandido",
   "expandedHeaderMobile": "Cabeçalho expandido móvel",
+  "failedToCopyLayout": "Falha ao copiar o layout.",
+  "failedToPasteComponentInvalidData": "Falha ao colar: dados de componente inválidos.",
+  "failedToPasteLayout": "Falha ao colar o layout.",
+  "failedToPasteLayoutInvalidData": "Falha ao colar: dados de layout inválidos.",
   "faq": "Perguntas frequentes",
   "fields": {
     "CTAVariant": "Variante de CTA",
@@ -551,6 +556,7 @@
   "page": "Página",
   "pageSettings": "Configurações da página",
   "pages": "Páginas",
+  "pasteLayout": "Colar layout",
   "phone": "Telefone",
   "photo": "Foto",
   "photoGallerySection": "Seção da galeria de fotos",

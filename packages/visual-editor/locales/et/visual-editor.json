@@ -132,6 +132,7 @@
   },
   "confirm": "Kinnitama",
   "coordinate": "Koordinaat",
+  "copyLayout": "Kopeeri paigutus",
   "coreInfoSection": "Põhiteabe jaotis",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Sündmus",
   "expandedHeaderDesktop": "Laiendatud päise töölaud",
   "expandedHeaderMobile": "Laiendatud päise mobiil",
+  "failedToCopyLayout": "Paigutuse kopeerimine ebaõnnestus.",
+  "failedToPasteComponentInvalidData": "Kleepimine ebaõnnestus: komponendi andmed on kehtetud.",
+  "failedToPasteLayout": "Paigutuse kleepimine ebaõnnestus.",
+  "failedToPasteLayoutInvalidData": "Kleepimine ebaõnnestus: küljenduse andmed on kehtetud.",
   "faq": "KKK",
   "fields": {
     "CTAVariant": "CTA variant",
@@ -551,6 +556,7 @@
   "page": "Leht",
   "pageSettings": "Lehe sätted",
   "pages": "Lehed",
+  "pasteLayout": "Kleebi paigutus",
   "phone": "Telefon",
   "photo": "Foto",
   "photoGallerySection": "Fotogalerii sektsioon",

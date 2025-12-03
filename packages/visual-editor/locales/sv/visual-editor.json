@@ -132,6 +132,7 @@
   },
   "confirm": "Bekräfta",
   "coordinate": "Samordna",
+  "copyLayout": "Kopiera layout",
   "coreInfoSection": "Kärninfo -sektionen",
   "cta": "Cta",
   "ctaTypes": {
@@ -158,6 +159,10 @@
   "event": "Händelse",
   "expandedHeaderDesktop": "Utökat huvudskrivbord",
   "expandedHeaderMobile": "Utvidgad rubrikmobil",
+  "failedToCopyLayout": "Det gick inte att kopiera layouten.",
+  "failedToPasteComponentInvalidData": "Det gick inte att klistra in: Ogiltig komponentdata.",
+  "failedToPasteLayout": "Det gick inte att klistra in layouten.",
+  "failedToPasteLayoutInvalidData": "Det gick inte att klistra in: Ogiltig layoutdata.",
   "faq": "Vanliga frågor",
   "fields": {
     "CTAVariant": "CTA-variant",
@@ -552,6 +557,7 @@
   "page": "Sida",
   "pageSettings": "Sidoinställningar",
   "pages": "Sidor",
+  "pasteLayout": "Klistra in layout",
   "phone": "Telefon",
   "photo": "Bild",
   "photoGallerySection": "Fotogalleriavsnitt",

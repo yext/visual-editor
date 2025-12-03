@@ -132,6 +132,7 @@
   },
   "confirm": "Onaylamak",
   "coordinate": "Koordinat",
+  "copyLayout": "Düzeni Kopyala",
   "coreInfoSection": "Çekirdek Bilgi Bölümü",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "Etkinlik",
   "expandedHeaderDesktop": "Genişletilmiş başlık masaüstü",
   "expandedHeaderMobile": "Genişletilmiş başlık mobil",
+  "failedToCopyLayout": "Düzen kopyalanamadı.",
+  "failedToPasteComponentInvalidData": "Yapıştırılamadı: Geçersiz bileşen verileri.",
+  "failedToPasteLayout": "Düzen yapıştırılamadı.",
+  "failedToPasteLayoutInvalidData": "Yapıştırılamadı: Geçersiz düzen verileri.",
   "faq": "SSS",
   "fields": {
     "CTAVariant": "CTA Varyantı",
@@ -551,6 +556,7 @@
   "page": "Sayfa",
   "pageSettings": "Sayfa Ayarları",
   "pages": "Sayfa",
+  "pasteLayout": "Düzeni Yapıştır",
   "phone": "Telefon",
   "photo": "Fotoğraf",
   "photoGallerySection": "Fotoğraf Galeri Bölümü",

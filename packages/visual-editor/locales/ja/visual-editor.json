@@ -132,6 +132,7 @@
   },
   "confirm": "確認する",
   "coordinate": "座標",
+  "copyLayout": "レイアウトのコピー",
   "coreInfoSection": "コア情報セクション",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "イベント",
   "expandedHeaderDesktop": "ヘッダーデスクトップの拡張",
   "expandedHeaderMobile": "拡張ヘッダーモバイル",
+  "failedToCopyLayout": "レイアウトのコピーに失敗しました。",
+  "failedToPasteComponentInvalidData": "貼り付けに失敗しました: コンポーネント データが無効です。",
+  "failedToPasteLayout": "レイアウトの貼り付けに失敗しました。",
+  "failedToPasteLayoutInvalidData": "貼り付けに失敗しました: 無効なレイアウト データです。",
   "faq": "よくある質問",
   "fields": {
     "CTAVariant": "CTA バリアント",
@@ -551,6 +556,7 @@
   "page": "ページ",
   "pageSettings": "ページ設定",
   "pages": "ページ",
+  "pasteLayout": "レイアウトの貼り付け",
   "phone": "電話",
   "photo": "写真",
   "photoGallerySection": "フォトギャラリーセクション",

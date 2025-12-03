@@ -132,6 +132,7 @@
   },
   "confirm": "确认",
   "coordinate": "协调",
+  "copyLayout": "复制布局",
   "coreInfoSection": "核心信息部分",
   "cta": "CTA",
   "ctaTypes": {
@@ -157,6 +158,10 @@
   "event": "事件",
   "expandedHeaderDesktop": "扩展的标头桌面",
   "expandedHeaderMobile": "扩展的标头移动设备",
+  "failedToCopyLayout": "复制布局失败。",
+  "failedToPasteComponentInvalidData": "粘贴失败：组件数据无效。",
+  "failedToPasteLayout": "粘贴布局失败。",
+  "failedToPasteLayoutInvalidData": "粘贴失败：布局数据无效。",
   "faq": "常问问题",
   "fields": {
     "CTAVariant": "CTA 变体",
@@ -551,6 +556,7 @@
   "page": "页",
   "pageSettings": "页面设置",
   "pages": "页面",
+  "pasteLayout": "粘贴布局",
   "phone": "电话",
   "photo": "照片",
   "photoGallerySection": "照片库部分",

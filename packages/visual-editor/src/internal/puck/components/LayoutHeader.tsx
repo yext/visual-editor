@@ -19,6 +19,7 @@ import {
   usePlatformTranslation,
   pt,
 } from "../../../utils/i18n/platform.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 const usePuck = createUsePuck();
 
@@ -40,6 +41,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onSendLayoutForApproval,
     localDev,
   } = props;
+  const streamDocument = useDocument();
 
   const [approvalModalOpen, setApprovalModalOpen] =
     React.useState<boolean>(false);
@@ -107,6 +109,70 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       <header className="puck-header">
         <div className="header-left ve-items-center">
           <UIButtonsToggle showLeft={true} />
+          <Separator
+            orientation="vertical"
+            decorative
+            className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
+          />
+          <Button
+            variant="outline"
+            onClick={async () => {
+              const { appState } = getPuck();
+
+              try {
+                navigator.clipboard.writeText(
+                  JSON.stringify(appState.data, null, 2)
+                );
+              } catch {
+                alert(pt("failedToCopyLayout", "Failed to copy layout."));
+              }
+            }}
+            className="mr-2"
+          >
+            {pt("copyLayout", "Copy Layout")}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              try {
+                const { dispatch, config } = getPuck();
+                const rawClipboardText = await navigator.clipboard.readText();
+                const pastedData = JSON.parse(rawClipboardText);
+
+                if (
+                  !pastedData ||
+                  typeof pastedData !== "object" ||
+                  pastedData.root === undefined ||
+                  pastedData.content === undefined
+                ) {
+                  alert(
+                    pt(
+                      "failedToPasteLayoutInvalidData",
+                      "Failed to paste: Invalid layout data."
+                    )
+                  );
+                  return;
+                }
+
+                const migratedPastedData = migrate(
+                  pastedData,
+                  migrationRegistry,
+                  config,
+                  streamDocument
+                );
+
+                dispatch({
+                  type: "setData",
+                  data: migratedPastedData,
+                });
+              } catch {
+                alert(pt("failedToPasteLayout", "Failed to paste layout."));
+                return;
+              }
+            }}
+          >
+            {pt("pasteLayout", "Paste Layout")}
+          </Button>
           <Separator
             orientation="vertical"
             decorative
