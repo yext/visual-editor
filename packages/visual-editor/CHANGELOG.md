@@ -1,3 +1,13 @@
+#### 1.0.0 (2025-12-03)
+
+##### New Features
+
+- add pagination to locator ([#924](https://github.com/yext/visual-editor/pull/924)) ([e687d1dc](https://github.com/yext/visual-editor/commit/e687d1dc5ce61fafd2cb2714a16b9795ca9ccead))
+
+##### Bug Fixes
+
+- logic in PromoSection slots migration ([#931](https://github.com/yext/visual-editor/pull/931)) ([ea6f36b7](https://github.com/yext/visual-editor/commit/ea6f36b7744042333e34bdb9e5c9c2b0e4a06cda))
+
 #### 1.0.0-beta.3 (2025-12-02)
 
 ##### Chores
