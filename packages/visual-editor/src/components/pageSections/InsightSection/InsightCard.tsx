@@ -264,7 +264,7 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
   } = useGetCardSlots<InsightCardProps>(props.id);
 
   React.useEffect(() => {
-    if (!props.puck.isEditing || !sharedCardProps) {
+    if (!props.puck.isEditing || !sharedCardProps || !getPuck) {
       return;
     }
 
@@ -319,16 +319,7 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
         },
       },
     });
-  }, [
-    sharedCardProps,
-    styles.backgroundColor,
-    slotStyles,
-    props.puck.isEditing,
-    getPuck,
-    props.id,
-    slotsData,
-    props,
-  ]);
+  }, [sharedCardProps]);
 
   // When the card's shared props or the card's slots' shared props change, update the context
   React.useEffect(() => {
