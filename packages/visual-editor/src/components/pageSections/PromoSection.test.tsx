@@ -332,99 +332,99 @@ const tests: ComponentTest[] = [
     name: "version 24 with constant values",
     document: {},
     props: {
-        data: {
-          promo: {
-            field: "c_locationPages_locationPages_promoSection",
-            constantValue: {
-              cta: {
-                link: "#",
-                label: {
-                  en: "LEARN MORE",
-                  hasLocalizedValue: "true"
-                },
-                ctaType: "textAndLink",
-                linkType: "URL"
+      data: {
+        promo: {
+          field: "c_locationPages_locationPages_promoSection",
+          constantValue: {
+            cta: {
+              link: "#",
+              label: {
+                en: "LEARN MORE",
+                hasLocalizedValue: "true",
               },
-              image: {
-                url: "https://placehold.co/640x360",
-                width: 640,
-                height: 360,
-                assetImage: {
-                  id: "22241106",
-                  name: "menu decoverte",
-                  sourceUrl: "",
-                  childImages: [
-                    {
-                      url: "https://placehold.co/640x360",
-                      dimension: {
-                        width: 640,
-                        height: 360
-                      }
-                    }
-                  ],
-                  originalImage: {
-                    url: "https://placehold.co/640x360",
-                    dimension: {
-                      width: 640,
-                      height: 360
-                    },
-                    exifMetadata: {
-                      rotate: 0
-                    }
-                  },
-                  transformations: {},
-                  transformedImage: {
-                    url: "https://placehold.co/640x360",
-                    dimension: {
-                      width: 640,
-                      height: 360
-                    }
-                  }
-                },
-                alternateText: ""
-              },
-              title: {
-                en: "Discovery Menu",
-                hasLocalizedValue: "true"
-              },
-              description: {
-                en: {
-                  html: "<p dir=\"ltr\" style=\"font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;\"><span>Express yourself every day of the week with our brand-new Discovery Menu!</span></p>",
-                  json: "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"Express yourself every day of the week with our brand-new Discovery Menu!\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}"
-                },
-                hasLocalizedValue: "true"
-              }
+              ctaType: "textAndLink",
+              linkType: "URL",
             },
-            constantValueEnabled: true,
-            constantValueOverride: {
-              cta: true,
-              image: true,
-              title: true,
-              description: true
-            }
-          }
-        },
-        styles: {
-          image: {
-            aspectRatio: 1.78
+            image: {
+              url: "https://placehold.co/640x360",
+              width: 640,
+              height: 360,
+              assetImage: {
+                id: "22241106",
+                name: "menu decoverte",
+                sourceUrl: "",
+                childImages: [
+                  {
+                    url: "https://placehold.co/640x360",
+                    dimension: {
+                      width: 640,
+                      height: 360,
+                    },
+                  },
+                ],
+                originalImage: {
+                  url: "https://placehold.co/640x360",
+                  dimension: {
+                    width: 640,
+                    height: 360,
+                  },
+                  exifMetadata: {
+                    rotate: 0,
+                  },
+                },
+                transformations: {},
+                transformedImage: {
+                  url: "https://placehold.co/640x360",
+                  dimension: {
+                    width: 640,
+                    height: 360,
+                  },
+                },
+              },
+              alternateText: "",
+            },
+            title: {
+              en: "Discovery Menu",
+              hasLocalizedValue: "true",
+            },
+            description: {
+              en: {
+                html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Express yourself every day of the week with our brand-new Discovery Menu!</span></p>',
+                json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Express yourself every day of the week with our brand-new Discovery Menu!","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+              },
+              hasLocalizedValue: "true",
+            },
           },
-          heading: {
-            align: "left",
-            level: 2
+          constantValueEnabled: true,
+          constantValueOverride: {
+            cta: true,
+            image: true,
+            title: true,
+            description: true,
           },
-          ctaVariant: "primary",
-          orientation: "left",
-          backgroundColor: {
-            bgColor: "bg-palette-tertiary",
-            textColor: "text-palette-tertiary-contrast"
-          }
         },
-        analytics: {
-          scope: "promoSection"
-        },
-        liveVisibility: true
       },
-      version: 24,
+      styles: {
+        image: {
+          aspectRatio: 1.78,
+        },
+        heading: {
+          align: "left",
+          level: 2,
+        },
+        ctaVariant: "primary",
+        orientation: "left",
+        backgroundColor: {
+          bgColor: "bg-palette-tertiary",
+          textColor: "text-palette-tertiary-contrast",
+        },
+      },
+      analytics: {
+        scope: "promoSection",
+      },
+      liveVisibility: true,
+    },
+    version: 24,
   },
   {
     name: "version 30 props with entity values",
