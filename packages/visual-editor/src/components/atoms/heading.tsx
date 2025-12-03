@@ -68,15 +68,7 @@ export interface HeadingProps
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   (
-    {
-      className,
-      level = 1,
-      weight,
-      // transform,
-      fontSize,
-      semanticLevelOverride,
-      ...props
-    },
+    { className, level = 1, weight, fontSize, semanticLevelOverride, ...props },
     ref
   ) => {
     const Tag = (
@@ -96,7 +88,6 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           headingVariants({
             fontSize,
             weight,
-            // transform,
             level,
           }),
           Tag === "span" && "block",
