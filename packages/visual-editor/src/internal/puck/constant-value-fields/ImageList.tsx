@@ -12,6 +12,6 @@ export const IMAGE_LIST_CONSTANT_CONFIG = (): Field<any> => {
         label: pt("fields.image", "Image"),
       },
     },
-    getItemSummary: (_, i) => pt("photo", "Photo") + " " + i,
+    getItemSummary: (_, i) => pt("photo", "Photo") + " " + ((i ?? 0) + 1),
   };
 };

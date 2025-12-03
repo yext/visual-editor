@@ -10,6 +10,8 @@ import {
   walkTree,
   ComponentDataOptionalId,
   FieldLabel,
+  createUsePuck,
+  resolveAllData,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -27,9 +29,12 @@ import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
+import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 
 const devLogger = new DevLogger();
+const usePuck = createUsePuck();
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -97,10 +102,9 @@ export const InternalLayoutEditor = ({
   metadata,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
-  const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
-    useState<boolean>(false);
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
+  const streamDocument = useDocument();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -256,6 +260,113 @@ export const InternalLayoutEditor = ({
     } as Config;
   }, [puckConfig, i18n.language]);
 
+  // Resolve all data and slots when the document changes
+  // Implemented as an override so that the getPuck hook is available
+  const reloadDataOnDocumentChange = React.useCallback(
+    (props: { children: React.ReactNode }): React.ReactElement => {
+      const getPuck = useGetPuck();
+
+      React.useEffect(() => {
+        const resolveData = async () => {
+          const { appState, config, dispatch } = getPuck();
+          const resolvedData = await resolveAllData(appState.data, config, {
+            streamDocument,
+          });
+          dispatch({ type: "setData", data: resolvedData });
+        };
+
+        resolveData();
+      }, [streamDocument]);
+
+      return <>{props.children}</>;
+    },
+    [streamDocument]
+  );
+
+  // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
+  React.useEffect(() => {
+    const originalSetPointerCapture = Element.prototype.setPointerCapture;
+    let failedCaptureAttempts = new Set<number>();
+
+    // Wrap setPointerCapture to handle cases where the pointer is no longer active
+    Element.prototype.setPointerCapture = function (pointerId: number): void {
+      try {
+        originalSetPointerCapture.call(this, pointerId);
+        failedCaptureAttempts.delete(pointerId);
+      } catch (error) {
+        // If it's a NotFoundError (pointer no longer active), handle it gracefully
+        if (error instanceof DOMException && error.name === "NotFoundError") {
+          failedCaptureAttempts.add(pointerId);
+
+          // Reset Puck's drag state by dispatching pointer events
+          setTimeout(() => {
+            const cancelEvent = new PointerEvent("pointercancel", {
+              bubbles: true,
+              cancelable: true,
+              pointerId: pointerId,
+            });
+            this.dispatchEvent(cancelEvent);
+
+            const upEvent = new PointerEvent("pointerup", {
+              bubbles: true,
+              cancelable: true,
+              pointerId: pointerId,
+            });
+
+            this.dispatchEvent(upEvent);
+            document.dispatchEvent(cancelEvent);
+            document.dispatchEvent(upEvent);
+          }, 0);
+
+          return;
+        }
+        throw error;
+      }
+    };
+
+    // Global listeners to detect and reset stuck drag states
+    const handleGlobalPointerUp = (event: PointerEvent) => {
+      if (failedCaptureAttempts.has(event.pointerId)) {
+        failedCaptureAttempts.delete(event.pointerId);
+        const cancelEvent = new PointerEvent("pointercancel", {
+          bubbles: true,
+          cancelable: true,
+          pointerId: event.pointerId,
+        });
+        document.dispatchEvent(cancelEvent);
+      }
+    };
+
+    const handleMouseDown = () => {
+      if (failedCaptureAttempts.size > 0) {
+        failedCaptureAttempts.forEach((pointerId) => {
+          const cancelEvent = new PointerEvent("pointercancel", {
+            bubbles: true,
+            cancelable: true,
+            pointerId: pointerId,
+          });
+          document.dispatchEvent(cancelEvent);
+        });
+        failedCaptureAttempts.clear();
+      }
+    };
+
+    document.addEventListener("pointerup", handleGlobalPointerUp, true);
+    document.addEventListener("pointercancel", handleGlobalPointerUp, true);
+    document.addEventListener("mousedown", handleMouseDown, true);
+
+    return () => {
+      Element.prototype.setPointerCapture = originalSetPointerCapture;
+      document.removeEventListener("pointerup", handleGlobalPointerUp, true);
+      document.removeEventListener(
+        "pointercancel",
+        handleGlobalPointerUp,
+        true
+      );
+      document.removeEventListener("mousedown", handleMouseDown, true);
+    };
+  }, []);
+
   return (
     <EntityTooltipsProvider>
       <Puck
@@ -268,13 +379,10 @@ export const InternalLayoutEditor = ({
           header: () => (
             <LayoutHeader
               templateMetadata={templateMetadata}
-              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               onClearLocalChanges={handleClearLocalChanges}
               onHistoryChange={handleHistoryChange}
               onPublishLayout={handlePublishLayout}
               onSendLayoutForApproval={handleSendLayoutForApproval}
-              isDevMode={templateMetadata.isDevMode}
               localDev={localDev}
             />
           ),
@@ -291,6 +399,13 @@ export const InternalLayoutEditor = ({
           actionBar: ({ children, label }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
+            const itemSelectorState = usePuck(
+              (s) => s.appState.ui.itemSelector
+            );
+
+            React.useEffect(removeDuplicateImageActionBars, [
+              itemSelectorState,
+            ]);
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
@@ -342,7 +457,12 @@ export const InternalLayoutEditor = ({
                   !pastedData.type ||
                   pastedData.type !== selectedComponent?.type
                 ) {
-                  alert("Failed to paste: Invalid component data.");
+                  alert(
+                    pt(
+                      "failedToPasteComponentInvalidData",
+                      "Failed to paste: Invalid component data."
+                    )
+                  );
                   return;
                 }
 
@@ -350,9 +470,12 @@ export const InternalLayoutEditor = ({
                 const newData = walkTree(pastedData, puckConfig, (contents) =>
                   contents.map((item: ComponentDataOptionalId) => {
                     const id = `${item.type}-${uuidv4()}`;
+                    // oxlint-disable-next-line no-unused-vars
+                    const { id: _, parentData: __, ...rest } = item.props;
+
                     return {
                       ...item,
-                      props: { ...item.props, id },
+                      props: { ...rest, id },
                     };
                   })
                 );
@@ -366,7 +489,12 @@ export const InternalLayoutEditor = ({
                   data: newData,
                 });
               } catch (_) {
-                alert("Failed to paste: Invalid component data.");
+                alert(
+                  pt(
+                    "failedToPasteComponentInvalidData",
+                    "Failed to paste: Invalid component data."
+                  )
+                );
               }
             };
 
@@ -403,6 +531,7 @@ export const InternalLayoutEditor = ({
           fieldLabel: ({ icon, children, ...rest }) => (
             <FieldLabel {...rest}>{children}</FieldLabel>
           ),
+          puck: reloadDataOnDocumentChange,
         }}
         metadata={metadata}
       />

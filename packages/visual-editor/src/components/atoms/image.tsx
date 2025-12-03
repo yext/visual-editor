@@ -72,13 +72,14 @@ export const Image: React.FC<ImageProps> = ({
           width={width}
           height={calculatedHeight}
           className="object-cover"
-          imgOverrides={{ sizes }}
+          imgOverrides={{ sizes, loading: "lazy" }}
         />
       ) : (
         <img
           src={isComplexImageType(image) ? image.image.url : image.url}
           alt={altText}
           className="object-cover w-full h-full"
+          loading="lazy"
         />
       )}
     </div>
@@ -91,7 +92,7 @@ function isComplexImageType(
   return "image" in image;
 }
 
-type ImgSizesByBreakpoint = {
+export type ImgSizesByBreakpoint = {
   base: string;
   sm?: string;
   md?: string;
@@ -103,10 +104,15 @@ type ImgSizesByBreakpoint = {
 /**
  * Creates an img sizes attribute based on the default Tailwind breakpoints.
  * Replaces `maxWidth` with the current page section max width from the theme.
+ * Replaces `width` with the width parameter.
  * @param sizes - the width of the image at different breakpoints
+ * @param width - the current width prop of the image
  * @returns a string for the sizes attribute of an img tag
  */
-export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
+export const imgSizesHelper = (
+  sizes: ImgSizesByBreakpoint,
+  width?: string
+): string => {
   const streamDocument = useDocument();
 
   let maxWidth = undefined;
@@ -145,7 +151,9 @@ export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
   const updatedBreakpointSizes = Object.fromEntries(
     Object.entries(sizes).map(([key, value]) => [
       key,
-      value.replace("maxWidth", maxWidth || "1440px"),
+      value
+        .replace("maxWidth", maxWidth || "1440px")
+        .replace("width", width || 640 + "px"),
     ])
   );
 
