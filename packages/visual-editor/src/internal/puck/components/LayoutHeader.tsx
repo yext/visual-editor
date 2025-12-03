@@ -135,10 +135,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             variant="outline"
             onClick={async () => {
               try {
-                const {
-                  history: { setHistories, histories, setHistoryIndex },
-                  config,
-                } = getPuck();
+                const { dispatch, config } = getPuck();
                 const rawClipboardText = await navigator.clipboard.readText();
                 const pastedData = JSON.parse(rawClipboardText);
 
@@ -164,21 +161,10 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   streamDocument
                 );
 
-                const newHistory = [
-                  ...histories,
-                  {
-                    state: {
-                      ui:
-                        histories.length > 0
-                          ? histories[histories.length - 1].state.ui
-                          : undefined,
-                      data: migratedPastedData,
-                    },
-                  },
-                ];
-
-                setHistories(newHistory);
-                setHistoryIndex(newHistory.length - 1);
+                dispatch({
+                  type: "setData",
+                  data: migratedPastedData,
+                });
               } catch {
                 alert(pt("failedToPasteLayout", "Failed to paste layout."));
                 return;
