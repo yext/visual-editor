@@ -19,6 +19,10 @@ import { useProgress } from "../internal/hooks/useProgress.ts";
 import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
 import {
+  createDefaultThemeConfig,
+  defaultThemeConfig,
+} from "../components/DefaultThemeConfig";
+import {
   defaultFonts,
   loadGoogleFontsIntoDocument,
 } from "../utils/visualEditorFonts.ts";
@@ -160,6 +164,13 @@ export const Editor = ({
     ],
   });
 
+  let finalThemeConfig = themeConfig;
+  // If themeConfig is the default and there are custom fonts, create a new default theme config with the custom fonts.
+  // In the case of a hybrid developer with a custom themeConfig, we cannot adjust their themeConfig to have custom fonts.
+  // The hybrid developer must provide a themeConfig that includes their custom fonts if they want to use them.
+  if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
+    finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
+  }
   const migratedData = !isLoading
     ? migrate(layoutData!, migrationRegistry, puckConfig, document)
     : undefined;
@@ -174,7 +185,7 @@ export const Editor = ({
               templateMetadata={templateMetadata!}
               layoutData={migratedData!}
               themeData={themeData!}
-              themeConfig={themeConfig}
+              themeConfig={finalThemeConfig}
               localDev={!!localDev}
               metadata={{ ...metadata, streamDocument: document }}
             />
@@ -184,7 +195,7 @@ export const Editor = ({
               templateMetadata={templateMetadata!}
               layoutData={migratedData!}
               themeData={themeData!}
-              themeConfig={themeConfig}
+              themeConfig={finalThemeConfig}
               localDev={!!localDev}
               metadata={{ ...metadata, streamDocument: document }}
               streamDocument={document}

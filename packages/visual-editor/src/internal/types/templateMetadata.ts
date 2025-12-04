@@ -1,3 +1,4 @@
+import { FontRegistry } from "../../utils/visualEditorFonts.ts";
 import DOMPurify from "dompurify";
 
 export type TemplateMetadata = {
@@ -18,6 +19,7 @@ export type TemplateMetadata = {
   locales: string[];
   layoutTaskApprovals: boolean;
   locatorDisplayFields?: Record<string, FieldTypeData>;
+  customFonts?: FontRegistry;
 };
 
 export type FieldTypeData = {
