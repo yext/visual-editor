@@ -175,7 +175,6 @@ const CustomCodeSectionWrapper = ({
 /**
  * The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page.
  * It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
- * Only available with additional feature flag enabled.
  */
 export const CustomCodeSection: ComponentConfig<{
   props: CustomCodeSectionProps;

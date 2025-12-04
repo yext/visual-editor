@@ -19,6 +19,7 @@ import {
   usePlatformTranslation,
   pt,
 } from "../../../utils/i18n/platform.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 const usePuck = createUsePuck();
 
@@ -28,9 +29,6 @@ type LayoutHeaderProps = {
   onHistoryChange: (histories: History[], index: number) => void;
   onPublishLayout: (data: Data) => Promise<void>;
   onSendLayoutForApproval: (data: Data, comment: string) => void;
-  isDevMode: boolean;
-  clearLocalChangesModalOpen: boolean;
-  setClearLocalChangesModalOpen: (newValue: boolean) => void;
   localDev: boolean;
 };
 
@@ -41,13 +39,13 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onHistoryChange,
     onPublishLayout,
     onSendLayoutForApproval,
-    isDevMode,
-    clearLocalChangesModalOpen,
-    setClearLocalChangesModalOpen,
     localDev,
   } = props;
+  const streamDocument = useDocument();
 
   const [approvalModalOpen, setApprovalModalOpen] =
+    React.useState<boolean>(false);
+  const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
     React.useState<boolean>(false);
   const { i18n } = usePlatformTranslation();
   const getPuck = useGetPuck();
@@ -116,6 +114,70 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             decorative
             className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
           />
+          <Button
+            variant="outline"
+            onClick={async () => {
+              const { appState } = getPuck();
+
+              try {
+                navigator.clipboard.writeText(
+                  JSON.stringify(appState.data, null, 2)
+                );
+              } catch {
+                alert(pt("failedToCopyLayout", "Failed to copy layout."));
+              }
+            }}
+            className="mr-2"
+          >
+            {pt("copyLayout", "Copy Layout")}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              try {
+                const { dispatch, config } = getPuck();
+                const rawClipboardText = await navigator.clipboard.readText();
+                const pastedData = JSON.parse(rawClipboardText);
+
+                if (
+                  !pastedData ||
+                  typeof pastedData !== "object" ||
+                  pastedData.root === undefined ||
+                  pastedData.content === undefined
+                ) {
+                  alert(
+                    pt(
+                      "failedToPasteLayoutInvalidData",
+                      "Failed to paste: Invalid layout data."
+                    )
+                  );
+                  return;
+                }
+
+                const migratedPastedData = migrate(
+                  pastedData,
+                  migrationRegistry,
+                  config,
+                  streamDocument
+                );
+
+                dispatch({
+                  type: "setData",
+                  data: migratedPastedData,
+                });
+              } catch {
+                alert(pt("failedToPasteLayout", "Failed to paste layout."));
+                return;
+              }
+            }}
+          >
+            {pt("pasteLayout", "Paste Layout")}
+          </Button>
+          <Separator
+            orientation="vertical"
+            decorative
+            className="ve-mx-4 ve-h-7 ve-w-px ve-bg-gray-300 ve-my-auto"
+          />
           <EntityFieldsToggle />
           {localDev && <LocalDevOverrideButtons />}
         </div>
@@ -167,7 +229,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               setHistories([{ ...histories[0] }]);
             }}
           />
-          {!isDevMode && (
+          {!templateMetadata.isDevMode && (
             <Button
               variant="secondary"
               disabled={histories.length === 1}
@@ -207,7 +269,7 @@ export const LocalDevOverrideButtons = () => {
           try {
             data = JSON.parse(prompt("Enter layout data:") ?? "{}");
           } finally {
-            const migratedData = migrate(data, migrationRegistry, config);
+            const migratedData = migrate(data, migrationRegistry, config, {});
             setHistories([...histories, { state: { data: migratedData } }]);
           }
         }}

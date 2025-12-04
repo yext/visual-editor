@@ -4,3 +4,4 @@ export * from "./LocatorCategory";
 export * from "./OtherCategory";
 export * from "./PageSectionCategory";
 export * from "./DeprecatedCategory";
+export * from "./SlotsCategory";

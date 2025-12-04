@@ -1,6 +1,11 @@
-import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { useTranslation } from "react-i18next";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@measured/puck";
 import {
   useDocument,
   EntityField,
@@ -12,66 +17,156 @@ import {
   EnhancedTranslatableCTA,
   CTA,
   CTAVariant,
+  resolveDataFromParent,
+  themeManagerCn,
+  PresetImageType,
 } from "@yext/visual-editor";
 import {
   ctaTypeOptions,
-  ctaTypeToEntityFieldType,
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
+// TODO: ensure CTAwrapper works as expected
+
 export interface CTAWrapperProps {
-  entityField: YextEntityField<EnhancedTranslatableCTA>;
-  variant: CTAVariant;
+  data: {
+    /** Whether to show the CTA */
+    show?: boolean;
+    /** The call to action to display */
+    entityField: YextEntityField<EnhancedTranslatableCTA>;
+  };
+
+  styles: {
+    /** The visual style of the CTA. */
+    variant: CTAVariant;
+    /** The image to use if the CTA is set to preset image */
+    presetImage?: PresetImageType;
+  };
+
+  /** Additional CSS classes to apply to the CTA. */
   className?: string;
+
+  /** @internal Controlled data from the parent section. */
+  parentData?: {
+    field: string;
+    cta: EnhancedTranslatableCTA;
+  };
+
+  /** @internal Controlled style from the parent section */
+  parentStyles?: {
+    classNameFn?: (variant: CTAVariant) => string;
+  };
+
+  /** @internal Event name to be used for click analytics */
+  eventName?: string;
 }
 
 const ctaWrapperFields: Fields<CTAWrapperProps> = {
-  entityField: YextField(msg("fields.cta", "CTA"), {
-    type: "entityField",
-    filter: {
-      types: ["type.cta"],
+  data: {
+    type: "object",
+    label: msg("fields.data", "Data"),
+    objectFields: {
+      show: YextField(msg("fields.showCTA", "Show CTA"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+        visible: false,
+      }),
+      entityField: YextField(msg("fields.cta", "CTA"), {
+        type: "entityField",
+        filter: {
+          types: ["type.cta"],
+        },
+        typeSelectorConfig: {
+          typeLabel: msg("fields.ctaType", "CTA Type"),
+          fieldLabel: msg("fields.ctaField", "CTA Field"),
+          options: ctaTypeOptions(),
+          optionValueToEntityFieldType: {
+            presetImage: "type.cta",
+            textAndLink: "type.cta",
+          },
+        },
+      }),
     },
-    typeSelectorConfig: {
-      typeLabel: msg("fields.ctaType", "CTA Type"),
-      fieldLabel: msg("fields.ctaField", "CTA Field"),
-      options: ctaTypeOptions(),
-      optionValueToEntityFieldType: ctaTypeToEntityFieldType,
+  },
+  styles: {
+    type: "object",
+    label: msg("fields.styles", "Styles"),
+    objectFields: {
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "radio",
+        options: "CTA_VARIANT",
+      }),
+      presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
+        type: "select",
+        options: "PRESET_IMAGE",
+      }),
     },
-  }),
-  variant: YextField(msg("fields.variant", "Variant"), {
-    type: "radio",
-    options: "CTA_VARIANT",
-  }),
+  },
 };
 
-const CTAWrapperComponent: React.FC<CTAWrapperProps> = ({
-  entityField,
-  variant,
-  className,
-}) => {
-  const { i18n } = useTranslation();
+const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
+  const { t, i18n } = useTranslation();
+  const { data, styles, className, parentData, puck, parentStyles, eventName } =
+    props;
   const streamDocument = useDocument();
-  const cta = resolveComponentData(entityField, i18n.language, streamDocument);
-  const { ctaType } = getCTAType(entityField);
 
-  return (
+  const cta = parentData
+    ? parentData.cta
+    : resolveComponentData(data.entityField, i18n.language, streamDocument);
+  const { ctaType } = getCTAType(data.entityField);
+
+  let combinedClassName = className;
+  if (parentStyles?.classNameFn) {
+    combinedClassName = themeManagerCn(
+      parentStyles.classNameFn(styles.variant),
+      className
+    );
+  }
+
+  let resolvedLabel =
+    cta && resolveComponentData(cta.label, i18n.language, streamDocument);
+  if (
+    (parentData || !data.entityField.constantValueEnabled) &&
+    ctaType === "getDirections"
+  ) {
+    resolvedLabel = t("getDirections", "Get Directions");
+  }
+
+  const showCTA =
+    cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
+
+  return showCTA ? (
     <EntityField
       displayName={pt("cta", "CTA")}
-      fieldId={entityField.field}
-      constantValueEnabled={entityField.constantValueEnabled}
+      fieldId={parentData ? parentData.field : data.entityField.field}
+      constantValueEnabled={
+        !parentData && data.entityField.constantValueEnabled
+      }
     >
       {cta && (
         <CTA
-          label={resolveComponentData(cta.label, i18n.language, streamDocument)}
-          link={resolveComponentData(cta.link, i18n.language, streamDocument)}
+          label={resolvedLabel}
+          link={
+            ctaType === "getDirections"
+              ? undefined
+              : resolveComponentData(cta.link, i18n.language, streamDocument)
+          }
           linkType={cta.linkType}
           ctaType={ctaType}
-          presetImageType={cta.presetImageType}
-          variant={variant}
-          className={className}
+          presetImageType={styles.presetImage}
+          variant={styles.variant}
+          className={combinedClassName}
+          eventName={eventName}
         />
       )}
     </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-[50px] min-w-[130px]" />
+  ) : (
+    <></>
   );
 };
 
@@ -79,16 +174,40 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   label: msg("components.callToAction", "Call to Action"),
   fields: ctaWrapperFields,
   defaultProps: {
-    entityField: {
-      field: "",
-      constantValue: {
-        label: "Call to Action",
-        link: "#",
-        linkType: "URL",
-        ctaType: "textAndLink",
+    data: {
+      entityField: {
+        field: "",
+        constantValue: {
+          label: "Call to Action",
+          link: "#",
+          linkType: "URL",
+        },
+        selectedType: "textAndLink",
       },
     },
-    variant: "primary",
+    styles: {
+      variant: "primary",
+      presetImage: "app-store",
+    },
   },
-  render: (props: CTAWrapperProps) => <CTAWrapperComponent {...props} />,
+  resolveFields: (data) => {
+    const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
+
+    const ctaType = getCTAType(data.props.data.entityField).ctaType;
+    if (ctaType === "presetImage") {
+      setDeep(updatedFields, "styles.objectFields.variant.visible", false);
+      setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);
+    } else {
+      setDeep(updatedFields, "styles.objectFields.variant.visible", true);
+      setDeep(updatedFields, "styles.objectFields.presetImage.visible", false);
+    }
+
+    // If the show field exists, make it visible in the editor
+    if (data.props.data.show !== undefined) {
+      setDeep(updatedFields, "data.objectFields.show.visible", true);
+    }
+
+    return updatedFields;
+  },
+  render: (props) => <CTAWrapperComponent {...props} />,
 };

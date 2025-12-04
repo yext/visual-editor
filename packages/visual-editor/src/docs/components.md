@@ -3,6 +3,21 @@ title: Components
 outline: 2
 ---
 
+## Address
+
+### Props
+
+Props for the Address component
+
+#### Other Props
+
+| Prop     | Type                                                          | Description | Default |
+| :------- | :------------------------------------------------------------ | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                  |             |         |
+| `styles` | `{ showGetDirectionsLink: boolean; ctaVariant: CTAVariant; }` |             |         |
+
+---
+
 ## BannerSection
 
 The Banner Section component displays a single, translatable line of rich text. It's designed to be used as a simple, full-width banner on a page. Available on Location templates.
@@ -74,6 +89,18 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## CopyrightMessageSlot
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                            | Description | Default |
+| :----- | :------------------------------ | :---------- | :------ |
+| `data` | `{ text: TranslatableString; }` |             |         |
+
+---
+
 ## CoreInfoSection
 
 The Core Info Section is a comprehensive component designed to display essential business information in a clear, multi-column layout. It typically includes contact details (address, phone, email), hours of operation, and a list of services, with extensive options for customization. Available on Location templates.
@@ -82,40 +109,56 @@ The Core Info Section is a comprehensive component designed to display essential
 
 ### Props
 
-#### Data Props
-
-This object contains all the content to be displayed within the three columns.
-
-| Prop            | Type                                                                                                                                                                       | Description                           | Default |
-| :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.hours`    | `{ headingText: YextEntityField<TranslatableString>; hours: YextEntityField<HoursType>; }`                                                                                 | Content for the "Hours" column.       |         |
-| `data.info`     | `{ headingText: YextEntityField<TranslatableString>; address: YextEntityField<AddressType>; phoneNumbers: Array<PhoneProps["data"]>; emails: YextEntityField<string[]>; }` | Content for the "Information" column. |         |
-| `data.services` | `{ headingText: YextEntityField<TranslatableString>; servicesList: YextEntityField<TranslatableString[]>; }`                                                               | Content for the "Services" column.    |         |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                             | Description                           | Default |
-| :----------------------- | :------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                | The background color of the section.  |         |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                 | Styling for all column headings.      |         |
-| `styles.hours`           | `Omit<HoursTableProps["styles"], "alignment">`                                   | Styling for the "Hours" column.       |         |
-| `styles.info`            | `AddressProps["styles"] & PhoneProps["styles"] & { emailsListLength?: number; }` | Styling for the "Information" column. |         |
+| Prop                     | Type              | Description                          | Default |
+| :----------------------- | :---------------- | :----------------------------------- | :------ |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                                                                                                                                                                               | Description                                                                    | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                                                                          | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ CoreInfoHeadingSlot: Slot; CoreInfoAddressSlot: Slot; CoreInfoPhoneNumbersSlot: Slot; CoreInfoEmailsSlot: Slot; HoursHeadingSlot: Slot; HoursTableSlot: Slot; ServicesHeadingSlot: Slot; TextListSlot: Slot; }` |                                                                                |         |
+
+---
+
+## CTAGroup
+
+### Props
+
+#### Other Props
+
+| Prop      | Type              | Description | Default |
+| :-------- | :---------------- | :---------- | :------ |
+| `buttons` | `BasicCTAProps[]` |             |         |
+
+---
+
+## CTAWrapper
+
+### Props
+
+#### Other Props
+
+Additional CSS classes to apply to the CTA.
+
+| Prop        | Type                                                                         | Description                                 | Default |
+| :---------- | :--------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                                     | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ show?: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; }` |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; }`                    |                                             |         |
 
 ---
 
 ## CustomCodeSection
 
-The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively. Only available with additional feature flag enabled.
+The CustomCodeSection component allows you to add custom HTML, CSS, and JavaScript to your page. It is useful for integrating third-party widgets or custom scripts that are not supported by the visual editor natively.
 
 ![Preview of the CustomCodeSection component](../components/testing/screenshots/CustomCodeSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
 
@@ -142,28 +185,26 @@ The Directory Page component serves as a navigational hub, displaying a list of 
 
 ### Props
 
-#### Data Props
-
-This object contains the content used by the component.
-
-| Prop                 | Type                                  | Description                                                        | Default                                       |
-| :------------------- | :------------------------------------ | :----------------------------------------------------------------- | :-------------------------------------------- |
-| `data.directoryRoot` | `TranslatableString`                  | The display label for the root link in the breadcrumbs navigation. | `"Directory Root" (constant)`                 |
-| `data.siteName`      | `YextEntityField<TranslatableString>` | The site name to display above the title.                          | `"" (empty string)`                           |
-| `data.title`         | `YextEntityField<TranslatableString>` | The title for the Directory Section.                               | `"[[name]]" (constant using embedded fields)` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                                | Type                                                                                                                        | Description                                                     | Default              |
-| :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`            | `BackgroundStyle`                                                                                                           | The main background color for the directory page content.       | `Background Color 1` |
-| `styles.breadcrumbsBackgroundColor` | `BackgroundStyle`                                                                                                           | A specific background color for the breadcrumbs navigation bar. | `Background Color 1` |
-| `styles.cards`                      | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }`                                                        | Style properties for directory cards.                           |                      |
-| `styles.hours`                      | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.                     |                      |
-| `styles.phoneNumberFormat`          | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards.              | `'domestic'`         |
-| `styles.phoneNumberLink`            | `boolean`                                                                                                                   | If "true", wraps phone numbers in a clickable "tel:" hyperlink. | `false`              |
+| Prop                     | Type              | Description                                               | Default              |
+| :----------------------- | :---------------- | :-------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The main background color for the directory page content. | `Background Color 1` |
+
+---
+
+## Emails
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                   | Description | Default |
+| :------- | :------------------------------------- | :---------- | :------ |
+| `data`   | `{ list: YextEntityField<string[]>; }` |             |         |
+| `styles` | `{ listLength?: number; }`             |             |         |
 
 ---
 
@@ -175,24 +216,13 @@ The Events Section component is designed to display a curated list of events. It
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop           | Type                                  | Description                                                                                    | Default                           |
-| :------------- | :------------------------------------ | :--------------------------------------------------------------------------------------------- | :-------------------------------- |
-| `data.events`  | `YextEntityField<EventSectionType>`   | The source of event data, which can be linked to a Yext field or provided as a constant value. | `A list of 3 placeholder events.` |
-| `data.heading` | `YextEntityField<TranslatableString>` | The main heading for the entire events section.                                                | `"Upcoming Events" (constant)`    |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                                                       | Description                          | Default              |
-| :----------------------- | :------------------------------------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                                                          | The background color of the section. | `Background Color 3` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; truncateDescription: boolean; }` | Styling for all the cards.           |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                           | Styling for the heading.             |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -216,20 +246,18 @@ The Expanded Footer is a comprehensive, two-tiered site-wide component for large
 
 This object contains all the content for both footer tiers.
 
-| Prop                   | Type                                                                                                                                                                                                                                                                                                                                                                                      | Description                           | Default |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `data.primaryFooter`   | `{ logo: AssetImageType; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; xLink: string; utilityImages: { image: AssetImageType; linkTarget?: string; }[]; expandedFooter: boolean; footerLinks: TranslatableCTA[]; expandedFooterLinks: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` | Content for the primary footer bar.   |         |
-| `data.secondaryFooter` | `{ show: boolean; copyrightMessage: TranslatableString; secondaryFooterLinks: TranslatableCTA[]; }`                                                                                                                                                                                                                                                                                       | Content for the secondary header bar. |         |
+| Prop                 | Type                           | Description                         | Default |
+| :------------------- | :----------------------------- | :---------------------------------- | :------ |
+| `data.primaryFooter` | `{ expandedFooter: boolean; }` | Content for the primary footer bar. |         |
 
 #### Style Props
 
 This object contains properties for customizing the appearance of both footer tiers.
 
-| Prop                     | Type                                                                                                                                   | Description                           | Default |
-| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ | :------ |
-| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                         | The maximum width of the footer.      |         |
-| `styles.primaryFooter`   | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; logo: ImageStylingProps; utilityImages: ImageStylingProps; }` | Styling for the primary footer bar.   |         |
-| `styles.secondaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }`                                                            | Styling for the secondary footer bar. |         |
+| Prop                   | Type                                                                        | Description                         | Default |
+| :--------------------- | :-------------------------------------------------------------------------- | :---------------------------------- | :------ |
+| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                              | The maximum width of the footer.    |         |
+| `styles.primaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }` | Styling for the primary footer bar. |         |
 
 ---
 
@@ -241,59 +269,39 @@ The Expanded Header is a two-tiered component for websites with complex navigati
 
 ### Props
 
-#### Data Props
-
-This object contains all the content for both header tiers.
-
-| Prop                   | Type                                                                                                                                                                    | Description                                               | Default |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :------ |
-| `data.primaryHeader`   | `{ logo: AssetImageType; links: TranslatableCTA[]; primaryCTA?: TranslatableCTA; showPrimaryCTA: boolean; secondaryCTA?: TranslatableCTA; showSecondaryCTA: boolean; }` | Content for the main primary header bar.                  |         |
-| `data.secondaryHeader` | `{ show: boolean; showLanguageDropdown: boolean; secondaryLinks: TranslatableCTA[]; }`                                                                                  | Content for the secondary header (above the main header). |         |
-
 #### Style Props
 
 This object contains properties for customizing the appearance of both header tiers.
 
-| Prop                     | Type                                                                                                                              | Description                                 | Default |
-| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `styles.headerPosition`  | `"sticky" \| "fixed" \| "scrollsWithPage"`                                                                                        | Whether the header is "sticky" or not       |         |
-| `styles.maxWidth`        | `PageSectionProps["maxWidth"]`                                                                                                    | The maximum width of the header             |         |
-| `styles.primaryHeader`   | `{ logo: ImageStylingProps; backgroundColor?: BackgroundStyle; primaryCtaVariant: CTAVariant; secondaryCtaVariant: CTAVariant; }` | Styling for the main, primary header bar.   |         |
-| `styles.secondaryHeader` | `{ backgroundColor?: BackgroundStyle; }`                                                                                          | Styling for the secondary header (top bar). |         |
+| Prop                    | Type                                       | Description                           | Default |
+| :---------------------- | :----------------------------------------- | :------------------------------------ | :------ |
+| `styles.headerPosition` | `"sticky" \| "fixed" \| "scrollsWithPage"` | Whether the header is "sticky" or not |         |
+| `styles.maxWidth`       | `PageSectionProps["maxWidth"]`             | The maximum width of the header       |         |
 
 ---
 
 ## FAQSection
 
-The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer. Available on Location templates.
+The FAQ Section component displays a list of questions and answers in an organized format. It includes a main heading for the section and typically renders the FAQs as an accordion, where users can click on a question to reveal the answer.
 
 ### Props
-
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop           | Type                                  | Description                                                                                                        | Default                                   |
-| :------------- | :------------------------------------ | :----------------------------------------------------------------------------------------------------------------- | :---------------------------------------- |
-| `data.faqs`    | `YextEntityField<FAQSectionType>`     | The source of the FAQ data (questions and answers), which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder FAQs.`           |
-| `data.heading` | `YextEntityField<TranslatableString>` | The main heading for the entire events section.                                                                    | `"Frequently Asked Questions" (constant)` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                          | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color of the section. | `Background Color 3` |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the heading.             |                      |
+| Prop                     | Type              | Description                          | Default              |
+| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 3` |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                            | Description                                                                    | Default |
+| :--------------- | :---------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                       | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ HeadingSlot: Slot; FAQsWrapperSlot: Slot; }` |                                                                                |         |
 
 ---
 
@@ -312,6 +320,80 @@ The background color for the entire footer section.
 | Prop              | Type              | Description                                         | Default              |
 | :---------------- | :---------------- | :-------------------------------------------------- | :------------------- |
 | `backgroundColor` | `BackgroundStyle` | The background color for the entire footer section. | `Background Color 1` |
+
+---
+
+## FooterExpandedLinkSectionSlot
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                                                                        | Description | Default |
+| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data` | `{ label: YextEntityField<TranslatableString>; links: TranslatableCTA[]; }` |             |         |
+
+---
+
+## FooterExpandedLinksWrapper
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                                                                        | Description | Default |
+| :----- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `data` | `{ sections: { label: TranslatableString; links: TranslatableCTA[]; }[]; }` |             |         |
+
+---
+
+## FooterLinksSlot
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                            | Description | Default |
+| :----- | :------------------------------ | :---------- | :------ |
+| `data` | `{ links: TranslatableCTA[]; }` |             |         |
+
+---
+
+## FooterLogoSlot
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                                               | Description | Default |
+| :------- | :----------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ image: YextEntityField<AssetImageType>; linkTarget?: string; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                        |             |         |
+
+---
+
+## FooterSocialLinksSlot
+
+### Props
+
+#### Other Props
+
+| Prop   | Type                                                                                                                                                    | Description | Default |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data` | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
+
+---
+
+## FooterUtilityImagesSlot
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                                                    | Description | Default |
+| :------- | :---------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ utilityImages: { image: AssetImageType; linkTarget?: string; }[]; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                             |             |         |
 
 ---
 
@@ -344,40 +426,80 @@ If 'true', displays the language selector dropdown in the header.
 
 This object contains the content to be displayed by the component.
 
-| Prop                     | Type                                     | Description                                                                             | Default                      |
-| :----------------------- | :--------------------------------------- | :-------------------------------------------------------------------------------------- | :--------------------------- |
-| `data.businessName`      | `YextEntityField<TranslatableString>`    | The primary business name displayed in the hero.                                        | `"Business Name" (constant)` |
-| `data.hero`              | `YextStructEntityField<HeroSectionType>` | The main hero content, including an image and primary/secondary call-to-action buttons. | `Placeholder image and CTAs` |
-| `data.hours`             | `YextEntityField<HoursType>`             | The entity's hours data, used to display an "Open/Closed" status.                       | `'hours' field`              |
-| `data.localGeoModifier`  | `YextEntityField<TranslatableString>`    | A location-based modifier or slogan (e.g., "Serving Downtown").                         | `"Geomodifier" (constant)`   |
-| `data.showAverageReview` | `boolean`                                | If 'true', displays the entity's average review rating.                                 | `true`                       |
+| Prop                   | Type                                           | Description | Default |
+| :--------------------- | :--------------------------------------------- | :---------- | :------ |
+| `data.backgroundImage` | `YextEntityField<ImageType \| AssetImageType>` |             |         |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                              | Type                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                | Default              |
-| :-------------------------------- | :----------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`          | `BackgroundStyle`                                      | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant).                                                                                                                                                                                                                                                                                             | `Background Color 1` |
-| `styles.businessNameLevel`        | `HeadingLevel`                                         | The HTML heading level for the business name.                                                                                                                                                                                                                                                                                                                                                                                              | `3`                  |
-| `styles.desktopContainerPosition` | `"left" \| "center"`                                   | Container position on desktop (spotlight and immersive variants).                                                                                                                                                                                                                                                                                                                                                                          | `left`               |
-| `styles.desktopImagePosition`     | `"left" \| "right"`                                    | Positions the image to the left or right of the hero content on desktop (classic and compact variants).                                                                                                                                                                                                                                                                                                                                    | `right`              |
-| `styles.image`                    | `ImageStylingProps & { height?: number; }`             | Styling options for the hero image. Classic variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported) and height. Immersive variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding) Spotlight variant: height (500px default, minimum height: content height + Page Section Top/Bottom Padding) Compact variant: aspect ratio (ratios 4:1, 3:1, 2:1, and 9:16 are not supported). |                      |
-| `styles.localGeoModifierLevel`    | `HeadingLevel`                                         | The HTML heading level for the local geo-modifier.                                                                                                                                                                                                                                                                                                                                                                                         | `1`                  |
-| `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                                                                                                                                                                                                                                                                                                                    | `left`               |
-| `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                                                                                                                                                                                                                                                                                                                     | `top`                |
-| `styles.primaryCTA`               | `CTAVariant`                                           | The visual style variant for the primary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                            | `primary`            |
-| `styles.secondaryCTA`             | `CTAVariant`                                           | The visual style variant for the secondary call-to-action button.                                                                                                                                                                                                                                                                                                                                                                          | `secondary`          |
-| `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                                                                                                                                                                                                                                                                                                              | `true`               |
-| `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                                                                                                                                                                                                                                                                                                                   | `classic`            |
+| Prop                              | Type                                                   | Description                                                                                                                                    | Default              |
+| :-------------------------------- | :----------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`          | `BackgroundStyle`                                      | The background color for the entire section (classic and compact variants). The background color for the featured content (spotlight variant). | `Background Color 1` |
+| `styles.desktopContainerPosition` | `"left" \| "center"`                                   | Container position on desktop (spotlight and immersive variants).                                                                              | `left`               |
+| `styles.desktopImagePosition`     | `"left" \| "right"`                                    | Positions the image to the left or right of the hero content on desktop (classic and compact variants).                                        | `right`              |
+| `styles.imageHeight`              | `number`                                               | Image Height for the hero image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding 500px     |                      |
+| `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                        | `left`               |
+| `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                         | `top`                |
+| `styles.showAverageReview`        | `boolean`                                              | If 'true', displays the entity's average review rating.                                                                                        | `true`               |
+| `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                  | `true`               |
+| `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                       | `classic`            |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                                                                                                       | Description                                                                    | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                  | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ BusinessNameSlot: Slot; GeomodifierSlot: Slot; HoursStatusSlot: Slot; ImageSlot: Slot; PrimaryCTASlot: Slot; SecondaryCTASlot: Slot; }` |                                                                                |         |
+
+---
+
+## HoursStatus
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                                                                                                                             | Description | Default |
+| :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                         |             |         |
+| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; }` |             |         |
+
+---
+
+## HoursTable
+
+### Props
+
+Props for the HoursTable component.
+
+#### Other Props
+
+| Prop     | Type                                                                                                                                                     | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                 |             |         |
+| `styles` | `{ startOfWeek: keyof DayOfWeekNames \| "today"; collapseDays: boolean; showAdditionalHoursText: boolean; alignment: "items-start" \| "items-center"; }` |             |         |
+
+---
+
+## ImageWrapper
+
+### Props
+
+#### Other Props
+
+Additional CSS classes to apply to the image.
+
+| Prop            | Type                                                                           | Description                                   | Default |
+| :-------------- | :----------------------------------------------------------------------------- | :-------------------------------------------- | :------ |
+| `className`     | `string`                                                                       | Additional CSS classes to apply to the image. |         |
+| `data`          | `{ image: YextEntityField<ImageType \| ComplexImageType \| AssetImageType>; }` |                                               |         |
+| `hideWidthProp` | `boolean`                                                                      |                                               |         |
+| `sizes`         | `ImgSizesByBreakpoint`                                                         |                                               |         |
+| `styles`        | `ImageStylingProps`                                                            | Size and aspect ratio of the image.           |         |
 
 ---
 
@@ -389,32 +511,22 @@ The Insight Section is used to display a curated list of content such as article
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop            | Type                                  | Description                                                                                    | Default                             |
-| :-------------- | :------------------------------------ | :--------------------------------------------------------------------------------------------- | :---------------------------------- |
-| `data.heading`  | `YextEntityField<TranslatableString>` | The main heading for the entire insights section.                                              | `"Insights"`                        |
-| `data.insights` | `YextEntityField<InsightSectionType>` | The source of the insight data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder insights.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                         | Description                                                           | Default              |
-| :----------------------- | :------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                            | The background color for the entire section, selected from the theme. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; }` | Styling for the individual insight cards.                             |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                             | Styling for the main section heading.                                 |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                    | Description                                                                    | Default |
+| :--------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
 
 ---
 
@@ -456,29 +568,13 @@ The Nearby Locations Section dynamically finds and displays a list of business l
 
 ### Props
 
-#### Data Props
-
-This object defines the search parameters for finding nearby locations.
-
-| Prop              | Type                                  | Description                                          | Default                         |
-| :---------------- | :------------------------------------ | :--------------------------------------------------- | :------------------------------ |
-| `data.coordinate` | `YextEntityField<Coordinate>`         | The central coordinate (, ) to search from.          | `'yextDisplayCoordinate' field` |
-| `data.heading`    | `YextEntityField<TranslatableString>` | The main heading for the entire section.             | `"Nearby Locations" (constant)` |
-| `data.limit`      | `number`                              | The maximum number of locations to find and display. | `3`                             |
-| `data.radius`     | `number`                              | The search radius in miles.                          | `10`                            |
-
 #### Style Props
 
 This object contains extensive properties for customizing the component's appearance.
 
-| Prop                       | Type                                                                                                                        | Description                                        | Default              |
-| :------------------------- | :-------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------- | :------------------- |
-| `styles.backgroundColor`   | `BackgroundStyle`                                                                                                           | The background color for the entire section.       | `Background Color 1` |
-| `styles.cards`             | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }`                                                        | Styling for the individual location cards.         |                      |
-| `styles.heading`           | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                                                            | Styling for the main section heading.              |                      |
-| `styles.hours`             | `{ showCurrentStatus: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; }` | Styling for the hours display on each card.        |                      |
-| `styles.phoneNumberFormat` | `"domestic" \| "international"`                                                                                             | The display format for phone numbers on the cards. | `'domestic'`         |
-| `styles.phoneNumberLink`   | `boolean`                                                                                                                   | If , wraps phone numbers in a clickable hyperlink. | `false`              |
+| Prop     | Type                                     | Description                                                                           | Default |
+| :------- | :--------------------------------------- | :------------------------------------------------------------------------------------ | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains extensive properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -490,6 +586,34 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## Phone
+
+### Props
+
+The props for the Phone component
+
+#### Other Props
+
+| Prop     | Type                                                                                                     | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ number: YextEntityField<string>; label: TranslatableString; }`                                        |             |         |
+| `styles` | `{ phoneFormat: "domestic" \| "international"; includePhoneHyperlink: boolean; includeIcon?: boolean; }` |             |         |
+
+---
+
+## PhoneList
+
+### Props
+
+#### Other Props
+
+| Prop     | Type                                           | Description | Default |
+| :------- | :--------------------------------------------- | :---------- | :------ |
+| `data`   | `{ phoneNumbers: Array<PhoneProps["data"]>; }` |             |         |
+| `styles` | `PhoneProps["styles"]`                         |             |         |
+
+---
+
 ## PhotoGallerySection
 
 The Photo Gallery Section is designed to display a collection of images in a visually appealing format. It consists of a main heading for the section and a flexible grid of images, with options for styling the image presentation. Available on Location templates.
@@ -498,24 +622,13 @@ The Photo Gallery Section is designed to display a collection of images in a vis
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop           | Type                                                                                      | Description                                                                                  | Default                           |
-| :------------- | :---------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- | :-------------------------------- |
-| `data.heading` | `YextEntityField<TranslatableString>`                                                     | The main heading for the photo gallery.                                                      | `"Gallery" (constant)`            |
-| `data.images`  | `YextEntityField<ImageType[] \| ComplexImageType[] \| { assetImage: AssetImageType; }[]>` | The source of the image data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder images.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                                                           | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color for the entire section, selected from the theme. | `Background Color 1` |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the main section heading.                                 |                      |
-| `styles.image`           | `ImageStylingProps`                                              | Styling options for the gallery images, such as aspect ratio.         |                      |
+| Prop                     | Type              | Description                                                           | Default              |
+| :----------------------- | :---------------- | :-------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color for the entire section, selected from the theme. | `Background Color 1` |
 
 #### Other Props
 
@@ -535,32 +648,22 @@ The Product Section is used to display a curated list of products in a dedicated
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop            | Type                                  | Description                                                                                    | Default                             |
-| :-------------- | :------------------------------------ | :--------------------------------------------------------------------------------------------- | :---------------------------------- |
-| `data.heading`  | `YextEntityField<TranslatableString>` | The main heading for the entire products section.                                              | `"Featured Products" (constant)`    |
-| `data.products` | `YextEntityField<ProductSectionType>` | The source of the product data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder products.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                                         | Description                                  | Default              |
-| :----------------------- | :------------------------------------------------------------------------------------------- | :------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                                            | The background color for the entire section. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; ctaVariant: CTAVariant; }` | Styling for the individual product cards.    |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`                             | Styling for the main section heading.        |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                                    | Description                                                                    | Default |
+| :--------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
 
 ---
 
@@ -578,19 +681,17 @@ This object contains the content to be displayed by the component.
 
 | Prop         | Type                                      | Description                                                                                           | Default                                         |
 | :----------- | :---------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
-| `data.promo` | `YextStructEntityField<PromoSectionType>` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
+| `data.media` | `"image" \| "video"`                      | Determines whether to display an image or video in the media section.                                 | `'image'`                                       |
+| `data.promo` | `YextEntityField<PromoSectionType \| {}>` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                                                   | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color for the entire section.                  | `Background Color 1` |
-| `styles.ctaVariant`      | `CTAVariant`                                                     | The visual style variant for the call-to-action button.       | `'primary'`          |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the promo's title.                                |                      |
-| `styles.image`           | `ImageStylingProps`                                              | Styling options for the promo image, such as aspect ratio.    |                      |
-| `styles.orientation`     | `"left" \| "right"`                                              | Positions the image to the left or right of the text content. | `'left'`             |
+| Prop                     | Type                | Description                                                   | Default              |
+| :----------------------- | :------------------ | :------------------------------------------------------------ | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`   | The background color for the entire section.                  | `Background Color 1` |
+| `styles.orientation`     | `"left" \| "right"` | Positions the image to the left or right of the text content. | `'left'`             |
 
 #### Other Props
 
@@ -599,6 +700,56 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 | Prop             | Type      | Description                                                                    | Default |
 | :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
 | `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
+## ReviewsSection
+
+The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps. Available on Location templates.
+
+![Preview of the ReviewsSection component](<../components/testing/screenshots/ReviewsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data%20(after%20interactions).png>)
+
+### Props
+
+#### Style Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
+## SecondaryFooterSlot
+
+The Secondary Footer Slot is a sub-section of the Expanded Footer that contains copyright information and secondary links.
+
+### Props
+
+#### Data Props
+
+Data configuration for the secondary footer.
+
+| Prop   | Type                 | Description                                  | Default |
+| :----- | :------------------- | :------------------------------------------- | :------ |
+| `data` | `{ show: boolean; }` | Data configuration for the secondary footer. |         |
+
+#### Style Props
+
+Styling configuration for the secondary footer.
+
+| Prop     | Type                                                                        | Description                                     | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }` | Styling configuration for the secondary footer. |         |
 
 ---
 
@@ -645,21 +796,13 @@ The Team Section is designed to showcase a list of people, such as employees, ex
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop   | Type       | Description                                                        | Default |
-| :----- | :--------- | :----------------------------------------------------------------- | :------ |
-| `data` | `TeamData` | This object contains the content to be displayed by the component. |         |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type         | Description                                                                 | Default |
-| :------- | :----------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `TeamStyles` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -679,24 +822,13 @@ The Testimonial Section is used to display a list of customer testimonials or re
 
 ### Props
 
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop                | Type                                      | Description                                                                                        | Default                                 |
-| :------------------ | :---------------------------------------- | :------------------------------------------------------------------------------------------------- | :-------------------------------------- |
-| `data.heading`      | `YextEntityField<TranslatableString>`     | The main heading for the entire testimonials section.                                              | `"Featured Testimonials" (constant)`    |
-| `data.testimonials` | `YextEntityField<TestimonialSectionType>` | The source of the testimonial data, which can be linked to a Yext field or provided as a constant. | `A list of 3 placeholder testimonials.` |
-
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                                 | Description                                                           | Default              |
-| :----------------------- | :------------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                    | The background color for the entire section, selected from the theme. | `Background Color 2` |
-| `styles.cards`           | `{ headingLevel: HeadingLevel; backgroundColor?: BackgroundStyle; }` | Styling for the individual testimonial cards.                         |                      |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }`     | Styling for the main section heading.                                 |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -708,36 +840,42 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## TextList
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                    | Description | Default |
+| :--------------- | :-------------------------------------- | :---------- | :------ |
+| `commaSeparated` | `boolean`                               |             |         |
+| `list`           | `YextEntityField<TranslatableString[]>` |             |         |
+
+---
+
 ## VideoSection
 
 The Video Section is used to display an embedded YouTube video. Available on Location templates.
 
+![Preview of the VideoSection component](../components/testing/screenshots/VideoSection/%5Bdesktop%5D%20default%20props%20with%20empty%20document.png)
+
 ### Props
-
-#### Data Props
-
-This object contains the content to be displayed by the component.
-
-| Prop              | Type                                  | Description                             | Default         |
-| :---------------- | :------------------------------------ | :-------------------------------------- | :-------------- |
-| `data.assetVideo` | `AssetVideo \| undefined`             | The embedded YouTube video              |                 |
-| `data.heading`    | `YextEntityField<TranslatableString>` | The main heading for the video section. | `"" (constant)` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                                                             | Description                                                           | Default              |
-| :----------------------- | :--------------------------------------------------------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`                                                | The background color for the entire section, selected from the theme. | `Background Color 1` |
-| `styles.heading`         | `{ level: HeadingLevel; align: "left" \| "center" \| "right"; }` | Styling for the main section heading.                                 |                      |
+| Prop     | Type                                     | Description                                                                 | Default |
+| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type      | Description                                                                    | Default |
-| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| Prop             | Type                                             | Description                                                                    | Default |
+| :--------------- | :----------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                        | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ SectionHeadingSlot: Slot; VideoSlot: Slot; }` |                                                                                |         |
 
 ---

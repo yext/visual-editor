@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
-import * as React from "react";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
   useDocument,
   EntityField,
@@ -37,9 +36,10 @@ const textListFields: Fields<TextListProps> = {
   ),
 };
 
-const TextListComponent: React.FC<TextListProps> = ({
+const TextListComponent: PuckComponent<TextListProps> = ({
   list: textListField,
   commaSeparated,
+  puck,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -54,7 +54,7 @@ const TextListComponent: React.FC<TextListProps> = ({
     resolvedTextList = [resolvedTextList];
   }
 
-  return (
+  return resolvedTextList?.length ? (
     <EntityField
       displayName={pt("textList", "Text List")}
       fieldId={textListField.field}
@@ -82,6 +82,10 @@ const TextListComponent: React.FC<TextListProps> = ({
         </ul>
       ) : null}
     </EntityField>
+  ) : puck.isEditing ? (
+    <div className="h-10" />
+  ) : (
+    <></>
   );
 };
 
