@@ -1,4 +1,4 @@
-import { FontRegistry } from "@yext/visual-editor";
+import { FontRegistry } from "../../utils/visualEditorFonts.ts";
 import DOMPurify from "dompurify";
 
 export type TemplateMetadata = {

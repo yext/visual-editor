@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { createDefaultThemeConfig } from "./DefaultThemeConfig.ts";
-import { FontRegistry } from "@yext/visual-editor";
+import { FontRegistry } from "../utils/visualEditorFonts.ts";
 
 describe("createDefaultThemeConfig", () => {
   it("should include custom fonts in the font options", () => {
