@@ -79,6 +79,13 @@ export function createDefaultThemeConfig(
           default: "700",
         },
       },
+      textTransform: {
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        type: "select",
+        plugin: "textTransform",
+        options: ThemeOptions.TEXT_TRANSFORM,
+        default: "none",
+      },
     },
     h2: {
       label: "H2",
@@ -104,6 +111,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-h2-fontFamily"),
           default: "700",
         },
+      },
+      textTransform: {
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        type: "select",
+        plugin: "textTransform",
+        options: ThemeOptions.TEXT_TRANSFORM,
+        default: "none",
       },
     },
     h3: {
@@ -131,6 +145,13 @@ export function createDefaultThemeConfig(
           default: "700",
         },
       },
+      textTransform: {
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        type: "select",
+        plugin: "textTransform",
+        options: ThemeOptions.TEXT_TRANSFORM,
+        default: "none",
+      },
     },
     h4: {
       label: "H4",
@@ -156,6 +177,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-h4-fontFamily"),
           default: "700",
         },
+      },
+      textTransform: {
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        type: "select",
+        plugin: "textTransform",
+        options: ThemeOptions.TEXT_TRANSFORM,
+        default: "none",
       },
     },
     h5: {
@@ -183,6 +211,13 @@ export function createDefaultThemeConfig(
           default: "700",
         },
       },
+      textTransform: {
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        type: "select",
+        plugin: "textTransform",
+        options: ThemeOptions.TEXT_TRANSFORM,
+        default: "none",
+      },
     },
     h6: {
       label: "H6",
@@ -209,6 +244,13 @@ export function createDefaultThemeConfig(
           default: "700",
         },
       },
+      textTransform: {
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        type: "select",
+        plugin: "textTransform",
+        options: ThemeOptions.TEXT_TRANSFORM,
+        default: "none",
+      },
     },
     body: {
       label: msg("theme.bodyText", "Body Text"),
@@ -234,6 +276,13 @@ export function createDefaultThemeConfig(
           options: fontWeightOptions("--fontFamily-body-fontFamily"),
           default: "400",
         },
+      },
+      textTransform: {
+        label: msg("theme.textTransform.textTransform", "Text Transform"),
+        type: "select",
+        plugin: "textTransform",
+        options: ThemeOptions.TEXT_TRANSFORM,
+        default: "none",
       },
     },
     pageSection: {
