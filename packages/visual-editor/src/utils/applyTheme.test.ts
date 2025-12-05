@@ -10,7 +10,7 @@ describe("buildCssOverridesStyle", () => {
         theme: JSON.stringify({ "--colors-palette-text": "red" }),
       },
     };
-    const result = applyTheme(streamDocument, themeConfig);
+    const result = applyTheme(streamDocument, "./", themeConfig);
 
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
@@ -40,7 +40,7 @@ describe("buildCssOverridesStyle", () => {
       },
     };
 
-    const result = applyTheme(streamDocument, themeConfig);
+    const result = applyTheme(streamDocument, "./", themeConfig);
 
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
@@ -59,7 +59,7 @@ describe("buildCssOverridesStyle", () => {
   });
 
   it("should return default values for an empty c_theme field", () => {
-    const result = applyTheme({} as StreamDocument, themeConfig);
+    const result = applyTheme({} as StreamDocument, "./", themeConfig);
 
     expect(result).toContain("fonts.googleapis.com");
     expect(result).toContain(
@@ -83,7 +83,7 @@ describe("buildCssOverridesStyle", () => {
       },
     };
 
-    const result = applyTheme(streamDocument, themeConfig);
+    const result = applyTheme(streamDocument, "./", themeConfig);
 
     expect(result).toBe(
       '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
@@ -102,7 +102,7 @@ describe("buildCssOverridesStyle", () => {
 
   it("should return the base string unmodified when themeConfig is empty", () => {
     const base = "<style>div{color:blue}</style>";
-    const result = applyTheme({} as StreamDocument, {}, base);
+    const result = applyTheme({} as StreamDocument, "./", {}, base);
 
     expect(result).toBe(base);
   });
@@ -113,7 +113,7 @@ describe("buildCssOverridesStyle", () => {
         theme: JSON.stringify({ "--absdag": "red" }),
       },
     };
-    const result = applyTheme(streamDocument, themeConfig);
+    const result = applyTheme(streamDocument, "./", themeConfig);
 
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
@@ -140,7 +140,7 @@ describe("buildCssOverridesStyle", () => {
         }),
       },
     };
-    const result = applyTheme(streamDocument, {
+    const result = applyTheme(streamDocument, "./", {
       palette: {
         label: "Colors",
         styles: {

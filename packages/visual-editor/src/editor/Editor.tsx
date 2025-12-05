@@ -22,10 +22,7 @@ import {
   createDefaultThemeConfig,
   defaultThemeConfig,
 } from "../components/DefaultThemeConfig";
-import {
-  defaultFonts,
-  loadGoogleFontsIntoDocument,
-} from "../utils/visualEditorFonts.ts";
+import { defaultFonts, loadFontsIntoDOM } from "../utils/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 
@@ -110,14 +107,15 @@ export const Editor = ({
 
   // Load default Google Fonts for the font selector dropdown
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      loadGoogleFontsIntoDocument(
+    if (typeof window !== "undefined" && templateMetadata?.isThemeMode) {
+      loadFontsIntoDOM(
         window.document,
         defaultFonts,
+        templateMetadata?.customFonts ?? {},
         "visual-editor-default-fonts"
       );
     }
-  }, []);
+  }, [templateMetadata?.customFonts, templateMetadata?.isThemeMode]);
 
   useEffect(() => {
     // templateMetadata.isDevMode indicates in-platform dev mode

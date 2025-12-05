@@ -107,7 +107,7 @@ export const InternalThemeEditor = ({
         buildThemeLocalStorageKey(),
         lzstring.compress(JSON.stringify(newHistory.histories))
       );
-      updateThemeInEditor(newThemeValues, themeConfig);
+      updateThemeInEditor(newThemeValues, themeConfig, true);
       setThemeHistories(newHistory);
       return;
     }
@@ -131,7 +131,7 @@ export const InternalThemeEditor = ({
       });
     }
 
-    updateThemeInEditor(newThemeValues, themeConfig);
+    updateThemeInEditor(newThemeValues, themeConfig, true);
     setThemeHistories(newHistory);
   };
 

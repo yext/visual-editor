@@ -24,4 +24,5 @@ export {
 export {
   defaultThemeConfig,
   createDefaultThemeConfig,
+  constructFontSelectOptions,
 } from "./DefaultThemeConfig.ts";

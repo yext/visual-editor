@@ -32,7 +32,7 @@ import mapboxPackageJson from "mapbox-gl/package.json";
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
 ): HeadConfig => {
-  const { document } = data;
+  const { document, relativePrefixToRoot } = data;
   const { title, description } = getPageMetadata(document);
   const schema = getSchema(data);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
@@ -87,7 +87,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     other: [
       applyAnalytics(document),
       applyHeaderScript(document),
-      applyTheme(document, defaultThemeConfig),
+      applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
     ].join("\n"),
   };

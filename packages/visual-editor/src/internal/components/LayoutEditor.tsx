@@ -109,13 +109,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         sendDevThemeSaveStateData({
           payload: { devThemeSaveStateData: JSON.stringify(localThemeData) },
         });
-        updateThemeInEditor(localThemeData, themeConfig);
+        updateThemeInEditor(localThemeData, themeConfig, false);
         return;
       }
     }
 
     if (themeData) {
-      updateThemeInEditor(themeData as ThemeData, themeConfig);
+      updateThemeInEditor(themeData as ThemeData, themeConfig, false);
     }
   }, [themeData, themeConfig, templateMetadata]);
 

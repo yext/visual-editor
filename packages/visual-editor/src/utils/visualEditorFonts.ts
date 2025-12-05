@@ -24,18 +24,6 @@ type FontSpecification = {
 // prettier-ignore
 export const defaultFonts: FontRegistry = fontsJs as FontRegistry;
 
-export const constructFontSelectOptions = (fonts: FontRegistry) => {
-  const fontOptions: StyleSelectOption[] = [];
-  for (const fontName in fonts) {
-    const fontDetails = fonts[fontName];
-    fontOptions.push({
-      label: fontName,
-      value: `'${fontName}', ${fontDetails.fallback}`,
-    });
-  }
-  return fontOptions;
-};
-
 /*
  * generateGoogleFontsURL takes a list of fonts and the available values for
  * their variable font axes and the <link> tags needed to load Google fonts
@@ -46,7 +34,7 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
   if (Object.keys(fonts).length === 0) {
     return "";
   }
-  return fontLinkDataToHTML(generateFontLinkData(fonts));
+  return fontLinkDataToHTML(generateGoogleFontLinkData(fonts));
 };
 
 export type FontLinkData = {
@@ -90,7 +78,9 @@ const PRECONNECT_LINKS: FontLinkData[] = [
   },
 ];
 
-export const generateFontLinkData = (fonts: FontRegistry): FontLinkData[] => {
+export const generateGoogleFontLinkData = (
+  fonts: FontRegistry
+): FontLinkData[] => {
   const fontLinks = Object.entries(fonts).map(([fontName, fontDetails]) => {
     const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
     const weightParam = generateWeightParam(fontDetails);
@@ -103,6 +93,18 @@ export const generateFontLinkData = (fonts: FontRegistry): FontLinkData[] => {
   });
 
   return [...PRECONNECT_LINKS, ...fontLinks];
+};
+
+export const generateCustomFontLinkData = (
+  customFonts: string[],
+  relativePrefixToRoot: string
+): FontLinkData[] => {
+  return customFonts.map((fontName) => {
+    return {
+      href: `${relativePrefixToRoot}y-fonts/${fontName.replaceAll(" ", "").toLowerCase()}.css`,
+      rel: "stylesheet",
+    };
+  });
 };
 
 // Convert font link data to HTML string
@@ -122,15 +124,18 @@ export const fontLinkDataToHTML = (linkData: FontLinkData[]): string => {
 };
 
 export const googleFontLinkTags = fontLinkDataToHTML(
-  generateFontLinkData(defaultFonts)
+  generateGoogleFontLinkData(defaultFonts)
 );
 
 // Create DOM elements directly from font data
 export const createFontLinkElements = (
-  fonts: FontRegistry
+  googleFonts: FontRegistry,
+  customFonts: string[]
 ): HTMLLinkElement[] => {
-  const linkData = generateFontLinkData(fonts);
-  return linkData.map((link) => {
+  const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
+  const customFontLinkData = generateCustomFontLinkData(customFonts, "./");
+
+  return [...customFontLinkData, ...googleFontLinkData].map((link) => {
     const element = document.createElement("link");
     element.href = link.href;
     element.rel = link.rel;
@@ -141,14 +146,16 @@ export const createFontLinkElements = (
   });
 };
 
-// Helper function to load Google Font links into a document
-export const loadGoogleFontsIntoDocument = (
+// Helper function to load font links into the DOM
+export const loadFontsIntoDOM = (
   document: Document,
-  fonts: FontRegistry,
+  googleFonts: FontRegistry,
+  customFonts: FontRegistry,
   idPrefix: string = "visual-editor-fonts"
 ) => {
   if (!document.getElementById(`${idPrefix}-0`)) {
-    const links = createFontLinkElements(fonts);
+    const links = createFontLinkElements(googleFonts, Object.keys(customFonts));
+
     links.forEach((link, index) => {
       link.id = `${idPrefix}-${index}`;
       link.setAttribute("data-visual-editor-font", "true");
@@ -284,7 +291,7 @@ const filterFontWeights = (
 export const extractInUseFontFamilies = (
   data: ThemeData,
   availableFonts: FontRegistry
-): FontRegistry => {
+): { inUseGoogleFonts: FontRegistry; inUseCustomFonts: string[] } => {
   const fontFamilies = new Set<string>();
 
   // Iterate over all the keys in the theme data to find font names.
@@ -302,18 +309,17 @@ export const extractInUseFontFamilies = (
     }
   }
 
-  const inUseFonts: FontRegistry = {};
+  const inUseGoogleFonts: FontRegistry = {};
+  const inUseCustomFonts: string[] = [];
 
   // For each unique font family found, look it up in the availableFonts map.
   for (const fontName of fontFamilies) {
     if (availableFonts[fontName]) {
-      inUseFonts[fontName] = availableFonts[fontName];
+      inUseGoogleFonts[fontName] = availableFonts[fontName];
     } else {
-      console.warn(
-        `The font '${fontName}' is used in the theme but cannot be found in available fonts.`
-      );
+      inUseCustomFonts.push(fontName);
     }
   }
 
-  return inUseFonts;
+  return { inUseGoogleFonts, inUseCustomFonts };
 };

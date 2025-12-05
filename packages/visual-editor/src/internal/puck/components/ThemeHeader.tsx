@@ -171,7 +171,8 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
             if (themeConfig) {
               updateThemeInEditor(
                 themeHistories?.histories?.[0]?.data as ThemeData,
-                themeConfig
+                themeConfig,
+                true
               );
             }
             setThemeHistories({
