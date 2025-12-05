@@ -217,6 +217,13 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     if (data.props.data.show !== undefined) {
       setDeep(updatedFields, "data.objectFields.show.visible", true);
     }
+    const ctaVariant = data.props.styles.variant;
+
+    // Show/hide color field based on the CTA variant
+    const showColor =
+      (ctaVariant === "primary" || ctaVariant === "secondary") &&
+      ctaType !== "presetImage";
+    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
 
     return updatedFields;
   },

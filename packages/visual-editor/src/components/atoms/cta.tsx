@@ -235,7 +235,7 @@ export const CTA = (props: CTAProps) => {
 
   return (
     <Button
-      style={dynamicStyle}
+      style={ctaType !== "presetImage" ? dynamicStyle : undefined}
       asChild
       className={buttonClassName}
       variant={buttonVariant}
