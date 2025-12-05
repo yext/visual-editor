@@ -36,7 +36,7 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   ) as AssetImageType;
 
   if (!imageDataUrl?.url) {
-    return puck.isEditing ? <div className="h-20" /> : <></>;
+    return puck.isEditing ? <div className="h-20 w-[100px]" /> : <></>;
   }
 
   const width = styles.width || 150;

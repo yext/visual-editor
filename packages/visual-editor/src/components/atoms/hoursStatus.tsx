@@ -35,7 +35,7 @@ export const HoursStatusAtom = React.memo(
       <HoursStatusJS
         hours={hours}
         className={themeManagerCn(
-          "components mb-2 font-body-fontWeight text-body-lg-fontSize",
+          "components mb-2 font-body-fontFamily font-body-fontWeight text-body-lg-fontSize",
           className
         )}
         currentTemplate={

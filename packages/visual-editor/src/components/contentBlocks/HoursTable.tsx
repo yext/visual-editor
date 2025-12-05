@@ -11,6 +11,7 @@ import {
   YextField,
   msg,
   pt,
+  Body,
 } from "@yext/visual-editor";
 
 /** Props for the HoursTable component. */
@@ -132,9 +133,9 @@ const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
           displayName={pt("hoursText", "Hours Text")}
           fieldId="additionalHoursText"
         >
-          <div className="mt-4 text-body-sm-fontSize">
+          <Body variant="sm" className="mt-4">
             {additionalHoursText}
-          </div>
+          </Body>
         </EntityField>
       )}
     </div>

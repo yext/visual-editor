@@ -272,7 +272,13 @@ const mainDefaultLayout = {
         data: {
           text: {
             field: "",
-            constantValue: { en: "Banner Text", hasLocalizedValue: "true" },
+            constantValue: {
+              en: {
+                json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Banner Text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Banner Text</span></p>',
+              },
+              hasLocalizedValue: "true",
+            },
             constantValueEnabled: true,
           },
         },
