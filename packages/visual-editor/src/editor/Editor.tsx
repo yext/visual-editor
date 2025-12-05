@@ -105,7 +105,7 @@ export const Editor = ({
     }
   }, []);
 
-  // Load default Google Fonts for the font selector dropdown
+  // Loads all Google and custom fonts in the theme editor for the font dropdown
   useEffect(() => {
     if (typeof window !== "undefined" && templateMetadata?.isThemeMode) {
       loadFontsIntoDOM(

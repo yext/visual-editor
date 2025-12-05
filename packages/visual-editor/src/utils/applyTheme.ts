@@ -174,12 +174,16 @@ const updateFontLinksInDocument = (
   }
 };
 
+// Used to avoid creating multiple observers in updateThemeInEditor
+let pendingObserver: MutationObserver | null = null;
+
 export const updateThemeInEditor = async (
   newTheme: ThemeData,
   themeConfig: ThemeConfig,
   isThemeMode: boolean
 ) => {
   devLogger.logFunc("updateThemeInEditor");
+  pendingObserver?.disconnect();
 
   const defaultThemeValues = generateCssVariablesFromThemeConfig(themeConfig);
   const mergedThemeData = { ...defaultThemeValues, ...newTheme };
@@ -194,6 +198,8 @@ export const updateThemeInEditor = async (
     editorStyleTag.innerText = newThemeTag;
   }
 
+  // In the theme editor, all fonts are already loaded
+  // In the layout editor, we need to load the in-use fonts after the Puck iframe has loaded
   if (!isThemeMode) {
     let fontsToLoad: FontRegistry;
     if (Object.keys(inUseGoogleFonts).length === 0) {
@@ -214,6 +220,8 @@ export const updateThemeInEditor = async (
         iframe?.contentDocument?.getElementById(THEME_STYLE_TAG_ID);
       if (pagePreviewStyleTag) {
         observer.disconnect();
+        pendingObserver = null;
+
         pagePreviewStyleTag.innerText = newThemeTag;
         updateFontLinksInDocument(
           iframe.contentDocument!,
@@ -223,6 +231,7 @@ export const updateThemeInEditor = async (
       }
     });
 
+    pendingObserver = observer;
     observer.observe(document, {
       childList: true,
       subtree: true,

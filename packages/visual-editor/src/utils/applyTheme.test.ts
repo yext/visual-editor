@@ -35,6 +35,8 @@ describe("buildCssOverridesStyle", () => {
         theme: JSON.stringify({
           "--colors-palette-primary-DEFAULT": "hsl(0 68% 51%)",
           "--colors-palette-primary-foreground": "hsl(0 0% 100%)",
+          "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
+          "--fontFamily-h2-fontFamily": "'Yext Custom', serif",
           "--borderRadius-border-lg": "20px",
         }),
       },
@@ -44,6 +46,12 @@ describe("buildCssOverridesStyle", () => {
 
     // Should include Google Font links and the CSS style tag
     expect(result).toContain("fonts.googleapis.com");
+    expect(result).toContain(
+      '<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link href="./y-fonts/yextcustom.css" rel="stylesheet">'
+    );
     expect(result).toContain(
       '<style id="visual-editor-theme" type="text/css">.components{'
     );
@@ -79,6 +87,7 @@ describe("buildCssOverridesStyle", () => {
       __: {
         theme: JSON.stringify({
           "--fontFamily-button-fontFamily": "'Adamina', serif",
+          "--fontFamily-h2-fontFamily": "'Yext Custom', serif",
         }),
       },
     };
@@ -86,7 +95,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(streamDocument, "./", themeConfig);
 
     expect(result).toBe(
-      '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+      '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
+        '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n' +
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
         '<style id="visual-editor-theme" type="text/css">.components{' +
@@ -95,7 +105,8 @@ describe("buildCssOverridesStyle", () => {
         "--colors-palette-primary-foreground:hsl(0 0% 100%) !important;" +
         "--borderRadius-border-lg:8px !important;" +
         "--borderRadius-border-sm:4px !important;" +
-        "--fontFamily-button-fontFamily:'Adamina', serif !important" +
+        "--fontFamily-button-fontFamily:'Adamina', serif !important;" +
+        "--fontFamily-h2-fontFamily:'Yext Custom', serif !important" +
         "}</style>"
     );
   });
