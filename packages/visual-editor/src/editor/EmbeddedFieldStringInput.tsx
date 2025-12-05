@@ -80,6 +80,14 @@ export const EmbeddedFieldStringInputFromOptions = ({
   );
   const [inputValue, setInputValue] = React.useState(value);
 
+  const inputValueRef = React.useRef(inputValue);
+  const onChangeRef = React.useRef(onChange);
+  const valueRef = React.useRef(value);
+
+  inputValueRef.current = inputValue;
+  onChangeRef.current = onChange;
+  valueRef.current = value;
+
   // Update local state if the prop value changes from outside
   React.useEffect(() => {
     setInputValue(value);
@@ -97,6 +105,15 @@ export const EmbeddedFieldStringInputFromOptions = ({
       clearTimeout(handler);
     };
   }, [inputValue, onChange, value]);
+
+  // Ensure changes are saved when the component unmounts
+  React.useEffect(() => {
+    return () => {
+      if (inputValueRef.current !== valueRef.current) {
+        onChangeRef.current(inputValueRef.current);
+      }
+    };
+  }, []);
 
   const fieldOptions = React.useMemo(() => {
     return options;
@@ -148,6 +165,11 @@ export const EmbeddedFieldStringInputFromOptions = ({
         onSelect={(e) => setCursorPosition(e.currentTarget.selectionStart)}
         onChange={(e) => {
           setInputValue(e.target.value);
+        }}
+        onBlur={() => {
+          if (inputValue !== value) {
+            onChange(inputValue);
+          }
         }}
       />
       {showFieldSelector && (
