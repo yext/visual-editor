@@ -5,20 +5,8 @@ import {
   getFontWeightOptions,
   ThemeOptions,
   msg,
+  constructFontSelectOptions,
 } from "@yext/visual-editor";
-import { StyleSelectOption } from "../utils/themeResolver";
-
-export const constructFontSelectOptions = (fonts: FontRegistry) => {
-  const fontOptions: StyleSelectOption[] = [];
-  for (const fontName in fonts) {
-    const fontDetails = fonts[fontName];
-    fontOptions.push({
-      label: fontName,
-      value: `'${fontName}', ${fontDetails.fallback}`,
-    });
-  }
-  return fontOptions;
-};
 
 export function createDefaultThemeConfig(
   customFonts: FontRegistry = {}

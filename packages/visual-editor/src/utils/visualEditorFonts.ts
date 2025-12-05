@@ -24,6 +24,18 @@ type FontSpecification = {
 // prettier-ignore
 export const defaultFonts: FontRegistry = fontsJs as FontRegistry;
 
+export const constructFontSelectOptions = (fonts: FontRegistry) => {
+  const fontOptions: StyleSelectOption[] = [];
+  for (const fontName in fonts) {
+    const fontDetails = fonts[fontName];
+    fontOptions.push({
+      label: fontName,
+      value: `'${fontName}', ${fontDetails.fallback}`,
+    });
+  }
+  return fontOptions;
+};
+
 /*
  * generateGoogleFontsURL takes a list of fonts and the available values for
  * their variable font axes and the <link> tags needed to load Google fonts

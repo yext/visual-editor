@@ -37,6 +37,7 @@ export {
 export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export {
+  constructFontSelectOptions,
   defaultFonts,
   getFontWeightOptions,
   getFontWeightOverrideOptions,
