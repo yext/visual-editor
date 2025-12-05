@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { ThemeData } from "../internal/types/themeData.ts";
 import {
   extractInUseFontFamilies,
@@ -19,12 +19,20 @@ describe("extractInUseFontFamilies", () => {
       Adamina: { italics: false, weights: [400], fallback: "serif" },
     };
 
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual(expected);
+    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+      themeData,
+      defaultFonts
+    );
+    expect(inUseGoogleFonts).toEqual(expected);
+    expect(inUseCustomFonts).toEqual([]);
   });
 
   it("should return an empty object if theme data is empty", () => {
     const themeData: ThemeData = {};
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({});
+    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({
+      inUseGoogleFonts: {},
+      inUseCustomFonts: [],
+    });
   });
 
   it("should return an empty object if no font families are defined in the theme", () => {
@@ -32,7 +40,13 @@ describe("extractInUseFontFamilies", () => {
       "--colors-palette-primary": "#CF0A2C",
       "--fontSize-h1-fontSize": "48px",
     };
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({});
+
+    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+      themeData,
+      defaultFonts
+    );
+    expect(inUseGoogleFonts).toEqual({});
+    expect(inUseCustomFonts).toEqual([]);
   });
 
   it("should return an empty object if the list of available fonts is empty", () => {
@@ -40,9 +54,13 @@ describe("extractInUseFontFamilies", () => {
       "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif",
     };
     const emptyAvailableFonts = {};
-    expect(extractInUseFontFamilies(themeData, emptyAvailableFonts)).toEqual(
-      {}
+
+    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+      themeData,
+      emptyAvailableFonts
     );
+    expect(inUseGoogleFonts).toEqual({});
+    expect(inUseCustomFonts).toEqual(["Open Sans"]);
   });
 
   it("should handle malformed or empty fontFamily values gracefully", () => {
@@ -54,7 +72,13 @@ describe("extractInUseFontFamilies", () => {
     const expected: FontRegistry = {
       Adamina: { italics: false, weights: [400], fallback: "serif" },
     };
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual(expected);
+
+    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+      themeData,
+      defaultFonts
+    );
+    expect(inUseGoogleFonts).toEqual(expected);
+    expect(inUseCustomFonts).toEqual([]);
   });
 
   it("should not include duplicate fonts, even if used multiple times", () => {
@@ -73,18 +97,35 @@ describe("extractInUseFontFamilies", () => {
       },
     };
 
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual(expected);
+    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+      themeData,
+      defaultFonts
+    );
+    expect(inUseGoogleFonts).toEqual(expected);
+    expect(inUseCustomFonts).toEqual([]);
   });
 
-  it("should handle fontFamily in theme data not in available fonts", () => {
-    const consoleSpy = vi.spyOn(console, "warn");
+  it("should handle custom fonts", () => {
     const themeData: ThemeData = {
-      "--fontFamily-h1-fontFamily": "'Fake Font', sans-serif",
+      "--fontFamily-h1-fontFamily": "'Custom Font', sans-serif",
+      "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
     };
-    expect(extractInUseFontFamilies(themeData, defaultFonts)).toEqual({});
-    expect(consoleSpy).toHaveBeenLastCalledWith(
-      "The font 'Fake Font' is used in the theme but cannot be found in available fonts."
+
+    const expected: FontRegistry = {
+      "Open Sans": {
+        italics: true,
+        minWeight: 300,
+        maxWeight: 800,
+        fallback: "sans-serif",
+      },
+    };
+
+    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+      themeData,
+      defaultFonts
     );
+    expect(inUseGoogleFonts).toEqual(expected);
+    expect(inUseCustomFonts).toEqual(["Custom Font"]);
   });
 });
 

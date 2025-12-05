@@ -1,5 +1,4 @@
 import { configureAxe } from "jest-axe";
-import { defaultThemeConfig, applyTheme } from "@yext/visual-editor";
 // Applies the theme tailwind classes
 import "./componentTests.css";
 // Applies the build css that is applied to the page templates
@@ -9,6 +8,8 @@ import "jest-axe/extend-expect";
 import { expect, vi } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
 import { act } from "@testing-library/react";
+import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
+import { applyTheme } from "../../utils/applyTheme.ts";
 
 // Applies the theme variables and mocks the date
 beforeEach(() => {
@@ -16,7 +17,7 @@ beforeEach(() => {
   vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
 
   const tag = document.createElement("style");
-  const themeTags = applyTheme({}, defaultThemeConfig);
+  const themeTags = applyTheme({}, "./", defaultThemeConfig);
 
   // don't load fonts
   const match = themeTags.match(/<style[^>]*>[\s\S]*?<\/style>/);

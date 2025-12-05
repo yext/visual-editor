@@ -3,9 +3,9 @@ import {
   defaultFonts,
   FontRegistry,
   getFontWeightOptions,
-  constructFontSelectOptions,
   ThemeOptions,
   msg,
+  constructFontSelectOptions,
 } from "@yext/visual-editor";
 
 export function createDefaultThemeConfig(
