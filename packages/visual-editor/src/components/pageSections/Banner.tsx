@@ -12,6 +12,7 @@ import {
   msg,
   pt,
   Body,
+  getDefaultRTF,
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
@@ -225,7 +226,7 @@ export const defaultBannerProps: BannerSectionProps = {
     text: {
       field: "",
       constantValue: {
-        en: "Banner Text",
+        en: getDefaultRTF("Banner Text"),
         hasLocalizedValue: "true",
       },
       constantValueEnabled: true,
