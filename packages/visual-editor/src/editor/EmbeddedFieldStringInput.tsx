@@ -61,6 +61,16 @@ export const EmbeddedFieldStringInputFromEntity = <
   );
 };
 
+const commitChanges = (
+  currentValue: string,
+  originalValue: string,
+  onChange: (value: string) => void
+) => {
+  if (currentValue !== originalValue) {
+    onChange(currentValue);
+  }
+};
+
 export const EmbeddedFieldStringInputFromOptions = ({
   value,
   onChange,
@@ -96,9 +106,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   // Debounce the call to the parent onChange handler
   React.useEffect(() => {
     const handler = setTimeout(() => {
-      if (inputValue !== value) {
-        onChange(inputValue);
-      }
+      commitChanges(inputValue, value, onChange);
     }, 800); // 800ms delay
 
     return () => {
@@ -109,9 +117,11 @@ export const EmbeddedFieldStringInputFromOptions = ({
   // Ensure changes are saved when the component unmounts
   React.useEffect(() => {
     return () => {
-      if (inputValueRef.current !== valueRef.current) {
-        onChangeRef.current(inputValueRef.current);
-      }
+      commitChanges(
+        inputValueRef.current,
+        valueRef.current,
+        onChangeRef.current
+      );
     };
   }, []);
 
@@ -167,9 +177,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
           setInputValue(e.target.value);
         }}
         onBlur={() => {
-          if (inputValue !== value) {
-            onChange(inputValue);
-          }
+          commitChanges(inputValue, value, onChange);
         }}
       />
       {showFieldSelector && (
