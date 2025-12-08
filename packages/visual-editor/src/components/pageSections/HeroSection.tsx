@@ -546,18 +546,6 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           "mx-auto max-w-full md:max-w-[350px] lg:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius"
         );
         break;
-      case "spotlight":
-        data = setDeep(
-          data,
-          "props.slots.GeomodifierSlot[0].props.styles.align",
-          "center"
-        );
-        data = setDeep(
-          data,
-          "props.slots.BusinessNameSlot[0].props.styles.align",
-          "center"
-        );
-        break;
     }
 
     const streamDocument = params.metadata?.streamDocument;

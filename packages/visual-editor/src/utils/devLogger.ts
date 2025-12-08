@@ -4,6 +4,8 @@ export type DevLoggerPrefix =
   | "LAYOUT_SAVE_STATE"
   | "THEME_SAVE_STATE"
   | "LAYOUT_DATA"
+  | "RESOLVED_LAYOUT_DATA"
+  | "PASTED_DATA"
   | "THEME_DATA"
   | "THEME_HISTORIES"
   | "DOCUMENT"
