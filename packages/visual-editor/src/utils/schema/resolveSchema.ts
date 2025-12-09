@@ -1,6 +1,6 @@
 import { OpeningHoursSchema, PhotoGallerySchema } from "@yext/pages-components";
 import { StreamDocument } from "../applyTheme";
-import { embeddedFieldRegex, findField } from "../resolveYextEntityField";
+import { embeddedFieldRegexSource, findField } from "../resolveYextEntityField";
 import { removeEmptyValues } from "./helpers";
 import {
   resolvePageSetUrlTemplate,
@@ -8,8 +8,8 @@ import {
 } from "../resolveUrlTemplate";
 import { mergeMeta } from "../mergeMeta";
 
-// Recompile the embedded field regex to support matching
-const EMBEDDED_FIELD_REGEX = new RegExp(embeddedFieldRegex.source);
+// Create a fresh regex instance for each use to avoid any potential state retention
+const getEmbeddedFieldRegex = () => new RegExp(embeddedFieldRegexSource, "g");
 
 const stringifyResolvedField = (fieldValue: any): string => {
   if (fieldValue === undefined || fieldValue === null) {
@@ -41,7 +41,8 @@ export const resolveSchemaString = (
   streamDocument: StreamDocument,
   schema: string
 ): string => {
-  return schema.replace(embeddedFieldRegex, (_, fieldName) => {
+  const regex = getEmbeddedFieldRegex();
+  return schema.replace(regex, (_, fieldName) => {
     const resolvedValue = findField(streamDocument, fieldName);
 
     if (resolvedValue === undefined || resolvedValue === null) {
@@ -63,7 +64,21 @@ export const resolveSchemaJson = (
   return removeEmptyValues(resolvedValues);
 };
 
-const resolveNode = (streamDocument: StreamDocument, node: any): any => {
+const resolveNode = (
+  streamDocument: StreamDocument,
+  node: any,
+  visited: WeakSet<object> = new WeakSet(),
+  depth: number = 0
+): any => {
+  // Safety limit: prevent stack overflow from extremely deep structures
+  const MAX_DEPTH = 100;
+  if (depth > MAX_DEPTH) {
+    console.warn(
+      "[@yext/visual-editor] Maximum recursion depth exceeded in resolveNode. Returning original node."
+    );
+    return node;
+  }
+
   // Case 1: Handle primitives other than objects/arrays
   if (node === null || typeof node !== "object") {
     // Return numbers, booleans, undefined, and null directly.
@@ -74,29 +89,63 @@ const resolveNode = (streamDocument: StreamDocument, node: any): any => {
     return node;
   }
 
-  // Case 2: Handle Arrays
-  if (Array.isArray(node)) {
-    // Recursively resolve each item in the array
-    return node.map((child) => resolveNode(streamDocument, child));
+  // Check for circular references
+  if (visited.has(node)) {
+    console.warn(
+      "[@yext/visual-editor] Circular reference detected in resolveNode. Returning original node."
+    );
+    return node;
   }
 
-  // Case 3: Handle Objects
-  const newSchema: Record<string, any> = {};
-  for (const key in node) {
-    if (Object.prototype.hasOwnProperty.call(node, key)) {
-      if (node[key] === "[[dm_directoryChildren]]") {
-        // handle directory children
-        newSchema[key] = resolveDirectoryChildren(streamDocument, node[key]);
-      } else if (specialCases.includes(key)) {
-        // Handle keys with special formatting
-        newSchema[key] = resolveSpecialCases(streamDocument, key, node[key]);
-      } else {
-        // Otherwise, recursively resolve each property in the object
-        newSchema[key] = resolveNode(streamDocument, node[key]);
+  // Mark this object as visited
+  visited.add(node);
+
+  try {
+    // Case 2: Handle Arrays
+    if (Array.isArray(node)) {
+      // Recursively resolve each item in the array
+      return node.map((child) =>
+        resolveNode(streamDocument, child, visited, depth + 1)
+      );
+    }
+
+    // Case 3: Handle Objects
+    const newSchema: Record<string, any> = {};
+    for (const key in node) {
+      if (Object.prototype.hasOwnProperty.call(node, key)) {
+        if (node[key] === "[[dm_directoryChildren]]") {
+          // handle directory children
+          newSchema[key] = resolveDirectoryChildren(
+            streamDocument,
+            node[key],
+            visited,
+            depth + 1
+          );
+        } else if (specialCases.includes(key)) {
+          // Handle keys with special formatting
+          newSchema[key] = resolveSpecialCases(
+            streamDocument,
+            key,
+            node[key],
+            visited,
+            depth + 1
+          );
+        } else {
+          // Otherwise, recursively resolve each property in the object
+          newSchema[key] = resolveNode(
+            streamDocument,
+            node[key],
+            visited,
+            depth + 1
+          );
+        }
       }
     }
+    return newSchema;
+  } finally {
+    // Note: We don't remove from visited here because we want to detect
+    // circular references even if the same object appears at different depths
   }
-  return newSchema;
 };
 
 const specialCases = ["openingHours", "image", "hasOfferCatalog"];
@@ -104,15 +153,17 @@ const specialCases = ["openingHours", "image", "hasOfferCatalog"];
 const resolveSpecialCases = (
   streamDocument: StreamDocument,
   key: string,
-  value: any
+  value: any,
+  visited: WeakSet<object> = new WeakSet(),
+  depth: number = 0
 ): any => {
   if (typeof value !== "string") {
-    return resolveNode(streamDocument, value);
+    return resolveNode(streamDocument, value, visited, depth);
   }
 
-  const fieldName = value.match(EMBEDDED_FIELD_REGEX)?.[1];
+  const fieldName = value.match(getEmbeddedFieldRegex())?.[1];
   if (!fieldName) {
-    return resolveNode(streamDocument, value);
+    return resolveNode(streamDocument, value, visited, depth);
   }
 
   const resolvedValue = findField(streamDocument, fieldName) as any;
@@ -122,7 +173,7 @@ const resolveSpecialCases = (
       const hoursSchema = OpeningHoursSchema(resolvedValue);
 
       if (Object.keys(hoursSchema).length === 0) {
-        return resolveNode(streamDocument, value);
+        return resolveNode(streamDocument, value, visited, depth);
       }
 
       return hoursSchema.openingHours;
@@ -131,14 +182,14 @@ const resolveSpecialCases = (
       const gallerySchema = PhotoGallerySchema(resolvedValue);
 
       if (!gallerySchema?.image?.length) {
-        return resolveNode(streamDocument, value);
+        return resolveNode(streamDocument, value, visited, depth);
       }
 
       return gallerySchema.image;
     }
     case "hasOfferCatalog": {
       if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
-        return resolveNode(streamDocument, value);
+        return resolveNode(streamDocument, value, visited, depth);
       }
 
       return {
@@ -153,27 +204,29 @@ const resolveSpecialCases = (
       };
     }
     default: {
-      return resolveNode(streamDocument, value);
+      return resolveNode(streamDocument, value, visited, depth);
     }
   }
 };
 
 const resolveDirectoryChildren = (
   streamDocument: StreamDocument,
-  value: any
+  value: any,
+  visited: WeakSet<object> = new WeakSet(),
+  depth: number = 0
 ): any => {
   if (typeof value !== "string") {
-    return resolveNode(streamDocument, value);
+    return resolveNode(streamDocument, value, visited, depth);
   }
 
-  const fieldName = value.match(EMBEDDED_FIELD_REGEX)?.[1];
+  const fieldName = value.match(getEmbeddedFieldRegex())?.[1];
   if (!fieldName) {
-    return resolveNode(streamDocument, value);
+    return resolveNode(streamDocument, value, visited, depth);
   }
 
   const resolvedValue = findField(streamDocument, fieldName) as any;
   if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
-    return resolveNode(streamDocument, value);
+    return resolveNode(streamDocument, value, visited, depth);
   }
 
   return resolvedValue.map((child: any, index: number) => {

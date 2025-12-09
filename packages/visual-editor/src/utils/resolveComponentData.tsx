@@ -101,11 +101,26 @@ export function resolveComponentData<T>(
 /**
  * Recursively traverses a value and resolves any translatable types
  * (TranslatableString, TranslatableRichText) to their final form.
+ * @param value The value to resolve.
+ * @param locale The locale to use for resolution.
+ * @param visited WeakSet to track visited objects and prevent circular reference infinite recursion.
+ * @param depth Current recursion depth to prevent stack overflow from very deep structures.
  */
 const resolveTranslatableType = (
   value: any,
-  locale: string
+  locale: string,
+  visited: WeakSet<object> = new WeakSet(),
+  depth: number = 0
 ): any | string | React.ReactElement => {
+  // Safety limit: prevent stack overflow from extremely deep structures
+  const MAX_DEPTH = 100;
+  if (depth > MAX_DEPTH) {
+    console.warn(
+      "[@yext/visual-editor] Maximum recursion depth exceeded in resolveTranslatableType. Returning original value."
+    );
+    return value;
+  }
+
   // If the value is already a React element, return it immediately.
   if (React.isValidElement(value)) {
     return value;
@@ -115,36 +130,62 @@ const resolveTranslatableType = (
     return value;
   }
 
-  // Handle a direct RichText object that is not inside a Translatable object.
-  if (isRichText(value)) {
-    return toStringOrElement(value);
+  // Check for circular references
+  if (visited.has(value)) {
+    console.warn(
+      "[@yext/visual-editor] Circular reference detected in resolveTranslatableType. Returning original value."
+    );
+    return value;
   }
 
-  // Handle TranslatableString
-  if (value.hasLocalizedValue === "true" && typeof value[locale] === "string") {
-    return value[locale];
-  }
+  // Mark this object as visited
+  visited.add(value);
 
-  // Handle TranslatableRichText
-  if (value.hasLocalizedValue === "true" && isRichText(value[locale])) {
-    return toStringOrElement(value[locale]);
-  }
+  try {
+    // Handle a direct RichText object that is not inside a Translatable object.
+    if (isRichText(value)) {
+      return toStringOrElement(value);
+    }
 
-  // Handle missing translation
-  if (value.hasLocalizedValue === "true" && !value[locale]) {
-    return "";
-  }
+    // Handle TranslatableString
+    if (
+      value.hasLocalizedValue === "true" &&
+      typeof value[locale] === "string"
+    ) {
+      return value[locale];
+    }
 
-  if (Array.isArray(value)) {
-    return value.map((item) => resolveTranslatableType(item, locale));
-  }
+    // Handle TranslatableRichText
+    if (value.hasLocalizedValue === "true" && isRichText(value[locale])) {
+      return toStringOrElement(value[locale]);
+    }
 
-  // If it's an object, recursively resolve each property.
-  const newValue: { [key: string]: any } = {};
-  for (const key in value) {
-    newValue[key] = resolveTranslatableType(value[key], locale);
+    // Handle missing translation
+    if (value.hasLocalizedValue === "true" && !value[locale]) {
+      return "";
+    }
+
+    if (Array.isArray(value)) {
+      return value.map((item) =>
+        resolveTranslatableType(item, locale, visited, depth + 1)
+      );
+    }
+
+    // If it's an object, recursively resolve each property.
+    const newValue: { [key: string]: any } = {};
+    for (const key in value) {
+      newValue[key] = resolveTranslatableType(
+        value[key],
+        locale,
+        visited,
+        depth + 1
+      );
+    }
+    return newValue;
+  } finally {
+    // Note: We don't remove from visited here because we want to detect
+    // circular references even if the same object appears at different depths
   }
-  return newValue;
 };
 
 function isRichText(value: unknown): value is RichText {

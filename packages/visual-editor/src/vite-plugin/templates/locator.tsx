@@ -25,6 +25,7 @@ import {
   getCanonicalUrl,
   migrate,
   migrationRegistry,
+  clearPuckCache,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -115,6 +116,11 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const updatedData = await resolveAllData(migratedData, locatorConfig, {
     streamDocument: document,
   });
+
+  // Clear Puck's internal cache after resolving data to prevent memory leaks
+  // when processing many pages. The cache stores resolved data per component ID
+  // and never gets cleared, causing memory to accumulate across page invocations.
+  clearPuckCache();
 
   return { ...props, data: updatedData };
 };
