@@ -157,7 +157,7 @@ export const CTA = (props: CTAProps) => {
 
   const resolvedProps = useResolvedCtaProps(props);
 
-  const dynamicStyle = (() => {
+  const dynamicStyle: React.CSSProperties = (() => {
     const bg = color?.bgColor?.replace("bg-", "");
     const textColor = color?.textColor?.replace("text-", "");
     const border = bg && `var(--colors-${bg})`;
@@ -179,6 +179,12 @@ export const CTA = (props: CTAProps) => {
 
     return {};
   })();
+
+  const disabledStyle: React.CSSProperties = {
+    ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
+    cursor: "default",
+    pointerEvents: "auto",
+  };
 
   if (!resolvedProps) {
     return null;
@@ -233,7 +239,7 @@ export const CTA = (props: CTAProps) => {
           e.preventDefault();
           e.stopPropagation();
         }}
-        style={{ cursor: "default", pointerEvents: "auto" }}
+        style={disabledStyle}
       >
         {linkContent}
       </Button>
