@@ -35,6 +35,14 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 
+import { createAiPlugin } from "@puckeditor/plugin-ai";
+import "@puckeditor/plugin-ai/styles.css";
+
+import headingAnalyzer from "@measured/puck-plugin-heading-analyzer";
+import "@measured/puck-plugin-heading-analyzer/dist/index.css";
+
+const aiPlugin = createAiPlugin();
+
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
 
@@ -85,7 +93,6 @@ type InternalLayoutEditorProps = {
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
   metadata?: Metadata;
-  plugins?: Plugin<Config>[] | undefined;
 };
 
 // Render Puck editor
@@ -103,7 +110,6 @@ export const InternalLayoutEditor = ({
   buildVisualConfigLocalStorageKey,
   localDev,
   metadata,
-  plugins,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const historyIndex = useRef<number>(0);
@@ -386,6 +392,7 @@ export const InternalLayoutEditor = ({
   return (
     <EntityTooltipsProvider>
       <Puck
+        plugins={[aiPlugin, headingAnalyzer] as Plugin[]}
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
@@ -575,7 +582,6 @@ export const InternalLayoutEditor = ({
           puck: reloadDataOnDocumentChange,
         }}
         metadata={metadata}
-        plugins={plugins}
       />
     </EntityTooltipsProvider>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as lzstring from "lz-string";
 import {
   InitialHistory,
@@ -6,7 +6,6 @@ import {
   Data,
   History,
   AppState,
-  type Plugin,
 } from "@measured/puck";
 import { InternalLayoutEditor } from "./InternalLayoutEditor.tsx";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -36,7 +35,6 @@ type LayoutEditorProps = {
   localDev: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
-  plugins?: Plugin<Config>[] | undefined;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -49,7 +47,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     localDev,
     metadata,
     streamDocument,
-    plugins,
   } = props;
 
   const {
@@ -293,7 +290,6 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
       metadata={metadata}
-      plugins={plugins}
     />
   ) : (
     <LoadingScreen

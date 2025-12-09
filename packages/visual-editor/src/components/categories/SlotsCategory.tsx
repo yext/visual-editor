@@ -192,81 +192,82 @@ const ExpandedHeaderComponents = {
   },
 };
 
-export const SlotsCategoryComponents = {
-  AddressSlot: { ...Address, permissions: lockedPermissions },
-  BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
-  BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
-  CopyrightMessageSlot: {
-    ...CopyrightMessageSlot,
-    permissions: lockedPermissions,
-  },
-  CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
-  DirectoryCard: { ...DirectoryCard, permissions: lockedPermissions },
-  DirectoryGrid: { ...DirectoryGrid, permissions: lockedPermissions },
-  EmailsSlot: { ...Emails, permissions: lockedPermissions },
-  EventCard: { ...EventCard, permissions: lockedPermissions },
-  EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
-  ...ExpandedHeaderComponents,
-  FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
-  FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
-  FooterExpandedLinkSectionSlot: {
-    ...FooterExpandedLinkSectionSlot,
-    permissions: lockedPermissions,
-  },
-  FooterExpandedLinksWrapper: {
-    ...FooterExpandedLinksWrapper,
-    permissions: lockedPermissions,
-  },
-  FooterLinksSlot: { ...FooterLinksSlot, permissions: lockedPermissions },
-  FooterLogoSlot: { ...FooterLogoSlot, permissions: lockedPermissions },
-  FooterSocialLinksSlot: {
-    ...FooterSocialLinksSlot,
-    permissions: lockedPermissions,
-  },
-  FooterUtilityImagesSlot: {
-    ...FooterUtilityImagesSlot,
-    permissions: lockedPermissions,
-  },
-  HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
-  HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
-  HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
-  HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
-  ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
-  InsightCardsWrapper: {
-    ...InsightCardsWrapper,
-    permissions: lockedPermissions,
-  },
-  InsightCard: { ...InsightCard, permissions: lockedPermissions },
-  NearbyLocationCardsWrapper: {
-    ...NearbyLocationCardsWrapper,
-    permissions: lockedPermissions,
-  },
-  PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
-  PhoneSlot: { ...Phone, permissions: lockedPermissions },
-  PhotoGalleryWrapper: {
-    ...PhotoGalleryWrapper,
-    permissions: lockedPermissions,
-  },
-  ProductCardsWrapper: {
-    ...ProductCardsWrapper,
-    permissions: lockedPermissions,
-  },
-  ProductCard: { ...ProductCard, permissions: lockedPermissions },
-  SecondaryFooterSlot: {
-    ...SecondaryFooterSlot,
-    permissions: lockedPermissions,
-  },
-  TeamCard: { ...TeamCard, permissions: lockedPermissions },
-  TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },
-  TestimonialCard: { ...TestimonialCard, permissions: lockedPermissions },
-  TestimonialCardsWrapper: {
-    ...TestimonialCardsWrapper,
-    permissions: lockedPermissions,
-  },
-  TextListSlot: { ...TextList, permissions: lockedPermissions },
-  Timestamp: { ...Timestamp, permissions: lockedPermissions },
-  VideoSlot: { ...Video, permissions: lockedPermissions },
-};
+export const SlotsCategoryComponents: { [K in keyof SlotsCategoryProps]: any } =
+  {
+    AddressSlot: { ...Address, permissions: lockedPermissions },
+    BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
+    BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
+    CopyrightMessageSlot: {
+      ...CopyrightMessageSlot,
+      permissions: lockedPermissions,
+    },
+    CTASlot: { ...CTAWrapper, permissions: lockedPermissions },
+    DirectoryCard: { ...DirectoryCard, permissions: lockedPermissions },
+    DirectoryGrid: { ...DirectoryGrid, permissions: lockedPermissions },
+    EmailsSlot: { ...Emails, permissions: lockedPermissions },
+    EventCard: { ...EventCard, permissions: lockedPermissions },
+    EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
+    ...ExpandedHeaderComponents,
+    FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
+    FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
+    FooterExpandedLinkSectionSlot: {
+      ...FooterExpandedLinkSectionSlot,
+      permissions: lockedPermissions,
+    },
+    FooterExpandedLinksWrapper: {
+      ...FooterExpandedLinksWrapper,
+      permissions: lockedPermissions,
+    },
+    FooterLinksSlot: { ...FooterLinksSlot, permissions: lockedPermissions },
+    FooterLogoSlot: { ...FooterLogoSlot, permissions: lockedPermissions },
+    FooterSocialLinksSlot: {
+      ...FooterSocialLinksSlot,
+      permissions: lockedPermissions,
+    },
+    FooterUtilityImagesSlot: {
+      ...FooterUtilityImagesSlot,
+      permissions: lockedPermissions,
+    },
+    HeadingTextSlot: { ...HeadingText, permissions: lockedPermissions },
+    HeroImageSlot: { ...HeroImage, permissions: lockedPermissions },
+    HoursStatusSlot: { ...HoursStatus, permissions: lockedPermissions },
+    HoursTableSlot: { ...HoursTable, permissions: lockedPermissions },
+    ImageSlot: { ...ImageWrapper, permissions: lockedPermissions },
+    InsightCardsWrapper: {
+      ...InsightCardsWrapper,
+      permissions: lockedPermissions,
+    },
+    InsightCard: { ...InsightCard, permissions: lockedPermissions },
+    NearbyLocationCardsWrapper: {
+      ...NearbyLocationCardsWrapper,
+      permissions: lockedPermissions,
+    },
+    PhoneNumbersSlot: { ...PhoneList, permissions: lockedPermissions },
+    PhoneSlot: { ...Phone, permissions: lockedPermissions },
+    PhotoGalleryWrapper: {
+      ...PhotoGalleryWrapper,
+      permissions: lockedPermissions,
+    },
+    ProductCardsWrapper: {
+      ...ProductCardsWrapper,
+      permissions: lockedPermissions,
+    },
+    ProductCard: { ...ProductCard, permissions: lockedPermissions },
+    SecondaryFooterSlot: {
+      ...SecondaryFooterSlot,
+      permissions: lockedPermissions,
+    },
+    TeamCard: { ...TeamCard, permissions: lockedPermissions },
+    TeamCardsWrapper: { ...TeamCardsWrapper, permissions: lockedPermissions },
+    TestimonialCard: { ...TestimonialCard, permissions: lockedPermissions },
+    TestimonialCardsWrapper: {
+      ...TestimonialCardsWrapper,
+      permissions: lockedPermissions,
+    },
+    TextListSlot: { ...TextList, permissions: lockedPermissions },
+    Timestamp: { ...Timestamp, permissions: lockedPermissions },
+    VideoSlot: { ...Video, permissions: lockedPermissions },
+  };
 
 export const SlotsCategory = Object.keys(
   SlotsCategoryComponents
