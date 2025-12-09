@@ -18,6 +18,7 @@ import {
   CardWrapperType,
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultTeamCardSlotData, TeamCardProps } from "./TeamCard.tsx";
+import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 
 export type TeamCardsWrapperProps = CardWrapperType<TeamSectionType>;
 
@@ -58,6 +59,16 @@ export const TeamCardsWrapper: ComponentConfig<{
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    const sharedCardProps =
+      data.props.slots.CardSlot.length === 0
+        ? undefined
+        : {
+            backgroundColor:
+              data.props.slots.CardSlot[0].props.styles.backgroundColor,
+            slotStyles: gatherSlotStyles(
+              data.props.slots.CardSlot[0].props.slots
+            ),
+          };
 
     if (!data?.props?.data) {
       return data;
@@ -86,7 +97,12 @@ export const TeamCardsWrapper: ComponentConfig<{
           ? Array(requiredLength - currentLength)
               .fill(null)
               .map(() =>
-                defaultTeamCardSlotData(`TeamCard-${crypto.randomUUID()}`)
+                defaultTeamCardSlotData(
+                  `TeamCard-${crypto.randomUUID()}`,
+                  undefined,
+                  sharedCardProps?.backgroundColor,
+                  sharedCardProps?.slotStyles
+                )
               )
           : [];
       const updatedCardSlot = [
@@ -140,7 +156,12 @@ export const TeamCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultTeamCardSlotData(newId, i);
+          return defaultTeamCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          );
         }
 
         newCard = setDeep(newCard, "props.id", newId);

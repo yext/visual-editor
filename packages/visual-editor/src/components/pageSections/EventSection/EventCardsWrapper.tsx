@@ -18,6 +18,7 @@ import {
   CardWrapperType,
 } from "../../../utils/cardSlots/cardWrapperHelpers.ts";
 import { defaultEventCardSlotData, EventCardProps } from "./EventCard.tsx";
+import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 
 export type EventCardsWrapperProps = CardWrapperType<EventSectionType>;
 
@@ -55,6 +56,18 @@ export const EventCardsWrapper: ComponentConfig<{
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    const sharedCardProps =
+      data.props.slots.CardSlot.length === 0
+        ? undefined
+        : {
+            backgroundColor:
+              data.props.slots.CardSlot[0].props.styles.backgroundColor,
+            truncateDescription:
+              data.props.slots.CardSlot[0].props.truncateDescription,
+            slotStyles: gatherSlotStyles(
+              data.props.slots.CardSlot[0].props.slots
+            ),
+          };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
@@ -82,7 +95,13 @@ export const EventCardsWrapper: ComponentConfig<{
           ? Array(requiredLength - currentLength)
               .fill(null)
               .map(() =>
-                defaultEventCardSlotData(`EventCard-${crypto.randomUUID()}`)
+                defaultEventCardSlotData(
+                  `EventCard-${crypto.randomUUID()}`,
+                  undefined,
+                  sharedCardProps?.backgroundColor,
+                  sharedCardProps?.truncateDescription,
+                  sharedCardProps?.slotStyles
+                )
               )
           : [];
       const updatedCardSlot = [
@@ -136,7 +155,13 @@ export const EventCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultEventCardSlotData(newId, i);
+          return defaultEventCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.truncateDescription,
+            sharedCardProps?.slotStyles
+          );
         }
 
         newCard = setDeep(newCard, "props.id", newId); // update the id

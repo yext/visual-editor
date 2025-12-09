@@ -26,12 +26,17 @@ export const useGetCardSlots = <T extends { slots: Record<string, Slot> }>(
 
   // Process the slot props into just the shared styles
   const slotStyles = React.useMemo(() => {
-    const slotNameToStyles = {} as Record<string, any>;
-    Object.entries(slotProps || {}).forEach(([key, value]) => {
-      slotNameToStyles[key] = value[0].props.styles || {};
-    });
-    return slotNameToStyles;
+    return gatherSlotStyles(slotProps || {});
   }, [slotProps]);
 
   return { slotStyles, getPuck, slotProps };
+};
+
+export const gatherSlotStyles = (slotProps: Record<string, Slot>) => {
+  return Object.fromEntries(
+    Object.entries(slotProps).map(([key, value]) => [
+      key,
+      value[0].props.styles || {},
+    ])
+  );
 };
