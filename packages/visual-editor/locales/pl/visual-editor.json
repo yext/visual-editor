@@ -299,10 +299,10 @@
       "compact": "Kompaktowy",
       "ctaVariant": {
         "link": "Połączyć",
+        "outline": "Zarys",
         "primary": "Podstawowy",
         "secondary": "Wtórny",
-        "solid": "",
-        "outline": ""
+        "solid": "Solidny"
       },
       "dark": "Ciemny",
       "default": "Domyślny",

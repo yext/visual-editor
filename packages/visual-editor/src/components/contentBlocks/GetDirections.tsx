@@ -56,7 +56,7 @@ export const GetDirections: ComponentConfig<{ props: GetDirectionsProps }> = {
     const updatedFields = resolveDataFromParent(getDirectionsFields, data);
     const ctaVariant = data.props.variant;
     const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
-    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
+    setDeep(updatedFields, "color.visible", showColor);
     return updatedFields;
   },
   render: (props) => <GetDirectionsComponent {...props} />,

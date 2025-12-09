@@ -299,10 +299,10 @@
       "compact": "Kompaktný",
       "ctaVariant": {
         "link": "Prepojiť",
+        "outline": "Obrys",
         "primary": "Primárny",
         "secondary": "Druhoradý",
-        "solid": "",
-        "outline": ""
+        "solid": "Pevné"
       },
       "dark": "Tmavý",
       "default": "Predvolený",

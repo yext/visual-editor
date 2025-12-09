@@ -305,10 +305,10 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Forbindelse",
+        "outline": "Disposition",
         "primary": "Primær",
         "secondary": "Sekundær",
-        "solid": "Solid",
-        "outline": "Disposition"
+        "solid": "Solid"
       },
       "dark": "Mørk",
       "default": "Misligholdelse",

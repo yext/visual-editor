@@ -298,10 +298,10 @@
       "compact": "Compactar",
       "ctaVariant": {
         "link": "Link",
+        "outline": "Contorno",
         "primary": "Primário",
         "secondary": "Secundário",
-        "solid": "",
-        "outline": ""
+        "solid": "Sólido"
       },
       "dark": "Escuro",
       "default": "Padrão",

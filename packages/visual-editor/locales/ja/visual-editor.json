@@ -298,10 +298,10 @@
       "compact": "コンパクト",
       "ctaVariant": {
         "link": "リンク",
+        "outline": "概要",
         "primary": "主要な",
         "secondary": "二次",
-        "solid": "",
-        "outline": ""
+        "solid": "固体"
       },
       "dark": "暗い",
       "default": "デフォルト",

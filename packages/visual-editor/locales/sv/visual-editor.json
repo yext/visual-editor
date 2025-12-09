@@ -299,10 +299,10 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Länk",
+        "outline": "Skissera",
         "primary": "Primär",
         "secondary": "Sekundär",
-        "solid": "",
-        "outline": ""
+        "solid": "Fast"
       },
       "dark": "Mörk",
       "default": "Standard",
