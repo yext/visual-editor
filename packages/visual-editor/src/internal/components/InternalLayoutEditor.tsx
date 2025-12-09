@@ -32,6 +32,7 @@ import { cn } from "../../utils/cn.ts";
 import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
+import { isDeepEqual } from "../../utils/deepEqual.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -268,10 +269,22 @@ export const InternalLayoutEditor = ({
 
       React.useEffect(() => {
         const resolveData = async () => {
+          devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
+
           const resolvedData = await resolveAllData(appState.data, config, {
             streamDocument,
           });
+
+          devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
+
+          if (isDeepEqual(appState.data, resolvedData)) {
+            devLogger.log(
+              "reloadDataOnDocumentChange - no layout changes detected"
+            );
+            return;
+          }
+
           dispatch({ type: "setData", data: resolvedData });
         };
 
@@ -473,6 +486,30 @@ export const InternalLayoutEditor = ({
                     // oxlint-disable-next-line no-unused-vars
                     const { id: _, parentData: __, ...rest } = item.props;
 
+                    // CardsWrappers need to have their children's ids preserved in the constantValue array
+                    if (item.type.includes("CardsWrapper")) {
+                      if (
+                        "data" in rest &&
+                        "constantValue" in rest.data &&
+                        "slots" in rest &&
+                        "CardSlot" in rest.slots
+                      ) {
+                        const constantValue = rest.data.constantValue;
+                        if (
+                          Array.isArray(constantValue) &&
+                          constantValue.every(
+                            (cv: unknown) =>
+                              typeof cv === "object" && cv && "id" in cv
+                          )
+                        ) {
+                          constantValue.forEach((cv, i) => {
+                            cv.id =
+                              rest?.slots?.CardSlot[i]?.props?.id || cv.id;
+                          });
+                        }
+                      }
+                    }
+
                     return {
                       ...item,
                       props: { ...rest, id },
@@ -482,6 +519,7 @@ export const InternalLayoutEditor = ({
                 // preserve the selected component's id and type
                 newData.props.id = selectedComponent.props.id;
 
+                devLogger.logData("PASTED_DATA", newData);
                 dispatch({
                   type: "replace",
                   destinationZone: appState.ui.itemSelector.zone,
