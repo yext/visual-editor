@@ -42,7 +42,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   return {
-    other: fullStorySnippet + applyTheme(document, defaultThemeConfig),
+    other: fullStorySnippet + applyTheme(document, "./", defaultThemeConfig),
   };
 };
 

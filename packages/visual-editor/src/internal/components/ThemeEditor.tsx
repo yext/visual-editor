@@ -210,7 +210,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     if (themeHistories && themeConfig) {
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as ThemeData,
-        themeConfig
+        themeConfig,
+        true
       );
     }
   }, [themeHistories, themeConfig]);

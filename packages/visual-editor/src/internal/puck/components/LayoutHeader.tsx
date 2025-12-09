@@ -20,8 +20,10 @@ import {
   pt,
 } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
+import { DevLogger } from "../../../utils/devLogger.ts";
 
 const usePuck = createUsePuck();
+const devLogger = new DevLogger();
 
 type LayoutHeaderProps = {
   templateMetadata: TemplateMetadata;
@@ -161,6 +163,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   streamDocument
                 );
 
+                devLogger.logData("PASTED_DATA", migratedPastedData);
                 dispatch({
                   type: "setData",
                   data: migratedPastedData,
