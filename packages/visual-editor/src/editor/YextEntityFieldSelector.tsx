@@ -1,5 +1,11 @@
 import React from "react";
-import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
+import {
+  AutoField,
+  FieldLabel,
+  Field,
+  CustomField,
+  UiState,
+} from "@measured/puck";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
@@ -46,8 +52,6 @@ import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeS
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection";
 
 const devLogger = new DevLogger();
-
-type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
@@ -205,7 +209,13 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
 ): Field<YextEntityField<U>> => {
   return {
     type: "custom",
-    render: ({ value, onChange }: RenderProps) => {
+    render: ({
+      value,
+      onChange,
+    }: {
+      value: YextEntityField<U>;
+      onChange: (value: YextEntityField<U>) => void;
+    }) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           ...value,
@@ -217,7 +227,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
         <>
           <ConstantValueModeToggler
             fieldTypeFilter={props.filter.types ?? []}
-            constantValueEnabled={value?.constantValueEnabled}
+            constantValueEnabled={value?.constantValueEnabled ?? false}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
@@ -366,7 +376,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <AutoField
       key={value?.selectedType} // reset when type changes
-      onChange={(newConstantValue, uiState) =>
+      onChange={(newConstantValue: T, uiState: Partial<UiState>) =>
         onChange(
           {
             ...value,
@@ -375,8 +385,8 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           uiState
         )
       }
-      value={value?.constantValue}
-      field={constantFieldConfig}
+      value={value?.constantValue as T}
+      field={constantFieldConfig as Field<T> | undefined}
     />
   );
 
@@ -499,7 +509,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       {typeSelectorConfig && (
         <AutoField
           field={typeSelector!}
-          onChange={(selectedType, uiState) => {
+          onChange={(selectedType: string, uiState: Partial<UiState>) => {
             onChange(
               {
                 ...value,
@@ -515,7 +525,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       <AutoField
         key={value?.selectedType}
         field={entityFieldSelector}
-        onChange={(selectedEntityField, uiState) => {
+        onChange={(selectedEntityField: string, uiState: Partial<UiState>) => {
           onChange(
             {
               ...value,

@@ -7,7 +7,13 @@ import React from "react";
 
 export const PHONE_CONSTANT_CONFIG: CustomField<string | undefined> = {
   type: "custom",
-  render: ({ value, onChange }) => {
+  render: ({
+    value,
+    onChange,
+  }: {
+    value: string | undefined;
+    onChange: (value: string | undefined) => void;
+  }) => {
     /* Managing an internal state is necessary to prevent PhoneInput from 
        reverting back to its initial value unexpectedly. */
     const [phoneNumber, setPhoneNumber] = React.useState(value);

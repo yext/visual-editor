@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField, Field, FieldLabel } from "@measured/puck";
 import { useTranslation } from "react-i18next";
 import {
   TARGET_ORIGINS,
@@ -22,7 +22,15 @@ export type ImagePayload = {
 
 export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
   type: "custom",
-  render: ({ onChange, value, field }) => {
+  render: ({
+    onChange,
+    value,
+    field,
+  }: {
+    onChange: (value: AssetImageType | undefined) => void;
+    value: AssetImageType | undefined;
+    field: Field;
+  }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
     const [pendingMessageId, setPendingMessageId] = React.useState<
@@ -175,7 +183,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
         <AutoField
           field={altTextField}
           value={value?.alternateText}
-          onChange={(newValue) =>
+          onChange={(newValue: TranslatableString | undefined) =>
             onChange(value ? { ...value, alternateText: newValue } : undefined)
           }
         />
