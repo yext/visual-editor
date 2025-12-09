@@ -36,7 +36,7 @@ export const gatherSlotStyles = (slotProps: Record<string, Slot>) => {
   return Object.fromEntries(
     Object.entries(slotProps).map(([key, value]) => [
       key,
-      value[0].props.styles || {},
+      value?.[0]?.props?.styles || {},
     ])
   );
 };
