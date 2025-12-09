@@ -6,6 +6,7 @@ import {
   Data,
   History,
   AppState,
+  type Plugin,
 } from "@measured/puck";
 import { InternalLayoutEditor } from "./InternalLayoutEditor.tsx";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -35,7 +36,7 @@ type LayoutEditorProps = {
   localDev: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
-  plugins: any[];
+  plugins?: Plugin<Config>[] | undefined;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {

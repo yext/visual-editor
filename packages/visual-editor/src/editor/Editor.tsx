@@ -3,7 +3,7 @@ import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { type Config } from "@measured/puck";
+import { type Config, type Plugin } from "@measured/puck";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
@@ -56,7 +56,7 @@ export type EditorProps = {
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
   metadata?: Metadata; // passed into puck's global metadata
-  plugins: any[];
+  plugins?: Plugin<Config>[] | undefined;
 };
 
 export const Editor = ({

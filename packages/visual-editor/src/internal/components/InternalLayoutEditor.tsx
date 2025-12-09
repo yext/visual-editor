@@ -12,6 +12,7 @@ import {
   FieldLabel,
   createUsePuck,
   resolveAllData,
+  type Plugin,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -84,7 +85,7 @@ type InternalLayoutEditorProps = {
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
   metadata?: Metadata;
-  plugins: any[];
+  plugins?: Plugin<Config>[] | undefined;
 };
 
 // Render Puck editor
