@@ -186,6 +186,7 @@
     "cards": "Cartões",
     "category": "Categoria",
     "collapseDays": "Dias de colapso",
+    "color": "Cor",
     "columns": "Colunas",
     "commaSeparated": "Separados por Vírgula",
     "contributorName": "Nome do colaborador",
@@ -298,7 +299,9 @@
       "ctaVariant": {
         "link": "Link",
         "primary": "Primário",
-        "secondary": "Secundário"
+        "secondary": "Secundário",
+        "solid": "",
+        "outline": ""
       },
       "dark": "Escuro",
       "default": "Padrão",

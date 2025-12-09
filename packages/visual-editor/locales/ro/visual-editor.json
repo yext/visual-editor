@@ -186,6 +186,7 @@
     "cards": "Cărți",
     "category": "Categorie",
     "collapseDays": "Zile de prăbușire",
+    "color": "Culoare",
     "columns": "Coloane",
     "commaSeparated": "Separat prin virgulă",
     "contributorName": "Numele contribuabilului",
@@ -298,7 +299,9 @@
       "ctaVariant": {
         "link": "Legătură",
         "primary": "Primar",
-        "secondary": "Secundar"
+        "secondary": "Secundar",
+        "solid": "",
+        "outline": ""
       },
       "dark": "Întuneric",
       "default": "Implicit",

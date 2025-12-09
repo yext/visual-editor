@@ -186,6 +186,7 @@
     "cards": "牌",
     "category": "類別",
     "collapseDays": "崩潰的日子",
+    "color": "顏色",
     "columns": "列",
     "commaSeparated": "逗號分隔",
     "contributorName": "貢獻者名稱",
@@ -298,7 +299,9 @@
       "ctaVariant": {
         "link": "關聯",
         "primary": "基本的",
-        "secondary": "次要"
+        "secondary": "次要",
+        "solid": "",
+        "outline": ""
       },
       "dark": "黑暗的",
       "default": "預設",

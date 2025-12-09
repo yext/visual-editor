@@ -185,6 +185,7 @@
     "cards": "Tarjetas",
     "category": "Categoría",
     "collapseDays": "Días de colapso",
+    "color": "Color",
     "columns": "Columnas",
     "commaSeparated": "Separados por comas",
     "contributorName": "Nombre de contribuyente",
@@ -297,7 +298,9 @@
       "ctaVariant": {
         "link": "Enlace",
         "primary": "Primario",
-        "secondary": "Secundario"
+        "secondary": "Secundario",
+        "solid": "Sólido",
+        "outline": "Describir"
       },
       "dark": "Oscuro",
       "default": "Por defecto",

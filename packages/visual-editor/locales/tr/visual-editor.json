@@ -186,6 +186,7 @@
     "cards": "Kart",
     "category": "Kategori",
     "collapseDays": "Çökme günleri",
+    "color": "Renk",
     "columns": "Sütunlar",
     "commaSeparated": "Virgülle Ayrılmış",
     "contributorName": "Katkıda bulunan adı",
@@ -298,7 +299,9 @@
       "ctaVariant": {
         "link": "Bağlantı",
         "primary": "Öncelik",
-        "secondary": "İkincil"
+        "secondary": "İkincil",
+        "solid": "",
+        "outline": ""
       },
       "dark": "Karanlık",
       "default": "Varsayılan",

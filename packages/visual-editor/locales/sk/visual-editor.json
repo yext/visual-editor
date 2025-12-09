@@ -187,6 +187,7 @@
     "cards": "Karty",
     "category": "Kategória",
     "collapseDays": "Dni kolapsu",
+    "color": "Farba",
     "columns": "Stĺpce",
     "commaSeparated": "Čiarkou oddelené",
     "contributorName": "Názov prispievateľa",
@@ -299,7 +300,9 @@
       "ctaVariant": {
         "link": "Prepojiť",
         "primary": "Primárny",
-        "secondary": "Druhoradý"
+        "secondary": "Druhoradý",
+        "solid": "",
+        "outline": ""
       },
       "dark": "Tmavý",
       "default": "Predvolený",

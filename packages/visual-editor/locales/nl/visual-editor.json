@@ -186,6 +186,7 @@
     "cards": "Kaarten",
     "category": "Categorie",
     "collapseDays": "Instortdagen",
+    "color": "Kleur",
     "columns": "Kolommen",
     "commaSeparated": "Komma gescheiden",
     "contributorName": "Bijdragennaam",
@@ -298,7 +299,9 @@
       "ctaVariant": {
         "link": "Link",
         "primary": "Primair",
-        "secondary": "Secundair"
+        "secondary": "Secundair",
+        "solid": "",
+        "outline": ""
       },
       "dark": "Donker",
       "default": "Standaard",

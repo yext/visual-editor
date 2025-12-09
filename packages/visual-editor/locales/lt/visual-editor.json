@@ -186,6 +186,7 @@
     "cards": "Kortelės",
     "category": "Kategorija",
     "collapseDays": "Griūties dienos",
+    "color": "Spalva",
     "columns": "Stulpeliai",
     "commaSeparated": "Atskirtas kableliu",
     "contributorName": "Bendraautoriaus vardas",
@@ -298,7 +299,9 @@
       "ctaVariant": {
         "link": "Nuoroda",
         "primary": "Pirminis",
-        "secondary": "Antrinis"
+        "secondary": "Antrinis",
+        "solid": "",
+        "outline": ""
       },
       "dark": "Tamsu",
       "default": "Numatytasis",

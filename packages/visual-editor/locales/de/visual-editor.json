@@ -190,6 +190,7 @@
     "cards": "Karten",
     "category": "Kategorie",
     "collapseDays": "Zusammenbruch Tage",
+    "color": "Farbe",
     "columns": "Spalten",
     "commaSeparated": "Komma getrennt",
     "contributorName": "Mitwirkender Name",
@@ -303,7 +304,9 @@
       "ctaVariant": {
         "link": "Link",
         "primary": "Primär",
-        "secondary": "Sekundär"
+        "secondary": "Sekundär",
+        "solid": "Solide",
+        "outline": "Gliederung"
       },
       "dark": "Dunkel",
       "default": "Standard",

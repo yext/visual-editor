@@ -186,6 +186,7 @@
     "cards": "カード",
     "category": "カテゴリ",
     "collapseDays": "崩壊日",
+    "color": "色",
     "columns": "列",
     "commaSeparated": "カンマ区切り",
     "contributorName": "貢献者名",
@@ -298,7 +299,9 @@
       "ctaVariant": {
         "link": "リンク",
         "primary": "主要な",
-        "secondary": "二次"
+        "secondary": "二次",
+        "solid": "",
+        "outline": ""
       },
       "dark": "暗い",
       "default": "デフォルト",

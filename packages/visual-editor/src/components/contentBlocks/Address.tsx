@@ -1,5 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@measured/puck";
 import {
   AddressType,
   getDirections,
@@ -15,6 +20,9 @@ import {
   msg,
   resolveComponentData,
   CTAVariant,
+  BackgroundStyle,
+  resolveDataFromParent,
+  backgroundColors,
 } from "@yext/visual-editor";
 
 /** Props for the Address component */
@@ -29,6 +37,7 @@ export interface AddressProps {
     showGetDirectionsLink: boolean;
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
+    color?: BackgroundStyle;
   };
 
   /** @internal */
@@ -63,6 +72,10 @@ export const AddressStyleFields = {
     type: "radio",
     options: "CTA_VARIANT",
   }),
+  color: YextField(msg("fields.color", "Color"), {
+    type: "select",
+    options: "SITE_COLOR",
+  }),
 };
 
 const addressFields: Fields<AddressProps> = {
@@ -74,7 +87,7 @@ const addressFields: Fields<AddressProps> = {
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
-    objectFields: AddressStyleFields,
+    objectFields: AddressStyleFields as any,
   }),
 };
 
@@ -83,6 +96,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
 
+  const resolvedColor = styles.color ?? backgroundColors.color1.value;
   const address = parentData
     ? parentData.address
     : (resolveComponentData(
@@ -142,6 +156,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
             linkType="DRIVING_DIRECTIONS"
             target="_blank"
             variant={styles.ctaVariant}
+            color={resolvedColor}
           />
         )}
     </div>
@@ -173,7 +188,16 @@ export const Address: ComponentConfig<{
     styles: {
       showGetDirectionsLink: true,
       ctaVariant: "link",
+      color: backgroundColors.color1.value,
     },
+  },
+  resolveFields(data) {
+    const updatedFields = resolveDataFromParent(addressFields, data);
+    const ctaVariant = data.props.styles.ctaVariant;
+    const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
+    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
+
+    return updatedFields;
   },
   render: (props) => <AddressComponent {...props} />,
 };

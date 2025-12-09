@@ -8,6 +8,8 @@ import {
   PresetImageType,
   YextField,
   pt,
+  BackgroundStyle,
+  backgroundColors,
 } from "@yext/visual-editor";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
 import { CTAVariant } from "../atoms/cta.tsx";
@@ -25,6 +27,7 @@ type BasicCTAProps = {
   variant: CTAVariant;
   /** The image to use if the CTA is set to preset image */
   presetImage?: PresetImageType;
+  color?: BackgroundStyle;
 };
 
 const defaultButton: BasicCTAProps = {
@@ -39,6 +42,7 @@ const defaultButton: BasicCTAProps = {
   },
   variant: "primary",
   presetImage: "app-store",
+  color: backgroundColors.color1.value,
 };
 
 export interface CTAGroupProps {
@@ -74,6 +78,10 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         type: "select",
         options: "PRESET_IMAGE",
       }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
     getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
   }),
@@ -95,6 +103,8 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
       }
     >
       {buttons.map((button, idx) => {
+        const resolvedColor = button.color ?? backgroundColors.color1.value;
+
         const cta = resolveComponentData(
           button.entityField,
           locale,
@@ -131,6 +141,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                 ctaType={ctaType}
                 presetImageType={button.presetImage}
                 className="truncate w-full"
+                color={resolvedColor}
               />
             </div>
           )

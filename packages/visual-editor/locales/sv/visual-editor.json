@@ -187,6 +187,7 @@
     "cards": "Kort",
     "category": "Kategori",
     "collapseDays": "Kollapsdagar",
+    "color": "Färg",
     "columns": "Kolumner",
     "commaSeparated": "Kommaseparerad",
     "contributorName": "Bidragsgivarnamn",
@@ -299,7 +300,9 @@
       "ctaVariant": {
         "link": "Länk",
         "primary": "Primär",
-        "secondary": "Sekundär"
+        "secondary": "Sekundär",
+        "solid": "",
+        "outline": ""
       },
       "dark": "Mörk",
       "default": "Standard",

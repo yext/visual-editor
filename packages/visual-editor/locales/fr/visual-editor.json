@@ -185,6 +185,7 @@
     "cards": "Cartes",
     "category": "Catégorie",
     "collapseDays": "Jours d'effondrement",
+    "color": "Couleur",
     "columns": "Colonnes",
     "commaSeparated": "Séparés par des virgules",
     "contributorName": "Nom de contributeur",
@@ -297,7 +298,9 @@
       "ctaVariant": {
         "link": "Lien",
         "primary": "Primaire",
-        "secondary": "Secondaire"
+        "secondary": "Secondaire",
+        "solid": "Solide",
+        "outline": "Contour"
       },
       "dark": "Sombre",
       "default": "Défaut",

@@ -192,6 +192,7 @@
     "cards": "Kort",
     "category": "Kategori",
     "collapseDays": "Kollaps dage",
+    "color": "Farve",
     "columns": "Søjler",
     "commaSeparated": "Kommasepareret",
     "contributorName": "Bidragydernavn",
@@ -305,7 +306,9 @@
       "ctaVariant": {
         "link": "Forbindelse",
         "primary": "Primær",
-        "secondary": "Sekundær"
+        "secondary": "Sekundær",
+        "solid": "Solid",
+        "outline": "Disposition"
       },
       "dark": "Mørk",
       "default": "Misligholdelse",

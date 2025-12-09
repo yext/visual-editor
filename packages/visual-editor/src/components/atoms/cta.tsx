@@ -3,7 +3,11 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { themeManagerCn, useDocument } from "@yext/visual-editor";
+import {
+  BackgroundStyle,
+  themeManagerCn,
+  useDocument,
+} from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType } from "../../types/types";
@@ -28,6 +32,7 @@ export type CTAProps = {
   ariaLabel?: string;
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
+  color?: BackgroundStyle;
 };
 
 /**
@@ -147,9 +152,33 @@ export const CTA = (props: CTAProps) => {
     ctaType,
     onClick,
     disabled = false,
+    color,
   } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
+
+  const dynamicStyle = (() => {
+    const bg = color?.bgColor?.replace("bg-", "");
+    const textColor = color?.textColor?.replace("text-", "");
+    const border = bg && `var(--colors-${bg})`;
+
+    if (variant === "primary") {
+      return {
+        backgroundColor: bg && `var(--colors-${bg})`,
+        color: textColor && `var(--colors-${textColor})`,
+        borderColor: border,
+      };
+    }
+
+    if (variant === "secondary") {
+      return {
+        borderColor: border,
+        color: border,
+      };
+    }
+
+    return {};
+  })();
 
   if (!resolvedProps) {
     return null;
@@ -212,7 +241,12 @@ export const CTA = (props: CTAProps) => {
   }
 
   return (
-    <Button asChild className={buttonClassName} variant={buttonVariant}>
+    <Button
+      style={ctaType !== "presetImage" ? dynamicStyle : undefined}
+      asChild
+      className={buttonClassName}
+      variant={buttonVariant}
+    >
       <Link
         cta={{ link, linkType }}
         eventName={eventName}

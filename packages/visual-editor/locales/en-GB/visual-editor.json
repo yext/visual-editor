@@ -185,6 +185,7 @@
     "cards": "Cards",
     "category": "Category",
     "collapseDays": "Collapse Days",
+    "color": "Color",
     "columns": "Columns",
     "commaSeparated": "Comma Separated",
     "contributorName": "Contributor Name",
@@ -297,7 +298,9 @@
       "ctaVariant": {
         "link": "Link",
         "primary": "Primary",
-        "secondary": "Secondary"
+        "secondary": "Secondary",
+        "solid": "Solid",
+        "outline": "Outline"
       },
       "dark": "Dark",
       "default": "Default",
