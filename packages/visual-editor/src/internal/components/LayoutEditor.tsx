@@ -35,6 +35,7 @@ type LayoutEditorProps = {
   localDev: boolean;
   metadata?: Metadata;
   streamDocument: StreamDocument;
+  plugins: any[];
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -47,6 +48,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     localDev,
     metadata,
     streamDocument,
+    plugins,
   } = props;
 
   const {
@@ -290,6 +292,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
       localDev={localDev}
       metadata={metadata}
+      plugins={plugins}
     />
   ) : (
     <LoadingScreen

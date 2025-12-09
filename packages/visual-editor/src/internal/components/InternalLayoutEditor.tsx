@@ -84,6 +84,7 @@ type InternalLayoutEditorProps = {
   buildVisualConfigLocalStorageKey: () => string;
   localDev: boolean;
   metadata?: Metadata;
+  plugins: any[];
 };
 
 // Render Puck editor
@@ -101,6 +102,7 @@ export const InternalLayoutEditor = ({
   buildVisualConfigLocalStorageKey,
   localDev,
   metadata,
+  plugins,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
   const historyIndex = useRef<number>(0);
@@ -572,6 +574,7 @@ export const InternalLayoutEditor = ({
           puck: reloadDataOnDocumentChange,
         }}
         metadata={metadata}
+        plugins={plugins}
       />
     </EntityTooltipsProvider>
   );

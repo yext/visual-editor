@@ -56,6 +56,7 @@ export type EditorProps = {
   // forceThemeMode is used with localDev to load the theme editor
   forceThemeMode?: boolean;
   metadata?: Metadata; // passed into puck's global metadata
+  plugins: any[];
 };
 
 export const Editor = ({
@@ -65,6 +66,7 @@ export const Editor = ({
   localDev,
   forceThemeMode,
   metadata,
+  plugins,
 }: EditorProps) => {
   if (document) {
     devLogger.logData("DOCUMENT", document);
@@ -197,6 +199,7 @@ export const Editor = ({
               localDev={!!localDev}
               metadata={{ ...metadata, streamDocument: document }}
               streamDocument={document}
+              plugins={plugins}
             />
           )
         ) : (
