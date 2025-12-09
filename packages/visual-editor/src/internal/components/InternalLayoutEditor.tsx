@@ -14,7 +14,7 @@ import {
   resolveAllData,
   type Plugin,
 } from "@measured/puck";
-import React from "react";
+import React, { useMemo } from "react";
 import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
@@ -35,13 +35,9 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 
-import { createAiPlugin } from "@puckeditor/plugin-ai";
+// CSS imports are safe at top level (no JS execution)
 import "@puckeditor/plugin-ai/styles.css";
-
-import headingAnalyzer from "@measured/puck-plugin-heading-analyzer";
 import "@measured/puck-plugin-heading-analyzer/dist/index.css";
-
-const aiPlugin = createAiPlugin();
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -115,6 +111,20 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+
+  // Lazily create plugins to avoid "document is not defined" errors during SSR/build
+  const plugins = useMemo(() => {
+    // Dynamic imports would be cleaner but useMemo with conditional check works for browser-only code
+    if (typeof window === "undefined") {
+      return [];
+    }
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createAiPlugin } = require("@puckeditor/plugin-ai");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const headingAnalyzer =
+      require("@measured/puck-plugin-heading-analyzer").default;
+    return [createAiPlugin(), headingAnalyzer] as Plugin[];
+  }, []);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -392,7 +402,7 @@ export const InternalLayoutEditor = ({
   return (
     <EntityTooltipsProvider>
       <Puck
-        plugins={[aiPlugin, headingAnalyzer] as Plugin[]}
+        plugins={plugins}
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
