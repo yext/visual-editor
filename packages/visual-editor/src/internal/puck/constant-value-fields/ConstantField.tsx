@@ -41,8 +41,8 @@ function ConstantField<T extends Record<string, any>>(
     >
       <AutoField
         field={{ type: fieldProps.fieldType, options: fieldProps.options }}
-        value={props.value[fieldProps.field] as T}
-        onChange={(fieldValue: T[keyof T]) => {
+        value={props.value[fieldProps.field]}
+        onChange={(fieldValue: unknown) => {
           props.onChange({
             ...props.value,
             [fieldProps.field]: fieldValue,

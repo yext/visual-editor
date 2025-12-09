@@ -376,7 +376,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <AutoField
       key={value?.selectedType} // reset when type changes
-      onChange={(newConstantValue: T, uiState: Partial<UiState>) =>
+      onChange={(newConstantValue: T, uiState?: Partial<UiState>) =>
         onChange(
           {
             ...value,
@@ -386,7 +386,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
         )
       }
       value={value?.constantValue as T}
-      field={constantFieldConfig as Field<T> | undefined}
+      field={constantFieldConfig as Field<T>}
     />
   );
 
@@ -509,7 +509,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       {typeSelectorConfig && (
         <AutoField
           field={typeSelector!}
-          onChange={(selectedType: string, uiState: Partial<UiState>) => {
+          onChange={(selectedType: string, uiState?: Partial<UiState>) => {
             onChange(
               {
                 ...value,
@@ -525,7 +525,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       <AutoField
         key={value?.selectedType}
         field={entityFieldSelector}
-        onChange={(selectedEntityField: string, uiState: Partial<UiState>) => {
+        onChange={(selectedEntityField: string, uiState?: Partial<UiState>) => {
           onChange(
             {
               ...value,

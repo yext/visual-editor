@@ -11,6 +11,6 @@ export const EVENT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
     },
   },
   label: "",
-  getItemSummary: (item: EventStruct, index: number) =>
+  getItemSummary: (item: EventStruct, index?: number) =>
     pt("event", "Event") + " " + ((index ?? 0) + 1),
 };

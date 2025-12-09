@@ -13,6 +13,6 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
     },
   },
   label: "",
-  getItemSummary: (item: TestimonialStruct, index: number) =>
+  getItemSummary: (item: TestimonialStruct, index?: number) =>
     pt("testimonial", "Testimonial") + " " + ((index ?? 0) + 1),
 };

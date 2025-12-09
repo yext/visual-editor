@@ -83,7 +83,6 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
             <span style={{ color: TEXT_LIST_BUTTON_COLOR }}>
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >
@@ -199,7 +198,6 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
             <div className="ve-flex ve-justify-end">
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >

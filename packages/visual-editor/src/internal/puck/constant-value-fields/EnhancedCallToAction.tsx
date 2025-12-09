@@ -8,6 +8,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
 import { YextEntityField } from "@yext/visual-editor";
+import { LinkType } from "@yext/pages-components";
 
 export const ctaTypeOptions = () => {
   return [
@@ -135,9 +136,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                       type: "select",
                       options: linkTypeOptions(),
                     }}
-                    value={value?.linkType || "URL"}
-                    onChange={(newValue) =>
-                      onChange({ ...value, linkType: newValue })
+                    value={value?.linkType || ("URL" as unknown as LinkType)}
+                    onChange={(newValue: LinkType) =>
+                      onChange({ ...value, linkType: newValue as LinkType })
                     }
                   />
                 </FieldLabel>
@@ -253,8 +254,11 @@ export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
                 options: linkTypeOptions(),
               }}
               value={value?.linkType || "URL"}
-              onChange={(newValue: "URL" | "PHONE" | "EMAIL") =>
-                onChange({ ...value, linkType: newValue })
+              onChange={(newValue: string) =>
+                onChange({
+                  ...value,
+                  linkType: newValue as LinkType | undefined as LinkType,
+                })
               }
             />
           </FieldLabel>

@@ -13,7 +13,7 @@ export const IMAGE_LIST_CONSTANT_CONFIG = (): Field<any> => {
         label: pt("fields.image", "Image"),
       },
     },
-    getItemSummary: (item: AssetImageType, index: number) =>
+    getItemSummary: (item: AssetImageType, index?: number) =>
       pt("photo", "Photo") + " " + ((index ?? 0) + 1),
   };
 };

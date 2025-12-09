@@ -11,6 +11,6 @@ export const PRODUCT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
     },
   },
   label: "",
-  getItemSummary: (item: ProductStruct, index: number) =>
+  getItemSummary: (item: ProductStruct, index?: number) =>
     pt("product", "Product") + " " + ((index ?? 0) + 1),
 };

@@ -13,6 +13,6 @@ export const TEAM_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
     },
   },
   label: "",
-  getItemSummary: (item: PersonStruct, index: number) =>
+  getItemSummary: (item: PersonStruct, index?: number) =>
     pt("teamMember", "Team Member") + " " + ((index ?? 0) + 1),
 };
