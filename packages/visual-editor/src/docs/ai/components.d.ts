@@ -5,7 +5,6 @@ import {
   DefaultRootProps,
   Field,
   ComponentConfig,
-  Plugin,
   CustomField,
   ArrayField,
   BaseField,
