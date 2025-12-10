@@ -1,3 +1,18 @@
+#### 1.0.1 (2025-12-10)
+
+##### New Features
+
+- use custom fonts ([#932](https://github.com/yext/visual-editor/pull/932)) ([b40a06dc](https://github.com/yext/visual-editor/commit/b40a06dc7df858c7a72128043f08c68d61e9ef48))
+- show custom fonts in theme editor ([#923](https://github.com/yext/visual-editor/pull/923)) ([f0cede8a](https://github.com/yext/visual-editor/commit/f0cede8a81138a6c5be2a17bb40163441961594f))
+- full layout copy and paste ([#930](https://github.com/yext/visual-editor/pull/930)) ([afbf2aee](https://github.com/yext/visual-editor/commit/afbf2aee4e3ce7fd772a6c5ebf294602ee111720))
+
+##### Bug Fixes
+
+- shared styles lost when new card is added ([#938](https://github.com/yext/visual-editor/pull/938)) ([d1196961](https://github.com/yext/visual-editor/commit/d11969612cf181f27eb15995e4f4f0742bc074c3))
+- state/history bugs ([#935](https://github.com/yext/visual-editor/pull/935)) ([811d9eee](https://github.com/yext/visual-editor/commit/811d9eee50f0622472510908fe2d69799290727e))
+- save inputs immediately on blur ([#933](https://github.com/yext/visual-editor/pull/933)) ([e7c18893](https://github.com/yext/visual-editor/commit/e7c1889384c0e7157ba42cb09e649134108867b9))
+- footer logo empty state and body font family for banner and hours table ([#934](https://github.com/yext/visual-editor/pull/934)) ([992631c7](https://github.com/yext/visual-editor/commit/992631c7985b86e56af1573fb12c9aa718a57087))
+
 #### 1.0.0 (2025-12-03)
 
 ##### New Features
