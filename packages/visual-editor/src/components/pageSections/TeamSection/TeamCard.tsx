@@ -41,7 +41,7 @@ const defaultPerson = {
     ctaType: "textAndLink",
   },
   headshot: {
-    url: "https://placehold.co/80x80",
+    url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
     height: 80,
     width: 80,
   },
