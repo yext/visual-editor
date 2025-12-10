@@ -59,11 +59,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
 
-  const { layoutSaveState, layoutSaveStateFetched } = useLayoutMessageReceivers(
-    localDev,
-    puckConfig,
-    streamDocument
-  );
+  const { layoutSaveState, layoutSaveStateFetched, setLayoutSaveState } =
+    useLayoutMessageReceivers(localDev, puckConfig, streamDocument);
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
@@ -84,7 +81,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     if (localDev) {
       return;
     }
+    setLayoutSaveState(undefined);
     deleteLayoutSaveState();
+  };
+
+  const handlePublish = (data?: any) => {
+    setLayoutSaveState(undefined);
+    publishLayout(data);
   };
 
   /**
@@ -284,7 +287,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       templateMetadata={templateMetadata}
       layoutSaveState={layoutSaveState}
       saveLayoutSaveState={saveLayoutSaveState}
-      publishLayout={publishLayout}
+      publishLayout={handlePublish}
       sendLayoutForApproval={sendLayoutForApproval}
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}
