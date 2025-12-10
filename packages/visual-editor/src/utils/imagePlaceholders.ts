@@ -2,9 +2,9 @@
  * Placeholder images for default image placeholders in page sections.
  */
 const PLACEHOLDER_IMAGE_IDS = [
-  "photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1000", // Ocean wave
-  "photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1000", // Pine Trees
-  "photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&w=1000", // Sand dune
+  "photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Ocean wave
+  "photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Pine Trees
+  "photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb", // Sand dune
 ] as const;
 
 export interface PlaceholderImageOptions {

@@ -27,7 +27,6 @@ import {
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 const defaultPerson = {
@@ -71,14 +70,7 @@ export const defaultTeamCardSlotData = (
               data: {
                 image: {
                   field: "",
-                  constantValue: defaultPerson.headshot || {
-                    ...getRandomPlaceholderImageObject({
-                      width: 640,
-                      height: 360,
-                    }),
-                    width: 640,
-                    height: 360,
-                  },
+                  constantValue: defaultPerson.headshot,
                   constantValueEnabled: true,
                 },
               },
