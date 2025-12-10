@@ -21,6 +21,7 @@ import {
   defaultProductCardSlotData,
   ProductCardProps,
 } from "./ProductCard.tsx";
+import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 
 export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType>;
 
@@ -61,6 +62,16 @@ export const ProductCardsWrapper: ComponentConfig<{
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    const sharedCardProps =
+      data.props.slots.CardSlot.length === 0
+        ? undefined
+        : {
+            backgroundColor:
+              data.props.slots.CardSlot[0].props.styles.backgroundColor,
+            slotStyles: gatherSlotStyles(
+              data.props.slots.CardSlot[0].props.slots
+            ),
+          };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
       // ENTITY VALUES
@@ -88,7 +99,12 @@ export const ProductCardsWrapper: ComponentConfig<{
           ? Array(requiredLength - currentLength)
               .fill(null)
               .map(() =>
-                defaultProductCardSlotData(`ProductCard-${crypto.randomUUID()}`)
+                defaultProductCardSlotData(
+                  `ProductCard-${crypto.randomUUID()}`,
+                  undefined,
+                  sharedCardProps?.backgroundColor,
+                  sharedCardProps?.slotStyles
+                )
               )
           : [];
       const updatedCardSlot = [
@@ -142,7 +158,12 @@ export const ProductCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultProductCardSlotData(newId, i);
+          return defaultProductCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          );
         }
 
         newCard = setDeep(newCard, "props.id", newId); // update the id

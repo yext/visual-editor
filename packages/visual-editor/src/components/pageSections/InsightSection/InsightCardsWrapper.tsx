@@ -21,6 +21,7 @@ import {
   defaultInsightCardSlotData,
   InsightCardProps,
 } from "./InsightCard.tsx";
+import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 
 export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType>;
 
@@ -61,6 +62,16 @@ export const InsightCardsWrapper: ComponentConfig<{
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    const sharedCardProps =
+      data.props.slots.CardSlot.length === 0
+        ? undefined
+        : {
+            backgroundColor:
+              data.props.slots.CardSlot[0].props.styles.backgroundColor,
+            slotStyles: gatherSlotStyles(
+              data.props.slots.CardSlot[0].props.slots
+            ),
+          };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
       const resolvedInsights = resolveYextEntityField<
@@ -85,7 +96,12 @@ export const InsightCardsWrapper: ComponentConfig<{
           ? Array(requiredLength - currentLength)
               .fill(null)
               .map(() =>
-                defaultInsightCardSlotData(`InsightCard-${crypto.randomUUID()}`)
+                defaultInsightCardSlotData(
+                  `InsightCard-${crypto.randomUUID()}`,
+                  undefined,
+                  sharedCardProps?.backgroundColor,
+                  sharedCardProps?.slotStyles
+                )
               )
           : [];
       const updatedCardSlot = [
@@ -134,7 +150,12 @@ export const InsightCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultInsightCardSlotData(newId, i);
+          return defaultInsightCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          );
         }
 
         newCard = setDeep(newCard, "props.id", newId);
