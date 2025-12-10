@@ -315,7 +315,7 @@ const mainDefaultLayout = {
           backgroundImage: {
             field: "",
             constantValue: {
-              url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=1000&height=640&fit=max",
+              url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
               height: 360,
               width: 640,
             },
