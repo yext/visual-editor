@@ -32,6 +32,7 @@ export default defineConfig(() => ({
         "mapbox-gl",
         "@yext/search-headless-react",
         "@yext/search-ui-react",
+        "@puckeditor/plugin-ai",
       ],
       output: {
         globals: {

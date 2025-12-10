@@ -14,7 +14,7 @@ import {
   resolveAllData,
   type Plugin,
 } from "@measured/puck";
-import React, { useMemo } from "react";
+import React from "react";
 import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
@@ -34,10 +34,33 @@ import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageAct
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
-
-// CSS imports are safe at top level (no JS execution)
 import "@puckeditor/plugin-ai/styles.css";
-import "@measured/puck-plugin-heading-analyzer/dist/index.css";
+
+// Module-level cache for the AI plugin to ensure it's only created once
+// and to avoid re-renders when using dynamic import.
+let cachedAiPlugin: Plugin | null = null;
+let pluginLoadStarted = false;
+
+// Load the AI plugin dynamically. The dynamic import is necessary because
+// static imports would cause the module to be evaluated during SSR/build time
+// (e.g., when tailwind processes the CSS and evaluates the bundled code).
+// The package is marked as external in vite.config.ts.
+const loadAiPlugin = (onLoaded: () => void): Plugin | null => {
+  if (typeof document === "undefined") {
+    return null;
+  }
+  if (cachedAiPlugin) {
+    return cachedAiPlugin;
+  }
+  if (!pluginLoadStarted) {
+    pluginLoadStarted = true;
+    import("@puckeditor/plugin-ai").then((mod) => {
+      cachedAiPlugin = mod.createAiPlugin();
+      onLoaded();
+    });
+  }
+  return null;
+};
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -111,20 +134,6 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
-
-  // Lazily create plugins to avoid "document is not defined" errors during SSR/build
-  const plugins = useMemo(() => {
-    // Dynamic imports would be cleaner but useMemo with conditional check works for browser-only code
-    if (typeof window === "undefined") {
-      return [];
-    }
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { createAiPlugin } = require("@puckeditor/plugin-ai");
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const headingAnalyzer =
-      require("@measured/puck-plugin-heading-analyzer").default;
-    return [createAiPlugin(), headingAnalyzer] as Plugin[];
-  }, []);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -399,6 +408,12 @@ export const InternalLayoutEditor = ({
     };
   }, []);
 
+  // Load the AI plugin once. Uses a simple flag state to trigger a single re-render
+  // when the plugin loads, and useMemo to keep the same array reference.
+  const [, setPluginLoaded] = useState(false);
+  const plugin = loadAiPlugin(() => setPluginLoaded(true));
+  const plugins = React.useMemo(() => (plugin ? [plugin] : []), [plugin]);
+
   return (
     <EntityTooltipsProvider>
       <Puck
@@ -587,7 +602,9 @@ export const InternalLayoutEditor = ({
           },
           // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
           fieldLabel: ({ icon, children, ...rest }) => (
-            <FieldLabel {...rest}>{children}</FieldLabel>
+            <FieldLabel {...rest} label={children as string}>
+              {children}
+            </FieldLabel>
           ),
           puck: reloadDataOnDocumentChange,
         }}
