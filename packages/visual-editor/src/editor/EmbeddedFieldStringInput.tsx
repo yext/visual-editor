@@ -93,6 +93,7 @@ export const EmbeddedFieldStringInputFromOptions = ({
   const inputValueRef = React.useRef(inputValue);
   const onChangeRef = React.useRef(onChange);
   const valueRef = React.useRef(value);
+  const prevValueRef = React.useRef(value);
 
   inputValueRef.current = inputValue;
   onChangeRef.current = onChange;
@@ -105,6 +106,13 @@ export const EmbeddedFieldStringInputFromOptions = ({
 
   // Debounce the call to the parent onChange handler
   React.useEffect(() => {
+    const valueChanged = value !== prevValueRef.current;
+    prevValueRef.current = value;
+
+    if (valueChanged) {
+      return;
+    }
+
     const handler = setTimeout(() => {
       commitChanges(inputValue, value, onChange);
     }, 800); // 800ms delay
