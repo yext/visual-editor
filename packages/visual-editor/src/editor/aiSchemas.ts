@@ -104,50 +104,90 @@ export const yextEntityFieldCTASchema = z.object({
 });
 
 /**
- * Cleans up a JSON Schema to ensure compatibility with Puck AI
+ * Checks if a value is an empty object (from z.any() or similar)
+ */
+function isEmptyObject(value: unknown): boolean {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.keys(value).length === 0
+  );
+}
+
+/**
+ * Cleans a JSON Schema to be compatible with Puck AI
  * - Removes $schema property (Puck AI doesn't need it)
- * - Converts additionalProperties: {} to additionalProperties: true for passthrough objects
- * - Handles empty object properties (z.any() results in {})
+ * - Converts empty additionalProperties: {} to additionalProperties: true
+ * - Removes properties with empty object schemas {} (from z.any())
  */
 function cleanSchemaForPuck(schema: unknown): JSONSchema {
   if (typeof schema !== "object" || schema === null) {
     return schema as JSONSchema;
   }
 
-  const cleaned = { ...schema } as Record<string, unknown>;
+  const obj = schema as Record<string, unknown>;
+  const cleaned: Record<string, unknown> = {};
 
-  // Remove $schema property
-  delete cleaned.$schema;
+  for (const [key, value] of Object.entries(obj)) {
+    // Skip $schema property
+    if (key === "$schema") {
+      continue;
+    }
 
-  // Recursively clean nested objects
-  if (cleaned.properties && typeof cleaned.properties === "object") {
-    const props = cleaned.properties as Record<string, unknown>;
-    for (const [key, value] of Object.entries(props)) {
-      // Handle empty object properties (from z.any()) - convert to allow any type
-      if (
-        typeof value === "object" &&
-        value !== null &&
-        Object.keys(value).length === 0
-      ) {
-        props[key] = {};
-      } else {
-        props[key] = cleanSchemaForPuck(value);
+    // Handle additionalProperties: {} -> additionalProperties: true
+    if (key === "additionalProperties" && isEmptyObject(value)) {
+      cleaned[key] = true;
+      continue;
+    }
+
+    // Handle properties object - filter out empty object properties
+    if (key === "properties" && typeof value === "object" && value !== null) {
+      const props = value as Record<string, unknown>;
+      const cleanedProps: Record<string, unknown> = {};
+
+      for (const [propKey, propValue] of Object.entries(props)) {
+        // Skip properties with empty object schemas (from z.any())
+        if (isEmptyObject(propValue)) {
+          continue;
+        }
+        cleanedProps[propKey] = cleanSchemaForPuck(propValue);
       }
+
+      cleaned[key] = cleanedProps;
+      continue;
+    }
+
+    // Handle required array - remove references to filtered out properties
+    if (key === "required" && Array.isArray(value)) {
+      // We'll handle this after properties are cleaned
+      cleaned[key] = value;
+      continue;
+    }
+
+    // Recursively clean nested objects
+    if (typeof value === "object" && value !== null) {
+      if (Array.isArray(value)) {
+        cleaned[key] = value.map((item) => cleanSchemaForPuck(item));
+      } else {
+        cleaned[key] = cleanSchemaForPuck(value);
+      }
+    } else {
+      cleaned[key] = value;
     }
   }
 
-  if (cleaned.anyOf && Array.isArray(cleaned.anyOf)) {
-    cleaned.anyOf = cleaned.anyOf.map((item) => cleanSchemaForPuck(item));
-  }
-
-  // Fix additionalProperties: {} to additionalProperties: true for passthrough
-  if (
-    cleaned.additionalProperties &&
-    typeof cleaned.additionalProperties === "object" &&
-    !Array.isArray(cleaned.additionalProperties) &&
-    Object.keys(cleaned.additionalProperties).length === 0
-  ) {
-    cleaned.additionalProperties = true;
+  // Update required array to only include properties that still exist
+  if (cleaned.required && cleaned.properties) {
+    const existingProps = Object.keys(
+      cleaned.properties as Record<string, unknown>
+    );
+    cleaned.required = (cleaned.required as string[]).filter((prop) =>
+      existingProps.includes(prop)
+    );
+    if ((cleaned.required as string[]).length === 0) {
+      delete cleaned.required;
+    }
   }
 
   return cleaned as JSONSchema;
