@@ -299,8 +299,6 @@
       "ctaVariant": {
         "link": "Nuoroda",
         "outline": "Kontūras",
-        "primary": "Pirminis",
-        "secondary": "Antrinis",
         "solid": "Tvirtas"
       },
       "dark": "Tamsu",

@@ -299,8 +299,6 @@
       "ctaVariant": {
         "link": "Collegamento",
         "outline": "Contorno",
-        "primary": "Primario",
-        "secondary": "Secondario",
         "solid": "Solido"
       },
       "dark": "Buio",

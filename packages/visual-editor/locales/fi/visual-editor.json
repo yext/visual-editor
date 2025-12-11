@@ -299,8 +299,6 @@
       "ctaVariant": {
         "link": "Linkki",
         "outline": "Outline",
-        "primary": "Ensisijainen",
-        "secondary": "Toissijainen",
         "solid": "Kiinteä"
       },
       "dark": "Tumma",

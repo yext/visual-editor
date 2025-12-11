@@ -300,8 +300,6 @@
       "ctaVariant": {
         "link": "Länk",
         "outline": "Skissera",
-        "primary": "Primär",
-        "secondary": "Sekundär",
         "solid": "Fast"
       },
       "dark": "Mörk",

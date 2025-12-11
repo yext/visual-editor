@@ -57,7 +57,7 @@ export const AddressDataField = YextField<any, AddressType>(
 );
 
 // Address style fields used in Address and CoreInfoSection
-export const AddressStyleFields = {
+export const AddressStyleFields: Fields<AddressProps["styles"]> = {
   showGetDirectionsLink: YextField<boolean>(
     msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     {
@@ -87,7 +87,7 @@ const addressFields: Fields<AddressProps> = {
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
-    objectFields: AddressStyleFields as any,
+    objectFields: AddressStyleFields,
   }),
 };
 

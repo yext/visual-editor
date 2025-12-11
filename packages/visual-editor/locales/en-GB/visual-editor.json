@@ -298,8 +298,6 @@
       "ctaVariant": {
         "link": "Link",
         "outline": "Outline",
-        "primary": "Primary",
-        "secondary": "Secondary",
         "solid": "Solid"
       },
       "dark": "Dark",

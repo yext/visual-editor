@@ -306,8 +306,6 @@
       "ctaVariant": {
         "link": "Forbindelse",
         "outline": "Disposition",
-        "primary": "Primær",
-        "secondary": "Sekundær",
         "solid": "Solid"
       },
       "dark": "Mørk",

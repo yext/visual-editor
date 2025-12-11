@@ -299,8 +299,6 @@
       "ctaVariant": {
         "link": "Bağlantı",
         "outline": "Taslak",
-        "primary": "Öncelik",
-        "secondary": "İkincil",
         "solid": "Sağlam"
       },
       "dark": "Karanlık",

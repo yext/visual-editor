@@ -306,8 +306,6 @@
       "ctaVariant": {
         "link": "Odkaz",
         "outline": "Obrys",
-        "primary": "Primární",
-        "secondary": "Sekundární",
         "solid": "Solidní"
       },
       "dark": "Tma",

@@ -168,7 +168,10 @@ const siteColorOptions: ComboboxOptionGroup[] = [
         if (key.includes("color")) {
           return {
             label,
-            value,
+            value: {
+              bgColor: value.bgColor.replace("bg-", ""),
+              textColor: value.textColor.replace("text-", ""),
+            },
             color: value.bgColor,
           };
         }

@@ -158,8 +158,8 @@ export const CTA = (props: CTAProps) => {
   const resolvedProps = useResolvedCtaProps(props);
 
   const dynamicStyle: React.CSSProperties = (() => {
-    const bg = color?.bgColor?.replace("bg-", "");
-    const textColor = color?.textColor?.replace("text-", "");
+    const bg = normalize(color?.bgColor);
+    const textColor = normalize(color?.textColor);
     const border = bg && `var(--colors-${bg})`;
 
     if (variant === "primary") {
@@ -265,3 +265,10 @@ export const CTA = (props: CTAProps) => {
     </Button>
   );
 };
+
+const normalize = (token?: string) =>
+  token?.startsWith("bg-")
+    ? token.substring(3)
+    : token?.startsWith("text-")
+      ? token.substring(5)
+      : token;
