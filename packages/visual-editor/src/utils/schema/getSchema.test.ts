@@ -293,6 +293,69 @@ describe("getSchema", () => {
             id: "dm_city",
           },
         },
+        dm_directoryChildren: [
+          {
+            __: {
+              entityPageSetUrlTemplates:
+                '{"primary":"[[address.region]]/[[address.city]]/[[address.line1]]"}',
+            },
+            address: {
+              city: "Arlington",
+              countryCode: "US",
+              line1: "1101 Wilson Blvd",
+              postalCode: "22209",
+              region: "VA",
+            },
+            hours: {
+              friday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              monday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              saturday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              sunday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              thursday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              tuesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              wednesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+            },
+            mainPhone: "+12025551010",
+            meta: {
+              entityType: { id: "location", uid: 12345 },
+              locale: "en",
+            },
+            name: "Galaxy Grill",
+            timezone: "America/New_York",
+            slug: "va/arlington/1101-wilson-blvd",
+          },
+          {
+            __: {
+              entityPageSetUrlTemplates:
+                '{"primary":"[[address.region]]/[[address.city]]/[[address.line1]]"}',
+            },
+            address: {
+              city: "Arlington",
+              countryCode: "US",
+              line1: "2101 Wilson Blvd",
+              line2: "Suite 101",
+              postalCode: "22209",
+              region: "VA",
+            },
+            mainPhone: "+12025551010",
+            hours: {
+              friday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              monday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              saturday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              sunday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              thursday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              tuesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              wednesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+            },
+            meta: {
+              entityType: { id: "location", uid: 12346 },
+              locale: "en",
+            },
+            name: "Galaxy Grill To Go",
+            timezone: "America/New_York",
+            slug: "va/arlington/2101-wilson-blvd",
+          },
+        ],
         dm_directoryParents_63590_locations: [
           { name: "Locations Directory", slug: "index.html" },
           {
@@ -319,6 +382,49 @@ describe("getSchema", () => {
           url: "https://yext.com/us/ny/nyc",
           "@type": "CollectionPage",
           name: "New York City",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  address: {
+                    "@type": "PostalAddress",
+                    addressCountry: "US",
+                    addressLocality: "Arlington",
+                    addressRegion: "VA",
+                    postalCode: "22209",
+                    streetAddress: "1101 Wilson Blvd",
+                  },
+                  name: "Galaxy Grill",
+                  openingHours: ["Mo,Tu,We,Th,Fr,Sa,Su 10:00-22:00"],
+                  phone: "+12025551010",
+                  url: "https://yext.com/va/arlington/1101-wilson-blvd",
+                },
+                position: 1,
+              },
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  address: {
+                    "@type": "PostalAddress",
+                    addressCountry: "US",
+                    addressLocality: "Arlington",
+                    addressRegion: "VA",
+                    postalCode: "22209",
+                    streetAddress: "2101 Wilson Blvd",
+                  },
+                  name: "Galaxy Grill To Go",
+                  openingHours: ["Mo,Tu,We,Th,Fr,Sa,Su 10:00-22:00"],
+                  phone: "+12025551010",
+                  url: "https://yext.com/va/arlington/2101-wilson-blvd",
+                },
+                position: 2,
+              },
+            ],
+          },
         },
         {
           "@type": "BreadcrumbList",
@@ -374,7 +480,16 @@ describe("getSchema", () => {
           entityType: {
             id: "dm_root",
           },
+          locale: "es",
         },
+        dm_directoryChildren: [
+          {
+            name: "US",
+            slug: "us",
+            dm_addressCountryDisplayName: "United States",
+          },
+          { name: "CA", slug: "ca", dm_addressCountryDisplayName: "Canada" },
+        ],
       },
     };
     const schema = getSchema(testData);
@@ -387,6 +502,29 @@ describe("getSchema", () => {
           url: "https://yext.com/index.html",
           "@type": "CollectionPage",
           name: "Test Root",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  name: "US",
+                  url: "https://yext.com/us",
+                },
+                position: 1,
+              },
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  name: "CA",
+                  url: "https://yext.com/ca",
+                },
+                position: 2,
+              },
+            ],
+          },
         },
         {
           "@type": "BreadcrumbList",

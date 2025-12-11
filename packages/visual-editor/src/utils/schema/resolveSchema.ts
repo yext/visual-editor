@@ -177,7 +177,7 @@ const resolveDirectoryChildren = (
   }
 
   return resolvedValue.map((child: any, index: number) => {
-    const childUrl = `${streamDocument.siteDomain}/${
+    const childUrl = `https://${streamDocument.siteDomain}/${
       child.address // if the child has an address, we're at the city level
         ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
         : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "")

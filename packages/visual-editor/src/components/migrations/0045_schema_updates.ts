@@ -34,7 +34,7 @@ export const schemaUpdates: Migration = {
           schema["@id"] =
             `https://[[siteDomain]]/[[uid]]#${localBusinessSubtype.toLowerCase()}`;
           schema["@type"] = localBusinessSubtype;
-        } else if (entityTypeId?.includes("DM")) {
+        } else if (entityTypeId?.includes("dm")) {
           schema["@id"] = "https://[[siteDomain]]/[[uid]]#collectionpage";
         } else if (entityTypeId === "locator") {
           schema["@id"] = "https://[[siteDomain]]/[[uid]]#webpage";
