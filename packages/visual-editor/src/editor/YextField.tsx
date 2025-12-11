@@ -33,7 +33,7 @@ import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Im
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 import { getSchemaForYextEntityField } from "./aiSchemas.ts";
-import "@puckeditor/plugin-ai";
+// import "@puckeditor/plugin-ai";
 
 /** Field option type for select/radio fields */
 export type FieldOption = {
