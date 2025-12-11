@@ -113,7 +113,10 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
-  const inputLink = resolveComponentData(data.logoLink, i18n.language);
+  const inputLink = resolveComponentData(
+    data?.logoLink ?? DEFAULT_LOGO_LINK,
+    i18n.language
+  );
   const resolvedLink =
     typeof inputLink === "string" &&
     LINK_REGEX_VALIDATION.test(inputLink.trim())
