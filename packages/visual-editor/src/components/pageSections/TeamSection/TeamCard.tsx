@@ -27,7 +27,6 @@ import {
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 const defaultPerson = {
@@ -42,7 +41,7 @@ const defaultPerson = {
     ctaType: "textAndLink",
   },
   headshot: {
-    url: "https://placehold.co/80x80",
+    url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
     height: 80,
     width: 80,
   },
@@ -71,14 +70,7 @@ export const defaultTeamCardSlotData = (
               data: {
                 image: {
                   field: "",
-                  constantValue: defaultPerson.headshot || {
-                    ...getRandomPlaceholderImageObject({
-                      width: 640,
-                      height: 360,
-                    }),
-                    width: 640,
-                    height: 360,
-                  },
+                  constantValue: defaultPerson.headshot,
                   constantValueEnabled: true,
                 },
               },
