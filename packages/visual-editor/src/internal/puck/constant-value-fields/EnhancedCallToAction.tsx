@@ -1,4 +1,4 @@
-import { AutoField, CustomField, Field, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField, FieldLabel } from "@measured/puck";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   EnhancedTranslatableCTA,
@@ -56,7 +56,8 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
       const labelField = useMemo(() => {
         return TranslatableStringField<TranslatableString>(
           msg("fields.label", "Label"),
-          { types: ["type.string"] }
+          { types: ["type.string"] },
+          true
         );
       }, []);
 
@@ -137,62 +138,6 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
         </div>
       );
     },
-  };
-
-export const enhancedTranslatableCTAFields =
-  (): Field<EnhancedTranslatableCTA> => {
-    const labelField = TranslatableStringField<any>(
-      msg("fields.label", "Label"),
-      { types: ["type.string"] }
-    );
-    return {
-      type: "object",
-      label: pt("fields.callToAction", "Call To Action"),
-      objectFields: {
-        label: labelField,
-        link: {
-          label: pt("fields.link", "Link"),
-          type: "text",
-        },
-        linkType: {
-          label: pt("fields.linkType", "Link Type"),
-          type: "select",
-          options: linkTypeOptions(),
-        },
-        ctaType: {
-          label: pt("fields.ctaType", "CTA Type"),
-          type: "select",
-          options: ctaTypeOptions(),
-        },
-      },
-    };
-  };
-
-// Restricted CTA fields for page sections that should only show "Text & Link" options
-export const restrictedTranslatableCTAFields =
-  (): Field<EnhancedTranslatableCTA> => {
-    const labelField = TranslatableStringField<any>(
-      msg("fields.label", "Label"),
-      { types: ["type.string"] }
-    );
-    return {
-      type: "object",
-      label: pt("fields.callToAction", "Call To Action"),
-      objectFields: {
-        label: labelField,
-        link: {
-          label: pt("fields.link", "Link"),
-          type: "text",
-        },
-        linkType: {
-          label: pt("fields.linkType", "Link Type"),
-          type: "select",
-          options: linkTypeOptions(),
-        },
-        // Note: ctaType is not included here, so it will default to "textAndLink"
-        // and cannot be changed in the editor
-      },
-    };
   };
 
 // Restricted constant config for components that should only use textAndLink CTA type
