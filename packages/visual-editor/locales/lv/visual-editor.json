@@ -298,8 +298,8 @@
       "compact": "Kompakts",
       "ctaVariant": {
         "link": "Saite",
-        "outline": "Kontūra",
-        "solid": "Ciets"
+        "primary": "Ciets",
+        "secondary": "Kontūra"
       },
       "dark": "Tumšs",
       "default": "Nepildīt",

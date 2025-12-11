@@ -298,8 +298,8 @@
       "compact": "Compatto",
       "ctaVariant": {
         "link": "Collegamento",
-        "outline": "Contorno",
-        "solid": "Solido"
+        "primary": "Solido",
+        "secondary": "Contorno"
       },
       "dark": "Buio",
       "default": "Predefinito",

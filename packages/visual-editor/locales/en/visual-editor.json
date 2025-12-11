@@ -297,8 +297,8 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Link",
-        "outline": "Outline",
-        "solid": "Solid"
+        "primary": "Solid",
+        "secondary": "Outline"
       },
       "dark": "Dark",
       "default": "Default",

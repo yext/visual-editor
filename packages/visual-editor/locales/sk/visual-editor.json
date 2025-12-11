@@ -299,8 +299,8 @@
       "compact": "Kompaktný",
       "ctaVariant": {
         "link": "Prepojiť",
-        "outline": "Obrys",
-        "solid": "Pevné"
+        "primary": "Pevné",
+        "secondary": "Obrys"
       },
       "dark": "Tmavý",
       "default": "Predvolený",

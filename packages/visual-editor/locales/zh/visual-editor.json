@@ -298,8 +298,8 @@
       "compact": "袖珍的",
       "ctaVariant": {
         "link": "关联",
-        "outline": "大纲",
-        "solid": "坚硬的"
+        "primary": "坚硬的",
+        "secondary": "大纲"
       },
       "dark": "黑暗的",
       "default": "默认",

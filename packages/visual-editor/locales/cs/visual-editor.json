@@ -305,8 +305,8 @@
       "compact": "Kompaktní",
       "ctaVariant": {
         "link": "Odkaz",
-        "outline": "Obrys",
-        "solid": "Solidní"
+        "primary": "Solidní",
+        "secondary": "Obrys"
       },
       "dark": "Tma",
       "default": "Výchozí",

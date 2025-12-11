@@ -298,8 +298,8 @@
       "compact": "Kompaktan",
       "ctaVariant": {
         "link": "Link",
-        "outline": "Obris",
-        "solid": "Čvrsto"
+        "primary": "Čvrsto",
+        "secondary": "Obris"
       },
       "dark": "Tamna",
       "default": "Zadano",

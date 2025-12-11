@@ -297,8 +297,8 @@
       "compact": "Compacto",
       "ctaVariant": {
         "link": "Enlace",
-        "outline": "Contorno",
-        "solid": "Sólido"
+        "primary": "Sólido",
+        "secondary": "Describir"
       },
       "dark": "Oscuro",
       "default": "Por defecto",

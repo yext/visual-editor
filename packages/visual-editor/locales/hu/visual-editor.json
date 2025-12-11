@@ -298,8 +298,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Link",
-        "outline": "Vázlat",
-        "solid": "Szilárd"
+        "primary": "Szilárd",
+        "secondary": "Vázlat"
       },
       "dark": "Sötét",
       "default": "Mulasztás",

@@ -298,8 +298,8 @@
       "compact": "Kompaktne",
       "ctaVariant": {
         "link": "Link",
-        "outline": "Kontuur",
-        "solid": "Tahke"
+        "primary": "Tahke",
+        "secondary": "Kontuur"
       },
       "dark": "Tume",
       "default": "Täitmata jätmine",

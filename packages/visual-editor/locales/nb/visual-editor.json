@@ -298,8 +298,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Lenke",
-        "outline": "Disposisjon",
-        "solid": "Fast"
+        "primary": "Fast",
+        "secondary": "Disposisjon"
       },
       "dark": "Mørk",
       "default": "Misligholde",

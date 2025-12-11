@@ -303,8 +303,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Link",
-        "outline": "Gliederung",
-        "solid": "Solide"
+        "primary": "Solide",
+        "secondary": "Gliederung"
       },
       "dark": "Dunkel",
       "default": "Standard",

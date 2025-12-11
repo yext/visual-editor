@@ -299,8 +299,8 @@
       "compact": "Kompaktowy",
       "ctaVariant": {
         "link": "Połączyć",
-        "outline": "Zarys",
-        "solid": "Solidny"
+        "primary": "Solidny",
+        "secondary": "Zarys"
       },
       "dark": "Ciemny",
       "default": "Domyślny",

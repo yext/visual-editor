@@ -298,8 +298,8 @@
       "compact": "Kompaktiškas",
       "ctaVariant": {
         "link": "Nuoroda",
-        "outline": "Kontūras",
-        "solid": "Tvirtas"
+        "primary": "Tvirtas",
+        "secondary": "Kontūras"
       },
       "dark": "Tamsu",
       "default": "Numatytasis",

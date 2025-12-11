@@ -299,8 +299,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Länk",
-        "outline": "Skissera",
-        "solid": "Fast"
+        "primary": "Fast",
+        "secondary": "Skissera"
       },
       "dark": "Mörk",
       "default": "Standard",

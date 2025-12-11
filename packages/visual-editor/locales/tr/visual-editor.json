@@ -298,8 +298,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Bağlantı",
-        "outline": "Taslak",
-        "solid": "Sağlam"
+        "primary": "Sağlam",
+        "secondary": "Taslak"
       },
       "dark": "Karanlık",
       "default": "Varsayılan",

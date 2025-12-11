@@ -305,8 +305,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Forbindelse",
-        "outline": "Disposition",
-        "solid": "Solid"
+        "primary": "Solid",
+        "secondary": "Disposition"
       },
       "dark": "Mørk",
       "default": "Misligholdelse",

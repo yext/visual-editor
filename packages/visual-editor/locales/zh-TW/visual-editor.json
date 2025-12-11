@@ -298,8 +298,8 @@
       "compact": "袖珍的",
       "ctaVariant": {
         "link": "關聯",
-        "outline": "大綱",
-        "solid": "堅硬的"
+        "primary": "堅硬的",
+        "secondary": "大綱"
       },
       "dark": "黑暗的",
       "default": "預設",

@@ -298,8 +298,8 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Legătură",
-        "outline": "Contur",
-        "solid": "Solid"
+        "primary": "Solid",
+        "secondary": "Contur"
       },
       "dark": "Întuneric",
       "default": "Implicit",

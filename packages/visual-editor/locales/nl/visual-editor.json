@@ -298,8 +298,8 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Link",
-        "outline": "Overzicht",
-        "solid": "Stevig"
+        "primary": "Stevig",
+        "secondary": "Overzicht"
       },
       "dark": "Donker",
       "default": "Standaard",

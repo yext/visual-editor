@@ -298,8 +298,8 @@
       "compact": "Kompakti",
       "ctaVariant": {
         "link": "Linkki",
-        "outline": "Outline",
-        "solid": "Kiinteä"
+        "primary": "Kiinteä",
+        "secondary": "Outline"
       },
       "dark": "Tumma",
       "default": "Laiminlyönti",
