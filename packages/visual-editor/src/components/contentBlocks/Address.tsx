@@ -150,7 +150,6 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
           <CTA
             ctaType="getDirections"
             eventName={`getDirections`}
-            className="font-bold"
             link={useAddressLink ? addressLink : listingsLink}
             label={t("getDirections", "Get Directions")}
             linkType="DRIVING_DIRECTIONS"
