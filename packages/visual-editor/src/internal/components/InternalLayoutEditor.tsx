@@ -28,7 +28,7 @@ import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
-import { AdvancedSettings } from "./AdvancedSettings.tsx";
+// import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
 import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -235,19 +235,20 @@ export const InternalLayoutEditor = ({
       }
     );
 
-    translatedComponents["AdvancedSettings"] = {
-      ...AdvancedSettings,
-      label: pt("advancedSettings", "Advanced Settings"),
-    };
+    // Commented out for experimental VE version
+    // translatedComponents["AdvancedSettings"] = {
+    //   ...AdvancedSettings,
+    //   label: pt("advancedSettings", "Advanced Settings"),
+    // };
 
-    translatedComponents["PageSettings"] = {
-      label: pt("page", "Page"),
-      fields: {},
-      defaultProps: {
-        data: { title: "Page Settings" },
-      },
-      render: () => <></>,
-    };
+    // translatedComponents["PageSettings"] = {
+    //   label: pt("page", "Page"),
+    //   fields: {},
+    //   defaultProps: {
+    //     data: { title: "Page Settings" },
+    //   },
+    //   render: () => <></>,
+    // };
 
     return {
       categories: puckConfig.categories,
