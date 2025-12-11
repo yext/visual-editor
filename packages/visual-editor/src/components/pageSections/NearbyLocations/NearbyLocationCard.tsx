@@ -71,7 +71,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
       <MaybeLink
         eventName={`link${cardNumber}`}
         alwaysHideCaret={true}
-        className="mb-2"
+        className="mb-2 line-clamp-2 text-wrap break-words w-full"
         href={resolvedUrl}
       >
         <Heading
