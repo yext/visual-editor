@@ -61,6 +61,15 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
         );
       }, []);
 
+      const linkField = useMemo(() => {
+        return TranslatableStringField<TranslatableString>(
+          msg("fields.link", "Link"),
+          { types: ["type.string"] },
+          true,
+          false
+        );
+      }, []);
+
       const showLabel = value?.ctaType !== "presetImage";
       const showLinkFields = value?.ctaType !== "getDirections";
 
@@ -109,15 +118,13 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           {showLinkFields && (
             <>
               <div className="ve-mb-3">
-                <FieldLabel label={pt("fields.link", "Link")}>
-                  <AutoField
-                    field={{ type: "text" }}
-                    value={value?.link || ""}
-                    onChange={(newValue) =>
-                      onChange({ ...value, link: newValue })
-                    }
-                  />
-                </FieldLabel>
+                <AutoField
+                  field={linkField}
+                  value={value?.link || ""}
+                  onChange={(newValue) =>
+                    onChange({ ...value, link: newValue })
+                  }
+                />
               </div>
               <div className="ve-mb-3">
                 <FieldLabel label={pt("fields.linkType", "Link Type")}>
