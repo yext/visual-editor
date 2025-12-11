@@ -26,7 +26,7 @@ const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
 
 export interface PrimaryHeaderSlotProps {
   data: {
-    logoLink: TranslatableString;
+    logoLink?: TranslatableString;
   };
   styles: {
     backgroundColor?: BackgroundStyle;
