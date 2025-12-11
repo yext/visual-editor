@@ -3,9 +3,10 @@ import { StreamDocument } from "../applyTheme";
 export const schemaWhitespaceRegex = /\n\s*/g;
 
 export const getDefaultSchema = (
-  document: StreamDocument
+  streamDocument: StreamDocument
 ): Record<string, any> => {
-  const defaultSchemaTemplate = getSchemaTemplate(document);
+  const entityTypeId = streamDocument?.meta?.entityType?.id;
+  const defaultSchemaTemplate = getSchemaTemplate(entityTypeId);
   try {
     return JSON.parse(defaultSchemaTemplate);
   } catch (e) {
@@ -15,9 +16,7 @@ export const getDefaultSchema = (
 };
 
 // Function to get the appropriate schema template based on entity type
-export const getSchemaTemplate = (streamDocument: StreamDocument): string => {
-  const entityTypeId = streamDocument?.meta?.entityType?.id;
-
+export const getSchemaTemplate = (entityTypeId: string | undefined): string => {
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   } else if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {

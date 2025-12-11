@@ -23,12 +23,9 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
   document.path = data.path;
 
   // Set placeholder site domain for non-production domains
-  console.log("document 1", document.siteDomain, !document.siteDomain);
-
   if (!document.siteDomain) {
-    document.siteDomain == "<siteDomain>";
+    document.siteDomain = "<siteDomain>";
   }
-  console.log("document 2", document.siteDomain);
 
   const layoutString = document?.__?.layout;
   if (!layoutString) {
@@ -39,7 +36,8 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const layout = JSON.parse(layoutString);
     const entityTypeId = document?.meta?.entityType?.id;
 
-    // If the document has categories, resolve primaryCategory to the local business subtype
+    // If the entity has categories, resolve the primaryCategory key
+    // to the local business subtype corresponding to the entity's primary category
     if (entityTypeId !== "locator" && !entityTypeId?.startsWith("dm_")) {
       document.primaryCategory = getLocalBusinessSubtype(document);
     }
