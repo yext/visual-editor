@@ -5,8 +5,7 @@ export const schemaWhitespaceRegex = /\n\s*/g;
 export const getDefaultSchema = (
   streamDocument: StreamDocument
 ): Record<string, any> => {
-  const entityTypeId = streamDocument?.meta?.entityType?.id;
-  const defaultSchemaTemplate = getSchemaTemplate(entityTypeId);
+  const defaultSchemaTemplate = getSchemaTemplate(streamDocument);
   try {
     return JSON.parse(defaultSchemaTemplate);
   } catch (e) {
@@ -16,7 +15,9 @@ export const getDefaultSchema = (
 };
 
 // Function to get the appropriate schema template based on entity type
-export const getSchemaTemplate = (entityTypeId: string | undefined): string => {
+export const getSchemaTemplate = (streamDocument: StreamDocument): string => {
+  const entityTypeId = streamDocument?.meta?.entityType?.id;
+
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   } else if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
