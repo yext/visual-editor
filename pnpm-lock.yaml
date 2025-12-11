@@ -102,7 +102,7 @@ importers:
         version: 0.3.1
       "@puckeditor/plugin-ai":
         specifier: ^0.3.1
-        version: 0.3.1(@measured/puck@0.21.0-canary.c0db75c1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@3.25.76)
+        version: 0.3.1(@measured/puck@0.21.0-canary.c0db75c1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@4.1.13)
       "@radix-ui/react-accordion":
         specifier: ^1.2.3
         version: 1.2.12(@types/react-dom@18.3.7(@types/react@18.3.24))(@types/react@18.3.24)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -363,8 +363,8 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.12)(@types/node@20.19.11)(@vitest/browser@3.2.4)(happy-dom@20.0.11)(jsdom@24.1.3)
       zod:
-        specifier: ^3.23.8
-        version: 3.25.76
+        specifier: ^4.1.13
+        version: 4.1.13
 
   starter:
     dependencies:
@@ -4820,6 +4820,12 @@ packages:
     resolution:
       {
         integrity: sha512-uug3FEEGv0r+jrecvUUpbY8lLisvIjg6AAic6a2bSP5OEOLeJsDSnvhCDov7ipFFMXS3orMpzlmi0ZcuGkBbow==,
+      }
+
+  "@types/node@20.19.26":
+    resolution:
+      {
+        integrity: sha512-0l6cjgF0XnihUpndDhk+nyD3exio3iKaYROSgvh/qSevPXax3L8p5DBRFjbvalnwatGgHEQn2R88y2fA3g4irg==,
       }
 
   "@types/parse5@5.0.3":
@@ -12767,6 +12773,12 @@ packages:
         integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==,
       }
 
+  zod@4.1.13:
+    resolution:
+      {
+        integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==,
+      }
+
   zustand@5.0.8:
     resolution:
       {
@@ -12801,19 +12813,19 @@ packages:
       }
 
 snapshots:
-  "@ai-sdk/gateway@2.0.18(zod@3.25.76)":
+  "@ai-sdk/gateway@2.0.18(zod@4.1.13)":
     dependencies:
       "@ai-sdk/provider": 2.0.0
-      "@ai-sdk/provider-utils": 3.0.18(zod@3.25.76)
+      "@ai-sdk/provider-utils": 3.0.18(zod@4.1.13)
       "@vercel/oidc": 3.0.5
-      zod: 3.25.76
+      zod: 4.1.13
 
-  "@ai-sdk/provider-utils@3.0.18(zod@3.25.76)":
+  "@ai-sdk/provider-utils@3.0.18(zod@4.1.13)":
     dependencies:
       "@ai-sdk/provider": 2.0.0
       "@standard-schema/spec": 1.0.0
       eventsource-parser: 3.0.6
-      zod: 3.25.76
+      zod: 4.1.13
 
   "@ai-sdk/provider@2.0.0":
     dependencies:
@@ -14133,10 +14145,10 @@ snapshots:
 
   "@puckeditor/cloud-client@0.3.1": {}
 
-  "@puckeditor/plugin-ai@0.3.1(@measured/puck@0.21.0-canary.c0db75c1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@3.25.76)":
+  "@puckeditor/plugin-ai@0.3.1(@measured/puck@0.21.0-canary.c0db75c1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1)))(@types/react@18.3.24)(react@18.3.1)(zod@4.1.13)":
     dependencies:
       "@measured/puck": 0.21.0-canary.c0db75c1(@types/react@18.3.24)(immer@9.0.21)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
-      ai: 5.0.108(zod@3.25.76)
+      ai: 5.0.108(zod@4.1.13)
       qler: 0.6.2
       react: 18.3.1
       react-markdown: 10.1.0(@types/react@18.3.24)(react@18.3.1)
@@ -16105,6 +16117,11 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  "@types/node@20.19.26":
+    dependencies:
+      undici-types: 6.21.0
+    optional: true
+
   "@types/parse5@5.0.3": {}
 
   "@types/pixelmatch@5.2.6":
@@ -16625,13 +16642,13 @@ snapshots:
 
   agent-base@7.1.4: {}
 
-  ai@5.0.108(zod@3.25.76):
+  ai@5.0.108(zod@4.1.13):
     dependencies:
-      "@ai-sdk/gateway": 2.0.18(zod@3.25.76)
+      "@ai-sdk/gateway": 2.0.18(zod@4.1.13)
       "@ai-sdk/provider": 2.0.0
-      "@ai-sdk/provider-utils": 3.0.18(zod@3.25.76)
+      "@ai-sdk/provider-utils": 3.0.18(zod@4.1.13)
       "@opentelemetry/api": 1.9.0
-      zod: 3.25.76
+      zod: 4.1.13
 
   ajv-draft-04@1.0.0(ajv@8.13.0):
     optionalDependencies:
@@ -17820,7 +17837,7 @@ snapshots:
 
   happy-dom@20.0.11:
     dependencies:
-      "@types/node": 20.19.11
+      "@types/node": 20.19.26
       "@types/whatwg-mimetype": 3.0.2
       whatwg-mimetype: 3.0.0
     optional: true
@@ -21634,6 +21651,8 @@ snapshots:
       zod: 3.25.76
 
   zod@3.25.76: {}
+
+  zod@4.1.13: {}
 
   zustand@5.0.8(@types/react@18.3.24)(immer@9.0.21)(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1)):
     optionalDependencies:

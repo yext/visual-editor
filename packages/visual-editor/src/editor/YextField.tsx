@@ -32,6 +32,8 @@ import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
+import { getSchemaForYextEntityField } from "./aiSchemas.ts";
+import "@puckeditor/plugin-ai";
 
 /** Field option type for select/radio fields */
 export type FieldOption = {
@@ -58,9 +60,22 @@ function isThemeOptionsKey(value: unknown): value is ThemeOptionsKey {
   return typeof value === "string" && value in ThemeOptions;
 }
 
+/**
+ * AI configuration for Puck AI plugin
+ * Based on FieldAiParams from @puckeditor/plugin-ai
+ */
+type YextFieldAiConfig = {
+  instructions?: string;
+  exclude?: boolean;
+  required?: boolean;
+  stream?: boolean;
+  schema?: unknown; // JSONSchema type
+};
+
 type YextBaseField = {
   type: string;
   visible?: boolean;
+  ai?: YextFieldAiConfig;
 };
 
 // YextArrayField has same functionality as Puck's ArrayField
@@ -221,14 +236,33 @@ export function YextField<T, U>(
 ): any {
   // use YextEntityFieldSelector
   if (config.type === "entityField") {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
+    // Get schema for the entity field based on filter types
+    const schema = getSchemaForYextEntityField(config.filter);
+
+    // Build the field with AI config
+    const field = YextEntityFieldSelector<
+      T extends Record<string, any> ? T : any,
+      U
+    >({
       label: fieldName,
       filter: config.filter,
       disableConstantValueToggle: config.disableConstantValueToggle,
       disallowTranslation: config.disallowTranslation,
       typeSelectorConfig: config.typeSelectorConfig,
     });
+
+    // Merge AI config if schema exists or if user provided AI config
+    if (schema || config.ai) {
+      return {
+        ...field,
+        ai: {
+          ...(schema ? { schema } : {}),
+          ...config.ai,
+        },
+      };
+    }
+
+    return field;
   }
 
   if (config.type === "optionalNumber") {
