@@ -120,6 +120,16 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
       ? inputLink.trim()
       : DEFAULT_LOGO_LINK;
 
+  const LogoLink = (
+    <Link
+      href={resolvedLink}
+      eventName="clickedLogo"
+      aria-label={t("logoLink", "Logo Link")}
+    >
+      <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
+    </Link>
+  );
+
   const navContent = (
     <>
       <slots.LinksSlot style={{ height: "auto" }} />
@@ -142,25 +152,9 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
           className="flex flex-row justify-between w-full items-center gap-8"
         >
           {/* Mobile logo */}
-          <div className="block md:hidden">
-            <Link
-              href={resolvedLink}
-              eventName="clickedLogo"
-              aria-label={t("logoLink", "Logo Link")}
-            >
-              <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
-            </Link>
-          </div>
+          <div className="block md:hidden">{LogoLink}</div>
           {/* Desktop logo */}
-          <div className="hidden md:block">
-            <Link
-              href={resolvedLink}
-              eventName="clickedLogo"
-              aria-label={t("logoLink", "Logo Link")}
-            >
-              <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
-            </Link>
-          </div>
+          <div className="hidden md:block">{LogoLink}</div>
           {/* Desktop Navigation & Mobile Hamburger */}
           {showNavContent && (
             <div
