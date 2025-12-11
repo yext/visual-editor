@@ -47,13 +47,18 @@ const defaultInsight = {
   },
 } satisfies InsightStruct;
 
-export const defaultInsightCardSlotData = (id?: string, index?: number) => {
-  return {
+export const defaultInsightCardSlotData = (
+  id?: string,
+  index?: number,
+  backgroundColor?: BackgroundStyle,
+  sharedSlotStyles?: Record<string, any>
+) => {
+  const cardData = {
     type: "InsightCard",
     props: {
       ...(id && { id }),
       styles: {
-        backgroundColor: backgroundColors.background1.value,
+        backgroundColor: backgroundColor ?? backgroundColors.background1.value,
       } satisfies InsightCardProps["styles"],
       conditionalRender: {
         hasCategory: true,
@@ -192,6 +197,14 @@ export const defaultInsightCardSlotData = (id?: string, index?: number) => {
       },
     } satisfies InsightCardProps,
   };
+
+  Object.entries(cardData.props.slots).forEach(([slotKey, slotArray]) => {
+    if (sharedSlotStyles?.[slotKey]) {
+      slotArray[0].props.styles = sharedSlotStyles[slotKey];
+    }
+  });
+
+  return cardData;
 };
 
 export type InsightCardProps = {

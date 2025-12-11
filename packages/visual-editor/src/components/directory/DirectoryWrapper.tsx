@@ -135,7 +135,7 @@ export const DirectoryGrid: ComponentConfig<{
       return data;
     }
 
-    // Update CardSlots data but preserve styles and slot configurations
+    // Update CardSlots data but preserve the existing styles and slot configurations
     const updatedCards = Array(requiredLength)
       .fill(null)
       .map((_, i) =>
@@ -143,8 +143,8 @@ export const DirectoryGrid: ComponentConfig<{
           `DirectoryCard-${crypto.randomUUID()}`,
           i,
           sortedDirectoryChildren[i],
-          data.props.slots?.CardSlot[i]?.props.styles,
-          data.props.slots?.CardSlot[i]?.props.slots
+          data.props.slots?.CardSlot?.[0]?.props.styles,
+          data.props.slots?.CardSlot?.[0]?.props.slots
         )
       );
 
