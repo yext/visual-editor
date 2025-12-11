@@ -34,7 +34,6 @@ const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
   return (
     <CTA
       ctaType="getDirections"
-      className="font-bold"
       eventName={`getDirections`}
       label={t("getDirections", "Get Directions")}
       linkType={"DRIVING_DIRECTIONS"}

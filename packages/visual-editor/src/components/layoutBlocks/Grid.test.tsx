@@ -23,6 +23,7 @@ import {
   TextList,
 } from "../contentBlocks/index.ts";
 import {
+  axe,
   ComponentTest,
   testHours,
   transformTests,
@@ -1312,11 +1313,23 @@ describe("Grid", async () => {
 
       await expect(`Grid/[${viewportName}] ${name}`).toMatchScreenshot();
 
+      const results = await axe(container);
+      if (name === "version 45 - CTAs with different site colors") {
+        console.warn(results);
+      } else {
+        expect(results).toHaveNoViolations();
+      }
       if (interactions) {
         await interactions(page);
         await expect(
           `Grid/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
+        const results2 = await axe(container);
+        if (name === "version 45 - CTAs with different site colors") {
+          console.warn(results2);
+        } else {
+          expect(results2).toHaveNoViolations();
+        }
       }
     }
   );

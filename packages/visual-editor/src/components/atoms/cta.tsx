@@ -266,6 +266,7 @@ export const CTA = (props: CTAProps) => {
   );
 };
 
+// Extracts the name of a theme color from a tailwind bg- or text- class
 const normalize = (token?: string) =>
   token?.startsWith("bg-")
     ? token.substring(3)
