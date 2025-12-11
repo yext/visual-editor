@@ -2206,9 +2206,20 @@ const tests: ComponentTest[] = [
   },
 ];
 
+const BRAND_COLOR_BG_ALLOWLIST = new Set([
+  "bg-palette-primary",
+  "bg-palette-primary-dark",
+  "bg-palette-secondary",
+  "bg-palette-secondary-dark",
+  "bg-palette-tertiary",
+  "bg-palette-tertiary-dark",
+  "bg-palette-quaternary",
+  "bg-palette-quaternary-dark",
+]);
+
 const isBrandColorTest = (props: any) => {
   const bg = props?.styles?.backgroundColor?.bgColor;
-  return typeof bg === "string" && bg.startsWith("bg-palette-");
+  return typeof bg === "string" && BRAND_COLOR_BG_ALLOWLIST.has(bg);
 };
 
 describe("HeroSection", async () => {
@@ -2275,7 +2286,10 @@ describe("HeroSection", async () => {
       await expect(`HeroSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       if (isBrandColorTest(props)) {
-        console.warn(results);
+        console.warn(
+          `IGNORING axe violations for brand color test: ${name}`,
+          results
+        );
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -2287,7 +2301,10 @@ describe("HeroSection", async () => {
         ).toMatchScreenshot();
         const results = await axe(container);
         if (isBrandColorTest(props)) {
-          console.warn(results);
+          console.warn(
+            `IGNORING axe violations for brand color test: ${name}`,
+            results
+          );
         } else {
           expect(results).toHaveNoViolations();
         }
