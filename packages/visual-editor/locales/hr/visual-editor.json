@@ -186,6 +186,7 @@
     "cards": "Karata",
     "category": "Kategorija",
     "collapseDays": "Dani kolapsa",
+    "color": "Boja",
     "columns": "Stupci",
     "commaSeparated": "Odvojeno zarezom",
     "contributorName": "Naziv suradnika",
@@ -297,8 +298,8 @@
       "compact": "Kompaktan",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Osnovan",
-        "secondary": "Sekundarni"
+        "primary": "Čvrsto",
+        "secondary": "Obris"
       },
       "dark": "Tamna",
       "default": "Zadano",

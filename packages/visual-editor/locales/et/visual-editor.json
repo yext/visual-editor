@@ -186,6 +186,7 @@
     "cards": "Kaardid",
     "category": "Kategooria",
     "collapseDays": "Varisevad päevad",
+    "color": "Värv",
     "columns": "Veerud",
     "commaSeparated": "Komaga eraldatud",
     "contributorName": "Kaastöötaja nimi",
@@ -297,8 +298,8 @@
       "compact": "Kompaktne",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Alg-",
-        "secondary": "Teisene"
+        "primary": "Tahke",
+        "secondary": "Kontuur"
       },
       "dark": "Tume",
       "default": "Täitmata jätmine",

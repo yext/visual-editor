@@ -186,6 +186,7 @@
     "cards": "Kártyás kártyák",
     "category": "Kategória",
     "collapseDays": "Összeomlás napjai",
+    "color": "Szín",
     "columns": "Oszlopok",
     "commaSeparated": "Vesszővel elválasztva",
     "contributorName": "Közreműködő neve",
@@ -297,8 +298,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Elsődleges",
-        "secondary": "Másodlagos"
+        "primary": "Szilárd",
+        "secondary": "Vázlat"
       },
       "dark": "Sötét",
       "default": "Mulasztás",

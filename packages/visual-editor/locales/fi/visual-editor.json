@@ -186,6 +186,7 @@
     "cards": "Kortit",
     "category": "Luokka",
     "collapseDays": "Romahduspäivät",
+    "color": "Väri",
     "columns": "Pylväät",
     "commaSeparated": "Pilkulla erotettuna",
     "contributorName": "Avustajan nimi",
@@ -297,8 +298,8 @@
       "compact": "Kompakti",
       "ctaVariant": {
         "link": "Linkki",
-        "primary": "Ensisijainen",
-        "secondary": "Toissijainen"
+        "primary": "Kiinteä",
+        "secondary": "Outline"
       },
       "dark": "Tumma",
       "default": "Laiminlyönti",

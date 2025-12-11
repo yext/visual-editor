@@ -160,6 +160,26 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
   },
 ];
 
+const siteColorOptions: ComboboxOptionGroup[] = [
+  {
+    title: msg("siteColors", "Site Colors"),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("color")) {
+          return {
+            label,
+            value: {
+              bgColor: value.bgColor.replace("bg-", ""),
+              textColor: value.textColor.replace("text-", ""),
+            },
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
+  },
+];
+
 /** Corresponds to the different semantic heading levels */
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -270,11 +290,11 @@ const imageBorderRadiusOptions: BorderRadiusOption[] = [
 
 const ctaVariantOptions = [
   {
-    label: msg("fields.options.ctaVariant.primary", "Primary"),
+    label: msg("fields.options.ctaVariant.primary", "Solid"),
     value: "primary",
   },
   {
-    label: msg("fields.options.ctaVariant.secondary", "Secondary"),
+    label: msg("fields.options.ctaVariant.secondary", "Outline"),
     value: "secondary",
   },
   { label: msg("fields.options.ctaVariant.link", "Link"), value: "link" },
@@ -390,6 +410,7 @@ export const ThemeOptions = {
   TEXT_TRANSFORM: textTransformOptions,
   LETTER_SPACING: letterSpacingOptions,
   BACKGROUND_COLOR: backgroundColorOptions,
+  SITE_COLOR: siteColorOptions,
   CTA_VARIANT: ctaVariantOptions,
   PRESET_IMAGE: presetImageTypeOptions,
   ALIGNMENT: alignmentOptions,

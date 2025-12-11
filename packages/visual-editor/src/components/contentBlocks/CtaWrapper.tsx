@@ -20,6 +20,8 @@ import {
   resolveDataFromParent,
   themeManagerCn,
   PresetImageType,
+  BackgroundStyle,
+  backgroundColors,
 } from "@yext/visual-editor";
 import {
   ctaTypeOptions,
@@ -41,6 +43,7 @@ export interface CTAWrapperProps {
     variant: CTAVariant;
     /** The image to use if the CTA is set to preset image */
     presetImage?: PresetImageType;
+    color?: BackgroundStyle;
   };
 
   /** Additional CSS classes to apply to the CTA. */
@@ -103,6 +106,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
         type: "select",
         options: "PRESET_IMAGE",
       }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   },
 };
@@ -135,6 +142,8 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     resolvedLabel = t("getDirections", "Get Directions");
   }
 
+  const resolvedColor = styles.color ?? backgroundColors.color1.value;
+
   const showCTA =
     cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
 
@@ -160,6 +169,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           variant={styles.variant}
           className={combinedClassName}
           eventName={eventName}
+          color={resolvedColor}
         />
       )}
     </EntityField>
@@ -188,10 +198,12 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     styles: {
       variant: "primary",
       presetImage: "app-store",
+      color: backgroundColors.color1.value,
     },
   },
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
+    const ctaVariant = data.props.styles.variant;
 
     const ctaType = getCTAType(data.props.data.entityField).ctaType;
     if (ctaType === "presetImage") {
@@ -206,6 +218,11 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     if (data.props.data.show !== undefined) {
       setDeep(updatedFields, "data.objectFields.show.visible", true);
     }
+
+    const showColor =
+      (ctaVariant === "primary" || ctaVariant === "secondary") &&
+      ctaType !== "presetImage";
+    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
 
     return updatedFields;
   },
