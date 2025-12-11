@@ -31,24 +31,32 @@ import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFiel
 import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
+import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 
-/** Copied from Puck, do not change */
+/** Field option type for select/radio fields */
 export type FieldOption = {
   label: string;
-  value: string | number | boolean;
+  value: string | number | boolean | undefined | null | object;
 };
 
-/** Copied from Puck, do not change */
+/** Array of field options for select/radio fields */
 export type FieldOptions = Array<FieldOption> | ReadonlyArray<FieldOption>;
 
-type radioOptions =
+type RadioOptions =
   | "PHONE_OPTIONS"
   | "ALIGNMENT"
   | "BODY_VARIANT"
   | "JUSTIFY_CONTENT"
   | "CTA_VARIANT";
 
-type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
+type SelectOptions = keyof Omit<typeof ThemeOptions, RadioOptions>;
+
+type ThemeOptionsKey = keyof typeof ThemeOptions;
+
+/** Type guard to check if a value is a valid ThemeOptions key */
+function isThemeOptionsKey(value: unknown): value is ThemeOptionsKey {
+  return typeof value === "string" && value in ThemeOptions;
+}
 
 type YextBaseField = {
   type: string;
@@ -56,22 +64,24 @@ type YextBaseField = {
 };
 
 // YextArrayField has same functionality as Puck's ArrayField
+// Note: Uses `any` for Props due to complex generic constraints with Puck's Field types
 type YextArrayField<
-  Props extends { [key: string]: any }[] = { [key: string]: any }[],
+  Props extends { [key: string]: unknown }[] = { [key: string]: unknown }[],
 > = YextBaseField & Omit<ArrayField<Props>, keyof BaseField>;
 
 // YextNumberField has same functionality as Puck's NumberField
 type YextNumberField = YextBaseField & Omit<NumberField, keyof BaseField>;
 
 // YextObjectField has same functionality as Puck's ObjectField
+// Note: Uses `any` for Props due to complex generic constraints with Puck's Field types
 type YextObjectField<
-  Props extends { [key: string]: any } = { [key: string]: any },
+  Props extends { [key: string]: unknown } = { [key: string]: unknown },
 > = YextBaseField & Omit<ObjectField<Props>, keyof BaseField>;
 
 // YextRadioField accepts normal FieldOptions or specific ThemeConfig options.
 type YextRadioField = YextBaseField & {
   type: "radio";
-  options: FieldOptions | radioOptions;
+  options: FieldOptions | RadioOptions;
 };
 
 // YextSelectField accepts normal FieldOptions or specific ThemeConfig options.
@@ -79,7 +89,7 @@ type YextRadioField = YextBaseField & {
 type YextSelectField = YextBaseField & {
   type: "select";
   hasSearch?: boolean;
-  options: FieldOptions | selectOptions;
+  options: FieldOptions | SelectOptions;
 };
 
 // YextTextField has same functionality as Puck's TextField
@@ -107,7 +117,7 @@ type YextMaxWidthField = YextBaseField & {
 
 type YextTranslatableStringField = YextBaseField & {
   type: "translatableString";
-  filter?: RenderEntityFieldFilter<any>;
+  filter?: RenderEntityFieldFilter<Record<string, unknown>>;
   showApplyAllOption?: boolean;
 };
 
@@ -136,18 +146,25 @@ type YextDynamicSingleSelectField<T extends DynamicOptionValueTypes> =
   };
 
 // YextEntitySelectorField has same functionality as YextEntityFieldSelector
+// Note: Uses Record<string, unknown> as default for T to maintain type flexibility
 type YextEntitySelectorField<
-  T extends Record<string, any> = Record<string, any>,
+  T extends Record<string, unknown> = Record<string, unknown>,
 > = YextBaseField &
   Omit<RenderYextEntityFieldSelectorProps<T>, "label"> & {
     type: "entityField";
   };
 
+// Note: This union type uses conditional types with `any` fallbacks to maintain
+// compatibility with existing call sites that rely on flexible type inference.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type YextFieldConfig<Props = any> =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | YextArrayField<Props extends Record<string, any>[] ? Props : any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | YextObjectField<Props extends Record<string, any> ? Props : any>
   | YextNumberField
   | YextTextField
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | YextEntitySelectorField<Props extends Record<string, any> ? Props : any>
   | YextSelectField
   | YextRadioField
@@ -157,16 +174,20 @@ type YextFieldConfig<Props = any> =
   | YextTranslatableStringField
   | YextImageField
   | YextVideoField
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | YextDynamicSelectField<Props extends DynamicOptionValueTypes ? Props : any>
   | YextDynamicSingleSelectField<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Props extends DynamicOptionValueTypes ? Props : any
     >;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function YextField<T = any>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
 ): Field<T>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function YextField<T extends Record<string, any>, U = any>(
   fieldName: MsgString,
   config: YextEntitySelectorField<T>
@@ -185,12 +206,22 @@ export function YextField<
   U extends DynamicOptionValueTypes,
 >(fieldName: MsgString, config: YextDynamicSingleSelectField<U>): Field<T>;
 
+/**
+ * Creates a Puck field configuration with Yext-specific enhancements.
+ *
+ * @param fieldName - The label for the field
+ * @param config - Configuration object that determines the field type and options
+ * @returns A Puck Field configuration
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function YextField<T, U>(
   fieldName: MsgString,
   config: YextFieldConfig<T>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): any {
   // use YextEntityFieldSelector
   if (config.type === "entityField") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return YextEntityFieldSelector<T extends Record<string, any> ? T : any, U>({
       label: fieldName,
       filter: config.filter,
@@ -210,26 +241,27 @@ export function YextField<T, U>(
   }
 
   if (config.type === "select" && config.options === "BACKGROUND_COLOR") {
-    const options = ThemeOptions[config.options];
     return BasicSelector({
       label: fieldName,
-      optionGroups: options,
+      optionGroups: ThemeOptions.BACKGROUND_COLOR,
       disableSearch: true,
     });
   }
 
   // use BasicSelector functionality
   if (config.type === "select" && config.hasSearch) {
-    const options =
-      typeof config.options === "string"
-        ? ThemeOptions[config.options]
-        : config.options;
-    return BasicSelector({ label: fieldName, options: options as any });
+    const options = isThemeOptionsKey(config.options)
+      ? ThemeOptions[config.options]
+      : config.options;
+    return BasicSelector({
+      label: fieldName,
+      options: options as ComboboxOption[],
+    });
   }
 
   if (
     (config.type === "select" || config.type === "radio") &&
-    typeof config.options === "string"
+    isThemeOptionsKey(config.options)
   ) {
     return {
       label: fieldName,
