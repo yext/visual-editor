@@ -102,3 +102,9 @@ export const removeEmptyValues = (
 
   return obj;
 };
+
+export const extractPrimaryCategory = (
+  categoryFullDisplayName: string
+): string => {
+  return categoryFullDisplayName.split(" > ")[0].trim();
+};

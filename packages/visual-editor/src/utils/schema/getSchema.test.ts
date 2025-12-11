@@ -8,6 +8,7 @@ describe("getSchema", () => {
       path: "/us/va/123-main-street",
       document: {
         name: "Test Name",
+        uid: 123,
         services: [],
         __: {
           layout: JSON.stringify({
@@ -29,6 +30,7 @@ describe("getSchema", () => {
             id: "location",
           },
         },
+        siteDomain: "example.com",
       },
     };
     const schema = getSchema(testData);
@@ -47,6 +49,7 @@ describe("getSchema", () => {
       relativePrefixToRoot: "./",
       path: "us/va/123-main-street",
       document: {
+        uid: 123,
         name: "Test Name",
         siteDomain: "yext.com",
         address: {
@@ -56,6 +59,11 @@ describe("getSchema", () => {
           postalCode: "20000",
           countryCode: "US",
         },
+        ref_categories: [
+          {
+            fullDisplayName: "Automotive & Vehicles > Auto Repair",
+          },
+        ],
         mainPhone: "123-456-7890",
         description: "test description",
         __: {
@@ -80,8 +88,9 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "yext.com/us/va/123-main-street",
-          "@type": "LocalBusiness",
+          "@id": "https://yext.com/123#automotivebusiness",
+          url: "https://yext.com/us/va/123-main-street",
+          "@type": "AutomotiveBusiness",
           name: "Test Name",
           address: {
             "@type": "PostalAddress",
@@ -104,6 +113,7 @@ describe("getSchema", () => {
       path: "us/va/123-main-street",
       document: {
         name: "Test Name",
+        uid: 123,
         siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
@@ -111,7 +121,8 @@ describe("getSchema", () => {
               props: {
                 schemaMarkup: `{
                 "@type": "LocalBusiness",
-                "@id": "[[siteDomain]]/[[path]]",
+                "@id": "https://[[siteDomain]]/[[uid]]#localbusiness",
+                "url": "https://[[siteDomain]]/[[path]]",
                 "name": "[[name]]"
               }`,
               },
@@ -208,66 +219,54 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@type": "LocalBusiness",
-          "@id": "yext.com/us/va/123-main-street",
+          "@id": "https://yext.com/123#localbusiness",
+          url: "https://yext.com/us/va/123-main-street",
           name: "Test Name",
         },
         {
           "@type": "BreadcrumbList",
+          "@id": "https://yext.com/123#breadcrumbs",
           "@context": "https://schema.org",
           itemListElement: [
             {
               "@type": "ListItem",
               position: 1,
               name: "Locations Directory",
-              item: {
-                "@id": "../../index.html",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/index.html",
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "US",
-              item: {
-                "@id": "../../us",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/us",
             },
             {
               "@type": "ListItem",
               position: 3,
               name: "NY",
-              item: {
-                "@id": "../../us/ny",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/us/ny",
             },
             {
               "@type": "ListItem",
               position: 4,
               name: "Brooklyn",
-              item: {
-                "@id": "../../us/ny/brooklyn",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/us/ny/brooklyn",
             },
             {
               "@type": "ListItem",
               position: 5,
               name: "Test Name",
-              item: {
-                "@id": "yext.com/us/va/123-main-street",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/us/va/123-main-street",
             },
           ],
         },
         {
           "@type": "AggregateRating",
+          "@id": "https://yext.com/123#aggregaterating",
           ratingValue: "3.7142856",
           reviewCount: "7",
           itemReviewed: {
-            "@id": "yext.com/us/va/123-main-street",
+            "@id": "https://yext.com/123#localbusiness",
           },
         },
       ],
@@ -280,6 +279,7 @@ describe("getSchema", () => {
       path: "us/ny/nyc",
       document: {
         name: "New York City",
+        uid: 999,
         siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
@@ -315,49 +315,39 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "yext.com/us/ny/nyc",
+          "@id": "https://yext.com/999#collectionpage",
+          url: "https://yext.com/us/ny/nyc",
           "@type": "CollectionPage",
           name: "New York City",
         },
         {
           "@type": "BreadcrumbList",
           "@context": "https://schema.org",
+          "@id": "https://yext.com/999#breadcrumbs",
           itemListElement: [
             {
               "@type": "ListItem",
               position: 1,
               name: "Locations Directory",
-              item: {
-                "@id": "../../index.html",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/index.html",
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "US",
-              item: {
-                "@id": "../../us",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/us",
             },
             {
               "@type": "ListItem",
               position: 3,
               name: "NY",
-              item: {
-                "@id": "../../us/ny",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/us/ny",
             },
             {
               "@type": "ListItem",
               position: 4,
               name: "New York City",
-              item: {
-                "@id": "yext.com/us/ny/nyc",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/us/ny/nyc",
             },
           ],
         },
@@ -371,6 +361,7 @@ describe("getSchema", () => {
       path: "index.html",
       document: {
         name: "Test Root",
+        uid: 1000,
         siteDomain: "yext.com",
         __: {
           layout: JSON.stringify({
@@ -392,24 +383,60 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "yext.com/index.html",
+          "@id": "https://yext.com/1000#collectionpage",
+          url: "https://yext.com/index.html",
           "@type": "CollectionPage",
           name: "Test Root",
         },
         {
           "@type": "BreadcrumbList",
           "@context": "https://schema.org",
+          "@id": "https://yext.com/1000#breadcrumbs",
           itemListElement: [
             {
               "@type": "ListItem",
               position: 1,
               name: "Test Root",
-              item: {
-                "@id": "yext.com/index.html",
-                "@type": "Thing",
-              },
+              item: "https://yext.com/index.html",
             },
           ],
+        },
+      ],
+    });
+  });
+
+  it("returns schema for a locator with no schemaMarkup", async () => {
+    const testData = {
+      relativePrefixToRoot: "../",
+      path: "locator",
+      document: {
+        name: "Test Locator",
+        uid: 2000,
+        siteDomain: "yext.com",
+        __: {
+          layout: JSON.stringify({
+            root: {
+              props: {},
+            },
+          }),
+        },
+        meta: {
+          entityType: {
+            id: "locator",
+          },
+        },
+      },
+    };
+    const schema = getSchema(testData);
+
+    expect(schema).toEqual({
+      "@graph": [
+        {
+          "@context": "https://schema.org",
+          "@id": "https://yext.com/2000#webpage",
+          url: "https://yext.com/locator",
+          "@type": "WebPage",
+          name: "Test Locator",
         },
       ],
     });

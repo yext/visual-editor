@@ -21,6 +21,9 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
 
   // Move path to the document for schema resolution
   document.path = data.path;
+  if (!document.siteDomain) {
+    console.log("data", data);
+  }
 
   const layoutString = document?.__?.layout;
   if (!layoutString) {
@@ -40,13 +43,17 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const resolvedSchema = resolveSchemaJson(document, schemaMarkupJson);
 
     const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchema);
-    const pageId = resolveSchemaString(document, "[[siteDomain]]/[[path]]");
+    const currentPageUrl = resolveSchemaString(
+      document,
+      "https://[[siteDomain]]/[[path]]"
+    );
+    const currentPageId = parsedSchemaEditorMarkup?.["@id"];
 
     if (entityTypeId && entityTypeId !== "locator") {
-      const breadcrumbsSchema = getBreadcrumbsSchema(data, pageId);
+      const breadcrumbsSchema = getBreadcrumbsSchema(data, currentPageUrl);
       const aggregateRatingSchemaBlock = getAggregateRatingSchemaBlock(
         document,
-        pageId
+        currentPageId
       );
 
       return {

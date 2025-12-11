@@ -1,10 +1,12 @@
+import { StreamDocument } from "../applyTheme";
+import { extractPrimaryCategory } from "./helpers";
+
 export const schemaWhitespaceRegex = /\n\s*/g;
 
 export const getDefaultSchema = (
-  document: Record<string, any>
+  document: StreamDocument
 ): Record<string, any> => {
-  const entityTypeId = (document as any)?.meta?.entityType?.id;
-  const defaultSchemaTemplate = getSchemaTemplate(entityTypeId);
+  const defaultSchemaTemplate = getSchemaTemplate(document);
   try {
     return JSON.parse(defaultSchemaTemplate);
   } catch (e) {
@@ -14,11 +16,13 @@ export const getDefaultSchema = (
 };
 
 // Function to get the appropriate schema template based on entity type
-export const getSchemaTemplate = (entityTypeId?: string): string => {
+export const getSchemaTemplate = (streamDocument: StreamDocument): string => {
+  const entityTypeId = streamDocument?.meta?.entityType?.id;
+
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   } else if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
-    return LOCAL_BUSINESS_SCHEMA;
+    return LOCAL_BUSINESS_SCHEMA(getLocalBusinessSubtype(streamDocument));
   } else if (entityTypeId.startsWith("dm_")) {
     return DIRECTORY_SCHEMA;
   } else if (entityTypeId === "locator") {
@@ -28,10 +32,12 @@ export const getSchemaTemplate = (entityTypeId?: string): string => {
   }
 };
 
-const LOCAL_BUSINESS_SCHEMA = `{
+const LOCAL_BUSINESS_SCHEMA = (localBusinessSubtype: string) =>
+  `{
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@type": "${localBusinessSubtype}",
+  "@id": "https://[[siteDomain]]/[[uid]]#${localBusinessSubtype.toLowerCase()}",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "address": {
     "@type": "PostalAddress",
@@ -48,13 +54,14 @@ const LOCAL_BUSINESS_SCHEMA = `{
   "paymentAccepted": "[[paymentOptions]]",
   "hasOfferCatalog": "[[services]]"
 }`
-  .replace(schemaWhitespaceRegex, " ")
-  .trim();
+    .replace(schemaWhitespaceRegex, " ")
+    .trim();
 
 const DIRECTORY_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "mainEntity": {
     "@type": "ItemList",
@@ -67,7 +74,8 @@ const DIRECTORY_SCHEMA = `{
 const LOCATOR_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#webpage",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]"
 }`
   .replace(schemaWhitespaceRegex, " ")
@@ -76,14 +84,15 @@ const LOCATOR_SCHEMA = `{
 const FALLBACK_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "Thing",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#thing",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "description": "[[description]]"
 }`
   .replace(schemaWhitespaceRegex, " ")
   .trim();
 
-const LOCAL_BUSINESS_ENTITY_TYPES = [
+export const LOCAL_BUSINESS_ENTITY_TYPES = [
   "location",
   "financialProfessional",
   "healthcareProfessional",
@@ -94,3 +103,35 @@ const LOCAL_BUSINESS_ENTITY_TYPES = [
   "healthcareProvider",
   "providerFacility",
 ];
+
+const primaryCategoryToLocalBusinessSubtype: Record<string, string> = {
+  "Arts & Entertainment": "EntertainmentBusiness",
+  "Automotive & Vehicles": "AutomotiveBusiness",
+  "Beauty & Spas": "HealthAndBeautyBusiness",
+  "Business Services": "ProfessionalService",
+  "Computers & Software": "Store",
+  "Consumer Electronics": "Store",
+  Contractors: "HomeAndConstructionBusiness",
+  "Financial Services": "FinancialService",
+  Government: "GovernmentOffice",
+  "Health & Medicine": "MedicalBusiness",
+  "Home & Garden": "Store",
+  Insurance: "FinancialService",
+  "Telecommunication Services": "Store",
+  Legal: "LegalService",
+  "Moving & Transport": "ProfessionalService",
+  Pets: "Store",
+  "Real Estate": "RealEstateAgent",
+  Shopping: "Store",
+  "Sports & Recreation": "SportsActivityLocation",
+  Travel: "TravelAgency",
+};
+
+export const getLocalBusinessSubtype = (
+  streamDocument: StreamDocument
+): string => {
+  const category = extractPrimaryCategory(
+    streamDocument?.ref_categories?.[0]?.fullDisplayName || ""
+  );
+  return primaryCategoryToLocalBusinessSubtype[category] || "LocalBusiness";
+};
