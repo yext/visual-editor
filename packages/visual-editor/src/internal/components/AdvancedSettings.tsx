@@ -129,6 +129,9 @@ export const AdvancedSettings: ComponentConfig<{
 }> = {
   label: msg("advancedSettings", "Advanced Settings"),
   fields: advancedSettingsFields,
+  ai: {
+    ignore: true,
+  },
   defaultProps: {
     data: {
       schemaMarkup: "",
