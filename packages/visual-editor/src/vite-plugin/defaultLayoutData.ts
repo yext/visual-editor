@@ -315,7 +315,7 @@ const mainDefaultLayout = {
           backgroundImage: {
             field: "",
             constantValue: {
-              url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+              url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
               height: 360,
               width: 640,
             },
@@ -395,7 +395,7 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
                       height: 360,
                       width: 640,
                     },
@@ -682,7 +682,7 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                       height: 360,
                       width: 640,
                     },
@@ -801,7 +801,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -930,7 +930,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -1059,7 +1059,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -1781,7 +1781,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
                                       height: 80,
                                       width: 80,
                                     },
@@ -1946,7 +1946,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
                                       height: 80,
                                       width: 80,
                                     },
@@ -2109,7 +2109,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
                                       height: 80,
                                       width: 80,
                                     },
@@ -2331,7 +2331,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -2489,7 +2489,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -2647,7 +2647,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -2826,25 +2826,25 @@ const mainDefaultLayout = {
                     constantValue: [
                       {
                         assetImage: {
-                          url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
-                          width: 640,
-                          height: 360,
+                          url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          width: 1000,
+                          height: 570,
                           assetImage: { name: "Placeholder" },
                         },
                       },
                       {
                         assetImage: {
-                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
-                          width: 640,
-                          height: 360,
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          width: 1000,
+                          height: 570,
                           assetImage: { name: "Placeholder" },
                         },
                       },
                       {
                         assetImage: {
-                          url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
-                          width: 640,
-                          height: 360,
+                          url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          width: 1000,
+                          height: 570,
                           assetImage: { name: "Placeholder" },
                         },
                       },
@@ -2934,7 +2934,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -3074,7 +3074,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
@@ -3214,7 +3214,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb",
+                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                                       height: 360,
                                       width: 640,
                                     },
