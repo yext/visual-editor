@@ -31,7 +31,7 @@ export const schemaUpdates: Migration = {
           schema["@type"] = "[[primaryCategory]]";
           schema["openingHoursSpecification"] = schema["openingHours"];
           delete schema["openingHours"];
-        } else if (entityTypeId?.includes("dm")) {
+        } else if (entityTypeId?.includes("_dm")) {
           schema["@id"] = "https://[[siteDomain]]/[[uid]]#collectionpage";
         } else if (entityTypeId === "locator") {
           schema["@id"] = "https://[[siteDomain]]/[[uid]]#webpage";
