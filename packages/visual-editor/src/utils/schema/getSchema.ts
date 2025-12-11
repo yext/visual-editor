@@ -22,7 +22,7 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
   // Move path to the document for schema resolution
   document.path = data.path;
   if (!document.siteDomain) {
-    console.log("data", data);
+    document.siteDomain == "<siteDomain>";
   }
 
   const layoutString = document?.__?.layout;

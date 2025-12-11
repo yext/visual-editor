@@ -74,30 +74,37 @@ export const useLayoutMessageReceivers = (
   );
 
   useReceiveMessage("resolveSchema", TARGET_ORIGINS, (_, payload) => {
-    const schema = payload?.schema;
+    try {
+      console.log("Received resolveSchema message", payload);
+      const schema = payload?.schema;
 
-    // Resolve the url path
-    let path = "";
-    if (
-      streamDocument?.meta?.entityType?.id === "locator" ||
-      streamDocument?.meta?.entityType?.id?.startsWith("dm_")
-    ) {
-      path = resolveUrlTemplateOfChild(streamDocument, "");
-    } else {
-      path = resolvePageSetUrlTemplate(streamDocument, "");
+      // Resolve the url path
+      let path = "";
+      if (
+        streamDocument?.meta?.entityType?.id === "locator" ||
+        streamDocument?.meta?.entityType?.id?.startsWith("dm_")
+      ) {
+        path = resolveUrlTemplateOfChild(streamDocument, "");
+      } else {
+        path = resolvePageSetUrlTemplate(streamDocument, "");
+      }
+
+      console.log("Resolved path for schema:", path);
+      const resolvedSchema = resolveSchemaJson(
+        {
+          ...streamDocument,
+          path,
+          // siteDomain only includes the production domain, so add a fallback for placeholder domains
+          siteDomain: streamDocument.siteDomain || "<siteDomain>",
+        },
+        schema
+      );
+      console.log("Resolved schema:", resolvedSchema);
+
+      sendResolvedSchemaToParent({ payload: { schema: resolvedSchema } });
+    } catch (e) {
+      console.log("error", e);
     }
-
-    const resolvedSchema = resolveSchemaJson(
-      {
-        ...streamDocument,
-        path,
-        // siteDomain only includes the production domain, so add a fallback for placeholder domains
-        siteDomain: streamDocument.siteDomain || "<siteDomain>",
-      },
-      schema
-    );
-
-    sendResolvedSchemaToParent({ payload: { schema: resolvedSchema } });
   });
 
   return {
