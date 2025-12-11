@@ -13,7 +13,7 @@ import { Button } from "../internal/puck/ui/button.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { DynamicOption } from "./DynamicOptionsSelector.tsx";
-import { useDocument } from "../hooks/useDocument.tsx";
+// import { useDocument } from "../hooks/useDocument.tsx";
 
 /**
  * Generates a translatable string config
@@ -39,18 +39,18 @@ export function TranslatableStringField<
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
       const templateMetadata: TemplateMetadata = useTemplateMetadata();
-      const streamDocument = useDocument();
+      // const streamDocument = useDocument();
 
-      let locales = templateMetadata?.locales || [];
-      if (locales.length === 0) {
-        try {
-          locales = JSON.parse(streamDocument._pageset).scope.locales;
-        } catch {
-          console.warn("failed to retrieve locales from page group");
-        }
-      }
+      // let locales = templateMetadata?.locales || [];
+      // if (locales.length === 0) {
+      //   try {
+      //     locales = JSON.parse(streamDocument._pageset).scope.locales;
+      //   } catch {
+      //     console.warn("failed to retrieve locales from page group");
+      //   }
+      // }
 
-      console.log("locales:", locales);
+      // console.log("locales:", locales);
 
       const applyAllButton = showApplyAllOption ? (
         <Button
@@ -59,7 +59,7 @@ export function TranslatableStringField<
           onClick={() => {
             const valueByLocale: TranslatableString = {
               hasLocalizedValue: "true",
-              ...locales.reduce(
+              ...templateMetadata.locales.reduce(
                 (acc, locale) => {
                   acc[locale] = resolvedValue;
                   return acc;
