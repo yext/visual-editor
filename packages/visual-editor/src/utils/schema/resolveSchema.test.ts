@@ -416,7 +416,7 @@ describe("resolveSchemaJson", () => {
             item: {
               "@type": "Thing",
               name: "ON",
-              url: "yext.com/en/ca/on",
+              url: "https://yext.com/en/ca/on",
             },
             position: 1,
           },
@@ -425,7 +425,7 @@ describe("resolveSchemaJson", () => {
             item: {
               "@type": "Thing",
               name: "BC",
-              url: "yext.com/en/ca/bc",
+              url: "https://yext.com/en/ca/bc",
             },
             position: 2,
           },
@@ -541,7 +541,7 @@ describe("resolveSchemaJson", () => {
             item: {
               "@type": "Thing",
               name: "Galaxy Grill",
-              url: "yext.com/va/arlington/1101-wilson-blvd",
+              url: "https://yext.com/va/arlington/1101-wilson-blvd",
               address: {
                 "@type": "PostalAddress",
                 addressCountry: "US",
@@ -550,7 +550,22 @@ describe("resolveSchemaJson", () => {
                 postalCode: "22209",
                 streetAddress: "1101 Wilson Blvd",
               },
-              openingHours: ["Mo,Tu,We,Th,Fr,Sa,Su 10:00-22:00"],
+              openingHoursSpecification: [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  closes: "22:00",
+                  dayOfWeek: [
+                    "https://schema.org/Monday",
+                    "https://schema.org/Tuesday",
+                    "https://schema.org/Wednesday",
+                    "https://schema.org/Thursday",
+                    "https://schema.org/Friday",
+                    "https://schema.org/Saturday",
+                    "https://schema.org/Sunday",
+                  ],
+                  opens: "10:00",
+                },
+              ],
               phone: "+17577017560",
             },
             position: 1,

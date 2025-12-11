@@ -23,10 +23,12 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
   document.path = data.path;
 
   // Set placeholder site domain for non-production domains
+  console.log("document 1", document.siteDomain, !document.siteDomain);
+
   if (!document.siteDomain) {
     document.siteDomain == "<siteDomain>";
   }
-  console.log("document", document);
+  console.log("document 2", document.siteDomain);
 
   const layoutString = document?.__?.layout;
   if (!layoutString) {

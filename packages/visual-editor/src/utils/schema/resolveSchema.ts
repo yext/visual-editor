@@ -139,7 +139,6 @@ const resolveSpecialCases = (
     case "openingHoursSpecification": {
       const hoursSpecSchema = OpeningHoursSpecificationSchema(resolvedValue);
 
-      console.log("hoursSpecSchema", hoursSpecSchema);
       if (Object.keys(hoursSpecSchema).length === 0) {
         return resolveNode(streamDocument, value);
       }
