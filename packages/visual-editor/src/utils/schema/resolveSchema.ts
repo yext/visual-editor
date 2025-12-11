@@ -1,4 +1,8 @@
-import { OpeningHoursSchema, PhotoGallerySchema } from "@yext/pages-components";
+import {
+  OpeningHoursSchema,
+  OpeningHoursSpecificationSchema,
+  PhotoGallerySchema,
+} from "@yext/pages-components";
 import { StreamDocument } from "../applyTheme";
 import { embeddedFieldRegex, findField } from "../resolveYextEntityField";
 import { removeEmptyValues } from "./helpers";
@@ -99,7 +103,12 @@ const resolveNode = (streamDocument: StreamDocument, node: any): any => {
   return newSchema;
 };
 
-const specialCases = ["openingHours", "image", "hasOfferCatalog"];
+const specialCases = [
+  "openingHours",
+  "openingHoursSpecification",
+  "image",
+  "hasOfferCatalog",
+];
 
 const resolveSpecialCases = (
   streamDocument: StreamDocument,
@@ -126,6 +135,16 @@ const resolveSpecialCases = (
       }
 
       return hoursSchema.openingHours;
+    }
+    case "openingHoursSpecification": {
+      const hoursSpecSchema = OpeningHoursSpecificationSchema(resolvedValue);
+
+      console.log("hoursSpecSchema", hoursSpecSchema);
+      if (Object.keys(hoursSpecSchema).length === 0) {
+        return resolveNode(streamDocument, value);
+      }
+
+      return hoursSpecSchema.openingHoursSpecification;
     }
     case "image": {
       const gallerySchema = PhotoGallerySchema(resolvedValue);
@@ -190,7 +209,8 @@ const resolveDirectoryChildren = (
         "@type": "Thing",
         name: child.name,
         url: childUrl,
-        openingHours: OpeningHoursSchema(child.hours)?.openingHours,
+        openingHoursSpecification: OpeningHoursSpecificationSchema(child.hours)
+          ?.openingHoursSpecification,
         address: child.address && {
           "@type": "PostalAddress",
           streetAddress: child.address.line1,

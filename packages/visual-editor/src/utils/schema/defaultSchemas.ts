@@ -1,5 +1,4 @@
 import { StreamDocument } from "../applyTheme";
-import { extractPrimaryCategory } from "./helpers";
 
 export const schemaWhitespaceRegex = /\n\s*/g;
 
@@ -22,7 +21,7 @@ export const getSchemaTemplate = (streamDocument: StreamDocument): string => {
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   } else if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
-    return LOCAL_BUSINESS_SCHEMA(getLocalBusinessSubtype(streamDocument));
+    return LOCAL_BUSINESS_SCHEMA;
   } else if (entityTypeId.startsWith("dm_")) {
     return DIRECTORY_SCHEMA;
   } else if (entityTypeId === "locator") {
@@ -32,11 +31,10 @@ export const getSchemaTemplate = (streamDocument: StreamDocument): string => {
   }
 };
 
-const LOCAL_BUSINESS_SCHEMA = (localBusinessSubtype: string) =>
-  `{
+const LOCAL_BUSINESS_SCHEMA = `{
   "@context": "https://schema.org",
-  "@type": "${localBusinessSubtype}",
-  "@id": "https://[[siteDomain]]/[[uid]]#${localBusinessSubtype.toLowerCase()}",
+  "@type": "[[primaryCategory]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#[[primaryCategory]]",
   "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "address": {
@@ -47,15 +45,15 @@ const LOCAL_BUSINESS_SCHEMA = (localBusinessSubtype: string) =>
     "postalCode": "[[address.postalCode]]",
     "addressCountry": "[[address.countryCode]]"
   },
-  "openingHours": "[[hours]]",
+  "openingHoursSpecification": "[[hours]]",
   "image": "[[photoGallery]]",
   "description": "[[description]]",
   "telephone": "[[mainPhone]]",
   "paymentAccepted": "[[paymentOptions]]",
   "hasOfferCatalog": "[[services]]"
 }`
-    .replace(schemaWhitespaceRegex, " ")
-    .trim();
+  .replace(schemaWhitespaceRegex, " ")
+  .trim();
 
 const DIRECTORY_SCHEMA = `{
   "@context": "https://schema.org",
@@ -103,35 +101,3 @@ export const LOCAL_BUSINESS_ENTITY_TYPES = [
   "healthcareProvider",
   "providerFacility",
 ];
-
-const primaryCategoryToLocalBusinessSubtype: Record<string, string> = {
-  "Arts & Entertainment": "EntertainmentBusiness",
-  "Automotive & Vehicles": "AutomotiveBusiness",
-  "Beauty & Spas": "HealthAndBeautyBusiness",
-  "Business Services": "ProfessionalService",
-  "Computers & Software": "Store",
-  "Consumer Electronics": "Store",
-  Contractors: "HomeAndConstructionBusiness",
-  "Financial Services": "FinancialService",
-  Government: "GovernmentOffice",
-  "Health & Medicine": "MedicalBusiness",
-  "Home & Garden": "Store",
-  Insurance: "FinancialService",
-  "Telecommunication Services": "Store",
-  Legal: "LegalService",
-  "Moving & Transport": "ProfessionalService",
-  Pets: "Store",
-  "Real Estate": "RealEstateAgent",
-  Shopping: "Store",
-  "Sports & Recreation": "SportsActivityLocation",
-  Travel: "TravelAgency",
-};
-
-export const getLocalBusinessSubtype = (
-  streamDocument: StreamDocument
-): string => {
-  const category = extractPrimaryCategory(
-    streamDocument?.ref_categories?.[0]?.fullDisplayName || ""
-  );
-  return primaryCategoryToLocalBusinessSubtype[category] || "LocalBusiness";
-};

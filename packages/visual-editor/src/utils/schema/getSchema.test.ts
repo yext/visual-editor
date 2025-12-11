@@ -52,6 +52,20 @@ describe("getSchema", () => {
         uid: 123,
         name: "Test Name",
         siteDomain: "yext.com",
+        hours: {
+          monday: { openIntervals: [{ end: "12:00", start: "9:00" }] },
+          tuesday: {
+            openIntervals: [
+              { end: "18:00", start: "14:00" },
+              { end: "12:00", start: "9:00" },
+            ],
+          },
+          wednesday: { openIntervals: [{ end: "12:00", start: "9:00" }] },
+          thursday: { openIntervals: [{ end: "17:00", start: "9:00" }] },
+          friday: { isClosed: true },
+          saturday: { isClosed: true },
+          sunday: { isClosed: true },
+        },
         address: {
           line1: "123 Test St",
           city: "Washington",
@@ -88,7 +102,7 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@context": "https://schema.org",
-          "@id": "https://yext.com/123#automotivebusiness",
+          "@id": "https://yext.com/123#AutomotiveBusiness",
           url: "https://yext.com/us/va/123-main-street",
           "@type": "AutomotiveBusiness",
           name: "Test Name",
@@ -100,6 +114,40 @@ describe("getSchema", () => {
             postalCode: "20000",
             addressCountry: "US",
           },
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "12:00",
+              dayOfWeek: [
+                "https://schema.org/Monday",
+                "https://schema.org/Tuesday",
+                "https://schema.org/Wednesday",
+              ],
+              opens: "9:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "18:00",
+              dayOfWeek: "https://schema.org/Tuesday",
+              opens: "14:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "17:00",
+              dayOfWeek: "https://schema.org/Thursday",
+              opens: "9:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "00:00",
+              dayOfWeek: [
+                "https://schema.org/Friday",
+                "https://schema.org/Saturday",
+                "https://schema.org/Sunday",
+              ],
+              opens: "00:00",
+            },
+          ],
           description: "test description",
           telephone: "123-456-7890",
         },
@@ -120,8 +168,8 @@ describe("getSchema", () => {
             root: {
               props: {
                 schemaMarkup: `{
-                "@type": "LocalBusiness",
-                "@id": "https://[[siteDomain]]/[[uid]]#localbusiness",
+                "@type": "[[primaryCategory]]",
+                "@id": "https://[[siteDomain]]/[[uid]]#[[primaryCategory]]",
                 "url": "https://[[siteDomain]]/[[path]]",
                 "name": "[[name]]"
               }`,
@@ -219,7 +267,7 @@ describe("getSchema", () => {
       "@graph": [
         {
           "@type": "LocalBusiness",
-          "@id": "https://yext.com/123#localbusiness",
+          "@id": "https://yext.com/123#LocalBusiness",
           url: "https://yext.com/us/va/123-main-street",
           name: "Test Name",
         },
@@ -266,7 +314,7 @@ describe("getSchema", () => {
           ratingValue: "3.7142856",
           reviewCount: "7",
           itemReviewed: {
-            "@id": "https://yext.com/123#localbusiness",
+            "@id": "https://yext.com/123#LocalBusiness",
           },
         },
       ],
@@ -398,7 +446,22 @@ describe("getSchema", () => {
                     streetAddress: "1101 Wilson Blvd",
                   },
                   name: "Galaxy Grill",
-                  openingHours: ["Mo,Tu,We,Th,Fr,Sa,Su 10:00-22:00"],
+                  openingHoursSpecification: [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      dayOfWeek: [
+                        "https://schema.org/Monday",
+                        "https://schema.org/Tuesday",
+                        "https://schema.org/Wednesday",
+                        "https://schema.org/Thursday",
+                        "https://schema.org/Friday",
+                        "https://schema.org/Saturday",
+                        "https://schema.org/Sunday",
+                      ],
+                      opens: "10:00",
+                      closes: "22:00",
+                    },
+                  ],
                   phone: "+12025551010",
                   url: "https://yext.com/va/arlington/1101-wilson-blvd",
                 },
@@ -417,7 +480,22 @@ describe("getSchema", () => {
                     streetAddress: "2101 Wilson Blvd",
                   },
                   name: "Galaxy Grill To Go",
-                  openingHours: ["Mo,Tu,We,Th,Fr,Sa,Su 10:00-22:00"],
+                  openingHoursSpecification: [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      dayOfWeek: [
+                        "https://schema.org/Monday",
+                        "https://schema.org/Tuesday",
+                        "https://schema.org/Wednesday",
+                        "https://schema.org/Thursday",
+                        "https://schema.org/Friday",
+                        "https://schema.org/Saturday",
+                        "https://schema.org/Sunday",
+                      ],
+                      opens: "10:00",
+                      closes: "22:00",
+                    },
+                  ],
                   phone: "+12025551010",
                   url: "https://yext.com/va/arlington/2101-wilson-blvd",
                 },

@@ -1,7 +1,7 @@
 import { StreamDocument } from "../applyTheme.ts";
 import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema.ts";
 import { getDefaultSchema } from "./defaultSchemas.ts";
-import { removeEmptyValues } from "./helpers.ts";
+import { getLocalBusinessSubtype, removeEmptyValues } from "./helpers.ts";
 import {
   getAggregateRatingSchemaBlock,
   getBreadcrumbsSchema,
@@ -21,9 +21,12 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
 
   // Move path to the document for schema resolution
   document.path = data.path;
+
+  // Set placeholder site domain for non-production domains
   if (!document.siteDomain) {
     document.siteDomain == "<siteDomain>";
   }
+  console.log("document", document);
 
   const layoutString = document?.__?.layout;
   if (!layoutString) {
@@ -33,6 +36,11 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
   try {
     const layout = JSON.parse(layoutString);
     const entityTypeId = document?.meta?.entityType?.id;
+
+    // If the document has categories, resolve primaryCategory to the local business subtype
+    if (entityTypeId !== "locator" && !entityTypeId?.startsWith("dm_")) {
+      document.primaryCategory = getLocalBusinessSubtype(document);
+    }
 
     const schemaMarkup: string = layout?.root?.props?.schemaMarkup;
     const schemaMarkupJson: Record<string, any> = schemaMarkup

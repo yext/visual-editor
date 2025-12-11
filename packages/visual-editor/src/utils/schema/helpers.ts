@@ -103,8 +103,35 @@ export const removeEmptyValues = (
   return obj;
 };
 
-export const extractPrimaryCategory = (
-  categoryFullDisplayName: string
+const primaryCategoryToLocalBusinessSubtype: Record<string, string> = {
+  "Arts & Entertainment": "EntertainmentBusiness",
+  "Automotive & Vehicles": "AutomotiveBusiness",
+  "Beauty & Spas": "HealthAndBeautyBusiness",
+  "Business Services": "ProfessionalService",
+  "Computers & Software": "Store",
+  "Consumer Electronics": "Store",
+  Contractors: "HomeAndConstructionBusiness",
+  "Financial Services": "FinancialService",
+  Government: "GovernmentOffice",
+  "Health & Medicine": "MedicalBusiness",
+  "Home & Garden": "Store",
+  Insurance: "FinancialService",
+  "Telecommunication Services": "Store",
+  Legal: "LegalService",
+  "Moving & Transport": "ProfessionalService",
+  Pets: "Store",
+  "Real Estate": "RealEstateAgent",
+  Shopping: "Store",
+  "Sports & Recreation": "SportsActivityLocation",
+  Travel: "TravelAgency",
+};
+
+export const getLocalBusinessSubtype = (
+  streamDocument: StreamDocument
 ): string => {
-  return categoryFullDisplayName.split(" > ")[0].trim();
+  const categoryDisplayName =
+    streamDocument?.ref_categories?.[0]?.fullDisplayName;
+  const category = categoryDisplayName?.split(" > ")?.[0].trim();
+
+  return primaryCategoryToLocalBusinessSubtype[category] || "LocalBusiness";
 };

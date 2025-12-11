@@ -1,9 +1,6 @@
-import {
-  getLocalBusinessSubtype,
-  LOCAL_BUSINESS_ENTITY_TYPES,
-} from "../../utils/schema/defaultSchemas.ts";
+import { LOCAL_BUSINESS_ENTITY_TYPES } from "../../utils/schema/defaultSchemas.ts";
 import { Migration } from "../../utils/migrate";
-import { StreamDocument } from "src/utils/applyTheme.ts";
+import { StreamDocument } from "../../utils/applyTheme.ts";
 
 export const schemaUpdates: Migration = {
   root: {
@@ -24,16 +21,16 @@ export const schemaUpdates: Migration = {
         }
 
         // update @id to include a unique id
-        // update locations to use the correct local business subtype
+        // update locations to use the correct local business subtype and openingHoursSpecification
         const entityTypeId = streamDocument?.meta?.entityType?.id;
         if (
           entityTypeId &&
           LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)
         ) {
-          const localBusinessSubtype = getLocalBusinessSubtype(streamDocument);
-          schema["@id"] =
-            `https://[[siteDomain]]/[[uid]]#${localBusinessSubtype.toLowerCase()}`;
-          schema["@type"] = localBusinessSubtype;
+          schema["@id"] = `https://[[siteDomain]]/[[uid]]#[[primaryCategory]]`;
+          schema["@type"] = "[[primaryCategory]]";
+          schema["openingHoursSpecification"] = schema["openingHours"];
+          delete schema["openingHours"];
         } else if (entityTypeId?.includes("dm")) {
           schema["@id"] = "https://[[siteDomain]]/[[uid]]#collectionpage";
         } else if (entityTypeId === "locator") {
