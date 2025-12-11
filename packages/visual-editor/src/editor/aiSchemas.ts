@@ -223,3 +223,87 @@ export function getSchemaForYextEntityField(
   // Clean the schema for Puck AI compatibility
   return cleanSchemaForPuck(rawSchema);
 }
+
+/** Option type for select/radio fields */
+type FieldOption = {
+  label: string;
+  value: string | number | boolean | undefined | null | object;
+};
+
+/**
+ * Generates a JSON Schema for a select/radio field based on its options
+ */
+export function getSchemaForSelectField(
+  options: readonly FieldOption[] | FieldOption[]
+): JSONSchema {
+  const values = options
+    .map((opt) => opt.value)
+    .filter(
+      (v): v is string | number | boolean =>
+        typeof v === "string" || typeof v === "number" || typeof v === "boolean"
+    );
+
+  if (values.length === 0) {
+    return { type: "string" };
+  }
+
+  // Determine the type from the values
+  const types = new Set(values.map((v) => typeof v));
+
+  if (types.size === 1) {
+    const type = types.values().next().value as string;
+    if (type === "number") {
+      return {
+        type: "number",
+        enum: values as number[],
+      };
+    } else if (type === "boolean") {
+      return {
+        type: "boolean",
+      };
+    } else {
+      return {
+        type: "string",
+        enum: values as string[],
+      };
+    }
+  }
+
+  // Mixed types - use anyOf
+  return {
+    anyOf: values.map((v) => ({ const: v })),
+  };
+}
+
+/**
+ * Default schema for text fields
+ */
+export const textFieldSchema: JSONSchema = {
+  type: "string",
+};
+
+/**
+ * Default schema for number fields
+ */
+export const numberFieldSchema: JSONSchema = {
+  type: "number",
+};
+
+/**
+ * Default schema for boolean fields
+ */
+export const booleanFieldSchema: JSONSchema = {
+  type: "boolean",
+};
+
+/**
+ * Default schema for translatable string fields (simplified)
+ */
+export const translatableStringFieldSchema: JSONSchema = {
+  type: "object",
+  properties: {
+    hasLocalizedValue: { type: "string", const: "true" },
+  },
+  required: ["hasLocalizedValue"],
+  additionalProperties: true,
+};

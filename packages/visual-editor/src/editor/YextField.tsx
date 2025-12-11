@@ -32,8 +32,13 @@ import { MsgString } from "../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import { VIDEO_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Video.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
-import { getSchemaForYextEntityField } from "./aiSchemas.ts";
-// import "@puckeditor/plugin-ai";
+import {
+  getSchemaForYextEntityField,
+  getSchemaForSelectField,
+  textFieldSchema,
+  numberFieldSchema,
+  translatableStringFieldSchema,
+} from "./aiSchemas.ts";
 
 /** Field option type for select/radio fields */
 export type FieldOption = {
@@ -266,20 +271,35 @@ export function YextField<T, U>(
   }
 
   if (config.type === "optionalNumber") {
-    return OptionalNumberField({
+    const field = OptionalNumberField({
       fieldLabel: fieldName,
       hideNumberFieldRadioLabel: config.hideNumberFieldRadioLabel,
       showNumberFieldRadioLabel: config.showNumberFieldRadioLabel,
       defaultCustomValue: config.defaultCustomValue,
     });
+    // Default schema for optional number
+    const defaultSchema = numberFieldSchema;
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
+    };
   }
 
   if (config.type === "select" && config.options === "BACKGROUND_COLOR") {
-    return BasicSelector({
+    const options = ThemeOptions.BACKGROUND_COLOR.flatMap(
+      (group) => group.options
+    );
+    const field = BasicSelector({
       label: fieldName,
       optionGroups: ThemeOptions.BACKGROUND_COLOR,
       disableSearch: true,
     });
+    // Default schema from options
+    const defaultSchema = getSchemaForSelectField(options as FieldOptions);
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
+    };
   }
 
   // use BasicSelector functionality
@@ -287,42 +307,67 @@ export function YextField<T, U>(
     const options = isThemeOptionsKey(config.options)
       ? ThemeOptions[config.options]
       : config.options;
-    return BasicSelector({
+    const field = BasicSelector({
       label: fieldName,
       options: options as ComboboxOption[],
     });
+    // Default schema from options
+    const defaultSchema = getSchemaForSelectField(options as FieldOptions);
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
+    };
   }
 
   if (
     (config.type === "select" || config.type === "radio") &&
     isThemeOptionsKey(config.options)
   ) {
-    return {
+    const options = ThemeOptions[config.options] as FieldOptions;
+    const field = {
       label: fieldName,
       visible: config.visible,
       type: config.type,
-      options: ThemeOptions[config.options] as FieldOptions,
+      options,
+    };
+    // Default schema from options
+    const defaultSchema = getSchemaForSelectField(options);
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
     };
   }
 
   if (config.type === "text") {
-    return {
+    const field = {
       label: fieldName,
       visible: config.visible,
       type: config.isMultiline ? "textarea" : "text",
     };
+    // Default schema for text
+    const defaultSchema = textFieldSchema;
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
+    };
   }
 
   if (config.type === "code") {
-    return CodeField({
+    const field = CodeField({
       fieldLabel: fieldName,
       codeLanguage: config.codeLanguage,
     });
+    // Default schema for code (string)
+    const defaultSchema = textFieldSchema;
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
+    };
   }
 
   if (config.type === "maxWidth") {
     const maxWidthOptions = getMaxWidthOptions();
-    return BasicSelector({
+    const field = BasicSelector({
       label: fieldName,
       disableSearch: true,
       optionGroups: [
@@ -335,50 +380,77 @@ export function YextField<T, U>(
         },
       ],
     });
+    // Default schema from options
+    const defaultSchema = getSchemaForSelectField(maxWidthOptions);
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
+    };
   }
 
   if (config.type === "translatableString") {
-    return TranslatableStringField(
+    const field = TranslatableStringField(
       fieldName,
       config.filter,
       config.showApplyAllOption
     );
+    // Default schema for translatable string
+    const defaultSchema = translatableStringFieldSchema;
+    return {
+      ...field,
+      ai: { schema: defaultSchema, ...config.ai },
+    };
   }
 
   if (config.type === "image") {
-    return {
+    const field = {
       ...IMAGE_CONSTANT_CONFIG,
       label: fieldName,
+    };
+    // Image fields typically shouldn't be AI generated, exclude by default
+    return {
+      ...field,
+      ai: { exclude: true, ...config.ai },
     };
   }
 
   if (config.type === "video") {
-    return {
+    const field = {
       ...VIDEO_CONSTANT_CONFIG,
       label: fieldName,
+    };
+    // Video fields typically shouldn't be AI generated, exclude by default
+    return {
+      ...field,
+      ai: { exclude: true, ...config.ai },
     };
   }
 
   if (config.type === "dynamicSelect") {
-    return DynamicOptionsSelector({
+    const field = DynamicOptionsSelector({
       label: fieldName,
       dropdownLabel: config.dropdownLabel,
       getOptions: config.getOptions,
       placeholderOptionLabel: config.placeholderOptionLabel,
     });
+    // Dynamic options - user should provide schema if needed
+    return config.ai ? { ...field, ai: config.ai } : field;
   }
 
   if (config.type === "dynamicSingleSelect") {
-    return DynamicOptionsSingleSelector({
+    const field = DynamicOptionsSingleSelector({
       label: fieldName,
       dropdownLabel: config.dropdownLabel,
       getOptions: config.getOptions,
       placeholderOptionLabel: config.placeholderOptionLabel,
     });
+    // Dynamic options - user should provide schema if needed
+    return config.ai ? { ...field, ai: config.ai } : field;
   }
 
-  return {
+  const field = {
     label: fieldName,
     ...config,
-  } as Field<T>;
+  };
+  return (config.ai ? { ...field, ai: config.ai } : field) as Field<T>;
 }
