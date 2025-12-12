@@ -524,7 +524,7 @@ interface ExpandedHeaderStyles {
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
   /** Whether the header is "sticky" or not */
-  headerPosition: "sticky" | "fixed" | "scrollsWithPage";
+  headerPosition: "sticky" | "scrollsWithPage";
 }
 
 interface ExpandedFooterData {
