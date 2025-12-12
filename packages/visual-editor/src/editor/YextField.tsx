@@ -66,6 +66,23 @@ function isThemeOptionsKey(value: unknown): value is ThemeOptionsKey {
   return typeof value === "string" && value in ThemeOptions;
 }
 
+/**
+ * Builds AI config for a field with the given default schema.
+ * If exclude is true, the schema is not included (workaround for Puck bug).
+ */
+function buildAiConfig(
+  defaultSchema: FieldAiConfig["schema"],
+  userAi?: FieldAiConfig
+): FieldAiConfig {
+  if (userAi?.exclude) {
+    return { ...userAi };
+  }
+  return {
+    ...(defaultSchema ? { schema: defaultSchema } : {}),
+    ...userAi,
+  };
+}
+
 type YextBaseField = {
   type: string;
   visible?: boolean;
@@ -249,10 +266,7 @@ export function YextField<T, U>(
     if (schema || config.ai) {
       return {
         ...field,
-        ai: {
-          ...(schema ? { schema } : {}),
-          ...config.ai,
-        },
+        ai: buildAiConfig(schema, config.ai),
       };
     }
 
@@ -270,7 +284,7 @@ export function YextField<T, U>(
     const defaultSchema = numberFieldSchema;
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 
@@ -287,7 +301,7 @@ export function YextField<T, U>(
     const defaultSchema = getSchemaForSelectField(options as FieldOptions);
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 
@@ -304,7 +318,7 @@ export function YextField<T, U>(
     const defaultSchema = getSchemaForSelectField(options as FieldOptions);
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 
@@ -323,7 +337,7 @@ export function YextField<T, U>(
     const defaultSchema = getSchemaForSelectField(options);
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 
@@ -337,7 +351,7 @@ export function YextField<T, U>(
     const defaultSchema = textFieldSchema;
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 
@@ -350,7 +364,7 @@ export function YextField<T, U>(
     const defaultSchema = textFieldSchema;
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 
@@ -373,7 +387,7 @@ export function YextField<T, U>(
     const defaultSchema = getSchemaForSelectField(maxWidthOptions);
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 
@@ -387,7 +401,7 @@ export function YextField<T, U>(
     const defaultSchema = translatableStringFieldSchema;
     return {
       ...field,
-      ai: { schema: defaultSchema, ...config.ai },
+      ai: buildAiConfig(defaultSchema, config.ai),
     };
   }
 

@@ -213,10 +213,13 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   const defaultSchema = getSchemaForYextEntityField(props.filter);
 
   // Build AI config with default schema (can be overridden by props.ai)
-  const aiConfig: FieldAiConfig = {
-    ...(defaultSchema ? { schema: defaultSchema } : {}),
-    ...props.ai,
-  };
+  // If exclude is true, don't include schema (workaround for Puck bug)
+  const aiConfig: FieldAiConfig = props.ai?.exclude
+    ? { ...props.ai }
+    : {
+        ...(defaultSchema ? { schema: defaultSchema } : {}),
+        ...props.ai,
+      };
 
   return {
     type: "custom",
