@@ -7,7 +7,10 @@ import {
   useSendMessageToParent,
 } from "../../hooks/useMessage";
 import { Button } from "../ui/button";
-import { ImageContentData, AssetImageType } from "../../../types/images";
+import {
+  ImageContentData,
+  TranslatableAssetImage,
+} from "../../../types/images";
 import { useDocument } from "../../../hooks/useDocument";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField";
 import { resolveComponentData } from "../../../utils/resolveComponentData";
@@ -22,7 +25,9 @@ export type ImagePayload = {
   locale: string;
 };
 
-export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
+export const IMAGE_CONSTANT_CONFIG: CustomField<
+  TranslatableAssetImage | undefined
+> = {
   type: "custom",
   render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
@@ -40,10 +45,14 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
     }
 
     const resolvedValue = React.useMemo(() => {
-      if (value && typeof value === "object" && "hasLocalizedValue" in value) {
-        return value[locale] as AssetImageType | undefined;
+      if (value && "hasLocalizedValue" in value) {
+        const localizedValue = value[locale];
+        if (typeof localizedValue === "object") {
+          return localizedValue;
+        }
+        return undefined;
       }
-      return value as AssetImageType | undefined;
+      return value;
     }, [value, locale]);
 
     const [pendingMessageId, setPendingMessageId] = React.useState<
@@ -81,14 +90,10 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
           };
 
           onChange({
-            ...(value &&
-            typeof value === "object" &&
-            "hasLocalizedValue" in value
-              ? value
-              : {}),
+            ...(value && "hasLocalizedValue" in value ? value : {}),
             [locale]: newValue,
             hasLocalizedValue: "true",
-          } as unknown as AssetImageType);
+          });
         }
       }
     );
@@ -110,12 +115,10 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
           width: 1,
         };
         onChange({
-          ...(value && typeof value === "object" && "hasLocalizedValue" in value
-            ? value
-            : {}),
+          ...(value && "hasLocalizedValue" in value ? value : {}),
           [locale]: newValue,
           hasLocalizedValue: "true",
-        } as unknown as AssetImageType);
+        });
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
@@ -142,12 +145,10 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
       };
 
       onChange({
-        ...(value && typeof value === "object" && "hasLocalizedValue" in value
-          ? value
-          : {}),
+        ...(value && "hasLocalizedValue" in value ? value : {}),
         [locale]: newValue,
         hasLocalizedValue: "true",
-      } as unknown as AssetImageType);
+      });
     };
 
     const altTextField = React.useMemo(() => {
@@ -226,14 +227,10 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
               ? { ...resolvedValue, alternateText: newValue }
               : undefined;
             onChange({
-              ...(value &&
-              typeof value === "object" &&
-              "hasLocalizedValue" in value
-                ? value
-                : {}),
+              ...(value && "hasLocalizedValue" in value ? value : {}),
               [locale]: updatedImage,
               hasLocalizedValue: "true",
-            } as unknown as AssetImageType);
+            });
           }}
         />
         <Button
@@ -250,7 +247,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
                 {} as Record<string, any>
               ),
             };
-            onChange(valueByLocale as unknown as AssetImageType);
+            onChange(valueByLocale);
           }}
           className={"ve-px-0 ve-h-auto"}
         >
