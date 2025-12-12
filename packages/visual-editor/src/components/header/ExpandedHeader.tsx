@@ -106,11 +106,16 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
   const headerRef = React.useRef<HTMLDivElement>(null);
   const [headerHeight, setHeaderHeight] = React.useState(0);
 
-  React.useEffect(() => {
+  // useLayoutEffect runs after all DOM mutations but before content paint
+  React.useLayoutEffect(() => {
     if (!headerRef.current) {
       return;
     }
 
+    // Set initial height
+    setHeaderHeight(headerRef.current.offsetHeight);
+
+    // Watch for header size changes
     const resizeObserver = new ResizeObserver(() => {
       setHeaderHeight(headerRef.current?.offsetHeight ?? 0);
     });

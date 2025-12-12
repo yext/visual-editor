@@ -336,7 +336,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       background={styles.backgroundColor}
       ref={puck.dragRef}
     >
-      <slots.ImageSlot className="h-auto sm:min-h-[200px]" allow={[]} />
+      <slots.ImageSlot className="h-fit sm:min-h-[200px]" allow={[]} />
       <div className="p-8 gap-8 flex flex-col">
         <div className="gap-4 flex flex-col flex-grow">
           <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
