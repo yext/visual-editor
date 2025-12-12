@@ -16,7 +16,6 @@ export const headerWrapper = cva("flex flex-col", {
   variants: {
     position: {
       sticky: "sticky top-0 z-50",
-      fixed: "fixed top-0 left-0 right-0 z-50",
       scrollsWithPage: "",
     },
   },
@@ -74,7 +73,6 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               value: "scrollsWithPage",
             },
             { label: msg("fields.options.sticky", "Sticky"), value: "sticky" },
-            { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
           ],
         }
       ),

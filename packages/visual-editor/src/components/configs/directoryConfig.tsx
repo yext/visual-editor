@@ -62,7 +62,11 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
       return (
         <DropZone
           zone="default-zone"
-          style={{ display: "flex", flexDirection: "column" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
         />
       );
     },
