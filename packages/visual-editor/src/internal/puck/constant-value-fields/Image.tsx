@@ -93,7 +93,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
             ...(value && "hasLocalizedValue" in value ? value : {}),
             [locale]: newValue,
             hasLocalizedValue: "true",
-          });
+          } as TranslatableAssetImage);
         }
       }
     );
@@ -118,7 +118,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
           ...(value && "hasLocalizedValue" in value ? value : {}),
           [locale]: newValue,
           hasLocalizedValue: "true",
-        });
+        } as TranslatableAssetImage);
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
@@ -148,7 +148,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
         ...(value && "hasLocalizedValue" in value ? value : {}),
         [locale]: newValue,
         hasLocalizedValue: "true",
-      });
+      } as TranslatableAssetImage);
     };
 
     const altTextField = React.useMemo(() => {
@@ -230,7 +230,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
               ...(value && "hasLocalizedValue" in value ? value : {}),
               [locale]: updatedImage,
               hasLocalizedValue: "true",
-            });
+            } as TranslatableAssetImage);
           }}
         />
         <Button
@@ -247,7 +247,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
                 {} as Record<string, any>
               ),
             };
-            onChange(valueByLocale);
+            onChange(valueByLocale as TranslatableAssetImage);
           }}
           className={"ve-px-0 ve-h-auto"}
         >
