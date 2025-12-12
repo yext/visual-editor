@@ -1,11 +1,11 @@
 import { Migration } from "../../utils/migrate";
 
-export const removeFixedHeader: Migration = {
+export const mergeStickyAndFixedHeader: Migration = {
   ExpandedHeader: {
     action: "updated",
     propTransformation: (props) => {
-      if (props.styles?.headerPosition === "fixed") {
-        props.styles.headerPosition = "sticky";
+      if (props.styles?.headerPosition === "sticky") {
+        props.styles.headerPosition = "fixed";
       }
       return props;
     },

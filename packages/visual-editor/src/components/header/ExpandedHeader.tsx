@@ -15,7 +15,8 @@ import { defaultSecondaryHeaderProps } from "./SecondaryHeaderSlot.tsx";
 export const headerWrapper = cva("flex flex-col", {
   variants: {
     position: {
-      sticky: "sticky top-0 z-50",
+      // We use 'sticky' for fixed so that content does not overlap at the top of the page
+      fixed: "sticky top-0 z-50",
       scrollsWithPage: "",
     },
   },
@@ -27,8 +28,8 @@ export const headerWrapper = cva("flex flex-col", {
 export interface ExpandedHeaderStyles {
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
-  /** Whether the header is "sticky" or not */
-  headerPosition: "sticky" | "scrollsWithPage";
+  /** Whether the header is fixed to the top of the page or not */
+  headerPosition: "fixed" | "scrollsWithPage";
 }
 
 export interface ExpandedHeaderProps {
@@ -72,7 +73,7 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
               label: msg("fields.options.scrollsWithPage", "Scrolls with Page"),
               value: "scrollsWithPage",
             },
-            { label: msg("fields.options.sticky", "Sticky"), value: "sticky" },
+            { label: msg("fields.options.fixed", "Fixed"), value: "fixed" },
           ],
         }
       ),
