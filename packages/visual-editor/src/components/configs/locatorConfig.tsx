@@ -61,7 +61,7 @@ export const locatorConfig: Config<LocatorConfigProps> = {
       return (
         <DropZone
           zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          style={{ display: "flex", flexDirection: "column" }}
         />
       );
     },

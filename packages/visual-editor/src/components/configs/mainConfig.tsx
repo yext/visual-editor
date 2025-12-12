@@ -72,7 +72,7 @@ export const mainConfig: Config<MainConfigProps> = {
       return (
         <DropZone
           zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          style={{ display: "flex", flexDirection: "column" }}
           disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
         />
       );

@@ -29,7 +29,7 @@ export interface ExpandedHeaderStyles {
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
   /** Whether the header is "sticky" or not */
-  headerPosition: "sticky" | "fixed" | "scrollsWithPage";
+  headerPosition: "sticky" | "scrollsWithPage";
 }
 
 export interface ExpandedHeaderProps {
@@ -103,38 +103,9 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
   styles,
   slots,
 }) => {
-  const headerRef = React.useRef<HTMLDivElement>(null);
-  const [headerHeight, setHeaderHeight] = React.useState(0);
-
-  // useLayoutEffect runs after all DOM mutations but before content paint
-  React.useLayoutEffect(() => {
-    if (!headerRef.current) {
-      return;
-    }
-
-    // Set initial height
-    setHeaderHeight(headerRef.current.offsetHeight);
-
-    // Watch for header size changes
-    const resizeObserver = new ResizeObserver(() => {
-      setHeaderHeight(headerRef.current?.offsetHeight ?? 0);
-    });
-
-    resizeObserver.observe(headerRef.current);
-    return () => {
-      return resizeObserver.disconnect();
-    };
-  }, []);
-
   return (
     <>
-      {styles.headerPosition === "fixed" ? (
-        <div style={{ minHeight: headerHeight }} />
-      ) : null}
-      <div
-        ref={headerRef}
-        className={headerWrapper({ position: styles.headerPosition })}
-      >
+      <div className={headerWrapper({ position: styles.headerPosition })}>
         {/* Secondary Header (Top Bar) */}
         <div className="hidden md:flex">
           <slots.SecondaryHeaderSlot
