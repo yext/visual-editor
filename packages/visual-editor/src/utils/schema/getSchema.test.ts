@@ -4,7 +4,7 @@ import { getSchema } from "./getSchema";
 describe("getSchema - entity pages", () => {
   it("returns resolved schema markup for a location and no directory/reviews", async () => {
     const testData = {
-      relativePrefixToRoot: "./",
+      relativePrefixToRoot: "../../",
       path: "/us/va/123-main-street",
       document: {
         name: "Test Name",
@@ -212,7 +212,7 @@ describe("getSchema - entity pages", () => {
 
   it("resolves resolved schema markup for a location with no schema markup and no directory/reviews", async () => {
     const testData = {
-      relativePrefixToRoot: "./",
+      relativePrefixToRoot: "../../",
       path: "us/va/123-main-street",
       document: {
         uid: 123,
@@ -760,7 +760,7 @@ describe("getSchema - directory pages", () => {
 
   it("resolves resolved schema markup for a directory root with a site domain", async () => {
     const testData = {
-      relativePrefixToRoot: "../../",
+      relativePrefixToRoot: "",
       path: "index.html",
       document: {
         name: "Test Root",
@@ -842,7 +842,7 @@ describe("getSchema - directory pages", () => {
 
   it("resolves resolved schema markup for a directory root with no site domain", async () => {
     const testData = {
-      relativePrefixToRoot: "../../",
+      relativePrefixToRoot: "",
       path: "index.html",
       document: {
         name: "Test Root",
@@ -877,7 +877,7 @@ describe("getSchema - directory pages", () => {
         {
           "@context": "https://schema.org",
           "@id": "1000#collectionpage",
-          url: "../../index.html",
+          url: "index.html",
           "@type": "CollectionPage",
           name: "Test Root",
           mainEntity: {
@@ -888,7 +888,7 @@ describe("getSchema - directory pages", () => {
                 item: {
                   "@type": "Thing",
                   name: "US",
-                  url: "../../us",
+                  url: "us",
                 },
                 position: 1,
               },
@@ -897,7 +897,7 @@ describe("getSchema - directory pages", () => {
                 item: {
                   "@type": "Thing",
                   name: "CA",
-                  url: "../../ca",
+                  url: "ca",
                 },
                 position: 2,
               },
@@ -913,7 +913,7 @@ describe("getSchema - directory pages", () => {
               "@type": "ListItem",
               position: 1,
               name: "Test Root",
-              item: "../../index.html",
+              item: "index.html",
             },
           ],
         },
@@ -925,7 +925,7 @@ describe("getSchema - directory pages", () => {
 describe("getSchema - locator pages", () => {
   it("resolves resolved schema markup for a locator with a siteDomain", async () => {
     const testData = {
-      relativePrefixToRoot: "../",
+      relativePrefixToRoot: "",
       path: "locator",
       document: {
         name: "Test Locator",
@@ -963,7 +963,7 @@ describe("getSchema - locator pages", () => {
   it("resolves resolved schema markup for a locator with no siteDomain", async () => {
     const testData = {
       relativePrefixToRoot: "../",
-      path: "locator",
+      path: "en/locator",
       document: {
         name: "Test Locator",
         uid: 2000,
@@ -988,7 +988,7 @@ describe("getSchema - locator pages", () => {
         {
           "@context": "https://schema.org",
           "@id": "2000#webpage",
-          url: "../locator",
+          url: "../en/locator",
           "@type": "WebPage",
           name: "Test Locator",
         },

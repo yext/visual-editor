@@ -253,7 +253,7 @@ describe("resolveSchemaJson", () => {
     };
 
     const resolved = resolveSchemaJson(
-      { document, path: "test-path", relativePrefixToRoot: "/" },
+      { document, path: "test-path", relativePrefixToRoot: "" },
       schema
     );
 
@@ -280,7 +280,7 @@ describe("resolveSchemaJson", () => {
     };
 
     const resolved = resolveSchemaJson(
-      { document, path: "test-path", relativePrefixToRoot: "/" },
+      { document, path: "test-path", relativePrefixToRoot: "" },
       schema
     );
 
@@ -311,7 +311,7 @@ describe("resolveSchemaJson", () => {
     };
 
     const resolved = resolveSchemaJson(
-      { document, path: "test-path", relativePrefixToRoot: "/" },
+      { document, path: "test-path", relativePrefixToRoot: "" },
       schema
     );
 
@@ -363,7 +363,7 @@ describe("resolveSchemaJson", () => {
     };
 
     const resolved = resolveSchemaJson(
-      { document, path: "test-path", relativePrefixToRoot: "/" },
+      { document, path: "test-path", relativePrefixToRoot: "" },
       schema
     );
 
@@ -416,7 +416,7 @@ describe("resolveSchemaJson", () => {
     };
 
     const resolvedSchema = resolveSchemaJson(
-      { document, path: "en/ca", relativePrefixToRoot: "../../" },
+      { document, path: "en/ca", relativePrefixToRoot: "../" },
       schema
     );
 
