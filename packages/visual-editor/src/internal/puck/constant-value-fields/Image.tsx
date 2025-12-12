@@ -13,6 +13,8 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { resolveComponentData } from "../../../utils/resolveComponentData";
 import { TranslatableString } from "../../../types/types";
 import { msg, pt } from "../../../utils/i18n/platform";
+import { TemplateMetadata } from "../../types/templateMetadata";
+import { useTemplateMetadata } from "../../hooks/useMessageReceivers";
 
 export type ImagePayload = {
   id: string;
@@ -25,6 +27,25 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
   render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
+    const templateMetadata: TemplateMetadata = useTemplateMetadata();
+    const locale = i18n.language;
+
+    let locales = templateMetadata?.locales || [];
+    if (locales.length === 0) {
+      try {
+        locales = JSON.parse(streamDocument._pageset).scope.locales;
+      } catch {
+        console.warn("failed to retrieve locales from page group");
+      }
+    }
+
+    const resolvedValue = React.useMemo(() => {
+      if (value && typeof value === "object" && "hasLocalizedValue" in value) {
+        return value[locale] as AssetImageType | undefined;
+      }
+      return value as AssetImageType | undefined;
+    }, [value, locale]);
+
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();
@@ -46,7 +67,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
           if (!imageData) {
             return;
           }
-          onChange({
+          const newValue = {
             alternateText: imagePayload.value.altText
               ? {
                   [imagePayload.locale]: imagePayload.value.altText,
@@ -57,7 +78,17 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
             height: imageData.dimension?.height ?? 0,
             width: imageData.dimension?.width ?? 0,
             assetImage: payload.value,
-          });
+          };
+
+          onChange({
+            ...(value &&
+            typeof value === "object" &&
+            "hasLocalizedValue" in value
+              ? value
+              : {}),
+            [locale]: newValue,
+            hasLocalizedValue: "true",
+          } as unknown as AssetImageType);
         }
       }
     );
@@ -72,12 +103,19 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
         if (!userInput) {
           return;
         }
-        onChange({
-          alternateText: value?.alternateText ?? "",
+        const newValue = {
+          alternateText: resolvedValue?.alternateText ?? "",
           url: userInput,
           height: 1,
           width: 1,
-        });
+        };
+        onChange({
+          ...(value && typeof value === "object" && "hasLocalizedValue" in value
+            ? value
+            : {}),
+          [locale]: newValue,
+          hasLocalizedValue: "true",
+        } as unknown as AssetImageType);
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
@@ -85,7 +123,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",
-            value: value,
+            value: resolvedValue,
             id: messageId,
           },
         });
@@ -96,12 +134,20 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
       e.stopPropagation();
       e.preventDefault();
 
-      onChange({
-        alternateText: value?.alternateText ?? "",
+      const newValue = {
+        alternateText: resolvedValue?.alternateText ?? "",
         url: "",
         height: 0,
         width: 0,
-      });
+      };
+
+      onChange({
+        ...(value && typeof value === "object" && "hasLocalizedValue" in value
+          ? value
+          : {}),
+        [locale]: newValue,
+        hasLocalizedValue: "true",
+      } as unknown as AssetImageType);
     };
 
     const altTextField = React.useMemo(() => {
@@ -112,7 +158,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
     }, []);
 
     const altText = resolveComponentData(
-      value?.alternateText ?? "",
+      resolvedValue?.alternateText ?? "",
       i18n.language,
       streamDocument
     );
@@ -133,10 +179,10 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
               className="ve-absolute ve-inset-0 ve-z-10 ve-hidden"
               onClick={(e) => e.stopPropagation()}
             />
-            {value?.url ? (
+            {resolvedValue?.url ? (
               <>
                 <img
-                  src={value.url}
+                  src={resolvedValue.url}
                   alt={altText}
                   className="ve-w-full ve-min-h-[126px] ve-max-h-[200px] ve-object-cover ve-rounded-md ve-transition ve-duration-300 group-hover:ve-brightness-75"
                 />
@@ -174,11 +220,42 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<AssetImageType | undefined> = {
         {/* Alt Text Field */}
         <AutoField
           field={altTextField}
-          value={value?.alternateText}
-          onChange={(newValue) =>
-            onChange(value ? { ...value, alternateText: newValue } : undefined)
-          }
+          value={resolvedValue?.alternateText}
+          onChange={(newValue) => {
+            const updatedImage = resolvedValue
+              ? { ...resolvedValue, alternateText: newValue }
+              : undefined;
+            onChange({
+              ...(value &&
+              typeof value === "object" &&
+              "hasLocalizedValue" in value
+                ? value
+                : {}),
+              [locale]: updatedImage,
+              hasLocalizedValue: "true",
+            } as unknown as AssetImageType);
+          }}
         />
+        <Button
+          size="sm"
+          variant="small_link"
+          onClick={() => {
+            const valueByLocale = {
+              hasLocalizedValue: "true",
+              ...locales.reduce(
+                (acc, locale) => {
+                  acc[locale] = resolvedValue;
+                  return acc;
+                },
+                {} as Record<string, any>
+              ),
+            };
+            onChange(valueByLocale as unknown as AssetImageType);
+          }}
+          className={"ve-px-0 ve-h-auto"}
+        >
+          {pt("applyAll", "Apply to All Locales")}
+        </Button>
       </>
     );
   },
