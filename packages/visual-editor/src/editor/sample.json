@@ -1,0 +1,159 @@
+{
+  "categories": {
+    "blocks": { "title": "Blocks", "components": ["HeadingText"] },
+    "hidden": { "visible": false, "components": [] }
+  },
+  "components": {
+    "HeadingText": {
+      "label": "Heading Text",
+      "fields": {
+        "data": {
+          "label": "{\"key\":\"fields.data\",\"defaultValue\":\"Data\"}",
+          "type": "object",
+          "objectFields": {
+            "text": {
+              "type": "custom",
+              "ai": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "field": { "type": "string" },
+                    "constantValue": {
+                      "type": "object",
+                      "properties": {
+                        "hasLocalizedValue": {
+                          "type": "string",
+                          "enum": ["true"]
+                        }
+                      },
+                      "required": ["hasLocalizedValue"],
+                      "additionalProperties": true
+                    },
+                    "constantValueEnabled": {
+                      "type": "boolean",
+                      "enum": [true, false]
+                    }
+                  },
+                  "required": ["field"],
+                  "additionalProperties": false
+                },
+                "instructions": "Enter the text for the heading"
+              }
+            }
+          }
+        },
+        "styles": {
+          "label": "{\"key\":\"fields.styles\",\"defaultValue\":\"Styles\"}",
+          "type": "object",
+          "objectFields": {
+            "level": {
+              "type": "custom",
+              "ai": {
+                "schema": { "type": "number", "enum": [1, 2, 3, 4, 5, 6] }
+              }
+            },
+            "align": {
+              "label": "{\"key\":\"fields.headingAlign\",\"defaultValue\":\"Heading Align\"}",
+              "type": "radio",
+              "options": [
+                {
+                  "label": "{\"key\":\"fields.options.left\",\"defaultValue\":\"Left\",\"options\":{\"context\":\"direction\"}}",
+                  "value": "left"
+                },
+                {
+                  "label": "{\"key\":\"fields.options.center\",\"defaultValue\":\"Center\",\"options\":{\"context\":\"direction\"}}",
+                  "value": "center"
+                },
+                {
+                  "label": "{\"key\":\"fields.options.right\",\"defaultValue\":\"Right\",\"options\":{\"context\":\"direction\"}}",
+                  "value": "right"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "defaultProps": {
+        "data": {
+          "text": {
+            "field": "",
+            "constantValue": { "en": "Text", "hasLocalizedValue": "true" },
+            "constantValueEnabled": true
+          }
+        },
+        "styles": { "level": 2, "align": "left" }
+      }
+    }
+  },
+  "root": {
+    "fields": {
+      "title": {
+        "type": "custom",
+        "ai": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "constantValue": {
+                "type": "object",
+                "properties": {
+                  "hasLocalizedValue": { "type": "string", "enum": ["true"] }
+                },
+                "required": ["hasLocalizedValue"],
+                "additionalProperties": true
+              },
+              "constantValueEnabled": {
+                "type": "boolean",
+                "enum": [true, false]
+              }
+            },
+            "required": ["field"],
+            "additionalProperties": false
+          },
+          "exclude": true
+        }
+      },
+      "description": {
+        "type": "custom",
+        "ai": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "field": { "type": "string" },
+              "constantValue": {
+                "type": "object",
+                "properties": {
+                  "hasLocalizedValue": { "type": "string", "enum": ["true"] }
+                },
+                "required": ["hasLocalizedValue"],
+                "additionalProperties": true
+              },
+              "constantValueEnabled": {
+                "type": "boolean",
+                "enum": [true, false]
+              }
+            },
+            "required": ["field"],
+            "additionalProperties": false
+          },
+          "exclude": true
+        }
+      },
+      "__advancedSettingsLink": { "type": "custom", "ai": { "exclude": true } }
+    },
+    "defaultProps": {
+      "title": {
+        "field": "name",
+        "constantValue": { "hasLocalizedValue": "true" },
+        "constantValueEnabled": false
+      },
+      "description": {
+        "field": "description",
+        "constantValue": { "hasLocalizedValue": "true" },
+        "constantValueEnabled": false
+      },
+      "schemaMarkup": "",
+      "__advancedSettingsLink": null
+    }
+  }
+}

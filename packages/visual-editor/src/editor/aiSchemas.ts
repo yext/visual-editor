@@ -41,7 +41,7 @@ export type FieldAiConfig = {
  */
 const translatableStringConstantValueSchema = z
   .object({
-    hasLocalizedValue: z.literal("true"),
+    hasLocalizedValue: z.enum(["true"]),
   })
   .passthrough(); // Allow additional locale keys (en, es, fr, etc.)
 
@@ -51,8 +51,8 @@ const translatableStringConstantValueSchema = z
  */
 export const yextEntityFieldTranslatableStringSchema = z.object({
   field: z.string(),
-  constantValue: translatableStringConstantValueSchema,
-  constantValueEnabled: z.literal(true),
+  constantValue: translatableStringConstantValueSchema.optional(),
+  constantValueEnabled: z.boolean().optional(),
 });
 
 /**
@@ -68,7 +68,7 @@ const assetImageTypeConstantValueSchema = z.object({
       z.string(),
       z
         .object({
-          hasLocalizedValue: z.literal("true"),
+          hasLocalizedValue: z.enum(["true"]),
         })
         .passthrough(),
     ])
@@ -82,8 +82,8 @@ const assetImageTypeConstantValueSchema = z.object({
  */
 export const yextEntityFieldImageSchema = z.object({
   field: z.string(),
-  constantValue: assetImageTypeConstantValueSchema,
-  constantValueEnabled: z.literal(true),
+  constantValue: assetImageTypeConstantValueSchema.optional(),
+  constantValueEnabled: z.boolean().optional(),
 });
 
 /**
@@ -111,8 +111,8 @@ const translatableCTAConstantValueSchema = z.object({
  */
 export const yextEntityFieldCTASchema = z.object({
   field: z.string(),
-  constantValue: translatableCTAConstantValueSchema,
-  constantValueEnabled: z.literal(true),
+  constantValue: translatableCTAConstantValueSchema.optional(),
+  constantValueEnabled: z.boolean().optional(),
 });
 
 /**
@@ -314,7 +314,7 @@ export const booleanFieldSchema: JSONSchema = {
 export const translatableStringFieldSchema: JSONSchema = {
   type: "object",
   properties: {
-    hasLocalizedValue: { type: "string", const: "true" },
+    hasLocalizedValue: { type: "string", enum: ["true"] },
   },
   required: ["hasLocalizedValue"],
   additionalProperties: true,
