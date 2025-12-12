@@ -68,7 +68,7 @@ export const resolveSchemaJson = (
   let updatedSchema = schema;
   if (!data.document.siteDomain) {
     let schemaString = JSON.stringify(schema);
-    console.log(schemaString);
+
     schemaString = schemaString.replaceAll(
       `"@id":"https://[[siteDomain]]/`,
       `"@id":"`
