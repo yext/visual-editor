@@ -17,15 +17,10 @@ export interface TemplateRenderProps {
 }
 
 export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
-  const { document } = data;
+  const { document, relativePrefixToRoot } = data;
 
   // Move path to the document for schema resolution
   document.path = data.path;
-
-  // Set placeholder site domain for non-production domains
-  if (!document.siteDomain) {
-    document.siteDomain = "<siteDomain>";
-  }
 
   const layoutString = document?.__?.layout;
   if (!layoutString) {
@@ -48,18 +43,20 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
       : getDefaultSchema(document);
 
     // Resolve all fields in the schema markup
-    const resolvedSchema = resolveSchemaJson(document, schemaMarkupJson);
+    const resolvedSchema = resolveSchemaJson(data, schemaMarkupJson);
 
     const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchema);
     const currentPageUrl = resolveSchemaString(
       document,
-      "https://[[siteDomain]]/[[path]]"
+      document.siteDomain
+        ? "https://[[siteDomain]]/[[path]]"
+        : `${relativePrefixToRoot}[[path]]`
     );
     const currentPageId = parsedSchemaEditorMarkup?.["@id"];
 
     if (entityTypeId && entityTypeId !== "locator") {
       const breadcrumbsSchema = getBreadcrumbsSchema(data, currentPageUrl);
-      const aggregateRatingSchemaBlock = currentPageId // the aggregrateRating block requires a valid page @id
+      const aggregateRatingSchemaBlock = currentPageId // the aggregateRating block requires a valid page @id
         ? getAggregateRatingSchemaBlock(document, currentPageId)
         : undefined;
 
@@ -74,7 +71,7 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
 
     return { "@graph": [parsedSchemaEditorMarkup] };
   } catch (e) {
-    const defaultSchema = removeEmptyValues(getDefaultSchema(document));
+    const defaultSchema = removeEmptyValues(getDefaultSchema(data));
     console.warn("Error resolving schema:", e);
     return { "@graph": [defaultSchema] };
   }

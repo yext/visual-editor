@@ -87,12 +87,21 @@ export const useLayoutMessageReceivers = (
       path = resolvePageSetUrlTemplate(streamDocument, "");
     }
 
+    // Find the relativePrefixToRoot for the page being rendered in the editor
+    const pathComponents = path.split("/");
+    pathComponents.pop();
+    const relativePrefixToRoot = pathComponents
+      .map(() => "../")
+      .reduce(
+        (previousValue, currentValue) => previousValue + currentValue,
+        ""
+      );
+
     const resolvedSchema = resolveSchemaJson(
       {
-        ...streamDocument,
+        document: streamDocument,
         path,
-        // siteDomain only includes the production domain, so add a fallback for placeholder domains
-        siteDomain: streamDocument.siteDomain || "<siteDomain>",
+        relativePrefixToRoot,
       },
       schema
     );

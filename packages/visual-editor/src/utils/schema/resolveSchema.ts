@@ -11,6 +11,7 @@ import {
   resolveUrlTemplateOfChild,
 } from "../resolveUrlTemplate";
 import { mergeMeta } from "../mergeMeta";
+import { TemplateRenderProps } from "./getSchema";
 
 // Recompile the embedded field regex to support matching
 const EMBEDDED_FIELD_REGEX = new RegExp(embeddedFieldRegex.source);
@@ -57,17 +58,38 @@ export const resolveSchemaString = (
 };
 
 export const resolveSchemaJson = (
-  streamDocument: StreamDocument,
+  data: TemplateRenderProps,
   schema: Record<string, any>
 ): Record<string, any> => {
-  const resolvedValues = resolveNode(streamDocument, schema) as Record<
+  // Move path to the document for schema resolution
+  data.document.path = data.path;
+
+  // Handle the case where siteDomain is missing
+  let updatedSchema = schema;
+  if (!data.document.siteDomain) {
+    let schemaString = JSON.stringify(schema);
+    console.log(schemaString);
+    schemaString = schemaString.replaceAll(
+      `"@id":"https://[[siteDomain]]/`,
+      `"@id":"`
+    );
+    schemaString = schemaString.replaceAll(
+      "https://[[siteDomain]]/",
+      data.relativePrefixToRoot
+    );
+    updatedSchema = JSON.parse(schemaString);
+  }
+
+  const resolvedValues = resolveNode(data, updatedSchema) as Record<
     string,
     any
   >;
   return removeEmptyValues(resolvedValues);
 };
 
-const resolveNode = (streamDocument: StreamDocument, node: any): any => {
+const resolveNode = (data: TemplateRenderProps, node: any): any => {
+  const { document: streamDocument } = data;
+
   // Case 1: Handle primitives other than objects/arrays
   if (node === null || typeof node !== "object") {
     // Return numbers, booleans, undefined, and null directly.
@@ -81,7 +103,7 @@ const resolveNode = (streamDocument: StreamDocument, node: any): any => {
   // Case 2: Handle Arrays
   if (Array.isArray(node)) {
     // Recursively resolve each item in the array
-    return node.map((child) => resolveNode(streamDocument, child));
+    return node.map((child) => resolveNode(data, child));
   }
 
   // Case 3: Handle Objects
@@ -90,13 +112,13 @@ const resolveNode = (streamDocument: StreamDocument, node: any): any => {
     if (Object.prototype.hasOwnProperty.call(node, key)) {
       if (node[key] === "[[dm_directoryChildren]]") {
         // handle directory children
-        newSchema[key] = resolveDirectoryChildren(streamDocument, node[key]);
+        newSchema[key] = resolveDirectoryChildren(data, node[key]);
       } else if (specialCases.includes(key)) {
         // Handle keys with special formatting
-        newSchema[key] = resolveSpecialCases(streamDocument, key, node[key]);
+        newSchema[key] = resolveSpecialCases(data, key, node[key]);
       } else {
         // Otherwise, recursively resolve each property in the object
-        newSchema[key] = resolveNode(streamDocument, node[key]);
+        newSchema[key] = resolveNode(data, node[key]);
       }
     }
   }
@@ -111,27 +133,27 @@ const specialCases = [
 ];
 
 const resolveSpecialCases = (
-  streamDocument: StreamDocument,
+  data: TemplateRenderProps,
   key: string,
   value: any
 ): any => {
   if (typeof value !== "string") {
-    return resolveNode(streamDocument, value);
+    return resolveNode(data, value);
   }
 
   const fieldName = value.match(EMBEDDED_FIELD_REGEX)?.[1];
   if (!fieldName) {
-    return resolveNode(streamDocument, value);
+    return resolveNode(data, value);
   }
 
-  const resolvedValue = findField(streamDocument, fieldName) as any;
+  const resolvedValue = findField(data.document, fieldName) as any;
 
   switch (key) {
     case "openingHours": {
       const hoursSchema = OpeningHoursSchema(resolvedValue);
 
       if (Object.keys(hoursSchema).length === 0) {
-        return resolveNode(streamDocument, value);
+        return resolveNode(data, value);
       }
 
       return hoursSchema.openingHours;
@@ -140,7 +162,7 @@ const resolveSpecialCases = (
       const hoursSpecSchema = OpeningHoursSpecificationSchema(resolvedValue);
 
       if (Object.keys(hoursSpecSchema).length === 0) {
-        return resolveNode(streamDocument, value);
+        return resolveNode(data, value);
       }
 
       return hoursSpecSchema.openingHoursSpecification;
@@ -149,14 +171,14 @@ const resolveSpecialCases = (
       const gallerySchema = PhotoGallerySchema(resolvedValue);
 
       if (!gallerySchema?.image?.length) {
-        return resolveNode(streamDocument, value);
+        return resolveNode(data, value);
       }
 
       return gallerySchema.image;
     }
     case "hasOfferCatalog": {
       if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
-        return resolveNode(streamDocument, value);
+        return resolveNode(data, value);
       }
 
       return {
@@ -171,31 +193,33 @@ const resolveSpecialCases = (
       };
     }
     default: {
-      return resolveNode(streamDocument, value);
+      return resolveNode(data, value);
     }
   }
 };
 
 const resolveDirectoryChildren = (
-  streamDocument: StreamDocument,
+  data: TemplateRenderProps,
   value: any
 ): any => {
+  const { document: streamDocument } = data;
+
   if (typeof value !== "string") {
-    return resolveNode(streamDocument, value);
+    return resolveNode(data, value);
   }
 
   const fieldName = value.match(EMBEDDED_FIELD_REGEX)?.[1];
   if (!fieldName) {
-    return resolveNode(streamDocument, value);
+    return resolveNode(data, value);
   }
 
   const resolvedValue = findField(streamDocument, fieldName) as any;
   if (!Array.isArray(resolvedValue) || resolvedValue.length === 0) {
-    return resolveNode(streamDocument, value);
+    return resolveNode(data, value);
   }
 
   return resolvedValue.map((child: any, index: number) => {
-    const childUrl = `https://${streamDocument.siteDomain}/${
+    const childUrl = `${streamDocument.siteDomain ? `https://${streamDocument.siteDomain}/` : data.relativePrefixToRoot}${
       child.address // if the child has an address, we're at the city level
         ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
         : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "")

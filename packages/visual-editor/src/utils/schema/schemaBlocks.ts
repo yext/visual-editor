@@ -26,7 +26,9 @@ export const getBreadcrumbsSchema = (
       return {
         "@type": "BreadcrumbList",
         "@context": "https://schema.org",
-        "@id": `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`,
+        "@id": data.document.siteDomain
+          ? `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`
+          : `${data.document.uid}#breadcrumbs`,
         itemListElement: [
           fillBreadcrumbsItem(1, data.document.name, currentPageUrl),
         ],
@@ -41,7 +43,9 @@ export const getBreadcrumbsSchema = (
     fillBreadcrumbsItem(
       index + 1,
       parent.name,
-      `https://${data.document.siteDomain}/${parent.slug}`
+      data.document.siteDomain
+        ? `https://${data.document.siteDomain}/${parent.slug}`
+        : `${data.relativePrefixToRoot}${parent.slug}`
     )
   );
 
@@ -59,7 +63,9 @@ export const getBreadcrumbsSchema = (
   return {
     "@type": "BreadcrumbList",
     "@context": "https://schema.org",
-    "@id": `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`,
+    "@id": data.document.siteDomain
+      ? `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`
+      : `${data.document.uid}#breadcrumbs`,
     itemListElement: breadcrumbItems,
   };
 };
@@ -94,7 +100,9 @@ export const getAggregateRatingSchemaBlock = (
       // there should be at most one "FIRSTPARTY" so return early when found
       return {
         "@type": "AggregateRating",
-        "@id": `https://${document.siteDomain}/${document.uid}#aggregaterating`,
+        "@id": document.siteDomain
+          ? `https://${document.siteDomain}/${document.uid}#aggregaterating`
+          : `${document.uid}#aggregaterating`,
         ratingValue: review.averageRating.toString(),
         reviewCount: review.reviewCount.toString(),
         itemReviewed: {

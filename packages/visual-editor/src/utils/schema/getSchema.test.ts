@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { getSchema } from "./getSchema";
 
-describe("getSchema", () => {
-  it("resolves schemaMarkup for a location with no directory/reviews", async () => {
+describe("getSchema - entity pages", () => {
+  it("returns resolved schema markup for a location and no directory/reviews", async () => {
     const testData = {
       relativePrefixToRoot: "./",
       path: "/us/va/123-main-street",
@@ -44,118 +44,7 @@ describe("getSchema", () => {
     });
   });
 
-  it("returns the default schema for a location with no schema markup and no directory/reviews", async () => {
-    const testData = {
-      relativePrefixToRoot: "./",
-      path: "us/va/123-main-street",
-      document: {
-        uid: 123,
-        name: "Test Name",
-        siteDomain: "yext.com",
-        hours: {
-          monday: { openIntervals: [{ end: "12:00", start: "9:00" }] },
-          tuesday: {
-            openIntervals: [
-              { end: "18:00", start: "14:00" },
-              { end: "12:00", start: "9:00" },
-            ],
-          },
-          wednesday: { openIntervals: [{ end: "12:00", start: "9:00" }] },
-          thursday: { openIntervals: [{ end: "17:00", start: "9:00" }] },
-          friday: { isClosed: true },
-          saturday: { isClosed: true },
-          sunday: { isClosed: true },
-        },
-        address: {
-          line1: "123 Test St",
-          city: "Washington",
-          region: "DC",
-          postalCode: "20000",
-          countryCode: "US",
-        },
-        ref_categories: [
-          {
-            fullDisplayName: "Automotive & Vehicles > Auto Repair",
-          },
-        ],
-        mainPhone: "123-456-7890",
-        description: "test description",
-        __: {
-          layout: JSON.stringify({
-            root: {
-              props: {
-                otherField: "test",
-              },
-            },
-          }),
-        },
-        meta: {
-          entityType: {
-            id: "location",
-          },
-        },
-      },
-    };
-    const schema = getSchema(testData);
-
-    expect(schema).toEqual({
-      "@graph": [
-        {
-          "@context": "https://schema.org",
-          "@id": "https://yext.com/123#AutomotiveBusiness",
-          url: "https://yext.com/us/va/123-main-street",
-          "@type": "AutomotiveBusiness",
-          name: "Test Name",
-          address: {
-            "@type": "PostalAddress",
-            streetAddress: "123 Test St",
-            addressLocality: "Washington",
-            addressRegion: "DC",
-            postalCode: "20000",
-            addressCountry: "US",
-          },
-          openingHoursSpecification: [
-            {
-              "@type": "OpeningHoursSpecification",
-              closes: "12:00",
-              dayOfWeek: [
-                "https://schema.org/Monday",
-                "https://schema.org/Tuesday",
-                "https://schema.org/Wednesday",
-              ],
-              opens: "9:00",
-            },
-            {
-              "@type": "OpeningHoursSpecification",
-              closes: "18:00",
-              dayOfWeek: "https://schema.org/Tuesday",
-              opens: "14:00",
-            },
-            {
-              "@type": "OpeningHoursSpecification",
-              closes: "17:00",
-              dayOfWeek: "https://schema.org/Thursday",
-              opens: "9:00",
-            },
-            {
-              "@type": "OpeningHoursSpecification",
-              closes: "00:00",
-              dayOfWeek: [
-                "https://schema.org/Friday",
-                "https://schema.org/Saturday",
-                "https://schema.org/Sunday",
-              ],
-              opens: "00:00",
-            },
-          ],
-          description: "test description",
-          telephone: "123-456-7890",
-        },
-      ],
-    });
-  });
-
-  it("resolves schemaMarkup for a location with directory and reviews", async () => {
+  it("resolves resolved schema markup for a location with directory and reviews", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
       path: "us/va/123-main-street",
@@ -321,7 +210,120 @@ describe("getSchema", () => {
     });
   });
 
-  it("returns schema for a directory city with no schemaMarkup", async () => {
+  it("resolves resolved schema markup for a location with no schema markup and no directory/reviews", async () => {
+    const testData = {
+      relativePrefixToRoot: "./",
+      path: "us/va/123-main-street",
+      document: {
+        uid: 123,
+        name: "Test Name",
+        siteDomain: "yext.com",
+        hours: {
+          monday: { openIntervals: [{ end: "12:00", start: "9:00" }] },
+          tuesday: {
+            openIntervals: [
+              { end: "18:00", start: "14:00" },
+              { end: "12:00", start: "9:00" },
+            ],
+          },
+          wednesday: { openIntervals: [{ end: "12:00", start: "9:00" }] },
+          thursday: { openIntervals: [{ end: "17:00", start: "9:00" }] },
+          friday: { isClosed: true },
+          saturday: { isClosed: true },
+          sunday: { isClosed: true },
+        },
+        address: {
+          line1: "123 Test St",
+          city: "Washington",
+          region: "DC",
+          postalCode: "20000",
+          countryCode: "US",
+        },
+        ref_categories: [
+          {
+            fullDisplayName: "Automotive & Vehicles > Auto Repair",
+          },
+        ],
+        mainPhone: "123-456-7890",
+        description: "test description",
+        __: {
+          layout: JSON.stringify({
+            root: {
+              props: {
+                otherField: "test",
+              },
+            },
+          }),
+        },
+        meta: {
+          entityType: {
+            id: "location",
+          },
+        },
+      },
+    };
+    const schema = getSchema(testData);
+
+    expect(schema).toEqual({
+      "@graph": [
+        {
+          "@context": "https://schema.org",
+          "@id": "https://yext.com/123#AutomotiveBusiness",
+          url: "https://yext.com/us/va/123-main-street",
+          "@type": "AutomotiveBusiness",
+          name: "Test Name",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "123 Test St",
+            addressLocality: "Washington",
+            addressRegion: "DC",
+            postalCode: "20000",
+            addressCountry: "US",
+          },
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "12:00",
+              dayOfWeek: [
+                "https://schema.org/Monday",
+                "https://schema.org/Tuesday",
+                "https://schema.org/Wednesday",
+              ],
+              opens: "9:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "18:00",
+              dayOfWeek: "https://schema.org/Tuesday",
+              opens: "14:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "17:00",
+              dayOfWeek: "https://schema.org/Thursday",
+              opens: "9:00",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              closes: "00:00",
+              dayOfWeek: [
+                "https://schema.org/Friday",
+                "https://schema.org/Saturday",
+                "https://schema.org/Sunday",
+              ],
+              opens: "00:00",
+            },
+          ],
+          description: "test description",
+          telephone: "123-456-7890",
+        },
+      ],
+    });
+  });
+});
+
+describe("getSchema - directory pages", () => {
+  it("resolves resolved schema markup for a directory city with a site domain", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
       path: "us/ny/nyc",
@@ -539,7 +541,224 @@ describe("getSchema", () => {
     });
   });
 
-  it("returns schema for a directory root with no schemaMarkup", async () => {
+  it("resolves resolved schema markup for a directory city with no site domain", async () => {
+    const testData = {
+      relativePrefixToRoot: "../../",
+      path: "us/ny/nyc",
+      document: {
+        name: "New York City",
+        uid: 999,
+        __: {
+          layout: JSON.stringify({
+            root: {
+              props: {},
+            },
+          }),
+        },
+        meta: {
+          entityType: {
+            id: "dm_city",
+          },
+        },
+        dm_directoryChildren: [
+          {
+            __: {
+              entityPageSetUrlTemplates:
+                '{"primary":"[[address.region]]/[[address.city]]/[[address.line1]]"}',
+            },
+            address: {
+              city: "Arlington",
+              countryCode: "US",
+              line1: "1101 Wilson Blvd",
+              postalCode: "22209",
+              region: "VA",
+            },
+            hours: {
+              friday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              monday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              saturday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              sunday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              thursday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              tuesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              wednesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+            },
+            mainPhone: "+12025551010",
+            meta: {
+              entityType: { id: "location", uid: 12345 },
+              locale: "en",
+            },
+            name: "Galaxy Grill",
+            timezone: "America/New_York",
+            slug: "va/arlington/1101-wilson-blvd",
+          },
+          {
+            __: {
+              entityPageSetUrlTemplates:
+                '{"primary":"[[address.region]]/[[address.city]]/[[address.line1]]"}',
+            },
+            address: {
+              city: "Arlington",
+              countryCode: "US",
+              line1: "2101 Wilson Blvd",
+              line2: "Suite 101",
+              postalCode: "22209",
+              region: "VA",
+            },
+            mainPhone: "+12025551010",
+            hours: {
+              friday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              monday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              saturday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              sunday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              thursday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              tuesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+              wednesday: { openIntervals: [{ end: "22:00", start: "10:00" }] },
+            },
+            meta: {
+              entityType: { id: "location", uid: 12346 },
+              locale: "en",
+            },
+            name: "Galaxy Grill To Go",
+            timezone: "America/New_York",
+            slug: "va/arlington/2101-wilson-blvd",
+          },
+        ],
+        dm_directoryParents_63590_locations: [
+          { name: "Locations Directory", slug: "index.html" },
+          {
+            name: "US",
+            slug: "us",
+            dm_addressCountryDisplayName: "United States",
+          },
+          {
+            name: "NY",
+            slug: "us/ny",
+            dm_addressCountryDisplayName: "United States",
+            dm_addressRegionDisplayName: "New York",
+          },
+        ],
+      },
+    };
+    const schema = getSchema(testData);
+
+    expect(schema).toEqual({
+      "@graph": [
+        {
+          "@context": "https://schema.org",
+          "@id": "999#collectionpage",
+          url: "../../us/ny/nyc",
+          "@type": "CollectionPage",
+          name: "New York City",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  address: {
+                    "@type": "PostalAddress",
+                    addressCountry: "US",
+                    addressLocality: "Arlington",
+                    addressRegion: "VA",
+                    postalCode: "22209",
+                    streetAddress: "1101 Wilson Blvd",
+                  },
+                  name: "Galaxy Grill",
+                  openingHoursSpecification: [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      dayOfWeek: [
+                        "https://schema.org/Monday",
+                        "https://schema.org/Tuesday",
+                        "https://schema.org/Wednesday",
+                        "https://schema.org/Thursday",
+                        "https://schema.org/Friday",
+                        "https://schema.org/Saturday",
+                        "https://schema.org/Sunday",
+                      ],
+                      opens: "10:00",
+                      closes: "22:00",
+                    },
+                  ],
+                  phone: "+12025551010",
+                  url: "../../va/arlington/1101-wilson-blvd",
+                },
+                position: 1,
+              },
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  address: {
+                    "@type": "PostalAddress",
+                    addressCountry: "US",
+                    addressLocality: "Arlington",
+                    addressRegion: "VA",
+                    postalCode: "22209",
+                    streetAddress: "2101 Wilson Blvd",
+                  },
+                  name: "Galaxy Grill To Go",
+                  openingHoursSpecification: [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      dayOfWeek: [
+                        "https://schema.org/Monday",
+                        "https://schema.org/Tuesday",
+                        "https://schema.org/Wednesday",
+                        "https://schema.org/Thursday",
+                        "https://schema.org/Friday",
+                        "https://schema.org/Saturday",
+                        "https://schema.org/Sunday",
+                      ],
+                      opens: "10:00",
+                      closes: "22:00",
+                    },
+                  ],
+                  phone: "+12025551010",
+                  url: "../../va/arlington/2101-wilson-blvd",
+                },
+                position: 2,
+              },
+            ],
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@context": "https://schema.org",
+          "@id": "999#breadcrumbs",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Locations Directory",
+              item: "../../index.html",
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "US",
+              item: "../../us",
+            },
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: "NY",
+              item: "../../us/ny",
+            },
+            {
+              "@type": "ListItem",
+              position: 4,
+              name: "New York City",
+              item: "../../us/ny/nyc",
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("resolves resolved schema markup for a directory root with a site domain", async () => {
     const testData = {
       relativePrefixToRoot: "../../",
       path: "index.html",
@@ -621,7 +840,90 @@ describe("getSchema", () => {
     });
   });
 
-  it("returns schema for a locator with no schemaMarkup", async () => {
+  it("resolves resolved schema markup for a directory root with no site domain", async () => {
+    const testData = {
+      relativePrefixToRoot: "../../",
+      path: "index.html",
+      document: {
+        name: "Test Root",
+        uid: 1000,
+        __: {
+          layout: JSON.stringify({
+            root: {
+              props: {},
+            },
+          }),
+        },
+        meta: {
+          entityType: {
+            id: "dm_root",
+          },
+          locale: "es",
+        },
+        dm_directoryChildren: [
+          {
+            name: "US",
+            slug: "us",
+            dm_addressCountryDisplayName: "United States",
+          },
+          { name: "CA", slug: "ca", dm_addressCountryDisplayName: "Canada" },
+        ],
+      },
+    };
+    const schema = getSchema(testData);
+
+    expect(schema).toEqual({
+      "@graph": [
+        {
+          "@context": "https://schema.org",
+          "@id": "1000#collectionpage",
+          url: "../../index.html",
+          "@type": "CollectionPage",
+          name: "Test Root",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  name: "US",
+                  url: "../../us",
+                },
+                position: 1,
+              },
+              {
+                "@type": "ListItem",
+                item: {
+                  "@type": "Thing",
+                  name: "CA",
+                  url: "../../ca",
+                },
+                position: 2,
+              },
+            ],
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@context": "https://schema.org",
+          "@id": "1000#breadcrumbs",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Test Root",
+              item: "../../index.html",
+            },
+          ],
+        },
+      ],
+    });
+  });
+});
+
+describe("getSchema - locator pages", () => {
+  it("resolves resolved schema markup for a locator with a siteDomain", async () => {
     const testData = {
       relativePrefixToRoot: "../",
       path: "locator",
@@ -651,6 +953,42 @@ describe("getSchema", () => {
           "@context": "https://schema.org",
           "@id": "https://yext.com/2000#webpage",
           url: "https://yext.com/locator",
+          "@type": "WebPage",
+          name: "Test Locator",
+        },
+      ],
+    });
+  });
+
+  it("resolves resolved schema markup for a locator with no siteDomain", async () => {
+    const testData = {
+      relativePrefixToRoot: "../",
+      path: "locator",
+      document: {
+        name: "Test Locator",
+        uid: 2000,
+        __: {
+          layout: JSON.stringify({
+            root: {
+              props: {},
+            },
+          }),
+        },
+        meta: {
+          entityType: {
+            id: "locator",
+          },
+        },
+      },
+    };
+    const schema = getSchema(testData);
+
+    expect(schema).toEqual({
+      "@graph": [
+        {
+          "@context": "https://schema.org",
+          "@id": "2000#webpage",
+          url: "../locator",
           "@type": "WebPage",
           name: "Test Locator",
         },

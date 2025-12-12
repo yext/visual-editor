@@ -252,7 +252,10 @@ describe("resolveSchemaJson", () => {
       brand: "[[brand]]",
     };
 
-    const resolved = resolveSchemaJson(document, schema);
+    const resolved = resolveSchemaJson(
+      { document, path: "test-path", relativePrefixToRoot: "/" },
+      schema
+    );
 
     assert.deepEqual(resolved, {
       name: "Yext",
@@ -276,7 +279,10 @@ describe("resolveSchemaJson", () => {
       },
     };
 
-    const resolved = resolveSchemaJson(document, schema);
+    const resolved = resolveSchemaJson(
+      { document, path: "test-path", relativePrefixToRoot: "/" },
+      schema
+    );
 
     assert.deepEqual(resolved, {
       "@context": "https://schema.org/",
@@ -304,7 +310,10 @@ describe("resolveSchemaJson", () => {
       hasOfferCatalog: "[[services]]",
     };
 
-    const resolved = resolveSchemaJson(document, schema);
+    const resolved = resolveSchemaJson(
+      { document, path: "test-path", relativePrefixToRoot: "/" },
+      schema
+    );
 
     assert.deepEqual(resolved, {
       "@context": "https://schema.org/",
@@ -353,7 +362,10 @@ describe("resolveSchemaJson", () => {
       hasOfferCatalog: "[[name]]",
     };
 
-    const resolved = resolveSchemaJson(document, schema);
+    const resolved = resolveSchemaJson(
+      { document, path: "test-path", relativePrefixToRoot: "/" },
+      schema
+    );
 
     assert.deepEqual(resolved, {
       "@context": "https://schema.org/",
@@ -370,7 +382,8 @@ describe("resolveSchemaJson", () => {
     const schema = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "[[siteDomain]]/[[path]]",
+      "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+      url: "https://[[siteDomain]]/[[path]]",
       name: "[[name]]",
       mainEntity: {
         "@type": "ItemList",
@@ -383,6 +396,7 @@ describe("resolveSchemaJson", () => {
       siteDomain: "yext.com",
       path: "en/ca",
       locale: "en",
+      uid: 1,
       dm_directoryChildren: [
         {
           dm_addressCountryDisplayName: "Canada",
@@ -401,12 +415,16 @@ describe("resolveSchemaJson", () => {
       ],
     };
 
-    const resolvedSchema = resolveSchemaJson(document, schema);
+    const resolvedSchema = resolveSchemaJson(
+      { document, path: "en/ca", relativePrefixToRoot: "../../" },
+      schema
+    );
 
     assert.deepEqual(resolvedSchema, {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "yext.com/en/ca",
+      "@id": "https://yext.com/1#collectionpage",
+      url: "https://yext.com/en/ca",
       name: "Directory Country",
       mainEntity: {
         "@type": "ItemList",
@@ -438,7 +456,8 @@ describe("resolveSchemaJson", () => {
     const schema = {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "[[siteDomain]]/[[path]]",
+      "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+      url: "https://[[siteDomain]]/[[path]]",
       name: "[[name]]",
       mainEntity: {
         "@type": "ItemList",
@@ -450,6 +469,7 @@ describe("resolveSchemaJson", () => {
       name: "Directory City",
       siteDomain: "yext.com",
       path: "en/us/va/arlington",
+      uid: 2,
       locale: "en",
       dm_directoryChildren: [
         {
@@ -526,12 +546,20 @@ describe("resolveSchemaJson", () => {
       ],
     };
 
-    const resolvedSchema = resolveSchemaJson(document, schema);
+    const resolvedSchema = resolveSchemaJson(
+      {
+        document,
+        path: "en/us/va/arlington",
+        relativePrefixToRoot: "../../../",
+      },
+      schema
+    );
 
     assert.deepEqual(resolvedSchema, {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "@id": "yext.com/en/us/va/arlington",
+      "@id": "https://yext.com/2#collectionpage",
+      url: "https://yext.com/en/us/va/arlington",
       name: "Directory City",
       mainEntity: {
         "@type": "ItemList",
@@ -542,6 +570,156 @@ describe("resolveSchemaJson", () => {
               "@type": "Thing",
               name: "Galaxy Grill",
               url: "https://yext.com/va/arlington/1101-wilson-blvd",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "US",
+                addressLocality: "Arlington",
+                addressRegion: "VA",
+                postalCode: "22209",
+                streetAddress: "1101 Wilson Blvd",
+              },
+              openingHoursSpecification: [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  closes: "22:00",
+                  dayOfWeek: [
+                    "https://schema.org/Monday",
+                    "https://schema.org/Tuesday",
+                    "https://schema.org/Wednesday",
+                    "https://schema.org/Thursday",
+                    "https://schema.org/Friday",
+                    "https://schema.org/Saturday",
+                    "https://schema.org/Sunday",
+                  ],
+                  opens: "10:00",
+                },
+              ],
+              phone: "+17577017560",
+            },
+            position: 1,
+          },
+        ],
+      },
+    });
+  });
+
+  it("resolves Directory Children for city level directory with no site domain", () => {
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+      url: "https://[[siteDomain]]/[[path]]",
+      name: "[[name]]",
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: "[[dm_directoryChildren]]",
+      },
+    };
+
+    const document = {
+      name: "Directory City",
+      path: "en/us/va/arlington",
+      locale: "en",
+      uid: 3,
+      dm_directoryChildren: [
+        {
+          address: {
+            city: "Arlington",
+            countryCode: "US",
+            line1: "1101 Wilson Blvd",
+            postalCode: "22209",
+            region: "VA",
+          },
+          hours: {
+            friday: {
+              openIntervals: [
+                {
+                  end: "22:00",
+                  start: "10:00",
+                },
+              ],
+            },
+            monday: {
+              openIntervals: [
+                {
+                  end: "22:00",
+                  start: "10:00",
+                },
+              ],
+            },
+            saturday: {
+              openIntervals: [
+                {
+                  end: "22:00",
+                  start: "10:00",
+                },
+              ],
+            },
+            sunday: {
+              openIntervals: [
+                {
+                  end: "22:00",
+                  start: "10:00",
+                },
+              ],
+            },
+            thursday: {
+              openIntervals: [
+                {
+                  end: "22:00",
+                  start: "10:00",
+                },
+              ],
+            },
+            tuesday: {
+              openIntervals: [
+                {
+                  end: "22:00",
+                  start: "10:00",
+                },
+              ],
+            },
+            wednesday: {
+              openIntervals: [
+                {
+                  end: "22:00",
+                  start: "10:00",
+                },
+              ],
+            },
+          },
+          id: "1101-wilson-blvd",
+          mainPhone: "+17577017560",
+          name: "Galaxy Grill",
+          timezone: "America/New_York",
+        },
+      ],
+    };
+
+    const resolvedSchema = resolveSchemaJson(
+      {
+        document,
+        path: "en/us/va/arlington",
+        relativePrefixToRoot: "../../../",
+      },
+      schema
+    );
+
+    assert.deepEqual(resolvedSchema, {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": "3#collectionpage",
+      url: "../../../en/us/va/arlington",
+      name: "Directory City",
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            item: {
+              "@type": "Thing",
+              name: "Galaxy Grill",
+              url: "../../../va/arlington/1101-wilson-blvd",
               address: {
                 "@type": "PostalAddress",
                 addressCountry: "US",
