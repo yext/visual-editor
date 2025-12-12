@@ -846,8 +846,8 @@ const LocatorInternal = ({
             filterValue.lng,
             filterValue.lat,
           ];
-          setMapProps((prev) => ({ ...prev, centerCoords }));
           if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
+            setMapProps((prev) => ({ ...prev, centerCoords }));
             setMapCenter(mapboxgl.LngLat.convert(centerCoords));
           }
         }
