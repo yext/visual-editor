@@ -50,6 +50,7 @@ import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.t
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection";
+import { getSchemaForYextEntityField, FieldAiConfig } from "./aiSchemas.ts";
 
 const devLogger = new DevLogger();
 
@@ -98,6 +99,8 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
     typeSelectorConfig?: TypeSelectorConfigProps;
+    /** AI configuration for Puck AI plugin */
+    ai?: FieldAiConfig;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
@@ -200,15 +203,26 @@ const returnConstantFieldConfig = (
   }
   return fieldConfiguration;
 };
-
 /**
  * Allows the user to select an entity field from the document and set a constant value.
  */
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
+  // Generate default schema based on filter types
+  const defaultSchema = getSchemaForYextEntityField(props.filter);
+
+  // Build AI config with default schema (can be overridden by props.ai)
+  const aiConfig: FieldAiConfig = {
+    ...(defaultSchema ? { schema: defaultSchema } : {}),
+    ...props.ai,
+  };
+
   return {
     type: "custom",
+    // Include AI config if we have a schema or user provided config
+    ...(Object.keys(aiConfig).length > 0 ? { ai: aiConfig } : {}),
+
     render: ({
       value,
       onChange,

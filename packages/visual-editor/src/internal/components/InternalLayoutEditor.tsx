@@ -68,6 +68,7 @@ const usePuck = createUsePuck();
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
   type: "custom" as const,
+  ai: { exclude: true },
   render: () => {
     const getPuck = useGetPuck();
 
@@ -261,12 +262,14 @@ export const InternalLayoutEditor = ({
             filter: {
               types: ["type.string"],
             },
+            ai: { exclude: true },
           }),
           description: YextEntityFieldSelector<any, string>({
             label: msg("fields.metaDescription", "Meta Description"),
             filter: {
               types: ["type.string"],
             },
+            ai: { exclude: true },
           }),
           ...puckConfig.root?.fields,
           __advancedSettingsLink: createAdvancedSettingsLink(),

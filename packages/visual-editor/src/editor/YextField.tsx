@@ -38,6 +38,7 @@ import {
   textFieldSchema,
   numberFieldSchema,
   translatableStringFieldSchema,
+  FieldAiConfig,
 } from "./aiSchemas.ts";
 
 /** Field option type for select/radio fields */
@@ -65,22 +66,10 @@ function isThemeOptionsKey(value: unknown): value is ThemeOptionsKey {
   return typeof value === "string" && value in ThemeOptions;
 }
 
-/**
- * AI configuration for Puck AI plugin
- * Based on FieldAiParams from @puckeditor/plugin-ai
- */
-type YextFieldAiConfig = {
-  instructions?: string;
-  exclude?: boolean;
-  required?: boolean;
-  stream?: boolean;
-  schema?: unknown; // JSONSchema type
-};
-
 type YextBaseField = {
   type: string;
   visible?: boolean;
-  ai?: YextFieldAiConfig;
+  ai?: FieldAiConfig;
 };
 
 // YextArrayField has same functionality as Puck's ArrayField

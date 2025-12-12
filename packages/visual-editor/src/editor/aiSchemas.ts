@@ -5,7 +5,7 @@ import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFiel
  * JSON Schema type compatible with Puck AI plugin
  * Based on the JSONSchema type from @puckeditor/plugin-ai
  */
-type JSONSchema = {
+export type JSONSchema = {
   [k: string]: unknown;
   type?:
     | "object"
@@ -21,6 +21,18 @@ type JSONSchema = {
   enum?: Array<string | number | boolean | null>;
   anyOf?: JSONSchema[];
   additionalProperties?: boolean | JSONSchema;
+};
+
+/**
+ * AI configuration for Puck AI plugin fields
+ * Based on FieldAiParams from @puckeditor/plugin-ai
+ */
+export type FieldAiConfig = {
+  instructions?: string;
+  exclude?: boolean;
+  required?: boolean;
+  stream?: boolean;
+  schema?: JSONSchema;
 };
 
 /**
