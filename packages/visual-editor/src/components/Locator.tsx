@@ -739,7 +739,7 @@ const LocatorInternal = ({
     setSearchState("loading");
     if (
       nearFilterValue?.lat &&
-      nearFilterValue?.lat &&
+      nearFilterValue?.lng &&
       areValidCoordinates(nearFilterValue.lat, nearFilterValue.lng)
     ) {
       setMapCenter(
