@@ -56,7 +56,8 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
 
     if (entityTypeId && entityTypeId !== "locator") {
       const breadcrumbsSchema = getBreadcrumbsSchema(data, currentPageUrl);
-      const aggregateRatingSchemaBlock = currentPageId // the aggregateRating block requires a valid page @id
+      // The aggregateRating block requires a valid page @id
+      const aggregateRatingSchemaBlock = currentPageId
         ? getAggregateRatingSchemaBlock(document, currentPageId)
         : undefined;
 

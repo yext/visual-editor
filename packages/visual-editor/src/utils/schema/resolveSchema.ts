@@ -219,11 +219,16 @@ const resolveDirectoryChildren = (
   }
 
   return resolvedValue.map((child: any, index: number) => {
-    const childUrl = `${streamDocument.siteDomain ? `https://${streamDocument.siteDomain}/` : data.relativePrefixToRoot}${
-      child.address // if the child has an address, we're at the city level
-        ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
-        : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "")
-    }`;
+    const baseUrl = streamDocument.siteDomain
+      ? `https://${streamDocument.siteDomain}/`
+      : data.relativePrefixToRoot;
+
+    // if the child has an address, we're at the city level
+    const childPath = child.address
+      ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
+      : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "");
+
+    const childUrl = `${baseUrl}${childPath}`;
 
     return {
       "@type": "ListItem",
