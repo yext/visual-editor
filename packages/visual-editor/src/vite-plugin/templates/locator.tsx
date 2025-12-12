@@ -141,11 +141,7 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         <VisualEditorProvider templateProps={props}>
           <Render
             config={locatorConfig}
-            data={migrate(
-              JSON.parse(document.__.layout),
-              migrationRegistry,
-              locatorConfig
-            )}
+            data={data}
             metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>

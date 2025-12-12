@@ -523,8 +523,8 @@ interface VideoSectionProps {
 interface ExpandedHeaderStyles {
   /** The maximum width of the header */
   maxWidth: PageSectionProps["maxWidth"];
-  /** Whether the header is "sticky" or not */
-  headerPosition: "sticky" | "fixed" | "scrollsWithPage";
+  /** Whether the header is fixed to the top of the page or not */
+  headerPosition: "fixed" | "scrollsWithPage";
 }
 
 interface ExpandedFooterData {
