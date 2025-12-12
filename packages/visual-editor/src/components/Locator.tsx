@@ -737,7 +737,11 @@ const LocatorInternal = ({
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
-    if (nearFilterValue?.lat && nearFilterValue?.lng) {
+    if (
+      nearFilterValue?.lat &&
+      nearFilterValue?.lng &&
+      areValidCoordinates(nearFilterValue.lat, nearFilterValue.lng)
+    ) {
       setMapCenter(
         new mapboxgl.LngLat(nearFilterValue.lng, nearFilterValue.lat)
       );
@@ -842,8 +846,10 @@ const LocatorInternal = ({
             filterValue.lng,
             filterValue.lat,
           ];
-          setMapProps((prev) => ({ ...prev, centerCoords }));
-          setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+          if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
+            setMapProps((prev) => ({ ...prev, centerCoords }));
+            setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+          }
         }
       };
 
@@ -1705,4 +1711,16 @@ function deselectOpenNowFilters(
     }
     return filter;
   });
+}
+
+/** Checks whether a given lat and lng are valid coordinates */
+function areValidCoordinates(lat: number, lng: number): boolean {
+  return (
+    !isNaN(lat) &&
+    !isNaN(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180
+  );
 }
