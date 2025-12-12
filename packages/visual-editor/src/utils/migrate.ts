@@ -29,7 +29,8 @@ export type Migration =
   | {
       root: {
         propTransformation: (
-          oldProps: Record<string, any>
+          oldProps: Record<string, any>,
+          streamDocument: StreamDocument
         ) => Record<string, any>;
       };
     };

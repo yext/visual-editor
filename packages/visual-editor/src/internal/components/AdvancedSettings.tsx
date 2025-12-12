@@ -28,7 +28,6 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
     >();
 
     const streamDocument = useDocument();
-    const entityTypeId = (streamDocument as any)?.meta?.entityType?.id;
 
     const { sendToParent: openSchemaMarkupDrawer } = useSendMessageToParent(
       "constantValueEditorOpened",
@@ -45,7 +44,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       }
     );
 
-    const defaultSchema = getSchemaTemplate(entityTypeId);
+    const defaultSchema = getSchemaTemplate(streamDocument);
 
     // Use the schema value from root, or default schema if not set
     const schema = value || defaultSchema;
