@@ -89,19 +89,22 @@ export const EmbeddedFieldStringInputFromOptions = ({
     null
   );
   const [inputValue, setInputValue] = React.useState(value);
+  const [prevPropValue, setPrevPropValue] = React.useState(value);
+
+  if (value !== prevPropValue) {
+    setPrevPropValue(value);
+    setInputValue(value);
+  }
 
   const inputValueRef = React.useRef(inputValue);
   const onChangeRef = React.useRef(onChange);
   const valueRef = React.useRef(value);
 
-  inputValueRef.current = inputValue;
-  onChangeRef.current = onChange;
-  valueRef.current = value;
-
-  // Update local state if the prop value changes from outside
-  React.useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+  if (value === prevPropValue) {
+    inputValueRef.current = inputValue;
+    onChangeRef.current = onChange;
+    valueRef.current = value;
+  }
 
   // Debounce the call to the parent onChange handler
   React.useEffect(() => {

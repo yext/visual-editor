@@ -268,7 +268,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
               field: "",
               constantValue: {
                 label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: "#",
+                link: { en: "#", hasLocalizedValue: "true" },
                 linkType: "URL",
                 ctaType: "textAndLink",
               },
@@ -293,7 +293,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
               field: "",
               constantValue: {
                 label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: "#",
+                link: { en: "#", hasLocalizedValue: "true" },
                 linkType: "URL",
                 ctaType: "textAndLink",
               },
