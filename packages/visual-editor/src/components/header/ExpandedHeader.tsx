@@ -128,7 +128,7 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
 
   return (
     <>
-      {styles.headerPosition === "fixed" && headerHeight > 0 ? (
+      {styles.headerPosition === "fixed" ? (
         <div style={{ minHeight: headerHeight }} />
       ) : null}
       <div
