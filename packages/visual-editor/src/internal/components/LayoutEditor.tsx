@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as lzstring from "lz-string";
 import {
   InitialHistory,

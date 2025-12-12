@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, Field, FieldLabel } from "@measured/puck";
 import {
   TARGET_ORIGINS,
   useReceiveMessage,
@@ -17,7 +17,15 @@ type VideoPayload = {
 
 export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
   type: "custom",
-  render: ({ onChange, value, field }) => {
+  render: ({
+    onChange,
+    value,
+    field,
+  }: {
+    onChange: (value: AssetVideo | undefined) => void;
+    value: AssetVideo | undefined;
+    field: Field;
+  }) => {
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined
     >();

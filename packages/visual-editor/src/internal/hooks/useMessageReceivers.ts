@@ -97,9 +97,9 @@ export const useCommonMessageReceivers = (
     let puckConfig = componentRegistry[payload.templateId];
     if (puckConfig) {
       puckConfig = filterComponentsFromConfig(
-        puckConfig,
-        payload.additionalLayoutComponents,
-        payload.additionalLayoutCategories
+        puckConfig
+        // payload.additionalLayoutComponents,
+        // payload.additionalLayoutCategories
       );
     } else {
       throw new Error(

@@ -1,12 +1,15 @@
 import path from "node:path";
 import fs from "fs-extra";
 import { Plugin } from "vite";
-import mainTemplate from "./templates/main.tsx?raw";
-import editTemplate from "./templates/edit.tsx?raw";
-import directoryTemplate from "./templates/directory.tsx?raw";
-import locatorTemplate from "./templates/locator.tsx?raw";
-import { ComponentField, ComponentFields } from "../types/fields.ts";
-import { defaultLayoutData } from "./defaultLayoutData.ts";
+// import mainTemplate from "./templates/main.tsx?raw";
+// import editTemplate from "./templates/edit.tsx?raw";
+// import directoryTemplate from "./templates/directory.tsx?raw";
+// import locatorTemplate from "./templates/locator.tsx?raw";
+import {
+  ComponentField,
+  // ComponentFields
+} from "../types/fields.ts";
+// import { defaultLayoutData } from "./defaultLayoutData.ts";
 
 type TemplateManifestEntry = {
   name: string;
@@ -30,56 +33,56 @@ type VirtualFile = {
  * It also defines entries that will be used to generate the template-manifest.json
  */
 const virtualFiles: VirtualFile[] = [
-  {
-    filepath: "src/templates/main.tsx",
-    content: mainTemplate,
-    templateManifestEntry: {
-      name: "main",
-      description:
-        "Use this template to generate pages for each of your Locations.",
-      exampleSiteUrl: "",
-      layoutRequired: true,
-      defaultLayoutData: defaultLayoutData.main,
-      componentFields: [
-        ComponentFields.PromoSection,
-        ComponentFields.ProductSection,
-        ComponentFields.EventSection,
-        ComponentFields.FAQSection,
-        ComponentFields.TestimonialSection,
-        ComponentFields.InsightSection,
-        ComponentFields.TeamSection,
-      ],
-    },
-  },
-  {
-    filepath: "src/templates/directory.tsx",
-    content: directoryTemplate,
-    templateManifestEntry: {
-      name: "directory",
-      description:
-        "Use this template to generate pages for each of your Directory entities.",
-      exampleSiteUrl: "",
-      layoutRequired: true,
-      defaultLayoutData: defaultLayoutData.directory,
-      // no componentFields are defined because this is handled in the back-end for the dynamically
-      // generated DM fields
-    },
-  },
-  {
-    filepath: "src/templates/locator.tsx",
-    content: locatorTemplate,
-    templateManifestEntry: {
-      name: "locator",
-      description: "Use this template to generate pages for your Locators.",
-      exampleSiteUrl: "",
-      layoutRequired: true,
-      defaultLayoutData: defaultLayoutData.locator,
-    },
-  },
-  {
-    filepath: "src/templates/edit.tsx",
-    content: editTemplate,
-  },
+  // {
+  //   filepath: "src/templates/main.tsx",
+  //   content: mainTemplate,
+  //   templateManifestEntry: {
+  //     name: "main",
+  //     description:
+  //       "Use this template to generate pages for each of your Locations.",
+  //     exampleSiteUrl: "",
+  //     layoutRequired: true,
+  //     defaultLayoutData: defaultLayoutData.main,
+  //     componentFields: [
+  //       ComponentFields.PromoSection,
+  //       ComponentFields.ProductSection,
+  //       ComponentFields.EventSection,
+  //       ComponentFields.FAQSection,
+  //       ComponentFields.TestimonialSection,
+  //       ComponentFields.InsightSection,
+  //       ComponentFields.TeamSection,
+  //     ],
+  //   },
+  // },
+  // {
+  //   filepath: "src/templates/directory.tsx",
+  //   content: directoryTemplate,
+  //   templateManifestEntry: {
+  //     name: "directory",
+  //     description:
+  //       "Use this template to generate pages for each of your Directory entities.",
+  //     exampleSiteUrl: "",
+  //     layoutRequired: true,
+  //     defaultLayoutData: defaultLayoutData.directory,
+  //     // no componentFields are defined because this is handled in the back-end for the dynamically
+  //     // generated DM fields
+  //   },
+  // },
+  // {
+  //   filepath: "src/templates/locator.tsx",
+  //   content: locatorTemplate,
+  //   templateManifestEntry: {
+  //     name: "locator",
+  //     description: "Use this template to generate pages for your Locators.",
+  //     exampleSiteUrl: "",
+  //     layoutRequired: true,
+  //     defaultLayoutData: defaultLayoutData.locator,
+  //   },
+  // },
+  // {
+  //   filepath: "src/templates/edit.tsx",
+  //   content: editTemplate,
+  // },
 ];
 
 export const yextVisualEditorPlugin = (): Plugin => {

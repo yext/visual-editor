@@ -1,5 +1,6 @@
 import { Field } from "@measured/puck";
 import { pt } from "../../../utils/i18n/platform.ts";
+import { type FAQStruct } from "../../../types/types.ts";
 
 export const FAQ_SECTION_CONSTANT_CONFIG: Field<any> = {
   type: "array",
@@ -10,5 +11,6 @@ export const FAQ_SECTION_CONSTANT_CONFIG: Field<any> = {
     },
   },
   label: "",
-  getItemSummary: (item, index) => pt("faq", "FAQ") + " " + ((index ?? 0) + 1),
+  getItemSummary: (item: FAQStruct, index?: number) =>
+    pt("faq", "FAQ") + " " + ((index ?? 0) + 1),
 };

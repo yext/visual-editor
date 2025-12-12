@@ -24,7 +24,7 @@ const TooltipContent = React.forwardRef<
   const [iframeWidth, setIFrameWidth] = React.useState<number | undefined>();
 
   // Safe fallback if tooltip renders outside of puck context
-  let viewportWidth: number | undefined;
+  let viewportWidth: number | "100%" | undefined;
   try {
     const getPuck = useGetPuck();
     const puck = getPuck();
@@ -71,7 +71,7 @@ const TooltipContent = React.forwardRef<
     // Scale the tooltip using on Puck's zoom factor
     // Based on https://github.com/puckeditor/puck/blob/af1dc89139e0311b1dc014e328f431b1ebab0067/packages/core/components/DraggableComponent/index.tsx#L608
     // and https://github.com/puckeditor/puck/blob/af1dc89139e0311b1dc014e328f431b1ebab0067/packages/core/lib/get-zoom-config.ts#L6
-    if (iframeWidth && viewportWidth && zoomWithViewport) {
+    if (iframeWidth && typeof viewportWidth === "number" && zoomWithViewport) {
       setScaleFactor(1 / (iframeWidth / viewportWidth));
     }
   }, [viewportWidth, iframeWidth, zoomWithViewport]);

@@ -1,5 +1,5 @@
 import "./index.css";
-import React, { ErrorInfo, useEffect, useState } from "react";
+import { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";

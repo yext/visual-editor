@@ -12,6 +12,7 @@ import {
   FieldLabel,
   createUsePuck,
   resolveAllData,
+  type Plugin,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -27,12 +28,39 @@ import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
-import { AdvancedSettings } from "./AdvancedSettings.tsx";
+// import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
 import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
+import "@puckeditor/plugin-ai/styles.css";
+
+// Module-level cache for the AI plugin to ensure it's only created once
+// and to avoid re-renders when using dynamic import.
+let cachedAiPlugin: Plugin | null = null;
+let pluginLoadStarted = false;
+
+// Load the AI plugin dynamically. The dynamic import is necessary because
+// static imports would cause the module to be evaluated during SSR/build time
+// (e.g., when tailwind processes the CSS and evaluates the bundled code).
+// The package is marked as external in vite.config.ts.
+const loadAiPlugin = (onLoaded: () => void): Plugin | null => {
+  if (typeof document === "undefined") {
+    return null;
+  }
+  if (cachedAiPlugin) {
+    return cachedAiPlugin;
+  }
+  if (!pluginLoadStarted) {
+    pluginLoadStarted = true;
+    import("@puckeditor/plugin-ai").then((mod) => {
+      cachedAiPlugin = mod.createAiPlugin();
+      onLoaded();
+    });
+  }
+  return null;
+};
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -40,6 +68,7 @@ const usePuck = createUsePuck();
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
   type: "custom" as const,
+  ai: { exclude: true },
   render: () => {
     const getPuck = useGetPuck();
 
@@ -207,19 +236,20 @@ export const InternalLayoutEditor = ({
       }
     );
 
-    translatedComponents["AdvancedSettings"] = {
-      ...AdvancedSettings,
-      label: pt("advancedSettings", "Advanced Settings"),
-    };
+    // Commented out for experimental VE version
+    // translatedComponents["AdvancedSettings"] = {
+    //   ...AdvancedSettings,
+    //   label: pt("advancedSettings", "Advanced Settings"),
+    // };
 
-    translatedComponents["PageSettings"] = {
-      label: pt("page", "Page"),
-      fields: {},
-      defaultProps: {
-        data: { title: "Page Settings" },
-      },
-      render: () => <></>,
-    };
+    // translatedComponents["PageSettings"] = {
+    //   label: pt("page", "Page"),
+    //   fields: {},
+    //   defaultProps: {
+    //     data: { title: "Page Settings" },
+    //   },
+    //   render: () => <></>,
+    // };
 
     return {
       categories: puckConfig.categories,
@@ -232,12 +262,14 @@ export const InternalLayoutEditor = ({
             filter: {
               types: ["type.string"],
             },
+            ai: { exclude: true },
           }),
           description: YextEntityFieldSelector<any, string>({
             label: msg("fields.metaDescription", "Meta Description"),
             filter: {
               types: ["type.string"],
             },
+            ai: { exclude: true },
           }),
           ...puckConfig.root?.fields,
           __advancedSettingsLink: createAdvancedSettingsLink(),
@@ -380,9 +412,16 @@ export const InternalLayoutEditor = ({
     };
   }, []);
 
+  // Load the AI plugin once. Uses a simple flag state to trigger a single re-render
+  // when the plugin loads, and useMemo to keep the same array reference.
+  const [, setPluginLoaded] = useState(false);
+  const plugin = loadAiPlugin(() => setPluginLoaded(true));
+  const plugins = React.useMemo(() => (plugin ? [plugin] : []), [plugin]);
+
   return (
     <EntityTooltipsProvider>
       <Puck
+        plugins={plugins}
         config={translatedPuckConfigWithRootFields}
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
@@ -567,7 +606,9 @@ export const InternalLayoutEditor = ({
           },
           // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
           fieldLabel: ({ icon, children, ...rest }) => (
-            <FieldLabel {...rest}>{children}</FieldLabel>
+            <FieldLabel {...rest} label={children as string}>
+              {children}
+            </FieldLabel>
           ),
           puck: reloadDataOnDocumentChange,
         }}

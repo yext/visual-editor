@@ -1,5 +1,6 @@
 import { ArrayField } from "@measured/puck";
 import { pt } from "../../../utils/i18n/platform.ts";
+import { type InsightStruct } from "../../../types/types.ts";
 
 export const INSIGHT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
   type: "array",
@@ -10,6 +11,6 @@ export const INSIGHT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
     },
   },
   label: "",
-  getItemSummary: (item, index) =>
+  getItemSummary: (item: InsightStruct, index?: number) =>
     pt("insight", "Insight") + " " + ((index ?? 0) + 1),
 };

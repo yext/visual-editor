@@ -8,6 +8,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
 import { YextEntityField } from "@yext/visual-editor";
+import { LinkType } from "@yext/pages-components";
 
 export const ctaTypeOptions = () => {
   return [
@@ -52,7 +53,13 @@ export const getCTAType = <T extends Record<string, any>>(
 export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> =
   {
     type: "custom",
-    render: ({ onChange, value }) => {
+    render: ({
+      onChange,
+      value,
+    }: {
+      onChange: (value: EnhancedTranslatableCTA) => void;
+      value: EnhancedTranslatableCTA;
+    }) => {
       const labelField = useMemo(() => {
         return TranslatableStringField<TranslatableString>(
           msg("fields.label", "Label"),
@@ -73,7 +80,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                   options: ctaTypeOptions(),
                 }}
                 value={value?.ctaType || "textAndLink"}
-                onChange={(newValue) => {
+                onChange={(
+                  newValue: "textAndLink" | "getDirections" | "presetImage"
+                ) => {
                   const updatedValue = { ...value, ctaType: newValue };
                   // Set defaults based on CTA type
                   if (newValue === "presetImage") {
@@ -101,7 +110,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
               <AutoField
                 field={labelField}
                 value={value?.label}
-                onChange={(newValue) => onChange({ ...value, label: newValue })}
+                onChange={(newValue: TranslatableString) =>
+                  onChange({ ...value, label: newValue })
+                }
               />
             </div>
           )}
@@ -112,7 +123,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                   <AutoField
                     field={{ type: "text" }}
                     value={value?.link || ""}
-                    onChange={(newValue) =>
+                    onChange={(newValue: TranslatableString) =>
                       onChange({ ...value, link: newValue })
                     }
                   />
@@ -125,9 +136,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                       type: "select",
                       options: linkTypeOptions(),
                     }}
-                    value={value?.linkType || "URL"}
-                    onChange={(newValue) =>
-                      onChange({ ...value, linkType: newValue })
+                    value={value?.linkType || ("URL" as unknown as LinkType)}
+                    onChange={(newValue: LinkType) =>
+                      onChange({ ...value, linkType: newValue as LinkType })
                     }
                   />
                 </FieldLabel>
@@ -198,7 +209,13 @@ export const restrictedTranslatableCTAFields =
 // Restricted constant config for components that should only use textAndLink CTA type
 export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
   type: "custom",
-  render: ({ onChange, value }) => {
+  render: ({
+    onChange,
+    value,
+  }: {
+    onChange: (value: EnhancedTranslatableCTA) => void;
+    value: EnhancedTranslatableCTA;
+  }) => {
     const labelField = TranslatableStringField<any>(
       msg("fields.label", "Label"),
       {
@@ -212,7 +229,9 @@ export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
             <AutoField
               field={labelField}
               value={value?.label}
-              onChange={(newValue) => onChange({ ...value, label: newValue })}
+              onChange={(newValue: TranslatableString) =>
+                onChange({ ...value, label: newValue })
+              }
             />
           </FieldLabel>
         </div>
@@ -221,7 +240,9 @@ export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
             <AutoField
               field={{ type: "text" }}
               value={value?.link || ""}
-              onChange={(newValue) => onChange({ ...value, link: newValue })}
+              onChange={(newValue: TranslatableString) =>
+                onChange({ ...value, link: newValue })
+              }
             />
           </FieldLabel>
         </div>
@@ -233,8 +254,11 @@ export const LINK_ONLY_CTA_CONFIG: CustomField<EnhancedTranslatableCTA> = {
                 options: linkTypeOptions(),
               }}
               value={value?.linkType || "URL"}
-              onChange={(newValue) =>
-                onChange({ ...value, linkType: newValue })
+              onChange={(newValue: string) =>
+                onChange({
+                  ...value,
+                  linkType: newValue as LinkType | undefined as LinkType,
+                })
               }
             />
           </FieldLabel>

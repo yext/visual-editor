@@ -1,3 +1,4 @@
+import { type TestimonialStruct } from "../../../types/types.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 import { ArrayField } from "@measured/puck";
 
@@ -12,6 +13,6 @@ export const TESTIMONIAL_SECTION_CONSTANT_CONFIG: ArrayField<any> = {
     },
   },
   label: "",
-  getItemSummary: (item, index) =>
+  getItemSummary: (item: TestimonialStruct, index?: number) =>
     pt("testimonial", "Testimonial") + " " + ((index ?? 0) + 1),
 };

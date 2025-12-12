@@ -1,5 +1,11 @@
 import React from "react";
-import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
+import {
+  AutoField,
+  FieldLabel,
+  Field,
+  CustomField,
+  UiState,
+} from "@measured/puck";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
@@ -44,10 +50,9 @@ import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.t
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
 import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection";
+import { getSchemaForYextEntityField, FieldAiConfig } from "./aiSchemas.ts";
 
 const devLogger = new DevLogger();
-
-type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 export type YextEntityField<T> = {
@@ -94,6 +99,8 @@ export type RenderYextEntityFieldSelectorProps<T extends Record<string, any>> =
     disableConstantValueToggle?: boolean;
     disallowTranslation?: boolean;
     typeSelectorConfig?: TypeSelectorConfigProps;
+    /** AI configuration for Puck AI plugin */
+    ai?: FieldAiConfig;
   };
 
 export const TYPE_TO_CONSTANT_CONFIG: Record<string, Field<any>> = {
@@ -196,16 +203,36 @@ const returnConstantFieldConfig = (
   }
   return fieldConfiguration;
 };
-
 /**
  * Allows the user to select an entity field from the document and set a constant value.
  */
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
+  // Generate default schema based on filter types
+  const defaultSchema = getSchemaForYextEntityField(props.filter);
+
+  // Build AI config with default schema (can be overridden by props.ai)
+  // If exclude is true, don't include schema (workaround for Puck bug)
+  const aiConfig: FieldAiConfig = props.ai?.exclude
+    ? { ...props.ai }
+    : {
+        ...(defaultSchema ? { schema: defaultSchema } : {}),
+        ...props.ai,
+      };
+
   return {
     type: "custom",
-    render: ({ value, onChange }: RenderProps) => {
+    // Include AI config if we have a schema or user provided config
+    ...(Object.keys(aiConfig).length > 0 ? { ai: aiConfig } : {}),
+
+    render: ({
+      value,
+      onChange,
+    }: {
+      value: YextEntityField<U>;
+      onChange: (value: YextEntityField<U>) => void;
+    }) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
           ...value,
@@ -217,7 +244,7 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
         <>
           <ConstantValueModeToggler
             fieldTypeFilter={props.filter.types ?? []}
-            constantValueEnabled={value?.constantValueEnabled}
+            constantValueEnabled={value?.constantValueEnabled ?? false}
             toggleConstantValueEnabled={toggleConstantValueEnabled}
             disableConstantValue={props.disableConstantValueToggle}
             label={pt(props.label)}
@@ -366,7 +393,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <AutoField
       key={value?.selectedType} // reset when type changes
-      onChange={(newConstantValue, uiState) =>
+      onChange={(newConstantValue: T, uiState?: Partial<UiState>) =>
         onChange(
           {
             ...value,
@@ -375,8 +402,8 @@ export const ConstantValueInput = <T extends Record<string, any>>({
           uiState
         )
       }
-      value={value?.constantValue}
-      field={constantFieldConfig}
+      value={value?.constantValue as T}
+      field={constantFieldConfig as Field<T>}
     />
   );
 
@@ -499,7 +526,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       {typeSelectorConfig && (
         <AutoField
           field={typeSelector!}
-          onChange={(selectedType, uiState) => {
+          onChange={(selectedType: string, uiState?: Partial<UiState>) => {
             onChange(
               {
                 ...value,
@@ -515,7 +542,7 @@ export const EntityFieldInput = <T extends Record<string, any>>({
       <AutoField
         key={value?.selectedType}
         field={entityFieldSelector}
-        onChange={(selectedEntityField, uiState) => {
+        onChange={(selectedEntityField: string, uiState?: Partial<UiState>) => {
           onChange(
             {
               ...value,

@@ -10,7 +10,15 @@ const TEXT_LIST_BUTTON_COLOR: string = "#969696";
 
 export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
   type: "custom",
-  render: ({ onChange, value, id }) => {
+  render: ({
+    onChange,
+    value,
+    id,
+  }: {
+    onChange: (value: string[]) => void;
+    value: string[];
+    id: string;
+  }) => {
     const [localItems, setLocalItems] = useState<string[]>(value);
     const { t: pt } = usePlatformTranslation();
 
@@ -75,7 +83,6 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
             <span style={{ color: TEXT_LIST_BUTTON_COLOR }}>
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >
@@ -103,7 +110,15 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
   TranslatableRichText[]
 > = {
   type: "custom",
-  render: ({ onChange, value = [], id }) => {
+  render: ({
+    onChange,
+    value = [],
+    id,
+  }: {
+    onChange: (value: TranslatableRichText[]) => void;
+    value: TranslatableRichText[];
+    id: string;
+  }) => {
     const streamDocument = useDocument();
     const { t: pt } = usePlatformTranslation();
     const locale = streamDocument?.locale ?? "en";
@@ -176,12 +191,13 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
               field={{ type: "text" }}
               id={`${id}-value-${index}`}
               value={getDisplayValue(item, locale)}
-              onChange={(val) => updateItem(index, locale, val)}
+              onChange={(val: string | RichText) =>
+                updateItem(index, locale, val)
+              }
             />
             <div className="ve-flex ve-justify-end">
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >
