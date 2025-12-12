@@ -388,119 +388,119 @@ const tests: ComponentTest[] = [
       });
     },
   },
-  // {
-  //   name: "version 15 props - fixed header",
-  //   document: {},
-  //   props: {
-  //     data: {
-  //       primaryHeader: {
-  //         logo: "https://placehold.co/100",
-  //         links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
-  //         primaryCTA: {
-  //           label: { en: "Call to Action", hasLocalizedValue: "true" },
-  //           link: "#",
-  //           linkType: "URL",
-  //         },
-  //         secondaryCTA: {
-  //           label: { en: "Call to Action", hasLocalizedValue: "true" },
-  //           link: "#",
-  //           linkType: "URL",
-  //         },
-  //         showPrimaryCTA: false,
-  //         showSecondaryCTA: false,
-  //       },
-  //       secondaryHeader: {
-  //         show: true,
-  //         showLanguageDropdown: false,
-  //         secondaryLinks: [
-  //           defaultSecondaryLinkV0,
-  //           defaultSecondaryLinkV0,
-  //           defaultSecondaryLinkV0,
-  //           defaultSecondaryLinkV0,
-  //         ],
-  //       },
-  //     },
-  //     styles: {
-  //       primaryHeader: {
-  //         logo: {
-  //           width: 100,
-  //           aspectRatio: 1,
-  //         },
-  //         backgroundColor: backgroundColors.background6.value,
-  //         primaryCtaVariant: "primary",
-  //         secondaryCtaVariant: "secondary",
-  //       },
-  //       secondaryHeader: {
-  //         backgroundColor: backgroundColors.background7.value,
-  //       },
-  //       maxWidth: "full",
-  //       headerPosition: "fixed",
-  //     },
-  //     analytics: {
-  //       scope: "expandedHeader",
-  //     },
-  //   },
-  //   version: 15,
-  // },
-  // {
-  //   name: "version 20 props",
-  //   document: {},
-  //   props: {
-  //     data: {
-  //       primaryHeader: {
-  //         logo: {
-  //           url: "https://placehold.co/100",
-  //           alternateText: { en: "Logo", hasLocalizedValue: "true" },
-  //           width: 100,
-  //           height: 100,
-  //         },
-  //         links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
-  //         primaryCTA: {
-  //           label: { en: "Call to Action", hasLocalizedValue: "true" },
-  //           link: "#",
-  //           linkType: "URL",
-  //         },
-  //         secondaryCTA: {
-  //           label: { en: "Call to Action", hasLocalizedValue: "true" },
-  //           link: "#",
-  //           linkType: "URL",
-  //         },
-  //         showPrimaryCTA: false,
-  //         showSecondaryCTA: false,
-  //       },
-  //       secondaryHeader: {
-  //         show: true,
-  //         showLanguageDropdown: false,
-  //         secondaryLinks: [
-  //           defaultSecondaryLinkV0,
-  //           defaultSecondaryLinkV0,
-  //           defaultSecondaryLinkV0,
-  //           defaultSecondaryLinkV0,
-  //         ],
-  //       },
-  //     },
-  //     styles: {
-  //       primaryHeader: {
-  //         logo: {
-  //           width: 100,
-  //           aspectRatio: 1,
-  //         },
-  //         backgroundColor: backgroundColors.background6.value,
-  //         primaryCtaVariant: "primary",
-  //         secondaryCtaVariant: "secondary",
-  //       },
-  //       secondaryHeader: {
-  //         backgroundColor: backgroundColors.background7.value,
-  //       },
-  //       maxWidth: "full",
-  //       headerPosition: "fixed",
-  //     },
-  //     analytics: {
-  //       scope: "expandedHeader",
-  //     },
-  //   },
-  //   version: 20,
-  // },
+  {
+    name: "version 15 props - fixed header",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: "https://placehold.co/100",
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+        headerPosition: "fixed",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 15,
+  },
+  {
+    name: "version 20 props",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+        headerPosition: "fixed",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 20,
+  },
   {
     name: "version 41 props - no secondary header",
     document: {},
