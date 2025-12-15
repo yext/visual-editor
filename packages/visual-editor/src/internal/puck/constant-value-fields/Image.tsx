@@ -237,11 +237,37 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
           size="sm"
           variant="small_link"
           onClick={() => {
+            let imageToApply = resolvedValue;
+
+            if (resolvedValue) {
+              const currentAltText = resolveComponentData(
+                resolvedValue.alternateText ?? "",
+                locale,
+                streamDocument
+              );
+
+              const newAltText = {
+                hasLocalizedValue: "true" as const,
+                ...locales.reduce(
+                  (acc, l) => {
+                    acc[l] = currentAltText;
+                    return acc;
+                  },
+                  {} as Record<string, string>
+                ),
+              };
+
+              imageToApply = {
+                ...resolvedValue,
+                alternateText: newAltText,
+              };
+            }
+
             const valueByLocale = {
               hasLocalizedValue: "true",
               ...locales.reduce(
-                (acc, locale) => {
-                  acc[locale] = resolvedValue;
+                (acc, l) => {
+                  acc[l] = imageToApply;
                   return acc;
                 },
                 {} as Record<string, any>
