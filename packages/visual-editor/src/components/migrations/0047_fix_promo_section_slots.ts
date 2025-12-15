@@ -12,29 +12,27 @@ export const fixPromoSectionSlots: Migration = {
         return props;
       }
 
-      const titleField =
-        props.slots.HeadingSlot?.[0]?.props.data.text.field ?? "";
-      if (titleField === field) {
+      const titleField = props.slots.HeadingSlot?.[0]?.props?.data?.text?.field;
+      if (titleField && titleField === field) {
         props.slots.HeadingSlot[0].props.data.text.field =
           titleField + ".title";
       }
 
       const descriptionField =
-        props.slots.DescriptionSlot?.[0]?.props.data.text.field ?? "";
-      if (descriptionField === field) {
+        props.slots.DescriptionSlot?.[0]?.props?.data?.text?.field;
+      if (descriptionField && descriptionField === field) {
         props.slots.DescriptionSlot[0].props.data.text.field =
           descriptionField + ".description";
       }
 
       const ctaField =
-        props.slots.CTASlot?.[0]?.props.data.entityField.field ?? "";
-      if (ctaField === field) {
+        props.slots.CTASlot?.[0]?.props?.data?.entityField?.field;
+      if (ctaField && ctaField === field) {
         props.slots.CTASlot[0].props.data.entityField.field = ctaField + ".cta";
       }
 
-      const imageField =
-        props.slots.ImageSlot?.[0]?.props.data.image.field ?? "";
-      if (imageField === field) {
+      const imageField = props.slots.ImageSlot?.[0]?.props?.data?.image?.field;
+      if (imageField && imageField === field) {
         props.slots.ImageSlot[0].props.data.image.field = imageField + ".image";
       }
 
