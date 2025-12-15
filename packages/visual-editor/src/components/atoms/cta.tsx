@@ -6,6 +6,7 @@ import { Button, ButtonProps } from "./button.js";
 import {
   BackgroundStyle,
   themeManagerCn,
+  useBackground,
   useDocument,
 } from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
@@ -156,6 +157,7 @@ export const CTA = (props: CTAProps) => {
   } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
+  const isDarkBG = useBackground()?.isDarkBackground;
 
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = normalize(color?.bgColor);
@@ -170,7 +172,7 @@ export const CTA = (props: CTAProps) => {
       };
     }
 
-    if (variant === "secondary") {
+    if (variant === "secondary" && !isDarkBG) {
       return {
         borderColor: border,
         color: border,

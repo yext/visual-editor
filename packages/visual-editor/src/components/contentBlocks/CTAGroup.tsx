@@ -104,6 +104,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
     >
       {buttons.map((button, idx) => {
         const resolvedColor = button.color ?? backgroundColors.color1.value;
+        const isDefault = resolvedColor?.bgColor?.startsWith("bg-");
 
         const cta = resolveComponentData(
           button.entityField,
@@ -141,7 +142,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                 ctaType={ctaType}
                 presetImageType={button.presetImage}
                 className="truncate w-full"
-                color={resolvedColor}
+                color={!isDefault ? resolvedColor : undefined}
               />
             </div>
           )

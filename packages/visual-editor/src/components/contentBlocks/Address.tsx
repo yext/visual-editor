@@ -97,6 +97,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   const streamDocument = useDocument();
 
   const resolvedColor = styles.color ?? backgroundColors.color1.value;
+  const isDefault = resolvedColor?.bgColor?.startsWith("bg-");
   const address = parentData
     ? parentData.address
     : (resolveComponentData(
@@ -155,7 +156,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
             linkType="DRIVING_DIRECTIONS"
             target="_blank"
             variant={styles.ctaVariant}
-            color={resolvedColor}
+            color={!isDefault ? resolvedColor : undefined}
           />
         )}
     </div>

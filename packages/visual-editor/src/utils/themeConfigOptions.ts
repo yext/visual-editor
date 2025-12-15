@@ -163,20 +163,31 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
 const siteColorOptions: ComboboxOptionGroup[] = [
   {
     title: msg("siteColors", "Site Colors"),
-    options: Object.entries(backgroundColors)
-      .map(([key, { label, value }]) => {
-        if (key.includes("color")) {
-          return {
-            label,
-            value: {
-              bgColor: value.bgColor.replace("bg-", ""),
-              textColor: value.textColor.replace("text-", ""),
-            },
-            color: value.bgColor,
-          };
-        }
-      })
-      .filter((o) => !!o),
+    options: [
+      {
+        label: msg("default", "Default"),
+        value: {
+          bgColor: "bg-palette-primary",
+          textColor: "text-palette-primary-contrast",
+        },
+        color: backgroundColors.color1.value.bgColor,
+      },
+      ...Object.entries(backgroundColors)
+        .filter(([key]) => key.startsWith("color"))
+        .map(([key, { label, value }]) => {
+          if (key.includes("color")) {
+            return {
+              label,
+              value: {
+                bgColor: value.bgColor.replace("bg-", ""),
+                textColor: value.textColor.replace("text-", ""),
+              },
+              color: value.bgColor,
+            };
+          }
+        })
+        .filter((o) => !!o),
+    ],
   },
 ];
 
