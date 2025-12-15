@@ -19,17 +19,21 @@ import {
   ImgSizesByBreakpoint,
   resolveDataFromParent,
   AssetImageType,
+  TranslatableString,
 } from "@yext/visual-editor";
-import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { ComplexImageType, ImageType, Link } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
 import { EmptyImageState } from "./EmptyImageState";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
+const DEFAULT_LINK = "#";
+const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
 
 export interface ImageWrapperProps {
   data: {
     /** The image to display. */
     image: YextEntityField<ImageType | ComplexImageType | AssetImageType>;
+    link?: TranslatableString;
   };
 
   /** Size and aspect ratio of the image. */
@@ -62,6 +66,9 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
           },
         }
       ),
+      link: YextField(msg("fields.link", "Link"), {
+        type: "translatableString",
+      }),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -87,7 +94,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     },
     hideWidthProp,
   } = props;
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = React.useMemo(() => {
     return parentData
@@ -114,6 +121,19 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     !resolvedImage ||
     !imageUrl ||
     (typeof imageUrl === "string" && imageUrl.trim() === "");
+
+  const inputLink = resolveComponentData(
+    data.link ?? { en: DEFAULT_LINK, hasLocalizedValue: "true" as const },
+    i18n.language,
+    streamDocument
+  );
+
+  const resolvedLink =
+    typeof inputLink === "string" &&
+    LINK_REGEX_VALIDATION.test(inputLink.trim())
+      ? inputLink.trim()
+      : DEFAULT_LINK;
+  const isPlaceHolderLink = resolvedLink === "#";
 
   if (isEmpty) {
     return (
@@ -152,15 +172,22 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       ref={puck.dragRef}
     >
       <div className="w-full h-full">
-        <Image
-          image={resolvedImage}
-          aspectRatio={styles.aspectRatio}
-          width={hideWidthProp ? undefined : styles.width}
-          className={
-            className || "max-w-full rounded-image-borderRadius w-full h-full"
-          }
-          sizes={transformedSizes}
-        />
+        <Link
+          className={isPlaceHolderLink ? "cursor-auto pointer-events-none" : ""}
+          href={resolvedLink}
+          eventName="clickedOnImage"
+          aria-label={t("link", "Link")}
+        >
+          <Image
+            image={resolvedImage}
+            aspectRatio={styles.aspectRatio}
+            width={hideWidthProp ? undefined : styles.width}
+            className={
+              className || "max-w-full rounded-image-borderRadius w-full h-full"
+            }
+            sizes={transformedSizes}
+          />
+        </Link>
       </div>
     </EntityField>
   );
@@ -177,6 +204,7 @@ export const imageDefaultProps = {
       },
       constantValueEnabled: true,
     },
+    link: { en: DEFAULT_LINK, hasLocalizedValue: "true" as const },
   },
   styles: {
     aspectRatio: 1.78,

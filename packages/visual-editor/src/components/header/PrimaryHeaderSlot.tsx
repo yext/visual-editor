@@ -1,33 +1,25 @@
-import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
-  YextField,
-  msg,
   backgroundColors,
   BackgroundStyle,
+  CTAWrapperProps,
+  EnhancedTranslatableCTA,
+  ImageWrapperProps,
+  msg,
   PageSection,
   PageSectionProps,
-  CTAWrapperProps,
-  useOverflow,
-  ImageWrapperProps,
   resolveComponentData,
-  EnhancedTranslatableCTA,
-  YextEntityField,
   TranslatableCTA,
-  TranslatableString,
+  useOverflow,
+  YextEntityField,
+  YextField,
 } from "@yext/visual-editor";
-import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
-import { FaTimes, FaBars } from "react-icons/fa";
+import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "@yext/pages-components";
-
-const DEFAULT_LOGO_LINK = "#";
-const LINK_REGEX_VALIDATION = /^(https?:\/\/[^\s]+|\/[^\s]*|#[^\s]*)$/;
+import { FaBars, FaTimes } from "react-icons/fa";
+import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
 
 export interface PrimaryHeaderSlotProps {
-  data: {
-    logoLink?: TranslatableString;
-  };
   styles: {
     backgroundColor?: BackgroundStyle;
   };
@@ -54,14 +46,6 @@ export interface PrimaryHeaderSlotProps {
 }
 
 const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      logoLink: YextField(msg("fields.logoLink", "Logo Link"), {
-        type: "translatableString",
-      }),
-    },
-  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -95,14 +79,13 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
 };
 
 const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
-  data,
   styles,
   slots,
   parentValues,
   conditionalRender,
   puck,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
 
@@ -113,25 +96,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
-  const inputLink = resolveComponentData(
-    data?.logoLink ?? DEFAULT_LOGO_LINK,
-    i18n.language
-  );
-  const resolvedLink =
-    typeof inputLink === "string" &&
-    LINK_REGEX_VALIDATION.test(inputLink.trim())
-      ? inputLink.trim()
-      : DEFAULT_LOGO_LINK;
-
-  const LogoLink = (
-    <Link
-      href={resolvedLink}
-      eventName="clickedLogo"
-      aria-label={t("logoLink", "Logo Link")}
-    >
-      <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
-    </Link>
-  );
+  const LogoSlot = <slots.LogoSlot style={{ height: "auto", width: "auto" }} />;
 
   const navContent = (
     <>
@@ -155,9 +120,9 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
           className="flex flex-row justify-between w-full items-center gap-8"
         >
           {/* Mobile logo */}
-          <div className="block md:hidden">{LogoLink}</div>
+          <div className="block md:hidden">{LogoSlot}</div>
           {/* Desktop logo */}
-          <div className="hidden md:block">{LogoLink}</div>
+          <div className="hidden md:block">{LogoSlot}</div>
           {/* Desktop Navigation & Mobile Hamburger */}
           {showNavContent && (
             <div
@@ -254,9 +219,6 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
 };
 
 export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
-  data: {
-    logoLink: { en: DEFAULT_LOGO_LINK, hasLocalizedValue: "true" },
-  },
   styles: {
     backgroundColor: backgroundColors.background1.value,
   },

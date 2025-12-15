@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} lokacija unutar {{distance}} milja od \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} lokacija unutar {{distance}} milja od \"{{name}}\"",
   "logo": "Logo",
-  "logoLink": "Link na logotip",
   "map": "Karta",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
   "mediaType": "Medijska vrsta",

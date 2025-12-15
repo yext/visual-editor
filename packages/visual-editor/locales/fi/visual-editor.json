@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} sijaintia {{distance}} mailin säteellä kohteesta \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} sijaintia {{distance}} mailin säteellä kohteesta \"{{name}}\"",
   "logo": "Logo",
-  "logoLink": "Logo linkki",
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "mediaType": "Mediatyyppi",

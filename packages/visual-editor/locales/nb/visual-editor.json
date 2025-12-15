@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} steder innenfor {{distance}} miles fra \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} steder innenfor {{distance}} miles fra \"{{name}}\"",
   "logo": "Logo",
-  "logoLink": "Logo Link",
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "mediaType": "Medietype",

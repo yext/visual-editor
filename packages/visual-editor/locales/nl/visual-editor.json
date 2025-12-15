@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} locaties binnen {{distance}} mijl van \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} locaties binnen {{distance}} mijl van \"{{name}}\"",
   "logo": "Logo",
-  "logoLink": "Logo-link",
   "map": "Kaart",
   "maxWidthTip": "Voor optimale inhouduitlijning raden we aan de koptekst- en voettekstbreedte in te stellen om het pagina -inhoudsnet van de pagina te matchen of te overschrijden.",
   "mediaType": "Type media",

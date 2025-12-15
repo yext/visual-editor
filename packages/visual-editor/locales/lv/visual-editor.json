@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} atrašanās vietas {{distance}} jūdžu rādiusā no \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} atrašanās vietas {{distance}} jūdžu rādiusā no \"{{name}}\"",
   "logo": "Logotips",
-  "logoLink": "Logotipa saite",
   "map": "Karte",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
   "mediaType": "Multivides tips",

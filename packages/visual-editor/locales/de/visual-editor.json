@@ -536,7 +536,6 @@
   "locationsWithinDistanceOf_other": "{{count}} Standorte im Umkreis von {{distance}} Meilen von „{{name}}“",
   "locationsWithinDistanceOf_zero": "{{count}} Standorte im Umkreis von {{distance}} Meilen von „{{name}}“",
   "logo": "Logo",
-  "logoLink": "Logo-Link",
   "map": "Karte",
   "maxWidthTip": "Für eine optimale Inhaltsausrichtung empfehlen wir, die Header- und Fußzeile -Breite so festzulegen, dass sie das Seitenzinhaltsnetz überschreiten oder übertreffen.",
   "mediaType": "Medientyp",

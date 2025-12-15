@@ -532,7 +532,6 @@
   "locationsWithinDistanceOf_other": "{{count}} miest v okruhu {{distance}} míľ od „{{name}}“",
   "locationsWithinDistanceOf_zero": "{{count}} miest v okruhu {{distance}} míľ od „{{name}}“",
   "logo": "Logo",
-  "logoLink": "Odkaz na logo",
   "map": "Mapovať",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "mediaType": "Typ médií",

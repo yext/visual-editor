@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "「{{name}}」から {{distance}} マイル以内の {{count}} か所の場所",
   "locationsWithinDistanceOf_zero": "「{{name}}」から {{ distance}} マイル以内の {{count}} か所の場所",
   "logo": "ロゴ",
-  "logoLink": "ロゴリンク",
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "mediaType": "メディアタイプ",

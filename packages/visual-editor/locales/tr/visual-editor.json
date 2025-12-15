@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "\"{{name}}\" 'in {{distance}} mil yakınındaki {{count}} konum",
   "locationsWithinDistanceOf_zero": "\"{{name}}\" 'ya {{distance}} mil mesafedeki {{count}} konum",
   "logo": "Logo",
-  "logoLink": "Logo Bağlantısı",
   "map": "Harita",
   "maxWidthTip": "Optimal içerik hizalaması için, sayfa içerik şebekesini eşleştirecek veya aşacak şekilde üstbilgi ve altbilgi genişliğini ayarlamanızı öneririz.",
   "mediaType": "Medya türü",

@@ -530,7 +530,6 @@
   "locationsWithinDistanceOf_other": "{{count}} locations within {{distance}} miles of \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} locations within {{distance}} miles of \"{{name}}\"",
   "logo": "Logo",
-  "logoLink": "Logo Link",
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "mediaType": "Media Type",

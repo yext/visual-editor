@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} locații pe o rază de {{distance}} mile de „{{name}}”",
   "locationsWithinDistanceOf_zero": "{{count}} locații pe o rază de {{distance}} mile de „{{name}}”",
   "logo": "Logo",
-  "logoLink": "Link logo",
   "map": "Hartă",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
   "mediaType": "Tip media",

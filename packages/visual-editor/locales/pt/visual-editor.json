@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} locais dentro de {{distance}} milhas de \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} locais dentro de {{distance}} milhas de \"{{name}}\"",
   "logo": "Logotipo",
-  "logoLink": "Link do logotipo",
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "mediaType": "Tipo de mídia",

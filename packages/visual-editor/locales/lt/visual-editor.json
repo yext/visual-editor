@@ -531,7 +531,6 @@
   "locationsWithinDistanceOf_other": "{{count}} vietų {{distance}} mylių atstumu nuo \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} vietovių per {{distance}} mylių nuo \"{{name}}\"",
   "logo": "Logotipas",
-  "logoLink": "Logotipo nuoroda",
   "map": "Žemėlapis",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
   "mediaType": "Žiniasklaidos tipas",
