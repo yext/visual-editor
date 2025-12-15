@@ -56,8 +56,7 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
       const labelField = useMemo(() => {
         return TranslatableStringField<TranslatableString>(
           msg("fields.label", "Label"),
-          { types: ["type.string"] },
-          true
+          { types: ["type.string"] }
         );
       }, []);
 
