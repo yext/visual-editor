@@ -27,7 +27,6 @@ import {
 } from "@yext/visual-editor";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 const defaultPerson = {
@@ -42,155 +41,163 @@ const defaultPerson = {
     ctaType: "textAndLink",
   },
   headshot: {
-    url: "https://placehold.co/80x80",
+    url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
     height: 80,
     width: 80,
   },
 } satisfies PersonStruct;
 
-export const defaultTeamCardSlotData = (id?: string, index?: number) => ({
-  type: "TeamCard",
-  props: {
-    ...(id && { id }),
-    ...(index !== undefined && { index }),
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-    } satisfies TeamCardProps["styles"],
-    slots: {
-      ImageSlot: [
-        {
-          type: "ImageSlot",
-          props: {
-            ...(id && { id: `${id}-image` }),
-            data: {
-              image: {
-                field: "",
-                constantValue: defaultPerson.headshot || {
-                  ...getRandomPlaceholderImageObject({
-                    width: 640,
-                    height: 360,
-                  }),
-                  width: 640,
-                  height: 360,
+export const defaultTeamCardSlotData = (
+  id?: string,
+  index?: number,
+  backgroundColor?: BackgroundStyle,
+  sharedSlotStyles?: Record<string, any>
+) => {
+  const cardData = {
+    type: "TeamCard",
+    props: {
+      ...(id && { id }),
+      ...(index !== undefined && { index }),
+      styles: {
+        backgroundColor: backgroundColor ?? backgroundColors.background1.value,
+      } satisfies TeamCardProps["styles"],
+      slots: {
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              ...(id && { id: `${id}-image` }),
+              data: {
+                image: {
+                  field: "",
+                  constantValue: defaultPerson.headshot,
+                  constantValueEnabled: true,
                 },
-                constantValueEnabled: true,
               },
-            },
-            styles: {
-              aspectRatio: 1,
-              width: 200,
-            },
-            hideWidthProp: true,
-          } satisfies ImageWrapperProps,
-        },
-      ],
-      NameSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            ...(id && { id: `${id}-name` }),
-            data: {
-              text: {
-                field: "",
-                constantValue: defaultPerson.name,
-                constantValueEnabled: true,
+              styles: {
+                aspectRatio: 1,
+                width: 200,
               },
-            },
-            styles: {
-              level: 3,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      TitleSlot: [
-        {
-          type: "BodyTextSlot",
-          props: {
-            ...(id && { id: `${id}-title` }),
-            data: {
-              text: {
-                field: "",
-                constantValue: defaultPerson.title,
-                constantValueEnabled: true,
-              },
-            },
-            styles: {
-              variant: "base",
-            },
-          } satisfies BodyTextProps,
-        },
-      ],
-      PhoneSlot: [
-        {
-          type: "PhoneNumbersSlot",
-          props: {
-            ...(id && { id: `${id}-phone` }),
-            data: {
-              phoneNumbers: [
-                {
-                  number: {
-                    field: "",
-                    constantValue: defaultPerson.phoneNumber,
-                    constantValueEnabled: true,
-                  },
-                  label: {
-                    en: "",
-                    hasLocalizedValue: "true",
-                  },
+              hideWidthProp: true,
+            } satisfies ImageWrapperProps,
+          },
+        ],
+        NameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              ...(id && { id: `${id}-name` }),
+              data: {
+                text: {
+                  field: "",
+                  constantValue: defaultPerson.name,
+                  constantValueEnabled: true,
                 },
-              ],
-            },
-            styles: {
-              phoneFormat: "domestic",
-              includePhoneHyperlink: true,
-            },
-            eventName: index !== undefined ? `card${index}-phone` : undefined,
-          } satisfies PhoneListProps,
-        },
-      ],
-      EmailSlot: [
-        {
-          type: "EmailsSlot",
-          props: {
-            ...(id && { id: `${id}-email` }),
-            data: {
-              list: {
-                field: "",
-                constantValue: [defaultPerson.email],
-                constantValueEnabled: true,
               },
-            },
-            styles: {
-              listLength: 1,
-            },
-            eventName: index !== undefined ? `card${index}-email` : undefined,
-          } satisfies EmailsProps,
-        },
-      ],
-      CTASlot: [
-        {
-          type: "CTASlot",
-          props: {
-            ...(id && { id: `${id}-cta` }),
-            data: {
-              entityField: {
-                field: "",
-                constantValue: defaultPerson.cta,
-                constantValueEnabled: true,
+              styles: {
+                level: 3,
+                align: "left",
               },
-            },
-            styles: {
-              variant: "primary",
-              presetImage: "app-store",
-            },
-            eventName: index !== undefined ? `card${index}-cta` : undefined,
-          } satisfies CTAWrapperProps,
-        },
-      ],
+            } satisfies HeadingTextProps,
+          },
+        ],
+        TitleSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              ...(id && { id: `${id}-title` }),
+              data: {
+                text: {
+                  field: "",
+                  constantValue: defaultPerson.title,
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "base",
+              },
+            } satisfies BodyTextProps,
+          },
+        ],
+        PhoneSlot: [
+          {
+            type: "PhoneNumbersSlot",
+            props: {
+              ...(id && { id: `${id}-phone` }),
+              data: {
+                phoneNumbers: [
+                  {
+                    number: {
+                      field: "",
+                      constantValue: defaultPerson.phoneNumber,
+                      constantValueEnabled: true,
+                    },
+                    label: {
+                      en: "",
+                      hasLocalizedValue: "true",
+                    },
+                  },
+                ],
+              },
+              styles: {
+                phoneFormat: "domestic",
+                includePhoneHyperlink: true,
+              },
+              eventName: index !== undefined ? `card${index}-phone` : undefined,
+            } satisfies PhoneListProps,
+          },
+        ],
+        EmailSlot: [
+          {
+            type: "EmailsSlot",
+            props: {
+              ...(id && { id: `${id}-email` }),
+              data: {
+                list: {
+                  field: "",
+                  constantValue: [defaultPerson.email],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                listLength: 1,
+              },
+              eventName: index !== undefined ? `card${index}-email` : undefined,
+            } satisfies EmailsProps,
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              ...(id && { id: `${id}-cta` }),
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: defaultPerson.cta,
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "primary",
+                presetImage: "app-store",
+              },
+              eventName: index !== undefined ? `card${index}-cta` : undefined,
+            } satisfies CTAWrapperProps,
+          },
+        ],
+      },
     },
-  },
-});
+  };
+
+  Object.entries(cardData.props.slots).forEach(([slotKey, slotArray]) => {
+    if (sharedSlotStyles?.[slotKey]) {
+      slotArray[0].props.styles = sharedSlotStyles[slotKey];
+    }
+  });
+
+  return cardData;
+};
 
 export type TeamCardProps = {
   /** Styling for all the cards. */

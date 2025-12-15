@@ -4,18 +4,21 @@
     font-size: var(--fontSize-body-fontSize) !important;
     line-height: calc(var(--fontSize-body-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-body-fontWeight) !important;
+    text-transform: var(--textTransform-body-textTransform) !important;
   }
   li {
     font-family: var(--fontFamily-body-fontFamily) !important;
     font-size: var(--fontSize-body-fontSize) !important;
     line-height: calc(var(--fontSize-body-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-body-fontWeight) !important;
+    text-transform: var(--textTransform-body-textTransform) !important;
   }
   h1 {
     font-family: var(--fontFamily-h2-fontFamily) !important;
     font-size: var(--fontSize-h2-fontSize) !important;
     line-height: calc(var(--fontSize-h2-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-h2-fontWeight) !important;
+    text-transform: var(--textTransform-h1-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h1-fontFamily) !important;
       font-size: var(--fontSize-h1-fontSize) !important;
@@ -28,6 +31,7 @@
     font-size: var(--fontSize-h3-fontSize) !important;
     line-height: calc(var(--fontSize-h3-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-h3-fontWeight) !important;
+    text-transform: var(--textTransform-h2-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h2-fontFamily) !important;
       font-size: var(--fontSize-h2-fontSize) !important;
@@ -40,6 +44,7 @@
     font-size: var(--fontSize-h4-fontSize) !important;
     line-height: calc(var(--fontSize-h4-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-h4-fontWeight) !important;
+    text-transform: var(--textTransform-h3-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h3-fontFamily) !important;
       font-size: var(--fontSize-h3-fontSize) !important;
@@ -52,6 +57,7 @@
     font-size: var(--fontSize-h5-fontSize) !important;
     line-height: calc(var(--fontSize-h5-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-h5-fontWeight) !important;
+    text-transform: var(--textTransform-h4-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h4-fontFamily) !important;
       font-size: var(--fontSize-h4-fontSize) !important;
@@ -64,6 +70,7 @@
     font-size: var(--fontSize-h6-fontSize) !important;
     line-height: calc(var(--fontSize-h6-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-h6-fontWeight) !important;
+    text-transform: var(--textTransform-h5-textTransform) !important;
     @media (min-width: 640px) {
       font-family: var(--fontFamily-h5-fontFamily) !important;
       font-size: var(--fontSize-h5-fontSize) !important;
@@ -76,6 +83,7 @@
     font-size: var(--fontSize-h6-fontSize) !important;
     line-height: calc(var(--fontSize-h6-fontSize) + 4px) !important;
     font-weight: var(--fontWeight-h6-fontWeight) !important;
+    text-transform: var(--textTransform-h6-textTransform) !important;
   }
   a {
     font-family: var(--fontFamily-link-fontFamily) !important;

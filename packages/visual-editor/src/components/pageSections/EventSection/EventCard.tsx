@@ -52,130 +52,146 @@ const defaultEvent = {
   },
 } satisfies EventStruct;
 
-export const defaultEventCardSlotData = (id?: string, index?: number) => ({
-  type: "EventCard",
-  props: {
-    ...(id && { id }),
-    ...(index !== undefined && { index }),
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-      truncateDescription: true,
-    } satisfies EventCardProps["styles"],
-    slots: {
-      ImageSlot: [
-        {
-          type: "ImageSlot",
-          props: {
-            ...(id && { id: `${id}-image` }),
-            data: {
-              image: {
-                field: "",
-                constantValue: {
-                  ...getRandomPlaceholderImageObject({
+export const defaultEventCardSlotData = (
+  id?: string,
+  index?: number,
+  backgroundColor?: BackgroundStyle,
+  truncateDescription?: boolean,
+  sharedSlotStyles?: Record<string, any>
+) => {
+  const cardData = {
+    type: "EventCard",
+    props: {
+      ...(id && { id }),
+      ...(index !== undefined && { index }),
+      styles: {
+        backgroundColor: backgroundColor ?? backgroundColors.background1.value,
+        truncateDescription: truncateDescription ?? true,
+      } satisfies EventCardProps["styles"],
+      slots: {
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              ...(id && { id: `${id}-image` }),
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    ...getRandomPlaceholderImageObject({
+                      width: 640,
+                      height: 360,
+                    }),
                     width: 640,
                     height: 360,
-                  }),
-                  width: 640,
-                  height: 360,
+                  },
+                  constantValueEnabled: true,
                 },
-                constantValueEnabled: true,
               },
-            },
-            styles: {
-              aspectRatio: 1.78,
-              width: 640,
-            },
-            hideWidthProp: true,
-          } satisfies ImageWrapperProps,
-        },
-      ],
-      TitleSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            ...(id && { id: `${id}-title` }),
-            data: {
-              text: {
-                field: "",
-                constantValue: defaultEvent.title,
-                constantValueEnabled: true,
+              styles: {
+                aspectRatio: 1.78,
+                width: 640,
               },
-            },
-            styles: {
-              level: 3,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      DateTimeSlot: [
-        {
-          type: "Timestamp",
-          props: {
-            ...(id && { id: `${id}-timestamp` }),
-            data: {
-              date: {
-                field: "",
-                constantValue: defaultEvent.dateTime,
-                constantValueEnabled: true,
+              hideWidthProp: true,
+            } satisfies ImageWrapperProps,
+          },
+        ],
+        TitleSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              ...(id && { id: `${id}-title` }),
+              data: {
+                text: {
+                  field: "",
+                  constantValue: defaultEvent.title,
+                  constantValueEnabled: true,
+                },
               },
-              endDate: {
-                field: "",
-                constantValue: "",
-                constantValueEnabled: true,
+              styles: {
+                level: 3,
+                align: "left",
               },
-            },
-            styles: {
-              includeTime: true,
-              includeRange: false,
-            },
-          } satisfies TimestampProps,
-        },
-      ],
-      DescriptionSlot: [
-        {
-          type: "BodyTextSlot",
-          props: {
-            ...(id && { id: `${id}-description` }),
-            data: {
-              text: {
-                field: "",
-                constantValue: defaultEvent.description,
-                constantValueEnabled: true,
+            } satisfies HeadingTextProps,
+          },
+        ],
+        DateTimeSlot: [
+          {
+            type: "Timestamp",
+            props: {
+              ...(id && { id: `${id}-timestamp` }),
+              data: {
+                date: {
+                  field: "",
+                  constantValue: defaultEvent.dateTime,
+                  constantValueEnabled: true,
+                },
+                endDate: {
+                  field: "",
+                  constantValue: "",
+                  constantValueEnabled: true,
+                },
               },
-            },
-            styles: {
-              variant: "base",
-            },
-            parentStyles: {
-              className: "md:line-clamp-2",
-            },
-          } satisfies BodyTextProps,
-        },
-      ],
-      CTASlot: [
-        {
-          type: "CTASlot",
-          props: {
-            ...(id && { id: `${id}-cta` }),
-            data: {
-              entityField: {
-                field: "",
-                constantValue: defaultEvent.cta,
-                constantValueEnabled: true,
+              styles: {
+                includeTime: true,
+                includeRange: false,
               },
-            },
-            styles: {
-              variant: "primary",
-              presetImage: "app-store",
-            },
-            eventName: index !== undefined ? `cta${index}` : undefined,
-          } satisfies CTAWrapperProps,
-        },
-      ],
+            } satisfies TimestampProps,
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              ...(id && { id: `${id}-description` }),
+              data: {
+                text: {
+                  field: "",
+                  constantValue: defaultEvent.description,
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "base",
+              },
+              parentStyles: {
+                className: "md:line-clamp-2",
+              },
+            } satisfies BodyTextProps,
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              ...(id && { id: `${id}-cta` }),
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: defaultEvent.cta,
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "primary",
+                presetImage: "app-store",
+              },
+              eventName: index !== undefined ? `cta${index}` : undefined,
+            } satisfies CTAWrapperProps,
+          },
+        ],
+      },
     },
-  },
-});
+  };
+
+  Object.entries(cardData.props.slots).forEach(([slotKey, slotArray]) => {
+    if (sharedSlotStyles?.[slotKey]) {
+      slotArray[0].props.styles = sharedSlotStyles[slotKey];
+    }
+  });
+
+  return cardData;
+};
 
 export type EventCardProps = {
   /** Styling for all the cards. */

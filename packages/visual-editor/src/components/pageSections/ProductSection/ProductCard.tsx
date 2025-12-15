@@ -51,14 +51,19 @@ const defaultProduct = {
   },
 } satisfies ProductStruct;
 
-export const defaultProductCardSlotData = (id?: string, index?: number) => {
-  return {
+export const defaultProductCardSlotData = (
+  id?: string,
+  index?: number,
+  backgroundColor?: BackgroundStyle,
+  sharedSlotStyles?: Record<string, any>
+) => {
+  const cardData = {
     type: "ProductCard",
     props: {
       ...(id && { id }),
       ...(index !== undefined && { index }),
       styles: {
-        backgroundColor: backgroundColors.background1.value,
+        backgroundColor: backgroundColor ?? backgroundColors.background1.value,
       } satisfies ProductCardProps["styles"],
       slots: {
         ImageSlot: [
@@ -164,6 +169,14 @@ export const defaultProductCardSlotData = (id?: string, index?: number) => {
       },
     } satisfies ProductCardProps,
   };
+
+  Object.entries(cardData.props.slots).forEach(([slotKey, slotArray]) => {
+    if (sharedSlotStyles?.[slotKey]) {
+      slotArray[0].props.styles = sharedSlotStyles[slotKey];
+    }
+  });
+
+  return cardData;
 };
 
 export type ProductCardProps = {
@@ -323,7 +336,11 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       background={styles.backgroundColor}
       ref={puck.dragRef}
     >
-      <slots.ImageSlot className="h-auto sm:min-h-[200px]" allow={[]} />
+      <slots.ImageSlot
+        style={{ height: "fit-content" }}
+        className="sm:min-h-[200px]"
+        allow={[]}
+      />
       <div className="p-8 gap-8 flex flex-col">
         <div className="gap-4 flex flex-col flex-grow">
           <slots.TitleSlot style={{ height: "auto" }} allow={[]} />

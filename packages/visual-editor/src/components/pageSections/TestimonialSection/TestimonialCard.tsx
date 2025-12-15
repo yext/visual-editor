@@ -38,80 +38,92 @@ const defaultTestimonial = {
 
 export const defaultTestimonialCardSlotData = (
   id?: string,
-  index?: number
-) => ({
-  type: "TestimonialCard",
-  props: {
-    ...(id && { id }),
-    ...(index !== undefined && { index }),
-    styles: {
-      backgroundColor: backgroundColors.background1.value,
-    } satisfies TestimonialCardProps["styles"],
-    slots: {
-      DescriptionSlot: [
-        {
-          type: "BodyTextSlot",
-          props: {
-            ...(id && { id: `${id}-description` }),
-            data: {
-              text: {
-                field: "",
-                constantValue: defaultTestimonial.description,
-                constantValueEnabled: true,
+  index?: number,
+  backgroundColor?: BackgroundStyle,
+  sharedSlotStyles?: Record<string, any>
+) => {
+  const cardData = {
+    type: "TestimonialCard",
+    props: {
+      ...(id && { id }),
+      ...(index !== undefined && { index }),
+      styles: {
+        backgroundColor: backgroundColor ?? backgroundColors.background1.value,
+      } satisfies TestimonialCardProps["styles"],
+      slots: {
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              ...(id && { id: `${id}-description` }),
+              data: {
+                text: {
+                  field: "",
+                  constantValue: defaultTestimonial.description,
+                  constantValueEnabled: true,
+                },
               },
-            },
-            styles: {
-              variant: "base",
-            },
-          } satisfies BodyTextProps,
-        },
-      ],
-      ContributorNameSlot: [
-        {
-          type: "HeadingTextSlot",
-          props: {
-            ...(id && { id: `${id}-contributorName` }),
-            data: {
-              text: {
-                field: "",
-                constantValue: defaultTestimonial.contributorName,
-                constantValueEnabled: true,
+              styles: {
+                variant: "base",
               },
-            },
-            styles: {
-              level: 3,
-              align: "left",
-            },
-          } satisfies HeadingTextProps,
-        },
-      ],
-      ContributionDateSlot: [
-        {
-          type: "Timestamp",
-          props: {
-            ...(id && { id: `${id}-contributionDate` }),
-            data: {
-              date: {
-                field: "",
-                constantValue: defaultTestimonial.contributionDate,
-                constantValueEnabled: true,
+            } satisfies BodyTextProps,
+          },
+        ],
+        ContributorNameSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              ...(id && { id: `${id}-contributorName` }),
+              data: {
+                text: {
+                  field: "",
+                  constantValue: defaultTestimonial.contributorName,
+                  constantValueEnabled: true,
+                },
               },
-              endDate: {
-                field: "",
-                constantValueEnabled: true,
-                constantValue: "",
+              styles: {
+                level: 3,
+                align: "left",
               },
-            },
-            styles: {
-              includeTime: false,
-              includeRange: false,
-            },
-          } satisfies TimestampProps,
-        },
-      ],
+            } satisfies HeadingTextProps,
+          },
+        ],
+        ContributionDateSlot: [
+          {
+            type: "Timestamp",
+            props: {
+              ...(id && { id: `${id}-contributionDate` }),
+              data: {
+                date: {
+                  field: "",
+                  constantValue: defaultTestimonial.contributionDate,
+                  constantValueEnabled: true,
+                },
+                endDate: {
+                  field: "",
+                  constantValueEnabled: true,
+                  constantValue: "",
+                },
+              },
+              styles: {
+                includeTime: false,
+                includeRange: false,
+              },
+            } satisfies TimestampProps,
+          },
+        ],
+      },
     },
-  },
-});
+  };
+
+  Object.entries(cardData.props.slots).forEach(([slotKey, slotArray]) => {
+    if (sharedSlotStyles?.[slotKey]) {
+      slotArray[0].props.styles = sharedSlotStyles[slotKey];
+    }
+  });
+
+  return cardData;
+};
 
 export type TestimonialCardProps = {
   /** Styling for all the cards. */

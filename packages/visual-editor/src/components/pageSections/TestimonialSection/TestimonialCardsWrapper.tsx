@@ -21,6 +21,7 @@ import {
   defaultTestimonialCardSlotData,
   TestimonialCardProps,
 } from "./TestimonialCard.tsx";
+import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
 
 export type TestimonialCardsWrapperProps =
   CardWrapperType<TestimonialSectionType>;
@@ -63,6 +64,16 @@ export const TestimonialCardsWrapper: ComponentConfig<{
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+    const sharedCardProps =
+      data.props.slots.CardSlot.length === 0
+        ? undefined
+        : {
+            backgroundColor:
+              data.props.slots.CardSlot[0].props.styles.backgroundColor,
+            slotStyles: gatherSlotStyles(
+              data.props.slots.CardSlot[0].props.slots
+            ),
+          };
 
     if (!data?.props?.data) {
       return data;
@@ -92,7 +103,10 @@ export const TestimonialCardsWrapper: ComponentConfig<{
               .fill(null)
               .map(() =>
                 defaultTestimonialCardSlotData(
-                  `TestimonialCard-${crypto.randomUUID()}`
+                  `TestimonialCard-${crypto.randomUUID()}`,
+                  undefined,
+                  sharedCardProps?.backgroundColor,
+                  sharedCardProps?.slotStyles
                 )
               )
           : [];
@@ -148,7 +162,12 @@ export const TestimonialCardsWrapper: ComponentConfig<{
         inUseIds.add(newId);
 
         if (!newCard) {
-          return defaultTestimonialCardSlotData(newId, i);
+          return defaultTestimonialCardSlotData(
+            newId,
+            i,
+            sharedCardProps?.backgroundColor,
+            sharedCardProps?.slotStyles
+          );
         }
 
         newCard = setDeep(newCard, "props.id", newId);

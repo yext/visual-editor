@@ -26,7 +26,7 @@ export interface BodyProps
     VariantProps<typeof bodyVariants> {}
 
 export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
-  ({ className, variant, ...props }, ref) => {
+  ({ className, variant, style, ...props }, ref) => {
     return (
       <p
         className={themeManagerCn(
@@ -36,6 +36,11 @@ export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
           }),
           className
         )}
+        style={{
+          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
+          textTransform: `var(--textTransform-body-textTransform)`,
+          ...style,
+        }}
         ref={ref}
         {...props}
       >

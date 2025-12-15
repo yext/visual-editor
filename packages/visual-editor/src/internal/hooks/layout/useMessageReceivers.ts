@@ -112,5 +112,6 @@ export const useLayoutMessageReceivers = (
   return {
     layoutSaveState,
     layoutSaveStateFetched,
+    setLayoutSaveState,
   };
 };
