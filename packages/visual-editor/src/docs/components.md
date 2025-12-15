@@ -273,10 +273,10 @@ The Expanded Header is a two-tiered component for websites with complex navigati
 
 This object contains properties for customizing the appearance of both header tiers.
 
-| Prop                    | Type                                       | Description                           | Default |
-| :---------------------- | :----------------------------------------- | :------------------------------------ | :------ |
-| `styles.headerPosition` | `"sticky" \| "fixed" \| "scrollsWithPage"` | Whether the header is "sticky" or not |         |
-| `styles.maxWidth`       | `PageSectionProps["maxWidth"]`             | The maximum width of the header       |         |
+| Prop                    | Type                           | Description                                               | Default |
+| :---------------------- | :----------------------------- | :-------------------------------------------------------- | :------ |
+| `styles.headerPosition` | `"fixed" \| "scrollsWithPage"` | Whether the header is fixed to the top of the page or not |         |
+| `styles.maxWidth`       | `PageSectionProps["maxWidth"]` | The maximum width of the header                           |         |
 
 ---
 
