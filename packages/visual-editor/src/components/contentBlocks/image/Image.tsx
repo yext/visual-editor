@@ -95,7 +95,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     },
     hideWidthProp,
   } = props;
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = React.useMemo(() => {
     return parentData
@@ -173,6 +173,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     >
       <div className="w-full h-full">
         <MaybeLink
+          ariaLabel={t(`goToHomepage`, "Go to Homepage")}
           className="w-auto"
           eventName="logoLink"
           href={resolvedLink}
@@ -201,6 +202,7 @@ export const imageDefaultProps = {
         url: PLACEHOLDER_IMAGE_URL,
         height: 360,
         width: 640,
+        alternateText: "Test",
       },
       constantValueEnabled: true,
     },
