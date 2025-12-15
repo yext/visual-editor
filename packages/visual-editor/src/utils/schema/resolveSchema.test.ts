@@ -621,6 +621,12 @@ describe("resolveSchemaJson", () => {
       path: "en/us/va/arlington",
       locale: "en",
       uid: 3,
+      __: {
+        entityPageSetUrlTemplates: JSON.stringify({
+          primary:
+            "[[locale]]/locations/[[address.region]]/[[address.city]]/[[id]]",
+        }),
+      },
       dm_directoryChildren: [
         {
           address: {
@@ -709,7 +715,7 @@ describe("resolveSchemaJson", () => {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       "@id": "3#collectionpage",
-      url: "../../../en/us/va/arlington",
+      url: "/en/us/va/arlington",
       name: "Directory City",
       mainEntity: {
         "@type": "ItemList",
@@ -719,7 +725,7 @@ describe("resolveSchemaJson", () => {
             item: {
               "@type": "Thing",
               name: "Galaxy Grill",
-              url: "../../../va/arlington/1101-wilson-blvd",
+              url: "/en/locations/va/arlington/1101-wilson-blvd",
               address: {
                 "@type": "PostalAddress",
                 addressCountry: "US",

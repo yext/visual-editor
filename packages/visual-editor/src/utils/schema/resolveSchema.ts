@@ -64,19 +64,19 @@ export const resolveSchemaJson = (
   // Move path to the document for schema resolution
   data.document.path = data.path;
 
-  // Handle the case where siteDomain is missing
+  // When siteDomain is not set, we need to use relative URLs in the schema.
+  // We do a string replacement because the user-editable schema may have
+  // [[siteDomain]] placeholders anywhere in the schema.
   let updatedSchema = schema;
   if (!data.document.siteDomain) {
     let schemaString = JSON.stringify(schema);
 
+    // For @id, we don't need to use a relative URL since the id can be an arbitrary URI
     schemaString = schemaString.replaceAll(
       `"@id":"https://[[siteDomain]]/`,
       `"@id":"`
     );
-    schemaString = schemaString.replaceAll(
-      "https://[[siteDomain]]/",
-      data.relativePrefixToRoot
-    );
+    schemaString = schemaString.replaceAll("https://[[siteDomain]]", "");
     updatedSchema = JSON.parse(schemaString);
   }
 
@@ -221,7 +221,7 @@ const resolveDirectoryChildren = (
   return resolvedValue.map((child: any, index: number) => {
     const baseUrl = streamDocument.siteDomain
       ? `https://${streamDocument.siteDomain}/`
-      : data.relativePrefixToRoot;
+      : "/";
 
     // if the child has an address, we're at the city level
     const childPath = child.address

@@ -45,7 +45,7 @@ export const getBreadcrumbsSchema = (
       parent.name,
       data.document.siteDomain
         ? `https://${data.document.siteDomain}/${parent.slug}`
-        : `${data.relativePrefixToRoot}${parent.slug}`
+        : `/${parent.slug}`
     )
   );
 

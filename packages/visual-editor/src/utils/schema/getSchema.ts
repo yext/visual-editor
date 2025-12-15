@@ -17,7 +17,7 @@ export interface TemplateRenderProps {
 }
 
 export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
-  const { document, relativePrefixToRoot } = data;
+  const { document } = data;
 
   // Move path to the document for schema resolution
   document.path = data.path;
@@ -48,9 +48,7 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchema);
     const currentPageUrl = resolveSchemaString(
       document,
-      document.siteDomain
-        ? "https://[[siteDomain]]/[[path]]"
-        : `${relativePrefixToRoot}[[path]]`
+      document.siteDomain ? "https://[[siteDomain]]/[[path]]" : `/[[path]]`
     );
     const currentPageId = parsedSchemaEditorMarkup?.["@id"];
 
