@@ -1,29 +1,30 @@
-import * as React from "react";
-import { useTranslation } from "react-i18next";
 import {
   ComponentConfig,
   Fields,
   PuckComponent,
   setDeep,
 } from "@measured/puck";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
-  useDocument,
-  resolveComponentData,
+  AssetImageType,
   EntityField,
-  YextEntityField,
   Image,
+  ImgSizesByBreakpoint,
+  MaybeLink,
+  TranslatableString,
+  YextEntityField,
   YextField,
+  imgSizesHelper,
   msg,
   pt,
-  imgSizesHelper,
-  ImgSizesByBreakpoint,
+  resolveComponentData,
   resolveDataFromParent,
-  AssetImageType,
-  TranslatableString,
+  useDocument,
 } from "@yext/visual-editor";
-import { ComplexImageType, ImageType, Link } from "@yext/pages-components";
-import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
+import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { EmptyImageState } from "./EmptyImageState";
+import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 const DEFAULT_LINK = "#";
@@ -94,7 +95,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     },
     hideWidthProp,
   } = props;
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const resolvedImage = React.useMemo(() => {
     return parentData
@@ -133,7 +134,6 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     LINK_REGEX_VALIDATION.test(inputLink.trim())
       ? inputLink.trim()
       : DEFAULT_LINK;
-  const isPlaceHolderLink = resolvedLink === "#";
 
   if (isEmpty) {
     return (
@@ -172,11 +172,11 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       ref={puck.dragRef}
     >
       <div className="w-full h-full">
-        <Link
-          className={isPlaceHolderLink ? "cursor-auto pointer-events-none" : ""}
+        <MaybeLink
+          className="w-auto"
+          eventName="logoLink"
           href={resolvedLink}
-          eventName="clickedOnImage"
-          aria-label={t(`ClickedOnImage`, "Clicked on Image")}
+          alwaysHideCaret={true}
         >
           <Image
             image={resolvedImage}
@@ -187,7 +187,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
             }
             sizes={transformedSizes}
           />
-        </Link>
+        </MaybeLink>
       </div>
     </EntityField>
   );
@@ -218,11 +218,15 @@ export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   inline: true,
   fields: ImageWrapperFields,
   defaultProps: imageDefaultProps,
-  resolveFields: (data) => {
+  resolveFields: (data, params) => {
     const fields = resolveDataFromParent(ImageWrapperFields, data);
+    const parentType = params.parent?.type;
 
     if (data.props.hideWidthProp) {
       return setDeep(fields, "styles.objectFields.width.visible", false);
+    }
+    if (parentType !== "PrimaryHeaderSlot") {
+      return setDeep(fields, "data.objectFields.link.visible", false);
     }
 
     return setDeep(fields, "styles.objectFields.width.visible", true);
