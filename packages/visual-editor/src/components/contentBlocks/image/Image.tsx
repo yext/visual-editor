@@ -176,7 +176,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
           className={isPlaceHolderLink ? "cursor-auto pointer-events-none" : ""}
           href={resolvedLink}
           eventName="clickedOnImage"
-          aria-label={t("link", "Link")}
+          aria-label={t(`ClickedOnImage`, "Clicked on Image")}
         >
           <Image
             image={resolvedImage}
