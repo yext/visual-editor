@@ -1,7 +1,7 @@
 import { StreamDocument } from "../applyTheme.ts";
 import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema.ts";
 import { getDefaultSchema } from "./defaultSchemas.ts";
-import { removeEmptyValues } from "./helpers.ts";
+import { getLocalBusinessSubtype, removeEmptyValues } from "./helpers.ts";
 import {
   getAggregateRatingSchemaBlock,
   getBreadcrumbsSchema,
@@ -31,23 +31,33 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const layout = JSON.parse(layoutString);
     const entityTypeId = document?.meta?.entityType?.id;
 
+    // If the entity has categories, resolve the primaryCategory key
+    // to the local business subtype corresponding to the entity's primary category
+    if (entityTypeId !== "locator" && !entityTypeId?.startsWith("dm_")) {
+      document.primaryCategory = getLocalBusinessSubtype(document);
+    }
+
     const schemaMarkup: string = layout?.root?.props?.schemaMarkup;
     const schemaMarkupJson: Record<string, any> = schemaMarkup
       ? JSON.parse(schemaMarkup)
       : getDefaultSchema(document);
 
     // Resolve all fields in the schema markup
-    const resolvedSchema = resolveSchemaJson(document, schemaMarkupJson);
+    const resolvedSchema = resolveSchemaJson(data, schemaMarkupJson);
 
     const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchema);
-    const pageId = resolveSchemaString(document, "[[siteDomain]]/[[path]]");
+    const currentPageUrl = resolveSchemaString(
+      document,
+      document.siteDomain ? "https://[[siteDomain]]/[[path]]" : `/[[path]]`
+    );
+    const currentPageId = parsedSchemaEditorMarkup?.["@id"];
 
     if (entityTypeId && entityTypeId !== "locator") {
-      const breadcrumbsSchema = getBreadcrumbsSchema(data, pageId);
-      const aggregateRatingSchemaBlock = getAggregateRatingSchemaBlock(
-        document,
-        pageId
-      );
+      const breadcrumbsSchema = getBreadcrumbsSchema(data, currentPageUrl);
+      // The aggregateRating block requires a valid page @id
+      const aggregateRatingSchemaBlock = currentPageId
+        ? getAggregateRatingSchemaBlock(document, currentPageId)
+        : undefined;
 
       return {
         "@graph": [
@@ -60,7 +70,7 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
 
     return { "@graph": [parsedSchemaEditorMarkup] };
   } catch (e) {
-    const defaultSchema = removeEmptyValues(getDefaultSchema(document));
+    const defaultSchema = removeEmptyValues(getDefaultSchema(data));
     console.warn("Error resolving schema:", e);
     return { "@graph": [defaultSchema] };
   }

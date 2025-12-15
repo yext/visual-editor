@@ -4,17 +4,18 @@ import { getDirectoryParents } from "./helpers";
 
 export const getBreadcrumbsSchema = (
   data: TemplateRenderProps,
-  pageId: string
+  currentPageUrl: string
 ): Record<string, any> | undefined => {
   // Helper to create a ListItem object
-  const fillBreadcrumbsItem = (position: number, name: string, id: string) => ({
+  const fillBreadcrumbsItem = (
+    position: number,
+    name: string,
+    url: string
+  ) => ({
     "@type": "ListItem",
     position,
     name,
-    item: {
-      "@id": id,
-      "@type": "Thing",
-    },
+    item: url,
   });
 
   const directoryParents = getDirectoryParents(data.document);
@@ -25,7 +26,12 @@ export const getBreadcrumbsSchema = (
       return {
         "@type": "BreadcrumbList",
         "@context": "https://schema.org",
-        itemListElement: [fillBreadcrumbsItem(1, data.document.name, pageId)],
+        "@id": data.document.siteDomain
+          ? `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`
+          : `${data.document.uid}#breadcrumbs`,
+        itemListElement: [
+          fillBreadcrumbsItem(1, data.document.name, currentPageUrl),
+        ],
       };
     }
     // If no parents, do not return breadcrumbs
@@ -37,7 +43,9 @@ export const getBreadcrumbsSchema = (
     fillBreadcrumbsItem(
       index + 1,
       parent.name,
-      data.relativePrefixToRoot + parent.slug
+      data.document.siteDomain
+        ? `https://${data.document.siteDomain}/${parent.slug}`
+        : `/${parent.slug}`
     )
   );
 
@@ -47,7 +55,7 @@ export const getBreadcrumbsSchema = (
       fillBreadcrumbsItem(
         breadcrumbItems.length + 1,
         data.document.name,
-        pageId
+        currentPageUrl
       )
     );
   }
@@ -55,6 +63,9 @@ export const getBreadcrumbsSchema = (
   return {
     "@type": "BreadcrumbList",
     "@context": "https://schema.org",
+    "@id": data.document.siteDomain
+      ? `https://${data.document.siteDomain}/${data.document.uid}#breadcrumbs`
+      : `${data.document.uid}#breadcrumbs`,
     itemListElement: breadcrumbItems,
   };
 };
@@ -89,6 +100,9 @@ export const getAggregateRatingSchemaBlock = (
       // there should be at most one "FIRSTPARTY" so return early when found
       return {
         "@type": "AggregateRating",
+        "@id": document.siteDomain
+          ? `https://${document.siteDomain}/${document.uid}#aggregaterating`
+          : `${document.uid}#aggregaterating`,
         ratingValue: review.averageRating.toString(),
         reviewCount: review.reviewCount.toString(),
         itemReviewed: {
