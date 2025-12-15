@@ -449,10 +449,14 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
         imageSlotProps?.parentData?.image ||
         (imageSlotProps &&
           (imageSlotProps?.data.image.field ||
-            ("url" in imageSlotProps.data.image.constantValue &&
+            (imageSlotProps.data.image.constantValue &&
+              "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
+            (imageSlotProps.data.image.constantValue &&
+              "url" in imageSlotProps.data.image.constantValue &&
               imageSlotProps.data.image.constantValue.url) ||
-            ("image" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.image.url)))
+            (imageSlotProps.data.image.constantValue &&
+              "image" in imageSlotProps.data.image.constantValue &&
+              imageSlotProps.data.image.constantValue.image?.url)))
     );
     const showName = Boolean(
       person?.name ||

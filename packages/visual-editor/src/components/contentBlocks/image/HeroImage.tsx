@@ -10,6 +10,7 @@ import {
   pt,
   imgSizesHelper,
   AssetImageType,
+  TranslatableAssetImage,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { updateFields } from "../../pageSections/HeroSection";
@@ -36,11 +37,20 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
   );
 
   const getImageUrl = (
-    image: ImageType | ComplexImageType | AssetImageType | undefined
+    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined
   ): string | undefined => {
     if (!image) {
       return undefined;
     }
+
+    if ("hasLocalizedValue" in image) {
+      const localized = image[i18n.language];
+      if (typeof localized === "object") {
+        return localized.url;
+      }
+      return undefined;
+    }
+
     if ("image" in image) {
       return image.image?.url;
     }

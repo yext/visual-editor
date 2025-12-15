@@ -19,6 +19,7 @@ import {
   ImgSizesByBreakpoint,
   resolveDataFromParent,
   AssetImageType,
+  TranslatableAssetImage,
 } from "@yext/visual-editor";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
@@ -29,7 +30,9 @@ const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";
 export interface ImageWrapperProps {
   data: {
     /** The image to display. */
-    image: YextEntityField<ImageType | ComplexImageType | AssetImageType>;
+    image: YextEntityField<
+      ImageType | ComplexImageType | TranslatableAssetImage
+    >;
   };
 
   /** Size and aspect ratio of the image. */
@@ -38,7 +41,7 @@ export interface ImageWrapperProps {
   /** @internal Controlled data from the parent section. */
   parentData?: {
     field: string;
-    image: ImageType | ComplexImageType | AssetImageType | undefined;
+    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined;
   };
 
   /** Additional CSS classes to apply to the image. */
@@ -53,15 +56,15 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      image: YextField<any, ImageType | ComplexImageType | AssetImageType>(
-        msg("fields.options.image", "Image"),
-        {
-          type: "entityField",
-          filter: {
-            types: ["type.image"],
-          },
-        }
-      ),
+      image: YextField<
+        any,
+        ImageType | ComplexImageType | TranslatableAssetImage
+      >(msg("fields.options.image", "Image"), {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+        },
+      }),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -96,9 +99,17 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
   }, [parentData, data.image, i18n.language, streamDocument]);
 
   const getImageUrl = (
-    image: ImageType | ComplexImageType | AssetImageType | undefined
+    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined
   ): string | undefined => {
     if (!image) {
+      return undefined;
+    }
+
+    if ("hasLocalizedValue" in image) {
+      const localized = image[i18n.language];
+      if (typeof localized === "object") {
+        return localized.url;
+      }
       return undefined;
     }
 
