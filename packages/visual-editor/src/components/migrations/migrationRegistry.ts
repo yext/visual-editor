@@ -43,8 +43,8 @@ import { expandedHeaderSlots } from "./0041_expanded_header_slots.ts";
 import { expandedFooterSlots } from "./0042_expanded_footer_slots.ts";
 import { setDefaultCtaVariants } from "./0043_set_default_cta_variants.ts";
 import { fixRootMetaFieldsMigration } from "./0044_fix_root_meta_fields.ts";
-
 import { mergeStickyAndFixedHeader } from "./0046_merge_sticky_and_fixed_header.ts";
+import { fixPromoSectionSlots } from "./0047_fix_promo_section_slots.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -98,4 +98,5 @@ export const migrationRegistry: MigrationRegistry = [
   fixRootMetaFieldsMigration,
   {},
   mergeStickyAndFixedHeader,
+  fixPromoSectionSlots,
 ];
