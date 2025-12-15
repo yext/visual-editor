@@ -87,8 +87,8 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
     <Background background={styles.backgroundColor}>
       <slots.BreadcrumbsSlot style={{ height: "auto" }} />
       <PageSection className="flex flex-col items-center gap-2">
-        <slots.SiteNameSlot style={{ height: "auto" }} />
-        <slots.TitleSlot style={{ height: "auto" }} />
+        <slots.SiteNameSlot style={{ height: "auto", width: "100%" }} />
+        <slots.TitleSlot style={{ height: "auto", width: "100%" }} />
       </PageSection>
       {streamDocument.dm_directoryChildren &&
         isDirectoryGrid(streamDocument.dm_directoryChildren) && (
