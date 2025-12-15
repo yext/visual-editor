@@ -17,7 +17,8 @@ export {
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
 export { resolveYextEntityField } from "./resolveYextEntityField.ts";
-export { clearPuckCache } from "./clearPuckCache.ts";
+// export { clearPuckCache, getPuckCacheSize } from "./clearPuckCache.ts";
+// export { clearPuckCacheAsync } from "./clearPuckCacheAsync.ts";
 export {
   resolveUrlTemplateOfChild,
   resolvePageSetUrlTemplate,

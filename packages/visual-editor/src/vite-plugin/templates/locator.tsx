@@ -25,7 +25,9 @@ import {
   getCanonicalUrl,
   migrate,
   migrationRegistry,
-  clearPuckCache,
+  // clearPuckCache,
+  // getPuckCacheSize,
+  // clearPuckCacheAsync,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -113,14 +115,30 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     locatorConfig,
     document
   );
+
+  // Log cache size before resolveAllData
+  // const cacheSizeBefore = getPuckCacheSize();
+  // console.log(
+  //   `[VE transformProps] Before resolveAllData for document ${document.id}: cache size = ${cacheSizeBefore}`
+  // );
+
   const updatedData = await resolveAllData(migratedData, locatorConfig, {
     streamDocument: document,
   });
 
+  // Log cache size after resolveAllData but before clearing
+  // const cacheSizeAfterResolve = getPuckCacheSize();
+  // console.log(
+  //   `[VE transformProps] After resolveAllData for document ${document.id}: cache size = ${cacheSizeAfterResolve} (was ${cacheSizeBefore})`
+  // );
+
   // Clear Puck's internal cache after resolving data to prevent memory leaks
   // when processing many pages. The cache stores resolved data per component ID
   // and never gets cleared, causing memory to accumulate across page invocations.
-  clearPuckCache();
+  // The cache also stores parentData with references to document objects, which
+  // prevents garbage collection and causes exponential memory growth.
+  // Use async version for Deno compatibility
+  // await clearPuckCacheAsync();
 
   return { ...props, data: updatedData };
 };
