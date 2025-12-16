@@ -30,7 +30,13 @@ export type PresetImageType =
   | "google-play"
   | "galaxy-store"
   | "app-gallery"
-  | "uber-eats";
+  | "deliveroo"
+  | "doordash"
+  | "grubhub"
+  | "skip-the-dishes"
+  | "postmates"
+  | "uber-eats"
+  | "ezcater";
 
 /** Data for the HeroSection */
 export type HeroSectionType = {
