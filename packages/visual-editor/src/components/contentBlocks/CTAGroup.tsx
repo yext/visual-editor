@@ -1,22 +1,21 @@
-import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
-  useDocument,
-  msg,
-  resolveComponentData,
+  BackgroundStyle,
   CTA,
   PresetImageType,
   YextField,
+  msg,
   pt,
-  BackgroundStyle,
-  backgroundColors,
+  resolveComponentData,
+  useDocument,
 } from "@yext/visual-editor";
-import { CTAWrapperProps } from "./CtaWrapper.tsx";
-import { CTAVariant } from "../atoms/cta.tsx";
+import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { CTAVariant } from "../atoms/cta.tsx";
+import { CTAWrapperProps } from "./CtaWrapper.tsx";
 
 // TODO: re-enable CTA Group
 
@@ -42,7 +41,6 @@ const defaultButton: BasicCTAProps = {
   },
   variant: "primary",
   presetImage: "app-store",
-  color: backgroundColors.color1.value,
 };
 
 export interface CTAGroupProps {
@@ -103,8 +101,6 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
       }
     >
       {buttons.map((button, idx) => {
-        const resolvedColor = button.color;
-
         const cta = resolveComponentData(
           button.entityField,
           locale,
@@ -141,7 +137,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                 ctaType={ctaType}
                 presetImageType={button.presetImage}
                 className="truncate w-full"
-                color={resolvedColor}
+                color={button.color}
               />
             </div>
           )

@@ -1,5 +1,3 @@
-import * as React from "react";
-import { useTranslation } from "react-i18next";
 import {
   ComponentConfig,
   Fields,
@@ -7,22 +5,22 @@ import {
   setDeep,
 } from "@measured/puck";
 import {
-  useDocument,
-  EntityField,
-  YextEntityField,
-  msg,
-  pt,
-  YextField,
-  resolveComponentData,
-  EnhancedTranslatableCTA,
+  BackgroundStyle,
   CTA,
   CTAVariant,
+  EnhancedTranslatableCTA,
+  EntityField,
+  PresetImageType,
+  YextEntityField,
+  YextField,
+  msg,
+  pt,
+  resolveComponentData,
   resolveDataFromParent,
   themeManagerCn,
-  PresetImageType,
-  BackgroundStyle,
-  backgroundColors,
+  useDocument,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,
   getCTAType,
@@ -142,8 +140,6 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     resolvedLabel = t("getDirections", "Get Directions");
   }
 
-  const resolvedColor = styles.color;
-
   const showCTA =
     cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
 
@@ -169,7 +165,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           variant={styles.variant}
           className={combinedClassName}
           eventName={eventName}
-          color={resolvedColor}
+          color={styles.color}
         />
       )}
     </EntityField>
@@ -198,14 +194,13 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     styles: {
       variant: "primary",
       presetImage: "app-store",
-      color: backgroundColors.color1.value,
     },
   },
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
     const ctaVariant = data.props.styles.variant;
-
     const ctaType = getCTAType(data.props.data.entityField).ctaType;
+
     if (ctaType === "presetImage") {
       setDeep(updatedFields, "styles.objectFields.variant.visible", false);
       setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);

@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, setDeep } from "@measured/puck";
 import "@yext/pages-components/style.css";
 import {
@@ -6,10 +5,10 @@ import {
   CTA,
   CTAVariant,
   YextField,
-  backgroundColors,
   msg,
   resolveDataFromParent,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 
 export type GetDirectionsProps = {
   variant: CTAVariant;
@@ -29,7 +28,6 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
 
 const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
   const { t } = useTranslation();
-  const resolvedColor = color;
 
   return (
     <CTA
@@ -39,7 +37,7 @@ const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
       linkType={"DRIVING_DIRECTIONS"}
       target="_blank"
       variant={variant}
-      color={resolvedColor}
+      color={color}
     />
   );
 };
@@ -49,7 +47,6 @@ export const GetDirections: ComponentConfig<{ props: GetDirectionsProps }> = {
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
-    color: backgroundColors.color1.value,
   },
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(getDirectionsFields, data);
