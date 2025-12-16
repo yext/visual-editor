@@ -143,6 +143,7 @@
   "customSearchArea": "Kohandatud otsinguala",
   "date": "Kuupäev",
   "dateAndTime": "Kuupäev ja kellaaeg",
+  "default": "Vaikimisi",
   "delete": "Kustutama",
   "deleteItem": "Kustuta üksus",
   "discardChanges": {

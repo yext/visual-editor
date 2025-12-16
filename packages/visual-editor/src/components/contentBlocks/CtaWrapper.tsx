@@ -142,8 +142,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     resolvedLabel = t("getDirections", "Get Directions");
   }
 
-  const resolvedColor = styles.color ?? backgroundColors.color1.value;
-  const isDefault = resolvedColor?.bgColor?.startsWith("bg-");
+  const resolvedColor = styles.color;
 
   const showCTA =
     cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
@@ -170,7 +169,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           variant={styles.variant}
           className={combinedClassName}
           eventName={eventName}
-          color={!isDefault ? resolvedColor : undefined}
+          color={resolvedColor}
         />
       )}
     </EntityField>

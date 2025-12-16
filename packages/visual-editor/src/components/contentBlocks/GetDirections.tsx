@@ -29,8 +29,7 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
 
 const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
   const { t } = useTranslation();
-  const resolvedColor = color ?? backgroundColors.color1.value;
-  const isDefault = resolvedColor?.bgColor?.startsWith("bg-");
+  const resolvedColor = color;
 
   return (
     <CTA
@@ -40,7 +39,7 @@ const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
       linkType={"DRIVING_DIRECTIONS"}
       target="_blank"
       variant={variant}
-      color={!isDefault ? resolvedColor : undefined}
+      color={resolvedColor}
     />
   );
 };

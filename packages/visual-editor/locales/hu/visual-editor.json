@@ -143,6 +143,7 @@
   "customSearchArea": "Egyedi keresési terület",
   "date": "Dátum",
   "dateAndTime": "Dátum és idő",
+  "default": "Alapértelmezett",
   "delete": "Töröl",
   "deleteItem": "Az elem törlése",
   "discardChanges": {

@@ -160,16 +160,13 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
   },
 ];
 
-const siteColorOptions: ComboboxOptionGroup[] = [
+export const siteColorOptions: ComboboxOptionGroup[] = [
   {
     title: msg("siteColors", "Site Colors"),
     options: [
       {
         label: msg("default", "Default"),
-        value: {
-          bgColor: "bg-palette-primary",
-          textColor: "text-palette-primary-contrast",
-        },
+        value: undefined,
         color: backgroundColors.color1.value.bgColor,
       },
       ...Object.entries(backgroundColors)

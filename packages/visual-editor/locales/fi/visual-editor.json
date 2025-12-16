@@ -143,6 +143,7 @@
   "customSearchArea": "Mukautettu hakualue",
   "date": "Päivämäärä",
   "dateAndTime": "Päivämäärä ja aika",
+  "default": "Oletus",
   "delete": "Poistaa",
   "deleteItem": "Poista kohde",
   "discardChanges": {

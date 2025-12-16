@@ -149,6 +149,7 @@
   "customSearchArea": "Brugerdefineret søgeområde",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
+  "default": "Misligholdelse",
   "delete": "Slet",
   "deleteItem": "Slet vare",
   "discardChanges": {

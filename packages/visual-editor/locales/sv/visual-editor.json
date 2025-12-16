@@ -144,6 +144,7 @@
   "customSearchArea": "Anpassad sökområde",
   "date": "Datum",
   "dateAndTime": "Datum och tid",
+  "default": "Standard",
   "delete": "Radera",
   "deleteItem": "Ta bort objekt",
   "discardChanges": {
