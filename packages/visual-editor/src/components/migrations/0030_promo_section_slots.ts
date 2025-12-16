@@ -59,7 +59,7 @@ export const promoSectionSlots: Migration = {
                 id: `${props.id}-HeadingSlot`,
                 data: {
                   text: {
-                    field,
+                    field: field ? `${field}.title` : "",
                     constantValue: constantValue.title ?? "",
                     constantValueEnabled: constantValueOverride.title ?? false,
                   },
@@ -81,7 +81,7 @@ export const promoSectionSlots: Migration = {
                 id: `${props.id}-DescriptionSlot`,
                 data: {
                   text: {
-                    field,
+                    field: field ? `${field}.description` : "",
                     constantValue: constantValue.description ?? "",
                     constantValueEnabled:
                       constantValueOverride.description ?? false,
@@ -120,7 +120,7 @@ export const promoSectionSlots: Migration = {
                 id: `${props.id}-ImageSlot`,
                 data: {
                   image: {
-                    field: isVideo ? "" : field,
+                    field: isVideo ? "" : field ? `${field}.image` : "",
                     constantValue: isVideo ? {} : (constantValue.image ?? {}),
                     constantValueEnabled: constantValueOverride.image ?? false,
                   },
@@ -161,7 +161,7 @@ export const promoSectionSlots: Migration = {
                 id: `${props.id}-CTASlot`,
                 data: {
                   entityField: {
-                    field,
+                    field: field ? `${field}.cta` : "",
                     constantValue: constantValue.cta ?? {},
                     constantValueEnabled: constantValueOverride.cta ?? false,
                     selectedType: "type.cta",

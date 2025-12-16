@@ -249,6 +249,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
 
 export const LocalDevOverrideButtons = () => {
   const getPuck = useGetPuck();
+  const streamDocument = useDocument();
 
   return (
     <>
@@ -272,7 +273,12 @@ export const LocalDevOverrideButtons = () => {
           try {
             data = JSON.parse(prompt("Enter layout data:") ?? "{}");
           } finally {
-            const migratedData = migrate(data, migrationRegistry, config, {});
+            const migratedData = migrate(
+              data,
+              migrationRegistry,
+              config,
+              streamDocument
+            );
             setHistories([...histories, { state: { data: migratedData } }]);
           }
         }}
