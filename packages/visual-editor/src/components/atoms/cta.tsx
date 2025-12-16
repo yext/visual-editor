@@ -6,7 +6,7 @@ import { Button, ButtonProps } from "./button.js";
 import { themeManagerCn, useDocument } from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
-import { PresetImageType } from "../../types/types";
+import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
 
 export type CTAProps = {
@@ -124,6 +124,13 @@ const useResolvedCtaProps = (props: CTAProps) => {
     {
       // Let preset images determine their natural size - no forced width constraints
       "w-fit h-[51px] items-center justify-center": ctaType === "presetImage",
+      // Special handling for food delivery services to give them more visual prominence
+      "!w-auto":
+        ctaType === "presetImage" &&
+        props.presetImageType &&
+        (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+          props.presetImageType
+        ),
     },
     className
   );

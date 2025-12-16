@@ -25,18 +25,24 @@ export type EnhancedTranslatableCTA = TranslatableCTA & {
 };
 
 /** Preset image types for CTA buttons - app store or food delivery logos */
+export const FOOD_DELIVERY_SERVICES = [
+  "deliveroo",
+  "doordash",
+  "grubhub",
+  "skip-the-dishes",
+  "postmates",
+  "uber-eats",
+  "ezcater",
+] as const;
+
+export type FoodDeliveryServiceType = (typeof FOOD_DELIVERY_SERVICES)[number];
+
 export type PresetImageType =
   | "app-store"
   | "google-play"
   | "galaxy-store"
   | "app-gallery"
-  | "deliveroo"
-  | "doordash"
-  | "grubhub"
-  | "skip-the-dishes"
-  | "postmates"
-  | "uber-eats"
-  | "ezcater";
+  | FoodDeliveryServiceType;
 
 /** Data for the HeroSection */
 export type HeroSectionType = {
