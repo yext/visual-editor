@@ -38,14 +38,14 @@ const mainDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              url: "https://placehold.co/100",
+                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                               height: 100,
                               width: 100,
                             },
                             constantValueEnabled: true,
                           },
                         },
-                        styles: { aspectRatio: 2, width: 100 },
+                        styles: { aspectRatio: 1, width: 100 },
                       },
                     },
                   ],
@@ -1781,7 +1781,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
+                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
                                       height: 80,
                                       width: 80,
                                     },
@@ -1946,7 +1946,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
+                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
                                       height: 80,
                                       width: 80,
                                     },
@@ -2109,7 +2109,7 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
+                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
                                       height: 80,
                                       width: 80,
                                     },
@@ -3422,7 +3422,7 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://placehold.co/100",
+                      url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                       height: 100,
                       width: 100,
                       alternateText: { en: "Logo", hasLocalizedValue: "true" },
@@ -3430,7 +3430,7 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { width: 100, aspectRatio: 1.78 },
+                styles: { width: 100, aspectRatio: 1 },
               },
             },
           ],
@@ -3835,14 +3835,14 @@ const directoryDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              url: "https://placehold.co/100",
+                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                               height: 100,
                               width: 100,
                             },
                             constantValueEnabled: true,
                           },
                         },
-                        styles: { aspectRatio: 2, width: 100 },
+                        styles: { aspectRatio: 1, width: 100 },
                       },
                     },
                   ],
@@ -4157,7 +4157,7 @@ const directoryDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://placehold.co/100",
+                      url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                       height: 100,
                       width: 100,
                       alternateText: { en: "Logo", hasLocalizedValue: "true" },
@@ -4165,7 +4165,7 @@ const directoryDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { width: 100, aspectRatio: 1.78 },
+                styles: { width: 100, aspectRatio: 1 },
               },
             },
           ],

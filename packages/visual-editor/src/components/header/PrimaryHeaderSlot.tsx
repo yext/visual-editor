@@ -233,7 +233,8 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             image: {
               field: "",
               constantValue: {
-                url: "https://placehold.co/100",
+                // Placeholder logo, uploaded to account 4174974
+                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                 height: 100,
                 width: 100,
               },
@@ -241,7 +242,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             },
           },
           styles: {
-            aspectRatio: 2,
+            aspectRatio: 1,
             width: 100,
           },
         } satisfies ImageWrapperProps,
