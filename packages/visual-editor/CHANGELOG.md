@@ -1,3 +1,19 @@
+#### 1.0.2 (2025-12-15)
+
+##### New Features
+
+- unique schema identifiers and subtype classification ([#942](https://github.com/yext/visual-editor/pull/942)) ([51affe12](https://github.com/yext/visual-editor/commit/51affe126f71bc2c218accdd6b6d1526e43724dc))
+- added global transformations to heading and body ([#926](https://github.com/yext/visual-editor/pull/926)) ([538fda4c](https://github.com/yext/visual-editor/commit/538fda4c030ef9968854efbe614bc3868aa7ebd3))
+
+##### Bug Fixes
+
+- promo slots migration ([#948](https://github.com/yext/visual-editor/pull/948)) ([99d85093](https://github.com/yext/visual-editor/commit/99d85093e35720d89afe2ac1b4e05d01210ad46c))
+- add coordinate validation before making LngLat object ([#947](https://github.com/yext/visual-editor/pull/947)) ([0b45176f](https://github.com/yext/visual-editor/commit/0b45176f1952dac8d2f0086174e40e65119bdc03))
+- fixed header rendering flash and product card image ratio ([#946](https://github.com/yext/visual-editor/pull/946)) ([638908d5](https://github.com/yext/visual-editor/commit/638908d5dff010f62f91606d47e0686341a88980))
+- dev plugin during local testing ([#945](https://github.com/yext/visual-editor/pull/945)) ([e381a5d9](https://github.com/yext/visual-editor/commit/e381a5d92f7086891be753d32e9b7081e1dddc5e))
+- wrap nearby location link ([#941](https://github.com/yext/visual-editor/pull/941)) ([50166bfd](https://github.com/yext/visual-editor/commit/50166bfdce79ff984d9f19952a0a5d79b9cd0876))
+- tab slowness ([#940](https://github.com/yext/visual-editor/pull/940)) ([2b730069](https://github.com/yext/visual-editor/commit/2b73006969067a0b7f35056cf5f643f37291e209))
+
 #### 1.0.1 (2025-12-10)
 
 ##### New Features
