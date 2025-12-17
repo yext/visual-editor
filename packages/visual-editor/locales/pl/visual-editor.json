@@ -144,6 +144,7 @@
   "customSearchArea": "Niestandardowy obszar wyszukiwania",
   "date": "Data",
   "dateAndTime": "Data i godzina",
+  "default": "Domyślny",
   "delete": "Usuwać",
   "deleteItem": "Usuń element",
   "discardChanges": {
@@ -187,6 +188,7 @@
     "cards": "Karty",
     "category": "Kategoria",
     "collapseDays": "Dni upadku",
+    "color": "Kolor",
     "columns": "Kolumny",
     "commaSeparated": "Oddzielone przecinkiem",
     "contributorName": "Nazwa współpracownika",
@@ -299,8 +301,8 @@
       "compact": "Kompaktowy",
       "ctaVariant": {
         "link": "Połączyć",
-        "primary": "Podstawowy",
-        "secondary": "Wtórny"
+        "primary": "Solidny",
+        "secondary": "Zarys"
       },
       "dark": "Ciemny",
       "default": "Domyślny",

@@ -143,6 +143,7 @@
   "customSearchArea": "Özel arama alanı",
   "date": "Tarih",
   "dateAndTime": "Tarih ve saat",
+  "default": "Varsayılan",
   "delete": "Silmek",
   "deleteItem": "Öğeyi sil",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Kart",
     "category": "Kategori",
     "collapseDays": "Çökme günleri",
+    "color": "Renk",
     "columns": "Sütunlar",
     "commaSeparated": "Virgülle Ayrılmış",
     "contributorName": "Katkıda bulunan adı",
@@ -298,8 +300,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Bağlantı",
-        "primary": "Öncelik",
-        "secondary": "İkincil"
+        "primary": "Sağlam",
+        "secondary": "Taslak"
       },
       "dark": "Karanlık",
       "default": "Varsayılan",

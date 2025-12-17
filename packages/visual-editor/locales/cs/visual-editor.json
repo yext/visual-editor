@@ -148,6 +148,7 @@
   "customSearchArea": "Vlastní vyhledávací oblast",
   "date": "Datum",
   "dateAndTime": "Datum a čas",
+  "default": "Výchozí",
   "delete": "Vymazat",
   "deleteItem": "Odstranit položku",
   "discardChanges": {
@@ -191,6 +192,7 @@
     "cards": "Karty",
     "category": "Kategorie",
     "collapseDays": "Dny kolapsu",
+    "color": "Barva",
     "columns": "Sloupce",
     "commaSeparated": "Čárkou oddělené",
     "contentAlignment": "Zarovnání obsahu",
@@ -305,8 +307,8 @@
       "compact": "Kompaktní",
       "ctaVariant": {
         "link": "Odkaz",
-        "primary": "Primární",
-        "secondary": "Sekundární"
+        "primary": "Solidní",
+        "secondary": "Obrys"
       },
       "dark": "Tma",
       "default": "Výchozí",
