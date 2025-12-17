@@ -465,7 +465,6 @@ describe("NearbyLocationsSection", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      console.log("NEW TEST", name);
       const data = migrate(
         {
           root: {
