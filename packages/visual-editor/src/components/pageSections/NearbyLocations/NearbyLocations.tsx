@@ -15,16 +15,9 @@ import {
   VisibilityWrapper,
   msg,
   HeadingTextProps,
-  Body,
-  pt,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  defaultNearbyLocationsCardsProps,
-  NearbyLocationCardsWrapperProps,
-} from "./NearbyLocationsCardsWrapper";
-import { MapPinOff } from "lucide-react";
-import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper";
 
 export interface NearbyLocationsSectionProps {
   /**
@@ -99,63 +92,16 @@ const nearbyLocationsSectionFields: Fields<NearbyLocationsSectionProps> = {
   ),
 };
 
-/** @internal */
-const NearbyLocationsEmptyState: React.FC<{
-  backgroundColor?: BackgroundStyle;
-  radius?: number;
-}> = ({ backgroundColor, radius }) => {
-  const templateMetadata = useTemplateMetadata();
-  const entityTypeDisplayName =
-    templateMetadata?.entityTypeDisplayName?.toLowerCase();
-
-  return (
-    <PageSection background={backgroundColor}>
-      <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
-        <MapPinOff className="w-12 h-12 text-gray-400" />
-        <div className="flex flex-col items-center gap-0">
-          <Body variant="base" className="text-gray-500 font-medium">
-            {pt(
-              "nearbyLocationsEmptyStateSectionHidden",
-              "Section hidden for this {{entityType}}",
-              {
-                entityType: entityTypeDisplayName
-                  ? entityTypeDisplayName
-                  : "page",
-              }
-            )}
-          </Body>
-          <Body variant="base" className="text-gray-500 font-normal">
-            {pt(
-              "nearbyLocationsEmptyState",
-              "No {{entityType}} within {{radius}} miles",
-              {
-                entityType: entityTypeDisplayName
-                  ? entityTypeDisplayName
-                  : "entity",
-                radius: radius ?? 10,
-              }
-            )}
-          </Body>
-        </div>
-      </div>
-    </PageSection>
-  );
-};
-
 const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
   props
 ) => {
   const { styles, slots, puck } = props;
   const cardsWrapperRef = React.useRef<HTMLDivElement>(null);
-  const [showSection, setShowSection] = React.useState<boolean>(true);
-  const [isEmptyState, setIsEmptyState] = React.useState<boolean>(false);
-
-  // Get cards wrapper props to access radius for empty state
-  const cardsWrapperSlot = slots.CardsWrapperSlot;
-  const cardsWrapperProps =
-    Array.isArray(cardsWrapperSlot) && cardsWrapperSlot[0]
-      ? (cardsWrapperSlot[0].props as NearbyLocationCardsWrapperProps)
-      : undefined;
+  // Hide the header if there are no nearby locations and it is the editor
+  const [showHeading, setShowHeading] = React.useState<boolean>(true);
+  // Hide the entire section if there are no nearby locations and it is the live page
+  const [hideEntireSection, setHideEntireSection] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     // Watch the cards wrapper element to see if any cards are rendered
@@ -172,8 +118,8 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
       const isLoading = element.querySelector('[data-loading="true"]') !== null; // Check for loading state
       const shouldShow =
         hasContent || isLoading || (hasHeight && !hasEmptyStateMarker);
-      setShowSection(shouldShow);
-      setIsEmptyState(hasEmptyStateMarker && puck.isEditing);
+      setShowHeading(shouldShow);
+      setHideEntireSection(hasEmptyStateMarker && !puck.isEditing);
     };
 
     const observer = new ResizeObserver(() => {
@@ -201,22 +147,14 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
   }, [puck.isEditing]);
 
   // Show empty state if detected
-  if (isEmptyState) {
-    return (
-      <NearbyLocationsEmptyState
-        backgroundColor={styles?.backgroundColor}
-        radius={cardsWrapperProps?.data?.radius}
-      />
-    );
+  if (hideEntireSection) {
+    return <></>;
   }
 
   return (
-    <PageSection
-      background={styles?.backgroundColor}
-      outerClassName={showSection ? undefined : "p-0 m-0"}
-    >
+    <PageSection background={styles?.backgroundColor}>
       <div className="space-y-6">
-        {showSection && (
+        {showHeading && (
           <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
         )}
         <div ref={cardsWrapperRef}>
