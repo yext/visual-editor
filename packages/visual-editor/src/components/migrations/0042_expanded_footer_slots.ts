@@ -20,18 +20,38 @@ export const expandedFooterSlots: Migration = {
         expandedFooter,
       } = props.data.primaryFooter || {};
 
-      const logo = typeof rawLogo === "string" ? { url: rawLogo } : rawLogo;
+      let logo = typeof rawLogo === "string" ? { url: rawLogo } : rawLogo;
+      if (logo && !logo.url) {
+        logo = undefined;
+      }
+      if (logo) {
+        logo = {
+          height: 100,
+          width: 100,
+          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          ...logo,
+        };
+      }
 
       const utilityImages = rawUtilityImages?.map((img: any) => {
-        if (img.image) {
-          return img;
+        let processedImg = img;
+        if (!img.image) {
+          processedImg = {
+            image: {
+              url: img.url,
+            },
+            linkTarget: img.linkTarget,
+          };
         }
-        return {
-          image: {
-            url: img.url,
-          },
-          linkTarget: img.linkTarget,
-        };
+        if (processedImg.image) {
+          processedImg.image = {
+            height: 60,
+            width: 60,
+            alternateText: { en: "Utility Image", hasLocalizedValue: "true" },
+            ...processedImg.image,
+          };
+        }
+        return processedImg;
       });
 
       // Extract data from secondaryFooter
