@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 41,
+      version: 46,
       title: { field: "name", constantValue: "", constantValueEnabled: false },
       description: {
         field: "description",
@@ -3376,10 +3376,6 @@ const mainDefaultLayout = {
               props: {
                 id: "NearbyLocationCardsWrapper-7d43eba1-9a72-49eb-876d-3b77d672198b",
                 data: {
-                  coordinate: {
-                    field: "yextDisplayCoordinate",
-                    constantValue: { latitude: 0, longitude: 0 },
-                  },
                   radius: 10,
                   limit: 3,
                 },
