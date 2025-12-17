@@ -1,20 +1,21 @@
-import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
-  useDocument,
-  msg,
-  resolveComponentData,
+  BackgroundStyle,
   CTA,
   PresetImageType,
   YextField,
+  msg,
   pt,
+  resolveComponentData,
+  useDocument,
 } from "@yext/visual-editor";
-import { CTAWrapperProps } from "./CtaWrapper.tsx";
-import { CTAVariant } from "../atoms/cta.tsx";
+import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { CTAVariant } from "../atoms/cta.tsx";
+import { CTAWrapperProps } from "./CtaWrapper.tsx";
 
 // TODO: re-enable CTA Group
 
@@ -25,6 +26,7 @@ type BasicCTAProps = {
   variant: CTAVariant;
   /** The image to use if the CTA is set to preset image */
   presetImage?: PresetImageType;
+  color?: BackgroundStyle;
 };
 
 const defaultButton: BasicCTAProps = {
@@ -73,6 +75,10 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
       presetImage: YextField(msg("fields.presetImage", "Preset Image"), {
         type: "select",
         options: "PRESET_IMAGE",
+      }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
       }),
     },
     getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
@@ -131,6 +137,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                 ctaType={ctaType}
                 presetImageType={button.presetImage}
                 className="truncate w-full"
+                color={button.color}
               />
             </div>
           )

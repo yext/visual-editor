@@ -192,6 +192,10 @@ const tests: ComponentTest[] = [
       }),
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
       c_nearbyHeader: "Nearby",
+      yextDisplayCoordinate: {
+        latitude: 25.73398,
+        longitude: -80.319968,
+      },
     },
     props: {
       data: {
@@ -361,6 +365,10 @@ const tests: ComponentTest[] = [
       }),
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
       c_nearbyHeader: "Nearby",
+      yextDisplayCoordinate: {
+        latitude: 25.73398,
+        longitude: -80.319968,
+      },
     },
     props: {
       styles: {

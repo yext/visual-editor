@@ -167,6 +167,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
             srcSet={getMapboxStaticImageUrl("medium")}
           />
           <img
+            loading="lazy"
             src={getMapboxStaticImageUrl("large")}
             className="components h-full w-full object-cover"
             alt={t("map", "Map")}
@@ -179,7 +180,12 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
         </span>
         <span className="absolute bottom-0 left-0">
           <a href="https://www.mapbox.com/">
-            <img src={mapboxLogo} alt="Mapbox" className="w-10" />
+            <img
+              loading="lazy"
+              src={mapboxLogo}
+              alt="Mapbox"
+              className="w-10"
+            />
           </a>
         </span>
       </div>

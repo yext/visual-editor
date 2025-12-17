@@ -143,6 +143,7 @@
   "customSearchArea": "自定義搜索區域",
   "date": "日期",
   "dateAndTime": "日期和時間",
+  "default": "預設",
   "delete": "刪除",
   "deleteItem": "刪除項目",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "牌",
     "category": "類別",
     "collapseDays": "崩潰的日子",
+    "color": "顏色",
     "columns": "列",
     "commaSeparated": "逗號分隔",
     "contributorName": "貢獻者名稱",
@@ -298,8 +300,8 @@
       "compact": "袖珍的",
       "ctaVariant": {
         "link": "關聯",
-        "primary": "基本的",
-        "secondary": "次要"
+        "primary": "堅硬的",
+        "secondary": "大綱"
       },
       "dark": "黑暗的",
       "default": "預設",
