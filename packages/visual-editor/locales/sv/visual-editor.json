@@ -144,6 +144,7 @@
   "customSearchArea": "Anpassad sökområde",
   "date": "Datum",
   "dateAndTime": "Datum och tid",
+  "default": "Standard",
   "delete": "Radera",
   "deleteItem": "Ta bort objekt",
   "discardChanges": {
@@ -187,6 +188,7 @@
     "cards": "Kort",
     "category": "Kategori",
     "collapseDays": "Kollapsdagar",
+    "color": "Färg",
     "columns": "Kolumner",
     "commaSeparated": "Kommaseparerad",
     "contributorName": "Bidragsgivarnamn",
@@ -299,8 +301,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Länk",
-        "primary": "Primär",
-        "secondary": "Sekundär"
+        "primary": "Fast",
+        "secondary": "Skissera"
       },
       "dark": "Mörk",
       "default": "Standard",

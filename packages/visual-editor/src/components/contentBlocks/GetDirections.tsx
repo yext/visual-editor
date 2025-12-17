@@ -1,10 +1,18 @@
-import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, setDeep } from "@measured/puck";
 import "@yext/pages-components/style.css";
-import { CTA, CTAVariant, YextField, msg } from "@yext/visual-editor";
+import {
+  BackgroundStyle,
+  CTA,
+  CTAVariant,
+  YextField,
+  msg,
+  resolveDataFromParent,
+} from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 
 export type GetDirectionsProps = {
   variant: CTAVariant;
+  color?: BackgroundStyle;
 };
 
 const getDirectionsFields: Fields<GetDirectionsProps> = {
@@ -12,20 +20,24 @@ const getDirectionsFields: Fields<GetDirectionsProps> = {
     type: "radio",
     options: "CTA_VARIANT",
   }),
+  color: YextField(msg("fields.color", "Color"), {
+    type: "select",
+    options: "SITE_COLOR",
+  }),
 };
 
-const GetDirectionsComponent = ({ variant }: GetDirectionsProps) => {
+const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
   const { t } = useTranslation();
 
   return (
     <CTA
       ctaType="getDirections"
-      className="font-bold"
       eventName={`getDirections`}
       label={t("getDirections", "Get Directions")}
       linkType={"DRIVING_DIRECTIONS"}
       target="_blank"
       variant={variant}
+      color={color}
     />
   );
 };
@@ -35,6 +47,13 @@ export const GetDirections: ComponentConfig<{ props: GetDirectionsProps }> = {
   fields: getDirectionsFields,
   defaultProps: {
     variant: "primary",
+  },
+  resolveFields: (data) => {
+    const updatedFields = resolveDataFromParent(getDirectionsFields, data);
+    const ctaVariant = data.props.variant;
+    const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
+    setDeep(updatedFields, "color.visible", showColor);
+    return updatedFields;
   },
   render: (props) => <GetDirectionsComponent {...props} />,
 };
