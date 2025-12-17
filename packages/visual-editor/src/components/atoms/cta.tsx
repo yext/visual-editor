@@ -257,7 +257,7 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
-        cta={{ link: normalizeSlug(link), linkType }}
+        cta={{ link: normalizeSlug(link) ?? "#", linkType }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}
