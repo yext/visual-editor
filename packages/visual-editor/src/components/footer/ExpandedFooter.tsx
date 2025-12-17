@@ -12,7 +12,8 @@ import {
 } from "@yext/visual-editor";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
-const PLACEHOLDER_LOGO_IMAGE: string = "https://placehold.co/100";
+const PLACEHOLDER_LOGO_IMAGE: string =
+  "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg";
 
 export const defaultLink = {
   linkType: "URL" as const,
@@ -328,7 +329,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             },
             styles: {
               width: 100,
-              aspectRatio: 1.78,
+              aspectRatio: 1,
             },
           },
         },

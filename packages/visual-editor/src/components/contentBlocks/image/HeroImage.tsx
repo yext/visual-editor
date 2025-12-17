@@ -97,6 +97,7 @@ const HeroImageComponent: PuckComponent<HeroImageProps> = (props) => {
           base: "calc(100vw - 32px)",
           md: "calc(maxWidth / 2)",
         })}
+        loading="eager"
       />
     </EntityField>
   );

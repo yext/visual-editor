@@ -103,7 +103,8 @@ export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
       image: {
         field: "",
         constantValue: {
-          url: "https://placehold.co/100",
+          // Placeholder logo, uploaded to account 4174974
+          url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
           height: 100,
           width: 100,
           alternateText: { en: "Logo", hasLocalizedValue: "true" },
@@ -113,7 +114,7 @@ export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
     },
     styles: {
       width: 0,
-      aspectRatio: 1.78,
+      aspectRatio: 1,
     },
   },
   render: (props) => <FooterLogoSlotInternal {...props} />,
