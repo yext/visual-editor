@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import {
   ImageContentData,
   TranslatableAssetImage,
+  AssetImageType,
 } from "../../../types/images";
 import { useDocument } from "../../../hooks/useDocument";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField";
@@ -218,6 +219,37 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
           </div>
         </FieldLabel>
 
+        <Button
+          size="sm"
+          variant="small_link"
+          onClick={() => {
+            if (!resolvedValue) return;
+
+            const valueByLocale = {
+              hasLocalizedValue: "true",
+              ...locales.reduce(
+                (acc, l) => {
+                  const existingLocaleData =
+                    value && "hasLocalizedValue" in value
+                      ? (value[l] as AssetImageType | undefined)
+                      : undefined;
+
+                  acc[l] = {
+                    ...resolvedValue,
+                    alternateText: existingLocaleData?.alternateText,
+                  };
+                  return acc;
+                },
+                {} as Record<string, any>
+              ),
+            };
+            onChange(valueByLocale as TranslatableAssetImage);
+          }}
+          className={"ve-px-0 ve-pb-4 ve-h-auto"}
+        >
+          {pt("applyAll", "Apply to all locales")}
+        </Button>
+
         {/* Alt Text Field */}
         <AutoField
           field={altTextField}
@@ -233,52 +265,6 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
             } as TranslatableAssetImage);
           }}
         />
-        <Button
-          size="sm"
-          variant="small_link"
-          onClick={() => {
-            let imageToApply = resolvedValue;
-
-            if (resolvedValue) {
-              const currentAltText = resolveComponentData(
-                resolvedValue.alternateText ?? "",
-                locale,
-                streamDocument
-              );
-
-              const newAltText = {
-                hasLocalizedValue: "true" as const,
-                ...locales.reduce(
-                  (acc, l) => {
-                    acc[l] = currentAltText;
-                    return acc;
-                  },
-                  {} as Record<string, string>
-                ),
-              };
-
-              imageToApply = {
-                ...resolvedValue,
-                alternateText: newAltText,
-              };
-            }
-
-            const valueByLocale = {
-              hasLocalizedValue: "true",
-              ...locales.reduce(
-                (acc, l) => {
-                  acc[l] = imageToApply;
-                  return acc;
-                },
-                {} as Record<string, any>
-              ),
-            };
-            onChange(valueByLocale as TranslatableAssetImage);
-          }}
-          className={"ve-px-0 ve-h-auto"}
-        >
-          {pt("applyAll", "Apply to All Locales")}
-        </Button>
       </>
     );
   },

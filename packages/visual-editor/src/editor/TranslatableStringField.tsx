@@ -13,7 +13,7 @@ import { Button } from "../internal/puck/ui/button.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { DynamicOption } from "./DynamicOptionsSelector.tsx";
-import { useDocument } from "../hooks";
+import { useDocument } from "../hooks/useDocument.tsx";
 
 /**
  * Generates a translatable string config
@@ -69,11 +69,7 @@ export function TranslatableStringField<
           }}
           className={"ve-px-0 ve-h-auto"}
         >
-          {label
-            ? pt("applyAllWithLabel", "Apply {{fieldLabel}} to All Locales", {
-                fieldLabel: pt(label),
-              })
-            : pt("applyAll", "Apply to All Locales")}
+          {pt("applyAll", "Apply to all locales")}
         </Button>
       ) : null;
 

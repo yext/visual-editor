@@ -436,20 +436,18 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
       | WithId<CTAWrapperProps>
       | undefined;
 
+    const resolvedImage = imageSlotProps?.parentData
+      ? imageSlotProps.parentData.image
+      : imageSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            imageSlotProps.data.image,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined;
+
     const showImage = Boolean(
-      imageSlotProps?.parentData
-        ? imageSlotProps.parentData.image
-        : imageSlotProps &&
-            (imageSlotProps?.data.image.field ||
-              (imageSlotProps.data.image.constantValue &&
-                "hasLocalizedValue" in
-                  imageSlotProps.data.image.constantValue) ||
-              (imageSlotProps.data.image.constantValue &&
-                "url" in imageSlotProps.data.image.constantValue &&
-                imageSlotProps.data.image.constantValue.url) ||
-              (imageSlotProps.data.image.constantValue &&
-                "image" in imageSlotProps.data.image.constantValue &&
-                imageSlotProps.data.image.constantValue.image?.url))
+      (resolvedImage as any)?.url || (resolvedImage as any)?.image?.url
     );
     const showDescription = Boolean(
       descriptionSlotProps &&

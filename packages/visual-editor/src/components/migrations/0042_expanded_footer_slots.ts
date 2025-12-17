@@ -6,7 +6,7 @@ export const expandedFooterSlots: Migration = {
     propTransformation: (props) => {
       // Extract all data from primaryFooter
       const {
-        logo,
+        logo: rawLogo,
         xLink,
         facebookLink,
         instagramLink,
@@ -14,11 +14,25 @@ export const expandedFooterSlots: Migration = {
         pinterestLink,
         tiktokLink,
         youtubeLink,
-        utilityImages,
+        utilityImages: rawUtilityImages,
         footerLinks,
         expandedFooterLinks,
         expandedFooter,
       } = props.data.primaryFooter || {};
+
+      const logo = typeof rawLogo === "string" ? { url: rawLogo } : rawLogo;
+
+      const utilityImages = rawUtilityImages?.map((img: any) => {
+        if (img.image) {
+          return img;
+        }
+        return {
+          image: {
+            url: img.url,
+          },
+          linkTarget: img.linkTarget,
+        };
+      });
 
       // Extract data from secondaryFooter
       const { secondaryFooterLinks, copyrightMessage, show } =
