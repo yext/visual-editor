@@ -5,6 +5,7 @@ import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import {
   BackgroundStyle,
+  normalizeSlug,
   themeManagerCn,
   useBackground,
   useDocument,
@@ -256,7 +257,7 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
-        cta={{ link, linkType }}
+        cta={{ link: normalizeSlug(link), linkType }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}
