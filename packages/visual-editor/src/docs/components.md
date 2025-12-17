@@ -11,10 +11,10 @@ Props for the Address component
 
 #### Other Props
 
-| Prop     | Type                                                          | Description | Default |
-| :------- | :------------------------------------------------------------ | :---------- | :------ |
-| `data`   | `{ address: YextEntityField<AddressType>; }`                  |             |         |
-| `styles` | `{ showGetDirectionsLink: boolean; ctaVariant: CTAVariant; }` |             |         |
+| Prop     | Type                                                                                   | Description | Default |
+| :------- | :------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                                           |             |         |
+| `styles` | `{ showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: BackgroundStyle; }` |             |         |
 
 ---
 
@@ -148,11 +148,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 Additional CSS classes to apply to the CTA.
 
-| Prop        | Type                                                                         | Description                                 | Default |
-| :---------- | :--------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `className` | `string`                                                                     | Additional CSS classes to apply to the CTA. |         |
-| `data`      | `{ show?: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; }` |                                             |         |
-| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; }`                    |                                             |         |
+| Prop        | Type                                                                               | Description                                 | Default |
+| :---------- | :--------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                                           | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ show?: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; }`       |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: BackgroundStyle; }` |                                             |         |
 
 ---
 

@@ -144,6 +144,7 @@
   "customSearchArea": "Oblasť vyhľadávania",
   "date": "Dátum",
   "dateAndTime": "Dátum a čas",
+  "default": "Predvolené",
   "delete": "Vymazať",
   "deleteItem": "Vymazať",
   "discardChanges": {
@@ -187,6 +188,7 @@
     "cards": "Karty",
     "category": "Kategória",
     "collapseDays": "Dni kolapsu",
+    "color": "Farba",
     "columns": "Stĺpce",
     "commaSeparated": "Čiarkou oddelené",
     "contributorName": "Názov prispievateľa",
@@ -299,8 +301,8 @@
       "compact": "Kompaktný",
       "ctaVariant": {
         "link": "Prepojiť",
-        "primary": "Primárny",
-        "secondary": "Druhoradý"
+        "primary": "Pevné",
+        "secondary": "Obrys"
       },
       "dark": "Tmavý",
       "default": "Predvolený",

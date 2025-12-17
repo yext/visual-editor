@@ -143,6 +143,7 @@
   "customSearchArea": "カスタム検索領域",
   "date": "日付",
   "dateAndTime": "日時",
+  "default": "デフォルト",
   "delete": "消去",
   "deleteItem": "アイテムを削除します",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "カード",
     "category": "カテゴリ",
     "collapseDays": "崩壊日",
+    "color": "色",
     "columns": "列",
     "commaSeparated": "カンマ区切り",
     "contributorName": "貢献者名",
@@ -298,8 +300,8 @@
       "compact": "コンパクト",
       "ctaVariant": {
         "link": "リンク",
-        "primary": "主要な",
-        "secondary": "二次"
+        "primary": "固体",
+        "secondary": "概要"
       },
       "dark": "暗い",
       "default": "デフォルト",

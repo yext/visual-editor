@@ -1,5 +1,3 @@
-import * as React from "react";
-import { useTranslation } from "react-i18next";
 import {
   ComponentConfig,
   Fields,
@@ -7,20 +5,22 @@ import {
   setDeep,
 } from "@measured/puck";
 import {
-  useDocument,
-  EntityField,
-  YextEntityField,
-  msg,
-  pt,
-  YextField,
-  resolveComponentData,
-  EnhancedTranslatableCTA,
+  BackgroundStyle,
   CTA,
   CTAVariant,
+  EnhancedTranslatableCTA,
+  EntityField,
+  PresetImageType,
+  YextEntityField,
+  YextField,
+  msg,
+  pt,
+  resolveComponentData,
   resolveDataFromParent,
   themeManagerCn,
-  PresetImageType,
+  useDocument,
 } from "@yext/visual-editor";
+import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,
   getCTAType,
@@ -41,6 +41,7 @@ export interface CTAWrapperProps {
     variant: CTAVariant;
     /** The image to use if the CTA is set to preset image */
     presetImage?: PresetImageType;
+    color?: BackgroundStyle;
   };
 
   /** Additional CSS classes to apply to the CTA. */
@@ -103,6 +104,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
         type: "select",
         options: "PRESET_IMAGE",
       }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   },
 };
@@ -160,6 +165,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           variant={styles.variant}
           className={combinedClassName}
           eventName={eventName}
+          color={styles.color}
         />
       )}
     </EntityField>
@@ -192,8 +198,9 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   },
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
-
+    const ctaVariant = data.props.styles.variant;
     const ctaType = getCTAType(data.props.data.entityField).ctaType;
+
     if (ctaType === "presetImage") {
       setDeep(updatedFields, "styles.objectFields.variant.visible", false);
       setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);
@@ -206,6 +213,11 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     if (data.props.data.show !== undefined) {
       setDeep(updatedFields, "data.objectFields.show.visible", true);
     }
+
+    const showColor =
+      (ctaVariant === "primary" || ctaVariant === "secondary") &&
+      ctaType !== "presetImage";
+    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
 
     return updatedFields;
   },
