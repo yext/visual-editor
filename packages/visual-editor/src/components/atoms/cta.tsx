@@ -8,6 +8,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
+import { useBackground } from "../../hooks/useBackground";
 
 export type CTAProps = {
   // Core props
@@ -52,6 +53,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
+  const background = useBackground();
 
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
@@ -84,10 +86,31 @@ const useResolvedCtaProps = (props: CTAProps) => {
         if (!props.presetImageType) {
           return null;
         }
+
+        let label = presetImageIcons[props.presetImageType];
+
+        if (
+          props.presetImageType &&
+          (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+            props.presetImageType
+          ) &&
+          React.isValidElement(label)
+        ) {
+          const isWhiteBackground =
+            !background?.bgColor || background.bgColor === "bg-white";
+          const buttonBackgroundColor = isWhiteBackground
+            ? "#F9F9F9"
+            : "#FFFFFF";
+
+          label = React.cloneElement(label as React.ReactElement, {
+            backgroundColor: buttonBackgroundColor,
+          });
+        }
+
         return {
           link: props.link || "#",
           linkType: props.linkType ?? "URL",
-          label: presetImageIcons[props.presetImageType],
+          label,
           ariaLabel:
             ariaLabel ||
             t("buttonWithIcon", `Button with {{presetImageType}} icon`, {
@@ -104,7 +127,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, streamDocument]);
+  }, [props, streamDocument, background]);
 
   if (!resolvedDynamicProps) {
     return null;
