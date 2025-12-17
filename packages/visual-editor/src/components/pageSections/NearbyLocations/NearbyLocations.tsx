@@ -119,7 +119,6 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
       const shouldShow =
         hasContent || isLoading || (hasHeight && !hasEmptyStateMarker);
       setShowHeading(shouldShow);
-      console.log("hasEmptyStateMarker", hasEmptyStateMarker, puck.isEditing);
       setHideEntireSection(hasEmptyStateMarker && !puck.isEditing);
     };
 
@@ -149,7 +148,6 @@ const NearbyLocationsComponent: PuckComponent<NearbyLocationsSectionProps> = (
 
   // Show empty state if detected
   if (hideEntireSection) {
-    console.log("here");
     return <></>;
   }
 
