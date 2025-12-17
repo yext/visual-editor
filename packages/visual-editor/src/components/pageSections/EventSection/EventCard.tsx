@@ -447,7 +447,11 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
         : undefined;
 
     const showImage = Boolean(
-      (resolvedImage as any)?.url || (resolvedImage as any)?.image?.url
+      (resolvedImage as any)?.url ||
+        (resolvedImage as any)?.image?.url ||
+        ((resolvedImage as any)?.hasLocalizedValue &&
+          (resolvedImage as any)?.[i18nComponentsInstance.language || "en"]
+            ?.url)
     );
     const showDescription = Boolean(
       descriptionSlotProps &&

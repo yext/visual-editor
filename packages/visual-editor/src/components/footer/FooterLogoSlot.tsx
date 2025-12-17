@@ -29,10 +29,14 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const streamDocument = useDocument();
   const { i18n, t } = useTranslation();
 
-  const imageDataUrl = resolveComponentData(
+  const resolvedImage = resolveComponentData(
     data.image,
     i18n.language,
     streamDocument
+  );
+
+  const imageDataUrl = (
+    typeof resolvedImage === "string" ? { url: resolvedImage } : resolvedImage
   ) as AssetImageType;
 
   if (!imageDataUrl?.url) {
