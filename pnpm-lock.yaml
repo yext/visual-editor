@@ -143,8 +143,8 @@ importers:
         specifier: ^2.6.0
         version: 2.6.0(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: ^1.10.2
-        version: 1.10.2(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
+        specifier: ^1.11.1
+        version: 1.11.1(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -5221,15 +5221,15 @@ packages:
       react: ^16.14 || ^17 || ^18
       react-dom: ^16.14 || ^17 || ^18
 
-  "@yext/search-ui-react@1.10.2":
+  "@yext/search-ui-react@1.11.1":
     resolution:
       {
-        integrity: sha512-GadFxNdLjjOB0UelA62AtNEalH4wjRbF5waoPEYWhxPADqTDVNMxY5Ax0AsNMxP3zZZueq1IRmmprSB7wJUmzw==,
+        integrity: sha512-SuvWew3wioVhX9TPGC1TqPOAUXnQPL6bTPzbd//nHYFQs5OLY4E9n/EPz/LHl0TF+iRAQO4BygpSMuNBeapu4w==,
       }
     peerDependencies:
       "@yext/search-headless-react": ^2.6.0
-      react: ^16.14 || ^17 || ^18
-      react-dom: ^16.14 || ^17 || ^18
+      react: ^16.14 || ^17 || ^18 || ^19
+      react-dom: ^16.14 || ^17 || ^18 || ^19
 
   abbrev@3.0.1:
     resolution:
@@ -16030,7 +16030,7 @@ snapshots:
       - tailwindcss
       - typescript
 
-  "@yext/search-ui-react@1.10.2(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
+  "@yext/search-ui-react@1.11.1(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
