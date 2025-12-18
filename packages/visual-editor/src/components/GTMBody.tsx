@@ -21,7 +21,7 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
     console.warn(
       "Failed to parse visualEditorConfig for GTM. Skipping adding GTM iframe."
     );
-    return;
+    return <>{children}</>;
   }
 
   const googleTagManagerId: string = visualEditorConfig?.googleTagManagerId;

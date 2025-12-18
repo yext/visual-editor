@@ -16,7 +16,7 @@ export const applyAnalytics = (document: Record<string, any>) => {
   // Google Tag Manager (GTM)
   const googleTagManagerId: string = visualEditorConfig?.googleTagManagerId;
 
-  if (googleTagManagerId) {
+  if (googleTagManagerId && /^GTM-[A-Z0-9]+$/.test(googleTagManagerId)) {
     return `<!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
