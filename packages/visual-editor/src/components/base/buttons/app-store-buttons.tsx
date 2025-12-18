@@ -743,7 +743,7 @@ export const AppGalleryButton = ({
 
 export const DeliverooButton = ({
   backgroundColor = "#F9F9F9",
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: {
   backgroundColor?: string;
 }) => {
   return (
@@ -779,7 +779,7 @@ export const DeliverooButton = ({
 
 export const DoordashButton = ({
   backgroundColor = "#F9F9F9",
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: {
   backgroundColor?: string;
 }) => {
   return (
@@ -865,7 +865,7 @@ export const DoordashButton = ({
 
 export const GrubhubButton = ({
   backgroundColor = "#F9F9F9",
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: {
   backgroundColor?: string;
 }) => {
   return (
@@ -901,7 +901,7 @@ export const GrubhubButton = ({
 
 export const SkipTheDishesButton = ({
   backgroundColor = "#F9F9F9",
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: {
   backgroundColor?: string;
 }) => {
   return (
@@ -951,7 +951,7 @@ export const SkipTheDishesButton = ({
 
 export const PostmatesButton = ({
   backgroundColor = "#F9F9F9",
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: {
   backgroundColor?: string;
 }) => {
   return (
@@ -993,7 +993,7 @@ export const PostmatesButton = ({
 
 export const UberEatsButton = ({
   backgroundColor = "#F9F9F9",
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: {
   backgroundColor?: string;
 }) => {
   return (
@@ -1019,7 +1019,7 @@ export const UberEatsButton = ({
 
 export const EzCaterButton = ({
   backgroundColor = "#F9F9F9",
-}: AnchorHTMLAttributes<HTMLAnchorElement> & {
+}: {
   backgroundColor?: string;
 }) => {
   return (

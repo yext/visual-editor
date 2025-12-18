@@ -99,11 +99,9 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ) &&
           React.isValidElement(label)
         ) {
-          const isWhiteBackground =
-            !background?.bgColor || background.bgColor === "bg-white";
-          const buttonBackgroundColor = isWhiteBackground
-            ? "#F9F9F9"
-            : "#FFFFFF";
+          const buttonBackgroundColor = background.isDarkBackground
+            ? "#FFFFFF"
+            : "#F9F9F9";
 
           label = React.cloneElement(label as React.ReactElement, {
             backgroundColor: buttonBackgroundColor,

@@ -978,6 +978,81 @@ const tests: ComponentTest[] = [
     },
     version: 29,
   },
+  {
+    name: "version 29 - delivery service CTAs",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Deliveroo",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "deliveroo" },
+                id: "CTAWrapper-deliveroo",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Doordash",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "doordash" },
+                id: "CTAWrapper-doordash",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Grubhub",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "grubhub" },
+                id: "CTAWrapper-grubhub",
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 29,
+  },
 ];
 
 describe("Grid", async () => {
