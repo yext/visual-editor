@@ -101,7 +101,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ) &&
           React.isValidElement(label)
         ) {
-          const buttonBackgroundColor = background.isDarkBackground
+          const buttonBackgroundColor = background?.isDarkBackground
             ? "#FFFFFF"
             : "#F9F9F9";
 
