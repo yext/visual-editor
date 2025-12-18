@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useDocument } from "@yext/visual-editor";
 
 /**
@@ -14,15 +14,20 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
     return <>{children}</>;
   }
 
-  let visualEditorConfig: Record<string, any>;
-  try {
-    visualEditorConfig = JSON.parse(streamDocument.__.visualEditorConfig);
-  } catch (_) {
-    console.warn(
-      "Failed to parse visualEditorConfig for GTM. Skipping adding GTM iframe."
-    );
-    return <>{children}</>;
-  }
+  const visualEditorConfig: Record<string, any> | null = useMemo(() => {
+    if (!streamDocument?.__?.visualEditorConfig) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(streamDocument.__.visualEditorConfig);
+    } catch (_) {
+      console.warn(
+        "Failed to parse visualEditorConfig for GTM. Skipping adding GTM iframe."
+      );
+      return null;
+    }
+  }, [streamDocument]);
 
   const googleTagManagerId: string = visualEditorConfig?.googleTagManagerId;
 
