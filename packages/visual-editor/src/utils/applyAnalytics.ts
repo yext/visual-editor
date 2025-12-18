@@ -3,10 +3,18 @@ export const applyAnalytics = (document: Record<string, any>) => {
     return;
   }
 
+  let visualEditorConfig: Record<string, any>;
+  try {
+    visualEditorConfig = JSON.parse(document.__.visualEditorConfig);
+  } catch (_) {
+    console.warn(
+      "Failed to parse visualEditorConfig for analytics. Skipping analytics script injection."
+    );
+    return;
+  }
+
   // Google Tag Manager (GTM)
-  const googleTagManagerId: string = JSON.parse(
-    document.__.visualEditorConfig
-  )?.googleTagManagerId;
+  const googleTagManagerId: string = visualEditorConfig?.googleTagManagerId;
 
   if (googleTagManagerId) {
     return `<!-- Google Tag Manager -->
@@ -20,9 +28,7 @@ export const applyAnalytics = (document: Record<string, any>) => {
 
   // Google Analytics 4 (GA4)
   // Note that this does not yet exist in platform. Adding for future support.
-  const googleAnalyticsId: string = JSON.parse(
-    document.__.visualEditorConfig
-  )?.googleAnalyticsId;
+  const googleAnalyticsId: string = visualEditorConfig?.googleAnalyticsId;
 
   if (googleAnalyticsId) {
     return `<!-- Google tag (gtag.js) -->

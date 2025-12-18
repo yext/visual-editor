@@ -14,11 +14,19 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
     return <>{children}</>;
   }
 
-  const googleTagManagerId: string = JSON.parse(
-    streamDocument.__.visualEditorConfig
-  )?.googleTagManagerId;
+  let visualEditorConfig: Record<string, any>;
+  try {
+    visualEditorConfig = JSON.parse(streamDocument.__.visualEditorConfig);
+  } catch (_) {
+    console.warn(
+      "Failed to parse visualEditorConfig for GTM. Skipping adding GTM iframe."
+    );
+    return;
+  }
 
-  if (!googleTagManagerId) {
+  const googleTagManagerId: string = visualEditorConfig?.googleTagManagerId;
+
+  if (!googleTagManagerId || !/^GTM-[A-Z0-9]+$/.test(googleTagManagerId)) {
     return <>{children}</>;
   }
 
