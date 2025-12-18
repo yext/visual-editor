@@ -14,7 +14,7 @@ export const applyAnalytics = (document: Record<string, any>) => {
   }
 
   // Google Tag Manager (GTM)
-  const googleTagManagerId: string = visualEditorConfig?.googleTagManagerId;
+  const googleTagManagerId = visualEditorConfig?.googleTagManagerId;
 
   if (googleTagManagerId && /^GTM-[A-Z0-9]+$/.test(googleTagManagerId)) {
     return `<!-- Google Tag Manager -->
@@ -28,9 +28,9 @@ export const applyAnalytics = (document: Record<string, any>) => {
 
   // Google Analytics 4 (GA4)
   // Note that this does not yet exist in platform. Adding for future support.
-  const googleAnalyticsId: string = visualEditorConfig?.googleAnalyticsId;
+  const googleAnalyticsId = visualEditorConfig?.googleAnalyticsId;
 
-  if (googleAnalyticsId) {
+  if (googleAnalyticsId && /^G(T)?-[A-Z0-9]+$/.test(googleAnalyticsId)) {
     return `<!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}"></script>
     <script>
