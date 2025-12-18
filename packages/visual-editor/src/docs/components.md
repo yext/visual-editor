@@ -238,8 +238,6 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Expanded Footer is a comprehensive, two-tiered site-wide component for large websites. It includes a primary footer area for a logo, social media links, and utility images, and features two distinct layouts: a standard link list or an "expanded" multi-column mega-footer. It also includes an optional secondary sub-footer for copyright notices and legal links. Avalible on Location templates.
 
-![Preview of the ExpandedFooter component](../components/testing/screenshots/ExpandedFooter/%5Bdesktop%5D%20default%20props.png)
-
 ### Props
 
 #### Data Props
@@ -365,10 +363,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                               | Description | Default |
-| :------- | :----------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ image: YextEntityField<AssetImageType>; linkTarget?: string; }` |             |         |
-| `styles` | `{ width?: number; aspectRatio?: number; }`                        |             |         |
+| Prop     | Type                                                                                         | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ image: YextEntityField<AssetImageType \| TranslatableAssetImage>; linkTarget?: string; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                                                  |             |         |
 
 ---
 
