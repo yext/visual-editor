@@ -44,7 +44,15 @@ export function TranslatableStringField<
       let locales = templateMetadata?.locales || [];
       if (locales.length === 0) {
         try {
-          locales = JSON.parse(streamDocument._pageset).scope.locales;
+          const parsedPageSet = JSON.parse(streamDocument._pageset);
+          if (
+            parsedPageSet?.scope?.locales &&
+            Array.isArray(parsedPageSet.scope.locales)
+          ) {
+            locales = parsedPageSet.scope.locales;
+          } else {
+            console.warn("Invalid locale structure in page group data");
+          }
         } catch {
           console.warn("failed to retrieve locales from page group");
         }
