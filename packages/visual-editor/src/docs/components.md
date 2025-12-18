@@ -365,10 +365,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                               | Description | Default |
-| :------- | :----------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ image: YextEntityField<AssetImageType>; linkTarget?: string; }` |             |         |
-| `styles` | `{ width?: number; aspectRatio?: number; }`                        |             |         |
+| Prop     | Type                                                                                         | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ image: YextEntityField<AssetImageType \| TranslatableAssetImage>; linkTarget?: string; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                                                  |             |         |
 
 ---
 
