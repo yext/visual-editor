@@ -3,12 +3,15 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { themeManagerCn, useDocument } from "@yext/visual-editor";
+import {
+  themeManagerCn,
+  useDocument,
+  useBackground,
+} from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
-import { useBackground } from "../../hooks/useBackground";
 
 export type CTAProps = {
   // Core props
