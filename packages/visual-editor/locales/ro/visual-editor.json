@@ -143,6 +143,7 @@
   "customSearchArea": "Zona de căutare personalizată",
   "date": "Data",
   "dateAndTime": "Data și ora",
+  "default": "Implicit",
   "delete": "Şterge",
   "deleteItem": "Ștergeți elementul",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Cărți",
     "category": "Categorie",
     "collapseDays": "Zile de prăbușire",
+    "color": "Culoare",
     "columns": "Coloane",
     "commaSeparated": "Separat prin virgulă",
     "contributorName": "Numele contribuabilului",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Geomodificator local",
     "localGeomodifierHeadingLevel": "Nivelul local al geomodificatorului",
     "logo": "Logo",
+    "logoLink": "Link logo",
     "logoStyles": "Stiluri de logo",
     "logoUrl": "Logo",
     "logoWidth": "Lățimea logo -ului",
@@ -297,8 +300,8 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Legătură",
-        "primary": "Primar",
-        "secondary": "Secundar"
+        "primary": "Solid",
+        "secondary": "Contur"
       },
       "dark": "Întuneric",
       "default": "Implicit",

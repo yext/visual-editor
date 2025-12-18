@@ -4,9 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import {
+  BackgroundStyle,
   themeManagerCn,
-  useDocument,
   useBackground,
+  useDocument,
 } from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
@@ -32,6 +33,7 @@ export type CTAProps = {
   ariaLabel?: string;
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
+  color?: BackgroundStyle;
 };
 
 /**
@@ -175,9 +177,40 @@ export const CTA = (props: CTAProps) => {
     ctaType,
     onClick,
     disabled = false,
+    color,
   } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
+  const isDarkBG = useBackground()?.isDarkBackground;
+
+  const dynamicStyle: React.CSSProperties = (() => {
+    const bg = normalize(color?.bgColor);
+    const textColor = normalize(color?.textColor);
+    const border = bg && `var(--colors-${bg})`;
+
+    if (variant === "primary") {
+      return {
+        backgroundColor: bg && `var(--colors-${bg})`,
+        color: textColor && `var(--colors-${textColor})`,
+        borderColor: border,
+      };
+    }
+
+    if (variant === "secondary" && !isDarkBG) {
+      return {
+        borderColor: border,
+        color: border,
+      };
+    }
+
+    return {};
+  })();
+
+  const disabledStyle: React.CSSProperties = {
+    ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
+    cursor: "default",
+    pointerEvents: "auto",
+  };
 
   if (!resolvedProps) {
     return null;
@@ -232,7 +265,7 @@ export const CTA = (props: CTAProps) => {
           e.preventDefault();
           e.stopPropagation();
         }}
-        style={{ cursor: "default", pointerEvents: "auto" }}
+        style={disabledStyle}
       >
         {linkContent}
       </Button>
@@ -240,7 +273,12 @@ export const CTA = (props: CTAProps) => {
   }
 
   return (
-    <Button asChild className={buttonClassName} variant={buttonVariant}>
+    <Button
+      style={ctaType !== "presetImage" ? dynamicStyle : undefined}
+      asChild
+      className={buttonClassName}
+      variant={buttonVariant}
+    >
       <Link
         cta={{ link, linkType }}
         eventName={eventName}
@@ -253,3 +291,11 @@ export const CTA = (props: CTAProps) => {
     </Button>
   );
 };
+
+// Extracts the name of a theme color from a tailwind bg- or text- class
+const normalize = (token?: string) =>
+  token?.startsWith("bg-")
+    ? token.substring(3)
+    : token?.startsWith("text-")
+      ? token.substring(5)
+      : token;

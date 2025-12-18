@@ -142,6 +142,7 @@
   "customSearchArea": "Zone de recherche personnalisée",
   "date": "Date",
   "dateAndTime": "Date et heure",
+  "default": "Défaut",
   "delete": "Supprimer",
   "deleteItem": "Supprimer",
   "discardChanges": {
@@ -185,6 +186,7 @@
     "cards": "Cartes",
     "category": "Catégorie",
     "collapseDays": "Jours d'effondrement",
+    "color": "Couleur",
     "columns": "Colonnes",
     "commaSeparated": "Séparés par des virgules",
     "contributorName": "Nom de contributeur",
@@ -271,6 +273,7 @@
     "localGeomodifier": "Géomodificateur local",
     "localGeomodifierHeadingLevel": "Niveau de cap du géomodificateur local",
     "logo": "Logo",
+    "logoLink": "Lien vers le logo",
     "logoStyles": "Styles de logo",
     "logoUrl": "Logo",
     "logoWidth": "Largeur du logo",
@@ -296,8 +299,8 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Lien",
-        "primary": "Primaire",
-        "secondary": "Secondaire"
+        "primary": "Solide",
+        "secondary": "Contour"
       },
       "dark": "Sombre",
       "default": "Défaut",
@@ -528,6 +531,7 @@
   "locationsWithinDistanceOf_other": "{{count}} emplacements dans un rayon de {{distance}} miles autour de \"{{name}}\"",
   "locationsWithinDistanceOf_zero": "{{count}} emplacements dans un rayon de {{distance}} miles autour de \"{{name}}\"",
   "logo": "Logo",
+  "logoLink": "Lien vers le logo",
   "map": "Carte",
   "maxWidthTip": "Pour l'alignement optimal du contenu, nous vous recommandons de définir la largeur de l'en-tête et du pied de page pour correspondre ou dépasser la grille de contenu de la page.",
   "mediaType": "Type de support",

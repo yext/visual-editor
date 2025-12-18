@@ -143,6 +143,7 @@
   "customSearchArea": "Egyedi keresési terület",
   "date": "Dátum",
   "dateAndTime": "Dátum és idő",
+  "default": "Alapértelmezett",
   "delete": "Töröl",
   "deleteItem": "Az elem törlése",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Kártyás kártyák",
     "category": "Kategória",
     "collapseDays": "Összeomlás napjai",
+    "color": "Szín",
     "columns": "Oszlopok",
     "commaSeparated": "Vesszővel elválasztva",
     "contributorName": "Közreműködő neve",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Helyi geomodifier",
     "localGeomodifierHeadingLevel": "Helyi geomodifier fejléc",
     "logo": "Logó",
+    "logoLink": "Logo link",
     "logoStyles": "Logóstílusok",
     "logoUrl": "Logó",
     "logoWidth": "Logószélesség",
@@ -297,8 +300,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Elsődleges",
-        "secondary": "Másodlagos"
+        "primary": "Szilárd",
+        "secondary": "Vázlat"
       },
       "dark": "Sötét",
       "default": "Mulasztás",

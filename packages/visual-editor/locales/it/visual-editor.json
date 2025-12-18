@@ -143,6 +143,7 @@
   "customSearchArea": "Area di ricerca personalizzata",
   "date": "Data",
   "dateAndTime": "Data e ora",
+  "default": "Predefinito",
   "delete": "Eliminare",
   "deleteItem": "Elimina l'articolo",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Carte",
     "category": "Categoria",
     "collapseDays": "Giorni di collasso",
+    "color": "Colore",
     "columns": "Colonne",
     "commaSeparated": "Separati da virgole",
     "contributorName": "Nome collaboratore",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Geomodificatore locale",
     "localGeomodifierHeadingLevel": "Livello di intestazione del geomodificatore locale",
     "logo": "Logo",
+    "logoLink": "Collegamento al logo",
     "logoStyles": "Stili del logo",
     "logoUrl": "Logo",
     "logoWidth": "Larghezza del logo",
@@ -297,8 +300,8 @@
       "compact": "Compatto",
       "ctaVariant": {
         "link": "Collegamento",
-        "primary": "Primario",
-        "secondary": "Secondario"
+        "primary": "Solido",
+        "secondary": "Contorno"
       },
       "dark": "Buio",
       "default": "Predefinito",

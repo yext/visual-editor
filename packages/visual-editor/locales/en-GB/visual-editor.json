@@ -142,6 +142,7 @@
   "customSearchArea": "Custom Search Area",
   "date": "Date",
   "dateAndTime": "Date and Time",
+  "default": "Default",
   "delete": "Delete",
   "deleteItem": "Delete Item",
   "discardChanges": {
@@ -185,6 +186,7 @@
     "cards": "Cards",
     "category": "Category",
     "collapseDays": "Collapse Days",
+    "color": "Color",
     "columns": "Columns",
     "commaSeparated": "Comma Separated",
     "contributorName": "Contributor Name",
@@ -271,6 +273,7 @@
     "localGeomodifier": "Local GeoModifier",
     "localGeomodifierHeadingLevel": "Local GeoModifier Heading Level",
     "logo": "Logo",
+    "logoLink": "Logo Link",
     "logoStyles": "Logo Styles",
     "logoUrl": "Logo",
     "logoWidth": "Logo Width",
@@ -296,8 +299,8 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Primary",
-        "secondary": "Secondary"
+        "primary": "Solid",
+        "secondary": "Outline"
       },
       "dark": "Dark",
       "default": "Default",

@@ -143,6 +143,7 @@
   "customSearchArea": "Pielāgota meklēšanas zona",
   "date": "Datums",
   "dateAndTime": "Datums un laiks",
+  "default": "Noklusējums",
   "delete": "Dzēst",
   "deleteItem": "Dzēst vienumu",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Kārtis",
     "category": "Kategorija",
     "collapseDays": "Sabrukšanas dienas",
+    "color": "Krāsa",
     "columns": "Kolonnas",
     "commaSeparated": "Atdalīts ar komatu",
     "contributorName": "Līdzautora vārds",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Vietējais ģeomodifieris",
     "localGeomodifierHeadingLevel": "Vietējais ģeomodifiera virsraksta līmenis",
     "logo": "Logotips",
+    "logoLink": "Logotipa saite",
     "logoStyles": "Logotipa stili",
     "logoUrl": "Logotips",
     "logoWidth": "Logotipa platums",
@@ -297,8 +300,8 @@
       "compact": "Kompakts",
       "ctaVariant": {
         "link": "Saite",
-        "primary": "Primārs",
-        "secondary": "Sekundārs"
+        "primary": "Ciets",
+        "secondary": "Kontūra"
       },
       "dark": "Tumšs",
       "default": "Nepildīt",

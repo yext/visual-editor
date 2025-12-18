@@ -147,6 +147,7 @@
   "customSearchArea": "Benutzerdefinierte Suchbereich",
   "date": "Datum",
   "dateAndTime": "Datum und Uhrzeit",
+  "default": "Standard",
   "delete": "Löschen",
   "deleteItem": "Artikel löschen",
   "discardChanges": {
@@ -190,6 +191,7 @@
     "cards": "Karten",
     "category": "Kategorie",
     "collapseDays": "Zusammenbruch Tage",
+    "color": "Farbe",
     "columns": "Spalten",
     "commaSeparated": "Komma getrennt",
     "contributorName": "Mitwirkender Name",
@@ -277,6 +279,7 @@
     "localGeomodifier": "Lokaler Geomodifier",
     "localGeomodifierHeadingLevel": "Lokale Geomodifikator -Überschrift Level",
     "logo": "Logo",
+    "logoLink": "Logo-Link",
     "logoStyles": "Logo -Stile",
     "logoUrl": "Logo",
     "logoWidth": "Logobreite",
@@ -302,8 +305,8 @@
       "compact": "Kompakt",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Primär",
-        "secondary": "Sekundär"
+        "primary": "Solide",
+        "secondary": "Gliederung"
       },
       "dark": "Dunkel",
       "default": "Standard",

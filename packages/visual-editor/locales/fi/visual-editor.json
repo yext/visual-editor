@@ -143,6 +143,7 @@
   "customSearchArea": "Mukautettu hakualue",
   "date": "Päivämäärä",
   "dateAndTime": "Päivämäärä ja aika",
+  "default": "Oletus",
   "delete": "Poistaa",
   "deleteItem": "Poista kohde",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Kortit",
     "category": "Luokka",
     "collapseDays": "Romahduspäivät",
+    "color": "Väri",
     "columns": "Pylväät",
     "commaSeparated": "Pilkulla erotettuna",
     "contributorName": "Avustajan nimi",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Paikallinen geomodifoija",
     "localGeomodifierHeadingLevel": "Paikallinen geomodifiorin otsikkotaso",
     "logo": "Logo",
+    "logoLink": "Logo linkki",
     "logoStyles": "Logotyylit",
     "logoUrl": "Logo",
     "logoWidth": "Logon leveys",
@@ -297,8 +300,8 @@
       "compact": "Kompakti",
       "ctaVariant": {
         "link": "Linkki",
-        "primary": "Ensisijainen",
-        "secondary": "Toissijainen"
+        "primary": "Kiinteä",
+        "secondary": "Outline"
       },
       "dark": "Tumma",
       "default": "Laiminlyönti",

@@ -148,6 +148,7 @@
   "customSearchArea": "Vlastní vyhledávací oblast",
   "date": "Datum",
   "dateAndTime": "Datum a čas",
+  "default": "Výchozí",
   "delete": "Vymazat",
   "deleteItem": "Odstranit položku",
   "discardChanges": {
@@ -191,6 +192,7 @@
     "cards": "Karty",
     "category": "Kategorie",
     "collapseDays": "Dny kolapsu",
+    "color": "Barva",
     "columns": "Sloupce",
     "commaSeparated": "Čárkou oddělené",
     "contentAlignment": "Zarovnání obsahu",
@@ -279,6 +281,7 @@
     "localGeomodifier": "Místní geomodifikátor",
     "localGeomodifierHeadingLevel": "Úroveň nadpisu místního geomodifikátoru",
     "logo": "Logo",
+    "logoLink": "Odkaz na logo",
     "logoStyles": "Styly loga",
     "logoUrl": "Logo",
     "logoWidth": "Šířka loga",
@@ -304,8 +307,8 @@
       "compact": "Kompaktní",
       "ctaVariant": {
         "link": "Odkaz",
-        "primary": "Primární",
-        "secondary": "Sekundární"
+        "primary": "Solidní",
+        "secondary": "Obrys"
       },
       "dark": "Tma",
       "default": "Výchozí",

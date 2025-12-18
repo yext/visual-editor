@@ -143,6 +143,7 @@
   "customSearchArea": "Pasirinktinė paieškos sritis",
   "date": "Data",
   "dateAndTime": "Data ir laikas",
+  "default": "Numatytoji",
   "delete": "Ištrinti",
   "deleteItem": "Ištrinti elementą",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Kortelės",
     "category": "Kategorija",
     "collapseDays": "Griūties dienos",
+    "color": "Spalva",
     "columns": "Stulpeliai",
     "commaSeparated": "Atskirtas kableliu",
     "contributorName": "Bendraautoriaus vardas",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Vietinis geomodiferis",
     "localGeomodifierHeadingLevel": "Vietinis geomodifier antraštės lygis",
     "logo": "Logotipas",
+    "logoLink": "Logotipo nuoroda",
     "logoStyles": "Logotipų stiliai",
     "logoUrl": "Logotipas",
     "logoWidth": "Logotipo plotis",
@@ -297,8 +300,8 @@
       "compact": "Kompaktiškas",
       "ctaVariant": {
         "link": "Nuoroda",
-        "primary": "Pirminis",
-        "secondary": "Antrinis"
+        "primary": "Tvirtas",
+        "secondary": "Kontūras"
       },
       "dark": "Tamsu",
       "default": "Numatytasis",

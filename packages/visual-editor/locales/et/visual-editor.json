@@ -143,6 +143,7 @@
   "customSearchArea": "Kohandatud otsinguala",
   "date": "Kuupäev",
   "dateAndTime": "Kuupäev ja kellaaeg",
+  "default": "Vaikimisi",
   "delete": "Kustutama",
   "deleteItem": "Kustuta üksus",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Kaardid",
     "category": "Kategooria",
     "collapseDays": "Varisevad päevad",
+    "color": "Värv",
     "columns": "Veerud",
     "commaSeparated": "Komaga eraldatud",
     "contributorName": "Kaastöötaja nimi",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Kohalik geomodifikaator",
     "localGeomodifierHeadingLevel": "Kohalik geomodifikaatori pealkirjatase",
     "logo": "Logo",
+    "logoLink": "Logo link",
     "logoStyles": "Logo stiilid",
     "logoUrl": "Logo",
     "logoWidth": "Logo laius",
@@ -297,8 +300,8 @@
       "compact": "Kompaktne",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Alg-",
-        "secondary": "Teisene"
+        "primary": "Tahke",
+        "secondary": "Kontuur"
       },
       "dark": "Tume",
       "default": "Täitmata jätmine",

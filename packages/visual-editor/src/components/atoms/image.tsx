@@ -20,6 +20,7 @@ export interface ImageProps {
   className?: string;
   /** sizes attribute of the underlying img tag */
   sizes?: string;
+  loading?: "lazy" | "eager";
 }
 
 export const Image: React.FC<ImageProps> = ({
@@ -28,6 +29,7 @@ export const Image: React.FC<ImageProps> = ({
   width,
   className,
   sizes,
+  loading = "lazy",
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -64,6 +66,7 @@ export const Image: React.FC<ImageProps> = ({
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
           imgOverrides={{ sizes }}
+          loading={loading}
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
@@ -72,14 +75,15 @@ export const Image: React.FC<ImageProps> = ({
           width={width}
           height={calculatedHeight}
           className="object-cover"
-          imgOverrides={{ sizes, loading: "lazy" }}
+          imgOverrides={{ sizes }}
+          loading={loading}
         />
       ) : (
         <img
           src={isComplexImageType(image) ? image.image.url : image.url}
           alt={altText}
           className="object-cover w-full h-full"
-          loading="lazy"
+          loading={loading}
         />
       )}
     </div>

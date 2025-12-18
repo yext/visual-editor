@@ -2,30 +2,25 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { useQuery } from "@tanstack/react-query";
-import { Coordinate } from "@yext/pages-components";
 import {
   backgroundColors,
   BackgroundStyle,
   Body,
   HeadingLevel,
   msg,
+  pt,
   resolveComponentData,
   useDocument,
-  YextEntityField,
   YextField,
 } from "@yext/visual-editor";
 import { parseDocument, fetchNearbyLocations } from "./utils";
 import { NearbyLocationCard } from "./NearbyLocationCard";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+import { MapPinOff } from "lucide-react";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
   data: {
-    /**
-     * The central coordinate (`latitude`, `longitude`) to search from.
-     * @defaultValue 'yextDisplayCoordinate' field
-     */
-    coordinate: YextEntityField<Coordinate>;
-
     /**
      * The search radius in miles.
      * @defaultValue 10
@@ -82,13 +77,6 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
     data: YextField(msg("fields.data", "Data"), {
       type: "object",
       objectFields: {
-        coordinate: YextField<any, Coordinate>(
-          msg("fields.coordinates", "Coordinates"),
-          {
-            type: "entityField",
-            filter: { types: ["type.coordinate"] },
-          }
-        ),
         radius: YextField(msg("fields.radiusMiles", "Radius (Miles)"), {
           type: "number",
           min: 0,
@@ -204,7 +192,14 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
   const locale = i18n.language;
 
   const coordinate = resolveComponentData(
-    data?.coordinate,
+    {
+      field: "yextDisplayCoordinate",
+      constantValue: {
+        latitude: 0,
+        longitude: 0,
+      },
+      constantValueEnabled: false,
+    },
     locale,
     streamDocument
   );
@@ -279,13 +274,14 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
     );
   }
 
-  // do not render the component if there's no data or it's not enabled
+  // Render an empty state if no nearby locations are found
+  // The parent component will hide the entire section if it is the live page
   if (!enableNearbyLocations || !nearbyLocationsData?.response?.docs?.length) {
-    // Return a marker element so parent can detect empty state
     if (puck.isEditing) {
-      return <div data-empty-state="true" style={{ display: "none" }} />;
+      return <NearbyLocationsEmptyState radius={data.radius} />;
+    } else {
+      return <div data-empty-state="true" />;
     }
-    return <></>;
   }
 
   return (
@@ -317,13 +313,6 @@ const NearbyLocationCardsWrapperComponent: PuckComponent<
 export const defaultNearbyLocationsCardsProps: NearbyLocationCardsWrapperProps =
   {
     data: {
-      coordinate: {
-        field: "yextDisplayCoordinate",
-        constantValue: {
-          latitude: 0,
-          longitude: 0,
-        },
-      },
       radius: 10,
       limit: 3,
     },
@@ -350,4 +339,47 @@ export const NearbyLocationCardsWrapper: ComponentConfig<{
   fields: nearbyLocationCardsWrapperFields,
   defaultProps: defaultNearbyLocationsCardsProps,
   render: (props) => <NearbyLocationCardsWrapperComponent {...props} />,
+};
+
+/** @internal */
+const NearbyLocationsEmptyState: React.FC<{
+  radius?: number;
+}> = ({ radius }) => {
+  const templateMetadata = useTemplateMetadata();
+  const entityTypeDisplayName =
+    templateMetadata?.entityTypeDisplayName?.toLowerCase();
+
+  return (
+    <div
+      data-empty-state="true"
+      className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+    >
+      <MapPinOff className="w-12 h-12 text-gray-400" />
+      <div className="flex flex-col items-center gap-0">
+        <Body variant="base" className="text-gray-500 font-medium">
+          {pt(
+            "nearbyLocationsEmptyStateSectionHidden",
+            "Section hidden for this {{entityType}}",
+            {
+              entityType: entityTypeDisplayName
+                ? entityTypeDisplayName
+                : "page",
+            }
+          )}
+        </Body>
+        <Body variant="base" className="text-gray-500 font-normal">
+          {pt(
+            "nearbyLocationsEmptyState",
+            "No {{entityType}} within {{radius}} miles",
+            {
+              entityType: entityTypeDisplayName
+                ? entityTypeDisplayName
+                : "entity",
+              radius: radius ?? 10,
+            }
+          )}
+        </Body>
+      </div>
+    </div>
+  );
 };

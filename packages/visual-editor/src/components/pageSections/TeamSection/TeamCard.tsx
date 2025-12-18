@@ -41,7 +41,8 @@ const defaultPerson = {
     ctaType: "textAndLink",
   },
   headshot: {
-    url: "https://dyn.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/width=80,height=80",
+    // Placeholder headshot, uploaded to account 4174974
+    url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
     height: 80,
     width: 80,
   },
@@ -522,8 +523,7 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
       "max-w-full h-full object-cover"
     );
     updatedData = setDeep(updatedData, "props.slots.ImageSlot[0].props.sizes", {
-      base: "calc(100vw - 32px)",
-      lg: "calc(maxWidth * 0.33)",
+      base: "80px",
     } satisfies ImgSizesByBreakpoint);
 
     // Set the CTA's event name

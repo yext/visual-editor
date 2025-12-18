@@ -1,23 +1,23 @@
-import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import {
-  YextField,
-  msg,
   backgroundColors,
   BackgroundStyle,
+  CTAWrapperProps,
+  EnhancedTranslatableCTA,
+  ImageWrapperProps,
+  msg,
   PageSection,
   PageSectionProps,
-  CTAWrapperProps,
-  useOverflow,
-  ImageWrapperProps,
   resolveComponentData,
-  EnhancedTranslatableCTA,
-  YextEntityField,
   TranslatableCTA,
+  useOverflow,
+  YextEntityField,
+  YextField,
 } from "@yext/visual-editor";
-import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
-import { FaTimes, FaBars } from "react-icons/fa";
+import * as React from "react";
 import { useTranslation } from "react-i18next";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
 
 export interface PrimaryHeaderSlotProps {
   styles: {
@@ -96,6 +96,8 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
+  const LogoSlot = <slots.LogoSlot style={{ height: "auto", width: "auto" }} />;
+
   const navContent = (
     <>
       <slots.LinksSlot style={{ height: "auto" }} />
@@ -118,13 +120,9 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
           className="flex flex-row justify-between w-full items-center gap-8"
         >
           {/* Mobile logo */}
-          <div className="block md:hidden">
-            <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
-          </div>
+          <div className="block md:hidden">{LogoSlot}</div>
           {/* Desktop logo */}
-          <div className="hidden md:block">
-            <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
-          </div>
+          <div className="hidden md:block">{LogoSlot}</div>
           {/* Desktop Navigation & Mobile Hamburger */}
           {showNavContent && (
             <div
@@ -233,7 +231,8 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             image: {
               field: "",
               constantValue: {
-                url: "https://placehold.co/100",
+                // Placeholder logo, uploaded to account 4174974
+                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                 height: 100,
                 width: 100,
               },
@@ -241,7 +240,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
             },
           },
           styles: {
-            aspectRatio: 2,
+            aspectRatio: 1,
             width: 100,
           },
         } satisfies ImageWrapperProps,

@@ -143,6 +143,7 @@
   "customSearchArea": "Aangepast zoekgebied",
   "date": "Datum",
   "dateAndTime": "Datum en tijd",
+  "default": "Standaard",
   "delete": "Verwijderen",
   "deleteItem": "Verwijder item",
   "discardChanges": {
@@ -186,6 +187,7 @@
     "cards": "Kaarten",
     "category": "Categorie",
     "collapseDays": "Instortdagen",
+    "color": "Kleur",
     "columns": "Kolommen",
     "commaSeparated": "Komma gescheiden",
     "contributorName": "Bijdragennaam",
@@ -272,6 +274,7 @@
     "localGeomodifier": "Lokale geomodifier",
     "localGeomodifierHeadingLevel": "Lokale geomodifieringsniveau",
     "logo": "Logo",
+    "logoLink": "Logo-link",
     "logoStyles": "Logo -stijlen",
     "logoUrl": "Logo",
     "logoWidth": "Logo -breedte",
@@ -297,8 +300,8 @@
       "compact": "Compact",
       "ctaVariant": {
         "link": "Link",
-        "primary": "Primair",
-        "secondary": "Secundair"
+        "primary": "Stevig",
+        "secondary": "Overzicht"
       },
       "dark": "Donker",
       "default": "Standaard",
