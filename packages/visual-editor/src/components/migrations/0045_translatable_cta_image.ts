@@ -12,8 +12,15 @@ const getLocales = (streamDocument: any): string[] => {
 // Helper to migrate Image constant value
 const migrateImage = (image: any, locales: string[]) => {
   if (!image) return image;
+
+  // Normalize string to object
+  let imageObj = image;
+  if (typeof image === "string") {
+    imageObj = { url: image };
+  }
+
   // If already localized, return as is
-  if ("hasLocalizedValue" in image) return image;
+  if ("hasLocalizedValue" in imageObj) return imageObj;
 
   // If it's a legacy image object (url, width, height, etc.)
   // Wrap it in localized structure
@@ -22,7 +29,7 @@ const migrateImage = (image: any, locales: string[]) => {
   };
 
   locales.forEach((locale) => {
-    localizedImage[locale] = image;
+    localizedImage[locale] = imageObj;
   });
 
   return localizedImage;
@@ -108,6 +115,80 @@ export const translatableCTAImageMigration: Migration = {
               .constantValue,
             locales
           );
+      }
+
+      return props;
+    },
+  },
+  ExpandedFooter: {
+    action: "updated",
+    propTransformation: (props, streamDocument) => {
+      const locales = getLocales(streamDocument);
+
+      // Migrate LogoSlot
+      if (props.slots?.LogoSlot?.[0]?.props?.data?.image?.constantValue) {
+        let logo = props.slots.LogoSlot[0].props.data.image.constantValue;
+
+        // Normalize logo
+        if (typeof logo === "string") {
+          logo = { url: logo };
+        }
+        // Handle nested image.url from legacy complex image
+        if (logo?.image?.url && !logo.url) {
+          logo = { ...logo, url: logo.image.url };
+        }
+        // Ensure defaults
+        logo = {
+          height: 100,
+          width: 100,
+          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          ...logo,
+        };
+
+        props.slots.LogoSlot[0].props.data.image.constantValue = migrateImage(
+          logo,
+          locales
+        );
+      }
+
+      // Migrate UtilityImagesSlot
+      if (props.slots?.UtilityImagesSlot?.[0]?.props?.data?.utilityImages) {
+        const utilityImages =
+          props.slots.UtilityImagesSlot[0].props.data.utilityImages;
+
+        props.slots.UtilityImagesSlot[0].props.data.utilityImages =
+          utilityImages.map((img: any) => {
+            // Normalize utility image item
+            let processedImg = img;
+            if (typeof img === "string") {
+              processedImg = { image: { url: img } };
+            } else if (!img.image && img.url) {
+              // Handle flat object { url: "...", linkTarget: "..." }
+              processedImg = {
+                image: { url: img.url },
+                linkTarget: img.linkTarget,
+              };
+            }
+
+            // Ensure defaults for the image part
+            if (processedImg.image) {
+              // Normalize image string inside the item
+              if (typeof processedImg.image === "string") {
+                processedImg.image = { url: processedImg.image };
+              }
+
+              processedImg.image = {
+                height: 60,
+                width: 60,
+                alternateText: {
+                  en: "Utility Image",
+                  hasLocalizedValue: "true",
+                },
+                ...processedImg.image,
+              };
+            }
+            return processedImg;
+          });
       }
 
       return props;

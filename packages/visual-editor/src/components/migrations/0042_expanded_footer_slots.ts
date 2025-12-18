@@ -6,7 +6,7 @@ export const expandedFooterSlots: Migration = {
     propTransformation: (props) => {
       // Extract all data from primaryFooter
       const {
-        logo: rawLogo,
+        logo,
         xLink,
         facebookLink,
         instagramLink,
@@ -14,45 +14,11 @@ export const expandedFooterSlots: Migration = {
         pinterestLink,
         tiktokLink,
         youtubeLink,
-        utilityImages: rawUtilityImages,
+        utilityImages,
         footerLinks,
         expandedFooterLinks,
         expandedFooter,
       } = props.data.primaryFooter || {};
-
-      let logo = typeof rawLogo === "string" ? { url: rawLogo } : rawLogo;
-      if (logo && !logo.url) {
-        logo = undefined;
-      }
-      if (logo) {
-        logo = {
-          height: 100,
-          width: 100,
-          alternateText: { en: "Logo", hasLocalizedValue: "true" },
-          ...logo,
-        };
-      }
-
-      const utilityImages = rawUtilityImages?.map((img: any) => {
-        let processedImg = img;
-        if (!img.image) {
-          processedImg = {
-            image: {
-              url: img.url,
-            },
-            linkTarget: img.linkTarget,
-          };
-        }
-        if (processedImg.image) {
-          processedImg.image = {
-            height: 60,
-            width: 60,
-            alternateText: { en: "Utility Image", hasLocalizedValue: "true" },
-            ...processedImg.image,
-          };
-        }
-        return processedImg;
-      });
 
       // Extract data from secondaryFooter
       const { secondaryFooterLinks, copyrightMessage, show } =
