@@ -115,7 +115,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
 
     if ("hasLocalizedValue" in image) {
       const localized = image[i18n.language];
-      if (typeof localized === "object") {
+      if (localized && typeof localized === "object") {
         return localized.url;
       }
       return undefined;
