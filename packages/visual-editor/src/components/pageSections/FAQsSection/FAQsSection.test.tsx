@@ -339,8 +339,8 @@ const tests: ComponentTest[] = [
     props: {
       styles: {
         backgroundColor: {
-          bgColor: "bg-palette-tertiary-light",
-          textColor: "text-black",
+          bgColor: "bg-palette-primary-dark",
+          textColor: "text-white",
         },
       },
       slots: {
@@ -514,6 +514,119 @@ const tests: ComponentTest[] = [
     },
     interactions: async (page) => {
       const q1 = page.getByText("How does version 35 work?");
+      await act(async () => {
+        await q1.click();
+        await delay(interactionsDelay);
+      });
+    },
+    version: 35,
+  },
+  {
+    name: "version 35 with constant values and entity values",
+    document: {
+      locale: "en",
+      question: getDefaultRTF("What is your return policy?"),
+    },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "FAQs Heading Slot",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        FAQsWrapperSlot: [
+          {
+            type: "FAQsWrapperSlot",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{ id: "faq-1" }],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "FAQSlot",
+                    props: {
+                      id: "faq-1",
+                      slots: {
+                        QuestionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "faq-1-question",
+                              data: {
+                                text: {
+                                  field: "question",
+                                  constantValue: {
+                                    en: getDefaultRTF(
+                                      "Lorem ipsum dolor sit amet?"
+                                    ),
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: false,
+                                },
+                              },
+                              styles: {
+                                variant: "lg",
+                              },
+                            },
+                          },
+                        ],
+                        AnswerSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "faq-1-answer",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: getDefaultRTF(
+                                      "You can return any item within 30 days of purchase."
+                                    ),
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    interactions: async (page) => {
+      const q1 = page.getByText("What is your return policy?");
       await act(async () => {
         await q1.click();
         await delay(interactionsDelay);
