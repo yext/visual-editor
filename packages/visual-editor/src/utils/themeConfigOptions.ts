@@ -325,16 +325,13 @@ const presetImageTypeOptions: {
     label: msg("presetImages.appGallery", "App Gallery"),
     value: "app-gallery",
   },
-  { label: msg("presetImages.deliveroo", "Deliveroo"), value: "deliveroo" },
-  { label: msg("presetImages.doordash", "DoorDash"), value: "doordash" },
-  { label: msg("presetImages.grubhub", "Grubhub"), value: "grubhub" },
-  {
-    label: msg("presetImages.skipTheDishes", "Skip The Dishes"),
-    value: "skip-the-dishes",
-  },
-  { label: msg("presetImages.postmates", "Postmates"), value: "postmates" },
-  { label: msg("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
-  { label: msg("presetImages.ezCater", "ezCater"), value: "ezcater" },
+  { label: "Deliveroo", value: "deliveroo" },
+  { label: "DoorDash", value: "doordash" },
+  { label: "Grubhub", value: "grubhub" },
+  { label: "Skip The Dishes", value: "skip-the-dishes" },
+  { label: "Postmates", value: "postmates" },
+  { label: "Uber Eats", value: "uber-eats" },
+  { label: "ezCater", value: "ezcater" },
 ];
 
 const alignmentOptions = [

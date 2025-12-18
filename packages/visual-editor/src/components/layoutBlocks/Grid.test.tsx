@@ -1530,7 +1530,7 @@ const tests: ComponentTest[] = [
     version: 45,
   },
   {
-    name: "version 29 - delivery service CTAs",
+    name: "version 47 - delivery service CTAs",
     document: {
       address: testAddress,
       id: "test-id",
@@ -1602,7 +1602,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       analytics: { scope: "gridSection" },
     },
-    version: 29,
+    version: 47,
   },
 ];
 
