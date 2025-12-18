@@ -191,6 +191,22 @@ export const translatableCTAImageMigration: Migration = {
           });
       }
 
+      // Migrate PrimaryLinksWrapperSlot
+      if (props.slots?.PrimaryLinksWrapperSlot?.[0]?.props?.data?.links) {
+        props.slots.PrimaryLinksWrapperSlot[0].props.data.links =
+          props.slots.PrimaryLinksWrapperSlot[0].props.data.links.map(
+            (link: any) => migrateCTALink(link, locales)
+          );
+      }
+
+      // Migrate ExpandedLinksWrapperSlot
+      if (props.slots?.ExpandedLinksWrapperSlot?.[0]?.props?.data?.links) {
+        props.slots.ExpandedLinksWrapperSlot[0].props.data.links =
+          props.slots.ExpandedLinksWrapperSlot[0].props.data.links.map(
+            (link: any) => migrateCTALink(link, locales)
+          );
+      }
+
       return props;
     },
   },
@@ -311,49 +327,6 @@ export const translatableCTAImageMigration: Migration = {
               locales
             );
         }
-      }
-
-      return props;
-    },
-  },
-  ExpandedFooter: {
-    action: "updated",
-    propTransformation: (props, streamDocument) => {
-      const locales = getLocales(streamDocument);
-
-      // Migrate LogoSlot
-      if (props.slots?.LogoSlot?.[0]?.props?.data?.image?.constantValue) {
-        props.slots.LogoSlot[0].props.data.image.constantValue = migrateImage(
-          props.slots.LogoSlot[0].props.data.image.constantValue,
-          locales
-        );
-      }
-
-      // Migrate PrimaryLinksWrapperSlot
-      if (props.slots?.PrimaryLinksWrapperSlot?.[0]?.props?.data?.links) {
-        props.slots.PrimaryLinksWrapperSlot[0].props.data.links =
-          props.slots.PrimaryLinksWrapperSlot[0].props.data.links.map(
-            (link: any) => migrateCTALink(link, locales)
-          );
-      }
-
-      // Migrate ExpandedLinksWrapperSlot
-      if (props.slots?.ExpandedLinksWrapperSlot?.[0]?.props?.data?.links) {
-        props.slots.ExpandedLinksWrapperSlot[0].props.data.links =
-          props.slots.ExpandedLinksWrapperSlot[0].props.data.links.map(
-            (link: any) => migrateCTALink(link, locales)
-          );
-      }
-
-      // Migrate UtilityImagesSlot
-      if (props.slots?.UtilityImagesSlot?.[0]?.props?.data?.utilityImages) {
-        props.slots.UtilityImagesSlot[0].props.data.utilityImages.forEach(
-          (item: any) => {
-            if (item.image) {
-              item.image = migrateImage(item.image, locales);
-            }
-          }
-        );
       }
 
       return props;
