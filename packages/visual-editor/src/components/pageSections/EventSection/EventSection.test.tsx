@@ -1217,6 +1217,7 @@ const tests: ComponentTest[] = [
                                       url: "https://placehold.co/640x360",
                                       height: 360,
                                       width: 640,
+                                      alternateText: "Alt Text",
                                     },
                                     hasLocalizedValue: "true",
                                   },

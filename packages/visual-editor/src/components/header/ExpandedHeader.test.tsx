@@ -859,6 +859,12 @@ const tests: ComponentTest[] = [
                   constantValueEnabled: true,
                 },
               },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-white",
+                  textColor: "text-black",
+                },
+              },
               slots: {
                 LogoSlot: [
                   {
@@ -873,6 +879,7 @@ const tests: ComponentTest[] = [
                               url: "https://placehold.co/100",
                               height: 100,
                               width: 100,
+                              alternateText: "Alt Text",
                             },
                             hasLocalizedValue: "true",
                           },
