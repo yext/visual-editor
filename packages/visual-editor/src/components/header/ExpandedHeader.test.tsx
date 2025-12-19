@@ -835,6 +835,97 @@ const tests: ComponentTest[] = [
     },
     version: 41,
   },
+  {
+    name: "version 47 props with non-localized logo and CTAs",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          field: "",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              id: "PrimaryHeaderSlot-v47",
+              data: {
+                primaryHeader: {
+                  field: "",
+                  constantValue: {},
+                  constantValueEnabled: true,
+                },
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "HeaderLogoSlot",
+                    props: {
+                      id: "LogoSlot-v47",
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            url: "https://placehold.co/100",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "PrimaryCTASlot-v47",
+                      data: {
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: "Call to Action",
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "SecondaryCTASlot-v47",
+                      data: {
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: "Call to Action",
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 47,
+  },
 ];
 
 describe("ExpandedHeader", async () => {

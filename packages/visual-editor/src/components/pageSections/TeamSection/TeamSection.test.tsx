@@ -1010,6 +1010,104 @@ const tests: ComponentTest[] = [
     },
     version: 34,
   },
+  {
+    name: "version 47 props with non-localized image and CTA",
+    document: { c_team: teamData.people },
+    props: {
+      data: {
+        people: { field: "", constantValue: [], constantValueEnabled: true },
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      },
+      slots: {
+        CardsWrapperSlot: [
+          {
+            type: "TeamCardsWrapper",
+            props: {
+              id: "CardsWrapperSlot-v47",
+              data: {
+                people: {
+                  field: "",
+                  constantValue: [
+                    {
+                      headshot: {
+                        url: "https://placehold.co/640x360",
+                        height: 360,
+                        width: 640,
+                      },
+                      cta: {
+                        label: "View Profile",
+                        link: "#",
+                        linkType: "URL",
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "TeamCard",
+                    props: {
+                      id: "CardSlot-v47",
+                      data: {},
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              id: "ImageSlot-v47",
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/640x360",
+                                    height: 360,
+                                    width: 640,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              id: "CTASlot-v47",
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "View Profile",
+                                    link: "#",
+                                    linkType: "URL",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "teamSection",
+      },
+      liveVisibility: true,
+    },
+    version: 47,
+  },
 ];
 
 describe("TeamSection", async () => {

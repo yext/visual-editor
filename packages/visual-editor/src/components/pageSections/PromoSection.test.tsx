@@ -721,6 +721,67 @@ const tests: ComponentTest[] = [
     },
     version: 30,
   },
+  {
+    name: "version 47 props with non-localized image and CTA",
+    document: { c_examplePromo: promoData },
+    props: {
+      data: {
+        promo: { field: "", constantValue: {}, constantValueEnabled: true },
+        media: "image",
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        orientation: "left",
+      },
+      slots: {
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-v47",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://placehold.co/640x360",
+                    height: 360,
+                    width: 640,
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-v47",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Learn More",
+                    link: "#",
+                    linkType: "URL",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "primary",
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+    },
+    version: 47,
+  },
 ];
 
 const BRAND_COLOR_BG_ALLOWLIST = new Set([

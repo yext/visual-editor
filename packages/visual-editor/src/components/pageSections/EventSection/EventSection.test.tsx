@@ -1166,6 +1166,102 @@ const tests: ComponentTest[] = [
     },
     version: 26,
   },
+  {
+    name: "version 47 props with non-localized image and CTA",
+    document: { c_events: eventsData.events },
+    props: {
+      data: {
+        events: { field: "", constantValue: [], constantValueEnabled: true },
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      },
+      slots: {
+        CardsWrapperSlot: [
+          {
+            type: "EventCardsWrapper",
+            props: {
+              id: "CardsWrapperSlot-v47",
+              data: {
+                events: {
+                  field: "",
+                  constantValue: [
+                    {
+                      image: {
+                        url: "https://placehold.co/640x360",
+                        height: 360,
+                        width: 640,
+                      },
+                      cta: {
+                        label: "Learn More",
+                        link: "#",
+                        linkType: "URL",
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "EventCard",
+                    props: {
+                      id: "CardSlot-v47",
+                      data: {},
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              id: "ImageSlot-v47",
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/640x360",
+                                    height: 360,
+                                    width: 640,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              id: "CTASlot-v47",
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "Learn More",
+                                    link: "#",
+                                    linkType: "URL",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "eventsSection" },
+      liveVisibility: true,
+    },
+    version: 47,
+  },
 ];
 
 describe("EventSection", async () => {

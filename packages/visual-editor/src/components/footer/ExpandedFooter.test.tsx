@@ -1074,6 +1074,73 @@ const tests: ComponentTest[] = [
     },
     version: 42,
   },
+  {
+    name: "version 47 props with non-localized logo and utility images",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          field: "",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+      },
+      slots: {
+        LogoSlot: [
+          {
+            type: "FooterLogoSlot",
+            props: {
+              id: "LogoSlot-v47",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: "https://placehold.co/100",
+                  constantValueEnabled: true,
+                },
+              },
+            },
+          },
+        ],
+        UtilityImagesSlot: [
+          {
+            type: "FooterUtilityImagesSlot",
+            props: {
+              id: "UtilityImagesSlot-v47",
+              data: {
+                utilityImages: [
+                  "https://placehold.co/60",
+                  {
+                    url: "https://placehold.co/60",
+                    linkTarget: "_blank",
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      styles: {
+        primaryFooter: {
+          logo: {
+            width: 0,
+            aspectRatio: 1.78,
+          },
+          utilityImages: {
+            width: 0,
+            aspectRatio: 1,
+          },
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
+          linksAlignment: "right",
+        },
+        maxWidth: "theme",
+      },
+      analytics: { scope: "expandedFooter" },
+    },
+    version: 47,
+  },
 ];
 
 const socialLinkTestCases = [

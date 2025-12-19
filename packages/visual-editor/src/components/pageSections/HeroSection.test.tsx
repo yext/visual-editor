@@ -2204,6 +2204,85 @@ const tests: ComponentTest[] = [
     },
     version: 31,
   },
+  {
+    name: "version 47 props with non-localized image and CTAs",
+    document: {
+      locale: "en",
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+    },
+    props: {
+      data: {
+        hero: { field: "", constantValue: {}, constantValueEnabled: true },
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      },
+      slots: {
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-v47",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    url: "https://placehold.co/100x100",
+                    height: 100,
+                    width: 100,
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "PrimaryCTASlot-v47",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Get Directions",
+                    link: "#",
+                    linkType: "URL",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+            },
+          },
+        ],
+        SecondaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "SecondaryCTASlot-v47",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: "Learn More",
+                    link: "#",
+                    linkType: "URL",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 47,
+  },
 ];
 
 const BRAND_COLOR_BG_ALLOWLIST = new Set([
