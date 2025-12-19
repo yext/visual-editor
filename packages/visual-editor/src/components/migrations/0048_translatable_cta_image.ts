@@ -11,7 +11,9 @@ const getLocales = (streamDocument: any): string[] => {
 
 // Helper to migrate Image constant value
 const migrateImage = (image: any, locales: string[]) => {
-  if (!image) return image;
+  if (!image) {
+    return image;
+  }
 
   // Normalize string to object
   let imageObj = image;
@@ -20,7 +22,9 @@ const migrateImage = (image: any, locales: string[]) => {
   }
 
   // If already localized, return as is
-  if ("hasLocalizedValue" in imageObj) return imageObj;
+  if ("hasLocalizedValue" in imageObj) {
+    return imageObj;
+  }
 
   // If it's a legacy image object (url, width, height, etc.)
   // Wrap it in localized structure
@@ -37,7 +41,9 @@ const migrateImage = (image: any, locales: string[]) => {
 
 // Helper to migrate CTA link
 const migrateCTALink = (cta: any, locales: string[]) => {
-  if (!cta) return cta;
+  if (!cta) {
+    return cta;
+  }
 
   // Migrate link if it's a string
   if (cta.link && typeof cta.link === "string") {

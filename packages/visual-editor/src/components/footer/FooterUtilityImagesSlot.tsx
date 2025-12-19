@@ -36,20 +36,22 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
 
   // Filter to only valid images with URLs
   const validImages = (data.utilityImages || [])
-    .map((item: any) => {
-      if (item.image) {
+    .map(
+      (item: { image?: AssetImageType; url?: string; linkTarget?: string }) => {
+        if (item.image) {
+          return item;
+        }
+        if (item.url) {
+          return {
+            image: {
+              url: item.url,
+            },
+            linkTarget: item.linkTarget,
+          };
+        }
         return item;
       }
-      if (item.url) {
-        return {
-          image: {
-            url: item.url,
-          },
-          linkTarget: item.linkTarget,
-        };
-      }
-      return item;
-    })
+    )
     .filter((item) => item.image?.url);
 
   if (validImages.length === 0) {
