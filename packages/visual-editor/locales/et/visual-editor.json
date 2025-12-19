@@ -30,6 +30,10 @@
     "send": "Saada heakskiitu",
     "writeComment": "Kirjutage oma kommentaar siia ..."
   },
+  "ariaLabelAppGallery": "Uurige seda rakenduses AppGallery",
+  "ariaLabelAppStore": "Laadige alla App Store'ist",
+  "ariaLabelGalaxyStore": "Saadaval Galaxy Store'is",
+  "ariaLabelGooglePlay": "Hankige see Google Playst",
   "arrayField": "Massiivi väli",
   "back": "Tagurpidi",
   "base": "Alus",

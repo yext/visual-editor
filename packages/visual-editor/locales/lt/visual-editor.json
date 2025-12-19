@@ -30,6 +30,10 @@
     "send": "Siųsti patvirtinti",
     "writeComment": "Parašykite savo komentarą čia ..."
   },
+  "ariaLabelAppGallery": "Naršykite jį „AppGallery“.",
+  "ariaLabelAppStore": "Atsisiųskite iš „App Store“.",
+  "ariaLabelGalaxyStore": "Galima įsigyti „Galaxy Store“.",
+  "ariaLabelGooglePlay": "Gaukite jį iš „Google Play“.",
   "arrayField": "Masyvo laukas",
   "back": "Atgal",
   "base": "Bazė",

@@ -30,6 +30,10 @@
     "send": "Genehmigung senden",
     "writeComment": "Schreiben Sie Ihren Kommentar hier ..."
   },
+  "ariaLabelAppGallery": "Entdecken Sie es in der AppGallery",
+  "ariaLabelAppStore": "Im App Store herunterladen",
+  "ariaLabelGalaxyStore": "Erhältlich im Galaxy Store",
+  "ariaLabelGooglePlay": "Holen Sie es sich bei Google Play",
   "arrayField": "Array -Feld",
   "back": "Zurück",
   "base": "Base",

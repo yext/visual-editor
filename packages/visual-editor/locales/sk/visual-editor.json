@@ -30,6 +30,10 @@
     "send": "Poslať na schválenie",
     "writeComment": "Napíš sem svoj komentár ..."
   },
+  "ariaLabelAppGallery": "Preskúmajte to v AppGallery",
+  "ariaLabelAppStore": "Stiahnite si na App Store",
+  "ariaLabelGalaxyStore": "Dostupné v obchode Galaxy Store",
+  "ariaLabelGooglePlay": "Získajte ju v službe Google Play",
   "arrayField": "Pole",
   "back": "Chrbát",
   "base": "Základňa",

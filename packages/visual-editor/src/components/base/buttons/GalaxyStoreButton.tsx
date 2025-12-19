@@ -1,5 +1,6 @@
 import type { AnchorHTMLAttributes } from "react";
 import { cn } from "../../../utils/cn";
+import { pt } from "../../../utils/i18n/platform";
 
 export const GalaxyStoreButton = ({
   size = "md",
@@ -7,7 +8,7 @@ export const GalaxyStoreButton = ({
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
   return (
     <a
-      aria-label="Available on Galaxy Store"
+      aria-label={pt("ariaLabelGalaxyStore", "Available on Galaxy Store")}
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",

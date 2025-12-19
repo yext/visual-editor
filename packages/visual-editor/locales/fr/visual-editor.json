@@ -30,6 +30,10 @@
     "send": "Envoyer l'approbation",
     "writeComment": "Écrivez votre commentaire ici ..."
   },
+  "ariaLabelAppGallery": "Découvrez-le sur AppGallery",
+  "ariaLabelAppStore": "Télécharger sur l'App Store",
+  "ariaLabelGalaxyStore": "Disponible sur le Galaxy Store",
+  "ariaLabelGooglePlay": "Obtenez-le sur Google Play",
   "arrayField": "Champ de tableau",
   "back": "Dos",
   "base": "Base",

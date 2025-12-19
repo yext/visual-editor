@@ -30,6 +30,10 @@
     "send": "Skicka för godkännande",
     "writeComment": "Skriv din kommentar här ..."
   },
+  "ariaLabelAppGallery": "Utforska det på AppGallery",
+  "ariaLabelAppStore": "Ladda ner på App Store",
+  "ariaLabelGalaxyStore": "Tillgänglig på Galaxy Store",
+  "ariaLabelGooglePlay": "Skaffa det på Google Play",
   "arrayField": "Matrisfält",
   "back": "Tillbaka",
   "base": "Bas",

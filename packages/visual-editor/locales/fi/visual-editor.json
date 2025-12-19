@@ -30,6 +30,10 @@
     "send": "Lähetä hyväksyntä",
     "writeComment": "Kirjoita kommenttisi tähän ..."
   },
+  "ariaLabelAppGallery": "Tutustu siihen AppGalleryssa",
+  "ariaLabelAppStore": "Lataa App Storesta",
+  "ariaLabelGalaxyStore": "Saatavilla Galaxy Storesta",
+  "ariaLabelGooglePlay": "Hanki se Google Playsta",
   "arrayField": "Ryhmäkenttä",
   "back": "Takaisin",
   "base": "Pohja",

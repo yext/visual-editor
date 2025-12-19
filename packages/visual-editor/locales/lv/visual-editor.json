@@ -30,6 +30,10 @@
     "send": "Nosūtīt apstiprināšanai",
     "writeComment": "Uzrakstiet savu komentāru šeit ..."
   },
+  "ariaLabelAppGallery": "Izpētiet to vietnē AppGallery",
+  "ariaLabelAppStore": "Lejupielādējiet no App Store",
+  "ariaLabelGalaxyStore": "Pieejams veikalā Galaxy Store",
+  "ariaLabelGooglePlay": "Iegūstiet to pakalpojumā Google Play",
   "arrayField": "Masīva lauks",
   "back": "Aizmugure",
   "base": "Pamatne",

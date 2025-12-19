@@ -30,6 +30,10 @@
     "send": "Send for godkjenning",
     "writeComment": "Skriv kommentaren din her ..."
   },
+  "ariaLabelAppGallery": "Utforsk det på AppGallery",
+  "ariaLabelAppStore": "Last ned på App Store",
+  "ariaLabelGalaxyStore": "Tilgjengelig på Galaxy Store",
+  "ariaLabelGooglePlay": "Få den på Google Play",
   "arrayField": "Array -feltet",
   "back": "Tilbake",
   "base": "Base",

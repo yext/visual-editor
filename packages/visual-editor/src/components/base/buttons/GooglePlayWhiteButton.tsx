@@ -1,5 +1,6 @@
 import type { AnchorHTMLAttributes } from "react";
 import { cn } from "../../../utils/cn";
+import { pt } from "../../../utils/i18n/platform";
 
 export const GooglePlayWhiteButton = ({
   size = "md",
@@ -7,7 +8,7 @@ export const GooglePlayWhiteButton = ({
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
   return (
     <a
-      aria-label="Download on the App Store"
+      aria-label={pt("ariaLabelGooglePlay", "Get it on Google Play")}
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",

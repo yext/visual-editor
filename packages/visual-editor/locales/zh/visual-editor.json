@@ -30,6 +30,10 @@
     "send": "发送批准",
     "writeComment": "在这里写你的评论..."
   },
+  "ariaLabelAppGallery": "在 AppGallery 上探索",
+  "ariaLabelAppStore": "在应用商店下载",
+  "ariaLabelGalaxyStore": "Galaxy 商店有售",
+  "ariaLabelGooglePlay": "在 Google Play 上获取",
   "arrayField": "数组字段",
   "back": "后退",
   "base": "根据",

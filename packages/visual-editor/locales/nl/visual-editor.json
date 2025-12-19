@@ -30,6 +30,10 @@
     "send": "Stuur voor goedkeuring",
     "writeComment": "Schrijf hier je opmerking ..."
   },
+  "ariaLabelAppGallery": "Ontdek het op AppGallery",
+  "ariaLabelAppStore": "Downloaden in de App Store",
+  "ariaLabelGalaxyStore": "Verkrijgbaar in de Galaxy Store",
+  "ariaLabelGooglePlay": "Download het op Google Play",
   "arrayField": "Arrayveld",
   "back": "Rug",
   "base": "Baseren",

@@ -30,6 +30,10 @@
     "send": "Trimiteți pentru aprobare",
     "writeComment": "Scrie -ți comentariul aici ..."
   },
+  "ariaLabelAppGallery": "Explorează-l pe AppGallery",
+  "ariaLabelAppStore": "Descărcați în App Store",
+  "ariaLabelGalaxyStore": "Disponibil pe Galaxy Store",
+  "ariaLabelGooglePlay": "Obțineți-l pe Google Play",
   "arrayField": "Câmp de matrice",
   "back": "Spate",
   "base": "Baza",

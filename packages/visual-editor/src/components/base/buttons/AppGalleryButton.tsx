@@ -1,5 +1,6 @@
 import type { AnchorHTMLAttributes } from "react";
 import { cn } from "../../../utils/cn";
+import { pt } from "../../../utils/i18n/platform";
 
 export const AppGalleryButton = ({
   size = "md",
@@ -7,7 +8,7 @@ export const AppGalleryButton = ({
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
   return (
     <a
-      aria-label="Explore it on AppGallery"
+      aria-label={pt("ariaLabelAppGallery", "Explore it on AppGallery")}
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",

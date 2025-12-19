@@ -30,6 +30,10 @@
     "send": "Send for Approval",
     "writeComment": "Write your comment here..."
   },
+  "ariaLabelAppGallery": "Explore it on AppGallery",
+  "ariaLabelAppStore": "Download on the App Store",
+  "ariaLabelGalaxyStore": "Available on Galaxy Store",
+  "ariaLabelGooglePlay": "Get it on Google Play",
   "arrayField": "Array Field",
   "back": "Back",
   "base": "Base",
