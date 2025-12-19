@@ -58,28 +58,29 @@ export function TranslatableStringField<
         }
       }
 
-      const applyAllButton = showApplyAllOption ? (
-        <Button
-          size="sm"
-          variant="small_link"
-          onClick={() => {
-            const valueByLocale: TranslatableString = {
-              hasLocalizedValue: "true",
-              ...locales.reduce(
-                (acc, locale) => {
-                  acc[locale] = resolvedValue;
-                  return acc;
-                },
-                {} as Record<string, string>
-              ),
-            };
-            onChange(valueByLocale as T);
-          }}
-          className={"ve-px-0 ve-h-auto"}
-        >
-          {pt("applyAll", "Apply to all locales")}
-        </Button>
-      ) : null;
+      const applyAllButton =
+        showApplyAllOption && locales.length > 1 ? (
+          <Button
+            size="sm"
+            variant="small_link"
+            onClick={() => {
+              const valueByLocale: TranslatableString = {
+                hasLocalizedValue: "true",
+                ...locales.reduce(
+                  (acc, locale) => {
+                    acc[locale] = resolvedValue;
+                    return acc;
+                  },
+                  {} as Record<string, string>
+                ),
+              };
+              onChange(valueByLocale as T);
+            }}
+            className={"ve-px-0 ve-h-auto"}
+          >
+            {pt("applyAll", "Apply to all locales")}
+          </Button>
+        ) : null;
 
       const fieldEditor = (
         <>

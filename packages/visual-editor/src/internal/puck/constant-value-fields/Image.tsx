@@ -227,36 +227,40 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
           </div>
         </FieldLabel>
 
-        <Button
-          size="sm"
-          variant="small_link"
-          onClick={() => {
-            if (!resolvedValue) return;
+        {locales.length > 1 && (
+          <Button
+            size="sm"
+            variant="small_link"
+            onClick={() => {
+              if (!resolvedValue) {
+                return;
+              }
 
-            const valueByLocale = {
-              hasLocalizedValue: "true",
-              ...locales.reduce(
-                (acc, l) => {
-                  const existingLocaleData =
-                    value && "hasLocalizedValue" in value
-                      ? (value[l] as AssetImageType | undefined)
-                      : undefined;
+              const valueByLocale = {
+                hasLocalizedValue: "true",
+                ...locales.reduce(
+                  (acc, l) => {
+                    const existingLocaleData =
+                      value && "hasLocalizedValue" in value
+                        ? (value[l] as AssetImageType | undefined)
+                        : undefined;
 
-                  acc[l] = {
-                    ...resolvedValue,
-                    alternateText: existingLocaleData?.alternateText,
-                  };
-                  return acc;
-                },
-                {} as Record<string, any>
-              ),
-            };
-            onChange(valueByLocale as TranslatableAssetImage);
-          }}
-          className={"ve-px-0 ve-pb-4 ve-h-auto"}
-        >
-          {pt("applyAll", "Apply to all locales")}
-        </Button>
+                    acc[l] = {
+                      ...resolvedValue,
+                      alternateText: existingLocaleData?.alternateText,
+                    };
+                    return acc;
+                  },
+                  {} as Record<string, any>
+                ),
+              };
+              onChange(valueByLocale as TranslatableAssetImage);
+            }}
+            className={"ve-px-0 ve-pb-4 ve-h-auto"}
+          >
+            {pt("applyAll", "Apply to all locales")}
+          </Button>
+        )}
 
         {/* Alt Text Field */}
         <AutoField
