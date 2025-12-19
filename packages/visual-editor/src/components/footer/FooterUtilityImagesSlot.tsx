@@ -45,14 +45,17 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
           return {
             image: {
               url: item.url,
-            },
+            } as AssetImageType,
             linkTarget: item.linkTarget,
           };
         }
         return item;
       }
     )
-    .filter((item) => item.image?.url);
+    .filter(
+      (item): item is { image: AssetImageType; linkTarget?: string } =>
+        !!item.image?.url
+    );
 
   if (validImages.length === 0) {
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
