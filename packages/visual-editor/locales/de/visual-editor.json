@@ -30,6 +30,10 @@
     "send": "Genehmigung senden",
     "writeComment": "Schreiben Sie Ihren Kommentar hier ..."
   },
+  "ariaLabelAppGallery": "Entdecken Sie es auf {{serviceName}}",
+  "ariaLabelAppStore": "Herunterladen auf {{serviceName}}",
+  "ariaLabelGalaxyStore": "Verfügbar auf {{serviceName}}",
+  "ariaLabelGooglePlay": "Holen Sie es sich bei {{serviceName}}",
   "arrayField": "Array -Feld",
   "back": "Zurück",
   "base": "Base",

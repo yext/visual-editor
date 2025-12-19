@@ -30,6 +30,10 @@
     "send": "Lähetä hyväksyntä",
     "writeComment": "Kirjoita kommenttisi tähän ..."
   },
+  "ariaLabelAppGallery": "Tutustu siihen palvelussa {{serviceName}}",
+  "ariaLabelAppStore": "Lataa palvelusta {{serviceName}}",
+  "ariaLabelGalaxyStore": "Saatavilla palvelussa {{serviceName}}",
+  "ariaLabelGooglePlay": "Hanki se palvelusta {{serviceName}}",
   "arrayField": "Ryhmäkenttä",
   "back": "Takaisin",
   "base": "Pohja",

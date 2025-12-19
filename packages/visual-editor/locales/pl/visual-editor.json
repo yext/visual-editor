@@ -30,6 +30,10 @@
     "send": "Wyślij do zatwierdzenia",
     "writeComment": "Napisz swój komentarz tutaj ..."
   },
+  "ariaLabelAppGallery": "Odkryj to w {{serviceName}}",
+  "ariaLabelAppStore": "Pobierz na {{serviceName}}",
+  "ariaLabelGalaxyStore": "Dostępne w {{serviceName}}",
+  "ariaLabelGooglePlay": "Pobierz to na {{serviceName}}",
   "arrayField": "Pole tablicy",
   "back": "Z powrotem",
   "base": "Opierać",

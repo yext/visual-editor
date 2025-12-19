@@ -325,7 +325,13 @@ const presetImageTypeOptions: {
     label: msg("presetImages.appGallery", "App Gallery"),
     value: "app-gallery",
   },
-  { label: msg("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
+  { label: "Deliveroo", value: "deliveroo" },
+  { label: "DoorDash", value: "doordash" },
+  { label: "Grubhub", value: "grubhub" },
+  { label: "Skip The Dishes", value: "skip-the-dishes" },
+  { label: "Postmates", value: "postmates" },
+  { label: "Uber Eats", value: "uber-eats" },
+  { label: "ezCater", value: "ezcater" },
 ];
 
 const alignmentOptions = [

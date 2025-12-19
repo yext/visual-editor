@@ -30,6 +30,10 @@
     "send": "Onay için gönder",
     "writeComment": "Yorumunuzu buraya yazın ..."
   },
+  "ariaLabelAppGallery": "{{serviceName}} üzerinde keşfedin",
+  "ariaLabelAppStore": "{{serviceName}} üzerinden indirin",
+  "ariaLabelGalaxyStore": "{{serviceName}} üzerinde mevcut",
+  "ariaLabelGooglePlay": "{{serviceName}} üzerinden edinin",
   "arrayField": "Dizi alanı",
   "back": "Geri",
   "base": "Temel",

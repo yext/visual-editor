@@ -1529,6 +1529,153 @@ const tests: ComponentTest[] = [
     },
     version: 45,
   },
+  {
+    name: "version 47 - delivery service CTAs",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Deliveroo",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "deliveroo" },
+                id: "CTAWrapper-deliveroo",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Doordash",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "doordash" },
+                id: "CTAWrapper-doordash",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Grubhub",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "grubhub" },
+                id: "CTAWrapper-grubhub",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Postmates",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "postmates" },
+                id: "CTAWrapper-postmates",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Uber Eats",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "uber-eats" },
+                id: "CTAWrapper-uber-eats",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Skip The Dishes",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "skip-the-dishes" },
+                id: "CTAWrapper-skip-the-dishes",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "ezCater",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "ezcater" },
+                id: "CTAWrapper-ezcater",
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 47,
+  },
 ];
 
 describe("Grid", async () => {

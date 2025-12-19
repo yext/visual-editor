@@ -30,6 +30,10 @@
     "send": "Saada heakskiitu",
     "writeComment": "Kirjutage oma kommentaar siia ..."
   },
+  "ariaLabelAppGallery": "Avastage seda teenuses {{serviceName}}",
+  "ariaLabelAppStore": "Laadige alla teenusest {{serviceName}}",
+  "ariaLabelGalaxyStore": "Saadaval teenuses {{serviceName}}",
+  "ariaLabelGooglePlay": "Hankige see teenusest {{serviceName}}",
   "arrayField": "Massiivi väli",
   "back": "Tagurpidi",
   "base": "Alus",

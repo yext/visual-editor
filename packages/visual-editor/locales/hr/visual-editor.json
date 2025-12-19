@@ -30,6 +30,10 @@
     "send": "Pošaljite na odobrenje",
     "writeComment": "Napišite svoj komentar ovdje ..."
   },
+  "ariaLabelAppGallery": "Istražite na {{serviceName}}",
+  "ariaLabelAppStore": "Preuzmite na {{serviceName}}",
+  "ariaLabelGalaxyStore": "Dostupno na {{serviceName}}",
+  "ariaLabelGooglePlay": "Nabavite na {{serviceName}}",
   "arrayField": "Polje",
   "back": "Nazad",
   "base": "Baza",

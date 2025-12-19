@@ -30,6 +30,10 @@
     "send": "Enviar para su aprobación",
     "writeComment": "Escribe tu comentario aquí ..."
   },
+  "ariaLabelAppGallery": "Exploralo en {{serviceName}}",
+  "ariaLabelAppStore": "Descargar en {{serviceName}}",
+  "ariaLabelGalaxyStore": "Disponible en {{serviceName}}",
+  "ariaLabelGooglePlay": "Consíguelo en {{serviceName}}",
   "arrayField": "Campo de matriz",
   "back": "Atrás",
   "base": "Base",

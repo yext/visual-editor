@@ -30,6 +30,10 @@
     "send": "承認のために送信します",
     "writeComment": "ここにあなたのコメントを書いてください..."
   },
+  "ariaLabelAppGallery": "{{serviceName}} で調べてみる",
+  "ariaLabelAppStore": "{{serviceName}} でダウンロード",
+  "ariaLabelGalaxyStore": "{{serviceName}} で利用可能",
+  "ariaLabelGooglePlay": "{{serviceName}} で入手",
   "arrayField": "配列フィールド",
   "back": "戻る",
   "base": "ベース",

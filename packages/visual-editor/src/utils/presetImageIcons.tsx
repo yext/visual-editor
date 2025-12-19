@@ -1,11 +1,16 @@
 import React from "react";
 import { PresetImageType } from "../types/types";
-import {
-  GooglePlayButton,
-  AppStoreButton,
-  GalaxyStoreButton,
-  AppGalleryButton,
-} from "../components/base/buttons/app-store-buttons";
+import { AppStoreButton } from "../components/base/buttons/AppStoreButton";
+import { GooglePlayButton } from "../components/base/buttons/GooglePlayButton";
+import { GalaxyStoreButton } from "../components/base/buttons/GalaxyStoreButton";
+import { AppGalleryButton } from "../components/base/buttons/AppGalleryButton";
+import { DeliverooButton } from "../components/base/buttons/DeliverooButton";
+import { DoordashButton } from "../components/base/buttons/DoordashButton";
+import { GrubhubButton } from "../components/base/buttons/GrubhubButton";
+import { SkipTheDishesButton } from "../components/base/buttons/SkipTheDishesButton";
+import { PostmatesButton } from "../components/base/buttons/PostmatesButton";
+import { UberEatsButton } from "../components/base/buttons/UberEatsButton";
+import { EzCaterButton } from "../components/base/buttons/EzCaterButton";
 
 // Preset image icons mapping - only app store and food delivery logos for CTAs
 export const presetImageIcons: Record<PresetImageType, React.ReactNode> = {
@@ -14,17 +19,11 @@ export const presetImageIcons: Record<PresetImageType, React.ReactNode> = {
   "galaxy-store": <GalaxyStoreButton size="lg" />,
   "app-gallery": <AppGalleryButton size="lg" />,
 
-  "uber-eats": (
-    <img
-      src="https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9maWxlXC85SFNOWGg4TllyaHBoRUw1WWdjYi5wbmcifQ:postmates:Cq8658w3bJfQOxFkVZRRr-2BUG00jWQDG429urRCZpM?width=115"
-      srcSet={
-        "https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9maWxlXC85SFNOWGg4TllyaHBoRUw1WWdjYi5wbmcifQ:postmates:Cq8658w3bJfQOxFkVZRRr-2BUG00jWQDG429urRCZpM?width=115 1x, " +
-        "https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9maWxlXC85SFNOWGg4TllyaHBoRUw1WWdjYi5wbmcifQ:postmates:Cq8658w3bJfQOxFkVZRRr-2BUG00jWQDG429urRCZpM?width=230 2x, " +
-        "https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9maWxlXC85SFNOWGg4TllyaHBoRUw1WWdjYi5wbmcifQ:postmates:Cq8658w3bJfQOxFkVZRRr-2BUG00jWQDG429urRCZpM?width=345 3x"
-      }
-      alt="Uber Eats"
-      width="115"
-      style={{ objectFit: "contain" }}
-    />
-  ),
+  deliveroo: <DeliverooButton />,
+  doordash: <DoordashButton />,
+  grubhub: <GrubhubButton />,
+  "skip-the-dishes": <SkipTheDishesButton />,
+  postmates: <PostmatesButton />,
+  "uber-eats": <UberEatsButton />,
+  ezcater: <EzCaterButton />,
 };

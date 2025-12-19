@@ -30,6 +30,10 @@
     "send": "Küldje el jóváhagyásra",
     "writeComment": "Írja ide a megjegyzését ..."
   },
+  "ariaLabelAppGallery": "Fedezze fel a(z) {{serviceName}} szolgáltatásban",
+  "ariaLabelAppStore": "Letöltés a(z) {{serviceName}} webhelyről",
+  "ariaLabelGalaxyStore": "Elérhető itt: {{serviceName}}",
+  "ariaLabelGooglePlay": "Szerezd meg a(z) {{serviceName}} webhelyen",
   "arrayField": "Tömbmező",
   "back": "Vissza",
   "base": "Bázis",
