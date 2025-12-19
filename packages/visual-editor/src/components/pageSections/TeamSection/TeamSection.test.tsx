@@ -1098,6 +1098,25 @@ const tests: ComponentTest[] = [
                             },
                           },
                         ],
+                        TitleSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              id: "TitleSlot-v47",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: "Associate Agent",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 4,
+                                align: "left",
+                              },
+                            },
+                          },
+                        ],
                       },
                     },
                   },

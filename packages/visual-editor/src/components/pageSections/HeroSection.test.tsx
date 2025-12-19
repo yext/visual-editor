@@ -2304,6 +2304,21 @@ const tests: ComponentTest[] = [
             },
           },
         ],
+        HoursStatusSlot: [
+          {
+            type: "HoursStatusSlot",
+            props: {
+              id: "HoursStatusSlot-v47",
+              data: {
+                hours: {
+                  field: "hours",
+                  constantValue: {},
+                  constantValueEnabled: false,
+                },
+              },
+            },
+          },
+        ],
       },
     },
     version: 47,

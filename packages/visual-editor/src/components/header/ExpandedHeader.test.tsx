@@ -862,7 +862,7 @@ const tests: ComponentTest[] = [
               slots: {
                 LogoSlot: [
                   {
-                    type: "HeaderLogoSlot",
+                    type: "ImageSlot",
                     props: {
                       id: "LogoSlot-v47",
                       data: {

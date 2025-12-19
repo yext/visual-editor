@@ -1187,6 +1187,7 @@ const tests: ComponentTest[] = [
                   field: "",
                   constantValue: [
                     {
+                      id: "test-card-id",
                       image: {
                         url: "https://placehold.co/640x360",
                         height: 360,
