@@ -25,7 +25,7 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [streamDocument]);
 
-  const googleTagManagerId: string = visualEditorConfig?.googleTagManagerId;
+  const googleTagManagerId = visualEditorConfig?.googleTagManagerId;
 
   if (!googleTagManagerId || !/^GTM-[A-Z0-9]+$/.test(googleTagManagerId)) {
     return <>{children}</>;
