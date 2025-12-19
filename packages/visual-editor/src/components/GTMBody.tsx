@@ -10,10 +10,6 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const streamDocument = useDocument();
 
-  if (!streamDocument?.__?.visualEditorConfig) {
-    return <>{children}</>;
-  }
-
   const visualEditorConfig: Record<string, any> | null = useMemo(() => {
     if (!streamDocument?.__?.visualEditorConfig) {
       return null;
@@ -38,12 +34,14 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
   return (
     <>
       {/* Google Tag Manager (noscript) */}
-      <iframe
-        src={`https://www.googletagmanager.com/ns.html?id=${googleTagManagerId}`}
-        height="0"
-        width="0"
-        style={{ display: "none", visibility: "hidden" }}
-      ></iframe>
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${googleTagManagerId}`}
+          height="0"
+          width="0"
+          style={{ display: "none", visibility: "hidden" }}
+        ></iframe>
+      </noscript>
       {/* End Google Tag Manager (noscript) */}
 
       {children}
