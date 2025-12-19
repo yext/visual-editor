@@ -754,6 +754,47 @@ const tests: ComponentTest[] = [
             },
           },
         ],
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingSlot-v47",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: "Promo Title",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "DescriptionSlot-v47",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: "Promo Description",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-v47",
+              data: {},
+            },
+          },
+        ],
         CTASlot: [
           {
             type: "CTASlot",

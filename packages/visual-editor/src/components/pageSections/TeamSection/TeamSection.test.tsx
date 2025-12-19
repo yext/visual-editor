@@ -1012,7 +1012,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "version 47 props with non-localized image and CTA",
-    document: { c_team: teamData.people },
+    document: { c_team: teamData },
     props: {
       data: {
         people: { field: "", constantValue: [], constantValueEnabled: true },
@@ -1053,6 +1053,12 @@ const tests: ComponentTest[] = [
                     props: {
                       id: "CardSlot-v47",
                       data: {},
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-white",
+                          textColor: "text-black",
+                        },
+                      },
                       slots: {
                         ImageSlot: [
                           {

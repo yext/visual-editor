@@ -39,8 +39,8 @@ const migrateImage = (image: any, locales: string[]) => {
   return localizedImage;
 };
 
-// Helper to migrate CTA link
-const migrateCTALink = (cta: any, locales: string[]) => {
+// Helper to migrate CTA link and label
+const migrateCTA = (cta: any, locales: string[]) => {
   if (!cta) {
     return cta;
   }
@@ -54,6 +54,17 @@ const migrateCTALink = (cta: any, locales: string[]) => {
       localizedLink[locale] = cta.link;
     });
     cta.link = localizedLink;
+  }
+
+  // Migrate label if it's a string
+  if (cta.label && typeof cta.label === "string") {
+    const localizedLabel: any = {
+      hasLocalizedValue: "true",
+    };
+    locales.forEach((locale) => {
+      localizedLabel[locale] = cta.label;
+    });
+    cta.label = localizedLabel;
   }
 
   return cta;
@@ -76,7 +87,7 @@ export const translatableCTAImageMigration: Migration = {
       // Migrate CTASlot
       if (props.slots?.CTASlot?.[0]?.props?.data?.entityField?.constantValue) {
         props.slots.CTASlot[0].props.data.entityField.constantValue =
-          migrateCTALink(
+          migrateCTA(
             props.slots.CTASlot[0].props.data.entityField.constantValue,
             locales
           );
@@ -104,7 +115,7 @@ export const translatableCTAImageMigration: Migration = {
           ?.constantValue
       ) {
         props.slots.PrimaryCTASlot[0].props.data.entityField.constantValue =
-          migrateCTALink(
+          migrateCTA(
             props.slots.PrimaryCTASlot[0].props.data.entityField.constantValue,
             locales
           );
@@ -116,7 +127,7 @@ export const translatableCTAImageMigration: Migration = {
           ?.constantValue
       ) {
         props.slots.SecondaryCTASlot[0].props.data.entityField.constantValue =
-          migrateCTALink(
+          migrateCTA(
             props.slots.SecondaryCTASlot[0].props.data.entityField
               .constantValue,
             locales
@@ -201,7 +212,7 @@ export const translatableCTAImageMigration: Migration = {
       if (props.slots?.PrimaryLinksWrapperSlot?.[0]?.props?.data?.links) {
         props.slots.PrimaryLinksWrapperSlot[0].props.data.links =
           props.slots.PrimaryLinksWrapperSlot[0].props.data.links.map(
-            (link: any) => migrateCTALink(link, locales)
+            (link: any) => migrateCTA(link, locales)
           );
       }
 
@@ -209,7 +220,7 @@ export const translatableCTAImageMigration: Migration = {
       if (props.slots?.ExpandedLinksWrapperSlot?.[0]?.props?.data?.links) {
         props.slots.ExpandedLinksWrapperSlot[0].props.data.links =
           props.slots.ExpandedLinksWrapperSlot[0].props.data.links.map(
-            (link: any) => migrateCTALink(link, locales)
+            (link: any) => migrateCTA(link, locales)
           );
       }
 
@@ -240,7 +251,7 @@ export const translatableCTAImageMigration: Migration = {
               ?.constantValue
           ) {
             card.props.slots.CTASlot[0].props.data.entityField.constantValue =
-              migrateCTALink(
+              migrateCTA(
                 card.props.slots.CTASlot[0].props.data.entityField
                   .constantValue,
                 locales
@@ -276,7 +287,7 @@ export const translatableCTAImageMigration: Migration = {
               ?.constantValue
           ) {
             card.props.slots.CTASlot[0].props.data.entityField.constantValue =
-              migrateCTALink(
+              migrateCTA(
                 card.props.slots.CTASlot[0].props.data.entityField
                   .constantValue,
                 locales
@@ -314,7 +325,7 @@ export const translatableCTAImageMigration: Migration = {
             ?.entityField?.constantValue
         ) {
           primaryHeader.props.slots.PrimaryCTASlot[0].props.data.entityField.constantValue =
-            migrateCTALink(
+            migrateCTA(
               primaryHeader.props.slots.PrimaryCTASlot[0].props.data.entityField
                 .constantValue,
               locales
@@ -327,7 +338,7 @@ export const translatableCTAImageMigration: Migration = {
             ?.entityField?.constantValue
         ) {
           primaryHeader.props.slots.SecondaryCTASlot[0].props.data.entityField.constantValue =
-            migrateCTALink(
+            migrateCTA(
               primaryHeader.props.slots.SecondaryCTASlot[0].props.data
                 .entityField.constantValue,
               locales

@@ -1168,7 +1168,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "version 47 props with non-localized image and CTA",
-    document: { c_events: eventsData.events },
+    document: { c_events: eventsData },
     props: {
       data: {
         events: { field: "", constantValue: [], constantValueEnabled: true },
@@ -1209,6 +1209,13 @@ const tests: ComponentTest[] = [
                     props: {
                       id: "CardSlot-v47",
                       data: {},
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-white",
+                          textColor: "text-black",
+                        },
+                        truncateDescription: true,
+                      },
                       slots: {
                         ImageSlot: [
                           {

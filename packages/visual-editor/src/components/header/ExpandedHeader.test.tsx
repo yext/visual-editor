@@ -870,6 +870,8 @@ const tests: ComponentTest[] = [
                           field: "",
                           constantValue: {
                             url: "https://placehold.co/100",
+                            height: 100,
+                            width: 100,
                           },
                           constantValueEnabled: true,
                         },
@@ -922,6 +924,9 @@ const tests: ComponentTest[] = [
       },
       analytics: {
         scope: "expandedHeader",
+      },
+      styles: {
+        headerPosition: "static",
       },
     },
     version: 47,

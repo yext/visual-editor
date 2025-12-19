@@ -2250,7 +2250,10 @@ const tests: ComponentTest[] = [
                 entityField: {
                   field: "",
                   constantValue: {
-                    label: "Get Directions",
+                    label: {
+                      en: "Get Directions",
+                      hasLocalizedValue: "true",
+                    },
                     link: "#",
                     linkType: "URL",
                   },
@@ -2269,12 +2272,34 @@ const tests: ComponentTest[] = [
                 entityField: {
                   field: "",
                   constantValue: {
-                    label: "Learn More",
+                    label: {
+                      en: "Learn More",
+                      hasLocalizedValue: "true",
+                    },
                     link: "#",
                     linkType: "URL",
                   },
                   constantValueEnabled: true,
                 },
+              },
+            },
+          },
+        ],
+        GeomodifierSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "GeomodifierSlot-v47",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: "Geomodifier",
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 1,
+                align: "left",
               },
             },
           },

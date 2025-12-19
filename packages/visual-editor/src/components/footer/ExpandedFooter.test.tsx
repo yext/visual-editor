@@ -125,7 +125,10 @@ const tests: ComponentTest[] = [
           youtubeLink: "https://youtube.com/c/yext",
           tiktokLink: "https://tiktok.com/@yext",
           utilityImages: [
-            { url: "https://placehold.co/20", linkTarget: "https://yext.com" },
+            {
+              url: "https://placehold.co/20",
+              linkTarget: "https://yext.com",
+            },
             { url: "https://placehold.co/50x20" },
           ],
           expandedFooter: true,
@@ -1114,6 +1117,47 @@ const tests: ComponentTest[] = [
                     linkTarget: "_blank",
                   },
                 ],
+              },
+            },
+          },
+        ],
+        ExpandedLinksWrapperSlot: [
+          {
+            type: "FooterExpandedLinksWrapper",
+            props: {
+              id: "ExpandedLinksWrapperSlot-v47",
+              data: {
+                sections: [],
+              },
+            },
+          },
+        ],
+        PrimaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              id: "PrimaryLinksWrapperSlot-v47",
+              data: {
+                links: [],
+              },
+              variant: "primary",
+              eventNamePrefix: "primary",
+            },
+          },
+        ],
+        SocialLinksSlot: [
+          {
+            type: "FooterSocialLinksSlot",
+            props: {
+              id: "SocialLinksSlot-v47",
+              data: {
+                xLink: "",
+                facebookLink: "",
+                instagramLink: "",
+                linkedInLink: "",
+                pinterestLink: "",
+                tiktokLink: "",
+                youtubeLink: "",
               },
             },
           },
