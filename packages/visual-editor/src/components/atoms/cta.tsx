@@ -5,6 +5,7 @@ import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import {
   BackgroundStyle,
+  normalizeSlug,
   themeManagerCn,
   useBackground,
   useDocument,
@@ -248,6 +249,12 @@ export const CTA = (props: CTAProps) => {
     );
   }
 
+  // Normalize link for all link types except EMAIL and PHONE
+  const normalizedLink =
+    linkType === "EMAIL" || linkType === "PHONE"
+      ? link
+      : normalizeSlug(link) || "#";
+
   return (
     <Button
       style={ctaType !== "presetImage" ? dynamicStyle : undefined}
@@ -256,7 +263,7 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
-        cta={{ link, linkType }}
+        cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}
