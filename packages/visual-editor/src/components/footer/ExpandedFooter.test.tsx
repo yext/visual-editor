@@ -1078,14 +1078,12 @@ const tests: ComponentTest[] = [
     version: 42,
   },
   {
-    name: "version 47 props with non-localized logo and utility images",
+    name: "version 48 props",
     document: {},
     props: {
       data: {
         primaryFooter: {
-          field: "",
-          constantValue: {},
-          constantValueEnabled: true,
+          expandedFooter: false,
         },
       },
       slots: {
@@ -1093,75 +1091,57 @@ const tests: ComponentTest[] = [
           {
             type: "FooterLogoSlot",
             props: {
-              id: "LogoSlot-v47",
+              id: "LogoSlot-v48",
               data: {
                 image: {
                   field: "",
-                  constantValue: "https://placehold.co/100",
+                  constantValue: {
+                    en: {
+                      url: "https://placehold.co/100",
+                      height: 100,
+                      width: 100,
+                    },
+                    hasLocalizedValue: "true",
+                  },
                   constantValueEnabled: true,
                 },
               },
-            },
-          },
-        ],
-        UtilityImagesSlot: [
-          {
-            type: "FooterUtilityImagesSlot",
-            props: {
-              id: "UtilityImagesSlot-v47",
-              data: {
-                utilityImages: [
-                  "https://placehold.co/60",
-                  {
-                    url: "https://placehold.co/60",
-                    linkTarget: "_blank",
-                  },
-                ],
+              styles: {
+                width: 0,
+                aspectRatio: 1.78,
               },
             },
           },
         ],
-        ExpandedLinksWrapperSlot: [
-          {
-            type: "FooterExpandedLinksWrapper",
-            props: {
-              id: "ExpandedLinksWrapperSlot-v47",
-              data: {
-                sections: [],
-              },
-            },
-          },
-        ],
+        SocialLinksSlot: [],
+        UtilityImagesSlot: [],
         PrimaryLinksWrapperSlot: [
           {
             type: "FooterLinksSlot",
             props: {
-              id: "PrimaryLinksWrapperSlot-v47",
+              id: "PrimaryLinksWrapperSlot-v48",
               data: {
-                links: [],
+                links: [
+                  {
+                    label: {
+                      en: "Link 1",
+                      hasLocalizedValue: "true",
+                    },
+                    link: {
+                      en: "#",
+                      hasLocalizedValue: "true",
+                    },
+                    linkType: "URL",
+                  },
+                ],
               },
               variant: "primary",
               eventNamePrefix: "primary",
             },
           },
         ],
-        SocialLinksSlot: [
-          {
-            type: "FooterSocialLinksSlot",
-            props: {
-              id: "SocialLinksSlot-v47",
-              data: {
-                xLink: "",
-                facebookLink: "",
-                instagramLink: "",
-                linkedInLink: "",
-                pinterestLink: "",
-                tiktokLink: "",
-                youtubeLink: "",
-              },
-            },
-          },
-        ],
+        ExpandedLinksWrapperSlot: [],
+        SecondaryFooterSlot: [],
       },
       styles: {
         primaryFooter: {
@@ -1183,7 +1163,7 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 47,
+    version: 48,
   },
 ];
 

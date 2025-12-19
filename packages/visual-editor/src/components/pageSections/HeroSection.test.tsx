@@ -2205,7 +2205,7 @@ const tests: ComponentTest[] = [
     version: 31,
   },
   {
-    name: "version 47 props with non-localized image and CTAs",
+    name: "version 48 props",
     document: {
       locale: "en",
       name: "name",
@@ -2226,14 +2226,17 @@ const tests: ComponentTest[] = [
           {
             type: "ImageSlot",
             props: {
-              id: "ImageSlot-v47",
+              id: "ImageSlot-v48",
               data: {
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://placehold.co/100x100",
-                    height: 100,
-                    width: 100,
+                    en: {
+                      url: "https://placehold.co/100x100",
+                      height: 100,
+                      width: 100,
+                    },
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -2245,7 +2248,7 @@ const tests: ComponentTest[] = [
           {
             type: "CTASlot",
             props: {
-              id: "PrimaryCTASlot-v47",
+              id: "PrimaryCTASlot-v48",
               data: {
                 entityField: {
                   field: "",
@@ -2254,29 +2257,10 @@ const tests: ComponentTest[] = [
                       en: "Get Directions",
                       hasLocalizedValue: "true",
                     },
-                    link: "#",
-                    linkType: "URL",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-            },
-          },
-        ],
-        SecondaryCTASlot: [
-          {
-            type: "CTASlot",
-            props: {
-              id: "SecondaryCTASlot-v47",
-              data: {
-                entityField: {
-                  field: "",
-                  constantValue: {
-                    label: {
-                      en: "Learn More",
+                    link: {
+                      en: "#",
                       hasLocalizedValue: "true",
                     },
-                    link: "#",
                     linkType: "URL",
                   },
                   constantValueEnabled: true,
@@ -2285,43 +2269,12 @@ const tests: ComponentTest[] = [
             },
           },
         ],
-        GeomodifierSlot: [
-          {
-            type: "HeadingTextSlot",
-            props: {
-              id: "GeomodifierSlot-v47",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: "Geomodifier",
-                  constantValueEnabled: true,
-                },
-              },
-              styles: {
-                level: 1,
-                align: "left",
-              },
-            },
-          },
-        ],
-        HoursStatusSlot: [
-          {
-            type: "HoursStatusSlot",
-            props: {
-              id: "HoursStatusSlot-v47",
-              data: {
-                hours: {
-                  field: "hours",
-                  constantValue: {},
-                  constantValueEnabled: false,
-                },
-              },
-            },
-          },
-        ],
+        SecondaryCTASlot: [],
+        GeomodifierSlot: [],
+        HoursStatusSlot: [],
       },
     },
-    version: 47,
+    version: 48,
   },
 ];
 
