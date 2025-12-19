@@ -24,7 +24,7 @@ export type EnhancedTranslatableCTA = TranslatableCTA & {
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
 };
 
-/** Preset image types for CTA buttons - app store or food delivery logos */
+/** Preset delivery logo options */
 export const FOOD_DELIVERY_SERVICES = [
   "deliveroo",
   "doordash",
@@ -37,6 +37,7 @@ export const FOOD_DELIVERY_SERVICES = [
 
 export type FoodDeliveryServiceType = (typeof FOOD_DELIVERY_SERVICES)[number];
 
+/** Preset image types for CTA buttons - app store or food delivery logos */
 export type PresetImageType =
   | "app-store"
   | "google-play"
