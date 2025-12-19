@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
 import { useDocument } from "@yext/visual-editor";
 
+const GTM_ID_REGEX = /^GTM-[A-Z0-9]+$/;
+
 /**
  * Adds the Google Tag Manager (noscript) iframe to the body.
  * This is required for GTM to function properly when JavaScript is disabled.
@@ -27,7 +29,7 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
 
   const googleTagManagerId = visualEditorConfig?.googleTagManagerId;
 
-  if (!googleTagManagerId || !/^GTM-[A-Z0-9]+$/.test(googleTagManagerId)) {
+  if (!googleTagManagerId || !GTM_ID_REGEX.test(googleTagManagerId)) {
     return <>{children}</>;
   }
 
@@ -40,7 +42,7 @@ export const GTMBody: React.FC<{ children: React.ReactNode }> = ({
           height="0"
           width="0"
           style={{ display: "none", visibility: "hidden" }}
-        ></iframe>
+        />
       </noscript>
       {/* End Google Tag Manager (noscript) */}
 

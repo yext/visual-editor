@@ -104,19 +104,23 @@ const Location: Template<TemplateRenderProps> = (props) => {
       currency="USD"
     >
       <VisualEditorProvider templateProps={props}>
-        <Render
-          config={mainConfig}
-          data={migrate(
-            JSON.parse(document.__.layout),
-            migrationRegistry,
-            mainConfig
-          )}
-        />
+        <GTMBody>
+          <Render
+            config={mainConfig}
+            data={migrate(
+              JSON.parse(document.__.layout),
+              migrationRegistry,
+              mainConfig
+            )}
+          />
+        </GTMBody>
       </VisualEditorProvider>
     </AnalyticsProvider>
   );
 };
 ```
+
+`<GTMBody>` applies the Google Tag Manager noscript tag if the GTM ID is set in the platform's Site Configuration setting.
 
 `<Render>` converts the saved layout data from the editor into the rendered page.
 

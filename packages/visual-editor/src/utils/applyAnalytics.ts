@@ -1,3 +1,6 @@
+const GTM_ID_REGEX = /^GTM-[A-Z0-9]+$/;
+const GA4_ID_REGEX = /^G(T)?-[A-Z0-9]+$/;
+
 export const applyAnalytics = (document: Record<string, any>) => {
   if (!document?.__?.visualEditorConfig) {
     return;
@@ -16,7 +19,7 @@ export const applyAnalytics = (document: Record<string, any>) => {
   // Google Tag Manager (GTM)
   const googleTagManagerId = visualEditorConfig?.googleTagManagerId;
 
-  if (googleTagManagerId && /^GTM-[A-Z0-9]+$/.test(googleTagManagerId)) {
+  if (googleTagManagerId && GTM_ID_REGEX.test(googleTagManagerId)) {
     return `<!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -30,7 +33,7 @@ export const applyAnalytics = (document: Record<string, any>) => {
   // Note that this does not yet exist in platform. Adding for future support.
   const googleAnalyticsId = visualEditorConfig?.googleAnalyticsId;
 
-  if (googleAnalyticsId && /^G(T)?-[A-Z0-9]+$/.test(googleAnalyticsId)) {
+  if (googleAnalyticsId && GA4_ID_REGEX.test(googleAnalyticsId)) {
     return `<!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}"></script>
     <script>
