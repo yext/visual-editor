@@ -8,7 +8,9 @@ export const AppStoreButton = ({
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
   return (
     <a
-      aria-label={pt("ariaLabelAppStore", "Download on the App Store")}
+      aria-label={pt("ariaLabelAppStore", "Download on the {{serviceName}}", {
+        serviceName: "App Store",
+      })}
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",

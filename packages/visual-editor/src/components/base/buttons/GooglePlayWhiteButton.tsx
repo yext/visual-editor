@@ -8,7 +8,9 @@ export const GooglePlayWhiteButton = ({
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
   return (
     <a
-      aria-label={pt("ariaLabelGooglePlay", "Get it on Google Play")}
+      aria-label={pt("ariaLabelGooglePlay", "Get it on {{serviceName}}", {
+        serviceName: "Google Play",
+      })}
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",

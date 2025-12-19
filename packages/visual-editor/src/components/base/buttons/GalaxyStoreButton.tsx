@@ -8,7 +8,9 @@ export const GalaxyStoreButton = ({
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
   return (
     <a
-      aria-label={pt("ariaLabelGalaxyStore", "Available on Galaxy Store")}
+      aria-label={pt("ariaLabelGalaxyStore", "Available on {{serviceName}}", {
+        serviceName: "Galaxy Store",
+      })}
       {...props}
       className={cn(
         "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
