@@ -881,6 +881,12 @@ const tests: ComponentTest[] = [
                               width: 100,
                               alternateText: "Alt Text",
                             },
+                            fr: {
+                              url: "https://placehold.co/100",
+                              height: 100,
+                              width: 100,
+                              alternateText: "Alt Text (FR)",
+                            },
                             hasLocalizedValue: "true",
                           },
                           constantValueEnabled: true,
