@@ -835,6 +835,111 @@ const tests: ComponentTest[] = [
     },
     version: 41,
   },
+  {
+    name: "version 48 props",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          field: "",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              id: "PrimaryHeaderSlot-v48",
+              data: {
+                primaryHeader: {
+                  field: "",
+                  constantValue: {},
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-white",
+                  textColor: "text-black",
+                },
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "ImageSlot",
+                    props: {
+                      id: "LogoSlot-v48",
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            en: {
+                              url: "https://placehold.co/100",
+                              height: 100,
+                              width: 100,
+                              alternateText: "Alt Text",
+                            },
+                            fr: {
+                              url: "https://placehold.co/100",
+                              height: 100,
+                              width: 100,
+                              alternateText: "Alt Text (FR)",
+                            },
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: { aspectRatio: 1, width: 100 },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "PrimaryCTASlot-v48",
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Call to Action",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: { variant: "primary" },
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [],
+                LinksSlot: [],
+              },
+            },
+          },
+        ],
+        SecondaryHeaderSlot: [],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+      styles: {
+        headerPosition: "static",
+      },
+    },
+    version: 48,
+  },
 ];
 
 describe("ExpandedHeader", async () => {

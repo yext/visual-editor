@@ -721,6 +721,124 @@ const tests: ComponentTest[] = [
     },
     version: 30,
   },
+  {
+    name: "version 48 props with translatable image and CTA",
+    document: { c_examplePromo: promoData },
+    props: {
+      data: {
+        promo: { field: "", constantValue: {}, constantValueEnabled: true },
+        media: "image",
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        orientation: "left",
+      },
+      slots: {
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-v48",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://placehold.co/640x360",
+                      height: 360,
+                      width: 640,
+                      alternateText: "Image",
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+            },
+          },
+        ],
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingSlot-v48",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Promo Title",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "DescriptionSlot-v48",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Promo Description",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-v48",
+              data: {},
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-v48",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: {
+                      en: "Learn More",
+                      hasLocalizedValue: "true",
+                    },
+                    link: {
+                      en: "#",
+                      hasLocalizedValue: "true",
+                    },
+                    linkType: "URL",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "primary",
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+    },
+    version: 48,
+  },
 ];
 
 const BRAND_COLOR_BG_ALLOWLIST = new Set([

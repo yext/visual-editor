@@ -1,3 +1,9 @@
+#### 1.0.4 (2025-12-22)
+
+##### New Features
+
+- make images and cta links translatable fields ([#944](https://github.com/yext/visual-editor/pull/944)) ([d2e4f241](https://github.com/yext/visual-editor/commit/d2e4f2411674c87c1b964ae775eed6c1279139fd))
+
 #### 1.0.3 (2025-12-19)
 
 ##### Chores

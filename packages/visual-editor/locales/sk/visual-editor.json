@@ -24,7 +24,6 @@
   "advancedSettings": "Rozšírené nastavenia",
   "altText": "Alt",
   "applyAll": "Vzťahovať sa na všetky miesta",
-  "applyAllWithLabel": "Použite {{fieldLabel}} na všetky lokality",
   "approvals": {
     "addAComment": "Pridajte komentár, ktorý pomôže vášmu súhlasu pochopiť, čo sa zmenilo",
     "send": "Poslať na schválenie",
