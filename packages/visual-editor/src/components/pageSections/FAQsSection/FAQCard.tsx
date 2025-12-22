@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import {
+  Body,
   BodyProps,
   FAQStruct,
   getDefaultRTF,
@@ -239,8 +240,12 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
             })
       }
     >
-      <AccordionTrigger>{resolvedQuestion}</AccordionTrigger>
-      <AccordionContent>{resolvedAnswer}</AccordionContent>
+      <AccordionTrigger>
+        <Body variant={styles.questionVariant}>{resolvedQuestion}</Body>
+      </AccordionTrigger>
+      <AccordionContent>
+        <Body variant={styles.answerVariant}>{resolvedAnswer}</Body>
+      </AccordionContent>
     </AccordionItem>
   );
 };
