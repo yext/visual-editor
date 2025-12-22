@@ -197,10 +197,7 @@ export const translatableCTAImageMigration: Migration = {
               const baseImage = {
                 height: 60,
                 width: 60,
-                alternateText: {
-                  en: "Utility Image",
-                  hasLocalizedValue: "true",
-                },
+                alternateText: "Utility Image",
                 ...processedImg.image,
               };
 
