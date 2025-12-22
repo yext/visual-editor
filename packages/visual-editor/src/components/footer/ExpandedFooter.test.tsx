@@ -1100,7 +1100,7 @@ const tests: ComponentTest[] = [
                       url: "https://placehold.co/100",
                       height: 100,
                       width: 100,
-                      alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                      alternateText: "Logo",
                     },
                     hasLocalizedValue: "true",
                   },

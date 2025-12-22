@@ -45,6 +45,7 @@ const defaultPerson = {
     url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
     height: 80,
     width: 80,
+    alternateText: "Headshot Image",
   },
 } satisfies PersonStruct;
 

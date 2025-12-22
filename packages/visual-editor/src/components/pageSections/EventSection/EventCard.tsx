@@ -84,6 +84,7 @@ export const defaultEventCardSlotData = (
                     }),
                     width: 640,
                     height: 360,
+                    alternateText: "Event Image",
                   },
                   constantValueEnabled: true,
                 },
