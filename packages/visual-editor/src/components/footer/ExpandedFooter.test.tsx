@@ -1083,7 +1083,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryFooter: {
-          expandedFooter: false,
+          expandedFooter: true,
         },
       },
       slots: {
@@ -1114,8 +1114,62 @@ const tests: ComponentTest[] = [
             },
           },
         ],
-        SocialLinksSlot: [],
-        UtilityImagesSlot: [],
+        SocialLinksSlot: [
+          {
+            type: "FooterSocialLinksSlot",
+            props: {
+              id: "SocialLinksSlot-v48",
+              data: {
+                xLink: "https://x.com/yext",
+                facebookLink: "https://facebook.com/yext",
+                instagramLink: "https://instagram.com/yext",
+                linkedInLink: "https://linkedin.com/in/yext",
+                pinterestLink: "https://pinterest.com/yext",
+                tiktokLink: "https://tiktok.com/@yext",
+                youtubeLink: "https://youtube.com/c/yext",
+              },
+            },
+          },
+        ],
+        UtilityImagesSlot: [
+          {
+            type: "FooterUtilityImagesSlot",
+            props: {
+              id: "UtilityImagesSlot-v48",
+              data: {
+                utilityImages: [
+                  {
+                    image: {
+                      en: {
+                        url: "https://placehold.co/20",
+                        width: 20,
+                        height: 20,
+                        alternateText: "Utility 1",
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    linkTarget: "https://yext.com",
+                  },
+                  {
+                    image: {
+                      en: {
+                        url: "https://placehold.co/50x20",
+                        width: 50,
+                        height: 20,
+                        alternateText: "Utility 2",
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                  },
+                ],
+              },
+              styles: {
+                width: 50,
+                aspectRatio: 1.78,
+              },
+            },
+          },
+        ],
         PrimaryLinksWrapperSlot: [
           {
             type: "FooterLinksSlot",
@@ -1141,8 +1195,103 @@ const tests: ComponentTest[] = [
             },
           },
         ],
-        ExpandedLinksWrapperSlot: [],
-        SecondaryFooterSlot: [],
+        ExpandedLinksWrapperSlot: [
+          {
+            type: "FooterExpandedLinksWrapper",
+            props: {
+              id: "ExpandedLinksWrapperSlot-v48",
+              data: {
+                sections: [
+                  {
+                    label: {
+                      en: "Section 1",
+                      hasLocalizedValue: "true",
+                    },
+                    links: [
+                      {
+                        label: {
+                          en: "Link 1",
+                          hasLocalizedValue: "true",
+                        },
+                        link: {
+                          en: "#",
+                          hasLocalizedValue: "true",
+                        },
+                        linkType: "URL",
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        SecondaryFooterSlot: [
+          {
+            type: "SecondaryFooterSlot",
+            props: {
+              id: "SecondaryFooterSlot-v48",
+              data: {
+                show: true,
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-tertiary-light",
+                  textColor: "text-black",
+                },
+                linksAlignment: "right",
+              },
+              maxWidth: "theme",
+              slots: {
+                SecondaryLinksWrapperSlot: [
+                  {
+                    type: "FooterLinksSlot",
+                    props: {
+                      id: "SecondaryLinksWrapperSlot-v48",
+                      data: {
+                        links: [
+                          {
+                            label: {
+                              en: "Privacy Policy",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                          },
+                        ],
+                      },
+                      variant: "secondary",
+                      eventNamePrefix: "secondary",
+                      alignment: "right",
+                    },
+                  },
+                ],
+                CopyrightSlot: [
+                  {
+                    type: "CopyrightMessageSlot",
+                    props: {
+                      id: "CopyrightSlot-v48",
+                      data: {
+                        text: {
+                          field: "",
+                          constantValue: {
+                            en: "Copyright 2025",
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      alignment: "right",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
       },
       styles: {
         primaryFooter: {

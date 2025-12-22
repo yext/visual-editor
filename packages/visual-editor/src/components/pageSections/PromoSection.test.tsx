@@ -722,7 +722,7 @@ const tests: ComponentTest[] = [
     version: 30,
   },
   {
-    name: "version 47 props with non-localized image and CTA",
+    name: "version 48 props with translatable image and CTA",
     document: { c_examplePromo: promoData },
     props: {
       data: {
@@ -738,14 +738,18 @@ const tests: ComponentTest[] = [
           {
             type: "ImageSlot",
             props: {
-              id: "ImageSlot-v47",
+              id: "ImageSlot-v48",
               data: {
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://placehold.co/640x360",
-                    height: 360,
-                    width: 640,
+                    en: {
+                      url: "https://placehold.co/640x360",
+                      height: 360,
+                      width: 640,
+                      alternateText: "Image",
+                    },
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -758,11 +762,14 @@ const tests: ComponentTest[] = [
           {
             type: "HeadingTextSlot",
             props: {
-              id: "HeadingSlot-v47",
+              id: "HeadingSlot-v48",
               data: {
                 text: {
                   field: "",
-                  constantValue: "Promo Title",
+                  constantValue: {
+                    en: "Promo Title",
+                    hasLocalizedValue: "true",
+                  },
                   constantValueEnabled: true,
                 },
               },
@@ -774,11 +781,14 @@ const tests: ComponentTest[] = [
           {
             type: "BodyTextSlot",
             props: {
-              id: "DescriptionSlot-v47",
+              id: "DescriptionSlot-v48",
               data: {
                 text: {
                   field: "",
-                  constantValue: "Promo Description",
+                  constantValue: {
+                    en: "Promo Description",
+                    hasLocalizedValue: "true",
+                  },
                   constantValueEnabled: true,
                 },
               },
@@ -790,7 +800,7 @@ const tests: ComponentTest[] = [
           {
             type: "VideoSlot",
             props: {
-              id: "VideoSlot-v47",
+              id: "VideoSlot-v48",
               data: {},
             },
           },
@@ -799,13 +809,19 @@ const tests: ComponentTest[] = [
           {
             type: "CTASlot",
             props: {
-              id: "CTASlot-v47",
+              id: "CTASlot-v48",
               data: {
                 entityField: {
                   field: "",
                   constantValue: {
-                    label: "Learn More",
-                    link: "#",
+                    label: {
+                      en: "Learn More",
+                      hasLocalizedValue: "true",
+                    },
+                    link: {
+                      en: "#",
+                      hasLocalizedValue: "true",
+                    },
                     linkType: "URL",
                   },
                   constantValueEnabled: true,
@@ -821,7 +837,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "promoSection" },
       liveVisibility: true,
     },
-    version: 47,
+    version: 48,
   },
 ];
 
