@@ -886,7 +886,7 @@ const tests: ComponentTest[] = [
                           constantValueEnabled: true,
                         },
                       },
-                      styles: { aspectRatio: 1, width: 640 },
+                      styles: { aspectRatio: 1, width: 100 },
                     },
                   },
                 ],

@@ -54,7 +54,8 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
     )
     .filter(
       (item): item is { image: AssetImageType; linkTarget?: string } =>
-        !!item.image?.url
+        !!item.image?.url ||
+        (typeof item.image === "object" && "hasLocalizedValue" in item.image)
     );
 
   if (validImages.length === 0) {
