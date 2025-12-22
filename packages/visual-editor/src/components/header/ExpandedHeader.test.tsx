@@ -896,6 +896,7 @@ const tests: ComponentTest[] = [
                     props: {
                       id: "PrimaryCTASlot-v48",
                       data: {
+                        show: true,
                         entityField: {
                           field: "",
                           constantValue: {
@@ -912,6 +913,7 @@ const tests: ComponentTest[] = [
                           constantValueEnabled: true,
                         },
                       },
+                      styles: { variant: "primary" },
                     },
                   },
                 ],

@@ -194,7 +194,7 @@ export const translatableCTAImageMigration: Migration = {
                 processedImg.image = { url: processedImg.image };
               }
 
-              processedImg.image = {
+              const baseImage = {
                 height: 60,
                 width: 60,
                 alternateText: {
@@ -203,6 +203,8 @@ export const translatableCTAImageMigration: Migration = {
                 },
                 ...processedImg.image,
               };
+
+              processedImg.image = migrateImage(baseImage, locales);
             }
             return processedImg;
           });

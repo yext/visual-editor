@@ -1245,6 +1245,7 @@ const tests: ComponentTest[] = [
                                       hasLocalizedValue: "true",
                                     },
                                     linkType: "URL",
+                                    ctaType: "textAndLink",
                                   },
                                   constantValueEnabled: true,
                                 },
