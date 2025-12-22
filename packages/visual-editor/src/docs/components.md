@@ -679,19 +679,24 @@ The Promo Section is a flexible content component designed to highlight a single
 
 This object contains the content to be displayed by the component.
 
-| Prop         | Type                                      | Description                                                                                           | Default                                         |
-| :----------- | :---------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
-| `data.media` | `"image" \| "video"`                      | Determines whether to display an image or video in the media section.                                 | `'image'`                                       |
-| `data.promo` | `YextEntityField<PromoSectionType \| {}>` | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
+| Prop                   | Type                                           | Description                                                                                           | Default                                         |
+| :--------------------- | :--------------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
+| `data.backgroundImage` | `YextEntityField<ImageType \| AssetImageType>` |                                                                                                       |                                                 |
+| `data.media`           | `"image" \| "video"`                           | Determines whether to display an image or video in the media section.                                 | `'image'`                                       |
+| `data.promo`           | `YextEntityField<PromoSectionType \| {}>`      | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                | Description                                                   | Default              |
-| :----------------------- | :------------------ | :------------------------------------------------------------ | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`   | The background color for the entire section.                  | `Background Color 1` |
-| `styles.orientation`     | `"left" \| "right"` | Positions the image to the left or right of the text content. | `'left'`             |
+| Prop                          | Type                                                   | Description                                                                                                                                 | Default              |
+| :---------------------------- | :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ | :------------------- |
+| `styles.backgroundColor`      | `BackgroundStyle`                                      | The background color for the entire section.                                                                                                | `Background Color 1` |
+| `styles.containerAlignment`   | `"left" \| "center" \| "right"`                        | Text content position and alignment.                                                                                                        | `left`               |
+| `styles.desktopImagePosition` | `"left" \| "right"`                                    | Positions the image to the left or right of the promo content on desktop (classic and compact variants).                                    | `right`              |
+| `styles.imageHeight`          | `number`                                               | Image Height for the promo image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding 500px |                      |
+| `styles.mobileImagePosition`  | `"top" \| "bottom"`                                    | Positions the image to the top or bottom of the promo content on mobile (classic and compact variants).                                     | `top`                |
+| `styles.variant`              | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the promo section.                                                                                                   | `classic`            |
 
 #### Other Props
 
