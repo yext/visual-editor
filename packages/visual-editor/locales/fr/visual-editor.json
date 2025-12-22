@@ -24,7 +24,6 @@
   "advancedSettings": "Paramètres avancés",
   "altText": "Texte alt",
   "applyAll": "Postuler à tous les lieux",
-  "applyAllWithLabel": "Appliquer {{fieldLabel}} à tous les endroits",
   "approvals": {
     "addAComment": "Ajoutez un commentaire pour aider votre approbateur à comprendre ce qui a changé",
     "send": "Envoyer l'approbation",

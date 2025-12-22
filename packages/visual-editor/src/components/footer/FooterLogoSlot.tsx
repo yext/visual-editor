@@ -9,13 +9,14 @@ import {
   MaybeLink,
   Image,
   YextEntityField,
+  TranslatableAssetImage,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling";
 
 export interface FooterLogoSlotProps {
   data: {
-    image: YextEntityField<AssetImageType>;
+    image: YextEntityField<AssetImageType | TranslatableAssetImage>;
     linkTarget?: string;
   };
   styles: {
@@ -29,11 +30,19 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const streamDocument = useDocument();
   const { i18n, t } = useTranslation();
 
-  const imageDataUrl = resolveComponentData(
+  const resolvedImage = resolveComponentData(
     data.image,
     i18n.language,
     streamDocument
-  ) as AssetImageType;
+  );
+
+  let imageDataUrl = (
+    typeof resolvedImage === "string" ? { url: resolvedImage } : resolvedImage
+  ) as AssetImageType | TranslatableAssetImage;
+
+  if (imageDataUrl && "hasLocalizedValue" in imageDataUrl) {
+    imageDataUrl = imageDataUrl[i18n.language] as AssetImageType;
+  }
 
   if (!imageDataUrl?.url) {
     return puck.isEditing ? <div className="h-20 w-[100px]" /> : <></>;

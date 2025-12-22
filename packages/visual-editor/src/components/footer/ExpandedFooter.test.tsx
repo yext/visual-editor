@@ -125,7 +125,10 @@ const tests: ComponentTest[] = [
           youtubeLink: "https://youtube.com/c/yext",
           tiktokLink: "https://tiktok.com/@yext",
           utilityImages: [
-            { url: "https://placehold.co/20", linkTarget: "https://yext.com" },
+            {
+              url: "https://placehold.co/20",
+              linkTarget: "https://yext.com",
+            },
             { url: "https://placehold.co/50x20" },
           ],
           expandedFooter: true,
@@ -1073,6 +1076,244 @@ const tests: ComponentTest[] = [
       analytics: { scope: "expandedFooter" },
     },
     version: 42,
+  },
+  {
+    name: "version 48 props",
+    document: {},
+    props: {
+      data: {
+        primaryFooter: {
+          expandedFooter: true,
+        },
+      },
+      slots: {
+        LogoSlot: [
+          {
+            type: "FooterLogoSlot",
+            props: {
+              id: "LogoSlot-v48",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://placehold.co/100",
+                      height: 100,
+                      width: 100,
+                      alternateText: "Logo",
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                width: 0,
+                aspectRatio: 1.78,
+              },
+            },
+          },
+        ],
+        SocialLinksSlot: [
+          {
+            type: "FooterSocialLinksSlot",
+            props: {
+              id: "SocialLinksSlot-v48",
+              data: {
+                xLink: "https://x.com/yext",
+                facebookLink: "https://facebook.com/yext",
+                instagramLink: "https://instagram.com/yext",
+                linkedInLink: "https://linkedin.com/in/yext",
+                pinterestLink: "https://pinterest.com/yext",
+                tiktokLink: "https://tiktok.com/@yext",
+                youtubeLink: "https://youtube.com/c/yext",
+              },
+            },
+          },
+        ],
+        UtilityImagesSlot: [
+          {
+            type: "FooterUtilityImagesSlot",
+            props: {
+              id: "UtilityImagesSlot-v48",
+              data: {
+                utilityImages: [
+                  {
+                    image: {
+                      en: {
+                        url: "https://placehold.co/20",
+                        width: 20,
+                        height: 20,
+                        alternateText: "Utility 1",
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    linkTarget: "https://yext.com",
+                  },
+                  {
+                    image: {
+                      en: {
+                        url: "https://placehold.co/50x20",
+                        width: 50,
+                        height: 20,
+                        alternateText: "Utility 2",
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                  },
+                ],
+              },
+              styles: {
+                width: 50,
+                aspectRatio: 1.78,
+              },
+            },
+          },
+        ],
+        PrimaryLinksWrapperSlot: [
+          {
+            type: "FooterLinksSlot",
+            props: {
+              id: "PrimaryLinksWrapperSlot-v48",
+              data: {
+                links: [
+                  {
+                    label: {
+                      en: "Link 1",
+                      hasLocalizedValue: "true",
+                    },
+                    link: {
+                      en: "#",
+                      hasLocalizedValue: "true",
+                    },
+                    linkType: "URL",
+                  },
+                ],
+              },
+              variant: "primary",
+              eventNamePrefix: "primary",
+            },
+          },
+        ],
+        ExpandedLinksWrapperSlot: [
+          {
+            type: "FooterExpandedLinksWrapper",
+            props: {
+              id: "ExpandedLinksWrapperSlot-v48",
+              data: {
+                sections: [
+                  {
+                    label: {
+                      en: "Section 1",
+                      hasLocalizedValue: "true",
+                    },
+                    links: [
+                      {
+                        label: {
+                          en: "Link 1",
+                          hasLocalizedValue: "true",
+                        },
+                        link: {
+                          en: "#",
+                          hasLocalizedValue: "true",
+                        },
+                        linkType: "URL",
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        SecondaryFooterSlot: [
+          {
+            type: "SecondaryFooterSlot",
+            props: {
+              id: "SecondaryFooterSlot-v48",
+              data: {
+                show: true,
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-tertiary-light",
+                  textColor: "text-black",
+                },
+                linksAlignment: "right",
+              },
+              maxWidth: "theme",
+              slots: {
+                SecondaryLinksWrapperSlot: [
+                  {
+                    type: "FooterLinksSlot",
+                    props: {
+                      id: "SecondaryLinksWrapperSlot-v48",
+                      data: {
+                        links: [
+                          {
+                            label: {
+                              en: "Privacy Policy",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                          },
+                        ],
+                      },
+                      variant: "secondary",
+                      eventNamePrefix: "secondary",
+                      alignment: "right",
+                    },
+                  },
+                ],
+                CopyrightSlot: [
+                  {
+                    type: "CopyrightMessageSlot",
+                    props: {
+                      id: "CopyrightSlot-v48",
+                      data: {
+                        text: {
+                          field: "",
+                          constantValue: {
+                            en: "Copyright 2025",
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      alignment: "right",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      styles: {
+        primaryFooter: {
+          logo: {
+            width: 0,
+            aspectRatio: 1.78,
+          },
+          utilityImages: {
+            width: 0,
+            aspectRatio: 1,
+          },
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
+          linksAlignment: "right",
+        },
+        maxWidth: "theme",
+      },
+      analytics: { scope: "expandedFooter" },
+    },
+    version: 48,
   },
 ];
 

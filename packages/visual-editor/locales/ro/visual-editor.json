@@ -24,7 +24,6 @@
   "advancedSettings": "Setări avansate",
   "altText": "Alt text",
   "applyAll": "Aplicați la toate localitățile",
-  "applyAllWithLabel": "Aplicați {{fieldLabel}} la toate localitățile",
   "approvals": {
     "addAComment": "Adăugați un comentariu pentru a vă ajuta aprobatorul să înțeleagă ce s -a schimbat",
     "send": "Trimiteți pentru aprobare",
