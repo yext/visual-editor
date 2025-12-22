@@ -918,6 +918,7 @@ const tests: ComponentTest[] = [
                   },
                 ],
                 SecondaryCTASlot: [],
+                LinksSlot: [],
               },
             },
           },
