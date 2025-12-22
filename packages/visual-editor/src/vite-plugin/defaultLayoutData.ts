@@ -38,9 +38,12 @@ const mainDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                              height: 100,
-                              width: 100,
+                              hasLocalizedValue: "true",
+                              en: {
+                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                                height: 100,
+                                width: 100,
+                              },
                             },
                             constantValueEnabled: true,
                           },
@@ -100,7 +103,7 @@ const mainDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: "#",
+                              link: { en: "#", hasLocalizedValue: "true" },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -128,7 +131,7 @@ const mainDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: "#",
+                              link: { en: "#", hasLocalizedValue: "true" },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -315,9 +318,12 @@ const mainDefaultLayout = {
           backgroundImage: {
             field: "",
             constantValue: {
-              url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
-              height: 360,
-              width: 640,
+              hasLocalizedValue: "true",
+              en: {
+                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
+                height: 360,
+                width: 640,
+              },
             },
             constantValueEnabled: true,
           },
@@ -395,9 +401,12 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
-                      height: 360,
-                      width: 640,
+                      hasLocalizedValue: "true",
+                      en: {
+                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
+                        height: 360,
+                        width: 640,
+                      },
                     },
                     constantValueEnabled: true,
                   },
@@ -422,7 +431,7 @@ const mainDefaultLayout = {
                         en: "Call To Action",
                         hasLocalizedValue: "true",
                       },
-                      link: "#",
+                      link: { en: "#", hasLocalizedValue: "true" },
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
@@ -444,7 +453,7 @@ const mainDefaultLayout = {
                     field: "",
                     constantValue: {
                       label: { en: "Learn More", hasLocalizedValue: "true" },
-                      link: "#",
+                      link: { en: "#", hasLocalizedValue: "true" },
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
@@ -682,9 +691,12 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                      height: 360,
-                      width: 640,
+                      hasLocalizedValue: "true",
+                      en: {
+                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                        height: 360,
+                        width: 640,
+                      },
                     },
                     constantValueEnabled: true,
                   },
@@ -710,7 +722,7 @@ const mainDefaultLayout = {
                     field: "",
                     constantValue: {
                       label: "Learn More",
-                      link: "#",
+                      link: { en: "#", hasLocalizedValue: "true" },
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
@@ -801,9 +813,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -890,7 +905,10 @@ const mainDefaultLayout = {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -930,9 +948,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1019,7 +1040,10 @@ const mainDefaultLayout = {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -1059,9 +1083,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1148,7 +1175,10 @@ const mainDefaultLayout = {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -1781,9 +1811,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
-                                      height: 80,
-                                      width: 80,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                        height: 80,
+                                        width: 80,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1899,7 +1932,10 @@ const mainDefaultLayout = {
                                         en: "Visit Profile",
                                         hasLocalizedValue: "true",
                                       },
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -1946,9 +1982,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
-                                      height: 80,
-                                      width: 80,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                        height: 80,
+                                        width: 80,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2062,7 +2101,10 @@ const mainDefaultLayout = {
                                         en: "Visit Profile",
                                         hasLocalizedValue: "true",
                                       },
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2109,9 +2151,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
-                                      height: 80,
-                                      width: 80,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                        height: 80,
+                                        width: 80,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2225,7 +2270,10 @@ const mainDefaultLayout = {
                                         en: "Visit Profile",
                                         hasLocalizedValue: "true",
                                       },
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2331,9 +2379,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2447,7 +2498,10 @@ const mainDefaultLayout = {
                                         en: "Read More",
                                         hasLocalizedValue: "true",
                                       },
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2489,9 +2543,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2605,7 +2662,10 @@ const mainDefaultLayout = {
                                         en: "Read More",
                                         hasLocalizedValue: "true",
                                       },
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2647,9 +2707,12 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2763,7 +2826,10 @@ const mainDefaultLayout = {
                                         en: "Read More",
                                         hasLocalizedValue: "true",
                                       },
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2934,9 +3000,13 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                        alternateText: "Event Image",
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3027,7 +3097,10 @@ const mainDefaultLayout = {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3074,9 +3147,13 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                        alternateText: "Event Image",
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3167,7 +3244,10 @@ const mainDefaultLayout = {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3214,9 +3294,13 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                      height: 360,
-                                      width: 640,
+                                      hasLocalizedValue: "true",
+                                      en: {
+                                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                        height: 360,
+                                        width: 640,
+                                        alternateText: "Event Image",
+                                      },
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3307,7 +3391,10 @@ const mainDefaultLayout = {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: "#",
+                                      link: {
+                                        en: "#",
+                                        hasLocalizedValue: "true",
+                                      },
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3418,10 +3505,16 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                      height: 100,
-                      width: 100,
-                      alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                      hasLocalizedValue: "true",
+                      en: {
+                        url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                        height: 100,
+                        width: 100,
+                        alternateText: {
+                          en: "Logo",
+                          hasLocalizedValue: "true",
+                        },
+                      },
                     },
                     constantValueEnabled: true,
                   },
@@ -3831,9 +3924,12 @@ const directoryDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                              height: 100,
-                              width: 100,
+                              hasLocalizedValue: "true",
+                              en: {
+                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                                height: 100,
+                                width: 100,
+                              },
                             },
                             constantValueEnabled: true,
                           },
@@ -3893,7 +3989,7 @@ const directoryDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: "#",
+                              link: { en: "#", hasLocalizedValue: "true" },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -3922,7 +4018,7 @@ const directoryDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: "#",
+                              link: { en: "#", hasLocalizedValue: "true" },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -4153,10 +4249,16 @@ const directoryDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                      height: 100,
-                      width: 100,
-                      alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                      hasLocalizedValue: "true",
+                      en: {
+                        url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                        height: 100,
+                        width: 100,
+                        alternateText: {
+                          en: "Logo",
+                          hasLocalizedValue: "true",
+                        },
+                      },
                     },
                     constantValueEnabled: true,
                   },

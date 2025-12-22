@@ -35,9 +35,28 @@ const FooterUtilityImagesSlotInternal: PuckComponent<
   const aspectRatio = styles.aspectRatio || 1;
 
   // Filter to only valid images with URLs
-  const validImages = (data.utilityImages || []).filter(
-    (item) => item.image?.url
-  );
+  const validImages = (data.utilityImages || [])
+    .map(
+      (item: { image?: AssetImageType; url?: string; linkTarget?: string }) => {
+        if (item.image) {
+          return item;
+        }
+        if (item.url) {
+          return {
+            image: {
+              url: item.url,
+            } as AssetImageType,
+            linkTarget: item.linkTarget,
+          };
+        }
+        return item;
+      }
+    )
+    .filter(
+      (item): item is { image: AssetImageType; linkTarget?: string } =>
+        !!item.image?.url ||
+        (typeof item.image === "object" && "hasLocalizedValue" in item.image)
+    );
 
   if (validImages.length === 0) {
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;

@@ -2205,6 +2205,79 @@ const tests: ComponentTest[] = [
     version: 31,
     includeXLViewport: true,
   },
+  {
+    name: "version 48 props",
+    document: {
+      locale: "en",
+      name: "name",
+      address: {
+        city: "city",
+      },
+      hours: testHours,
+    },
+    props: {
+      data: {
+        hero: { field: "", constantValue: {}, constantValueEnabled: true },
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      },
+      slots: {
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-v48",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://placehold.co/100x100",
+                      height: 100,
+                      width: 100,
+                      alternateText: "Alt Text",
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+            },
+          },
+        ],
+        PrimaryCTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "PrimaryCTASlot-v48",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: {
+                      en: "Get Directions",
+                      hasLocalizedValue: "true",
+                    },
+                    link: {
+                      en: "#",
+                      hasLocalizedValue: "true",
+                    },
+                    linkType: "URL",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+            },
+          },
+        ],
+        SecondaryCTASlot: [],
+        GeomodifierSlot: [],
+        HoursStatusSlot: [],
+      },
+    },
+    version: 48,
+  },
 ];
 
 const BRAND_COLOR_BG_ALLOWLIST = new Set([

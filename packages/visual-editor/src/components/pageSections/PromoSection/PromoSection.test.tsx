@@ -722,7 +722,125 @@ const tests: ComponentTest[] = [
     version: 30,
   },
   {
-    name: "[classic] version 48 props with constant values and image",
+    name: "version 48 props with translatable image and CTA",
+    document: { c_examplePromo: promoData },
+    props: {
+      data: {
+        promo: { field: "", constantValue: {}, constantValueEnabled: true },
+        media: "image",
+      },
+      styles: {
+        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+        orientation: "left",
+      },
+      slots: {
+        ImageSlot: [
+          {
+            type: "ImageSlot",
+            props: {
+              id: "ImageSlot-v48",
+              data: {
+                image: {
+                  field: "",
+                  constantValue: {
+                    en: {
+                      url: "https://placehold.co/640x360",
+                      height: 360,
+                      width: 640,
+                      alternateText: "Image",
+                    },
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { aspectRatio: 1.78, width: 640 },
+            },
+          },
+        ],
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingSlot-v48",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Promo Title",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        DescriptionSlot: [
+          {
+            type: "BodyTextSlot",
+            props: {
+              id: "DescriptionSlot-v48",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Promo Description",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { variant: "base" },
+            },
+          },
+        ],
+        VideoSlot: [
+          {
+            type: "VideoSlot",
+            props: {
+              id: "VideoSlot-v48",
+              data: {},
+            },
+          },
+        ],
+        CTASlot: [
+          {
+            type: "CTASlot",
+            props: {
+              id: "CTASlot-v48",
+              data: {
+                entityField: {
+                  field: "",
+                  constantValue: {
+                    label: {
+                      en: "Learn More",
+                      hasLocalizedValue: "true",
+                    },
+                    link: {
+                      en: "#",
+                      hasLocalizedValue: "true",
+                    },
+                    linkType: "URL",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                variant: "primary",
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "promoSection" },
+      liveVisibility: true,
+    },
+    version: 48,
+  },
+  {
+    name: "[classic] version 49 props with constant values and image",
     document: {},
     props: {
       data: {
@@ -807,9 +925,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -852,10 +973,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "PromoSection-562d56de-f919-45b8-abbc-64fc7de0e75a",
     },
-    version: 48,
+    version: 49,
   },
   {
-    name: "[classic] version 48 with constant values and video",
+    name: "[classic] version 49 with constant values and video",
     document: {},
     props: {
       data: {
@@ -957,9 +1078,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1002,10 +1126,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "PromoSection-562d56de-f919-45b8-abbc-64fc7de0e75a",
     },
-    version: 48,
+    version: 49,
   },
   {
-    name: "[classic] version 48 with entity values",
+    name: "[classic] version 49 with entity values",
     document: { c_examplePromo: promoData },
     props: {
       data: {
@@ -1107,9 +1231,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1195,12 +1322,12 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "PromoSection-25075125-341e-44eb-9037-8eb65042a29a",
     },
-    version: 48,
+    version: 49,
   },
   {
-    name: "version 48 empty state",
+    name: "version 49 empty state",
     document: {},
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -1288,9 +1415,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1335,9 +1465,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[immersive] version 48 with entity values",
+    name: "[immersive] version 49 with entity values",
     document: { c_examplePromo: promoData },
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -1435,9 +1565,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1525,9 +1658,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[immersive] version 48 with constant values",
+    name: "[immersive] version 49 with constant values",
     document: {},
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -1615,9 +1748,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatableValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1663,9 +1799,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[spotlight] version 48 with constant values",
+    name: "[spotlight] version 49 with constant values",
     document: {},
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -1756,9 +1892,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatableValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1804,9 +1943,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[spotlight] version 48 with entity values",
+    name: "[spotlight] version 49 with entity values",
     document: { c_examplePromo: promoData },
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -1907,9 +2046,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatableValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1998,9 +2140,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[compact] version 48 with entity values",
+    name: "[compact] version 49 with entity values",
     document: { c_examplePromo: promoData },
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -2102,9 +2244,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatableValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -2192,9 +2337,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[compact] version 48 with constant values and image",
+    name: "[compact] version 49 with constant values and image",
     document: {},
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -2283,9 +2428,12 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                    width: 640,
-                    height: 360,
+                    en: {
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      width: 640,
+                      height: 360,
+                    },
+                    hasTranslatableValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -2330,9 +2478,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[compact] version 48 with constant values and video",
+    name: "[compact] version 49 with constant values and video",
     document: {},
-    version: 48,
+    version: 49,
     props: {
       data: {
         promo: {
@@ -2435,10 +2583,13 @@ const tests: ComponentTest[] = [
                 image: {
                   field: "",
                   constantValue: {
-                    alternateText: "",
-                    url: "https://www.youtube.com/watch?v=U3UPQH5rTp4",
-                    height: 1,
-                    width: 1,
+                    en: {
+                      alternateText: "",
+                      url: "",
+                      height: 1,
+                      width: 1,
+                    },
+                    hasTranslatableValue: "true",
                   },
                   constantValueEnabled: true,
                 },

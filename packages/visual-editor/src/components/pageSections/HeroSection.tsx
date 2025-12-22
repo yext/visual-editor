@@ -438,7 +438,10 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
                     en: "Call To Action",
                     hasLocalizedValue: "true",
                   },
-                  link: "#",
+                  link: {
+                    en: "#",
+                    hasLocalizedValue: "true",
+                  },
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -464,7 +467,10 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
                     en: "Learn More",
                     hasLocalizedValue: "true",
                   },
-                  link: "#",
+                  link: {
+                    en: "#",
+                    hasLocalizedValue: "true",
+                  },
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
