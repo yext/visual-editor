@@ -1,26 +1,14 @@
-import { useTranslation } from "react-i18next";
 import * as React from "react";
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-  SlotComponent,
-} from "@measured/puck";
+import { ComponentConfig, Fields, setDeep, Slot } from "@measured/puck";
 import {
   PromoSectionType,
   backgroundColors,
   BackgroundStyle,
-  PageSection,
   YextField,
   VisibilityWrapper,
   msg,
   getAnalyticsScopeHash,
   ComponentFields,
-  EntityField,
-  pt,
-  themeManagerCn,
   YextEntityField,
   YextEntityFieldSelector,
   resolveYextEntityField,
@@ -31,13 +19,19 @@ import {
   VideoProps,
   i18nComponentsInstance,
   getDefaultRTF,
-  Body,
+  AssetImageType,
+  themeManagerCn,
   useDocument,
 } from "@yext/visual-editor";
-import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
-import { CircleSlash2 } from "lucide-react";
-import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
+import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { updateFields } from "../HeroSection";
+import { ClassicPromo } from "./ClassicPromo";
+import { SpotlightPromo } from "./SpotlightPromo";
+import { ImmersivePromo } from "./ImmersivePromo";
+import { CompactPromo } from "./CompactPromo";
+import { useTranslation } from "react-i18next";
+import { PromoEmptyState } from "./PromoEmptyState";
 
 export interface PromoData {
   /**
@@ -51,9 +45,17 @@ export interface PromoData {
    * @defaultValue 'image'
    */
   media: "image" | "video";
+
+  backgroundImage: YextEntityField<ImageType | AssetImageType>;
 }
 
 export interface PromoStyles {
+  /**
+   * The visual variant for the promo section.
+   * @defaultValue classic
+   */
+  variant: "classic" | "immersive" | "spotlight" | "compact";
+
   /**
    * The background color for the entire section.
    * @defaultValue Background Color 1
@@ -61,10 +63,29 @@ export interface PromoStyles {
   backgroundColor?: BackgroundStyle;
 
   /**
-   * Positions the image to the left or right of the text content.
-   * @defaultValue 'left'
+   * Positions the image to the left or right of the promo content on desktop (classic and compact variants).
+   * @defaultValue right
    */
-  orientation: "left" | "right";
+  desktopImagePosition: "left" | "right";
+
+  /**
+   * Positions the image to the top or bottom of the promo content on mobile (classic and compact variants).
+   * @defaultValue top
+   */
+  mobileImagePosition: "top" | "bottom";
+
+  /**
+   * Text content position and alignment.
+   * @defaultValue left
+   */
+  containerAlignment: "left" | "center" | "right";
+
+  /**
+   * Image Height for the promo image with Immersive or Spotlight variant
+   * Minimum height: content height + Page Section Top/Bottom Padding
+   * @default 500px
+   */
+  imageHeight: number;
 }
 
 export interface PromoSectionProps {
@@ -101,6 +122,12 @@ export interface PromoSectionProps {
   liveVisibility?: boolean;
 }
 
+export type PromoVariantProps = Pick<
+  PromoSectionProps,
+  "data" | "styles" | "slots"
+  // | "conditionalRender"
+>;
+
 const promoSectionFields: Fields<PromoSectionProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
@@ -118,11 +145,35 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           { label: msg("fields.options.video", "Video"), value: "video" },
         ],
       }),
+      backgroundImage: YextField(msg("fields.image", "Image"), {
+        type: "entityField",
+        filter: {
+          types: ["type.image"],
+        },
+      }),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "select",
+        options: [
+          { label: msg("fields.options.classic", "Classic"), value: "classic" },
+          {
+            label: msg("fields.options.immersive", "Immersive"),
+            value: "immersive",
+          },
+          {
+            label: msg("fields.options.spotlight", "Spotlight"),
+            value: "spotlight",
+          },
+          {
+            label: msg("fields.options.compact", "Compact"),
+            value: "compact",
+          },
+        ],
+      }),
       backgroundColor: YextField(
         msg("fields.backgroundColor", "Background Color"),
         {
@@ -130,8 +181,8 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      orientation: YextField(
-        msg("fields.mediaOrientation", "Media Orientation"),
+      desktopImagePosition: YextField(
+        msg("fields.desktopImagePosition", "Desktop Image Position"),
         {
           type: "radio",
           options: [
@@ -150,6 +201,56 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           ],
         }
       ),
+      mobileImagePosition: YextField(
+        msg("fields.mobileImagePosition", "Mobile Image Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.top", "Top", {
+                context: "direction",
+              }),
+              value: "top",
+            },
+            {
+              label: msg("fields.options.bottom", "Bottom", {
+                context: "direction",
+              }),
+              value: "bottom",
+            },
+          ],
+        }
+      ),
+      containerAlignment: YextField(
+        msg("fields.containerAlignment", "Container Alignment"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.center", "Center", {
+                context: "direction",
+              }),
+              value: "center",
+            },
+            {
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
+            },
+          ],
+        }
+      ),
+      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
+        type: "number",
+        min: 0,
+      }),
     },
   }),
   slots: {
@@ -184,132 +285,6 @@ const promoSectionFields: Fields<PromoSectionProps> = {
   ),
 };
 
-const PromoMedia = ({
-  className,
-  data,
-  slots,
-}: {
-  className: string;
-  data: PromoData;
-  slots: {
-    VideoSlot: SlotComponent;
-    ImageSlot: SlotComponent;
-  };
-}) => {
-  const { t } = useTranslation();
-
-  return (
-    <div
-      className={themeManagerCn("w-full my-auto", className)}
-      role="region"
-      aria-label={t("promoMedia", "Promo Media")}
-    >
-      <EntityField
-        displayName={pt("fields.media", "Media")}
-        fieldId={data.promo.field}
-        constantValueEnabled={data.promo.constantValueEnabled}
-      >
-        {data.media === "video" ? (
-          <slots.VideoSlot style={{ height: "auto" }} allow={[]} />
-        ) : (
-          <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
-        )}
-      </EntityField>
-    </div>
-  );
-};
-
-const PromoWrapper: PuckComponent<PromoSectionProps> = (props) => {
-  const { data, styles, slots, puck } = props;
-  const { i18n } = useTranslation();
-  const locale = i18n.language;
-  const streamDocument = useDocument();
-  const templateMetadata = useTemplateMetadata();
-
-  // Check if using mapped entity field (not constant value) and if it's empty
-  const isMappedField = !data.promo.constantValueEnabled && !!data.promo.field;
-  const resolvedPromo = isMappedField
-    ? resolveYextEntityField(streamDocument, data.promo, locale)
-    : undefined;
-  const isEmpty =
-    isMappedField &&
-    (!resolvedPromo || Object.keys(resolvedPromo || {}).length === 0);
-
-  // Show empty state in editor mode when mapped field is empty
-  if (isMappedField && isEmpty) {
-    if (puck.isEditing) {
-      const entityTypeDisplayName = templateMetadata?.entityTypeDisplayName;
-
-      return (
-        <PageSection
-          background={backgroundColors.background1.value}
-          className="flex items-center justify-center"
-        >
-          <div className="relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5">
-            <CircleSlash2 className="w-12 h-12 text-gray-400" />
-            <div className="flex flex-col items-center gap-0">
-              <Body variant="base" className="text-gray-500 font-medium">
-                {pt(
-                  "emptyStateSectionHidden",
-                  "Section hidden for this {{entityType}}",
-                  {
-                    entityType: entityTypeDisplayName
-                      ? entityTypeDisplayName.toLowerCase()
-                      : "page",
-                  }
-                )}
-              </Body>
-              <Body variant="base" className="text-gray-500 font-normal">
-                {pt(
-                  "emptyStateFieldEmpty",
-                  "{{entityType}}'s mapped field is empty",
-                  {
-                    entityType: entityTypeDisplayName
-                      ? entityTypeDisplayName.charAt(0).toUpperCase() +
-                        entityTypeDisplayName.slice(1)
-                      : "Entity",
-                  }
-                )}
-              </Body>
-            </div>
-          </div>
-        </PageSection>
-      );
-    }
-    return <></>;
-  }
-
-  return (
-    <PageSection
-      background={styles.backgroundColor}
-      className={themeManagerCn("flex flex-col md:flex-row md:gap-16")}
-    >
-      {/* Desktop left image */}
-      <PromoMedia
-        data={data}
-        slots={slots}
-        className={themeManagerCn(
-          styles.orientation === "right" && "md:hidden"
-        )}
-      />
-      <div className="flex flex-col justify-center gap-y-4 md:gap-y-8 pt-4 md:pt-0 w-full break-words">
-        <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
-        <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
-        <slots.CTASlot style={{ height: "auto" }} allow={[]} />
-      </div>
-      {/* Desktop right image */}
-      <PromoMedia
-        data={data}
-        slots={slots}
-        className={themeManagerCn(
-          "hidden sm:block",
-          styles.orientation === "left" && "md:hidden"
-        )}
-      />
-    </PageSection>
-  );
-};
-
 /**
  * The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements.
  * Available on Location templates.
@@ -325,10 +300,23 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         constantValueEnabled: true,
       },
       media: "image",
+      backgroundImage: {
+        field: "",
+        constantValue: {
+          ...getRandomPlaceholderImageObject({ width: 640, height: 360 }),
+          width: 640,
+          height: 360,
+        },
+        constantValueEnabled: true,
+      },
     },
     styles: {
+      variant: "classic",
       backgroundColor: backgroundColors.background1.value,
-      orientation: "left",
+      desktopImagePosition: "left",
+      mobileImagePosition: "top",
+      containerAlignment: "left",
+      imageHeight: 500,
     },
     slots: {
       HeadingSlot: [
@@ -407,7 +395,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               lg: "width",
             },
             className:
-              "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
+              "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
           } satisfies ImageWrapperProps,
         },
       ],
@@ -438,13 +426,85 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
     },
     liveVisibility: true,
   },
+  resolveFields: (data) => {
+    let fields = promoSectionFields;
+
+    switch (data.props.styles.variant) {
+      case "compact": {
+        // compact should remove the same fields removed by classic
+      }
+      case "classic": {
+        fields = updateFields(
+          fields,
+          [
+            "data.objectFields.backgroundImage",
+            "styles.objectFields.imageHeight",
+          ],
+          undefined
+        );
+
+        break;
+      }
+      case "immersive": {
+        fields = updateFields(
+          fields,
+          ["slots.ImageSlot", "styles.objectFields.backgroundColor"],
+          undefined
+        );
+        // immersive should also remove the fields removed by spotlight
+      }
+      case "spotlight": {
+        fields = updateFields(
+          fields,
+          [
+            "styles.objectFields.mobileImagePosition",
+            "styles.objectFields.desktopImagePosition",
+            "data.objectFields.media",
+            data.props.data.promo.constantValueEnabled
+              ? undefined
+              : "data.objectFields.backgroundImage",
+          ],
+          undefined
+        );
+        break;
+      }
+    }
+
+    return fields;
+  },
   resolveData: (data, params) => {
+    let updatedData = { ...data };
     // puck supports dot notation even though the type does not
     const mediaSubfield = "data.media" as any;
 
+    // Apply the alignment to the description text
+    updatedData = setDeep(
+      updatedData,
+      "props.slots.DescriptionSlot[0].props.parentStyles.className",
+      `text-${updatedData.props.styles.containerAlignment}`
+    );
+
+    if (data.props.styles.variant === "compact") {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ImageSlot[0].props.className",
+        themeManagerCn(
+          "w-full h-full",
+          data.props.styles.desktopImagePosition === "left"
+            ? "mr-auto"
+            : "ml-auto"
+        )
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.VideoSlot[0].props.className",
+        "h-full"
+      );
+    }
+
     if (data.props?.data?.promo.constantValueEnabled) {
-      let updatedData = setDeep(
-        data,
+      updatedData = setDeep(
+        updatedData,
         "props.slots.HeadingSlot[0].props.parentData",
         undefined
       );
@@ -463,6 +523,11 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         "props.slots.ImageSlot[0].props.parentData",
         undefined
       );
+      updatedData = setDeep(updatedData, "props.data.backgroundImage", {
+        field: data.props?.data?.promo.field + ".image" || "",
+        constantValue: data.props.data.backgroundImage.constantValue,
+        constantValueEnabled: true,
+      } satisfies PromoData["backgroundImage"]);
 
       return { ...updatedData, readOnly: { [mediaSubfield]: false } };
     }
@@ -477,7 +542,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       return { ...data, readOnly: { [mediaSubfield]: false } };
     }
 
-    let updatedData = setDeep(data, "props.data.media", "image");
+    updatedData = setDeep(updatedData, "props.data.media", "image");
     updatedData = setDeep(
       updatedData,
       "props.slots.HeadingSlot[0].props.parentData",
@@ -510,6 +575,11 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         field: data.props?.data?.promo.field || "",
       }
     );
+    updatedData = setDeep(updatedData, "props.data.backgroundImage", {
+      field: data.props?.data?.promo.field + ".image" || "",
+      constantValue: data.props.data.backgroundImage.constantValue,
+      constantValueEnabled: false,
+    } satisfies PromoData["backgroundImage"]);
 
     return {
       ...updatedData,
@@ -519,6 +589,44 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
     };
   },
   render: (props) => {
+    const { data, styles, puck } = props;
+    const { i18n } = useTranslation();
+    const locale = i18n.language;
+    const streamDocument = useDocument();
+
+    let PromoVariant = <ClassicPromo {...props} />;
+    switch (props.styles.variant) {
+      case "immersive":
+        PromoVariant = <ImmersivePromo {...props} />;
+        break;
+      case "spotlight":
+        PromoVariant = <SpotlightPromo {...props} />;
+        break;
+      case "compact":
+        PromoVariant = <CompactPromo {...props} />;
+        break;
+    }
+
+    // Check if using mapped entity field (not constant value) and if it's empty
+    const isMappedField =
+      !data.promo.constantValueEnabled && !!data.promo.field;
+    const resolvedPromo = isMappedField
+      ? resolveYextEntityField(streamDocument, data.promo, locale)
+      : undefined;
+    const isEmpty =
+      isMappedField &&
+      (!resolvedPromo || Object.keys(resolvedPromo || {}).length === 0);
+
+    // Show empty state in editor mode when mapped field is empty
+    if (isMappedField && isEmpty) {
+      PromoVariant = (
+        <PromoEmptyState
+          isEditing={puck.isEditing}
+          backgroundStyle={styles.backgroundColor}
+        />
+      );
+    }
+
     return (
       <AnalyticsScopeProvider
         name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
@@ -527,7 +635,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           liveVisibility={!!props.liveVisibility}
           isEditing={props.puck.isEditing}
         >
-          <PromoWrapper {...props} />
+          {PromoVariant}
         </VisibilityWrapper>
       </AnalyticsScopeProvider>
     );
