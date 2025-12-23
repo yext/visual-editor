@@ -53,6 +53,8 @@ export type FontLinkData = {
   href: string;
   rel: string;
   crossOrigin?: "anonymous" | "use-credentials";
+  as?: "font";
+  type?: "font/woff2";
 };
 
 // Helper function to generate weight parameter for Google Fonts API
@@ -116,12 +118,23 @@ export const generateCustomFontLinkData = (
   customFonts: string[],
   relativePrefixToRoot: string
 ): FontLinkData[] => {
-  return customFonts.map((fontName) => {
-    return {
+  const data: FontLinkData[] = [];
+  customFonts.forEach((font) => {
+    const fontName = font.split("-")[0];
+
+    data.push({
+      href: `${relativePrefixToRoot}y-fonts/${font}.woff2`,
+      rel: "preload",
+      as: "font",
+      type: "font/woff2",
+      crossOrigin: "anonymous",
+    });
+    data.push({
       href: `${relativePrefixToRoot}y-fonts/${fontName.replaceAll(" ", "").toLowerCase()}.css`,
       rel: "stylesheet",
-    };
+    });
   });
+  return data;
 };
 
 // Convert font link data to HTML string
@@ -134,7 +147,7 @@ export const fontLinkDataToHTML = (linkData: FontLinkData[]): string => {
       if (link.rel === "preconnect") {
         return `<link rel="${link.rel}" href="${link.href}"${crossOriginAttr}>`;
       } else {
-        return `<link href="${link.href}" rel="${link.rel}"${crossOriginAttr}>`;
+        return `<link href="${link.href}" rel="${link.rel}"${crossOriginAttr} ${link.as ? `as="${link.as}"` : ""} ${link.type ? `type="${link.type}"` : ""}>`;
       }
     })
     .join("\n");
@@ -321,7 +334,10 @@ export const extractInUseFontFamilies = (
       if (typeof value === "string" && value.length > 0) {
         const firstFont = value.split(",")[0];
         const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
-        fontFamilies.add(cleanedFontName);
+        const fontWeight = data[
+          key.replace("fontFamily", "fontWeight")
+        ].replace(" !important", "");
+        fontFamilies.add(`${cleanedFontName}-${fontWeight}`);
       }
     }
   }
@@ -330,11 +346,25 @@ export const extractInUseFontFamilies = (
   const inUseCustomFonts: string[] = [];
 
   // For each unique font family found, look it up in the availableFonts map.
-  for (const fontName of fontFamilies) {
+  for (const fontEntry of fontFamilies) {
+    const fontName = fontEntry.split("-")[0];
+    const fontWeight = fontEntry.split("-")[1];
     if (availableFonts[fontName]) {
       inUseGoogleFonts[fontName] = availableFonts[fontName];
     } else {
-      inUseCustomFonts.push(fontName);
+      const weightName: Record<string, string> = {
+        "100": "thin",
+        "200": "extralight",
+        "300": "light",
+        "400": "regular",
+        "500": "medium",
+        "600": "semibold",
+        "700": "bold",
+        "800": "extrabold",
+        "900": "black",
+      };
+      const customFontFullName = `${fontName}-${weightName[fontWeight]}`;
+      inUseCustomFonts.push(customFontFullName);
     }
   }
 
