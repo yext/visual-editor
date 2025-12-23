@@ -5,10 +5,12 @@ export const promoVariants: Migration = {
   PromoSection: {
     action: "updated",
     propTransformation: (props) => {
-      const orientation = props.styles?.orientation;
-      delete props.styles?.orientation;
-
       const newProps = { ...props };
+      const orientation = newProps.styles?.orientation;
+      delete newProps.styles?.orientation;
+      if (!newProps.styles) {
+        newProps.styles = {};
+      }
 
       newProps.styles.variant = "classic";
       newProps.styles.desktopImagePosition = orientation;

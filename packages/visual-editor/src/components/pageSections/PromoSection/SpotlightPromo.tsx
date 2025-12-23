@@ -24,7 +24,6 @@ export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
 
   return (
     <div
-      className="bg-no-repeat bg-center bg-cover"
       style={{
         backgroundImage: resolvedBackgroundImage?.url
           ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`

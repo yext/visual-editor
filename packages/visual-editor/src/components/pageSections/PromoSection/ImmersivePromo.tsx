@@ -17,7 +17,7 @@ export const ImmersivePromo: PuckComponent<PromoVariantProps> = (props) => {
   const streamDocument = useDocument();
   const resolvedBackgroundImage = resolveYextEntityField(
     streamDocument,
-    data?.backgroundImage,
+    data.backgroundImage,
     locale
   );
 

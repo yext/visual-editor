@@ -125,7 +125,6 @@ export interface PromoSectionProps {
 export type PromoVariantProps = Pick<
   PromoSectionProps,
   "data" | "styles" | "slots"
-  // | "conditionalRender"
 >;
 
 const promoSectionFields: Fields<PromoSectionProps> = {
@@ -530,7 +529,9 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         undefined
       );
       updatedData = setDeep(updatedData, "props.data.backgroundImage", {
-        field: data.props?.data?.promo.field + ".image" || "",
+        field: data.props?.data?.promo.field
+          ? data.props?.data?.promo.field + ".image"
+          : "",
         constantValue: data.props.data?.backgroundImage?.constantValue,
         constantValueEnabled: true,
       } satisfies PromoData["backgroundImage"]);
@@ -582,7 +583,9 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       }
     );
     updatedData = setDeep(updatedData, "props.data.backgroundImage", {
-      field: data.props?.data?.promo.field + ".image" || "",
+      field: data.props?.data?.promo.field
+        ? data.props?.data?.promo.field + ".image"
+        : "",
       constantValue: data.props.data?.backgroundImage?.constantValue,
       constantValueEnabled: false,
     } satisfies PromoData["backgroundImage"]);

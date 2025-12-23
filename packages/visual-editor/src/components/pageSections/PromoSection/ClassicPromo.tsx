@@ -10,7 +10,7 @@ export const ClassicPromo: PuckComponent<PromoVariantProps> = (props) => {
   return (
     <PageSection
       background={styles.backgroundColor}
-      className={themeManagerCn("flex flex-col lg:flex-row gap-6 md:gap-10")}
+      className={themeManagerCn("flex flex-col lg:flex-row gap-8 md:gap-16")}
     >
       {/* Desktop left image / Mobile top image */}
       <PromoMedia

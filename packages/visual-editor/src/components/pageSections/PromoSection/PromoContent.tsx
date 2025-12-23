@@ -3,7 +3,7 @@ import { PromoVariantProps } from "./PromoSection";
 
 /** Shared styling for the various parent containers of PromoContent  */
 export const promoContentParentCn = (styles: PromoVariantProps["styles"]) => {
-  return `flex flex-col gap-y-8 sm:gap-y-10 w-full break-words ${styles.containerAlignment === "left" ? "items-start" : styles.containerAlignment === "center" ? "items-center" : "items-end"} `;
+  return `flex flex-col gap-y-8 sm:gap-y-10 w-full break-words ${styles.containerAlignment === "left" ? "items-start" : styles.containerAlignment === "center" ? "items-center" : "items-end"}`;
 };
 
 export const PromoContent: PuckComponent<PromoVariantProps> = (props) => {

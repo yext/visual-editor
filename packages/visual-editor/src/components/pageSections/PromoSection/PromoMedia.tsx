@@ -21,11 +21,7 @@ export const PromoMedia = ({
 
   return (
     <div
-      className={themeManagerCn(
-        "w-full",
-        styles.variant === "compact" ? "" : "py-auto",
-        className
-      )}
+      className={themeManagerCn("w-full", className)}
       role="region"
       aria-label={t("promoMedia", "Promo Media")}
     >
@@ -34,7 +30,6 @@ export const PromoMedia = ({
         fieldId={data.promo.field}
         constantValueEnabled={data.promo.constantValueEnabled}
         fullHeight
-        // className="flex"
       >
         {data.media === "video" ? (
           <slots.VideoSlot
