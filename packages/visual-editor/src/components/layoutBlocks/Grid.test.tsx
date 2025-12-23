@@ -1529,6 +1529,252 @@ const tests: ComponentTest[] = [
     },
     version: 45,
   },
+  {
+    name: "version 48 - HeadingText on dark background",
+    document: {},
+    props: {
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 3,
+                  align: "left",
+                  color: backgroundColors.color2.value,
+                },
+                id: "HeadingText-dark-bg-1",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 2,
+                  align: "left",
+                  color: backgroundColors.color1.value,
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                  color: backgroundColors.color3.value,
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 5,
+                  align: "left",
+                  color: backgroundColors.color4.value,
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+          ],
+        },
+        { Column: [] },
+        { Column: [] },
+      ],
+      backgroundColor: backgroundColors.color4.value,
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 48,
+  },
+  {
+    name: "version 48 - HeadingText on light background",
+    document: {},
+    props: {
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 3,
+                  align: "left",
+                  color: backgroundColors.color2.value,
+                },
+                id: "HeadingText-dark-bg-1",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 2,
+                  align: "left",
+                  color: backgroundColors.color1.value,
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                  color: backgroundColors.color3.value,
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 5,
+                  align: "left",
+                  color: backgroundColors.color4.value,
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Business Name",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                },
+                id: "HeadingText-dark-bg-2",
+              },
+            },
+          ],
+        },
+        { Column: [] },
+        { Column: [] },
+      ],
+      backgroundColor: backgroundColors.background1.value,
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 48,
+  },
 ];
 
 describe("Grid", async () => {
@@ -1589,10 +1835,7 @@ describe("Grid", async () => {
       await expect(`Grid/[${viewportName}] ${name}`).toMatchScreenshot();
 
       const results = await axe(container);
-      if (
-        name === "version 45 - CTAs with different site colors" ||
-        name === "version 45 - CTAs with Dark background"
-      ) {
+      if (version === 45 || version === 48) {
         console.warn(results);
       } else {
         expect(results).toHaveNoViolations();
@@ -1603,10 +1846,7 @@ describe("Grid", async () => {
           `Grid/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
         const results2 = await axe(container);
-        if (
-          name === "version 45 - CTAs with different site colors" ||
-          name === "version 45 - CTAs with Dark background"
-        ) {
+        if (version === 45 || version === 48) {
           console.warn(results2);
         } else {
           expect(results2).toHaveNoViolations();

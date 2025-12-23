@@ -162,12 +162,16 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
 
 export const siteColorOptions: ComboboxOptionGroup[] = [
   {
-    title: msg("siteColors", "Site Colors"),
+    title: msg("recommendedColors", "Recommended Colors"),
+    description: msg(
+      "theme.colors.recommendedDescription",
+      "Optimize color contrast for accessibility with these backgrounds."
+    ),
     options: [
       {
         label: msg("default", "Default"),
         value: undefined,
-        color: backgroundColors.color1.value.bgColor,
+        color: undefined,
       },
       ...Object.entries(backgroundColors)
         .filter(([key]) => key.startsWith("color"))

@@ -1,6 +1,11 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { HeadingLevel, themeManagerCn } from "@yext/visual-editor";
+import {
+  BackgroundStyle,
+  HeadingLevel,
+  themeManagerCn,
+  useBackground,
+} from "@yext/visual-editor";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -64,6 +69,7 @@ export interface HeadingProps
     VariantProps<typeof headingVariants> {
   level: HeadingLevel;
   semanticLevelOverride?: HeadingLevel | "span";
+  color?: BackgroundStyle;
 }
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
@@ -75,6 +81,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       fontSize,
       semanticLevelOverride,
       style,
+      color,
       ...props
     },
     ref
@@ -90,6 +97,13 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span"
     >;
 
+    const isDarkBG = useBackground()?.isDarkBackground;
+
+    const dynamicStyle =
+      !isDarkBG && color?.bgColor
+        ? { color: `var(--colors-${normalize(color.bgColor)})` }
+        : undefined;
+
     return (
       <Tag
         className={themeManagerCn(
@@ -104,6 +118,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
         style={{
           // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-h${level}-textTransform)`,
+          ...dynamicStyle,
           ...style,
         }}
         ref={ref}
@@ -115,3 +130,11 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   }
 );
 Heading.displayName = "Heading";
+
+// Extracts the name of a theme color from a tailwind bg- or text- class
+const normalize = (token?: string) =>
+  token?.startsWith("bg-")
+    ? token.substring(3)
+    : token?.startsWith("text-")
+      ? token.substring(5)
+      : token;
