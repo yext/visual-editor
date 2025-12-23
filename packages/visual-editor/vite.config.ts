@@ -20,7 +20,7 @@ export default defineConfig(() => ({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "visual-editor",
-      formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
+      formats: ["es"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
     rollupOptions: {
       external: [
@@ -82,7 +82,7 @@ const dts = (): Plugin => ({
       return;
     }
 
-    exec("tsup src/index.ts --format esm,cjs --dts-only", (err) => {
+    exec("tsup src/index.ts --format esm --dts-only", (err) => {
       if (err) {
         throw new Error("Failed to generate declaration files");
       }
