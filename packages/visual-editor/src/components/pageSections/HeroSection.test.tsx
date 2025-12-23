@@ -2377,7 +2377,7 @@ describe("HeroSection", async () => {
         if (isBrandColorTest(props) && results.violations.length) {
           console.warn(
             `IGNORING axe violations for brand color test: ${name}`,
-            results
+            results.violations
           );
         } else {
           expect(results).toHaveNoViolations();
