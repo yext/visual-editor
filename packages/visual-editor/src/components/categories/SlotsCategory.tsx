@@ -55,11 +55,7 @@ import {
   PhotoGalleryWrapperProps,
   PhotoGalleryWrapper,
 } from "../pageSections/PhotoGallerySection/PhotoGalleryWrapper.tsx";
-import {
-  FAQsWrapperSlot,
-  FAQsWrapperSlotProps,
-} from "../pageSections/FAQsSection/FAQsWrapperSlot.tsx";
-import { FAQSlot, FAQSlotProps } from "../pageSections/FAQsSection/FAQSlot.tsx";
+import { FAQCard, FAQCardProps } from "../pageSections/FAQsSection/FAQCard.tsx";
 import {
   TeamCardsWrapper,
   TeamCardsWrapperProps,
@@ -142,8 +138,7 @@ export interface SlotsCategoryProps {
   EmailsSlot: EmailsProps;
   EventCard: EventCardProps;
   EventCardsWrapper: EventCardsWrapperProps;
-  FAQsWrapperSlot: FAQsWrapperSlotProps;
-  FAQSlot: FAQSlotProps;
+  FAQCard: FAQCardProps;
   FooterExpandedLinkSectionSlot: FooterExpandedLinkSectionSlotProps;
   FooterExpandedLinksWrapper: FooterExpandedLinksWrapperProps;
   FooterLinksSlot: FooterLinksSlotProps;
@@ -207,8 +202,7 @@ export const SlotsCategoryComponents = {
   EventCard: { ...EventCard, permissions: lockedPermissions },
   EventCardsWrapper: { ...EventCardsWrapper, permissions: lockedPermissions },
   ...ExpandedHeaderComponents,
-  FAQsWrapperSlot: { ...FAQsWrapperSlot, permissions: lockedPermissions },
-  FAQSlot: { ...FAQSlot, permissions: lockedPermissions },
+  FAQCard: { ...FAQCard, permissions: lockedPermissions },
   FooterExpandedLinkSectionSlot: {
     ...FooterExpandedLinkSectionSlot,
     permissions: lockedPermissions,

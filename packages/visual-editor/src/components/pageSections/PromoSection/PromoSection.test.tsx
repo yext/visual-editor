@@ -840,7 +840,7 @@ const tests: ComponentTest[] = [
     version: 48,
   },
   {
-    name: "[classic] version 49 props with constant values and image",
+    name: "[classic] version 50 props with constant values and image",
     document: {},
     props: {
       data: {
@@ -971,10 +971,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "PromoSection-562d56de-f919-45b8-abbc-64fc7de0e75a",
     },
-    version: 49,
+    version: 50,
   },
   {
-    name: "[classic] version 49 with constant values and video",
+    name: "[classic] version 50 with constant values and video",
     document: {},
     props: {
       data: {
@@ -1122,10 +1122,10 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "PromoSection-562d56de-f919-45b8-abbc-64fc7de0e75a",
     },
-    version: 49,
+    version: 50,
   },
   {
-    name: "[classic] version 49 with entity values",
+    name: "[classic] version 50 with entity values",
     document: { c_examplePromo: promoData },
     props: {
       data: {
@@ -1316,12 +1316,12 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "PromoSection-25075125-341e-44eb-9037-8eb65042a29a",
     },
-    version: 49,
+    version: 50,
   },
   {
-    name: "[immersive] version 49 with entity values",
+    name: "[immersive] version 50 with entity values",
     document: { c_examplePromo: promoData },
-    version: 49,
+    version: 50,
     props: {
       data: {
         promo: {
@@ -1510,9 +1510,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[immersive] version 49 with constant values",
+    name: "[immersive] version 50 with constant values",
     document: {},
-    version: 49,
+    version: 50,
     props: {
       data: {
         promo: {
@@ -1649,9 +1649,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[spotlight] version 49 with constant values",
+    name: "[spotlight] version 50 with constant values",
     document: {},
-    version: 49,
+    version: 50,
     props: {
       data: {
         promo: {
@@ -1791,9 +1791,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[spotlight] version 49 with entity values",
+    name: "[spotlight] version 50 with entity values",
     document: { c_examplePromo: promoData },
-    version: 49,
+    version: 50,
     props: {
       data: {
         promo: {
@@ -1986,9 +1986,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[compact] version 49 with entity values",
+    name: "[compact] version 50 with entity values",
     document: { c_examplePromo: promoData },
-    version: 49,
+    version: 50,
     includeXLViewport: true,
     props: {
       data: {
@@ -2184,9 +2184,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[compact] version 49 with constant values and image",
+    name: "[compact] version 50 with constant values and image",
     document: {},
-    version: 49,
+    version: 50,
     props: {
       data: {
         promo: {
@@ -2326,9 +2326,9 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "[compact] version 49 with constant values and video",
+    name: "[compact] version 50 with constant values and video",
     document: {},
-    version: 49,
+    version: 50,
     props: {
       data: {
         promo: {
