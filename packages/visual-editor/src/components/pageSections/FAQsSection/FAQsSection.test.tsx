@@ -14,7 +14,7 @@ import {
   migrationRegistry,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory";
 
@@ -634,6 +634,77 @@ const tests: ComponentTest[] = [
     },
     version: 35,
   },
+  {
+    name: "version 49 with constant values",
+    document: { locale: "en" },
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-palette-tertiary-light",
+          textColor: "text-black",
+        },
+      },
+      data: {
+        field: "",
+        constantValueEnabled: true,
+        constantValue: [{ id: "faq-1" }],
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  constantValue: {
+                    en: "FAQs Heading Slot",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardSlot: [
+          {
+            type: "FAQCard",
+            props: {
+              id: "faq-1",
+              data: {
+                question: {
+                  field: "",
+                  constantValueEnabled: true,
+                  constantValue: getDefaultRTF("How do I reset my password?"),
+                },
+                answer: {
+                  field: "",
+                  constantValueEnabled: true,
+                  constantValue: getDefaultRTF(
+                    "To reset your password, click on 'Forgot Password' at the login screen."
+                  ),
+                },
+              },
+              styles: {
+                questionVariant: "lg",
+                answerVariant: "base",
+              },
+            },
+          },
+        ],
+      },
+    },
+    interactions: async (page) => {
+      const q1 = page.getByText("How do I reset my password?");
+      await act(async () => {
+        await q1.click();
+        await delay(interactionsDelay);
+      });
+    },
+    version: 49,
+  },
 ];
 
 const screenshotThreshold = 10;
@@ -679,9 +750,17 @@ describe("FAQSection", async () => {
         document
       );
 
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

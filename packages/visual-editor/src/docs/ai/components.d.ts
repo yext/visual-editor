@@ -212,6 +212,11 @@ interface EventSectionProps {
 }
 
 interface FAQSectionProps {
+  data: Omit<YextEntityField<FAQSectionType>, "constantValue"> & {
+    constantValue: {
+      id?: string;
+    }[];
+  };
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
@@ -219,7 +224,7 @@ interface FAQSectionProps {
   styles: FAQStyles;
   slots: {
     HeadingSlot: Slot;
-    FAQsWrapperSlot: Slot;
+    CardSlot: Slot;
   };
   /** @internal */
   analytics: {
@@ -614,6 +619,31 @@ type BackgroundStyle = {
   isDarkBackground?: boolean;
 };
 
+/** Represents data that can either be from the Yext Knowledge Graph or statically defined */
+type YextEntityField<T> = {
+  /** The api name of the Yext field */
+  field: string;
+  /** The static value of the field */
+  constantValue: T;
+  /** Whether to use the Yext field or the constant value */
+  constantValueEnabled?: boolean;
+  /**
+   * Whether the field can be translated or not.
+   * @ai always omit this property
+   */
+  disallowTranslation?: boolean;
+  /**
+   * Filter the embedded field input to this type.
+   * @ai always omit this property
+   */
+  selectedType?: string;
+};
+
+/** Data for the FAQSection */
+type FAQSectionType = {
+  faqs: Array<FAQStruct>;
+};
+
 interface FAQStyles {
   /**
    * The background color of the section.
@@ -741,26 +771,6 @@ interface PageSectionProps
   outerStyle?: React.CSSProperties;
 }
 
-/** Represents data that can either be from the Yext Knowledge Graph or statically defined */
-type YextEntityField<T> = {
-  /** The api name of the Yext field */
-  field: string;
-  /** The static value of the field */
-  constantValue: T;
-  /** Whether to use the Yext field or the constant value */
-  constantValueEnabled?: boolean;
-  /**
-   * Whether the field can be translated or not.
-   * @ai always omit this property
-   */
-  disallowTranslation?: boolean;
-  /**
-   * Filter the embedded field input to this type.
-   * @ai always omit this property
-   */
-  selectedType?: string;
-};
-
 /**
  * Rich text that can be translated for different locales.
  * @ai This should always be Record<string, RichText>
@@ -774,6 +784,14 @@ type TranslatableRichText =
  * @ai This should always be the LocalizedValues type
  */
 type TranslatableString = string | LocalizedValues;
+
+/** An individual FAQ */
+type FAQStruct = {
+  /** The question (always visible on the page) */
+  question: TranslatableString | TranslatableRichText;
+  /** The answer (visible when the question is clicked) */
+  answer: TranslatableRichText;
+};
 
 type AssetImageType = Omit<ImageType, "alternateText"> & {
   alternateText?: TranslatableString;
