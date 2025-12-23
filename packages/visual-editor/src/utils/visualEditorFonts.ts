@@ -53,6 +53,8 @@ export type FontLinkData = {
   href: string;
   rel: string;
   crossOrigin?: "anonymous" | "use-credentials";
+  as?: "font";
+  type?: "font/woff2";
 };
 
 // Helper function to generate weight parameter for Google Fonts API
@@ -93,15 +95,20 @@ const PRECONNECT_LINKS: FontLinkData[] = [
 export const generateGoogleFontLinkData = (
   fonts: FontRegistry
 ): FontLinkData[] => {
-  const fontLinks = Object.entries(fonts).map(([fontName, fontDetails]) => {
+  const fontLinks: FontLinkData[] = [];
+  Object.entries(fonts).forEach(([fontName, fontDetails]) => {
     const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
     const weightParam = generateWeightParam(fontDetails);
     const param = `family=${fontName.replaceAll(" ", "+")}${axes}${weightParam}`;
 
-    return {
+    fontLinks.push({
       href: `https://fonts.googleapis.com/css2?${param}&display=swap`,
       rel: "stylesheet",
-    };
+    });
+    fontLinks.push({
+      href: `https://fonts.googleapis.com/css2?${param}&display=block&text=&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@%23$%5E%26*()-_%3D%2B[]{}|;':%22,./%3C%3E?%20%E2%80%98%E2%80%99%E2%80%9C%E2%80%9D%E2%80%93%E2%80%94%E2%82%AC%C2%A9%C2%AE%E2%84%A2%E2%80%A2`,
+      rel: "stylesheet",
+    });
   });
 
   return [...PRECONNECT_LINKS, ...fontLinks];
@@ -111,12 +118,23 @@ export const generateCustomFontLinkData = (
   customFonts: string[],
   relativePrefixToRoot: string
 ): FontLinkData[] => {
-  return customFonts.map((fontName) => {
-    return {
+  const data: FontLinkData[] = [];
+  customFonts.forEach((font) => {
+    const fontName = font.split("-")[0];
+
+    data.push({
+      href: `${relativePrefixToRoot}y-fonts/${font}.woff2`,
+      rel: "preload",
+      as: "font",
+      type: "font/woff2",
+      crossOrigin: "anonymous",
+    });
+    data.push({
       href: `${relativePrefixToRoot}y-fonts/${fontName.replaceAll(" ", "").toLowerCase()}.css`,
       rel: "stylesheet",
-    };
+    });
   });
+  return data;
 };
 
 // Convert font link data to HTML string
@@ -129,7 +147,7 @@ export const fontLinkDataToHTML = (linkData: FontLinkData[]): string => {
       if (link.rel === "preconnect") {
         return `<link rel="${link.rel}" href="${link.href}"${crossOriginAttr}>`;
       } else {
-        return `<link href="${link.href}" rel="${link.rel}"${crossOriginAttr}>`;
+        return `<link href="${link.href}" rel="${link.rel}"${crossOriginAttr} ${link.as ? `as="${link.as}"` : ""} ${link.type ? `type="${link.type}"` : ""}>`;
       }
     })
     .join("\n");
@@ -316,7 +334,10 @@ export const extractInUseFontFamilies = (
       if (typeof value === "string" && value.length > 0) {
         const firstFont = value.split(",")[0];
         const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
-        fontFamilies.add(cleanedFontName);
+        const fontWeight = data[
+          key.replace("fontFamily", "fontWeight")
+        ].replace(" !important", "");
+        fontFamilies.add(`${cleanedFontName}-${fontWeight}`);
       }
     }
   }
@@ -325,11 +346,25 @@ export const extractInUseFontFamilies = (
   const inUseCustomFonts: string[] = [];
 
   // For each unique font family found, look it up in the availableFonts map.
-  for (const fontName of fontFamilies) {
+  for (const fontEntry of fontFamilies) {
+    const fontName = fontEntry.split("-")[0];
+    const fontWeight = fontEntry.split("-")[1];
     if (availableFonts[fontName]) {
       inUseGoogleFonts[fontName] = availableFonts[fontName];
     } else {
-      inUseCustomFonts.push(fontName);
+      const weightName: Record<string, string> = {
+        "100": "thin",
+        "200": "extralight",
+        "300": "light",
+        "400": "regular",
+        "500": "medium",
+        "600": "semibold",
+        "700": "bold",
+        "800": "extrabold",
+        "900": "black",
+      };
+      const customFontFullName = `${fontName}-${weightName[fontWeight]}`;
+      inUseCustomFonts.push(customFontFullName);
     }
   }
 
