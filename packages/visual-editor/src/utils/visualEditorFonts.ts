@@ -93,15 +93,20 @@ const PRECONNECT_LINKS: FontLinkData[] = [
 export const generateGoogleFontLinkData = (
   fonts: FontRegistry
 ): FontLinkData[] => {
-  const fontLinks = Object.entries(fonts).map(([fontName, fontDetails]) => {
+  const fontLinks: FontLinkData[] = [];
+  Object.entries(fonts).forEach(([fontName, fontDetails]) => {
     const axes = fontDetails.italics ? ":ital,wght@" : ":wght@";
     const weightParam = generateWeightParam(fontDetails);
     const param = `family=${fontName.replaceAll(" ", "+")}${axes}${weightParam}`;
 
-    return {
+    fontLinks.push({
       href: `https://fonts.googleapis.com/css2?${param}&display=swap`,
       rel: "stylesheet",
-    };
+    });
+    fontLinks.push({
+      href: `https://fonts.googleapis.com/css2?${param}&display=block&text=&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@%23$%5E%26*()-_%3D%2B[]{}|;':%22,./%3C%3E?%20%E2%80%98%E2%80%99%E2%80%9C%E2%80%9D%E2%80%93%E2%80%94%E2%82%AC%C2%A9%C2%AE%E2%84%A2%E2%80%A2`,
+      rel: "stylesheet",
+    });
   });
 
   return [...PRECONNECT_LINKS, ...fontLinks];
