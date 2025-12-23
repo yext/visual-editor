@@ -17,7 +17,7 @@ export const promoVariants: Migration = {
       newProps.styles.mobileImagePosition = "top";
       newProps.styles.imageHeight = 500;
       newProps.styles.containerAlignment = "left";
-      newProps.styles.backgroundImage = {
+      newProps.data.backgroundImage = {
         field: "",
         constantValue: getRandomPlaceholderImage({ width: 1440, height: 900 }),
         constantValueEnabled: true,
