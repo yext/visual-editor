@@ -22,6 +22,7 @@ import {
   AssetImageType,
   themeManagerCn,
   useDocument,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
@@ -46,6 +47,10 @@ export interface PromoData {
    */
   media: "image" | "video";
 
+  /**
+   * The background image used by the immersive and spotlight variants.
+   * @defaultValue Placeholder image.
+   */
   backgroundImage: YextEntityField<ImageType | AssetImageType>;
 }
 
@@ -204,46 +209,14 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         msg("fields.mobileImagePosition", "Mobile Image Position"),
         {
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.top", "Top", {
-                context: "direction",
-              }),
-              value: "top",
-            },
-            {
-              label: msg("fields.options.bottom", "Bottom", {
-                context: "direction",
-              }),
-              value: "bottom",
-            },
-          ],
+          options: ThemeOptions.VERTICAL_POSITION,
         }
       ),
       containerAlignment: YextField(
         msg("fields.containerAlignment", "Container Alignment"),
         {
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.center", "Center", {
-                context: "direction",
-              }),
-              value: "center",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
+          options: ThemeOptions.ALIGNMENT,
         }
       ),
       imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {

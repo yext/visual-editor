@@ -23,6 +23,7 @@ import {
   ImageWrapperProps,
   CTAWrapperProps,
   resolveComponentData,
+  ThemeOptions,
 } from "@yext/visual-editor";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -273,16 +274,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         msg("fields.mobileImagePosition", "Mobile Image Position"),
         {
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.top", "Top"),
-              value: "top",
-            },
-            {
-              label: msg("fields.options.bottom", "Bottom"),
-              value: "bottom",
-            },
-          ],
+          options: ThemeOptions.VERTICAL_POSITION,
         }
       ),
     },
