@@ -606,6 +606,7 @@
   "product": "製品",
   "promoMedia": "プロモーションメディア",
   "recentReviews": "最近のレビュー",
+  "recommendedColor": "おすすめカラー",
   "recommendedColors": "推奨される色",
   "redo": "やり直します",
   "refineYourSearch": "検索を絞り込む",
@@ -672,6 +673,7 @@
       "colors": "色",
       "primary": "主要な",
       "quaternary": "第四紀",
+      "recommendedColorDescription": "動的なデフォルトを使用して、アクセシビリティのために色のコントラストを最適化します。",
       "recommendedDescription": "これらの背景を使用したアクセシビリティの色のコントラストを最適化します。",
       "secondary": "二次",
       "tertiary": "三次"

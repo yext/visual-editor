@@ -613,6 +613,7 @@
   "product": "Produkt",
   "promoMedia": "Promo média",
   "recentReviews": "Nedávné recenze",
+  "recommendedColor": "Doporučená barva",
   "recommendedColors": "Doporučené barvy",
   "redo": "Předělat",
   "refineYourSearch": "Upřesněte své vyhledávání",
@@ -679,6 +680,7 @@
       "colors": "Barvy",
       "primary": "Primární",
       "quaternary": "Kvartérní",
+      "recommendedColorDescription": "Optimalizujte barevný kontrast pro usnadnění přístupu pomocí dynamického výchozího nastavení.",
       "recommendedDescription": "Optimalizujte barevný kontrast pro přístupnost s těmito pozabami.",
       "secondary": "Sekundární",
       "tertiary": "Terciární"

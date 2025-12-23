@@ -606,6 +606,7 @@
   "product": "Prodotto",
   "promoMedia": "Media promozionale",
   "recentReviews": "Recensioni recenti",
+  "recommendedColor": "Colore consigliato",
   "recommendedColors": "Colori consigliati",
   "redo": "Rifare",
   "refineYourSearch": "Perfeziona la tua ricerca",
@@ -672,6 +673,7 @@
       "colors": "Colori",
       "primary": "Primario",
       "quaternary": "Quaternario",
+      "recommendedColorDescription": "Ottimizza il contrasto del colore per l'accessibilità utilizzando l'impostazione dinamica predefinita.",
       "recommendedDescription": "Ottimizza il contrasto del colore per l'accessibilità con questi sfondi.",
       "secondary": "Secondario",
       "tertiary": "Terziario"

@@ -606,6 +606,7 @@
   "product": "Tuote",
   "promoMedia": "Promootio",
   "recentReviews": "Viimeaikaiset arvostelut",
+  "recommendedColor": "Suositeltu väri",
   "recommendedColors": "Suositellut värit",
   "redo": "Tehdä uudelleen",
   "refineYourSearch": "Tarkenna hakuasi",
@@ -672,6 +673,7 @@
       "colors": "Värit",
       "primary": "Ensisijainen",
       "quaternary": "Kvaternäärinen",
+      "recommendedColorDescription": "Optimoi värikontrasti käytettävyyttä varten käyttämällä dynaamista oletusasetusta.",
       "recommendedDescription": "Optimoi värikontrasti saavutettavuuden saavuttamiseksi näiden taustojen kanssa.",
       "secondary": "Toissijainen",
       "tertiary": "Korkea -asteen"

@@ -606,6 +606,7 @@
   "product": "Toode",
   "promoMedia": "Promo meedia",
   "recentReviews": "Viimased ülevaated",
+  "recommendedColor": "Soovitatav värv",
   "recommendedColors": "Soovitatavad värvid",
   "redo": "Uuesti tegema",
   "refineYourSearch": "Täpsustage oma otsingut",
@@ -672,6 +673,7 @@
       "colors": "Värvid",
       "primary": "Alg-",
       "quaternary": "Kvaternaarne",
+      "recommendedColorDescription": "Dünaamilise vaikeseadete abil optimeerige juurdepääsetavuse tagamiseks värvikontrastsust.",
       "recommendedDescription": "Optimeerige värvikontrastiks nende taustaga juurdepääsetavuse tagamiseks.",
       "secondary": "Teisene",
       "tertiary": "Kolmanda astme"

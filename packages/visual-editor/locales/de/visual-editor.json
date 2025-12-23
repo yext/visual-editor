@@ -611,6 +611,7 @@
   "product": "Produkt",
   "promoMedia": "Promo -Medien",
   "recentReviews": "Neuere Bewertungen",
+  "recommendedColor": "Empfohlene Farbe",
   "recommendedColors": "Empfohlene Farben",
   "redo": "Wiederholen",
   "refineYourSearch": "Verfeinern Sie Ihre Suche",
@@ -677,6 +678,7 @@
       "colors": "Farben",
       "primary": "Primär",
       "quaternary": "Quartär",
+      "recommendedColorDescription": "Optimieren Sie den Farbkontrast für Barrierefreiheit, indem Sie die dynamische Standardeinstellung verwenden.",
       "recommendedDescription": "Optimieren Sie den Farbkontrast für die Zugänglichkeit mit diesen Hintergründen.",
       "secondary": "Sekundär",
       "tertiary": "Tertiär"

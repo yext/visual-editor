@@ -605,6 +605,7 @@
   "product": "Product",
   "promoMedia": "Promo Media",
   "recentReviews": "Recent Reviews",
+  "recommendedColor": "Recommended Color",
   "recommendedColors": "Recommended Colors",
   "redo": "Redo",
   "refineYourSearch": "Refine Your Search",
@@ -671,6 +672,7 @@
       "colors": "Colors",
       "primary": "Primary",
       "quaternary": "Quaternary",
+      "recommendedColorDescription": "Optimize color contrast for accessibility by using the dynamic default.",
       "recommendedDescription": "Optimize color contrast for accessibility with these backgrounds.",
       "secondary": "Secondary",
       "tertiary": "Tertiary"

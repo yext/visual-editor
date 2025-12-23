@@ -607,6 +607,7 @@
   "product": "產品",
   "promoMedia": "促銷媒體",
   "recentReviews": "最近的評論",
+  "recommendedColor": "推薦顏色",
   "recommendedColors": "推薦的顏色",
   "redo": "重做",
   "refineYourSearch": "優化您的搜索",
@@ -673,6 +674,7 @@
       "colors": "顏色",
       "primary": "基本的",
       "quaternary": "第四紀",
+      "recommendedColorDescription": "使用動態默認值優化顏色對比度以實現可訪問性。",
       "recommendedDescription": "優化使用這些背景的可訪問性的顏色對比度。",
       "secondary": "次要",
       "tertiary": "第三"

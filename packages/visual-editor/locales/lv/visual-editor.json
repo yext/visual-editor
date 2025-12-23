@@ -606,6 +606,7 @@
   "product": "Produkts",
   "promoMedia": "Promo Media",
   "recentReviews": "Nesenie pārskati",
+  "recommendedColor": "Ieteicamā krāsa",
   "recommendedColors": "Ieteicamās krāsas",
   "redo": "Pārtaisīt",
   "refineYourSearch": "Uzlabojiet meklēšanu",
@@ -672,6 +673,7 @@
       "colors": "Krāsas",
       "primary": "Primārs",
       "quaternary": "Kvartāra",
+      "recommendedColorDescription": "Optimizējiet krāsu kontrastu pieejamībai, izmantojot dinamisko noklusējuma iestatījumu.",
       "recommendedDescription": "Optimizējiet krāsu kontrastu ar šo fonu.",
       "secondary": "Sekundārs",
       "tertiary": "Terciārs"

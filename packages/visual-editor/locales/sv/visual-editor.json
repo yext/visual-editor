@@ -607,6 +607,7 @@
   "product": "Produkt",
   "promoMedia": "Promo media",
   "recentReviews": "Senaste recensioner",
+  "recommendedColor": "Rekommenderad färg",
   "recommendedColors": "Rekommenderade färger",
   "redo": "Göra om",
   "refineYourSearch": "Förfina din sökning",
@@ -673,6 +674,7 @@
       "colors": "Färger",
       "primary": "Primär",
       "quaternary": "Kvartär",
+      "recommendedColorDescription": "Optimera färgkontrasten för tillgänglighet genom att använda den dynamiska standarden.",
       "recommendedDescription": "Optimera färgkontrasten för tillgänglighet med dessa bakgrunder.",
       "secondary": "Sekundär",
       "tertiary": "Tertiär"

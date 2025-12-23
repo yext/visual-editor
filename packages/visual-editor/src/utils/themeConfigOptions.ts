@@ -162,10 +162,10 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
 
 export const siteColorOptions: ComboboxOptionGroup[] = [
   {
-    title: msg("recommendedColors", "Recommended Colors"),
+    title: msg("recommendedColor", "Recommended Color"),
     description: msg(
-      "theme.colors.recommendedDescription",
-      "Optimize color contrast for accessibility with these backgrounds."
+      "theme.colors.recommendedColorDescription",
+      "Optimize color contrast for accessibility by using the dynamic default."
     ),
     options: [
       {
@@ -173,22 +173,21 @@ export const siteColorOptions: ComboboxOptionGroup[] = [
         value: undefined,
         color: undefined,
       },
-      ...Object.entries(backgroundColors)
-        .filter(([key]) => key.startsWith("color"))
-        .map(([key, { label, value }]) => {
-          if (key.includes("color")) {
-            return {
-              label,
-              value: {
-                bgColor: value.bgColor.replace("bg-", ""),
-                textColor: value.textColor.replace("text-", ""),
-              },
-              color: value.bgColor,
-            };
-          }
-        })
-        .filter((o) => !!o),
     ],
+  },
+  {
+    title: msg("siteColors", "Site Colors"),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("color")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
   },
 ];
 

@@ -606,6 +606,7 @@
   "product": "Produktas",
   "promoMedia": "Promo žiniasklaida",
   "recentReviews": "Naujausios apžvalgos",
+  "recommendedColor": "Rekomenduojama spalva",
   "recommendedColors": "Rekomenduojamos spalvos",
   "redo": "Perdaryti",
   "refineYourSearch": "Patikslinkite savo paiešką",
@@ -672,6 +673,7 @@
       "colors": "Spalvos",
       "primary": "Pirminis",
       "quaternary": "Kvartero",
+      "recommendedColorDescription": "Optimizuokite spalvų kontrastą, kad būtų lengviau pasiekti, naudodami dinaminius numatytuosius nustatymus.",
       "recommendedDescription": "Optimizuokite spalvų kontrastą prieinamumui su šiais fonu.",
       "secondary": "Antrinis",
       "tertiary": "Tretinis"
