@@ -17,7 +17,7 @@ export const PromoContent: PuckComponent<PromoVariantProps> = (props) => {
       <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
       <slots.CTASlot
         style={{ height: "auto", width: "100%" }}
-        className="lg:!w-fit"
+        className="sm:!w-fit"
         allow={[]}
       />
     </div>

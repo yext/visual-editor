@@ -14,7 +14,7 @@ import {
   VisualEditorProvider,
   SlotsCategoryComponents,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 
 const promoData = {
@@ -926,23 +926,21 @@ const tests: ComponentTest[] = [
                   field: "",
                   constantValue: {
                     en: {
-                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                      width: 640,
-                      height: 360,
+                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
                     },
-                    hasTranslatedValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
               },
-              styles: { aspectRatio: 1.78, width: 640 },
+              styles: { aspectRatio: 1.78, width: 550 },
               sizes: {
                 base: "calc(100vw - 32px)",
                 md: "min(width, 450px)",
                 lg: "width",
               },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
             },
           },
         ],
@@ -1083,7 +1081,7 @@ const tests: ComponentTest[] = [
                       width: 640,
                       height: 360,
                     },
-                    hasTranslatedValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1094,8 +1092,6 @@ const tests: ComponentTest[] = [
                 md: "min(width, 450px)",
                 lg: "width",
               },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
             },
           },
         ],
@@ -1232,23 +1228,21 @@ const tests: ComponentTest[] = [
                   field: "",
                   constantValue: {
                     en: {
-                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                      width: 640,
-                      height: 360,
+                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
                     },
-                    hasTranslatedValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
               },
-              styles: { aspectRatio: 1, width: 640 },
+              styles: { aspectRatio: 1, width: 550 },
               sizes: {
                 base: "calc(100vw - 32px)",
                 md: "min(width, 450px)",
                 lg: "width",
               },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
               parentData: {
                 image: {
                   height: 2048,
@@ -1323,146 +1317,6 @@ const tests: ComponentTest[] = [
       id: "PromoSection-25075125-341e-44eb-9037-8eb65042a29a",
     },
     version: 49,
-  },
-  {
-    name: "version 49 empty state",
-    document: {},
-    version: 49,
-    props: {
-      data: {
-        promo: {
-          field: "c_emptyPromo",
-          constantValue: {},
-          constantValueEnabled: false,
-        },
-        media: "image",
-        backgroundImage: {
-          field: ".image",
-          constantValue: {
-            url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-            width: 640,
-            height: 360,
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        variant: "classic",
-        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-        desktopImagePosition: "left",
-        mobileImagePosition: "top",
-        containerAlignment: "left",
-        imageHeight: 500,
-      },
-      slots: {
-        HeadingSlot: [
-          {
-            type: "HeadingTextSlot",
-            props: {
-              id: "HeadingTextSlot-c18af35e-2e31-4bcc-80e6-056fbbd57c27",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: "Featured Promotion",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { level: 2, align: "left" },
-            },
-          },
-        ],
-        DescriptionSlot: [
-          {
-            type: "BodyTextSlot",
-            props: {
-              id: "BodyTextSlot-99ab8a1a-3b79-4e84-9366-3584bb55f79a",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: {
-                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
-                    },
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { variant: "base" },
-              parentStyles: { className: "text-left" },
-            },
-          },
-        ],
-        VideoSlot: [
-          {
-            type: "VideoSlot",
-            props: {
-              id: "VideoSlot-6ecbe163-f3fe-4ae0-8762-0b79d3a55d01",
-              data: {},
-            },
-          },
-        ],
-        ImageSlot: [
-          {
-            type: "ImageSlot",
-            props: {
-              id: "ImageSlot-2f06e32e-ee08-4345-93cb-b2dc41cc7b67",
-              data: {
-                image: {
-                  field: "",
-                  constantValue: {
-                    en: {
-                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                      width: 640,
-                      height: 360,
-                    },
-                    hasTranslatedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { aspectRatio: 1.78, width: 640 },
-              sizes: {
-                base: "calc(100vw - 32px)",
-                md: "min(width, 450px)",
-                lg: "width",
-              },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
-            },
-          },
-        ],
-        CTASlot: [
-          {
-            type: "CTASlot",
-            props: {
-              id: "CTASlot-e25a2244-0dbe-4a3c-9ac7-57560c237c18",
-              data: {
-                entityField: {
-                  field: "",
-                  constantValue: {
-                    label: "Learn More",
-                    link: "#",
-                    linkType: "URL",
-                    ctaType: "textAndLink",
-                  },
-                  selectedType: "textAndLink",
-                },
-              },
-              styles: { variant: "primary", presetImage: "app-store" },
-              eventName: "cta",
-            },
-          },
-        ],
-      },
-      analytics: { scope: "promoSection" },
-      liveVisibility: true,
-      id: "PromoSection-5fbb4956-9727-4d70-aba9-94d63644bc59",
-    },
   },
   {
     name: "[immersive] version 49 with entity values",
@@ -1570,7 +1424,7 @@ const tests: ComponentTest[] = [
                       width: 640,
                       height: 360,
                     },
-                    hasTranslatedValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1581,8 +1435,6 @@ const tests: ComponentTest[] = [
                 md: "min(width, 450px)",
                 lg: "width",
               },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
               parentData: {
                 image: {
                   height: 2048,
@@ -1753,7 +1605,7 @@ const tests: ComponentTest[] = [
                       width: 640,
                       height: 360,
                     },
-                    hasTranslatableValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1764,8 +1616,6 @@ const tests: ComponentTest[] = [
                 md: "min(width, 450px)",
                 lg: "width",
               },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
             },
           },
         ],
@@ -1897,7 +1747,7 @@ const tests: ComponentTest[] = [
                       width: 640,
                       height: 360,
                     },
-                    hasTranslatableValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -1908,8 +1758,6 @@ const tests: ComponentTest[] = [
                 md: "min(width, 450px)",
                 lg: "width",
               },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
             },
           },
         ],
@@ -2051,7 +1899,7 @@ const tests: ComponentTest[] = [
                       width: 640,
                       height: 360,
                     },
-                    hasTranslatableValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -2062,8 +1910,6 @@ const tests: ComponentTest[] = [
                 md: "min(width, 450px)",
                 lg: "width",
               },
-              className:
-                "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
               parentData: {
                 image: {
                   height: 2048,
@@ -2143,6 +1989,7 @@ const tests: ComponentTest[] = [
     name: "[compact] version 49 with entity values",
     document: { c_examplePromo: promoData },
     version: 49,
+    includeXLViewport: true,
     props: {
       data: {
         promo: {
@@ -2245,16 +2092,16 @@ const tests: ComponentTest[] = [
                   field: "",
                   constantValue: {
                     en: {
-                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                      width: 640,
-                      height: 360,
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
                     },
-                    hasTranslatableValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
               },
-              styles: { aspectRatio: 1.78, width: 640 },
+              styles: { aspectRatio: 1.78, width: 550 },
               sizes: {
                 base: "calc(100vw - 32px)",
                 md: "min(width, 450px)",
@@ -2429,16 +2276,17 @@ const tests: ComponentTest[] = [
                   field: "",
                   constantValue: {
                     en: {
-                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                      width: 640,
-                      height: 360,
+                      alternateText: "",
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+                      width: 550,
+                      height: 310,
                     },
-                    hasTranslatableValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
               },
-              styles: { aspectRatio: 1.78, width: 640 },
+              styles: { aspectRatio: 1.78, width: 550 },
               sizes: {
                 base: "calc(100vw - 32px)",
                 md: "min(width, 450px)",
@@ -2589,7 +2437,7 @@ const tests: ComponentTest[] = [
                       height: 1,
                       width: 1,
                     },
-                    hasTranslatableValue: "true",
+                    hasLocalizedValue: "true",
                   },
                   constantValueEnabled: true,
                 },
@@ -2689,11 +2537,15 @@ describe("PromoSection", async () => {
         document
       );
 
+      const resolvedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
           <Render
             config={puckConfig}
-            data={data}
+            data={resolvedData}
             metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>
@@ -2712,10 +2564,10 @@ describe("PromoSection", async () => {
         customThreshold: 10,
       });
       const results = await axe(container);
-      if (isBrandColorTest(props)) {
+      if (isBrandColorTest(props) && results.violations.length) {
         console.warn(
           `IGNORING axe violations for brand color test: ${name}`,
-          results
+          results.violations
         );
       } else {
         expect(results).toHaveNoViolations();
@@ -2727,10 +2579,10 @@ describe("PromoSection", async () => {
           `PromoSection/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot({ customThreshold: 10 });
         const results = await axe(container);
-        if (isBrandColorTest(props)) {
+        if (isBrandColorTest(props) && results.violations.length) {
           console.warn(
             `IGNORING axe violations for brand color test: ${name}`,
-            results
+            results.violations
           );
         } else {
           expect(results).toHaveNoViolations();

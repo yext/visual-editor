@@ -303,9 +303,9 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       backgroundImage: {
         field: "",
         constantValue: {
-          ...getRandomPlaceholderImageObject({ width: 640, height: 360 }),
-          width: 640,
-          height: 360,
+          ...getRandomPlaceholderImageObject({ width: 550, height: 310 }),
+          width: 550,
+          height: 310,
         },
         constantValueEnabled: true,
       },
@@ -394,8 +394,6 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               md: "min(width, 450px)",
               lg: "width",
             },
-            className:
-              "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full",
           } satisfies ImageWrapperProps,
         },
       ],
@@ -489,7 +487,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         updatedData,
         "props.slots.ImageSlot[0].props.className",
         themeManagerCn(
-          "w-full h-full",
+          "!w-full lg:!w-auto h-full",
           data.props.styles.desktopImagePosition === "left"
             ? "mr-auto"
             : "ml-auto"
@@ -499,6 +497,14 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         updatedData,
         "props.slots.VideoSlot[0].props.className",
         "h-full"
+      );
+    }
+
+    if (data.props.styles.variant === "classic") {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ImageSlot[0].props.className",
+        "min-w-full lg:min-w-none max-w-full lg:max-w-none rounded-image-borderRadius"
       );
     }
 
@@ -525,7 +531,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       );
       updatedData = setDeep(updatedData, "props.data.backgroundImage", {
         field: data.props?.data?.promo.field + ".image" || "",
-        constantValue: data.props.data.backgroundImage.constantValue,
+        constantValue: data.props.data?.backgroundImage?.constantValue,
         constantValueEnabled: true,
       } satisfies PromoData["backgroundImage"]);
 
@@ -577,7 +583,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
     );
     updatedData = setDeep(updatedData, "props.data.backgroundImage", {
       field: data.props?.data?.promo.field + ".image" || "",
-      constantValue: data.props.data.backgroundImage.constantValue,
+      constantValue: data.props.data?.backgroundImage?.constantValue,
       constantValueEnabled: false,
     } satisfies PromoData["backgroundImage"]);
 

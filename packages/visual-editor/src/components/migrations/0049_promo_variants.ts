@@ -21,11 +21,6 @@ export const promoVariants: Migration = {
         constantValueEnabled: true,
       };
 
-      if (newProps?.slots?.ImageSlot?.[0]?.props) {
-        newProps.slots.ImageSlot[0].props.className =
-          "max-w-full sm:max-w-none rounded-image-borderRadius w-full sm:!w-full";
-      }
-
       return newProps;
     },
   },

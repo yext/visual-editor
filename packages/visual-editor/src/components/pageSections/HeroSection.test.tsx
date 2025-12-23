@@ -2357,11 +2357,9 @@ describe("HeroSection", async () => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
 
-      if (name.includes("[compact] version 31 props with constant")) {
-      }
       await expect(`HeroSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
-      if (isBrandColorTest(props)) {
+      if (isBrandColorTest(props) && results.violations.length) {
         console.warn(
           `IGNORING axe violations for brand color test: ${name}`,
           results.violations
@@ -2376,7 +2374,7 @@ describe("HeroSection", async () => {
           `HeroSection/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
         const results = await axe(container);
-        if (isBrandColorTest(props)) {
+        if (isBrandColorTest(props) && results.violations.length) {
           console.warn(
             `IGNORING axe violations for brand color test: ${name}`,
             results
