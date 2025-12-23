@@ -19,7 +19,10 @@ export const promoVariants: Migration = {
       newProps.styles.containerAlignment = "left";
       newProps.data.backgroundImage = {
         field: "",
-        constantValue: getRandomPlaceholderImage({ width: 1440, height: 900 }),
+        constantValue: {
+          en: getRandomPlaceholderImage({ width: 1440, height: 900 }),
+          hasLocalizedValue: "true",
+        },
         constantValueEnabled: true,
       };
 
