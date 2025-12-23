@@ -670,7 +670,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements. Available on Location templates.
 
-![Preview of the PromoSection component](../components/testing/screenshots/PromoSection/%5Bdesktop%5D%20%5Bclassic%5D%20version%2049%20props%20with%20constant%20values%20and%20image.png)
+![Preview of the PromoSection component](../components/testing/screenshots/PromoSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
 
