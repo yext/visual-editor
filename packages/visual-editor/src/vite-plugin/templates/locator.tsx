@@ -25,6 +25,7 @@ import {
   getCanonicalUrl,
   migrate,
   migrationRegistry,
+  GTMBody,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -139,11 +140,13 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         currency="USD"
       >
         <VisualEditorProvider templateProps={props}>
-          <Render
-            config={locatorConfig}
-            data={data}
-            metadata={{ streamDocument: document }}
-          />
+          <GTMBody>
+            <Render
+              config={locatorConfig}
+              data={data}
+              metadata={{ streamDocument: document }}
+            />
+          </GTMBody>
         </VisualEditorProvider>
       </AnalyticsProvider>
     </>
