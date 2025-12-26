@@ -22,7 +22,7 @@ export interface FooterLinksSlotProps {
   /** @internal */
   eventNamePrefix?: string;
   /** @internal */
-  alignment?: "left" | "right";
+  alignment?: "left" | "center" | "right";
 }
 
 const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
@@ -43,9 +43,12 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
   }
 
   const secondaryItemsAlignment =
-    variant === "secondary" && alignment === "right"
+    variant === "secondary" &&
+    (alignment === "right"
       ? "md:justify-end"
-      : "md:justify-start";
+      : alignment === "center"
+        ? "md:justify-center"
+        : "md:justify-start");
 
   return (
     <div

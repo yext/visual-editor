@@ -15,7 +15,7 @@ export interface CopyrightMessageSlotProps {
     text: TranslatableString;
   };
   /** @internal */
-  alignment?: "left" | "right";
+  alignment?: "left" | "center" | "right";
 }
 
 const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
@@ -37,7 +37,9 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
       className={
         alignment === "right"
           ? "text-center md:text-right"
-          : "text-center md:text-left"
+          : alignment === "center"
+            ? "text-center"
+            : "text-center md:text-left"
       }
     >
       {resolvedText}
