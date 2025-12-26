@@ -14,7 +14,8 @@ export const heroContentParentCn = (styles: HeroVariantProps["styles"]) => {
     styles.variant === "spotlight" || styles.variant === "immersive"
       ? styles.desktopContainerPosition
       : "left";
-  return `flex flex-col gap-y-6 md:gap-y-8 w-full break-words ${desktopContainerPosition === "left" ? "items-start sm:text-start" : "items-center sm:text-center"} ${styles.mobileContentAlignment === "left" ? "text-start" : "text-center"}`;
+  const width = styles.variant === "compact" ? "" : "w-full";
+  return `flex flex-col gap-y-6 md:gap-y-8 ${width} break-words ${desktopContainerPosition === "left" ? "items-start sm:text-start" : "items-center sm:text-center"} ${styles.mobileContentAlignment === "left" ? "text-start" : "text-center"}`;
 };
 
 export const HeroContent: PuckComponent<HeroVariantProps> = ({

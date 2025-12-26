@@ -27,7 +27,7 @@ import {
 import {
   PromoSection,
   PromoSectionProps,
-} from "../pageSections/PromoSection.tsx";
+} from "../pageSections/PromoSection/PromoSection.tsx";
 import {
   PhotoGallerySection,
   PhotoGallerySectionProps,

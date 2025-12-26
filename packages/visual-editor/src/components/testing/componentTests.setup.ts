@@ -85,6 +85,7 @@ export const viewports = {
   mobile: { name: "mobile", width: 375, height: 667 },
   tablet: { name: "tablet", width: 800, height: 1280 },
   desktop: { name: "desktop", width: 1440, height: 900 },
+  xlDesktop: { name: "xl", width: 1920, height: 1080 },
 };
 
 // Adds mobile and desktop viewports to tests if not specified
@@ -96,6 +97,9 @@ export const transformTests = (tests: ComponentTest[]) => {
       accumulator.push({ ...test, viewport: viewports.desktop });
       accumulator.push({ ...test, viewport: viewports.tablet });
       accumulator.push({ ...test, viewport: viewports.mobile });
+      if (test.includeXLViewport) {
+        accumulator.push({ ...test, viewport: viewports.xlDesktop });
+      }
     }
 
     return accumulator;
@@ -113,6 +117,7 @@ export type ComponentTest = {
     width: number;
     height: number;
   };
+  includeXLViewport?: boolean;
 };
 
 export type ComponentTestWithViewport = ComponentTest &
