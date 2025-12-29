@@ -1,11 +1,10 @@
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
 import {
   BackgroundStyle,
   HeadingLevel,
   themeManagerCn,
-  useBackground,
 } from "@yext/visual-editor";
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -97,12 +96,9 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span"
     >;
 
-    const isDarkBG = useBackground()?.isDarkBackground;
-
-    const dynamicStyle =
-      !isDarkBG && color?.bgColor
-        ? { color: `var(--colors-${normalize(color.bgColor)})` }
-        : undefined;
+    const dynamicStyle = color?.bgColor
+      ? { color: `var(--colors-${normalize(color.bgColor)})` }
+      : undefined;
 
     return (
       <Tag
