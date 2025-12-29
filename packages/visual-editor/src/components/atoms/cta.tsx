@@ -289,7 +289,7 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
-        className="flex items-center"
+        className="inline"
         cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
@@ -297,7 +297,9 @@ export const CTA = (props: CTAProps) => {
         onClick={onClick}
       >
         {linkContent}
-        {openInNewTab && <FaExternalLinkAlt className="ml-1 w-3 h-3" />}
+        {openInNewTab && (
+          <FaExternalLinkAlt className="inline-block ml-1 w-3 h-3  align-text-top" />
+        )}
       </Link>
     </Button>
   );
