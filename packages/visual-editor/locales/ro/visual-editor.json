@@ -273,6 +273,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Link -uri",
     "linksAlignment": "Alinierea legăturilor",
+    "linksPosition": "Poziția legăturilor",
     "listLength": "Lungimea listei",
     "liveVisibility": "Vizibil pe pagina live",
     "localGeomodifier": "Geomodificator local",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Alinierea conținutului mobil",
     "mobileImagePosition": "Poziția imaginii mobile",
     "name": "Nume",
+    "openInNewTab": "Deschide într-o filă nouă",
     "options": {
       "aspectRatio": "Raport de aspect",
       "base": "Baza",

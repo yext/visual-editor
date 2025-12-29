@@ -273,6 +273,7 @@
     "linkedInLink": "LinkedIn -linkki",
     "links": "Linkit",
     "linksAlignment": "Linkkien suuntaus",
+    "linksPosition": "Linkkien sijainti",
     "listLength": "Listata pituus",
     "liveVisibility": "Näkyvissä live -sivulla",
     "localGeomodifier": "Paikallinen geomodifoija",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Mobiilisisällön kohdistus",
     "mobileImagePosition": "Mobiili kuvan sijainti",
     "name": "Nimi",
+    "openInNewTab": "Avaa uudessa välilehdessä",
     "options": {
       "aspectRatio": "Kuvasuhde",
       "base": "Pohja",

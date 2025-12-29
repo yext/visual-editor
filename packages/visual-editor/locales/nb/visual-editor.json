@@ -273,6 +273,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Lenker",
     "linksAlignment": "Koblinger justering",
+    "linksPosition": "Linker Posisjon",
     "listLength": "Listelengde",
     "liveVisibility": "Synlig på live side",
     "localGeomodifier": "Lokal geomodifier",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Mobilinnholdsinnretning",
     "mobileImagePosition": "Mobil bildeposisjon",
     "name": "Navn",
+    "openInNewTab": "Åpne i ny fane",
     "options": {
       "aspectRatio": "Aspektforhold",
       "base": "Base",

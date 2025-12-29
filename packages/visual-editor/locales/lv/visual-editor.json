@@ -273,6 +273,7 @@
     "linkedInLink": "LinkedIn saite",
     "links": "Saites",
     "linksAlignment": "Saišu izlīdzināšana",
+    "linksPosition": "Saišu pozīcija",
     "listLength": "Saraksta garums",
     "liveVisibility": "Redzams tiešraides lapā",
     "localGeomodifier": "Vietējais ģeomodifieris",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Mobilā satura izlīdzināšana",
     "mobileImagePosition": "Mobilā attēla pozīcija",
     "name": "Nosaukt",
+    "openInNewTab": "Atvērt jaunā cilnē",
     "options": {
       "aspectRatio": "Malu attiecība",
       "base": "Pamatne",

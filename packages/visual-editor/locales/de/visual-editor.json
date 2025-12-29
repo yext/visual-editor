@@ -278,6 +278,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Links",
     "linksAlignment": "Links Ausrichtung",
+    "linksPosition": "Linkposition",
     "listLength": "Listenlänge",
     "liveVisibility": "Auf der Live -Seite sichtbar",
     "localGeomodifier": "Lokaler Geomodifier",
@@ -298,6 +299,7 @@
     "mobileContentAlignment": "Ausrichtung des mobilen Inhalts",
     "mobileImagePosition": "Mobile Bildposition",
     "name": "Name",
+    "openInNewTab": "In neuem Tab öffnen",
     "options": {
       "aspectRatio": "Seitenverhältnis",
       "base": "Base",

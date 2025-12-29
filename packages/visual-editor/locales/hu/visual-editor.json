@@ -273,6 +273,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Linkek",
     "linksAlignment": "Linkek igazítás",
+    "linksPosition": "Linkek Pozíció",
     "listLength": "Lista hossza",
     "liveVisibility": "Látható az élő oldalon",
     "localGeomodifier": "Helyi geomodifier",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Mobil tartalom igazítása",
     "mobileImagePosition": "Mobil képpozíció",
     "name": "Név",
+    "openInNewTab": "Megnyitás új lapon",
     "options": {
       "aspectRatio": "Oldal arány",
       "base": "Bázis",

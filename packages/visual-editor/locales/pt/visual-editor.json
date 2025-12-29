@@ -273,6 +273,7 @@
     "linkedInLink": "Link LinkedIn",
     "links": "Links",
     "linksAlignment": "Alinhamento de links",
+    "linksPosition": "Posição dos links",
     "listLength": "Comprimento da lista",
     "liveVisibility": "Visível na página ao vivo",
     "localGeomodifier": "Geomodificador local",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Alinhamento de conteúdo móvel",
     "mobileImagePosition": "Posição da imagem móvel",
     "name": "Nome",
+    "openInNewTab": "Abrir em nova aba",
     "options": {
       "aspectRatio": "Proporção de aspecto",
       "base": "Base",

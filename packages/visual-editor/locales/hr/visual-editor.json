@@ -273,6 +273,7 @@
     "linkedInLink": "LinkedIn veza",
     "links": "Veze",
     "linksAlignment": "Poravnanje veza",
+    "linksPosition": "Linkovi Pozicija",
     "listLength": "Dužina popisa",
     "liveVisibility": "Vidljivo na stranici uživo",
     "localGeomodifier": "Lokalni geomodifikator",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Poravnavanje mobilnog sadržaja",
     "mobileImagePosition": "Položaj mobilne slike",
     "name": "Ime",
+    "openInNewTab": "Otvori u novoj kartici",
     "options": {
       "aspectRatio": "Omjer slike",
       "base": "Baza",

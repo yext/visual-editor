@@ -273,6 +273,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Bağlar",
     "linksAlignment": "Bağlantılar Hizalama",
+    "linksPosition": "Bağlantı Konumu",
     "listLength": "Liste uzunluğu",
     "liveVisibility": "Canlı sayfada görünür",
     "localGeomodifier": "Yerel Geomodifikatör",
@@ -293,6 +294,7 @@
     "mobileContentAlignment": "Mobil içerik hizalaması",
     "mobileImagePosition": "Mobil Görüntü Pozisyonu",
     "name": "İsim",
+    "openInNewTab": "Yeni sekmede aç",
     "options": {
       "aspectRatio": "En boy oranı",
       "base": "Temel",
