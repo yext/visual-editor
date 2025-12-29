@@ -18,6 +18,7 @@ import {
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
+  applyCertifiedFacts,
   migrate,
   migrationRegistry,
   filterComponentsFromConfig,
@@ -89,6 +90,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       applyHeaderScript(document),
       applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
+      applyCertifiedFacts(document),
     ].join("\n"),
   };
 };
