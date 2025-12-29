@@ -10,5 +10,15 @@
   "temporarilyClosed": "Închis temporar",
   "thursday": "joi",
   "tuesday": "marţi",
-  "wednesday": "miercuri"
+  "wednesday": "miercuri",
+  "search": "Căutare",
+  "searchHere": "Căutați aici ...",
+  "searchThisArea": "Căutați în această zonă",
+  "useOurLocatorToFindALocationNearYou": "Folosiți localizatorul nostru pentru a găsi o locație lângă dvs.",
+  "filter": "Filtra",
+  "refineYourSearch": "Rafinați-vă căutarea",
+  "distance": "Distanţă",
+  "clearAll": "Ștergeți tot",
+  "visitPage": "Vizitați pagina",
+  "getDirections": "Obțineți indicații"
 }

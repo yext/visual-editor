@@ -10,5 +10,15 @@
   "temporarilyClosed": "Laikinai uždarytas",
   "thursday": "Ketvirtadienis",
   "tuesday": "Antradienis",
-  "wednesday": "Trečiadienis"
+  "wednesday": "Trečiadienis",
+  "search": "Ieškoti",
+  "searchHere": "Ieškokite čia ...",
+  "searchThisArea": "Ieškokite šioje srityje",
+  "useOurLocatorToFindALocationNearYou": "Naudokite mūsų ieškiklį, kad rastumėte vietą šalia jūsų",
+  "filter": "Filtruoti",
+  "refineYourSearch": "Patikslinkite savo paiešką",
+  "distance": "Atstumas",
+  "clearAll": "Išvalyti viską",
+  "visitPage": "Apsilankykite puslapyje",
+  "getDirections": "Gaukite nurodymus"
 }

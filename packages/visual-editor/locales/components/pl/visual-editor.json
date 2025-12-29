@@ -10,5 +10,15 @@
   "temporarilyClosed": "Tymczasowo zamknięte",
   "thursday": "Czwartek",
   "tuesday": "Wtorek",
-  "wednesday": "Środa"
+  "wednesday": "Środa",
+  "search": "Szukaj",
+  "searchHere": "Wyszukaj tutaj ...",
+  "searchThisArea": "Przeszukaj ten obszar",
+  "useOurLocatorToFindALocationNearYou": "Użyj naszego lokalizatora, aby znaleźć lokalizację w pobliżu",
+  "filter": "Filtr",
+  "refineYourSearch": "Sprecyzuj wyszukiwanie",
+  "distance": "Dystans",
+  "clearAll": "Wyczyść wszystko",
+  "visitPage": "Odwiedź stronę",
+  "getDirections": "Uzyskaj wskazówki"
 }

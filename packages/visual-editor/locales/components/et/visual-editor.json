@@ -10,5 +10,15 @@
   "temporarilyClosed": "Ajutiselt suletud",
   "thursday": "Neljapäev",
   "tuesday": "Teisipäev",
-  "wednesday": "Kolmapäev"
+  "wednesday": "Kolmapäev",
+  "search": "Otsima",
+  "searchHere": "Otsige siit ...",
+  "searchThisArea": "Otsige sellest piirkonnast",
+  "useOurLocatorToFindALocationNearYou": "Kasutage meie asukoha leidmiseks meie asukohta",
+  "filter": "Filter",
+  "refineYourSearch": "Täpsustage oma otsingut",
+  "distance": "Kaugus",
+  "clearAll": "Kustuta kõik",
+  "visitPage": "Külastage leht",
+  "getDirections": "Hankige juhiseid"
 }

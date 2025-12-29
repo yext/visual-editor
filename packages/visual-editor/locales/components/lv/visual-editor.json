@@ -10,5 +10,15 @@
   "temporarilyClosed": "Īslaicīgi slēgts",
   "thursday": "Ceturtdiena",
   "tuesday": "Otrdiena",
-  "wednesday": "Trešdiena"
+  "wednesday": "Trešdiena",
+  "search": "Meklēšana",
+  "searchHere": "Meklēt šeit ...",
+  "searchThisArea": "Meklējiet šo apgabalu",
+  "useOurLocatorToFindALocationNearYou": "Izmantojiet mūsu lokatoru, lai atrastu atrašanās vietu netālu no jums",
+  "filter": "Filtrs",
+  "refineYourSearch": "Uzlabojiet meklēšanu",
+  "distance": "Attālums",
+  "clearAll": "Notīrīt visu",
+  "visitPage": "Apmeklējuma lapa",
+  "getDirections": "Saņemt norādes"
 }

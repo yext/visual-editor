@@ -10,5 +10,15 @@
   "temporarilyClosed": "Dočasne zatvorené",
   "thursday": "Štvrtok",
   "tuesday": "Utorok",
-  "wednesday": "Streda"
+  "wednesday": "Streda",
+  "search": "Prehliadka",
+  "searchHere": "Vyhľadajte tu ...",
+  "searchThisArea": "Hľadať túto oblasť",
+  "useOurLocatorToFindALocationNearYou": "Pomocou nášho vyhľadávača nájdete miesto vo vašom okolí",
+  "filter": "Filter",
+  "refineYourSearch": "Upravte svoje vyhľadávanie",
+  "distance": "Vzdialenosť",
+  "clearAll": "Vymazať všetko",
+  "visitPage": "Navštíviť stránku",
+  "getDirections": "Získajte pokyny"
 }

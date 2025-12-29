@@ -10,5 +10,15 @@
   "temporarilyClosed": "Geçici olarak kapalı",
   "thursday": "Perşembe",
   "tuesday": "Salı",
-  "wednesday": "Çarşamba"
+  "wednesday": "Çarşamba",
+  "search": "Aramak",
+  "searchHere": "Burada ara ...",
+  "searchThisArea": "Bu alanı arayın",
+  "useOurLocatorToFindALocationNearYou": "Yakınınızdaki bir yer bulmak için bulucumuzu kullanın",
+  "filter": "Filtre",
+  "refineYourSearch": "Aramanızı Hassaslaştırın",
+  "distance": "Mesafe",
+  "clearAll": "Tümünü Temizle",
+  "visitPage": "Ziyaret Sayfası",
+  "getDirections": "Yol tarifi alın"
 }

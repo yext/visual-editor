@@ -10,5 +10,15 @@
   "temporarilyClosed": "Midlertidig stengt",
   "thursday": "torsdag",
   "tuesday": "tirsdag",
-  "wednesday": "onsdag"
+  "wednesday": "onsdag",
+  "search": "Søk",
+  "searchHere": "Søk her ...",
+  "searchThisArea": "Søk i dette området",
+  "useOurLocatorToFindALocationNearYou": "Bruk vår lokaliserer for å finne et sted i nærheten",
+  "filter": "Filter",
+  "refineYourSearch": "Avgrens søket ditt",
+  "distance": "Avstand",
+  "clearAll": "Fjern alle",
+  "visitPage": "Besøk side",
+  "getDirections": "Få veibeskrivelse"
 }

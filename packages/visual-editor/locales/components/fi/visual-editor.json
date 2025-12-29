@@ -10,5 +10,15 @@
   "temporarilyClosed": "Väliaikaisesti suljettu",
   "thursday": "torstai",
   "tuesday": "tiistai",
-  "wednesday": "keskiviikko"
+  "wednesday": "keskiviikko",
+  "search": "Haku",
+  "searchHere": "Etsi täältä ...",
+  "searchThisArea": "Etsi tätä aluetta",
+  "useOurLocatorToFindALocationNearYou": "Löydä lähelläsi sijaintipaikka",
+  "filter": "Suodattaa",
+  "refineYourSearch": "Tarkenna hakuasi",
+  "distance": "Etäisyys",
+  "clearAll": "Tyhjennä kaikki",
+  "visitPage": "Vieraile sivussa",
+  "getDirections": "Hanki reittiohjeet"
 }

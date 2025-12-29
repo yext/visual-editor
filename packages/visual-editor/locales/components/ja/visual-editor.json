@@ -10,5 +10,15 @@
   "temporarilyClosed": "一時的に閉じた",
   "thursday": "木曜日",
   "tuesday": "火曜日",
-  "wednesday": "水曜日"
+  "wednesday": "水曜日",
+  "search": "検索",
+  "searchHere": "ここで検索してください...",
+  "searchThisArea": "このエリアを検索します",
+  "useOurLocatorToFindALocationNearYou": "ロケーターを使用して、お近くの場所を見つけてください",
+  "filter": "フィルター",
+  "refineYourSearch": "検索を絞り込む",
+  "distance": "距離",
+  "clearAll": "すべてクリア",
+  "visitPage": "ページにアクセスしてください",
+  "getDirections": "道順を取得します"
 }

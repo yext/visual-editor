@@ -10,5 +10,15 @@
   "temporarilyClosed": "Ideiglenesen bezárt",
   "thursday": "csütörtök",
   "tuesday": "kedd",
-  "wednesday": "szerda"
+  "wednesday": "szerda",
+  "search": "Keresés",
+  "searchHere": "Keressen itt ...",
+  "searchThisArea": "Keresse meg ezt a területet",
+  "useOurLocatorToFindALocationNearYou": "Használja a lokátorunkat, hogy találjon egy helyet a közelben",
+  "filter": "Szűrő",
+  "refineYourSearch": "Finomítsa a keresést",
+  "distance": "Távolság",
+  "clearAll": "Összes törlése",
+  "visitPage": "Látogasson el az oldalra",
+  "getDirections": "Szerezzen útmutatásokat"
 }

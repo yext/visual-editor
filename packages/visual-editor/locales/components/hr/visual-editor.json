@@ -10,5 +10,15 @@
   "temporarilyClosed": "Privremeno zatvoren",
   "thursday": "četvrtak",
   "tuesday": "utorak",
-  "wednesday": "srijeda"
+  "wednesday": "srijeda",
+  "search": "Pretraživanje",
+  "searchHere": "Pretražite ovdje ...",
+  "searchThisArea": "Pretražite ovo područje",
+  "useOurLocatorToFindALocationNearYou": "Upotrijebite naš lokator da biste pronašli lokaciju u vašoj blizini",
+  "filter": "Filter",
+  "refineYourSearch": "Pročistite svoju pretragu",
+  "distance": "Udaljenost",
+  "clearAll": "Obriši sve",
+  "visitPage": "Stranica za posjetu",
+  "getDirections": "Dobiti upute"
 }

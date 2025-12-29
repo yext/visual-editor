@@ -10,5 +10,15 @@
   "temporarilyClosed": "暂时关闭",
   "thursday": "Thursday",
   "tuesday": "Tuesday",
-  "wednesday": "Wednesday"
+  "wednesday": "Wednesday",
+  "search": "搜索",
+  "searchHere": "在这里搜索...",
+  "searchThisArea": "搜索此区域",
+  "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
+  "filter": "筛选",
+  "refineYourSearch": "优化您的搜索",
+  "distance": "距离",
+  "clearAll": "全部清除",
+  "visitPage": "访问页面",
+  "getDirections": "获取指示"
 }
