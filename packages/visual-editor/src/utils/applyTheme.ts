@@ -26,6 +26,7 @@ export type StreamDocument = {
       id?: string;
     };
   };
+  __certified_facts?: any;
   __?: {
     layout?: string;
     theme?: string;
@@ -34,7 +35,6 @@ export type StreamDocument = {
     visualEditorConfig?: string;
     isPrimaryLocale?: boolean;
     entityPageSetUrlTemplates?: string;
-    certified_facts?: any;
   };
 };
 

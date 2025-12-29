@@ -9,7 +9,7 @@ import { StreamDocument } from "./applyTheme.ts";
 export const applyCertifiedFacts = (
   document: StreamDocument
 ): string | undefined => {
-  // Certified facts are provided in the document.__certified_facts field
+  // Certified facts are provided in document.__certified_facts
   // when includeBrandCertifiedFacts is set to true in the stream configuration
   const certifiedFacts = document?.__certified_facts;
 
@@ -19,5 +19,18 @@ export const applyCertifiedFacts = (
 
   // The certified facts script embeds the digitally signed facts in JSON-LD format
   // and references the schema at https://yext.com/.well-known/certified-fact/core-snapshot/1/schema.json
-  return `<script type="application/ld+json">${JSON.stringify(certifiedFacts)}</script>`;
+  let certifiedFactsJson: string;
+  try {
+    certifiedFactsJson = JSON.stringify(certifiedFacts);
+  } catch (error) {
+    console.error(
+      "Failed to stringify certified facts data:",
+      error,
+      "Falling back to empty object."
+    );
+    // Return a safe fallback script with an empty object to prevent page rendering from breaking
+    certifiedFactsJson = "{}";
+  }
+
+  return `<script type="application/ld+json">${certifiedFactsJson}</script>`;
 };
