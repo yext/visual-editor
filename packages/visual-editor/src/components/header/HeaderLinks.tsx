@@ -33,6 +33,7 @@ const defaultLink: TranslatableCTA = {
   linkType: "URL",
   label: { en: "Header Link", hasLocalizedValue: "true" },
   link: "#",
+  openInNewTab: false,
 };
 
 const headerLinksFields: Fields<HeaderLinksProps> = {
@@ -54,6 +55,16 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
             type: "select",
             options: linkTypeOptions(),
           },
+          openInNewTab: YextField(
+            msg("fields.openInNewTab", "Open in new tab"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
         },
         defaultItemProps: defaultLink satisfies TranslatableCTA,
         getItemSummary: (item, i) => {
@@ -90,6 +101,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
           ? "headerFooterMainLink"
           : "headerFooterSecondaryLink"
       }
+      openInNewTab={item.openInNewTab}
       eventName={`cta.${ctaType}.${index}`}
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}

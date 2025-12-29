@@ -73,6 +73,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 
         return (
           <CTA
+            openInNewTab={linkData.openInNewTab}
             key={index}
             variant={
               variant === "primary"
@@ -127,6 +128,16 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
           link: YextField(msg("fields.link", "Link"), {
             type: "text",
           }),
+          openInNewTab: YextField(
+            msg("fields.openInNewTab", "Open in new tab"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
         },
         defaultItemProps: defaultLink,
         getItemSummary: (item: any, index?: number) => {

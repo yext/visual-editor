@@ -10,7 +10,7 @@ import {
   useBackground,
   useDocument,
 } from "@yext/visual-editor";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
@@ -35,6 +35,7 @@ export type CTAProps = {
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
   color?: BackgroundStyle;
+  openInNewTab?: boolean;
 };
 
 /**
@@ -179,6 +180,7 @@ export const CTA = (props: CTAProps) => {
     onClick,
     disabled = false,
     color,
+    openInNewTab = false,
   } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
@@ -287,13 +289,15 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
+        className="flex items-center"
         cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
-        target={target}
+        target={openInNewTab ? "_blank" : target}
         aria-label={ariaLabel || undefined}
         onClick={onClick}
       >
         {linkContent}
+        {openInNewTab && <FaExternalLinkAlt className="ml-1 w-3 h-3" />}
       </Link>
     </Button>
   );

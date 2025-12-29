@@ -20,6 +20,7 @@ export const defaultLink = {
     hasLocalizedValue: "true" as const,
   },
   link: "#",
+  openInNewTab: false,
 };
 
 export const defaultLinks = [

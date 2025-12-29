@@ -17,6 +17,7 @@ const defaultLink = {
     hasLocalizedValue: "true" as const,
   },
   link: "#",
+  openInNewTab: false,
 };
 
 const defaultLinks = [
