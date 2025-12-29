@@ -165,6 +165,7 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
     type: "radio",
     options: [
       { label: "Left", value: "left" },
+      { label: "Center", value: "center" },
       { label: "Right", value: "right" },
     ],
     visible: false,

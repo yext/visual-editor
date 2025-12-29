@@ -294,11 +294,15 @@ export const CTA = (props: CTAProps) => {
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
         aria-label={ariaLabel || undefined}
+        rel={openInNewTab ? "noopener noreferrer" : undefined}
         onClick={onClick}
       >
         {linkContent}
         {openInNewTab && (
-          <FaExternalLinkAlt className="inline-block ml-1 w-3 h-3  align-text-top" />
+          <FaExternalLinkAlt
+            aria-hidden="true"
+            className="inline-block ml-1 w-3 h-3  align-text-top"
+          />
         )}
       </Link>
     </Button>

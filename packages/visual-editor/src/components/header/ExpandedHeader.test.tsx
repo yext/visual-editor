@@ -1115,7 +1115,13 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: 41,
+    interactions: async (page) => {
+      const mobileMenuButton = page.getByLabelText("Open menu");
+      await act(async () => {
+        await mobileMenuButton.click();
+      });
+    },
+    version: 50,
   },
 ];
 
