@@ -281,6 +281,11 @@ export const CTA = (props: CTAProps) => {
       ? link
       : normalizeSlug(link) || "#";
 
+  const computedAriaLabel =
+    ariaLabel && openInNewTab
+      ? `${ariaLabel} (opens in a new tab)`
+      : ariaLabel || undefined;
+
   return (
     <Button
       style={ctaType !== "presetImage" ? dynamicStyle : undefined}
@@ -293,7 +298,7 @@ export const CTA = (props: CTAProps) => {
         cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
-        aria-label={ariaLabel || undefined}
+        aria-label={computedAriaLabel}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
         onClick={onClick}
       >
