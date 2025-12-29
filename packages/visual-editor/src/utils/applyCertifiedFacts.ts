@@ -23,13 +23,8 @@ export const applyCertifiedFacts = (
   try {
     certifiedFactsJson = JSON.stringify(certifiedFacts);
   } catch (error) {
-    console.error(
-      "Failed to stringify certified facts data:",
-      error,
-      "Falling back to empty object."
-    );
-    // Return a safe fallback script with an empty object to prevent page rendering from breaking
-    certifiedFactsJson = "{}";
+    console.error("Failed to stringify certified facts data:", error);
+    return undefined;
   }
 
   return `<script type="application/ld+json">${certifiedFactsJson}</script>`;
