@@ -1,6 +1,6 @@
 {
   "closed": "Gesloten",
-  "closesAt": "Sluit af aan",
+  "closesAt": "Sluit om",
   "friday": "Vrijdag",
   "monday": "Maandag",
   "open24Hours": "24 uur open",
@@ -20,5 +20,5 @@
   "distance": "Afstand",
   "clearAll": "Alles wissen",
   "visitPage": "Bezoek pagina",
-  "getDirections": "Krijg een routebeschrijving"
+  "getDirections": "Routebeschrijving"
 }

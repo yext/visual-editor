@@ -67,6 +67,11 @@ const copyPlatformTranslations = async () => {
   );
 
   // 2. Find all locale folders under locales/platform
+  if (!fs.existsSync(PLATFORM_DIR)) {
+    console.error(`Platform directory not found: ${PLATFORM_DIR}`);
+    process.exit(1);
+  }
+
   const platformLocaleDirs = fs
     .readdirSync(PLATFORM_DIR, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())

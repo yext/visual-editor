@@ -59,7 +59,7 @@
   "closeHeaderMenu": "Sluit koptekstmenu",
   "closeMenu": "Sluit het menu",
   "closed": "Gesloten",
-  "closesAt": "Sluit af aan",
+  "closesAt": "Sluit om",
   "components": {
     "DirectoryGrid": "Directoryraster",
     "Video": "Video",
@@ -95,7 +95,7 @@
     },
     "footerUtilityImagesSlotLabel": "Hulpprogramma-afbeeldingen",
     "gallery": "Galerij",
-    "getDirections": "Krijg een routebeschrijving",
+    "getDirections": "Routebeschrijving",
     "gridSection": "Roostergedeelte",
     "header": "Koptekst",
     "headerLinks": "Koplinks",
@@ -139,7 +139,7 @@
   "coreInfoSection": "Core Info -sectie",
   "cta": "CTA",
   "ctaTypes": {
-    "getDirections": "Krijg een routebeschrijving",
+    "getDirections": "Routebeschrijving",
     "presetImage": "Vooraf ingestelde afbeelding",
     "textAndLink": "Tekst en link"
   },
@@ -492,7 +492,7 @@
     "search": "Zoek lettertypen ..."
   },
   "friday": "Vrijdag",
-  "getDirections": "Krijg een routebeschrijving",
+  "getDirections": "Routebeschrijving",
   "heroBanner": "Hero Banner",
   "heroHeader": "Hero -header",
   "heroImage": "Hero -afbeelding",
