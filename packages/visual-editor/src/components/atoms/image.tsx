@@ -10,27 +10,50 @@ import {
   useDocument,
   AssetImageType,
   TranslatableString,
+  TranslatableAssetImage,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
 export interface ImageProps {
-  image: ImageType | ComplexImageType | AssetImageType;
+  image: ImageType | ComplexImageType | TranslatableAssetImage;
   aspectRatio?: number;
   width?: number;
   className?: string;
   /** sizes attribute of the underlying img tag */
   sizes?: string;
+  loading?: "lazy" | "eager";
 }
 
 export const Image: React.FC<ImageProps> = ({
-  image,
+  image: rawImage,
   aspectRatio,
   width,
   className,
   sizes,
+  loading = "lazy",
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
+
+  const image = React.useMemo(() => {
+    if (
+      rawImage &&
+      typeof rawImage === "object" &&
+      "hasLocalizedValue" in rawImage
+    ) {
+      const localized = rawImage[i18n.language];
+      if (typeof localized === "object") {
+        return localized as AssetImageType;
+      }
+      return undefined;
+    }
+    return rawImage as ImageType | ComplexImageType | AssetImageType;
+  }, [rawImage, i18n.language]);
+
+  if (!image) {
+    return null;
+  }
+
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
     width && aspectRatio ? width / aspectRatio : undefined;
@@ -64,6 +87,7 @@ export const Image: React.FC<ImageProps> = ({
           aspectRatio={aspectRatio}
           className="object-cover w-full h-full"
           imgOverrides={{ sizes }}
+          loading={loading}
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
@@ -73,12 +97,14 @@ export const Image: React.FC<ImageProps> = ({
           height={calculatedHeight}
           className="object-cover"
           imgOverrides={{ sizes }}
+          loading={loading}
         />
       ) : (
         <img
           src={isComplexImageType(image) ? image.image.url : image.url}
           alt={altText}
           className="object-cover w-full h-full"
+          loading={loading}
         />
       )}
     </div>
@@ -91,7 +117,7 @@ function isComplexImageType(
   return "image" in image;
 }
 
-type ImgSizesByBreakpoint = {
+export type ImgSizesByBreakpoint = {
   base: string;
   sm?: string;
   md?: string;
@@ -103,10 +129,15 @@ type ImgSizesByBreakpoint = {
 /**
  * Creates an img sizes attribute based on the default Tailwind breakpoints.
  * Replaces `maxWidth` with the current page section max width from the theme.
+ * Replaces `width` with the width parameter.
  * @param sizes - the width of the image at different breakpoints
+ * @param width - the current width prop of the image
  * @returns a string for the sizes attribute of an img tag
  */
-export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
+export const imgSizesHelper = (
+  sizes: ImgSizesByBreakpoint,
+  width?: string
+): string => {
   const streamDocument = useDocument();
 
   let maxWidth = undefined;
@@ -145,7 +176,9 @@ export const imgSizesHelper = (sizes: ImgSizesByBreakpoint): string => {
   const updatedBreakpointSizes = Object.fromEntries(
     Object.entries(sizes).map(([key, value]) => [
       key,
-      value.replace("maxWidth", maxWidth || "1440px"),
+      value
+        .replace("maxWidth", maxWidth || "1440px")
+        .replace("width", width || 640 + "px"),
     ])
   );
 

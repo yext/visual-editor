@@ -10,6 +10,8 @@ import {
   walkTree,
   ComponentDataOptionalId,
   FieldLabel,
+  createUsePuck,
+  resolveAllData,
 } from "@measured/puck";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -23,13 +25,17 @@ import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import * as lzstring from "lz-string";
 import { msg, pt, usePlatformTranslation } from "../../utils/i18n/platform.ts";
 import { ClipboardCopyIcon, ClipboardPasteIcon } from "lucide-react";
-import { FaArrowLeft } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
+import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
+import { isDeepEqual } from "../../utils/deepEqual.ts";
 
 const devLogger = new DevLogger();
+const usePuck = createUsePuck();
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -97,10 +103,9 @@ export const InternalLayoutEditor = ({
   metadata,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
-  const [clearLocalChangesModalOpen, setClearLocalChangesModalOpen] =
-    useState<boolean>(false);
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
+  const streamDocument = useDocument();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -129,22 +134,28 @@ export const InternalLayoutEditor = ({
           }
         }
 
-        if (layoutSaveState?.hash !== histories[index].id) {
+        const current = histories[index];
+
+        if (!current?.state) {
+          return;
+        }
+
+        if (layoutSaveState?.hash !== current.id) {
           if (templateMetadata.isDevMode && !templateMetadata.devOverride) {
             devLogger.logFunc("sendDevSaveStateData");
             sendDevSaveStateData({
               payload: {
-                devSaveStateData: JSON.stringify(histories[index].state.data),
+                devSaveStateData: JSON.stringify(current.state.data),
               },
             });
           } else {
             devLogger.logFunc("saveLayoutSaveState");
             saveLayoutSaveState({
               payload: {
-                hash: histories[index].id,
+                hash: current.id,
                 history: JSON.stringify({
-                  data: histories[index].state.data,
-                  ui: histories[index].state.ui,
+                  data: current.state.data,
+                  ui: current.state.ui,
                 }),
               },
             });
@@ -250,6 +261,125 @@ export const InternalLayoutEditor = ({
     } as Config;
   }, [puckConfig, i18n.language]);
 
+  // Resolve all data and slots when the document changes
+  // Implemented as an override so that the getPuck hook is available
+  const reloadDataOnDocumentChange = React.useCallback(
+    (props: { children: React.ReactNode }): React.ReactElement => {
+      const getPuck = useGetPuck();
+
+      React.useEffect(() => {
+        const resolveData = async () => {
+          devLogger.logFunc("reloadDataOnDocumentChange");
+          const { appState, config, dispatch } = getPuck();
+
+          const resolvedData = await resolveAllData(appState.data, config, {
+            streamDocument,
+          });
+
+          devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
+
+          if (isDeepEqual(appState.data, resolvedData)) {
+            devLogger.log(
+              "reloadDataOnDocumentChange - no layout changes detected"
+            );
+            return;
+          }
+
+          dispatch({ type: "setData", data: resolvedData });
+        };
+
+        resolveData();
+      }, [streamDocument]);
+
+      return <>{props.children}</>;
+    },
+    [streamDocument]
+  );
+
+  // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
+  React.useEffect(() => {
+    const originalSetPointerCapture = Element.prototype.setPointerCapture;
+    let failedCaptureAttempts = new Set<number>();
+
+    // Wrap setPointerCapture to handle cases where the pointer is no longer active
+    Element.prototype.setPointerCapture = function (pointerId: number): void {
+      try {
+        originalSetPointerCapture.call(this, pointerId);
+        failedCaptureAttempts.delete(pointerId);
+      } catch (error) {
+        // If it's a NotFoundError (pointer no longer active), handle it gracefully
+        if (error instanceof DOMException && error.name === "NotFoundError") {
+          failedCaptureAttempts.add(pointerId);
+
+          // Reset Puck's drag state by dispatching pointer events
+          setTimeout(() => {
+            const cancelEvent = new PointerEvent("pointercancel", {
+              bubbles: true,
+              cancelable: true,
+              pointerId: pointerId,
+            });
+            this.dispatchEvent(cancelEvent);
+
+            const upEvent = new PointerEvent("pointerup", {
+              bubbles: true,
+              cancelable: true,
+              pointerId: pointerId,
+            });
+
+            this.dispatchEvent(upEvent);
+            document.dispatchEvent(cancelEvent);
+            document.dispatchEvent(upEvent);
+          }, 0);
+
+          return;
+        }
+        throw error;
+      }
+    };
+
+    // Global listeners to detect and reset stuck drag states
+    const handleGlobalPointerUp = (event: PointerEvent) => {
+      if (failedCaptureAttempts.has(event.pointerId)) {
+        failedCaptureAttempts.delete(event.pointerId);
+        const cancelEvent = new PointerEvent("pointercancel", {
+          bubbles: true,
+          cancelable: true,
+          pointerId: event.pointerId,
+        });
+        document.dispatchEvent(cancelEvent);
+      }
+    };
+
+    const handleMouseDown = () => {
+      if (failedCaptureAttempts.size > 0) {
+        failedCaptureAttempts.forEach((pointerId) => {
+          const cancelEvent = new PointerEvent("pointercancel", {
+            bubbles: true,
+            cancelable: true,
+            pointerId: pointerId,
+          });
+          document.dispatchEvent(cancelEvent);
+        });
+        failedCaptureAttempts.clear();
+      }
+    };
+
+    document.addEventListener("pointerup", handleGlobalPointerUp, true);
+    document.addEventListener("pointercancel", handleGlobalPointerUp, true);
+    document.addEventListener("mousedown", handleMouseDown, true);
+
+    return () => {
+      Element.prototype.setPointerCapture = originalSetPointerCapture;
+      document.removeEventListener("pointerup", handleGlobalPointerUp, true);
+      document.removeEventListener(
+        "pointercancel",
+        handleGlobalPointerUp,
+        true
+      );
+      document.removeEventListener("mousedown", handleMouseDown, true);
+    };
+  }, []);
+
   return (
     <EntityTooltipsProvider>
       <Puck
@@ -258,92 +388,14 @@ export const InternalLayoutEditor = ({
         initialHistory={puckInitialHistory}
         onChange={change}
         overrides={{
-          fields: ({ children }) => {
-            const getPuck = useGetPuck();
-            const { appState } = getPuck();
-
-            const isAdvancedSettingsSelected =
-              appState?.ui?.itemSelector &&
-              appState.ui.itemSelector.zone === "root:advanced";
-
-            if (isAdvancedSettingsSelected) {
-              const advancedSettingsField = AdvancedSettings.fields?.data;
-
-              if (
-                advancedSettingsField &&
-                advancedSettingsField.type === "object" &&
-                advancedSettingsField.objectFields?.schemaMarkup
-              ) {
-                const schemaField = advancedSettingsField.objectFields
-                  .schemaMarkup as any;
-
-                if (schemaField.type === "custom" && schemaField.render) {
-                  return (
-                    <div className="ve-p-4 ve-mb-4">
-                      {/* Title */}
-                      <div className="ve-mb-4">
-                        <div className="ve-text-md ve-font-semibold ve-text-gray-900 ve-mb-2">
-                          {pt("advancedSettings", "Advanced Settings")}
-                        </div>
-                      </div>
-
-                      {/* Schema markup field */}
-                      {React.createElement(schemaField.render, {
-                        onChange: (newValue: string) => {
-                          const { dispatch } = getPuck();
-                          dispatch({
-                            type: "replaceRoot",
-                            root: {
-                              ...appState.data.root,
-                              props: {
-                                ...appState.data.root?.props,
-                                schemaMarkup: newValue,
-                              } as any,
-                            },
-                          });
-                        },
-                        value: appState.data.root?.props?.schemaMarkup || "",
-                        field: { label: msg("schemaMarkup", "Schema Markup") },
-                      })}
-
-                      {/* Back button */}
-                      <div className="ve-mt-4">
-                        <button
-                          onClick={() => {
-                            const { dispatch } = getPuck();
-                            dispatch({
-                              type: "setUi",
-                              ui: {
-                                ...appState.ui,
-                                itemSelector: null,
-                                rightSideBarVisible: true,
-                              },
-                            });
-                          }}
-                          className="ve-flex ve-items-center ve-gap-2 ve-text-sm ve-text-blue-600 hover:ve-text-blue-800 ve-bg-none ve-border-none ve-cursor-pointer ve-p-0"
-                        >
-                          <FaArrowLeft className="ve-w-4 ve-h-4" />
-                          {pt("back", "Back")}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                }
-              }
-            }
-
-            return <>{children}</>;
-          },
+          fields: fieldsOverride,
           header: () => (
             <LayoutHeader
               templateMetadata={templateMetadata}
-              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               onClearLocalChanges={handleClearLocalChanges}
               onHistoryChange={handleHistoryChange}
               onPublishLayout={handlePublishLayout}
               onSendLayoutForApproval={handleSendLayoutForApproval}
-              isDevMode={templateMetadata.isDevMode}
               localDev={localDev}
             />
           ),
@@ -360,6 +412,13 @@ export const InternalLayoutEditor = ({
           actionBar: ({ children, label }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
+            const itemSelectorState = usePuck(
+              (s) => s.appState.ui.itemSelector
+            );
+
+            React.useEffect(removeDuplicateImageActionBars, [
+              itemSelectorState,
+            ]);
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&
@@ -411,7 +470,12 @@ export const InternalLayoutEditor = ({
                   !pastedData.type ||
                   pastedData.type !== selectedComponent?.type
                 ) {
-                  alert("Failed to paste: Invalid component data.");
+                  alert(
+                    pt(
+                      "failedToPasteComponentInvalidData",
+                      "Failed to paste: Invalid component data."
+                    )
+                  );
                   return;
                 }
 
@@ -419,15 +483,43 @@ export const InternalLayoutEditor = ({
                 const newData = walkTree(pastedData, puckConfig, (contents) =>
                   contents.map((item: ComponentDataOptionalId) => {
                     const id = `${item.type}-${uuidv4()}`;
+                    // oxlint-disable-next-line no-unused-vars
+                    const { id: _, parentData: __, ...rest } = item.props;
+
+                    // CardsWrappers need to have their children's ids preserved in the constantValue array
+                    if (item.type.includes("CardsWrapper")) {
+                      if (
+                        "data" in rest &&
+                        "constantValue" in rest.data &&
+                        "slots" in rest &&
+                        "CardSlot" in rest.slots
+                      ) {
+                        const constantValue = rest.data.constantValue;
+                        if (
+                          Array.isArray(constantValue) &&
+                          constantValue.every(
+                            (cv: unknown) =>
+                              typeof cv === "object" && cv && "id" in cv
+                          )
+                        ) {
+                          constantValue.forEach((cv, i) => {
+                            cv.id =
+                              rest?.slots?.CardSlot[i]?.props?.id || cv.id;
+                          });
+                        }
+                      }
+                    }
+
                     return {
                       ...item,
-                      props: { ...item.props, id },
+                      props: { ...rest, id },
                     };
                   })
                 );
                 // preserve the selected component's id and type
                 newData.props.id = selectedComponent.props.id;
 
+                devLogger.logData("PASTED_DATA", newData);
                 dispatch({
                   type: "replace",
                   destinationZone: appState.ui.itemSelector.zone,
@@ -435,7 +527,12 @@ export const InternalLayoutEditor = ({
                   data: newData,
                 });
               } catch (_) {
-                alert("Failed to paste: Invalid component data.");
+                alert(
+                  pt(
+                    "failedToPasteComponentInvalidData",
+                    "Failed to paste: Invalid component data."
+                  )
+                );
               }
             };
 
@@ -472,6 +569,7 @@ export const InternalLayoutEditor = ({
           fieldLabel: ({ icon, children, ...rest }) => (
             <FieldLabel {...rest}>{children}</FieldLabel>
           ),
+          puck: reloadDataOnDocumentChange,
         }}
         metadata={metadata}
       />

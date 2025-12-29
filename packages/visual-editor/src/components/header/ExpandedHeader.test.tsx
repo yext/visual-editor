@@ -12,9 +12,10 @@ import {
   ExpandedHeader,
   migrate,
   migrationRegistry,
+  SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
 import { defaultBannerProps } from "../pageSections/Banner.tsx";
 
@@ -169,7 +170,7 @@ const tests: ComponentTest[] = [
     props: {
       data: {
         primaryHeader: {
-          logo: "",
+          logo: "https://placehold.co/100",
           links: [],
           primaryCTA: {
             label: { en: "", hasLocalizedValue: "true" },
@@ -441,17 +442,516 @@ const tests: ComponentTest[] = [
     },
     version: 15,
   },
+  {
+    name: "version 20 props",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          logo: {
+            url: "https://placehold.co/100",
+            alternateText: { en: "Logo", hasLocalizedValue: "true" },
+            width: 100,
+            height: 100,
+          },
+          links: [defaultMainLinkV0, defaultMainLinkV0, defaultMainLinkV0],
+          primaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          secondaryCTA: {
+            label: { en: "Call to Action", hasLocalizedValue: "true" },
+            link: "#",
+            linkType: "URL",
+          },
+          showPrimaryCTA: false,
+          showSecondaryCTA: false,
+        },
+        secondaryHeader: {
+          show: true,
+          showLanguageDropdown: false,
+          secondaryLinks: [
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+            defaultSecondaryLinkV0,
+          ],
+        },
+      },
+      styles: {
+        primaryHeader: {
+          logo: {
+            width: 100,
+            aspectRatio: 1,
+          },
+          backgroundColor: backgroundColors.background6.value,
+          primaryCtaVariant: "primary",
+          secondaryCtaVariant: "secondary",
+        },
+        secondaryHeader: {
+          backgroundColor: backgroundColors.background7.value,
+        },
+        maxWidth: "full",
+        headerPosition: "fixed",
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 20,
+  },
+  {
+    name: "version 41 props - no secondary header",
+    document: {},
+    props: {
+      styles: {
+        maxWidth: "theme",
+        headerPosition: "scrollsWithPage",
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              styles: {
+                backgroundColor: backgroundColors.background3.value,
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "ImageSlot",
+                    props: {
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            url: "https://placehold.co/100",
+                            height: 100,
+                            width: 100,
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        aspectRatio: 1,
+                        width: 100,
+                      },
+                    },
+                  },
+                ],
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                        ],
+                      },
+                      parentData: {
+                        type: "Primary",
+                      },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: { en: "CTA", hasLocalizedValue: "true" },
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        displayType: "textAndLink",
+                        variant: "primary",
+                      },
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Secondary CTA",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        displayType: "textAndLink",
+                        variant: "secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        SecondaryHeaderSlot: [
+          {
+            type: "SecondaryHeaderSlot",
+            props: {
+              data: {
+                show: false,
+                showLanguageDropdown: false,
+              },
+              styles: {
+                backgroundColor: backgroundColors.background4.value,
+              },
+              slots: {
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Secondary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                        ],
+                      },
+                      parentData: {
+                        type: "Secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 41,
+  },
+  {
+    name: "version 41 props - with secondary header",
+    document: {},
+    props: {
+      styles: {
+        maxWidth: "theme",
+        headerPosition: "scrollsWithPage",
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              styles: {
+                backgroundColor: backgroundColors.background3.value,
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "ImageSlot",
+                    props: {
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            url: "https://placehold.co/100",
+                            height: 100,
+                            width: 100,
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        aspectRatio: 1,
+                        width: 100,
+                      },
+                    },
+                  },
+                ],
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                        ],
+                      },
+                      parentData: {
+                        type: "Primary",
+                      },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: { en: "CTA", hasLocalizedValue: "true" },
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        displayType: "textAndLink",
+                        variant: "primary",
+                      },
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Secondary CTA",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        displayType: "textAndLink",
+                        variant: "secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        SecondaryHeaderSlot: [
+          {
+            type: "SecondaryHeaderSlot",
+            props: {
+              data: {
+                show: true,
+                showLanguageDropdown: false,
+              },
+              styles: {
+                backgroundColor: backgroundColors.background4.value,
+              },
+              slots: {
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Secondary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                        ],
+                      },
+                      parentData: {
+                        type: "Secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    version: 41,
+  },
+  {
+    name: "version 48 props",
+    document: {},
+    props: {
+      data: {
+        primaryHeader: {
+          field: "",
+          constantValue: {},
+          constantValueEnabled: true,
+        },
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              id: "PrimaryHeaderSlot-v48",
+              data: {
+                primaryHeader: {
+                  field: "",
+                  constantValue: {},
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-white",
+                  textColor: "text-black",
+                },
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "ImageSlot",
+                    props: {
+                      id: "LogoSlot-v48",
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            en: {
+                              url: "https://placehold.co/100",
+                              height: 100,
+                              width: 100,
+                              alternateText: "Alt Text",
+                            },
+                            fr: {
+                              url: "https://placehold.co/100",
+                              height: 100,
+                              width: 100,
+                              alternateText: "Alt Text (FR)",
+                            },
+                            hasLocalizedValue: "true",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: { aspectRatio: 1, width: 100 },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "PrimaryCTASlot-v48",
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Call to Action",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: { variant: "primary" },
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [],
+                LinksSlot: [],
+              },
+            },
+          },
+        ],
+        SecondaryHeaderSlot: [],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+      styles: {
+        headerPosition: "static",
+      },
+    },
+    version: 48,
+  },
 ];
 
 describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
-    components: { ExpandedHeader, BannerSection },
+    components: { ExpandedHeader, BannerSection, ...SlotsCategoryComponents },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
         return <>{children}</>;
       },
     },
   };
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({
@@ -492,12 +992,21 @@ describe("ExpandedHeader", async () => {
           content: content,
         },
         migrationRegistry,
-        puckConfig
+        puckConfig,
+        document
       );
+
+      const updatedData = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
 
       const { container } = reactRender(
         <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+          <Render
+            config={puckConfig}
+            data={updatedData}
+            metadata={{ streamDocument: document }}
+          />
         </VisualEditorProvider>
       );
 

@@ -13,19 +13,24 @@ export { FontSizeSelector } from "./FontSizeSelector.tsx";
 export { SpacingSelector } from "./SpacingSelector.tsx";
 export { BasicSelector } from "./BasicSelector.tsx";
 export { YextField } from "./YextField.tsx";
-export {
-  YextStructFieldSelector,
-  type YextStructEntityField,
-} from "./YextStructFieldSelector.tsx";
 export { KnowledgeGraphIcon } from "./KnowledgeGraphIcon.tsx";
 export { TranslatableStringField } from "./TranslatableStringField.tsx";
-export { TranslatableRichTextField } from "./TranslatableRichTextField.tsx";
-export { EmbeddedFieldStringInput } from "./EmbeddedFieldStringInput.tsx";
+export {
+  TranslatableRichTextField,
+  getDefaultRTF,
+} from "./TranslatableRichTextField.tsx";
+export {
+  EmbeddedFieldStringInputFromEntity,
+  EmbeddedFieldStringInputFromOptions,
+} from "./EmbeddedFieldStringInput.tsx";
 export { CodeField, type CodeFieldProps } from "./CodeField.tsx";
 export { getMaxWidthOptions, filterMaxWidths } from "./MaxWidthSelector.tsx";
+export { resolveDataFromParent } from "./ParentData.tsx";
 export {
   type DynamicOption,
   DynamicOptionsSelector,
+  DynamicOptionsSingleSelector,
   type DynamicOptionsSelectorType,
+  type DynamicOptionsSingleSelectorType,
   type DynamicOptionValueTypes,
 } from "./DynamicOptionsSelector.tsx";

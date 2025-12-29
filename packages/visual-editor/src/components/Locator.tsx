@@ -1,26 +1,20 @@
 import { useTranslation } from "react-i18next";
-import {
-  ComponentConfig,
-  Fields,
-  PuckContext,
-  WithPuckProps,
-} from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
 import {
   AnalyticsProvider,
+  AppliedFilters,
   CardProps,
-  Coordinate,
   executeSearch,
+  Facets,
   FilterSearch,
   getUserLocation,
   MapboxMap,
   OnDragHandler,
   OnSelectParams,
+  Pagination,
   PinComponent,
-  useCardAnalyticsCallback,
-  VerticalResults,
   SearchI18nextProvider,
-  Facets,
-  AppliedFilters,
+  VerticalResults,
 } from "@yext/search-ui-react";
 import {
   FilterSearchResponse,
@@ -33,11 +27,10 @@ import {
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
+  FieldValueFilter,
 } from "@yext/search-headless-react";
-import * as React from "react";
+import React from "react";
 import {
-  Background,
-  backgroundColors,
   BasicSelector,
   Button,
   createSearchAnalyticsConfig,
@@ -45,57 +38,38 @@ import {
   DynamicOption,
   DynamicOptionsSelectorType,
   Heading,
+  Location,
+  LocatorResultCard,
+  LocatorResultCardProps,
   msg,
   useDocument,
   YextField,
-  useTemplateProps,
-  resolveUrlTemplateOfChild,
-  mergeMeta,
-  HoursStatusAtom,
 } from "@yext/visual-editor";
-import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import {
-  Address,
-  AddressType,
-  getDirections,
-  HoursType,
-  ListingType,
-} from "@yext/pages-components";
+  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  LocatorResultCardFields,
+} from "./LocatorResultCard.tsx";
+import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
 import { MapPinIcon } from "./MapPinIcon.js";
 import {
-  FaAngleRight,
   FaChevronUp,
   FaDotCircle,
   FaRegCircle,
   FaSlidersH,
   FaTimes,
 } from "react-icons/fa";
-import { formatPhoneNumber } from "./atoms/phone.js";
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString";
 
+const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
+const COUNTRY_CODE_FIELD = "address.countryCode";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
 const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
 const MILES_TO_METERS = 1609.34;
 const INITIAL_LOCATION_KEY = "initialLocation";
-
-// Keep only digits and at most one leading plus for tel: links.
-// If the input already starts with "tel:", return it as-is.
-function sanitizePhoneForTelHref(rawPhone?: string): string | undefined {
-  if (!rawPhone) {
-    return undefined;
-  }
-  if (rawPhone.startsWith("tel:")) {
-    return rawPhone;
-  }
-
-  // Remove any '+' that is not the leading character and strip non-digits.
-  const cleaned = rawPhone.replace(/(?!^\+)\+|[^\d+]/g, "");
-  return `tel:${cleaned}`;
-}
 
 const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();
@@ -449,6 +423,12 @@ export interface LocatorProps {
      * @defaultValue false
      */
     openNowButton: boolean;
+    /**
+     * If 'true', displays several distance options to filter searches to only locations within
+     * a certain radius.
+     * @defaultValue false
+     */
+    showDistanceOptions: boolean;
     /** Which fields are facetable in the search experience */
     facetFields?: DynamicOptionsSelectorType<string>;
   };
@@ -460,6 +440,12 @@ export interface LocatorProps {
     latitude: string;
     longitude: string;
   };
+
+  /**
+   * Props to customize the locator result card component.
+   * Controls which fields are displayed and their styling.
+   */
+  resultCard: LocatorResultCardProps;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -506,18 +492,31 @@ const locatorFields: Fields<LocatorProps> = {
           ],
         }
       ),
-      facetFields: YextField(msg("fields.dynamicFilters", "Dynamic Filters"), {
-        type: "dynamicSelect",
-        dropdownLabel: msg("fields.field", "Field"),
-        getOptions: () => {
-          const entityType = getEntityType();
-          return getFacetFieldOptions(entityType);
-        },
-        placeholderOptionLabel: msg(
-          "fields.options.selectAField",
-          "Select a field"
-        ),
-      }),
+      showDistanceOptions: YextField(
+        msg("fields.options.showDistanceOptions", "Include Distance Options"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }
+      ),
+      facetFields: YextField<DynamicOptionsSelectorType<string>, string>(
+        msg("fields.dynamicFilters", "Dynamic Filters"),
+        {
+          type: "dynamicSelect",
+          dropdownLabel: msg("fields.field", "Field"),
+          getOptions: () => {
+            const entityType = getEntityType();
+            return getFacetFieldOptions(entityType);
+          },
+          placeholderOptionLabel: msg(
+            "fields.options.selectAField",
+            "Select a field"
+          ),
+        }
+      ),
     },
   },
   mapStartingLocation: YextField(
@@ -534,6 +533,7 @@ const locatorFields: Fields<LocatorProps> = {
       },
     }
   ),
+  resultCard: LocatorResultCardFields,
 };
 
 /**
@@ -544,7 +544,9 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   defaultProps: {
     filters: {
       openNowButton: false,
+      showDistanceOptions: false,
     },
+    resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
   render: (props) => <LocatorWrapper {...props} />,
@@ -590,8 +592,9 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
-  filters: { openNowButton, facetFields },
+  filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
+  resultCard: resultCardProps,
   puck,
 }: WithPuckProps<LocatorProps>) => {
   const { t } = useTranslation();
@@ -624,6 +627,12 @@ const LocatorInternal = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
   const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
+  /** Explicit filter radius selected by the user */
+  const [selectedDistanceMiles, setSelectedDistanceMiles] = React.useState<
+    number | null
+  >(null);
+  /** Radius of last location near filter returned by the filter search API */
+  const apiFilterRadius = React.useRef<number | null>(null);
 
   const handleDrag: OnDragHandler = (center: LngLat, bounds: LngLatBounds) => {
     setMapCenter(center);
@@ -648,6 +657,7 @@ const LocatorInternal = ({
 
   const handleSearchAreaClick = () => {
     if (mapCenter && mapBounds) {
+      searchActions.setOffset(0);
       const locationFilter: SelectableStaticFilter = {
         selected: true,
         displayName: "",
@@ -683,30 +693,58 @@ const LocatorInternal = ({
   }, [searchActions, selectedFacets]);
 
   const filterDisplayName = useSearchState(
-    (state) => state.filters.static?.[0]?.displayName
+    (state) =>
+      state.filters?.static?.find(
+        (filter) =>
+          filter.filter.kind === "fieldValue" &&
+          (filter.filter.fieldId === LOCATION_FIELD ||
+            filter.filter.fieldId === COUNTRY_CODE_FIELD)
+      )?.displayName
   );
   const handleFilterSelect = (params: OnSelectParams) => {
     const newDisplayName = params.newDisplayName;
-    const filterValue = params.newFilter.value as NearFilterValue;
-    const locationFilter: SelectableStaticFilter = {
-      displayName: newDisplayName,
-      selected: true,
-      filter: {
-        kind: "fieldValue",
-        fieldId: params.newFilter.fieldId,
-        value: {
-          ...filterValue,
-          radius: selectedDistanceMiles * MILES_TO_METERS,
-        },
-        matcher: Matcher.Near,
-      },
-    };
+    const filter = params.newFilter;
 
+    let locationFilter: SelectableStaticFilter;
+    let nearFilterValue: NearFilterValue | undefined;
+    switch (filter.matcher) {
+      case Matcher.Near: {
+        nearFilterValue = filter.value as NearFilterValue;
+        apiFilterRadius.current = nearFilterValue.radius;
+        // only overwrite radius from filter if display options are enabled
+        const radius =
+          showDistanceOptions && selectedDistanceMiles
+            ? selectedDistanceMiles * MILES_TO_METERS
+            : nearFilterValue.radius;
+        locationFilter = buildNearLocationFilterFromPrevious(
+          nearFilterValue,
+          newDisplayName,
+          radius
+        );
+        break;
+      }
+      case Matcher.Equals: {
+        apiFilterRadius.current = null;
+        locationFilter = buildEqualsLocationFilter(filter, newDisplayName);
+        break;
+      }
+      default: {
+        throw new Error(`Unsupported matcher type: ${filter.matcher}`);
+      }
+    }
+
+    searchActions.setOffset(0);
     searchActions.setStaticFilters([locationFilter, openNowFilter]);
     searchActions.executeVerticalQuery();
     setSearchState("loading");
-    if (filterValue?.lat && filterValue?.lng) {
-      setMapCenter(new mapboxgl.LngLat(filterValue.lng, filterValue.lat));
+    if (
+      nearFilterValue?.lat &&
+      nearFilterValue?.lng &&
+      areValidCoordinates(nearFilterValue.lat, nearFilterValue.lng)
+    ) {
+      setMapCenter(
+        new mapboxgl.LngLat(nearFilterValue.lng, nearFilterValue.lat)
+      );
     }
   };
 
@@ -761,8 +799,14 @@ const LocatorInternal = ({
   }, []);
 
   const CardComponent = React.useCallback(
-    (result: CardProps<Location>) => <LocationCard {...result} puck={puck} />,
-    [puck]
+    (result: CardProps<Location>) => (
+      <LocatorResultCard
+        {...result}
+        puck={puck}
+        resultCardProps={resultCardProps}
+      />
+    ),
+    [puck, resultCardProps]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
@@ -774,34 +818,39 @@ const LocatorInternal = ({
     markerOptionsOverride: markerOptionsOverride,
   });
 
-  const [selectedDistanceMiles, setSelectedDistanceMiles] =
-    React.useState<number>(DEFAULT_RADIUS_MILES);
-
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
-      let centerCoords = DEFAULT_MAP_CENTER;
-      let displayName: string | undefined;
+      const radius =
+        showDistanceOptions && selectedDistanceMiles
+          ? selectedDistanceMiles * MILES_TO_METERS
+          : DEFAULT_RADIUS_MILES * MILES_TO_METERS;
+      // default location filter to NYC
+      let initialLocationFilter = buildNearLocationFilterFromCoords(
+        DEFAULT_MAP_CENTER[1],
+        DEFAULT_MAP_CENTER[0],
+        radius
+      );
       const doSearch = () => {
-        searchActions.setStaticFilters([
-          {
-            selected: true,
-            displayName,
-            filter: {
-              kind: "fieldValue",
-              fieldId: "builtin.location",
-              value: {
-                lat: centerCoords[1],
-                lng: centerCoords[0],
-                radius: selectedDistanceMiles * MILES_TO_METERS,
-              },
-              matcher: Matcher.Near,
-            },
-          },
-        ]);
+        searchActions.setVerticalLimit(RESULTS_LIMIT);
+        searchActions.setOffset(0);
+        searchActions.setStaticFilters([initialLocationFilter]);
         searchActions.executeVerticalQuery();
         setSearchState("loading");
-        setMapProps((prev) => ({ ...prev, centerCoords }));
-        setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+        if (
+          initialLocationFilter.filter.kind === "fieldValue" &&
+          initialLocationFilter.filter.matcher === Matcher.Near
+        ) {
+          const filterValue = initialLocationFilter.filter
+            .value as NearFilterValue;
+          const centerCoords: [number, number] = [
+            filterValue.lng,
+            filterValue.lat,
+          ];
+          if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
+            setMapProps((prev) => ({ ...prev, centerCoords }));
+            setMapCenter(mapboxgl.LngLat.convert(centerCoords));
+          }
+        }
       };
 
       const foundStartingLocationFromQueryParam = async (
@@ -817,21 +866,33 @@ const LocatorInternal = ({
           ])
           .then((response: FilterSearchResponse | undefined) => {
             const firstResult = response?.sections[0]?.results[0];
-            const filterFromResult = firstResult?.filter?.value as
-              | NearFilterValue
-              | undefined;
-
-            if (
-              firstResult &&
-              firstResult.filter &&
-              filterFromResult?.lat &&
-              filterFromResult?.lng
-            ) {
-              displayName = firstResult.value;
-              centerCoords = [filterFromResult.lng, filterFromResult.lat];
-              return true;
+            const resultFilter = firstResult?.filter;
+            if (!firstResult || !resultFilter) {
+              return false;
             }
-            return false;
+
+            switch (resultFilter.matcher) {
+              case Matcher.Near: {
+                const filterFromResult = resultFilter.value as NearFilterValue;
+                initialLocationFilter = buildNearLocationFilterFromPrevious(
+                  filterFromResult,
+                  firstResult.value
+                );
+                apiFilterRadius.current = filterFromResult.radius;
+                return true;
+              }
+              case Matcher.Equals: {
+                initialLocationFilter = buildEqualsLocationFilter(
+                  resultFilter,
+                  firstResult.value
+                );
+                apiFilterRadius.current = null;
+                return true;
+              }
+              default: {
+                return false;
+              }
+            }
           })
           .catch((e) => {
             console.warn("Filter search for initial location failed:", e);
@@ -851,10 +912,12 @@ const LocatorInternal = ({
       try {
         // 2. Try to get user location via Geolocation API
         const location = await getUserLocation();
-        centerCoords = [location.coords.longitude, location.coords.latitude];
+        const lat = location.coords.latitude;
+        const lng = location.coords.longitude;
         setUserLocationRetrieved(true);
 
         // Try to reverse-geocode the coordinates to a human-readable place name using Mapbox
+        let displayName: string | undefined;
         try {
           if (mapboxApiKey) {
             const lang =
@@ -863,9 +926,7 @@ const LocatorInternal = ({
                 ? navigator.language
                 : undefined) ||
               "en";
-            const lon = centerCoords[0];
-            const lat = centerCoords[1];
-            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lon},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
+            const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxApiKey}&types=place,region,country&limit=1&language=${encodeURIComponent(
               lang
             )}`;
 
@@ -878,12 +939,24 @@ const LocatorInternal = ({
           }
         } catch (e) {
           console.warn("Reverse geocoding failed:", e);
+        } finally {
+          initialLocationFilter = buildNearLocationFilterFromCoords(
+            lat,
+            lng,
+            radius,
+            displayName
+          );
         }
       } catch {
         // 3. Fall back to mapStartingLocation prop
         try {
           if (mapStartingLocation?.latitude && mapStartingLocation.longitude) {
-            centerCoords = parseMapStartingLocation(mapStartingLocation);
+            const centerCoords = parseMapStartingLocation(mapStartingLocation);
+            initialLocationFilter = buildNearLocationFilterFromCoords(
+              centerCoords[1],
+              centerCoords[0],
+              radius
+            );
           }
         } catch (e) {
           console.error(e);
@@ -919,119 +992,62 @@ const LocatorInternal = ({
   };
 
   const searchFilters = useSearchState((state) => state.filters);
-  const handleDistanceClick = (distanceMiles: number) => {
-    // Update existing distance filter if present
-    const existingFilters = searchFilters.static || [];
-    const nonLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind !== "fieldValue" ||
-        filter.filter.fieldId !== LOCATION_FIELD
-    );
-    const oldLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === LOCATION_FIELD
-    );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => {
-      const previousFilter = filter.filter as
-        | FieldValueStaticFilter
-        | undefined;
-      const previousValue = previousFilter?.value as
-        | NearFilterValue
-        | undefined;
-      // mapCenter should always be defined here, but fall back to previous value or default
-      // just in case
-      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
-      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
-      return {
-        ...filter,
-        filter: {
-          ...previousFilter,
-          value: {
-            ...previousValue,
-            lat,
-            lng,
-            radius: distanceMiles * MILES_TO_METERS,
-          },
-        },
-      } as SelectableStaticFilter;
-    });
+  const currentOffset = useSearchState((state) => state.vertical.offset);
+  const previousOffset = React.useRef<number | undefined>(undefined);
 
-    searchActions.setStaticFilters(
-      nonLocationFilters.concat(updatedLocationFilters)
-    );
-    setSelectedDistanceMiles(distanceMiles);
+  // Scroll to top when pagination changes
+  React.useEffect(() => {
+    if (
+      currentOffset !== previousOffset.current &&
+      previousOffset.current !== undefined
+    ) {
+      resultsContainer.current?.scroll({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+    previousOffset.current = currentOffset;
+  }, [currentOffset]);
+
+  const handleDistanceClick = (distanceMiles: number) => {
+    const existingFilters = searchFilters.static || [];
+    let updatedFilters: SelectableStaticFilter[];
+    if (distanceMiles === selectedDistanceMiles) {
+      setSelectedDistanceMiles(null);
+      // revert to API radius (or default if none was found) if user clicks the same distance again
+      updatedFilters = updateRadiusInNearFiltersOnLocationField(
+        existingFilters,
+        apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
+      );
+    } else {
+      setSelectedDistanceMiles(distanceMiles);
+      updatedFilters = updateRadiusInNearFiltersOnLocationField(
+        existingFilters,
+        distanceMiles * MILES_TO_METERS
+      );
+    }
+    searchActions.setStaticFilters(updatedFilters);
     searchActions.setOffset(0);
     executeSearch(searchActions);
   };
 
   const handleClearFiltersClick = () => {
     const existingFilters = searchFilters.static || [];
-
-    // There shouldn't be any other static filters besides location and open now, but leave
-    // them untouched for safety
-    const unaffectedStaticFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind !== "fieldValue" ||
-        (filter.filter.fieldId !== LOCATION_FIELD &&
-          filter.filter.fieldId !== HOURS_FIELD)
+    // revert to API radius (or default if none was found)
+    const partiallyUpdatedFilters = updateRadiusInNearFiltersOnLocationField(
+      existingFilters,
+      apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
     );
-
-    // Make Open Now filter unselected
-    const oldOpenNowFilter = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === HOURS_FIELD
-    );
-    const updatedOpenNowFilters = oldOpenNowFilter.map((filter) => ({
-      ...filter,
-      selected: false,
-    }));
-
-    // Update location filters to default radius
-    const oldLocationFilters = existingFilters.filter(
-      (filter) =>
-        filter.filter.kind === "fieldValue" &&
-        filter.filter.fieldId === LOCATION_FIELD
-    );
-    const updatedLocationFilters = oldLocationFilters.map((filter) => {
-      const previousFilter = filter.filter as
-        | FieldValueStaticFilter
-        | undefined;
-      const previousValue = previousFilter?.value as
-        | NearFilterValue
-        | undefined;
-      // mapCenter should always be defined here, but fall back to previous value or default
-      // just in case
-      const lat = mapCenter?.lat ?? previousValue?.lat ?? DEFAULT_MAP_CENTER[1];
-      const lng = mapCenter?.lng ?? previousValue?.lng ?? DEFAULT_MAP_CENTER[0];
-      return {
-        ...filter,
-        filter: {
-          ...previousFilter,
-          value: {
-            ...previousValue,
-            lat,
-            lng,
-            radius: DEFAULT_RADIUS_MILES * MILES_TO_METERS,
-          },
-        },
-      } as SelectableStaticFilter;
-    });
+    const updatedFilters = deselectOpenNowFilters(partiallyUpdatedFilters);
 
     // Both open now and distance filters must be updated in the same setStaticFilters call to
     // avoid problems due to the asynchronous nature of state updates.
-    searchActions.setStaticFilters(
-      unaffectedStaticFilters.concat(
-        updatedLocationFilters,
-        updatedOpenNowFilters
-      )
-    );
+    searchActions.setStaticFilters(updatedFilters);
     searchActions.resetFacets();
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
     executeSearch(searchActions);
-    setSelectedDistanceMiles(DEFAULT_RADIUS_MILES);
+    setSelectedDistanceMiles(null);
   };
 
   // If something else causes the filters to update, check if the hours filter is still present
@@ -1050,14 +1066,21 @@ const LocatorInternal = ({
     );
   }, [searchFilters]);
 
-  const hasFilterModalToggle = openNowButton || selectedFacets.length > 0;
+  const hasFacetOptions =
+    (
+      useSearchState((state) =>
+        state.filters.facets?.filter((f) => f.options.length)
+      ) ?? []
+    ).length > 0;
+  const hasFilterModalToggle =
+    openNowButton || showDistanceOptions || hasFacetOptions;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
       <div
-        className="relative h-screen w-full md:w-2/5 lg:w-1/3 flex flex-col"
+        className="relative h-screen w-full md:w-2/5 lg:w-[40rem] flex flex-col md:min-w-[24rem]"
         id="locatorLeftDiv"
       >
         <div className="px-8 py-6 gap-4 flex flex-col">
@@ -1084,33 +1107,12 @@ const LocatorInternal = ({
         <div className="relative flex-1 flex flex-col min-h-0">
           <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
             <div className="flex flex-row justify-between" id="levelWithModal">
-              <div>
-                {resultCount === 0 &&
-                  searchState === "not started" &&
-                  t(
-                    "useOurLocatorToFindALocationNearYou",
-                    "Use our locator to find a location near you"
-                  )}
-                {resultCount === 0 &&
-                  searchState === "complete" &&
-                  t(
-                    "noResultsFoundForThisArea",
-                    "No results found for this area"
-                  )}
-                {resultCount > 0 &&
-                  (filterDisplayName
-                    ? t(
-                        "locationsNear",
-                        `${resultCount} locations near "${filterDisplayName}"`,
-                        {
-                          count: resultCount,
-                          filterDisplayName,
-                        }
-                      )
-                    : t("locationWithCount", `${resultCount} locations`, {
-                        count: resultCount,
-                      }))}
-              </div>
+              <ResultsCountSummary
+                searchState={searchState}
+                resultCount={resultCount}
+                selectedDistanceMiles={selectedDistanceMiles}
+                filterDisplayName={filterDisplayName}
+              />
               {hasFilterModalToggle && (
                 <button
                   className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
@@ -1123,7 +1125,7 @@ const LocatorInternal = ({
             </div>
             <div className="flex flex-row justify-between">
               <AppliedFilters
-                hiddenFields={[LOCATION_FIELD]}
+                hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
                 customCssClasses={{
                   removableFilter: "text-md font-normal mt-2 mb-0",
                   clearAllButton: "hidden",
@@ -1140,11 +1142,22 @@ const LocatorInternal = ({
               />
             )}
           </div>
+          {resultCount > RESULTS_LIMIT && (
+            <div className="border-t border-gray-300 pt-4">
+              <Pagination
+                customCssClasses={{
+                  selectedLabel:
+                    "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+                }}
+              />
+            </div>
+          )}
           <FilterModal
             showFilterModal={showFilterModal}
             showOpenNowOption={openNowButton}
             isOpenNowSelected={isOpenNowSelected}
             handleOpenNowClick={handleOpenNowClick}
+            showDistanceOptions={showDistanceOptions}
             selectedDistanceMiles={selectedDistanceMiles}
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
@@ -1154,10 +1167,7 @@ const LocatorInternal = ({
       </div>
 
       {/* Right Section: Map. Hidden for small screens */}
-      <div
-        id="locatorMapDiv"
-        className="md:w-3/5 lg:w-2/3 md:flex hidden relative"
-      >
+      <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
         <Map {...mapProps} />
         {showSearchAreaButton && (
           <div className="absolute bottom-10 left-0 right-0 flex justify-center">
@@ -1172,6 +1182,75 @@ const LocatorInternal = ({
       </div>
     </div>
   );
+};
+
+interface ResultsCountSummaryProps {
+  searchState: SearchState;
+  resultCount: number;
+  selectedDistanceMiles: number | null;
+  filterDisplayName?: string;
+}
+
+const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
+  const { searchState, resultCount, selectedDistanceMiles, filterDisplayName } =
+    props;
+  const { t } = useTranslation();
+
+  if (resultCount === 0) {
+    if (searchState === "not started") {
+      return (
+        <div>
+          {t(
+            "useOurLocatorToFindALocationNearYou",
+            "Use our locator to find a location near you"
+          )}
+        </div>
+      );
+    } else if (searchState === "complete") {
+      return (
+        <div>
+          {t("noResultsFoundForThisArea", "No results found for this area")}
+        </div>
+      );
+    } else {
+      return <div></div>;
+    }
+  } else {
+    if (filterDisplayName) {
+      if (selectedDistanceMiles) {
+        return (
+          <div>
+            {t(
+              "locationsWithinDistanceOf",
+              '{{count}} locations within {{distance}} miles of "{{name}}"',
+              {
+                count: resultCount,
+                distance: selectedDistanceMiles,
+                name: filterDisplayName,
+              }
+            )}
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            {t("locationsNear", '{{count}} locations near "{{name}}"', {
+              count: resultCount,
+              name: filterDisplayName,
+            })}
+          </div>
+        );
+      }
+    } else {
+      return (
+        <div>
+          {t("locationWithCount", "{{count}} locations", {
+            count: resultCount,
+          })}
+        </div>
+      );
+    }
+  }
 };
 
 interface MapProps {
@@ -1275,165 +1354,12 @@ const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
   );
 };
 
-const LocationCard = React.memo(
-  ({
-    result,
-    puck,
-  }: {
-    result: CardProps<Location>["result"];
-    puck: PuckContext;
-  }): React.JSX.Element => {
-    const { document: streamDocument, relativePrefixToRoot } =
-      useTemplateProps();
-    const { t } = useTranslation();
-
-    const location = result.rawData;
-    const distance = result.distance;
-
-    const distanceInMiles = distance
-      ? (distance / 1609.344).toFixed(1)
-      : undefined;
-    const distanceInKilometers = distance
-      ? (distance / 1000).toFixed(1)
-      : undefined;
-
-    const handleGetDirectionsClick = useCardAnalyticsCallback(
-      result,
-      "DRIVING_DIRECTIONS"
-    );
-    const handleVisitPageClick = useCardAnalyticsCallback(
-      result,
-      "VIEW_WEBSITE"
-    );
-    const handlePhoneNumberClick = useCardAnalyticsCallback(
-      result,
-      "TAP_TO_CALL"
-    );
-
-    const resolvedUrl = resolveUrlTemplateOfChild(
-      mergeMeta(location, streamDocument),
-      relativePrefixToRoot,
-      puck.metadata?.resolveUrlTemplate
-    );
-
-    const formattedPhoneNumber = location.mainPhone
-      ? formatPhoneNumber(
-          location.mainPhone,
-          location.mainPhone.slice(0, 2) === "+1" ? "domestic" : "international"
-        )
-      : null;
-
-    const telHref = sanitizePhoneForTelHref(location.mainPhone);
-
-    const getDirectionsLink: string | undefined = (() => {
-      const listings = location.ref_listings ?? [];
-      const listingsLink = getDirections(
-        undefined,
-        listings,
-        undefined,
-        { provider: "google" },
-        undefined
-      );
-      const coordinateLink = getDirections(
-        undefined,
-        undefined,
-        undefined,
-        { provider: "google" },
-        location.yextDisplayCoordinate
-      );
-
-      return listingsLink || coordinateLink;
-    })();
-
-    return (
-      <Background
-        background={backgroundColors.background1.value}
-        className="container flex flex-row border-b border-gray-300 p-8 gap-4"
-      >
-        <Background
-          background={backgroundColors.background6.value}
-          className="flex-shrink-0 w-6 h-6 rounded-full font-bold flex items-center justify-center text-body-sm-fontSize"
-        >
-          {result.index}
-        </Background>
-        <div className="flex flex-wrap gap-6 w-full">
-          <div className="w-full flex flex-col gap-4">
-            <div className="flex flex-row justify-between items-center">
-              <Heading
-                className="font-bold text-palette-primary-dark"
-                level={4}
-              >
-                {location.name}
-              </Heading>
-              {distance && (
-                <div className="font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize">
-                  {t("distanceInUnit", `${distanceInMiles} mi`, {
-                    distanceInMiles,
-                    distanceInKilometers,
-                  })}
-                </div>
-              )}
-            </div>
-            {location.hours && (
-              <div className="font-body-fontFamily text-body-fontSize gap-8">
-                <HoursStatusAtom
-                  hours={location.hours}
-                  timezone={location.timezone}
-                  className="text-body-fontSize"
-                  boldCurrentStatus={false}
-                />
-              </div>
-            )}
-            {location.mainPhone && (
-              <a
-                href={telHref}
-                onClick={handlePhoneNumberClick}
-                className="components h-fit w-fit underline decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing text-palette-primary-dark"
-              >
-                {formattedPhoneNumber}
-              </a>
-            )}
-            <div className="flex flex-col gap-1 w-full">
-              {location.address && (
-                <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
-                  <Address
-                    address={location.address}
-                    lines={[
-                      ["line1"],
-                      ["line2"],
-                      ["city", "region", "postalCode"],
-                    ]}
-                  />
-                </div>
-              )}
-              {getDirectionsLink && (
-                <a
-                  href={getDirectionsLink}
-                  onClick={handleGetDirectionsClick}
-                  className="components h-fit items-center w-fit underline gap-2 decoration-0 hover:no-underline font-link-fontFamily text-link-fontSize tracking-link-letterSpacing flex font-bold text-palette-primary-dark"
-                >
-                  {t("getDirections", "Get Directions")}
-                  <FaAngleRight size={"12px"} />
-                </a>
-              )}
-            </div>
-          </div>
-          <Button asChild className="basis-full" variant="primary">
-            <a href={resolvedUrl} onClick={handleVisitPageClick}>
-              {t("visitPage", "Visit Page")}
-            </a>
-          </Button>
-        </div>
-      </Background>
-    );
-  }
-);
-
 interface FilterModalProps {
   showFilterModal: boolean;
   showOpenNowOption: boolean; // whether to show the Open Now filter option
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
-  selectedDistanceMiles?: number;
+  showDistanceOptions: boolean; // whether to show the Distance filter option
+  selectedDistanceMiles: number | null;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
   handleDistanceClick: (distance: number) => void;
@@ -1445,6 +1371,7 @@ const FilterModal = (props: FilterModalProps) => {
     showFilterModal,
     showOpenNowOption,
     isOpenNowSelected,
+    showDistanceOptions,
     selectedDistanceMiles,
     handleCloseModalClick,
     handleOpenNowClick,
@@ -1457,7 +1384,7 @@ const FilterModal = (props: FilterModalProps) => {
   return showFilterModal ? (
     <div
       id="popup"
-      className="absolute top-4 z-50 w-80 flex flex-col bg-white left-full ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+      className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
@@ -1473,7 +1400,7 @@ const FilterModal = (props: FilterModalProps) => {
       </div>
       <div className="px-6 border-b border-gray-300">
         <AppliedFilters
-          hiddenFields={[LOCATION_FIELD]}
+          hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
           customCssClasses={{
             removableFilter: "text-md font-normal",
             clearAllButton: "hidden",
@@ -1488,10 +1415,12 @@ const FilterModal = (props: FilterModalProps) => {
               onChange={handleOpenNowClick}
             />
           )}
-          <DistanceFilter
-            onChange={handleDistanceClick}
-            selectedDistanceMiles={selectedDistanceMiles}
-          />
+          {showDistanceOptions && (
+            <DistanceFilter
+              onChange={handleDistanceClick}
+              selectedDistanceMiles={selectedDistanceMiles}
+            />
+          )}
           <Facets
             customCssClasses={{
               divider: "bg-white",
@@ -1561,7 +1490,7 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 
 interface DistanceFilterProps {
   onChange: (distance: number) => void;
-  selectedDistanceMiles?: number;
+  selectedDistanceMiles: number | null;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
@@ -1651,15 +1580,147 @@ const parseMapStartingLocation = (mapStartingLocation: {
   return [lng, lat];
 };
 
-interface Location {
-  address: AddressType;
-  hours?: HoursType;
-  id: string;
-  mainPhone?: string;
-  name: string;
-  neighborhood?: string;
-  slug?: string;
-  timezone: string;
-  yextDisplayCoordinate?: Coordinate;
-  ref_listings?: ListingType[];
+/**
+ * Returns true if the given filter is a "near" filter on the builtin.location field; otherwise,
+ * returns false.
+ */
+const isLocationNearFilter = (filter: SelectableStaticFilter) =>
+  filter.filter.kind === "fieldValue" &&
+  filter.filter.fieldId === LOCATION_FIELD &&
+  filter.filter.matcher === Matcher.Near;
+
+/**
+ * Returns true if the given filter is an "open at" filter on the builtin.hours field; otherwise,
+ * returns false.
+ */
+const isOpenNowFilter = (filter: SelectableStaticFilter) =>
+  filter.filter.kind === "fieldValue" &&
+  filter.filter.fieldId === HOURS_FIELD &&
+  filter.filter.matcher === Matcher.OpenAt;
+
+/**
+ * Builds a "near" static filter on the builtin.location field from a previous near filter
+ * value, with optional overrides for display name and radius
+ */
+function buildNearLocationFilterFromPrevious(
+  previousValue: NearFilterValue,
+  displayName?: string,
+  radius?: number
+): SelectableStaticFilter {
+  return {
+    selected: true,
+    displayName,
+    filter: {
+      kind: "fieldValue",
+      fieldId: LOCATION_FIELD,
+      value: {
+        ...previousValue,
+        radius: radius ?? previousValue.radius,
+      },
+      matcher: Matcher.Near,
+    },
+  };
+}
+
+/**
+ * Builds a "near" static filter on the builtin.location field from given coordinates, with
+ * optional radius and display name.
+ */
+function buildNearLocationFilterFromCoords(
+  lat: number,
+  lng: number,
+  radius?: number,
+  displayName?: string
+): SelectableStaticFilter {
+  return {
+    selected: true,
+    displayName,
+    filter: {
+      kind: "fieldValue",
+      fieldId: LOCATION_FIELD,
+      value: {
+        lat,
+        lng,
+        radius: radius ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+      },
+      matcher: Matcher.Near,
+    },
+  };
+}
+
+/**
+ * Builds an "equals" static filter on the builtin.location field from a previous equals filter,
+ * with a new display name.
+ */
+function buildEqualsLocationFilter(
+  filter: FieldValueFilter,
+  newDisplayName: string
+): SelectableStaticFilter {
+  return {
+    displayName: newDisplayName,
+    selected: true,
+    filter: {
+      kind: "fieldValue",
+      fieldId: filter.fieldId,
+      value: filter.value,
+      matcher: Matcher.Equals,
+    },
+  };
+}
+
+/**
+ * Helper function to iterate through a list of static filters and update all near filters on the
+ * location field to have the new radius.
+ */
+function updateRadiusInNearFiltersOnLocationField(
+  filters: SelectableStaticFilter[],
+  newRadius: number
+): SelectableStaticFilter[] {
+  return filters.map((filter) => {
+    if (isLocationNearFilter(filter)) {
+      const previousFilter = filter.filter as FieldValueStaticFilter;
+      const previousValue = previousFilter.value as NearFilterValue;
+      return {
+        ...filter,
+        filter: {
+          ...previousFilter,
+          value: {
+            ...previousValue,
+            radius: newRadius,
+          },
+        },
+      } as SelectableStaticFilter;
+    }
+    return filter;
+  });
+}
+
+/**
+ * Helper function to iterate through a list of static filters and set the selected field to
+ * false on any Open Now filters.
+ */
+function deselectOpenNowFilters(
+  filters: SelectableStaticFilter[]
+): SelectableStaticFilter[] {
+  return filters.map((filter) => {
+    if (isOpenNowFilter(filter)) {
+      return {
+        ...filter,
+        selected: false,
+      };
+    }
+    return filter;
+  });
+}
+
+/** Checks whether a given lat and lng are valid coordinates */
+function areValidCoordinates(lat: number, lng: number): boolean {
+  return (
+    !isNaN(lat) &&
+    !isNaN(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180
+  );
 }

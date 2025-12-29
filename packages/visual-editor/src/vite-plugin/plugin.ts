@@ -41,7 +41,6 @@ const virtualFiles: VirtualFile[] = [
       layoutRequired: true,
       defaultLayoutData: defaultLayoutData.main,
       componentFields: [
-        ComponentFields.HeroSection,
         ComponentFields.PromoSection,
         ComponentFields.ProductSection,
         ComponentFields.EventSection,
@@ -103,13 +102,13 @@ export const yextVisualEditorPlugin = (): Plugin => {
     // Iterate over each template definition
     virtualFiles.forEach((virtualFile: VirtualFile) => {
       const filePath = path.join(process.cwd(), virtualFile.filepath);
-      filesToCleanup.push(filePath);
 
       // Ensure the directory exists
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
 
       // Write the content to the file if it doesn't already exist
       if (!fs.existsSync(filePath)) {
+        filesToCleanup.push(filePath);
         fs.writeFileSync(filePath, virtualFile.content);
       }
 

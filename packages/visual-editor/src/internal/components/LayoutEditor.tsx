@@ -16,7 +16,7 @@ import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.t
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeData, ThemeHistory } from "../types/themeData.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
-import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { StreamDocument, updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
@@ -34,6 +34,7 @@ type LayoutEditorProps = {
   themeConfig: ThemeConfig | undefined;
   localDev: boolean;
   metadata?: Metadata;
+  streamDocument: StreamDocument;
 };
 
 export const LayoutEditor = (props: LayoutEditorProps) => {
@@ -45,6 +46,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     themeConfig,
     localDev,
     metadata,
+    streamDocument,
   } = props;
 
   const {
@@ -57,10 +59,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   const { sendDevLayoutSaveStateData, sendDevThemeSaveStateData } =
     useCommonMessageSenders();
 
-  const { layoutSaveState, layoutSaveStateFetched } = useLayoutMessageReceivers(
-    localDev,
-    puckConfig
-  );
+  const { layoutSaveState, layoutSaveStateFetched, setLayoutSaveState } =
+    useLayoutMessageReceivers(localDev, puckConfig, streamDocument);
 
   const { buildVisualConfigLocalStorageKey, clearVisualConfigLocalStorage } =
     useLayoutLocalStorage(templateMetadata);
@@ -81,7 +81,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     if (localDev) {
       return;
     }
+    setLayoutSaveState(undefined);
     deleteLayoutSaveState();
+  };
+
+  const handlePublish = (data?: any) => {
+    setLayoutSaveState(undefined);
+    publishLayout(data);
   };
 
   /**
@@ -106,13 +112,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         sendDevThemeSaveStateData({
           payload: { devThemeSaveStateData: JSON.stringify(localThemeData) },
         });
-        updateThemeInEditor(localThemeData, themeConfig);
+        updateThemeInEditor(localThemeData, themeConfig, false);
         return;
       }
     }
 
     if (themeData) {
-      updateThemeInEditor(themeData as ThemeData, themeConfig);
+      updateThemeInEditor(themeData as ThemeData, themeConfig, false);
     }
   }, [themeData, themeConfig, templateMetadata]);
 
@@ -145,22 +151,30 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
         devLogger.log("Layout Dev Mode - Using layout data from localStorage");
         const localHistories = (
           JSON.parse(localHistoryArray) as History<AppState>[]
-        ).map((history) => ({
-          id: history.id,
-          state: {
-            data: migrate(history.state.data, migrationRegistry, puckConfig),
-            ui: history.state.ui,
-          },
-        }));
+        )
+          .filter((history): history is History<AppState> => !!history?.state)
+          .map((history) => ({
+            id: history.id,
+            state: {
+              data: migrate(
+                history.state.data,
+                migrationRegistry,
+                puckConfig,
+                streamDocument
+              ),
+              ui: history.state.ui,
+            },
+          }));
         const localHistoryIndex = localHistories.length - 1;
-        // @ts-expect-error https://github.com/measuredco/puck/issues/673
-        setPuckInitialHistory({
-          histories: localHistories,
-          index: localHistoryIndex,
-          appendData: false,
-        });
-        setPuckInitialHistoryFetched(true);
-        return;
+        if (localHistoryIndex >= 0) {
+          setPuckInitialHistory({
+            histories: localHistories as any,
+            index: localHistoryIndex,
+            appendData: false,
+          });
+          setPuckInitialHistoryFetched(true);
+          return;
+        }
       }
 
       // Otherwise start fresh from Content
@@ -230,7 +244,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       return;
     }
     loadPuckInitialHistory();
-  }, [templateMetadata, layoutSaveStateFetched]);
+  }, [templateMetadata.layoutId, layoutSaveStateFetched]);
 
   // Log PUCK_INITIAL_HISTORY (layout) on load
   useEffect(() => {
@@ -247,8 +261,11 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     }
 
     const historyToSend =
-      puckInitialHistory?.histories[puckInitialHistory.histories.length - 1]
-        .state.data;
+      puckInitialHistory?.histories?.[puckInitialHistory.histories.length - 1]
+        ?.state?.data;
+    if (!historyToSend) {
+      return;
+    }
 
     devLogger.logFunc("sendDevSaveStateData useEffect");
     sendDevLayoutSaveStateData({
@@ -270,7 +287,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       templateMetadata={templateMetadata}
       layoutSaveState={layoutSaveState}
       saveLayoutSaveState={saveLayoutSaveState}
-      publishLayout={publishLayout}
+      publishLayout={handlePublish}
       sendLayoutForApproval={sendLayoutForApproval}
       sendDevSaveStateData={sendDevLayoutSaveStateData}
       buildVisualConfigLocalStorageKey={buildVisualConfigLocalStorageKey}

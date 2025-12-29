@@ -1,79 +1,14 @@
-import { ArrayField, CustomField, AutoField, UiState } from "@measured/puck";
-import { useTranslation } from "react-i18next";
-import { FAQSectionType, FAQStruct } from "../../../types/types.ts";
-import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { useMemo } from "react";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
-import { TranslatableRichTextField } from "../../../editor/TranslatableRichTextField.tsx";
-import { useDocument } from "../../../hooks/useDocument.tsx";
+import { Field } from "@measured/puck";
+import { pt } from "../../../utils/i18n/platform.ts";
 
-export const defaultFAQ: FAQStruct = {
-  question: {
-    en: "Question Lorem ipsum dolor sit amet?",
-    hasLocalizedValue: "true",
-  },
-  answer: {
-    en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    hasLocalizedValue: "true",
-  },
-};
-
-export const FAQ_SECTION_CONSTANT_CONFIG: CustomField<FAQSectionType> = {
-  type: "custom",
-  render: ({
-    onChange,
-    value,
-  }: {
-    value: FAQSectionType;
-    onChange: (value: FAQSectionType, uiState?: Partial<UiState>) => void;
-  }) => {
-    return (
-      <div className={"ve-mt-4"}>
-        <AutoField
-          field={FAQStructArrayField()}
-          value={value.faqs}
-          onChange={(newValue, uiState) =>
-            onChange({ faqs: newValue }, uiState)
-          }
-        />
-      </div>
-    );
-  },
-};
-
-const FAQStructArrayField = (): ArrayField<FAQStruct[]> => {
-  const streamDocument = useDocument();
-
-  const questionField = useMemo(() => {
-    return TranslatableStringField(msg("fields.question", "Question"), {
-      types: ["type.string"],
-    });
-  }, []);
-
-  const answerField = useMemo(() => {
-    return TranslatableRichTextField(msg("fields.answer", "Answer"));
-  }, []);
-
-  return {
-    label: pt("arrayField", "Array Field"),
-    type: "array",
-    arrayFields: {
-      question: questionField,
-      answer: answerField,
+export const FAQ_SECTION_CONSTANT_CONFIG: Field<any> = {
+  type: "array",
+  arrayFields: {
+    id: {
+      type: "text",
+      visible: false,
     },
-    defaultItemProps: defaultFAQ,
-    getItemSummary: (item, i): string => {
-      const { i18n } = useTranslation();
-      const translation = resolveComponentData(
-        item.question,
-        i18n.language,
-        streamDocument
-      );
-      if (translation) {
-        return translation;
-      }
-      return pt("faq", "FAQ") + " " + ((i ?? 0) + 1);
-    },
-  };
+  },
+  label: "",
+  getItemSummary: (item, index) => pt("faq", "FAQ") + " " + ((index ?? 0) + 1),
 };

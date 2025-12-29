@@ -1,4 +1,5 @@
 import { DropZone, Config } from "@measured/puck";
+import { pt } from "@yext/visual-editor";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
@@ -19,18 +20,25 @@ import {
   AdvancedCoreInfoCategoryComponents,
   type AdvancedCoreInfoCategoryProps,
 } from "../categories/AdvancedCoreInfoCategory";
+import {
+  SlotsCategory,
+  SlotsCategoryComponents,
+  SlotsCategoryProps,
+} from "../categories";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
-    AdvancedCoreInfoCategoryProps {}
+    AdvancedCoreInfoCategoryProps,
+    SlotsCategoryProps {}
 
 const components: Config<MainConfigProps>["components"] = {
   ...PageSectionCategoryComponents,
   ...DeprecatedCategoryComponents,
   ...OtherCategoryComponents,
   ...AdvancedCoreInfoCategoryComponents,
+  ...SlotsCategoryComponents,
 };
 
 // The config used for base entities (locations, financial professionals, etc.)
@@ -38,16 +46,20 @@ export const mainConfig: Config<MainConfigProps> = {
   components,
   categories: {
     pageSections: {
-      title: "Page Sections",
+      title: pt("categories.pageSections", "Page Sections"),
       components: PageSectionCategory,
     },
     coreInformation: {
-      title: "Core Information",
+      title: pt("categories.coreInformation", "Core Information"),
       components: AdvancedCoreInfoCategory,
     },
     other: {
-      title: "Other",
+      title: pt("categories.other", "Other"),
       components: OtherCategory,
+    },
+    slots: {
+      components: SlotsCategory,
+      visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
@@ -60,7 +72,11 @@ export const mainConfig: Config<MainConfigProps> = {
       return (
         <DropZone
           zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
           disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
         />
       );

@@ -35,7 +35,10 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   tailwindConfig,
   children,
 }: VisualEditorProviderProps<T>) => {
-  const queryClient = new QueryClient();
+  // Use useMemo to prevent creating a new QueryClient on every render
+  // QueryClient maintains internal caches, so creating new instances unnecessarily
+  // could lead to memory accumulation
+  const queryClient = React.useMemo(() => new QueryClient(), []);
   const normalizedTemplateProps = React.useMemo(
     () => normalizeLocalesInObject(templateProps),
     [templateProps]

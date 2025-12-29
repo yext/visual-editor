@@ -18,3 +18,21 @@ export const DateTimeSelector: CustomField<string | undefined> = {
     );
   },
 };
+
+export const DATE_TIME_CONSTANT_CONFIG: CustomField<string | undefined> = {
+  type: "custom",
+  render: ({ value, onChange }) => {
+    return (
+      <div className="ve-mt-3">
+        <input
+          className="date-time-picker"
+          type="datetime-local"
+          onChange={(e) => onChange(e.target.value)}
+          value={value ?? ""}
+          // needed so that the browser's date picker opens
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    );
+  },
+};

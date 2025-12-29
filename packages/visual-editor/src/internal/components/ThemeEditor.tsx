@@ -88,16 +88,17 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
       const localHistories = (
         localHistoryArray ? JSON.parse(localHistoryArray) : []
       ) as History<AppState>[];
-      const localHistoryIndex = localHistories.length - 1;
-      if (localHistoryIndex >= 0) {
-        devLogger.log("Theme Dev Mode - Using layout data from local storage");
-        const histories = localHistories.map((h) => {
+      const histories = localHistories
+        .filter((h) => h?.state)
+        .map((h) => {
           // strip ui state
           return { id: h.id, state: { data: { ...h.state.data } } };
         });
-        // @ts-expect-error https://github.com/measuredco/puck/issues/673
+      const localHistoryIndex = histories.length - 1;
+      if (localHistoryIndex >= 0) {
+        devLogger.log("Theme Dev Mode - Using layout data from local storage");
         setPuckInitialHistory({
-          histories: histories,
+          histories: histories as any,
           index: localHistoryIndex,
           appendData: false,
         });
@@ -209,7 +210,8 @@ export const ThemeEditor = (props: ThemeEditorProps) => {
     if (themeHistories && themeConfig) {
       updateThemeInEditor(
         themeHistories.histories[themeHistories.index]?.data as ThemeData,
-        themeConfig
+        themeConfig,
+        true
       );
     }
   }, [themeHistories, themeConfig]);

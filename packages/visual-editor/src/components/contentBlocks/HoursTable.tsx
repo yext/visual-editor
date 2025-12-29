@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
 import {
@@ -11,6 +11,7 @@ import {
   YextField,
   msg,
   pt,
+  Body,
 } from "@yext/visual-editor";
 
 /** Props for the HoursTable component. */
@@ -102,7 +103,8 @@ const hoursTableFields: Fields<HoursTableProps> = {
   }),
 };
 
-const VisualEditorHoursTable = ({ data, styles }: HoursTableProps) => {
+const VisualEditorHoursTable: PuckComponent<HoursTableProps> = (props) => {
+  const { data, styles, puck } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
   const hours = resolveComponentData(data.hours, i18n.language, streamDocument);
@@ -111,7 +113,7 @@ const VisualEditorHoursTable = ({ data, styles }: HoursTableProps) => {
     additionalHoursText: string;
   };
 
-  return (
+  return hours ? (
     <div className={`flex flex-col ${styles.alignment}`}>
       {hours && (
         <EntityField
@@ -131,12 +133,16 @@ const VisualEditorHoursTable = ({ data, styles }: HoursTableProps) => {
           displayName={pt("hoursText", "Hours Text")}
           fieldId="additionalHoursText"
         >
-          <div className="mt-4 text-body-sm-fontSize">
+          <Body variant="sm" className="mt-4">
             {additionalHoursText}
-          </div>
+          </Body>
         </EntityField>
       )}
     </div>
+  ) : puck.isEditing ? (
+    <div className="h-24" />
+  ) : (
+    <></>
   );
 };
 
@@ -157,5 +163,5 @@ export const HoursTable: ComponentConfig<{ props: HoursTableProps }> = {
     },
   },
   label: msg("components.hoursTable", "Hours Table"),
-  render: (props: HoursTableProps) => <VisualEditorHoursTable {...props} />,
+  render: (props) => <VisualEditorHoursTable {...props} />,
 };

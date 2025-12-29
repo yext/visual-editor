@@ -8,10 +8,13 @@ import {
   YextField,
   msg,
   pt,
+  themeManagerCn,
+  Body,
 } from "@yext/visual-editor";
-import { ComponentConfig, Field, Fields } from "@measured/puck";
+import { ComponentConfig, Field, Fields, PuckComponent } from "@measured/puck";
 import { StreamDocument } from "../../utils/applyTheme";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
+import { Map } from "lucide-react";
 
 export type MapboxStaticProps = {
   apiKey: string;
@@ -78,12 +81,13 @@ const getPrimaryColor = (streamDocument: StreamDocument) => {
   }
 };
 
-export const MapboxStaticMapComponent = ({
+export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   apiKey,
   coordinate: coordinateField,
   zoom = 14,
   mapStyle = "light-v11",
-}: MapboxStaticProps) => {
+  puck,
+}) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
 
@@ -93,11 +97,39 @@ export const MapboxStaticMapComponent = ({
     streamDocument
   );
 
+  // Show empty state in editor mode when API key is missing
+  if (!apiKey) {
+    if (puck?.isEditing) {
+      return (
+        <div
+          className={themeManagerCn(
+            "relative h-[300px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+          )}
+        >
+          <Map className="w-12 h-12 text-gray-400" />
+          <div className="flex flex-col items-center gap-0">
+            <Body variant="base" className="text-gray-500 font-medium">
+              {pt(
+                "staticMapEmptyStateSectionHidden",
+                "Section hidden for all locations"
+              )}
+            </Body>
+            <Body variant="base" className="text-gray-500 font-normal">
+              {pt(
+                "staticMapEmptyStateAddApiKey",
+                "Add an API key to preview your map"
+              )}
+            </Body>
+          </div>
+        </div>
+      );
+    }
+    console.warn("API Key is required for MapboxStaticMap");
+    return <></>;
+  }
+
   if (!coordinate) {
     console.warn(`${coordinateField.field} is not present in the stream`);
-    return <></>;
-  } else if (!apiKey) {
-    console.warn("API Key is required for MapboxStaticMap");
     return <></>;
   }
 
@@ -135,6 +167,7 @@ export const MapboxStaticMapComponent = ({
             srcSet={getMapboxStaticImageUrl("medium")}
           />
           <img
+            loading="lazy"
             src={getMapboxStaticImageUrl("large")}
             className="components h-full w-full object-cover"
             alt={t("map", "Map")}
@@ -147,7 +180,12 @@ export const MapboxStaticMapComponent = ({
         </span>
         <span className="absolute bottom-0 left-0">
           <a href="https://www.mapbox.com/">
-            <img src={mapboxLogo} alt="Mapbox" className="w-10" />
+            <img
+              loading="lazy"
+              src={mapboxLogo}
+              alt="Mapbox"
+              className="w-10"
+            />
           </a>
         </span>
       </div>
@@ -169,5 +207,5 @@ export const MapboxStaticMap: ComponentConfig<{ props: MapboxStaticProps }> = {
     },
     mapStyle: "streets-v12",
   },
-  render: (props: MapboxStaticProps) => <MapboxStaticMapComponent {...props} />,
+  render: (props) => <MapboxStaticMapComponent {...props} />,
 };

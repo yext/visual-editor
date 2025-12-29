@@ -15,9 +15,15 @@ import {
   type OtherCategoryProps,
 } from "../categories/OtherCategory";
 import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
+import {
+  SlotsCategory,
+  SlotsCategoryComponents,
+  SlotsCategoryProps,
+} from "../categories/SlotsCategory";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
+    SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {
   BannerSection: BannerSectionProps;
@@ -27,6 +33,7 @@ export interface DirectoryConfigProps
 export const directoryConfig: Config<DirectoryConfigProps> = {
   components: {
     ...DirectoryCategoryComponents,
+    ...SlotsCategoryComponents,
     ...DeprecatedCategoryComponents,
     ...OtherCategoryComponents,
     BannerSection,
@@ -35,6 +42,10 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
     pageSections: {
       title: "Page Sections",
       components: [...DirectoryCategory, "BannerSection"],
+    },
+    slots: {
+      components: SlotsCategory,
+      visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
@@ -45,12 +56,17 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
       components: OtherCategory,
     },
   },
+
   root: {
     render: () => {
       return (
         <DropZone
           zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
         />
       );
     },

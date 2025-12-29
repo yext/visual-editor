@@ -15,9 +15,15 @@ import {
   type OtherCategoryProps,
 } from "../categories/OtherCategory";
 import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
+import {
+  SlotsCategory,
+  SlotsCategoryComponents,
+  SlotsCategoryProps,
+} from "../categories/SlotsCategory";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
+    SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {
   BannerSection: BannerSectionProps;
@@ -27,6 +33,7 @@ export interface LocatorConfigProps
 export const locatorConfig: Config<LocatorConfigProps> = {
   components: {
     ...LocatorCategoryComponents,
+    ...SlotsCategoryComponents,
     ...DeprecatedCategoryComponents,
     ...OtherCategoryComponents,
     BannerSection,
@@ -35,6 +42,10 @@ export const locatorConfig: Config<LocatorConfigProps> = {
     pageSections: {
       title: "Page Sections",
       components: [...LocatorCategory, "BannerSection"],
+    },
+    slots: {
+      components: SlotsCategory,
+      visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
@@ -50,7 +61,11 @@ export const locatorConfig: Config<LocatorConfigProps> = {
       return (
         <DropZone
           zone="default-zone"
-          style={{ display: "flex", flexDirection: "column", height: "100vh" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
         />
       );
     },

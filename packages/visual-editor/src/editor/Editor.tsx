@@ -22,9 +22,12 @@ import {
 } from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
 import {
-  defaultFonts,
-  loadGoogleFontsIntoDocument,
-} from "../utils/visualEditorFonts.ts";
+  createDefaultThemeConfig,
+  defaultThemeConfig,
+} from "../components/DefaultThemeConfig";
+import { defaultFonts, loadFontsIntoDOM } from "../utils/visualEditorFonts.ts";
+import { migrate } from "../utils/migrate.ts";
+import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 
 const devLogger = new DevLogger();
 
@@ -43,6 +46,8 @@ export interface Metadata {
     locale: string,
     relativePrefixToRoot: string
   ) => string;
+  // The stream document for the current page
+  streamDocument?: any;
 }
 
 export type EditorProps = {
@@ -80,7 +85,7 @@ export const Editor = ({
     layoutDataFetched,
     themeData,
     themeDataFetched,
-  } = useCommonMessageReceivers(componentRegistry, !!localDev);
+  } = useCommonMessageReceivers(componentRegistry, !!localDev, document);
 
   const { pushPageSets, sendError } = useCommonMessageSenders();
 
@@ -103,16 +108,17 @@ export const Editor = ({
     }
   }, []);
 
-  // Load default Google Fonts for the font selector dropdown
+  // Loads all Google and custom fonts in the theme editor for the font dropdown
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      loadGoogleFontsIntoDocument(
+    if (typeof window !== "undefined" && templateMetadata?.isThemeMode) {
+      loadFontsIntoDOM(
         window.document,
         defaultFonts,
+        templateMetadata?.customFonts ?? {},
         "visual-editor-default-fonts"
       );
     }
-  }, []);
+  }, [templateMetadata?.customFonts, templateMetadata?.isThemeMode]);
 
   useEffect(() => {
     // templateMetadata.isDevMode indicates in-platform dev mode
@@ -178,6 +184,17 @@ export const Editor = ({
     ],
   });
 
+  let finalThemeConfig = themeConfig;
+  // If themeConfig is the default and there are custom fonts, create a new default theme config with the custom fonts.
+  // In the case of a hybrid developer with a custom themeConfig, we cannot adjust their themeConfig to have custom fonts.
+  // The hybrid developer must provide a themeConfig that includes their custom fonts if they want to use them.
+  if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
+    finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
+  }
+  const migratedData = !isLoading
+    ? migrate(layoutData!, migrationRegistry, puckConfig, document)
+    : undefined;
+
   return (
     <TemplateMetadataContext.Provider value={templateMetadata!}>
       <ErrorBoundary fallback={<></>} onError={logError}>
@@ -186,21 +203,22 @@ export const Editor = ({
             <ThemeEditor
               puckConfig={puckConfig!}
               templateMetadata={templateMetadata!}
-              layoutData={layoutData!}
+              layoutData={migratedData!}
               themeData={themeData!}
-              themeConfig={themeConfig}
+              themeConfig={finalThemeConfig}
               localDev={!!localDev}
-              metadata={metadata}
+              metadata={{ ...metadata, streamDocument: document }}
             />
           ) : (
             <LayoutEditor
               puckConfig={puckConfig!}
               templateMetadata={templateMetadata!}
-              layoutData={layoutData!}
+              layoutData={migratedData!}
               themeData={themeData!}
-              themeConfig={themeConfig}
+              themeConfig={finalThemeConfig}
               localDev={!!localDev}
-              metadata={metadata}
+              metadata={{ ...metadata, streamDocument: document }}
+              streamDocument={document}
             />
           )
         ) : (

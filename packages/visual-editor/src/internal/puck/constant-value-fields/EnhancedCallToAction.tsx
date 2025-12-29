@@ -1,8 +1,7 @@
-import { AutoField, CustomField, Field, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField, FieldLabel } from "@measured/puck";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   EnhancedTranslatableCTA,
-  PresetImageType,
   TranslatableString,
 } from "../../../types/types.ts";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -50,28 +49,6 @@ export const getCTAType = <T extends Record<string, any>>(
   return { ctaType };
 };
 
-export const presetImageTypeOptions = (): {
-  label: string;
-  value: PresetImageType;
-}[] => {
-  return [
-    { label: pt("presetImages.appStore", "App Store"), value: "app-store" },
-    {
-      label: pt("presetImages.googlePlay", "Google Play"),
-      value: "google-play",
-    },
-    {
-      label: pt("presetImages.galaxyStore", "Galaxy Store"),
-      value: "galaxy-store",
-    },
-    {
-      label: pt("presetImages.appGallery", "App Gallery"),
-      value: "app-gallery",
-    },
-    { label: pt("presetImages.uberEats", "Uber Eats"), value: "uber-eats" },
-  ];
-};
-
 export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> =
   {
     type: "custom",
@@ -82,9 +59,19 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           { types: ["type.string"] }
         );
       }, []);
+
+      const linkField = useMemo(() => {
+        return TranslatableStringField<TranslatableString>(
+          msg("fields.link", "Link"),
+          { types: ["type.string"] },
+          true,
+          false
+        );
+      }, []);
+
       const showLabel = value?.ctaType !== "presetImage";
-      const showPresetImage = value?.ctaType === "presetImage";
       const showLinkFields = value?.ctaType !== "getDirections";
+
       return (
         <div className={"ve-mt-3"}>
           <div className="ve-mb-3">
@@ -100,8 +87,6 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                   // Set defaults based on CTA type
                   if (newValue === "presetImage") {
                     updatedValue.label = { en: "", hasLocalizedValue: "true" };
-                    updatedValue.presetImageType =
-                      updatedValue?.presetImageType || "app-store";
                   } else if (newValue === "getDirections") {
                     updatedValue.label = updatedValue?.label || {
                       en: "Get Directions",
@@ -132,15 +117,13 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
           {showLinkFields && (
             <>
               <div className="ve-mb-3">
-                <FieldLabel label={pt("fields.link", "Link")}>
-                  <AutoField
-                    field={{ type: "text" }}
-                    value={value?.link || ""}
-                    onChange={(newValue) =>
-                      onChange({ ...value, link: newValue })
-                    }
-                  />
-                </FieldLabel>
+                <AutoField
+                  field={linkField}
+                  value={value?.link || ""}
+                  onChange={(newValue) =>
+                    onChange({ ...value, link: newValue })
+                  }
+                />
               </div>
               <div className="ve-mb-3">
                 <FieldLabel label={pt("fields.linkType", "Link Type")}>
@@ -158,88 +141,9 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
               </div>
             </>
           )}
-          {showPresetImage && (
-            <div className="ve-mb-3">
-              <FieldLabel
-                label={pt("fields.presetImageType", "Preset Image Type")}
-              >
-                <AutoField
-                  field={{
-                    type: "select",
-                    options: presetImageTypeOptions(),
-                  }}
-                  value={value?.presetImageType ?? "app-store"}
-                  onChange={(newValue) =>
-                    onChange({ ...value, presetImageType: newValue })
-                  }
-                />
-              </FieldLabel>
-            </div>
-          )}
         </div>
       );
     },
-  };
-
-export const enhancedTranslatableCTAFields =
-  (): Field<EnhancedTranslatableCTA> => {
-    const labelField = TranslatableStringField<any>(
-      msg("fields.label", "Label"),
-      { types: ["type.string"] }
-    );
-    return {
-      type: "object",
-      label: pt("fields.callToAction", "Call To Action"),
-      objectFields: {
-        label: labelField,
-        link: {
-          label: pt("fields.link", "Link"),
-          type: "text",
-        },
-        linkType: {
-          label: pt("fields.linkType", "Link Type"),
-          type: "select",
-          options: linkTypeOptions(),
-        },
-        ctaType: {
-          label: pt("fields.ctaType", "CTA Type"),
-          type: "select",
-          options: ctaTypeOptions(),
-        },
-        presetImageType: {
-          label: pt("fields.presetImageType", "Preset Image Type"),
-          type: "select",
-          options: presetImageTypeOptions(),
-        },
-      },
-    };
-  };
-
-// Restricted CTA fields for page sections that should only show "Text & Link" options
-export const restrictedTranslatableCTAFields =
-  (): Field<EnhancedTranslatableCTA> => {
-    const labelField = TranslatableStringField<any>(
-      msg("fields.label", "Label"),
-      { types: ["type.string"] }
-    );
-    return {
-      type: "object",
-      label: pt("fields.callToAction", "Call To Action"),
-      objectFields: {
-        label: labelField,
-        link: {
-          label: pt("fields.link", "Link"),
-          type: "text",
-        },
-        linkType: {
-          label: pt("fields.linkType", "Link Type"),
-          type: "select",
-          options: linkTypeOptions(),
-        },
-        // Note: ctaType is not included here, so it will default to "textAndLink"
-        // and cannot be changed in the editor
-      },
-    };
   };
 
 // Restricted constant config for components that should only use textAndLink CTA type

@@ -6,7 +6,10 @@ import { exec } from "node:child_process";
 import { compareScreenshot } from "./src/components/testing/compareScreenshot.ts";
 
 export default defineConfig(() => ({
-  plugins: [react(), dts(), ...(process.env.VITEST ? [cssStubPlugin] : [])],
+  define: {
+    __VISUAL_EDITOR_TEST__: JSON.stringify(!!process.env.VITEST),
+  },
+  plugins: [react(), ...(process.env.VITEST ? [cssStubPlugin] : [dts()])],
   resolve: {
     alias: {
       "@yext/visual-editor": path.resolve(__dirname, "src"),
@@ -17,7 +20,7 @@ export default defineConfig(() => ({
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "visual-editor",
-      formats: ["es", "cjs"] as LibraryFormats[], // typescript is unhappy without this forced type definition
+      formats: ["es"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
     rollupOptions: {
       external: [
@@ -79,7 +82,7 @@ const dts = (): Plugin => ({
       return;
     }
 
-    exec("tsup src/index.ts --format esm,cjs --dts-only", (err) => {
+    exec("tsup src/index.ts --format esm --dts-only", (err) => {
       if (err) {
         throw new Error("Failed to generate declaration files");
       }

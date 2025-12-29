@@ -1,11 +1,7 @@
 import { StreamDocument } from "../applyTheme.ts";
-import {
-  resolvePageSetUrlTemplate,
-  resolveUrlTemplateOfChild,
-} from "../resolveUrlTemplate.ts";
-import { resolveSchemaJson } from "./resolveSchema.ts";
+import { resolveSchemaJson, resolveSchemaString } from "./resolveSchema.ts";
 import { getDefaultSchema } from "./defaultSchemas.ts";
-import { removeEmptyValues } from "./helpers.ts";
+import { getLocalBusinessSubtype, removeEmptyValues } from "./helpers.ts";
 import {
   getAggregateRatingSchemaBlock,
   getBreadcrumbsSchema,
@@ -24,25 +20,7 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
   const { document } = data;
 
   // Move path to the document for schema resolution
-  if (data.path) {
-    document.path = data.path;
-  } else {
-    // TODO (SUMO-7941): Check that this resolves correctly for the schema drawer preview
-    if (
-      document?.__?.codeTemplate === "directory" ||
-      document?.__?.codeTemplate === "locator"
-    ) {
-      document.path = resolveUrlTemplateOfChild(
-        document,
-        data.relativePrefixToRoot
-      );
-    } else {
-      document.path = resolvePageSetUrlTemplate(
-        document,
-        data.relativePrefixToRoot
-      );
-    }
-  }
+  document.path = data.path;
 
   const layoutString = document?.__?.layout;
   if (!layoutString) {
@@ -53,32 +31,46 @@ export const getSchema = (data: TemplateRenderProps): Record<string, any> => {
     const layout = JSON.parse(layoutString);
     const entityTypeId = document?.meta?.entityType?.id;
 
+    // If the entity has categories, resolve the primaryCategory key
+    // to the local business subtype corresponding to the entity's primary category
+    if (entityTypeId !== "locator" && !entityTypeId?.startsWith("dm_")) {
+      document.primaryCategory = getLocalBusinessSubtype(document);
+    }
+
     const schemaMarkup: string = layout?.root?.props?.schemaMarkup;
-    const resolvedSchemaMarkup: Record<string, any> = schemaMarkup
-      ? JSON.parse(resolveSchemaJson(document, schemaMarkup))
+    const schemaMarkupJson: Record<string, any> = schemaMarkup
+      ? JSON.parse(schemaMarkup)
       : getDefaultSchema(document);
-    const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchemaMarkup);
-    const pageId = resolveSchemaJson(document, "[[siteDomain]]/[[path]]");
+
+    // Resolve all fields in the schema markup
+    const resolvedSchema = resolveSchemaJson(data, schemaMarkupJson);
+
+    const parsedSchemaEditorMarkup = removeEmptyValues(resolvedSchema);
+    const currentPageUrl = resolveSchemaString(
+      document,
+      document.siteDomain ? "https://[[siteDomain]]/[[path]]" : `/[[path]]`
+    );
+    const currentPageId = parsedSchemaEditorMarkup?.["@id"];
 
     if (entityTypeId && entityTypeId !== "locator") {
-      const breadcrumbsSchema = getBreadcrumbsSchema(data, pageId);
-      const aggregateRatingSchemaBlock = getAggregateRatingSchemaBlock(
-        document,
-        pageId
-      );
+      const breadcrumbsSchema = getBreadcrumbsSchema(data, currentPageUrl);
+      // The aggregateRating block requires a valid page @id
+      const aggregateRatingSchemaBlock = currentPageId
+        ? getAggregateRatingSchemaBlock(document, currentPageId)
+        : undefined;
 
       return {
         "@graph": [
           parsedSchemaEditorMarkup,
-          breadcrumbsSchema && { ...breadcrumbsSchema },
-          aggregateRatingSchemaBlock && { ...aggregateRatingSchemaBlock },
+          breadcrumbsSchema,
+          aggregateRatingSchemaBlock,
         ].filter(Boolean),
       };
     }
 
     return { "@graph": [parsedSchemaEditorMarkup] };
   } catch (e) {
-    const defaultSchema = removeEmptyValues(getDefaultSchema(document));
+    const defaultSchema = removeEmptyValues(getDefaultSchema(data));
     console.warn("Error resolving schema:", e);
     return { "@graph": [defaultSchema] };
   }

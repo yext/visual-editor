@@ -2,16 +2,27 @@ import { useEffect, useState } from "react";
 import { AppState, Config } from "@measured/puck";
 import { DevLogger } from "../../../utils/devLogger.ts";
 import { LayoutSaveState } from "../../types/saveState.ts";
-import { useReceiveMessage, TARGET_ORIGINS } from "../useMessage.ts";
+import {
+  useReceiveMessage,
+  TARGET_ORIGINS,
+  useSendMessageToParent,
+} from "../useMessage.ts";
 import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import { migrate } from "../../../utils/migrate.ts";
+import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
+import {
+  resolvePageSetUrlTemplate,
+  resolveUrlTemplateOfChild,
+} from "../../../utils/resolveUrlTemplate.ts";
+import { type StreamDocument } from "../../../utils/applyTheme.ts";
 
 const devLogger = new DevLogger();
 
 export const useLayoutMessageReceivers = (
   localDev: boolean,
-  puckConfig: Config
+  puckConfig: Config,
+  streamDocument: StreamDocument
 ) => {
   const { iFrameLoaded } = useCommonMessageSenders();
 
@@ -31,7 +42,12 @@ export const useLayoutMessageReceivers = (
       const history = JSON.parse(payload.history) as AppState;
       const migratedHistory = {
         ...history,
-        data: migrate(history.data, migrationRegistry, puckConfig),
+        data: migrate(
+          history.data,
+          migrationRegistry,
+          puckConfig,
+          streamDocument
+        ),
       };
 
       receivedLayoutSaveState = {
@@ -40,7 +56,11 @@ export const useLayoutMessageReceivers = (
       } as LayoutSaveState;
     }
     devLogger.logData("LAYOUT_SAVE_STATE", receivedLayoutSaveState);
-    setLayoutSaveState(receivedLayoutSaveState);
+
+    if (layoutSaveState?.hash !== receivedLayoutSaveState?.hash) {
+      setLayoutSaveState(receivedLayoutSaveState);
+    }
+
     setLayoutSaveStateFetched(true);
     send({
       status: "success",
@@ -48,8 +68,50 @@ export const useLayoutMessageReceivers = (
     });
   });
 
+  const { sendToParent: sendResolvedSchemaToParent } = useSendMessageToParent(
+    "resolveSchema",
+    TARGET_ORIGINS
+  );
+
+  useReceiveMessage("resolveSchema", TARGET_ORIGINS, (_, payload) => {
+    const schema = payload?.schema;
+
+    // Resolve the url path
+    let path = "";
+    if (
+      streamDocument?.meta?.entityType?.id === "locator" ||
+      streamDocument?.meta?.entityType?.id?.startsWith("dm_")
+    ) {
+      path = resolveUrlTemplateOfChild(streamDocument, "");
+    } else {
+      path = resolvePageSetUrlTemplate(streamDocument, "");
+    }
+
+    // Find the relativePrefixToRoot for the page being rendered in the editor
+    const pathComponents = path.split("/");
+    pathComponents.pop();
+    const relativePrefixToRoot = pathComponents
+      .map(() => "../")
+      .reduce(
+        (previousValue, currentValue) => previousValue + currentValue,
+        ""
+      );
+
+    const resolvedSchema = resolveSchemaJson(
+      {
+        document: streamDocument,
+        path,
+        relativePrefixToRoot,
+      },
+      schema
+    );
+
+    sendResolvedSchemaToParent({ payload: { schema: resolvedSchema } });
+  });
+
   return {
     layoutSaveState,
     layoutSaveStateFetched,
+    setLayoutSaveState,
   };
 };

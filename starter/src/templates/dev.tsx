@@ -79,7 +79,7 @@ export const config = {
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data,
 ): HeadConfig => {
-  const { document } = data;
+  const { document, relativePrefixToRoot } = data;
   const schema = getSchema(data);
 
   return {
@@ -98,7 +98,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     other: [
       applyAnalytics(document),
       applyHeaderScript(document),
-      applyTheme(document, defaultThemeConfig),
+      applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
       // Prevent Vite client script loading in StackBlitz
       `<script>

@@ -3,21 +3,28 @@ import {
   useReceiveMessage,
   TARGET_ORIGINS,
 } from "../internal/hooks/useMessage.ts";
-import { useState } from "react";
 import { StreamFields, YextSchemaField } from "../types/entityFields.ts";
+import { isDeepEqual } from "../utils/deepEqual.ts";
 
 /**
  * Under the hood we receive a Stream for a template, but we expose
  * hooks with a more user-friendly name.
  */
 export const usePlatformBridgeEntityFields = () => {
-  const [entityFields, setEntityFields] = useState<StreamFields | null>(null);
+  const [entityFields, setEntityFields] = React.useState<StreamFields | null>(
+    null
+  );
 
   useReceiveMessage("getTemplateStream", TARGET_ORIGINS, (send, payload) => {
-    setEntityFields({
+    const receivedValues = {
       fields: payload.stream.schema.fields,
       displayNames: payload.apiNamesToDisplayNames,
-    });
+    };
+
+    if (!isDeepEqual(receivedValues, entityFields)) {
+      setEntityFields(receivedValues);
+    }
+
     send({
       status: "success",
       payload: { message: "templateStream received" },

@@ -3,10 +3,16 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import { themeManagerCn, useDocument } from "@yext/visual-editor";
+import {
+  BackgroundStyle,
+  normalizeSlug,
+  themeManagerCn,
+  useBackground,
+  useDocument,
+} from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
-import { PresetImageType } from "../../types/types";
+import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
 
 export type CTAProps = {
@@ -26,6 +32,9 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  disabled?: boolean;
+  color?: BackgroundStyle;
 };
 
 /**
@@ -50,6 +59,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
+  const background = useBackground();
 
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
@@ -69,7 +79,8 @@ const useResolvedCtaProps = (props: CTAProps) => {
           { provider: "google" },
           streamDocument.yextDisplayCoordinate
         );
-        // Prefer user-provided link, then listings link, then coordinate link
+        // Prefer hardcoded link, then listings link, then coordinate link
+        // User settable link props should not be used for get directions
         return {
           link: props.link || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
@@ -81,10 +92,29 @@ const useResolvedCtaProps = (props: CTAProps) => {
         if (!props.presetImageType) {
           return null;
         }
+
+        let label = presetImageIcons[props.presetImageType];
+
+        if (
+          props.presetImageType &&
+          (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+            props.presetImageType
+          ) &&
+          React.isValidElement(label)
+        ) {
+          const buttonBackgroundColor = background?.isDarkBackground
+            ? "#FFFFFF"
+            : "#F9F9F9";
+
+          label = React.cloneElement(label as React.ReactElement, {
+            backgroundColor: buttonBackgroundColor,
+          });
+        }
+
         return {
           link: props.link || "#",
           linkType: props.linkType ?? "URL",
-          label: presetImageIcons[props.presetImageType],
+          label,
           ariaLabel:
             ariaLabel ||
             t("buttonWithIcon", `Button with {{presetImageType}} icon`, {
@@ -101,7 +131,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, streamDocument]);
+  }, [props, streamDocument, background]);
 
   if (!resolvedDynamicProps) {
     return null;
@@ -121,9 +151,13 @@ const useResolvedCtaProps = (props: CTAProps) => {
     {
       // Let preset images determine their natural size - no forced width constraints
       "w-fit h-[51px] items-center justify-center": ctaType === "presetImage",
-      // Special handling for Uber Eats to give it more visual prominence
+      // Special handling for food delivery services to give them more visual prominence
       "!w-auto":
-        ctaType === "presetImage" && props.presetImageType === "uber-eats",
+        ctaType === "presetImage" &&
+        props.presetImageType &&
+        (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+          props.presetImageType
+        ),
     },
     className
   );
@@ -137,9 +171,47 @@ const useResolvedCtaProps = (props: CTAProps) => {
 };
 
 export const CTA = (props: CTAProps) => {
-  const { eventName, target, variant, ctaType } = props;
+  const {
+    eventName,
+    target,
+    variant,
+    ctaType,
+    onClick,
+    disabled = false,
+    color,
+  } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
+  const isDarkBG = useBackground()?.isDarkBackground;
+
+  const dynamicStyle: React.CSSProperties = (() => {
+    const bg = normalize(color?.bgColor);
+    const textColor = normalize(color?.textColor);
+    const border = bg && `var(--colors-${bg})`;
+
+    if (variant === "primary") {
+      return {
+        backgroundColor: bg && `var(--colors-${bg})`,
+        color: textColor && `var(--colors-${textColor})`,
+        borderColor: border,
+      };
+    }
+
+    if (variant === "secondary" && !isDarkBG) {
+      return {
+        borderColor: border,
+        color: border,
+      };
+    }
+
+    return {};
+  })();
+
+  const disabledStyle: React.CSSProperties = {
+    ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
+    cursor: "default",
+    pointerEvents: "auto",
+  };
 
   if (!resolvedProps) {
     return null;
@@ -155,32 +227,82 @@ export const CTA = (props: CTAProps) => {
     showCaret,
   } = resolvedProps;
 
+  const linkContent = (
+    <>
+      {label}
+      {ctaType !== "presetImage" && (
+        <FaAngleRight
+          size="12px"
+          // For directoryLink, the theme value for caret is ignored
+          className={variant === "directoryLink" ? "block sm:hidden" : ""}
+          // display does not support custom Tailwind utilities so the property must be set directly
+          style={{
+            display:
+              variant === "directoryLink"
+                ? undefined
+                : showCaret
+                  ? "inline-block"
+                  : "none",
+          }}
+        />
+      )}
+    </>
+  );
+
+  if (disabled) {
+    return (
+      <Button
+        className={buttonClassName}
+        variant={buttonVariant}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onPointerDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        style={disabledStyle}
+      >
+        {linkContent}
+      </Button>
+    );
+  }
+
+  // Normalize link for all link types except EMAIL and PHONE
+  const normalizedLink =
+    linkType === "EMAIL" || linkType === "PHONE"
+      ? link
+      : normalizeSlug(link) || "#";
+
   return (
-    <Button asChild className={buttonClassName} variant={buttonVariant}>
+    <Button
+      style={ctaType !== "presetImage" ? dynamicStyle : undefined}
+      asChild
+      className={buttonClassName}
+      variant={buttonVariant}
+    >
       <Link
-        cta={{ link, linkType }}
+        cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}
+        onClick={onClick}
       >
-        {label}
-        {ctaType !== "presetImage" && (
-          <FaAngleRight
-            size="12px"
-            // For directoryLink, the theme value for caret is ignored
-            className={variant === "directoryLink" ? "block sm:hidden" : ""}
-            // display does not support custom Tailwind utilities so the property must be set directly
-            style={{
-              display:
-                variant === "directoryLink"
-                  ? undefined
-                  : showCaret
-                    ? "inline-block"
-                    : "none",
-            }}
-          />
-        )}
+        {linkContent}
       </Link>
     </Button>
   );
 };
+
+// Extracts the name of a theme color from a tailwind bg- or text- class
+const normalize = (token?: string) =>
+  token?.startsWith("bg-")
+    ? token.substring(3)
+    : token?.startsWith("text-")
+      ? token.substring(5)
+      : token;

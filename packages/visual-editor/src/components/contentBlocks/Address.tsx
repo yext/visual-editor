@@ -1,5 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@measured/puck";
 import {
   AddressType,
   getDirections,
@@ -15,6 +20,9 @@ import {
   msg,
   resolveComponentData,
   CTAVariant,
+  BackgroundStyle,
+  resolveDataFromParent,
+  backgroundColors,
 } from "@yext/visual-editor";
 
 /** Props for the Address component */
@@ -23,11 +31,19 @@ export interface AddressProps {
     /** The address data to display. */
     address: YextEntityField<AddressType>;
   };
+
   styles: {
     /** Whether to include a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
+    color?: BackgroundStyle;
+  };
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    address: AddressType;
   };
 }
 
@@ -41,7 +57,7 @@ export const AddressDataField = YextField<any, AddressType>(
 );
 
 // Address style fields used in Address and CoreInfoSection
-export const AddressStyleFields = {
+export const AddressStyleFields: Fields<AddressProps["styles"]> = {
   showGetDirectionsLink: YextField<boolean>(
     msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     {
@@ -55,6 +71,10 @@ export const AddressStyleFields = {
   ctaVariant: YextField<CTAVariant>(msg("fields.ctaVariant", "CTA Variant"), {
     type: "radio",
     options: "CTA_VARIANT",
+  }),
+  color: YextField(msg("fields.color", "Color"), {
+    type: "select",
+    options: "SITE_COLOR",
   }),
 };
 
@@ -71,13 +91,27 @@ const addressFields: Fields<AddressProps> = {
   }),
 };
 
-const AddressComponent = ({ data, styles }: AddressProps) => {
+const AddressComponent: PuckComponent<AddressProps> = (props) => {
+  const { data, styles, puck, parentData } = props;
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
-  const address = resolveComponentData(
-    data.address,
-    i18n.language,
-    streamDocument
+
+  const resolvedColor = styles.color;
+  const address = parentData
+    ? parentData.address
+    : (resolveComponentData(
+        data.address,
+        i18n.language,
+        streamDocument
+      ) as unknown as AddressType | undefined);
+
+  const listings = streamDocument.ref_listings ?? [];
+  const listingsLink = getDirections(
+    undefined,
+    listings,
+    undefined,
+    { provider: "google" },
+    undefined
   );
   const addressLink = getDirections(
     address as AddressType,
@@ -90,39 +124,45 @@ const AddressComponent = ({ data, styles }: AddressProps) => {
   const useAddressLink: boolean =
     data.address.field !== "address" || !streamDocument.ref_listings?.length;
 
-  return (
-    <>
-      {address && (
-        <EntityField
-          displayName={pt("address", "Address")}
-          fieldId={data.address.field}
-          constantValueEnabled={data.address.constantValueEnabled}
-        >
-          <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
-            <RenderAddress
-              address={address}
-              lines={[
-                ["line1"],
-                ["line2"],
-                ["city", ",", "region", "postalCode"],
-              ]}
-            />
-          </div>
-          {addressLink && styles.showGetDirectionsLink && (
-            <CTA
-              ctaType="getDirections"
-              eventName={`getDirections`}
-              className="font-bold"
-              link={useAddressLink ? addressLink : undefined}
-              label={t("getDirections", "Get Directions")}
-              linkType="DRIVING_DIRECTIONS"
-              target="_blank"
-              variant={styles.ctaVariant}
-            />
-          )}
-        </EntityField>
-      )}
-    </>
+  // Only show the address component if there's at least one line of the address
+  const showAddress = !!(
+    address?.line1 ||
+    address?.line2 ||
+    address?.city ||
+    address?.region ||
+    address?.postalCode
+  );
+
+  return showAddress ? (
+    <div className="flex flex-col gap-2 text-body-fontSize font-body-fontWeight font-body-fontFamily">
+      <EntityField
+        displayName={parentData ? parentData.field : pt("address", "Address")}
+        fieldId={data.address.field}
+        constantValueEnabled={!parentData && data.address.constantValueEnabled}
+      >
+        <RenderAddress
+          address={address}
+          lines={[["line1"], ["line2"], ["city", ",", "region", "postalCode"]]}
+        />
+      </EntityField>
+      {(useAddressLink ? !!addressLink : !!listingsLink) &&
+        styles.showGetDirectionsLink && (
+          <CTA
+            ctaType="getDirections"
+            eventName={`getDirections`}
+            link={useAddressLink ? addressLink : listingsLink}
+            label={t("getDirections", "Get Directions")}
+            linkType="DRIVING_DIRECTIONS"
+            target="_blank"
+            variant={styles.ctaVariant}
+            color={resolvedColor}
+          />
+        )}
+    </div>
+  ) : puck.isEditing ? (
+    <div className="min-h-[40px]"></div>
+  ) : (
+    <></>
   );
 };
 
@@ -147,7 +187,16 @@ export const Address: ComponentConfig<{
     styles: {
       showGetDirectionsLink: true,
       ctaVariant: "link",
+      color: backgroundColors.color1.value,
     },
+  },
+  resolveFields(data) {
+    const updatedFields = resolveDataFromParent(addressFields, data);
+    const ctaVariant = data.props.styles.ctaVariant;
+    const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
+    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
+
+    return updatedFields;
   },
   render: (props) => <AddressComponent {...props} />,
 };

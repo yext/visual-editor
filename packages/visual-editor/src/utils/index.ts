@@ -1,10 +1,10 @@
 export * from "./i18n/index.ts";
 export * from "./schema/index.ts";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
-export { fetchNearbyLocations } from "./api/nearbyLocations.tsx";
 export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
+export { applyCertifiedFacts } from "./applyCertifiedFacts.ts";
 export { applyTheme, type StreamDocument } from "./applyTheme.ts";
 export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
@@ -17,10 +17,7 @@ export {
   type MigrationRegistry,
 } from "./migrate.ts";
 export { resolveComponentData } from "./resolveComponentData.tsx";
-export {
-  resolveYextEntityField,
-  resolveYextStructField,
-} from "./resolveYextEntityField.ts";
+export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {
   resolveUrlTemplateOfChild,
   resolvePageSetUrlTemplate,
@@ -38,7 +35,7 @@ export {
   type HeadingLevel,
   VisualEditorComponentsContentPath,
 } from "./themeConfigOptions.ts";
-export { type ThemeConfig, themeResolver } from "./themeResolver.ts";
+export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export {
   constructFontSelectOptions,

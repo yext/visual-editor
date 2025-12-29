@@ -1,14 +1,13 @@
-import { resolveSchemaJson } from "./resolveSchema.ts";
+import { StreamDocument } from "../applyTheme";
 
 export const schemaWhitespaceRegex = /\n\s*/g;
 
 export const getDefaultSchema = (
-  document: Record<string, any>
+  streamDocument: StreamDocument
 ): Record<string, any> => {
-  const entityTypeId = (document as any)?.meta?.entityType?.id;
-  const defaultSchemaTemplate = getSchemaTemplate(entityTypeId);
+  const defaultSchemaTemplate = getSchemaTemplate(streamDocument);
   try {
-    return JSON.parse(resolveSchemaJson(document, defaultSchemaTemplate));
+    return JSON.parse(defaultSchemaTemplate);
   } catch (e) {
     console.warn("Error resolving default schema:", e);
     return {};
@@ -16,7 +15,9 @@ export const getDefaultSchema = (
 };
 
 // Function to get the appropriate schema template based on entity type
-export const getSchemaTemplate = (entityTypeId?: string): string => {
+export const getSchemaTemplate = (streamDocument: StreamDocument): string => {
+  const entityTypeId = streamDocument?.meta?.entityType?.id;
+
   if (!entityTypeId) {
     return FALLBACK_SCHEMA;
   } else if (LOCAL_BUSINESS_ENTITY_TYPES.includes(entityTypeId)) {
@@ -32,8 +33,9 @@ export const getSchemaTemplate = (entityTypeId?: string): string => {
 
 const LOCAL_BUSINESS_SCHEMA = `{
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@type": "[[primaryCategory]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#[[primaryCategory]]",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "address": {
     "@type": "PostalAddress",
@@ -43,7 +45,7 @@ const LOCAL_BUSINESS_SCHEMA = `{
     "postalCode": "[[address.postalCode]]",
     "addressCountry": "[[address.countryCode]]"
   },
-  "openingHours": "[[hours]]",
+  "openingHoursSpecification": "[[hours]]",
   "image": "[[photoGallery]]",
   "description": "[[description]]",
   "telephone": "[[mainPhone]]",
@@ -56,7 +58,8 @@ const LOCAL_BUSINESS_SCHEMA = `{
 const DIRECTORY_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#collectionpage",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "mainEntity": {
     "@type": "ItemList",
@@ -69,7 +72,8 @@ const DIRECTORY_SCHEMA = `{
 const LOCATOR_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#webpage",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]"
 }`
   .replace(schemaWhitespaceRegex, " ")
@@ -78,14 +82,15 @@ const LOCATOR_SCHEMA = `{
 const FALLBACK_SCHEMA = `{
   "@context": "https://schema.org",
   "@type": "Thing",
-  "@id": "[[siteDomain]]/[[path]]",
+  "@id": "https://[[siteDomain]]/[[uid]]#thing",
+  "url": "https://[[siteDomain]]/[[path]]",
   "name": "[[name]]",
   "description": "[[description]]"
 }`
   .replace(schemaWhitespaceRegex, " ")
   .trim();
 
-const LOCAL_BUSINESS_ENTITY_TYPES = [
+export const LOCAL_BUSINESS_ENTITY_TYPES = [
   "location",
   "financialProfessional",
   "healthcareProfessional",

@@ -11,7 +11,7 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Render } from "@measured/puck";
+import { Render, resolveAllData } from "@measured/puck";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -24,6 +24,8 @@ import {
   getSchema,
   injectTranslations,
   getCanonicalUrl,
+  migrate,
+  migrationRegistry,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -31,7 +33,7 @@ import mapboxPackageJson from "mapbox-gl/package.json";
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
 ): HeadConfig => {
-  const { document } = data;
+  const { document, relativePrefixToRoot } = data;
   const { title, description } = getPageMetadata(document);
   const schema = getSchema(data);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
@@ -42,7 +44,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     viewport: "width=device-width, initial-scale=1",
     tags: [
       {
-        type: "link",
+        type: "link" as TagType,
         attributes: {
           rel: "icon",
           type: "image/x-icon",
@@ -51,7 +53,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
       ...(data.document.siteDomain
         ? [
             {
-              type: "link",
+              type: "link" as TagType,
               attributes: {
                 rel: "canonical",
                 href: getCanonicalUrl(data),
@@ -86,7 +88,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
     other: [
       applyAnalytics(document),
       applyHeaderScript(document),
-      applyTheme(document, defaultThemeConfig),
+      applyTheme(document, relativePrefixToRoot, defaultThemeConfig),
       SchemaWrapper(schema),
     ].join("\n"),
   };
@@ -109,8 +111,23 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
   return normalizeSlug(path);
 };
 
-const Locator: Template<TemplateRenderProps> = (props) => {
+export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
+  const migratedData = migrate(
+    JSON.parse(document.__.layout),
+    migrationRegistry,
+    locatorConfig,
+    document
+  );
+  const updatedData = await resolveAllData(migratedData, locatorConfig, {
+    streamDocument: document,
+  });
+
+  return { ...props, data: updatedData };
+};
+
+const Locator: Template<TemplateRenderProps> = (props) => {
+  const { document, data } = props;
 
   return (
     <>
@@ -131,7 +148,8 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         <VisualEditorProvider templateProps={props}>
           <Render
             config={locatorConfig}
-            data={JSON.parse(document.__.layout)}
+            data={data}
+            metadata={{ streamDocument: document }}
           />
         </VisualEditorProvider>
       </AnalyticsProvider>
