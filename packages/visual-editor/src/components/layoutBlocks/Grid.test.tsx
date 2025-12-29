@@ -1691,7 +1691,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 1",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1700,9 +1700,9 @@ const tests: ComponentTest[] = [
                 styles: {
                   level: 3,
                   align: "left",
-                  color: backgroundColors.color2.value,
+                  color: backgroundColors.color1.value,
                 },
-                id: "HeadingText-dark-bg-1",
+                id: "HeadingText-dark-bg-color1",
               },
             },
             {
@@ -1712,7 +1712,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 2",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1721,9 +1721,9 @@ const tests: ComponentTest[] = [
                 styles: {
                   level: 2,
                   align: "left",
-                  color: backgroundColors.color1.value,
+                  color: backgroundColors.color2.value,
                 },
-                id: "HeadingText-dark-bg-2",
+                id: "HeadingText-dark-bg-color2",
               },
             },
             {
@@ -1733,7 +1733,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 3",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1744,7 +1744,7 @@ const tests: ComponentTest[] = [
                   align: "left",
                   color: backgroundColors.color3.value,
                 },
-                id: "HeadingText-dark-bg-3",
+                id: "HeadingText-dark-bg-color3",
               },
             },
             {
@@ -1754,7 +1754,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 4",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1765,7 +1765,7 @@ const tests: ComponentTest[] = [
                   align: "left",
                   color: backgroundColors.color4.value,
                 },
-                id: "HeadingText-dark-bg-4",
+                id: "HeadingText-dark-bg-color4",
               },
             },
             {
@@ -1775,7 +1775,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Default (Dynamic) Heading Color",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1785,7 +1785,7 @@ const tests: ComponentTest[] = [
                   level: 4,
                   align: "left",
                 },
-                id: "HeadingText-dark-bg-5",
+                id: "HeadingText-dark-bg-default",
               },
             },
           ],
@@ -1814,7 +1814,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 1",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1823,9 +1823,9 @@ const tests: ComponentTest[] = [
                 styles: {
                   level: 3,
                   align: "left",
-                  color: backgroundColors.color2.value,
+                  color: backgroundColors.color1.value,
                 },
-                id: "HeadingText-dark-bg-1",
+                id: "HeadingText-light-bg-color1",
               },
             },
             {
@@ -1835,7 +1835,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 2",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1844,9 +1844,9 @@ const tests: ComponentTest[] = [
                 styles: {
                   level: 2,
                   align: "left",
-                  color: backgroundColors.color1.value,
+                  color: backgroundColors.color2.value,
                 },
-                id: "HeadingText-dark-bg-2",
+                id: "HeadingText-light-bg-color2",
               },
             },
             {
@@ -1856,7 +1856,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 3",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1867,7 +1867,7 @@ const tests: ComponentTest[] = [
                   align: "left",
                   color: backgroundColors.color3.value,
                 },
-                id: "HeadingText-dark-bg-3",
+                id: "HeadingText-light-bg-color3",
               },
             },
             {
@@ -1877,7 +1877,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Site Color 4",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1888,7 +1888,7 @@ const tests: ComponentTest[] = [
                   align: "left",
                   color: backgroundColors.color4.value,
                 },
-                id: "HeadingText-dark-bg-4",
+                id: "HeadingText-light-bg-color4",
               },
             },
             {
@@ -1898,7 +1898,7 @@ const tests: ComponentTest[] = [
                   text: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
+                      en: "Heading - Default (Dynamic) Heading Color",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
@@ -1908,7 +1908,7 @@ const tests: ComponentTest[] = [
                   level: 4,
                   align: "left",
                 },
-                id: "HeadingText-dark-bg-5",
+                id: "HeadingText-light-bg-default",
               },
             },
           ],

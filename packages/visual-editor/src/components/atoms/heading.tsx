@@ -5,6 +5,7 @@ import {
 } from "@yext/visual-editor";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
+import { normalizeThemeColor } from "../../utils/normalizeThemeColor";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -97,7 +98,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
     >;
 
     const dynamicStyle = color?.bgColor
-      ? { color: `var(--colors-${normalize(color.bgColor)})` }
+      ? { color: `var(--colors-${normalizeThemeColor(color.bgColor)})` }
       : undefined;
 
     return (
@@ -126,11 +127,3 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
   }
 );
 Heading.displayName = "Heading";
-
-// Extracts the name of a theme color from a tailwind bg- or text- class
-const normalize = (token?: string) =>
-  token?.startsWith("bg-")
-    ? token.substring(3)
-    : token?.startsWith("text-")
-      ? token.substring(5)
-      : token;
