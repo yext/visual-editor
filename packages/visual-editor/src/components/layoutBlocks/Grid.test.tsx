@@ -1530,250 +1530,151 @@ const tests: ComponentTest[] = [
     version: 45,
   },
   {
-    name: "version 48 - HeadingText on dark background",
-    document: {},
+    name: "version 47 - delivery service CTAs",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
     props: {
-      columns: 2,
+      columns: 1,
       slots: [
         {
           Column: [
             {
-              type: "HeadingText",
+              type: "CTAWrapper",
               props: {
                 data: {
-                  text: {
+                  entityField: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
+                      label: "Deliveroo",
+                      link: "#",
+                      linkType: "URL",
                     },
-                    constantValueEnabled: true,
+                    selectedType: "presetImage",
                   },
                 },
-                styles: {
-                  level: 3,
-                  align: "left",
-                  color: backgroundColors.color2.value,
-                },
-                id: "HeadingText-dark-bg-1",
+                styles: { variant: "primary", presetImage: "deliveroo" },
+                id: "CTAWrapper-deliveroo",
               },
             },
             {
-              type: "HeadingText",
+              type: "CTAWrapper",
               props: {
                 data: {
-                  text: {
+                  entityField: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
+                      label: "Doordash",
+                      link: "#",
+                      linkType: "URL",
                     },
-                    constantValueEnabled: true,
+                    selectedType: "presetImage",
                   },
                 },
-                styles: {
-                  level: 2,
-                  align: "left",
-                  color: backgroundColors.color1.value,
-                },
-                id: "HeadingText-dark-bg-2",
+                styles: { variant: "primary", presetImage: "doordash" },
+                id: "CTAWrapper-doordash",
               },
             },
             {
-              type: "HeadingText",
+              type: "CTAWrapper",
               props: {
                 data: {
-                  text: {
+                  entityField: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
+                      label: "Grubhub",
+                      link: "#",
+                      linkType: "URL",
                     },
-                    constantValueEnabled: true,
+                    selectedType: "presetImage",
                   },
                 },
-                styles: {
-                  level: 4,
-                  align: "left",
-                  color: backgroundColors.color3.value,
-                },
-                id: "HeadingText-dark-bg-2",
+                styles: { variant: "primary", presetImage: "grubhub" },
+                id: "CTAWrapper-grubhub",
               },
             },
             {
-              type: "HeadingText",
+              type: "CTAWrapper",
               props: {
                 data: {
-                  text: {
+                  entityField: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
+                      label: "Postmates",
+                      link: "#",
+                      linkType: "URL",
                     },
-                    constantValueEnabled: true,
+                    selectedType: "presetImage",
                   },
                 },
-                styles: {
-                  level: 5,
-                  align: "left",
-                  color: backgroundColors.color4.value,
-                },
-                id: "HeadingText-dark-bg-2",
+                styles: { variant: "primary", presetImage: "postmates" },
+                id: "CTAWrapper-postmates",
               },
             },
             {
-              type: "HeadingText",
+              type: "CTAWrapper",
               props: {
                 data: {
-                  text: {
+                  entityField: {
                     field: "",
                     constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
+                      label: "Uber Eats",
+                      link: "#",
+                      linkType: "URL",
                     },
-                    constantValueEnabled: true,
+                    selectedType: "presetImage",
                   },
                 },
-                styles: {
-                  level: 4,
-                  align: "left",
+                styles: { variant: "primary", presetImage: "uber-eats" },
+                id: "CTAWrapper-uber-eats",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "Skip The Dishes",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
                 },
-                id: "HeadingText-dark-bg-2",
+                styles: { variant: "primary", presetImage: "skip-the-dishes" },
+                id: "CTAWrapper-skip-the-dishes",
+              },
+            },
+            {
+              type: "CTAWrapper",
+              props: {
+                data: {
+                  entityField: {
+                    field: "",
+                    constantValue: {
+                      label: "ezCater",
+                      link: "#",
+                      linkType: "URL",
+                    },
+                    selectedType: "presetImage",
+                  },
+                },
+                styles: { variant: "primary", presetImage: "ezcater" },
+                id: "CTAWrapper-ezcater",
               },
             },
           ],
         },
-        { Column: [] },
-        { Column: [] },
       ],
-      backgroundColor: backgroundColors.color4.value,
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
       liveVisibility: true,
       analytics: { scope: "gridSection" },
     },
-    version: 48,
-  },
-  {
-    name: "version 48 - HeadingText on light background",
-    document: {},
-    props: {
-      columns: 2,
-      slots: [
-        {
-          Column: [
-            {
-              type: "HeadingText",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                  },
-                },
-                styles: {
-                  level: 3,
-                  align: "left",
-                  color: backgroundColors.color2.value,
-                },
-                id: "HeadingText-dark-bg-1",
-              },
-            },
-            {
-              type: "HeadingText",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                  },
-                },
-                styles: {
-                  level: 2,
-                  align: "left",
-                  color: backgroundColors.color1.value,
-                },
-                id: "HeadingText-dark-bg-2",
-              },
-            },
-            {
-              type: "HeadingText",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                  },
-                },
-                styles: {
-                  level: 4,
-                  align: "left",
-                  color: backgroundColors.color3.value,
-                },
-                id: "HeadingText-dark-bg-2",
-              },
-            },
-            {
-              type: "HeadingText",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                  },
-                },
-                styles: {
-                  level: 5,
-                  align: "left",
-                  color: backgroundColors.color4.value,
-                },
-                id: "HeadingText-dark-bg-2",
-              },
-            },
-            {
-              type: "HeadingText",
-              props: {
-                data: {
-                  text: {
-                    field: "",
-                    constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                  },
-                },
-                styles: {
-                  level: 4,
-                  align: "left",
-                },
-                id: "HeadingText-dark-bg-2",
-              },
-            },
-          ],
-        },
-        { Column: [] },
-        { Column: [] },
-      ],
-      backgroundColor: backgroundColors.background1.value,
-      liveVisibility: true,
-      analytics: { scope: "gridSection" },
-    },
-    version: 48,
+    version: 47,
   },
 ];
 

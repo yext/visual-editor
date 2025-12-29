@@ -2,14 +2,12 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
 import {
   backgroundColors,
-  msg,
-  YextField,
   BackgroundStyle,
-  PageSection,
-  Background,
-  PageSectionProps,
-  themeManagerCn,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { msg } from "../../utils/i18n/index.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { PageSection, Background, PageSectionProps } from "../atoms/index.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const PLACEHOLDER_LOGO_IMAGE: string =

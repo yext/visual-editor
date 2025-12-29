@@ -61,3 +61,10 @@ export type AssetImageType = Omit<ImageType, "alternateText"> & {
   // and future proof any potential enhancements.
   assetImage?: ImageContentData;
 };
+
+export type LocalizedAssetImage = {
+  hasLocalizedValue: "true";
+  [key: string]: AssetImageType | string | undefined;
+};
+
+export type TranslatableAssetImage = AssetImageType | LocalizedAssetImage;

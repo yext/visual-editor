@@ -1,3 +1,29 @@
+#### 1.0.4 (2025-12-22)
+
+##### New Features
+
+- make images and cta links translatable fields ([#944](https://github.com/yext/visual-editor/pull/944)) ([d2e4f241](https://github.com/yext/visual-editor/commit/d2e4f2411674c87c1b964ae775eed6c1279139fd))
+
+#### 1.0.3 (2025-12-19)
+
+##### Chores
+
+- add additional tests for FAQsSection ([#956](https://github.com/yext/visual-editor/pull/956)) ([2564686c](https://github.com/yext/visual-editor/commit/2564686c7e52e2bfe10459a6ff4a272b64320a31))
+- bump search-ui-react version ([#953](https://github.com/yext/visual-editor/pull/953)) ([03d05fb3](https://github.com/yext/visual-editor/commit/03d05fb3add0dfa09ad1f73186ccf48dd54a394c))
+
+##### New Features
+
+- add delivery service CTA presets ([#954](https://github.com/yext/visual-editor/pull/954)) ([8dc44e1d](https://github.com/yext/visual-editor/commit/8dc44e1d3107252e0c23a59722b8920d1daca654))
+- normalize links ([#952](https://github.com/yext/visual-editor/pull/952)) ([bc2f83b7](https://github.com/yext/visual-editor/commit/bc2f83b7dbaad8103ceb7b34085a1c8267f203c9))
+- add color selection for CTAs ([#936](https://github.com/yext/visual-editor/pull/936)) ([3e1e985a](https://github.com/yext/visual-editor/commit/3e1e985a26bf1e2ec9ba23f3e1273ed700a174e4))
+- placeholder image for header/footer logo ([#949](https://github.com/yext/visual-editor/pull/949)) ([f6272d92](https://github.com/yext/visual-editor/commit/f6272d92d313d582afb7f08196a18bc8a0639b13))
+- added link to header logo ([#943](https://github.com/yext/visual-editor/pull/943)) ([935f0fc2](https://github.com/yext/visual-editor/commit/935f0fc2fc895a2f99d92f3994378ecfb36c79ff))
+
+##### Bug Fixes
+
+- loading Hero Section Image eagerly and map lazily ([#950](https://github.com/yext/visual-editor/pull/950)) ([b15dd720](https://github.com/yext/visual-editor/commit/b15dd720c797fada9d0c2429f357dbc63451c99c))
+- nearby locations coordinate and empty state ([#951](https://github.com/yext/visual-editor/pull/951)) ([fdf599ba](https://github.com/yext/visual-editor/commit/fdf599ba7c8ee11e274eefe4cf85948fda285d71))
+
 #### 1.0.2 (2025-12-15)
 
 ##### New Features

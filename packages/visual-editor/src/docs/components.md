@@ -296,12 +296,11 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-If 'true', the component is visible on the live page; if 'false', it's hidden.
-
-| Prop             | Type                                            | Description                                                                    | Default |
-| :--------------- | :---------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                       | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ HeadingSlot: Slot; FAQsWrapperSlot: Slot; }` |                                                                                |         |
+| Prop             | Type                                                                                              | Description                                                                    | Default |
+| :--------------- | :------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
+| `data`           | `Omit<YextEntityField<FAQSectionType>, "constantValue"> & { constantValue: { id?: string; }[]; }` |                                                                                |         |
+| `liveVisibility` | `boolean`                                                                                         | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ HeadingSlot: Slot; CardSlot: Slot; }`                                                          |                                                                                |         |
 
 ---
 
@@ -365,10 +364,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                               | Description | Default |
-| :------- | :----------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ image: YextEntityField<AssetImageType>; linkTarget?: string; }` |             |         |
-| `styles` | `{ width?: number; aspectRatio?: number; }`                        |             |         |
+| Prop     | Type                                                                                         | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ image: YextEntityField<AssetImageType \| TranslatableAssetImage>; linkTarget?: string; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                                                  |             |         |
 
 ---
 
@@ -493,13 +492,13 @@ Props for the HoursTable component.
 
 Additional CSS classes to apply to the image.
 
-| Prop            | Type                                                                                                      | Description                                   | Default |
-| :-------------- | :-------------------------------------------------------------------------------------------------------- | :-------------------------------------------- | :------ |
-| `className`     | `string`                                                                                                  | Additional CSS classes to apply to the image. |         |
-| `data`          | `{ image: YextEntityField<ImageType \| ComplexImageType \| AssetImageType>; link?: TranslatableString; }` |                                               |         |
-| `hideWidthProp` | `boolean`                                                                                                 |                                               |         |
-| `sizes`         | `ImgSizesByBreakpoint`                                                                                    |                                               |         |
-| `styles`        | `ImageStylingProps`                                                                                       | Size and aspect ratio of the image.           |         |
+| Prop            | Type                                                                                                              | Description                                   | Default |
+| :-------------- | :---------------------------------------------------------------------------------------------------------------- | :-------------------------------------------- | :------ |
+| `className`     | `string`                                                                                                          | Additional CSS classes to apply to the image. |         |
+| `data`          | `{ image: YextEntityField<ImageType \| ComplexImageType \| TranslatableAssetImage>; link?: TranslatableString; }` |                                               |         |
+| `hideWidthProp` | `boolean`                                                                                                         |                                               |         |
+| `sizes`         | `ImgSizesByBreakpoint`                                                                                            |                                               |         |
+| `styles`        | `ImageStylingProps`                                                                                               | Size and aspect ratio of the image.           |         |
 
 ---
 

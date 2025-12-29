@@ -5,13 +5,14 @@ import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import {
   BackgroundStyle,
+  normalizeSlug,
   themeManagerCn,
   useBackground,
   useDocument,
 } from "@yext/visual-editor";
 import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
-import { PresetImageType } from "../../types/types";
+import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
 
 export type CTAProps = {
@@ -58,6 +59,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
+  const background = useBackground();
 
   const resolvedDynamicProps = useMemo(() => {
     switch (ctaType) {
@@ -90,10 +92,29 @@ const useResolvedCtaProps = (props: CTAProps) => {
         if (!props.presetImageType) {
           return null;
         }
+
+        let label = presetImageIcons[props.presetImageType];
+
+        if (
+          props.presetImageType &&
+          (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+            props.presetImageType
+          ) &&
+          React.isValidElement(label)
+        ) {
+          const buttonBackgroundColor = background?.isDarkBackground
+            ? "#FFFFFF"
+            : "#F9F9F9";
+
+          label = React.cloneElement(label as React.ReactElement, {
+            backgroundColor: buttonBackgroundColor,
+          });
+        }
+
         return {
           link: props.link || "#",
           linkType: props.linkType ?? "URL",
-          label: presetImageIcons[props.presetImageType],
+          label,
           ariaLabel:
             ariaLabel ||
             t("buttonWithIcon", `Button with {{presetImageType}} icon`, {
@@ -110,7 +131,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, streamDocument]);
+  }, [props, streamDocument, background]);
 
   if (!resolvedDynamicProps) {
     return null;
@@ -130,9 +151,13 @@ const useResolvedCtaProps = (props: CTAProps) => {
     {
       // Let preset images determine their natural size - no forced width constraints
       "w-fit h-[51px] items-center justify-center": ctaType === "presetImage",
-      // Special handling for Uber Eats to give it more visual prominence
+      // Special handling for food delivery services to give them more visual prominence
       "!w-auto":
-        ctaType === "presetImage" && props.presetImageType === "uber-eats",
+        ctaType === "presetImage" &&
+        props.presetImageType &&
+        (FOOD_DELIVERY_SERVICES as readonly string[]).includes(
+          props.presetImageType
+        ),
     },
     className
   );
@@ -248,6 +273,12 @@ export const CTA = (props: CTAProps) => {
     );
   }
 
+  // Normalize link for all link types except EMAIL and PHONE
+  const normalizedLink =
+    linkType === "EMAIL" || linkType === "PHONE"
+      ? link
+      : normalizeSlug(link) || "#";
+
   return (
     <Button
       style={ctaType !== "presetImage" ? dynamicStyle : undefined}
@@ -256,7 +287,7 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
-        cta={{ link, linkType }}
+        cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
         target={target}
         aria-label={ariaLabel || undefined}

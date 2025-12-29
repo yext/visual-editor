@@ -13,6 +13,7 @@ import { Button } from "../internal/puck/ui/button.tsx";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { DynamicOption } from "./DynamicOptionsSelector.tsx";
+import { useDocument } from "../hooks/useDocument.tsx";
 
 /**
  * Generates a translatable string config
@@ -38,33 +39,48 @@ export function TranslatableStringField<
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
       const templateMetadata: TemplateMetadata = useTemplateMetadata();
+      const streamDocument = useDocument();
 
-      const applyAllButton = showApplyAllOption ? (
-        <Button
-          size="sm"
-          variant="small_link"
-          onClick={() => {
-            const valueByLocale: TranslatableString = {
-              hasLocalizedValue: "true",
-              ...templateMetadata.locales.reduce(
-                (acc, locale) => {
-                  acc[locale] = resolvedValue;
-                  return acc;
-                },
-                {} as Record<string, string>
-              ),
-            };
-            onChange(valueByLocale as T);
-          }}
-          className={"ve-px-0 ve-h-auto"}
-        >
-          {label
-            ? pt("applyAllWithLabel", "Apply {{fieldLabel}} to All Locales", {
-                fieldLabel: pt(label),
-              })
-            : pt("applyAll", "Apply to All Locales")}
-        </Button>
-      ) : null;
+      let locales = templateMetadata?.locales || [];
+      if (locales.length === 0) {
+        try {
+          const parsedPageSet = JSON.parse(streamDocument._pageset);
+          if (
+            parsedPageSet?.scope?.locales &&
+            Array.isArray(parsedPageSet.scope.locales)
+          ) {
+            locales = parsedPageSet.scope.locales;
+          } else {
+            console.warn("Invalid locale structure in page group data");
+          }
+        } catch {
+          console.warn("failed to retrieve locales from page group");
+        }
+      }
+
+      const applyAllButton =
+        showApplyAllOption && locales.length > 1 ? (
+          <Button
+            size="sm"
+            variant="small_link"
+            onClick={() => {
+              const valueByLocale: TranslatableString = {
+                hasLocalizedValue: "true",
+                ...locales.reduce(
+                  (acc, locale) => {
+                    acc[locale] = resolvedValue;
+                    return acc;
+                  },
+                  {} as Record<string, string>
+                ),
+              };
+              onChange(valueByLocale as T);
+            }}
+            className={"ve-px-0 ve-h-auto"}
+          >
+            {pt("applyAll", "Apply to all locales")}
+          </Button>
+        ) : null;
 
       const fieldEditor = (
         <>

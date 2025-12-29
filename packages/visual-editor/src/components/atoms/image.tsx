@@ -10,11 +10,12 @@ import {
   useDocument,
   AssetImageType,
   TranslatableString,
+  TranslatableAssetImage,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
 export interface ImageProps {
-  image: ImageType | ComplexImageType | AssetImageType;
+  image: ImageType | ComplexImageType | TranslatableAssetImage;
   aspectRatio?: number;
   width?: number;
   className?: string;
@@ -24,7 +25,7 @@ export interface ImageProps {
 }
 
 export const Image: React.FC<ImageProps> = ({
-  image,
+  image: rawImage,
   aspectRatio,
   width,
   className,
@@ -33,6 +34,26 @@ export const Image: React.FC<ImageProps> = ({
 }) => {
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
+
+  const image = React.useMemo(() => {
+    if (
+      rawImage &&
+      typeof rawImage === "object" &&
+      "hasLocalizedValue" in rawImage
+    ) {
+      const localized = rawImage[i18n.language];
+      if (typeof localized === "object") {
+        return localized as AssetImageType;
+      }
+      return undefined;
+    }
+    return rawImage as ImageType | ComplexImageType | AssetImageType;
+  }, [rawImage, i18n.language]);
+
+  if (!image) {
+    return null;
+  }
+
   // Calculate height based on width and aspect ratio if width is provided
   const calculatedHeight =
     width && aspectRatio ? width / aspectRatio : undefined;
