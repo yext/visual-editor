@@ -345,9 +345,12 @@ const translatePuckSidebars = () => {
   if (componentCategoryTitles?.length) {
     componentCategoryTitles.forEach((title) => {
       if (title.innerText === "PAGE SECTIONS") {
-        title.innerText = pt("categories.pageSections", "PAGE SECTIONS");
+        title.innerText = pt(
+          "categories.pageSections",
+          "Page Sections"
+        ).toUpperCase();
       } else if (title.innerText === "OTHER") {
-        title.innerText = pt("categories.other", "OTHER");
+        title.innerText = pt("categories.other", "Other").toUpperCase();
       }
     });
   }

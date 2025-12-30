@@ -491,6 +491,15 @@
     "notFound": "Ingen skrifter funnet.",
     "search": "Søkefonter ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Følg oss på Facebook",
+    "instagram": "Følg oss på Instagram",
+    "linkedIn": "Følg oss på LinkedIn",
+    "pinterest": "Følg oss på Pinterest",
+    "tiktok": "Følg oss på TikTok",
+    "twitter": "Følg oss på Twitter",
+    "youtube": "Abonner på vår YouTube-kanal"
+  },
   "friday": "fredag",
   "getDirections": "Få veibeskrivelse",
   "heroBanner": "Hero Banner",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Stedskort i nærheten",
     "productCard": "Produktkort",
     "productCards": "Produktkort"
+  },
+  "socialLinks": {
+    "facebook": "Følg oss på Facebook",
+    "instagram": "Følg oss på Instagram",
+    "linkedIn": "Følg oss på LinkedIn",
+    "pinterest": "Følg oss på Pinterest",
+    "tiktok": "Følg oss på TikTok",
+    "xLink": "Følg oss på X (Twitter)",
+    "youtube": "Abonner på vår YouTube-kanal"
   },
   "spacingDefaultLabel": "Misligholde",
   "staticContent": "Statisk innhold",

@@ -491,6 +491,15 @@
     "notFound": "Jokių šriftų nerasta.",
     "search": "Ieškokite šriftų ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Sekite mus Facebook",
+    "instagram": "Sekite mus Instagram",
+    "linkedIn": "Sekite mus LinkedIn",
+    "pinterest": "Sekite mus Pinterest",
+    "tiktok": "Sekite mus TikTok",
+    "twitter": "Sekite mus Twitter",
+    "youtube": "Prenumeruokite mūsų YouTube kanalą"
+  },
   "friday": "Penktadienis",
   "getDirections": "Gaukite nurodymus",
   "heroBanner": "Herojaus antraštė",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Netoliese esančios vietos kortelės",
     "productCard": "Produkto kortelė",
     "productCards": "Produktų kortelės"
+  },
+  "socialLinks": {
+    "facebook": "Sekite mus Facebook",
+    "instagram": "Sekite mus Instagram",
+    "linkedIn": "Sekite mus LinkedIn",
+    "pinterest": "Sekite mus Pinterest",
+    "tiktok": "Sekite mus TikTok",
+    "xLink": "Sekite mus X („Twitter“)",
+    "youtube": "Prenumeruokite mūsų YouTube kanalą"
   },
   "spacingDefaultLabel": "Numatytasis",
   "staticContent": "Statinis turinys",

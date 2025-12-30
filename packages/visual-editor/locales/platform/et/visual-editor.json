@@ -491,6 +491,15 @@
     "notFound": "Ühtegi fondi ei leitud.",
     "search": "Otsingufondid ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Jälgi meid Facebookis",
+    "instagram": "Jälgi meid Instagramis",
+    "linkedIn": "Jälgi meid LinkedInis",
+    "pinterest": "Jälgi meid Pinterestis",
+    "tiktok": "Jälgi meid TikTokis",
+    "twitter": "Jälgi meid Twitteris",
+    "youtube": "Tellige meie YouTube'i kanal"
+  },
   "friday": "Reede",
   "getDirections": "Hankige juhiseid",
   "heroBanner": "Kangelasriba",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Läheduses asuvad asukohakaardid",
     "productCard": "Tootekaart",
     "productCards": "Tootekaardid"
+  },
+  "socialLinks": {
+    "facebook": "Jälgi meid Facebookis",
+    "instagram": "Jälgi meid Instagramis",
+    "linkedIn": "Jälgi meid LinkedInis",
+    "pinterest": "Jälgi meid Pinterestis",
+    "tiktok": "Jälgi meid TikTokis",
+    "xLink": "Jälgi meid X-is (Twitter)",
+    "youtube": "Tellige meie YouTube'i kanal"
   },
   "spacingDefaultLabel": "Täitmata jätmine",
   "staticContent": "Staatiline sisu",

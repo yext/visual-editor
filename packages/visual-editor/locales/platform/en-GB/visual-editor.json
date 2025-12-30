@@ -490,6 +490,15 @@
     "notFound": "No fonts found.",
     "search": "Search fonts..."
   },
+  "footerSocialLinks": {
+    "facebook": "Follow us on Facebook",
+    "instagram": "Follow us on Instagram",
+    "linkedIn": "Follow us on LinkedIn",
+    "pinterest": "Follow us on Pinterest",
+    "tiktok": "Follow us on TikTok",
+    "twitter": "Follow us on Twitter",
+    "youtube": "Subscribe to our YouTube channel"
+  },
   "friday": "Friday",
   "getDirections": "Get Directions",
   "heroBanner": "Hero Banner",
@@ -645,6 +654,15 @@
     "nearbyLocationCards": "Nearby Location Cards",
     "productCard": "Product Card",
     "productCards": "Product Cards"
+  },
+  "socialLinks": {
+    "facebook": "Follow us on Facebook",
+    "instagram": "Follow us on Instagram",
+    "linkedIn": "Follow us on LinkedIn",
+    "pinterest": "Follow us on Pinterest",
+    "tiktok": "Follow us on TikTok",
+    "xLink": "Follow us on X (Twitter)",
+    "youtube": "Subscribe to our YouTube channel"
   },
   "spacingDefaultLabel": "Default",
   "staticContent": "Static content",

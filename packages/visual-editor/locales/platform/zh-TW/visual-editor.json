@@ -492,6 +492,15 @@
     "notFound": "找不到字體。",
     "search": "搜索字體..."
   },
+  "footerSocialLinks": {
+    "facebook": "在 Facebook 上關注我們",
+    "instagram": "在 Instagram 上關注我們",
+    "linkedIn": "在 LinkedIn 上關注我們",
+    "pinterest": "在 Pinterest 上關注我們",
+    "tiktok": "在 TikTok 上關注我們",
+    "twitter": "在 Twitter 上關注我們",
+    "youtube": "訂閱我們的 YouTube 頻道"
+  },
   "friday": "星期五",
   "getDirections": "獲取指示",
   "heroBanner": "英雄橫幅",
@@ -647,6 +656,15 @@
     "nearbyLocationCards": "附近位置卡",
     "productCard": "產品卡",
     "productCards": "產品卡"
+  },
+  "socialLinks": {
+    "facebook": "在 Facebook 上關注我們",
+    "instagram": "在 Instagram 上關注我們",
+    "linkedIn": "在 LinkedIn 上關注我們",
+    "pinterest": "在 Pinterest 上關注我們",
+    "tiktok": "在 TikTok 上關注我們",
+    "xLink": "在 X (Twitter) 上關注我們",
+    "youtube": "訂閱我們的 YouTube 頻道"
   },
   "spacingDefaultLabel": "預設",
   "staticContent": "靜態內容",

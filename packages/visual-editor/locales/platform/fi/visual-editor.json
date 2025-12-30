@@ -491,6 +491,15 @@
     "notFound": "Ei fontteja löydetty.",
     "search": "Haku fontit ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Seuraa meitä Facebookissa",
+    "instagram": "Seuraa meitä Instagramissa",
+    "linkedIn": "Seuraa meitä LinkedInissä",
+    "pinterest": "Seuraa meitä Pinterestissä",
+    "tiktok": "Seuraa meitä TikTokissa",
+    "twitter": "Seuraa meitä Twitterissä",
+    "youtube": "Tilaa YouTube-kanavamme"
+  },
   "friday": "perjantai",
   "getDirections": "Hanki reittiohjeet",
   "heroBanner": "Sankari",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Läheiset sijaintikortit",
     "productCard": "Tuotekortti",
     "productCards": "Tuotekortit"
+  },
+  "socialLinks": {
+    "facebook": "Seuraa meitä Facebookissa",
+    "instagram": "Seuraa meitä Instagramissa",
+    "linkedIn": "Seuraa meitä LinkedInissä",
+    "pinterest": "Seuraa meitä Pinterestissä",
+    "tiktok": "Seuraa meitä TikTokissa",
+    "xLink": "Seuraa meitä X:ssä (Twitter)",
+    "youtube": "Tilaa YouTube-kanavamme"
   },
   "spacingDefaultLabel": "Laiminlyönti",
   "staticContent": "Staattinen sisältö",

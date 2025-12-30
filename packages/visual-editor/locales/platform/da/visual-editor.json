@@ -498,6 +498,15 @@
     "notFound": "Ingen skrifttyper fundet.",
     "search": "Søg skrifttyper ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Følg os på Facebook",
+    "instagram": "Følg os på Instagram",
+    "linkedIn": "Følg os på LinkedIn",
+    "pinterest": "Følg os på Pinterest",
+    "tiktok": "Følg os på TikTok",
+    "twitter": "Følg os på Twitter",
+    "youtube": "Abonner på vores YouTube-kanal"
+  },
   "friday": "fredag",
   "getDirections": "Få rutevejledning",
   "heroBanner": "Hero Banner",
@@ -653,6 +662,15 @@
     "nearbyLocationCards": "Lokalitetskort i nærheden",
     "productCard": "Produktkort",
     "productCards": "Produktkort"
+  },
+  "socialLinks": {
+    "facebook": "Følg os på Facebook",
+    "instagram": "Følg os på Instagram",
+    "linkedIn": "Følg os på LinkedIn",
+    "pinterest": "Følg os på Pinterest",
+    "tiktok": "Følg os på TikTok",
+    "xLink": "Følg os på X (Twitter)",
+    "youtube": "Abonner på vores YouTube-kanal"
   },
   "spacingDefaultLabel": "Misligholdelse",
   "staticContent": "Statisk indhold",

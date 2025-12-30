@@ -492,6 +492,15 @@
     "notFound": "Nenašli sa žiadne písma.",
     "search": "Vyhľadajte písma ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Sledujte nás na Facebooku",
+    "instagram": "Sledujte nás na Instagrame",
+    "linkedIn": "Sledujte nás na LinkedIn",
+    "pinterest": "Sledujte nás na Pintereste",
+    "tiktok": "Sledujte nás na TikTok",
+    "twitter": "Sledujte nás na Twitteri",
+    "youtube": "Prihláste sa na odber nášho kanála YouTube"
+  },
   "friday": "Piatok",
   "getDirections": "Získajte pokyny",
   "heroBanner": "Hrdinka",
@@ -647,6 +656,15 @@
     "nearbyLocationCards": "Karty polohy v okolí",
     "productCard": "Karta produktu",
     "productCards": "Produktové karty"
+  },
+  "socialLinks": {
+    "facebook": "Sledujte nás na Facebooku",
+    "instagram": "Sledujte nás na Instagrame",
+    "linkedIn": "Sledujte nás na LinkedIn",
+    "pinterest": "Sledujte nás na Pintereste",
+    "tiktok": "Sledujte nás na TikTok",
+    "xLink": "Sledujte nás na X (Twitter)",
+    "youtube": "Prihláste sa na odber nášho kanála YouTube"
   },
   "spacingDefaultLabel": "Predvolený",
   "staticContent": "Statický obsah",

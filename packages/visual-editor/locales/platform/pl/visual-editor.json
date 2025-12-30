@@ -492,6 +492,15 @@
     "notFound": "Nie znaleziono czcionek.",
     "search": "Wyszukaj czcionki ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Śledź nas na Facebooku",
+    "instagram": "Śledź nas na Instagramie",
+    "linkedIn": "Śledź nas na LinkedIn",
+    "pinterest": "Śledź nas na Pintereście",
+    "tiktok": "Śledź nas na TikToku",
+    "twitter": "Śledź nas na Twitterze",
+    "youtube": "Subskrybuj nasz kanał YouTube"
+  },
   "friday": "Piątek",
   "getDirections": "Uzyskaj wskazówki",
   "heroBanner": "Banner bohatera",
@@ -647,6 +656,15 @@
     "nearbyLocationCards": "Karty lokalizacji w pobliżu",
     "productCard": "Karta Produktu",
     "productCards": "Karty Produktów"
+  },
+  "socialLinks": {
+    "facebook": "Śledź nas na Facebooku",
+    "instagram": "Śledź nas na Instagramie",
+    "linkedIn": "Śledź nas na LinkedIn",
+    "pinterest": "Śledź nas na Pintereście",
+    "tiktok": "Śledź nas na TikToku",
+    "xLink": "Śledź nas na X (Twitter)",
+    "youtube": "Subskrybuj nasz kanał YouTube"
   },
   "spacingDefaultLabel": "Domyślny",
   "staticContent": "Treść statyczna",

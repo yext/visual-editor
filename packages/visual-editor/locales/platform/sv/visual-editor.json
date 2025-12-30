@@ -492,6 +492,15 @@
     "notFound": "Inga teckensnitt hittades.",
     "search": "Sök teckensnitt ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Följ oss på Facebook",
+    "instagram": "Följ oss på Instagram",
+    "linkedIn": "Följ oss på LinkedIn",
+    "pinterest": "Följ oss på Pinterest",
+    "tiktok": "Följ oss på TikTok",
+    "twitter": "Följ oss på Twitter",
+    "youtube": "Prenumerera på vår YouTube-kanal"
+  },
   "friday": "Fredag",
   "getDirections": "Få vägbeskrivning",
   "heroBanner": "Hjältebanner",
@@ -647,6 +656,15 @@
     "nearbyLocationCards": "Närliggande platskort",
     "productCard": "Produktkort",
     "productCards": "Produktkort"
+  },
+  "socialLinks": {
+    "facebook": "Följ oss på Facebook",
+    "instagram": "Följ oss på Instagram",
+    "linkedIn": "Följ oss på LinkedIn",
+    "pinterest": "Följ oss på Pinterest",
+    "tiktok": "Följ oss på TikTok",
+    "xLink": "Följ oss på X (Twitter)",
+    "youtube": "Prenumerera på vår YouTube-kanal"
   },
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statiskt innehåll",

@@ -496,6 +496,15 @@
     "notFound": "Keine Schriftarten gefunden.",
     "search": "Schriftarten suchen ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Folgen Sie uns auf Facebook",
+    "instagram": "Folgen Sie uns auf Instagram",
+    "linkedIn": "Folgen Sie uns auf LinkedIn",
+    "pinterest": "Folgen Sie uns auf Pinterest",
+    "tiktok": "Folgen Sie uns auf TikTok",
+    "twitter": "Folgen Sie uns auf Twitter",
+    "youtube": "Abonnieren Sie unseren YouTube-Kanal"
+  },
   "friday": "Freitag",
   "getDirections": "Wegbeschreibung bekommen",
   "heroBanner": "Heldenbanner",
@@ -651,6 +660,15 @@
     "nearbyLocationCards": "Karten mit Standorten in der Nähe",
     "productCard": "Produktkarte",
     "productCards": "Produktkarten"
+  },
+  "socialLinks": {
+    "facebook": "Folgen Sie uns auf Facebook",
+    "instagram": "Folgen Sie uns auf Instagram",
+    "linkedIn": "Folgen Sie uns auf LinkedIn",
+    "pinterest": "Folgen Sie uns auf Pinterest",
+    "tiktok": "Folgen Sie uns auf TikTok",
+    "xLink": "Folgen Sie uns auf X (Twitter)",
+    "youtube": "Abonnieren Sie unseren YouTube-Kanal"
   },
   "spacingDefaultLabel": "Standard",
   "staticContent": "Statischer Inhalt",

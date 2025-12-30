@@ -491,6 +491,15 @@
     "notFound": "Nenhuma fonte encontrada.",
     "search": "Pesquisar fontes ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Siga-nos no Facebook",
+    "instagram": "Siga-nos no Instagram",
+    "linkedIn": "Siga-nos no LinkedIn",
+    "pinterest": "Siga-nos no Pinterest",
+    "tiktok": "Siga-nos no TikTok",
+    "twitter": "Siga-nos no Twitter",
+    "youtube": "Inscreva-se em nosso canal no YouTube"
+  },
   "friday": "Sexta-feira",
   "getDirections": "Obtenha direções",
   "heroBanner": "Hero Banner",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Cartões de localização próximos",
     "productCard": "Cartão de produto",
     "productCards": "Cartões de produto"
+  },
+  "socialLinks": {
+    "facebook": "Siga-nos no Facebook",
+    "instagram": "Siga-nos no Instagram",
+    "linkedIn": "Siga-nos no LinkedIn",
+    "pinterest": "Siga-nos no Pinterest",
+    "tiktok": "Siga-nos no TikTok",
+    "xLink": "Siga-nos no X (Twitter)",
+    "youtube": "Inscreva-se em nosso canal no YouTube"
   },
   "spacingDefaultLabel": "Padrão",
   "staticContent": "Conteúdo estático",

@@ -88,7 +88,7 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
         }),
       },
     }),
-    styles: YextField(msg("fields.styles", "styles"), {
+    styles: YextField(msg("fields.styles", "Styles"), {
       type: "object",
       objectFields: {
         backgroundColor: YextField(

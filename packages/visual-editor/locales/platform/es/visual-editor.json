@@ -490,6 +490,15 @@
     "notFound": "No se encontraron fuentes.",
     "search": "Fuentes de búsqueda ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Síguenos en Facebook",
+    "instagram": "Síguenos en Instagram",
+    "linkedIn": "Síguenos en LinkedIn",
+    "pinterest": "Síguenos en Pinterest",
+    "tiktok": "Síguenos en TikTok",
+    "twitter": "Síguenos en Twitter",
+    "youtube": "Suscríbete a nuestro canal de YouTube"
+  },
   "friday": "Viernes",
   "getDirections": "Obtener instrucciones",
   "heroBanner": "Estandarte",
@@ -646,6 +655,15 @@
     "productCard": "Tarjeta de producto",
     "productCards": "Tarjetas de producto"
   },
+  "socialLinks": {
+    "facebook": "Síguenos en Facebook",
+    "instagram": "Síguenos en Instagram",
+    "linkedIn": "Síguenos en LinkedIn",
+    "pinterest": "Síguenos en Pinterest",
+    "tiktok": "Síguenos en TikTok",
+    "xLink": "Síguenos en X (Twitter)",
+    "youtube": "Suscríbete a nuestro canal de YouTube"
+  },
   "spacingDefaultLabel": "Por defecto",
   "staticContent": "Contenido estático",
   "staticMapEmptyStateAddApiKey": "Agregue una clave API para obtener una vista previa de su mapa",
@@ -738,7 +756,7 @@
   "undo": "Deshacer",
   "update": "Actualizar",
   "updatePage": "Página de actualización",
-  "useOurLocatorToFindALocationNearYou": "",
+  "useOurLocatorToFindALocationNearYou": "Use nuestro localizador para encontrar una ubicación cerca de usted",
   "utilityImage": "Imagen de utilidad",
   "video": "Video",
   "videoThumbnail": "Miniatura de video",

@@ -491,6 +491,15 @@
     "notFound": "Nu au fost găsite fonturi.",
     "search": "Căutați fonturi ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Urmărește-ne pe Facebook",
+    "instagram": "Urmărește-ne pe Instagram",
+    "linkedIn": "Urmărește-ne pe LinkedIn",
+    "pinterest": "Urmărește-ne pe Pinterest",
+    "tiktok": "Urmărește-ne pe TikTok",
+    "twitter": "Urmărește-ne pe Twitter",
+    "youtube": "Abonați-vă la canalul nostru YouTube"
+  },
   "friday": "vineri",
   "getDirections": "Obțineți indicații",
   "heroBanner": "Hero Banner",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Carduri de locație în apropiere",
     "productCard": "Card de produs",
     "productCards": "Carduri de produse"
+  },
+  "socialLinks": {
+    "facebook": "Urmărește-ne pe Facebook",
+    "instagram": "Urmărește-ne pe Instagram",
+    "linkedIn": "Urmărește-ne pe LinkedIn",
+    "pinterest": "Urmărește-ne pe Pinterest",
+    "tiktok": "Urmărește-ne pe TikTok",
+    "xLink": "Urmărește-ne pe X (Twitter)",
+    "youtube": "Abonați-vă la canalul nostru YouTube"
   },
   "spacingDefaultLabel": "Implicit",
   "staticContent": "Conținut static",

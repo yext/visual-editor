@@ -491,6 +491,15 @@
     "notFound": "Yazı tipi bulunamadı.",
     "search": "Yazı tiplerini arama ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Bizi Facebook'ta takip edin",
+    "instagram": "Bizi Instagram'da takip edin",
+    "linkedIn": "Bizi LinkedIn'de takip edin",
+    "pinterest": "Bizi Pinterest'te takip edin",
+    "tiktok": "Bizi TikTok'ta takip edin",
+    "twitter": "Bizi Twitter'da takip edin",
+    "youtube": "YouTube kanalımıza abone olun"
+  },
   "friday": "Cuma",
   "getDirections": "Yol tarifi alın",
   "heroBanner": "Kahraman afiş",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Yakındaki Konum Kartları",
     "productCard": "Ürün Kartı",
     "productCards": "Ürün Kartları"
+  },
+  "socialLinks": {
+    "facebook": "Bizi Facebook'ta takip edin",
+    "instagram": "Bizi Instagram'da takip edin",
+    "linkedIn": "Bizi LinkedIn'de takip edin",
+    "pinterest": "Bizi Pinterest'te takip edin",
+    "tiktok": "Bizi TikTok'ta takip edin",
+    "xLink": "Bizi X'te takip edin (Twitter)",
+    "youtube": "YouTube kanalımıza abone olun"
   },
   "spacingDefaultLabel": "Varsayılan",
   "staticContent": "Statik içerik",

@@ -491,6 +491,15 @@
     "notFound": "Nincs betűtípus.",
     "search": "Keresési betűtípusok ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Kövess minket a Facebookon",
+    "instagram": "Kövess minket Instagramon",
+    "linkedIn": "Kövess minket a LinkedIn-en",
+    "pinterest": "Kövess minket a Pinteresten",
+    "tiktok": "Kövess minket a TikTokon",
+    "twitter": "Kövess minket a Twitteren",
+    "youtube": "Iratkozz fel YouTube csatornánkra"
+  },
   "friday": "péntek",
   "getDirections": "Szerezzen útmutatásokat",
   "heroBanner": "Hős szalaghirdetés",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Közeli helykártyák",
     "productCard": "Termékkártya",
     "productCards": "Termékkártyák"
+  },
+  "socialLinks": {
+    "facebook": "Kövess minket a Facebookon",
+    "instagram": "Kövess minket Instagramon",
+    "linkedIn": "Kövess minket a LinkedIn-en",
+    "pinterest": "Kövess minket a Pinteresten",
+    "tiktok": "Kövess minket a TikTokon",
+    "xLink": "Kövess minket az X-en (Twitter)",
+    "youtube": "Iratkozz fel YouTube csatornánkra"
   },
   "spacingDefaultLabel": "Mulasztás",
   "staticContent": "Statikus tartalom",

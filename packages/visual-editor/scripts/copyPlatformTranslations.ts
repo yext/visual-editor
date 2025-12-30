@@ -24,14 +24,14 @@ const ensureDir = (dir: string) => {
 };
 
 // Load JSON file safely
-const loadJson = (filePath: string): Record<string, string> => {
+const loadJson = (filePath: string): Record<string, any> => {
   if (!fs.existsSync(filePath)) {
     console.warn(`File not found: ${filePath} – treating as empty object`);
     return {};
   }
   try {
     const content = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(content) as Record<string, string>;
+    return JSON.parse(content) as Record<string, any>;
   } catch (err) {
     console.error(`Failed to parse JSON in ${filePath}:`, err);
     return {};

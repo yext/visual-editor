@@ -491,6 +491,15 @@
     "notFound": "Fonti nav atrasti.",
     "search": "Meklēt fontus ..."
   },
+  "footerSocialLinks": {
+    "facebook": "Sekojiet mums Facebook",
+    "instagram": "Sekojiet mums Instagram",
+    "linkedIn": "Sekojiet mums LinkedIn",
+    "pinterest": "Sekojiet mums Pinterest",
+    "tiktok": "Sekojiet mums TikTok",
+    "twitter": "Sekojiet mums Twitter",
+    "youtube": "Abonējiet mūsu YouTube kanālu"
+  },
   "friday": "Piektdiena",
   "getDirections": "Saņemt norādes",
   "heroBanner": "Varoņu reklāmkarogs",
@@ -646,6 +655,15 @@
     "nearbyLocationCards": "Tuvumā esošās atrašanās vietu kartes",
     "productCard": "Produkta karte",
     "productCards": "Produktu kartes"
+  },
+  "socialLinks": {
+    "facebook": "Sekojiet mums Facebook",
+    "instagram": "Sekojiet mums Instagram",
+    "linkedIn": "Sekojiet mums LinkedIn",
+    "pinterest": "Sekojiet mums Pinterest",
+    "tiktok": "Sekojiet mums TikTok",
+    "xLink": "Sekojiet mums X (Twitter)",
+    "youtube": "Abonējiet mūsu YouTube kanālu"
   },
   "spacingDefaultLabel": "Nepildīt",
   "staticContent": "Statisks saturs",

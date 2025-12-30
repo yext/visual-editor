@@ -1221,8 +1221,12 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
         return (
           <div>
             {t(
-              "locationsWithinDistanceOf",
-              '{{count}} locations within {{distance}} miles of "{{name}}"',
+              resultCount === 1
+                ? "locationWithinDistanceOf_one"
+                : "locationsWithinDistanceOf_other",
+              resultCount === 1
+                ? '{{count}} location within {{distance}} miles of "{{name}}"'
+                : '{{count}} locations within {{distance}} miles of "{{name}}"',
               {
                 count: resultCount,
                 distance: selectedDistanceMiles,
@@ -1234,19 +1238,31 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
       } else {
         return (
           <div>
-            {t("locationsNear", '{{count}} locations near "{{name}}"', {
-              count: resultCount,
-              name: filterDisplayName,
-            })}
+            {t(
+              resultCount === 1 ? "locationNear_one" : "locationsNear_other",
+              resultCount === 1
+                ? '{{count}} location near "{{name}}"'
+                : '{{count}} locations near "{{name}}"',
+              {
+                count: resultCount,
+                name: filterDisplayName,
+              }
+            )}
           </div>
         );
       }
     } else {
       return (
         <div>
-          {t("locationWithCount", "{{count}} locations", {
-            count: resultCount,
-          })}
+          {t(
+            resultCount === 1
+              ? "locationWithCount_one"
+              : "locationWithCount_other",
+            resultCount === 1 ? "{{count}} location" : "{{count}} locations",
+            {
+              count: resultCount,
+            }
+          )}
         </div>
       );
     }
