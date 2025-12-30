@@ -13,17 +13,17 @@
     "twitter": "在 Twitter 上关注我们",
     "youtube": "订阅我们的 YouTube 频道"
   },
-  "friday": "Friday",
+  "friday": "星期五",
   "getDirections": "获取指示",
   "locationsNear_one": "{{count}}位置附近“ {{name}}”",
   "locationsNear_other": "“{{name}}”附近有 {{count}} 个地点",
   "locationsWithinDistanceOf_one": "距“{{name}}” {{distance}} 英里内的 {{count}} 个位置",
   "locationsWithinDistanceOf_other": "“{{name}}”距离 {{distance}} 英里内有 {{count}} 个位置",
-  "monday": "Monday",
+  "monday": "周一",
   "open24Hours": "打开24小时",
   "openNow": "现在打开",
   "refineYourSearch": "优化您的搜索",
-  "saturday": "Saturday",
+  "saturday": "周六",
   "search": "搜索",
   "searchHere": "在这里搜索...",
   "searchThisArea": "搜索此区域",
@@ -36,11 +36,11 @@
     "xLink": "在 X (Twitter) 上关注我们",
     "youtube": "订阅我们的 YouTube 频道"
   },
-  "sunday": "Sunday",
+  "sunday": "星期日",
   "temporarilyClosed": "暂时关闭",
-  "thursday": "Thursday",
-  "tuesday": "Tuesday",
+  "thursday": "周四",
+  "tuesday": "周二",
   "useOurLocatorToFindALocationNearYou": "使用我们的定位器找到您附近的位置",
   "visitPage": "访问页面",
-  "wednesday": "Wednesday"
+  "wednesday": "周三"
 }
