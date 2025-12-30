@@ -63,7 +63,8 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
         <div
           className={themeManagerCn(
             heroContentParentCn(styles),
-            "py-pageSection-verticalPadding pt-6 px-4 hidden sm:flex self-center sm:max-w-[500px] lg:max-w-[400px] lg:min-w-[350px]",
+            "py-pageSection-verticalPadding pt-6 px-4 hidden sm:flex self-center sm:max-w-[500px] md:max-w-[400px] lg:max-w-none lg:min-w-[350px]",
+            styles.showImage ? "w-2/4" : "w-full",
             styles.desktopImagePosition === "left"
               ? "sm:pl-8 lg:pl-16 sm:pr-0"
               : "sm:pr-8 lg:pr-16 sm:pl-0"
