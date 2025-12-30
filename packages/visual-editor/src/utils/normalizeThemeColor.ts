@@ -3,11 +3,11 @@ export const normalizeThemeColor = (token?: string): string | undefined => {
   if (!token) return undefined;
 
   if (token.startsWith("bg-")) {
-    return token.replace("bg-", "");
+    return token.replace("bg-", "") || undefined;
   }
 
   if (token.startsWith("text-")) {
-    return token.replace("text-", "");
+    return token.replace("text-", "") || undefined;
   }
 
   return undefined;
