@@ -13,38 +13,39 @@ export const updateLinksAlignmentMigration: Migration = {
         return { ...props, styles };
       }
 
+      const { linksAlignment, ...restPrimaryFooter } = primaryFooter;
+
       return {
         ...props,
         styles: {
           ...styles,
           primaryFooter: {
-            ...primaryFooter,
+            ...restPrimaryFooter,
             linksPosition:
-              primaryFooter.linksPosition ??
-              primaryFooter.linksAlignment ??
-              "right",
+              primaryFooter.linksPosition ?? linksAlignment ?? "right",
           },
         },
       };
     },
   },
+
   SecondaryFooterSlot: {
     action: "updated",
     propTransformation: ({ styles, ...props }) => {
       if (!styles) {
         return { ...props, styles };
       }
-
       if (styles.linksPosition && !("linksAlignment" in styles)) {
         return { ...props, styles };
       }
 
+      const { linksAlignment, ...restStyles } = styles;
+
       return {
         ...props,
         styles: {
-          ...styles,
-          linksPosition:
-            styles.linksPosition ?? styles.linksAlignment ?? "left",
+          ...restStyles,
+          linksPosition: styles.linksPosition ?? linksAlignment ?? "left",
         },
       };
     },
