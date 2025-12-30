@@ -42,15 +42,11 @@ export type EventHandler = (
 /**
  * Checks if an origin matches any of the target origins, or matches the optimizelocation.com pattern.
  * @param origin - The origin to check (e.g., "https://subdomain.optimizelocation.com")
- * @param targetOrigins - Array of allowed origins (exact matches only, no wildcards)
  * @returns true if the origin matches any target origin or matches *.optimizelocation.com pattern
  */
-export const isOriginAllowed = (
-  origin: string,
-  targetOrigins: string[]
-): boolean => {
-  // Check for exact match in targetOrigins
-  if (targetOrigins.includes(origin)) {
+export const isOriginAllowed = (origin: string): boolean => {
+  // Check for exact match in TARGET_ORIGINS
+  if (TARGET_ORIGINS.includes(origin)) {
     return true;
   }
 
@@ -61,16 +57,7 @@ export const isOriginAllowed = (
       url.hostname.endsWith(".optimizelocation.com") ||
       url.hostname === "optimizelocation.com"
     ) {
-      // Check if origin matches the pattern ${protocol}//*.optimizelocation.com
-      const expectedPattern = `${url.protocol}//*.optimizelocation.com`;
-      // Convert wildcard pattern to regex: escape special chars except *, then replace * with .*
-      const pattern = expectedPattern
-        .replace(/[.+?^${}()|[\]\\]/g, "\\$&")
-        .replace(/\*/g, ".*");
-      const regex = new RegExp(`^${pattern}$`);
-      if (regex.test(origin)) {
-        return true;
-      }
+      return true;
     }
   } catch {
     // Invalid origin URL, no match
@@ -229,7 +216,7 @@ const useListenAndRespondMessage = (
       if (data?.source?.startsWith("react-devtools")) {
         return;
       }
-      if (!isOriginAllowed(origin, targetOrigins)) {
+      if (!isOriginAllowed(origin)) {
         return;
       }
 
@@ -241,7 +228,7 @@ const useListenAndRespondMessage = (
         callback(data, origin, source);
       }
     },
-    [messageName, targetOrigins, setSource, setOrigin, callback]
+    [messageName, setSource, setOrigin, callback]
   );
 
   useEffect(() => {
