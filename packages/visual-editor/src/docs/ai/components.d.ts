@@ -725,6 +725,10 @@ interface PromoData {
    * @defaultValue 'image'
    */
   media: "image" | "video";
+  /**
+   * The background image used by the immersive and spotlight variants.
+   * @defaultValue Placeholder image.
+   */
   backgroundImage: YextEntityField<ImageType | AssetImageType>;
 }
 
