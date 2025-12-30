@@ -45,7 +45,10 @@ export type EventHandler = (
  * @param targetOrigins - Array of allowed origins (exact matches only, no wildcards)
  * @returns true if the origin matches any target origin or matches *.optimizelocation.com pattern
  */
-const isOriginAllowed = (origin: string, targetOrigins: string[]): boolean => {
+export const isOriginAllowed = (
+  origin: string,
+  targetOrigins: string[]
+): boolean => {
   // Check for exact match in targetOrigins
   if (targetOrigins.includes(origin)) {
     return true;
