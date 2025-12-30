@@ -183,9 +183,10 @@ export const CTA = (props: CTAProps) => {
     openInNewTab = false,
   } = props;
 
+  const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
   const isDarkBG = useBackground()?.isDarkBackground;
-
+  const opensInNewTabText = t("opensInNewTab", "opens in a new tab");
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = normalize(color?.bgColor);
     const textColor = normalize(color?.textColor);
@@ -283,7 +284,7 @@ export const CTA = (props: CTAProps) => {
 
   const computedAriaLabel =
     ariaLabel && openInNewTab
-      ? `${ariaLabel} (opens in a new tab)`
+      ? `${ariaLabel} (${opensInNewTabText})`
       : ariaLabel || undefined;
 
   return (
@@ -294,7 +295,7 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
-        className="inline"
+        className="inline leading-none"
         cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
@@ -306,7 +307,7 @@ export const CTA = (props: CTAProps) => {
         {openInNewTab && (
           <FaExternalLinkAlt
             aria-hidden="true"
-            className="inline-block ml-1 w-3 h-3  align-text-top"
+            className="inline-block ml-1 w-3 h-3 align-middle relative -top-px"
           />
         )}
       </Link>

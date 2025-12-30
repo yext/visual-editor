@@ -42,13 +42,21 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
-  const secondaryItemsAlignment =
-    variant === "secondary" &&
-    (alignment === "right"
-      ? "md:justify-end"
-      : alignment === "center"
-        ? "md:justify-center"
-        : "md:justify-start");
+  let secondaryItemsAlignment: string | undefined;
+
+  if (variant === "secondary") {
+    switch (alignment) {
+      case "right":
+        secondaryItemsAlignment = "md:justify-end";
+        break;
+      case "center":
+        secondaryItemsAlignment = "md:justify-center";
+        break;
+      default:
+        secondaryItemsAlignment = "md:justify-start";
+        break;
+    }
+  }
 
   return (
     <div

@@ -31,17 +31,22 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
     streamDocument
   );
 
+  let alignmentStyle = ["text-center"];
+  switch (alignment) {
+    case "left": {
+      alignmentStyle.push("md:text-left");
+      break;
+    }
+    case "right": {
+      alignmentStyle.push("md:text-right");
+      break;
+    }
+    default:
+      break;
+  }
+
   return resolvedText ? (
-    <Body
-      variant="xs"
-      className={
-        alignment === "right"
-          ? "text-center md:text-right"
-          : alignment === "center"
-            ? "text-center"
-            : "text-center md:text-left"
-      }
-    >
+    <Body variant="xs" className={alignmentStyle.join(" ")}>
       {resolvedText}
     </Body>
   ) : puck.isEditing ? (
