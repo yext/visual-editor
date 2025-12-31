@@ -186,7 +186,6 @@ export const CTA = (props: CTAProps) => {
   const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
   const isDarkBG = useBackground()?.isDarkBackground;
-  const opensInNewTabText = t("opensInNewTab", "opens in a new tab");
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = normalize(color?.bgColor);
     const textColor = normalize(color?.textColor);
@@ -283,9 +282,11 @@ export const CTA = (props: CTAProps) => {
       : normalizeSlug(link) || "#";
 
   const computedAriaLabel =
-    ariaLabel && openInNewTab
-      ? `${ariaLabel} (${opensInNewTabText})`
-      : ariaLabel || undefined;
+    openInNewTab && ariaLabel
+      ? t("aria.opensInNewTab", "{{label}} (opens in a new tab)", {
+          label: ariaLabel,
+        })
+      : ariaLabel;
 
   return (
     <Button
