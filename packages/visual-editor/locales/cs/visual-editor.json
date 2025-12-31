@@ -29,6 +29,9 @@
     "send": "Odeslat ke schválení",
     "writeComment": "Napište svůj komentář zde ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (otevře se na nové kartě)"
+  },
   "ariaLabelAppGallery": "Prozkoumejte to na {{serviceName}}",
   "ariaLabelAppStore": "Stáhnout na {{serviceName}}",
   "ariaLabelGalaxyStore": "Dostupné na {{serviceName}}",
@@ -280,6 +283,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Odkazy",
     "linksAlignment": "Sladění odkazů",
+    "linksPosition": "Pozice odkazů",
     "listLength": "Délka seznamu",
     "liveVisibility": "Viditelné na živé stránce",
     "localGeomodifier": "Místní geomodifikátor",
@@ -300,6 +304,7 @@
     "mobileContentAlignment": "Zarovnání mobilního obsahu",
     "mobileImagePosition": "Pozice mobilního obrazu",
     "name": "Jméno",
+    "openInNewTab": "Otevřít na nové kartě",
     "options": {
       "aspectRatio": "Poměr stran",
       "base": "Báze",

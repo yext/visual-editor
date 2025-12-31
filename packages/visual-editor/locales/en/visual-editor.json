@@ -29,6 +29,9 @@
     "send": "Send for Approval",
     "writeComment": "Write your comment here..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (opens in a new tab)"
+  },
   "ariaLabelAppGallery": "Explore it on {{serviceName}}",
   "ariaLabelAppStore": "Download on the {{serviceName}}",
   "ariaLabelGalaxyStore": "Available on {{serviceName}}",
@@ -272,6 +275,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Links",
     "linksAlignment": "Links Alignment",
+    "linksPosition": "Links Position",
     "listLength": "List Length",
     "liveVisibility": "Visible on Live Page",
     "localGeomodifier": "Local GeoModifier",
@@ -292,6 +296,7 @@
     "mobileContentAlignment": "Mobile Content Alignment",
     "mobileImagePosition": "Mobile Image Position",
     "name": "Name",
+    "openInNewTab": "Open in new tab",
     "options": {
       "aspectRatio": "Aspect Ratio",
       "base": "Base",

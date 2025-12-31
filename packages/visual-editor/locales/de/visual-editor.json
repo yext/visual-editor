@@ -29,6 +29,9 @@
     "send": "Genehmigung senden",
     "writeComment": "Schreiben Sie Ihren Kommentar hier ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (öffnet sich in einem neuen Tab)"
+  },
   "ariaLabelAppGallery": "Entdecken Sie es auf {{serviceName}}",
   "ariaLabelAppStore": "Herunterladen auf {{serviceName}}",
   "ariaLabelGalaxyStore": "Verfügbar auf {{serviceName}}",
@@ -278,6 +281,7 @@
     "linkedInLink": "LinkedIn Link",
     "links": "Links",
     "linksAlignment": "Links Ausrichtung",
+    "linksPosition": "Linkposition",
     "listLength": "Listenlänge",
     "liveVisibility": "Auf der Live -Seite sichtbar",
     "localGeomodifier": "Lokaler Geomodifier",
@@ -298,6 +302,7 @@
     "mobileContentAlignment": "Ausrichtung des mobilen Inhalts",
     "mobileImagePosition": "Mobile Bildposition",
     "name": "Name",
+    "openInNewTab": "In neuem Tab öffnen",
     "options": {
       "aspectRatio": "Seitenverhältnis",
       "base": "Base",
