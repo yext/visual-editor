@@ -940,6 +940,189 @@ const tests: ComponentTest[] = [
     },
     version: 48,
   },
+  {
+    name: "version 50 props - with external links",
+    document: {},
+    props: {
+      styles: {
+        maxWidth: "theme",
+        headerPosition: "scrollsWithPage",
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              styles: {
+                backgroundColor: backgroundColors.background3.value,
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "ImageSlot",
+                    props: {
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            url: "https://placehold.co/100",
+                            height: 100,
+                            width: 100,
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        aspectRatio: 1,
+                        width: 100,
+                      },
+                    },
+                  },
+                ],
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: true,
+                          },
+                        ],
+                      },
+                      parentData: {
+                        type: "Primary",
+                      },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: { en: "CTA", hasLocalizedValue: "true" },
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        displayType: "textAndLink",
+                        variant: "primary",
+                      },
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      data: {
+                        show: true,
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Secondary CTA",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            linkType: "URL",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        displayType: "textAndLink",
+                        variant: "secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        SecondaryHeaderSlot: [
+          {
+            type: "SecondaryHeaderSlot",
+            props: {
+              data: {
+                show: true,
+                showLanguageDropdown: false,
+              },
+              styles: {
+                backgroundColor: backgroundColors.background4.value,
+              },
+              slots: {
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Secondary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Secondary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: true,
+                          },
+                        ],
+                      },
+                      parentData: {
+                        type: "Secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    interactions: async (page) => {
+      const mobileMenuButton = page.getByLabelText("Open menu");
+      await act(async () => {
+        await mobileMenuButton.click();
+      });
+    },
+    version: 50,
+  },
 ];
 
 describe("ExpandedHeader", async () => {
