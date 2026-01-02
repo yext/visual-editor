@@ -282,11 +282,11 @@ export const CTA = (props: CTAProps) => {
       : normalizeSlug(link) || "#";
 
   const computedAriaLabel =
-    openInNewTab && ariaLabel
+    openInNewTab && ariaLabel && ariaLabel.trim() !== ""
       ? t("aria.opensInNewTab", "{{label}} (opens in a new tab)", {
           label: ariaLabel,
         })
-      : ariaLabel;
+      : ariaLabel || undefined;
 
   return (
     <Button
