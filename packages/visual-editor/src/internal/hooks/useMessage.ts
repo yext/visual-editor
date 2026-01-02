@@ -206,12 +206,60 @@ const trackParentOrigin = (origin: string) => {
   }
 };
 
+// Set up a global listener to track the parent origin from ANY message
+// This ensures we capture the origin even before specific message listeners are set up
+let globalOriginTrackerInitialized = false;
+const initializeGlobalOriginTracker = () => {
+  if (globalOriginTrackerInitialized || typeof window === "undefined") {
+    return;
+  }
+  globalOriginTrackerInitialized = true;
+
+  const globalTracker = ({ origin, data }: MessageEvent) => {
+    // Ignore React Dev Tools messages
+    if (data?.source?.startsWith("react-devtools")) {
+      return;
+    }
+    // Track any valid origin, even if we haven't set up specific message listeners yet
+    if (isOriginAllowed(origin)) {
+      trackParentOrigin(origin);
+    }
+  };
+
+  window.addEventListener("message", globalTracker);
+};
+
 /**
  * Gets the list of origins to use when sending messages.
  * Includes TARGET_ORIGINS plus any tracked parent origin.
+ * Also tries to infer the parent origin from document.referrer if not yet tracked.
  */
 const getOriginsForSending = (targetOrigins: string[]): string[] => {
+  // Initialize the global tracker to ensure we capture the parent origin early
+  initializeGlobalOriginTracker();
+
   const origins = [...targetOrigins];
+
+  // If we haven't tracked the parent origin yet, try to infer it from document.referrer
+  if (
+    !trackedParentOrigin &&
+    typeof document !== "undefined" &&
+    document.referrer
+  ) {
+    try {
+      const referrerUrl = new URL(document.referrer);
+      const referrerOrigin = referrerUrl.origin;
+      if (
+        isOriginAllowed(referrerOrigin) &&
+        !origins.includes(referrerOrigin)
+      ) {
+        trackedParentOrigin = referrerOrigin;
+      }
+    } catch {
+      // Invalid referrer URL, ignore
+    }
+  }
+
   if (trackedParentOrigin && !origins.includes(trackedParentOrigin)) {
     origins.push(trackedParentOrigin);
   }
