@@ -73,7 +73,7 @@ export const isOriginAllowed = (origin: string): boolean => {
 
 export const TARGET_ORIGINS = [
   "http://localhost",
-  "http://scroogesubreseller.optimizelocation.com",
+  "https://scroogesubreseller.optimizelocation.com",
   "https://dev.yext.com",
   "https://qa.yext.com",
   "https://sandbox.yext.com",
