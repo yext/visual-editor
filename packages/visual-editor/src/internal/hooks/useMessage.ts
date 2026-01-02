@@ -50,16 +50,21 @@ export const isOriginAllowed = (origin: string): boolean => {
     return true;
   }
 
+  console.log("origin", origin);
+
   // Check if origin matches *.optimizelocation.com pattern
   try {
     const url = new URL(origin);
+    console.log("url", url);
+    console.log("url.hostname", url.hostname);
     if (
       url.hostname.endsWith(".optimizelocation.com") ||
       url.hostname === "optimizelocation.com"
     ) {
       return true;
     }
-  } catch {
+  } catch (error) {
+    console.log("error", error as Error);
     // Invalid origin URL, no match
   }
 
