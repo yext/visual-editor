@@ -34,6 +34,7 @@ export interface PrimaryHeaderSlotProps {
   conditionalRender?: {
     navContent: boolean;
     CTAs: boolean;
+    hasLogoImage?: boolean;
   };
 
   /** @internal */
@@ -88,28 +89,17 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const { t } = useTranslation();
 
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
-  const logoWrapperRef = React.useRef<HTMLDivElement>(null);
-  const [hasImage, setHasImage] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const showHamburger = useOverflow(containerRef, contentRef);
 
-  React.useEffect(() => {
-    if (!logoWrapperRef.current) {
-      setHasImage(false);
-      return;
-    }
-
-    const img = logoWrapperRef.current.querySelector("img");
-    setHasImage(!!img);
-  }, [slots.LogoSlot]);
+  const hasImage = conditionalRender?.hasLogoImage;
 
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
   const LogoSlot = (
     <div
-      ref={logoWrapperRef}
       className="flex-shrink-0"
       style={{ minHeight: hasImage ? undefined : "100px" }}
     >
@@ -342,6 +332,15 @@ export const PrimaryHeaderSlot: ComponentConfig<{
       return data;
     }
 
+    const logoSlotItem = data.props.slots.LogoSlot?.[0];
+
+    const hasLogoImage =
+      logoSlotItem?.type === "ImageSlot" &&
+      !!(
+        logoSlotItem?.props?.data?.image?.constantValue ||
+        logoSlotItem?.props?.data?.image?.field
+      );
+
     // Check if PrimaryCTA has data to display
     const primaryCTA = resolveComponentData(
       data.props.slots.PrimaryCTASlot[0]?.props.data
@@ -385,6 +384,7 @@ export const PrimaryHeaderSlot: ComponentConfig<{
         conditionalRender: {
           navContent: showNavContent,
           CTAs: showPrimaryCTA || showSecondaryCTA,
+          hasLogoImage,
         },
       },
     };
