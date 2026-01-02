@@ -50,21 +50,16 @@ export const isOriginAllowed = (origin: string): boolean => {
     return true;
   }
 
-  console.log("origin", origin);
-
   // Check if origin matches *.optimizelocation.com pattern
   try {
     const url = new URL(origin);
-    console.log("url", url);
-    console.log("url.hostname", url.hostname);
     if (
       url.hostname.endsWith(".optimizelocation.com") ||
       url.hostname === "optimizelocation.com"
     ) {
       return true;
     }
-  } catch (error) {
-    console.log("error", error as Error);
+  } catch {
     // Invalid origin URL, no match
   }
 
@@ -73,7 +68,6 @@ export const isOriginAllowed = (origin: string): boolean => {
 
 export const TARGET_ORIGINS = [
   "http://localhost",
-  "https://scroogesubreseller.optimizelocation.com",
   "https://dev.yext.com",
   "https://qa.yext.com",
   "https://sandbox.yext.com",
@@ -111,7 +105,8 @@ export const useSendMessageToIFrame = (
   const sendToIFrame = (data?: PostMessage) => {
     if (iframeRef.current) {
       setStatus("pending");
-      for (const targetOrigin of targetOrigins) {
+      const originsToUse = getOriginsForSending(targetOrigins);
+      for (const targetOrigin of originsToUse) {
         postMessage(
           { ...data, type: messageName },
           iframeRef.current.contentWindow,
@@ -147,7 +142,8 @@ export const useSendMessageToParent = (
       throw new Error("Parent window has closed");
     }
     setStatus("pending");
-    for (const targetOrigin of targetOrigins) {
+    const originsToUse = getOriginsForSending(targetOrigins);
+    for (const targetOrigin of originsToUse) {
       postMessage({ ...data, type: messageName }, window.parent, targetOrigin);
     }
   };
@@ -194,6 +190,34 @@ export const useReceiveMessage = (
   );
 };
 
+// Track the parent window's origin when we receive messages from it
+// This allows us to send messages back to *.optimizelocation.com subdomains
+// that aren't explicitly in TARGET_ORIGINS
+let trackedParentOrigin: string | null = null;
+
+/**
+ * Tracks the parent window's origin when a message is received.
+ * This allows us to send messages back to origins that match the pattern
+ * (like *.optimizelocation.com) even if they're not in TARGET_ORIGINS.
+ */
+const trackParentOrigin = (origin: string) => {
+  if (isOriginAllowed(origin) && !TARGET_ORIGINS.includes(origin)) {
+    trackedParentOrigin = origin;
+  }
+};
+
+/**
+ * Gets the list of origins to use when sending messages.
+ * Includes TARGET_ORIGINS plus any tracked parent origin.
+ */
+const getOriginsForSending = (targetOrigins: string[]): string[] => {
+  const origins = [...targetOrigins];
+  if (trackedParentOrigin && !origins.includes(trackedParentOrigin)) {
+    origins.push(trackedParentOrigin);
+  }
+  return origins;
+};
+
 /**
  * An internal hook which listens for a specific message type. When a message is received,
  * the event handler is called with the message payload and a function to send a message back
@@ -225,6 +249,9 @@ const useListenAndRespondMessage = (
       if (!isOriginAllowed(origin)) {
         return;
       }
+
+      // Track the parent origin if it's not in TARGET_ORIGINS
+      trackParentOrigin(origin);
 
       const { type }: ReceivePayloadInternal = data;
       if (type === messageName) {
