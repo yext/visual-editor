@@ -88,15 +88,34 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const { t } = useTranslation();
 
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
-
+  const logoWrapperRef = React.useRef<HTMLDivElement>(null);
+  const [hasImage, setHasImage] = React.useState(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const showHamburger = useOverflow(containerRef, contentRef);
 
+  React.useEffect(() => {
+    if (!logoWrapperRef.current) {
+      setHasImage(false);
+      return;
+    }
+
+    const img = logoWrapperRef.current.querySelector("img");
+    setHasImage(!!img);
+  }, [slots.LogoSlot]);
+
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
-  const LogoSlot = <slots.LogoSlot style={{ height: "auto", width: "auto" }} />;
+  const LogoSlot = (
+    <div
+      ref={logoWrapperRef}
+      className="flex-shrink-0"
+      style={{ minHeight: hasImage ? undefined : "100px" }}
+    >
+      <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
+    </div>
+  );
 
   const navContent = (
     <>
