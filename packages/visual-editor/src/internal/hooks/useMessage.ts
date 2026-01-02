@@ -39,6 +39,33 @@ export type EventHandler = (
   payload: Payload
 ) => unknown;
 
+/**
+ * Checks if an origin matches any of the target origins, or matches the optimizelocation.com pattern.
+ * @param origin - The origin to check (e.g., "https://subdomain.optimizelocation.com")
+ * @returns true if the origin matches any target origin or matches *.optimizelocation.com pattern
+ */
+export const isOriginAllowed = (origin: string): boolean => {
+  // Check for exact match in TARGET_ORIGINS
+  if (TARGET_ORIGINS.includes(origin)) {
+    return true;
+  }
+
+  // Check if origin matches *.optimizelocation.com pattern
+  try {
+    const url = new URL(origin);
+    if (
+      url.hostname.endsWith(".optimizelocation.com") ||
+      url.hostname === "optimizelocation.com"
+    ) {
+      return true;
+    }
+  } catch {
+    // Invalid origin URL, no match
+  }
+
+  return false;
+};
+
 export const TARGET_ORIGINS = [
   "http://localhost",
   "https://dev.yext.com",
@@ -189,7 +216,7 @@ const useListenAndRespondMessage = (
       if (data?.source?.startsWith("react-devtools")) {
         return;
       }
-      if (!targetOrigins.includes(origin)) {
+      if (!isOriginAllowed(origin)) {
         return;
       }
 
@@ -201,7 +228,7 @@ const useListenAndRespondMessage = (
         callback(data, origin, source);
       }
     },
-    [messageName, targetOrigins, setSource, setOrigin, callback]
+    [messageName, setSource, setOrigin, callback]
   );
 
   useEffect(() => {
