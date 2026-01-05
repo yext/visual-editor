@@ -22,13 +22,21 @@ export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
     locale
   );
 
+  const localizedImage =
+    resolvedBackgroundImage &&
+    typeof resolvedBackgroundImage === "object" &&
+    "hasLocalizedValue" in resolvedBackgroundImage
+      ? resolvedBackgroundImage[locale]
+      : resolvedBackgroundImage;
+
   return (
     <div
       className="bg-no-repeat bg-center bg-cover"
       style={{
-        backgroundImage: resolvedBackgroundImage?.url
-          ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`
-          : undefined,
+        backgroundImage:
+          typeof localizedImage === "object" && localizedImage?.url
+            ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
+            : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

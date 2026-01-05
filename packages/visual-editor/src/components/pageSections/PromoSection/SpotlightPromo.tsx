@@ -22,12 +22,20 @@ export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
     locale
   );
 
+  const localizedImage =
+    resolvedBackgroundImage &&
+    typeof resolvedBackgroundImage === "object" &&
+    "hasLocalizedValue" in resolvedBackgroundImage
+      ? resolvedBackgroundImage[locale]
+      : resolvedBackgroundImage;
+
   return (
     <div
       style={{
-        backgroundImage: resolvedBackgroundImage?.url
-          ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`
-          : undefined,
+        backgroundImage:
+          typeof localizedImage === "object" && localizedImage?.url
+            ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
+            : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

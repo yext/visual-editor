@@ -2,12 +2,13 @@ import {
   backgroundColors,
   PageSection,
   resolveYextEntityField,
+  TranslatableAssetImage,
   useDocument,
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
 import { useTranslation } from "react-i18next";
-import { getImageUrl } from "@yext/pages-components";
+import { getImageUrl, ImageType } from "@yext/pages-components";
 import { PuckComponent } from "@measured/puck";
 
 export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
@@ -15,24 +16,35 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedBackgroundImage = resolveYextEntityField(
+  const resolvedBackgroundImage:
+    | TranslatableAssetImage
+    | ImageType
+    | undefined = resolveYextEntityField(
     streamDocument,
     data?.backgroundImage,
     locale
   );
 
+  const localizedImage =
+    resolvedBackgroundImage &&
+    typeof resolvedBackgroundImage === "object" &&
+    "hasLocalizedValue" in resolvedBackgroundImage
+      ? resolvedBackgroundImage[locale]
+      : resolvedBackgroundImage;
+
   return (
     <div
       style={{
-        backgroundImage: resolvedBackgroundImage?.url
-          ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`
-          : undefined,
+        backgroundImage:
+          typeof localizedImage === "object" && localizedImage?.url
+            ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
+            : undefined,
       }}
       className="bg-no-repeat bg-center bg-cover"
     >
       <PageSection
         background={
-          resolvedBackgroundImage?.url
+          typeof localizedImage === "object" && localizedImage?.url
             ? {
                 bgColor: "bg-[#00000080]",
                 textColor: "text-white",

@@ -19,10 +19,10 @@ import {
   VideoProps,
   i18nComponentsInstance,
   getDefaultRTF,
-  AssetImageType,
   themeManagerCn,
   useDocument,
   ThemeOptions,
+  TranslatableAssetImage,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
@@ -51,7 +51,7 @@ export interface PromoData {
    * The background image used by the immersive and spotlight variants.
    * @defaultValue Placeholder image.
    */
-  backgroundImage: YextEntityField<ImageType | AssetImageType>;
+  backgroundImage: YextEntityField<ImageType | TranslatableAssetImage>;
 }
 
 export interface PromoStyles {
