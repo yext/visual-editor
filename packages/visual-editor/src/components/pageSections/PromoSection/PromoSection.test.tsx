@@ -2550,17 +2550,41 @@ describe("PromoSection", async () => {
       );
 
       await page.viewport(width, height);
+
+      // Wait for img tags to load
       const images = Array.from(container.querySelectorAll("img"));
       await waitFor(() => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
+
+      // Wait for Youtube iframe to load
       if (props?.data?.media === "video") {
-        // wait a second for YouTube to load
         await delay(1000);
       }
+
+      // Wait for background images to load
       if (name.includes("[immersive]") || name.includes("spotlight")) {
-        // wait for the background image to load
-        await delay(250);
+        await waitFor(async () => {
+          const banner = container.querySelector(".bg-no-repeat");
+          if (!banner) {
+            return true;
+          }
+          const bgImage = window.getComputedStyle(banner).backgroundImage;
+          const url = bgImage.match(/url\(["']?([^"']+)["']?\)/)?.[1];
+
+          if (!url) {
+            return true;
+          }
+
+          const isLoaded = await new Promise((resolve) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+          });
+
+          expect(isLoaded).toBe(true);
+        });
       }
 
       await expect(`PromoSection/[${viewportName}] ${name}`).toMatchScreenshot({
