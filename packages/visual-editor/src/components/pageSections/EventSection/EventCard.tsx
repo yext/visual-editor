@@ -40,7 +40,7 @@ const defaultEvent = {
   dateTime: "2022-12-12T14:00:00",
   description: {
     en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     ),
     hasLocalizedValue: "true",
   },
