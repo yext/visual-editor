@@ -2203,6 +2203,7 @@ const tests: ComponentTest[] = [
       conditionalRender: { hours: true },
     },
     version: 31,
+    includeXLViewport: true,
   },
   {
     name: "version 48 props",
@@ -2358,10 +2359,10 @@ describe("HeroSection", async () => {
 
       await expect(`HeroSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
-      if (isBrandColorTest(props)) {
+      if (isBrandColorTest(props) && results.violations.length) {
         console.warn(
           `IGNORING axe violations for brand color test: ${name}`,
-          results
+          results.violations
         );
       } else {
         expect(results).toHaveNoViolations();
@@ -2373,10 +2374,10 @@ describe("HeroSection", async () => {
           `HeroSection/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
         const results = await axe(container);
-        if (isBrandColorTest(props)) {
+        if (isBrandColorTest(props) && results.violations.length) {
           console.warn(
             `IGNORING axe violations for brand color test: ${name}`,
-            results
+            results.violations
           );
         } else {
           expect(results).toHaveNoViolations();

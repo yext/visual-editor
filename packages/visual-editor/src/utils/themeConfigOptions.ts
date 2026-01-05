@@ -349,6 +349,17 @@ const alignmentOptions = [
   },
 ];
 
+const verticalPositionOptions = [
+  {
+    label: msg("fields.options.top", "Top", { context: "direction" }),
+    value: "top",
+  },
+  {
+    label: msg("fields.options.bottom", "Bottom", { context: "direction" }),
+    value: "bottom",
+  },
+];
+
 const justifyContentOptions = [
   { label: msg("fields.options.start", "Start"), value: "start" },
   { label: msg("fields.options.center", "Center"), value: "center" },
@@ -428,6 +439,7 @@ export const ThemeOptions = {
   CTA_VARIANT: ctaVariantOptions,
   PRESET_IMAGE: presetImageTypeOptions,
   ALIGNMENT: alignmentOptions,
+  VERTICAL_POSITION: verticalPositionOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
   BUTTON_BORDER_RADIUS: buttonBorderRadiusOptions,
