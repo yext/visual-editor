@@ -1678,7 +1678,7 @@ const tests: ComponentTest[] = [
     version: 47,
   },
   {
-    name: "version 49 - Body text - small",
+    name: "version 49 - Body text - small variant",
     document: {
       address: testAddress,
       id: "test-id",
@@ -1718,7 +1718,7 @@ const tests: ComponentTest[] = [
     version: 49,
   },
   {
-    name: "version 49 - Body text - base",
+    name: "version 49 - Body text - base variant",
     document: {
       address: testAddress,
       id: "test-id",
@@ -1758,7 +1758,7 @@ const tests: ComponentTest[] = [
     version: 49,
   },
   {
-    name: "version 49 - Body text - large",
+    name: "version 49 - Body text - large variant",
     document: {
       address: testAddress,
       id: "test-id",
