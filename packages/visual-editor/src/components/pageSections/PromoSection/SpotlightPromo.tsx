@@ -32,10 +32,9 @@ export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
   return (
     <div
       style={{
-        backgroundImage:
-          typeof localizedImage === "object" && localizedImage?.url
-            ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
-            : undefined,
+        backgroundImage: localizedImage?.url
+          ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
+          : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

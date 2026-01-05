@@ -24,6 +24,7 @@ import {
   resolveComponentData,
   ThemeOptions,
   TranslatableAssetImage,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -32,7 +33,9 @@ import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 
 export interface HeroData {
-  backgroundImage: YextEntityField<ImageType | TranslatableAssetImage>;
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 export interface HeroStyles {

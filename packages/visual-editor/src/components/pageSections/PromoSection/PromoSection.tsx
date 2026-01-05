@@ -23,6 +23,7 @@ import {
   useDocument,
   ThemeOptions,
   TranslatableAssetImage,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
@@ -51,7 +52,9 @@ export interface PromoData {
    * The background image used by the immersive and spotlight variants.
    * @defaultValue Placeholder image.
    */
-  backgroundImage: YextEntityField<ImageType | TranslatableAssetImage>;
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 export interface PromoStyles {

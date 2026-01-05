@@ -31,16 +31,15 @@ export const ImmersivePromo: PuckComponent<PromoVariantProps> = (props) => {
   return (
     <div
       style={{
-        backgroundImage:
-          typeof localizedImage === "object" && localizedImage?.url
-            ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
-            : undefined,
+        backgroundImage: localizedImage?.url
+          ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
+          : undefined,
       }}
       className="bg-no-repeat bg-center bg-cover"
     >
       <PageSection
         background={
-          typeof localizedImage === "object" && localizedImage?.url
+          localizedImage?.url
             ? {
                 bgColor: "bg-[#00000080]",
                 textColor: "text-white",

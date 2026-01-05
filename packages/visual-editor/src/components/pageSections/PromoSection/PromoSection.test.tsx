@@ -2555,7 +2555,12 @@ describe("PromoSection", async () => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
       if (props?.data?.media === "video") {
+        // wait a second for YouTube to load
         await delay(1000);
+      }
+      if (name.includes("[immersive]") || name.includes("spotlight")) {
+        // wait for the background image to load
+        await delay(100);
       }
 
       await expect(`PromoSection/[${viewportName}] ${name}`).toMatchScreenshot({

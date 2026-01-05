@@ -33,10 +33,9 @@ export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
     <div
       className="bg-no-repeat bg-center bg-cover"
       style={{
-        backgroundImage:
-          typeof localizedImage === "object" && localizedImage?.url
-            ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
-            : undefined,
+        backgroundImage: localizedImage?.url
+          ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
+          : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
