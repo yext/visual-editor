@@ -105,7 +105,8 @@ export const useSendMessageToIFrame = (
   const sendToIFrame = (data?: PostMessage) => {
     if (iframeRef.current) {
       setStatus("pending");
-      for (const targetOrigin of targetOrigins) {
+      const originsToUse = getOriginsForSending(targetOrigins);
+      for (const targetOrigin of originsToUse) {
         postMessage(
           { ...data, type: messageName },
           iframeRef.current.contentWindow,
@@ -141,7 +142,8 @@ export const useSendMessageToParent = (
       throw new Error("Parent window has closed");
     }
     setStatus("pending");
-    for (const targetOrigin of targetOrigins) {
+    const originsToUse = getOriginsForSending(targetOrigins);
+    for (const targetOrigin of originsToUse) {
       postMessage({ ...data, type: messageName }, window.parent, targetOrigin);
     }
   };
@@ -188,6 +190,80 @@ export const useReceiveMessage = (
   );
 };
 
+// Track the parent window's origin when we receive messages from it
+// This allows us to send messages back to *.optimizelocation.com subdomains
+// that aren't explicitly in TARGET_ORIGINS
+let trackedParentOrigin: string | null = null;
+
+/**
+ * Tracks the parent window's origin when a message is received.
+ * This allows us to send messages back to origins that match the pattern
+ * (like *.optimizelocation.com) even if they're not in TARGET_ORIGINS.
+ */
+const trackParentOrigin = (origin: string) => {
+  if (isOriginAllowed(origin) && !TARGET_ORIGINS.includes(origin)) {
+    trackedParentOrigin = origin;
+  }
+};
+
+// Set up a global listener to track the parent origin from ANY message
+// This ensures we capture the origin even before specific message listeners are set up
+let globalOriginTrackerInitialized = false;
+const initializeGlobalOriginTracker = () => {
+  if (globalOriginTrackerInitialized || typeof window === "undefined") {
+    return;
+  }
+  globalOriginTrackerInitialized = true;
+
+  const globalTracker = ({ origin, data }: MessageEvent) => {
+    // Ignore React Dev Tools messages
+    if (data?.source?.startsWith("react-devtools")) {
+      return;
+    }
+    // Track any valid origin, even if we haven't set up specific message listeners yet
+    trackParentOrigin(origin);
+  };
+
+  window.addEventListener("message", globalTracker);
+};
+
+/**
+ * Gets the list of origins to use when sending messages.
+ * Includes TARGET_ORIGINS plus any tracked parent origin.
+ * Also tries to infer the parent origin from document.referrer if not yet tracked.
+ */
+const getOriginsForSending = (targetOrigins: string[]): string[] => {
+  // Initialize the global tracker to ensure we capture the parent origin early
+  initializeGlobalOriginTracker();
+
+  const origins = [...targetOrigins];
+
+  // If we haven't tracked the parent origin yet, try to infer it from document.referrer
+  if (
+    !trackedParentOrigin &&
+    typeof document !== "undefined" &&
+    document.referrer
+  ) {
+    try {
+      const referrerUrl = new URL(document.referrer);
+      const referrerOrigin = referrerUrl.origin;
+      if (
+        isOriginAllowed(referrerOrigin) &&
+        !origins.includes(referrerOrigin)
+      ) {
+        trackedParentOrigin = referrerOrigin;
+      }
+    } catch {
+      // Invalid referrer URL, ignore
+    }
+  }
+
+  if (trackedParentOrigin && !origins.includes(trackedParentOrigin)) {
+    origins.push(trackedParentOrigin);
+  }
+  return origins;
+};
+
 /**
  * An internal hook which listens for a specific message type. When a message is received,
  * the event handler is called with the message payload and a function to send a message back
@@ -219,6 +295,9 @@ const useListenAndRespondMessage = (
       if (!isOriginAllowed(origin)) {
         return;
       }
+
+      // Track the parent origin if it's not in TARGET_ORIGINS
+      trackParentOrigin(origin);
 
       const { type }: ReceivePayloadInternal = data;
       if (type === messageName) {
