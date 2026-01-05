@@ -162,29 +162,32 @@ const backgroundColorOptions: ComboboxOptionGroup[] = [
 
 export const siteColorOptions: ComboboxOptionGroup[] = [
   {
-    title: msg("siteColors", "Site Colors"),
+    title: msg("recommendedColor", "Recommended Color"),
+    description: msg(
+      "theme.colors.recommendedColorDescription",
+      "Optimize color contrast for accessibility by using the dynamic default."
+    ),
     options: [
       {
         label: msg("default", "Default"),
         value: undefined,
-        color: backgroundColors.color1.value.bgColor,
+        color: undefined,
       },
-      ...Object.entries(backgroundColors)
-        .filter(([key]) => key.startsWith("color"))
-        .map(([key, { label, value }]) => {
-          if (key.includes("color")) {
-            return {
-              label,
-              value: {
-                bgColor: value.bgColor.replace("bg-", ""),
-                textColor: value.textColor.replace("text-", ""),
-              },
-              color: value.bgColor,
-            };
-          }
-        })
-        .filter((o) => !!o),
     ],
+  },
+  {
+    title: msg("siteColors", "Site Colors"),
+    options: Object.entries(backgroundColors)
+      .map(([key, { label, value }]) => {
+        if (key.includes("color")) {
+          return {
+            label,
+            value,
+            color: value.bgColor,
+          };
+        }
+      })
+      .filter((o) => !!o),
   },
 ];
 
@@ -349,6 +352,17 @@ const alignmentOptions = [
   },
 ];
 
+const verticalPositionOptions = [
+  {
+    label: msg("fields.options.top", "Top", { context: "direction" }),
+    value: "top",
+  },
+  {
+    label: msg("fields.options.bottom", "Bottom", { context: "direction" }),
+    value: "bottom",
+  },
+];
+
 const justifyContentOptions = [
   { label: msg("fields.options.start", "Start"), value: "start" },
   { label: msg("fields.options.center", "Center"), value: "center" },
@@ -428,6 +442,7 @@ export const ThemeOptions = {
   CTA_VARIANT: ctaVariantOptions,
   PRESET_IMAGE: presetImageTypeOptions,
   ALIGNMENT: alignmentOptions,
+  VERTICAL_POSITION: verticalPositionOptions,
   JUSTIFY_CONTENT: justifyContentOptions,
   BODY_VARIANT: bodyVariantOptions,
   BUTTON_BORDER_RADIUS: buttonBorderRadiusOptions,

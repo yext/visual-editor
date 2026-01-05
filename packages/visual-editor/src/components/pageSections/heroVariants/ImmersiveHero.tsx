@@ -21,18 +21,25 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
     locale
   );
 
+  const localizedImage =
+    resolvedBackgroundImage &&
+    typeof resolvedBackgroundImage === "object" &&
+    "hasLocalizedValue" in resolvedBackgroundImage
+      ? resolvedBackgroundImage[locale]
+      : resolvedBackgroundImage;
+
   return (
     <div
       style={{
-        backgroundImage: resolvedBackgroundImage?.url
-          ? `url(${getImageUrl(resolvedBackgroundImage.url, resolvedBackgroundImage.width, resolvedBackgroundImage.height)})`
+        backgroundImage: localizedImage?.url
+          ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
           : undefined,
       }}
       className="bg-no-repeat bg-center bg-cover"
     >
       <PageSection
         background={
-          resolvedBackgroundImage?.url
+          localizedImage?.url
             ? {
                 bgColor: "bg-[#00000080]",
                 textColor: "text-white",

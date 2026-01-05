@@ -653,7 +653,9 @@ interface FAQStyles {
 }
 
 interface HeroData {
-  backgroundImage: YextEntityField<ImageType | AssetImageType>;
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 interface HeroStyles {
@@ -725,19 +727,47 @@ interface PromoData {
    * @defaultValue 'image'
    */
   media: "image" | "video";
+  /**
+   * The background image used by the immersive and spotlight variants.
+   * @defaultValue Placeholder image.
+   */
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 interface PromoStyles {
+  /**
+   * The visual variant for the promo section.
+   * @defaultValue classic
+   */
+  variant: "classic" | "immersive" | "spotlight" | "compact";
   /**
    * The background color for the entire section.
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
   /**
-   * Positions the image to the left or right of the text content.
-   * @defaultValue 'left'
+   * Positions the image to the left or right of the promo content on desktop (classic and compact variants).
+   * @defaultValue right
    */
-  orientation: "left" | "right";
+  desktopImagePosition: "left" | "right";
+  /**
+   * Positions the image to the top or bottom of the promo content on mobile (classic and compact variants).
+   * @defaultValue top
+   */
+  mobileImagePosition: "top" | "bottom";
+  /**
+   * Text content position and alignment.
+   * @defaultValue left
+   */
+  containerAlignment: "left" | "center" | "right";
+  /**
+   * Image Height for the promo image with Immersive or Spotlight variant
+   * Minimum height: content height + Page Section Top/Bottom Padding
+   * @default 500px
+   */
+  imageHeight: number;
 }
 
 interface StaticMapData {
@@ -798,6 +828,8 @@ type AssetImageType = Omit<ImageType, "alternateText"> & {
   assetImage?: ImageContentData;
 };
 
+type TranslatableAssetImage = AssetImageType | LocalizedAssetImage;
+
 /** Data for the PromoSection */
 type PromoSectionType = {
   /**
@@ -837,6 +869,12 @@ type ImageContentData = {
   transformations?: ImageTransformations;
   sourceUrl?: string;
   altText?: string;
+};
+
+type LocalizedAssetImage = {
+  hasLocalizedValue: "true";
+} & {
+  [key: string]: AssetImageType | undefined;
 };
 
 type AssetVideo = {
