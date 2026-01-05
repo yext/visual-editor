@@ -425,9 +425,9 @@ If 'true', displays the language selector dropdown in the header.
 
 This object contains the content to be displayed by the component.
 
-| Prop                   | Type                                           | Description | Default |
-| :--------------------- | :--------------------------------------------- | :---------- | :------ |
-| `data.backgroundImage` | `YextEntityField<ImageType \| AssetImageType>` |             |         |
+| Prop                   | Type                                                   | Description | Default |
+| :--------------------- | :----------------------------------------------------- | :---------- | :------ |
+| `data.backgroundImage` | `YextEntityField<ImageType \| TranslatableAssetImage>` |             |         |
 
 #### Style Props
 
@@ -678,11 +678,11 @@ The Promo Section is a flexible content component designed to highlight a single
 
 This object contains the content to be displayed by the component.
 
-| Prop                   | Type                                           | Description                                                                                           | Default                                         |
-| :--------------------- | :--------------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
-| `data.backgroundImage` | `YextEntityField<ImageType \| AssetImageType>` | The background image used by the immersive and spotlight variants.                                    | `Placeholder image.`                            |
-| `data.media`           | `"image" \| "video"`                           | Determines whether to display an image or video in the media section.                                 | `'image'`                                       |
-| `data.promo`           | `YextEntityField<PromoSectionType \| {}>`      | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
+| Prop                   | Type                                                   | Description                                                                                           | Default                                         |
+| :--------------------- | :----------------------------------------------------- | :---------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
+| `data.backgroundImage` | `YextEntityField<ImageType \| TranslatableAssetImage>` | The background image used by the immersive and spotlight variants.                                    | `Placeholder image.`                            |
+| `data.media`           | `"image" \| "video"`                                   | Determines whether to display an image or video in the media section.                                 | `'image'`                                       |
+| `data.promo`           | `YextEntityField<PromoSectionType \| {}>`              | The source for the promotional content, including an image, title, description, and a call-to-action. | `Placeholder content for a featured promotion.` |
 
 #### Style Props
 

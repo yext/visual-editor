@@ -653,7 +653,7 @@ interface FAQStyles {
 }
 
 interface HeroData {
-  backgroundImage: YextEntityField<ImageType | AssetImageType>;
+  backgroundImage: YextEntityField<ImageType | TranslatableAssetImage>;
 }
 
 interface HeroStyles {
@@ -729,7 +729,7 @@ interface PromoData {
    * The background image used by the immersive and spotlight variants.
    * @defaultValue Placeholder image.
    */
-  backgroundImage: YextEntityField<ImageType | AssetImageType>;
+  backgroundImage: YextEntityField<ImageType | TranslatableAssetImage>;
 }
 
 interface PromoStyles {
@@ -819,10 +819,7 @@ type FAQStruct = {
   answer: TranslatableRichText;
 };
 
-type AssetImageType = Omit<ImageType, "alternateText"> & {
-  alternateText?: TranslatableString;
-  assetImage?: ImageContentData;
-};
+type TranslatableAssetImage = AssetImageType | LocalizedAssetImage;
 
 /** Data for the PromoSection */
 type PromoSectionType = {
@@ -854,15 +851,14 @@ type LocalizedValues = {
   hasLocalizedValue: "true";
 } & Record<string, string>;
 
-/** Describes the data corresponding to a piece of image content. */
-type ImageContentData = {
-  name?: string;
-  transformedImage?: ImageData;
-  originalImage?: ImageData;
-  childImages?: ImageData[];
-  transformations?: ImageTransformations;
-  sourceUrl?: string;
-  altText?: string;
+type AssetImageType = Omit<ImageType, "alternateText"> & {
+  alternateText?: TranslatableString;
+  assetImage?: ImageContentData;
+};
+
+type LocalizedAssetImage = {
+  hasLocalizedValue: "true";
+  [key: string]: AssetImageType | string | undefined;
 };
 
 type AssetVideo = {
@@ -887,16 +883,16 @@ type EnhancedTranslatableCTA = TranslatableCTA & {
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
 };
 
-/** Describes the data corresponding to a single image. */
-type ImageData = {
-  url: string;
-  dimension?: ImageDimension;
-  exifMetadata?: {
-    rotate: number;
-  };
+/** Describes the data corresponding to a piece of image content. */
+type ImageContentData = {
+  name?: string;
+  transformedImage?: ImageData;
+  originalImage?: ImageData;
+  childImages?: ImageData[];
+  transformations?: ImageTransformations;
+  sourceUrl?: string;
+  altText?: string;
 };
-
-type ImageTransformations = Partial<Record<TransformKind, ImageTransformation>>;
 
 type Video$1 = {
   /** The YouTube video URL */
@@ -922,6 +918,17 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   /** The link the for the CTA */
   link: TranslatableString;
 };
+
+/** Describes the data corresponding to a single image. */
+type ImageData = {
+  url: string;
+  dimension?: ImageDimension;
+  exifMetadata?: {
+    rotate: number;
+  };
+};
+
+type ImageTransformations = Partial<Record<TransformKind, ImageTransformation>>;
 
 /** Describes the dimensions of an image. */
 type ImageDimension = {
