@@ -6,7 +6,6 @@ import {
   GetPath,
   TemplateProps,
   TemplateRenderProps,
-  TransformProps,
   GetHeadConfig,
   HeadConfig,
   TagType,
