@@ -96,12 +96,6 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   };
 };
 
-export const transformProps: TransformProps<TemplateProps<any>> = async (
-  data
-) => {
-  return await injectTranslations(data);
-};
-
 export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
@@ -117,9 +111,11 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     mainConfig,
     document
   );
-  const updatedData = await resolveAllData(migratedData, mainConfig, {
-    streamDocument: document,
-  });
+  const updatedData = await injectTranslations(
+    await resolveAllData(migratedData, mainConfig, {
+      streamDocument: document,
+    })
+  );
 
   return { ...props, data: updatedData };
 };

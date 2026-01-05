@@ -101,48 +101,45 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       name: "facebook",
       link: streamDocument?._site?.facebookPageUrl,
       label: <FaFacebook className="w-5 h-5 mr-4" />,
-      ariaLabel: t("footerSocialLinks.facebook", "Follow us on Facebook"),
+      ariaLabel: t("socialLinks.facebook", "Follow us on Facebook"),
     },
     {
       name: "instagram",
       prefix: "//www.instagram.com/",
       link: streamDocument?._site?.instagramHandle,
       label: <FaInstagram className="w-5 h-5 mr-4" />,
-      ariaLabel: t("footerSocialLinks.instagram", "Follow us on Instagram"),
+      ariaLabel: t("socialLinks.instagram", "Follow us on Instagram"),
     },
     {
       name: "youtube",
       link: streamDocument?._site?.youTubeChannelUrl,
       label: <FaYoutube className="w-5 h-5 mr-4" />,
-      ariaLabel: t(
-        "footerSocialLinks.youtube",
-        "Subscribe to our YouTube channel"
-      ),
+      ariaLabel: t("socialLinks.youtube", "Subscribe to our YouTube channel"),
     },
     {
       name: "linkedIn",
       link: streamDocument?._site?.linkedInUrl,
       label: <FaLinkedinIn className="w-5 h-5 mr-4" />,
-      ariaLabel: t("footerSocialLinks.linkedIn", "Follow us on LinkedIn"),
+      ariaLabel: t("socialLinks.linkedIn", "Follow us on LinkedIn"),
     },
     {
       name: "twitter",
       prefix: "//www.twitter.com/",
       link: streamDocument?._site?.twitterHandle,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
-      ariaLabel: t("footerSocialLinks.twitter", "Follow us on Twitter"),
+      ariaLabel: t("socialLinks.twitter", "Follow us on X (Twitter)"),
     },
     {
       name: "pinterest",
       link: streamDocument?._site?.pinterestUrl,
       label: <FaPinterest className="w-5 h-5 mr-4" />,
-      ariaLabel: t("footerSocialLinks.pinterest", "Follow us on Pinterest"),
+      ariaLabel: t("socialLinks.pinterest", "Follow us on Pinterest"),
     },
     {
       name: "tiktok",
       link: streamDocument?._site?.tikTokUrl,
       label: <FaTiktok className="w-5 h-5 mr-4" />,
-      ariaLabel: t("footerSocialLinks.tiktok", "Follow us on TikTok"),
+      ariaLabel: t("socialLinks.tiktok", "Follow us on TikTok"),
     },
   ].filter((link) => link.link);
 

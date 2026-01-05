@@ -1220,49 +1220,30 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
       if (selectedDistanceMiles) {
         return (
           <div>
-            {t(
-              resultCount === 1
-                ? "locationWithinDistanceOf_one"
-                : "locationsWithinDistanceOf_other",
-              resultCount === 1
-                ? '{{count}} location within {{distance}} miles of "{{name}}"'
-                : '{{count}} locations within {{distance}} miles of "{{name}}"',
-              {
-                count: resultCount,
-                distance: selectedDistanceMiles,
-                name: filterDisplayName,
-              }
-            )}
+            {t("locationsWithinDistanceOf", {
+              count: resultCount,
+              distance: selectedDistanceMiles,
+              mile: t("mile", { count: selectedDistanceMiles }),
+              name: filterDisplayName,
+            })}
           </div>
         );
       } else {
         return (
           <div>
-            {t(
-              resultCount === 1 ? "locationNear_one" : "locationsNear_other",
-              resultCount === 1
-                ? '{{count}} location near "{{name}}"'
-                : '{{count}} locations near "{{name}}"',
-              {
-                count: resultCount,
-                name: filterDisplayName,
-              }
-            )}
+            {t("locationsNear", {
+              count: resultCount,
+              name: filterDisplayName,
+            })}
           </div>
         );
       }
     } else {
       return (
         <div>
-          {t(
-            resultCount === 1
-              ? "locationWithCount_one"
-              : "locationWithCount_other",
-            resultCount === 1 ? "{{count}} location" : "{{count}} locations",
-            {
-              count: resultCount,
-            }
-          )}
+          {t("locationWithCount", {
+            count: resultCount,
+          })}
         </div>
       );
     }

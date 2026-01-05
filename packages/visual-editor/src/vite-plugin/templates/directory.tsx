@@ -94,12 +94,6 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   };
 };
 
-export const transformProps: TransformProps<TemplateProps<any>> = async (
-  data
-) => {
-  return await injectTranslations(data);
-};
-
 export const getPath: GetPath<TemplateProps> = ({ document }) => {
   if (document.slug) {
     return document.slug;
@@ -119,9 +113,11 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     directoryConfig,
     document
   );
-  const updatedData = await resolveAllData(migratedData, directoryConfig, {
-    streamDocument: document,
-  });
+  const updatedData = await injectTranslations(
+    await resolveAllData(migratedData, directoryConfig, {
+      streamDocument: document,
+    })
+  );
 
   return { ...props, data: updatedData };
 };
