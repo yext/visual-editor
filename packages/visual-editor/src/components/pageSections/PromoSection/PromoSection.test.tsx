@@ -2560,7 +2560,7 @@ describe("PromoSection", async () => {
       }
       if (name.includes("[immersive]") || name.includes("spotlight")) {
         // wait for the background image to load
-        await delay(100);
+        await delay(250);
       }
 
       await expect(`PromoSection/[${viewportName}] ${name}`).toMatchScreenshot({
