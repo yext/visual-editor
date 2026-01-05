@@ -39,7 +39,8 @@ const testAddress = {
   postalCode: "11211",
   region: "NY",
 };
-
+const rtfHtml =
+  '<div class="rtf-theme"><h1><span>Heading One — Lorem Ipsum</span></h1><h2><span>Heading Two — Lorem Ipsum</span></h2><p><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<strong>Lorem ipsum</strong> dolor sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Lorem ipsum</strong> dolor sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.<strong>Lorem ipsum</strong> dolor sit amet.</span></p><ul style="padding: 0; margin: 0; margin-left: 16px; list-style-type: disc; list-style-position: inside;"><li><span>Lorem ipsum dolor sit amet</span></li><li><span>Consectetur adipiscing elit</span></li></ul><p><span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.<a href=\\"#\\">Lorem link</a></span></p></div>';
 const tests: ComponentTest[] = [
   {
     name: "version 18 - atoms used to make a HeroSection",
@@ -1675,6 +1676,126 @@ const tests: ComponentTest[] = [
       analytics: { scope: "gridSection" },
     },
     version: 47,
+  },
+  {
+    name: "version 49 - Body text - small",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "BodyText",
+              props: {
+                id: "BodyText-547941ef-1bc8-4e88-96e6-81b3b65a4f54",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        html: rtfHtml,
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "sm" },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 49,
+  },
+  {
+    name: "version 49 - Body text - base",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "BodyText",
+              props: {
+                id: "BodyText-547941ef-1bc8-4e88-96e6-81b3b65a4f54",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        html: rtfHtml,
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "base" },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 49,
+  },
+  {
+    name: "version 49 - Body text - large",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "BodyText",
+              props: {
+                id: "BodyText-547941ef-1bc8-4e88-96e6-81b3b65a4f54",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        html: rtfHtml,
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "lg" },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 49,
   },
 ];
 
