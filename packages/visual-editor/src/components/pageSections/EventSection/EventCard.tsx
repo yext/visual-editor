@@ -436,6 +436,7 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
       | WithId<CTAWrapperProps>
       | undefined;
+    const shouldTruncate = data.props.styles.truncateDescription !== false;
 
     const resolvedImage = imageSlotProps?.parentData
       ? imageSlotProps.parentData.image
@@ -529,7 +530,7 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
     updatedData = setDeep(
       updatedData,
       "props.slots.DescriptionSlot[0].props.parentStyles.className",
-      data.props.styles.truncateDescription ? "md:line-clamp-2" : undefined
+      shouldTruncate ? "md:line-clamp-2" : undefined
     );
 
     // Set parentData for all slots if parentData is provided

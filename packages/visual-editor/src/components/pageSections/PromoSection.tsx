@@ -130,26 +130,23 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      orientation: YextField(
-        msg("fields.mediaOrientation", "Media Orientation"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
-        }
-      ),
+      orientation: YextField(msg("fields.mediaPosition", "Media Position"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.right", "Right", {
+              context: "direction",
+            }),
+            value: "right",
+          },
+        ],
+      }),
     },
   }),
   slots: {
