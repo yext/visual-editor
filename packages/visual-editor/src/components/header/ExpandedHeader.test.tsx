@@ -941,7 +941,7 @@ const tests: ComponentTest[] = [
     version: 48,
   },
   {
-    name: "version 50 props - no logo",
+    name: "version 49 props - no logo",
     document: {},
     props: {
       styles: {
@@ -1084,7 +1084,7 @@ const tests: ComponentTest[] = [
         scope: "expandedHeader",
       },
     },
-    version: 50,
+    version: 49,
   },
 ];
 
