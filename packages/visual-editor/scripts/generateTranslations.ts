@@ -270,5 +270,4 @@ async function translateFile(type: "components" | "platform"): Promise<void> {
 }
 
 // Kick off the translation process
-translateFile("components").catch(console.error);
 translateFile("platform").catch(console.error);
