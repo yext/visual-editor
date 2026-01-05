@@ -221,9 +221,7 @@ const initializeGlobalOriginTracker = () => {
       return;
     }
     // Track any valid origin, even if we haven't set up specific message listeners yet
-    if (isOriginAllowed(origin)) {
-      trackParentOrigin(origin);
-    }
+    trackParentOrigin(origin);
   };
 
   window.addEventListener("message", globalTracker);

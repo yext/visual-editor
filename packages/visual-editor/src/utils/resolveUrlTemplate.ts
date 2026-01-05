@@ -4,7 +4,6 @@ import { normalizeSlug } from "./slugifier";
 import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
 
-// test to delete
 /**
  * Resolves a URL template using the base entity page set's URL template.
  * This function is specifically for resolving URLs of child entities (locations)
