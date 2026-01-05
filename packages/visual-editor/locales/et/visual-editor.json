@@ -287,7 +287,7 @@
     "mapStyle": "Kaardistiil",
     "maxWidth": "Maksimaalne laius",
     "media": "Meedium",
-    "mediaOrientation": "Meedia orientatsioon",
+    "mediaPosition": "Meedia positsioon",
     "metaDescription": "Meta kirjeldus",
     "metaTitle": "Meta pealkiri",
     "mobileContentAlignment": "Mobiilse sisu joondamine",

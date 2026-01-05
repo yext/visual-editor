@@ -287,7 +287,7 @@
     "mapStyle": "Karttatyyli",
     "maxWidth": "Enimmäisleveys",
     "media": "Media",
-    "mediaOrientation": "Median suuntautuminen",
+    "mediaPosition": "Median asema",
     "metaDescription": "Metakuvaus",
     "metaTitle": "Metan otsikko",
     "mobileContentAlignment": "Mobiilisisällön kohdistus",
