@@ -496,6 +496,98 @@ const tests: ComponentTest[] = [
     },
     version: 38,
   },
+  {
+    name: "version 50 props with localized constant values",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+      },
+      slots: {
+        HeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-3c58d37f-7f1d-46ad-8938-e72ac3013b39",
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Gallery",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            },
+          },
+        ],
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              id: "PhotoGalleryWrapper-96ee4ed8-d5f7-451a-ac90-8657c4526c42",
+              data: {
+                images: {
+                  field: "",
+                  constantValue: [
+                    {
+                      assetImage: {
+                        en: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        es: {
+                          alternateText: "",
+                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          height: 1,
+                          width: 1,
+                        },
+                        hasLocalizedValue: "true",
+                      },
+                    },
+                    {
+                      assetImage: {
+                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                        width: 1000,
+                        height: 570,
+                        assetImage: {
+                          name: "Placeholder",
+                        },
+                      },
+                    },
+                  ],
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
+                },
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+      id: "PhotoGallerySection-c8c122c3-2493-449b-a399-9f36a3372fed",
+    },
+    version: 50,
+  },
 ];
 
 describe("PhotoGallerySection", async () => {
