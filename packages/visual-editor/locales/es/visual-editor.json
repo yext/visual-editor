@@ -612,6 +612,7 @@
   "promoBanner": "Banner promocional",
   "promoMedia": "Medios promocionales",
   "recentReviews": "Revisiones recientes",
+  "recommendedColor": "Color recomendado",
   "recommendedColors": "Colores recomendados",
   "redo": "Rehacer",
   "refineYourSearch": "Refina tu búsqueda",
@@ -678,6 +679,7 @@
       "colors": "Bandera",
       "primary": "Primario",
       "quaternary": "Cuaternario",
+      "recommendedColorDescription": "Optimice el contraste de color para la accesibilidad utilizando el valor predeterminado dinámico.",
       "recommendedDescription": "Optimizar el contraste de color para la accesibilidad con estos fondos.",
       "secondary": "Secundario",
       "tertiary": "Terciario"

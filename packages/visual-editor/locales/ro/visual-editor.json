@@ -613,6 +613,7 @@
   "promoBanner": "Banner promoțional",
   "promoMedia": "Media promo",
   "recentReviews": "Recenzii recente",
+  "recommendedColor": "Culoare recomandată",
   "recommendedColors": "Culorile recomandate",
   "redo": "Redo.",
   "refineYourSearch": "Rafinați-vă căutarea",
@@ -679,6 +680,7 @@
       "colors": "Culori",
       "primary": "Primar",
       "quaternary": "Cuaternar",
+      "recommendedColorDescription": "Optimizați contrastul de culoare pentru accesibilitate utilizând valoarea implicită dinamică.",
       "recommendedDescription": "Optimizați contrastul de culoare pentru accesibilitate cu aceste fundaluri.",
       "secondary": "Secundar",
       "tertiary": "Terţiar"

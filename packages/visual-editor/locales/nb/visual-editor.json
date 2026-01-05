@@ -613,6 +613,7 @@
   "promoBanner": "Kampanjebanner",
   "promoMedia": "Promo Media",
   "recentReviews": "Nyere anmeldelser",
+  "recommendedColor": "Anbefalt farge",
   "recommendedColors": "Anbefalte farger",
   "redo": "Gjøre om",
   "refineYourSearch": "Avgrens søket ditt",
@@ -679,6 +680,7 @@
       "colors": "Farger",
       "primary": "Primær",
       "quaternary": "Kvartær",
+      "recommendedColorDescription": "Optimaliser fargekontrasten for tilgjengelighet ved å bruke den dynamiske standarden.",
       "recommendedDescription": "Optimaliser fargekontrast for tilgjengelighet med denne bakgrunnen.",
       "secondary": "Sekundær",
       "tertiary": "Tertiær"

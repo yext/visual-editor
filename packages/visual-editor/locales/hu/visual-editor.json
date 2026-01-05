@@ -613,6 +613,7 @@
   "promoBanner": "Promó banner",
   "promoMedia": "Promóciós média",
   "recentReviews": "Legutóbbi vélemények",
+  "recommendedColor": "Ajánlott szín",
   "recommendedColors": "Ajánlott színek",
   "redo": "Újra felújít",
   "refineYourSearch": "Finomítsa a keresést",
@@ -679,6 +680,7 @@
       "colors": "Színek",
       "primary": "Elsődleges",
       "quaternary": "Kvaterner",
+      "recommendedColorDescription": "Optimalizálja a színkontrasztot a hozzáférhetőség érdekében a dinamikus alapértelmezés használatával.",
       "recommendedDescription": "Optimalizálja a színkontrasztot az ilyen háttérrel való hozzáféréshez.",
       "secondary": "Másodlagos",
       "tertiary": "Harmadlagos"

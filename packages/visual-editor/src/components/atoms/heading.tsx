@@ -1,6 +1,11 @@
-import * as React from "react";
+import {
+  BackgroundStyle,
+  HeadingLevel,
+  themeManagerCn,
+} from "@yext/visual-editor";
 import { cva, type VariantProps } from "class-variance-authority";
-import { HeadingLevel, themeManagerCn } from "@yext/visual-editor";
+import * as React from "react";
+import { normalizeThemeColor } from "../../utils/normalizeThemeColor";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {
@@ -64,6 +69,7 @@ export interface HeadingProps
     VariantProps<typeof headingVariants> {
   level: HeadingLevel;
   semanticLevelOverride?: HeadingLevel | "span";
+  color?: BackgroundStyle;
 }
 
 export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
@@ -75,6 +81,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       fontSize,
       semanticLevelOverride,
       style,
+      color,
       ...props
     },
     ref
@@ -90,6 +97,10 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
       "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span"
     >;
 
+    const dynamicStyle = color?.bgColor
+      ? { color: `var(--colors-${normalizeThemeColor(color.bgColor)})` }
+      : undefined;
+
     return (
       <Tag
         className={themeManagerCn(
@@ -104,6 +115,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
         style={{
           // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-h${level}-textTransform)`,
+          ...dynamicStyle,
           ...style,
         }}
         ref={ref}

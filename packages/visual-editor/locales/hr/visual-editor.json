@@ -613,6 +613,7 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo medija",
   "recentReviews": "Nedavne recenzije",
+  "recommendedColor": "Preporučena boja",
   "recommendedColors": "Preporučene boje",
   "redo": "Ponovno obnavljati",
   "refineYourSearch": "Pročistite svoju pretragu",
@@ -679,6 +680,7 @@
       "colors": "Boja",
       "primary": "Osnovan",
       "quaternary": "Kvartarni",
+      "recommendedColorDescription": "Optimizirajte kontrast boja za pristupačnost pomoću dinamičke zadane postavke.",
       "recommendedDescription": "Optimizirajte kontrast boje za pristupačnost s tim pozadinama.",
       "secondary": "Sekundarni",
       "tertiary": "Tercijarni"

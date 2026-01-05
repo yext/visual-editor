@@ -613,6 +613,7 @@
   "promoBanner": "Promobanner",
   "promoMedia": "Promo media",
   "recentReviews": "Recente beoordelingen",
+  "recommendedColor": "Aanbevolen kleur",
   "recommendedColors": "Aanbevolen kleuren",
   "redo": "Opnieuw doen",
   "refineYourSearch": "Verfijn uw zoekopdracht",
@@ -679,6 +680,7 @@
       "colors": "Kleuren",
       "primary": "Primair",
       "quaternary": "Quaternair",
+      "recommendedColorDescription": "Optimaliseer het kleurcontrast voor toegankelijkheid door de dynamische standaard te gebruiken.",
       "recommendedDescription": "Optimaliseer het kleurcontrast voor toegankelijkheid met deze achtergronden.",
       "secondary": "Secundair",
       "tertiary": "Tertiair"

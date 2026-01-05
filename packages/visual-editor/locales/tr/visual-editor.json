@@ -613,6 +613,7 @@
   "promoBanner": "Promosyon Banner'ı",
   "promoMedia": "Promosyon medyası",
   "recentReviews": "Son İncelemeler",
+  "recommendedColor": "Önerilen Renk",
   "recommendedColors": "Önerilen renkler",
   "redo": "Yeniden yapmak",
   "refineYourSearch": "Aramanızı Hassaslaştırın",
@@ -679,6 +680,7 @@
       "colors": "Renk",
       "primary": "Öncelik",
       "quaternary": "Kuaterner",
+      "recommendedColorDescription": "Dinamik varsayılanı kullanarak erişilebilirlik için renk kontrastını optimize edin.",
       "recommendedDescription": "Bu arka planlarla erişilebilirlik için renk kontrastını optimize edin.",
       "secondary": "İkincil",
       "tertiary": "Üçüncül"
