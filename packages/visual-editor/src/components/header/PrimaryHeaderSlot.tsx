@@ -92,16 +92,15 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const showHamburger = useOverflow(containerRef, contentRef);
-
-  const hasImage = conditionalRender?.hasLogoImage;
-
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
   const LogoSlot = (
     <div
       className="flex-shrink-0"
-      style={{ minHeight: hasImage ? undefined : "100px" }}
+      style={{
+        minHeight: conditionalRender?.hasLogoImage ? undefined : "100px",
+      }}
     >
       <slots.LogoSlot style={{ height: "auto", width: "auto" }} />
     </div>
