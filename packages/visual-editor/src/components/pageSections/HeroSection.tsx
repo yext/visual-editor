@@ -14,7 +14,6 @@ import {
   msg,
   getAnalyticsScopeHash,
   YextEntityField,
-  AssetImageType,
   themeManagerCn,
   CTAVariant,
   HeadingLevel,
@@ -23,6 +22,9 @@ import {
   ImageWrapperProps,
   CTAWrapperProps,
   resolveComponentData,
+  ThemeOptions,
+  TranslatableAssetImage,
+  AssetImageType,
 } from "@yext/visual-editor";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
@@ -31,7 +33,9 @@ import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 
 export interface HeroData {
-  backgroundImage: YextEntityField<ImageType | AssetImageType>;
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
 }
 
 export interface HeroStyles {
@@ -273,16 +277,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         msg("fields.mobileImagePosition", "Mobile Image Position"),
         {
           type: "radio",
-          options: [
-            {
-              label: msg("fields.options.top", "Top"),
-              value: "top",
-            },
-            {
-              label: msg("fields.options.bottom", "Bottom"),
-              value: "bottom",
-            },
-          ],
+          options: ThemeOptions.VERTICAL_POSITION,
         }
       ),
     },
@@ -538,7 +533,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           data,
           "props.slots.ImageSlot[0].props.className",
           themeManagerCn(
-            "w-full sm:w-fit h-full",
+            "w-full h-full",
             data.props.styles.desktopImagePosition === "left"
               ? "mr-auto"
               : "ml-auto"
@@ -667,12 +662,16 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
  */
 export const updateFields = <T extends DefaultComponentProps>(
   obj: Record<string, any>,
-  paths: string[],
+  paths: (string | undefined)[],
   value: any
 ): Fields<T> => {
   const newObj = { ...obj };
 
   for (const path of paths) {
+    if (!path) {
+      continue;
+    }
+
     const keys = path.split(".");
     let current = newObj;
 
