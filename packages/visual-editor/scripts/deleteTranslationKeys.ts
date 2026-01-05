@@ -1,4 +1,3 @@
-// delete-visual-editor-keys.ts
 import fs from "node:fs";
 import path from "node:path";
 import * as readline from "node:readline/promises";
@@ -151,8 +150,7 @@ function removeKeysFromFile(filePath: string, keysToDelete: string[]): number {
 }
 
 /**
- * Main function: deletes specified keys from visual-editor.json files
- * (non-English by default, English optionally)
+ * Deletes specified keys from translation files (non-English by default, English optionally).
  */
 async function deleteTranslationKeys() {
   console.log("=== Delete Translation Keys from visual-editor.json ===\n");
@@ -203,10 +201,6 @@ async function deleteTranslationKeys() {
     console.log("\nNo matching keys were found in the processed files.");
   }
 }
-
-// ────────────────────────────────────────────────
-// ENTRY POINT
-// ────────────────────────────────────────────────
 
 try {
   await deleteTranslationKeys();

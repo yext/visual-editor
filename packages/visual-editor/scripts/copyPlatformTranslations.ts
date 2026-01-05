@@ -45,7 +45,9 @@ const saveJson = (filePath: string, data: Record<string, string>) => {
 };
 
 /**
- * Copies missing translations from platform locale files to components locale files.
+ * Copies translations from platform locale files to components locale files. If the key does not exist
+ * in the components file but exists in the platform file, it will be copied over. If the key already exists
+ * in the components file, it will be overwritten.
  */
 const copyPlatformTranslations = async () => {
   // 1. Read the English components file to get the list of keys
@@ -107,14 +109,16 @@ const copyPlatformTranslations = async () => {
 
     let updated = false;
 
-    // Copy missing keys from platform to components
+    // Copy missing keys/mismatching values from platform to components
     for (const key of enComponentKeys) {
-      if (!(key in componentsTranslations) && key in platformTranslations) {
-        componentsTranslations[key] = platformTranslations[key];
-        updated = true;
-        console.log(
-          `  → Added "${key}" to components/${locale}/visual-editor.json`
-        );
+      if (key in platformTranslations) {
+        if (componentsTranslations[key] !== platformTranslations[key]) {
+          componentsTranslations[key] = platformTranslations[key];
+          updated = true;
+          console.log(
+            `  → Added/Updated "${key}" to components/${locale}/visual-editor.json`
+          );
+        }
       }
     }
 
