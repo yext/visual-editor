@@ -323,9 +323,10 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
       ];
       if (key === "DescriptionSlot") {
         newSlotData.DescriptionSlot[0].props.parentStyles = {
-          className: sharedCardProps.cardStyles.truncateDescription
-            ? "md:line-clamp-2"
-            : undefined,
+          className:
+            sharedCardProps.cardStyles.truncateDescription !== false
+              ? "md:line-clamp-2"
+              : undefined,
         };
       }
     });
