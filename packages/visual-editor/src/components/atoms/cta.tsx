@@ -295,7 +295,6 @@ export const CTA = (props: CTAProps) => {
       variant={buttonVariant}
     >
       <Link
-        className="inline leading-none"
         cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
