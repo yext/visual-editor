@@ -24,6 +24,8 @@
   "loadingMap": "Laster inn kart ...",
   "loadingNearbyLocations": "Laster inn nærliggende steder ...",
   "loadingReviews": "Laster inn anmeldelser ...",
+  "locationWithCount_one": "{{count}} plassering",
+  "locationWithCount_other": "{{count}} lokasjoner",
   "locationsNear_one": "{{count}} plassering i nærheten \"{{name}}\"",
   "locationsNear_other": "{{count}} steder i nærheten av «{{name}}»",
   "locationsWithinDistanceOf_one": "{{count}} sted innenfor {{distance}} {{mile}} fra \"{{name}}\"",

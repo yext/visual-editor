@@ -24,6 +24,8 @@
   "loadingMap": "Kaardi laadimine ...",
   "loadingNearbyLocations": "Lähedal asuvate asukohtade laadimine ...",
   "loadingReviews": "Ülevaadete laadimine ...",
+  "locationWithCount_one": "{{count}} asukoht",
+  "locationWithCount_other": "{{count}} asukohad",
   "locationsNear_one": "{{count}} asukoht \"{{name}}\" lähedal",
   "locationsNear_other": "{{count}} asukohta \"{{name}}\" läheduses",
   "locationsWithinDistanceOf_one": "{{count}} asukoht {{distance}} {{mile}} raadiuses asukohast \"{{name}}\"",

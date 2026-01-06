@@ -24,6 +24,8 @@
   "loadingMap": "Betöltési térkép ...",
   "loadingNearbyLocations": "A közeli helyek betöltése ...",
   "loadingReviews": "A vélemények betöltése ...",
+  "locationWithCount_one": "{{count}} hely",
+  "locationWithCount_other": "{{count}} helyek",
   "locationsNear_one": "{{count}} A hely közelében \"{{name}}\"",
   "locationsNear_other": "{{count}} hely a(z) \"{{name}}\" közelében",
   "locationsWithinDistanceOf_one": "{{count}} hely a(z) \"{{name}}\" {{distance}} {{mile}}-án belül",

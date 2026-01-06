@@ -24,6 +24,8 @@
   "loadingMap": "Latauskartta ...",
   "loadingNearbyLocations": "Lataaminen lähellä olevia paikkoja ...",
   "loadingReviews": "Ladataan arvosteluja ...",
+  "locationWithCount_one": "{{count}} sijainti",
+  "locationWithCount_other": "{{count}} sijainnit",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{name}}\"",
   "locationsNear_other": "{{count}} sijaintia lähellä kohdetta {{name}}",
   "locationsWithinDistanceOf_one": "{{count}} sijainti {{distance}} {{mile}} päässä kohteesta \"{{name}}\"",

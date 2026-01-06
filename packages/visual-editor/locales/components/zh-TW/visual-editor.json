@@ -24,6 +24,7 @@
   "loadingMap": "加載地圖...",
   "loadingNearbyLocations": "在附近的位置加載...",
   "loadingReviews": "加載評論...",
+  "locationWithCount_other": "{{count}}位置",
   "locationsNear_other": "“{{name}}”附近有{{count}}位置",
   "locationsWithinDistanceOf_other": "“{{name}}”的 {{distance}} {{mile}} 內有 {{count}} 個位置",
   "logo": "標識",

@@ -24,6 +24,8 @@
   "loadingMap": "Carte de chargement ...",
   "loadingNearbyLocations": "Chargement des emplacements à proximité ...",
   "loadingReviews": "Chargement des critiques ...",
+  "locationWithCount_one": "{{count}} emplacement",
+  "locationWithCount_other": "{{count}} emplacements",
   "locationsNear_one": "{{count}} emplacement près de \"{{name}}\"",
   "locationsNear_other": "{{count}} emplacements à proximité de \"{{name}}\"",
   "locationsWithinDistanceOf_one": "{{count}} emplacement à {{distance}} {{mile}} de \"{{name}}\"",

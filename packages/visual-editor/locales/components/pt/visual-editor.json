@@ -24,6 +24,8 @@
   "loadingMap": "Mapa de carregamento ...",
   "loadingNearbyLocations": "Carregando locais próximos ...",
   "loadingReviews": "Revisões de carregamento ...",
+  "locationWithCount_one": "{{count}} localização",
+  "locationWithCount_other": "{{count}} localizações",
   "locationsNear_one": "{{count}} localização próxima a \"{{name}}\"",
   "locationsNear_other": "{{count}} locais próximos a \"{{name}}\"",
   "locationsWithinDistanceOf_one": "{{count}} localização dentro de {{distance}} {{mile}} de \"{{name}}\"",

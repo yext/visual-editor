@@ -24,6 +24,8 @@
   "loadingMap": "Yükleme haritası ...",
   "loadingNearbyLocations": "Yakındaki yerleri yükleme ...",
   "loadingReviews": "Yükleme İncelemeleri ...",
+  "locationWithCount_one": "{{count}} Konum",
+  "locationWithCount_other": "{{count}} konumlar",
   "locationsNear_one": "{{count}} konum \"{{name}}\" yakınında yer",
   "locationsNear_other": "\"{{name}}\"  yakınındaki {{count}} konum",
   "locationsWithinDistanceOf_one": "\"{{name}}\" 'a {{distance}} {{mile}} mesafede {{count}} konum",

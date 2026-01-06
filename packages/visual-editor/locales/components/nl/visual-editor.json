@@ -24,6 +24,8 @@
   "loadingMap": "Kaart laden ...",
   "loadingNearbyLocations": "Nabijgelegen locaties laden ...",
   "loadingReviews": "Beoordelingen laden ...",
+  "locationWithCount_one": "{{count}} locatie",
+  "locationWithCount_other": "{{count}} locaties",
   "locationsNear_one": "{{count}} locatie nabij \"{{name}}\"",
   "locationsNear_other": "{{count}} locaties in de buurt van \"{{name}}\"",
   "locationsWithinDistanceOf_one": "{{count}} locatie binnen {{distance}} {{mile}} van \"{{name}}\"",

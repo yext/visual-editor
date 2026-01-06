@@ -77,10 +77,7 @@ const copyPlatformTranslations = async () => {
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name);
 
-  // Filter out 'en' if it exists – we explicitly skip copying from en to en
-  const localesToProcess = platformLocaleDirs.filter(
-    (locale) => locale !== "en"
-  );
+  const localesToProcess = platformLocaleDirs;
 
   if (localesToProcess.length === 0) {
     console.log("No non-English locale folders found in locales/platform.");

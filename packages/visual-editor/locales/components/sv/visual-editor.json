@@ -24,6 +24,8 @@
   "loadingMap": "Laddar karta ...",
   "loadingNearbyLocations": "Laddar närliggande platser ...",
   "loadingReviews": "Laddar recensioner ...",
+  "locationWithCount_one": "{{count}} Plats",
+  "locationWithCount_other": "{{count}} Platser",
   "locationsNear_one": "{{count}} Plats nära \"{{name}}\"",
   "locationsNear_other": "{{count}} platser nära \"{{name}}\"",
   "locationsWithinDistanceOf_one": "{{count}} plats inom {{distance}} {{mile}} från \"{{name}}\"",
