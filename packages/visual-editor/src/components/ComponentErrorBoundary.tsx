@@ -32,7 +32,7 @@ export const ComponentErrorBoundary = ({
     <ErrorBoundary
       onError={handleError}
       onReset={handleReset}
-      fallbackRender={({ error, resetErrorBoundary }) => {
+      fallbackRender={({ error }) => {
         if (!isEditing) {
           return null;
         }
@@ -45,12 +45,6 @@ export const ComponentErrorBoundary = ({
             <pre className="text-sm overflow-auto max-h-40 mb-4 whitespace-pre-wrap">
               {error.message}
             </pre>
-            <button
-              onClick={resetErrorBoundary}
-              className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
-            >
-              Try again
-            </button>
           </div>
         );
       }}

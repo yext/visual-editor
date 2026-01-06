@@ -11,6 +11,7 @@ import {
   mapStyleField,
 } from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
 
 export interface StaticMapData {
   /**
@@ -136,11 +137,16 @@ export const StaticMapSection: ComponentConfig<{
     },
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
+      componentName="StaticMapSection"
       isEditing={props.puck.isEditing}
     >
-      <StaticMapSectionWrapper {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <StaticMapSectionWrapper {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };

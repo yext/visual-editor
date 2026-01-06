@@ -18,6 +18,7 @@ import {
 } from "@yext/visual-editor";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper";
+import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
 
 export interface NearbyLocationsSectionProps {
   /**
@@ -223,15 +224,20 @@ export const NearbyLocationsSection: ComponentConfig<{
     );
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={props.analytics?.scope ?? "nearbyLocationsSection"}
+    <ComponentErrorBoundary
+      componentName="NearbyLocationsSection"
+      isEditing={props.puck.isEditing}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={props.analytics?.scope ?? "nearbyLocationsSection"}
       >
-        <NearbyLocationsComponent {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <NearbyLocationsComponent {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

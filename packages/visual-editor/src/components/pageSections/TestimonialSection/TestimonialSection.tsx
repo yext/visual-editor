@@ -14,6 +14,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
 
 export interface TestimonialSectionProps {
   /**
@@ -165,15 +166,20 @@ export const TestimonialSection: ComponentConfig<{
     return forwardHeadingLevel(data, "ContributorNameSlot");
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      componentName="TestimonialSection"
+      isEditing={props.puck.isEditing}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <TestimonialSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <TestimonialSectionWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

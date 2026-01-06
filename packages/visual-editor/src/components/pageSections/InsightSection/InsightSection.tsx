@@ -12,6 +12,7 @@ import {
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
 
@@ -164,16 +165,21 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        componentName="InsightSection"
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <InsightSectionComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <InsightSectionComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };

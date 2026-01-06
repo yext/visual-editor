@@ -5,12 +5,11 @@ import { PromoMedia } from "./PromoMedia";
 import { PromoContent } from "./PromoContent";
 
 export const ClassicPromo: PuckComponent<PromoVariantProps> = (props) => {
-  // UNCOMMENT THE LINE BELOW TO TEST ERROR BOUNDARY
-  throw new Error(
-    "Forced error in PromoWrapper for testing ComponentErrorBoundary"
-  );
-
   const { data, styles, slots } = props;
+
+  if (data.forceError) {
+    throw new Error("Forced error in ClassicPromo for testing");
+  }
 
   return (
     <PageSection

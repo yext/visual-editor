@@ -24,6 +24,7 @@ import {
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext";
+import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
 
 export interface FAQStyles {
   /**
@@ -293,15 +294,20 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
     }
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "faqsSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      componentName="FAQsSection"
+      isEditing={props.puck.isEditing}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "faqsSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <FAQsSectionComponent {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <FAQsSectionComponent {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

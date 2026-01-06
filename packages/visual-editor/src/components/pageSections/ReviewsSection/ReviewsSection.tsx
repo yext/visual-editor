@@ -26,6 +26,7 @@ import {
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
 
 const REVIEWS_PER_PAGE = 5;
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
@@ -606,15 +607,20 @@ export const ReviewsSection: ComponentConfig<{ props: ReviewsSectionProps }> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "reviewsSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      componentName="ReviewsSection"
+      isEditing={props.puck.isEditing}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "reviewsSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <ReviewsSectionInternal {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <ReviewsSectionInternal {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };

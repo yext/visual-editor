@@ -31,6 +31,7 @@ import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
+import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
 
 export interface HeroData {
   backgroundImage: YextEntityField<
@@ -641,16 +642,21 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     }
 
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        componentName="HeroSection"
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={!!props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          {HeroVariant}
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={!!props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            {HeroVariant}
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };

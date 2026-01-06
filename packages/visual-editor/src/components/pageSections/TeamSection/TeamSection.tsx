@@ -14,6 +14,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
 
 export interface TeamSectionProps {
   /**
@@ -161,15 +162,20 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
     return forwardHeadingLevel(data, "TitleSlot");
   },
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      componentName="TeamSection"
+      isEditing={props.puck.isEditing}
     >
-      <VisibilityWrapper
-        liveVisibility={props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <TeamSectionWrapper {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <TeamSectionWrapper {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };
