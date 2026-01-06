@@ -4,6 +4,12 @@ import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
@@ -235,13 +241,35 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             }}
           />
           {!templateMetadata.isDevMode && (
-            <Button
-              variant="secondary"
-              disabled={histories.length === 1 || hasErrors}
-              onClick={onButtonClick}
-            >
-              {buttonText}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span
+                    tabIndex={0}
+                    className={hasErrors ? "ve-cursor-not-allowed" : ""}
+                  >
+                    <Button
+                      variant="secondary"
+                      disabled={histories.length === 1 || hasErrors}
+                      onClick={onButtonClick}
+                      className={hasErrors ? "ve-pointer-events-none" : ""}
+                    >
+                      {buttonText}
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {hasErrors && (
+                  <TooltipContent>
+                    <p>
+                      {pt(
+                        "errors.cannot_publish",
+                        "Cannot publish while components have errors."
+                      )}
+                    </p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
       </header>

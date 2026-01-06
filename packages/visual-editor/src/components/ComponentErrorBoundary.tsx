@@ -16,16 +16,29 @@ export const ComponentErrorBoundary = ({
 }: ComponentErrorBoundaryProps) => {
   const { sendError } = useCommonMessageSenders();
   const { incrementErrorCount, decrementErrorCount } = useErrorContext();
+  const [hasError, setHasError] = React.useState(false);
+
+  React.useEffect(() => {
+    if (hasError) {
+      incrementErrorCount();
+    }
+
+    return () => {
+      if (hasError) {
+        decrementErrorCount();
+      }
+    };
+  }, [hasError, incrementErrorCount, decrementErrorCount]);
 
   const handleError = (error: Error, info: React.ErrorInfo) => {
     sendError({
       payload: { error, info },
     });
-    incrementErrorCount();
+    setHasError(true);
   };
 
   const handleReset = () => {
-    decrementErrorCount();
+    setHasError(false);
   };
 
   return (
