@@ -4,20 +4,20 @@ import {
   resolveYextEntityField,
   useDocument,
 } from "@yext/visual-editor";
-import { HeroVariantProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { PromoVariantProps } from "./PromoSection";
+import { PromoContent, promoContentParentCn } from "./PromoContent";
 import { useTranslation } from "react-i18next";
 import { getImageUrl } from "@yext/pages-components";
 import { PuckComponent } from "@measured/puck";
 
-export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
+export const ImmersivePromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
   const resolvedBackgroundImage = resolveYextEntityField(
     streamDocument,
-    data?.backgroundImage,
+    data.backgroundImage,
     locale
   );
 
@@ -47,15 +47,15 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
               }
             : backgroundColors.background1.value
         }
-        aria-label={t("heroBanner", "Hero Banner")}
+        aria-label={t("promoBanner", "Promo Banner")}
         className="z-10 flex items-center h-full w-full"
         outerClassName="h-fit flex items-center"
         outerStyle={{
           minHeight: `${styles.imageHeight}px`,
         }}
       >
-        <div className={heroContentParentCn(styles)}>
-          <HeroContent {...props} />
+        <div className={promoContentParentCn(styles)}>
+          <PromoContent {...props} />
         </div>
       </PageSection>
     </div>

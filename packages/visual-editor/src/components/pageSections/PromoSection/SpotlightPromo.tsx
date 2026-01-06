@@ -1,20 +1,21 @@
-import {
-  backgroundColors,
-  PageSection,
-  resolveYextEntityField,
-  useDocument,
-} from "@yext/visual-editor";
-import { HeroVariantProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
 import { useTranslation } from "react-i18next";
+import {
+  PageSection,
+  useDocument,
+  Background,
+  resolveYextEntityField,
+} from "@yext/visual-editor";
 import { getImageUrl } from "@yext/pages-components";
+import { PromoContent, promoContentParentCn } from "./PromoContent";
 import { PuckComponent } from "@measured/puck";
+import { PromoVariantProps } from "./PromoSection";
 
-export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
+export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles } = props;
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
+
   const resolvedBackgroundImage = resolveYextEntityField(
     streamDocument,
     data?.backgroundImage,
@@ -34,29 +35,31 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
         backgroundImage: localizedImage?.url
           ? `url(${getImageUrl(localizedImage.url, localizedImage.width, localizedImage.height)})`
           : undefined,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
-      className="bg-no-repeat bg-center bg-cover"
     >
       <PageSection
-        background={
-          localizedImage?.url
-            ? {
-                bgColor: "bg-[#00000080]",
-                textColor: "text-white",
-                isDarkBackground: true,
-              }
-            : backgroundColors.background1.value
-        }
-        aria-label={t("heroBanner", "Hero Banner")}
-        className="z-10 flex items-center h-full w-full"
+        aria-label={t("promoBanner", "Promo Banner")}
         outerClassName="h-fit flex items-center"
         outerStyle={{
           minHeight: `${styles.imageHeight}px`,
         }}
+        className={`relative z-10 flex items-center w-full h-full ${
+          styles.containerAlignment === "center"
+            ? "justify-center"
+            : styles.containerAlignment === "left"
+              ? "justify-start"
+              : "justify-end"
+        }`}
       >
-        <div className={heroContentParentCn(styles)}>
-          <HeroContent {...props} />
-        </div>
+        <Background
+          background={styles.backgroundColor}
+          className={`${promoContentParentCn(styles)} rounded shadow-lg p-6 md:p-10 max-w-[600px]`}
+        >
+          <PromoContent {...props} />
+        </Background>
       </PageSection>
     </div>
   );

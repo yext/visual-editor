@@ -13,6 +13,7 @@ import {
   msg,
   ThemeOptions,
   HeadingLevel,
+  BackgroundStyle,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -30,6 +31,7 @@ export type HeadingTextProps = {
     align: "left" | "center" | "right";
     /** Optional override to render a different HTML tag instead of the one based on the level */
     semanticLevelOverride?: HeadingLevel | "span";
+    color?: BackgroundStyle;
   };
 
   /** @internal Controlled data from the parent section */
@@ -75,6 +77,7 @@ const HeadingTextWrapper: PuckComponent<HeadingTextProps> = (props) => {
           level={styles.level}
           className={alignClass}
           semanticLevelOverride={styles.semanticLevelOverride}
+          color={styles.color}
         >
           {resolvedHeadingText}
         </Heading>
@@ -112,6 +115,10 @@ const headingTextFields: Fields<HeadingTextProps> = {
       align: YextField(msg("fields.headingAlign", "Heading Align"), {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
+      }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
       }),
     },
   },

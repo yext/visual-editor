@@ -6,6 +6,9 @@ export type VideoProps = {
     /** The embedded YouTube video */
     assetVideo: AssetVideo | undefined;
   };
+
+  /** @internal */
+  className?: string;
 };
 
 const videoFields: Fields<VideoProps> = {
@@ -22,17 +25,19 @@ const videoFields: Fields<VideoProps> = {
 const VideoComponent: PuckComponent<VideoProps> = (props) => {
   const {
     data,
-    puck: { isEditing },
+    puck: { isEditing, dragRef },
   } = props;
 
   return data?.assetVideo?.video?.embeddedUrl ? (
-    <VideoAtom
-      youTubeEmbedUrl={data.assetVideo.video.embeddedUrl}
-      title={data?.assetVideo?.video?.title ?? ""}
-      className="lg:w-4/5 mx-auto mt-8"
-    />
+    <div ref={dragRef} className="h-full w-full">
+      <VideoAtom
+        youTubeEmbedUrl={data.assetVideo.video.embeddedUrl}
+        title={data?.assetVideo?.video?.title ?? ""}
+        className={props.className ?? "lg:w-4/5 mx-auto mt-8"}
+      />
+    </div>
   ) : isEditing ? (
-    <div className="h-20 mt-8"></div>
+    <div ref={dragRef} className="h-20 mt-8"></div>
   ) : (
     <></>
   );
@@ -43,6 +48,7 @@ export const Video: ComponentConfig<{
 }> = {
   fields: videoFields,
   label: msg("components.Video", "Video"),
+  inline: true,
   defaultProps: {
     data: {
       assetVideo: undefined,

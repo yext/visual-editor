@@ -15,8 +15,8 @@ import {
   pt,
   resolveComponentData,
   AssetImageType,
+  TranslatableAssetImage,
 } from "@yext/visual-editor";
-import { AssetImageType as AssetImageTypeImport } from "../../../types/images";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
@@ -45,7 +45,9 @@ export interface PhotoGalleryWrapperProps {
      * @defaultValue A list of 3 placeholder images.
      */
     images: YextEntityField<
-      ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
+      | ImageType[]
+      | ComplexImageType[]
+      | { assetImage: AssetImageType | TranslatableAssetImage }[]
     >;
   };
   styles: {
@@ -60,7 +62,9 @@ const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
     objectFields: {
       images: YextField<
         any,
-        ImageType[] | ComplexImageType[] | { assetImage: AssetImageType }[]
+        | ImageType[]
+        | ComplexImageType[]
+        | { assetImage: AssetImageType | TranslatableAssetImage }[]
       >(msg("fields.images", "Images"), {
         type: "entityField",
         filter: {
@@ -153,42 +157,40 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     streamDocument
   );
 
-  const getImageUrl = (image: any): string | undefined => {
-    if (!image) return undefined;
-    if ("assetImage" in image) {
-      return image.assetImage?.url;
-    }
-    if ("image" in image) {
-      return image.image?.url;
-    }
-    return image.url;
-  };
-
-  const allImages = (resolvedImages || []).map(
-    (image: any, originalIndex: number) => {
-      const url = getImageUrl(image);
-      const isEmpty = !url || (typeof url === "string" && url.trim() === "");
-
+  const allImages = (resolvedImages || [])
+    .map((rawImage, originalIndex) => {
+      let image: ImageType | AssetImageType | undefined;
       let altText = "";
-      if ("assetImage" in image) {
-        altText = resolveComponentData(
-          image.assetImage?.alternateText ?? "",
-          locale,
-          streamDocument
-        );
-      } else if ("image" in image) {
-        altText = resolveComponentData(
-          image.image?.alternateText ?? "",
-          locale,
-          streamDocument
-        );
+
+      if ("assetImage" in rawImage) {
+        if (
+          typeof rawImage.assetImage === "object" &&
+          "hasLocalizedValue" in rawImage.assetImage
+        ) {
+          image = rawImage.assetImage[locale];
+          altText = resolveComponentData(
+            image?.alternateText ?? "",
+            locale,
+            streamDocument
+          );
+        } else {
+          image = rawImage.assetImage;
+          altText = resolveComponentData(
+            rawImage.assetImage?.alternateText ?? "",
+            locale,
+            streamDocument
+          );
+        }
+      } else if ("image" in rawImage) {
+        image = rawImage.image;
+        altText = rawImage.image?.alternateText ?? "";
       } else {
-        altText = resolveComponentData(
-          image.alternateText ?? "",
-          locale,
-          streamDocument
-        );
+        image = rawImage;
+        altText = rawImage.alternateText ?? "";
       }
+
+      const url = image?.url;
+      const isEmpty = !url || (typeof url === "string" && url.trim() === "");
 
       return {
         isEmpty,
@@ -201,17 +203,19 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
               width: 1000,
             }
           : {
-              url,
+              url: url,
               alternateText: altText,
-              height: "height" in image && image.height ? image.height : 570,
-              width: "width" in image && image.width ? image.width : 1000,
+              height:
+                "height" in rawImage && rawImage.height ? rawImage.height : 570,
+              width:
+                "width" in rawImage && rawImage.width ? rawImage.width : 1000,
             },
         aspectRatio: styles.image?.aspectRatio,
         width: styles.image?.width || 1000,
-        originalImage: image,
+        originalImage: rawImage,
       };
-    }
-  );
+    })
+    .filter((i) => puck?.isEditing || !i.isEmpty);
 
   const handleEmptyImageClick = (
     e: React.MouseEvent | undefined,
@@ -233,8 +237,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
           : undefined;
         const assetImageValue =
           currentImageValue && "assetImage" in currentImageValue
-            ? (currentImageValue as { assetImage?: AssetImageTypeImport })
-                .assetImage
+            ? (currentImageValue as { assetImage?: AssetImageType }).assetImage
             : undefined;
         openImageAssetSelector({
           payload: {
