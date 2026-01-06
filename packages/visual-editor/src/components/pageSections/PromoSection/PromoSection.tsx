@@ -164,7 +164,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
           types: ["type.image"],
         },
       }),
-      forceError: YextField(msg("fields.forceError", "Force Error (Test)"), {
+      forceError: YextField("Force Error (Test)" as any, {
         type: "radio",
         options: [
           { label: msg("fields.options.yes", "Yes"), value: true },
