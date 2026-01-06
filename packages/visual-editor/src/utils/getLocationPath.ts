@@ -12,8 +12,8 @@ export const getLocationPath = (
   location: LocationDocument,
   relativePrefixToRoot: string = "",
   pagesetConfig?: {
-    primary_locale?: string;
-    include_locale_prefix_for_primary_locale?: boolean;
+    primaryLocale?: string;
+    includeLocalePrefixForPrimaryLocale?: boolean;
   }
 ): string => {
   if (!location?.slug && !location?.address && !location?.id) {
@@ -29,14 +29,14 @@ export const getLocationPath = (
     throw new Error("Missing locale for getLocationPath");
   }
 
-  // Use primary_locale from pageset config, defaulting to "en" for backward compatibility
-  const primaryLocale = pagesetConfig?.primary_locale || "en";
+  // Use primaryLocale from pageset config, defaulting to "en" for backward compatibility
+  const primaryLocale = pagesetConfig?.primaryLocale || "en";
   const isPrimaryLocale =
     location.__?.isPrimaryLocale === true ||
     (location.__?.isPrimaryLocale === undefined && locale === primaryLocale);
 
   const includeLocalePrefixForPrimary =
-    pagesetConfig?.include_locale_prefix_for_primary_locale === true;
+    pagesetConfig?.includeLocalePrefixForPrimaryLocale === true;
   const shouldIncludeLocalePrefix =
     !isPrimaryLocale || (isPrimaryLocale && includeLocalePrefixForPrimary);
   const localePath = shouldIncludeLocalePrefix ? `${locale}/` : "";

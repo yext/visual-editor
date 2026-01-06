@@ -30,7 +30,7 @@ export const resolveUrlTemplateOfChild = (
     streamDocument?.__?.entityPageSetUrlTemplates || "{}"
   );
 
-  // Get pageset config from the document's _pageset to access primary_locale and include_locale_prefix_for_primary_locale
+  // Get pageset config from the document's _pageset to access primaryLocale and includeLocalePrefixForPrimaryLocale
   const pagesetJson =
     typeof streamDocument?._pageset === "string"
       ? JSON.parse(streamDocument._pageset || "{}")
@@ -96,8 +96,8 @@ const resolveUrlTemplateWithTemplates = (
     relativePrefixToRoot: string
   ) => string,
   pagesetConfig?: {
-    primary_locale?: string;
-    include_locale_prefix_for_primary_locale?: boolean;
+    primaryLocale?: string;
+    includeLocalePrefixForPrimaryLocale?: boolean;
   }
 ): string => {
   streamDocument = normalizeLocalesInObject(streamDocument);
@@ -149,7 +149,7 @@ const selectUrlTemplate = (
 
 /**
  * Builds a URL from a template string by resolving embedded fields and normalizing the slug.
- * Adds locale prefix based on primary_locale and include_locale_prefix_for_primary_locale config.
+ * Adds locale prefix based on primaryLocale and includeLocalePrefixForPrimaryLocale config.
  * If the template already includes [[locale]] at the start, it won't add an additional prefix.
  */
 const buildUrlFromTemplate = (
@@ -158,8 +158,8 @@ const buildUrlFromTemplate = (
   locale: string,
   relativePrefixToRoot: string,
   pagesetConfig?: {
-    primary_locale?: string;
-    include_locale_prefix_for_primary_locale?: boolean;
+    primaryLocale?: string;
+    includeLocalePrefixForPrimaryLocale?: boolean;
   }
 ): string => {
   // Check if the template already includes [[locale]] at the start
@@ -180,14 +180,14 @@ const buildUrlFromTemplate = (
   }
 
   // Determine if we should add a locale prefix
-  const primaryLocale = pagesetConfig?.primary_locale || "en";
+  const primaryLocale = pagesetConfig?.primaryLocale || "en";
   const isPrimaryLocale = locale === primaryLocale;
   const includeLocalePrefixForPrimary =
-    pagesetConfig?.include_locale_prefix_for_primary_locale === true;
+    pagesetConfig?.includeLocalePrefixForPrimaryLocale === true;
 
   // Add locale prefix if:
   // 1. It's not the primary locale, OR
-  // 2. It is the primary locale AND include_locale_prefix_for_primary_locale is true
+  // 2. It is the primary locale AND includeLocalePrefixForPrimaryLocale is true
   const shouldIncludeLocalePrefix =
     !isPrimaryLocale || (isPrimaryLocale && includeLocalePrefixForPrimary);
   const localePrefix = shouldIncludeLocalePrefix ? `${locale}/` : "";

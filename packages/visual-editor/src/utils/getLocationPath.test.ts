@@ -136,7 +136,7 @@ describe("getLocationPath", () => {
             },
           },
           "",
-          { primary_locale: "es" }
+          { primaryLocale: "es" }
         )
       ).toBe("va/arlington/1101-wilson-blvd");
 
@@ -158,7 +158,7 @@ describe("getLocationPath", () => {
             },
           },
           "",
-          { primary_locale: "es" }
+          { primaryLocale: "es" }
         )
       ).toBe("en/va/arlington/1101-wilson-blvd");
     });
@@ -183,8 +183,8 @@ describe("getLocationPath", () => {
           },
           "",
           {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: true,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: true,
           }
         )
       ).toBe("en/va/arlington/1101-wilson-blvd");
@@ -199,8 +199,8 @@ describe("getLocationPath", () => {
           },
           "",
           {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: true,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: true,
           }
         )
       ).toBe("en/location1");
@@ -226,8 +226,8 @@ describe("getLocationPath", () => {
           },
           "",
           {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: false,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: false,
           }
         )
       ).toBe("va/arlington/1101-wilson-blvd");
@@ -251,8 +251,8 @@ describe("getLocationPath", () => {
           },
           "",
           {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: false,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: false,
           }
         )
       ).toBe("es/va/arlington/1101-wilson-blvd");
@@ -269,8 +269,8 @@ describe("getLocationPath", () => {
           },
           "",
           {
-            primary_locale: "fr",
-            include_locale_prefix_for_primary_locale: true,
+            primaryLocale: "fr",
+            includeLocalePrefixForPrimaryLocale: true,
           }
         )
       ).toBe("fr/location1");
@@ -285,8 +285,8 @@ describe("getLocationPath", () => {
           },
           "",
           {
-            primary_locale: "fr",
-            include_locale_prefix_for_primary_locale: false,
+            primaryLocale: "fr",
+            includeLocalePrefixForPrimaryLocale: false,
           }
         )
       ).toBe("location1");
@@ -301,8 +301,8 @@ describe("getLocationPath", () => {
           },
           "",
           {
-            primary_locale: "fr",
-            include_locale_prefix_for_primary_locale: false,
+            primaryLocale: "fr",
+            includeLocalePrefixForPrimaryLocale: false,
           }
         )
       ).toBe("en/location1");

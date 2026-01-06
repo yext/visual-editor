@@ -466,7 +466,7 @@ describe("resolvePageSetUrlTemplate", () => {
         __: { isPrimaryLocale: true },
         _pageset: JSON.stringify({
           config: {
-            primary_locale: "es",
+            primaryLocale: "es", // camelCase as it appears in actual JSON
             urlTemplate: {
               primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
               alternate:
@@ -488,7 +488,7 @@ describe("resolvePageSetUrlTemplate", () => {
         __: { isPrimaryLocale: false },
         _pageset: JSON.stringify({
           config: {
-            primary_locale: "es",
+            primaryLocale: "es",
             urlTemplate: {
               primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
               alternate:
@@ -510,8 +510,8 @@ describe("resolvePageSetUrlTemplate", () => {
         __: { isPrimaryLocale: true },
         _pageset: JSON.stringify({
           config: {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: true,
+            primaryLocale: "en", // camelCase as it appears in actual JSON
+            includeLocalePrefixForPrimaryLocale: true, // camelCase as it appears in actual JSON
             urlTemplate: {
               primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
               alternate:
@@ -521,7 +521,7 @@ describe("resolvePageSetUrlTemplate", () => {
         }),
       };
 
-      // Primary locale with include_locale_prefix_for_primary_locale: true should get prefix
+      // Primary locale with includeLocalePrefixForPrimaryLocale: true should get prefix
       const result = resolvePageSetUrlTemplate(docWithPrefixForPrimary, "");
       expect(result).toBe("en/ny/new-york/61-9th-ave");
     });
@@ -533,8 +533,8 @@ describe("resolvePageSetUrlTemplate", () => {
         __: { isPrimaryLocale: true },
         _pageset: JSON.stringify({
           config: {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: false,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: false,
             urlTemplate: {
               primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
               alternate:
@@ -556,8 +556,8 @@ describe("resolvePageSetUrlTemplate", () => {
         __: { isPrimaryLocale: false },
         _pageset: JSON.stringify({
           config: {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: false,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: false,
             urlTemplate: {
               primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
               alternate:
@@ -579,8 +579,8 @@ describe("resolvePageSetUrlTemplate", () => {
         __: { isPrimaryLocale: true },
         _pageset: JSON.stringify({
           config: {
-            primary_locale: "fr",
-            include_locale_prefix_for_primary_locale: true,
+            primaryLocale: "fr",
+            includeLocalePrefixForPrimaryLocale: true,
             urlTemplate: {
               primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
               alternate:
@@ -608,8 +608,8 @@ describe("resolvePageSetUrlTemplate", () => {
         __: { isPrimaryLocale: true },
         _pageset: JSON.stringify({
           config: {
-            primary_locale: "en",
-            include_locale_prefix_for_primary_locale: true,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: true,
             urlTemplate: {
               primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
               alternate:
