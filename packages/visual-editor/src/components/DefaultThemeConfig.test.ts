@@ -15,9 +15,10 @@ describe("createDefaultThemeConfig", () => {
     const result = createDefaultThemeConfig(customFonts);
 
     const h1FontOptions = (result.h1.styles.fontFamily as any).options;
+
     expect(h1FontOptions).toContainEqual({
       label: "Custom Font",
-      value: "'Custom Font', sans-serif",
+      value: "'Custom Font', 'Custom Font Fallback', sans-serif",
     });
   });
 
@@ -37,7 +38,9 @@ describe("createDefaultThemeConfig", () => {
       (option: any) => option.label === "Open Sans"
     );
     expect(openSansOption).toBeDefined();
-    expect(openSansOption?.value).toBe("'Open Sans', serif");
+    expect(openSansOption?.value).toBe(
+      "'Open Sans', 'Open Sans Fallback', serif"
+    );
   });
 
   it("should merge custom fonts with default fonts", () => {
@@ -54,12 +57,12 @@ describe("createDefaultThemeConfig", () => {
     const h1FontOptions = (result.h1.styles.fontFamily as any).options;
     expect(h1FontOptions).toContainEqual({
       label: "Custom Font",
-      value: "'Custom Font', serif",
+      value: "'Custom Font', 'Custom Font Fallback', serif",
     });
 
     expect(h1FontOptions).toContainEqual({
       label: "Open Sans",
-      value: "'Open Sans', sans-serif",
+      value: "'Open Sans', 'Open Sans Fallback', sans-serif",
     });
   });
 });
