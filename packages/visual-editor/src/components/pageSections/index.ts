@@ -54,7 +54,7 @@ export {
   type PromoSectionProps,
   type PromoData,
   type PromoStyles,
-} from "./PromoSection.tsx";
+} from "./PromoSection/PromoSection.tsx";
 export {
   ProductSection,
   type ProductSectionProps,
