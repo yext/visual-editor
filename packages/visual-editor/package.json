@@ -57,7 +57,8 @@
     "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:copy-platform-translations",
     "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts",
     "i18n:copy-platform-translations": "pnpm exec tsx scripts/copyPlatformTranslations.ts && pnpm run i18n:sort",
-    "i18n:delete-translations": "pnpm exec tsx scripts/deleteTranslationKeys.ts && pnpm run i18n:sort"
+    "i18n:delete-translations": "pnpm exec tsx scripts/deleteTranslationKeys.ts && pnpm run i18n:sort",
+    "i18n:fix-plurals": "pnpm exec tsx scripts/fixPlurals.ts"
   },
   "dependencies": {
     "@measured/puck": "0.20.2",
