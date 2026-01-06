@@ -38,7 +38,7 @@
   "locationsWithinDistanceOf_other": "{{count}} míst ve vzdálenosti {{distance}} {{mile}} od „{{name}}“",
   "logo": "Logo",
   "map": "Mapa",
-  "mile_few": "mil",
+  "mile_few": "míle",
   "mile_one": "míle",
   "mile_other": "mil",
   "miles": "mil",

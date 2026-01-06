@@ -36,7 +36,7 @@
   "locationsWithinDistanceOf_other": "{{count}} vietovių per {{distance}} {{mile}} nuo \"{{name}}\"",
   "logo": "Logotipas",
   "map": "Žemėlapis",
-  "mile_few": "mylių",
+  "mile_few": "mylios",
   "mile_one": "mylia",
   "mile_other": "mylių",
   "miles": "mylių",

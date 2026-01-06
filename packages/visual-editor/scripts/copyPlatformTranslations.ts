@@ -45,9 +45,11 @@ const saveJson = (filePath: string, data: Record<string, string>) => {
 };
 
 /**
- * Copies translations from platform locale files to components locale files. If the key does not exist
- * in the components file but exists in the platform file, it will be copied over. If the key already exists
- * in the components file, it will be overwritten.
+ * Copies translations from platform locale files to components locale files.
+ * It first reads the English components file to get the list of keys.
+ * Then it adds any missing keys to the corresponding locale components files.
+ * Then for each component locale file, copies it from the platform locale file.
+ * Any mismatching values are also updated.
  */
 const copyPlatformTranslations = async () => {
   // 1. Read the English components file to get the list of keys
@@ -104,18 +106,29 @@ const copyPlatformTranslations = async () => {
     // Load existing components translations (if any)
     const componentsTranslations = loadJson(componentsFilePath);
 
+    // Add missing English keys to the components locale file with empty values
+    for (const key of enComponentKeys) {
+      if (!(key in componentsTranslations)) {
+        componentsTranslations[key] = "";
+        console.log(
+          `  → Added missing key "${key}" to components/${locale}/visual-editor.json`
+        );
+      }
+    }
+
     let updated = false;
 
-    // Copy missing keys/mismatching values from platform to components
-    for (const key of enComponentKeys) {
-      if (key in platformTranslations) {
-        if (componentsTranslations[key] !== platformTranslations[key]) {
-          componentsTranslations[key] = platformTranslations[key];
-          updated = true;
-          console.log(
-            `  → Added/Updated "${key}" to components/${locale}/visual-editor.json`
-          );
-        }
+    // Copy mismatching values from platform to components
+    for (const key of Object.keys(platformTranslations)) {
+      if (
+        key in componentsTranslations &&
+        componentsTranslations[key] !== platformTranslations[key]
+      ) {
+        componentsTranslations[key] = platformTranslations[key];
+        updated = true;
+        console.log(
+          `  → Updated "${key}" to components/${locale}/visual-editor.json`
+        );
       }
     }
 
