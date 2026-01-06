@@ -110,11 +110,7 @@ const resolveUrlTemplateWithTemplates = (
     return alternateFunction(streamDocument, relativePrefixToRoot);
   }
 
-  const urlTemplate = selectUrlTemplate(
-    streamDocument,
-    urlTemplates,
-    pagesetConfig
-  );
+  const urlTemplate = selectUrlTemplate(streamDocument, urlTemplates);
 
   if (!urlTemplate) {
     return getLocationPath(
