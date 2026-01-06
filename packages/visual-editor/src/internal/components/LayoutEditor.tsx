@@ -23,6 +23,8 @@ import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
+import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { toast } from "sonner";
 
 const devLogger = new DevLogger();
 
@@ -48,6 +50,8 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     metadata,
     streamDocument,
   } = props;
+
+  const { errorCount } = useErrorContext();
 
   const {
     saveLayoutSaveState,
@@ -86,6 +90,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   };
 
   const handlePublish = (data?: any) => {
+    if (errorCount > 0) {
+      toast.error("Cannot publish while there are component errors.");
+      return;
+    }
     setLayoutSaveState(undefined);
     publishLayout(data);
   };
@@ -286,7 +294,13 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       clearHistory={clearHistory}
       templateMetadata={templateMetadata}
       layoutSaveState={layoutSaveState}
-      saveLayoutSaveState={saveLayoutSaveState}
+      saveLayoutSaveState={(data) => {
+        if (errorCount > 0) {
+          toast.error("Cannot save while there are component errors.");
+          return;
+        }
+        saveLayoutSaveState(data);
+      }}
       publishLayout={handlePublish}
       sendLayoutForApproval={sendLayoutForApproval}
       sendDevSaveStateData={sendDevLayoutSaveStateData}

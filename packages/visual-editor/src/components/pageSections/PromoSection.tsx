@@ -38,6 +38,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
+import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
 
 export interface PromoData {
   /**
@@ -220,6 +221,11 @@ const PromoMedia = ({
 };
 
 const PromoWrapper: PuckComponent<PromoSectionProps> = (props) => {
+  // UNCOMMENT THE LINE BELOW TO TEST ERROR BOUNDARY
+  throw new Error(
+    "Forced error in PromoWrapper for testing ComponentErrorBoundary"
+  );
+
   const { data, styles, slots, puck } = props;
   const { i18n } = useTranslation();
   const locale = i18n.language;
@@ -520,16 +526,21 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        componentName="PromoSection"
+        isEditing={props.puck.isEditing}
       >
-        <VisibilityWrapper
-          liveVisibility={!!props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <PromoWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={!!props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <PromoWrapper {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };
