@@ -32,6 +32,7 @@ type LayoutHeaderProps = {
   onPublishLayout: (data: Data) => Promise<void>;
   onSendLayoutForApproval: (data: Data, comment: string) => void;
   localDev: boolean;
+  hasErrors: boolean;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -42,6 +43,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onPublishLayout,
     onSendLayoutForApproval,
     localDev,
+    hasErrors,
   } = props;
   const streamDocument = useDocument();
 
@@ -235,7 +237,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
           {!templateMetadata.isDevMode && (
             <Button
               variant="secondary"
-              disabled={histories.length === 1}
+              disabled={histories.length === 1 || hasErrors}
               onClick={onButtonClick}
             >
               {buttonText}
