@@ -1323,7 +1323,7 @@ const tests: ComponentTest[] = [
     version: 48,
   },
   {
-    name: "version 50 - with external links, centered secondary links",
+    name: "version 51 - with external links, centered secondary links",
     document: {},
     props: {
       data: {
@@ -1496,10 +1496,10 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 50,
+    version: 51,
   },
   {
-    name: "version 50 - with external links, centered secondary links - Dark BG",
+    name: "version 51 - with external links, centered secondary links - Dark BG",
     document: {},
     props: {
       data: {
@@ -1672,7 +1672,7 @@ const tests: ComponentTest[] = [
       },
       analytics: { scope: "expandedFooter" },
     },
-    version: 50,
+    version: 51,
   },
 ];
 

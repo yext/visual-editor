@@ -1087,7 +1087,7 @@ const tests: ComponentTest[] = [
     version: 49,
   },
   {
-    name: "version 50 props - with external links",
+    name: "version 51 props - with external links",
     document: {},
     props: {
       styles: {
@@ -1267,7 +1267,7 @@ const tests: ComponentTest[] = [
         await mobileMenuButton.click();
       });
     },
-    version: 50,
+    version: 51,
   },
 ];
 
