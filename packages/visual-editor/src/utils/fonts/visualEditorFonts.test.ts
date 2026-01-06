@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ThemeData } from "../internal/types/themeData.ts";
+import { ThemeData } from "../../internal/types/themeData.ts";
 import {
   extractInUseFontFamilies,
   FontRegistry,

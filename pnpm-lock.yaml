@@ -218,6 +218,12 @@ importers:
         specifier: ^4.16.3
         version: 4.20.4
     devDependencies:
+      "@capsizecss/core":
+        specifier: ^4.1.3
+        version: 4.1.3
+      "@capsizecss/metrics":
+        specifier: ^3.6.2
+        version: 3.6.2
       "@testing-library/dom":
         specifier: ^10.4.0
         version: 10.4.1
@@ -829,6 +835,18 @@ packages:
         integrity: sha512-ruv7Ae4J5dUYULmeXw1gmb7rYRz57OWCPM57pHojnLq/3Z1CK2lNSLTCVjxVk1F/TZHwOZZrOWi0ur95BbLxNQ==,
       }
     engines: { node: ">=6.9.0" }
+
+  "@capsizecss/core@4.1.3":
+    resolution:
+      {
+        integrity: sha512-d2sTTBwKuVioYxpwpU4URMp8VkFK+GI1VNGNawQcF8HBMHzCDa1FLcbeXJSzb5AJik7ZGv3aFVCTs7IS9MhvHg==,
+      }
+
+  "@capsizecss/metrics@3.6.2":
+    resolution:
+      {
+        integrity: sha512-5uL1EIhAlfg0dvWsR1DGfqIsyiPBUsD/qlra15B82Ik28BcH7ScYEHLA4F34fZA0KamlpYcappvt2n1pTuDUfw==,
+      }
 
   "@commander-js/extra-typings@13.1.0":
     resolution:
@@ -12630,6 +12648,12 @@ snapshots:
     dependencies:
       "@babel/helper-string-parser": 7.27.1
       "@babel/helper-validator-identifier": 7.27.1
+
+  "@capsizecss/core@4.1.3":
+    dependencies:
+      csstype: 3.1.3
+
+  "@capsizecss/metrics@3.6.2": {}
 
   "@commander-js/extra-typings@13.1.0(commander@13.1.0)":
     dependencies:
