@@ -4,6 +4,7 @@ export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity
 export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
+export { applyCertifiedFacts } from "./applyCertifiedFacts.ts";
 export { applyTheme, type StreamDocument } from "./applyTheme.ts";
 export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";

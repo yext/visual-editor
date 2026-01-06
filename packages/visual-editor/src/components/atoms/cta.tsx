@@ -14,6 +14,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
+import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
 
 export type CTAProps = {
   // Core props
@@ -185,8 +186,8 @@ export const CTA = (props: CTAProps) => {
   const isDarkBG = useBackground()?.isDarkBackground;
 
   const dynamicStyle: React.CSSProperties = (() => {
-    const bg = normalize(color?.bgColor);
-    const textColor = normalize(color?.textColor);
+    const bg = normalizeThemeColor(color?.bgColor);
+    const textColor = normalizeThemeColor(color?.textColor);
     const border = bg && `var(--colors-${bg})`;
 
     if (variant === "primary") {
@@ -298,11 +299,3 @@ export const CTA = (props: CTAProps) => {
     </Button>
   );
 };
-
-// Extracts the name of a theme color from a tailwind bg- or text- class
-const normalize = (token?: string) =>
-  token?.startsWith("bg-")
-    ? token.substring(3)
-    : token?.startsWith("text-")
-      ? token.substring(5)
-      : token;

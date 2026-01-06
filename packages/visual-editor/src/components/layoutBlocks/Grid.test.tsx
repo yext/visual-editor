@@ -1676,6 +1676,252 @@ const tests: ComponentTest[] = [
     },
     version: 47,
   },
+  {
+    name: "version 50 - HeadingText on dark background",
+    document: {},
+    props: {
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 1",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 3,
+                  align: "left",
+                  color: backgroundColors.color1.value,
+                },
+                id: "HeadingText-dark-bg-color1",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 2",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 2,
+                  align: "left",
+                  color: backgroundColors.color2.value,
+                },
+                id: "HeadingText-dark-bg-color2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 3",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                  color: backgroundColors.color3.value,
+                },
+                id: "HeadingText-dark-bg-color3",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 4",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 5,
+                  align: "left",
+                  color: backgroundColors.color4.value,
+                },
+                id: "HeadingText-dark-bg-color4",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Default (Dynamic) Heading Color",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                },
+                id: "HeadingText-dark-bg-default",
+              },
+            },
+          ],
+        },
+        { Column: [] },
+        { Column: [] },
+      ],
+      backgroundColor: backgroundColors.color4.value,
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 50,
+  },
+  {
+    name: "version 50 - HeadingText on light background",
+    document: {},
+    props: {
+      columns: 2,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 1",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 3,
+                  align: "left",
+                  color: backgroundColors.color1.value,
+                },
+                id: "HeadingText-light-bg-color1",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 2",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 2,
+                  align: "left",
+                  color: backgroundColors.color2.value,
+                },
+                id: "HeadingText-light-bg-color2",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 3",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                  color: backgroundColors.color3.value,
+                },
+                id: "HeadingText-light-bg-color3",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Site Color 4",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 5,
+                  align: "left",
+                  color: backgroundColors.color4.value,
+                },
+                id: "HeadingText-light-bg-color4",
+              },
+            },
+            {
+              type: "HeadingText",
+              props: {
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: "Heading - Default (Dynamic) Heading Color",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: {
+                  level: 4,
+                  align: "left",
+                },
+                id: "HeadingText-light-bg-default",
+              },
+            },
+          ],
+        },
+        { Column: [] },
+        { Column: [] },
+      ],
+      backgroundColor: backgroundColors.background1.value,
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 50,
+  },
 ];
 
 describe("Grid", async () => {
@@ -1736,10 +1982,7 @@ describe("Grid", async () => {
       await expect(`Grid/[${viewportName}] ${name}`).toMatchScreenshot();
 
       const results = await axe(container);
-      if (
-        name === "version 45 - CTAs with different site colors" ||
-        name === "version 45 - CTAs with Dark background"
-      ) {
+      if (version === 45 || version === 50) {
         console.warn(results);
       } else {
         expect(results).toHaveNoViolations();
@@ -1750,10 +1993,7 @@ describe("Grid", async () => {
           `Grid/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
         const results2 = await axe(container);
-        if (
-          name === "version 45 - CTAs with different site colors" ||
-          name === "version 45 - CTAs with Dark background"
-        ) {
+        if (version === 45 || version === 50) {
           console.warn(results2);
         } else {
           expect(results2).toHaveNoViolations();

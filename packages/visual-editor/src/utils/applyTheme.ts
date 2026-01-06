@@ -27,6 +27,7 @@ export type StreamDocument = {
       id?: string;
     };
   };
+  __certified_facts?: any;
   __?: {
     layout?: string;
     theme?: string;

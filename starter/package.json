@@ -13,7 +13,7 @@
     "components": "REGISTRY_URL=https://reliably-numerous-kit.pgsdemo.com/components npx shadcn add"
   },
   "engines": {
-    "node": "^18.4.0 || >=20.2.0"
+    "node": "^20.6.0 || ^22 || ^24"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",
@@ -54,7 +54,7 @@
     "@types/react-dom": "^18.2.25",
     "@vitejs/plugin-react": "^4.2.1",
     "@yext/pages": "1.2.5",
-    "@yext/pages-components": "1.1.18",
+    "@yext/pages-components": "^1.2.4",
     "@yext/visual-editor": "workspace:*",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.32",
