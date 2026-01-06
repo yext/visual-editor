@@ -189,7 +189,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         }
       ),
       desktopImagePosition: YextField(
-        msg("fields.desktopImagePosition", "Desktop Image Position"),
+        msg("fields.desktopMediaPosition", "Desktop Media Position"),
         {
           type: "radio",
           options: [
@@ -209,7 +209,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         }
       ),
       mobileImagePosition: YextField(
-        msg("fields.mobileImagePosition", "Mobile Image Position"),
+        msg("fields.mobileMediaPosition", "Mobile Media Position"),
         {
           type: "radio",
           options: ThemeOptions.VERTICAL_POSITION,

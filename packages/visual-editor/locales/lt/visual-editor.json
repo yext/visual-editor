@@ -211,6 +211,7 @@
     "description": "Aprašymas",
     "desktopContainerPosition": "Stalinio konteinerio padėtis",
     "desktopImagePosition": "Darbalaukio vaizdo padėtis",
+    "desktopMediaPosition": "Stalinio kompiuterio laikmenos padėtis",
     "destinationURL": "Paskirties URL",
     "direction": "Kryptis",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
@@ -291,6 +292,7 @@
     "metaTitle": "Meta titulas",
     "mobileContentAlignment": "Mobiliojo turinio suderinimas",
     "mobileImagePosition": "Mobiliojo vaizdo padėtis",
+    "mobileMediaPosition": "Mobiliosios medijos padėtis",
     "name": "Vardas",
     "options": {
       "aspectRatio": "Kraštinių santykis",

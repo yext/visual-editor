@@ -211,6 +211,7 @@
     "description": "Descriere",
     "desktopContainerPosition": "Poziția containerului desktop",
     "desktopImagePosition": "Poziția imaginii desktop",
+    "desktopMediaPosition": "Poziție media desktop",
     "destinationURL": "URL de destinație",
     "direction": "Direcţie",
     "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
@@ -291,6 +292,7 @@
     "metaTitle": "Titlu meta",
     "mobileContentAlignment": "Alinierea conținutului mobil",
     "mobileImagePosition": "Poziția imaginii mobile",
+    "mobileMediaPosition": "Poziția media mobilă",
     "name": "Nume",
     "options": {
       "aspectRatio": "Raport de aspect",

@@ -212,6 +212,7 @@
     "description": "Opis",
     "desktopContainerPosition": "Pozycja pojemnika na komputery stacjonarne",
     "desktopImagePosition": "Pozycja obrazu stacjonarnego",
+    "desktopMediaPosition": "Stanowisko multimedialne na komputerze stacjonarnym",
     "destinationURL": "URL docelowego",
     "direction": "Kierunek",
     "directoryRootLinkLabel": "Director Count Link",
@@ -292,6 +293,7 @@
     "metaTitle": "Tytuł meta",
     "mobileContentAlignment": "Wyrównanie treści mobilnych",
     "mobileImagePosition": "Pozycja obrazu mobilnego",
+    "mobileMediaPosition": "Pozycja w mediach mobilnych",
     "name": "Nazwa",
     "options": {
       "aspectRatio": "Współczynnik kształtu",

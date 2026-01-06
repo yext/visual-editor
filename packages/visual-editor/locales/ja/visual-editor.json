@@ -211,6 +211,7 @@
     "description": "説明",
     "desktopContainerPosition": "デスクトップコンテナ位置",
     "desktopImagePosition": "デスクトップ画像位置",
+    "desktopMediaPosition": "デスクトップメディアの位置",
     "destinationURL": "宛先URL",
     "direction": "方向",
     "directoryRootLinkLabel": "ディレクトリルートリンクラベル",
@@ -291,6 +292,7 @@
     "metaTitle": "メタタイトル",
     "mobileContentAlignment": "モバイルコンテンツアライメント",
     "mobileImagePosition": "モバイルイメージの位置",
+    "mobileMediaPosition": "モバイルメディアのポジション",
     "name": "名前",
     "options": {
       "aspectRatio": "アスペクト比",

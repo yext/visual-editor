@@ -211,6 +211,7 @@
     "description": "描述",
     "desktopContainerPosition": "桌面容器位置",
     "desktopImagePosition": "桌面圖像位置",
+    "desktopMediaPosition": "桌面媒體位置",
     "destinationURL": "目標網址",
     "direction": "方向",
     "directoryRootLinkLabel": "目錄根鏈接標籤",
@@ -291,6 +292,7 @@
     "metaTitle": "元標題",
     "mobileContentAlignment": "移動內容對齊",
     "mobileImagePosition": "移動圖像位置",
+    "mobileMediaPosition": "移動媒體定位",
     "name": "姓名",
     "options": {
       "aspectRatio": "縱橫比",

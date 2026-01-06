@@ -215,6 +215,7 @@
     "description": "Beschreibung",
     "desktopContainerPosition": "Desktop -Containerposition",
     "desktopImagePosition": "Desktop -Bildposition",
+    "desktopMediaPosition": "Desktop-Medienposition",
     "destinationURL": "Ziel -URL",
     "direction": "Richtung",
     "directoryRootLinkLabel": "Verzeichnis Root Link Link Label",
@@ -296,6 +297,7 @@
     "metaTitle": "Meta -Titel",
     "mobileContentAlignment": "Ausrichtung des mobilen Inhalts",
     "mobileImagePosition": "Mobile Bildposition",
+    "mobileMediaPosition": "Mobile Medienposition",
     "name": "Name",
     "options": {
       "aspectRatio": "Seitenverhältnis",

@@ -211,6 +211,7 @@
     "description": "Apraksts",
     "desktopContainerPosition": "Darbvirsmas konteinera pozīcija",
     "desktopImagePosition": "Darbvirsmas attēla pozīcija",
+    "desktopMediaPosition": "Darbvirsmas multivides pozīcija",
     "destinationURL": "Galamērķa URL",
     "direction": "Vadība",
     "directoryRootLinkLabel": "Direktorija sakņu saites etiķete",
@@ -291,6 +292,7 @@
     "metaTitle": "Meta nosaukums",
     "mobileContentAlignment": "Mobilā satura izlīdzināšana",
     "mobileImagePosition": "Mobilā attēla pozīcija",
+    "mobileMediaPosition": "Mobilo mediju pozīcija",
     "name": "Nosaukt",
     "options": {
       "aspectRatio": "Malu attiecība",

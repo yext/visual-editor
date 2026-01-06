@@ -211,6 +211,7 @@
     "description": "Descrizione",
     "desktopContainerPosition": "Posizione del contenitore desktop",
     "desktopImagePosition": "Posizione dell'immagine desktop",
+    "desktopMediaPosition": "Posizione multimediale sul desktop",
     "destinationURL": "URL di destinazione",
     "direction": "Direzione",
     "directoryRootLinkLabel": "Etichetta del collegamento root directory",
@@ -291,6 +292,7 @@
     "metaTitle": "Meta titolo",
     "mobileContentAlignment": "Allineamento dei contenuti mobili",
     "mobileImagePosition": "Posizione dell'immagine mobile",
+    "mobileMediaPosition": "Posizione sui media mobili",
     "name": "Nome",
     "options": {
       "aspectRatio": "Proporzioni",

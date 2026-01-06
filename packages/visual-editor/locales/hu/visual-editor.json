@@ -211,6 +211,7 @@
     "description": "Leírás",
     "desktopContainerPosition": "Asztali tartály helyzete",
     "desktopImagePosition": "Asztali képpozíció",
+    "desktopMediaPosition": "Asztali média pozíciója",
     "destinationURL": "Cél URL",
     "direction": "Irány",
     "directoryRootLinkLabel": "Directory Root Link címke",
@@ -291,6 +292,7 @@
     "metaTitle": "Meta cím",
     "mobileContentAlignment": "Mobil tartalom igazítása",
     "mobileImagePosition": "Mobil képpozíció",
+    "mobileMediaPosition": "Mobil média pozíció",
     "name": "Név",
     "options": {
       "aspectRatio": "Oldal arány",
