@@ -37,7 +37,29 @@ export const getLocationPath = (
     !isPrimaryLocale || (isPrimaryLocale && includeLocalePrefixForPrimary);
   const localePath = shouldIncludeLocalePrefix ? `${locale}/` : "";
 
-  // If there's a slug, apply locale prefix to it
+  // Special handling for directory entities (DM cases): if slug exists and no address,
+  // check if we need to add locale prefix before returning early
+  if (location.slug && !location.address) {
+    // Check if slug already starts with the primaryLocale prefix
+    const slugStartsWithPrimaryLocale = location.slug.startsWith(
+      `${primaryLocale}/`
+    );
+
+    // If locale matches primary AND includeLocalePrefixForPrimaryLocale is true,
+    // add prefix if not already present
+    if (
+      isPrimaryLocale &&
+      includeLocalePrefixForPrimary &&
+      !slugStartsWithPrimaryLocale
+    ) {
+      return `${relativePrefixToRoot}${localePath}${location.slug}`;
+    }
+
+    // Otherwise, use slug directly (already has prefix or doesn't need one)
+    return `${relativePrefixToRoot}${location.slug}`;
+  }
+
+  // If there's a slug (with address, so it's a location entity), apply locale prefix to it
   if (location.slug) {
     return `${relativePrefixToRoot}${localePath}${location.slug}`;
   }

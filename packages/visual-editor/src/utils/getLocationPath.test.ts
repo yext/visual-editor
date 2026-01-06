@@ -135,12 +135,12 @@ describe("getLocationPath", () => {
         )
       ).toBe("en/locator-page");
 
-      // Non-primary locale should always get prefix
+      // Usually, non-primary locale should always get prefix, but this represents a directory entity, so it should return as is.
       expect(
         getLocationPath(
           {
             locale: "es",
-            slug: "locator-page",
+            slug: "es/locator-page",
             id: "location1",
             __: { isPrimaryLocale: false },
           },
