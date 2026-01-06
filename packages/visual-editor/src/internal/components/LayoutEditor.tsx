@@ -294,13 +294,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       clearHistory={clearHistory}
       templateMetadata={templateMetadata}
       layoutSaveState={layoutSaveState}
-      saveLayoutSaveState={(data) => {
-        if (errorCount > 0) {
-          toast.error("Cannot save while there are component errors.");
-          return;
-        }
-        saveLayoutSaveState(data);
-      }}
+      saveLayoutSaveState={saveLayoutSaveState}
       publishLayout={handlePublish}
       sendLayoutForApproval={sendLayoutForApproval}
       sendDevSaveStateData={sendDevLayoutSaveStateData}
