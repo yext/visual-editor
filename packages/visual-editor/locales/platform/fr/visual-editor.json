@@ -741,7 +741,7 @@
   },
   "thursday": "Jeudi",
   "title": "Titre",
-  "totalReviews_one": "{{count}} Review",
+  "totalReviews_one": "{{count}} avis sur",
   "totalReviews_other": "{{count}} avis",
   "tuesday": "Mardi",
   "undo": "Défaire",

@@ -741,7 +741,7 @@
   },
   "thursday": "csütörtök",
   "title": "Cím",
-  "totalReviews_one": "{{count}} áttekintés",
+  "totalReviews_one": "{{count}} vélemény",
   "totalReviews_other": "{{count}} vélemény",
   "tuesday": "kedd",
   "undo": "Visszavonul",

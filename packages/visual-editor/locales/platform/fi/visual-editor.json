@@ -741,7 +741,7 @@
   },
   "thursday": "torstai",
   "title": "Otsikko",
-  "totalReviews_one": "{{count}} tarkista",
+  "totalReviews_one": "{{count}} arvostelu",
   "totalReviews_other": "{{count}} arvostelua",
   "tuesday": "tiistai",
   "undo": "Kumota",

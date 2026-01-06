@@ -741,7 +741,7 @@
   },
   "thursday": "Neljapäev",
   "title": "Tiitel",
-  "totalReviews_one": "{{count}} ülevaade",
+  "totalReviews_one": "{{count}} arvustus",
   "totalReviews_other": "{{count}} arvustust",
   "tuesday": "Teisipäev",
   "undo": "Tühistama",

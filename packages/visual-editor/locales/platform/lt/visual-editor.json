@@ -746,7 +746,7 @@
   "thursday": "Ketvirtadienis",
   "title": "Pavadinimas",
   "totalReviews_few": "{{count}} atsiliepimai",
-  "totalReviews_one": "{{count}} apžvalga",
+  "totalReviews_one": "{{count}} atsiliepimas",
   "totalReviews_other": "{{count}} atsiliepimai",
   "tuesday": "Antradienis",
   "undo": "Anuliuoti",
