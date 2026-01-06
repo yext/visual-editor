@@ -32,18 +32,20 @@ export const ComponentErrorBoundary = ({
     <ErrorBoundary
       onError={handleError}
       onReset={handleReset}
-      fallbackRender={({ error }) => {
+      fallbackRender={() => {
         if (!isEditing) {
           return null;
         }
 
         return (
-          <div className="p-4 border border-red-500 bg-red-50 rounded text-red-900 my-4">
+          <div className="p-4 border border-red-500 bg-red-50 text-red-900">
             <h3 className="font-bold mb-2">
               Error in {componentName || "Component"}
             </h3>
             <pre className="text-sm overflow-auto max-h-40 mb-4 whitespace-pre-wrap">
-              {error.message}
+              {
+                "There is a bug preventing this component from rendering. Try updating if an update is available, otherwise reach out to support. Publishing has been disabled."
+              }
             </pre>
           </div>
         );
