@@ -45,7 +45,7 @@
   "presetImages": {
     "appGallery": "Galería de aplicaciones",
     "appGalleryOutline": "Galería de aplicaciones (esquema)",
-    "appStore": "Tienda de aplicaciones",
+    "appStore": "App Store",
     "appStoreOutline": "App Store (esquema)",
     "apple": "Apple",
     "arrowDown": "Flecha hacia abajo",
@@ -60,7 +60,7 @@
     "email": "Correo electrónico",
     "facebook": "Facebook",
     "figma": "Figma",
-    "galaxyStore": "Tienda de galaxias",
+    "galaxyStore": "Galaxy Store",
     "galaxyStoreOutline": "Galaxy Store (esquema)",
     "google": "Google",
     "googlePlay": "Google Play",
