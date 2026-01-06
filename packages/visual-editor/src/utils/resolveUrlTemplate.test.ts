@@ -307,7 +307,8 @@ describe("resolvePageSetUrlTemplate", () => {
       docWithoutAlternateTemplate,
       "../"
     );
-    assert.equal(result, "../ny/new-york/61-9th-ave");
+    // Non-primary locale using primary template should get locale prefix
+    assert.equal(result, "../es/ny/new-york/61-9th-ave");
   });
 
   it("use fallback if all templates are missing", () => {
@@ -347,7 +348,9 @@ describe("resolvePageSetUrlTemplate", () => {
       docWithoutAlternateTemplate,
       "../"
     );
-    assert.equal(result, "../ny/new-york/61-9th-ave");
+    // When isPrimaryLocale is missing, it defaults to checking locale === primaryLocale
+    // Since "fr" !== "en" (default primary), it's treated as non-primary and gets prefix
+    assert.equal(result, "../fr/ny/new-york/61-9th-ave");
   });
 
   it("throw error when locale cannot be determined", () => {
@@ -453,5 +456,171 @@ describe("resolvePageSetUrlTemplate", () => {
     );
 
     expect(result).toBe("../custom-pageset-url-for-yext-en");
+  });
+
+  describe("with primary_locale and include_locale_prefix_for_primary_locale", () => {
+    it("uses custom primary_locale from pageset config", () => {
+      const docWithCustomPrimaryLocale = {
+        ...mockStreamDocument,
+        locale: "es",
+        __: { isPrimaryLocale: true },
+        _pageset: JSON.stringify({
+          config: {
+            primary_locale: "es",
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+              alternate:
+                "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+      };
+
+      // Spanish is primary, so should use primary template without prefix
+      const result = resolvePageSetUrlTemplate(docWithCustomPrimaryLocale, "");
+      expect(result).toBe("ny/new-york/61-9th-ave");
+    });
+
+    it("adds prefix for non-primary locale when primary_locale is custom", () => {
+      const docWithCustomPrimaryLocale = {
+        ...mockStreamDocument,
+        locale: "en",
+        __: { isPrimaryLocale: false },
+        _pageset: JSON.stringify({
+          config: {
+            primary_locale: "es",
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+              alternate:
+                "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+      };
+
+      // English is not primary (Spanish is), so should get prefix
+      const result = resolvePageSetUrlTemplate(docWithCustomPrimaryLocale, "");
+      expect(result).toBe("en/ny/new-york/61-9th-ave");
+    });
+
+    it("respects include_locale_prefix_for_primary_locale: true for primary template", () => {
+      const docWithPrefixForPrimary = {
+        ...mockStreamDocument,
+        locale: "en",
+        __: { isPrimaryLocale: true },
+        _pageset: JSON.stringify({
+          config: {
+            primary_locale: "en",
+            include_locale_prefix_for_primary_locale: true,
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+              alternate:
+                "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+      };
+
+      // Primary locale with include_locale_prefix_for_primary_locale: true should get prefix
+      const result = resolvePageSetUrlTemplate(docWithPrefixForPrimary, "");
+      expect(result).toBe("en/ny/new-york/61-9th-ave");
+    });
+
+    it("respects include_locale_prefix_for_primary_locale: false (default) for primary template", () => {
+      const docWithoutPrefixForPrimary = {
+        ...mockStreamDocument,
+        locale: "en",
+        __: { isPrimaryLocale: true },
+        _pageset: JSON.stringify({
+          config: {
+            primary_locale: "en",
+            include_locale_prefix_for_primary_locale: false,
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+              alternate:
+                "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+      };
+
+      // Primary locale with include_locale_prefix_for_primary_locale: false should NOT get prefix
+      const result = resolvePageSetUrlTemplate(docWithoutPrefixForPrimary, "");
+      expect(result).toBe("ny/new-york/61-9th-ave");
+    });
+
+    it("does not double-prefix when alternate template already includes [[locale]]", () => {
+      const docWithAlternateTemplate = {
+        ...mockStreamDocument,
+        locale: "es",
+        __: { isPrimaryLocale: false },
+        _pageset: JSON.stringify({
+          config: {
+            primary_locale: "en",
+            include_locale_prefix_for_primary_locale: false,
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+              alternate:
+                "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+      };
+
+      // Alternate template already includes [[locale]], so should not add additional prefix
+      const result = resolvePageSetUrlTemplate(docWithAlternateTemplate, "");
+      expect(result).toBe("es/ny/new-york/61-9th-ave");
+    });
+
+    it("works with custom primary_locale and include_locale_prefix_for_primary_locale: true", () => {
+      const docWithFrenchPrimary = {
+        ...mockStreamDocument,
+        locale: "fr",
+        __: { isPrimaryLocale: true },
+        _pageset: JSON.stringify({
+          config: {
+            primary_locale: "fr",
+            include_locale_prefix_for_primary_locale: true,
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+              alternate:
+                "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+      };
+
+      // French is primary with prefix enabled, should get prefix
+      const result = resolvePageSetUrlTemplate(docWithFrenchPrimary, "");
+      expect(result).toBe("fr/ny/new-york/61-9th-ave");
+    });
+
+    it("maintains backward compatibility when pageset config fields are missing", () => {
+      // Should default to "en" as primary and false for include_locale_prefix_for_primary_locale
+      const result = resolvePageSetUrlTemplate(mockStreamDocument, "");
+      expect(result).toBe("ny/new-york/61-9th-ave");
+    });
+
+    it("handles primary template with include_locale_prefix_for_primary_locale and relativePrefixToRoot", () => {
+      const docWithPrefixForPrimary = {
+        ...mockStreamDocument,
+        locale: "en",
+        __: { isPrimaryLocale: true },
+        _pageset: JSON.stringify({
+          config: {
+            primary_locale: "en",
+            include_locale_prefix_for_primary_locale: true,
+            urlTemplate: {
+              primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+              alternate:
+                "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+            },
+          },
+        }),
+      };
+
+      const result = resolvePageSetUrlTemplate(docWithPrefixForPrimary, "../");
+      expect(result).toBe("../en/ny/new-york/61-9th-ave");
+    });
   });
 });

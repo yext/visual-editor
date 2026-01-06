@@ -15,7 +15,6 @@ import { Render, resolveAllData } from "@measured/puck";
 import {
   applyTheme,
   VisualEditorProvider,
-  normalizeSlug,
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
@@ -25,6 +24,7 @@ import {
   getCanonicalUrl,
   migrate,
   migrationRegistry,
+  resolvePageSetUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 import mapboxPackageJson from "mapbox-gl/package.json";
@@ -93,15 +93,11 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   };
 };
 
-export const getPath: GetPath<TemplateProps> = ({ document }) => {
-  if (document.slug) {
-    return document.slug;
-  }
-
-  const localePath = document.locale !== "en" ? `${document.locale}/` : "";
-  const path = `${localePath}${document.id}`;
-
-  return normalizeSlug(path);
+export const getPath: GetPath<TemplateProps> = ({
+  document,
+  relativePrefixToRoot,
+}) => {
+  return resolvePageSetUrlTemplate(document, relativePrefixToRoot);
 };
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {

@@ -10,7 +10,11 @@ export interface LocationDocument extends StreamDocument {
 
 export const getLocationPath = (
   location: LocationDocument,
-  relativePrefixToRoot: string = ""
+  relativePrefixToRoot: string = "",
+  pagesetConfig?: {
+    primary_locale?: string;
+    include_locale_prefix_for_primary_locale?: boolean;
+  }
 ): string => {
   if (!location?.slug && !location?.address && !location?.id) {
     throw new Error("Could not resolve location path.");
@@ -25,11 +29,18 @@ export const getLocationPath = (
     throw new Error("Missing locale for getLocationPath");
   }
 
+  // Use primary_locale from pageset config, defaulting to "en" for backward compatibility
+  const primaryLocale = pagesetConfig?.primary_locale || "en";
   const isPrimaryLocale =
     location.__?.isPrimaryLocale === true ||
-    (location.__?.isPrimaryLocale === undefined && location.locale === "en");
+    (location.__?.isPrimaryLocale === undefined && locale === primaryLocale);
 
-  const localePath = isPrimaryLocale ? "" : `${locale}/`;
+  const includeLocalePrefixForPrimary =
+    pagesetConfig?.include_locale_prefix_for_primary_locale === true;
+  const shouldIncludeLocalePrefix =
+    !isPrimaryLocale || (isPrimaryLocale && includeLocalePrefixForPrimary);
+  const localePath = shouldIncludeLocalePrefix ? `${locale}/` : "";
+
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
     : `${localePath}${location.id}`;
