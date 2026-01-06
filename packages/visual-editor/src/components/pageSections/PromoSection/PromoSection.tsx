@@ -71,13 +71,13 @@ export interface PromoStyles {
   backgroundColor?: BackgroundStyle;
 
   /**
-   * Positions the image to the left or right of the promo content on desktop (classic and compact variants).
+   * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
    * @defaultValue right
    */
   desktopImagePosition: "left" | "right";
 
   /**
-   * Positions the image to the top or bottom of the promo content on mobile (classic and compact variants).
+   * Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).
    * @defaultValue top
    */
   mobileImagePosition: "top" | "bottom";
