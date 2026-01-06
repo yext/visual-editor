@@ -98,11 +98,13 @@ export const applyTheme = (
 
     // For each in-use Google Font, look up the corresponding fallback fonts and add to the head
     Object.keys(inUseGoogleFonts).forEach((fontFamily) => {
-      fallbackFontFaceDefinitions.push(
-        (fontFallbackTransformations as Record<string, string[]>)[
-          fontFamily
-        ].join("\n")
-      );
+      if (fontFamily in fontFallbackTransformations) {
+        fallbackFontFaceDefinitions.push(
+          (fontFallbackTransformations as Record<string, string[]>)[
+            fontFamily
+          ].join("\n")
+        );
+      }
     });
   }
 
