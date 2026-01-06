@@ -524,7 +524,7 @@
   "localGeomodifier": "ローカルジオモジファイア",
   "locationWithCount_other": "{{count}}場所",
   "locationsNear_other": "「{{name}}」 付近の {{count}} か所の場所",
-  "locationsWithinDistanceOf_other": "「{{name}}」から {{distance}} {{マイル}} 以内にある {{count}} か所の場所",
+  "locationsWithinDistanceOf_other": "「{{name}}」から {{distance}} {{mile}} 以内にある {{count}} か所の場所",
   "logo": "ロゴ",
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",

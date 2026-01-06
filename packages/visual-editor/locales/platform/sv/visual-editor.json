@@ -742,7 +742,7 @@
   },
   "thursday": "Torsdag",
   "title": "Titel",
-  "totalReviews_one": "{{greve}} Review",
+  "totalReviews_one": "{{count}} recension",
   "totalReviews_other": "{{count}} recensioner",
   "tuesday": "Tisdag",
   "undo": "Ångra",

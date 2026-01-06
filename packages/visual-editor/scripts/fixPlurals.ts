@@ -9,6 +9,8 @@ const getPluralCategories = (locale: string): Set<string> => {
     for (let i = 0; i <= 200; i++) {
       categories.add(pr.select(i));
     }
+    // Add a fraction which some locales use, such as lt to get 'many'
+    categories.add(pr.select(1.5));
   } catch (_) {
     console.error(
       `Invalid locale: ${locale}. Falling back to 'one' and 'other'.`

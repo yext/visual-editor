@@ -25,7 +25,7 @@
   "loadingNearbyLocations": "近くの場所を読み込む...",
   "loadingReviews": "レビューの読み込み...",
   "locationsNear_other": "「{{name}}」 付近の {{count}} か所の場所",
-  "locationsWithinDistanceOf_other": "「{{name}}」から {{distance}} {{マイル}} 以内にある {{count}} か所の場所",
+  "locationsWithinDistanceOf_other": "「{{name}}」から {{distance}} {{mile}} 以内にある {{count}} か所の場所",
   "logo": "ロゴ",
   "map": "地図",
   "mile_other": "マイル",
