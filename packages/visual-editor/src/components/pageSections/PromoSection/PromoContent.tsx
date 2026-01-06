@@ -11,10 +11,18 @@ export const PromoContent: PuckComponent<PromoVariantProps> = (props) => {
 
   return (
     <div
-      className={`flex flex-col justify-center gap-y-6 sm:gap-y-8 w-full break-words ${styles.containerAlignment === "left" ? "items-start" : styles.containerAlignment === "center" ? "items-center" : "items-end"}`}
+      className={`flex flex-col justify-center w-full break-words ${styles.containerAlignment === "left" ? "items-start" : styles.containerAlignment === "center" ? "items-center" : "items-end"}`}
     >
-      <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
-      <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
+      <slots.HeadingSlot
+        className={`mb-4 ${styles.variant === "classic" ? "sm:mb-8" : ""}`}
+        style={{ height: "auto" }}
+        allow={[]}
+      />
+      <slots.DescriptionSlot
+        className="mb-6 sm:mb-8"
+        style={{ height: "auto" }}
+        allow={[]}
+      />
       <slots.CTASlot
         style={{ height: "auto", width: "100%" }}
         className="sm:!w-fit"
