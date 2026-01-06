@@ -207,7 +207,7 @@ export const BreadcrumbsSection: ComponentConfig<{
   render: (props) => {
     return (
       <ComponentErrorBoundary
-        componentName="BreadcrumbsSection"
+        componentName="Breadcrumbs"
         isEditing={props.puck.isEditing}
       >
         <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>

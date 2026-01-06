@@ -225,7 +225,7 @@ export const NearbyLocationsSection: ComponentConfig<{
   },
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="NearbyLocationsSection"
+      componentName="Nearby Locations Section"
       isEditing={props.puck.isEditing}
     >
       <AnalyticsScopeProvider

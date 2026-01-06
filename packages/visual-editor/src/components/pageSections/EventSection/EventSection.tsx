@@ -162,7 +162,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
   },
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="EventSection"
+      componentName="Events Section"
       isEditing={props.puck.isEditing}
     >
       <AnalyticsScopeProvider

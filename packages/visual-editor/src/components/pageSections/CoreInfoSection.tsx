@@ -430,7 +430,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
     },
     render: (props) => (
       <ComponentErrorBoundary
-        componentName="CoreInfoSection"
+        componentName="Core Info Section"
         isEditing={props.puck.isEditing}
       >
         <AnalyticsScopeProvider

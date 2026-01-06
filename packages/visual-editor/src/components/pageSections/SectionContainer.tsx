@@ -130,7 +130,7 @@ export const SectionContainer: ComponentConfig<{
   },
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="SectionContainer"
+      componentName="Section Container"
       isEditing={props.puck.isEditing}
     >
       <VisibilityWrapper

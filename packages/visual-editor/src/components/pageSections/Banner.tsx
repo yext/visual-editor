@@ -251,7 +251,7 @@ export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
   defaultProps: defaultBannerProps,
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="BannerSection"
+      componentName="Banner Section"
       isEditing={props.puck.isEditing}
     >
       <VisibilityWrapper

@@ -295,7 +295,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
   },
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="FAQsSection"
+      componentName="FAQs Section"
       isEditing={props.puck.isEditing}
     >
       <AnalyticsScopeProvider

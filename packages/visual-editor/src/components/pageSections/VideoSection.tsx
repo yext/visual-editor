@@ -125,7 +125,7 @@ export const VideoSection: ComponentConfig<{
   },
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="VideoSection"
+      componentName="Video Section"
       isEditing={props.puck.isEditing}
     >
       <VisibilityWrapper

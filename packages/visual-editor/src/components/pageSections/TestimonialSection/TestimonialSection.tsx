@@ -167,7 +167,7 @@ export const TestimonialSection: ComponentConfig<{
   },
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="TestimonialSection"
+      componentName="Testimonials Section"
       isEditing={props.puck.isEditing}
     >
       <AnalyticsScopeProvider

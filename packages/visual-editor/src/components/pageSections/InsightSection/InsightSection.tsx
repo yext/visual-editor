@@ -166,7 +166,7 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
   render: (props) => {
     return (
       <ComponentErrorBoundary
-        componentName="InsightSection"
+        componentName="Insights Section"
         isEditing={props.puck.isEditing}
       >
         <AnalyticsScopeProvider

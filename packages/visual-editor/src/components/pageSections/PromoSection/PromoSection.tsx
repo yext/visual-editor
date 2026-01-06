@@ -628,7 +628,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
 
     return (
       <ComponentErrorBoundary
-        componentName="PromoSection"
+        componentName="Promo Section"
         isEditing={props.puck.isEditing}
       >
         <AnalyticsScopeProvider

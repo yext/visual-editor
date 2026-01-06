@@ -163,7 +163,7 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
   },
   render: (props) => (
     <ComponentErrorBoundary
-      componentName="TeamSection"
+      componentName="Team Section"
       isEditing={props.puck.isEditing}
     >
       <AnalyticsScopeProvider
