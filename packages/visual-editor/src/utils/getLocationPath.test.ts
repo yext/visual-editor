@@ -117,6 +117,42 @@ describe("getLocationPath", () => {
   });
 
   describe("with pagesetConfig", () => {
+    it("applies locale prefix to slug when includeLocalePrefixForPrimaryLocale is true", () => {
+      // Slug should get locale prefix when config says so
+      expect(
+        getLocationPath(
+          {
+            locale: "en",
+            slug: "locator-page",
+            id: "location1",
+            __: { isPrimaryLocale: true },
+          },
+          "",
+          {
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: true,
+          }
+        )
+      ).toBe("en/locator-page");
+
+      // Non-primary locale should always get prefix
+      expect(
+        getLocationPath(
+          {
+            locale: "es",
+            slug: "locator-page",
+            id: "location1",
+            __: { isPrimaryLocale: false },
+          },
+          "",
+          {
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale: false,
+          }
+        )
+      ).toBe("es/locator-page");
+    });
+
     it("uses custom primary_locale", () => {
       // Spanish as primary locale
       expect(

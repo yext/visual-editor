@@ -20,10 +20,6 @@ export const getLocationPath = (
     throw new Error("Could not resolve location path.");
   }
 
-  if (location.slug) {
-    return `${relativePrefixToRoot}${location.slug}`;
-  }
-
   const locale = location?.locale || location?.meta?.locale;
   if (!locale) {
     throw new Error("Missing locale for getLocationPath");
@@ -40,6 +36,11 @@ export const getLocationPath = (
   const shouldIncludeLocalePrefix =
     !isPrimaryLocale || (isPrimaryLocale && includeLocalePrefixForPrimary);
   const localePath = shouldIncludeLocalePrefix ? `${locale}/` : "";
+
+  // If there's a slug, apply locale prefix to it
+  if (location.slug) {
+    return `${relativePrefixToRoot}${localePath}${location.slug}`;
+  }
 
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
