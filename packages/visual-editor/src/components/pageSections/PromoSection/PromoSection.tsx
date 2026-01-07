@@ -285,7 +285,6 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         },
         constantValueEnabled: true,
       },
-      forceError: false,
     },
     styles: {
       variant: "classic",
