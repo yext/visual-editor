@@ -42,11 +42,26 @@ export const ComponentErrorBoundary = ({
     setHasError(false);
   };
 
+  // We stringify the props to ensure we only reset when the values change, not the object reference.
+  // We also exclude the `puck` prop which is unstable and causes unnecessary resets.
+  const stableResetKeys = resetKeys.map((key) => {
+    if (key && typeof key === "object" && "puck" in key) {
+      const rest = { ...key };
+      delete rest.puck;
+      try {
+        return JSON.stringify(rest);
+      } catch {
+        return key;
+      }
+    }
+    return key;
+  });
+
   return (
     <ErrorBoundary
       onError={handleError}
       onReset={handleReset}
-      resetKeys={resetKeys}
+      resetKeys={stableResetKeys}
       fallbackRender={() => {
         if (!isEditing) {
           return null;
