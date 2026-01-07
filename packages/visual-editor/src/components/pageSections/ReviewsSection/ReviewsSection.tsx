@@ -28,10 +28,19 @@ import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers
 
 type Review = {
   authorName: string;
-  content: string;
+  content?: string;
   rating: number;
   reviewDate: string;
   comments?: { content: string; commentDate: string }[];
+};
+
+type StreamDocumentWithReviews = StreamDocument & {
+  ref_reviewsAgg?: {
+    publisher: string;
+    reviewCount?: number;
+    averageRating?: number;
+    topReviews?: Review[];
+  }[];
 };
 
 const REVIEWS_PER_PAGE = 5;
@@ -156,14 +165,7 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
 const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
   const { styles, slots, puck } = props;
   const [currentPageNumber, setCurrentPageNumber] = React.useState(0);
-  const streamDocument = useDocument<
-    StreamDocument & {
-      ref_reviewsAgg?: {
-        publisher: string;
-        topReviews: Review[];
-      }[];
-    }
-  >();
+  const streamDocument = useDocument<StreamDocumentWithReviews>();
 
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
   const reviews = streamDocument.ref_reviewsAgg?.find(
@@ -293,7 +295,7 @@ interface AuthorWithDateProps {
 }
 
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
-  const streamDocument = useDocument();
+  const streamDocument = useDocument<StreamDocumentWithReviews>();
   return (
     <div className="flex flex-col gap-2">
       <Body variant={"lg"} className="font-bold">
