@@ -97,12 +97,12 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(streamDocument, "./", themeConfig);
 
     expect(result).toBe(
-      '<style type="text/css">@font-face {\n  font-family: "Adamina Fallback";\n  src: local(\'Georgia\');\n  ' +
-        "ascent-override: 100.1884%;\n  descent-override: 27.1032%;\n  size-adjust: 106.9985%;\n  font-weight: 400;\n  font-style: regular;\n}</style>" +
-        '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
+      '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
         '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n' +
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
+        '<style type="text/css">@font-face {\n  font-family: "Adamina Fallback";\n  src: local(\'Georgia\');\n  ' +
+        "ascent-override: 100.1884%;\n  descent-override: 27.1032%;\n  size-adjust: 106.9985%;\n  font-weight: 400;\n  font-style: regular;\n}</style>" +
         '<style id="visual-editor-theme" type="text/css">.components{' +
         "--colors-palette-text:black !important;" +
         "--colors-palette-primary-DEFAULT:hsl(0 68% 51%) !important;" +
