@@ -246,13 +246,13 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 <TooltipTrigger asChild>
                   <span
                     tabIndex={0}
-                    className={hasErrors ? "ve-cursor-not-allowed" : ""}
+                    // className={hasErrors ? "ve-cursor-not-allowed" : ""}
                   >
                     <Button
                       variant="secondary"
-                      disabled={histories.length === 1 || hasErrors}
+                      disabled={histories.length === 1}
                       onClick={onButtonClick}
-                      className={hasErrors ? "ve-pointer-events-none" : ""}
+                      // className={hasErrors ? "ve-pointer-events-none" : ""}
                     >
                       {buttonText}
                     </Button>

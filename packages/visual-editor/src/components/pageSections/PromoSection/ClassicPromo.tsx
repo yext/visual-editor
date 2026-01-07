@@ -7,6 +7,10 @@ import { PromoContent } from "./PromoContent";
 export const ClassicPromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles, slots } = props;
 
+  if (data.forceError) {
+    throw new Error("Forced error in ClassicPromo for testing");
+  }
+
   return (
     <PageSection
       background={styles.backgroundColor}
