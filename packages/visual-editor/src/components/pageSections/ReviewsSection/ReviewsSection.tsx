@@ -20,6 +20,7 @@ import {
   VisibilityWrapper,
   HeadingTextProps,
   pt,
+  StreamDocument,
 } from "@yext/visual-editor";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
@@ -155,12 +156,14 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
 const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
   const { styles, slots, puck } = props;
   const [currentPageNumber, setCurrentPageNumber] = React.useState(0);
-  const streamDocument = useDocument<{
-    ref_reviewsAgg?: {
-      publisher: string;
-      topReviews: Review[];
-    }[];
-  }>();
+  const streamDocument = useDocument<
+    StreamDocument & {
+      ref_reviewsAgg?: {
+        publisher: string;
+        topReviews: Review[];
+      }[];
+    }
+  >();
 
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
   const reviews = streamDocument.ref_reviewsAgg?.find(
@@ -197,16 +200,12 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
           reviewCount={reviewCount}
         />
       </div>
-      {reviews && (
-        <>
-          <ReviewsList reviews={reviewsPage} />
-          <PageScroller
-            numberOfReviews={reviews?.length ?? 0}
-            currentPageNumber={currentPageNumber}
-            setPageNumber={setCurrentPageNumber}
-          />
-        </>
-      )}
+      <ReviewsList reviews={reviewsPage} streamDocument={streamDocument} />
+      <PageScroller
+        numberOfReviews={reviews?.length ?? 0}
+        currentPageNumber={currentPageNumber}
+        setPageNumber={setCurrentPageNumber}
+      />
     </PageSection>
   );
 };
@@ -225,11 +224,19 @@ const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
   );
 };
 
-const ReviewsList: React.FC<{ reviews: Review[] }> = ({ reviews }) => {
+const ReviewsList: React.FC<{
+  reviews: Review[];
+  streamDocument: StreamDocument;
+}> = ({ reviews, streamDocument }) => {
   return (
     <div className="flex flex-col gap-4">
       {reviews.map((review, index) => (
-        <Review key={`review-${index}`} index={index} review={review} />
+        <Review
+          key={`review-${index}`}
+          index={index}
+          review={review}
+          streamDocument={streamDocument}
+        />
       ))}
     </div>
   );
@@ -238,8 +245,8 @@ const ReviewsList: React.FC<{ reviews: Review[] }> = ({ reviews }) => {
 const Review: React.FC<{
   review: Review;
   index: number;
-}> = ({ review, index }) => {
-  const streamDocument = useDocument();
+  streamDocument: StreamDocument;
+}> = ({ review, index, streamDocument }) => {
   const authorData: AuthorWithDateProps = {
     author: review.authorName,
     date: review.reviewDate,
