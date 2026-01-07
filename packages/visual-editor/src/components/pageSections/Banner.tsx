@@ -250,7 +250,10 @@ export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
   fields: bannerSectionFields,
   defaultProps: defaultBannerProps,
   render: (props) => (
-    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

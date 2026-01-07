@@ -7,11 +7,13 @@ import { useErrorContext } from "../contexts/ErrorContext";
 interface ComponentErrorBoundaryProps {
   children: React.ReactNode;
   isEditing?: boolean;
+  resetKeys?: any[];
 }
 
 export const ComponentErrorBoundary = ({
   children,
   isEditing = false,
+  resetKeys = [],
 }: ComponentErrorBoundaryProps) => {
   const { sendError } = useCommonMessageSenders();
   const { incrementErrorCount, decrementErrorCount } = useErrorContext();
@@ -44,7 +46,7 @@ export const ComponentErrorBoundary = ({
     <ErrorBoundary
       onError={handleError}
       onReset={handleReset}
-      resetKeys={[children]}
+      resetKeys={resetKeys}
       fallbackRender={() => {
         if (!isEditing) {
           return null;

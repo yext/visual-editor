@@ -429,7 +429,10 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
       };
     },
     render: (props) => (
-      <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
+      >
         <AnalyticsScopeProvider
           name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
         >

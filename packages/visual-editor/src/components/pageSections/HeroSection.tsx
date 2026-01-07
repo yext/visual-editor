@@ -642,7 +642,10 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     }
 
     return (
-      <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
+      >
         <AnalyticsScopeProvider
           name={`${props.analytics?.scope ?? "heroSection"}${getAnalyticsScopeHash(props.id)}`}
         >

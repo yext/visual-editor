@@ -627,7 +627,10 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
     }
 
     return (
-      <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
+      >
         <AnalyticsScopeProvider
           name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
         >

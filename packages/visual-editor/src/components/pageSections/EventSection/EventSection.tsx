@@ -161,7 +161,10 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
     return forwardHeadingLevel(data, "TitleSlot");
   },
   render: (props) => (
-    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
+    >
       <AnalyticsScopeProvider
         name={`${props.analytics?.scope ?? "eventsSection"}${getAnalyticsScopeHash(props.id)}`}
       >

@@ -224,7 +224,10 @@ export const NearbyLocationsSection: ComponentConfig<{
     );
   },
   render: (props) => (
-    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
+    >
       <AnalyticsScopeProvider
         name={props.analytics?.scope ?? "nearbyLocationsSection"}
       >

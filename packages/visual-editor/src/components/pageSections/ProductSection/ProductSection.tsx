@@ -165,7 +165,10 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   },
   render: (props) => {
     return (
-      <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
+      >
         <AnalyticsScopeProvider
           name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
         >

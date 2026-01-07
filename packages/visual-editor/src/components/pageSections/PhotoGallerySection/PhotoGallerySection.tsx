@@ -196,7 +196,10 @@ export const PhotoGallerySection: ComponentConfig<{
     liveVisibility: true,
   },
   render: (props) => (
-    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
+    >
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

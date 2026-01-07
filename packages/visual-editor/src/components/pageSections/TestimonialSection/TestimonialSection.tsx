@@ -166,7 +166,10 @@ export const TestimonialSection: ComponentConfig<{
     return forwardHeadingLevel(data, "ContributorNameSlot");
   },
   render: (props) => (
-    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
+    >
       <AnalyticsScopeProvider
         name={`${props.analytics?.scope ?? "testimonialSection"}${getAnalyticsScopeHash(props.id)}`}
       >
