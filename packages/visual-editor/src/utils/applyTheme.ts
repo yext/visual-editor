@@ -111,7 +111,7 @@ export const applyTheme = (
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
 
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}<style type="text/css">${fallbackFontFaceDefinitions.join("\n")}</style>${fontLinkTags}<style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
+    return `${base ?? ""}${fontLinkTags}<style type="text/css">${fallbackFontFaceDefinitions.join("\n")}</style><style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
   }
   return base ?? "";
 };
