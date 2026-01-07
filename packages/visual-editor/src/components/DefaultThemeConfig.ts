@@ -62,7 +62,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -95,7 +95,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -128,7 +128,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -161,7 +161,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -194,7 +194,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -227,7 +227,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -260,7 +260,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -312,7 +312,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),
@@ -359,7 +359,7 @@ export function createDefaultThemeConfig(
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,
-          default: "'Open Sans', sans-serif",
+          default: "'Open Sans', 'Open Sans Fallback', sans-serif",
         },
         fontSize: {
           label: msg("theme.fontSize", "Font Size"),

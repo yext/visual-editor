@@ -20,9 +20,9 @@ beforeEach(() => {
   const themeTags = applyTheme({}, "./", defaultThemeConfig);
 
   // don't load fonts
-  const match = themeTags.match(/<style[^>]*>[\s\S]*?<\/style>/);
-  if (match && match[0]) {
-    const theme = match[0];
+  const matches = [...themeTags.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)];
+  if (matches.length > 0 && matches[1]?.length) {
+    const theme = matches[1][0];
 
     document.head.appendChild(tag);
     tag.outerHTML = theme;
