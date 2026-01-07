@@ -23,8 +23,8 @@ import { useProgress } from "../hooks/useProgress.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
-// import { useErrorContext } from "../../contexts/ErrorContext.tsx";
-// import { toast } from "sonner";
+import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { toast } from "sonner";
 
 const devLogger = new DevLogger();
 
@@ -51,7 +51,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     streamDocument,
   } = props;
 
-  // const { errorCount } = useErrorContext();
+  const { errorCount } = useErrorContext();
 
   const {
     saveLayoutSaveState,
@@ -90,10 +90,10 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
   };
 
   const handlePublish = (data?: any) => {
-    // if (errorCount > 0) {
-    //   toast.error("Cannot publish while there are component errors.");
-    //   return;
-    // }
+    if (errorCount > 0) {
+      toast.error("Cannot publish while there are component errors.");
+      return;
+    }
     setLayoutSaveState(undefined);
     publishLayout(data);
   };
