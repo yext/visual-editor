@@ -22,7 +22,10 @@ import {
   createDefaultThemeConfig,
   defaultThemeConfig,
 } from "../components/DefaultThemeConfig";
-import { defaultFonts, loadFontsIntoDOM } from "../utils/visualEditorFonts.ts";
+import {
+  defaultFonts,
+  loadFontsIntoDOM,
+} from "../utils/fonts/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
