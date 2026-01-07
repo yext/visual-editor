@@ -1,6 +1,8 @@
 import { createFontStack } from "@capsizecss/core";
 import { fontFamilyToCamelCase } from "@capsizecss/metrics";
 import { defaultFonts } from "./font_registry";
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 // Requires different TS module resolution than we're using
 //@ts-ignore
@@ -11,6 +13,10 @@ import georgia from "@capsizecss/metrics/georgia";
 import courierNew from "@capsizecss/metrics/courierNew";
 //@ts-ignore
 import brushScript from "@capsizecss/metrics/brushScript";
+
+const outputFilepath = resolve(
+  "src/utils/fonts/fontFallbackTransformations.json"
+);
 
 const systemFallbacks: Record<string, any> = {
   "sans-serif": arial,
@@ -25,7 +31,7 @@ const systemFallbacks: Record<string, any> = {
  *
  * It only needs to be run if we update font_registry.js.
  */
-async function generate() {
+const generate = async () => {
   const results: Record<string, string[]> = {};
 
   for (const [displayName, config] of Object.entries(defaultFonts)) {
@@ -78,7 +84,12 @@ async function generate() {
     }
   }
 
-  console.log(JSON.stringify(results, null, 2));
-}
+  try {
+    writeFileSync(outputFilepath, JSON.stringify(results, null, 2), "utf-8");
+    console.log(`Successfully wrote to ${outputFilepath}`);
+  } catch (error) {
+    console.error("Failed to write file:", error);
+  }
+};
 
 generate();
