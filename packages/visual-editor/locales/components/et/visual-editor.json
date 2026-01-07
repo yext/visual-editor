@@ -31,7 +31,7 @@
   "locationsWithinDistanceOf_one": "{{count}} asukoht {{distance}} {{mile}} raadiuses asukohast \"{{name}}\"",
   "locationsWithinDistanceOf_other": "{{count}} asukohta asukohast \"{{name}}\" {{distance}} {{mile}} raadiuses",
   "logo": "Logo",
-  "map": "Kaardistama",
+  "map": "Kaart",
   "mile_one": "miil",
   "mile_other": "miili",
   "miles": "miili",

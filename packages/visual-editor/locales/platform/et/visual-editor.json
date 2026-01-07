@@ -529,7 +529,7 @@
   "locationsWithinDistanceOf_one": "{{count}} asukoht {{distance}} {{mile}} raadiuses asukohast \"{{name}}\"",
   "locationsWithinDistanceOf_other": "{{count}} asukohta asukohast \"{{name}}\" {{distance}} {{mile}} raadiuses",
   "logo": "Logo",
-  "map": "Kaardistama",
+  "map": "Kaart",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "mediaType": "Meediumitüüp",
   "mile_one": "miil",
