@@ -45,6 +45,7 @@
   "callToAction": "Oproep tot actie",
   "callToActions": "Oproep tot acties",
   "cancel": "Annuleren",
+  "cannotPublishWithErrors": "Kan niet publiceren terwijl componenten fouten bevatten.",
   "categories": {
     "coreInformation": "Kerninformatie",
     "other": "ANDER",
@@ -60,6 +61,10 @@
   "closeMenu": "Sluit het menu",
   "closed": "Gesloten",
   "closesAt": "Sluit af aan",
+  "componentErrorBoundary": {
+    "error": "Fout",
+    "message": "Kan deze sectie niet weergeven. Probeer uw componentenbibliotheek bij te werken."
+  },
   "components": {
     "DirectoryGrid": "Directoryraster",
     "Video": "Video",

@@ -45,6 +45,7 @@
   "callToAction": "Wezwanie do działania",
   "callToActions": "Zadzwoń do działań",
   "cancel": "Anulować",
+  "cannotPublishWithErrors": "Nie można opublikować, gdy komponenty zawierają błędy.",
   "categories": {
     "coreInformation": "Informacje podstawowe",
     "other": "INNY",
@@ -60,6 +61,10 @@
   "closeMenu": "Zamknij menu",
   "closed": "Zamknięte",
   "closesAt": "Zamyka się",
+  "componentErrorBoundary": {
+    "error": "Błąd",
+    "message": "Nie można wyrenderować tej sekcji. Spróbuj zaktualizować bibliotekę komponentów."
+  },
   "components": {
     "DirectoryGrid": "Siatka katalogów",
     "Video": "Wideo",

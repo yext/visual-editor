@@ -260,7 +260,12 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 </TooltipTrigger>
                 {hasErrors && (
                   <TooltipContent>
-                    <p>{"Cannot publish while components have errors."}</p>
+                    <p>
+                      {pt(
+                        "cannotPublishWithErrors",
+                        "Cannot publish while components have errors."
+                      )}
+                    </p>
                   </TooltipContent>
                 )}
               </Tooltip>

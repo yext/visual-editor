@@ -45,6 +45,7 @@
   "callToAction": "Chamada para ação",
   "callToActions": "Chamar para ações",
   "cancel": "Cancelar",
+  "cannotPublishWithErrors": "Não é possível publicar enquanto os componentes apresentam erros.",
   "categories": {
     "coreInformation": "Informações essenciais",
     "other": "OUTRO",
@@ -60,6 +61,10 @@
   "closeMenu": "Feche o menu",
   "closed": "Fechado",
   "closesAt": "Fecha em",
+  "componentErrorBoundary": {
+    "error": "Erro",
+    "message": "Não é possível renderizar esta seção. Tente atualizar sua biblioteca de componentes."
+  },
   "components": {
     "DirectoryGrid": "Grade de diretório",
     "Video": "Vídeo",

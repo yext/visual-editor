@@ -45,6 +45,7 @@
   "callToAction": "號召性用語",
   "callToActions": "打電話給行動",
   "cancel": "取消",
+  "cannotPublishWithErrors": "當組件有錯誤時無法發布。",
   "categories": {
     "coreInformation": "核心信息",
     "other": "其他",
@@ -60,6 +61,10 @@
   "closeMenu": "關閉菜單",
   "closed": "關閉",
   "closesAt": "關閉",
+  "componentErrorBoundary": {
+    "error": "錯誤",
+    "message": "無法渲染此部分。嘗試更新您的組件庫。"
+  },
   "components": {
     "DirectoryGrid": "目錄網格",
     "Video": "影片",

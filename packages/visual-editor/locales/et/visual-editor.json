@@ -45,6 +45,7 @@
   "callToAction": "Üleskutse tegevusele",
   "callToActions": "Tegevusele helistama",
   "cancel": "Tühistama",
+  "cannotPublishWithErrors": "Ei saa avaldada, kui komponentides on vigu.",
   "categories": {
     "coreInformation": "Põhiteave",
     "other": "Teine",
@@ -60,6 +61,10 @@
   "closeMenu": "Sulgemenüü",
   "closed": "Suletud",
   "closesAt": "Sulgub",
+  "componentErrorBoundary": {
+    "error": "Viga",
+    "message": "Seda jaotist ei saa renderdada. Proovige oma komponentide teeki värskendada."
+  },
   "components": {
     "DirectoryGrid": "Kataloogivõrk",
     "Video": "Video",

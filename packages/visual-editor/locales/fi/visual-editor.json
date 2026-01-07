@@ -45,6 +45,7 @@
   "callToAction": "Toimintakehotus",
   "callToActions": "Soita toimiin",
   "cancel": "Peruuttaa",
+  "cannotPublishWithErrors": "Ei voida julkaista, kun komponenteissa on virheitä.",
   "categories": {
     "coreInformation": "Perustiedot",
     "other": "Muut",
@@ -60,6 +61,10 @@
   "closeMenu": "Suljevalikko",
   "closed": "Suljettu",
   "closesAt": "Sulkeutuu jhk",
+  "componentErrorBoundary": {
+    "error": "Virhe",
+    "message": "Tätä osiota ei voi renderöidä. Yritä päivittää komponenttikirjastosi."
+  },
   "components": {
     "DirectoryGrid": "Hakemistoruudukko",
     "Video": "Video",

@@ -45,6 +45,7 @@
   "callToAction": "Raginimas veikti",
   "callToActions": "Kvietimas į veiksmus",
   "cancel": "Atšaukti",
+  "cannotPublishWithErrors": "Negalima paskelbti, kol komponentuose yra klaidų.",
   "categories": {
     "coreInformation": "Pagrindinė informacija",
     "other": "Kita",
@@ -60,6 +61,10 @@
   "closeMenu": "Uždaryti meniu",
   "closed": "Uždarytas",
   "closesAt": "Uždaroma",
+  "componentErrorBoundary": {
+    "error": "Klaida",
+    "message": "Nepavyko pateikti šios skilties. Pabandykite atnaujinti komponentų biblioteką."
+  },
   "components": {
     "DirectoryGrid": "Katalogų tinklelis",
     "Video": "Vaizdo įrašas",

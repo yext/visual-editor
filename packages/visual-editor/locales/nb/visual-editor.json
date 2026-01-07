@@ -45,6 +45,7 @@
   "callToAction": "Ring til handling",
   "callToActions": "Ring til handlinger",
   "cancel": "Kansellere",
+  "cannotPublishWithErrors": "Kan ikke publisere mens komponenter har feil.",
   "categories": {
     "coreInformation": "Kjerneinformasjon",
     "other": "ANNEN",
@@ -60,6 +61,10 @@
   "closeMenu": "Lukk meny",
   "closed": "Lukket",
   "closesAt": "Lukkes kl",
+  "componentErrorBoundary": {
+    "error": "Feil",
+    "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."
+  },
   "components": {
     "DirectoryGrid": "Katalognett",
     "Video": "Video",

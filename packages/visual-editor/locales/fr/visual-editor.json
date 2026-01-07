@@ -45,6 +45,7 @@
   "callToAction": "Appel à l'action",
   "callToActions": "Appel à des actions",
   "cancel": "Annuler",
+  "cannotPublishWithErrors": "Impossible de publier lorsque les composants contiennent des erreurs.",
   "categories": {
     "coreInformation": "Informations de base",
     "other": "AUTRE",
@@ -60,6 +61,10 @@
   "closeMenu": "Fermer le menu",
   "closed": "Fermé",
   "closesAt": "Se ferme à",
+  "componentErrorBoundary": {
+    "error": "Erreur",
+    "message": "Impossible de restituer cette section. Essayez de mettre à jour votre bibliothèque de composants."
+  },
   "components": {
     "DirectoryGrid": "Grille de répertoire",
     "Video": "Vidéo",

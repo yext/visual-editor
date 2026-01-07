@@ -45,6 +45,7 @@
   "callToAction": "Felhívás cselekvésre",
   "callToActions": "Cselekvési felhívás",
   "cancel": "Töröl",
+  "cannotPublishWithErrors": "Nem lehet közzétenni, amíg az összetevők hibásak.",
   "categories": {
     "coreInformation": "Alapvető információk",
     "other": "MÁS",
@@ -60,6 +61,10 @@
   "closeMenu": "Zárja be a menüt",
   "closed": "Zárt",
   "closesAt": "Bezár",
+  "componentErrorBoundary": {
+    "error": "Hiba",
+    "message": "Ez a szakasz nem jeleníthető meg. Próbálja meg frissíteni az összetevőkönyvtárat."
+  },
   "components": {
     "DirectoryGrid": "Címtárrács",
     "Video": "Videó",

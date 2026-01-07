@@ -45,6 +45,7 @@
   "callToAction": "Call to Action",
   "callToActions": "Call to Actions",
   "cancel": "Cancel",
+  "cannotPublishWithErrors": "Cannot publish while components have errors.",
   "categories": {
     "coreInformation": "Core Information",
     "other": "OTHER",
@@ -60,6 +61,10 @@
   "closeMenu": "Close menu",
   "closed": "Closed",
   "closesAt": "Closes at",
+  "componentErrorBoundary": {
+    "error": "Error",
+    "message": "Can't render this section. Try updating your component library."
+  },
   "components": {
     "DirectoryGrid": "Directory Grid",
     "Video": "Video",

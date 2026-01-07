@@ -45,6 +45,7 @@
   "callToAction": "号召性用语",
   "callToActions": "打电话给行动",
   "cancel": "取消",
+  "cannotPublishWithErrors": "当组件有错误时无法发布。",
   "categories": {
     "coreInformation": "核心信息",
     "other": "其他",
@@ -60,6 +61,10 @@
   "closeMenu": "关闭菜单",
   "closed": "关闭",
   "closesAt": "关闭",
+  "componentErrorBoundary": {
+    "error": "错误",
+    "message": "无法渲染此部分。尝试更新您的组件库。"
+  },
   "components": {
     "DirectoryGrid": "目录网格",
     "Video": "视频",

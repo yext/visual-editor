@@ -45,6 +45,7 @@
   "callToAction": "Aufruf zum Handeln",
   "callToActions": "Rufen Sie Aktionen an",
   "cancel": "Stornieren",
+  "cannotPublishWithErrors": "Veröffentlichung ist nicht möglich, solange Komponenten fehlerhaft sind.",
   "categories": {
     "coreInformation": "Kerninformationen",
     "directory": "Verzeichnis",
@@ -62,6 +63,10 @@
   "closeMenu": "Menü schließen",
   "closed": "Geschlossen",
   "closesAt": "Schließt bei",
+  "componentErrorBoundary": {
+    "error": "Fehler",
+    "message": "Dieser Abschnitt kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."
+  },
   "components": {
     "DirectoryGrid": "Verzeichnisraster",
     "Video": "Video",

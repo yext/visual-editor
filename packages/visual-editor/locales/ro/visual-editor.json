@@ -45,6 +45,7 @@
   "callToAction": "Apel la acțiune",
   "callToActions": "Apelați la acțiuni",
   "cancel": "Anula",
+  "cannotPublishWithErrors": "Nu se poate publica în timp ce componentele au erori.",
   "categories": {
     "coreInformation": "Informații de bază",
     "other": "ALTE",
@@ -60,6 +61,10 @@
   "closeMenu": "Închideți meniul",
   "closed": "Închis",
   "closesAt": "Se închide la",
+  "componentErrorBoundary": {
+    "error": "Eroare",
+    "message": "Nu se poate reda această secțiune. Încercați să vă actualizați biblioteca de componente."
+  },
   "components": {
     "DirectoryGrid": "Director Grid",
     "Video": "Video",
