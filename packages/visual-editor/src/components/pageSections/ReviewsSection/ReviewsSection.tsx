@@ -239,6 +239,7 @@ const Review: React.FC<{
   review: Review;
   index: number;
 }> = ({ review, index }) => {
+  const streamDocument = useDocument();
   const authorData: AuthorWithDateProps = {
     author: review.authorName,
     date: review.reviewDate,
@@ -253,7 +254,7 @@ const Review: React.FC<{
   if (Array.isArray(review.comments) && review.comments.length > 0) {
     const businessResponseContent = review.comments[0].content;
     const businessResponseDate = review.comments[0].commentDate;
-    const businessName = (useDocument() as { name?: string }).name || "";
+    const businessName = streamDocument.name || "";
     businessResponseData = {
       businessName,
       content: businessResponseContent,
