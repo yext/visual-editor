@@ -165,10 +165,7 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
   },
   render: (props) => {
     return (
-      <ComponentErrorBoundary
-        componentName="Insights Section"
-        isEditing={props.puck.isEditing}
-      >
+      <ComponentErrorBoundary isEditing={props.puck.isEditing}>
         <AnalyticsScopeProvider
           name={`${props.analytics?.scope ?? "insightsSection"}${getAnalyticsScopeHash(props.id)}`}
         >

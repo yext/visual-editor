@@ -206,10 +206,7 @@ export const BreadcrumbsSection: ComponentConfig<{
   },
   render: (props) => {
     return (
-      <ComponentErrorBoundary
-        componentName="Breadcrumbs"
-        isEditing={props.puck.isEditing}
-      >
+      <ComponentErrorBoundary isEditing={props.puck.isEditing}>
         <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
           <VisibilityWrapper
             liveVisibility={props.liveVisibility}

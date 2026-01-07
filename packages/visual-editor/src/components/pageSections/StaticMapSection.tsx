@@ -137,10 +137,7 @@ export const StaticMapSection: ComponentConfig<{
     },
   },
   render: (props) => (
-    <ComponentErrorBoundary
-      componentName="Static Map Section"
-      isEditing={props.puck.isEditing}
-    >
+    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

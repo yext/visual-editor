@@ -162,10 +162,7 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
     return forwardHeadingLevel(data, "TitleSlot");
   },
   render: (props) => (
-    <ComponentErrorBoundary
-      componentName="Team Section"
-      isEditing={props.puck.isEditing}
-    >
+    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
       <AnalyticsScopeProvider
         name={`${props.analytics?.scope ?? "teamSection"}${getAnalyticsScopeHash(props.id)}`}
       >

@@ -129,10 +129,7 @@ export const SectionContainer: ComponentConfig<{
     liveVisibility: true,
   },
   render: (props) => (
-    <ComponentErrorBoundary
-      componentName="Section Container"
-      isEditing={props.puck.isEditing}
-    >
+    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
       <VisibilityWrapper
         liveVisibility={props.liveVisibility}
         isEditing={props.puck.isEditing}

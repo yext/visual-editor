@@ -607,10 +607,7 @@ export const ReviewsSection: ComponentConfig<{ props: ReviewsSectionProps }> = {
     liveVisibility: true,
   },
   render: (props) => (
-    <ComponentErrorBoundary
-      componentName="Reviews Section"
-      isEditing={props.puck.isEditing}
-    >
+    <ComponentErrorBoundary isEditing={props.puck.isEditing}>
       <AnalyticsScopeProvider
         name={`${props.analytics?.scope ?? "reviewsSection"}${getAnalyticsScopeHash(props.id)}`}
       >

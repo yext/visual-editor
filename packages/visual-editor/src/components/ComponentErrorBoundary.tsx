@@ -1,17 +1,16 @@
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { OctagonX } from "lucide-react";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders";
 import { useErrorContext } from "../contexts/ErrorContext";
 
 interface ComponentErrorBoundaryProps {
   children: React.ReactNode;
-  componentName?: string;
   isEditing?: boolean;
 }
 
 export const ComponentErrorBoundary = ({
   children,
-  componentName,
   isEditing = false,
 }: ComponentErrorBoundaryProps) => {
   const { sendError } = useCommonMessageSenders();
@@ -51,15 +50,17 @@ export const ComponentErrorBoundary = ({
         }
 
         return (
-          <div className="p-4 border border-red-500 bg-red-50 text-red-900">
-            <h3 className="font-bold mb-2">
-              Error in {componentName || "Component"}
-            </h3>
-            <pre className="text-sm overflow-auto max-h-40 mb-4 whitespace-pre-wrap">
-              {
-                "There is a bug preventing this component from rendering. Try updating if an update is available, otherwise reach out to support. Publishing has been disabled."
-              }
-            </pre>
+          <div className="p-2 bg-white">
+            <div className="bg-gray-100 rounded-lg p-4 flex flex-row items-center justify-center gap-4">
+              <OctagonX className="w-10 h-10 text-gray-300 flex-shrink-0" />
+              <div className="flex flex-col">
+                <h3 className="font-medium text-gray-500">Error</h3>
+                <p className="text-gray-500 text-sm">
+                  Can't render this section. Try updating your component
+                  library.
+                </p>
+              </div>
+            </div>
           </div>
         );
       }}
