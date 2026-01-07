@@ -44,6 +44,7 @@ export const ComponentErrorBoundary = ({
     <ErrorBoundary
       onError={handleError}
       onReset={handleReset}
+      resetKeys={[children]}
       fallbackRender={() => {
         if (!isEditing) {
           return null;
@@ -51,7 +52,7 @@ export const ComponentErrorBoundary = ({
 
         return (
           <div className="p-2 bg-white">
-            <div className="bg-gray-100 rounded-lg p-4 flex flex-row items-center justify-center gap-4">
+            <div className="bg-gray-100 rounded-lg p-2 flex flex-row items-center justify-center gap-4">
               <OctagonX className="w-10 h-10 text-gray-300 flex-shrink-0" />
               <div className="flex flex-col">
                 <h3 className="font-medium text-gray-500">Error</h3>
