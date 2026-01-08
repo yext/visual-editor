@@ -148,11 +148,7 @@ const resolveTranslatableType = (
 };
 
 function isRichText(value: unknown): value is RichText {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    ("html" in value || "json" in value)
-  );
+  return typeof value === "object" && value !== null && "html" in value;
 }
 
 /**
@@ -183,7 +179,7 @@ export function getDisplayValue(
 }
 
 function richTextToString(rtf: RichText): string {
-  return rtf.html || rtf.json || "";
+  return rtf.html || "";
 }
 
 /**
@@ -194,7 +190,7 @@ function toStringOrElement(
   value: string | RichText
 ): string | React.ReactElement {
   if (isRichText(value)) {
-    if (value.html?.trim() === "" && value.json?.trim() === "") {
+    if (value.html?.trim() === "") {
       return "";
     }
     return <MaybeRTF data={value} />;
