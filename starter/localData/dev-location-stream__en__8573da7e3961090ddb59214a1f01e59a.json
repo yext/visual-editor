@@ -859,7 +859,51 @@
     {
       "averageRating": 4.1,
       "publisher": "FIRSTPARTY",
-      "reviewCount": 26
+      "reviewCount": 26,
+      "topReviews": [
+        {
+          "authorName": "Kyle B",
+          "content": "Decent Castle",
+          "rating": 3,
+          "reviewDate": "2025-06-30T01:17:29.641Z",
+          "reviewId": 1534364531
+        },
+        {
+          "authorName": "Kyle A",
+          "content": "Pretty good castle",
+          "rating": 4,
+          "reviewDate": "2025-06-30T01:17:12.023Z",
+          "reviewId": 1534364511
+        },
+        {
+          "authorName": "Kyle C",
+          "content": "This was an awesome castle!",
+          "rating": 5,
+          "reviewDate": "2025-06-30T01:18:12.715Z",
+          "reviewId": 1534364564
+        },
+        {
+          "authorName": "Kyle G",
+          "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          "rating": 4,
+          "reviewDate": "2025-06-27T03:38:17.297Z",
+          "reviewId": 1533706271
+        },
+        {
+          "authorName": "Bamboo Man",
+          "content": "Pretty good bamboo castle",
+          "rating": 4,
+          "reviewDate": "2025-06-22T04:01:49.024Z",
+          "reviewId": 1532737374
+        },
+        {
+          "authorName": "Kyle E",
+          "content": "Fine castle",
+          "rating": 4,
+          "reviewDate": "2025-01-01T01:17:12.023Z",
+          "reviewId": 1534364512
+        }
+      ]
     }
   ],
   "siteDomain": "",

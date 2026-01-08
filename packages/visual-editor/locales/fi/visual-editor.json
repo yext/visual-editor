@@ -29,6 +29,9 @@
     "send": "Lähetä hyväksyntä",
     "writeComment": "Kirjoita kommenttisi tähän ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (avautuu uuteen välilehteen)"
+  },
   "ariaLabelAppGallery": "Tutustu siihen palvelussa {{serviceName}}",
   "ariaLabelAppStore": "Lataa palvelusta {{serviceName}}",
   "ariaLabelGalaxyStore": "Saatavilla palvelussa {{serviceName}}",
@@ -216,6 +219,7 @@
     "description": "Kuvaus",
     "desktopContainerPosition": "Työpöydän säiliön sijainti",
     "desktopImagePosition": "Työpöydän kuvan sijainti",
+    "desktopMediaPosition": "Työpöytämedian sijainti",
     "destinationURL": "Kohde -URL -osoite",
     "direction": "Suunta",
     "directoryRootLinkLabel": "Hakemistojuurilinkin tarra",
@@ -277,7 +281,7 @@
     "linkType": "Linkkityyppi",
     "linkedInLink": "LinkedIn -linkki",
     "links": "Linkit",
-    "linksAlignment": "Linkkien suuntaus",
+    "linksPosition": "Linkkien sijainti",
     "listLength": "Listata pituus",
     "liveVisibility": "Näkyvissä live -sivulla",
     "localGeomodifier": "Paikallinen geomodifoija",
@@ -296,7 +300,9 @@
     "metaTitle": "Metan otsikko",
     "mobileContentAlignment": "Mobiilisisällön kohdistus",
     "mobileImagePosition": "Mobiili kuvan sijainti",
+    "mobileMediaPosition": "Mobiilimedian asema",
     "name": "Nimi",
+    "openInNewTab": "Avaa uudessa välilehdessä",
     "options": {
       "aspectRatio": "Kuvasuhde",
       "base": "Pohja",

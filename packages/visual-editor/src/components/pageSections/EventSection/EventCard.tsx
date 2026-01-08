@@ -40,7 +40,7 @@ const defaultEvent = {
   dateTime: "2022-12-12T14:00:00",
   description: {
     en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     ),
     hasLocalizedValue: "true",
   },
@@ -323,9 +323,10 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
       ];
       if (key === "DescriptionSlot") {
         newSlotData.DescriptionSlot[0].props.parentStyles = {
-          className: sharedCardProps.cardStyles.truncateDescription
-            ? "md:line-clamp-2"
-            : undefined,
+          className:
+            sharedCardProps.cardStyles.truncateDescription !== false
+              ? "md:line-clamp-2"
+              : undefined,
         };
       }
     });
@@ -529,7 +530,9 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
     updatedData = setDeep(
       updatedData,
       "props.slots.DescriptionSlot[0].props.parentStyles.className",
-      data.props.styles.truncateDescription ? "md:line-clamp-2" : undefined
+      data.props.styles.truncateDescription !== false
+        ? "md:line-clamp-2"
+        : undefined
     );
 
     // Set parentData for all slots if parentData is provided

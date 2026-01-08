@@ -29,6 +29,9 @@
     "send": "Odeslat ke schválení",
     "writeComment": "Napište svůj komentář zde ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (otevře se na nové kartě)"
+  },
   "ariaLabelAppGallery": "Prozkoumejte to na {{serviceName}}",
   "ariaLabelAppStore": "Stáhnout na {{serviceName}}",
   "ariaLabelGalaxyStore": "Dostupné na {{serviceName}}",
@@ -222,6 +225,7 @@
     "description": "Popis",
     "desktopContainerPosition": "Pozice kontejneru pro stolní počítače",
     "desktopImagePosition": "Pozice obrázku na plochu",
+    "desktopMediaPosition": "Pozice média na ploše",
     "destinationURL": "Cílová adresa URL",
     "direction": "Směr",
     "directoryRootLinkLabel": "Štítek kořenového odkazu na adresář",
@@ -284,7 +288,7 @@
     "linkType": "Typ odkazu",
     "linkedInLink": "LinkedIn Link",
     "links": "Odkazy",
-    "linksAlignment": "Sladění odkazů",
+    "linksPosition": "Pozice odkazů",
     "listLength": "Délka seznamu",
     "liveVisibility": "Viditelné na živé stránce",
     "localGeomodifier": "Místní geomodifikátor",
@@ -303,7 +307,9 @@
     "metaTitle": "Meta titul",
     "mobileContentAlignment": "Zarovnání mobilního obsahu",
     "mobileImagePosition": "Pozice mobilního obrazu",
+    "mobileMediaPosition": "Pozice mobilních médií",
     "name": "Jméno",
+    "openInNewTab": "Otevřít na nové kartě",
     "options": {
       "aspectRatio": "Poměr stran",
       "base": "Báze",

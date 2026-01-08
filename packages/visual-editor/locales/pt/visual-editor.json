@@ -29,6 +29,9 @@
     "send": "Enviar aprovação",
     "writeComment": "Escreva seu comentário aqui ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (abre em uma nova guia)"
+  },
   "ariaLabelAppGallery": "Explore-o em {{serviceName}}",
   "ariaLabelAppStore": "Baixe no {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponível em {{serviceName}}",
@@ -216,6 +219,7 @@
     "description": "Descrição",
     "desktopContainerPosition": "Posição do contêiner da área de trabalho",
     "desktopImagePosition": "Posição da imagem da área de trabalho",
+    "desktopMediaPosition": "Posição da mídia na área de trabalho",
     "destinationURL": "URL de destino",
     "direction": "Direção",
     "directoryRootLinkLabel": "Etiqueta de link raiz de diretório",
@@ -277,7 +281,7 @@
     "linkType": "Tipo de link",
     "linkedInLink": "Link LinkedIn",
     "links": "Links",
-    "linksAlignment": "Alinhamento de links",
+    "linksPosition": "Posição dos links",
     "listLength": "Comprimento da lista",
     "liveVisibility": "Visível na página ao vivo",
     "localGeomodifier": "Geomodificador local",
@@ -296,7 +300,9 @@
     "metaTitle": "Meta título",
     "mobileContentAlignment": "Alinhamento de conteúdo móvel",
     "mobileImagePosition": "Posição da imagem móvel",
+    "mobileMediaPosition": "Posição na mídia móvel",
     "name": "Nome",
+    "openInNewTab": "Abrir em nova aba",
     "options": {
       "aspectRatio": "Proporção de aspecto",
       "base": "Base",

@@ -254,10 +254,10 @@ This object contains all the content for both footer tiers.
 
 This object contains properties for customizing the appearance of both footer tiers.
 
-| Prop                   | Type                                                                        | Description                         | Default |
-| :--------------------- | :-------------------------------------------------------------------------- | :---------------------------------- | :------ |
-| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                              | The maximum width of the footer.    |         |
-| `styles.primaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }` | Styling for the primary footer bar. |         |
+| Prop                   | Type                                                                       | Description                         | Default |
+| :--------------------- | :------------------------------------------------------------------------- | :---------------------------------- | :------ |
+| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                             | The maximum width of the footer.    |         |
+| `styles.primaryFooter` | `{ backgroundColor?: BackgroundStyle; linksPosition: "left" \| "right"; }` | Styling for the primary footer bar. |         |
 
 ---
 
@@ -692,9 +692,9 @@ This object contains properties for customizing the component's appearance.
 | :---------------------------- | :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ | :------------------- |
 | `styles.backgroundColor`      | `BackgroundStyle`                                      | The background color for the entire section.                                                                                                | `Background Color 1` |
 | `styles.containerAlignment`   | `"left" \| "center" \| "right"`                        | Text content position and alignment.                                                                                                        | `left`               |
-| `styles.desktopImagePosition` | `"left" \| "right"`                                    | Positions the image to the left or right of the promo content on desktop (classic and compact variants).                                    | `right`              |
+| `styles.desktopImagePosition` | `"left" \| "right"`                                    | Positions the media to the left or right of the promo content on desktop (classic and compact variants).                                    | `right`              |
 | `styles.imageHeight`          | `number`                                               | Image Height for the promo image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding 500px |                      |
-| `styles.mobileImagePosition`  | `"top" \| "bottom"`                                    | Positions the image to the top or bottom of the promo content on mobile (classic and compact variants).                                     | `top`                |
+| `styles.mobileImagePosition`  | `"top" \| "bottom"`                                    | Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).                                     | `top`                |
 | `styles.variant`              | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the promo section.                                                                                                   | `classic`            |
 
 #### Other Props
@@ -751,9 +751,9 @@ Data configuration for the secondary footer.
 
 Styling configuration for the secondary footer.
 
-| Prop     | Type                                                                        | Description                                     | Default |
-| :------- | :-------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }` | Styling configuration for the secondary footer. |         |
+| Prop     | Type                                                                                   | Description                                     | Default |
+| :------- | :------------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; linksPosition: "left" \| "center" \| "right"; }` | Styling configuration for the secondary footer. |         |
 
 ---
 

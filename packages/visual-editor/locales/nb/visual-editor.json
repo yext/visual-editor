@@ -29,6 +29,9 @@
     "send": "Send for godkjenning",
     "writeComment": "Skriv kommentaren din her ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (åpnes i en ny fane)"
+  },
   "ariaLabelAppGallery": "Utforsk det på {{serviceName}}",
   "ariaLabelAppStore": "Last ned på {{serviceName}}",
   "ariaLabelGalaxyStore": "Tilgjengelig på {{serviceName}}",
@@ -216,6 +219,7 @@
     "description": "Beskrivelse",
     "desktopContainerPosition": "Desktop Container Position",
     "desktopImagePosition": "Desktop bildeposisjon",
+    "desktopMediaPosition": "Desktop Media Posisjon",
     "destinationURL": "Destinasjonsadressen",
     "direction": "Retning",
     "directoryRootLinkLabel": "Directory Root Link Label",
@@ -277,7 +281,7 @@
     "linkType": "Link Type",
     "linkedInLink": "LinkedIn Link",
     "links": "Lenker",
-    "linksAlignment": "Koblinger justering",
+    "linksPosition": "Linker Posisjon",
     "listLength": "Listelengde",
     "liveVisibility": "Synlig på live side",
     "localGeomodifier": "Lokal geomodifier",
@@ -296,7 +300,9 @@
     "metaTitle": "Metatittel",
     "mobileContentAlignment": "Mobilinnholdsinnretning",
     "mobileImagePosition": "Mobil bildeposisjon",
+    "mobileMediaPosition": "Mobil medieposisjon",
     "name": "Navn",
+    "openInNewTab": "Åpne i ny fane",
     "options": {
       "aspectRatio": "Aspektforhold",
       "base": "Base",
