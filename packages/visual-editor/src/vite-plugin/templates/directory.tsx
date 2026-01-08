@@ -6,10 +6,10 @@ import {
   GetPath,
   TemplateProps,
   TemplateRenderProps,
-  TransformProps,
   GetHeadConfig,
   HeadConfig,
   TagType,
+  TransformProps,
 } from "@yext/pages";
 import { Render, resolveAllData } from "@measured/puck";
 import {
@@ -24,6 +24,7 @@ import {
   defaultThemeConfig,
   directoryConfig,
   getSchema,
+  injectTranslations,
   getCanonicalUrl,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -111,9 +112,11 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     directoryConfig,
     document
   );
-  const updatedData = await resolveAllData(migratedData, directoryConfig, {
-    streamDocument: document,
-  });
+  const updatedData = await injectTranslations(
+    await resolveAllData(migratedData, directoryConfig, {
+      streamDocument: document,
+    })
+  );
 
   return { ...props, data: updatedData };
 };

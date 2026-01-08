@@ -26,6 +26,7 @@ import {
   defaultThemeConfig,
   mainConfig,
   getSchema,
+  injectTranslations,
   getCanonicalUrl,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
@@ -110,9 +111,11 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     mainConfig,
     document
   );
-  const updatedData = await resolveAllData(migratedData, mainConfig, {
-    streamDocument: document,
-  });
+  const updatedData = await injectTranslations(
+    await resolveAllData(migratedData, mainConfig, {
+      streamDocument: document,
+    })
+  );
 
   return { ...props, data: updatedData };
 };

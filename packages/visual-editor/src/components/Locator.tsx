@@ -1220,21 +1220,18 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
       if (selectedDistanceMiles) {
         return (
           <div>
-            {t(
-              "locationsWithinDistanceOf",
-              '{{count}} locations within {{distance}} miles of "{{name}}"',
-              {
-                count: resultCount,
-                distance: selectedDistanceMiles,
-                name: filterDisplayName,
-              }
-            )}
+            {t("locationsWithinDistanceOf", {
+              count: resultCount,
+              distance: selectedDistanceMiles,
+              mile: t("mile", { count: selectedDistanceMiles }),
+              name: filterDisplayName,
+            })}
           </div>
         );
       } else {
         return (
           <div>
-            {t("locationsNear", '{{count}} locations near "{{name}}"', {
+            {t("locationsNear", {
               count: resultCount,
               name: filterDisplayName,
             })}
@@ -1244,7 +1241,7 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
     } else {
       return (
         <div>
-          {t("locationWithCount", "{{count}} locations", {
+          {t("locationWithCount", {
             count: resultCount,
           })}
         </div>
@@ -1523,7 +1520,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
             <button
               className="inline-flex bg-white"
               onClick={() => onChange(distanceMiles)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
             >
               <div className="text-palette-primary-dark">
                 {selectedDistanceMiles === distanceMiles ? (
@@ -1534,7 +1531,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <div className="inline-flex">
-              {`< ${distanceMiles} ${t("miles", "miles")}`}
+              {`< ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
             </div>
           </div>
         ))}

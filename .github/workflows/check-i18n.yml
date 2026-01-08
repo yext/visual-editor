@@ -15,8 +15,8 @@ jobs:
         uses: pnpm/action-setup@v4.0.0
       - run: pnpm i --ignore-scripts
 
-      - name: Run i18n scan
-        run: pnpm run i18n:scan
+      - name: Run i18n update
+        run: pnpm run i18n:update
 
       - name: Push changes
         id: push-changes
