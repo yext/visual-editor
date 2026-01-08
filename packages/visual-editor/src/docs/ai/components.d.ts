@@ -581,7 +581,7 @@ interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
     backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
+    linksPosition: "left" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -781,12 +781,12 @@ interface PromoStyles {
    */
   backgroundColor?: BackgroundStyle;
   /**
-   * Positions the image to the left or right of the promo content on desktop (classic and compact variants).
+   * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
    * @defaultValue right
    */
   desktopImagePosition: "left" | "right";
   /**
-   * Positions the image to the top or bottom of the promo content on mobile (classic and compact variants).
+   * Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).
    * @defaultValue top
    */
   mobileImagePosition: "top" | "bottom";
@@ -966,6 +966,7 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   label: TranslatableString;
   /** The link the for the CTA */
   link: TranslatableString;
+  openInNewTab?: boolean;
 };
 
 /** Describes the dimensions of an image. */

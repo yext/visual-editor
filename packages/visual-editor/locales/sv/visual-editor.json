@@ -29,6 +29,9 @@
     "send": "Skicka för godkännande",
     "writeComment": "Skriv din kommentar här ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (öppnas i en ny flik)"
+  },
   "ariaLabelAppGallery": "Utforska det på {{serviceName}}",
   "ariaLabelAppStore": "Ladda ner på {{serviceName}}",
   "ariaLabelGalaxyStore": "Tillgänglig på {{serviceName}}",
@@ -216,6 +219,7 @@
     "description": "Beskrivning",
     "desktopContainerPosition": "Skrivbordsbehållare",
     "desktopImagePosition": "Skrivbordsbilden",
+    "desktopMediaPosition": "Desktop Media Position",
     "destinationURL": "Destinationsadress",
     "direction": "Riktning",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
@@ -278,7 +282,7 @@
     "linkType": "Länktyp",
     "linkedInLink": "LinkedIn -länk",
     "links": "Länkar",
-    "linksAlignment": "Länkar justering",
+    "linksPosition": "Länkar Position",
     "listLength": "Listlängd",
     "liveVisibility": "Synlig på live -sidan",
     "localGeomodifier": "Lokal geomodifierare",
@@ -297,7 +301,9 @@
     "metaTitle": "Metatitel",
     "mobileContentAlignment": "Mobilt innehållsinriktning",
     "mobileImagePosition": "Mobilbildsposition",
+    "mobileMediaPosition": "Mobil media position",
     "name": "Namn",
+    "openInNewTab": "Öppna i ny flik",
     "options": {
       "aspectRatio": "Bildförhållande",
       "base": "Bas",

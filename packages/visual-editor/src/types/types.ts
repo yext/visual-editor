@@ -10,6 +10,7 @@ export type TranslatableCTA = Omit<CTAType, "label" | "link"> & {
   label: TranslatableString;
   /** The link the for the CTA */
   link: TranslatableString;
+  openInNewTab?: boolean;
 };
 
 /** Enhanced CTA options */

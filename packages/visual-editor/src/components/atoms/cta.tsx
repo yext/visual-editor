@@ -10,7 +10,7 @@ import {
   useBackground,
   useDocument,
 } from "@yext/visual-editor";
-import { FaAngleRight } from "react-icons/fa";
+import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
 import { presetImageIcons } from "../../utils/presetImageIcons";
@@ -36,6 +36,12 @@ export type CTAProps = {
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
   color?: BackgroundStyle;
+  openInNewTab?: boolean;
+  /**
+   * When true and variant is "link", applies vertical padding (py-3) to the CTA.
+   * @default false
+   */
+  setPadding?: boolean;
 };
 
 /**
@@ -180,11 +186,13 @@ export const CTA = (props: CTAProps) => {
     onClick,
     disabled = false,
     color,
+    openInNewTab = false,
+    setPadding = false,
   } = props;
 
+  const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
   const isDarkBG = useBackground()?.isDarkBackground;
-
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = normalizeThemeColor(color?.bgColor);
     const textColor = normalizeThemeColor(color?.textColor);
@@ -280,21 +288,46 @@ export const CTA = (props: CTAProps) => {
       ? link
       : normalizeSlug(link) || "#";
 
+  const computedAriaLabel =
+    openInNewTab && ariaLabel && ariaLabel.trim() !== ""
+      ? t("aria.opensInNewTab", "{{label}} (opens in a new tab)", {
+          label: ariaLabel,
+        })
+      : ariaLabel || undefined;
+
+  const linkPadding: ButtonProps["linkPadding"] =
+    buttonVariant === "link" && setPadding ? "yOnly" : "none";
+
   return (
     <Button
       style={ctaType !== "presetImage" ? dynamicStyle : undefined}
       asChild
       className={buttonClassName}
       variant={buttonVariant}
+      linkPadding={linkPadding}
     >
       <Link
         cta={{ link: normalizedLink, linkType }}
         eventName={eventName}
-        target={target}
-        aria-label={ariaLabel || undefined}
+        target={openInNewTab ? "_blank" : target}
+        aria-label={computedAriaLabel}
+        rel={openInNewTab ? "noopener noreferrer" : undefined}
         onClick={onClick}
+        // textTransform has to be applied via styles because there is no custom tailwind utility
+        style={{
+          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
+          textTransform: buttonVariant?.toLowerCase().includes("link")
+            ? "var(--textTransform-link-textTransform)"
+            : "var(--textTransform-button-textTransform)",
+        }}
       >
         {linkContent}
+        {openInNewTab && (
+          <FaExternalLinkAlt
+            aria-hidden="true"
+            className="inline-block ml-1 w-3 h-3 align-middle relative -top-px"
+          />
+        )}
       </Link>
     </Button>
   );

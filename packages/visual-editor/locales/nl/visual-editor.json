@@ -29,6 +29,9 @@
     "send": "Stuur voor goedkeuring",
     "writeComment": "Schrijf hier je opmerking ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (wordt geopend in een nieuw tabblad)"
+  },
   "ariaLabelAppGallery": "Ontdek het op {{serviceName}}",
   "ariaLabelAppStore": "Downloaden op de {{serviceName}}",
   "ariaLabelGalaxyStore": "Beschikbaar op {{serviceName}}",
@@ -215,6 +218,7 @@
     "description": "Beschrijving",
     "desktopContainerPosition": "Bureaubladcontainerpositie",
     "desktopImagePosition": "De bureaubladafbeeldingspositie",
+    "desktopMediaPosition": "Desktopmediapositie",
     "destinationURL": "Bestemming URL",
     "direction": "Richting",
     "directoryRootLinkLabel": "Directory root link label",
@@ -277,7 +281,7 @@
     "linkType": "Linktype",
     "linkedInLink": "LinkedIn -link",
     "links": "Links",
-    "linksAlignment": "Verbindt afstemming",
+    "linksPosition": "Links Positie",
     "listLength": "Maak een lijst van lengte",
     "liveVisibility": "Zichtbaar op live pagina",
     "localGeomodifier": "Lokale geomodifier",
@@ -296,7 +300,9 @@
     "metaTitle": "Meta -titel",
     "mobileContentAlignment": "Mobiele inhoud afstemming",
     "mobileImagePosition": "Mobiele afbeeldingspositie",
+    "mobileMediaPosition": "Mobiele mediapositie",
     "name": "Naam",
+    "openInNewTab": "Openen in nieuw tabblad",
     "options": {
       "aspectRatio": "Beeldverhouding",
       "base": "Baseren",

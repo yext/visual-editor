@@ -29,6 +29,9 @@
     "send": "Onay için gönder",
     "writeComment": "Yorumunuzu buraya yazın ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (yeni bir sekmede açılır)"
+  },
   "ariaLabelAppGallery": "{{serviceName}} üzerinde keşfedin",
   "ariaLabelAppStore": "{{serviceName}} üzerinden indirin",
   "ariaLabelGalaxyStore": "{{serviceName}} üzerinde mevcut",
@@ -215,6 +218,7 @@
     "description": "Tanım",
     "desktopContainerPosition": "Masaüstü konteyner konumu",
     "desktopImagePosition": "Masaüstü görüntü konumu",
+    "desktopMediaPosition": "Masaüstü Medya Konumu",
     "destinationURL": "Hedef URL",
     "direction": "Yön",
     "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
@@ -277,7 +281,7 @@
     "linkType": "Bağlantı türü",
     "linkedInLink": "LinkedIn Link",
     "links": "Bağlar",
-    "linksAlignment": "Bağlantılar Hizalama",
+    "linksPosition": "Bağlantı Konumu",
     "listLength": "Liste uzunluğu",
     "liveVisibility": "Canlı sayfada görünür",
     "localGeomodifier": "Yerel Geomodifikatör",
@@ -296,7 +300,9 @@
     "metaTitle": "Meta başlığı",
     "mobileContentAlignment": "Mobil içerik hizalaması",
     "mobileImagePosition": "Mobil Görüntü Pozisyonu",
+    "mobileMediaPosition": "Mobil Medya Konumu",
     "name": "İsim",
+    "openInNewTab": "Yeni sekmede aç",
     "options": {
       "aspectRatio": "En boy oranı",
       "base": "Temel",

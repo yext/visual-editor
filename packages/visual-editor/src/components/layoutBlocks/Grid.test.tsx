@@ -39,7 +39,8 @@ const testAddress = {
   postalCode: "11211",
   region: "NY",
 };
-
+const rtfHtml =
+  '<div class="rtf-theme"><h1><span>Heading One — Lorem Ipsum</span></h1><h2><span>Heading Two — Lorem Ipsum</span></h2><p><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<strong>Lorem ipsum</strong> dolor sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Lorem ipsum</strong> dolor sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.<strong>Lorem ipsum</strong> dolor sit amet.</span></p><ul style="padding: 0; margin: 0; margin-left: 16px; list-style-type: disc; list-style-position: inside;"><li><span>Lorem ipsum dolor sit amet</span></li><li><span>Consectetur adipiscing elit</span></li></ul><p><span>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.<a href=\\"#\\">Lorem link</a></span></p></div>';
 const tests: ComponentTest[] = [
   {
     name: "version 18 - atoms used to make a HeroSection",
@@ -1921,6 +1922,288 @@ const tests: ComponentTest[] = [
       analytics: { scope: "gridSection" },
     },
     version: 50,
+  },
+  {
+    name: "version 49 - Body text - small variant",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "BodyText",
+              props: {
+                id: "BodyText-547941ef-1bc8-4e88-96e6-81b3b65a4f54",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        html: rtfHtml,
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "sm" },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 49,
+  },
+  {
+    name: "version 49 - Body text - base variant",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "BodyText",
+              props: {
+                id: "BodyText-547941ef-1bc8-4e88-96e6-81b3b65a4f54",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        html: rtfHtml,
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "base" },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 49,
+  },
+  {
+    name: "version 49 - Body text - large variant",
+    document: {
+      address: testAddress,
+      id: "test-id",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "BodyText",
+              props: {
+                id: "BodyText-547941ef-1bc8-4e88-96e6-81b3b65a4f54",
+                data: {
+                  text: {
+                    field: "",
+                    constantValue: {
+                      en: {
+                        html: rtfHtml,
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                },
+                styles: { variant: "lg" },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 49,
+  },
+  {
+    name: "version 51 - Link variant with Vertical Padding",
+    document: {
+      address: testAddress,
+      mainPhone: "+18005551010",
+      emails: ["sumo@yext.com"],
+      hours: testHours,
+      services: ["Delivery", "Catering"],
+      id: "test-id",
+      description: "test-description",
+      name: "Galaxy Grill",
+    },
+    props: {
+      columns: 3,
+      slots: [
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                id: "HeadingTextSlot-13c80a69-4194-41a6-86d0-1ded6367ed98",
+                data: {
+                  text: {
+                    constantValue: {
+                      en: "Information",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                    field: "",
+                  },
+                },
+                styles: { level: 3, align: "left" },
+              },
+            },
+            {
+              type: "Address",
+              props: {
+                id: "AddressSlot-07cfe7a6-e9c7-41c4-b1ae-03558c90c6b9",
+                data: {
+                  address: {
+                    constantValue: {
+                      line1: "",
+                      city: "",
+                      postalCode: "",
+                      countryCode: "",
+                    },
+                    field: "address",
+                  },
+                },
+                styles: { showGetDirectionsLink: true, ctaVariant: "link" },
+              },
+            },
+            {
+              type: "GetDirections",
+              props: {
+                variant: "link",
+                coordinate: {
+                  field: "yextDisplayCoordinate",
+                  constantValue: {
+                    latitude: 0,
+                    longitude: 0,
+                  },
+                },
+                id: "GetDirections-5a2ef957-bc3d-490d-8a34-f30546ac9591",
+              },
+            },
+            {
+              type: "Phone",
+              props: {
+                data: {
+                  number: {
+                    field: "mainPhone",
+                    constantValue: "",
+                  },
+                  label: {
+                    en: "Phone",
+                    hasLocalizedValue: "true",
+                  },
+                },
+                styles: {
+                  phoneFormat: "domestic",
+                  includePhoneHyperlink: true,
+                },
+                id: "Phone-717f487f-d487-47a1-b78a-6378d8c489e7",
+              },
+            },
+            {
+              type: "Emails",
+              props: {
+                id: "EmailsSlot-4d584104-463f-4569-86e4-19c137697f60",
+                data: { list: { field: "emails", constantValue: [] } },
+                styles: { listLength: 1 },
+              },
+            },
+          ],
+        },
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                id: "HeadingTextSlot-383eb893-a76f-4457-bf3b-7909b520a384",
+                data: {
+                  text: {
+                    constantValue: { en: "Hours", hasLocalizedValue: "true" },
+                    constantValueEnabled: true,
+                    field: "",
+                  },
+                },
+                styles: { level: 3, align: "left" },
+              },
+            },
+            {
+              type: "HoursTable",
+              props: {
+                id: "HoursTableSlot-ada7341a-2420-4ef2-b9e4-1d2e26945e43",
+                data: { hours: { field: "hours", constantValue: {} } },
+                styles: {
+                  startOfWeek: "today",
+                  collapseDays: false,
+                  showAdditionalHoursText: true,
+                  alignment: "items-start",
+                },
+              },
+            },
+          ],
+        },
+        {
+          Column: [
+            {
+              type: "HeadingText",
+              props: {
+                id: "HeadingTextSlot-1b445bc3-cc01-4fa9-9fb8-3c8dc1361ca5",
+                data: {
+                  text: {
+                    constantValue: {
+                      en: "Services",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                    field: "",
+                  },
+                },
+                styles: { level: 2, align: "left" },
+              },
+            },
+            {
+              type: "TextList",
+              props: {
+                id: "ServicesListSlot-88d05408-381e-4a03-a5a0-8b8c9781d6fc",
+                list: { field: "services", constantValue: [] },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: backgroundColors.background1.value,
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 51,
   },
 ];
 

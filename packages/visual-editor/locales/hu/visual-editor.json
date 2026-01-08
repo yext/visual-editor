@@ -29,6 +29,9 @@
     "send": "Küldje el jóváhagyásra",
     "writeComment": "Írja ide a megjegyzését ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (új lapon nyílik meg)"
+  },
   "ariaLabelAppGallery": "Fedezze fel a(z) {{serviceName}} szolgáltatásban",
   "ariaLabelAppStore": "Letöltés a(z) {{serviceName}} webhelyről",
   "ariaLabelGalaxyStore": "Elérhető itt: {{serviceName}}",
@@ -215,6 +218,7 @@
     "description": "Leírás",
     "desktopContainerPosition": "Asztali tartály helyzete",
     "desktopImagePosition": "Asztali képpozíció",
+    "desktopMediaPosition": "Asztali média pozíciója",
     "destinationURL": "Cél URL",
     "direction": "Irány",
     "directoryRootLinkLabel": "Directory Root Link címke",
@@ -277,7 +281,7 @@
     "linkType": "Linktípus",
     "linkedInLink": "LinkedIn Link",
     "links": "Linkek",
-    "linksAlignment": "Linkek igazítás",
+    "linksPosition": "Linkek Pozíció",
     "listLength": "Lista hossza",
     "liveVisibility": "Látható az élő oldalon",
     "localGeomodifier": "Helyi geomodifier",
@@ -296,7 +300,9 @@
     "metaTitle": "Meta cím",
     "mobileContentAlignment": "Mobil tartalom igazítása",
     "mobileImagePosition": "Mobil képpozíció",
+    "mobileMediaPosition": "Mobil média pozíció",
     "name": "Név",
+    "openInNewTab": "Megnyitás új lapon",
     "options": {
       "aspectRatio": "Oldal arány",
       "base": "Bázis",

@@ -17,6 +17,7 @@ const defaultLink = {
     hasLocalizedValue: "true" as const,
   },
   link: "#",
+  openInNewTab: false,
 };
 
 const defaultLinks = [
@@ -43,7 +44,7 @@ export interface SecondaryFooterSlotProps {
    */
   styles: {
     backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
+    linksPosition: "left" | "center" | "right";
   };
 
   /** @internal */
@@ -80,26 +81,29 @@ const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      linksAlignment: YextField(
-        msg("fields.linksAlignment", "Links Alignment"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.left", "Left", {
-                context: "direction",
-              }),
-              value: "left",
-            },
-            {
-              label: msg("fields.options.right", "Right", {
-                context: "direction",
-              }),
-              value: "right",
-            },
-          ],
-        }
-      ),
+      linksPosition: YextField(msg("fields.linksPosition", "Links Position"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.left", "Left", {
+              context: "direction",
+            }),
+            value: "left",
+          },
+          {
+            label: msg("fields.options.center", "Center", {
+              context: "direction",
+            }),
+            value: "center",
+          },
+          {
+            label: msg("fields.options.right", "Right", {
+              context: "direction",
+            }),
+            value: "right",
+          },
+        ],
+      }),
     },
   }),
   slots: {
@@ -176,7 +180,7 @@ export const SecondaryFooterSlot: ComponentConfig<{
       show: true,
     },
     styles: {
-      linksAlignment: "left",
+      linksPosition: "left",
     },
     slots: {
       SecondaryLinksWrapperSlot: [
@@ -226,7 +230,7 @@ export const SecondaryFooterSlot: ComponentConfig<{
 
     // Pass alignment to SecondaryLinksWrapperSlot based on parent styles
     const secondaryLinksAlignment =
-      data?.props?.styles?.linksAlignment || "left";
+      data?.props?.styles?.linksPosition ?? "left";
 
     if (
       data?.props?.slots?.SecondaryLinksWrapperSlot &&

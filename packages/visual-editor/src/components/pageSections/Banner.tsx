@@ -121,12 +121,6 @@ function isRichTextEmpty(value: any): boolean {
     if ("html" in value) {
       return !value.html || value.html.trim() === "";
     }
-    if ("json" in value) {
-      return (
-        !value.json ||
-        (typeof value.json === "string" && value.json.trim() === "")
-      );
-    }
   }
   return false;
 }

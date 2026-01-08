@@ -29,6 +29,9 @@
     "send": "Nosūtīt apstiprināšanai",
     "writeComment": "Uzrakstiet savu komentāru šeit ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (tiek atvērta jaunā cilnē)"
+  },
   "ariaLabelAppGallery": "Izpētiet to pakalpojumā {{serviceName}}",
   "ariaLabelAppStore": "Lejupielādēt pakalpojumā {{serviceName}}",
   "ariaLabelGalaxyStore": "Pieejams pakalpojumā {{serviceName}}",
@@ -215,6 +218,7 @@
     "description": "Apraksts",
     "desktopContainerPosition": "Darbvirsmas konteinera pozīcija",
     "desktopImagePosition": "Darbvirsmas attēla pozīcija",
+    "desktopMediaPosition": "Darbvirsmas multivides pozīcija",
     "destinationURL": "Galamērķa URL",
     "direction": "Vadība",
     "directoryRootLinkLabel": "Direktorija sakņu saites etiķete",
@@ -277,7 +281,7 @@
     "linkType": "Saites tips",
     "linkedInLink": "LinkedIn saite",
     "links": "Saites",
-    "linksAlignment": "Saišu izlīdzināšana",
+    "linksPosition": "Saišu pozīcija",
     "listLength": "Saraksta garums",
     "liveVisibility": "Redzams tiešraides lapā",
     "localGeomodifier": "Vietējais ģeomodifieris",
@@ -296,7 +300,9 @@
     "metaTitle": "Meta nosaukums",
     "mobileContentAlignment": "Mobilā satura izlīdzināšana",
     "mobileImagePosition": "Mobilā attēla pozīcija",
+    "mobileMediaPosition": "Mobilo mediju pozīcija",
     "name": "Nosaukt",
+    "openInNewTab": "Atvērt jaunā cilnē",
     "options": {
       "aspectRatio": "Malu attiecība",
       "base": "Pamatne",
