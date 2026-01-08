@@ -938,6 +938,9 @@ describe("getSchema - directory pages", () => {
           },
           locale: "es",
         },
+        _pageset: JSON.stringify({
+          type: "DIRECTORY",
+        }),
         dm_directoryChildren: [
           {
             name: "US",
@@ -1019,6 +1022,9 @@ describe("getSchema - directory pages", () => {
           },
           locale: "es",
         },
+        _pageset: JSON.stringify({
+          type: "DIRECTORY",
+        }),
         dm_directoryChildren: [
           {
             name: "US",

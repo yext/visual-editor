@@ -3,23 +3,46 @@ import { getLocationPath } from "./getLocationPath.ts";
 
 describe("getLocationPath", () => {
   it("returns slug paths", () => {
+    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
     expect(
-      getLocationPath({ locale: "en", slug: "my-slug", id: "location1" }, "")
-    ).toBe("my-slug");
-
-    expect(
-      getLocationPath({ locale: "en", slug: "my-slug", id: "location1" }, "")
+      getLocationPath(
+        {
+          locale: "en",
+          slug: "my-slug",
+          id: "location1",
+          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+        },
+        ""
+      )
     ).toBe("my-slug");
 
     expect(
       getLocationPath(
-        { locale: "en", slug: "my-slug", id: "location1" },
+        {
+          locale: "en",
+          slug: "my-slug",
+          id: "location1",
+          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+        },
+        ""
+      )
+    ).toBe("my-slug");
+
+    expect(
+      getLocationPath(
+        {
+          locale: "en",
+          slug: "my-slug",
+          id: "location1",
+          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+        },
         "../../"
       )
     ).toBe("../../my-slug");
   });
 
   it("returns address-based paths", () => {
+    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
     expect(
       getLocationPath(
         {
@@ -32,9 +55,7 @@ describe("getLocationPath", () => {
             postalCode: "22209",
           },
           id: "location1",
-          __: {
-            isPrimaryLocale: true,
-          },
+          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
         },
         ""
       )
@@ -82,24 +103,36 @@ describe("getLocationPath", () => {
   });
 
   it("returns id-based paths", () => {
+    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
     expect(
       getLocationPath(
-        { id: "location1", locale: "en", __: { isPrimaryLocale: true } },
+        {
+          id: "location1",
+          locale: "en",
+          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+        },
         ""
       )
     ).toBe("location1");
 
+    // No pageset config, so falls back to legacy __.isPrimaryLocale (undefined = falsy), adds prefix
     expect(getLocationPath({ locale: "es", id: "location1" }, "")).toBe(
       "es/location1"
     );
 
+    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
     expect(
       getLocationPath(
-        { id: "location1", locale: "en", __: { isPrimaryLocale: true } },
+        {
+          id: "location1",
+          locale: "en",
+          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+        },
         "../../../"
       )
     ).toBe("../../../location1");
 
+    // Legacy __.isPrimaryLocale: false takes precedence when no primaryLocale is set
     expect(
       getLocationPath(
         { id: "location1", locale: "en", __: { isPrimaryLocale: false } },

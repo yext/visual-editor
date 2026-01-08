@@ -230,13 +230,8 @@ const resolveDirectoryChildren = (
         : streamDocument?._pageset || {};
     const pagesetType = pagesetJson?.type;
 
-    // Fallback to entityType.id if pageset type is not available
-    const isDirectoryEntity =
-      pagesetType === "DIRECTORY" ||
-      streamDocument?.meta?.entityType?.id?.startsWith("dm_");
-
     let childPath: string;
-    if (isDirectoryEntity && child.slug) {
+    if (pagesetType === "DIRECTORY" && child.slug) {
       // Directory entities (dm_country, dm_region, dm_city) use slug directly
       // This matches the UI behavior in DirectoryWrapper where directory children links
       // use child.slug directly without locale prefix logic

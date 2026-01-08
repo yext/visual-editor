@@ -27,10 +27,9 @@ export const getLocationPath = (
       ? JSON.parse(location._pageset || "{}")
       : location?._pageset || {};
   const pagesetConfig = pagesetJson?.config || {};
-  const primaryLocale = pagesetConfig?.primaryLocale || "en";
+  // Prioritize pageset config primaryLocale, then fall back to __.isPrimaryLocale
   const isPrimaryLocale =
-    location.__?.isPrimaryLocale === true ||
-    (location.__?.isPrimaryLocale === undefined && locale === primaryLocale);
+    locale === pagesetConfig?.primaryLocale || location.__?.isPrimaryLocale;
 
   const localePrefix =
     !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
