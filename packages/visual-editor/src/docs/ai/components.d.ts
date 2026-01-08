@@ -852,6 +852,7 @@ type PromoSectionType = {
  */
 type RichText = {
   html?: string;
+  json?: string;
 };
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
