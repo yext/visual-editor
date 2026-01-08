@@ -1520,7 +1520,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
             <button
               className="inline-flex bg-white"
               onClick={() => onChange(distanceMiles)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
             >
               <div className="text-palette-primary-dark">
                 {selectedDistanceMiles === distanceMiles ? (
@@ -1531,7 +1531,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <div className="inline-flex">
-              {`< ${distanceMiles} ${t("miles", "miles")}`}
+              {`< ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
             </div>
           </div>
         ))}

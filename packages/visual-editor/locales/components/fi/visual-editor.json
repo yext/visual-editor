@@ -34,7 +34,6 @@
   "map": "Kartta",
   "mile_one": "maili",
   "mile_other": "mailia",
-  "miles": "mailia",
   "monday": "maanantai",
   "noResultsFoundForThisArea": "Tälle alueelle ei löydy tuloksia",
   "open24Hours": "Avoinna 24 tuntia",
@@ -99,7 +98,6 @@
     "linkedIn": "Seuraa meitä LinkedInissä",
     "pinterest": "Seuraa meitä Pinterestissä",
     "tiktok": "Seuraa meitä TikTokissa",
-    "twitter": "Seuraa meitä X:ssä (Twitter)",
     "xLink": "Seuraa meitä X:ssä (Twitter)",
     "youtube": "Tilaa YouTube-kanavamme"
   },

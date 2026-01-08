@@ -34,7 +34,6 @@
   "map": "Map",
   "mile_one": "mile",
   "mile_other": "miles",
-  "miles": "miles",
   "monday": "Monday",
   "noResultsFoundForThisArea": "No results found for this area",
   "open24Hours": "Open 24 Hours",
@@ -99,7 +98,6 @@
     "linkedIn": "Follow us on LinkedIn",
     "pinterest": "Follow us on Pinterest",
     "tiktok": "Follow us on TikTok",
-    "twitter": "Follow us on X (Twitter)",
     "xLink": "Follow us on X (Twitter)",
     "youtube": "Subscribe to our YouTube channel"
   },

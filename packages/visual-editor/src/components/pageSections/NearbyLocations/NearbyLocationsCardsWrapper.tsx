@@ -368,16 +368,13 @@ const NearbyLocationsEmptyState: React.FC<{
           )}
         </Body>
         <Body variant="base" className="text-gray-500 font-normal">
-          {pt(
-            "nearbyLocationsEmptyState",
-            "No {{entityType}} within {{radius}} miles",
-            {
-              entityType: entityTypeDisplayName
-                ? entityTypeDisplayName
-                : "entity",
-              radius: radius ?? 10,
-            }
-          )}
+          {pt("nearbyLocationsEmptyState", {
+            entityType: entityTypeDisplayName
+              ? entityTypeDisplayName
+              : "entity",
+            radius: radius ?? 10,
+            mile: pt("mile", { count: radius }),
+          })}
         </Body>
       </div>
     </div>

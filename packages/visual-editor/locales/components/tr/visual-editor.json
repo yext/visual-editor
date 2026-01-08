@@ -34,7 +34,6 @@
   "map": "Harita",
   "mile_one": "mil",
   "mile_other": "mil",
-  "miles": "mil",
   "monday": "Pazartesi",
   "noResultsFoundForThisArea": "Bu alan için sonuç bulunamadı",
   "open24Hours": "24 saat açık",
@@ -99,7 +98,6 @@
     "linkedIn": "Bizi LinkedIn'de takip edin",
     "pinterest": "Bizi Pinterest'te takip edin",
     "tiktok": "Bizi TikTok'ta takip edin",
-    "twitter": "Bizi X'te takip edin (Twitter)",
     "xLink": "Bizi X'te takip edin (Twitter)",
     "youtube": "YouTube kanalımıza abone olun"
   },

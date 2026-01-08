@@ -127,7 +127,7 @@ const FooterComponent: React.FC<WithId<WithPuckProps<FooterProps>>> = (
       prefix: "//www.twitter.com/",
       link: streamDocument?._site?.twitterHandle,
       label: <FaTwitter className="w-5 h-5 mr-4" />,
-      ariaLabel: t("socialLinks.twitter", "Follow us on X (Twitter)"),
+      ariaLabel: t("socialLinks.xLink", "Follow us on X (Twitter)"),
     },
     {
       name: "pinterest",

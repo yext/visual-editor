@@ -33,8 +33,7 @@
   "logo": "Logo",
   "map": "Carte",
   "mile_one": "mile",
-  "mile_other": "mile",
-  "miles": "miles",
+  "mile_other": "miles",
   "monday": "Lundi",
   "noResultsFoundForThisArea": "Aucun résultat trouvé pour cette zone",
   "open24Hours": "Ouvrir 24 heures",
@@ -99,7 +98,6 @@
     "linkedIn": "Suivez-nous sur LinkedIn",
     "pinterest": "Suivez-nous sur Pinterest",
     "tiktok": "Suivez-nous sur TikTok",
-    "twitter": "Suivez-nous sur X (Twitter)",
     "xLink": "Suivez-nous sur X (Twitter)",
     "youtube": "Abonnez-vous à notre chaîne YouTube"
   },

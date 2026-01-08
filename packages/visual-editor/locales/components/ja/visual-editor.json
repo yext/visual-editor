@@ -30,7 +30,6 @@
   "logo": "ロゴ",
   "map": "地図",
   "mile_other": "マイル",
-  "miles": "マイル",
   "monday": "月曜日",
   "noResultsFoundForThisArea": "この領域の結果は見つかりませんでした",
   "open24Hours": "２４時間営業",
@@ -95,7 +94,6 @@
     "linkedIn": "LinkedIn でフォローしてください",
     "pinterest": "Pinterest でフォローしてください",
     "tiktok": "TikTokでフォローしてください",
-    "twitter": "X (Twitter) でフォローしてください",
     "xLink": "X (Twitter) でフォローしてください",
     "youtube": "YouTube チャンネルを購読してください"
   },

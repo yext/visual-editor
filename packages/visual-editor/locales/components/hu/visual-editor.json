@@ -34,7 +34,6 @@
   "map": "Térkép",
   "mile_one": "mérföld",
   "mile_other": "mérföld",
-  "miles": "mérföldre",
   "monday": "hétfő",
   "noResultsFoundForThisArea": "Nincs eredmény erre a területre",
   "open24Hours": "Nyitva 24 órát",
@@ -99,7 +98,6 @@
     "linkedIn": "Kövess minket a LinkedIn-en",
     "pinterest": "Kövess minket a Pinteresten",
     "tiktok": "Kövess minket a TikTokon",
-    "twitter": "Kövess minket az X-en (Twitter)",
     "xLink": "Kövess minket az X-en (Twitter)",
     "youtube": "Iratkozz fel YouTube csatornánkra"
   },

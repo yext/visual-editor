@@ -34,7 +34,6 @@
   "map": "Kaart",
   "mile_one": "miil",
   "mile_other": "miili",
-  "miles": "miili",
   "monday": "Esmaspäev",
   "noResultsFoundForThisArea": "Selle piirkonna kohta tulemusi ei leitud",
   "open24Hours": "Avatud 24 tundi",
@@ -99,7 +98,6 @@
     "linkedIn": "Jälgi meid LinkedInis",
     "pinterest": "Jälgi meid Pinterestis",
     "tiktok": "Jälgi meid TikTokis",
-    "twitter": "Jälgi meid X-is (Twitter)",
     "xLink": "Jälgi meid X-is (Twitter)",
     "youtube": "Tellige meie YouTube'i kanal"
   },
