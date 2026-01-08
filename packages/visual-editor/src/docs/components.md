@@ -254,10 +254,10 @@ This object contains all the content for both footer tiers.
 
 This object contains properties for customizing the appearance of both footer tiers.
 
-| Prop                   | Type                                                                        | Description                         | Default |
-| :--------------------- | :-------------------------------------------------------------------------- | :---------------------------------- | :------ |
-| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                              | The maximum width of the footer.    |         |
-| `styles.primaryFooter` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }` | Styling for the primary footer bar. |         |
+| Prop                   | Type                                                                       | Description                         | Default |
+| :--------------------- | :------------------------------------------------------------------------- | :---------------------------------- | :------ |
+| `styles.maxWidth`      | `PageSectionProps["maxWidth"]`                                             | The maximum width of the footer.    |         |
+| `styles.primaryFooter` | `{ backgroundColor?: BackgroundStyle; linksPosition: "left" \| "right"; }` | Styling for the primary footer bar. |         |
 
 ---
 
@@ -751,9 +751,9 @@ Data configuration for the secondary footer.
 
 Styling configuration for the secondary footer.
 
-| Prop     | Type                                                                        | Description                                     | Default |
-| :------- | :-------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; linksAlignment: "left" \| "right"; }` | Styling configuration for the secondary footer. |         |
+| Prop     | Type                                                                                   | Description                                     | Default |
+| :------- | :------------------------------------------------------------------------------------- | :---------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; linksPosition: "left" \| "center" \| "right"; }` | Styling configuration for the secondary footer. |         |
 
 ---
 

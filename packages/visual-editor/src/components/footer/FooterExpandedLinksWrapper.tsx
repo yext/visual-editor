@@ -74,6 +74,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
 
                 return (
                   <CTA
+                    openInNewTab={linkData.openInNewTab}
                     key={linkIndex}
                     variant="headerFooterMainLink"
                     eventName={`cta.expandedFooter.${sectionIndex}-Link-${linkIndex + 1}`}
@@ -133,6 +134,19 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
+                  openInNewTab: YextField(
+                    msg("fields.openInNewTab", "Open in new tab"),
+                    {
+                      type: "radio",
+                      options: [
+                        {
+                          label: msg("fields.options.yes", "Yes"),
+                          value: true,
+                        },
+                        { label: msg("fields.options.no", "No"), value: false },
+                      ],
+                    }
+                  ),
                 },
                 defaultItemProps: defaultLink,
                 getItemSummary: (item: any, index?: number) => {

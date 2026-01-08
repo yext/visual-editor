@@ -548,7 +548,7 @@ interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
     backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
+    linksPosition: "left" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -933,6 +933,7 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   label: TranslatableString;
   /** The link the for the CTA */
   link: TranslatableString;
+  openInNewTab?: boolean;
 };
 
 /** Describes the dimensions of an image. */

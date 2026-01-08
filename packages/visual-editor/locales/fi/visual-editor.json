@@ -29,6 +29,9 @@
     "send": "Lähetä hyväksyntä",
     "writeComment": "Kirjoita kommenttisi tähän ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (avautuu uuteen välilehteen)"
+  },
   "ariaLabelAppGallery": "Tutustu siihen palvelussa {{serviceName}}",
   "ariaLabelAppStore": "Lataa palvelusta {{serviceName}}",
   "ariaLabelGalaxyStore": "Saatavilla palvelussa {{serviceName}}",
@@ -272,7 +275,7 @@
     "linkType": "Linkkityyppi",
     "linkedInLink": "LinkedIn -linkki",
     "links": "Linkit",
-    "linksAlignment": "Linkkien suuntaus",
+    "linksPosition": "Linkkien sijainti",
     "listLength": "Listata pituus",
     "liveVisibility": "Näkyvissä live -sivulla",
     "localGeomodifier": "Paikallinen geomodifoija",
@@ -292,6 +295,7 @@
     "mobileContentAlignment": "Mobiilisisällön kohdistus",
     "mobileImagePosition": "Mobiili kuvan sijainti",
     "name": "Nimi",
+    "openInNewTab": "Avaa uudessa välilehdessä",
     "options": {
       "aspectRatio": "Kuvasuhde",
       "base": "Pohja",

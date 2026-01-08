@@ -22,7 +22,7 @@ export interface FooterLinksSlotProps {
   /** @internal */
   eventNamePrefix?: string;
   /** @internal */
-  alignment?: "left" | "right";
+  alignment?: "left" | "center" | "right";
 }
 
 const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
@@ -42,10 +42,21 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
     return puck.isEditing ? <div className="h-10 min-w-[100px]" /> : <></>;
   }
 
-  const secondaryItemsAlignment =
-    variant === "secondary" && alignment === "right"
-      ? "md:justify-end"
-      : "md:justify-start";
+  let secondaryItemsAlignment: string | undefined;
+
+  if (variant === "secondary") {
+    switch (alignment) {
+      case "right":
+        secondaryItemsAlignment = "md:justify-end";
+        break;
+      case "center":
+        secondaryItemsAlignment = "md:justify-center";
+        break;
+      default:
+        secondaryItemsAlignment = "md:justify-start";
+        break;
+    }
+  }
 
   return (
     <div
@@ -70,6 +81,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 
         return (
           <CTA
+            openInNewTab={linkData.openInNewTab}
             key={index}
             variant={
               variant === "primary"
@@ -124,6 +136,16 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
           link: YextField(msg("fields.link", "Link"), {
             type: "text",
           }),
+          openInNewTab: YextField(
+            msg("fields.openInNewTab", "Open in new tab"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
         },
         defaultItemProps: defaultLink,
         getItemSummary: (item: any, index?: number) => {
@@ -151,6 +173,7 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
     type: "radio",
     options: [
       { label: "Left", value: "left" },
+      { label: "Center", value: "center" },
       { label: "Right", value: "right" },
     ],
     visible: false,

@@ -29,6 +29,9 @@
     "send": "Siųsti patvirtinti",
     "writeComment": "Parašykite savo komentarą čia ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (atidaroma naujame skirtuke)"
+  },
   "ariaLabelAppGallery": "Naršykite jį {{serviceName}}",
   "ariaLabelAppStore": "Atsisiųskite iš {{serviceName}}",
   "ariaLabelGalaxyStore": "Galima {{serviceName}}",
@@ -272,7 +275,7 @@
     "linkType": "Nuorodos tipas",
     "linkedInLink": "„LinkedIn“ nuoroda",
     "links": "Nuorodos",
-    "linksAlignment": "Nuorodos suderinimas",
+    "linksPosition": "Nuorodų padėtis",
     "listLength": "Sąrašo ilgis",
     "liveVisibility": "Matomas tiesioginiame puslapyje",
     "localGeomodifier": "Vietinis geomodiferis",
@@ -292,6 +295,7 @@
     "mobileContentAlignment": "Mobiliojo turinio suderinimas",
     "mobileImagePosition": "Mobiliojo vaizdo padėtis",
     "name": "Vardas",
+    "openInNewTab": "Atidaryti naujame skirtuke",
     "options": {
       "aspectRatio": "Kraštinių santykis",
       "base": "Bazė",
