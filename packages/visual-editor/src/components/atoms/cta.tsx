@@ -36,6 +36,7 @@ export type CTAProps = {
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
   color?: BackgroundStyle;
+  setPadding?: "py" | "p" | "none";
 };
 
 /**
@@ -180,6 +181,7 @@ export const CTA = (props: CTAProps) => {
     onClick,
     disabled = false,
     color,
+    setPadding = "none",
   } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
@@ -280,12 +282,23 @@ export const CTA = (props: CTAProps) => {
       ? link
       : normalizeSlug(link) || "#";
 
+  let linkPadding: ButtonProps["linkPadding"] = "both";
+
+  if (buttonVariant === "link") {
+    if (setPadding === "py") {
+      linkPadding = "yOnly";
+    } else if (setPadding === "none") {
+      linkPadding = "none";
+    }
+  }
+
   return (
     <Button
       style={ctaType !== "presetImage" ? dynamicStyle : undefined}
       asChild
       className={buttonClassName}
       variant={buttonVariant}
+      linkPadding={linkPadding}
     >
       <Link
         cta={{ link: normalizedLink, linkType }}

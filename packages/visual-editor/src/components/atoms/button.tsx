@@ -23,6 +23,11 @@ export const buttonVariants = cva(
         true: "",
         false: "",
       },
+      linkPadding: {
+        none: "",
+        both: "",
+        yOnly: "",
+      },
     },
     compoundVariants: [
       {
@@ -72,10 +77,21 @@ export const buttonVariants = cva(
         ],
         className: "text-white",
       },
+      {
+        variant: "link",
+        linkPadding: "both",
+        className: "px-6 py-3",
+      },
+      {
+        variant: "link",
+        linkPadding: "yOnly",
+        className: "py-3",
+      },
     ],
     defaultVariants: {
       variant: "primary",
       hasDarkBackground: false,
+      linkPadding: "none",
     },
   }
 );
@@ -87,7 +103,10 @@ export interface ButtonProps
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, asChild = false, ...props }, ref) => {
+  (
+    { className, variant, asChild = false, linkPadding = "none", ...props },
+    ref
+  ) => {
     const Comp = asChild ? Slot : "button";
     const background = useBackground();
 
@@ -97,6 +116,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           buttonVariants({
             variant,
             hasDarkBackground: background?.isDarkBackground,
+            linkPadding,
           }),
           className
         )}

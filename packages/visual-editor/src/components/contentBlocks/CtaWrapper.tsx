@@ -153,6 +153,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     >
       {cta && (
         <CTA
+          setPadding={"p"}
           label={resolvedLabel}
           link={
             ctaType === "getDirections"
