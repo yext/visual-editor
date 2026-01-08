@@ -13,16 +13,10 @@ export function mergeMeta(profile: any, streamDocument: any): any {
     typeof streamDocument?._pageset === "string"
       ? JSON.parse(streamDocument._pageset || "{}")
       : streamDocument?._pageset || {};
-  const primaryLocale = pagesetJson?.config?.primaryLocale || "en";
-
-  let isPrimaryLocale: boolean;
-  if (profile?.meta?.isPrimaryLocale === true) {
-    isPrimaryLocale = true;
-  } else if (profile?.meta?.isPrimaryLocale === false) {
-    isPrimaryLocale = false;
-  } else {
-    isPrimaryLocale = locale === primaryLocale;
-  }
+  const pagesetConfig = pagesetJson?.config || {};
+  // Prioritize pageset config primaryLocale, then fall back to legacy profile.meta.isPrimaryLocale
+  const isPrimaryLocale =
+    locale === pagesetConfig?.primaryLocale || profile?.meta?.isPrimaryLocale;
 
   return {
     locale: locale,

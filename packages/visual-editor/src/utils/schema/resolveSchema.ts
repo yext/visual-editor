@@ -223,32 +223,10 @@ const resolveDirectoryChildren = (
       ? `https://${streamDocument.siteDomain}/`
       : "/";
 
-    // Determine pageset type from the parent document's _pageset
-    const pagesetJson =
-      typeof streamDocument?._pageset === "string"
-        ? JSON.parse(streamDocument._pageset || "{}")
-        : streamDocument?._pageset || {};
-    const pagesetType = pagesetJson?.type;
-
-    let childPath: string;
-    if (pagesetType === "DIRECTORY" && child.slug) {
-      // Directory entities (dm_country, dm_region, dm_city) use slug directly
-      // This matches the UI behavior in DirectoryWrapper where directory children links
-      // use child.slug directly without locale prefix logic
-      childPath = child.slug;
-    } else if (child.address) {
-      // Location entities with address use entityPageSetUrlTemplates
-      childPath = resolveUrlTemplateOfChild(
-        mergeMeta(child, streamDocument),
-        ""
-      );
-    } else {
-      // Fallback to current page set template
-      childPath = resolvePageSetUrlTemplate(
-        mergeMeta(child, streamDocument),
-        ""
-      );
-    }
+    // if the child has an address, we're at the city level
+    const childPath = child.address
+      ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
+      : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "");
 
     const childUrl = `${baseUrl}${childPath}`;
 

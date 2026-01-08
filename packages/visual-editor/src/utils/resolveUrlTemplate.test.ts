@@ -198,7 +198,21 @@ describe("resolvePageSetUrlTemplate", () => {
   it("defaults to primary template if '__' is missing", () => {
     // eslint-disable-next-line no-unused-vars
     const { __, ...docWithoutPrimaryInfo } = mockStreamDocument;
-    const result = resolvePageSetUrlTemplate(docWithoutPrimaryInfo, "");
+    // Add primaryLocale to pageset config so locale === primaryLocale works
+    const docWithPagesetConfig = {
+      ...docWithoutPrimaryInfo,
+      _pageset: JSON.stringify({
+        config: {
+          primaryLocale: "en",
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+            alternate:
+              "[[locale]]/[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    };
+    const result = resolvePageSetUrlTemplate(docWithPagesetConfig, "");
     assert.equal(result, "ny/new-york/61-9th-ave");
   });
 
@@ -550,7 +564,7 @@ describe("resolvePageSetUrlTemplate", () => {
       expect(result).toBe("ny/new-york/61-9th-ave");
     });
 
-    it("does not double-prefix when alternate template already includes [[locale]]", () => {
+    it("allows double-prefix when alternate template already includes [[locale]]", () => {
       const docWithAlternateTemplate = {
         ...mockStreamDocument,
         locale: "es",
@@ -568,7 +582,8 @@ describe("resolvePageSetUrlTemplate", () => {
         }),
       };
 
-      // Alternate template already includes [[locale]], so should not add additional prefix
+      // Alternate template includes [[locale]] which resolves to "es/...", then we add another "es/" prefix
+      // This allows double prefixes if user configures it that way
       const result = resolvePageSetUrlTemplate(docWithAlternateTemplate, "");
       expect(result).toBe("es/es/ny/new-york/61-9th-ave");
     });
