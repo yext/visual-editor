@@ -215,6 +215,7 @@
     "description": "Opis",
     "desktopContainerPosition": "Poloha stolného kontajnera",
     "desktopImagePosition": "Pozícia obrazu na pracovnej ploche",
+    "desktopMediaPosition": "Pozícia média na pracovnej ploche",
     "destinationURL": "Cieľová adresa URL",
     "direction": "Smerovanie",
     "directoryRootLinkLabel": "Štítok s koreňom adresára",
@@ -295,6 +296,7 @@
     "metaTitle": "Názov meta",
     "mobileContentAlignment": "Zarovnanie mobilného obsahu",
     "mobileImagePosition": "Pozícia mobilného obrazu",
+    "mobileMediaPosition": "Pozícia mobilného média",
     "name": "Menovať",
     "openInNewTab": "Otvoriť na novej karte",
     "options": {

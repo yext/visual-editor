@@ -214,6 +214,7 @@
     "description": "Tanım",
     "desktopContainerPosition": "Masaüstü konteyner konumu",
     "desktopImagePosition": "Masaüstü görüntü konumu",
+    "desktopMediaPosition": "Masaüstü Medya Konumu",
     "destinationURL": "Hedef URL",
     "direction": "Yön",
     "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
@@ -294,6 +295,7 @@
     "metaTitle": "Meta başlığı",
     "mobileContentAlignment": "Mobil içerik hizalaması",
     "mobileImagePosition": "Mobil Görüntü Pozisyonu",
+    "mobileMediaPosition": "Mobil Medya Konumu",
     "name": "İsim",
     "openInNewTab": "Yeni sekmede aç",
     "options": {

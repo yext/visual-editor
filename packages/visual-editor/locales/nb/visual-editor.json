@@ -214,6 +214,7 @@
     "description": "Beskrivelse",
     "desktopContainerPosition": "Desktop Container Position",
     "desktopImagePosition": "Desktop bildeposisjon",
+    "desktopMediaPosition": "Desktop Media Posisjon",
     "destinationURL": "Destinasjonsadressen",
     "direction": "Retning",
     "directoryRootLinkLabel": "Directory Root Link Label",
@@ -294,6 +295,7 @@
     "metaTitle": "Metatittel",
     "mobileContentAlignment": "Mobilinnholdsinnretning",
     "mobileImagePosition": "Mobil bildeposisjon",
+    "mobileMediaPosition": "Mobil medieposisjon",
     "name": "Navn",
     "openInNewTab": "Åpne i ny fane",
     "options": {

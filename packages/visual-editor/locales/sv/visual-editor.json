@@ -215,6 +215,7 @@
     "description": "Beskrivning",
     "desktopContainerPosition": "Skrivbordsbehållare",
     "desktopImagePosition": "Skrivbordsbilden",
+    "desktopMediaPosition": "Desktop Media Position",
     "destinationURL": "Destinationsadress",
     "direction": "Riktning",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
@@ -295,6 +296,7 @@
     "metaTitle": "Metatitel",
     "mobileContentAlignment": "Mobilt innehållsinriktning",
     "mobileImagePosition": "Mobilbildsposition",
+    "mobileMediaPosition": "Mobil media position",
     "name": "Namn",
     "openInNewTab": "Öppna i ny flik",
     "options": {

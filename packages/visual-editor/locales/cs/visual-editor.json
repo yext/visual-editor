@@ -220,6 +220,7 @@
     "description": "Popis",
     "desktopContainerPosition": "Pozice kontejneru pro stolní počítače",
     "desktopImagePosition": "Pozice obrázku na plochu",
+    "desktopMediaPosition": "Pozice média na ploše",
     "destinationURL": "Cílová adresa URL",
     "direction": "Směr",
     "directoryRootLinkLabel": "Štítek kořenového odkazu na adresář",
@@ -301,6 +302,7 @@
     "metaTitle": "Meta titul",
     "mobileContentAlignment": "Zarovnání mobilního obsahu",
     "mobileImagePosition": "Pozice mobilního obrazu",
+    "mobileMediaPosition": "Pozice mobilních médií",
     "name": "Jméno",
     "openInNewTab": "Otevřít na nové kartě",
     "options": {

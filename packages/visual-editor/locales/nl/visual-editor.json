@@ -214,6 +214,7 @@
     "description": "Beschrijving",
     "desktopContainerPosition": "Bureaubladcontainerpositie",
     "desktopImagePosition": "De bureaubladafbeeldingspositie",
+    "desktopMediaPosition": "Desktopmediapositie",
     "destinationURL": "Bestemming URL",
     "direction": "Richting",
     "directoryRootLinkLabel": "Directory root link label",
@@ -294,6 +295,7 @@
     "metaTitle": "Meta -titel",
     "mobileContentAlignment": "Mobiele inhoud afstemming",
     "mobileImagePosition": "Mobiele afbeeldingspositie",
+    "mobileMediaPosition": "Mobiele mediapositie",
     "name": "Naam",
     "openInNewTab": "Openen in nieuw tabblad",
     "options": {

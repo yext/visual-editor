@@ -213,6 +213,7 @@
     "description": "Description",
     "desktopContainerPosition": "Desktop Container Position",
     "desktopImagePosition": "Desktop Image Position",
+    "desktopMediaPosition": "Desktop Media Position",
     "destinationURL": "Destination URL",
     "direction": "Direction",
     "directoryRootLinkLabel": "Directory Root Link Label",
@@ -293,6 +294,7 @@
     "metaTitle": "Meta Title",
     "mobileContentAlignment": "Mobile Content Alignment",
     "mobileImagePosition": "Mobile Image Position",
+    "mobileMediaPosition": "Mobile Media Position",
     "name": "Name",
     "openInNewTab": "Open in new tab",
     "options": {
