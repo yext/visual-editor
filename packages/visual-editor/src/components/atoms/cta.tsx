@@ -37,6 +37,10 @@ export type CTAProps = {
   disabled?: boolean;
   color?: BackgroundStyle;
   openInNewTab?: boolean;
+  /**
+   * When true and variant is "link", applies vertical padding (py-3) to the CTA.
+   * @default false
+   */
   setPadding?: boolean;
 };
 
@@ -291,13 +295,8 @@ export const CTA = (props: CTAProps) => {
         })
       : ariaLabel || undefined;
 
-  let linkPadding: ButtonProps["linkPadding"] = "none";
-
-  if (buttonVariant === "link") {
-    if (setPadding) {
-      linkPadding = "yOnly";
-    }
-  }
+  const linkPadding: ButtonProps["linkPadding"] =
+    buttonVariant === "link" && setPadding ? "yOnly" : "none";
 
   return (
     <Button
