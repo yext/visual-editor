@@ -3,9 +3,21 @@ import { PageSection, themeManagerCn } from "@yext/visual-editor";
 import { PromoVariantProps } from "./PromoSection";
 import { PromoMedia } from "./PromoMedia";
 import { PromoContent } from "./PromoContent";
+import { useEffect, useState } from "react";
 
 export const ClassicPromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles, slots } = props;
+  const [shouldThrow, setShouldThrow] = useState(false);
+
+  useEffect(() => {
+    if (data.forceError) {
+      setShouldThrow(true);
+    }
+  }, [data.forceError]);
+
+  if (shouldThrow) {
+    throw new Error("Forced error in ClassicPromo for testing");
+  }
 
   return (
     <PageSection
