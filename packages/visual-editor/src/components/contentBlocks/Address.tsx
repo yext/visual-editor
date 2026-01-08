@@ -148,6 +148,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
       {(useAddressLink ? !!addressLink : !!listingsLink) &&
         styles.showGetDirectionsLink && (
           <CTA
+            setPadding={true}
             ctaType="getDirections"
             eventName={`getDirections`}
             link={useAddressLink ? addressLink : listingsLink}
