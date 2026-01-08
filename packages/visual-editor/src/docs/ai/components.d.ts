@@ -734,10 +734,6 @@ interface PromoData {
   backgroundImage: YextEntityField<
     ImageType | AssetImageType | TranslatableAssetImage
   >;
-  /**
-   * For testing purposes only. If true, throws an error during render.
-   */
-  forceError?: boolean;
 }
 
 interface PromoStyles {
