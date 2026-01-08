@@ -397,6 +397,12 @@ describe("resolveSchemaJson", () => {
       path: "en/ca",
       locale: "en",
       uid: 1,
+      _pageset: JSON.stringify({
+        type: "DIRECTORY",
+        config: {
+          primaryLocale: "en",
+        },
+      }),
       dm_directoryChildren: [
         {
           dm_addressCountryDisplayName: "Canada",
@@ -471,6 +477,12 @@ describe("resolveSchemaJson", () => {
       path: "en/us/va/arlington",
       uid: 2,
       locale: "en",
+      _pageset: JSON.stringify({
+        type: "DIRECTORY",
+        config: {
+          primaryLocale: "en",
+        },
+      }),
       dm_directoryChildren: [
         {
           address: {
@@ -621,6 +633,12 @@ describe("resolveSchemaJson", () => {
       path: "en/us/va/arlington",
       locale: "en",
       uid: 3,
+      _pageset: JSON.stringify({
+        type: "DIRECTORY",
+        config: {
+          primaryLocale: "en",
+        },
+      }),
       __: {
         entityPageSetUrlTemplates: JSON.stringify({
           primary:

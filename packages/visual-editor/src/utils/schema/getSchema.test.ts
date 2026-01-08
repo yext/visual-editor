@@ -502,6 +502,12 @@ describe("getSchema - directory pages", () => {
             id: "dm_city",
           },
         },
+        _pageset: JSON.stringify({
+          type: "DIRECTORY",
+          config: {
+            primaryLocale: "en",
+          },
+        }),
         dm_directoryChildren: [
           {
             __: {
@@ -719,6 +725,12 @@ describe("getSchema - directory pages", () => {
             id: "dm_city",
           },
         },
+        _pageset: JSON.stringify({
+          type: "DIRECTORY",
+          config: {
+            primaryLocale: "en",
+          },
+        }),
         dm_directoryChildren: [
           {
             __: {
