@@ -2044,7 +2044,7 @@ const tests: ComponentTest[] = [
     version: 49,
   },
   {
-    name: "version 50 - Link variant with Vertical Padding",
+    name: "version 51 - Link variant with Vertical Padding",
     document: {
       address: testAddress,
       mainPhone: "+18005551010",
@@ -2203,7 +2203,7 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       analytics: { scope: "gridSection" },
     },
-    version: 50,
+    version: 51,
   },
 ];
 

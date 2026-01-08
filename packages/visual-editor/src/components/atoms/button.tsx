@@ -24,7 +24,7 @@ export const buttonVariants = cva(
         false: "",
       },
       linkPadding: {
-        none: "py-0",
+        none: "",
         yOnly: "py-3",
       },
     },
