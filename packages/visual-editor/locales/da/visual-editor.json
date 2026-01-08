@@ -497,6 +497,7 @@
   "filter": "Filter",
   "filters": "Filtre",
   "findALocation": "Find en placering",
+  "fixErrorsToPublish": "For at udgive, slette eller rette sektioner med fejl",
   "fontSize": "Skrifttypestørrelse",
   "fontSizeDefaultLabel": "Misligholdelse",
   "fonts": {

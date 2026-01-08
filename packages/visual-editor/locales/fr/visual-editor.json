@@ -489,6 +489,7 @@
   "filter": "Filtre",
   "filters": "Filtres",
   "findALocation": "Trouver un emplacement",
+  "fixErrorsToPublish": "Pour publier, supprimer ou corriger des sections contenant des erreurs",
   "fontSize": "Taille de la police",
   "fontSizeDefaultLabel": "Défaut",
   "fonts": {

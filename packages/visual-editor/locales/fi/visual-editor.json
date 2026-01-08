@@ -490,6 +490,7 @@
   "filter": "Suodattaa",
   "filters": "Suodattimet",
   "findALocation": "Etsi sijainti",
+  "fixErrorsToPublish": "Virheitä sisältävien osien julkaiseminen, poistaminen tai korjaaminen",
   "fontSize": "Fontin koko",
   "fontSizeDefaultLabel": "Laiminlyönti",
   "fonts": {

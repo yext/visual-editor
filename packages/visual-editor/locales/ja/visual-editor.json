@@ -490,6 +490,7 @@
   "filter": "フィルター",
   "filters": "フィルター",
   "findALocation": "場所を見つけます",
+  "fixErrorsToPublish": "エラーのあるセクションを公開、削除、または修正するには",
   "fontSize": "フォントサイズ",
   "fontSizeDefaultLabel": "デフォルト",
   "fonts": {

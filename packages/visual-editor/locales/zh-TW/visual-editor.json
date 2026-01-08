@@ -491,6 +491,7 @@
   "filter": "篩選",
   "filters": "過濾器",
   "findALocation": "找到一個位置",
+  "fixErrorsToPublish": "發布、刪除或修復有錯誤的部分",
   "fontSize": "字體大小",
   "fontSizeDefaultLabel": "預設",
   "fonts": {

@@ -94,7 +94,7 @@ export const Editor = ({
 
   const logError = (error: Error, info: ErrorInfo) => {
     sendError({
-      payload: { error, info },
+      payload: { error, info, type: "editor" },
     });
   };
 

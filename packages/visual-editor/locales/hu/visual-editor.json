@@ -490,6 +490,7 @@
   "filter": "Szűrő",
   "filters": "Szűrők",
   "findALocation": "Keressen egy helyet",
+  "fixErrorsToPublish": "Hibás szakaszok közzététele, törlése vagy javítása",
   "fontSize": "Betűkészlet",
   "fontSizeDefaultLabel": "Mulasztás",
   "fonts": {

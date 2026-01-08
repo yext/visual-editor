@@ -497,6 +497,7 @@
   "filter": "Filtr",
   "filters": "Filtry",
   "findALocation": "Najděte polohu",
+  "fixErrorsToPublish": "Chcete-li publikovat, odstranit nebo opravit části s chybami",
   "fontSize": "Velikost písma",
   "fontSizeDefaultLabel": "Výchozí",
   "fonts": {

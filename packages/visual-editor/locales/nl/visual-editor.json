@@ -490,6 +490,7 @@
   "filter": "Filter",
   "filters": "Filters",
   "findALocation": "Vind een locatie",
+  "fixErrorsToPublish": "Om secties met fouten te publiceren, verwijderen of repareren",
   "fontSize": "Lettergrootte",
   "fontSizeDefaultLabel": "Standaard",
   "fonts": {

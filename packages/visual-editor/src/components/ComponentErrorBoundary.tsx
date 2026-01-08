@@ -1,9 +1,9 @@
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { OctagonX } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders";
 import { useErrorContext } from "../contexts/ErrorContext";
+import { pt } from "../utils/i18n/platform";
 
 interface ComponentErrorBoundaryProps {
   children: React.ReactNode;
@@ -19,7 +19,6 @@ export const ComponentErrorBoundary = ({
   const { sendError } = useCommonMessageSenders();
   const { incrementErrorCount, decrementErrorCount } = useErrorContext();
   const [hasError, setHasError] = React.useState(false);
-  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (hasError) {
@@ -35,7 +34,7 @@ export const ComponentErrorBoundary = ({
 
   const handleError = (error: Error, info: React.ErrorInfo) => {
     sendError({
-      payload: { error, info },
+      payload: { error, info, type: "component" },
     });
     setHasError(true);
   };
@@ -74,10 +73,10 @@ export const ComponentErrorBoundary = ({
             <OctagonX className="w-10 h-10 text-gray-300 flex-shrink-0" />
             <div className="flex flex-col">
               <h3 className="font-medium text-gray-500">
-                {t("componentErrorBoundary.error", "Error")}
+                {pt("componentErrorBoundary.error", "Error")}
               </h3>
               <p className="text-gray-500 text-sm">
-                {t(
+                {pt(
                   "componentErrorBoundary.message",
                   "Can't render this section. Try updating your component library."
                 )}

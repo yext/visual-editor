@@ -490,6 +490,7 @@
   "filter": "筛选",
   "filters": "过滤器",
   "findALocation": "找到一个位置",
+  "fixErrorsToPublish": "发布、删除或修复有错误的部分",
   "fontSize": "字体大小",
   "fontSizeDefaultLabel": "默认",
   "fonts": {

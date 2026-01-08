@@ -262,8 +262,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   <TooltipContent>
                     <p>
                       {pt(
-                        "cannotPublishWithErrors",
-                        "Cannot publish while components have errors."
+                        "fixErrorsToPublish",
+                        "To publish, delete or fix sections with errors"
                       )}
                     </p>
                   </TooltipContent>

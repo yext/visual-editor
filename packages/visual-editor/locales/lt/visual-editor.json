@@ -490,6 +490,7 @@
   "filter": "Filtruoti",
   "filters": "Filtrai",
   "findALocation": "Raskite vietą",
+  "fixErrorsToPublish": "Jei norite skelbti, ištrinti arba taisyti skyrius su klaidomis",
   "fontSize": "Šrifto dydis",
   "fontSizeDefaultLabel": "Numatytasis",
   "fonts": {
