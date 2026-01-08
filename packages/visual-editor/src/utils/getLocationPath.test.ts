@@ -126,16 +126,18 @@ describe("getLocationPath", () => {
             slug: "locator-page",
             id: "location1",
             __: { isPrimaryLocale: true },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "en",
+                includeLocalePrefixForPrimaryLocale: true,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "en",
-            includeLocalePrefixForPrimaryLocale: true,
-          }
+          ""
         )
       ).toBe("en/locator-page");
 
-      // Usually, non-primary locale should always get prefix, but this represents a directory entity, so it should return as is.
+      // Non-primary locale should get prefix even if slug already has it (allows double prefix)
       expect(
         getLocationPath(
           {
@@ -143,14 +145,16 @@ describe("getLocationPath", () => {
             slug: "es/locator-page",
             id: "location1",
             __: { isPrimaryLocale: false },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "en",
+                includeLocalePrefixForPrimaryLocale: false,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "en",
-            includeLocalePrefixForPrimaryLocale: false,
-          }
+          ""
         )
-      ).toBe("es/locator-page");
+      ).toBe("es/es/locator-page");
     });
 
     it("uses custom primary_locale", () => {
@@ -170,9 +174,11 @@ describe("getLocationPath", () => {
             __: {
               isPrimaryLocale: true,
             },
+            _pageset: JSON.stringify({
+              config: { primaryLocale: "es" },
+            }),
           },
-          "",
-          { primaryLocale: "es" }
+          ""
         )
       ).toBe("va/arlington/1101-wilson-blvd");
 
@@ -192,9 +198,11 @@ describe("getLocationPath", () => {
             __: {
               isPrimaryLocale: false,
             },
+            _pageset: JSON.stringify({
+              config: { primaryLocale: "es" },
+            }),
           },
-          "",
-          { primaryLocale: "es" }
+          ""
         )
       ).toBe("en/va/arlington/1101-wilson-blvd");
     });
@@ -216,12 +224,14 @@ describe("getLocationPath", () => {
             __: {
               isPrimaryLocale: true,
             },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "en",
+                includeLocalePrefixForPrimaryLocale: true,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "en",
-            includeLocalePrefixForPrimaryLocale: true,
-          }
+          ""
         )
       ).toBe("en/va/arlington/1101-wilson-blvd");
 
@@ -232,12 +242,14 @@ describe("getLocationPath", () => {
             id: "location1",
             locale: "en",
             __: { isPrimaryLocale: true },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "en",
+                includeLocalePrefixForPrimaryLocale: true,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "en",
-            includeLocalePrefixForPrimaryLocale: true,
-          }
+          ""
         )
       ).toBe("en/location1");
     });
@@ -259,12 +271,14 @@ describe("getLocationPath", () => {
             __: {
               isPrimaryLocale: true,
             },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "en",
+                includeLocalePrefixForPrimaryLocale: false,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "en",
-            includeLocalePrefixForPrimaryLocale: false,
-          }
+          ""
         )
       ).toBe("va/arlington/1101-wilson-blvd");
 
@@ -284,12 +298,14 @@ describe("getLocationPath", () => {
             __: {
               isPrimaryLocale: false,
             },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "en",
+                includeLocalePrefixForPrimaryLocale: false,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "en",
-            includeLocalePrefixForPrimaryLocale: false,
-          }
+          ""
         )
       ).toBe("es/va/arlington/1101-wilson-blvd");
     });
@@ -302,12 +318,14 @@ describe("getLocationPath", () => {
             locale: "fr",
             id: "location1",
             __: { isPrimaryLocale: true },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "fr",
+                includeLocalePrefixForPrimaryLocale: true,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "fr",
-            includeLocalePrefixForPrimaryLocale: true,
-          }
+          ""
         )
       ).toBe("fr/location1");
 
@@ -318,12 +336,14 @@ describe("getLocationPath", () => {
             locale: "fr",
             id: "location1",
             __: { isPrimaryLocale: true },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "fr",
+                includeLocalePrefixForPrimaryLocale: false,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "fr",
-            includeLocalePrefixForPrimaryLocale: false,
-          }
+          ""
         )
       ).toBe("location1");
 
@@ -334,12 +354,14 @@ describe("getLocationPath", () => {
             locale: "en",
             id: "location1",
             __: { isPrimaryLocale: false },
+            _pageset: JSON.stringify({
+              config: {
+                primaryLocale: "fr",
+                includeLocalePrefixForPrimaryLocale: false,
+              },
+            }),
           },
-          "",
-          {
-            primaryLocale: "fr",
-            includeLocalePrefixForPrimaryLocale: false,
-          }
+          ""
         )
       ).toBe("en/location1");
     });

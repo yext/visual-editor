@@ -10,11 +10,7 @@ export interface LocationDocument extends StreamDocument {
 
 export const getLocationPath = (
   location: LocationDocument,
-  relativePrefixToRoot: string = "",
-  pagesetConfig?: {
-    primaryLocale?: string;
-    includeLocalePrefixForPrimaryLocale?: boolean;
-  }
+  relativePrefixToRoot: string = ""
 ): string => {
   if (!location?.slug && !location?.address && !location?.id) {
     throw new Error("Could not resolve location path.");
@@ -25,48 +21,30 @@ export const getLocationPath = (
     throw new Error("Missing locale for getLocationPath");
   }
 
-  // Use primaryLocale from pageset config, defaulting to "en" for backward compatibility
+  // Get pageset config from the document's _pageset
+  const pagesetJson =
+    typeof location?._pageset === "string"
+      ? JSON.parse(location._pageset || "{}")
+      : location?._pageset || {};
+  const pagesetConfig = pagesetJson?.config || {};
   const primaryLocale = pagesetConfig?.primaryLocale || "en";
   const isPrimaryLocale =
     location.__?.isPrimaryLocale === true ||
     (location.__?.isPrimaryLocale === undefined && locale === primaryLocale);
 
-  const includeLocalePrefixForPrimary =
-    pagesetConfig?.includeLocalePrefixForPrimaryLocale === true;
-  const shouldIncludeLocalePrefix =
-    !isPrimaryLocale || (isPrimaryLocale && includeLocalePrefixForPrimary);
-  const localePath = shouldIncludeLocalePrefix ? `${locale}/` : "";
+  const localePrefix =
+    !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
+      ? `${locale}/`
+      : "";
 
-  // Special handling for directory entities (DM cases): if slug exists and no address,
-  // check if we need to add locale prefix before returning early
-  if (location.slug && !location.address) {
-    // Check if slug already starts with the primaryLocale prefix
-    const slugStartsWithPrimaryLocale = location.slug.startsWith(
-      `${primaryLocale}/`
-    );
-
-    // If locale matches primary AND includeLocalePrefixForPrimaryLocale is true,
-    // add prefix if not already present
-    if (
-      isPrimaryLocale &&
-      includeLocalePrefixForPrimary &&
-      !slugStartsWithPrimaryLocale
-    ) {
-      return `${relativePrefixToRoot}${localePath}${location.slug}`;
-    }
-
-    // Otherwise, use slug directly (already has prefix or doesn't need one)
-    return `${relativePrefixToRoot}${location.slug}`;
-  }
-
-  // If there's a slug (with address, so it's a location entity), apply locale prefix to it
+  // If there's a slug, apply locale prefix to it
   if (location.slug) {
-    return `${relativePrefixToRoot}${localePath}${location.slug}`;
+    return `${relativePrefixToRoot}${localePrefix}${location.slug}`;
   }
 
   const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
-    : `${localePath}${location.id}`;
+    ? `${localePrefix}${location.address.region}/${location.address.city}/${location.address.line1}`
+    : `${localePrefix}${location.id}`;
 
   return `${relativePrefixToRoot}${normalizeSlug(path)}`;
 };

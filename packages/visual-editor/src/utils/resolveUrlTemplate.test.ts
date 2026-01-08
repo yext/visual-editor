@@ -89,7 +89,7 @@ describe("resolveUrlTemplateOfChild", () => {
         },
         ""
       )
-    ).toBe("es/ny/page/123");
+    ).toBe("es/es/ny/page/123");
   });
 
   it("handles primary url template on locator pages", () => {
@@ -108,7 +108,7 @@ describe("resolveUrlTemplateOfChild", () => {
         },
         ""
       )
-    ).toBe("es/ny/location/123");
+    ).toBe("es/es/ny/location/123");
   });
 
   it("uses base entity template (entityPageSetUrlTemplates) for directory pages", () => {
@@ -177,7 +177,7 @@ describe("resolvePageSetUrlTemplate", () => {
       locale: "es",
     };
     const result = resolvePageSetUrlTemplate(alternateLocaleDoc, "");
-    assert.equal(result, "es/ny/new-york/61-9th-ave");
+    assert.equal(result, "es/es/ny/new-york/61-9th-ave");
   });
 
   it("resolves alternate template for non-primary locale when locale format is bad", () => {
@@ -191,7 +191,7 @@ describe("resolvePageSetUrlTemplate", () => {
 
     assert.equal(
       resolvePageSetUrlTemplate(alternateLocaleDoc, ""),
-      "zh-hans-hk/ny/new-york/61-9th-ave"
+      "zh-Hans-HK/zh-hans-hk/ny/new-york/61-9th-ave"
     );
   });
 
@@ -246,7 +246,7 @@ describe("resolvePageSetUrlTemplate", () => {
       locale: "es",
     };
     const result = resolvePageSetUrlTemplate(alternateLocaleDoc, "../../");
-    assert.equal(result, "../../es/ny/new-york/61-9th-ave");
+    assert.equal(result, "../../es/es/ny/new-york/61-9th-ave");
   });
 
   it("handles empty string prefix without altering URL", () => {
@@ -405,7 +405,7 @@ describe("resolvePageSetUrlTemplate", () => {
       ""
     );
 
-    expect(result).toBe("es/directory/new-york/123");
+    expect(result).toBe("es/es/directory/new-york/123");
   });
 
   it("uses page set template for locator pages", () => {
@@ -499,8 +499,9 @@ describe("resolvePageSetUrlTemplate", () => {
       };
 
       // English is not primary (Spanish is), so should get prefix
+      // Template includes [[locale]] which resolves to "en/...", then we add another "en/" prefix
       const result = resolvePageSetUrlTemplate(docWithCustomPrimaryLocale, "");
-      expect(result).toBe("en/ny/new-york/61-9th-ave");
+      expect(result).toBe("en/en/ny/new-york/61-9th-ave");
     });
 
     it("respects include_locale_prefix_for_primary_locale: true for primary template", () => {
@@ -569,7 +570,7 @@ describe("resolvePageSetUrlTemplate", () => {
 
       // Alternate template already includes [[locale]], so should not add additional prefix
       const result = resolvePageSetUrlTemplate(docWithAlternateTemplate, "");
-      expect(result).toBe("es/ny/new-york/61-9th-ave");
+      expect(result).toBe("es/es/ny/new-york/61-9th-ave");
     });
 
     it("works with custom primary_locale and include_locale_prefix_for_primary_locale: true", () => {

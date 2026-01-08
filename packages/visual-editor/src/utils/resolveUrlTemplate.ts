@@ -30,19 +30,11 @@ export const resolveUrlTemplateOfChild = (
     streamDocument?.__?.entityPageSetUrlTemplates || "{}"
   );
 
-  // Get pageset config from the document's _pageset to access primaryLocale and includeLocalePrefixForPrimaryLocale
-  const pagesetJson =
-    typeof streamDocument?._pageset === "string"
-      ? JSON.parse(streamDocument._pageset || "{}")
-      : streamDocument?._pageset || {};
-  const pagesetConfig = pagesetJson?.config || {};
-
   return resolveUrlTemplateWithTemplates(
     streamDocument,
     relativePrefixToRoot,
     urlTemplates,
-    alternateFunction,
-    pagesetConfig
+    alternateFunction
   );
 };
 
@@ -72,14 +64,12 @@ export const resolvePageSetUrlTemplate = (
       ? JSON.parse(streamDocument._pageset || "{}")
       : streamDocument?._pageset || {};
   const urlTemplates = pagesetJson?.config?.urlTemplate || {};
-  const pagesetConfig = pagesetJson?.config || {};
 
   return resolveUrlTemplateWithTemplates(
     streamDocument,
     relativePrefixToRoot,
     urlTemplates,
-    alternateFunction,
-    pagesetConfig
+    alternateFunction
   );
 };
 
@@ -94,11 +84,7 @@ const resolveUrlTemplateWithTemplates = (
   alternateFunction?: (
     streamDocument: StreamDocument,
     relativePrefixToRoot: string
-  ) => string,
-  pagesetConfig?: {
-    primaryLocale?: string;
-    includeLocalePrefixForPrimaryLocale?: boolean;
-  }
+  ) => string
 ): string => {
   streamDocument = normalizeLocalesInObject(streamDocument);
   const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
@@ -115,8 +101,7 @@ const resolveUrlTemplateWithTemplates = (
   if (!urlTemplate) {
     return getLocationPath(
       streamDocument as LocationDocument,
-      relativePrefixToRoot,
-      pagesetConfig
+      relativePrefixToRoot
     );
   }
 
@@ -124,8 +109,7 @@ const resolveUrlTemplateWithTemplates = (
     urlTemplate,
     streamDocument,
     locale,
-    relativePrefixToRoot,
-    pagesetConfig
+    relativePrefixToRoot
   );
 };
 
@@ -156,16 +140,8 @@ const buildUrlFromTemplate = (
   urlTemplate: string,
   streamDocument: StreamDocument,
   locale: string,
-  relativePrefixToRoot: string,
-  pagesetConfig?: {
-    primaryLocale?: string;
-    includeLocalePrefixForPrimaryLocale?: boolean;
-  }
+  relativePrefixToRoot: string
 ): string => {
-  // Check if the template already includes [[locale]] at the start
-  // This means the template itself handles the locale prefix
-  const templateStartsWithLocale = urlTemplate.trim().startsWith("[[locale]]");
-
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
   ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
@@ -174,23 +150,19 @@ const buildUrlFromTemplate = (
     throw new Error(`Could not resolve URL template ${urlTemplate}`);
   }
 
-  // If the template already includes [[locale]], don't add an additional prefix
-  if (templateStartsWithLocale) {
-    return relativePrefixToRoot + normalizedSlug;
-  }
-
-  // Determine if we should add a locale prefix
+  // Get pageset config from the document's _pageset
+  const pagesetJson =
+    typeof streamDocument?._pageset === "string"
+      ? JSON.parse(streamDocument._pageset || "{}")
+      : streamDocument?._pageset || {};
+  const pagesetConfig = pagesetJson?.config || {};
   const primaryLocale = pagesetConfig?.primaryLocale || "en";
   const isPrimaryLocale = locale === primaryLocale;
-  const includeLocalePrefixForPrimary =
-    pagesetConfig?.includeLocalePrefixForPrimaryLocale === true;
 
-  // Add locale prefix if:
-  // 1. It's not the primary locale, OR
-  // 2. It is the primary locale AND includeLocalePrefixForPrimaryLocale is true
-  const shouldIncludeLocalePrefix =
-    !isPrimaryLocale || (isPrimaryLocale && includeLocalePrefixForPrimary);
-  const localePrefix = shouldIncludeLocalePrefix ? `${locale}/` : "";
+  const localePrefix =
+    !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
+      ? `${locale}/`
+      : "";
 
   return relativePrefixToRoot + localePrefix + normalizedSlug;
 };
