@@ -47,7 +47,7 @@ export const ComponentErrorBoundary = ({
   // We stringify the props to ensure we only reset when the values change, not the object reference.
   // We also exclude the `puck` prop which is unstable and causes unnecessary resets.
   const stableResetKeys = resetKeys.map((key) => {
-    if (key && typeof key === "object" && "puck" in key) {
+    if (key && typeof key === "object" && Object.hasOwn(key, "puck")) {
       const rest = { ...key };
       delete rest.puck;
       try {

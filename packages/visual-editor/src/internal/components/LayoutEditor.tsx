@@ -25,6 +25,7 @@ import { migrationRegistry } from "../../components/migrations/migrationRegistry
 import { Metadata } from "../../editor/Editor.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { toast } from "sonner";
+import { pt } from "../../utils/i18n/platform.ts";
 
 const devLogger = new DevLogger();
 
@@ -91,7 +92,12 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
 
   const handlePublish = (data?: any) => {
     if (errorCount > 0) {
-      toast.error("Cannot publish while there are component errors.");
+      toast.error(
+        pt(
+          "cannotPublishWithErrors",
+          "Cannot publish while components have errors."
+        )
+      );
       return;
     }
     setLayoutSaveState(undefined);
