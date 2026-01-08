@@ -82,7 +82,7 @@ const aboutSectionFields: Fields<AboutSectionProps> = {
           type: "radio",
           options: [
             {
-              label: msg("fields.options.yes", "Yex"),
+              label: msg("fields.options.yes", "Yes"),
               value: true,
             },
             {
