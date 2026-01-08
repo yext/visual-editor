@@ -15,11 +15,21 @@ i18nComponentsInstance.use(initReactI18next).init({
   resources: {},
 });
 
+export interface TemplateProps {
+  document?: {
+    locale?: string;
+  };
+  translations?: Record<string, string> | Record<string, any>;
+  [key: string]: any;
+}
+
 /**
  * Dynamically adds translations to the templateProps object. To be used
  * by consumers of visual-editor in transformProps of a template.
  */
-export const injectTranslations = async (templateProps: any) => {
+export const injectTranslations = async (
+  templateProps: TemplateProps
+): Promise<TemplateProps> => {
   if (!templateProps?.document?.locale) {
     return templateProps;
   }

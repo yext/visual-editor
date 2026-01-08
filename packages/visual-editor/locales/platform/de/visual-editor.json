@@ -22,8 +22,8 @@
     "sublocality": "Sublokalität"
   },
   "advancedSettings": "Erweiterte Einstellungen",
-  "altText": "ALT -Text",
-  "applyAll": "Bewerben Sie sich für alle Orte",
+  "altText": "ALT-Text",
+  "applyAll": "Für alle Standorte anwenden",
   "approvals": {
     "addAComment": "Fügen Sie einen Kommentar hinzu, um Ihrem Genehmiger zu verstehen, was sich geändert hat",
     "send": "Genehmigung senden",
@@ -71,7 +71,7 @@
     "address": "Adresse",
     "bannerSection": "Bannerabschnitt",
     "bodyText": "Körpertext",
-    "breadcrumbs": "Paniermehl",
+    "breadcrumbs": "Brotkrumen",
     "callToAction": "Aufruf zum Handeln",
     "components": "Komponenten",
     "copyrightMessage": "Copyright-Nachricht",
@@ -716,7 +716,7 @@
       "light": "Licht (300)",
       "medium": "Medium (500)",
       "normal": "Normal (400)",
-      "semibold": "Halbkalte (600)",
+      "semibold": "Halbfett (600)",
       "thin": "Dünn (100)"
     },
     "image": "Bild",

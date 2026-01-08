@@ -49,7 +49,6 @@ export const ReviewStars = (props: ReviewStarsProps) => {
           {t("totalReviews", {
             count: reviewCount,
           })}
-          )
         </Body>
       )}
     </div>

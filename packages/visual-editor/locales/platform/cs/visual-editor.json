@@ -23,7 +23,7 @@
   },
   "advancedSettings": "Pokročilá nastavení",
   "altText": "Alt text",
-  "applyAll": "Aplikujte na všechna lokalita",
+  "applyAll": "Aplikujte na všechna lokality",
   "approvals": {
     "addAComment": "Přidejte komentář, který pomůže vašemu schvalovateli pochopit, co se změnilo",
     "send": "Odeslat ke schválení",
@@ -132,7 +132,7 @@
     "teamCardsWrapper": "Týmové karty",
     "teamSection": "Týmová sekce",
     "testimonial": "Svědectví",
-    "testimonialCard": "Posudek Card",
+    "testimonialCard": "Posudek karta",
     "testimonialCardsWrapper": "Posudkové karty",
     "testimonialsSection": "Sekce posudků",
     "textList": "Textový seznam",
@@ -308,7 +308,7 @@
     "options": {
       "aspectRatio": "Poměr stran",
       "base": "Báze",
-      "base_text size": "Base",
+      "base_text size": "Báze",
       "bottom": "Dno",
       "bottom_direction": "Dole",
       "center": "Centrum",

@@ -373,7 +373,7 @@ const NearbyLocationsEmptyState: React.FC<{
               ? entityTypeDisplayName
               : "entity",
             radius: radius ?? 10,
-            mile: pt("mile", { count: radius }),
+            mile: pt("mile", { count: radius ?? 10 }),
           })}
         </Body>
       </div>

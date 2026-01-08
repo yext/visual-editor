@@ -47,25 +47,19 @@ async function processLocalesFolder(currentPath: string, subfolderPath = "") {
 
     if (item.isDirectory()) {
       const subItems = await fs.readdir(fullPath, { withFileTypes: true });
-      const hasJson = subItems.some(
-        (f) => f.isFile() && f.name.endsWith(".json")
-      );
 
-      if (hasJson) {
-        for (const file of subItems) {
-          if (file.isFile() && file.name.endsWith(".json")) {
-            const filePath = path.join(fullPath, file.name);
-            const data = JSON.parse(await fs.readFile(filePath, "utf8"));
-            const sorted = sortObject(data);
-            await fs.writeFile(
-              filePath,
-              JSON.stringify(sorted, null, 2) + "\n"
-            );
-          }
+      // Process JSON files in the current directory
+      for (const file of subItems) {
+        if (file.isFile() && file.name.endsWith(".json")) {
+          const filePath = path.join(fullPath, file.name);
+          const data = JSON.parse(await fs.readFile(filePath, "utf8"));
+          const sorted = sortObject(data);
+          await fs.writeFile(filePath, JSON.stringify(sorted, null, 2) + "\n");
         }
-      } else {
-        await processLocalesFolder(fullPath, currentSubfolder);
       }
+
+      // Always recurse into subdirectories
+      await processLocalesFolder(fullPath, currentSubfolder);
     }
   }
 }
