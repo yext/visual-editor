@@ -1,4 +1,3 @@
-import { LexicalRichText } from "@yext/pages-components";
 import { Body, BodyProps, RichText, useBackground } from "@yext/visual-editor";
 import "./maybeRTF.css";
 
@@ -35,10 +34,6 @@ export const MaybeRTF = ({
           className={`rtf-theme ${background?.isDarkBackground ? "rtf-dark-background" : "rtf-light-background"} ${bodyVariant !== "base" && `rtf-body-${bodyVariant}`}`}
         />
       );
-    }
-
-    if ("json" in data && data.json) {
-      return <LexicalRichText serializedAST={JSON.stringify(data.json)} />;
     }
   }
 
