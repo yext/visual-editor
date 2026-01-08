@@ -19,15 +19,18 @@ export const ComponentErrorBoundary = ({
   const { sendError } = useCommonMessageSenders();
   const { incrementErrorCount, decrementErrorCount } = useErrorContext();
   const [hasError, setHasError] = React.useState(false);
+  const didIncrementRef = React.useRef(false);
 
   React.useEffect(() => {
     if (hasError) {
       incrementErrorCount();
+      didIncrementRef.current = true;
     }
 
     return () => {
-      if (hasError) {
+      if (didIncrementRef.current) {
         decrementErrorCount();
+        didIncrementRef.current = false;
       }
     };
   }, [hasError, incrementErrorCount, decrementErrorCount]);
