@@ -1,8 +1,8 @@
-import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "./applyTheme.ts";
-import { StyleSelectOption } from "./themeResolver.ts";
+import { PUCK_PREVIEW_IFRAME_ID, THEME_STYLE_TAG_ID } from "../applyTheme.ts";
+import { StyleSelectOption } from "../themeResolver.ts";
 import { defaultFonts as fontsJs } from "./font_registry.js";
-import { msg } from "./i18n/platform.ts";
-import { ThemeData } from "../internal/types/themeData.ts";
+import { msg } from "../i18n/platform.ts";
+import { ThemeData } from "../../internal/types/themeData.ts";
 
 export type FontRegistry = Record<string, FontSpecification>;
 type FontSpecification = {
@@ -30,7 +30,7 @@ export const constructFontSelectOptions = (fonts: FontRegistry) => {
     const fontDetails = fonts[fontName];
     fontOptions.push({
       label: fontName,
-      value: `'${fontName}', ${fontDetails.fallback}`,
+      value: `'${fontName}', '${fontName} Fallback', ${fontDetails.fallback}`,
     });
   }
   return fontOptions;

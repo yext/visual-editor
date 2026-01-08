@@ -1,7 +1,6 @@
 export * from "./i18n/index.ts";
 export * from "./schema/index.ts";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
-export { fetchReviewsForEntity } from "./api/fetchReviewsForEntity.tsx";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
 export { applyCertifiedFacts } from "./applyCertifiedFacts.ts";
@@ -43,6 +42,6 @@ export {
   getFontWeightOptions,
   getFontWeightOverrideOptions,
   type FontRegistry,
-} from "./visualEditorFonts.ts";
+} from "./fonts/visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
 export { mergeMeta } from "./mergeMeta.ts";
