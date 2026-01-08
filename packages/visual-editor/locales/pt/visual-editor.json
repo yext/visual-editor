@@ -214,6 +214,7 @@
     "description": "Descrição",
     "desktopContainerPosition": "Posição do contêiner da área de trabalho",
     "desktopImagePosition": "Posição da imagem da área de trabalho",
+    "desktopMediaPosition": "Posição da mídia na área de trabalho",
     "destinationURL": "URL de destino",
     "direction": "Direção",
     "directoryRootLinkLabel": "Etiqueta de link raiz de diretório",
@@ -294,6 +295,7 @@
     "metaTitle": "Meta título",
     "mobileContentAlignment": "Alinhamento de conteúdo móvel",
     "mobileImagePosition": "Posição da imagem móvel",
+    "mobileMediaPosition": "Posição na mídia móvel",
     "name": "Nome",
     "openInNewTab": "Abrir em nova aba",
     "options": {

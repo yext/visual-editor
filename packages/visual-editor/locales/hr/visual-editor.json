@@ -214,6 +214,7 @@
     "description": "Opis",
     "desktopContainerPosition": "Položaj kontejnera radne površine",
     "desktopImagePosition": "Položaj slike radne površine",
+    "desktopMediaPosition": "Položaj medija na stolnom računalu",
     "destinationURL": "URL odredišta",
     "direction": "Smjer",
     "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
@@ -294,6 +295,7 @@
     "metaTitle": "Meta naslov",
     "mobileContentAlignment": "Poravnavanje mobilnog sadržaja",
     "mobileImagePosition": "Položaj mobilne slike",
+    "mobileMediaPosition": "Položaj mobilnih medija",
     "name": "Ime",
     "openInNewTab": "Otvori u novoj kartici",
     "options": {
