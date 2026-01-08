@@ -18,7 +18,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
 import { useTranslation } from "react-i18next";
-import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export type SectionContainerProps = {
   background?: BackgroundStyle;

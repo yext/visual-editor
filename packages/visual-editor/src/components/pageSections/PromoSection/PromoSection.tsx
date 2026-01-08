@@ -34,7 +34,7 @@ import { ImmersivePromo } from "./ImmersivePromo";
 import { CompactPromo } from "./CompactPromo";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState";
-import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 export interface PromoData {
   /**

@@ -12,7 +12,7 @@ import {
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
-import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
 

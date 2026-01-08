@@ -25,7 +25,7 @@ import {
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
-import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 type Review = {
   authorName: string;

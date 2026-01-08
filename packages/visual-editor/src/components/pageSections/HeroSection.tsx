@@ -31,7 +31,7 @@ import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
-import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface HeroData {
   backgroundImage: YextEntityField<

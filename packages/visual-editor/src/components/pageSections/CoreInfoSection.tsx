@@ -22,7 +22,7 @@ import {
   PhoneListProps,
   resolvePhoneNumbers,
 } from "../contentBlocks/PhoneList";
-import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface CoreInfoStyles {
   /**

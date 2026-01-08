@@ -7,7 +7,7 @@ import {
   VisibilityWrapper,
   YextField,
 } from "@yext/visual-editor";
-import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface VideoSectionProps {
   /**

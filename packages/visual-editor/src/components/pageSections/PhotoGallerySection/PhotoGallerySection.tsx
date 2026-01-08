@@ -13,7 +13,7 @@ import {
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
-import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {

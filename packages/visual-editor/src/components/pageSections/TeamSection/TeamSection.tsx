@@ -14,7 +14,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
-import { ComponentErrorBoundary } from "../../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 export interface TeamSectionProps {
   /**

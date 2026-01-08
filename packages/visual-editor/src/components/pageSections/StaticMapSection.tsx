@@ -11,7 +11,7 @@ import {
   mapStyleField,
 } from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
-import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface StaticMapData {
   /**

@@ -22,7 +22,7 @@ import {
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { ComponentErrorBoundary } from "../ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface BannerData {
   /**
