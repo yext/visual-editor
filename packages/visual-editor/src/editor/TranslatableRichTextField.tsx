@@ -53,8 +53,8 @@ export function TranslatableRichTextField<
             : undefined;
 
         const initialValue = React.isValidElement(resolvedValue)
-          ? valueForCurrentLocale?.json
-          : valueForCurrentLocale;
+          ? valueForCurrentLocale
+          : "";
 
         openConstantValueEditor({
           payload: {
@@ -71,7 +71,7 @@ export function TranslatableRichTextField<
           window.location.href.includes("http://localhost:5173/dev-location")
         ) {
           const userInput = prompt("Enter Rich Text (HTML):");
-          handleNewValue({ json: "", html: userInput ?? "" }, locale);
+          handleNewValue({ html: userInput ?? "" }, locale);
         }
       };
 
@@ -97,7 +97,6 @@ export function TranslatableRichTextField<
 /** Returns a simple RTF-format p tag wrapper for text  */
 export const getDefaultRTF = (text: string): RichText => {
   return {
-    json: `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"${text}","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
     html: `<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>${text}</span></p>`,
   };
 };

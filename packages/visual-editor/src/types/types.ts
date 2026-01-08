@@ -226,5 +226,4 @@ export type TranslatableRichText =
  */
 export type RichText = {
   html?: string;
-  json?: string;
 };
