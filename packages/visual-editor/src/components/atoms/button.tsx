@@ -24,9 +24,8 @@ export const buttonVariants = cva(
         false: "",
       },
       linkPadding: {
-        none: "",
-        both: "",
-        yOnly: "",
+        none: "py-0",
+        yOnly: "py-3",
       },
     },
     compoundVariants: [
@@ -76,16 +75,6 @@ export const buttonVariants = cva(
           "headerFooterSecondaryLink",
         ],
         className: "text-white",
-      },
-      {
-        variant: "link",
-        linkPadding: "both",
-        className: "px-6 py-3",
-      },
-      {
-        variant: "link",
-        linkPadding: "yOnly",
-        className: "py-3",
       },
     ],
     defaultVariants: {

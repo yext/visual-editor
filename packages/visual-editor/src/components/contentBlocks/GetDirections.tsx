@@ -31,7 +31,7 @@ const GetDirectionsComponent = ({ variant, color }: GetDirectionsProps) => {
 
   return (
     <CTA
-      setPadding="py"
+      setPadding={true}
       ctaType="getDirections"
       eventName={`getDirections`}
       label={t("getDirections", "Get Directions")}

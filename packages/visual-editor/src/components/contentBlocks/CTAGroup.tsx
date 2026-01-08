@@ -126,7 +126,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
               }
             >
               <CTA
-                setPadding={"p"}
+                setPadding={true}
                 label={resolvedLabel}
                 link={
                   ctaType === "getDirections"

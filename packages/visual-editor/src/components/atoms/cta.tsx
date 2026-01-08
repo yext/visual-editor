@@ -36,7 +36,7 @@ export type CTAProps = {
   onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   disabled?: boolean;
   color?: BackgroundStyle;
-  setPadding?: "py" | "p" | "none";
+  setPadding?: boolean;
 };
 
 /**
@@ -181,7 +181,7 @@ export const CTA = (props: CTAProps) => {
     onClick,
     disabled = false,
     color,
-    setPadding = "none",
+    setPadding = false,
   } = props;
 
   const resolvedProps = useResolvedCtaProps(props);
@@ -282,13 +282,11 @@ export const CTA = (props: CTAProps) => {
       ? link
       : normalizeSlug(link) || "#";
 
-  let linkPadding: ButtonProps["linkPadding"] = "both";
+  let linkPadding: ButtonProps["linkPadding"] = "none";
 
   if (buttonVariant === "link") {
-    if (setPadding === "py") {
+    if (setPadding) {
       linkPadding = "yOnly";
-    } else if (setPadding === "none") {
-      linkPadding = "none";
     }
   }
 
