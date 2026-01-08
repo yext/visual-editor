@@ -1,10 +1,5 @@
 import { ReactNode, useEffect } from "react";
 import mapboxPackageJson from "mapbox-gl/package.json";
-import {
-  defaultFonts,
-  loadFontsIntoDOM,
-} from "../../utils/visualEditorFonts.ts";
-import { useTemplateMetadata } from "../hooks/useMessageReceivers.ts";
 
 /**
  * For use in Puck's iframe override. Loads the Mapbox script and stylesheet into the iframe document.
@@ -16,8 +11,6 @@ export const loadMapboxIntoIframe = ({
   children: ReactNode;
   document?: Document | undefined;
 }) => {
-  const templateMetadata = useTemplateMetadata();
-
   useEffect(() => {
     if (!document) {
       return;
@@ -39,14 +32,6 @@ export const loadMapboxIntoIframe = ({
       link.rel = "stylesheet";
       document.body.appendChild(link);
     }
-
-    // Load default Google Fonts for the font selector dropdown
-    loadFontsIntoDOM(
-      document,
-      defaultFonts,
-      templateMetadata?.customFonts ?? {},
-      "visual-editor-iframe-fonts"
-    );
-  }, [document, templateMetadata?.customFonts]);
+  }, [document]);
   return <>{children}</>;
 };

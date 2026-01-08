@@ -1,4 +1,4 @@
-import { FontRegistry } from "../../utils/visualEditorFonts.ts";
+import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import DOMPurify from "dompurify";
 
 export type TemplateMetadata = {
