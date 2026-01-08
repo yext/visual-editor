@@ -20,6 +20,7 @@ export const defaultLink = {
     hasLocalizedValue: "true" as const,
   },
   link: "#",
+  openInNewTab: false,
 };
 
 export const defaultLinks = [
@@ -56,7 +57,7 @@ export interface ExpandedFooterStyles {
   /** Styling for the primary footer bar. */
   primaryFooter: {
     backgroundColor?: BackgroundStyle;
-    linksAlignment: "left" | "right";
+    linksPosition: "left" | "right";
   };
   /** The maximum width of the footer. */
   maxWidth: PageSectionProps["maxWidth"];
@@ -131,8 +132,8 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
               options: "BACKGROUND_COLOR",
             }
           ),
-          linksAlignment: YextField(
-            msg("fields.linksAlignment", "Links Alignment"),
+          linksPosition: YextField(
+            msg("fields.linksPosition", "Links Position"),
             {
               type: "radio",
               options: [
@@ -191,7 +192,7 @@ const ExpandedFooterWrapper: PuckComponent<ExpandedFooterProps> = ({
   const { primaryFooter } = data;
   const { primaryFooter: primaryFooterStyle, maxWidth } = styles;
   const { expandedFooter } = primaryFooter;
-  const { linksAlignment: primaryLinksAlignment, backgroundColor } =
+  const { linksPosition: primaryLinksAlignment, backgroundColor } =
     primaryFooterStyle;
 
   return (
@@ -410,7 +411,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             },
             styles: {
               backgroundColor: backgroundColors.background2.value,
-              linksAlignment: "left",
+              linksPosition: "left",
             },
             maxWidth: "theme",
             slots: {
@@ -441,7 +442,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
     styles: {
       primaryFooter: {
         backgroundColor: backgroundColors.background6.value,
-        linksAlignment: "right",
+        linksPosition: "right",
       },
       maxWidth: "theme",
     },

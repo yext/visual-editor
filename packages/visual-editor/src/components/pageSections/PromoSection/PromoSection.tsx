@@ -71,13 +71,13 @@ export interface PromoStyles {
   backgroundColor?: BackgroundStyle;
 
   /**
-   * Positions the image to the left or right of the promo content on desktop (classic and compact variants).
+   * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
    * @defaultValue right
    */
   desktopImagePosition: "left" | "right";
 
   /**
-   * Positions the image to the top or bottom of the promo content on mobile (classic and compact variants).
+   * Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).
    * @defaultValue top
    */
   mobileImagePosition: "top" | "bottom";
@@ -189,7 +189,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         }
       ),
       desktopImagePosition: YextField(
-        msg("fields.desktopImagePosition", "Desktop Image Position"),
+        msg("fields.desktopMediaPosition", "Desktop Media Position"),
         {
           type: "radio",
           options: [
@@ -209,7 +209,7 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         }
       ),
       mobileImagePosition: YextField(
-        msg("fields.mobileImagePosition", "Mobile Image Position"),
+        msg("fields.mobileMediaPosition", "Mobile Media Position"),
         {
           type: "radio",
           options: ThemeOptions.VERTICAL_POSITION,

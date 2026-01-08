@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
 import * as React from "react";
 import {
@@ -8,7 +7,6 @@ import {
   type BackgroundStyle,
   Body,
   Button,
-  fetchReviewsForEntity,
   getAggregateRating,
   getAnalyticsScopeHash,
   msg,
@@ -22,10 +20,28 @@ import {
   VisibilityWrapper,
   HeadingTextProps,
   pt,
+  StreamDocument,
 } from "@yext/visual-editor";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+
+type Review = {
+  authorName: string;
+  content?: string;
+  rating: number;
+  reviewDate: string;
+  comments?: { content: string; commentDate: string }[];
+};
+
+type StreamDocumentWithReviews = StreamDocument & {
+  ref_reviewsAgg?: {
+    publisher: string;
+    reviewCount?: number;
+    averageRating?: number;
+    topReviews?: Review[];
+  }[];
+};
 
 const REVIEWS_PER_PAGE = 5;
 const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
@@ -34,7 +50,6 @@ const DATE_FORMAT: Omit<Intl.DateTimeFormatOptions, "timeZone"> = {
   year: "numeric",
 };
 
-// for demoooo
 export interface ReviewsSectionProps {
   /**
    * This object contains properties for customizing the component's appearance.
@@ -149,60 +164,15 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
 
 const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
   const { styles, slots, puck } = props;
-  const streamDocument = useDocument();
-  const apiKey = streamDocument?._env?.YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY;
-
-  if (!apiKey) {
-    console.warn(
-      "Missing YEXT_VISUAL_EDITOR_REVIEWS_APP_API_KEY, unable to access reviews content endpoint."
-    );
-    return <></>;
-  }
-  const businessId: number = Number(streamDocument?.businessId);
-  const contentDeliveryAPIDomain =
-    streamDocument?._yext?.contentDeliveryAPIDomain;
-  const entityId = streamDocument?.uid;
-  const [currentPageNumber, setCurrentPageNumber] = React.useState(1); // Note: this is one-indexed
-  const [pageTokens, setPageTokens] = React.useState<Record<number, string>>(
-    {}
-  );
-
-  const {
-    data: reviews,
-    isLoading,
-    status: reviewsStatus,
-  } = useQuery({
-    queryKey: [
-      "reviews",
-      entityId,
-      currentPageNumber,
-      pageTokens[currentPageNumber],
-    ],
-    queryFn: async () =>
-      fetchReviewsForEntity({
-        businessId,
-        apiKey,
-        contentDeliveryAPIDomain,
-        entityId,
-        limit: REVIEWS_PER_PAGE,
-        pageToken: pageTokens[currentPageNumber],
-      }),
-    enabled:
-      !!businessId && !!apiKey && !!contentDeliveryAPIDomain && !!entityId,
-  });
-
-  React.useEffect(() => {
-    if (reviews?.response?.nextPageToken) {
-      setPageTokens((prev) => ({
-        ...prev,
-        [currentPageNumber + 1]: reviews.response.nextPageToken,
-      }));
-    }
-  }, [reviews, currentPageNumber]);
+  const [currentPageNumber, setCurrentPageNumber] = React.useState(0);
+  const streamDocument = useDocument<StreamDocumentWithReviews>();
 
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
+  const reviews = streamDocument.ref_reviewsAgg?.find(
+    (agg) => agg.publisher === "FIRSTPARTY"
+  )?.topReviews;
 
-  if (reviewsStatus !== "success" || (!isLoading && reviewCount === 0)) {
+  if (!reviews?.length) {
     if (puck?.isEditing) {
       return (
         <ReviewsEmptyState
@@ -215,17 +185,10 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
     return <></>;
   }
 
-  const headerProps: ReviewsHeaderProps = {
-    averageRating,
-    reviewCount,
-    isLoading,
-  };
-
-  const pageScrollerProps: PageScrollerProps = {
-    reviewCount,
-    currentPageNumber,
-    fetchData: setCurrentPageNumber,
-  };
+  const reviewsPage = reviews.slice(
+    currentPageNumber * REVIEWS_PER_PAGE,
+    (currentPageNumber + 1) * REVIEWS_PER_PAGE
+  );
 
   return (
     <PageSection
@@ -234,14 +197,17 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
     >
       <div className="flex flex-col gap-3">
         <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-        <ReviewsHeader {...headerProps} />
+        <ReviewsHeader
+          averageRating={averageRating}
+          reviewCount={reviewCount}
+        />
       </div>
-      {reviews && (
-        <>
-          <ReviewsList reviews={reviews?.response?.docs} />
-          <PageScroller {...pageScrollerProps} />
-        </>
-      )}
+      <ReviewsList reviews={reviewsPage} streamDocument={streamDocument} />
+      <PageScroller
+        numberOfReviews={reviews?.length ?? 0}
+        currentPageNumber={currentPageNumber}
+        setPageNumber={setCurrentPageNumber}
+      />
     </PageSection>
   );
 };
@@ -249,40 +215,40 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
 interface ReviewsHeaderProps {
   averageRating: number;
   reviewCount: number;
-  isLoading: boolean;
 }
 
 const ReviewsHeader: React.FC<ReviewsHeaderProps> = (props) => {
-  const { averageRating, reviewCount, isLoading } = props;
-  const { t } = useTranslation();
+  const { averageRating, reviewCount } = props;
   return (
     <div className="flex flex-row gap-3 items-center justify-center">
-      {isLoading ? (
-        <Body>{t("loadingReviews", "Loading reviews...")}</Body>
-      ) : (
-        <ReviewStars averageRating={averageRating} reviewCount={reviewCount} />
-      )}
+      <ReviewStars averageRating={averageRating} reviewCount={reviewCount} />
     </div>
   );
 };
 
-const ReviewsList: React.FC<{ reviews: any[] }> = ({ reviews }) => {
-  if (!reviews) {
-    return <></>; // No reviews to display while loading
-  }
+const ReviewsList: React.FC<{
+  reviews: Review[];
+  streamDocument: StreamDocument;
+}> = ({ reviews, streamDocument }) => {
   return (
     <div className="flex flex-col gap-4">
       {reviews.map((review, index) => (
-        <Review key={`review-${index}`} index={index} review={review} />
+        <Review
+          key={`review-${index}`}
+          index={index}
+          review={review}
+          streamDocument={streamDocument}
+        />
       ))}
     </div>
   );
 };
 
 const Review: React.FC<{
-  review: any;
+  review: Review;
   index: number;
-}> = ({ review, index }) => {
+  streamDocument: StreamDocument;
+}> = ({ review, index, streamDocument }) => {
   const authorData: AuthorWithDateProps = {
     author: review.authorName,
     date: review.reviewDate,
@@ -297,7 +263,7 @@ const Review: React.FC<{
   if (Array.isArray(review.comments) && review.comments.length > 0) {
     const businessResponseContent = review.comments[0].content;
     const businessResponseDate = review.comments[0].commentDate;
-    const businessName = (useDocument() as { name?: string }).name || "";
+    const businessName = streamDocument.name || "";
     businessResponseData = {
       businessName,
       content: businessResponseContent,
@@ -329,7 +295,7 @@ interface AuthorWithDateProps {
 }
 
 const AuthorWithDate: React.FC<AuthorWithDateProps> = ({ author, date }) => {
-  const streamDocument = useDocument();
+  const streamDocument = useDocument<StreamDocumentWithReviews>();
   return (
     <div className="flex flex-col gap-2">
       <Body variant={"lg"} className="font-bold">
@@ -448,19 +414,19 @@ const ExpandableContent: React.FC<ExpandableContentProps> = ({
 };
 
 interface PageScrollerProps {
-  reviewCount: number;
+  numberOfReviews: number;
   currentPageNumber: number;
-  fetchData: (newPageNumber: number) => void;
+  setPageNumber: (newPageNumber: number) => void;
 }
 
 const PageScroller: React.FC<PageScrollerProps> = ({
-  reviewCount,
+  numberOfReviews,
   currentPageNumber,
-  fetchData,
+  setPageNumber,
 }) => {
   const analytics = useAnalytics();
   const background = useBackground();
-  const numPages = Math.ceil(reviewCount / REVIEWS_PER_PAGE);
+  const numPages = Math.ceil(numberOfReviews / REVIEWS_PER_PAGE);
 
   if (numPages <= 1) {
     return <></>;
@@ -471,27 +437,27 @@ const PageScroller: React.FC<PageScrollerProps> = ({
   return (
     <Body className="flex flex-row justify-center items-center gap-5">
       <FaArrowLeft
-        className={`${currentPageNumber === 1 ? disabledButtonClasses : selectableButtonClasses}`}
+        className={`${currentPageNumber === 0 ? disabledButtonClasses : selectableButtonClasses}`}
         data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
         data-ya-eventname={
           analytics?.getDebugEnabled() ? "previousPage" : undefined
         }
         onClick={() => {
-          if (currentPageNumber > 1) {
-            fetchData(currentPageNumber - 1);
+          if (currentPageNumber > 0) {
+            setPageNumber(currentPageNumber - 1);
             analytics?.track({ eventName: "previousPage", action: "PAGINATE" });
           }
         }}
       />
       <FaArrowRight
-        className={`${currentPageNumber === numPages ? disabledButtonClasses : selectableButtonClasses}`}
+        className={`${currentPageNumber === numPages - 1 ? disabledButtonClasses : selectableButtonClasses}`}
         data-ya-action={analytics?.getDebugEnabled() ? "PAGINATE" : undefined}
         data-ya-eventname={
           analytics?.getDebugEnabled() ? "nextPage" : undefined
         }
         onClick={() => {
-          if (currentPageNumber < numPages) {
-            fetchData(currentPageNumber + 1);
+          if (currentPageNumber < numPages - 1) {
+            setPageNumber(currentPageNumber + 1);
             analytics?.track({ eventName: "nextPage", action: "PAGINATE" });
           }
         }}

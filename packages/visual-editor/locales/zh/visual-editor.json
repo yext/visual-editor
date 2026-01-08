@@ -29,6 +29,9 @@
     "send": "发送批准",
     "writeComment": "在这里写你的评论..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}}（在新标签页中打开）"
+  },
   "ariaLabelAppGallery": "在 {{serviceName}} 上探索它",
   "ariaLabelAppStore": "在 {{serviceName}} 上下载",
   "ariaLabelGalaxyStore": "在 {{serviceName}} 上可用",
@@ -211,6 +214,7 @@
     "description": "描述",
     "desktopContainerPosition": "桌面容器位置",
     "desktopImagePosition": "桌面图像位置",
+    "desktopMediaPosition": "桌面媒体位置",
     "destinationURL": "目标网址",
     "direction": "方向",
     "directoryRootLinkLabel": "目录根链接标签",
@@ -272,7 +276,7 @@
     "linkType": "链接类型",
     "linkedInLink": "LinkedIn链接",
     "links": "链接",
-    "linksAlignment": "链接对齐",
+    "linksPosition": "链接位置",
     "listLength": "列表长度",
     "liveVisibility": "在现场页面上可见",
     "localGeomodifier": "当地的土工改装剂",
@@ -291,7 +295,9 @@
     "metaTitle": "元标题",
     "mobileContentAlignment": "移动内容对齐",
     "mobileImagePosition": "移动图像位置",
+    "mobileMediaPosition": "移动媒体定位",
     "name": "姓名",
+    "openInNewTab": "在新选项卡中打开",
     "options": {
       "aspectRatio": "纵横比",
       "base": "根据",
