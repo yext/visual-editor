@@ -22,7 +22,7 @@ export const ComponentErrorBoundary = ({
   const didIncrementRef = React.useRef(false);
 
   React.useEffect(() => {
-    if (hasError) {
+    if (hasError && !didIncrementRef.current) {
       incrementErrorCount();
       didIncrementRef.current = true;
     }
