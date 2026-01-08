@@ -523,9 +523,9 @@
     "phone": "Telefone",
     "url": "Url"
   },
-  "loadingMap": "Mapa de carregamento ...",
+  "loadingMap": "Carregando mapa ...",
   "loadingNearbyLocations": "Carregando locais próximos ...",
-  "loadingReviews": "Revisões de carregamento ...",
+  "loadingReviews": "Carregando revisões ...",
   "loadingVE": "Carregando Editor Visual ...",
   "localGeomodifier": "Geomodificador local",
   "locationWithCount_one": "{{count}} localização",
