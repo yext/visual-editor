@@ -29,6 +29,9 @@
     "send": "Saada heakskiitu",
     "writeComment": "Kirjutage oma kommentaar siia ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (avaneb uuel vahelehel)"
+  },
   "ariaLabelAppGallery": "Avastage seda teenuses {{serviceName}}",
   "ariaLabelAppStore": "Laadige alla teenusest {{serviceName}}",
   "ariaLabelGalaxyStore": "Saadaval teenuses {{serviceName}}",
@@ -272,7 +275,7 @@
     "linkType": "Lingi tüüp",
     "linkedInLink": "LinkedIn Link",
     "links": "Lingid",
-    "linksAlignment": "Linkide joondamine",
+    "linksPosition": "Linkide asukoht",
     "listLength": "Nimekirja pikkus",
     "liveVisibility": "Nähtav live -lehel",
     "localGeomodifier": "Kohalik geomodifikaator",
@@ -292,6 +295,7 @@
     "mobileContentAlignment": "Mobiilse sisu joondamine",
     "mobileImagePosition": "Mobiilse pildipositsioon",
     "name": "Nimetus",
+    "openInNewTab": "Ava uuel vahelehel",
     "options": {
       "aspectRatio": "Kuvasuhe",
       "base": "Alus",

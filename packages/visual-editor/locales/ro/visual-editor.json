@@ -29,6 +29,9 @@
     "send": "Trimiteți pentru aprobare",
     "writeComment": "Scrie -ți comentariul aici ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (se deschide într-o filă nouă)"
+  },
   "ariaLabelAppGallery": "Explorează-l pe {{serviceName}}",
   "ariaLabelAppStore": "Descărcați de pe {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponibil pe {{serviceName}}",
@@ -272,7 +275,7 @@
     "linkType": "Tip de legătură",
     "linkedInLink": "LinkedIn Link",
     "links": "Link -uri",
-    "linksAlignment": "Alinierea legăturilor",
+    "linksPosition": "Poziția legăturilor",
     "listLength": "Lungimea listei",
     "liveVisibility": "Vizibil pe pagina live",
     "localGeomodifier": "Geomodificator local",
@@ -292,6 +295,7 @@
     "mobileContentAlignment": "Alinierea conținutului mobil",
     "mobileImagePosition": "Poziția imaginii mobile",
     "name": "Nume",
+    "openInNewTab": "Deschide într-o filă nouă",
     "options": {
       "aspectRatio": "Raport de aspect",
       "base": "Baza",
