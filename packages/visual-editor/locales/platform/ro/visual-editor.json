@@ -29,6 +29,9 @@
     "send": "Trimiteți pentru aprobare",
     "writeComment": "Scrie -ți comentariul aici ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (se deschide într-o filă nouă)"
+  },
   "ariaLabelAppGallery": "Explorează-l pe {{serviceName}}",
   "ariaLabelAppStore": "Descărcați de pe {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponibil pe {{serviceName}}",
@@ -211,6 +214,7 @@
     "description": "Descriere",
     "desktopContainerPosition": "Poziția containerului desktop",
     "desktopImagePosition": "Poziția imaginii desktop",
+    "desktopMediaPosition": "Poziție media desktop",
     "destinationURL": "URL de destinație",
     "direction": "Direcţie",
     "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
@@ -272,7 +276,7 @@
     "linkType": "Tip de legătură",
     "linkedInLink": "LinkedIn Link",
     "links": "Link -uri",
-    "linksAlignment": "Alinierea legăturilor",
+    "linksPosition": "Poziția legăturilor",
     "listLength": "Lungimea listei",
     "liveVisibility": "Vizibil pe pagina live",
     "localGeomodifier": "Geomodificator local",
@@ -291,7 +295,9 @@
     "metaTitle": "Titlu meta",
     "mobileContentAlignment": "Alinierea conținutului mobil",
     "mobileImagePosition": "Poziția imaginii mobile",
+    "mobileMediaPosition": "Poziția media mobilă",
     "name": "Nume",
+    "openInNewTab": "Deschide într-o filă nouă",
     "options": {
       "aspectRatio": "Raport de aspect",
       "base": "Baza",

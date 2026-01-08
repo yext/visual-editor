@@ -29,6 +29,9 @@
     "send": "Siųsti patvirtinti",
     "writeComment": "Parašykite savo komentarą čia ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (atidaroma naujame skirtuke)"
+  },
   "ariaLabelAppGallery": "Naršykite jį {{serviceName}}",
   "ariaLabelAppStore": "Atsisiųskite iš {{serviceName}}",
   "ariaLabelGalaxyStore": "Galima {{serviceName}}",
@@ -211,6 +214,7 @@
     "description": "Aprašymas",
     "desktopContainerPosition": "Stalinio konteinerio padėtis",
     "desktopImagePosition": "Darbalaukio vaizdo padėtis",
+    "desktopMediaPosition": "Stalinio kompiuterio laikmenos padėtis",
     "destinationURL": "Paskirties URL",
     "direction": "Kryptis",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
@@ -272,7 +276,7 @@
     "linkType": "Nuorodos tipas",
     "linkedInLink": "„LinkedIn“ nuoroda",
     "links": "Nuorodos",
-    "linksAlignment": "Nuorodos suderinimas",
+    "linksPosition": "Nuorodų padėtis",
     "listLength": "Sąrašo ilgis",
     "liveVisibility": "Matomas tiesioginiame puslapyje",
     "localGeomodifier": "Vietinis geomodiferis",
@@ -291,7 +295,9 @@
     "metaTitle": "Meta titulas",
     "mobileContentAlignment": "Mobiliojo turinio suderinimas",
     "mobileImagePosition": "Mobiliojo vaizdo padėtis",
+    "mobileMediaPosition": "Mobiliosios medijos padėtis",
     "name": "Vardas",
+    "openInNewTab": "Atidaryti naujame skirtuke",
     "options": {
       "aspectRatio": "Kraštinių santykis",
       "base": "Bazė",

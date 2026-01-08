@@ -161,7 +161,7 @@ export const defaultFonts = {
   "Andada Pro": {
     italics: true,
     minWeight: 400,
-    maxWeight: 840,
+    maxWeight: 800,
     fallback: "serif",
   },
   Andika: { italics: true, weights: [400, 700], fallback: "sans-serif" },
@@ -637,13 +637,13 @@ export const defaultFonts = {
   Cairo: {
     italics: false,
     minWeight: 200,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Cairo Play": {
     italics: false,
     minWeight: 200,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   Caladea: { italics: true, weights: [400, 700], fallback: "serif" },
@@ -864,7 +864,7 @@ export const defaultFonts = {
   "DM Sans": {
     italics: true,
     minWeight: 100,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "DM Serif Display": { italics: true, weights: [400], fallback: "serif" },
@@ -1367,7 +1367,7 @@ export const defaultFonts = {
   "Henny Penny": { italics: false, weights: [400], fallback: "sans-serif" },
   "Hepta Slab": {
     italics: false,
-    minWeight: 1,
+    minWeight: 100,
     maxWeight: 900,
     fallback: "serif",
   },
@@ -1911,8 +1911,8 @@ export const defaultFonts = {
   "Linden Hill": { italics: true, weights: [400], fallback: "serif" },
   Linefont: {
     italics: false,
-    minWeight: 4,
-    maxWeight: 1000,
+    minWeight: 400,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Lisu Bosa": {
@@ -2228,7 +2228,7 @@ export const defaultFonts = {
   Mulish: {
     italics: true,
     minWeight: 200,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   Murecho: {
@@ -3326,13 +3326,13 @@ export const defaultFonts = {
   Nunito: {
     italics: true,
     minWeight: 200,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Nunito Sans": {
     italics: true,
     minWeight: 200,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Nuosu SIL": { italics: false, weights: [400], fallback: "sans-serif" },
@@ -3671,14 +3671,14 @@ export const defaultFonts = {
   "Ravi Prakash": { italics: false, weights: [400], fallback: "sans-serif" },
   "Readex Pro": {
     italics: false,
-    minWeight: 160,
+    minWeight: 200,
     maxWeight: 700,
     fallback: "sans-serif",
   },
   Recursive: {
     italics: false,
     minWeight: 300,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Red Hat Display": {
@@ -3755,7 +3755,7 @@ export const defaultFonts = {
   "Roboto Flex": {
     italics: false,
     minWeight: 100,
-    maxWeight: 1000,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Roboto Mono": {
@@ -4041,26 +4041,26 @@ export const defaultFonts = {
   Sofia: { italics: false, weights: [400], fallback: "cursive" },
   "Sofia Sans": {
     italics: true,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Sofia Sans Condensed": {
     italics: true,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Sofia Sans Extra Condensed": {
     italics: true,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Sofia Sans Semi Condensed": {
     italics: true,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   Solitreo: { italics: false, weights: [400], fallback: "cursive" },
@@ -4428,8 +4428,8 @@ export const defaultFonts = {
   Waterfall: { italics: false, weights: [400], fallback: "cursive" },
   Wavefont: {
     italics: false,
-    minWeight: 4,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   Wellfleet: { italics: false, weights: [400], fallback: "serif" },
@@ -4483,26 +4483,26 @@ export const defaultFonts = {
   Yrsa: { italics: true, minWeight: 300, maxWeight: 700, fallback: "serif" },
   Ysabeau: {
     italics: true,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Ysabeau Infant": {
     italics: true,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Ysabeau Office": {
     italics: true,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Ysabeau SC": {
     italics: false,
-    minWeight: 1,
-    maxWeight: 1000,
+    minWeight: 100,
+    maxWeight: 900,
     fallback: "sans-serif",
   },
   "Yuji Boku": { italics: false, weights: [400], fallback: "serif" },

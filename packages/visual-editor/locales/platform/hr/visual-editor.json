@@ -29,6 +29,9 @@
     "send": "Pošaljite na odobrenje",
     "writeComment": "Napišite svoj komentar ovdje ..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (otvara se u novoj kartici)"
+  },
   "ariaLabelAppGallery": "Istražite na {{serviceName}}",
   "ariaLabelAppStore": "Preuzmite na {{serviceName}}",
   "ariaLabelGalaxyStore": "Dostupno na {{serviceName}}",
@@ -211,6 +214,7 @@
     "description": "Opis",
     "desktopContainerPosition": "Položaj kontejnera radne površine",
     "desktopImagePosition": "Položaj slike radne površine",
+    "desktopMediaPosition": "Položaj medija na stolnom računalu",
     "destinationURL": "URL odredišta",
     "direction": "Smjer",
     "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
@@ -272,7 +276,7 @@
     "linkType": "Vrsta veze",
     "linkedInLink": "LinkedIn veza",
     "links": "Veze",
-    "linksAlignment": "Poravnanje veza",
+    "linksPosition": "Linkovi Pozicija",
     "listLength": "Dužina popisa",
     "liveVisibility": "Vidljivo na stranici uživo",
     "localGeomodifier": "Lokalni geomodifikator",
@@ -291,7 +295,9 @@
     "metaTitle": "Meta naslov",
     "mobileContentAlignment": "Poravnavanje mobilnog sadržaja",
     "mobileImagePosition": "Položaj mobilne slike",
+    "mobileMediaPosition": "Položaj mobilnih medija",
     "name": "Ime",
+    "openInNewTab": "Otvori u novoj kartici",
     "options": {
       "aspectRatio": "Omjer slike",
       "base": "Baza",

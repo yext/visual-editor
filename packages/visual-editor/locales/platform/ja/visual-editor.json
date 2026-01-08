@@ -29,6 +29,9 @@
     "send": "承認のために送信します",
     "writeComment": "ここにあなたのコメントを書いてください..."
   },
+  "aria": {
+    "opensInNewTab": "{{label}} (新しいタブで開きます)"
+  },
   "ariaLabelAppGallery": "{{serviceName}} で調べてみる",
   "ariaLabelAppStore": "{{serviceName}} でダウンロード",
   "ariaLabelGalaxyStore": "{{serviceName}} で利用可能",
@@ -211,6 +214,7 @@
     "description": "説明",
     "desktopContainerPosition": "デスクトップコンテナ位置",
     "desktopImagePosition": "デスクトップ画像位置",
+    "desktopMediaPosition": "デスクトップメディアの位置",
     "destinationURL": "宛先URL",
     "direction": "方向",
     "directoryRootLinkLabel": "ディレクトリルートリンクラベル",
@@ -272,7 +276,7 @@
     "linkType": "リンクタイプ",
     "linkedInLink": "LinkedInリンク",
     "links": "リンク",
-    "linksAlignment": "リンクアライメント",
+    "linksPosition": "リンクの位置",
     "listLength": "リストの長さ",
     "liveVisibility": "ライブページに表示されます",
     "localGeomodifier": "ローカルジオモジファイア",
@@ -291,7 +295,9 @@
     "metaTitle": "メタタイトル",
     "mobileContentAlignment": "モバイルコンテンツアライメント",
     "mobileImagePosition": "モバイルイメージの位置",
+    "mobileMediaPosition": "モバイルメディアのポジション",
     "name": "名前",
+    "openInNewTab": "新しいタブで開く",
     "options": {
       "aspectRatio": "アスペクト比",
       "base": "ベース",
