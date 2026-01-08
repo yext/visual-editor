@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
-import { YextField, msg, CTA } from "@yext/visual-editor";
+import { YextField, msg, CTA, useBackground } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import {
   FaFacebook,
@@ -25,6 +25,7 @@ export interface FooterSocialLinksSlotProps {
   };
   styles?: {
     filledBackground?: boolean;
+    mobileAlignment?: "left" | "center";
   };
 }
 
@@ -62,6 +63,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
 > = (props) => {
   const { data, styles, puck } = props;
   const { t } = useTranslation();
+  const background = useBackground();
 
   const links = [
     {
@@ -118,11 +120,15 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   }
 
   return (
-    <div className="flex flex-wrap gap-6 items-center justify-center md:justify-start">
+    <div
+      className={`flex flex-wrap gap-6 items-center ${styles?.mobileAlignment === "left" ? "justify-start" : "justify-center"} md:justify-start`}
+    >
       {validLinks.map((link, index) => {
         const Icon = link.icon;
         const iconElement = styles?.filledBackground ? (
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-palette-primary-dark text-white">
+          <div
+            className={`flex h-12 w-12 items-center justify-center rounded-full ${background?.isDarkBackground ? "bg-white text-palette-primary-dark" : "bg-palette-primary-dark text-palette-white"}`}
+          >
             <Icon className="h-6 w-6" />
           </div>
         ) : (

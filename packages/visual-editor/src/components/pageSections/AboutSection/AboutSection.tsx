@@ -14,7 +14,10 @@ import {
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { FaChevronDown } from "react-icons/fa";
-import { AboutSectionDetailsColumnProps } from "./AboutSectionDetailsColumn";
+import {
+  AboutSectionDetailsColumnProps,
+  defaultAboutSectionProps,
+} from "./AboutSectionDetailsColumn";
 
 const placeholderText =
   "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae" +
@@ -165,7 +168,7 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
       </div>
       {data.showDetailsColumn && (
         <slots.SidebarSlot
-          style={{ height: "auto", width: "1/3" }}
+          style={{ height: "auto", width: "100%" }}
           allow={[]}
         />
       )}
@@ -226,7 +229,66 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
         {
           type: "AboutSectionDetailsColumn",
           props: {
-            sections: [],
+            sections: [
+              {
+                header: {
+                  field: "",
+                  constantValue: {
+                    en: "Hours",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+                content: {
+                  type: "hours",
+                  hours: defaultAboutSectionProps.hours,
+                },
+              },
+              {
+                header: {
+                  field: "",
+                  constantValue: {
+                    en: "Services Offered",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+                content: {
+                  type: "textList",
+                  textList: {
+                    list: {
+                      field: "services",
+                      constantValue: [],
+                    },
+                    commaSeparated: false,
+                  },
+                },
+              },
+              {
+                header: {
+                  field: "",
+                  constantValue: {
+                    en: "Follow Us",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+                content: {
+                  type: "socialMedia",
+                  socialMedia: {
+                    data: {
+                      xLink: "",
+                      facebookLink: "",
+                      instagramLink: "",
+                      linkedInLink: "",
+                      pinterestLink: "",
+                      tiktokLink: "",
+                      youtubeLink: "",
+                    },
+                  },
+                },
+              },
+            ],
           } satisfies AboutSectionDetailsColumnProps,
         },
       ],

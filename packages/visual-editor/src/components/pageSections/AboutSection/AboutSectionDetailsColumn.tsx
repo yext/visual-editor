@@ -44,119 +44,114 @@ import {
 
 type DetailSection = {
   header: YextEntityField<TranslatableString>;
-  content:
-    | {
-        type: "hours";
-        hours: {
-          data: HoursStatusProps["data"];
-          styles: Omit<HoursStatusProps["styles"], "className">;
-        };
-      }
-    | {
-        type: "address";
-        address: AddressProps;
-      }
-    | {
-        type: "phone";
-        phone: {
-          data: PhoneProps["data"];
-          styles: PhoneProps["styles"];
-        };
-      }
-    | {
-        type: "emails";
-        emails: EmailsProps;
-      }
-    | {
-        type: "textList";
-        textList: TextListProps;
-      }
-    | {
-        type: "socialMedia";
-        socialMedia: FooterSocialLinksSlotProps;
-      };
+  content: {
+    type: "hours" | "address" | "phone" | "emails" | "textList" | "socialMedia";
+    hours?: {
+      data: HoursStatusProps["data"];
+      styles: Omit<HoursStatusProps["styles"], "className">;
+    };
+    address?: AddressProps;
+    phone?: {
+      data: PhoneProps["data"];
+      styles: PhoneProps["styles"];
+    };
+    emails?: EmailsProps;
+    textList?: TextListProps;
+    socialMedia?: FooterSocialLinksSlotProps;
+  };
 };
 
-const defaultProps = {
-  hours: {
-    data: {
-      hours: {
-        field: "hours",
-        constantValue: {},
-        constantValueEnabled: false,
+export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
+  {
+    hours: {
+      data: {
+        hours: {
+          field: "hours",
+          constantValue: {},
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        showCurrentStatus: true,
+        showDayNames: false,
+        timeFormat: "12h" as const,
+        dayOfWeekFormat: "short" as const,
       },
     },
-    styles: {
-      showCurrentStatus: true,
-      showDayNames: false,
-      timeFormat: "12h" as const,
-      dayOfWeekFormat: "short" as const,
-    },
-  } satisfies HoursStatusProps,
-  address: {
-    data: {
-      address: {
-        field: "address",
-        constantValue: {} as AddressProps["data"]["address"]["constantValue"],
-        constantValueEnabled: false,
+    address: {
+      data: {
+        address: {
+          field: "address",
+          constantValue: {} as AddressProps["data"]["address"]["constantValue"],
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        showGetDirectionsLink: false,
+        ctaVariant: "link",
       },
     },
-    styles: {
-      showGetDirectionsLink: false,
-      ctaVariant: "link",
-    },
-  } satisfies AddressProps,
-  phone: {
-    data: {
-      number: {
-        field: "mainPhone",
-        constantValue: "",
-        constantValueEnabled: false,
+    phone: {
+      data: {
+        number: {
+          field: "mainPhone",
+          constantValue: "",
+          constantValueEnabled: false,
+        },
+        label: {
+          en: "Phone",
+          hasLocalizedValue: "true",
+        },
       },
-      label: {
-        en: "Phone",
-        hasLocalizedValue: "true",
+      styles: {
+        phoneFormat: "domestic",
+        includePhoneHyperlink: false,
       },
     },
-    styles: {
-      phoneFormat: "domestic",
-      includePhoneHyperlink: false,
+    emails: {
+      data: {
+        list: {
+          field: "emails",
+          constantValue: [],
+          constantValueEnabled: true,
+        },
+      },
+      styles: {
+        listLength: 1,
+      },
     },
-  } satisfies PhoneProps,
-  emails: {
-    data: {
+    textList: {
       list: {
-        field: "emails",
+        field: "",
         constantValue: [],
         constantValueEnabled: true,
       },
+      commaSeparated: false,
     },
-    styles: {
-      listLength: 1,
+    socialMedia: {
+      data: {
+        xLink: "",
+        facebookLink: "",
+        instagramLink: "",
+        linkedInLink: "",
+        pinterestLink: "",
+        tiktokLink: "",
+        youtubeLink: "",
+      },
+      styles: {
+        filledBackground: true,
+        mobileAlignment: "left",
+      },
     },
-  } satisfies EmailsProps,
-  textList: {
-    list: {
-      field: "",
-      constantValue: [],
-      constantValueEnabled: true,
-    },
-    commaSeparated: false,
-  } satisfies TextListProps,
-  socialMedia: {
-    data: {
-      xLink: "",
-      facebookLink: "",
-      instagramLink: "",
-      linkedInLink: "",
-      pinterestLink: "",
-      tiktokLink: "",
-      youtubeLink: "",
-    },
-    styles: {
-      filledBackground: true,
-    },
-  } satisfies FooterSocialLinksSlotProps,
+  };
+
+const typeToFields: Record<DetailSection["content"]["type"], Fields<any>> = {
+  hours: hoursStatusWrapperFields,
+  address: addressFields,
+  phone: PhoneFields,
+  emails: EmailsFields,
+  textList: textListFields,
+  socialMedia: FooterSocialLinksSlotFields,
 };
 
 export type AboutSectionDetailsColumnProps = {
@@ -194,38 +189,7 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                   <AutoField
                     value={value.type}
                     onChange={(v) => {
-                      switch (v) {
-                        case "hours":
-                          return onChange({
-                            type: v,
-                            hours: defaultProps.hours,
-                          });
-                        case "address":
-                          return onChange({
-                            type: v,
-                            address: defaultProps.address,
-                          });
-                        case "phone":
-                          return onChange({
-                            type: v,
-                            phone: defaultProps.phone,
-                          });
-                        case "emails":
-                          return onChange({
-                            type: v,
-                            emails: defaultProps.emails,
-                          });
-                        case "textList":
-                          return onChange({
-                            type: v,
-                            textList: defaultProps.textList,
-                          });
-                        case "socialMedia":
-                          return onChange({
-                            type: v,
-                            socialMedia: defaultProps.socialMedia,
-                          });
-                      }
+                      onChange({ type: v, [v]: defaultAboutSectionProps[v] });
                     }}
                     field={{
                       type: "select",
@@ -259,70 +223,18 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                     }}
                   />
                 </FieldLabel>
-                {value.type === "hours" && (
-                  <AutoField
-                    value={value.hours ?? defaultProps.hours}
-                    onChange={(v) => onChange({ type: "hours", hours: v })}
-                    field={{
-                      type: "object",
-                      objectFields: hoursStatusWrapperFields,
-                    }}
-                  />
-                )}
-                {value.type === "address" && (
-                  <AutoField
-                    value={value.address ?? defaultProps.address}
-                    onChange={(v) => onChange({ type: "address", address: v })}
-                    field={{
-                      type: "object",
-                      objectFields: addressFields,
-                    }}
-                  />
-                )}
-                {value.type === "phone" && (
-                  <AutoField
-                    value={value.phone ?? defaultProps.phone}
-                    onChange={(v) => onChange({ type: "phone", phone: v })}
-                    field={{
-                      type: "object",
-                      objectFields: PhoneFields,
-                    }}
-                  />
-                )}
-                {value.type === "emails" && (
-                  <AutoField
-                    value={value.emails ?? defaultProps.emails}
-                    onChange={(v) => onChange({ type: "emails", emails: v })}
-                    field={{
-                      type: "object",
-                      objectFields: EmailsFields,
-                    }}
-                  />
-                )}
-                {value.type === "textList" && (
-                  <AutoField
-                    value={value.textList ?? defaultProps.textList}
-                    onChange={(v) =>
-                      onChange({ type: "textList", textList: v })
-                    }
-                    field={{
-                      type: "object",
-                      objectFields: textListFields,
-                    }}
-                  />
-                )}
-                {value.type === "socialMedia" && (
-                  <AutoField
-                    value={value.socialMedia ?? defaultProps.socialMedia}
-                    onChange={(v) =>
-                      onChange({ type: "socialMedia", socialMedia: v })
-                    }
-                    field={{
-                      type: "object",
-                      objectFields: FooterSocialLinksSlotFields,
-                    }}
-                  />
-                )}
+                <AutoField
+                  value={
+                    value?.[value.type] ?? defaultAboutSectionProps[value.type]
+                  }
+                  onChange={(v) =>
+                    onChange({ type: value.type, [value.type]: v })
+                  }
+                  field={{
+                    type: "object",
+                    objectFields: typeToFields[value.type],
+                  }}
+                />
               </div>
             );
           },
@@ -336,7 +248,7 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
         },
         content: {
           type: "hours",
-          hours: defaultProps.hours,
+          hours: defaultAboutSectionProps.hours,
         },
       },
       getItemSummary: (item, i) => {
@@ -349,6 +261,18 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
     },
   };
 
+const typeToRenderFunctions: Record<
+  DetailSection["content"]["type"],
+  PuckComponent<any>
+> = {
+  hours: HoursStatus.render,
+  address: Address.render,
+  phone: Phone.render,
+  emails: Emails.render,
+  textList: TextList.render,
+  socialMedia: FooterSocialLinksSlot.render,
+};
+
 const AboutSectionDetailsColumnComponent: PuckComponent<
   AboutSectionDetailsColumnProps
 > = (props) => {
@@ -359,10 +283,12 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
   return (
     <div className="flex flex-col gap-8">
       {sections.map((section, i) => {
+        const Component = typeToRenderFunctions[section.content.type];
+
         return (
           <div
             key={`${section.content.type}-${i}`}
-            className={`border-t ${i == 0 ? "lg:border-t-0" : ""} border-[#BABABA] flex flex-col gap-4 pt-8`}
+            className={`border-t pt-8 ${i == 0 ? "lg:border-t-0 lg:pt-0" : ""} border-[#BABABA] flex flex-col gap-4`}
           >
             <EntityField
               fieldId={section.header.field}
@@ -378,68 +304,32 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
               </Heading>
             </EntityField>
             <div>
-              {section.content.type === "hours" && section.content.hours && (
-                <>
-                  <HoursStatus.render
-                    {...section.content.hours}
-                    puck={puck}
-                    id={`${id}-hours-${i}`}
-                  />
-
-                  {streamDocument.additionalHoursText && (
-                    <EntityField
-                      displayName={pt("hoursText", "Hours Text")}
-                      fieldId="additionalHoursText"
-                    >
-                      <Body variant="sm" className="mt-4">
-                        {streamDocument.additionalHoursText}
-                      </Body>
-                    </EntityField>
-                  )}
-                </>
-              )}
-              {section.content.type === "address" &&
-                section.content.address && (
-                  <Address.render
-                    {...section.content.address}
-                    puck={puck}
-                    id={`${id}-address-${i}`}
-                  />
-                )}
-              {section.content.type === "phone" && section.content.phone && (
-                <Phone.render
-                  {...section.content.phone}
+              {section?.content?.[section?.content?.type] && (
+                <Component
+                  {...section.content[section.content.type]}
                   puck={puck}
-                  id={`${id}-phone-${i}`}
+                  id={`${id}-${section.content.type}-${i}`}
                 />
               )}
-              {section.content.type === "emails" && section.content.emails && (
-                <Emails.render
-                  {...section.content.emails}
-                  puck={puck}
-                  id={`${id}-emails-${i}`}
-                />
-              )}
-              {section.content.type === "textList" &&
-                section.content.textList && (
-                  <TextList.render
-                    {...section.content.textList}
-                    puck={puck}
-                    id={`${id}-textList-${i}`}
-                  />
-                )}
-              {section.content.type === "socialMedia" &&
-                section.content.socialMedia && (
-                  <FooterSocialLinksSlot.render
-                    {...section.content.socialMedia}
-                    puck={puck}
-                    id={`${id}-socialMedia-${i}`}
-                  />
+              {section.content.type === "hours" &&
+                section.content.hours &&
+                streamDocument.additionalHoursText && (
+                  <EntityField
+                    displayName={pt("hoursText", "Hours Text")}
+                    fieldId="additionalHoursText"
+                  >
+                    <Body variant="sm" className="mt-4">
+                      {streamDocument.additionalHoursText}
+                    </Body>
+                  </EntityField>
                 )}
             </div>
           </div>
         );
       })}
+      {sections.length === 0 && puck.isEditing && (
+        <div style={{ minHeight: "500px" }}></div>
+      )}
     </div>
   );
 };
