@@ -245,7 +245,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span
-                    tabIndex={0}
+                    tabIndex={hasErrors ? 0 : -1}
                     className={hasErrors ? "ve-cursor-not-allowed" : ""}
                   >
                     <Button

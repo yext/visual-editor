@@ -69,18 +69,20 @@ export const ComponentErrorBoundary = ({
         }
 
         return (
-          <div className="bg-gray-100 rounded-lg p-2 flex flex-row items-center justify-center gap-4">
-            <OctagonX className="w-10 h-10 text-gray-300 flex-shrink-0" />
-            <div className="flex flex-col">
-              <h3 className="font-medium text-gray-500">
-                {pt("componentErrorBoundary.error", "Error")}
-              </h3>
-              <p className="text-gray-500 text-sm">
-                {pt(
-                  "componentErrorBoundary.message",
-                  "Can't render this section. Try updating your component library."
-                )}
-              </p>
+          <div className="p-2 bg-white">
+            <div className="bg-gray-100 rounded-lg p-2 flex flex-row items-center justify-center gap-4">
+              <OctagonX className="w-10 h-10 text-gray-300 flex-shrink-0" />
+              <div className="flex flex-col">
+                <h3 className="font-medium text-gray-500">
+                  {pt("componentErrorBoundary.error", "Error")}
+                </h3>
+                <p className="text-gray-500 text-sm">
+                  {pt(
+                    "componentErrorBoundary.message",
+                    "Can't render this section. Try updating your component library."
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         );
