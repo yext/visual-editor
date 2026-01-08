@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { YextField, msg, CTA } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import {
@@ -23,12 +23,44 @@ export interface FooterSocialLinksSlotProps {
     tiktokLink: string;
     youtubeLink: string;
   };
+  styles?: {
+    filledBackground?: boolean;
+  };
 }
+
+export const FooterSocialLinksSlotFields: Fields<FooterSocialLinksSlotProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      xLink: YextField(msg("fields.xLink", "X Link"), {
+        type: "text",
+      }),
+      facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
+        type: "text",
+      }),
+      instagramLink: YextField(msg("fields.instagramLink", "Instagram Link"), {
+        type: "text",
+      }),
+      linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
+        type: "text",
+      }),
+      pinterestLink: YextField(msg("fields.pinterestLink", "Pinterest Link"), {
+        type: "text",
+      }),
+      tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
+        type: "text",
+      }),
+      youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
+        type: "text",
+      }),
+    },
+  }),
+};
 
 const FooterSocialLinksSlotInternal: PuckComponent<
   FooterSocialLinksSlotProps
 > = (props) => {
-  const { data, puck } = props;
+  const { data, styles, puck } = props;
   const { t } = useTranslation();
 
   const links = [
@@ -86,10 +118,16 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   }
 
   return (
-    <div className="flex gap-6 items-center justify-center md:justify-start">
+    <div className="flex flex-wrap gap-6 items-center justify-center md:justify-start">
       {validLinks.map((link, index) => {
         const Icon = link.icon;
-        const iconElement = <Icon className="h-6 w-6 md:h-5 md:w-5" />;
+        const iconElement = styles?.filledBackground ? (
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-palette-primary-dark text-white">
+            <Icon className="h-6 w-6" />
+          </div>
+        ) : (
+          <Icon className="h-6 w-6 md:h-5 md:w-5" />
+        );
         return (
           <CTA
             key={index}
@@ -112,40 +150,7 @@ export const FooterSocialLinksSlot: ComponentConfig<{
   props: FooterSocialLinksSlotProps;
 }> = {
   label: msg("components.footerSocialLinksSlot", "Social Links"),
-  fields: {
-    data: YextField(msg("fields.data", "Data"), {
-      type: "object",
-      objectFields: {
-        xLink: YextField(msg("fields.xLink", "X Link"), {
-          type: "text",
-        }),
-        facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
-          type: "text",
-        }),
-        instagramLink: YextField(
-          msg("fields.instagramLink", "Instagram Link"),
-          {
-            type: "text",
-          }
-        ),
-        linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
-          type: "text",
-        }),
-        pinterestLink: YextField(
-          msg("fields.pinterestLink", "Pinterest Link"),
-          {
-            type: "text",
-          }
-        ),
-        tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
-          type: "text",
-        }),
-        youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
-          type: "text",
-        }),
-      },
-    }),
-  },
+  fields: FooterSocialLinksSlotFields,
   defaultProps: {
     data: {
       xLink: "",

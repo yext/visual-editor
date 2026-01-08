@@ -1,4 +1,8 @@
 import { Address, AddressProps } from "../contentBlocks/Address.tsx";
+import {
+  AboutSectionDetailsColumn,
+  AboutSectionDetailsColumnProps,
+} from "../pageSections/AboutSection/AboutSectionDetailsColumn.tsx";
 import { BodyTextProps, BodyText } from "../contentBlocks/BodyText.tsx";
 import { CTAWrapperProps, CTAWrapper } from "../contentBlocks/CtaWrapper.tsx";
 import {
@@ -129,6 +133,7 @@ import { HeaderLinks, HeaderLinksProps } from "../header/HeaderLinks.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
+  AboutSectionDetailsColumn: AboutSectionDetailsColumnProps;
   BreadcrumbsSlot: BreadcrumbsSectionProps;
   BodyTextSlot: BodyTextProps;
   CopyrightMessageSlot: CopyrightMessageSlotProps;
@@ -189,6 +194,10 @@ const ExpandedHeaderComponents = {
 
 export const SlotsCategoryComponents = {
   AddressSlot: { ...Address, permissions: lockedPermissions },
+  AboutSectionDetailsColumn: {
+    ...AboutSectionDetailsColumn,
+    permissions: lockedPermissions,
+  },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
   BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
   CopyrightMessageSlot: {
