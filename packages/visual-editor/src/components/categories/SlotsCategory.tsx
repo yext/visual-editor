@@ -193,11 +193,11 @@ const ExpandedHeaderComponents = {
 };
 
 export const SlotsCategoryComponents = {
-  AddressSlot: { ...Address, permissions: lockedPermissions },
   AboutSectionDetailsColumn: {
     ...AboutSectionDetailsColumn,
     permissions: lockedPermissions,
   },
+  AddressSlot: { ...Address, permissions: lockedPermissions },
   BodyTextSlot: { ...BodyText, permissions: lockedPermissions },
   BreadcrumbsSlot: { ...BreadcrumbsSection, permissions: lockedPermissions },
   CopyrightMessageSlot: {

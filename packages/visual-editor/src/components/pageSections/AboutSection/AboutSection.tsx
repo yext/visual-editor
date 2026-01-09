@@ -24,6 +24,7 @@ import {
   AboutSectionDetailsColumnProps,
   defaultAboutSectionProps,
 } from "./AboutSectionDetailsColumn";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 const placeholderText = {
   en: {
@@ -335,12 +336,17 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
     return data;
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
-      iconSize="md"
+      resetKeys={[props]}
     >
-      <AboutComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+        iconSize="md"
+      >
+        <AboutComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };
