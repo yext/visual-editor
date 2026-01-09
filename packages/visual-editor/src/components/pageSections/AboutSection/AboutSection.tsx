@@ -131,6 +131,14 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
   const { data, styles, slots } = props;
   const { t } = useTranslation();
   const [expanded, setExpanded] = React.useState(false);
+  const descriptionSlotRef = React.useRef<HTMLDivElement>(null);
+
+  // Only show expand/collapse button if the description content is truncated
+  const bodyTextContainer =
+    descriptionSlotRef.current?.getElementsByClassName("line-clamp-[10]")?.[0];
+  const showExpandCollapseButton =
+    bodyTextContainer &&
+    bodyTextContainer?.scrollHeight > bodyTextContainer?.clientHeight;
 
   return (
     <PageSection
@@ -143,22 +151,27 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
           className="mb-8"
           allow={[]}
         />
-        <slots.DescriptionSlot
-          style={{ height: "auto" }}
-          className={`mb-2 ${expanded ? "" : "line-clamp-[10] lg:line-clamp-none"}`}
-          allow={[]}
-        />
-        <Button
-          variant="link"
-          className="visible lg:hidden font-body-fontFamily font-bold text-body-fontSize no-underline cursor-pointer inline-flex items-center gap-2"
-          onClick={() => setExpanded(!expanded)}
-        >
-          {expanded ? t("readLess", "Read less") : t("readMore", "Read more")}
-          <FaChevronDown
-            className={`transition-transform ${expanded ? "rotate-180" : ""}`}
-            size={12}
+        <div ref={descriptionSlotRef}>
+          <slots.DescriptionSlot
+            style={{ height: "auto" }}
+            className={`mb-2 ${expanded ? "" : "line-clamp-[10] lg:line-clamp-none"}`}
+            allow={[]}
           />
-        </Button>
+        </div>
+        {showExpandCollapseButton && (
+          <Button
+            variant="link"
+            className="visible lg:hidden font-body-fontFamily font-bold text-body-fontSize no-underline cursor-pointer inline-flex items-center gap-2"
+            onClick={() => setExpanded(!expanded)}
+            aria-expanded={expanded}
+          >
+            {expanded ? t("readLess", "Read less") : t("readMore", "Read more")}
+            <FaChevronDown
+              className={`transition-transform ${expanded ? "rotate-180" : ""}`}
+              size={12}
+            />
+          </Button>
+        )}
       </div>
       {data.showDetailsColumn && (
         <slots.SidebarSlot
@@ -280,13 +293,15 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
+    const sectionHeadingLevel = (
+      data.props.slots.SectionHeadingSlot[0].props as WithId<HeadingTextProps>
+    ).styles?.level;
+
     if (
       data.props.slots.SectionHeadingSlot?.[0]?.props &&
-      data.props.slots.SidebarSlot[0]?.props
+      data.props.slots.SidebarSlot[0]?.props &&
+      sectionHeadingLevel
     ) {
-      const sectionHeadingLevel = (
-        data.props.slots.SectionHeadingSlot[0].props as WithId<HeadingTextProps>
-      ).styles?.level;
       const semanticOverride =
         sectionHeadingLevel < 6
           ? ((sectionHeadingLevel + 1) as HeadingLevel)
