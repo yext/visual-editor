@@ -36,8 +36,8 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
         className={themeManagerCn(
           "w-full max-w-[1440px] flex flex-col sm:flex-row justify-between",
           styles.desktopImagePosition === "left"
-            ? "2xl:mr-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)]"
-            : "2xl:ml-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)]"
+            ? "2xl:mr-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] ml-auto"
+            : "2xl:ml-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] mr-auto"
         )}
       >
         {/* Desktop left image / Mobile top image */}
