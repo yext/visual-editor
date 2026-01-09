@@ -59,7 +59,10 @@ export const resolvePageSetUrlTemplate = (
   ) => string
 ): string => {
   // Use current page set template
-  const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
+  const pagesetJson =
+    typeof streamDocument?._pageset === "string"
+      ? JSON.parse(streamDocument._pageset || "{}")
+      : streamDocument?._pageset || {};
   const urlTemplates = pagesetJson?.config?.urlTemplate || {};
 
   return resolveUrlTemplateWithTemplates(
@@ -130,6 +133,7 @@ const selectUrlTemplate = (
 
 /**
  * Builds a URL from a template string by resolving embedded fields and normalizing the slug.
+ * Adds locale prefix based on primaryLocale and includeLocalePrefixForPrimaryLocale config.
  */
 const buildUrlFromTemplate = (
   urlTemplate: string,
@@ -145,5 +149,21 @@ const buildUrlFromTemplate = (
     throw new Error(`Could not resolve URL template ${urlTemplate}`);
   }
 
-  return relativePrefixToRoot + normalizedSlug;
+  // Get pageset config from the document's _pageset
+  const pagesetJson =
+    typeof streamDocument?._pageset === "string"
+      ? JSON.parse(streamDocument._pageset || "{}")
+      : streamDocument?._pageset || {};
+  const pagesetConfig = pagesetJson?.config || {};
+  // Prioritize pageset config primaryLocale, if not set then fall back to __.isPrimaryLocale
+  const isPrimaryLocale = !!pagesetConfig?.primaryLocale
+    ? locale === pagesetConfig.primaryLocale
+    : streamDocument.__?.isPrimaryLocale;
+
+  const localePrefix =
+    !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
+      ? `${locale}/`
+      : "";
+
+  return relativePrefixToRoot + localePrefix + normalizedSlug;
 };

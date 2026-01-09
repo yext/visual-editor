@@ -15,7 +15,6 @@ import { Render, resolveAllData } from "@measured/puck";
 import {
   applyTheme,
   VisualEditorProvider,
-  normalizeSlug,
   getPageMetadata,
   applyAnalytics,
   applyHeaderScript,
@@ -25,6 +24,7 @@ import {
   directoryConfig,
   getSchema,
   getCanonicalUrl,
+  normalizeSlug,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
