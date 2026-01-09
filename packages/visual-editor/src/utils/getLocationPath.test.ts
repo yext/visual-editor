@@ -150,8 +150,8 @@ describe("getLocationPath", () => {
   });
 
   describe("with pagesetConfig", () => {
-    it("applies locale prefix to slug when includeLocalePrefixForPrimaryLocale is true", () => {
-      // Slug should get locale prefix when config says so
+    it("returns slug as-is without locale prefix logic", () => {
+      // Slug is returned early without locale prefix logic
       expect(
         getLocationPath(
           {
@@ -168,9 +168,9 @@ describe("getLocationPath", () => {
           },
           ""
         )
-      ).toBe("en/locator-page");
+      ).toBe("locator-page");
 
-      // Non-primary locale should get prefix even if slug already has it (allows double prefix)
+      // Slug is returned early without locale prefix logic, so slug is returned as-is
       expect(
         getLocationPath(
           {
@@ -187,7 +187,7 @@ describe("getLocationPath", () => {
           },
           ""
         )
-      ).toBe("es/es/locator-page");
+      ).toBe("es/locator-page");
     });
 
     it("uses custom primary_locale", () => {

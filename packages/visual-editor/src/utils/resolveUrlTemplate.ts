@@ -155,10 +155,10 @@ const buildUrlFromTemplate = (
       ? JSON.parse(streamDocument._pageset || "{}")
       : streamDocument?._pageset || {};
   const pagesetConfig = pagesetJson?.config || {};
-  // Prioritize pageset config primaryLocale, then fall back to __.isPrimaryLocale
-  const isPrimaryLocale =
-    locale === pagesetConfig?.primaryLocale ||
-    streamDocument.__?.isPrimaryLocale;
+  // Prioritize pageset config primaryLocale, if not set then fall back to __.isPrimaryLocale
+  const isPrimaryLocale = !!pagesetConfig?.primaryLocale
+    ? locale === pagesetConfig.primaryLocale
+    : streamDocument.__?.isPrimaryLocale;
 
   const localePrefix =
     !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
