@@ -127,7 +127,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
         const Icon = link.icon;
         const iconElement = styles?.filledBackground ? (
           <div
-            className={`flex h-12 w-12 items-center justify-center rounded-full ${background?.isDarkBackground ? "bg-white text-palette-primary-dark" : "bg-palette-primary-dark text-palette-white"}`}
+            className={`flex h-12 w-12 items-center justify-center rounded-full ${background?.isDarkBackground ? "bg-white text-palette-primary-dark" : "bg-palette-primary-dark text-white"}`}
           >
             <Icon className="h-6 w-6" />
           </div>
