@@ -48,6 +48,7 @@
   "callToAction": "Uppmaning till handling",
   "callToActions": "Uppmaning till handlingar",
   "cancel": "Avboka",
+  "cannotPublishWithErrors": "Kan inte publicera medan komponenter har fel.",
   "categories": {
     "coreInformation": "Kärninformation",
     "other": "ANDRA",
@@ -63,6 +64,10 @@
   "closeMenu": "Stänga meny",
   "closed": "Stängd",
   "closesAt": "Avslutas",
+  "componentErrorBoundary": {
+    "error": "Fel",
+    "message": "Det går inte att återge detta avsnitt. Testa att uppdatera ditt komponentbibliotek."
+  },
   "components": {
     "DirectoryGrid": "Katalogrutnät",
     "Video": "Video",
@@ -501,6 +506,7 @@
   "filter": "Filtrera",
   "filters": "Filter",
   "findALocation": "Hitta en plats",
+  "fixErrorsToPublish": "För att publicera, ta bort eller åtgärda avsnitt med fel",
   "fontSize": "Fontstorlek",
   "fontSizeDefaultLabel": "Standard",
   "fonts": {

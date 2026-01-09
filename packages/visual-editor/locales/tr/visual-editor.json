@@ -48,6 +48,7 @@
   "callToAction": "Eylem Çağrısı",
   "callToActions": "Eylem çağrısı",
   "cancel": "İptal etmek",
+  "cannotPublishWithErrors": "Bileşenlerde hatalar varken yayınlanamaz.",
   "categories": {
     "coreInformation": "Temel Bilgiler",
     "other": "DİĞER",
@@ -63,6 +64,10 @@
   "closeMenu": "Kapat Menüsü",
   "closed": "Kapalı",
   "closesAt": "Kapanır",
+  "componentErrorBoundary": {
+    "error": "Hata",
+    "message": "Bu bölüm oluşturulamıyor. Bileşen kitaplığınızı güncellemeyi deneyin."
+  },
   "components": {
     "DirectoryGrid": "Dizin Izgarası",
     "Video": "Video",
@@ -500,6 +505,7 @@
   "filter": "Filtre",
   "filters": "Filtreler",
   "findALocation": "Bir Konum Bul",
+  "fixErrorsToPublish": "Hatalı bölümleri yayınlamak, silmek veya düzeltmek için",
   "fontSize": "Yazı tipi boyutu",
   "fontSizeDefaultLabel": "Varsayılan",
   "fonts": {

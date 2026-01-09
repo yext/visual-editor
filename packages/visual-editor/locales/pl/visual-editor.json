@@ -48,6 +48,7 @@
   "callToAction": "Wezwanie do działania",
   "callToActions": "Zadzwoń do działań",
   "cancel": "Anulować",
+  "cannotPublishWithErrors": "Nie można opublikować, gdy komponenty zawierają błędy.",
   "categories": {
     "coreInformation": "Informacje podstawowe",
     "other": "INNY",
@@ -63,6 +64,10 @@
   "closeMenu": "Zamknij menu",
   "closed": "Zamknięte",
   "closesAt": "Zamyka się",
+  "componentErrorBoundary": {
+    "error": "Błąd",
+    "message": "Nie można wyrenderować tej sekcji. Spróbuj zaktualizować bibliotekę komponentów."
+  },
   "components": {
     "DirectoryGrid": "Siatka katalogów",
     "Video": "Wideo",
@@ -501,6 +506,7 @@
   "filter": "Filtr",
   "filters": "Filtry",
   "findALocation": "Znajdź lokalizację",
+  "fixErrorsToPublish": "Aby opublikować, usunąć lub naprawić sekcje z błędami",
   "fontSize": "Rozmiar czcionki",
   "fontSizeDefaultLabel": "Domyślny",
   "fonts": {

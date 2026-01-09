@@ -48,6 +48,7 @@
   "callToAction": "Výzva k akci",
   "callToActions": "Volání k akcím",
   "cancel": "Zrušit",
+  "cannotPublishWithErrors": "Nelze publikovat, pokud komponenty obsahují chyby.",
   "categories": {
     "coreInformation": "Základní informace",
     "directory": "Adresář",
@@ -65,6 +66,10 @@
   "closeMenu": "Zavřít menu",
   "closed": "ZAVŘENO",
   "closesAt": "Uzavírá",
+  "componentErrorBoundary": {
+    "error": "Chyba",
+    "message": "Tuto sekci nelze vykreslit. Zkuste aktualizovat knihovnu komponent."
+  },
   "components": {
     "DirectoryGrid": "Adresářová mřížka",
     "Video": "Video",
@@ -507,6 +512,7 @@
   "filter": "Filtr",
   "filters": "Filtry",
   "findALocation": "Najděte polohu",
+  "fixErrorsToPublish": "Chcete-li publikovat, odstranit nebo opravit části s chybami",
   "fontSize": "Velikost písma",
   "fontSizeDefaultLabel": "Výchozí",
   "fonts": {
