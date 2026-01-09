@@ -13,9 +13,8 @@ export const CompactPromo: PuckComponent<PromoVariantProps> = (props) => {
         className={themeManagerCn(
           "w-full max-w-[1440px] flex flex-col lg:flex-row justify-between",
           styles.desktopImagePosition === "left"
-            ? "lg:pr-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)]"
-            : "lg:pl-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)]",
-          "2xl:pl-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] 2xl:pr-0"
+            ? "lg:pr-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] 2xl:pr-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] 2xl:pl-auto"
+            : "lg:pl-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] 2xl:pl-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] 2xl:pr-auto"
         )}
       >
         {/* Desktop left image / Mobile top image */}
