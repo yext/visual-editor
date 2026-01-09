@@ -1,3 +1,39 @@
+#### 1.0.5 (2026-01-09)
+
+##### Chores
+
+- update pages-components ([#977](https://github.com/yext/visual-editor/pull/977)) ([d97a13c5](https://github.com/yext/visual-editor/commit/d97a13c55c3d839ffc522d37f80f0a9be60bdcc1))
+- update pages-components to 1.2.x ([#961](https://github.com/yext/visual-editor/pull/961)) ([b3f86e3e](https://github.com/yext/visual-editor/commit/b3f86e3e20200ddede48a1463d14cc0cff742efa))
+
+##### New Features
+
+- add padding-y for link variants and fixed show prop ([#978](https://github.com/yext/visual-editor/pull/978)) ([a4f4ca9e](https://github.com/yext/visual-editor/commit/a4f4ca9eebbb687eb655bcd8b9310aa67426df41))
+- renamed media orientation, fixed truncate in event section ([#971](https://github.com/yext/visual-editor/pull/971)) ([9963525a](https://github.com/yext/visual-editor/commit/9963525a01ec41447fef09cebe7d559022783944))
+- added open in new tab and center aligned the secondary footer ([#967](https://github.com/yext/visual-editor/pull/967)) ([c156ffd4](https://github.com/yext/visual-editor/commit/c156ffd453d849f97b4b1eddedc0a48fe151ebc8))
+- generate adjusted font fallbacks for smoother font loading ([#959](https://github.com/yext/visual-editor/pull/959)) ([aa5a135d](https://github.com/yext/visual-editor/commit/aa5a135dfede4e2cce08012e5e7ab6e5cf9b3adb))
+- added color options to heading text ([#963](https://github.com/yext/visual-editor/pull/963)) ([e82dc4a3](https://github.com/yext/visual-editor/commit/e82dc4a3ffae1c9aef5b737d5e1b2761da25e6e7))
+- promo variants ([#958](https://github.com/yext/visual-editor/pull/958)) ([a52252f1](https://github.com/yext/visual-editor/commit/a52252f19dc9c554e09145068a587a5b109142e7))
+- support \*.optimizelocation.com for useMessage ([#965](https://github.com/yext/visual-editor/pull/965)) ([0cb573fb](https://github.com/yext/visual-editor/commit/0cb573fb5ca7fbde99dae0557fea724a52db1a0d))
+- add brand certified facts to main template ([#964](https://github.com/yext/visual-editor/pull/964)) ([535ebe7b](https://github.com/yext/visual-editor/commit/535ebe7bd9ec4806655503ac0e8bbba714dce810))
+
+##### Bug Fixes
+
+- cta text transform ([#979](https://github.com/yext/visual-editor/pull/979)) ([4e10bc9c](https://github.com/yext/visual-editor/commit/4e10bc9c2b0bc441e246290b62837654844a9c35))
+- line height in rich text and reduced event description ([#972](https://github.com/yext/visual-editor/pull/972)) ([886dce8b](https://github.com/yext/visual-editor/commit/886dce8bdfaf5b324791f8730acee1d70a0660e9))
+- added min-height for logo slot ([#968](https://github.com/yext/visual-editor/pull/968)) ([0df2427e](https://github.com/yext/visual-editor/commit/0df2427eb358f572f8e705c6783c3c6aa0a914ab))
+- support optimizelocation for sending messages ([#970](https://github.com/yext/visual-editor/pull/970)) ([4099eb7b](https://github.com/yext/visual-editor/commit/4099eb7be2e2d97fa396c27ac857f0b15aae14c8))
+- simplify FAQsSection ([#957](https://github.com/yext/visual-editor/pull/957)) ([fc7e84ac](https://github.com/yext/visual-editor/commit/fc7e84acc103b8eda5639efd78f10535173214fb))
+
+##### Other Changes
+
+- drop Node 18 support and add 24 ([#966](https://github.com/yext/visual-editor/pull/966)) ([2c4682d1](https://github.com/yext/visual-editor/commit/2c4682d15a4b1bdc3bf84bd0b107cf403b9ddee9))
+- drop cjs support ([#960](https://github.com/yext/visual-editor/pull/960)) ([5db89d9f](https://github.com/yext/visual-editor/commit/5db89d9fcccc93ce20ddb7ac67deff97fd96869c))
+
+##### Refactors
+
+- use reviews from stream ([#976](https://github.com/yext/visual-editor/pull/976)) ([98f3106e](https://github.com/yext/visual-editor/commit/98f3106ee5c3d175a41d4097a6ec99d543179600))
+- adjust promo content layout ([#974](https://github.com/yext/visual-editor/pull/974)) ([17f12382](https://github.com/yext/visual-editor/commit/17f12382d90e70378eae5704d849cb5397c446f7))
+
 #### 1.0.4 (2025-12-22)
 
 ##### New Features
