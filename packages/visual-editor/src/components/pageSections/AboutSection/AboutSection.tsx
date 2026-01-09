@@ -1,11 +1,18 @@
 import React from "react";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  Slot,
+  WithId,
+} from "@measured/puck";
 import {
   backgroundColors,
   BackgroundStyle,
   BodyTextProps,
   Button,
   getDefaultRTF,
+  HeadingLevel,
   HeadingTextProps,
   msg,
   PageSection,
@@ -294,6 +301,23 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
       ],
     },
     liveVisibility: true,
+  },
+  resolveData: (data) => {
+    if (data.props.slots.SectionHeadingSlot?.[0]?.props) {
+      const sectionHeadingLevel = (
+        data.props.slots.SectionHeadingSlot[0].props as WithId<HeadingTextProps>
+      ).styles?.level;
+      const semanticOverride =
+        sectionHeadingLevel < 6
+          ? ((sectionHeadingLevel + 1) as HeadingLevel)
+          : "span";
+      (
+        data.props.slots.SidebarSlot[0]
+          .props as WithId<AboutSectionDetailsColumnProps>
+      ).headingLevelOverride = semanticOverride;
+    }
+
+    return data;
   },
   render: (props) => (
     <VisibilityWrapper

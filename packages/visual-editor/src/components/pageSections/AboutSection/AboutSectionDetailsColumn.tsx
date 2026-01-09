@@ -12,6 +12,7 @@ import {
   EntityField,
   FooterSocialLinksSlotProps,
   Heading,
+  HeadingLevel,
   msg,
   pt,
   resolveComponentData,
@@ -41,6 +42,11 @@ import {
   Address,
   AddressProps,
 } from "../../contentBlocks/Address";
+
+export type AboutSectionDetailsColumnProps = {
+  sections: DetailSection[];
+  headingLevelOverride?: HeadingLevel | "span";
+};
 
 type DetailSection = {
   header: YextEntityField<TranslatableString>;
@@ -152,10 +158,6 @@ const typeToFields: Record<DetailSection["content"]["type"], Fields<any>> = {
   emails: EmailsFields,
   textList: textListFields,
   socialMedia: FooterSocialLinksSlotFields,
-};
-
-export type AboutSectionDetailsColumnProps = {
-  sections: DetailSection[];
 };
 
 const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
@@ -276,7 +278,7 @@ const typeToRenderFunctions: Record<
 const AboutSectionDetailsColumnComponent: PuckComponent<
   AboutSectionDetailsColumnProps
 > = (props) => {
-  const { sections, puck, id } = props;
+  const { sections, headingLevelOverride, puck, id } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
 
@@ -295,7 +297,7 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
               displayName={pt("fields.sectionHeader", "Section Header")}
               constantValueEnabled={section.header.constantValueEnabled}
             >
-              <Heading level={5}>
+              <Heading level={5} semanticLevelOverride={headingLevelOverride}>
                 {resolveComponentData(
                   section.header,
                   i18n.language,
