@@ -303,7 +303,10 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    if (data.props.slots.SectionHeadingSlot?.[0]?.props) {
+    if (
+      data.props.slots.SectionHeadingSlot?.[0]?.props &&
+      data.props.slots.SidebarSlot[0]?.props
+    ) {
       const sectionHeadingLevel = (
         data.props.slots.SectionHeadingSlot[0].props as WithId<HeadingTextProps>
       ).styles?.level;
