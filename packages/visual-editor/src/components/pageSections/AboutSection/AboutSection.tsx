@@ -131,25 +131,29 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
   const { data, styles, slots } = props;
   const { t } = useTranslation();
   const [expanded, setExpanded] = React.useState(false);
-  const [showExpandCollapseButton, setShowExpandCollapseButton] =
+  const [isDescriptionOverflown, setIsDescriptionOverflown] =
     React.useState(false);
   const descriptionSlotRef = React.useRef<HTMLDivElement>(null);
 
   // Only show expand/collapse button if the description content is truncated
   React.useLayoutEffect(() => {
-    const bodyText = descriptionSlotRef.current?.querySelector(
-      ".line-clamp-\\[10\\]"
-    ) as HTMLElement;
-    if (!bodyText) {
+    if (!descriptionSlotRef.current) {
       return;
     }
 
     const observer = new ResizeObserver(() => {
-      const isOverflown = bodyText.scrollHeight > bodyText.clientHeight;
-      setShowExpandCollapseButton(isOverflown);
+      const bodyText = descriptionSlotRef.current?.querySelector(
+        ".description-slot"
+      ) as HTMLElement | undefined;
+
+      if (!bodyText) {
+        return;
+      }
+
+      setIsDescriptionOverflown(bodyText.scrollHeight > bodyText.clientHeight);
     });
 
-    observer.observe(bodyText);
+    observer.observe(descriptionSlotRef.current);
 
     return () => observer.disconnect();
   }, []);
@@ -168,15 +172,15 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
         <div ref={descriptionSlotRef}>
           <slots.DescriptionSlot
             style={{ height: "auto" }}
-            className={`mb-2 ${expanded ? "" : "line-clamp-[10] lg:line-clamp-none"}`}
+            className={`description-slot mb-2 ${expanded ? "" : "line-clamp-[10] lg:line-clamp-none"}`}
             allow={[]}
           />
         </div>
-        {showExpandCollapseButton && (
+        {(isDescriptionOverflown || expanded) && (
           <Button
             variant="link"
             className="visible lg:hidden font-body-fontFamily font-bold text-body-fontSize no-underline cursor-pointer inline-flex items-center gap-2"
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => setExpanded((prev) => !prev)}
             aria-expanded={expanded}
           >
             {expanded ? t("readLess", "Read less") : t("readMore", "Read more")}
@@ -308,7 +312,7 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
   },
   resolveData: (data) => {
     const sectionHeadingLevel = (
-      data.props.slots.SectionHeadingSlot?.[0].props as
+      data.props.slots.SectionHeadingSlot?.[0]?.props as
         | WithId<HeadingTextProps>
         | undefined
     )?.styles?.level;
