@@ -134,7 +134,6 @@ const selectUrlTemplate = (
 /**
  * Builds a URL from a template string by resolving embedded fields and normalizing the slug.
  * Adds locale prefix based on primaryLocale and includeLocalePrefixForPrimaryLocale config.
- * If the template already includes [[locale]] at the start, it won't add an additional prefix.
  */
 const buildUrlFromTemplate = (
   urlTemplate: string,
