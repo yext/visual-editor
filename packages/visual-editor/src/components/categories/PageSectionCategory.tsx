@@ -1,3 +1,4 @@
+import { AboutSection, AboutSectionProps } from "../pageSections/index.ts";
 import { BannerSection, BannerSectionProps } from "../pageSections/Banner.tsx";
 import {
   BreadcrumbsSection,
@@ -58,6 +59,7 @@ import {
 } from "../pageSections/VideoSection.tsx";
 
 export interface PageSectionCategoryProps {
+  AboutSection: AboutSectionProps;
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
@@ -77,6 +79,7 @@ export interface PageSectionCategoryProps {
 }
 
 export const PageSectionCategoryComponents = {
+  AboutSection,
   BannerSection,
   BreadcrumbsSection,
   CoreInfoSection,

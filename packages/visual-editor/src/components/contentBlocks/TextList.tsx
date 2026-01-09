@@ -16,7 +16,7 @@ export interface TextListProps {
   commaSeparated: boolean;
 }
 
-const textListFields: Fields<TextListProps> = {
+export const textListFields: Fields<TextListProps> = {
   list: YextField(msg("fields.values", "Values"), {
     type: "entityField",
     filter: {

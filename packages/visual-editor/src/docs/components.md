@@ -377,9 +377,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                                                                                                                                                    | Description | Default |
-| :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
-| `data` | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
+| Prop     | Type                                                                                                                                                    | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data`   | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
+| `styles` | `{ filledBackground?: boolean; mobileAlignment?: "left" \| "center"; }`                                                                                 |             |         |
 
 ---
 

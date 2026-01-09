@@ -1,4 +1,8 @@
 export {
+  AboutSection,
+  type AboutSectionProps,
+} from "./AboutSection/AboutSection.tsx";
+export {
   BannerSection,
   type BannerSectionProps,
   type BannerData,

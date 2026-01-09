@@ -40,7 +40,7 @@ export interface HoursStatusProps {
   };
 }
 
-const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
+export const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {

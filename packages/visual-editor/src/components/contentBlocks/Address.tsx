@@ -78,7 +78,7 @@ export const AddressStyleFields: Fields<AddressProps["styles"]> = {
   }),
 };
 
-const addressFields: Fields<AddressProps> = {
+export const addressFields: Fields<AddressProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
