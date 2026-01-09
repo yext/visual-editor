@@ -48,6 +48,7 @@
   "callToAction": "Invito all'azione",
   "callToActions": "Chiama alle azioni",
   "cancel": "Cancellare",
+  "cannotPublishWithErrors": "Impossibile pubblicare mentre i componenti presentano errori.",
   "categories": {
     "coreInformation": "Informazioni fondamentali",
     "other": "ALTRO",
@@ -63,6 +64,10 @@
   "closeMenu": "Chiudi menu",
   "closed": "Chiuso",
   "closesAt": "Chiude a",
+  "componentErrorBoundary": {
+    "error": "Errore",
+    "message": "Impossibile eseguire il rendering di questa sezione. Prova ad aggiornare la libreria dei componenti."
+  },
   "components": {
     "DirectoryGrid": "Griglia di elenchi",
     "Video": "Video",
@@ -491,6 +496,7 @@
   "filter": "Filtro",
   "filters": "Filtri",
   "findALocation": "Trova una posizione",
+  "fixErrorsToPublish": "Per pubblicare, eliminare o correggere sezioni con errori",
   "fontSize": "Dimensione del carattere",
   "fontSizeDefaultLabel": "Predefinito",
   "fonts": {

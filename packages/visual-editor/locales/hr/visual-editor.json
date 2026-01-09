@@ -48,6 +48,7 @@
   "callToAction": "Poziv na akciju",
   "callToActions": "Pozovite na akcije",
   "cancel": "Otkazati",
+  "cannotPublishWithErrors": "Nije moguće objaviti dok komponente imaju pogreške.",
   "categories": {
     "coreInformation": "Osnovne informacije",
     "other": "Drugi",
@@ -63,6 +64,10 @@
   "closeMenu": "Zatvori izbornik",
   "closed": "Zatvoreno",
   "closesAt": "Zatvara se",
+  "componentErrorBoundary": {
+    "error": "Greška",
+    "message": "Nije moguće prikazati ovaj odjeljak. Pokušajte ažurirati biblioteku komponenti."
+  },
   "components": {
     "DirectoryGrid": "Rešetka direktorija",
     "Video": "Video",
@@ -491,6 +496,7 @@
   "filter": "Filter",
   "filters": "Filteri",
   "findALocation": "Pronađite lokaciju",
+  "fixErrorsToPublish": "Za objavljivanje, brisanje ili popravljanje odjeljaka s pogreškama",
   "fontSize": "Veličina fonta",
   "fontSizeDefaultLabel": "Zadano",
   "fonts": {

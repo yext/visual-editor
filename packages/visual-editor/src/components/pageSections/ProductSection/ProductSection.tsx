@@ -14,6 +14,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 export interface ProductSectionProps {
   /**
@@ -164,16 +165,21 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "productsSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <ProductSectionComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <ProductSectionComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };

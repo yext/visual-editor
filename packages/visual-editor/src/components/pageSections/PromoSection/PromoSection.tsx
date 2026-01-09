@@ -34,6 +34,7 @@ import { ImmersivePromo } from "./ImmersivePromo";
 import { CompactPromo } from "./CompactPromo";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 export interface PromoData {
   /**
@@ -613,16 +614,21 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
     }
 
     return (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={!!props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "promoSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          {PromoVariant}
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={!!props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            {PromoVariant}
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };

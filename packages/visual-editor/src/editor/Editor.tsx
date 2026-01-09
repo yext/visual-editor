@@ -28,6 +28,7 @@ import {
 } from "../utils/fonts/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 const devLogger = new DevLogger();
 
@@ -93,7 +94,7 @@ export const Editor = ({
 
   const logError = (error: Error, info: ErrorInfo) => {
     sendError({
-      payload: { error, info },
+      payload: { error, info, type: "editor" },
     });
   };
 
@@ -177,41 +178,43 @@ export const Editor = ({
     : undefined;
 
   return (
-    <TemplateMetadataContext.Provider value={templateMetadata!}>
-      <ErrorBoundary fallback={<></>} onError={logError}>
-        {!isLoading ? (
-          templateMetadata?.isThemeMode || forceThemeMode ? (
-            <ThemeEditor
-              puckConfig={puckConfig!}
-              templateMetadata={templateMetadata!}
-              layoutData={migratedData!}
-              themeData={themeData!}
-              themeConfig={finalThemeConfig}
-              localDev={!!localDev}
-              metadata={{ ...metadata, streamDocument: document }}
-            />
+    <ErrorProvider>
+      <TemplateMetadataContext.Provider value={templateMetadata!}>
+        <ErrorBoundary fallback={<></>} onError={logError}>
+          {!isLoading ? (
+            templateMetadata?.isThemeMode || forceThemeMode ? (
+              <ThemeEditor
+                puckConfig={puckConfig!}
+                templateMetadata={templateMetadata!}
+                layoutData={migratedData!}
+                themeData={themeData!}
+                themeConfig={finalThemeConfig}
+                localDev={!!localDev}
+                metadata={{ ...metadata, streamDocument: document }}
+              />
+            ) : (
+              <LayoutEditor
+                puckConfig={puckConfig!}
+                templateMetadata={templateMetadata!}
+                layoutData={migratedData!}
+                themeData={themeData!}
+                themeConfig={finalThemeConfig}
+                localDev={!!localDev}
+                metadata={{ ...metadata, streamDocument: document }}
+                streamDocument={document}
+              />
+            )
           ) : (
-            <LayoutEditor
-              puckConfig={puckConfig!}
-              templateMetadata={templateMetadata!}
-              layoutData={migratedData!}
-              themeData={themeData!}
-              themeConfig={finalThemeConfig}
-              localDev={!!localDev}
-              metadata={{ ...metadata, streamDocument: document }}
-              streamDocument={document}
-            />
-          )
-        ) : (
-          parentLoaded && (
-            <LoadingScreen
-              progress={progress}
-              platformLanguageIsSet={!!templateMetadata?.platformLocale}
-            />
-          )
-        )}
-        <Toaster closeButton richColors />
-      </ErrorBoundary>
-    </TemplateMetadataContext.Provider>
+            parentLoaded && (
+              <LoadingScreen
+                progress={progress}
+                platformLanguageIsSet={!!templateMetadata?.platformLocale}
+              />
+            )
+          )}
+          <Toaster closeButton richColors />
+        </ErrorBoundary>
+      </TemplateMetadataContext.Provider>
+    </ErrorProvider>
   );
 };
