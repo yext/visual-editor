@@ -131,14 +131,28 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
   const { data, styles, slots } = props;
   const { t } = useTranslation();
   const [expanded, setExpanded] = React.useState(false);
+  const [showExpandCollapseButton, setShowExpandCollapseButton] =
+    React.useState(false);
   const descriptionSlotRef = React.useRef<HTMLDivElement>(null);
 
   // Only show expand/collapse button if the description content is truncated
-  const bodyTextContainer =
-    descriptionSlotRef.current?.getElementsByClassName("line-clamp-[10]")?.[0];
-  const showExpandCollapseButton =
-    bodyTextContainer &&
-    bodyTextContainer?.scrollHeight > bodyTextContainer?.clientHeight;
+  React.useLayoutEffect(() => {
+    const bodyText = descriptionSlotRef.current?.querySelector(
+      ".line-clamp-\\[10\\]"
+    ) as HTMLElement;
+    if (!bodyText) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      const isOverflown = bodyText.scrollHeight > bodyText.clientHeight;
+      setShowExpandCollapseButton(isOverflown);
+    });
+
+    observer.observe(bodyText);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <PageSection
@@ -294,16 +308,18 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
   },
   resolveData: (data) => {
     const sectionHeadingLevel = (
-      data.props.slots.SectionHeadingSlot[0].props as WithId<HeadingTextProps>
-    ).styles?.level;
+      data.props.slots.SectionHeadingSlot?.[0].props as
+        | WithId<HeadingTextProps>
+        | undefined
+    )?.styles?.level;
 
     if (
       data.props.slots.SectionHeadingSlot?.[0]?.props &&
-      data.props.slots.SidebarSlot[0]?.props &&
+      data.props.slots.SidebarSlot?.[0]?.props &&
       sectionHeadingLevel
     ) {
       const semanticOverride =
-        sectionHeadingLevel < 6
+        typeof sectionHeadingLevel === "number" && sectionHeadingLevel < 6
           ? ((sectionHeadingLevel + 1) as HeadingLevel)
           : "span";
       (
