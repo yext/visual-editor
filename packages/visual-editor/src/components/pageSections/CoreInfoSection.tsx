@@ -22,6 +22,7 @@ import {
   PhoneListProps,
   resolvePhoneNumbers,
 } from "../contentBlocks/PhoneList";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface CoreInfoStyles {
   /**
@@ -428,15 +429,20 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
       };
     },
     render: (props) => (
-      <AnalyticsScopeProvider
-        name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
       >
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
+        <AnalyticsScopeProvider
+          name={`${props.analytics?.scope ?? "coreInfoSection"}${getAnalyticsScopeHash(props.id)}`}
         >
-          <CoreInfoSectionWrapper {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+          >
+            <CoreInfoSectionWrapper {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     ),
   };

@@ -7,6 +7,7 @@ import {
   VisibilityWrapper,
   YextField,
 } from "@yext/visual-editor";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface VideoSectionProps {
   /**
@@ -123,11 +124,16 @@ export const VideoSection: ComponentConfig<{
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <VideoSectionComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <VideoSectionComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };

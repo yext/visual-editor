@@ -22,6 +22,7 @@ import {
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface BannerData {
   /**
@@ -243,12 +244,17 @@ export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
   fields: bannerSectionFields,
   defaultProps: defaultBannerProps,
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
-      iconSize="md"
+      resetKeys={[props]}
     >
-      <BannerComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+        iconSize="md"
+      >
+        <BannerComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };
