@@ -19,6 +19,7 @@ import {
   getAggregateRating,
   PageSection,
   ThemeOptions,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
@@ -84,6 +85,11 @@ export interface ProfessionalHeroSectionProps {
   liveVisibility?: boolean;
 
   /** @internal */
+  conditionalRender?: {
+    isRightColumnVisible?: boolean;
+  };
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
@@ -92,7 +98,7 @@ export interface ProfessionalHeroSectionProps {
 const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
   props
 ) => {
-  const { styles, slots } = props;
+  const { styles, slots, conditionalRender } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
@@ -151,10 +157,12 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
           </div>
 
           {/* Right Inner Column */}
-          <div className="flex flex-col gap-4 flex-1">
-            <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
-            <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
-          </div>
+          {conditionalRender?.isRightColumnVisible !== false && (
+            <div className="flex flex-col gap-4 flex-1">
+              <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
+              <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
+            </div>
+          )}
         </div>
       </div>
     </PageSection>
@@ -228,6 +236,7 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
     type: "object",
     objectFields: {
       ImageSlot: { type: "slot" },
+      BusinessNameSlot: { type: "slot" },
       ProfessionalNameSlot: { type: "slot" },
       ProfessionalTitleSlot: { type: "slot" },
       AddressSlot: { type: "slot" },
@@ -476,6 +485,40 @@ export const ProfessionalHeroSection: ComponentConfig<{
       scope: "professionalHeroSection",
     },
     liveVisibility: true,
+  },
+  resolveData: (data, params) => {
+    const streamDocument = params.metadata?.streamDocument;
+    const locale = streamDocument?.locale;
+    if (!locale || !streamDocument) {
+      return { ...data };
+    }
+
+    const emailSlot = data?.props?.slots?.EmailSlot?.[0];
+    const resolvedEmails = emailSlot
+      ? resolveComponentData(emailSlot.props.data.list, locale, streamDocument)
+      : [];
+
+    const phoneSlot = data?.props?.slots?.PhoneSlot?.[0];
+    const phoneNumbersConfig = phoneSlot?.props?.data?.phoneNumbers || [];
+    const hasPhones = phoneNumbersConfig.some((config: any) => {
+      const resolved = resolveComponentData(
+        config.number,
+        locale,
+        streamDocument
+      );
+      return !!resolved;
+    });
+
+    const isRightColumnVisible =
+      (resolvedEmails && resolvedEmails.length > 0) || hasPhones;
+
+    return {
+      ...data,
+      props: {
+        ...data.props,
+        conditionalRender: { isRightColumnVisible },
+      },
+    };
   },
   render: (props) => (
     <ComponentErrorBoundary
