@@ -140,11 +140,11 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0(lexical@0.38.2)(mapbox-gl@2.15.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@yext/search-headless-react":
-        specifier: ^2.6.0
-        version: 2.6.0(encoding@0.1.13)(react@18.3.1)
+        specifier: ^2.7.1
+        version: 2.7.1(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: ^1.11.1
-        version: 1.11.1(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
+        specifier: ^1.12.1
+        version: 1.12.1(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -5047,6 +5047,13 @@ packages:
       }
     engines: { node: ">=12" }
 
+  "@yext/search-core@2.8.0":
+    resolution:
+      {
+        integrity: sha512-28grGOj5Qy+clxDIHLFyZVmLj8yH1irO/nYfi8Td5LWzhhC0FEWyA/MVRLWbdEzx1JoaEjXqL2+W/9/2+8ZuaQ==,
+      }
+    engines: { node: ">=12" }
+
   "@yext/search-headless-react@2.6.0":
     resolution:
       {
@@ -5055,10 +5062,24 @@ packages:
     peerDependencies:
       react: ^16.14 || ^17 || ^18
 
+  "@yext/search-headless-react@2.7.1":
+    resolution:
+      {
+        integrity: sha512-1igYzfXXwVcIeEfQEaglIlFdsdwHfazZybzgepuAqS2tER+UCDShc615FcAR7vSve1iMPn4VWU5Lxl8hKVhaIg==,
+      }
+    peerDependencies:
+      react: ^16.14 || ^17 || ^18 || ^19
+
   "@yext/search-headless@2.7.0":
     resolution:
       {
         integrity: sha512-tPBPUh9oWLmXAeosl4FH6lcgjlbIniGIXjtgd6uCl8YVrwQ3GBg+7Q8YGEF8sd6EI8r+liBiOfdYLOYvHG+rZg==,
+      }
+
+  "@yext/search-headless@2.8.1":
+    resolution:
+      {
+        integrity: sha512-rexlQR9wJuWxuTXHtw3tuRp93zVZI26sHhok60THsFFm0AQHv7s6tWsyDIcHhAn4dACtsJGrYgcTE2pPyGiiYw==,
       }
 
   "@yext/search-ui-react@1.10.0":
@@ -5071,10 +5092,10 @@ packages:
       react: ^16.14 || ^17 || ^18
       react-dom: ^16.14 || ^17 || ^18
 
-  "@yext/search-ui-react@1.11.1":
+  "@yext/search-ui-react@1.12.1":
     resolution:
       {
-        integrity: sha512-SuvWew3wioVhX9TPGC1TqPOAUXnQPL6bTPzbd//nHYFQs5OLY4E9n/EPz/LHl0TF+iRAQO4BygpSMuNBeapu4w==,
+        integrity: sha512-8WFVmRCIxP54A8IqH87Arqq8LCt8g5/w6OhglwBb8uNp6vQ8geH3kekfHpZv9oq2kIKsYaLA7st79rx700zpyg==,
       }
     peerDependencies:
       "@yext/search-headless-react": ^2.6.0
@@ -15324,9 +15345,25 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  "@yext/search-core@2.8.0(encoding@0.1.13)":
+    dependencies:
+      "@babel/runtime-corejs3": 7.28.3
+      cross-fetch: 3.2.0(encoding@0.1.13)
+    transitivePeerDependencies:
+      - encoding
+
   "@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1)":
     dependencies:
       "@yext/search-headless": 2.7.0(encoding@0.1.13)(react@18.3.1)
+      react: 18.3.1
+      use-sync-external-store: 1.5.0(react@18.3.1)
+    transitivePeerDependencies:
+      - encoding
+      - react-redux
+
+  "@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1)":
+    dependencies:
+      "@yext/search-headless": 2.8.1(encoding@0.1.13)(react@18.3.1)
       react: 18.3.1
       use-sync-external-store: 1.5.0(react@18.3.1)
     transitivePeerDependencies:
@@ -15337,6 +15374,17 @@ snapshots:
     dependencies:
       "@reduxjs/toolkit": 1.9.7(react@18.3.1)
       "@yext/search-core": 2.7.0(encoding@0.1.13)
+      js-levenshtein: 1.1.6
+      lodash: 4.17.21
+    transitivePeerDependencies:
+      - encoding
+      - react
+      - react-redux
+
+  "@yext/search-headless@2.8.1(encoding@0.1.13)(react@18.3.1)":
+    dependencies:
+      "@reduxjs/toolkit": 1.9.7(react@18.3.1)
+      "@yext/search-core": 2.8.0(encoding@0.1.13)
       js-levenshtein: 1.1.6
       lodash: 4.17.21
     transitivePeerDependencies:
@@ -15377,14 +15425,14 @@ snapshots:
       - tailwindcss
       - typescript
 
-  "@yext/search-ui-react@1.11.1(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
+  "@yext/search-ui-react@1.12.1(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(encoding@0.1.13)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
       "@tailwindcss/line-clamp": 0.4.4(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
       "@tailwindcss/typography": 0.5.16(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
       "@yext/analytics": 0.6.8(encoding@0.1.13)
-      "@yext/search-headless-react": 2.6.0(encoding@0.1.13)(react@18.3.1)
+      "@yext/search-headless-react": 2.7.1(encoding@0.1.13)(react@18.3.1)
       classnames: 2.5.1
       i18next: 25.4.0(typescript@5.9.2)
       lodash: 4.17.21

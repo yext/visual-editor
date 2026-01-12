@@ -13,6 +13,7 @@ import {
   ReviewsSection,
   VisualEditorProvider,
   SlotsCategoryComponents,
+  injectTranslations,
 } from "@yext/visual-editor";
 import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
@@ -329,9 +330,16 @@ describe("ReviewsSection", async () => {
         streamDocument: document,
       });
 
+      const templateProps = {
+        document: document,
+        data: data,
+      };
+
+      const updatedData = await injectTranslations(templateProps);
+
       const { container } = reactRender(
-        <VisualEditorProvider templateProps={{ document }}>
-          <Render config={puckConfig} data={data} />
+        <VisualEditorProvider templateProps={updatedData}>
+          <Render config={puckConfig} data={updatedData.data} />
         </VisualEditorProvider>
       );
 

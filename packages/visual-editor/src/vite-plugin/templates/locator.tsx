@@ -22,6 +22,7 @@ import {
   defaultThemeConfig,
   locatorConfig,
   getSchema,
+  injectTranslations,
   getCanonicalUrl,
   migrate,
   migrationRegistry,
@@ -112,9 +113,11 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     locatorConfig,
     document
   );
-  const updatedData = await resolveAllData(migratedData, locatorConfig, {
-    streamDocument: document,
-  });
+  const updatedData = await injectTranslations(
+    await resolveAllData(migratedData, locatorConfig, {
+      streamDocument: document,
+    })
+  );
 
   return { ...props, data: updatedData };
 };

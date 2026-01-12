@@ -29,6 +29,14 @@ export interface FooterSocialLinksSlotProps {
   };
 }
 
+type socialLink = {
+  url: string;
+  icon: React.ComponentType<{ className?: string }>;
+  pattern: RegExp;
+  label: string;
+  ariaLabel: string;
+};
+
 export const FooterSocialLinksSlotFields: Fields<FooterSocialLinksSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
@@ -65,48 +73,55 @@ const FooterSocialLinksSlotInternal: PuckComponent<
   const { t } = useTranslation();
   const background = useBackground();
 
-  const links = [
+  const links: socialLink[] = [
     {
       url: data.xLink,
       icon: FaXTwitter,
       pattern: validPatterns.xLink,
       label: "X (Twitter)",
+      ariaLabel: t("socialLinks.xLink", "Follow us on X (Twitter)"),
     },
     {
       url: data.facebookLink,
       icon: FaFacebook,
       pattern: validPatterns.facebookLink,
       label: "Facebook",
+      ariaLabel: t("socialLinks.facebook", "Follow us on Facebook"),
     },
     {
       url: data.instagramLink,
       icon: FaInstagram,
       pattern: validPatterns.instagramLink,
       label: "Instagram",
+      ariaLabel: t("socialLinks.instagram", "Follow us on Instagram"),
     },
     {
       url: data.pinterestLink,
       icon: FaPinterest,
       pattern: validPatterns.pinterestLink,
       label: "Pinterest",
+      ariaLabel: t("socialLinks.pinterest", "Follow us on Pinterest"),
     },
     {
       url: data.linkedInLink,
       icon: FaLinkedinIn,
       pattern: validPatterns.linkedInLink,
       label: "LinkedIn",
+      ariaLabel: t("socialLinks.linkedIn", "Follow us on LinkedIn"),
     },
     {
       url: data.youtubeLink,
       icon: FaYoutube,
       pattern: validPatterns.youtubeLink,
       label: "YouTube",
+      ariaLabel: t("socialLinks.youtube", "Subscribe to our YouTube channel"),
     },
     {
       url: data.tiktokLink,
       icon: FaTiktok,
       pattern: validPatterns.tiktokLink,
       label: "TikTok",
+      ariaLabel: t("socialLinks.tiktok", "Follow us on TikTok"),
     },
   ];
 
@@ -142,7 +157,7 @@ const FooterSocialLinksSlotInternal: PuckComponent<
             linkType="URL"
             variant="link"
             eventName={`socialLink.${link.label.toLowerCase()}`}
-            ariaLabel={`${link.label} ${t("link", "link")}`}
+            ariaLabel={link.ariaLabel}
             alwaysHideCaret
             className="block break-words whitespace-normal"
           />

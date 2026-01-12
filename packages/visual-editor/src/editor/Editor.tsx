@@ -16,7 +16,10 @@ import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
-import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
+import {
+  i18nPlatformInstance,
+  loadPlatformTranslations,
+} from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
 import {
   createDefaultThemeConfig,
@@ -149,9 +152,31 @@ export const Editor = ({
   }, [templateMetadata?.isDevMode, devPageSets]);
 
   useEffect(() => {
-    if (templateMetadata?.platformLocale) {
-      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
-    }
+    let isCurrent = true;
+
+    const handlePlatformLocaleChange = async () => {
+      if (templateMetadata?.platformLocale) {
+        const expectedLocale = templateMetadata.platformLocale;
+        try {
+          await loadPlatformTranslations(expectedLocale);
+          // Additional check to avoid race conditions when locale changes quickly
+          if (
+            isCurrent &&
+            templateMetadata?.platformLocale === expectedLocale
+          ) {
+            i18nPlatformInstance.changeLanguage(expectedLocale);
+          }
+        } catch (error) {
+          console.error("Failed to load platform translations:", error);
+        }
+      }
+    };
+
+    handlePlatformLocaleChange();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({

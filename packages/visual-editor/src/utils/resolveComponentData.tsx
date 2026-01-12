@@ -1,10 +1,10 @@
 import {
   BodyProps,
   MaybeRTF,
-  RichText,
-  TranslatableRichText,
-  TranslatableString,
-  YextEntityField,
+  type RichText,
+  type TranslatableRichText,
+  type TranslatableString,
+  type YextEntityField,
 } from "@yext/visual-editor";
 import React from "react";
 import {
