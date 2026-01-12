@@ -88,7 +88,7 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
         }),
       },
     }),
-    styles: YextField(msg("fields.styles", "styles"), {
+    styles: YextField(msg("fields.styles", "Styles"), {
       type: "object",
       objectFields: {
         backgroundColor: YextField(
@@ -368,16 +368,13 @@ const NearbyLocationsEmptyState: React.FC<{
           )}
         </Body>
         <Body variant="base" className="text-gray-500 font-normal">
-          {pt(
-            "nearbyLocationsEmptyState",
-            "No {{entityType}} within {{radius}} miles",
-            {
-              entityType: entityTypeDisplayName
-                ? entityTypeDisplayName
-                : "entity",
-              radius: radius ?? 10,
-            }
-          )}
+          {pt("nearbyLocationsEmptyState", {
+            entityType: entityTypeDisplayName
+              ? entityTypeDisplayName
+              : "entity",
+            radius: radius ?? 10,
+            mile: pt("mile", { count: radius ?? 10 }),
+          })}
         </Body>
       </div>
     </div>
