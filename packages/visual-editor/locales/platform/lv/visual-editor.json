@@ -10,7 +10,7 @@
   },
   "addEntityField": "Pievienojiet entītijas lauku",
   "addImage": "Pievienot attēlu",
-  "address": "Uzruna",
+  "address": "Adrese",
   "addressInput": {
     "city": "Pilsēta",
     "countryCode": "Lauku kods",
@@ -73,7 +73,7 @@
     "Video": "Video",
     "aboutSection": "Par sadaļu",
     "aboutSectionDetailsColumn": "Sīkāka informācija kolonna",
-    "address": "Uzruna",
+    "address": "Adrese",
     "bannerSection": "Reklāmkarogu nodaļa",
     "bodyText": "Ķermeņa teksts",
     "breadcrumbs": "Rīvmaize",
@@ -179,7 +179,7 @@
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA variants",
-    "address": "Uzruna",
+    "address": "Adrese",
     "alignCard": "Izlīdzināt karti",
     "alignContent": "Saskaņot saturu",
     "alignItems": "Izlīdzināt priekšmetus",
