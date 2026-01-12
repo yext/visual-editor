@@ -8,6 +8,7 @@ import {
   msg,
   getAnalyticsScopeHash,
   YextEntityField,
+  themeManagerCn,
   HeadingTextProps,
   ImageWrapperProps,
   CTAWrapperProps,
@@ -18,6 +19,7 @@ import {
   useDocument,
   getAggregateRating,
   PageSection,
+  ThemeOptions,
   AssetImageType,
   TranslatableAssetImage,
 } from "@yext/visual-editor";
@@ -32,14 +34,44 @@ export interface ProfessionalHeroData {
 }
 
 export interface ProfessionalHeroStyles {
+  /**
+   * The background color for the section.
+   * @defaultValue Background Color 1
+   */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
   showAverageReview: boolean;
-  imageHeight?: number;
+
+  /**
+   * Whether to show the hero image.
+   * @defaultValue true
+   */
+  showImage: boolean;
+
+  /**
+   * Positions the image to the left or right of the hero content on desktop.
+   * @defaultValue left
+   */
+  desktopImagePosition: "left" | "right";
+
+  /**
+   * Positions the image to the top or bottom of the hero content on mobile.
+   * @defaultValue top
+   */
+  mobileImagePosition: "bottom" | "top";
 }
 
 export interface ProfessionalHeroSectionProps {
-  data: ProfessionalHeroData;
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
   styles: ProfessionalHeroStyles;
+
   slots: {
     ImageSlot: Slot;
     BusinessNameSlot: Slot;
@@ -50,7 +82,14 @@ export interface ProfessionalHeroSectionProps {
     PhoneSlot: Slot;
     EmailSlot: Slot;
   };
+
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
   liveVisibility?: boolean;
+
+  /** @internal */
   analytics: {
     scope?: string;
   };
@@ -64,19 +103,36 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
   const streamDocument = useDocument();
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
+  const showImage = styles.showImage ?? true;
+  const desktopImageRight = styles.desktopImagePosition === "right";
+  const mobileImageTop = styles.mobileImagePosition === "top";
+
+  const containerClasses = themeManagerCn(
+    "flex gap-8 lg:gap-16",
+    mobileImageTop ? "flex-col" : "flex-col-reverse",
+    desktopImageRight ? "lg:flex-row-reverse" : "lg:flex-row"
+  );
+
   return (
     <PageSection
       background={styles.backgroundColor}
       aria-label={t("professionalHero", "Professional Hero")}
-      className="flex flex-col lg:flex-row gap-8 lg:gap-16"
+      className={containerClasses}
     >
-      {/* Left Column: Image */}
-      <div className="w-full lg:w-1/3 flex-shrink-0">
-        <slots.ImageSlot allow={[]} />
-      </div>
+      {/* Image Column */}
+      {showImage && (
+        <div className="w-full lg:w-1/3 flex-shrink-0">
+          <slots.ImageSlot allow={[]} />
+        </div>
+      )}
 
-      {/* Right Column: Content */}
-      <div className="w-full lg:w-2/3 flex flex-col gap-6">
+      {/* Content Column */}
+      <div
+        className={themeManagerCn(
+          "w-full flex flex-col gap-6",
+          showImage ? "lg:w-2/3" : "w-full"
+        )}
+      >
         {/* Top: Names and Title */}
         <section className="flex flex-col gap-2">
           <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
@@ -111,17 +167,6 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
 };
 
 const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      backgroundImage: YextField(msg("fields.image", "Image"), {
-        type: "entityField",
-        filter: {
-          types: ["type.image"],
-        },
-      }),
-    },
-  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -142,10 +187,46 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
           ],
         }
       ),
-      imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
-        type: "number",
-        min: 0,
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.true", "True"),
+            value: true,
+          },
+          {
+            label: msg("fields.options.false", "False"),
+            value: false,
+          },
+        ],
       }),
+      desktopImagePosition: YextField(
+        msg("fields.desktopImagePosition", "Desktop Image Position"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.left", "Left", {
+                context: "direction",
+              }),
+              value: "left",
+            },
+            {
+              label: msg("fields.options.right", "Right", {
+                context: "direction",
+              }),
+              value: "right",
+            },
+          ],
+        }
+      ),
+      mobileImagePosition: YextField(
+        msg("fields.mobileImagePosition", "Mobile Image Position"),
+        {
+          type: "radio",
+          options: ThemeOptions.VERTICAL_POSITION,
+        }
+      ),
     },
   }),
   slots: {
@@ -189,21 +270,12 @@ export const ProfessionalHeroSection: ComponentConfig<{
   label: msg("components.professionalHeroSection", "Professional Hero Section"),
   fields: professionalHeroSectionFields,
   defaultProps: {
-    data: {
-      backgroundImage: {
-        field: "",
-        constantValue: {
-          ...getRandomPlaceholderImageObject({ width: 640, height: 700 }),
-          width: 640,
-          height: 700,
-        },
-        constantValueEnabled: true,
-      },
-    },
     styles: {
       backgroundColor: backgroundColors.background1.value,
       showAverageReview: true,
-      imageHeight: 500,
+      showImage: true,
+      desktopImagePosition: "left",
+      mobileImagePosition: "top",
     },
     slots: {
       ImageSlot: [
@@ -215,17 +287,17 @@ export const ProfessionalHeroSection: ComponentConfig<{
                 field: "",
                 constantValue: {
                   ...getRandomPlaceholderImageObject({
-                    width: 640,
-                    height: 700,
+                    width: 500,
+                    height: 500,
                   }),
-                  width: 640,
-                  height: 700,
+                  width: 500,
+                  height: 500,
                 },
                 constantValueEnabled: true,
               },
             },
             styles: {
-              aspectRatio: 0.9,
+              aspectRatio: 1,
               width: 500,
             },
           } satisfies ImageWrapperProps,
@@ -281,7 +353,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
                 field: "",
               },
             },
-            styles: { level: 4, align: "left" },
+            styles: { level: 2, align: "left" },
           } satisfies HeadingTextProps,
         },
       ],
