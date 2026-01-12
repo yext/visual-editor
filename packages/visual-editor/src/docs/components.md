@@ -666,6 +666,33 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## ProfessionalHeroSection
+
+### Props
+
+#### Style Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop                          | Type                | Description                                                              | Default              |
+| :---------------------------- | :------------------ | :----------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`      | `BackgroundStyle`   | The background color for the section.                                    | `Background Color 1` |
+| `styles.desktopImagePosition` | `"left" \| "right"` | Positions the image to the left or right of the hero content on desktop. | `left`               |
+| `styles.mobileImagePosition`  | `"bottom" \| "top"` | Positions the image to the top or bottom of the hero content on mobile.  | `top`                |
+| `styles.showAverageReview`    | `boolean`           | If 'true', displays the entity's average review rating.                  | `true`               |
+| `styles.showImage`            | `boolean`           | Whether to show the hero image.                                          | `true`               |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type                                                                                                                                                                               | Description                                                                    | Default |
+| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                                          | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+| `slots`          | `{ ImageSlot: Slot; BusinessNameSlot: Slot; ProfessionalNameSlot: Slot; ProfessionalTitleSlot: Slot; AddressSlot: Slot; ContactCTASlot: Slot; PhoneSlot: Slot; EmailSlot: Slot; }` |                                                                                |         |
+
+---
+
 ## PromoSection
 
 The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements. Available on Location templates.
