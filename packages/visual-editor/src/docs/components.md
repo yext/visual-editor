@@ -463,10 +463,10 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                                             | Description | Default |
-| :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                         |             |         |
-| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; }` |             |         |
+| Prop     | Type                                                                                                                                                                                   | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                               |             |         |
+| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; bodyVariant?: "lg" \| "base" \| "sm"; }` |             |         |
 
 ---
 
