@@ -136,7 +136,9 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
       >
         {/* Top: Names and Title */}
         <section className="flex flex-col gap-2">
-          <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
+          <div className="[&_p]:font-bold">
+            <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
+          </div>
           <slots.ProfessionalNameSlot style={{ height: "auto" }} allow={[]} />
           <slots.ProfessionalTitleSlot style={{ height: "auto" }} allow={[]} />
         </section>
@@ -332,7 +334,6 @@ export const ProfessionalHeroSection: ComponentConfig<{
             },
             styles: {
               variant: "lg",
-              fontWeight: "bold",
             },
           } satisfies BodyTextProps,
         },
