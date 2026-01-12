@@ -309,8 +309,8 @@
     "name": "Naam",
     "openInNewTab": "Openen in nieuw tabblad",
     "options": {
-      "HoursStatus": "Uurstatus",
-      "HoursTable": "Uren tabel",
+      "HoursStatus": "Urenstatus",
+      "HoursTable": "Urentafel",
       "address": "Adres",
       "aspectRatio": "Beeldverhouding",
       "base": "Baseren",

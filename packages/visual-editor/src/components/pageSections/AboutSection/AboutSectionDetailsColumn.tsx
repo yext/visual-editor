@@ -337,7 +337,7 @@ const filterEmptySections = (
   locale: string
 ): boolean => {
   switch (section.content.type) {
-    case "hoursStatus":
+    case "hoursStatus": {
       if (!section?.content?.hoursStatus?.data?.hours) {
         return false;
       }
@@ -347,8 +347,8 @@ const filterEmptySections = (
         section.content.hoursStatus.data.hours,
         locale
       );
-
-    case "hoursTable":
+    }
+    case "hoursTable": {
       if (!section?.content?.hoursTable?.data?.hours) {
         return false;
       }
@@ -358,8 +358,8 @@ const filterEmptySections = (
         section.content.hoursTable.data.hours,
         locale
       );
-
-    case "address":
+    }
+    case "address": {
       if (!section?.content?.address?.data?.address) {
         return false;
       }
@@ -377,8 +377,8 @@ const filterEmptySections = (
         address?.region ||
         address?.postalCode
       );
-
-    case "phone":
+    }
+    case "phone": {
       if (!section?.content?.phone?.data?.number) {
         return false;
       }
@@ -388,8 +388,8 @@ const filterEmptySections = (
         section.content.phone.data.number,
         locale
       );
-
-    case "emails":
+    }
+    case "emails": {
       if (!section?.content?.emails?.data?.list) {
         return false;
       }
@@ -401,8 +401,8 @@ const filterEmptySections = (
       );
 
       return Array.isArray(emails) && emails.length > 0;
-
-    case "textList":
+    }
+    case "textList": {
       if (!section?.content?.textList?.list) {
         return false;
       }
@@ -416,8 +416,8 @@ const filterEmptySections = (
       return (
         Array.isArray(textList) && textList.filter((t) => t.trim()).length > 0
       );
-
-    case "socialMedia":
+    }
+    case "socialMedia": {
       const socialMediaData = section?.content?.socialMedia?.data;
 
       if (!socialMediaData) {
@@ -425,6 +425,7 @@ const filterEmptySections = (
       }
 
       return Object.values(socialMediaData).some((link) => Boolean(link));
+    }
   }
 };
 
@@ -451,7 +452,7 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
         return (
           <div
             key={`${section.content.type}-${i}`}
-            className={`border-t pt-8 ${i == 0 ? "lg:border-t-0 lg:pt-0" : ""} border-[#BABABA] flex flex-col gap-4`}
+            className={`border-t pt-8 ${i === 0 ? "lg:border-t-0 lg:pt-0" : ""} border-[#BABABA] flex flex-col gap-4`}
           >
             <EntityField
               fieldId={section.header.field}
