@@ -67,6 +67,12 @@ export interface ProfessionalHeroStyles {
 
 export interface ProfessionalHeroSectionProps {
   /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: ProfessionalHeroData;
+
+  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */

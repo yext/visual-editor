@@ -13,6 +13,8 @@ import {
 } from "@yext/visual-editor";
 import { Render, Config, resolveAllData } from "@measured/puck";
 
+const defaultProps = ProfessionalHeroSection.defaultProps!;
+
 const testDocument = {
   locale: "en",
   name: "Dr. Jane Doe",
@@ -39,22 +41,22 @@ const tests: ComponentTest[] = [
     document: {
       locale: "en",
     },
-    props: { ...ProfessionalHeroSection.defaultProps },
+    props: { ...defaultProps },
     version: 0,
   },
   {
     name: "default props with data",
     document: testDocument,
-    props: { ...ProfessionalHeroSection.defaultProps },
+    props: { ...defaultProps },
     version: 0,
   },
   {
     name: "no image",
     document: testDocument,
     props: {
-      ...ProfessionalHeroSection.defaultProps,
+      ...defaultProps,
       styles: {
-        ...ProfessionalHeroSection.defaultProps.styles,
+        ...defaultProps.styles,
         showImage: false,
       },
     },
@@ -64,9 +66,9 @@ const tests: ComponentTest[] = [
     name: "image right desktop, image bottom mobile",
     document: testDocument,
     props: {
-      ...ProfessionalHeroSection.defaultProps,
+      ...defaultProps,
       styles: {
-        ...ProfessionalHeroSection.defaultProps.styles,
+        ...defaultProps.styles,
         desktopImagePosition: "right",
         mobileImagePosition: "bottom",
       },
@@ -77,9 +79,9 @@ const tests: ComponentTest[] = [
     name: "hide average review",
     document: testDocument,
     props: {
-      ...ProfessionalHeroSection.defaultProps,
+      ...defaultProps,
       styles: {
-        ...ProfessionalHeroSection.defaultProps.styles,
+        ...defaultProps.styles,
         showAverageReview: false,
       },
     },
