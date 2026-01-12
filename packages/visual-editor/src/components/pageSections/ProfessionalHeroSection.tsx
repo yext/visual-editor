@@ -23,6 +23,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface ProfessionalHeroStyles {
   /**
@@ -476,17 +477,21 @@ export const ProfessionalHeroSection: ComponentConfig<{
     },
     liveVisibility: true,
   },
-  // TODO: Add ComponentErrorBoundary
   render: (props) => (
-    <AnalyticsScopeProvider
-      name={`${props.analytics?.scope ?? "professionalHeroSection"}${getAnalyticsScopeHash(props.id)}`}
+    <ComponentErrorBoundary
+      isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <VisibilityWrapper
-        liveVisibility={!!props.liveVisibility}
-        isEditing={props.puck.isEditing}
+      <AnalyticsScopeProvider
+        name={`${props.analytics?.scope ?? "professionalHeroSection"}${getAnalyticsScopeHash(props.id)}`}
       >
-        <ProfessionalHero {...props} />
-      </VisibilityWrapper>
-    </AnalyticsScopeProvider>
+        <VisibilityWrapper
+          liveVisibility={!!props.liveVisibility}
+          isEditing={props.puck.isEditing}
+        >
+          <ProfessionalHero {...props} />
+        </VisibilityWrapper>
+      </AnalyticsScopeProvider>
+    </ComponentErrorBoundary>
   ),
 };
