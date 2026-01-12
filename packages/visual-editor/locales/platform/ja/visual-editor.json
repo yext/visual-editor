@@ -545,7 +545,7 @@
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
   "monday": "月曜日",
   "name": "名前",
-  "nearbyLocationsEmptyState": "{{radius}} {{mile} }以内に {{entityType}} はありません",
+  "nearbyLocationsEmptyState": "{{radius}} {{mile}} 以内に {{entityType}} はありません",
   "nearbyLocationsEmptyStateSectionHidden": "この {{entityType}} に対して非表示のセクション",
   "noAvailableFields": "利用可能なフィールドはありません",
   "noAvailableTypes": "利用可能なタイプはありません",
