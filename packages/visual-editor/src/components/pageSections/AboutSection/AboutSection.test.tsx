@@ -111,14 +111,42 @@ const tests: ComponentTest[] = [
                   header: {
                     field: "",
                     constantValue: {
+                      en: "Missing Data Section (should not render)",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                  content: {
+                    type: "hoursStatus",
+                    hoursStatus: {
+                      data: {
+                        hours: {
+                          field: "fakeField",
+                          constantValue: {},
+                          constantValueEnabled: false,
+                        },
+                      },
+                      styles: {
+                        showCurrentStatus: true,
+                        showDayNames: false,
+                        timeFormat: "12h",
+                        dayOfWeekFormat: "short",
+                      },
+                    },
+                  },
+                },
+                {
+                  header: {
+                    field: "",
+                    constantValue: {
                       en: "Office Hours",
                       hasLocalizedValue: "true",
                     },
                     constantValueEnabled: true,
                   },
                   content: {
-                    type: "hours",
-                    hours: {
+                    type: "hoursStatus",
+                    hoursStatus: {
                       data: {
                         hours: {
                           field: "hours",
@@ -131,6 +159,34 @@ const tests: ComponentTest[] = [
                         showDayNames: false,
                         timeFormat: "12h",
                         dayOfWeekFormat: "short",
+                      },
+                    },
+                  },
+                },
+                {
+                  header: {
+                    field: "",
+                    constantValue: {
+                      en: "Expanded Hours",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                  },
+                  content: {
+                    type: "hoursTable",
+                    hoursTable: {
+                      data: {
+                        hours: {
+                          field: "hours",
+                          constantValue: {},
+                          constantValueEnabled: false,
+                        },
+                      },
+                      styles: {
+                        startOfWeek: "today",
+                        collapseDays: false,
+                        showAdditionalHoursText: false,
+                        alignment: "items-start",
                       },
                     },
                   },
@@ -340,8 +396,8 @@ const tests: ComponentTest[] = [
                     constantValueEnabled: true,
                   },
                   content: {
-                    type: "hours",
-                    hours: {
+                    type: "hoursStatus",
+                    hoursStatus: {
                       data: {
                         hours: {
                           field: "hours",

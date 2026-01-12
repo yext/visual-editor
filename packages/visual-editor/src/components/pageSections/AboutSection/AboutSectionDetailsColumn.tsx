@@ -16,6 +16,8 @@ import {
   msg,
   pt,
   resolveComponentData,
+  resolveYextEntityField,
+  StreamDocument,
   TranslatableString,
   useDocument,
   YextEntityField,
@@ -41,7 +43,13 @@ import {
   addressFields,
   Address,
   AddressProps,
+  resolveAddressFields,
 } from "../../contentBlocks/Address";
+import {
+  HoursTableProps,
+  hoursTableFields,
+  HoursTable,
+} from "../../contentBlocks/HoursTable";
 
 export type AboutSectionDetailsColumnProps = {
   sections: DetailSection[];
@@ -51,11 +59,19 @@ export type AboutSectionDetailsColumnProps = {
 type DetailSection = {
   header: YextEntityField<TranslatableString>;
   content: {
-    type: "hours" | "address" | "phone" | "emails" | "textList" | "socialMedia";
-    hours?: {
+    type:
+      | "hoursStatus"
+      | "hoursTable"
+      | "address"
+      | "phone"
+      | "emails"
+      | "textList"
+      | "socialMedia";
+    hoursStatus?: {
       data: HoursStatusProps["data"];
       styles: Omit<HoursStatusProps["styles"], "className">;
     };
+    hoursTable?: HoursTableProps;
     address?: AddressProps;
     phone?: {
       data: PhoneProps["data"];
@@ -69,7 +85,7 @@ type DetailSection = {
 
 export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
   {
-    hours: {
+    hoursStatus: {
       data: {
         hours: {
           field: "hours",
@@ -82,6 +98,21 @@ export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
         showDayNames: false,
         timeFormat: "12h" as const,
         dayOfWeekFormat: "short" as const,
+      },
+    },
+    hoursTable: {
+      data: {
+        hours: {
+          field: "hours",
+          constantValue: {},
+          constantValueEnabled: false,
+        },
+      },
+      styles: {
+        startOfWeek: "today",
+        collapseDays: false,
+        showAdditionalHoursText: true,
+        alignment: "items-start",
       },
     },
     address: {
@@ -151,13 +182,23 @@ export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
     },
   };
 
-const typeToFields: Record<DetailSection["content"]["type"], Fields<any>> = {
-  hours: hoursStatusWrapperFields,
-  address: addressFields,
-  phone: PhoneFields,
-  emails: EmailsFields,
-  textList: textListFields,
-  socialMedia: FooterSocialLinksSlotFields,
+const typeToFields = (
+  type: DetailSection["content"]["type"],
+  data: DetailSection["content"]
+) => {
+  const fields: Record<DetailSection["content"]["type"], Fields<any>> = {
+    hoursStatus: hoursStatusWrapperFields,
+    hoursTable: hoursTableFields,
+    address:
+      "address" in data && data.address
+        ? resolveAddressFields({ props: { id: "", ...data.address } })
+        : addressFields,
+    phone: PhoneFields,
+    emails: EmailsFields,
+    textList: textListFields,
+    socialMedia: FooterSocialLinksSlotFields,
+  };
+  return fields[type];
 };
 
 const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
@@ -198,27 +239,40 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                       label: msg("fields.contentType", "Content Type"),
                       options: [
                         {
-                          label: msg("fields.hours", "Hours"),
-                          value: "hours",
+                          label: msg(
+                            "fields.options.HoursStatus",
+                            "Hours Status"
+                          ),
+                          value: "hoursStatus",
                         },
                         {
-                          label: msg("fields.address", "Address"),
+                          label: msg(
+                            "fields.options.HoursTable",
+                            "Hours Table"
+                          ),
+                          value: "hoursTable",
+                        },
+                        {
+                          label: msg("fields.options.address", "Address"),
                           value: "address",
                         },
                         {
-                          label: msg("fields.phone", "Phone"),
+                          label: msg("fields.options.phone", "Phone"),
                           value: "phone",
                         },
                         {
-                          label: msg("fields.emails", "Emails"),
+                          label: msg("fields.options.emails", "Emails"),
                           value: "emails",
                         },
                         {
-                          label: msg("fields.textList", "Text List"),
+                          label: msg("fields.options.textList", "Text List"),
                           value: "textList",
                         },
                         {
-                          label: msg("fields.socialMedia", "Social Media"),
+                          label: msg(
+                            "fields.options.socialMedia",
+                            "Social Media"
+                          ),
                           value: "socialMedia",
                         },
                       ],
@@ -234,7 +288,7 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                   }
                   field={{
                     type: "object",
-                    objectFields: typeToFields[value.type],
+                    objectFields: typeToFields(value.type, value),
                   }}
                 />
               </div>
@@ -249,8 +303,8 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
           constantValueEnabled: true,
         },
         content: {
-          type: "hours",
-          hours: defaultAboutSectionProps.hours,
+          type: "hoursStatus",
+          hoursStatus: defaultAboutSectionProps.hoursStatus,
         },
       },
       getItemSummary: (item, i) => {
@@ -267,12 +321,111 @@ const typeToRenderFunctions: Record<
   DetailSection["content"]["type"],
   PuckComponent<any>
 > = {
-  hours: HoursStatus.render,
+  hoursStatus: HoursStatus.render,
+  hoursTable: HoursTable.render,
   address: Address.render,
   phone: Phone.render,
   emails: Emails.render,
   textList: TextList.render,
   socialMedia: FooterSocialLinksSlot.render,
+};
+
+/** Resolves the data for each section type and returns whether the section should be displayed. */
+const filterEmptySections = (
+  section: DetailSection,
+  streamDocument: StreamDocument,
+  locale: string
+): boolean => {
+  switch (section.content.type) {
+    case "hoursStatus":
+      if (!section?.content?.hoursStatus?.data?.hours) {
+        return false;
+      }
+
+      return !!resolveYextEntityField(
+        streamDocument,
+        section.content.hoursStatus.data.hours,
+        locale
+      );
+
+    case "hoursTable":
+      if (!section?.content?.hoursTable?.data?.hours) {
+        return false;
+      }
+
+      return !!resolveYextEntityField(
+        streamDocument,
+        section.content.hoursTable.data.hours,
+        locale
+      );
+
+    case "address":
+      if (!section?.content?.address?.data?.address) {
+        return false;
+      }
+
+      const address = resolveYextEntityField(
+        streamDocument,
+        section.content.address.data.address,
+        locale
+      );
+
+      return !!(
+        address?.line1 ||
+        address?.line2 ||
+        address?.city ||
+        address?.region ||
+        address?.postalCode
+      );
+
+    case "phone":
+      if (!section?.content?.phone?.data?.number) {
+        return false;
+      }
+
+      return !!resolveYextEntityField(
+        streamDocument,
+        section.content.phone.data.number,
+        locale
+      );
+
+    case "emails":
+      if (!section?.content?.emails?.data?.list) {
+        return false;
+      }
+
+      const emails = resolveYextEntityField(
+        streamDocument,
+        section.content.emails.data.list,
+        locale
+      );
+
+      return Array.isArray(emails) && emails.length > 0;
+
+    case "textList":
+      if (!section?.content?.textList?.list) {
+        return false;
+      }
+
+      const textList = resolveComponentData(
+        section.content.textList.list,
+        locale,
+        streamDocument
+      ) as string[];
+
+      return (
+        Array.isArray(textList) && textList.filter((t) => t.trim()).length > 0
+      );
+
+    case "socialMedia":
+      const socialMediaData = section?.content?.socialMedia?.data;
+
+      if (!socialMediaData) {
+        return false;
+      }
+
+      return Object.values(socialMediaData).some((link) => Boolean(link));
+  }
 };
 
 const AboutSectionDetailsColumnComponent: PuckComponent<
@@ -282,9 +435,17 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
 
+  const filteredSections = React.useMemo(
+    () =>
+      sections.filter((section) =>
+        filterEmptySections(section, streamDocument, i18n.language)
+      ),
+    [sections, streamDocument, i18n.language]
+  );
+
   return (
     <div className="flex flex-col gap-8">
-      {sections.map((section, i) => {
+      {filteredSections.map((section, i) => {
         const Component = typeToRenderFunctions[section.content.type];
 
         return (
@@ -311,10 +472,17 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
                   {...section.content[section.content.type]}
                   puck={puck}
                   id={`${id}-${section.content.type}-${i}`}
+                  // Override bodyVariant to "base" for HoursStatus
+                  {...(section.content.type === "hoursStatus" && {
+                    styles: {
+                      ...section.content.hoursStatus?.styles,
+                      bodyVariant: "base",
+                    },
+                  })}
                 />
               )}
-              {section.content.type === "hours" &&
-                section.content.hours &&
+              {section.content.type === "hoursStatus" &&
+                section.content.hoursStatus &&
                 streamDocument.additionalHoursText && (
                   <EntityField
                     displayName={pt("hoursText", "Hours Text")}
@@ -329,7 +497,7 @@ const AboutSectionDetailsColumnComponent: PuckComponent<
           </div>
         );
       })}
-      {sections.length === 0 && puck.isEditing && (
+      {filteredSections.length === 0 && puck.isEditing && (
         <div style={{ minHeight: "500px" }}></div>
       )}
     </div>

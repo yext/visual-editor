@@ -30,6 +30,8 @@ export interface HoursStatusProps {
     showDayNames?: boolean;
     /** Additional class names to apply to the underlying component */
     className?: string;
+    /** The body size variant */
+    bodyVariant?: "lg" | "base" | "sm";
   };
 
   /** @internal */
@@ -119,6 +121,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
         showDayNames={styles.showDayNames}
         timeFormat={styles.timeFormat}
         dayOfWeekFormat={styles.dayOfWeekFormat}
+        bodyVariant={styles.bodyVariant}
       />
     </EntityField>
   ) : puck.isEditing ? (

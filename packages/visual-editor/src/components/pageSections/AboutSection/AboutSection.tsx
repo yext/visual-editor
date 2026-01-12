@@ -266,8 +266,8 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
                   constantValueEnabled: true,
                 },
                 content: {
-                  type: "hours",
-                  hours: defaultAboutSectionProps.hours,
+                  type: "hoursStatus",
+                  hoursStatus: defaultAboutSectionProps.hoursStatus,
                 },
               },
               {
