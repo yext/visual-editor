@@ -408,13 +408,15 @@ interface ProfessionalHeroSectionProps {
    * @propCategory Style Props
    */
   styles: ProfessionalHeroStyles;
+  /** @internal */
   slots: {
     ImageSlot: Slot;
     BusinessNameSlot: Slot;
     ProfessionalNameSlot: Slot;
     ProfessionalTitleSlot: Slot;
     AddressSlot: Slot;
-    ContactCTASlot: Slot;
+    PrimaryCTASlot: Slot;
+    SecondaryCTASlot: Slot;
     PhoneSlot: Slot;
     EmailSlot: Slot;
   };
@@ -423,6 +425,10 @@ interface ProfessionalHeroSectionProps {
    * @defaultValue true
    */
   liveVisibility?: boolean;
+  /** @internal */
+  conditionalRender?: {
+    isRightColumnVisible?: boolean;
+  };
   /** @internal */
   analytics: {
     scope?: string;

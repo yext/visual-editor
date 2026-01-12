@@ -668,6 +668,8 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## ProfessionalHeroSection
 
+![Preview of the ProfessionalHeroSection component](../components/testing/screenshots/ProfessionalHeroSection/%5Bdesktop%5D%20default%20props%20with%20data.png)
+
 ### Props
 
 #### Style Props
@@ -686,10 +688,9 @@ This object contains properties for customizing the component's appearance.
 
 If 'true', the component is visible on the live page; if 'false', it's hidden.
 
-| Prop             | Type                                                                                                                                                                               | Description                                                                    | Default |
-| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------- | :------ |
-| `liveVisibility` | `boolean`                                                                                                                                                                          | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
-| `slots`          | `{ ImageSlot: Slot; BusinessNameSlot: Slot; ProfessionalNameSlot: Slot; ProfessionalTitleSlot: Slot; AddressSlot: Slot; ContactCTASlot: Slot; PhoneSlot: Slot; EmailSlot: Slot; }` |                                                                                |         |
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
 
 ---
 
