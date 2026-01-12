@@ -41,6 +41,7 @@ interface PageSectionCategoryProps {
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
   PromoSection: PromoSectionProps;
+  ProfessionalHeroSection: ProfessionalHeroSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
@@ -399,6 +400,33 @@ interface PromoSectionProps {
    * @defaultValue true
    */
   liveVisibility?: boolean;
+}
+
+interface ProfessionalHeroSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: ProfessionalHeroStyles;
+  slots: {
+    ImageSlot: Slot;
+    BusinessNameSlot: Slot;
+    ProfessionalNameSlot: Slot;
+    ProfessionalTitleSlot: Slot;
+    AddressSlot: Slot;
+    ContactCTASlot: Slot;
+    PhoneSlot: Slot;
+    EmailSlot: Slot;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility?: boolean;
+  /** @internal */
+  analytics: {
+    scope?: string;
+  };
 }
 
 interface ReviewsSectionProps {
@@ -768,6 +796,34 @@ interface PromoStyles {
    * @default 500px
    */
   imageHeight: number;
+}
+
+interface ProfessionalHeroStyles {
+  /**
+   * The background color for the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+  /**
+   * Whether to show the hero image.
+   * @defaultValue true
+   */
+  showImage: boolean;
+  /**
+   * Positions the image to the left or right of the hero content on desktop.
+   * @defaultValue left
+   */
+  desktopImagePosition: "left" | "right";
+  /**
+   * Positions the image to the top or bottom of the hero content on mobile.
+   * @defaultValue top
+   */
+  mobileImagePosition: "bottom" | "top";
 }
 
 interface StaticMapData {
