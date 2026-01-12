@@ -60,6 +60,10 @@ import {
 } from "react-icons/fa";
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString";
+import {
+  getPreferredDistanceUnit,
+  toKilometers,
+} from "src/utils/i18n/distance.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -1194,7 +1198,7 @@ interface ResultsCountSummaryProps {
 const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   const { searchState, resultCount, selectedDistanceMiles, filterDisplayName } =
     props;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   if (resultCount === 0) {
     if (searchState === "not started") {
@@ -1218,12 +1222,17 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   } else {
     if (filterDisplayName) {
       if (selectedDistanceMiles) {
+        const unit = getPreferredDistanceUnit(i18n.language);
+        const distance =
+          unit === "mile"
+            ? selectedDistanceMiles
+            : toKilometers(selectedDistanceMiles);
         return (
           <div>
             {t("locationsWithinDistanceOf", {
               count: resultCount,
-              distance: selectedDistanceMiles,
-              mile: t("mile", { count: selectedDistanceMiles }),
+              distance: distance,
+              unit: t(unit, { count: distance }),
               name: filterDisplayName,
             })}
           </div>

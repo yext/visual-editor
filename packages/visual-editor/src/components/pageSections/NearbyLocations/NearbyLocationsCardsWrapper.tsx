@@ -17,6 +17,10 @@ import { parseDocument, fetchNearbyLocations } from "./utils";
 import { NearbyLocationCard } from "./NearbyLocationCard";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
 import { MapPinOff } from "lucide-react";
+import {
+  getPreferredDistanceUnit,
+  toKilometers,
+} from "src/utils/i18n/distance";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
@@ -349,6 +353,12 @@ const NearbyLocationsEmptyState: React.FC<{
   const entityTypeDisplayName =
     templateMetadata?.entityTypeDisplayName?.toLowerCase();
 
+  const { i18n } = useTranslation();
+
+  const unit = getPreferredDistanceUnit(i18n.language);
+  const distance =
+    unit === "mile" ? (radius ?? 10) : toKilometers(radius ?? 10);
+
   return (
     <div
       data-empty-state="true"
@@ -372,8 +382,8 @@ const NearbyLocationsEmptyState: React.FC<{
             entityType: entityTypeDisplayName
               ? entityTypeDisplayName
               : "entity",
-            radius: radius ?? 10,
-            mile: pt("mile", { count: radius ?? 10 }),
+            radius: distance,
+            unit: pt(unit, { count: distance }),
           })}
         </Body>
       </div>
