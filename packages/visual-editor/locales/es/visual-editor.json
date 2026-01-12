@@ -48,6 +48,7 @@
   "callToAction": "Llamado a la acción",
   "callToActions": "Llamar a las acciones",
   "cancel": "Cancelar",
+  "cannotPublishWithErrors": "No se puede publicar mientras los componentes tengan errores.",
   "categories": {
     "coreInformation": "Información básica",
     "other": "OTRO",
@@ -63,6 +64,10 @@
   "closeMenu": "Menú cerrado",
   "closed": "Cerrado",
   "closesAt": "Cierra",
+  "componentErrorBoundary": {
+    "error": "Error",
+    "message": "No se puede renderizar esta sección. Intente actualizar su biblioteca de componentes."
+  },
   "components": {
     "DirectoryGrid": "Cuadrícula de directorio",
     "Video": "Video",
@@ -491,6 +496,7 @@
   "filter": "Filtrar",
   "filters": "Filtros",
   "findALocation": "Encuentra una ubicación",
+  "fixErrorsToPublish": "Para publicar, eliminar o corregir secciones con errores",
   "fontSize": "Tamaño de fuente",
   "fontSizeDefaultLabel": "Por defecto",
   "fonts": {

@@ -34,7 +34,10 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
     <Background background={styles.backgroundColor}>
       <div
         className={themeManagerCn(
-          "w-full max-w-[1440px] flex flex-col sm:flex-row justify-between"
+          "w-full max-w-[1440px] flex flex-col sm:flex-row justify-between",
+          styles.desktopImagePosition === "left"
+            ? "2xl:mr-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] ml-auto"
+            : "2xl:ml-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] mr-auto"
         )}
       >
         {/* Desktop left image / Mobile top image */}
@@ -67,19 +70,11 @@ export const CompactHero: PuckComponent<HeroVariantProps> = (props) => {
             styles.showImage ? "w-2/4" : "w-full",
             styles.desktopImagePosition === "left"
               ? "sm:pl-8 lg:pl-16 sm:pr-0"
-              : "sm:pr-8 lg:pr-16 sm:pl-0"
-          )}
-          style={
+              : "sm:pr-8 lg:pr-16 sm:pl-0",
             styles.desktopImagePosition === "left"
-              ? {
-                  marginRight:
-                    "max(calc((100vw - var(--maxWidth-pageSection-contentWidth)) / 2), 1.5rem)",
-                }
-              : {
-                  marginLeft:
-                    "max(calc((100vw - var(--maxWidth-pageSection-contentWidth)) / 2), 1.5rem)",
-                }
-          }
+              ? "mr-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] 2xl:mr-0 "
+              : "ml-[max(calc((100vw-var(--maxWidth-pageSection-contentWidth))/2),1.5rem)] 2xl:ml-0"
+          )}
         >
           <HeroContent {...props} />
         </div>

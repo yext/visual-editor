@@ -48,6 +48,7 @@
   "callToAction": "行動喚起",
   "callToActions": "行動への呼びかけ",
   "cancel": "キャンセル",
+  "cannotPublishWithErrors": "コンポーネントにエラーがある間は公開できません。",
   "categories": {
     "coreInformation": "コア情報",
     "other": "他の",
@@ -63,6 +64,10 @@
   "closeMenu": "メニューを閉じます",
   "closed": "閉じた",
   "closesAt": "で閉じます",
+  "componentErrorBoundary": {
+    "error": "エラー",
+    "message": "このセクションをレンダリングできません。コンポーネント ライブラリを更新してみてください。"
+  },
   "components": {
     "DirectoryGrid": "ディレクトリグリッド",
     "Video": "ビデオ",
@@ -492,6 +497,7 @@
   "filter": "フィルター",
   "filters": "フィルター",
   "findALocation": "場所を見つけます",
+  "fixErrorsToPublish": "エラーのあるセクションを公開、削除、または修正するには",
   "fontSize": "フォントサイズ",
   "fontSizeDefaultLabel": "デフォルト",
   "fonts": {

@@ -48,6 +48,7 @@
   "callToAction": "Výzva na akciu",
   "callToActions": "Zavolať",
   "cancel": "Zrušiť",
+  "cannotPublishWithErrors": "Nie je možné publikovať, kým komponenty obsahujú chyby.",
   "categories": {
     "coreInformation": "Základné informácie",
     "other": "Druhý",
@@ -63,6 +64,10 @@
   "closeMenu": "Menu",
   "closed": "ZATVORENÉ",
   "closesAt": "Uzatvára sa",
+  "componentErrorBoundary": {
+    "error": "Chyba",
+    "message": "Túto sekciu nie je možné vykresliť. Skúste aktualizovať knižnicu komponentov."
+  },
   "components": {
     "DirectoryGrid": "Mriežka adresára",
     "Video": "Video",
@@ -493,6 +498,7 @@
   "filter": "Filter",
   "filters": "Filtre",
   "findALocation": "Nájdite miesto",
+  "fixErrorsToPublish": "Ak chcete zverejniť, odstrániť alebo opraviť sekcie s chybami",
   "fontSize": "Veľkosť písma",
   "fontSizeDefaultLabel": "Predvolený",
   "fonts": {

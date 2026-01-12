@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "sumo@yext.com",
   "repository": {
     "type": "git",
@@ -158,8 +158,8 @@
   },
   "peerDependencies": {
     "@yext/pages-components": "^2.0.0",
-    "@yext/search-headless-react": "^2.6.0",
-    "@yext/search-ui-react": "^1.11.1",
+    "@yext/search-headless-react": "^2.7.1",
+    "@yext/search-ui-react": "^1.12.1",
     "mapbox-gl": "^2.9.2",
     "react": "^17.0.2 || ^18.2.0",
     "react-dom": "^17.0.2 || ^18.2.0"

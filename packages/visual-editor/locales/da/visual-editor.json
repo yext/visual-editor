@@ -48,6 +48,7 @@
   "callToAction": "Opfordring til handling",
   "callToActions": "Ring til handlinger",
   "cancel": "Ophæve",
+  "cannotPublishWithErrors": "Kan ikke udgive, mens komponenter har fejl.",
   "categories": {
     "coreInformation": "Kerneoplysninger",
     "directory": "Vejviser",
@@ -65,6 +66,10 @@
   "closeMenu": "Luk menu",
   "closed": "Lukket",
   "closesAt": "Lukker kl",
+  "componentErrorBoundary": {
+    "error": "Fejl",
+    "message": "Kan ikke gengive denne sektion. Prøv at opdatere dit komponentbibliotek."
+  },
   "components": {
     "DirectoryGrid": "Kataloggitter",
     "Video": "Video",
@@ -499,6 +504,7 @@
   "filter": "Filter",
   "filters": "Filtre",
   "findALocation": "Find en placering",
+  "fixErrorsToPublish": "For at udgive, slette eller rette sektioner med fejl",
   "fontSize": "Skrifttypestørrelse",
   "fontSizeDefaultLabel": "Misligholdelse",
   "fonts": {

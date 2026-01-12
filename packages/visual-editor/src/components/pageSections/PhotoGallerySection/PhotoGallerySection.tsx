@@ -13,6 +13,7 @@ import {
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {
@@ -195,11 +196,16 @@ export const PhotoGallerySection: ComponentConfig<{
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <PhotoGallerySectionComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <PhotoGallerySectionComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };

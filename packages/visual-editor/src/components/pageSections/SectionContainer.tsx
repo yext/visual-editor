@@ -18,6 +18,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
 import { useTranslation } from "react-i18next";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export type SectionContainerProps = {
   background?: BackgroundStyle;
@@ -128,11 +129,16 @@ export const SectionContainer: ComponentConfig<{
     liveVisibility: true,
   },
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
+      resetKeys={[props]}
     >
-      <SectionContainerComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+      >
+        <SectionContainerComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };
