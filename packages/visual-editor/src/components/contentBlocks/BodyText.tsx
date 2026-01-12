@@ -14,6 +14,7 @@ import {
   useBackground,
   resolveDataFromParent,
   Body,
+  themeManagerCn,
 } from "@yext/visual-editor";
 
 export type BodyTextProps = {
@@ -25,6 +26,8 @@ export type BodyTextProps = {
   styles: {
     /** The size of the body text. */
     variant: BodyProps["variant"];
+    /** The weight of the body text. */
+    fontWeight?: "bold" | "normal";
   };
 
   /**
@@ -60,6 +63,13 @@ const bodyTextFields: Fields<BodyTextProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
+      fontWeight: YextField(msg("fields.fontWeight", "Font Weight"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.normal", "Normal"), value: "normal" },
+          { label: msg("fields.options.bold", "Bold"), value: "bold" },
+        ],
+      }),
     },
   }),
 };
@@ -71,12 +81,17 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
   const background = useBackground();
 
   const sourceData = parentData ? parentData?.richText : data.text;
+  const fontWeightClass = styles.fontWeight === "bold" ? "font-bold" : "";
+  const className = themeManagerCn(
+    props.parentStyles?.className,
+    fontWeightClass
+  );
 
   const resolvedData = sourceData
     ? resolveComponentData(sourceData, i18n.language, streamDocument, {
         variant: styles.variant,
         isDarkBackground: background?.isDarkBackground,
-        className: props.parentStyles?.className,
+        className,
       })
     : undefined;
 
@@ -89,7 +104,9 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
       {React.isValidElement(resolvedData) ? (
         resolvedData
       ) : (
-        <Body variant={styles.variant}>{resolvedData}</Body>
+        <Body variant={styles.variant} className={fontWeightClass}>
+          {resolvedData}
+        </Body>
       )}
     </EntityField>
   ) : puck.isEditing ? (

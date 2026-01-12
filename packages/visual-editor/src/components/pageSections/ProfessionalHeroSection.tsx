@@ -9,6 +9,7 @@ import {
   getAnalyticsScopeHash,
   themeManagerCn,
   HeadingTextProps,
+  BodyTextProps,
   ImageWrapperProps,
   CTAWrapperProps,
   AddressProps,
@@ -152,7 +153,7 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
               />
             )}
             <slots.AddressSlot style={{ height: "auto" }} allow={[]} />
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <slots.PrimaryCTASlot style={{ height: "auto" }} allow={[]} />
               <slots.SecondaryCTASlot style={{ height: "auto" }} allow={[]} />
             </div>
@@ -187,8 +188,14 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
         {
           type: "radio",
           options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
           ],
         }
       ),
@@ -196,11 +203,11 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
         type: "radio",
         options: [
           {
-            label: msg("fields.options.true", "True"),
+            label: msg("fields.options.show", "Show"),
             value: true,
           },
           {
-            label: msg("fields.options.false", "False"),
+            label: msg("fields.options.hide", "Hide"),
             value: false,
           },
         ],
@@ -311,20 +318,23 @@ export const ProfessionalHeroSection: ComponentConfig<{
       ],
       BusinessNameSlot: [
         {
-          type: "HeadingTextSlot",
+          type: "BodyTextSlot",
           props: {
             data: {
               text: {
+                field: "",
                 constantValue: {
                   en: "Business Name",
                   hasLocalizedValue: "true",
                 },
                 constantValueEnabled: true,
-                field: "",
               },
             },
-            styles: { level: 3, align: "left" },
-          } satisfies HeadingTextProps,
+            styles: {
+              variant: "lg",
+              fontWeight: "bold",
+            },
+          } satisfies BodyTextProps,
         },
       ],
       ProfessionalNameSlot: [
@@ -341,7 +351,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
                 field: "name",
               },
             },
-            styles: { level: 1, align: "left" },
+            styles: { level: 2, align: "left" },
           } satisfies HeadingTextProps,
         },
       ],
@@ -359,7 +369,11 @@ export const ProfessionalHeroSection: ComponentConfig<{
                 field: "",
               },
             },
-            styles: { level: 2, align: "left" },
+            styles: {
+              level: 5,
+              align: "left",
+              semanticLevelOverride: 3,
+            },
           } satisfies HeadingTextProps,
         },
       ],

@@ -129,7 +129,7 @@ describe("ProfessionalHeroSection", () => {
 
     await expect(
       `ProfessionalHeroSection/[${test.viewport.name}] ${test.name}`
-    ).toMatchScreenshot();
+    ).toMatchScreenshot({ useFullPage: true });
 
     const results = await axe(container);
     expect(results).toHaveNoViolations();
