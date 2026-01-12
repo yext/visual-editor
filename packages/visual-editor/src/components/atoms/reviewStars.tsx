@@ -46,11 +46,9 @@ export const ReviewStars = (props: ReviewStarsProps) => {
       </div>
       {reviewCount && (
         <Body className="ml-1">
-          {/* TODO: update script to handle plurals */}(
-          {t("totalReviews", `${reviewCount} reviews`, {
+          {t("totalReviews", {
             count: reviewCount,
           })}
-          )
         </Body>
       )}
     </div>

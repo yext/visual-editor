@@ -64,8 +64,21 @@ function removeEmbeddedContext(text: string): string {
 /**
  * Reads all directories under localesDir and returns them as target languages.
  */
-async function getTargetLanguages(): Promise<string[]> {
-  const entries = await fs.readdir(localesDir, { withFileTypes: true });
+async function getTargetLanguages(
+  type: "components" | "platform"
+): Promise<string[]> {
+  const dir = path.join(localesDir, type);
+  let entries;
+  try {
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch (err) {
+    const error = err as NodeJS.ErrnoException;
+    if (error.code === "ENOENT") {
+      console.warn(`Skipping missing locales directory for ${type} at ${dir}.`);
+      return [];
+    }
+    throw err;
+  }
   // Filter directories only
   return entries.filter((entry) => entry.isDirectory()).map((dir) => dir.name);
 }
@@ -182,17 +195,17 @@ function unflatten(obj: Record<string, string>): Record<string, any> {
  * Loads the base English translation file, compares it to each target language file,
  * translates missing or empty keys using Google Translate, and optionally writes them back.
  */
-async function translateFile(): Promise<void> {
-  const defaultPath = path.join(localesDir, defaultLng, `${ns}.json`);
+async function translateFile(type: "components" | "platform"): Promise<void> {
+  const defaultPath = path.join(localesDir, type, defaultLng, `${ns}.json`);
   const defaultJson = flatten(await loadJsonSafe(defaultPath));
 
-  for (const lng of await getTargetLanguages()) {
+  for (const lng of await getTargetLanguages(type)) {
     if (lng === defaultLng) {
       console.log(`Skipping default language [${lng}].`);
       continue;
     }
 
-    const targetPath = path.join(localesDir, lng, `${ns}.json`);
+    const targetPath = path.join(localesDir, type, lng, `${ns}.json`);
     const targetJson = flatten(await loadJsonSafe(targetPath));
 
     const cache = new Map<string, string>(
@@ -204,12 +217,12 @@ async function translateFile(): Promise<void> {
     });
 
     if (keysToTranslate.length === 0) {
-      console.log(`✅ No missing translations for [${lng}].`);
+      console.log(`✅ No missing translations for [${type}/${lng}].`);
       continue;
     }
 
     console.log(
-      `🔄 Translating ${keysToTranslate.length} keys for [${lng}]...`
+      `🔄 Translating ${keysToTranslate.length} keys for [${type}/${lng}]...`
     );
 
     let successCount = 0;
@@ -236,7 +249,7 @@ async function translateFile(): Promise<void> {
           cache.set(key.trim(), translated);
           successCount++;
           console.log(
-            `[${lng}] ${key}: "${defaultJson[key]}" -> "${translated}"`
+            `[${type}/${lng}] ${key}: "${defaultJson[key]}" -> "${translated}"`
           );
         } catch (e) {
           failCount++;
@@ -251,10 +264,10 @@ async function translateFile(): Promise<void> {
     }
 
     console.log(
-      `✅ [${lng}] Done. Translated: ${successCount}, Failed: ${failCount}, Saved to: ${targetPath} ${isDryRun ? "(dry run, not written)" : ""}`
+      `✅ [${type}/${lng}] Done. Translated: ${successCount}, Failed: ${failCount}, Saved to: ${targetPath} ${isDryRun ? "(dry run, not written)" : ""}`
     );
   }
 }
 
 // Kick off the translation process
-translateFile().catch(console.error);
+translateFile("platform").catch(console.error);

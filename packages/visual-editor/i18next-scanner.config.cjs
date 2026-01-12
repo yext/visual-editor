@@ -52,8 +52,8 @@ module.exports = {
     ns: ["visual-editor"],
     defaultNs: "visual-editor",
     resource: {
-      loadPath: "locales/{{lng}}/{{ns}}.json",
-      savePath: "locales/{{lng}}/{{ns}}.json",
+      loadPath: "locales/platform/{{lng}}/{{ns}}.json",
+      savePath: "locales/platform/{{lng}}/{{ns}}.json",
       jsonIndent: 2,
     },
     interpolation: {

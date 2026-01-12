@@ -19,11 +19,15 @@ import "../ui/puck.css";
 import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import {
+  i18nComponentsInstance,
+  loadComponentTranslations,
+} from "../../../utils/i18n/components.ts";
 import {
   i18nPlatformInstance,
   usePlatformTranslation,
   pt,
+  loadPlatformTranslations,
 } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { DevLogger } from "../../../utils/devLogger.ts";
@@ -318,9 +322,10 @@ export const LocalDevOverrideButtons = () => {
         Set Layout Data
       </Button>
       <Button
-        onClick={() => {
-          const locale = prompt("Enter components locale:");
-          i18nComponentsInstance.changeLanguage(locale ?? "en");
+        onClick={async () => {
+          const locale = prompt("Enter components locale:") || "en";
+          await loadComponentTranslations(locale);
+          i18nComponentsInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
@@ -328,9 +333,10 @@ export const LocalDevOverrideButtons = () => {
         Set Components Locale
       </Button>
       <Button
-        onClick={() => {
-          const locale = prompt("Enter platform locale:");
-          i18nPlatformInstance.changeLanguage(locale ?? "en");
+        onClick={async () => {
+          const locale = prompt("Enter platform locale:") || "en";
+          await loadPlatformTranslations(locale);
+          i18nPlatformInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
@@ -369,9 +375,12 @@ const translatePuckSidebars = () => {
   if (componentCategoryTitles?.length) {
     componentCategoryTitles.forEach((title) => {
       if (title.innerText === "PAGE SECTIONS") {
-        title.innerText = pt("categories.pageSections", "PAGE SECTIONS");
+        title.innerText = pt(
+          "categories.pageSections",
+          "Page Sections"
+        ).toUpperCase();
       } else if (title.innerText === "OTHER") {
-        title.innerText = pt("categories.other", "OTHER");
+        title.innerText = pt("categories.other", "Other").toUpperCase();
       }
     });
   }

@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -36,16 +36,32 @@ function sortObject(obj: any): any {
  * Reads all language directories under the baseDir,
  * then reads, sorts, and overwrites each JSON translation file within those directories.
  */
-for (const langDir of fs.readdirSync(baseDir)) {
-  const langPath = path.join(baseDir, langDir);
+async function processLocalesFolder(currentPath: string, subfolderPath = "") {
+  const items = await fs.readdir(currentPath, { withFileTypes: true });
 
-  if (!fs.lstatSync(langPath).isDirectory()) continue;
+  for (const item of items) {
+    const fullPath = path.join(currentPath, item.name);
+    const currentSubfolder = subfolderPath
+      ? path.join(subfolderPath, item.name)
+      : item.name;
 
-  // Process each file inside the language directory
-  for (const file of fs.readdirSync(langPath)) {
-    const filePath = path.join(langPath, file);
-    const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
-    const sorted = sortObject(data);
-    fs.writeFileSync(filePath, JSON.stringify(sorted, null, 2) + "\n");
+    if (item.isDirectory()) {
+      const subItems = await fs.readdir(fullPath, { withFileTypes: true });
+
+      // Process JSON files in the current directory
+      for (const file of subItems) {
+        if (file.isFile() && file.name.endsWith(".json")) {
+          const filePath = path.join(fullPath, file.name);
+          const data = JSON.parse(await fs.readFile(filePath, "utf8"));
+          const sorted = sortObject(data);
+          await fs.writeFile(filePath, JSON.stringify(sorted, null, 2) + "\n");
+        }
+      }
+
+      // Always recurse into subdirectories
+      await processLocalesFolder(fullPath, currentSubfolder);
+    }
   }
 }
+
+await processLocalesFolder(baseDir);
