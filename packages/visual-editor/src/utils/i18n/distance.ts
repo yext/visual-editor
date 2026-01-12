@@ -8,7 +8,7 @@ export const getPreferredDistanceUnit = (locale: string) => {
 };
 
 /**
- * Converts kilometers to miles.
+ * Converts miles to kilometers.
  */
 export const toKilometers = (miles: number) => {
   return miles * 1.609344;

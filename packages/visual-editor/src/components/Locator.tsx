@@ -44,6 +44,8 @@ import {
   msg,
   useDocument,
   YextField,
+  getPreferredDistanceUnit,
+  toKilometers,
 } from "@yext/visual-editor";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
@@ -60,10 +62,6 @@ import {
 } from "react-icons/fa";
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString";
-import {
-  getPreferredDistanceUnit,
-  toKilometers,
-} from "src/utils/i18n/distance.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";

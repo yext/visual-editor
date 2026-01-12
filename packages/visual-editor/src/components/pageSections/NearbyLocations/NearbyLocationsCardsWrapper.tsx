@@ -12,15 +12,13 @@ import {
   resolveComponentData,
   useDocument,
   YextField,
+  getPreferredDistanceUnit,
+  toKilometers,
 } from "@yext/visual-editor";
 import { parseDocument, fetchNearbyLocations } from "./utils";
 import { NearbyLocationCard } from "./NearbyLocationCard";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
 import { MapPinOff } from "lucide-react";
-import {
-  getPreferredDistanceUnit,
-  toKilometers,
-} from "src/utils/i18n/distance";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
