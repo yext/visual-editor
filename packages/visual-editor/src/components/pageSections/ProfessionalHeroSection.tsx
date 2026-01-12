@@ -152,12 +152,14 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
               />
             )}
             <slots.AddressSlot style={{ height: "auto" }} allow={[]} />
-            <slots.PrimaryCTASlot style={{ height: "auto" }} allow={[]} />
-            <slots.SecondaryCTASlot style={{ height: "auto" }} allow={[]} />
+            <div className="flex flex-wrap gap-4">
+              <slots.PrimaryCTASlot style={{ height: "auto" }} allow={[]} />
+              <slots.SecondaryCTASlot style={{ height: "auto" }} allow={[]} />
+            </div>
           </div>
 
           {/* Right Inner Column */}
-          {conditionalRender?.isRightColumnVisible !== false && (
+          {conditionalRender?.isRightColumnVisible && (
             <div className="flex flex-col gap-4 flex-1">
               <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
               <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
