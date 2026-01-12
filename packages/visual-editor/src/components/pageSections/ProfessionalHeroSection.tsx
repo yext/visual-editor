@@ -63,13 +63,15 @@ export interface ProfessionalHeroSectionProps {
    */
   styles: ProfessionalHeroStyles;
 
+  /** @internal */
   slots: {
     ImageSlot: Slot;
     BusinessNameSlot: Slot;
     ProfessionalNameSlot: Slot;
     ProfessionalTitleSlot: Slot;
     AddressSlot: Slot;
-    ContactCTASlot: Slot;
+    PrimaryCTASlot: Slot;
+    SecondaryCTASlot: Slot;
     PhoneSlot: Slot;
     EmailSlot: Slot;
   };
@@ -143,7 +145,8 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
               />
             )}
             <slots.AddressSlot style={{ height: "auto" }} allow={[]} />
-            <slots.ContactCTASlot style={{ height: "auto" }} allow={[]} />
+            <slots.PrimaryCTASlot style={{ height: "auto" }} allow={[]} />
+            <slots.SecondaryCTASlot style={{ height: "auto" }} allow={[]} />
           </div>
 
           {/* Right Inner Column */}
@@ -224,11 +227,11 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
     type: "object",
     objectFields: {
       ImageSlot: { type: "slot" },
-      BusinessNameSlot: { type: "slot" },
       ProfessionalNameSlot: { type: "slot" },
       ProfessionalTitleSlot: { type: "slot" },
       AddressSlot: { type: "slot" },
-      ContactCTASlot: { type: "slot" },
+      PrimaryCTASlot: { type: "slot" },
+      SecondaryCTASlot: { type: "slot" },
       PhoneSlot: { type: "slot" },
       EmailSlot: { type: "slot" },
     },
@@ -370,7 +373,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           } satisfies AddressProps,
         },
       ],
-      ContactCTASlot: [
+      PrimaryCTASlot: [
         {
           type: "CTASlot",
           props: {
@@ -391,9 +394,37 @@ export const ProfessionalHeroSection: ComponentConfig<{
                 },
               },
             },
-            eventName: "contactCta",
+            eventName: "primaryCta",
             styles: {
               variant: "primary",
+            },
+          } satisfies CTAWrapperProps,
+        },
+      ],
+      SecondaryCTASlot: [
+        {
+          type: "CTASlot",
+          props: {
+            data: {
+              entityField: {
+                field: "",
+                constantValue: {
+                  label: {
+                    en: "Learn More",
+                    hasLocalizedValue: "true",
+                  },
+                  link: {
+                    en: "#",
+                    hasLocalizedValue: "true",
+                  },
+                  linkType: "URL",
+                  ctaType: "textAndLink",
+                },
+              },
+            },
+            eventName: "secondaryCta",
+            styles: {
+              variant: "secondary",
             },
           } satisfies CTAWrapperProps,
         },
