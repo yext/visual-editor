@@ -48,6 +48,7 @@
   "callToAction": "Aicinājums uz darbību",
   "callToActions": "Aicinājums uz darbībām",
   "cancel": "Atcelt",
+  "cannotPublishWithErrors": "Nevar publicēt, kamēr komponentos ir kļūdas.",
   "categories": {
     "coreInformation": "Pamatinformācija",
     "other": "Cits",
@@ -63,6 +64,10 @@
   "closeMenu": "Aizvērt ēdienkarti",
   "closed": "Slēgts",
   "closesAt": "Aizveras plkst",
+  "componentErrorBoundary": {
+    "error": "Kļūda",
+    "message": "Nevar atveidot šo sadaļu. Mēģiniet atjaunināt savu komponentu bibliotēku."
+  },
   "components": {
     "DirectoryGrid": "Direktoriju režģis",
     "Video": "Video",
@@ -491,6 +496,7 @@
   "filter": "Filtrs",
   "filters": "Filtri",
   "findALocation": "Atrodiet atrašanās vietu",
+  "fixErrorsToPublish": "Lai publicētu, dzēstu vai labotu sadaļas ar kļūdām",
   "fontSize": "Fonta lielums",
   "fontSizeDefaultLabel": "Nepildīt",
   "fonts": {

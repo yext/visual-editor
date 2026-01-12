@@ -11,6 +11,7 @@ import {
   loadComponentTranslations,
 } from "./i18n/components.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
+import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 type AllOrNothing<T extends Record<string, any>> =
   | T
@@ -55,17 +56,19 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   }
 
   return (
-    <I18nextProvider i18n={i18nComponentsInstance}>
-      <QueryClientProvider client={queryClient}>
-        <TemplatePropsContext.Provider value={normalizedTemplateProps}>
-          <EntityFieldsContext.Provider value={entityFields}>
-            <TailwindConfigContext.Provider value={tailwindConfig}>
-              {children}
-            </TailwindConfigContext.Provider>
-          </EntityFieldsContext.Provider>
-        </TemplatePropsContext.Provider>
-      </QueryClientProvider>
-    </I18nextProvider>
+    <ErrorProvider>
+      <I18nextProvider i18n={i18nComponentsInstance}>
+        <QueryClientProvider client={queryClient}>
+          <TemplatePropsContext.Provider value={normalizedTemplateProps}>
+            <EntityFieldsContext.Provider value={entityFields}>
+              <TailwindConfigContext.Provider value={tailwindConfig}>
+                {children}
+              </TailwindConfigContext.Provider>
+            </EntityFieldsContext.Provider>
+          </TemplatePropsContext.Provider>
+        </QueryClientProvider>
+      </I18nextProvider>
+    </ErrorProvider>
   );
 };
 

@@ -4,6 +4,12 @@ import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
@@ -36,6 +42,7 @@ type LayoutHeaderProps = {
   onPublishLayout: (data: Data) => Promise<void>;
   onSendLayoutForApproval: (data: Data, comment: string) => void;
   localDev: boolean;
+  hasErrors: boolean;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -46,6 +53,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onPublishLayout,
     onSendLayoutForApproval,
     localDev,
+    hasErrors,
   } = props;
   const streamDocument = useDocument();
 
@@ -237,13 +245,35 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             }}
           />
           {!templateMetadata.isDevMode && (
-            <Button
-              variant="secondary"
-              disabled={histories.length === 1}
-              onClick={onButtonClick}
-            >
-              {buttonText}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span
+                    tabIndex={hasErrors ? 0 : -1}
+                    className={hasErrors ? "ve-cursor-not-allowed" : ""}
+                  >
+                    <Button
+                      variant="secondary"
+                      disabled={histories.length === 1 || hasErrors}
+                      onClick={onButtonClick}
+                      className={hasErrors ? "ve-pointer-events-none" : ""}
+                    >
+                      {buttonText}
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {hasErrors && (
+                  <TooltipContent>
+                    <p>
+                      {pt(
+                        "fixErrorsToPublish",
+                        "To publish, delete or fix sections with errors"
+                      )}
+                    </p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
       </header>
