@@ -80,6 +80,5 @@ export { VideoSection, type VideoSectionProps } from "./VideoSection.tsx";
 export {
   ProfessionalHeroSection,
   type ProfessionalHeroSectionProps,
-  type ProfessionalHeroData,
   type ProfessionalHeroStyles,
 } from "./ProfessionalHeroSection.tsx";

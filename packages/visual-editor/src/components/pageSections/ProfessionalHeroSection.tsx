@@ -7,7 +7,6 @@ import {
   VisibilityWrapper,
   msg,
   getAnalyticsScopeHash,
-  YextEntityField,
   themeManagerCn,
   HeadingTextProps,
   ImageWrapperProps,
@@ -20,18 +19,10 @@ import {
   getAggregateRating,
   PageSection,
   ThemeOptions,
-  AssetImageType,
-  TranslatableAssetImage,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
-import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
+import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
-
-export interface ProfessionalHeroData {
-  backgroundImage: YextEntityField<
-    ImageType | AssetImageType | TranslatableAssetImage
-  >;
-}
 
 export interface ProfessionalHeroStyles {
   /**
@@ -66,12 +57,6 @@ export interface ProfessionalHeroStyles {
 }
 
 export interface ProfessionalHeroSectionProps {
-  /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: ProfessionalHeroData;
-
   /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
