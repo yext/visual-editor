@@ -84,7 +84,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   parentData,
   puck,
 }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
   const MAX_VISIBLE = 5;
   const type = parentData?.type || "Primary";
@@ -157,7 +157,13 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
         {isSecondary && validLinks.length > MAX_VISIBLE && (
           <li className="hidden md:block py-4 md:py-0">
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex flex-row md:items-center gap-4 justify-between w-full">
+              <DropdownMenuTrigger
+                className="flex flex-row md:items-center gap-4 justify-between w-full"
+                aria-label={t(
+                  "showAdditionalHeaderLinks",
+                  "Show additional header links"
+                )}
+              >
                 <div className="flex gap-4 items-center">
                   <FaBars />
                 </div>
