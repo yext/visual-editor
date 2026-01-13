@@ -14,6 +14,7 @@ import {
   YextField,
   getPreferredDistanceUnit,
   toKilometers,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { parseDocument, fetchNearbyLocations } from "./utils";
 import { NearbyLocationCard } from "./NearbyLocationCard";
@@ -351,7 +352,7 @@ const NearbyLocationsEmptyState: React.FC<{
   const entityTypeDisplayName =
     templateMetadata?.entityTypeDisplayName?.toLowerCase();
 
-  const { i18n } = useTranslation();
+  const { i18n } = usePlatformTranslation();
 
   const unit = getPreferredDistanceUnit(i18n.language);
   const distance =
