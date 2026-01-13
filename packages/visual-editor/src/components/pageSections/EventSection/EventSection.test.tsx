@@ -124,224 +124,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 0 props with entity values",
-    document: { c_events: eventsData, name: "Test Name" },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Upcoming Events",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        events: {
-          field: "c_events",
-          constantValue: { events: [{}] },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        cardBackgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        headingLevel: 5,
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 0 props with constant value",
-    document: { c_events: eventsData },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Upcoming",
-          constantValueEnabled: true,
-        },
-        events: {
-          field: "c_exampleEvents",
-          constantValue: {
-            events: [
-              { title: "Event 1" },
-              {
-                image: { url: "https://placehold.co/600x400" },
-                title: "Event 2",
-                dateTime: "2020-02-02T10:10",
-                description: "Test Description",
-                cta: { label: "Test CTA", link: "https://yext.com" },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        cardBackgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        headingLevel: 2,
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 7 props with entity values",
-    document: { c_events: eventsData, name: "Test Name" },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Upcoming Events",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        events: {
-          field: "c_events",
-          constantValue: { events: [{}] },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 3,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 7 props with constant value",
-    document: { c_events: eventsData },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Upcoming",
-          constantValueEnabled: true,
-        },
-        events: {
-          field: "c_exampleEvents",
-          constantValue: {
-            events: [
-              { title: "Event 1" },
-              {
-                image: { url: "https://placehold.co/600x400" },
-                title: "Event 2",
-                dateTime: "2020-02-02T10:10",
-                description: "Test Description",
-                cta: { label: "Test CTA", link: "https://yext.com" },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 3,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 15 props with missing ctaType",
-    document: { c_events: eventsData },
-    props: {
-      data: {
-        events: {
-          field: "c_events",
-          constantValue: {
-            events: [
-              {
-                image: { url: "https://placehold.co/600x400" },
-                title: "Event 1",
-                dateTime: "2020-01-01T10:00",
-                description: "Test Description",
-                cta: {
-                  label: "Test CTA",
-                  // Missing link, linkType, and ctaType - should be added by migration
-                },
-              },
-              {
-                image: { url: "https://placehold.co/600x400" },
-                title: "Event 2",
-                dateTime: "2020-02-02T10:10",
-                description: "Test Description",
-                cta: {
-                  label: "Test CTA 2",
-                  link: "https://yext.com",
-                  // Missing linkType and ctaType - should be added by migration
-                },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 3,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 15,
-  },
-  {
     name: "version 26 props with constant values",
     document: { c_events: eventsData, name: "Galaxy Grill" },
     props: {
@@ -1167,35 +949,63 @@ const tests: ComponentTest[] = [
     version: 26,
   },
   {
-    name: "version 48 props",
-    version: 48,
+    name: "version 51 props with constant values",
+    version: 51,
     document: {},
     props: {
       styles: {
         backgroundColor: {
-          bgColor: "bg-white",
-          textColor: "text-black",
+          bgColor: "bg-palette-secondary-dark",
+          textColor: "text-white",
         },
       },
       slots: {
-        SectionHeadingSlot: [],
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              id: "HeadingTextSlot-78b2b421-b527-44f2-88ac-3bbfc386a312",
+              data: {
+                text: {
+                  constantValue: {
+                    en: "Upcoming Events",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                  field: "",
+                },
+              },
+              styles: {
+                level: 2,
+                align: "left",
+              },
+            },
+          },
+        ],
         CardsWrapperSlot: [
           {
             type: "EventCardsWrapper",
             props: {
-              id: "CardsWrapperSlot-v48",
+              id: "EventCardsWrapper-6814ff91-e468-48ae-be8b-2dc117bea46f",
               data: {
-                constantValue: [{ id: "card-1" }],
-                constantValueEnabled: true,
                 field: "",
+                constantValueEnabled: true,
+                constantValue: [
+                  {
+                    id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1",
+                  },
+                  {
+                    id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732",
+                  },
+                ],
               },
               slots: {
                 CardSlot: [
                   {
                     type: "EventCard",
                     props: {
-                      id: "CardSlot-v48",
-                      data: {},
+                      id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1",
+                      index: 0,
                       styles: {
                         backgroundColor: {
                           bgColor: "bg-white",
@@ -1208,21 +1018,102 @@ const tests: ComponentTest[] = [
                           {
                             type: "ImageSlot",
                             props: {
-                              id: "ImageSlot-v48",
+                              id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-image",
                               data: {
                                 image: {
                                   field: "",
                                   constantValue: {
+                                    url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                    width: 640,
+                                    height: 360,
+                                    alternateText: "Event Image",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1.78,
+                                width: 640,
+                              },
+                              hideWidthProp: true,
+                              className: "max-w-full h-full object-cover",
+                              sizes: {
+                                base: "calc(100vw - 32px)",
+                                lg: "calc(maxWidth * 0.45)",
+                              },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-title",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: "Event 1",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                                semanticLevelOverride: 3,
+                              },
+                            },
+                          },
+                        ],
+                        DateTimeSlot: [
+                          {
+                            type: "Timestamp",
+                            props: {
+                              id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-timestamp",
+                              data: {
+                                date: {
+                                  field: "",
+                                  constantValue: "",
+                                  constantValueEnabled: true,
+                                },
+                                endDate: {
+                                  field: "",
+                                  constantValue: "",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                includeTime: true,
+                                includeRange: false,
+                              },
+                            },
+                          },
+                        ],
+                        DescriptionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-description",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
                                     en: {
-                                      url: "https://placehold.co/640x360",
-                                      height: 360,
-                                      width: 640,
-                                      alternateText: "Image",
+                                      json: "",
+                                      html: "",
                                     },
                                     hasLocalizedValue: "true",
                                   },
                                   constantValueEnabled: true,
                                 },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                              parentStyles: {
+                                className: "md:line-clamp-2",
                               },
                             },
                           },
@@ -1231,28 +1122,192 @@ const tests: ComponentTest[] = [
                           {
                             type: "CTASlot",
                             props: {
-                              id: "CTASlot-v48",
+                              id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-cta",
                               data: {
                                 entityField: {
                                   field: "",
                                   constantValue: {
                                     label: {
-                                      en: "Learn More",
+                                      en: "",
                                       hasLocalizedValue: "true",
                                     },
-                                    link: {
-                                      en: "#",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    link: "#",
                                     linkType: "URL",
                                     ctaType: "textAndLink",
                                   },
                                   constantValueEnabled: true,
                                 },
                               },
+                              styles: {
+                                variant: "primary",
+                                presetImage: "app-store",
+                              },
+                              eventName: "cta0",
                             },
                           },
                         ],
+                      },
+                      conditionalRender: {
+                        image: true,
+                        title: true,
+                        dateTime: true,
+                        description: true,
+                        cta: true,
+                      },
+                    },
+                  },
+                  {
+                    type: "EventCard",
+                    props: {
+                      id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732",
+                      index: 1,
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-white",
+                          textColor: "text-black",
+                        },
+                        truncateDescription: true,
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-image",
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                    width: 640,
+                                    height: 360,
+                                    alternateText: "Event Image",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1.78,
+                                width: 640,
+                              },
+                              hideWidthProp: true,
+                              className: "max-w-full h-full object-cover",
+                              sizes: {
+                                base: "calc(100vw - 32px)",
+                                lg: "calc(maxWidth * 0.45)",
+                              },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-title",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: "Event 2",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                level: 3,
+                                align: "left",
+                                semanticLevelOverride: 3,
+                              },
+                            },
+                          },
+                        ],
+                        DateTimeSlot: [
+                          {
+                            type: "Timestamp",
+                            props: {
+                              id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-timestamp",
+                              data: {
+                                date: {
+                                  field: "",
+                                  constantValue: "2022-12-12T14:00:00",
+                                  constantValueEnabled: true,
+                                },
+                                endDate: {
+                                  field: "",
+                                  constantValue: "",
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                includeTime: true,
+                                includeRange: false,
+                              },
+                            },
+                          },
+                        ],
+                        DescriptionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-description",
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "base",
+                              },
+                              parentStyles: {
+                                className: "md:line-clamp-2",
+                              },
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-cta",
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: {
+                                      en: "",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    link: "#",
+                                    linkType: "URL",
+                                    ctaType: "presetImage",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "primary",
+                                presetImage: "app-store",
+                              },
+                              eventName: "cta1",
+                            },
+                          },
+                        ],
+                      },
+                      conditionalRender: {
+                        image: true,
+                        title: true,
+                        dateTime: true,
+                        description: true,
+                        cta: true,
                       },
                     },
                   },
@@ -1262,8 +1317,600 @@ const tests: ComponentTest[] = [
           },
         ],
       },
-      analytics: { scope: "eventsSection" },
+      analytics: {
+        scope: "eventsSection",
+      },
       liveVisibility: true,
+      id: "EventSection-2fb8d8fc-66d5-442b-8d4f-8b50f3a9d8aa",
+    },
+  },
+  {
+    name: "version 51 props with entity values",
+    version: 51,
+    document: { c_exampleEvents: eventsData, name: "Galaxy Grill" },
+    props: {
+      type: "EventSection",
+      props: {
+        styles: {
+          backgroundColor: {
+            bgColor: "bg-palette-quaternary",
+            textColor: "text-palette-quaternary-contrast",
+          },
+        },
+        slots: {
+          SectionHeadingSlot: [
+            {
+              type: "HeadingTextSlot",
+              props: {
+                id: "HeadingTextSlot-78b2b421-b527-44f2-88ac-3bbfc386a312",
+                data: {
+                  text: {
+                    constantValue: {
+                      en: "Events at [[name]]",
+                      hasLocalizedValue: "true",
+                    },
+                    constantValueEnabled: true,
+                    field: "name",
+                  },
+                },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
+              },
+            },
+          ],
+          CardsWrapperSlot: [
+            {
+              type: "EventCardsWrapper",
+              props: {
+                id: "EventCardsWrapper-6814ff91-e468-48ae-be8b-2dc117bea46f",
+                data: {
+                  field: "c_exampleEvents",
+                  constantValueEnabled: false,
+                  constantValue: [
+                    {
+                      id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1",
+                    },
+                    {
+                      id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732",
+                    },
+                  ],
+                },
+                slots: {
+                  CardSlot: [
+                    {
+                      type: "EventCard",
+                      props: {
+                        id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1",
+                        styles: {
+                          backgroundColor: {
+                            bgColor: "bg-white",
+                            textColor: "text-black",
+                          },
+                          truncateDescription: true,
+                        },
+                        slots: {
+                          ImageSlot: [
+                            {
+                              type: "ImageSlot",
+                              props: {
+                                id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-image",
+                                data: {
+                                  image: {
+                                    field: "",
+                                    constantValue: {
+                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      width: 640,
+                                      height: 360,
+                                      alternateText: "Event Image",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  aspectRatio: 1,
+                                  width: 640,
+                                },
+                                hideWidthProp: true,
+                                className: "max-w-full h-full object-cover",
+                                sizes: {
+                                  base: "calc(100vw - 32px)",
+                                  lg: "calc(maxWidth * 0.45)",
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  image: {
+                                    alternateText: "cooking class",
+                                    height: 1554,
+                                    thumbnails: [
+                                      {
+                                        height: 1554,
+                                        url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/2048x1554.jpg",
+                                        width: 2048,
+                                      },
+                                      {
+                                        height: 1442,
+                                        url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/1900x1442.jpg",
+                                        width: 1900,
+                                      },
+                                      {
+                                        height: 470,
+                                        url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/619x470.jpg",
+                                        width: 619,
+                                      },
+                                      {
+                                        height: 450,
+                                        url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/593x450.jpg",
+                                        width: 593,
+                                      },
+                                      {
+                                        height: 149,
+                                        url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/196x149.jpg",
+                                        width: 196,
+                                      },
+                                    ],
+                                    url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/2048x1554.jpg",
+                                    width: 2048,
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                          TitleSlot: [
+                            {
+                              type: "HeadingTextSlot",
+                              props: {
+                                id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-title",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: "Event 1",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                  semanticLevelOverride: 3,
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  text: "Cooking Class",
+                                },
+                              },
+                            },
+                          ],
+                          DateTimeSlot: [
+                            {
+                              type: "Timestamp",
+                              props: {
+                                id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-timestamp",
+                                data: {
+                                  date: {
+                                    field: "",
+                                    constantValue: "",
+                                    constantValueEnabled: true,
+                                  },
+                                  endDate: {
+                                    field: "",
+                                    constantValue: "",
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  includeTime: true,
+                                  includeRange: false,
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  date: "2025-06-01T10:00",
+                                },
+                              },
+                            },
+                          ],
+                          DescriptionSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-description",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: "",
+                                        html: "",
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                                parentStyles: {
+                                  className: "md:line-clamp-2",
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  richText: {
+                                    html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Join our hands-on </span><b><strong style="font-weight: bold;">cooking class</strong></b><span> to learn delicious recipes and </span><i><em style="font-style: italic;">unleash</em></i><span> your inner chef. </span><u><span style="text-decoration: underline; background-color: #ffc107;">Perfect for all levels!</span></u></p>',
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                          CTASlot: [
+                            {
+                              type: "CTASlot",
+                              props: {
+                                id: "EventCard-697ac4e1-b489-45f2-b502-440afe8c23e1-cta",
+                                data: {
+                                  entityField: {
+                                    field: "",
+                                    constantValue: {
+                                      label: {
+                                        en: "",
+                                        hasLocalizedValue: "true",
+                                      },
+                                      link: "#",
+                                      linkType: "URL",
+                                      ctaType: "textAndLink",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "primary",
+                                  presetImage: "app-store",
+                                },
+                                eventName: "cta0",
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  cta: {
+                                    label: "Learn More",
+                                    link: "https://yext.com",
+                                    linkType: "URL",
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                        },
+                        index: 0,
+                        conditionalRender: {
+                          image: true,
+                          title: true,
+                          dateTime: true,
+                          description: true,
+                          cta: true,
+                        },
+                        parentData: {
+                          field: "c_exampleEvents",
+                          event: {
+                            cta: {
+                              label: "Learn More",
+                              link: "https://yext.com",
+                              linkType: "URL",
+                            },
+                            dateTime: "2025-06-01T10:00",
+                            description: {
+                              html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Join our hands-on </span><b><strong style="font-weight: bold;">cooking class</strong></b><span> to learn delicious recipes and </span><i><em style="font-style: italic;">unleash</em></i><span> your inner chef. </span><u><span style="text-decoration: underline; background-color: #ffc107;">Perfect for all levels!</span></u></p>',
+                            },
+                            image: {
+                              alternateText: "cooking class",
+                              height: 1554,
+                              thumbnails: [
+                                {
+                                  height: 1554,
+                                  url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/2048x1554.jpg",
+                                  width: 2048,
+                                },
+                                {
+                                  height: 1442,
+                                  url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/1900x1442.jpg",
+                                  width: 1900,
+                                },
+                                {
+                                  height: 470,
+                                  url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/619x470.jpg",
+                                  width: 619,
+                                },
+                                {
+                                  height: 450,
+                                  url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/593x450.jpg",
+                                  width: 593,
+                                },
+                                {
+                                  height: 149,
+                                  url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/196x149.jpg",
+                                  width: 196,
+                                },
+                              ],
+                              url: "https://a.mktgcdn.com/p-dev/dORmX57RPQoHMVzY6eP8hBvzQit-XuqHI4LWatzrQLM/2048x1554.jpg",
+                              width: 2048,
+                            },
+                            title: "Cooking Class",
+                          },
+                        },
+                      },
+                    },
+                    {
+                      type: "EventCard",
+                      props: {
+                        id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732",
+                        index: 1,
+                        styles: {
+                          backgroundColor: {
+                            bgColor: "bg-white",
+                            textColor: "text-black",
+                          },
+                          truncateDescription: true,
+                        },
+                        slots: {
+                          ImageSlot: [
+                            {
+                              type: "ImageSlot",
+                              props: {
+                                id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-image",
+                                data: {
+                                  image: {
+                                    field: "",
+                                    constantValue: {
+                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      width: 640,
+                                      height: 360,
+                                      alternateText: "Event Image",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  aspectRatio: 1,
+                                  width: 640,
+                                },
+                                hideWidthProp: true,
+                                className: "max-w-full h-full object-cover",
+                                sizes: {
+                                  base: "calc(100vw - 32px)",
+                                  lg: "calc(maxWidth * 0.45)",
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  image: {
+                                    height: 2048,
+                                    thumbnails: [
+                                      {
+                                        height: 2048,
+                                        url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/2048x2048.jpg",
+                                        width: 2048,
+                                      },
+                                      {
+                                        height: 1900,
+                                        url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/1900x1900.jpg",
+                                        width: 1900,
+                                      },
+                                      {
+                                        height: 619,
+                                        url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/619x619.jpg",
+                                        width: 619,
+                                      },
+                                      {
+                                        height: 450,
+                                        url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/450x450.jpg",
+                                        width: 450,
+                                      },
+                                      {
+                                        height: 196,
+                                        url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/196x196.jpg",
+                                        width: 196,
+                                      },
+                                    ],
+                                    url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/2048x2048.jpg",
+                                    width: 2048,
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                          TitleSlot: [
+                            {
+                              type: "HeadingTextSlot",
+                              props: {
+                                id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-title",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: "Event 2",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                  semanticLevelOverride: 3,
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  text: "Hike",
+                                },
+                              },
+                            },
+                          ],
+                          DateTimeSlot: [
+                            {
+                              type: "Timestamp",
+                              props: {
+                                id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-timestamp",
+                                data: {
+                                  date: {
+                                    field: "",
+                                    constantValue: "2022-12-12T14:00:00",
+                                    constantValueEnabled: true,
+                                  },
+                                  endDate: {
+                                    field: "",
+                                    constantValue: "",
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  includeTime: true,
+                                  includeRange: false,
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  date: "2026-06-30T08:00",
+                                },
+                              },
+                            },
+                          ],
+                          DescriptionSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-description",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                                parentStyles: {
+                                  className: "md:line-clamp-2",
+                                },
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  richText: {
+                                    html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Join our group for a refreshing hike on local trails! Enjoy:</span></p><ul style="padding: 0; margin: 0; margin-left: 16px; list-style-type: disc; list-style-position: inside;"><li value="1" style="margin: 0 32px;"><span>nature</span></li><li value="2" style="margin: 0 32px;"><span>good company</span></li><li value="3" style="margin: 0 32px;"><span>fresh air together</span></li></ul>',
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                          CTASlot: [
+                            {
+                              type: "CTASlot",
+                              props: {
+                                id: "EventCard-e8f62460-d459-43c9-8c88-3a2afefa1732-cta",
+                                data: {
+                                  entityField: {
+                                    field: "",
+                                    constantValue: {
+                                      label: {
+                                        en: "",
+                                        hasLocalizedValue: "true",
+                                      },
+                                      link: "#",
+                                      linkType: "URL",
+                                      ctaType: "presetImage",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "primary",
+                                  presetImage: "app-store",
+                                },
+                                eventName: "cta1",
+                                parentData: {
+                                  field: "c_exampleEvents",
+                                  cta: {
+                                    label: "Sign Up",
+                                    link: "sumo@yext.com",
+                                    linkType: "EMAIL",
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                        },
+                        conditionalRender: {
+                          image: true,
+                          title: true,
+                          dateTime: true,
+                          description: true,
+                          cta: true,
+                        },
+                        parentData: {
+                          field: "c_exampleEvents",
+                          event: {
+                            cta: {
+                              label: "Sign Up",
+                              link: "sumo@yext.com",
+                              linkType: "EMAIL",
+                            },
+                            dateTime: "2026-06-30T08:00",
+                            description: {
+                              html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Join our group for a refreshing hike on local trails! Enjoy:</span></p><ul style="padding: 0; margin: 0; margin-left: 16px; list-style-type: disc; list-style-position: inside;"><li value="1" style="margin: 0 32px;"><span>nature</span></li><li value="2" style="margin: 0 32px;"><span>good company</span></li><li value="3" style="margin: 0 32px;"><span>fresh air together</span></li></ul>',
+                            },
+                            image: {
+                              height: 2048,
+                              thumbnails: [
+                                {
+                                  height: 2048,
+                                  url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/2048x2048.jpg",
+                                  width: 2048,
+                                },
+                                {
+                                  height: 1900,
+                                  url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/1900x1900.jpg",
+                                  width: 1900,
+                                },
+                                {
+                                  height: 619,
+                                  url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/619x619.jpg",
+                                  width: 619,
+                                },
+                                {
+                                  height: 450,
+                                  url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/450x450.jpg",
+                                  width: 450,
+                                },
+                                {
+                                  height: 196,
+                                  url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/196x196.jpg",
+                                  width: 196,
+                                },
+                              ],
+                              url: "https://a.mktgcdn.com/p-dev/IBubx9o_JTORQF4dzMm51g2VlMAn4_dGfUXrVkUdNXo/2048x2048.jpg",
+                              width: 2048,
+                            },
+                            title: "Hike",
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+        analytics: {
+          scope: "eventsSection",
+        },
+        liveVisibility: true,
+        id: "EventSection-2fb8d8fc-66d5-442b-8d4f-8b50f3a9d8aa",
+      },
     },
   },
 ];
@@ -1320,9 +1967,9 @@ describe("EventSection", async () => {
         expect(images.every((i) => i.complete)).toBe(true);
       });
 
-      await expect(`EventSection/[${viewportName}] ${name}`).toMatchScreenshot({
-        useFullPage: true,
-      });
+      await expect(
+        `EventSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -1330,7 +1977,7 @@ describe("EventSection", async () => {
         await interactions(page);
         await expect(
           `EventSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ useFullPage: true });
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

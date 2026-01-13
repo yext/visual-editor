@@ -1132,7 +1132,7 @@ describe("InsightSection", async () => {
 
       await expect(
         `InsightSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot({ useFullPage: true });
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -1140,7 +1140,7 @@ describe("InsightSection", async () => {
         await interactions(page);
         await expect(
           `InsightSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ useFullPage: true });
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

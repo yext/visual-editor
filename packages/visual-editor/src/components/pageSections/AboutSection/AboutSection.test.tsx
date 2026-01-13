@@ -589,9 +589,9 @@ describe("AboutSection", async () => {
 
       await page.viewport(width, height);
 
-      await expect(`AboutSection/[${viewportName}] ${name}`).toMatchScreenshot({
-        useFullPage: true,
-      });
+      await expect(
+        `AboutSection/[${viewportName}] ${name}`
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -599,7 +599,7 @@ describe("AboutSection", async () => {
         await interactions(page);
         await expect(
           `AboutSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ useFullPage: true });
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

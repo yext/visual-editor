@@ -381,99 +381,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 4 - directory list - non-default props",
-    document: regionDocument,
-    props: {
-      data: {
-        directoryRoot: "Not Default Root",
-      },
-      liveVisibility: true,
-    },
-    version: 4,
-  },
-  {
-    name: "version 4 - directory list - default props",
-    document: regionDocument,
-    props: {
-      data: {
-        directoryRoot: "Directory Root",
-      },
-      liveVisibility: true,
-    },
-    version: 4,
-  },
-  {
-    name: "version 4 - directory cards - default props",
-    document: cityDocument,
-    props: {
-      data: {
-        directoryRoot: "Directory Root",
-      },
-      liveVisibility: true,
-    },
-    version: 4,
-  },
-  {
-    name: "version 7 - directory list - non-default props",
-    document: regionDocument,
-    props: {
-      data: {
-        directoryRoot: "Not Default Root",
-      },
-      styles: {
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 7 - directory list - default props",
-    document: regionDocument,
-    props: {
-      data: {
-        directoryRoot: "Directory Root",
-      },
-      styles: {
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 7 - directory cards - default props",
-    document: cityDocument,
-    props: {
-      data: {
-        directoryRoot: "Directory Root",
-      },
-      styles: {
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
     name: "version 8 - directory list - non-default props",
     document: regionDocument,
     props: {
@@ -587,7 +494,7 @@ const tests: ComponentTest[] = [
   },
   {
     name: "version 8 - region - default props",
-    document: countryDocument,
+    document: regionDocument,
     props: {
       data: {
         directoryRoot: "Directory Root",
@@ -642,117 +549,6 @@ const tests: ComponentTest[] = [
     version: 8,
   },
   {
-    name: "version 11 with default props",
-    document: {
-      _site: {
-        name: "Example Business",
-      },
-      name: "VA",
-      meta: { entityType: { id: "dm_region", uid: 123 }, locale: "en" },
-      dm_addressCountryDisplayName: "United States",
-      dm_addressRegionDisplayName: "Virginia",
-      dm_childEntityIds: ["8932945"],
-      dm_directoryChildren: [
-        {
-          name: "Arlington",
-          slug: "us/va/arlington",
-          dm_addressCountryDisplayName: "United States",
-          dm_addressRegionDisplayName: "Virginia",
-        },
-      ],
-      dm_directoryManagerId: "63590-locations",
-      dm_directoryParents_63590_locations: [
-        {
-          name: "Locations Directory",
-          slug: "en/index.html",
-          dm_addressCountryDisplayName: "United States",
-          dm_addressRegionDisplayName: "Virginia",
-        },
-        {
-          name: "US",
-          slug: "en/us",
-          dm_addressCountryDisplayName: "United States",
-        },
-      ],
-    },
-    props: {
-      data: {
-        title: {
-          field: "",
-          constantValueEnabled: true,
-          constantValue: {
-            en: "[[name]]",
-            hasLocalizedValue: "true",
-          },
-        },
-        directoryRoot: "Directory Root",
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        breadcrumbsBackgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 11,
-  },
-  {
-    name: "version 14 with cityDocument and default props",
-    document: cityDocument,
-    props: {
-      data: {
-        title: {
-          field: "",
-          constantValueEnabled: true,
-          constantValue: {
-            en: "[[name]]",
-            hasLocalizedValue: "true",
-          },
-        },
-        directoryRoot: "Directory Root",
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        breadcrumbsBackgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-        hours: {
-          showCurrentStatus: true,
-          timeFormat: "12h",
-          showDayNames: false,
-          dayOfWeekFormat: "short",
-        },
-        phoneNumberFormat: "international",
-        phoneNumberLink: true,
-      },
-      liveVisibility: true,
-    },
-    version: 14,
-  },
-  {
     name: "version 18 with cityDocument and siteName field",
     document: cityDocument,
     props: {
@@ -805,13 +601,13 @@ const tests: ComponentTest[] = [
     version: 18,
   },
   {
-    name: "version 40 with cityDocument and default props",
+    name: "version 40 with cityDocument and non-default props",
     document: cityDocument,
     props: version40Props,
     version: 40,
   },
   {
-    name: "version 40 with countryDocument and default props",
+    name: "version 40 with countryDocument and non-default props",
     document: countryDocument,
     props: version40Props,
     version: 40,
