@@ -308,8 +308,6 @@ This object contains properties for customizing the component's appearance.
 
 The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component. Available on Directory and Locator templates.
 
-![Preview of the Footer component](../components/testing/screenshots/Footer/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
-
 ### Props
 
 #### Other Props
@@ -400,8 +398,6 @@ The background color for the entire footer section.
 ## Header
 
 The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component. Available on Directory and Locator templates.
-
-![Preview of the Header component](../components/testing/screenshots/Header/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
 
