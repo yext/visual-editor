@@ -10,6 +10,7 @@ export const getPreferredDistanceUnit = (locale: string) => {
 /**
  * Converts miles to kilometers.
  */
-export const toKilometers = (miles: number) => {
-  return miles * 1.609344;
+export const toKilometers = (miles: number, round = true) => {
+  const kilometers = miles * 1.609344;
+  return round ? Math.round(kilometers) : kilometers;
 };
