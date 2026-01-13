@@ -57,6 +57,60 @@ export interface ProfessionalHeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
+
+  /**
+   * Whether to show the credentials slot.
+   * @defaultValue true
+   */
+  showCredentials?: boolean;
+
+  /**
+   * Whether to show the subtitle slot.
+   * @defaultValue true
+   */
+  showSubtitle?: boolean;
+
+  /**
+   * Whether to show the business name slot.
+   * @defaultValue true
+   */
+  showBusinessName?: boolean;
+
+  /**
+   * Whether to show the professional title slot.
+   * @defaultValue true
+   */
+  showProfessionalTitle?: boolean;
+
+  /**
+   * Whether to show the address slot.
+   * @defaultValue true
+   */
+  showAddress?: boolean;
+
+  /**
+   * Whether to show the primary CTA slot.
+   * @defaultValue true
+   */
+  showPrimaryCTA?: boolean;
+
+  /**
+   * Whether to show the secondary CTA slot.
+   * @defaultValue true
+   */
+  showSecondaryCTA?: boolean;
+
+  /**
+   * Whether to show the phone slot.
+   * @defaultValue true
+   */
+  showPhone?: boolean;
+
+  /**
+   * Whether to show the email slot.
+   * @defaultValue true
+   */
+  showEmail?: boolean;
 }
 
 export interface ProfessionalHeroSectionProps {
@@ -70,8 +124,10 @@ export interface ProfessionalHeroSectionProps {
   slots: {
     ImageSlot: Slot;
     BusinessNameSlot: Slot;
+    CredentialsSlot: Slot;
     ProfessionalNameSlot: Slot;
     ProfessionalTitleSlot: Slot;
+    SubtitleSlot: Slot;
     AddressSlot: Slot;
     PrimaryCTASlot: Slot;
     SecondaryCTASlot: Slot;
@@ -130,18 +186,48 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
       {/* Content Column */}
       <div
         className={themeManagerCn(
-          "w-full flex flex-col gap-6",
+          "w-full flex flex-col gap-4",
           showImage ? "lg:w-2/3" : "w-full"
         )}
       >
         {/* Top: Names and Title */}
-        <section className="flex flex-col gap-2">
-          <div className="[&_p]:font-bold">
-            <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
+        <div className="flex flex-col gap-2">
+          {styles.showBusinessName && (
+            <div className="[&_p]:font-bold text-center lg:text-left">
+              <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
+            </div>
+          )}
+          <div className="flex flex-col lg:flex-row lg:gap-4">
+            <div
+              className={`${
+                styles.showCredentials ? "w-full lg:w-1/2" : "w-full"
+              } text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start`}
+            >
+              <slots.ProfessionalNameSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            </div>
+            {styles.showCredentials && (
+              <div className="w-full lg:w-1/2 text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start">
+                <slots.CredentialsSlot style={{ height: "auto" }} allow={[]} />
+              </div>
+            )}
           </div>
-          <slots.ProfessionalNameSlot style={{ height: "auto" }} allow={[]} />
-          <slots.ProfessionalTitleSlot style={{ height: "auto" }} allow={[]} />
-        </section>
+          {styles.showProfessionalTitle && (
+            <div className="text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start">
+              <slots.ProfessionalTitleSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            </div>
+          )}
+          {styles.showSubtitle && (
+            <div className="[&_p]:font-bold text-center lg:text-left [&_div]:justify-center lg:[&_div]:justify-start">
+              <slots.SubtitleSlot style={{ height: "auto" }} allow={[]} />
+            </div>
+          )}
+        </div>
 
         {/* Two Columns Under */}
         <div className="flex flex-col md:flex-row gap-8 w-full">
@@ -154,18 +240,28 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
                 className="justify-start"
               />
             )}
-            <slots.AddressSlot style={{ height: "auto" }} allow={[]} />
+            {styles.showAddress && (
+              <slots.AddressSlot style={{ height: "auto" }} allow={[]} />
+            )}
             <div className="flex flex-col md:flex-row gap-4">
-              <slots.PrimaryCTASlot style={{ height: "auto" }} allow={[]} />
-              <slots.SecondaryCTASlot style={{ height: "auto" }} allow={[]} />
+              {styles.showPrimaryCTA && (
+                <slots.PrimaryCTASlot style={{ height: "auto" }} allow={[]} />
+              )}
+              {styles.showSecondaryCTA && (
+                <slots.SecondaryCTASlot style={{ height: "auto" }} allow={[]} />
+              )}
             </div>
           </div>
 
           {/* Right Inner Column */}
           {conditionalRender?.isRightColumnVisible && (
             <div className="flex flex-col gap-4 flex-1">
-              <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
-              <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
+              {styles.showPhone && (
+                <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
+              )}
+              {styles.showEmail && (
+                <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
+              )}
             </div>
           )}
         </div>
@@ -183,22 +279,6 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
-        }
-      ),
-      showAverageReview: YextField(
-        msg("fields.showAverageReview", "Show Average Review"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.show", "Show"),
-              value: true,
-            },
-            {
-              label: msg("fields.options.hide", "Hide"),
-              value: false,
-            },
-          ],
         }
       ),
       showImage: YextField(msg("fields.showImage", "Show Image"), {
@@ -241,6 +321,154 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
           options: ThemeOptions.VERTICAL_POSITION,
         }
       ),
+      showBusinessName: YextField(
+        msg("fields.showBusinessName", "Show Business Name"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
+          ],
+        }
+      ),
+      showCredentials: YextField(
+        msg("fields.showCredentials", "Show Credentials"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
+          ],
+        }
+      ),
+      showProfessionalTitle: YextField(
+        msg("fields.showProfessionalTitle", "Show Professional Title"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
+          ],
+        }
+      ),
+      showSubtitle: YextField(msg("fields.showSubtitle", "Show Subtitle"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.show", "Show"),
+            value: true,
+          },
+          {
+            label: msg("fields.options.hide", "Hide"),
+            value: false,
+          },
+        ],
+      }),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
+          ],
+        }
+      ),
+      showAddress: YextField(msg("fields.showAddress", "Show Address"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.show", "Show"),
+            value: true,
+          },
+          {
+            label: msg("fields.options.hide", "Hide"),
+            value: false,
+          },
+        ],
+      }),
+      showPrimaryCTA: YextField(
+        msg("fields.showPrimaryCTA", "Show Primary CTA"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
+          ],
+        }
+      ),
+      showSecondaryCTA: YextField(
+        msg("fields.showSecondaryCTA", "Show Secondary CTA"),
+        {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.show", "Show"),
+              value: true,
+            },
+            {
+              label: msg("fields.options.hide", "Hide"),
+              value: false,
+            },
+          ],
+        }
+      ),
+      showPhone: YextField(msg("fields.showPhone", "Show Phone"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.show", "Show"),
+            value: true,
+          },
+          {
+            label: msg("fields.options.hide", "Hide"),
+            value: false,
+          },
+        ],
+      }),
+      showEmail: YextField(msg("fields.showEmail", "Show Email"), {
+        type: "radio",
+        options: [
+          {
+            label: msg("fields.options.show", "Show"),
+            value: true,
+          },
+          {
+            label: msg("fields.options.hide", "Hide"),
+            value: false,
+          },
+        ],
+      }),
     },
   }),
   slots: {
@@ -248,8 +476,10 @@ const professionalHeroSectionFields: Fields<ProfessionalHeroSectionProps> = {
     objectFields: {
       ImageSlot: { type: "slot" },
       BusinessNameSlot: { type: "slot" },
+      CredentialsSlot: { type: "slot" },
       ProfessionalNameSlot: { type: "slot" },
       ProfessionalTitleSlot: { type: "slot" },
+      SubtitleSlot: { type: "slot" },
       AddressSlot: { type: "slot" },
       PrimaryCTASlot: { type: "slot" },
       SecondaryCTASlot: { type: "slot" },
@@ -287,10 +517,19 @@ export const ProfessionalHeroSection: ComponentConfig<{
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
-      showAverageReview: true,
       showImage: true,
       desktopImagePosition: "left",
       mobileImagePosition: "top",
+      showBusinessName: true,
+      showCredentials: true,
+      showProfessionalTitle: true,
+      showSubtitle: true,
+      showAverageReview: true,
+      showAddress: true,
+      showPrimaryCTA: true,
+      showSecondaryCTA: true,
+      showPhone: true,
+      showEmail: true,
     },
     slots: {
       ImageSlot: [
@@ -338,6 +577,27 @@ export const ProfessionalHeroSection: ComponentConfig<{
           } satisfies BodyTextProps,
         },
       ],
+      CredentialsSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            data: {
+              text: {
+                field: "",
+                constantValue: {
+                  en: "Credentials",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+            },
+            styles: {
+              level: 2,
+              align: "left",
+            },
+          } satisfies HeadingTextProps,
+        },
+      ],
       ProfessionalNameSlot: [
         {
           type: "HeadingTextSlot",
@@ -376,6 +636,26 @@ export const ProfessionalHeroSection: ComponentConfig<{
               semanticLevelOverride: 3,
             },
           } satisfies HeadingTextProps,
+        },
+      ],
+      SubtitleSlot: [
+        {
+          type: "BodyTextSlot",
+          props: {
+            data: {
+              text: {
+                constantValue: {
+                  en: "Subtitle",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+                field: "",
+              },
+            },
+            styles: {
+              variant: "base",
+            },
+          } satisfies BodyTextProps,
         },
       ],
       AddressSlot: [
@@ -526,8 +806,12 @@ export const ProfessionalHeroSection: ComponentConfig<{
       return !!resolved;
     });
 
+    const showPhone = data.props.styles.showPhone ?? true;
+    const showEmail = data.props.styles.showEmail ?? true;
+
     const isRightColumnVisible =
-      (resolvedEmails && resolvedEmails.length > 0) || hasPhones;
+      (showEmail && resolvedEmails && resolvedEmails.length > 0) ||
+      (showPhone && hasPhones);
 
     return {
       ...data,
