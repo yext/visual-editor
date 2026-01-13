@@ -131,7 +131,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
 };
 
 export const transformProps: TransformProps<TemplateProps<any>> = async (
-  data
+  data,
 ) => {
   return await injectTranslations(data);
 };

@@ -12,6 +12,9 @@ import {
   resolveComponentData,
   useDocument,
   YextField,
+  getPreferredDistanceUnit,
+  toKilometers,
+  usePlatformTranslation,
 } from "@yext/visual-editor";
 import { parseDocument, fetchNearbyLocations } from "./utils";
 import { NearbyLocationCard } from "./NearbyLocationCard";
@@ -349,6 +352,12 @@ const NearbyLocationsEmptyState: React.FC<{
   const entityTypeDisplayName =
     templateMetadata?.entityTypeDisplayName?.toLowerCase();
 
+  const { i18n } = usePlatformTranslation();
+
+  const unit = getPreferredDistanceUnit(i18n.language);
+  const distance =
+    unit === "mile" ? (radius ?? 10) : toKilometers(radius ?? 10);
+
   return (
     <div
       data-empty-state="true"
@@ -372,8 +381,8 @@ const NearbyLocationsEmptyState: React.FC<{
             entityType: entityTypeDisplayName
               ? entityTypeDisplayName
               : "entity",
-            radius: radius ?? 10,
-            mile: pt("mile", { count: radius ?? 10 }),
+            radius: distance,
+            unit: pt(unit, { count: distance }),
           })}
         </Body>
       </div>

@@ -16,6 +16,7 @@ export interface HoursStatusAtomProps {
   dayOfWeekFormat?: "short" | "long";
   timezone?: string;
   boldCurrentStatus?: boolean;
+  bodyVariant?: "lg" | "base" | "sm";
 }
 
 export const HoursStatusAtom = React.memo(
@@ -28,6 +29,7 @@ export const HoursStatusAtom = React.memo(
     dayOfWeekFormat = "long",
     timezone,
     boldCurrentStatus = true,
+    bodyVariant = "lg",
   }: HoursStatusAtomProps): any => {
     const { t, i18n } = useTranslation();
 
@@ -35,7 +37,12 @@ export const HoursStatusAtom = React.memo(
       <HoursStatusJS
         hours={hours}
         className={themeManagerCn(
-          "components mb-2 font-body-fontFamily font-body-fontWeight text-body-lg-fontSize",
+          "components mb-2 font-body-fontFamily font-body-fontWeight",
+          bodyVariant === "lg"
+            ? "text-body-lg-fontSize"
+            : bodyVariant === "sm"
+              ? "text-body-sm-fontSize"
+              : "text-body-fontSize",
           className
         )}
         currentTemplate={

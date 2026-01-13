@@ -44,6 +44,8 @@ import {
   msg,
   useDocument,
   YextField,
+  getPreferredDistanceUnit,
+  toKilometers,
 } from "@yext/visual-editor";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
@@ -1194,7 +1196,7 @@ interface ResultsCountSummaryProps {
 const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   const { searchState, resultCount, selectedDistanceMiles, filterDisplayName } =
     props;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   if (resultCount === 0) {
     if (searchState === "not started") {
@@ -1218,12 +1220,17 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   } else {
     if (filterDisplayName) {
       if (selectedDistanceMiles) {
+        const unit = getPreferredDistanceUnit(i18n.language);
+        const distance =
+          unit === "mile"
+            ? selectedDistanceMiles
+            : toKilometers(selectedDistanceMiles);
         return (
           <div>
             {t("locationsWithinDistanceOf", {
               count: resultCount,
-              distance: selectedDistanceMiles,
-              mile: t("mile", { count: selectedDistanceMiles }),
+              distance: distance,
+              unit: t(unit, { count: distance }),
               name: filterDisplayName,
             })}
           </div>

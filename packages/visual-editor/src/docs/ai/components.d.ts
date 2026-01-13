@@ -30,6 +30,7 @@ import {
 import { VariantProps } from "class-variance-authority";
 
 interface PageSectionCategoryProps {
+  AboutSection: AboutSectionProps;
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
@@ -100,6 +101,38 @@ interface ExpandedFooterProps {
    * @internal */
   ignoreLocaleWarning?: string[];
 }
+
+type AboutSectionProps = {
+  /**
+   * This object contains properties for customizing the component's data.
+   * @propCategory Data Props
+   */
+  data: {
+    showDetailsColumn: boolean;
+  };
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    DescriptionSlot: Slot;
+    SidebarSlot: Slot;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility: boolean;
+};
 
 interface BannerSectionProps {
   /**
@@ -588,6 +621,26 @@ interface ExpandedFooterStyles {
   maxWidth: PageSectionProps["maxWidth"];
 }
 
+/**
+ * Applies a theme color as the background of a page section
+ * @ai This value MUST be one of the following
+ * { bgColor: "bg-white", textColor: "text-black" }
+ * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
+ * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ */
+type BackgroundStyle = {
+  /** The tailwind background color class */
+  bgColor: string;
+  /** The tailwind text color class */
+  textColor: string;
+  /** Whether the background color is dark (for adjusting other styles based on background) */
+  isDarkBackground?: boolean;
+};
+
 interface BannerData {
   /**
    * The rich text to display. It can be linked to a Yext entity field or set as a constant value.
@@ -632,26 +685,6 @@ interface CoreInfoStyles {
    */
   backgroundColor?: BackgroundStyle;
 }
-
-/**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
- */
-type BackgroundStyle = {
-  /** The tailwind background color class */
-  bgColor: string;
-  /** The tailwind text color class */
-  textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
-  isDarkBackground?: boolean;
-};
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 type YextEntityField<T> = {

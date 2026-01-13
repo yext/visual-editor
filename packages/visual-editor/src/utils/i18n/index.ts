@@ -5,3 +5,4 @@ export {
   msg,
   pt,
 } from "./platform.ts";
+export { getPreferredDistanceUnit, toKilometers } from "./distance.ts";
