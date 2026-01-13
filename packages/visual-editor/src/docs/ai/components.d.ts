@@ -412,8 +412,10 @@ interface ProfessionalHeroSectionProps {
   slots: {
     ImageSlot: Slot;
     BusinessNameSlot: Slot;
+    CredentialsSlot: Slot;
     ProfessionalNameSlot: Slot;
     ProfessionalTitleSlot: Slot;
+    SubtitleSlot: Slot;
     AddressSlot: Slot;
     PrimaryCTASlot: Slot;
     SecondaryCTASlot: Slot;
@@ -830,6 +832,51 @@ interface ProfessionalHeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
+  /**
+   * Whether to show the credentials slot.
+   * @defaultValue true
+   */
+  showCredentials?: boolean;
+  /**
+   * Whether to show the subtitle slot.
+   * @defaultValue true
+   */
+  showSubtitle?: boolean;
+  /**
+   * Whether to show the business name slot.
+   * @defaultValue true
+   */
+  showBusinessName?: boolean;
+  /**
+   * Whether to show the professional title slot.
+   * @defaultValue true
+   */
+  showProfessionalTitle?: boolean;
+  /**
+   * Whether to show the address slot.
+   * @defaultValue true
+   */
+  showAddress?: boolean;
+  /**
+   * Whether to show the primary CTA slot.
+   * @defaultValue true
+   */
+  showPrimaryCTA?: boolean;
+  /**
+   * Whether to show the secondary CTA slot.
+   * @defaultValue true
+   */
+  showSecondaryCTA?: boolean;
+  /**
+   * Whether to show the phone slot.
+   * @defaultValue true
+   */
+  showPhone?: boolean;
+  /**
+   * Whether to show the email slot.
+   * @defaultValue true
+   */
+  showEmail?: boolean;
 }
 
 interface StaticMapData {
