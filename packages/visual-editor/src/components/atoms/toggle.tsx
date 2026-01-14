@@ -10,6 +10,7 @@ function Toggle({
     <TogglePrimitive.Root
       data-slot="toggle"
       style={{
+        // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
         textTransform: "var(--textTransform-button-textTransform)",
       }}
       className={themeManagerCn(
