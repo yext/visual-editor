@@ -41,8 +41,8 @@ interface PageSectionCategoryProps {
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
-  PromoSection: PromoSectionProps;
   ProfessionalHeroSection: ProfessionalHeroSectionProps;
+  PromoSection: PromoSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
@@ -405,36 +405,6 @@ interface ProductSectionProps {
   liveVisibility: boolean;
 }
 
-interface PromoSectionProps {
-  /**
-   * This object contains the content to be displayed by the component.
-   * @propCategory Data Props
-   */
-  data: PromoData;
-  /**
-   * This object contains properties for customizing the component's appearance.
-   * @propCategory Style Props
-   */
-  styles: PromoStyles;
-  /** @internal */
-  slots: {
-    HeadingSlot: Slot;
-    DescriptionSlot: Slot;
-    VideoSlot: Slot;
-    ImageSlot: Slot;
-    CTASlot: Slot;
-  };
-  /** @internal */
-  analytics: {
-    scope?: string;
-  };
-  /**
-   * If 'true', the component is visible on the live page; if 'false', it's hidden.
-   * @defaultValue true
-   */
-  liveVisibility?: boolean;
-}
-
 interface ProfessionalHeroSectionProps {
   /**
    * This object contains properties for customizing the component's appearance.
@@ -468,6 +438,36 @@ interface ProfessionalHeroSectionProps {
   analytics: {
     scope?: string;
   };
+}
+
+interface PromoSectionProps {
+  /**
+   * This object contains the content to be displayed by the component.
+   * @propCategory Data Props
+   */
+  data: PromoData;
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: PromoStyles;
+  /** @internal */
+  slots: {
+    HeadingSlot: Slot;
+    DescriptionSlot: Slot;
+    VideoSlot: Slot;
+    ImageSlot: Slot;
+    CTASlot: Slot;
+  };
+  /** @internal */
+  analytics: {
+    scope?: string;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility?: boolean;
 }
 
 interface ReviewsSectionProps {
@@ -785,60 +785,6 @@ interface PhotoGalleryStyles {
   backgroundColor?: BackgroundStyle;
 }
 
-interface PromoData {
-  /**
-   * The source for the promotional content, including an image, title, description, and a call-to-action.
-   * @defaultValue Placeholder content for a featured promotion.
-   */
-  promo: YextEntityField<PromoSectionType | {}>;
-  /**
-   * Determines whether to display an image or video in the media section.
-   * @defaultValue 'image'
-   */
-  media: "image" | "video";
-  /**
-   * The background image used by the immersive and spotlight variants.
-   * @defaultValue Placeholder image.
-   */
-  backgroundImage: YextEntityField<
-    ImageType | AssetImageType | TranslatableAssetImage
-  >;
-}
-
-interface PromoStyles {
-  /**
-   * The visual variant for the promo section.
-   * @defaultValue classic
-   */
-  variant: "classic" | "immersive" | "spotlight" | "compact";
-  /**
-   * The background color for the entire section.
-   * @defaultValue Background Color 1
-   */
-  backgroundColor?: BackgroundStyle;
-  /**
-   * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
-   * @defaultValue right
-   */
-  desktopImagePosition: "left" | "right";
-  /**
-   * Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).
-   * @defaultValue top
-   */
-  mobileImagePosition: "top" | "bottom";
-  /**
-   * Text content position and alignment.
-   * @defaultValue left
-   */
-  containerAlignment: "left" | "center" | "right";
-  /**
-   * Image Height for the promo image with Immersive or Spotlight variant
-   * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
-   */
-  imageHeight: number;
-}
-
 interface ProfessionalHeroStyles {
   /**
    * The background color for the section.
@@ -910,6 +856,60 @@ interface ProfessionalHeroStyles {
    * @defaultValue true
    */
   showEmail?: boolean;
+}
+
+interface PromoData {
+  /**
+   * The source for the promotional content, including an image, title, description, and a call-to-action.
+   * @defaultValue Placeholder content for a featured promotion.
+   */
+  promo: YextEntityField<PromoSectionType | {}>;
+  /**
+   * Determines whether to display an image or video in the media section.
+   * @defaultValue 'image'
+   */
+  media: "image" | "video";
+  /**
+   * The background image used by the immersive and spotlight variants.
+   * @defaultValue Placeholder image.
+   */
+  backgroundImage: YextEntityField<
+    ImageType | AssetImageType | TranslatableAssetImage
+  >;
+}
+
+interface PromoStyles {
+  /**
+   * The visual variant for the promo section.
+   * @defaultValue classic
+   */
+  variant: "classic" | "immersive" | "spotlight" | "compact";
+  /**
+   * The background color for the entire section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * Positions the media to the left or right of the promo content on desktop (classic and compact variants).
+   * @defaultValue right
+   */
+  desktopImagePosition: "left" | "right";
+  /**
+   * Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).
+   * @defaultValue top
+   */
+  mobileImagePosition: "top" | "bottom";
+  /**
+   * Text content position and alignment.
+   * @defaultValue left
+   */
+  containerAlignment: "left" | "center" | "right";
+  /**
+   * Image Height for the promo image with Immersive or Spotlight variant
+   * Minimum height: content height + Page Section Top/Bottom Padding
+   * @default 500px
+   */
+  imageHeight: number;
 }
 
 interface StaticMapData {
