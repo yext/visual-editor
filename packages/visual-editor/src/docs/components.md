@@ -669,7 +669,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ## ProfessionalHeroSection
 
-![Preview of the ProfessionalHeroSection component](../components/testing/screenshots/ProfessionalHeroSection/%5Bdesktop%5D%20default%20props%20with%20data.png)
+![Preview of the ProfessionalHeroSection component](../components/testing/screenshots/ProfessionalHeroSection/%5Bdesktop%5D%20version%2051%20-%20default%20props%20with%20data.png)
 
 ### Props
 
