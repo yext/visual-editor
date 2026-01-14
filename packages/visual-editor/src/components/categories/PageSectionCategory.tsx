@@ -74,8 +74,8 @@ export interface PageSectionCategoryProps {
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
-  PromoSection: PromoSectionProps;
   ProfessionalHeroSection: ProfessionalHeroSectionProps;
+  PromoSection: PromoSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
   TeamSection: TeamSectionProps;
