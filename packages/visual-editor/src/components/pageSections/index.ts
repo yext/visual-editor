@@ -81,3 +81,8 @@ export {
   type TestimonialSectionProps,
 } from "./TestimonialSection/TestimonialSection.tsx";
 export { VideoSection, type VideoSectionProps } from "./VideoSection.tsx";
+export {
+  ProfessionalHeroSection,
+  type ProfessionalHeroSectionProps,
+  type ProfessionalHeroStyles,
+} from "./ProfessionalHeroSection.tsx";
