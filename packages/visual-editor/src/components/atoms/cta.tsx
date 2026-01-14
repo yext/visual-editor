@@ -315,7 +315,6 @@ export const CTA = (props: CTAProps) => {
         onClick={onClick}
         // textTransform has to be applied via styles because there is no custom tailwind utility
         style={{
-          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
           textTransform: buttonVariant?.toLowerCase().includes("link")
             ? "var(--textTransform-link-textTransform)"
             : "var(--textTransform-button-textTransform)",

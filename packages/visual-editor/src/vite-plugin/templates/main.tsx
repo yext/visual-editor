@@ -24,6 +24,7 @@ import {
   filterComponentsFromConfig,
   resolvePageSetUrlTemplate,
   defaultThemeConfig,
+  liteMainConfig,
   mainConfig,
   getSchema,
   injectTranslations,
@@ -57,7 +58,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
               type: "link" as TagType,
               attributes: {
                 rel: "canonical",
-                href: getCanonicalUrl(data),
+                href: getCanonicalUrl(data.path, data.document.siteDomain),
               },
             },
           ]
@@ -108,11 +109,11 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const migratedData = migrate(
     JSON.parse(document.__.layout),
     migrationRegistry,
-    mainConfig,
+    liteMainConfig,
     document
   );
   const updatedData = await injectTranslations(
-    await resolveAllData(migratedData, mainConfig, {
+    await resolveAllData(migratedData, liteMainConfig, {
       streamDocument: document,
     })
   );
