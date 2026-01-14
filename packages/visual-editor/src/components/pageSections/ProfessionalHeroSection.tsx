@@ -22,7 +22,6 @@ import {
   ThemeOptions,
   resolveComponentData,
 } from "@yext/visual-editor";
-import { useTranslation } from "react-i18next";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
@@ -156,7 +155,6 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
   props
 ) => {
   const { styles, slots, conditionalRender } = props;
-  const { t } = useTranslation();
   const streamDocument = useDocument();
   const { averageRating, reviewCount } = getAggregateRating(streamDocument);
 
@@ -173,7 +171,6 @@ const ProfessionalHero: PuckComponent<ProfessionalHeroSectionProps> = (
   return (
     <PageSection
       background={styles.backgroundColor}
-      aria-label={t("professionalHero", "Professional Hero")}
       className={containerClasses}
     >
       {/* Image Column */}

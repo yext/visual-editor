@@ -38,21 +38,21 @@ const testDocument = {
 
 const tests: ComponentTest[] = [
   {
-    name: "default props with no data",
+    name: "version 51 - default props with no data",
     document: {
       locale: "en",
     },
     props: { ...defaultProps },
-    version: 0,
+    version: 51,
   },
   {
-    name: "default props with data",
+    name: "version 51 - default props with data",
     document: testDocument,
     props: { ...defaultProps },
-    version: 0,
+    version: 51,
   },
   {
-    name: "no image",
+    name: "version 51 - no image",
     document: testDocument,
     props: {
       ...defaultProps,
@@ -61,10 +61,10 @@ const tests: ComponentTest[] = [
         showImage: false,
       },
     },
-    version: 0,
+    version: 51,
   },
   {
-    name: "image right desktop, image bottom mobile",
+    name: "version 51 - image right desktop, image bottom mobile",
     document: testDocument,
     props: {
       ...defaultProps,
@@ -74,10 +74,10 @@ const tests: ComponentTest[] = [
         mobileImagePosition: "bottom",
       },
     },
-    version: 0,
+    version: 51,
   },
   {
-    name: "hide average review",
+    name: "version 51 - hide average review",
     document: testDocument,
     props: {
       ...defaultProps,
@@ -86,7 +86,7 @@ const tests: ComponentTest[] = [
         showAverageReview: false,
       },
     },
-    version: 0,
+    version: 51,
   },
 ];
 
