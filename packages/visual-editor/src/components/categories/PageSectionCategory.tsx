@@ -57,6 +57,10 @@ import {
   VideoSection,
   VideoSectionProps,
 } from "../pageSections/VideoSection.tsx";
+import {
+  ProfessionalHeroSection,
+  ProfessionalHeroSectionProps,
+} from "../pageSections/ProfessionalHeroSection.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -70,6 +74,7 @@ export interface PageSectionCategoryProps {
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
+  ProfessionalHeroSection: ProfessionalHeroSectionProps;
   PromoSection: PromoSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
@@ -90,6 +95,7 @@ export const PageSectionCategoryComponents = {
   NearbyLocationsSection,
   PhotoGallerySection,
   ProductSection,
+  ProfessionalHeroSection,
   PromoSection,
   ReviewsSection,
   StaticMapSection,

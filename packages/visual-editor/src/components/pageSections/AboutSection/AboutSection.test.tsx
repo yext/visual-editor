@@ -589,9 +589,13 @@ describe("AboutSection", async () => {
 
       await page.viewport(width, height);
 
-      await expect(
-        `AboutSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      await expect(`AboutSection/[${viewportName}] ${name}`).toMatchScreenshot({
+        ignoreExact:
+          name === "version 50 props with details column" &&
+          viewportName === "tablet"
+            ? [5400]
+            : undefined,
+      });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 

@@ -663,6 +663,43 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## ProfessionalHeroSection
+
+![Preview of the ProfessionalHeroSection component](../components/testing/screenshots/ProfessionalHeroSection/%5Bdesktop%5D%20version%2051%20-%20default%20props%20with%20data.png)
+
+### Props
+
+#### Style Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop                           | Type                | Description                                                              | Default              |
+| :----------------------------- | :------------------ | :----------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`       | `BackgroundStyle`   | The background color for the section.                                    | `Background Color 1` |
+| `styles.desktopImagePosition`  | `"left" \| "right"` | Positions the image to the left or right of the hero content on desktop. | `left`               |
+| `styles.mobileImagePosition`   | `"bottom" \| "top"` | Positions the image to the top or bottom of the hero content on mobile.  | `top`                |
+| `styles.showAddress`           | `boolean`           | Whether to show the address slot.                                        | `true`               |
+| `styles.showAverageReview`     | `boolean`           | If 'true', displays the entity's average review rating.                  | `true`               |
+| `styles.showBusinessName`      | `boolean`           | Whether to show the business name slot.                                  | `true`               |
+| `styles.showCredentials`       | `boolean`           | Whether to show the credentials slot.                                    | `true`               |
+| `styles.showEmail`             | `boolean`           | Whether to show the email slot.                                          | `true`               |
+| `styles.showImage`             | `boolean`           | Whether to show the hero image.                                          | `true`               |
+| `styles.showPhone`             | `boolean`           | Whether to show the phone slot.                                          | `true`               |
+| `styles.showPrimaryCTA`        | `boolean`           | Whether to show the primary CTA slot.                                    | `true`               |
+| `styles.showProfessionalTitle` | `boolean`           | Whether to show the professional title slot.                             | `true`               |
+| `styles.showSecondaryCTA`      | `boolean`           | Whether to show the secondary CTA slot.                                  | `true`               |
+| `styles.showSubtitle`          | `boolean`           | Whether to show the subtitle slot.                                       | `true`               |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
+
+---
+
 ## PromoSection
 
 The Promo Section is a flexible content component designed to highlight a single, specific promotion. It combines an image with a title, description, and a call-to-action button in a customizable, split-column layout, making it perfect for drawing attention to special offers or announcements. Available on Location templates.

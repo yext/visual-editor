@@ -41,6 +41,7 @@ interface PageSectionCategoryProps {
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
+  ProfessionalHeroSection: ProfessionalHeroSectionProps;
   PromoSection: PromoSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
@@ -404,6 +405,41 @@ interface ProductSectionProps {
   liveVisibility: boolean;
 }
 
+interface ProfessionalHeroSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: ProfessionalHeroStyles;
+  /** @internal */
+  slots: {
+    ImageSlot: Slot;
+    BusinessNameSlot: Slot;
+    CredentialsSlot: Slot;
+    ProfessionalNameSlot: Slot;
+    ProfessionalTitleSlot: Slot;
+    SubtitleSlot: Slot;
+    AddressSlot: Slot;
+    PrimaryCTASlot: Slot;
+    SecondaryCTASlot: Slot;
+    PhoneSlot: Slot;
+    EmailSlot: Slot;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility?: boolean;
+  /** @internal */
+  conditionalRender?: {
+    isRightColumnVisible?: boolean;
+  };
+  /** @internal */
+  analytics: {
+    scope?: string;
+  };
+}
+
 interface PromoSectionProps {
   /**
    * This object contains the content to be displayed by the component.
@@ -747,6 +783,79 @@ interface PhotoGalleryStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+}
+
+interface ProfessionalHeroStyles {
+  /**
+   * The background color for the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+  /**
+   * Whether to show the hero image.
+   * @defaultValue true
+   */
+  showImage: boolean;
+  /**
+   * Positions the image to the left or right of the hero content on desktop.
+   * @defaultValue left
+   */
+  desktopImagePosition: "left" | "right";
+  /**
+   * Positions the image to the top or bottom of the hero content on mobile.
+   * @defaultValue top
+   */
+  mobileImagePosition: "bottom" | "top";
+  /**
+   * Whether to show the credentials slot.
+   * @defaultValue true
+   */
+  showCredentials?: boolean;
+  /**
+   * Whether to show the subtitle slot.
+   * @defaultValue true
+   */
+  showSubtitle?: boolean;
+  /**
+   * Whether to show the business name slot.
+   * @defaultValue true
+   */
+  showBusinessName?: boolean;
+  /**
+   * Whether to show the professional title slot.
+   * @defaultValue true
+   */
+  showProfessionalTitle?: boolean;
+  /**
+   * Whether to show the address slot.
+   * @defaultValue true
+   */
+  showAddress?: boolean;
+  /**
+   * Whether to show the primary CTA slot.
+   * @defaultValue true
+   */
+  showPrimaryCTA?: boolean;
+  /**
+   * Whether to show the secondary CTA slot.
+   * @defaultValue true
+   */
+  showSecondaryCTA?: boolean;
+  /**
+   * Whether to show the phone slot.
+   * @defaultValue true
+   */
+  showPhone?: boolean;
+  /**
+   * Whether to show the email slot.
+   * @defaultValue true
+   */
+  showEmail?: boolean;
 }
 
 interface PromoData {
