@@ -49,9 +49,13 @@ expect.extend({
       (window.frameElement as HTMLIFrameElement).style.height =
         `${document.body.offsetHeight}px`;
 
-      return page.screenshot({
+      const screenshot = await page.screenshot({
         save: false,
       });
+
+      // Reset to default screen height
+      (window.frameElement as HTMLIFrameElement).style.height = "";
+      return screenshot;
     });
 
     const { passes, numDiffPixels } = await commands.compareScreenshot(
