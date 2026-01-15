@@ -582,7 +582,7 @@ const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <SearchI18nextProvider searcher={searcher}>
-        <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+        <AnalyticsProvider {...searchAnalyticsConfig}>
           <LocatorInternal {...props} />
         </AnalyticsProvider>
       </SearchI18nextProvider>

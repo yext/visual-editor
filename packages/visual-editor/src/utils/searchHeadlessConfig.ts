@@ -4,6 +4,7 @@ import {
   Environment,
   HeadlessConfig,
 } from "@yext/search-headless-react";
+import { SearchAnalyticsConfig } from "@yext/search-ui-react";
 
 const EXPERIENCE_VERSION = "PRODUCTION";
 
@@ -79,16 +80,14 @@ export const createSearchHeadlessConfig = (
 /**
  * Builds the search analytics config for the template. Returns undefined if the config is not valid.
  * @param document the entity document
- * @param experienceKeyEnvVar can be provided via withPropOverrides for a hybrid developer
  */
-export const createSearchAnalyticsConfig = (
-  document: any,
-  experienceKeyEnvVar?: string
-) => {
+export const createSearchAnalyticsConfig = (document: any) => {
   const warnings = [];
-  const businessId = document?.businessId;
-  if (!businessId) {
-    warnings.push("Missing businessId! Unable to set up locator analytics.");
+  const analyticsApiKey = document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY;
+  if (!analyticsApiKey) {
+    warnings.push(
+      "Missing YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY! Unable to set up locator analytics."
+    );
   }
   const environment = document?._env?.YEXT_ENVIRONMENT?.toLowerCase();
   if (!isValidEnvironment(environment)) {
@@ -102,26 +101,23 @@ export const createSearchAnalyticsConfig = (
       "Invalid or missing YEXT_CLOUD_REGION! Unable to set up locator analytics."
     );
   }
-  const experienceKey = getExperienceKey(document, experienceKeyEnvVar);
-  if (!experienceKey) {
-    warnings.push("Missing experienceKey! Unable to set up locator analytics.");
-  }
   if (warnings.length > 0) {
     warnings.forEach((msg) => console.warn(msg));
     return;
   }
 
-  // corresponds to @yext/analytics EnvironmentEnum
+  // corresponds to @yext/analytics Environment
   const analyticsEnvironment =
-    environment === Environment.SANDBOX ? "SANDBOX" : "PRODUCTION";
-  // corresponds to @yext/analytics RegionEnum
-  const analyticsRegion = cloudRegion.toUpperCase();
-  const analyticsConfig = {
-    businessId: businessId,
-    experienceKey: experienceKey,
-    experienceVersion: EXPERIENCE_VERSION,
-    region: analyticsRegion,
-    env: analyticsEnvironment,
+    environment === Environment.SANDBOX
+      ? Environment.SANDBOX
+      : Environment.PROD;
+  // corresponds to @yext/analytics Region
+  const analyticsRegion =
+    cloudRegion === CloudRegion.US ? CloudRegion.US : CloudRegion.EU;
+  const analyticsConfig: SearchAnalyticsConfig = {
+    apiKey: analyticsApiKey,
+    cloudRegion: analyticsRegion,
+    environment: analyticsEnvironment,
   };
   return analyticsConfig;
 };
