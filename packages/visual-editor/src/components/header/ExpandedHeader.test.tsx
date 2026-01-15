@@ -1617,23 +1617,24 @@ describe("ExpandedHeader", async () => {
       viewport: { width, height, name: viewportName },
     }) => {
       // if the header position is fixed, render another section beneath the header
-      const content = name.includes("fixed")
-        ? [
-            {
-              type: "ExpandedHeader",
-              props: props,
-            },
-            {
-              type: "BannerSection",
-              props: defaultBannerProps,
-            },
-          ]
-        : [
-            {
-              type: "ExpandedHeader",
-              props: props,
-            },
-          ];
+      const content =
+        props.styles?.headerPosition === "fixed"
+          ? [
+              {
+                type: "ExpandedHeader",
+                props: props,
+              },
+              {
+                type: "BannerSection",
+                props: defaultBannerProps,
+              },
+            ]
+          : [
+              {
+                type: "ExpandedHeader",
+                props: props,
+              },
+            ];
 
       const data = migrate(
         {
