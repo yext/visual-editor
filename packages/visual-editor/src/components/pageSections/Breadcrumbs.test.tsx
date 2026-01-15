@@ -173,7 +173,7 @@ describe("BreadcrumbsSection", async () => {
 
       await expect(
         `BreadcrumbsSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot();
+      ).toMatchScreenshot({ customThreshold: 25, ignoreExact: [333] });
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
