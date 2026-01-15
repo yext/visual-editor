@@ -347,7 +347,7 @@ describe("ReviewsSection", async () => {
 
       await expect(
         `ReviewsSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot({ useFullPage: true });
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -355,7 +355,7 @@ describe("ReviewsSection", async () => {
         await interactions(page);
         await expect(
           `ReviewsSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ useFullPage: true });
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

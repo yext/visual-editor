@@ -590,7 +590,6 @@ describe("AboutSection", async () => {
       await page.viewport(width, height);
 
       await expect(`AboutSection/[${viewportName}] ${name}`).toMatchScreenshot({
-        useFullPage: true,
         ignoreExact:
           name === "version 50 props with details column" &&
           viewportName === "tablet"
@@ -604,7 +603,7 @@ describe("AboutSection", async () => {
         await interactions(page);
         await expect(
           `AboutSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ useFullPage: true });
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

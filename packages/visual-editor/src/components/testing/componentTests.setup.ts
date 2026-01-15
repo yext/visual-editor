@@ -41,20 +41,21 @@ expect.extend({
     options?: {
       customThreshold?: number;
       ignoreExact?: number[];
-      useFullPage?: boolean;
     }
   ) {
     const updatedScreenshotData = await act(async () => {
-      if (options?.useFullPage) {
-        // Workaround for vitest not allowing fullPage mobile screenshots
-        // See https://github.com/vitest-dev/vitest/discussions/7749
-        (window.frameElement as HTMLIFrameElement).style.height =
-          `${document.body.offsetHeight}px`;
-      }
+      // Workaround for vitest not allowing fullPage mobile screenshots
+      // See https://github.com/vitest-dev/vitest/discussions/7749
+      (window.frameElement as HTMLIFrameElement).style.height =
+        `${document.body.offsetHeight}px`;
 
-      return page.screenshot({
+      const screenshot = await page.screenshot({
         save: false,
       });
+
+      // Reset to default screen height
+      (window.frameElement as HTMLIFrameElement).style.height = "";
+      return screenshot;
     });
 
     const { passes, numDiffPixels } = await commands.compareScreenshot(

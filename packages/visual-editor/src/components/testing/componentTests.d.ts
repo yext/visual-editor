@@ -10,11 +10,6 @@ interface CustomMatchers<R = unknown> {
      * Useful for ignoring common flaky rendering issues.
      */
     ignoreExact?: number[];
-
-    /**
-     * Whether to use full page screenshots. Defaults to false.
-     */
-    useFullPage?: boolean;
   }) => Promise<R>;
 }
 

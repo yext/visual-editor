@@ -202,7 +202,7 @@ describe("CustomCodeSection", async () => {
 
       await expect(
         `CustomCodeSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot({ useFullPage: true });
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
