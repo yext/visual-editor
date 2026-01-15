@@ -16,6 +16,7 @@ export const getLocationPath = (
     throw new Error("Could not resolve location path.");
   }
 
+  // If there's a slug, apply locale prefix to it
   if (location.slug) {
     return `${relativePrefixToRoot}${location.slug}`;
   }
@@ -25,14 +26,25 @@ export const getLocationPath = (
     throw new Error("Missing locale for getLocationPath");
   }
 
-  const isPrimaryLocale =
-    location.__?.isPrimaryLocale === true ||
-    (location.__?.isPrimaryLocale === undefined && location.locale === "en");
+  // Get pageset config from the document's _pageset
+  const pagesetJson =
+    typeof location?._pageset === "string"
+      ? JSON.parse(location._pageset || "{}")
+      : location?._pageset || {};
+  const pagesetConfig = pagesetJson?.config || {};
+  // Prioritize pageset config primaryLocale, if not set then fall back to __.isPrimaryLocale
+  const isPrimaryLocale = !!pagesetConfig?.primaryLocale
+    ? locale === pagesetConfig.primaryLocale
+    : location.__?.isPrimaryLocale;
 
-  const localePath = isPrimaryLocale ? "" : `${locale}/`;
+  const localePrefix =
+    !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
+      ? `${locale}/`
+      : "";
+
   const path = location.address
-    ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
-    : `${localePath}${location.id}`;
+    ? `${localePrefix}${location.address.region}/${location.address.city}/${location.address.line1}`
+    : `${localePrefix}${location.id}`;
 
   return `${relativePrefixToRoot}${normalizeSlug(path)}`;
 };
