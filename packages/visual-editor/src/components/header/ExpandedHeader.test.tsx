@@ -32,7 +32,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 51 -  default props",
+    name: "version 51 - default props",
     document: {},
     version: 51,
     props: {
@@ -333,7 +333,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 51 -  primary header only",
+    name: "version 51 - primary header only",
     document: {},
     version: 51,
     props: {
@@ -634,7 +634,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 51 -  missing content",
+    name: "version 51 - missing content",
     document: {},
     version: 51,
     props: {
@@ -921,7 +921,7 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 51 -  full width fixed",
+    name: "version 51 - full width fixed",
     document: {},
     version: 51,
     props: {
