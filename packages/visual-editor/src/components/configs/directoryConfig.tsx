@@ -1,4 +1,4 @@
-import { Config, DropZone, setDeep } from "@measured/puck";
+import { Config, DropZone } from "@measured/puck";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
@@ -20,6 +20,7 @@ import {
   SlotsCategoryComponents,
   SlotsCategoryProps,
 } from "../categories/SlotsCategory";
+import { resolveDirectoryRootProps } from "../../utils/getPageMetadata";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
@@ -65,67 +66,16 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
         JSON.stringify(updatedData)
       );
 
-      if (
-        data.props?.title?.constantValue?.en &&
-        data.props.title.constantValue?.en === "PLACEHOLDER"
-      ) {
-        let titleValue = "Locations";
-        switch (params.metadata?.streamDocument?.meta?.entityType?.id) {
-          case "dm_root": {
-            titleValue = "Locations";
-            break;
-          }
-          case "dm_country": {
-            titleValue = "Locations in [[dm_addressCountryDisplayName]]";
-            break;
-          }
-          case "dm_region": {
-            titleValue = "Locations in [[dm_addressRegionDisplayName]]";
-            break;
-          }
-          case "dm_city": {
-            titleValue = "Locations in [[name]]";
-            break;
-          }
-        }
+      const a = {
+        ...data,
+        props: resolveDirectoryRootProps(
+          updatedData.props ?? {},
+          params.metadata?.streamDocument ?? {}
+        ),
+      };
+      console.log("Resolved data for directory:", JSON.stringify(a));
 
-        setDeep(updatedData, "props.title.constantValue.en", titleValue);
-      }
-      if (
-        data.props?.description?.constantValue?.en &&
-        data.props.description.constantValue?.en === "PLACEHOLDER"
-      ) {
-        let descriptionValue = "Locations";
-        switch (params.metadata?.streamDocument?.meta?.entityType?.id) {
-          case "dm_root": {
-            descriptionValue = "Browse all locations";
-            break;
-          }
-          case "dm_country": {
-            descriptionValue =
-              "Browse locations in [[dm_addressCountryDisplayName]]";
-            break;
-          }
-          case "dm_region": {
-            descriptionValue =
-              "Browse locations in [[dm_addressRegionDisplayName]]";
-            break;
-          }
-          case "dm_city": {
-            descriptionValue = "Browse locations in [[name]]";
-            break;
-          }
-        }
-
-        setDeep(
-          updatedData,
-          "props.description.constantValue.en",
-          descriptionValue
-        );
-      }
-
-      console.log("Resolved data for directory:", JSON.stringify(updatedData));
-      return updatedData;
+      return a;
     },
     render: () => {
       return (
