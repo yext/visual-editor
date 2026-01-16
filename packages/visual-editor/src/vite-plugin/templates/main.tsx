@@ -116,6 +116,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
       streamDocument: document,
     })
   );
+  console.log("updatedData", JSON.stringify(updatedData));
 
   return { ...props, data: updatedData };
 };

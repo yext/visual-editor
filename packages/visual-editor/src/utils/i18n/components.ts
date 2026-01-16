@@ -31,6 +31,10 @@ export interface TemplateProps {
 export const injectTranslations = async (
   templateProps: TemplateProps
 ): Promise<TemplateProps> => {
+  console.log(
+    "injecting translations into templateProps",
+    templateProps?.document?.locale
+  );
   if (!templateProps?.document?.locale) {
     return templateProps;
   }

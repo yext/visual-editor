@@ -27,22 +27,27 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
   };
 
   return (
-    <HoursTable
-      hours={hours}
-      dayOfWeekNames={dayOfWeekNames}
-      startOfWeek={startOfWeek}
-      collapseDays={collapseDays}
-      timeOptions={timeOptions}
-      intervalTranslations={{
-        isClosed: t("closed", "Closed"),
-        open24Hours: t("open24Hours", "Open 24 Hours"),
-        reopenDate: t("reopenDate", "Reopen Date"),
-        timeFormatLocale: i18n.language,
-      }}
-      className={themeManagerCn(
-        "text-body-fontSize font-body-fontWeight font-body-fontFamily",
-        className ?? ""
-      )}
-    />
+    <>
+      <p>
+        Current language: {i18n.language}, hours: {t("hours", "Hours")}
+      </p>
+      <HoursTable
+        hours={hours}
+        dayOfWeekNames={dayOfWeekNames}
+        startOfWeek={startOfWeek}
+        collapseDays={collapseDays}
+        timeOptions={timeOptions}
+        intervalTranslations={{
+          isClosed: t("closed", "Closed"),
+          open24Hours: t("open24Hours", "Open 24 Hours"),
+          reopenDate: t("reopenDate", "Reopen Date"),
+          timeFormatLocale: i18n.language,
+        }}
+        className={themeManagerCn(
+          "text-body-fontSize font-body-fontWeight font-body-fontFamily",
+          className ?? ""
+        )}
+      />
+    </>
   );
 };
