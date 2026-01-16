@@ -4758,5 +4758,3 @@ export const defaultLayoutData = {
   directory: JSON.stringify(directoryDefaultLayout),
   locator: JSON.stringify(locatorDefaultLayout),
 };
-
-console.log(defaultLayoutData.locator);
