@@ -17,11 +17,21 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
     return {};
   }
   const metaData: RootConfig = {};
+  console.log("getPageMetadata rootProps", rootProps);
   Object.keys(rootProps).forEach((key: string) => {
     metaData[key] = escapeHtml(
       resolveComponentData(rootProps[key], document.locale, document) ?? ""
     );
   });
+
+  // For title, fallback to en value if localized value is empty
+  if (metaData.title === "") {
+    metaData.title = escapeHtml(
+      resolveComponentData(rootProps.title, "en", document) ?? ""
+    );
+  }
+
+  console.log("getPageMetadata metaData", metaData);
   return metaData;
 }
 

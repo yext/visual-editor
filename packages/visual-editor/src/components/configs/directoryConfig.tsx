@@ -60,6 +60,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   root: {
     resolveData: (data, params) => {
       const updatedData = { ...data };
+      console.log("Resolving data for directory with params:", updatedData);
 
       if (
         data.props?.title?.constantValue?.en &&
@@ -120,6 +121,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
         );
       }
 
+      console.log("Resolved data for directory:", updatedData);
       return updatedData;
     },
     render: () => {
