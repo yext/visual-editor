@@ -156,7 +156,12 @@ export const Editor = ({
 
     const handlePlatformLocaleChange = async () => {
       if (templateMetadata?.platformLocale) {
-        const expectedLocale = templateMetadata.platformLocale;
+        let expectedLocale = templateMetadata.platformLocale;
+        // strip off region for translations, except for en-GB and zh-TW
+        if (expectedLocale !== "en-GB" && expectedLocale !== "zh-TW") {
+          expectedLocale = expectedLocale.split("-")[0];
+        }
+
         try {
           await loadPlatformTranslations(expectedLocale);
           // Additional check to avoid race conditions when locale changes quickly
