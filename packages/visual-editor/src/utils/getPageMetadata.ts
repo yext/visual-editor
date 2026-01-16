@@ -19,7 +19,11 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
     return {};
   }
   const metaData: RootConfig = {};
-  console.log("getPageMetadata rootProps 1", JSON.stringify(rootProps));
+  console.log(
+    "getPageMetadata rootProps 1",
+    document.meta?.entityType?.id,
+    JSON.stringify(rootProps)
+  );
 
   if (document.meta?.entityType?.id?.startsWith("dm_")) {
     rootProps = resolveDirectoryRootProps(rootProps, document);
@@ -65,8 +69,9 @@ export const resolveDirectoryRootProps = (
   props: Record<string, any>,
   streamDocument: StreamDocument
 ) => {
-  const updatedProps = { ...props };
+  let updatedProps = { ...props };
 
+  console.log(props?.title?.constantValue?.en);
   if (
     props?.title?.constantValue?.en &&
     props.title.constantValue?.en === "PLACEHOLDER"
@@ -91,7 +96,12 @@ export const resolveDirectoryRootProps = (
       }
     }
 
-    setDeep(updatedProps, "props.title.constantValue.en", titleValue);
+    console.log("setting title to", titleValue);
+    updatedProps = setDeep(
+      updatedProps,
+      "props.title.constantValue.en",
+      titleValue
+    );
   }
   if (
     props?.description?.constantValue?.en &&
@@ -119,7 +129,7 @@ export const resolveDirectoryRootProps = (
       }
     }
 
-    setDeep(
+    updatedProps = setDeep(
       updatedProps,
       "props.description.constantValue.en",
       descriptionValue
