@@ -32,7 +32,6 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
-import { stripLocaleRegion } from "../utils/i18n/shared.ts";
 
 const devLogger = new DevLogger();
 
@@ -157,17 +156,13 @@ export const Editor = ({
 
     const handlePlatformLocaleChange = async () => {
       if (templateMetadata?.platformLocale) {
-        const expectedLocale = stripLocaleRegion(
-          templateMetadata.platformLocale
-        );
-
+        const expectedLocale = templateMetadata.platformLocale;
         try {
           await loadPlatformTranslations(expectedLocale);
           // Additional check to avoid race conditions when locale changes quickly
           if (
             isCurrent &&
-            stripLocaleRegion(templateMetadata.platformLocale) ===
-              expectedLocale
+            templateMetadata?.platformLocale === expectedLocale
           ) {
             i18nPlatformInstance.changeLanguage(expectedLocale);
           }

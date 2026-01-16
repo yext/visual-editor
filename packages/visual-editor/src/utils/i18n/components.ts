@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
-import { stripLocaleRegion } from "./shared";
+import { getTranslations } from "./getTranslations";
 
 const NAMESPACE = "visual-editor";
 
@@ -35,50 +35,14 @@ export const injectTranslations = async (
     return templateProps;
   }
 
-  let locale = stripLocaleRegion(templateProps?.document?.locale ?? "");
-
-  const translations = (await getTranslations(locale)) || {};
+  const translations =
+    (await getTranslations(templateProps?.document?.locale, "components")) ||
+    {};
 
   return {
     ...templateProps,
     translations,
   };
-};
-
-/**
- * Dynamically imports the translation file for the given locale.
- */
-const getTranslations = async (
-  locale: string,
-  isRetry = false
-): Promise<Record<string, string>> => {
-  if (!locale) {
-    return {};
-  }
-
-  try {
-    const module = await import(
-      `../../../locales/components/${locale}/visual-editor.json`
-    );
-    return module.default;
-  } catch (e) {
-    if (isRetry || locale === "en") {
-      console.error(
-        "Error loading translations for locale",
-        locale,
-        e,
-        "No fallback available."
-      );
-      return {};
-    }
-    console.error(
-      "Error loading translations for locale",
-      locale,
-      e,
-      "Falling back to en."
-    );
-    return getTranslations("en", true);
-  }
 };
 
 /**
@@ -94,7 +58,8 @@ export const loadComponentTranslations = async (
     return;
   }
 
-  const translationsToInject = translations || (await getTranslations(locale));
+  const translationsToInject =
+    translations || (await getTranslations(locale, "components"));
 
   if (translationsToInject && Object.keys(translationsToInject).length > 0) {
     i18nComponentsInstance.addResourceBundle(
