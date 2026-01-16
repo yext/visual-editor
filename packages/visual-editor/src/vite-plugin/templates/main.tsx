@@ -105,6 +105,7 @@ export const getPath: GetPath<TemplateProps> = ({
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
+
   const migratedData = migrate(
     JSON.parse(document.__.layout),
     migrationRegistry,
@@ -114,15 +115,14 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const resolvedPuckData = await resolveAllData(migratedData, mainConfig, {
     streamDocument: document,
   });
-  console.log("resolvedPuckData", resolvedPuckData);
   const translations = await injectTranslations(document);
-  console.log("injected translations", translations);
+
   return { ...props, data: resolvedPuckData, translations };
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {
   const { document, data } = props;
-  console.log("Rendering location with props", JSON.stringify(props));
+
   const filteredConfig = filterComponentsFromConfig(
     mainConfig,
     document?._additionalLayoutComponents,

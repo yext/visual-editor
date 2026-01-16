@@ -106,6 +106,7 @@ export const getPath: GetPath<TemplateProps> = ({ document }) => {
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
+
   const migratedData = migrate(
     JSON.parse(document.__.layout),
     migrationRegistry,

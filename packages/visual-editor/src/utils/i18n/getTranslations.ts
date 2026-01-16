@@ -20,7 +20,6 @@ export const getTranslations = async (
     strippedLocale = "zh-TW";
   }
 
-  console.log("importing", instance, "translations for locale", strippedLocale);
   try {
     const module = await import(
       `../../../locales/${instance}/${strippedLocale}/visual-editor.json`

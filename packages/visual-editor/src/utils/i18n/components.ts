@@ -33,22 +33,16 @@ export interface TemplateProps {
 export const injectTranslations = async (
   streamDocument: StreamDocument
 ): Promise<Record<string, string> | Record<string, any>> => {
-  console.log(
-    "injecting translations into templateProps",
-    streamDocument?.locale
-  );
   if (!streamDocument?.locale) {
     return {};
   }
 
-  console.log("getting translations for locale", streamDocument?.locale);
-  const translations =
+  return (
     (await getTranslations(
       normalizeLocalesInObject(streamDocument).locale,
       "components"
-    )) || {};
-
-  return translations;
+    )) || {}
+  );
 };
 
 /**
@@ -60,7 +54,6 @@ export const loadComponentTranslations = async (
   locale: string,
   translations?: Record<string, string>
 ) => {
-  console.log("loading translations for locale", locale);
   if (i18nComponentsInstance.hasResourceBundle(locale, NAMESPACE)) {
     return;
   }
