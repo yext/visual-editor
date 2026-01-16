@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import { stripLocaleRegion } from "./shared";
 
 const NAMESPACE = "visual-editor";
 
@@ -34,10 +35,7 @@ export const injectTranslations = async (
     return templateProps;
   }
 
-  let locale = templateProps?.document?.locale;
-  if (locale && locale !== "en-GB" && locale !== "zh-TW") {
-    locale = locale.split("-")[0];
-  }
+  let locale = stripLocaleRegion(templateProps?.document?.locale ?? "");
 
   const translations = (await getTranslations(locale)) || {};
 

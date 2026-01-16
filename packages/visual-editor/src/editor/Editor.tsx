@@ -32,6 +32,7 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import { stripLocaleRegion } from "../utils/i18n/shared.ts";
 
 const devLogger = new DevLogger();
 
@@ -156,21 +157,19 @@ export const Editor = ({
 
     const handlePlatformLocaleChange = async () => {
       if (templateMetadata?.platformLocale) {
-        const expectedLocale = templateMetadata.platformLocale;
-
-        let strippedLocale = expectedLocale;
-        if (expectedLocale !== "en-GB" && expectedLocale !== "zh-TW") {
-          strippedLocale = expectedLocale.split("-")[0];
-        }
+        const expectedLocale = stripLocaleRegion(
+          templateMetadata.platformLocale
+        );
 
         try {
-          await loadPlatformTranslations(strippedLocale);
+          await loadPlatformTranslations(expectedLocale);
           // Additional check to avoid race conditions when locale changes quickly
           if (
             isCurrent &&
-            templateMetadata?.platformLocale === expectedLocale
+            stripLocaleRegion(templateMetadata.platformLocale) ===
+              expectedLocale
           ) {
-            i18nPlatformInstance.changeLanguage(strippedLocale);
+            i18nPlatformInstance.changeLanguage(expectedLocale);
           }
         } catch (error) {
           console.error("Failed to load platform translations:", error);
