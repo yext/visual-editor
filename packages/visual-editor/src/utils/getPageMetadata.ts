@@ -61,6 +61,28 @@ const escapeHtml = (str: string) => {
     .replace(/'/g, "&#39;");
 };
 
+const DIRECTORY_META_DEFAULTS: Record<
+  string,
+  { title: string; description: string }
+> = {
+  dm_root: {
+    title: "Locations",
+    description: "Browse all locations",
+  },
+  dm_country: {
+    title: "Locations in [[dm_addressCountryDisplayName]]",
+    description: "Browse locations in [[dm_addressCountryDisplayName]]",
+  },
+  dm_region: {
+    title: "Locations in [[dm_addressRegionDisplayName]]",
+    description: "Browse locations in [[dm_addressRegionDisplayName]]",
+  },
+  dm_city: {
+    title: "Locations in [[name]]",
+    description: "Browse locations in [[name]]",
+  },
+};
+
 /**
  * resolveDirectoryRootProps scans the meta title and description fields
  * and replaced PLACEHOLDER with an appropriate value based on the entityType
@@ -71,68 +93,32 @@ export const resolveDirectoryRootProps = (
 ) => {
   let updatedProps = { ...props };
 
-  console.log(props?.title?.constantValue?.en);
-  if (
-    props?.title?.constantValue?.en &&
-    props.title.constantValue?.en === "PLACEHOLDER"
-  ) {
-    let titleValue = "Locations";
-    switch (streamDocument?.meta?.entityType?.id) {
-      case "dm_root": {
-        titleValue = "Locations";
-        break;
-      }
-      case "dm_country": {
-        titleValue = "Locations in [[dm_addressCountryDisplayName]]";
-        break;
-      }
-      case "dm_region": {
-        titleValue = "Locations in [[dm_addressRegionDisplayName]]";
-        break;
-      }
-      case "dm_city": {
-        titleValue = "Locations in [[name]]";
-        break;
-      }
-    }
+  const entityType = streamDocument?.meta?.entityType?.id;
+  if (!entityType || !entityType.startsWith("dm_")) {
+    return updatedProps;
+  }
 
-    console.log("setting title to", titleValue);
+  const defaultValues = DIRECTORY_META_DEFAULTS[entityType];
+
+  if (!defaultValues) {
+    return updatedProps;
+  }
+
+  // Update Title
+  if (props?.title?.constantValue?.en === "PLACEHOLDER") {
     updatedProps = setDeep(
       updatedProps,
-      "props.title.constantValue.en",
-      titleValue
+      "title.constantValue.en",
+      defaultValues.title
     );
   }
-  if (
-    props?.description?.constantValue?.en &&
-    props.description.constantValue?.en === "PLACEHOLDER"
-  ) {
-    let descriptionValue = "Locations";
-    switch (streamDocument?.meta?.entityType?.id) {
-      case "dm_root": {
-        descriptionValue = "Browse all locations";
-        break;
-      }
-      case "dm_country": {
-        descriptionValue =
-          "Browse locations in [[dm_addressCountryDisplayName]]";
-        break;
-      }
-      case "dm_region": {
-        descriptionValue =
-          "Browse locations in [[dm_addressRegionDisplayName]]";
-        break;
-      }
-      case "dm_city": {
-        descriptionValue = "Browse locations in [[name]]";
-        break;
-      }
-    }
 
+  // Update Description
+  if (props?.description?.constantValue?.en === "PLACEHOLDER") {
     updatedProps = setDeep(
       updatedProps,
-      "props.description.constantValue.en",
-      descriptionValue
+      "description.constantValue.en",
+      defaultValues.description
     );
   }
 
