@@ -26,6 +26,7 @@ import {
   getSchema,
   injectTranslations,
   getCanonicalUrl,
+  GTMBody,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
@@ -131,11 +132,13 @@ const Directory: Template<TemplateRenderProps> = (props) => {
       currency="USD"
     >
       <VisualEditorProvider templateProps={props}>
-        <Render
-          config={directoryConfig}
-          data={data}
-          metadata={{ streamDocument: document }}
-        />
+        <GTMBody>
+          <Render
+            config={directoryConfig}
+            data={data}
+            metadata={{ streamDocument: document }}
+          />
+        </GTMBody>
       </VisualEditorProvider>
     </AnalyticsProvider>
   );

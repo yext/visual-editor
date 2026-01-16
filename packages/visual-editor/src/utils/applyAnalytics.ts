@@ -1,21 +1,47 @@
+const GTM_ID_REGEX = /^GTM-[A-Z0-9]+$/;
+const GA4_ID_REGEX = /^G(T)?-[A-Z0-9]+$/;
+
 export const applyAnalytics = (document: Record<string, any>) => {
   if (!document?.__?.visualEditorConfig) {
     return;
   }
 
-  const googleTagManagerId: string = JSON.parse(
-    document.__.visualEditorConfig
-  )?.googleTagManagerId;
+  let visualEditorConfig: Record<string, any>;
+  try {
+    visualEditorConfig = JSON.parse(document.__.visualEditorConfig);
+  } catch (_) {
+    console.warn(
+      "Failed to parse visualEditorConfig for analytics. Skipping analytics script injection."
+    );
+    return;
+  }
 
-  if (googleTagManagerId) {
+  // Google Tag Manager (GTM)
+  const googleTagManagerId = visualEditorConfig?.googleTagManagerId;
+
+  if (googleTagManagerId && GTM_ID_REGEX.test(googleTagManagerId)) {
+    return `<!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','${googleTagManagerId}');</script>
+    <!-- End Google Tag Manager -->`;
+  }
+
+  // Google Analytics 4 (GA4)
+  // Note that this does not yet exist in platform. Adding for future support.
+  const googleAnalyticsId = visualEditorConfig?.googleAnalyticsId;
+
+  if (googleAnalyticsId && GA4_ID_REGEX.test(googleAnalyticsId)) {
     return `<!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=${googleTagManagerId}"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
     
-      gtag('config', '${googleTagManagerId}');
+      gtag('config', '${googleAnalyticsId}');
     </script>`;
   }
 };
