@@ -17,7 +17,7 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
     return {};
   }
   const metaData: RootConfig = {};
-  console.log("getPageMetadata rootProps", rootProps);
+  console.log("getPageMetadata rootProps", JSON.stringify(rootProps));
   Object.keys(rootProps).forEach((key: string) => {
     metaData[key] = escapeHtml(
       resolveComponentData(rootProps[key], document.locale, document) ?? ""
@@ -31,7 +31,7 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
     );
   }
 
-  console.log("getPageMetadata metaData", metaData);
+  console.log("getPageMetadata metaData", JSON.stringify(metaData));
   return metaData;
 }
 
