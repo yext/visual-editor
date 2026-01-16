@@ -16,7 +16,11 @@ export const getTranslations = async (
   if (!supportedRegionalLocales.includes(locale)) {
     strippedLocale = locale.split("-")[0];
   }
+  if (strippedLocale === "zh-Hant-TW") {
+    strippedLocale = "zh-TW";
+  }
 
+  console.log("importing", instance, "translations for locale", strippedLocale);
   try {
     const module = await import(
       `../../../locales/${instance}/${strippedLocale}/visual-editor.json`
@@ -25,7 +29,7 @@ export const getTranslations = async (
   } catch (e) {
     if (isRetry || strippedLocale === "en") {
       console.error(
-        `Error loading ${instance}translations for locale`,
+        `Error loading ${instance} translations for locale`,
         locale,
         e,
         "No fallback available."

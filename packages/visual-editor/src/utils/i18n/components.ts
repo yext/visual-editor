@@ -35,6 +35,10 @@ export const injectTranslations = async (
     return templateProps;
   }
 
+  console.log(
+    "getting translations for locale",
+    templateProps?.document?.locale
+  );
   const translations =
     (await getTranslations(templateProps?.document?.locale, "components")) ||
     {};
@@ -54,6 +58,7 @@ export const loadComponentTranslations = async (
   locale: string,
   translations?: Record<string, string>
 ) => {
+  console.log("loading translations for locale", locale);
   if (i18nComponentsInstance.hasResourceBundle(locale, NAMESPACE)) {
     return;
   }
