@@ -34,8 +34,12 @@ export const injectTranslations = async (
     return templateProps;
   }
 
-  const translations =
-    (await getTranslations(templateProps?.document?.locale)) || {};
+  let locale = templateProps?.document?.locale;
+  if (locale && locale !== "en-GB" && locale !== "zh-TW") {
+    locale = locale.split("-")[0];
+  }
+
+  const translations = (await getTranslations(locale)) || {};
 
   return {
     ...templateProps,

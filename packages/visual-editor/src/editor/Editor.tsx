@@ -157,20 +157,14 @@ export const Editor = ({
     const handlePlatformLocaleChange = async () => {
       if (templateMetadata?.platformLocale) {
         const expectedLocale = templateMetadata.platformLocale;
-
-        let strippedLocale = expectedLocale;
-        if (expectedLocale !== "en-GB" && expectedLocale !== "zh-TW") {
-          strippedLocale = expectedLocale.split("-")[0];
-        }
-
         try {
-          await loadPlatformTranslations(strippedLocale);
+          await loadPlatformTranslations(expectedLocale);
           // Additional check to avoid race conditions when locale changes quickly
           if (
             isCurrent &&
             templateMetadata?.platformLocale === expectedLocale
           ) {
-            i18nPlatformInstance.changeLanguage(strippedLocale);
+            i18nPlatformInstance.changeLanguage(expectedLocale);
           }
         } catch (error) {
           console.error("Failed to load platform translations:", error);
