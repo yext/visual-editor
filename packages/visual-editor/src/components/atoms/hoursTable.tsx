@@ -29,7 +29,7 @@ export const HoursTableAtom = (props: HoursTableAtomProps) => {
   return (
     <>
       <p>
-        Current language: {i18n.language}, hours: {t("hours", "Hours")}
+        Current language: {i18n.language}, hours: {t("friday", "Friday")}
       </p>
       <HoursTable
         hours={hours}

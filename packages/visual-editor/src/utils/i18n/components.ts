@@ -1,6 +1,8 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getTranslations } from "./getTranslations";
+import { StreamDocument } from "../applyTheme";
+import { normalizeLocalesInObject } from "../normalizeLocale";
 
 const NAMESPACE = "visual-editor";
 
@@ -29,28 +31,24 @@ export interface TemplateProps {
  * by consumers of visual-editor in transformProps of a template.
  */
 export const injectTranslations = async (
-  templateProps: TemplateProps
-): Promise<TemplateProps> => {
+  streamDocument: StreamDocument
+): Promise<Record<string, string> | Record<string, any>> => {
   console.log(
     "injecting translations into templateProps",
-    templateProps?.document?.locale
+    streamDocument?.locale
   );
-  if (!templateProps?.document?.locale) {
-    return templateProps;
+  if (!streamDocument?.locale) {
+    return {};
   }
 
-  console.log(
-    "getting translations for locale",
-    templateProps?.document?.locale
-  );
+  console.log("getting translations for locale", streamDocument?.locale);
   const translations =
-    (await getTranslations(templateProps?.document?.locale, "components")) ||
-    {};
+    (await getTranslations(
+      normalizeLocalesInObject(streamDocument).locale,
+      "components"
+    )) || {};
 
-  return {
-    ...templateProps,
-    translations,
-  };
+  return translations;
 };
 
 /**

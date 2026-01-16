@@ -16,7 +16,7 @@ export const getTranslations = async (
   if (!supportedRegionalLocales.includes(locale)) {
     strippedLocale = locale.split("-")[0];
   }
-  if (strippedLocale === "zh-Hant-TW") {
+  if (locale.includes("zh-Hant")) {
     strippedLocale = "zh-TW";
   }
 

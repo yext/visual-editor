@@ -113,13 +113,12 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     locatorConfig,
     document
   );
-  const updatedData = await injectTranslations(
-    await resolveAllData(migratedData, locatorConfig, {
-      streamDocument: document,
-    })
-  );
+  const resolvedPuckData = await resolveAllData(migratedData, locatorConfig, {
+    streamDocument: document,
+  });
+  const translations = await injectTranslations(document);
 
-  return { ...props, data: updatedData };
+  return { ...props, data: resolvedPuckData, translations };
 };
 
 const Locator: Template<TemplateRenderProps> = (props) => {

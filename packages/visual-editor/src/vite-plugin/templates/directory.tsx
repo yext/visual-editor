@@ -112,13 +112,12 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     directoryConfig,
     document
   );
-  const updatedData = await injectTranslations(
-    await resolveAllData(migratedData, directoryConfig, {
-      streamDocument: document,
-    })
-  );
+  const resolvedPuckData = await resolveAllData(migratedData, directoryConfig, {
+    streamDocument: document,
+  });
+  const translations = await injectTranslations(document);
 
-  return { ...props, data: updatedData };
+  return { ...props, data: resolvedPuckData, translations };
 };
 
 const Directory: Template<TemplateRenderProps> = (props) => {

@@ -111,18 +111,18 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     mainConfig,
     document
   );
-  const updatedData = await injectTranslations(
-    await resolveAllData(migratedData, mainConfig, {
-      streamDocument: document,
-    })
-  );
-  console.log("updatedData", JSON.stringify(updatedData));
-
-  return { ...props, data: updatedData };
+  const resolvedPuckData = await resolveAllData(migratedData, mainConfig, {
+    streamDocument: document,
+  });
+  console.log("resolvedPuckData", resolvedPuckData);
+  const translations = await injectTranslations(document);
+  console.log("injected translations", translations);
+  return { ...props, data: resolvedPuckData, translations };
 };
 
 const Location: Template<TemplateRenderProps> = (props) => {
   const { document, data } = props;
+  console.log("Rendering location with props", JSON.stringify(props));
   const filteredConfig = filterComponentsFromConfig(
     mainConfig,
     document?._additionalLayoutComponents,
