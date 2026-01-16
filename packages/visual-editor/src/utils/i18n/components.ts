@@ -1,5 +1,8 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import { getTranslations } from "./getTranslations";
+import { StreamDocument } from "../applyTheme";
+import { normalizeLocalesInObject } from "../normalizeLocale";
 
 const NAMESPACE = "visual-editor";
 
@@ -28,55 +31,18 @@ export interface TemplateProps {
  * by consumers of visual-editor in transformProps of a template.
  */
 export const injectTranslations = async (
-  templateProps: TemplateProps
-): Promise<TemplateProps> => {
-  if (!templateProps?.document?.locale) {
-    return templateProps;
-  }
-
-  const translations =
-    (await getTranslations(templateProps?.document?.locale)) || {};
-
-  return {
-    ...templateProps,
-    translations,
-  };
-};
-
-/**
- * Dynamically imports the translation file for the given locale.
- */
-const getTranslations = async (
-  locale: string,
-  isRetry = false
-): Promise<Record<string, string>> => {
-  if (!locale) {
+  streamDocument: StreamDocument
+): Promise<Record<string, string> | Record<string, any>> => {
+  if (!streamDocument?.locale) {
     return {};
   }
 
-  try {
-    const module = await import(
-      `../../../locales/components/${locale}/visual-editor.json`
-    );
-    return module.default;
-  } catch (e) {
-    if (isRetry || locale === "en") {
-      console.error(
-        "Error loading translations for locale",
-        locale,
-        e,
-        "No fallback available."
-      );
-      return {};
-    }
-    console.error(
-      "Error loading translations for locale",
-      locale,
-      e,
-      "Falling back to en."
-    );
-    return getTranslations("en", true);
-  }
+  return (
+    (await getTranslations(
+      normalizeLocalesInObject(streamDocument).locale,
+      "components"
+    )) || {}
+  );
 };
 
 /**
@@ -92,7 +58,8 @@ export const loadComponentTranslations = async (
     return;
   }
 
-  const translationsToInject = translations || (await getTranslations(locale));
+  const translationsToInject =
+    translations || (await getTranslations(locale, "components"));
 
   if (translationsToInject && Object.keys(translationsToInject).length > 0) {
     i18nComponentsInstance.addResourceBundle(
