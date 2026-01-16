@@ -60,17 +60,12 @@ export const loadPlatformTranslations = async (locale: string) => {
     return;
   }
 
-  let strippedLocale = locale;
-  if (strippedLocale !== "en-GB" && strippedLocale !== "zh-TW") {
-    strippedLocale = strippedLocale.split("-")[0];
-  }
-
-  const translationsToInject = await getTranslations(strippedLocale);
+  const translationsToInject = await getTranslations(locale);
   applyI18nFallbacks(translationsToInject, defaultI18nFallbacks);
 
   if (translationsToInject && Object.keys(translationsToInject).length > 0) {
     i18nPlatformInstance.addResourceBundle(
-      strippedLocale,
+      locale,
       NAMESPACE,
       translationsToInject
     );
