@@ -77,7 +77,7 @@ const DIRECTORY_META_DEFAULTS: Record<
 
 /**
  * resolveDirectoryRootProps scans the meta title and description fields
- * and replaced PLACEHOLDER with an appropriate value based on the entityType
+ * and replaces PLACEHOLDER with an appropriate value based on the entityType
  */
 export const resolveDirectoryRootProps = (
   props: Record<string, any>,
