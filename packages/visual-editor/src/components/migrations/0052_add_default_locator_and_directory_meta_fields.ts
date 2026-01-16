@@ -15,7 +15,6 @@ export const addDefaultLocatorAndDirectoryMetaFields: Migration = {
     ) => {
       const updatedProps = { ...props };
 
-      console.log("start", props, streamDocument);
       if (
         streamDocument.meta?.entityType?.id !== "locator" &&
         !streamDocument.meta?.entityType?.id?.startsWith("dm")
@@ -87,7 +86,6 @@ export const addDefaultLocatorAndDirectoryMetaFields: Migration = {
         updatedProps.description.constantValueEnabled = true;
       }
 
-      console.log("end", updatedProps);
       return updatedProps;
     },
   },

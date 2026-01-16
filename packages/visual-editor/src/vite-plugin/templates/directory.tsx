@@ -112,14 +112,12 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     directoryConfig,
     document
   );
-  console.log("Migrated Data:", JSON.stringify(migratedData, null, 2));
 
   const updatedData = await injectTranslations(
     await resolveAllData(migratedData, directoryConfig, {
       streamDocument: document,
     })
   );
-  console.log("updated data", updatedData);
 
   return { ...props, data: updatedData };
 };

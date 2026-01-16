@@ -60,22 +60,13 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
 
   root: {
     resolveData: (data, params) => {
-      const updatedData = { ...data };
-      console.log(
-        "Resolving data for directory with params:",
-        JSON.stringify(updatedData)
-      );
-
-      const a = {
+      return {
         ...data,
         props: resolveDirectoryRootProps(
-          updatedData.props ?? {},
+          data.props ?? {},
           params.metadata?.streamDocument ?? {}
         ),
       };
-      console.log("Resolved data for directory:", JSON.stringify(a));
-
-      return a;
     },
     render: () => {
       return (

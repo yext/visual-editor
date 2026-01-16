@@ -19,17 +19,10 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
     return {};
   }
   const metaData: RootConfig = {};
-  console.log(
-    "getPageMetadata rootProps 1",
-    document.meta?.entityType?.id,
-    JSON.stringify(rootProps)
-  );
 
   if (document.meta?.entityType?.id?.startsWith("dm_")) {
     rootProps = resolveDirectoryRootProps(rootProps, document);
   }
-
-  console.log("getPageMetadata rootProps 2", JSON.stringify(rootProps));
 
   Object.keys(rootProps).forEach((key: string) => {
     metaData[key] = escapeHtml(
@@ -44,7 +37,6 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
     );
   }
 
-  console.log("getPageMetadata metaData", JSON.stringify(metaData));
   return metaData;
 }
 
