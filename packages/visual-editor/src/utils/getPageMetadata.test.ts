@@ -102,4 +102,87 @@ describe("getPageMetadata", () => {
       description: "&#39;&lt;&gt;&#39;",
     });
   });
+
+  it("falls back to english for title when the localized value is empty", async () => {
+    const testDocument = {
+      name: "Test Name",
+      description: "Test Description",
+      locale: "es",
+      __: {
+        layout: JSON.stringify({
+          root: {
+            props: {
+              title: {
+                field: "name",
+                constantValue: {
+                  en: "English",
+                  es: "",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+              description: {
+                field: "description",
+                constantValue: {
+                  en: "English",
+                  es: "",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+            },
+          },
+        }),
+      },
+    };
+    const metaData = getPageMetadata(testDocument);
+
+    expect(metaData).toMatchObject({
+      title: "English",
+      description: "",
+    });
+  });
+
+  it("resolves PLACEHOLDER for directory pages", async () => {
+    const testDocument = {
+      name: "Test Name",
+      description: "Test Description",
+      meta: {
+        entityType: { id: "dm_country" },
+      },
+      locale: "en",
+      dm_addressCountryDisplayName: "United States",
+      __: {
+        layout: JSON.stringify({
+          root: {
+            props: {
+              title: {
+                field: "",
+                constantValue: {
+                  en: "PLACEHOLDER",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+              description: {
+                field: "description",
+                constantValue: {
+                  en: "PLACEHOLDER",
+                  es: "",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+            },
+          },
+        }),
+      },
+    };
+    const metaData = getPageMetadata(testDocument);
+
+    expect(metaData).toMatchObject({
+      title: "Locations in United States",
+      description: "Browse locations in United States",
+    });
+  });
 });

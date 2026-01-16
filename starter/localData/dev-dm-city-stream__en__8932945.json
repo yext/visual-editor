@@ -151,7 +151,7 @@
         "wednesday": { "openIntervals": [{ "end": "22:00", "start": "10:00" }] }
       },
       "meta": {
-        "entityType": { "id": "location", "uid": 12346 },
+        "entityType": { "id": "dm_city", "uid": 12346 },
         "locale": "en"
       },
       "name": "Galaxy Grill To Go",
