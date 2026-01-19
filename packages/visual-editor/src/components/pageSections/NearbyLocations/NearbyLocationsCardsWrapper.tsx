@@ -1,25 +1,25 @@
-import * as React from "react";
-import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
 import { useQuery } from "@tanstack/react-query";
 import {
   backgroundColors,
   BackgroundStyle,
   Body,
+  getPreferredDistanceUnit,
   HeadingLevel,
   msg,
   pt,
   resolveComponentData,
-  useDocument,
-  YextField,
-  getPreferredDistanceUnit,
   toKilometers,
+  useDocument,
   usePlatformTranslation,
+  YextField,
 } from "@yext/visual-editor";
-import { parseDocument, fetchNearbyLocations } from "./utils";
-import { NearbyLocationCard } from "./NearbyLocationCard";
-import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
 import { MapPinOff } from "lucide-react";
+import * as React from "react";
+import { useTranslation } from "react-i18next";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+import { NearbyLocationCard } from "./NearbyLocationCard";
+import { fetchNearbyLocations, parseDocument } from "./utils";
 
 export type NearbyLocationCardsWrapperProps = {
   /** The search parameters for finding nearby locations. */
@@ -44,7 +44,7 @@ export type NearbyLocationCardsWrapperProps = {
 
     /** The heading level for the card title. */
     headingLevel?: HeadingLevel;
-
+    color?: BackgroundStyle;
     phone: {
       /**
        * The display format for phone numbers on the cards.
@@ -105,6 +105,10 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
           type: "select",
           hasSearch: true,
           options: "HEADING_LEVEL",
+        }),
+        color: YextField(msg("fields.color", "Color"), {
+          type: "select",
+          options: "SITE_COLOR",
         }),
         phone: YextField(msg("fields.phone", "Phone"), {
           type: "object",

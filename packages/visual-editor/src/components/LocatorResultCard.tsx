@@ -1,34 +1,4 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
 import { Field, PuckContext } from "@measured/puck";
-import {
-  CardProps,
-  Coordinate,
-  useCardAnalyticsCallback,
-} from "@yext/search-ui-react";
-import {
-  Background,
-  backgroundColors,
-  Body,
-  BodyProps,
-  CTA,
-  CTAVariant,
-  Heading,
-  HeadingLevel,
-  Image,
-  msg,
-  PhoneAtom,
-  useTemplateProps,
-  resolveComponentData,
-  resolveUrlTemplateOfChild,
-  mergeMeta,
-  HoursStatusAtom,
-  HoursTableAtom,
-  YextField,
-  DynamicOption,
-  DynamicOptionsSingleSelectorType,
-  TranslatableString,
-} from "@yext/visual-editor";
 import {
   Address,
   AddressType,
@@ -37,10 +7,45 @@ import {
   ListingType,
 } from "@yext/pages-components";
 import {
-  HoursTableProps,
-  HoursTableStyleFields,
-} from "./contentBlocks/HoursTable.tsx";
+  CardProps,
+  Coordinate,
+  useCardAnalyticsCallback,
+} from "@yext/search-ui-react";
+import {
+  Background,
+  backgroundColors,
+  BackgroundStyle,
+  Body,
+  BodyProps,
+  CTA,
+  CTAVariant,
+  DynamicOption,
+  DynamicOptionsSingleSelectorType,
+  Heading,
+  HeadingLevel,
+  HoursStatusAtom,
+  HoursTableAtom,
+  Image,
+  mergeMeta,
+  msg,
+  PhoneAtom,
+  resolveComponentData,
+  resolveUrlTemplateOfChild,
+  TranslatableString,
+  useTemplateProps,
+  YextField,
+} from "@yext/visual-editor";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import {
+  FaAngleRight,
+  FaMapMarkerAlt,
+  FaRegClock,
+  FaRegEnvelope,
+} from "react-icons/fa";
 import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers";
+import { FieldTypeData } from "../internal/types/templateMetadata";
 import {
   Accordion,
   AccordionContent,
@@ -48,13 +53,9 @@ import {
   AccordionTrigger,
 } from "./atoms/accordion.js";
 import {
-  FaAngleRight,
-  FaMapMarkerAlt,
-  FaRegClock,
-  FaRegEnvelope,
-} from "react-icons/fa";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers";
-import { FieldTypeData } from "../internal/types/templateMetadata";
+  HoursTableProps,
+  HoursTableStyleFields,
+} from "./contentBlocks/HoursTable.tsx";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -66,6 +67,7 @@ export interface LocatorResultCardProps {
     field: DynamicOptionsSingleSelectorType<string>;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
+    color?: BackgroundStyle;
   };
 
   /** Settings for the secondary heading of the card */
@@ -276,6 +278,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           type: "select",
           hasSearch: true,
           options: "HEADING_LEVEL",
+        }),
+        color: YextField(msg("fields.color", "Color"), {
+          type: "select",
+          options: "SITE_COLOR",
         }),
       },
     },
@@ -660,7 +666,9 @@ export const LocatorResultCard = React.memo(
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
       >
         <Background
-          background={backgroundColors.background6.value}
+          background={
+            props.primaryHeading.color ?? backgroundColors.background6.value
+          }
           className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
         >
           {result.index}
@@ -867,6 +875,7 @@ const HeadingTextSection = (props: {
   return (
     <div className="flex flex-col gap-2">
       <Heading
+        color={primaryHeading.color}
         className="font-bold text-palette-primary-dark"
         level={primaryHeading.headingLevel}
       >

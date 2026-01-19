@@ -1,6 +1,5 @@
-import React from "react";
 import { PuckContext } from "@measured/puck";
-import { HoursType, AddressType, Address } from "@yext/pages-components";
+import { Address, AddressType, HoursType } from "@yext/pages-components";
 import {
   Background,
   Heading,
@@ -12,6 +11,7 @@ import {
   resolvePageSetUrlTemplate,
   useTemplateProps,
 } from "@yext/visual-editor";
+import React from "react";
 import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper";
 
 /** A single card for the Nearby Locations Section */
@@ -32,7 +32,6 @@ type NearbyLocationCardProps = {
 
   /** @internal Shared styles for the card (controlled by the parent) */
   styles: NearbyLocationCardsWrapperProps["styles"];
-
   /** @internal The index of the card in the section */
   cardNumber?: number;
 
@@ -75,6 +74,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
         href={resolvedUrl}
       >
         <Heading
+          color={styles.color}
           level={styles.headingLevel ?? 4}
           semanticLevelOverride={
             sectionHeadingLevel

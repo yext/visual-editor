@@ -50,7 +50,7 @@ import { translatableCTAImageMigration } from "./0048_translatable_cta_image.ts"
 import { simplifyFaqSection } from "./0049_simplify_faq_section.ts";
 import { promoVariants } from "./0050_promo_variants.ts";
 import { updateLinksAlignmentMigration } from "./0051_update_link_align_prop.ts";
-
+import { updateLocatorHeading } from "./0052_update_locator_heading.ts";
 // To add a migration:
 // Create a new file in this directory that exports a Migration
 // Import it in this file and add it to this array.
@@ -108,4 +108,5 @@ export const migrationRegistry: MigrationRegistry = [
   simplifyFaqSection,
   promoVariants,
   updateLinksAlignmentMigration,
+  updateLocatorHeading,
 ];
