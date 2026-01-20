@@ -18,26 +18,26 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
   if (!rootProps) {
     return {};
   }
-  const metaData: RootConfig = {};
+  const metadata: RootConfig = {};
 
   if (document.meta?.entityType?.id?.startsWith("dm_")) {
     rootProps = resolveDirectoryRootProps(rootProps, document);
   }
 
   Object.keys(rootProps).forEach((key: string) => {
-    metaData[key] = escapeHtml(
+    metadata[key] = escapeHtml(
       resolveComponentData(rootProps[key], document.locale, document) ?? ""
     );
   });
 
   // For title, fallback to en value if localized value is empty
-  if (metaData.title === "") {
-    metaData.title = escapeHtml(
+  if (metadata.title === "") {
+    metadata.title = escapeHtml(
       resolveComponentData(rootProps.title, "en", document) ?? ""
     );
   }
 
-  return metaData;
+  return metadata;
 }
 
 const escapeHtml = (str: string) => {
