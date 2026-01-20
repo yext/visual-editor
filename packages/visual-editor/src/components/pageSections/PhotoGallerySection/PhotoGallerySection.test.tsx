@@ -1102,8 +1102,7 @@ describe("PhotoGallerySection", async () => {
       await page.viewport(width, height);
       const images = Array.from(container.querySelectorAll("img"));
       await waitFor(() => {
-        // The gallery only loads the first image
-        expect(images[0].complete).toBe(true);
+        expect(images.every((i) => i.complete)).toBe(true);
       });
 
       await expect(
