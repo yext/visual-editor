@@ -11,7 +11,7 @@
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
   "closed": "Geschlossen",
-  "closesAt": "schließt um xx:xx Uhr",
+  "closesAt": "Schließt bei",
   "customSearchArea": "Benutzerdefinierte Suchbereich",
   "distance": "Distanz",
   "filter": "Filter",
@@ -42,7 +42,7 @@
   "openHeaderMenu": "Öffnen Sie das Header -Menü",
   "openMenu": "Öffnen Sie das Menü",
   "openNow": "Jetzt offen",
-  "opensAt": "öffnet um xx:xx Uhr",
+  "opensAt": "Öffnet sich bei",
   "presetImages": {
     "appGallery": "App Galerie",
     "appGalleryOutline": "App Gallery (Umriss)",

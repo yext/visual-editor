@@ -65,7 +65,7 @@
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
   "closed": "Geschlossen",
-  "closesAt": "schließt um xx:xx Uhr",
+  "closesAt": "Schließt bei",
   "componentErrorBoundary": {
     "error": "Fehler",
     "message": "Dieser Abschnitt kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."
@@ -592,7 +592,7 @@
   "openHeaderMenu": "Öffnen Sie das Header -Menü",
   "openMenu": "Öffnen Sie das Menü",
   "openNow": "Jetzt offen",
-  "opensAt": "öffnet um xx:xx Uhr",
+  "opensAt": "Öffnet sich bei",
   "optional": "Optional",
   "outline": "Gliederung",
   "page": "Seite",
