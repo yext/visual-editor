@@ -181,7 +181,6 @@
   "fields": {
     "CTAVariant": "Varianta CTA",
     "address": "Adresa",
-    "alignCard": "Aliniați cardul",
     "alignContent": "Aliniați conținutul",
     "alignItems": "Aliniați articolele",
     "alignment": "Aliniere",
@@ -207,6 +206,7 @@
     "commaSeparated": "Separat prin virgulă",
     "containerAlignment": "Alinierea containerului",
     "content": "Conținut",
+    "contentAlignment": "Alinierea conținutului",
     "contentType": "Tip de conținut",
     "contributorName": "Numele contribuabilului",
     "coordinate": "Coordona",

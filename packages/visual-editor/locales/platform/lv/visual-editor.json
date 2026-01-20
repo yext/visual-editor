@@ -181,7 +181,6 @@
   "fields": {
     "CTAVariant": "CTA variants",
     "address": "Adrese",
-    "alignCard": "Izlīdzināt karti",
     "alignContent": "Saskaņot saturu",
     "alignItems": "Izlīdzināt priekšmetus",
     "alignment": "Izlīdzināšana",
@@ -207,6 +206,7 @@
     "commaSeparated": "Atdalīts ar komatu",
     "containerAlignment": "Konteinera līdzināšana",
     "content": "Saturs",
+    "contentAlignment": "Satura līdzināšana",
     "contentType": "Satura veids",
     "contributorName": "Līdzautora vārds",
     "coordinate": "Koordinēt",

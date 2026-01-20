@@ -180,7 +180,6 @@
   "fields": {
     "CTAVariant": "Variante de CTA",
     "address": "DIRECCIÓN",
-    "alignCard": "Alinear tarjeta",
     "alignContent": "Alinear contenido",
     "alignItems": "Alinear artículos",
     "alignment": "Alineación",
@@ -206,6 +205,7 @@
     "commaSeparated": "Separados por comas",
     "containerAlignment": "Alineación de contenedores",
     "content": "Contenido",
+    "contentAlignment": "Alineación de contenido",
     "contentType": "Tipo de contenido",
     "contributorName": "Nombre de contribuyente",
     "coordinate": "Coordinar",

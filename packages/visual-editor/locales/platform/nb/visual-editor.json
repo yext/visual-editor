@@ -181,7 +181,6 @@
   "fields": {
     "CTAVariant": "CTA-variant",
     "address": "Adresse",
-    "alignCard": "Juster kortet",
     "alignContent": "Juster innhold",
     "alignItems": "Juster gjenstander",
     "alignment": "Justering",
@@ -207,6 +206,7 @@
     "commaSeparated": "Kommaseparert",
     "containerAlignment": "Beholderjustering",
     "content": "Innhold",
+    "contentAlignment": "Innholdsjustering",
     "contentType": "Innholdstype",
     "contributorName": "Bidragsyternavn",
     "coordinate": "Koordinere",

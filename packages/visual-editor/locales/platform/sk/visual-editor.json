@@ -182,7 +182,6 @@
   "fields": {
     "CTAVariant": "Variant CTA",
     "address": "Osloviť",
-    "alignCard": "Zarovnaná karta",
     "alignContent": "Zarovnať obsah",
     "alignItems": "Vyrovnanie",
     "alignment": "Vyrovnanie",
@@ -208,6 +207,7 @@
     "commaSeparated": "Čiarkou oddelené",
     "containerAlignment": "Zarovnanie kontajnera",
     "content": "Obsah",
+    "contentAlignment": "Zarovnanie obsahu",
     "contentType": "Typ obsahu",
     "contributorName": "Názov prispievateľa",
     "coordinate": "Koordinovať",

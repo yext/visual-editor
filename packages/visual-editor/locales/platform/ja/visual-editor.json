@@ -181,7 +181,6 @@
   "fields": {
     "CTAVariant": "CTA バリアント",
     "address": "住所",
-    "alignCard": "カードを調整します",
     "alignContent": "コンテンツの整列",
     "alignItems": "アイテムを調整します",
     "alignment": "アライメント",
@@ -207,6 +206,7 @@
     "commaSeparated": "カンマ区切り",
     "containerAlignment": "コンテナの位置合わせ",
     "content": "コンテンツ",
+    "contentAlignment": "コンテンツの調整",
     "contentType": "コンテンツタイプ",
     "contributorName": "貢献者名",
     "coordinate": "座標",

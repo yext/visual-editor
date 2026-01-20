@@ -181,7 +181,6 @@
   "fields": {
     "CTAVariant": "CTA variantas",
     "address": "Adresas",
-    "alignCard": "Sulygios kortelė",
     "alignContent": "Sulygiuoti turinį",
     "alignItems": "Lyginkite daiktus",
     "alignment": "Suderinimas",
@@ -207,6 +206,7 @@
     "commaSeparated": "Atskirtas kableliu",
     "containerAlignment": "Konteinerio lygiavimas",
     "content": "Turinys",
+    "contentAlignment": "Turinio suderinimas",
     "contentType": "Turinio tipas",
     "contributorName": "Bendraautoriaus vardas",
     "coordinate": "Koordinatė",

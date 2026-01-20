@@ -181,7 +181,6 @@
   "fields": {
     "CTAVariant": "CTA-variant",
     "address": "Adres",
-    "alignCard": "Lijnkaart",
     "alignContent": "Inhoud uitlijnen",
     "alignItems": "Lijn items uit",
     "alignment": "Uitlijning",
@@ -207,6 +206,7 @@
     "commaSeparated": "Komma gescheiden",
     "containerAlignment": "Uitlijning van containers",
     "content": "Inhoud",
+    "contentAlignment": "Uitlijning van inhoud",
     "contentType": "Inhoudstype",
     "contributorName": "Bijdragennaam",
     "coordinate": "Coördineren",

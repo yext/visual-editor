@@ -180,7 +180,6 @@
   "fields": {
     "CTAVariant": "Variante CTA",
     "address": "Adresse",
-    "alignCard": "Aligner la carte",
     "alignContent": "Aligner le contenu",
     "alignItems": "Aligner les articles",
     "alignment": "Alignement",
@@ -206,6 +205,7 @@
     "commaSeparated": "Séparés par des virgules",
     "containerAlignment": "Alignement des conteneurs",
     "content": "Contenu",
+    "contentAlignment": "Alignement du contenu",
     "contentType": "Type de contenu",
     "contributorName": "Nom de contributeur",
     "coordinate": "Coordonner",

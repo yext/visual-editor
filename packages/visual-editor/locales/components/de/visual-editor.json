@@ -11,13 +11,13 @@
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
   "closed": "Geschlossen",
-  "closesAt": "Schließt bei",
+  "closesAt": "schließt um xx:xx Uhr",
   "customSearchArea": "Benutzerdefinierte Suchbereich",
   "distance": "Distanz",
   "filter": "Filter",
-  "findALocation": "Finden Sie einen Ort",
+  "findALocation": "Finde einen Standort",
   "friday": "Freitag",
-  "getDirections": "Wegbeschreibung bekommen",
+  "getDirections": "Route planen",
   "heroBanner": "Heldenbanner",
   "heroHeader": "Heldenkopfzeile",
   "heroImage": "Heldenbild",
@@ -42,7 +42,7 @@
   "openHeaderMenu": "Öffnen Sie das Header -Menü",
   "openMenu": "Öffnen Sie das Menü",
   "openNow": "Jetzt offen",
-  "opensAt": "Öffnet sich bei",
+  "opensAt": "öffnet um xx:xx Uhr",
   "presetImages": {
     "appGallery": "App Galerie",
     "appGalleryOutline": "App Gallery (Umriss)",
@@ -113,6 +113,6 @@
   "totalReviews_other": "{{count}} Rezensionen",
   "tuesday": "Dienstag",
   "useOurLocatorToFindALocationNearYou": "Verwenden Sie unseren Locator, um einen Ort in Ihrer Nähe zu finden",
-  "visitPage": "Besuchen Sie die Seite",
+  "visitPage": "Standortseite aufrufen",
   "wednesday": "Mittwoch"
 }
