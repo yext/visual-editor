@@ -107,5 +107,6 @@ export const migrationRegistry: MigrationRegistry = [
   translatableCTAImageMigration,
   simplifyFaqSection,
   promoVariants,
+  {},
   updateLinksAlignmentMigration,
 ];
