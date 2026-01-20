@@ -11,7 +11,7 @@
   "closeHeaderMenu": "Feche o menu do cabeçalho",
   "closeMenu": "Feche o menu",
   "closed": "Fechado",
-  "closesAtTime": "Fecha às {{hora}}",
+  "closesAtTime": "Fecha às {{time}}",
   "closesAtTimeWeek": "Fecha às {{time}} {{dayOfWeek}}",
   "customSearchArea": "Área de pesquisa personalizada",
   "distance": "Distância",
@@ -43,7 +43,7 @@
   "openHeaderMenu": "Menu de cabeçalho aberto",
   "openMenu": "Abrir menu",
   "openNow": "Aberto agora",
-  "opensAtTime": "Abre às {{hora}}",
+  "opensAtTime": "Abre às {{time}}",
   "opensAtTimeWeek": "Abre às {{time}} {{dayOfWeek}}",
   "presetImages": {
     "appGallery": "Galeria de App",

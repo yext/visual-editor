@@ -63,7 +63,7 @@
   "closeHeaderMenu": "Menú de encabezado cerrar",
   "closeMenu": "Menú cerrado",
   "closed": "Cerrado",
-  "closesAtTime": "Cierra a las {{hora}}",
+  "closesAtTime": "Cierra a las {{time}}",
   "closesAtTimeWeek": "Cierra a las {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Error",
@@ -587,7 +587,7 @@
   "openHeaderMenu": "Abrir menú de encabezado",
   "openMenu": "Menú abierto",
   "openNow": "Abierto ahora",
-  "opensAtTime": "Abre a las {{hora}}",
+  "opensAtTime": "Abre a las {{time}}",
   "opensAtTimeWeek": "Abre a las {{time}} {{dayOfWeek}}",
   "optional": "Opcional",
   "outline": "Describir",

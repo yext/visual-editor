@@ -63,7 +63,7 @@
   "closeHeaderMenu": "Feche o menu do cabeçalho",
   "closeMenu": "Feche o menu",
   "closed": "Fechado",
-  "closesAtTime": "Fecha às {{hora}}",
+  "closesAtTime": "Fecha às {{time}}",
   "closesAtTimeWeek": "Fecha às {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Erro",
@@ -588,7 +588,7 @@
   "openHeaderMenu": "Menu de cabeçalho aberto",
   "openMenu": "Abrir menu",
   "openNow": "Aberto agora",
-  "opensAtTime": "Abre às {{hora}}",
+  "opensAtTime": "Abre às {{time}}",
   "opensAtTimeWeek": "Abre às {{time}} {{dayOfWeek}}",
   "optional": "Opcional",
   "outline": "Contorno",

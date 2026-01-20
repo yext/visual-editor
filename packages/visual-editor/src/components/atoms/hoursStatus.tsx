@@ -49,7 +49,7 @@ export const HoursStatusAtom = React.memo(
         hours={hours}
         className={classNameResolved}
         statusTemplate={(params: HoursStatusParams) => {
-          const isFuture = isOpen24h(params) || isIndefinitelyClosed(params);
+          const isFuture = !isOpen24h(params) && !isIndefinitelyClosed(params);
           let time = "";
           if (params.isOpen) {
             const interval = params.currentInterval;
@@ -63,8 +63,7 @@ export const HoursStatusAtom = React.memo(
               : "";
           }
 
-          const showDayOfWeek =
-            showDayNames && !isOpen24h(params) && !isIndefinitelyClosed(params);
+          const showDayOfWeek = showDayNames && isFuture;
           let dayOfWeek = "";
           if (params.isOpen) {
             const interval = params.currentInterval;
