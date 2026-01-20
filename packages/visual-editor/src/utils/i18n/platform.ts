@@ -1,6 +1,6 @@
 import i18next, { TOptions } from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
-import { applyI18nFallbacks, defaultI18nFallbacks } from "./fallbacks.ts";
+import { getTranslations } from "./getTranslations.ts";
 
 const NAMESPACE = "visual-editor";
 
@@ -17,42 +17,6 @@ i18nPlatformInstance.use(initReactI18next).init({
 });
 
 /**
- * Dynamically imports the translation file for the given locale.
- */
-const getTranslations = async (
-  locale: string,
-  isRetry = false
-): Promise<Record<string, string>> => {
-  if (!locale) {
-    return {};
-  }
-
-  try {
-    const module = await import(
-      `../../../locales/platform/${locale}/visual-editor.json`
-    );
-    return module.default;
-  } catch (e) {
-    if (isRetry || locale === "en") {
-      console.error(
-        "Error loading translations for locale",
-        locale,
-        e,
-        "No fallback available."
-      );
-      return {};
-    }
-    console.error(
-      "Error loading translations for locale",
-      locale,
-      e,
-      "Falling back to en."
-    );
-    return getTranslations("en", true);
-  }
-};
-
-/**
  * Loads translations into the i18n instance for the given locale.
  */
 export const loadPlatformTranslations = async (locale: string) => {
@@ -60,8 +24,7 @@ export const loadPlatformTranslations = async (locale: string) => {
     return;
   }
 
-  const translationsToInject = await getTranslations(locale);
-  applyI18nFallbacks(translationsToInject, defaultI18nFallbacks);
+  const translationsToInject = await getTranslations(locale, "platform");
 
   if (translationsToInject && Object.keys(translationsToInject).length > 0) {
     i18nPlatformInstance.addResourceBundle(
