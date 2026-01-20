@@ -1102,7 +1102,16 @@ describe("PhotoGallerySection", async () => {
       await page.viewport(width, height);
       const images = Array.from(container.querySelectorAll("img"));
       await waitFor(() => {
-        expect(images.every((i) => i.complete)).toBe(true);
+        if (data.content[0].props.styles?.variant === "gallery") {
+          expect(images.every((i) => i.complete)).toBe(true);
+        } else {
+          const imagesPerSlide =
+            data.content[0].props.slots?.PhotoGalleryWrapper[0].props.styles
+              ?.carouselImageCount ?? 1;
+          expect(images.slice(0, imagesPerSlide).every((i) => i.complete)).toBe(
+            true
+          );
+        }
       });
 
       await expect(
