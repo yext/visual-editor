@@ -817,7 +817,7 @@ const tests: ComponentTest[] = [
                     },
                     {
                       assetImage: {
-                        es: {
+                        en: {
                           alternateText: "",
                           url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
                           height: 1,
@@ -914,7 +914,7 @@ const tests: ComponentTest[] = [
                     },
                     {
                       assetImage: {
-                        es: {
+                        en: {
                           alternateText: "",
                           url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
                           height: 1,
@@ -1011,7 +1011,7 @@ const tests: ComponentTest[] = [
                     },
                     {
                       assetImage: {
-                        es: {
+                        en: {
                           alternateText: "",
                           url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
                           height: 1,
