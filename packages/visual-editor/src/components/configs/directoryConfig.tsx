@@ -23,7 +23,8 @@ import {
 import { resolveDirectoryRootProps } from "../../utils/getPageMetadata";
 
 export interface DirectoryConfigProps
-  extends DirectoryCategoryProps,
+  extends
+    DirectoryCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {

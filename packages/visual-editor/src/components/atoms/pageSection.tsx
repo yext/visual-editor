@@ -40,7 +40,8 @@ const maxWidthVariants = cva("mx-auto", {
 });
 
 export interface PageSectionProps
-  extends VariantProps<typeof maxWidthVariants>,
+  extends
+    VariantProps<typeof maxWidthVariants>,
     React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];

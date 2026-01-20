@@ -22,7 +22,8 @@ import {
 } from "../categories/SlotsCategory";
 
 export interface LocatorConfigProps
-  extends LocatorCategoryProps,
+  extends
+    LocatorCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {

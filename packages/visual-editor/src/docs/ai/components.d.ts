@@ -934,7 +934,8 @@ interface StaticMapStyles {
 }
 
 interface PageSectionProps
-  extends VariantProps<typeof maxWidthVariants>,
+  extends
+    VariantProps<typeof maxWidthVariants>,
     React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];
