@@ -11,9 +11,8 @@ const TooltipTrigger = TooltipPrimitive.Trigger;
 
 const TooltipArrow = TooltipPrimitive.Arrow;
 
-interface TooltipContentProps extends React.ComponentPropsWithoutRef<
-  typeof TooltipPrimitive.Content
-> {
+interface TooltipContentProps
+  extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
   zoomWithViewport?: boolean;
 }
 
