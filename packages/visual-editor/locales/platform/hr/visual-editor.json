@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Zatvori izbornik zaglavlja",
   "closeMenu": "Zatvori izbornik",
   "closed": "Zatvoreno",
-  "closesAt": "Zatvara se",
+  "closesAtTime": "Zatvara se u {{time}}",
+  "closesAtTimeWeek": "Zatvara se u {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Greška",
     "message": "Nije moguće prikazati ovaj odjeljak. Pokušajte ažurirati biblioteku komponenti."
@@ -592,7 +593,8 @@
   "openHeaderMenu": "Izbornik otvorenog zaglavlja",
   "openMenu": "Otvoreni izbornik",
   "openNow": "Otvori sada",
-  "opensAt": "Otvara se na",
+  "opensAtTime": "Otvara se u {{time}}",
+  "opensAtTimeWeek": "Otvara se u {{time}} {{dayOfWeek}}",
   "optional": "Neobavezan",
   "outline": "Obris",
   "page": "Stranica",

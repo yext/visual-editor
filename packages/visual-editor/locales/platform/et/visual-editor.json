@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Sulgemenüü",
   "closeMenu": "Sulgemenüü",
   "closed": "Suletud",
-  "closesAt": "Sulgub",
+  "closesAtTime": "Suletakse {{time}}",
+  "closesAtTimeWeek": "Suletakse kell {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Viga",
     "message": "Seda jaotist ei saa renderdada. Proovige oma komponentide teeki värskendada."
@@ -587,7 +588,8 @@
   "openHeaderMenu": "Avatud päisemenüü",
   "openMenu": "Avatud menüü",
   "openNow": "Nüüd avatud",
-  "opensAt": "Avaneb",
+  "opensAtTime": "Avatakse {{time}}",
+  "opensAtTimeWeek": "Avatakse kell {{time}} {{dayOfWeek}}",
   "optional": "Valikuline",
   "outline": "Kontuur",
   "page": "Leht",

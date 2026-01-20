@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Stäng rubrikmeny",
   "closeMenu": "Stänga meny",
   "closed": "Stängd",
-  "closesAt": "Avslutas",
+  "closesAtTime": "Stänger kl. {{time}}",
+  "closesAtTimeWeek": "Stänger kl. {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Fel",
     "message": "Det går inte att återge detta avsnitt. Testa att uppdatera ditt komponentbibliotek."
@@ -588,7 +589,8 @@
   "openHeaderMenu": "Öppen rubrikmeny",
   "openMenu": "Öppna meny",
   "openNow": "Öppet nu",
-  "opensAt": "Öppnar sig",
+  "opensAtTime": "Öppnar kl. {{time}}",
+  "opensAtTimeWeek": "Öppnar kl. {{time}} {{dayOfWeek}}",
   "optional": "Frivillig",
   "outline": "Skissera",
   "page": "Sida",

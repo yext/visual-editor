@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Lukk headermeny",
   "closeMenu": "Lukk meny",
   "closed": "Lukket",
-  "closesAt": "Lukkes kl",
+  "closesAtTime": "Stenger kl. {{time}}",
+  "closesAtTimeWeek": "Stenger kl. {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Feil",
     "message": "Kan ikke gjengi denne delen. Prøv å oppdatere komponentbiblioteket."
@@ -587,7 +588,8 @@
   "openHeaderMenu": "Åpne headermeny",
   "openMenu": "Åpen meny",
   "openNow": "Åpne nå",
-  "opensAt": "Åpner kl",
+  "opensAtTime": "Åpner kl. {{time}}",
+  "opensAtTimeWeek": "Åpner kl. {{time}} {{dayOfWeek}}",
   "optional": "Valgfri",
   "outline": "Skissere",
   "page": "Side",

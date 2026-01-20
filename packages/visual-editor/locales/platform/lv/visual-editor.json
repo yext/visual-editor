@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Aizvērt galvenes izvēlni",
   "closeMenu": "Aizvērt ēdienkarti",
   "closed": "Slēgts",
-  "closesAt": "Aizveras plkst",
+  "closesAtTime": "Tiek slēgts plkst. {{time}}",
+  "closesAtTimeWeek": "Tiek slēgts plkst. {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Kļūda",
     "message": "Nevar atveidot šo sadaļu. Mēģiniet atjaunināt savu komponentu bibliotēku."
@@ -592,7 +593,8 @@
   "openHeaderMenu": "Atveriet galvenes izvēlni",
   "openMenu": "Atvērta ēdienkarte",
   "openNow": "Atvērts tagad",
-  "opensAt": "Atver plkst",
+  "opensAtTime": "Tiek atvērts plkst. {{time}}",
+  "opensAtTimeWeek": "Tiek atvērts plkst. {{time}} {{dayOfWeek}}",
   "optional": "Izvēlīgs",
   "outline": "Kontūra",
   "page": "Lappuse",

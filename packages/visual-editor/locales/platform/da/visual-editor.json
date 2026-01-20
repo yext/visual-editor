@@ -65,7 +65,8 @@
   "closeHeaderMenu": "Luk header -menu",
   "closeMenu": "Luk menu",
   "closed": "Lukket",
-  "closesAt": "Lukker kl",
+  "closesAtTime": "Lukker kl. {{time}}",
+  "closesAtTimeWeek": "Lukker kl. {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Fejl",
     "message": "Kan ikke gengive denne sektion. Prøv at opdatere dit komponentbibliotek."
@@ -594,7 +595,8 @@
   "openHeaderMenu": "Åben header -menu",
   "openMenu": "Åben menu",
   "openNow": "Åben nu",
-  "opensAt": "Åbner kl",
+  "opensAtTime": "Åbner kl. {{time}}",
+  "opensAtTimeWeek": "Åbner kl. {{time}} {{dayOfWeek}}",
   "optional": "Valgfri",
   "outline": "Oversigt",
   "page": "Side",

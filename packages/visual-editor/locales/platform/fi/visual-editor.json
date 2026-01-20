@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Sulje otsikkovalikko",
   "closeMenu": "Sulje valikko",
   "closed": "Suljettu",
-  "closesAt": "Sulkeutuu klo",
+  "closesAtTime": "Suljetaan {{time}}",
+  "closesAtTimeWeek": "Suljetaan klo {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Virhe",
     "message": "Tätä osiota ei voi renderöidä. Yritä päivittää komponenttikirjastosi."
@@ -587,7 +588,8 @@
   "openHeaderMenu": "Avaa otsikkovalikko",
   "openMenu": "Avaa valikko",
   "openNow": "Avoinna nyt",
-  "opensAt": "Avautuu klo",
+  "opensAtTime": "Avautuu {{time}}",
+  "opensAtTimeWeek": "Avautuu {{time}} {{dayOfWeek}}",
   "optional": "Valinnainen",
   "outline": "Hahmotella",
   "page": "Sivu",
