@@ -4,6 +4,12 @@ import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";
 import { Button } from "../ui/button.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip.tsx";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { EntityFieldsToggle } from "../ui/EntityFieldsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
@@ -13,11 +19,15 @@ import "../ui/puck.css";
 import "../../../editor/index.css";
 import { migrate } from "../../../utils/migrate.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
-import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import {
+  i18nComponentsInstance,
+  loadComponentTranslations,
+} from "../../../utils/i18n/components.ts";
 import {
   i18nPlatformInstance,
   usePlatformTranslation,
   pt,
+  loadPlatformTranslations,
 } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { DevLogger } from "../../../utils/devLogger.ts";
@@ -32,6 +42,7 @@ type LayoutHeaderProps = {
   onPublishLayout: (data: Data) => Promise<void>;
   onSendLayoutForApproval: (data: Data, comment: string) => void;
   localDev: boolean;
+  hasErrors: boolean;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -42,6 +53,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onPublishLayout,
     onSendLayoutForApproval,
     localDev,
+    hasErrors,
   } = props;
   const streamDocument = useDocument();
 
@@ -233,13 +245,35 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             }}
           />
           {!templateMetadata.isDevMode && (
-            <Button
-              variant="secondary"
-              disabled={histories.length === 1}
-              onClick={onButtonClick}
-            >
-              {buttonText}
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span
+                    tabIndex={hasErrors ? 0 : -1}
+                    className={hasErrors ? "ve-cursor-not-allowed" : ""}
+                  >
+                    <Button
+                      variant="secondary"
+                      disabled={histories.length === 1 || hasErrors}
+                      onClick={onButtonClick}
+                      className={hasErrors ? "ve-pointer-events-none" : ""}
+                    >
+                      {buttonText}
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {hasErrors && (
+                  <TooltipContent>
+                    <p>
+                      {pt(
+                        "fixErrorsToPublish",
+                        "To publish, delete or fix sections with errors"
+                      )}
+                    </p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
       </header>
@@ -288,9 +322,10 @@ export const LocalDevOverrideButtons = () => {
         Set Layout Data
       </Button>
       <Button
-        onClick={() => {
-          const locale = prompt("Enter components locale:");
-          i18nComponentsInstance.changeLanguage(locale ?? "en");
+        onClick={async () => {
+          const locale = prompt("Enter components locale:") || "en";
+          await loadComponentTranslations(locale);
+          i18nComponentsInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
@@ -298,9 +333,10 @@ export const LocalDevOverrideButtons = () => {
         Set Components Locale
       </Button>
       <Button
-        onClick={() => {
-          const locale = prompt("Enter platform locale:");
-          i18nPlatformInstance.changeLanguage(locale ?? "en");
+        onClick={async () => {
+          const locale = prompt("Enter platform locale:") || "en";
+          await loadPlatformTranslations(locale);
+          i18nPlatformInstance.changeLanguage(locale);
         }}
         variant="outline"
         className="ve-ml-4"
@@ -339,9 +375,12 @@ const translatePuckSidebars = () => {
   if (componentCategoryTitles?.length) {
     componentCategoryTitles.forEach((title) => {
       if (title.innerText === "PAGE SECTIONS") {
-        title.innerText = pt("categories.pageSections", "PAGE SECTIONS");
+        title.innerText = pt(
+          "categories.pageSections",
+          "Page Sections"
+        ).toUpperCase();
       } else if (title.innerText === "OTHER") {
-        title.innerText = pt("categories.other", "OTHER");
+        title.innerText = pt("categories.other", "Other").toUpperCase();
       }
     });
   }

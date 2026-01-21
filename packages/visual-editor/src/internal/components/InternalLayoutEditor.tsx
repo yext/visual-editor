@@ -33,6 +33,7 @@ import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageAct
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
+import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -106,6 +107,7 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+  const { errorCount } = useErrorContext();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -163,7 +165,12 @@ export const InternalLayoutEditor = ({
         }
       }
     },
-    [templateMetadata, buildVisualConfigLocalStorageKey, layoutSaveState]
+    [
+      templateMetadata,
+      buildVisualConfigLocalStorageKey,
+      layoutSaveState,
+      saveLayoutSaveState,
+    ]
   );
 
   const handleClearLocalChanges = () => {
@@ -397,6 +404,7 @@ export const InternalLayoutEditor = ({
               onPublishLayout={handlePublishLayout}
               onSendLayoutForApproval={handleSendLayoutForApproval}
               localDev={localDev}
+              hasErrors={errorCount > 0}
             />
           ),
           iframe: loadMapboxIntoIframe,

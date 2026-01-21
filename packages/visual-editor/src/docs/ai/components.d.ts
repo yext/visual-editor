@@ -30,6 +30,7 @@ import {
 import { VariantProps } from "class-variance-authority";
 
 interface PageSectionCategoryProps {
+  AboutSection: AboutSectionProps;
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
@@ -40,6 +41,7 @@ interface PageSectionCategoryProps {
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
+  ProfessionalHeroSection: ProfessionalHeroSectionProps;
   PromoSection: PromoSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
@@ -99,6 +101,38 @@ interface ExpandedFooterProps {
    * @internal */
   ignoreLocaleWarning?: string[];
 }
+
+type AboutSectionProps = {
+  /**
+   * This object contains properties for customizing the component's data.
+   * @propCategory Data Props
+   */
+  data: {
+    showDetailsColumn: boolean;
+  };
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: {
+    /**
+     * The background color of the section.
+     * @defaultValue Background Color 2
+     */
+    backgroundColor?: BackgroundStyle;
+  };
+  /** @internal */
+  slots: {
+    SectionHeadingSlot: Slot;
+    DescriptionSlot: Slot;
+    SidebarSlot: Slot;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility: boolean;
+};
 
 interface BannerSectionProps {
   /**
@@ -371,6 +405,41 @@ interface ProductSectionProps {
   liveVisibility: boolean;
 }
 
+interface ProfessionalHeroSectionProps {
+  /**
+   * This object contains properties for customizing the component's appearance.
+   * @propCategory Style Props
+   */
+  styles: ProfessionalHeroStyles;
+  /** @internal */
+  slots: {
+    ImageSlot: Slot;
+    BusinessNameSlot: Slot;
+    CredentialsSlot: Slot;
+    ProfessionalNameSlot: Slot;
+    ProfessionalTitleSlot: Slot;
+    SubtitleSlot: Slot;
+    AddressSlot: Slot;
+    PrimaryCTASlot: Slot;
+    SecondaryCTASlot: Slot;
+    PhoneSlot: Slot;
+    EmailSlot: Slot;
+  };
+  /**
+   * If 'true', the component is visible on the live page; if 'false', it's hidden.
+   * @defaultValue true
+   */
+  liveVisibility?: boolean;
+  /** @internal */
+  conditionalRender?: {
+    isRightColumnVisible?: boolean;
+  };
+  /** @internal */
+  analytics: {
+    scope?: string;
+  };
+}
+
 interface PromoSectionProps {
   /**
    * This object contains the content to be displayed by the component.
@@ -554,6 +623,26 @@ interface ExpandedFooterStyles {
   maxWidth: PageSectionProps["maxWidth"];
 }
 
+/**
+ * Applies a theme color as the background of a page section
+ * @ai This value MUST be one of the following
+ * { bgColor: "bg-white", textColor: "text-black" }
+ * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
+ * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
+ * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
+ */
+type BackgroundStyle = {
+  /** The tailwind background color class */
+  bgColor: string;
+  /** The tailwind text color class */
+  textColor: string;
+  /** Whether the background color is dark (for adjusting other styles based on background) */
+  isDarkBackground?: boolean;
+};
+
 interface BannerData {
   /**
    * The rich text to display. It can be linked to a Yext entity field or set as a constant value.
@@ -598,26 +687,6 @@ interface CoreInfoStyles {
    */
   backgroundColor?: BackgroundStyle;
 }
-
-/**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
- */
-type BackgroundStyle = {
-  /** The tailwind background color class */
-  bgColor: string;
-  /** The tailwind text color class */
-  textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
-  isDarkBackground?: boolean;
-};
 
 /** Represents data that can either be from the Yext Knowledge Graph or statically defined */
 type YextEntityField<T> = {
@@ -714,6 +783,84 @@ interface PhotoGalleryStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+  /**
+   * The layout style for displaying images in the gallery.
+   * @defaultValue "gallery"
+   */
+  variant: "gallery" | "carousel";
+}
+
+interface ProfessionalHeroStyles {
+  /**
+   * The background color for the section.
+   * @defaultValue Background Color 1
+   */
+  backgroundColor?: BackgroundStyle;
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+  /**
+   * Whether to show the hero image.
+   * @defaultValue true
+   */
+  showImage: boolean;
+  /**
+   * Positions the image to the left or right of the hero content on desktop.
+   * @defaultValue left
+   */
+  desktopImagePosition: "left" | "right";
+  /**
+   * Positions the image to the top or bottom of the hero content on mobile.
+   * @defaultValue top
+   */
+  mobileImagePosition: "bottom" | "top";
+  /**
+   * Whether to show the credentials slot.
+   * @defaultValue true
+   */
+  showCredentials?: boolean;
+  /**
+   * Whether to show the subtitle slot.
+   * @defaultValue true
+   */
+  showSubtitle?: boolean;
+  /**
+   * Whether to show the business name slot.
+   * @defaultValue true
+   */
+  showBusinessName?: boolean;
+  /**
+   * Whether to show the professional title slot.
+   * @defaultValue true
+   */
+  showProfessionalTitle?: boolean;
+  /**
+   * Whether to show the address slot.
+   * @defaultValue true
+   */
+  showAddress?: boolean;
+  /**
+   * Whether to show the primary CTA slot.
+   * @defaultValue true
+   */
+  showPrimaryCTA?: boolean;
+  /**
+   * Whether to show the secondary CTA slot.
+   * @defaultValue true
+   */
+  showSecondaryCTA?: boolean;
+  /**
+   * Whether to show the phone slot.
+   * @defaultValue true
+   */
+  showPhone?: boolean;
+  /**
+   * Whether to show the email slot.
+   * @defaultValue true
+   */
+  showEmail?: boolean;
 }
 
 interface PromoData {
@@ -792,7 +939,8 @@ interface StaticMapStyles {
 }
 
 interface PageSectionProps
-  extends VariantProps<typeof maxWidthVariants>,
+  extends
+    VariantProps<typeof maxWidthVariants>,
     React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;
   verticalPadding?: VariantProps<typeof pageSectionVariants>["verticalPadding"];

@@ -16,7 +16,10 @@ import { LayoutEditor } from "../internal/components/LayoutEditor.tsx";
 import { ThemeEditor } from "../internal/components/ThemeEditor.tsx";
 import { useCommonMessageSenders } from "../internal/hooks/useMessageSenders.ts";
 import { useProgress } from "../internal/hooks/useProgress.ts";
-import { i18nPlatformInstance } from "../utils/i18n/platform.ts";
+import {
+  i18nPlatformInstance,
+  loadPlatformTranslations,
+} from "../utils/i18n/platform.ts";
 import { StreamDocument } from "../utils/applyTheme.ts";
 import {
   createDefaultThemeConfig,
@@ -28,6 +31,7 @@ import {
 } from "../utils/fonts/visualEditorFonts.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
+import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 const devLogger = new DevLogger();
 
@@ -93,7 +97,7 @@ export const Editor = ({
 
   const logError = (error: Error, info: ErrorInfo) => {
     sendError({
-      payload: { error, info },
+      payload: { error, info, type: "editor" },
     });
   };
 
@@ -148,9 +152,31 @@ export const Editor = ({
   }, [templateMetadata?.isDevMode, devPageSets]);
 
   useEffect(() => {
-    if (templateMetadata?.platformLocale) {
-      i18nPlatformInstance.changeLanguage(templateMetadata?.platformLocale);
-    }
+    let isCurrent = true;
+
+    const handlePlatformLocaleChange = async () => {
+      if (templateMetadata?.platformLocale) {
+        const expectedLocale = templateMetadata.platformLocale;
+        try {
+          await loadPlatformTranslations(expectedLocale);
+          // Additional check to avoid race conditions when locale changes quickly
+          if (
+            isCurrent &&
+            templateMetadata?.platformLocale === expectedLocale
+          ) {
+            i18nPlatformInstance.changeLanguage(expectedLocale);
+          }
+        } catch (error) {
+          console.error("Failed to load platform translations:", error);
+        }
+      }
+    };
+
+    handlePlatformLocaleChange();
+
+    return () => {
+      isCurrent = false;
+    };
   }, [templateMetadata?.platformLocale]);
 
   const { isLoading, progress } = useProgress({
@@ -177,41 +203,43 @@ export const Editor = ({
     : undefined;
 
   return (
-    <TemplateMetadataContext.Provider value={templateMetadata!}>
-      <ErrorBoundary fallback={<></>} onError={logError}>
-        {!isLoading ? (
-          templateMetadata?.isThemeMode || forceThemeMode ? (
-            <ThemeEditor
-              puckConfig={puckConfig!}
-              templateMetadata={templateMetadata!}
-              layoutData={migratedData!}
-              themeData={themeData!}
-              themeConfig={finalThemeConfig}
-              localDev={!!localDev}
-              metadata={{ ...metadata, streamDocument: document }}
-            />
+    <ErrorProvider>
+      <TemplateMetadataContext.Provider value={templateMetadata!}>
+        <ErrorBoundary fallback={<></>} onError={logError}>
+          {!isLoading ? (
+            templateMetadata?.isThemeMode || forceThemeMode ? (
+              <ThemeEditor
+                puckConfig={puckConfig!}
+                templateMetadata={templateMetadata!}
+                layoutData={migratedData!}
+                themeData={themeData!}
+                themeConfig={finalThemeConfig}
+                localDev={!!localDev}
+                metadata={{ ...metadata, streamDocument: document }}
+              />
+            ) : (
+              <LayoutEditor
+                puckConfig={puckConfig!}
+                templateMetadata={templateMetadata!}
+                layoutData={migratedData!}
+                themeData={themeData!}
+                themeConfig={finalThemeConfig}
+                localDev={!!localDev}
+                metadata={{ ...metadata, streamDocument: document }}
+                streamDocument={document}
+              />
+            )
           ) : (
-            <LayoutEditor
-              puckConfig={puckConfig!}
-              templateMetadata={templateMetadata!}
-              layoutData={migratedData!}
-              themeData={themeData!}
-              themeConfig={finalThemeConfig}
-              localDev={!!localDev}
-              metadata={{ ...metadata, streamDocument: document }}
-              streamDocument={document}
-            />
-          )
-        ) : (
-          parentLoaded && (
-            <LoadingScreen
-              progress={progress}
-              platformLanguageIsSet={!!templateMetadata?.platformLocale}
-            />
-          )
-        )}
-        <Toaster closeButton richColors />
-      </ErrorBoundary>
-    </TemplateMetadataContext.Provider>
+            parentLoaded && (
+              <LoadingScreen
+                progress={progress}
+                platformLanguageIsSet={!!templateMetadata?.platformLocale}
+              />
+            )
+          )}
+          <Toaster closeButton richColors />
+        </ErrorBoundary>
+      </TemplateMetadataContext.Provider>
+    </ErrorProvider>
   );
 };

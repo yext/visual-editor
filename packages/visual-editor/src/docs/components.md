@@ -308,8 +308,6 @@ This object contains properties for customizing the component's appearance.
 
 The Footer appears at the bottom of the page. It serves as a container for secondary navigation, social media links, legal disclaimers, and copyright information. See [Expanded Footer](#expanded-footer) for the newest footer component. Available on Directory and Locator templates.
 
-![Preview of the Footer component](../components/testing/screenshots/Footer/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
-
 ### Props
 
 #### Other Props
@@ -377,9 +375,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop   | Type                                                                                                                                                    | Description | Default |
-| :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
-| `data` | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
+| Prop     | Type                                                                                                                                                    | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `data`   | `{ xLink: string; facebookLink: string; instagramLink: string; linkedInLink: string; pinterestLink: string; tiktokLink: string; youtubeLink: string; }` |             |         |
+| `styles` | `{ filledBackground?: boolean; mobileAlignment?: "left" \| "center"; }`                                                                                 |             |         |
 
 ---
 
@@ -399,8 +398,6 @@ The background color for the entire footer section.
 ## Header
 
 The Header component appears at the top of pages. It serves as the primary navigation and branding element, containing the site logo and optionally a language selector. See [Expanded Header](#expanded-header) for the newest header component. Available on Directory and Locator templates.
-
-![Preview of the Header component](../components/testing/screenshots/Header/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
 
 ### Props
 
@@ -462,10 +459,10 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop     | Type                                                                                                                                             | Description | Default |
-| :------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                         |             |         |
-| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; }` |             |         |
+| Prop     | Type                                                                                                                                                                                   | Description | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ hours: YextEntityField<HoursType>; }`                                                                                                                                               |             |         |
+| `styles` | `{ showCurrentStatus?: boolean; timeFormat?: "12h" \| "24h"; dayOfWeekFormat?: "short" \| "long"; showDayNames?: boolean; className?: string; bodyVariant?: "lg" \| "base" \| "sm"; }` |             |         |
 
 ---
 
@@ -625,9 +622,10 @@ The Photo Gallery Section is designed to display a collection of images in a vis
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                                                           | Default              |
-| :----------------------- | :---------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color for the entire section, selected from the theme. | `Background Color 1` |
+| Prop                     | Type                      | Description                                                           | Default              |
+| :----------------------- | :------------------------ | :-------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`         | The background color for the entire section, selected from the theme. | `Background Color 1` |
+| `styles.variant`         | `"gallery" \| "carousel"` | The layout style for displaying images in the gallery.                | `"gallery"`          |
 
 #### Other Props
 
@@ -663,6 +661,43 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 | :--------------- | :------------------------------------------------------ | :----------------------------------------------------------------------------- | :------ |
 | `liveVisibility` | `boolean`                                               | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
 | `slots`          | `{ SectionHeadingSlot: Slot; CardsWrapperSlot: Slot; }` |                                                                                |         |
+
+---
+
+## ProfessionalHeroSection
+
+![Preview of the ProfessionalHeroSection component](../components/testing/screenshots/ProfessionalHeroSection/%5Bdesktop%5D%20version%2051%20-%20default%20props%20with%20data.png)
+
+### Props
+
+#### Style Props
+
+This object contains properties for customizing the component's appearance.
+
+| Prop                           | Type                | Description                                                              | Default              |
+| :----------------------------- | :------------------ | :----------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`       | `BackgroundStyle`   | The background color for the section.                                    | `Background Color 1` |
+| `styles.desktopImagePosition`  | `"left" \| "right"` | Positions the image to the left or right of the hero content on desktop. | `left`               |
+| `styles.mobileImagePosition`   | `"bottom" \| "top"` | Positions the image to the top or bottom of the hero content on mobile.  | `top`                |
+| `styles.showAddress`           | `boolean`           | Whether to show the address slot.                                        | `true`               |
+| `styles.showAverageReview`     | `boolean`           | If 'true', displays the entity's average review rating.                  | `true`               |
+| `styles.showBusinessName`      | `boolean`           | Whether to show the business name slot.                                  | `true`               |
+| `styles.showCredentials`       | `boolean`           | Whether to show the credentials slot.                                    | `true`               |
+| `styles.showEmail`             | `boolean`           | Whether to show the email slot.                                          | `true`               |
+| `styles.showImage`             | `boolean`           | Whether to show the hero image.                                          | `true`               |
+| `styles.showPhone`             | `boolean`           | Whether to show the phone slot.                                          | `true`               |
+| `styles.showPrimaryCTA`        | `boolean`           | Whether to show the primary CTA slot.                                    | `true`               |
+| `styles.showProfessionalTitle` | `boolean`           | Whether to show the professional title slot.                             | `true`               |
+| `styles.showSecondaryCTA`      | `boolean`           | Whether to show the secondary CTA slot.                                  | `true`               |
+| `styles.showSubtitle`          | `boolean`           | Whether to show the subtitle slot.                                       | `true`               |
+
+#### Other Props
+
+If 'true', the component is visible on the live page; if 'false', it's hidden.
+
+| Prop             | Type      | Description                                                                    | Default |
+| :--------------- | :-------- | :----------------------------------------------------------------------------- | :------ |
+| `liveVisibility` | `boolean` | If 'true', the component is visible on the live page; if 'false', it's hidden. | `true`  |
 
 ---
 

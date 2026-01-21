@@ -30,6 +30,8 @@ export interface HoursStatusProps {
     showDayNames?: boolean;
     /** Additional class names to apply to the underlying component */
     className?: string;
+    /** The body size variant */
+    bodyVariant?: "lg" | "base" | "sm";
   };
 
   /** @internal */
@@ -40,7 +42,7 @@ export interface HoursStatusProps {
   };
 }
 
-const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
+export const hoursStatusWrapperFields: Fields<HoursStatusProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -119,6 +121,7 @@ const HoursStatusWrapper: PuckComponent<HoursStatusProps> = ({
         showDayNames={styles.showDayNames}
         timeFormat={styles.timeFormat}
         dayOfWeekFormat={styles.dayOfWeekFormat}
+        bodyVariant={styles.bodyVariant}
       />
     </EntityField>
   ) : puck.isEditing ? (

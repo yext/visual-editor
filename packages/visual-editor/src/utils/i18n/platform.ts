@@ -1,39 +1,41 @@
 import i18next, { TOptions } from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
-import { applyI18nFallbacks, defaultI18nFallbacks } from "./fallbacks.ts";
+import { getTranslations } from "./getTranslations.ts";
 
 const NAMESPACE = "visual-editor";
 
-const i18nPlatformInstance = i18next.createInstance();
-
-const resources: Record<string, any> = {};
-const modules = import.meta.glob("../../../locales/*/visual-editor.json", {
-  eager: true,
-});
-const translationRegex = new RegExp(`locales/([^/]+)/${NAMESPACE}\\.json$`);
-
-for (const path in modules) {
-  const match = path.match(translationRegex);
-  if (match) {
-    const lang = match[1];
-    resources[lang] = {
-      [NAMESPACE]: (modules[path] as any).default,
-    };
-  }
-}
-
-applyI18nFallbacks(resources, defaultI18nFallbacks);
+export const i18nPlatformInstance = i18next.createInstance();
 
 i18nPlatformInstance.use(initReactI18next).init({
+  lng: "en",
   fallbackLng: "en",
   ns: [NAMESPACE],
   defaultNS: NAMESPACE,
   interpolation: { escapeValue: false },
   nsSeparator: false,
-  resources,
+  resources: {},
 });
 
-const usePlatformTranslation = () => {
+/**
+ * Loads translations into the i18n instance for the given locale.
+ */
+export const loadPlatformTranslations = async (locale: string) => {
+  if (i18nPlatformInstance.hasResourceBundle(locale, NAMESPACE)) {
+    return;
+  }
+
+  const translationsToInject = await getTranslations(locale, "platform");
+
+  if (translationsToInject && Object.keys(translationsToInject).length > 0) {
+    i18nPlatformInstance.addResourceBundle(
+      locale,
+      NAMESPACE,
+      translationsToInject
+    );
+  }
+};
+
+export const usePlatformTranslation = () => {
   return useTranslation(NAMESPACE, { i18n: i18nPlatformInstance });
 };
 
@@ -45,7 +47,7 @@ export type MsgString = string & { __brand: "i18nPlatform" };
  * stringified in the config and dynamically replaced
  * upon render.
  */
-const msg = (
+export const msg = (
   key: string,
   defaultValue: string,
   options?: TOptions
@@ -58,7 +60,7 @@ const msg = (
  * operate as a normal TFunction or handle configurations that
  * have been stringified by msg.
  */
-const pt = (
+export const pt = (
   keyOrEncodedValue: string | MsgString,
   optionsOrDefault?: string | TOptions,
   options?: TOptions
@@ -100,5 +102,3 @@ const pt = (
     return t(keyOrEncodedValue);
   }
 };
-
-export { i18nPlatformInstance, usePlatformTranslation, msg, pt };

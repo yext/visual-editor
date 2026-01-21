@@ -1,3 +1,4 @@
+import { AboutSection, AboutSectionProps } from "../pageSections/index.ts";
 import { BannerSection, BannerSectionProps } from "../pageSections/Banner.tsx";
 import {
   BreadcrumbsSection,
@@ -56,8 +57,13 @@ import {
   VideoSection,
   VideoSectionProps,
 } from "../pageSections/VideoSection.tsx";
+import {
+  ProfessionalHeroSection,
+  ProfessionalHeroSectionProps,
+} from "../pageSections/ProfessionalHeroSection.tsx";
 
 export interface PageSectionCategoryProps {
+  AboutSection: AboutSectionProps;
   BannerSection: BannerSectionProps;
   BreadcrumbsSection: BreadcrumbsSectionProps;
   CoreInfoSection: CoreInfoSectionProps;
@@ -68,6 +74,7 @@ export interface PageSectionCategoryProps {
   NearbyLocationsSection: NearbyLocationsSectionProps;
   PhotoGallerySection: PhotoGallerySectionProps;
   ProductSection: ProductSectionProps;
+  ProfessionalHeroSection: ProfessionalHeroSectionProps;
   PromoSection: PromoSectionProps;
   ReviewsSection: ReviewsSectionProps;
   StaticMapSection: StaticMapSectionProps;
@@ -77,6 +84,7 @@ export interface PageSectionCategoryProps {
 }
 
 export const PageSectionCategoryComponents = {
+  AboutSection,
   BannerSection,
   BreadcrumbsSection,
   CoreInfoSection,
@@ -87,6 +95,7 @@ export const PageSectionCategoryComponents = {
   NearbyLocationsSection,
   PhotoGallerySection,
   ProductSection,
+  ProfessionalHeroSection,
   PromoSection,
   ReviewsSection,
   StaticMapSection,

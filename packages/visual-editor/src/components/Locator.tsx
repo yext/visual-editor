@@ -44,6 +44,8 @@ import {
   msg,
   useDocument,
   YextField,
+  getPreferredDistanceUnit,
+  toKilometers,
 } from "@yext/visual-editor";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
@@ -580,7 +582,7 @@ const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <SearchI18nextProvider searcher={searcher}>
-        <AnalyticsProvider {...(searchAnalyticsConfig as any)}>
+        <AnalyticsProvider {...searchAnalyticsConfig}>
           <LocatorInternal {...props} />
         </AnalyticsProvider>
       </SearchI18nextProvider>
@@ -1194,7 +1196,7 @@ interface ResultsCountSummaryProps {
 const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   const { searchState, resultCount, selectedDistanceMiles, filterDisplayName } =
     props;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   if (resultCount === 0) {
     if (searchState === "not started") {
@@ -1218,23 +1220,25 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   } else {
     if (filterDisplayName) {
       if (selectedDistanceMiles) {
+        const unit = getPreferredDistanceUnit(i18n.language);
+        const distance =
+          unit === "mile"
+            ? selectedDistanceMiles
+            : toKilometers(selectedDistanceMiles);
         return (
           <div>
-            {t(
-              "locationsWithinDistanceOf",
-              '{{count}} locations within {{distance}} miles of "{{name}}"',
-              {
-                count: resultCount,
-                distance: selectedDistanceMiles,
-                name: filterDisplayName,
-              }
-            )}
+            {t("locationsWithinDistanceOf", {
+              count: resultCount,
+              distance: distance,
+              unit: t(unit, { count: distance }),
+              name: filterDisplayName,
+            })}
           </div>
         );
       } else {
         return (
           <div>
-            {t("locationsNear", '{{count}} locations near "{{name}}"', {
+            {t("locationsNear", {
               count: resultCount,
               name: filterDisplayName,
             })}
@@ -1244,7 +1248,7 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
     } else {
       return (
         <div>
-          {t("locationWithCount", "{{count}} locations", {
+          {t("locationWithCount", {
             count: resultCount,
           })}
         </div>
@@ -1523,7 +1527,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
             <button
               className="inline-flex bg-white"
               onClick={() => onChange(distanceMiles)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("miles", "miles")}`}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
             >
               <div className="text-palette-primary-dark">
                 {selectedDistanceMiles === distanceMiles ? (
@@ -1534,7 +1538,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <div className="inline-flex">
-              {`< ${distanceMiles} ${t("miles", "miles")}`}
+              {`< ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
             </div>
           </div>
         ))}

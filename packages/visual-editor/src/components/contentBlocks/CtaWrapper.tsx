@@ -153,6 +153,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     >
       {cta && (
         <CTA
+          setPadding={true}
           label={resolvedLabel}
           link={
             ctaType === "getDirections"
@@ -212,6 +213,8 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     // If the show field exists, make it visible in the editor
     if (data.props.data.show !== undefined) {
       setDeep(updatedFields, "data.objectFields.show.visible", true);
+    } else {
+      setDeep(updatedFields, "data.objectFields.show.visible", false);
     }
 
     const showColor =

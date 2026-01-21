@@ -3888,14 +3888,19 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 41,
-      title: { field: "", constantValue: "", constantValueEnabled: false },
+      version: 52,
+      title: {
+        field: "",
+        constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
+        constantValueEnabled: true,
+      },
       description: {
         field: "",
-        constantValue: "",
-        constantValueEnabled: false,
+        constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
+        constantValueEnabled: true,
       },
     },
+    type: "root",
   },
   content: [
     {
@@ -3907,7 +3912,7 @@ const directoryDefaultLayout = {
             {
               type: "PrimaryHeaderSlot",
               props: {
-                id: "PrimaryHeaderSlot-0d3864b1-add7-4268-9a02-f0526eb35c9b",
+                id: "PrimaryHeaderSlot-6bec7d2b-1bea-4c98-971d-22417036e3f1",
                 styles: {
                   backgroundColor: {
                     bgColor: "bg-white",
@@ -3919,17 +3924,14 @@ const directoryDefaultLayout = {
                     {
                       type: "ImageSlot",
                       props: {
-                        id: "ImageSlot-dbf6589a-4cff-4ef8-ada0-1a53bf5af37a",
+                        id: "ImageSlot-e1a34076-0cb5-415d-bb3c-bc7b17e5cf78",
                         data: {
                           image: {
                             field: "",
                             constantValue: {
-                              hasLocalizedValue: "true",
-                              en: {
-                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                                height: 100,
-                                width: 100,
-                              },
+                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                              height: 100,
+                              width: 100,
                             },
                             constantValueEnabled: true,
                           },
@@ -3942,7 +3944,7 @@ const directoryDefaultLayout = {
                     {
                       type: "HeaderLinks",
                       props: {
-                        id: "HeaderLinks-48f4506c-6421-4f54-95c2-0a44f6d89c29",
+                        id: "HeaderLinks-7369f769-4b5e-4f7d-a0ad-be85c3df008f",
                         data: {
                           links: [
                             {
@@ -3952,6 +3954,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -3960,6 +3963,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -3968,6 +3972,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                           ],
                         },
@@ -3979,7 +3984,7 @@ const directoryDefaultLayout = {
                     {
                       type: "CTASlot",
                       props: {
-                        id: "CTASlot-6ff4af13-e9a4-4ec2-8884-8e0cd165f900",
+                        id: "CTASlot-47ab637c-9bb8-4c19-9134-1f36f6a8317b",
                         data: {
                           show: true,
                           entityField: {
@@ -4008,7 +4013,7 @@ const directoryDefaultLayout = {
                     {
                       type: "CTASlot",
                       props: {
-                        id: "CTASlot-203ce7a4-6207-42b5-bd8d-500051893a78",
+                        id: "CTASlot-80a6423e-dc73-477c-8e52-e50eccb36e47",
                         data: {
                           show: true,
                           entityField: {
@@ -4040,7 +4045,7 @@ const directoryDefaultLayout = {
                     {
                       type: "SecondaryHeaderSlot",
                       props: {
-                        id: "SecondaryHeaderSlot-27cae493-886a-4c73-a9fa-376d28a0baf3",
+                        id: "SecondaryHeaderSlot-c6938360-c677-439c-8013-4e5903ac83c0",
                         data: { show: true, showLanguageDropdown: false },
                         styles: {
                           backgroundColor: {
@@ -4053,7 +4058,7 @@ const directoryDefaultLayout = {
                             {
                               type: "HeaderLinks",
                               props: {
-                                id: "HeaderLinks-76826121-e9bc-452a-8b99-c663a5803dc3",
+                                id: "HeaderLinks-7367fdd1-0206-4045-8108-fcee3bc5f626",
                                 data: {
                                   links: [
                                     {
@@ -4063,6 +4068,7 @@ const directoryDefaultLayout = {
                                         hasLocalizedValue: "true",
                                       },
                                       link: "#",
+                                      openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
@@ -4071,6 +4077,7 @@ const directoryDefaultLayout = {
                                         hasLocalizedValue: "true",
                                       },
                                       link: "#",
+                                      openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
@@ -4079,6 +4086,7 @@ const directoryDefaultLayout = {
                                         hasLocalizedValue: "true",
                                       },
                                       link: "#",
+                                      openInNewTab: false,
                                     },
                                   ],
                                 },
@@ -4092,7 +4100,11 @@ const directoryDefaultLayout = {
                     },
                   ],
                 },
-                conditionalRender: { navContent: true, CTAs: true },
+                conditionalRender: {
+                  navContent: true,
+                  CTAs: true,
+                  hasLogoImage: true,
+                },
               },
             },
           ],
@@ -4100,7 +4112,7 @@ const directoryDefaultLayout = {
             {
               type: "SecondaryHeaderSlot",
               props: {
-                id: "SecondaryHeaderSlot-27cae493-886a-4c73-a9fa-376d28a0baf3",
+                id: "SecondaryHeaderSlot-c6938360-c677-439c-8013-4e5903ac83c0",
                 data: { show: true, showLanguageDropdown: false },
                 styles: {
                   backgroundColor: {
@@ -4113,7 +4125,7 @@ const directoryDefaultLayout = {
                     {
                       type: "HeaderLinks",
                       props: {
-                        id: "HeaderLinks-76826121-e9bc-452a-8b99-c663a5803dc3",
+                        id: "HeaderLinks-7367fdd1-0206-4045-8108-fcee3bc5f626",
                         data: {
                           links: [
                             {
@@ -4123,6 +4135,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -4131,6 +4144,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -4139,6 +4153,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                           ],
                         },
@@ -4153,8 +4168,8 @@ const directoryDefaultLayout = {
           ],
         },
         analytics: { scope: "expandedHeader" },
-        id: "ExpandedHeader-92679ccf-a7de-4b5b-90d3-fea0f03449d0",
-        ignoreLocaleWarning: ["slots.SecondaryHeaderSlot"],
+        id: "ExpandedHeader-a7953e49-f085-4132-b107-cfb9936fb6c7",
+        ignoreLocaleWarning: [],
       },
     },
     {
@@ -4168,7 +4183,7 @@ const directoryDefaultLayout = {
             {
               type: "HeadingTextSlot",
               props: {
-                id: "HeadingTextSlot-799a66ed-c7dc-43c6-a732-07484a8e0cab",
+                id: "HeadingTextSlot-1a871989-a34d-426c-b24a-a1888c1a46ea",
                 data: {
                   text: {
                     constantValue: {
@@ -4187,7 +4202,7 @@ const directoryDefaultLayout = {
             {
               type: "HeadingTextSlot",
               props: {
-                id: "HeadingTextSlot-994eac78-8ba0-48d8-815c-046d570cfb2f",
+                id: "HeadingTextSlot-9a120ff6-d494-4ec8-9ab8-e43017d77c03",
                 data: {
                   text: {
                     constantValue: { en: "", hasLocalizedValue: "true" },
@@ -4203,7 +4218,7 @@ const directoryDefaultLayout = {
             {
               type: "BreadcrumbsSlot",
               props: {
-                id: "BreadcrumbsSlot-40287424-8577-4dc8-b2c6-8d56baa236bd",
+                id: "BreadcrumbsSlot-13dba298-abd1-4f75-a7e9-b19779a4fc5b",
                 data: {
                   directoryRoot: {
                     en: "Directory Root",
@@ -4225,14 +4240,14 @@ const directoryDefaultLayout = {
             {
               type: "DirectoryGrid",
               props: {
-                id: "DirectoryGrid-d0f91ac5-a8cb-4b8d-8cac-d003c7842fb3",
+                id: "DirectoryGrid-dab8e202-600a-47da-b5c7-971df3f504fb",
                 slots: { CardSlot: [] },
               },
             },
           ],
         },
         analytics: { scope: "directory" },
-        id: "Directory-16740a55-2fc8-4922-8475-4b4fff7a75f5",
+        id: "Directory-d21d6943-0a81-4a8e-b76b-cecb5b157c14",
       },
     },
     {
@@ -4244,21 +4259,15 @@ const directoryDefaultLayout = {
             {
               type: "FooterLogoSlot",
               props: {
-                id: "FooterLogoSlot-cd904e91-9979-486f-b9da-ac21313cdc3b",
+                id: "FooterLogoSlot-ec076737-32fc-40db-aa64-8044d47a6de3",
                 data: {
                   image: {
                     field: "",
                     constantValue: {
-                      hasLocalizedValue: "true",
-                      en: {
-                        url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                        height: 100,
-                        width: 100,
-                        alternateText: {
-                          en: "Logo",
-                          hasLocalizedValue: "true",
-                        },
-                      },
+                      url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                      height: 100,
+                      width: 100,
+                      alternateText: { en: "Logo", hasLocalizedValue: "true" },
                     },
                     constantValueEnabled: true,
                   },
@@ -4271,7 +4280,7 @@ const directoryDefaultLayout = {
             {
               type: "FooterSocialLinksSlot",
               props: {
-                id: "FooterSocialLinksSlot-eba66b8e-535a-42e7-8c74-5299cf69d255",
+                id: "FooterSocialLinksSlot-e3ff3e64-107e-4163-b13c-bd033bd43a15",
                 data: {
                   xLink: "",
                   facebookLink: "",
@@ -4288,7 +4297,7 @@ const directoryDefaultLayout = {
             {
               type: "FooterUtilityImagesSlot",
               props: {
-                id: "FooterUtilityImagesSlot-b1702480-10c2-4fa7-8b27-cbb2c0fa83d2",
+                id: "FooterUtilityImagesSlot-d122386b-f2a9-4c12-8a56-1249566d7298",
                 data: { utilityImages: [] },
                 styles: { width: 0, aspectRatio: 1 },
               },
@@ -4298,33 +4307,38 @@ const directoryDefaultLayout = {
             {
               type: "FooterLinksSlot",
               props: {
-                id: "FooterLinksSlot-e508fa3c-1192-4b5b-81f1-5f7fd370b35a",
+                id: "FooterLinksSlot-6ee433f9-3df5-4729-91f0-351437201ae6",
                 data: {
                   links: [
                     {
                       linkType: "URL",
                       label: { en: "Footer Link", hasLocalizedValue: "true" },
                       link: "#",
+                      openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { en: "Footer Link", hasLocalizedValue: "true" },
                       link: "#",
+                      openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { en: "Footer Link", hasLocalizedValue: "true" },
                       link: "#",
+                      openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { en: "Footer Link", hasLocalizedValue: "true" },
                       link: "#",
+                      openInNewTab: false,
                     },
                     {
                       linkType: "URL",
                       label: { en: "Footer Link", hasLocalizedValue: "true" },
                       link: "#",
+                      openInNewTab: false,
                     },
                   ],
                 },
@@ -4337,7 +4351,7 @@ const directoryDefaultLayout = {
             {
               type: "FooterExpandedLinksWrapper",
               props: {
-                id: "FooterExpandedLinksWrapper-8b001169-8e2f-42fa-a5fe-d57f0b889f09",
+                id: "FooterExpandedLinksWrapper-98ade069-167f-4e61-b5bc-5ec6778b8c91",
                 data: {
                   sections: [
                     {
@@ -4350,6 +4364,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4358,6 +4373,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4366,6 +4382,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4374,6 +4391,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4382,51 +4400,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
-                        },
-                      ],
-                    },
-                    {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
-                      links: [
-                        {
-                          linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
-                          link: "#",
-                        },
-                        {
-                          linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
-                          link: "#",
+                          openInNewTab: false,
                         },
                       ],
                     },
@@ -4440,6 +4414,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4448,6 +4423,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4456,6 +4432,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4464,6 +4441,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4472,6 +4450,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                       ],
                     },
@@ -4485,6 +4464,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4493,6 +4473,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4501,6 +4482,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4509,6 +4491,7 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
                         },
                         {
                           linkType: "URL",
@@ -4517,6 +4500,57 @@ const directoryDefaultLayout = {
                             hasLocalizedValue: "true",
                           },
                           link: "#",
+                          openInNewTab: false,
+                        },
+                      ],
+                    },
+                    {
+                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      links: [
+                        {
+                          linkType: "URL",
+                          label: {
+                            en: "Footer Link",
+                            hasLocalizedValue: "true",
+                          },
+                          link: "#",
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: {
+                            en: "Footer Link",
+                            hasLocalizedValue: "true",
+                          },
+                          link: "#",
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: {
+                            en: "Footer Link",
+                            hasLocalizedValue: "true",
+                          },
+                          link: "#",
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: {
+                            en: "Footer Link",
+                            hasLocalizedValue: "true",
+                          },
+                          link: "#",
+                          openInNewTab: false,
+                        },
+                        {
+                          linkType: "URL",
+                          label: {
+                            en: "Footer Link",
+                            hasLocalizedValue: "true",
+                          },
+                          link: "#",
+                          openInNewTab: false,
                         },
                       ],
                     },
@@ -4529,7 +4563,7 @@ const directoryDefaultLayout = {
             {
               type: "SecondaryFooterSlot",
               props: {
-                id: "SecondaryFooterSlot-014d0906-830d-40ae-bb74-dcbc1188ae73",
+                id: "SecondaryFooterSlot-337d3a64-afe3-4f12-9026-e416d2c5d83c",
                 data: { show: true },
                 styles: {
                   backgroundColor: {
@@ -4544,7 +4578,7 @@ const directoryDefaultLayout = {
                     {
                       type: "FooterLinksSlot",
                       props: {
-                        id: "FooterLinksSlot-239a1635-3339-4c1d-b850-894aec3220d3",
+                        id: "FooterLinksSlot-b26b9c7f-1a1d-440e-a6f3-69a3ec47ac69",
                         data: {
                           links: [
                             {
@@ -4554,6 +4588,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -4562,6 +4597,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -4570,6 +4606,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -4578,6 +4615,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -4586,6 +4624,7 @@ const directoryDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                           ],
                         },
@@ -4599,7 +4638,7 @@ const directoryDefaultLayout = {
                     {
                       type: "CopyrightMessageSlot",
                       props: {
-                        id: "CopyrightMessageSlot-e0142469-df41-4ed7-9213-6a1ae84433e0",
+                        id: "CopyrightMessageSlot-65eda140-da7c-4ad5-9bb7-f017a433277b",
                         data: { text: { en: "", hasLocalizedValue: "true" } },
                         alignment: "left",
                       },
@@ -4622,7 +4661,7 @@ const directoryDefaultLayout = {
           maxWidth: "theme",
         },
         analytics: { scope: "expandedFooter" },
-        id: "ExpandedFooter-2c5d3c6c-615b-4d94-9b0b-16220bd840a0",
+        id: "ExpandedFooter-ece16c93-758a-418d-a157-c8465918818d",
         ignoreLocaleWarning: ["slots.ExpandedLinksWrapperSlot"],
       },
     },
@@ -4633,29 +4672,85 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 22,
-      title: { field: "", constantValue: "", constantValueEnabled: false },
+      version: 52,
+      title: {
+        field: "",
+        constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
+        constantValueEnabled: true,
+      },
       description: {
         field: "",
-        constantValue: "",
-        constantValueEnabled: false,
+        constantValue: {
+          en: "Find the right location for you.",
+          hasLocalizedValue: "true",
+        },
+        constantValueEnabled: true,
       },
     },
   },
-  zones: {},
   content: [
     {
       type: "Locator",
       props: {
         id: "Locator-2ae506f4-a3ee-46ea-b5f9-e4c3236243a7",
         mapStyle: "mapbox://styles/mapbox/streets-v12",
-        filters: {
-          openNowButton: false,
-          showDistanceOptions: false,
+        filters: { openNowButton: false, showDistanceOptions: false },
+        resultCard: {
+          primaryHeading: {
+            field: { selection: { value: "name" } },
+            headingLevel: 3,
+          },
+          secondaryHeading: {
+            field: { selection: { value: "name" } },
+            variant: "base",
+            liveVisibility: false,
+          },
+          tertiaryHeading: {
+            field: { selection: { value: "name" } },
+            variant: "base",
+            liveVisibility: false,
+          },
+          icons: false,
+          hours: {
+            field: { selection: { value: "hours" } },
+            table: {
+              startOfWeek: "today",
+              collapseDays: false,
+              showAdditionalHoursText: false,
+            },
+            liveVisibility: true,
+          },
+          address: { showGetDirectionsLink: true, liveVisibility: true },
+          phone: {
+            field: { selection: { value: "mainPhone" } },
+            phoneFormat: "domestic",
+            includePhoneHyperlink: true,
+            liveVisibility: true,
+          },
+          email: {
+            field: { selection: { value: "emails" } },
+            liveVisibility: false,
+          },
+          services: {
+            field: { selection: { value: "services" } },
+            liveVisibility: false,
+          },
+          primaryCTA: { variant: "primary", liveVisibility: true },
+          secondaryCTA: {
+            label: "Call to Action",
+            link: "#",
+            variant: "secondary",
+            liveVisibility: false,
+          },
+          image: {
+            field: { selection: { value: "headshot" } },
+            liveVisibility: false,
+          },
         },
       },
     },
   ],
+  zones: {},
 };
 
 export const defaultLayoutData = {

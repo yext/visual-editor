@@ -13,6 +13,7 @@ import {
   ReviewsSection,
   VisualEditorProvider,
   SlotsCategoryComponents,
+  injectTranslations,
 } from "@yext/visual-editor";
 import { Render, Config, resolveAllData } from "@measured/puck";
 import { page } from "@vitest/browser/context";
@@ -329,8 +330,10 @@ describe("ReviewsSection", async () => {
         streamDocument: document,
       });
 
+      const translations = await injectTranslations(document);
+
       const { container } = reactRender(
-        <VisualEditorProvider templateProps={{ document }}>
+        <VisualEditorProvider templateProps={{ document, translations }}>
           <Render config={puckConfig} data={data} />
         </VisualEditorProvider>
       );
@@ -339,7 +342,7 @@ describe("ReviewsSection", async () => {
 
       await expect(
         `ReviewsSection/[${viewportName}] ${name}`
-      ).toMatchScreenshot({ useFullPage: true });
+      ).toMatchScreenshot();
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
@@ -347,7 +350,7 @@ describe("ReviewsSection", async () => {
         await interactions(page);
         await expect(
           `ReviewsSection/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot({ useFullPage: true });
+        ).toMatchScreenshot();
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

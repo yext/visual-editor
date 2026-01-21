@@ -6,8 +6,12 @@ import { StreamFields } from "../types/entityFields.ts";
 import { TailwindConfigContext } from "../hooks/useTailwindConfig.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { I18nextProvider } from "react-i18next";
-import { i18nComponentsInstance } from "./i18n/components.ts";
+import {
+  i18nComponentsInstance,
+  loadComponentTranslations,
+} from "./i18n/components.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
+import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 
 type AllOrNothing<T extends Record<string, any>> =
   | T
@@ -42,23 +46,29 @@ const VisualEditorProvider = <T extends Record<string, any>>({
   );
 
   if (normalizedTemplateProps?.document?.locale) {
+    loadComponentTranslations(
+      normalizedTemplateProps.document.locale,
+      normalizedTemplateProps?.translations
+    );
     i18nComponentsInstance.changeLanguage(
       normalizedTemplateProps.document.locale
     );
   }
 
   return (
-    <I18nextProvider i18n={i18nComponentsInstance}>
-      <QueryClientProvider client={queryClient}>
-        <TemplatePropsContext.Provider value={normalizedTemplateProps}>
-          <EntityFieldsContext.Provider value={entityFields}>
-            <TailwindConfigContext.Provider value={tailwindConfig}>
-              {children}
-            </TailwindConfigContext.Provider>
-          </EntityFieldsContext.Provider>
-        </TemplatePropsContext.Provider>
-      </QueryClientProvider>
-    </I18nextProvider>
+    <ErrorProvider>
+      <I18nextProvider i18n={i18nComponentsInstance}>
+        <QueryClientProvider client={queryClient}>
+          <TemplatePropsContext.Provider value={normalizedTemplateProps}>
+            <EntityFieldsContext.Provider value={entityFields}>
+              <TailwindConfigContext.Provider value={tailwindConfig}>
+                {children}
+              </TailwindConfigContext.Provider>
+            </EntityFieldsContext.Provider>
+          </TemplatePropsContext.Provider>
+        </QueryClientProvider>
+      </I18nextProvider>
+    </ErrorProvider>
   );
 };
 

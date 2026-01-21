@@ -37,6 +37,11 @@ export type CTAProps = {
   disabled?: boolean;
   color?: BackgroundStyle;
   openInNewTab?: boolean;
+  /**
+   * When true and variant is "link", applies vertical padding (py-3) to the CTA.
+   * @default false
+   */
+  setPadding?: boolean;
 };
 
 /**
@@ -182,6 +187,7 @@ export const CTA = (props: CTAProps) => {
     disabled = false,
     color,
     openInNewTab = false,
+    setPadding = false,
   } = props;
 
   const { t } = useTranslation();
@@ -289,12 +295,16 @@ export const CTA = (props: CTAProps) => {
         })
       : ariaLabel || undefined;
 
+  const linkPadding: ButtonProps["linkPadding"] =
+    buttonVariant === "link" && setPadding ? "yOnly" : "none";
+
   return (
     <Button
       style={ctaType !== "presetImage" ? dynamicStyle : undefined}
       asChild
       className={buttonClassName}
       variant={buttonVariant}
+      linkPadding={linkPadding}
     >
       <Link
         cta={{ link: normalizedLink, linkType }}
@@ -303,6 +313,13 @@ export const CTA = (props: CTAProps) => {
         aria-label={computedAriaLabel}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
         onClick={onClick}
+        // textTransform has to be applied via styles because there is no custom tailwind utility
+        style={{
+          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
+          textTransform: buttonVariant?.toLowerCase().includes("link")
+            ? "var(--textTransform-link-textTransform)"
+            : "var(--textTransform-button-textTransform)",
+        }}
       >
         {linkContent}
         {openInNewTab && (

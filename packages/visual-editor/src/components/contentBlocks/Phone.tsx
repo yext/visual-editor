@@ -86,7 +86,7 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
   },
 };
 
-const PhoneFields: Fields<PhoneProps> = {
+export const PhoneFields: Fields<PhoneProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: PhoneDataFields,

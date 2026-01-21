@@ -1,7 +1,7 @@
 {
   "name": "@yext/visual-editor",
   "description": "Component library for Yext Pages Visual Editor",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "sumo@yext.com",
   "repository": {
     "type": "git",
@@ -54,8 +54,11 @@
     "i18n:translate": "pnpm exec tsx scripts/generateTranslations.ts",
     "i18n:translate:dry": "pnpm exec tsx scripts/generateTranslations.ts --dry-run",
     "i18n:sort": "pnpm exec tsx scripts/sortTranslations.ts",
-    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:sort",
-    "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts"
+    "i18n:update": "pnpm run i18n:scan && pnpm run i18n:translate && pnpm run i18n:copy-platform-translations && pnpm run i18n:fix-plurals",
+    "i18n:check-empty": "pnpm exec tsx scripts/checkEmptyTranslations.ts",
+    "i18n:copy-platform-translations": "pnpm exec tsx scripts/copyPlatformTranslations.ts && pnpm run i18n:sort",
+    "i18n:delete-translations": "pnpm exec tsx scripts/deleteTranslationKeys.ts && pnpm run i18n:sort",
+    "i18n:fix-plurals": "pnpm exec tsx scripts/fixPlurals.ts && pnpm run i18n:sort"
   },
   "dependencies": {
     "@measured/puck": "0.20.2",
@@ -157,9 +160,9 @@
     "zod": "^3.23.8"
   },
   "peerDependencies": {
-    "@yext/pages-components": "^1.2.4",
-    "@yext/search-headless-react": "^2.6.0",
-    "@yext/search-ui-react": "^1.11.1",
+    "@yext/pages-components": "^2.0.0",
+    "@yext/search-headless-react": "^2.7.1",
+    "@yext/search-ui-react": "^2.0.2",
     "mapbox-gl": "^2.9.2",
     "react": "^17.0.2 || ^18.2.0",
     "react-dom": "^17.0.2 || ^18.2.0"

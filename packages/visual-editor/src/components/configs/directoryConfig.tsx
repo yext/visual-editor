@@ -20,9 +20,11 @@ import {
   SlotsCategoryComponents,
   SlotsCategoryProps,
 } from "../categories/SlotsCategory";
+import { resolveDirectoryRootProps } from "../../utils/getPageMetadata";
 
 export interface DirectoryConfigProps
-  extends DirectoryCategoryProps,
+  extends
+    DirectoryCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {
@@ -58,6 +60,15 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   },
 
   root: {
+    resolveData: (data, params) => {
+      return {
+        ...data,
+        props: resolveDirectoryRootProps(
+          data.props ?? {},
+          params.metadata?.streamDocument ?? {}
+        ),
+      };
+    },
     render: () => {
       return (
         <DropZone

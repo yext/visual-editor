@@ -14,6 +14,7 @@ import {
 } from "@yext/visual-editor";
 import { ComponentConfig, Fields } from "@measured/puck";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface BreadcrumbsData {
   /**
@@ -205,15 +206,20 @@ export const BreadcrumbsSection: ComponentConfig<{
   },
   render: (props) => {
     return (
-      <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
-        <VisibilityWrapper
-          liveVisibility={props.liveVisibility}
-          isEditing={props.puck.isEditing}
-          iconSize="md"
-        >
-          <BreadcrumbsComponent {...props} />
-        </VisibilityWrapper>
-      </AnalyticsScopeProvider>
+      <ComponentErrorBoundary
+        isEditing={props.puck.isEditing}
+        resetKeys={[props]}
+      >
+        <AnalyticsScopeProvider name={props?.analytics?.scope ?? "breadcrumbs"}>
+          <VisibilityWrapper
+            liveVisibility={props.liveVisibility}
+            isEditing={props.puck.isEditing}
+            iconSize="md"
+          >
+            <BreadcrumbsComponent {...props} />
+          </VisibilityWrapper>
+        </AnalyticsScopeProvider>
+      </ComponentErrorBoundary>
     );
   },
 };

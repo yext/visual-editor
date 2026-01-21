@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import {
   ComponentConfig,
+  ComponentData,
+  DefaultComponentProps,
   Fields,
   PuckComponent,
   setDeep,
@@ -78,7 +80,7 @@ export const AddressStyleFields: Fields<AddressProps["styles"]> = {
   }),
 };
 
-const addressFields: Fields<AddressProps> = {
+export const addressFields: Fields<AddressProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
@@ -148,6 +150,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
       {(useAddressLink ? !!addressLink : !!listingsLink) &&
         styles.showGetDirectionsLink && (
           <CTA
+            setPadding={true}
             ctaType="getDirections"
             eventName={`getDirections`}
             link={useAddressLink ? addressLink : listingsLink}
@@ -164,6 +167,30 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
   ) : (
     <></>
   );
+};
+
+export const resolveAddressFields = (
+  data: Omit<
+    ComponentData<AddressProps, string, Record<string, DefaultComponentProps>>,
+    "type"
+  >
+) => {
+  const updatedFields = resolveDataFromParent(addressFields, data);
+  const showGetDirectionsLink = data.props.styles.showGetDirectionsLink;
+  setDeep(
+    updatedFields,
+    "styles.objectFields.ctaVariant.visible",
+    showGetDirectionsLink
+  );
+  const ctaVariant = data.props.styles.ctaVariant;
+  const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
+  setDeep(
+    updatedFields,
+    "styles.objectFields.color.visible",
+    showGetDirectionsLink && showColor
+  );
+
+  return updatedFields;
 };
 
 export const Address: ComponentConfig<{
@@ -190,13 +217,6 @@ export const Address: ComponentConfig<{
       color: backgroundColors.color1.value,
     },
   },
-  resolveFields(data) {
-    const updatedFields = resolveDataFromParent(addressFields, data);
-    const ctaVariant = data.props.styles.ctaVariant;
-    const showColor = ctaVariant === "primary" || ctaVariant === "secondary";
-    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
-
-    return updatedFields;
-  },
+  resolveFields: resolveAddressFields,
   render: (props) => <AddressComponent {...props} />,
 };

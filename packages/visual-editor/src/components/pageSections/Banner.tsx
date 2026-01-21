@@ -22,6 +22,7 @@ import {
 import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface BannerData {
   /**
@@ -120,12 +121,6 @@ function isRichTextEmpty(value: any): boolean {
   if (typeof value === "object") {
     if ("html" in value) {
       return !value.html || value.html.trim() === "";
-    }
-    if ("json" in value) {
-      return (
-        !value.json ||
-        (typeof value.json === "string" && value.json.trim() === "")
-      );
     }
   }
   return false;
@@ -249,12 +244,17 @@ export const BannerSection: ComponentConfig<{ props: BannerSectionProps }> = {
   fields: bannerSectionFields,
   defaultProps: defaultBannerProps,
   render: (props) => (
-    <VisibilityWrapper
-      liveVisibility={props.liveVisibility}
+    <ComponentErrorBoundary
       isEditing={props.puck.isEditing}
-      iconSize="md"
+      resetKeys={[props]}
     >
-      <BannerComponent {...props} />
-    </VisibilityWrapper>
+      <VisibilityWrapper
+        liveVisibility={props.liveVisibility}
+        isEditing={props.puck.isEditing}
+        iconSize="md"
+      >
+        <BannerComponent {...props} />
+      </VisibilityWrapper>
+    </ComponentErrorBoundary>
   ),
 };

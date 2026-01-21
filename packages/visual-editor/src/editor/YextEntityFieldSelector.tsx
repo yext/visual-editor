@@ -302,7 +302,10 @@ export const ConstantValueModeToggler = ({
           </Tooltip>
         </TooltipProvider>
       )}
-      <p className="ve-self-center ve-text-sm ve-text-gray-800 ve-font-semibold">
+      <p
+        className="ve-self-center ve-text-sm ve-font-semibold"
+        style={{ color: "var(--puck-color-grey-04)" }}
+      >
         {showLocale && constantValueEnabled
           ? `${pt(label)} (${locale})`
           : `${pt(label)}`}

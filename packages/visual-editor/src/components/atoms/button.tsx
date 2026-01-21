@@ -23,6 +23,10 @@ export const buttonVariants = cva(
         true: "",
         false: "",
       },
+      linkPadding: {
+        none: "",
+        yOnly: "py-3",
+      },
     },
     compoundVariants: [
       {
@@ -76,18 +80,23 @@ export const buttonVariants = cva(
     defaultVariants: {
       variant: "primary",
       hasDarkBackground: false,
+      linkPadding: "none",
     },
   }
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, asChild = false, ...props }, ref) => {
+  (
+    { className, variant, asChild = false, linkPadding = "none", ...props },
+    ref
+  ) => {
     const Comp = asChild ? Slot : "button";
     const background = useBackground();
 
@@ -97,16 +106,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           buttonVariants({
             variant,
             hasDarkBackground: background?.isDarkBackground,
+            linkPadding,
           }),
           className
         )}
-        // textTransform has to be applied via styles because there is no custom tailwind utility
-        style={{
-          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
-          textTransform: variant?.toLowerCase().includes("link")
-            ? "var(--textTransform-link-textTransform)"
-            : "var(--textTransform-button-textTransform)",
-        }}
         ref={ref}
         {...props}
       />

@@ -78,7 +78,7 @@ export const HoursTableStyleFields = {
   ),
 };
 
-const hoursTableFields: Fields<HoursTableProps> = {
+export const hoursTableFields: Fields<HoursTableProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
