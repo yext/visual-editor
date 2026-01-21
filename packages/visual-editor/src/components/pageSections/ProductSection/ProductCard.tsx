@@ -432,7 +432,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     const showPrice = Boolean(
       priceSlotProps?.parentData
         ? priceSlotProps.parentData.richText
-        : priceSlotProps?.data.text
+        : priceSlotProps?.data?.text
     );
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<BodyTextProps>
@@ -440,7 +440,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     const showBrow = Boolean(
       browSlotProps?.parentData
         ? browSlotProps.parentData.richText
-        : browSlotProps?.data.text
+        : browSlotProps?.data?.text
     );
 
     let updatedData = {
