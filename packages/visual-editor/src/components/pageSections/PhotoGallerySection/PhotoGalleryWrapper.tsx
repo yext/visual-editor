@@ -33,10 +33,6 @@ import "pure-react-carousel/dist/react-carousel.es.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ImagePlus } from "lucide-react";
 import { Button } from "../../../internal/puck/ui/button";
-import {
-  TARGET_ORIGINS,
-  useSendMessageToParent,
-} from "../../../internal/hooks/useMessage";
 import { updateFields } from "../HeroSection.tsx";
 
 export interface PhotoGalleryWrapperProps {
@@ -151,16 +147,9 @@ type GalleryRenderProps = {
   isEditing: boolean;
   imagesFieldId: string;
   constantValueEnabled?: boolean;
-  onEmptyImageClick: (e: React.MouseEvent | undefined, index: number) => void;
 };
 
-const EmptyImage = ({
-  imageData,
-  onEmptyImageClick,
-}: {
-  imageData: ResolvedGalleryImage;
-  onEmptyImageClick: (e: React.MouseEvent | undefined, index: number) => void;
-}) => {
+const EmptyImage = ({ imageData }: { imageData: ResolvedGalleryImage }) => {
   return (
     <div
       className={themeManagerCn(
@@ -168,21 +157,6 @@ const EmptyImage = ({
       )}
       style={{
         aspectRatio: imageData.aspectRatio,
-      }}
-      onClick={(e) => {
-        const target = e.target as HTMLElement;
-        const isButton = target.closest('button[aria-label*="Add Image"]');
-        if (isButton) {
-          return;
-        }
-      }}
-      onPointerDown={(e) => {
-        // Stop Puck from capturing pointer events on the button
-        const target = e.target as HTMLElement;
-        const isButton = target.closest('button[aria-label*="Add Image"]');
-        if (isButton) {
-          e.stopPropagation();
-        }
       }}
     >
       <Button
@@ -194,34 +168,6 @@ const EmptyImage = ({
           zIndex: 100,
           inset: "50%",
           transform: "translate(-50%, -50%)",
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          onEmptyImageClick(e, imageData.originalIndex);
-        }}
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }}
-        onMouseUp={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          onEmptyImageClick(e as any, imageData.originalIndex);
-        }}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          // Prevent Puck drag handlers from activating
-          e.nativeEvent.stopImmediatePropagation();
-        }}
-        onPointerUp={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          onEmptyImageClick(e as any, imageData.originalIndex);
-        }}
-        onClickCapture={(e) => {
-          e.stopPropagation();
         }}
         type="button"
         aria-label={pt("addImage", "Add Image")}
@@ -235,20 +181,16 @@ const EmptyImage = ({
 const DesktopImageItem = ({
   imageData,
   isEditing,
-  onEmptyImageClick,
   sizes,
   constrainToParent = false,
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
-  onEmptyImageClick: (e: React.MouseEvent | undefined, index: number) => void;
   sizes: string;
   constrainToParent?: boolean;
 }) => {
   if (imageData.isEmpty && isEditing) {
-    return (
-      <EmptyImage imageData={imageData} onEmptyImageClick={onEmptyImageClick} />
-    );
+    return <EmptyImage imageData={imageData} />;
   }
 
   const imageElement = (
@@ -281,16 +223,12 @@ const DesktopImageItem = ({
 const MobileImageItem = ({
   imageData,
   isEditing,
-  onEmptyImageClick,
 }: {
   imageData: ResolvedGalleryImage;
   isEditing: boolean;
-  onEmptyImageClick: (e: React.MouseEvent | undefined, index: number) => void;
 }) => {
   if (imageData.isEmpty && isEditing) {
-    return (
-      <EmptyImage imageData={imageData} onEmptyImageClick={onEmptyImageClick} />
-    );
+    return <EmptyImage imageData={imageData} />;
   }
 
   return (
@@ -318,7 +256,6 @@ const DesktopCarousel = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
-  onEmptyImageClick,
 }: GalleryRenderProps & { carouselImageCount: number }) => {
   const hasCarouselGap = carouselImageCount > 1;
   return (
@@ -354,7 +291,6 @@ const DesktopCarousel = ({
                       <DesktopImageItem
                         imageData={imageData}
                         isEditing={isEditing}
-                        onEmptyImageClick={onEmptyImageClick}
                         sizes={`min(${imageWidth}px, calc((100vw - 6rem) / ${carouselImageCount}))`}
                         constrainToParent
                       />
@@ -400,7 +336,6 @@ const MobileCarousel = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
-  onEmptyImageClick,
 }: GalleryRenderProps) => {
   return (
     <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
@@ -418,7 +353,6 @@ const MobileCarousel = ({
                   <MobileImageItem
                     imageData={imageData}
                     isEditing={isEditing}
-                    onEmptyImageClick={onEmptyImageClick}
                   />
                 </div>
               </Slide>
@@ -458,7 +392,6 @@ const GalleryGrid = ({
   isEditing,
   imagesFieldId,
   constantValueEnabled,
-  onEmptyImageClick,
 }: GalleryRenderProps) => {
   return (
     <EntityField
@@ -472,7 +405,6 @@ const GalleryGrid = ({
             <DesktopImageItem
               imageData={imageData}
               isEditing={isEditing}
-              onEmptyImageClick={onEmptyImageClick}
               sizes={`(min-width: 1024px) min(${imageWidth}px, calc((100vw - 6rem) / 3)), (min-width: 640px) min(${imageWidth}px, calc((100vw - 4rem) / 2)), min(${imageWidth}px, 100vw)`}
             />
           </div>
@@ -532,11 +464,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
   const containerRef = React.useRef(null);
   const [visibleSlides, setVisibleSlides] = React.useState(
     styles.carouselImageCount
-  );
-
-  const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
-    "constantValueEditorOpened",
-    TARGET_ORIGINS
   );
 
   const resolvedImages = resolveComponentData(
@@ -605,39 +532,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     })
     .filter((i) => puck?.isEditing || !i.isEmpty);
 
-  const handleEmptyImageClick = (
-    e: React.MouseEvent | undefined,
-    index: number
-  ) => {
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-
-    if (data.images.constantValueEnabled && puck?.isEditing) {
-      if (window.location.href.includes("http://localhost:5173")) {
-        const userInput = prompt("Enter Image URL:");
-        if (!userInput) return;
-      } else {
-        const messageId = `ImageAsset-${Date.now()}-${index}`;
-        const currentImageValue = Array.isArray(data.images.constantValue)
-          ? data.images.constantValue[index]
-          : undefined;
-        const assetImageValue =
-          currentImageValue && "assetImage" in currentImageValue
-            ? (currentImageValue as { assetImage?: AssetImageType }).assetImage
-            : undefined;
-        openImageAssetSelector({
-          payload: {
-            type: "ImageAsset",
-            value: assetImageValue,
-            id: messageId,
-          },
-        });
-      }
-    }
-  };
-
   const hasAnyImages = allImages.length > 0;
   const imageWidth = styles.image?.width || 1000;
 
@@ -648,7 +542,6 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     isEditing,
     imagesFieldId: data.images.field,
     constantValueEnabled: data.images.constantValueEnabled,
-    onEmptyImageClick: handleEmptyImageClick,
   };
 
   // Update visibleSlides based on container width
