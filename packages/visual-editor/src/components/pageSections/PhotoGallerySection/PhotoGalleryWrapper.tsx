@@ -154,89 +154,101 @@ type GalleryRenderProps = {
   onEmptyImageClick: (e: React.MouseEvent | undefined, index: number) => void;
 };
 
+const EmptyImage = ({
+  imageData,
+  onEmptyImageClick,
+}: {
+  imageData: ResolvedGalleryImage;
+  onEmptyImageClick: (e: React.MouseEvent | undefined, index: number) => void;
+}) => {
+  return (
+    <div
+      className={themeManagerCn(
+        "rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
+      )}
+      style={{
+        width: `${imageData.width}px`,
+        aspectRatio: imageData.aspectRatio,
+      }}
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        const isButton = target.closest('button[aria-label*="Add Image"]');
+        if (isButton) {
+          return;
+        }
+      }}
+      onPointerDown={(e) => {
+        // Stop Puck from capturing pointer events on the button
+        const target = e.target as HTMLElement;
+        const isButton = target.closest('button[aria-label*="Add Image"]');
+        if (isButton) {
+          e.stopPropagation();
+        }
+      }}
+    >
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
+        style={{
+          position: "absolute",
+          zIndex: 100,
+          inset: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          onEmptyImageClick(e, imageData.originalIndex);
+        }}
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        onMouseUp={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          onEmptyImageClick(e as any, imageData.originalIndex);
+        }}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          // Prevent Puck drag handlers from activating
+          e.nativeEvent.stopImmediatePropagation();
+        }}
+        onPointerUp={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          onEmptyImageClick(e as any, imageData.originalIndex);
+        }}
+        onClickCapture={(e) => {
+          e.stopPropagation();
+        }}
+        type="button"
+        aria-label={pt("addImage", "Add Image")}
+      >
+        <ImagePlus size={24} className="stroke-2" />
+      </Button>
+    </div>
+  );
+};
+
 const DesktopImageItem = ({
   imageData,
-  imageWidth,
   isEditing,
   onEmptyImageClick,
+  sizes,
   constrainToParent = false,
 }: {
   imageData: ResolvedGalleryImage;
-  imageWidth: number;
   isEditing: boolean;
   onEmptyImageClick: (e: React.MouseEvent | undefined, index: number) => void;
+  sizes: string;
   constrainToParent?: boolean;
 }) => {
   if (imageData.isEmpty && isEditing) {
     return (
-      <div
-        className={themeManagerCn(
-          "rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
-        )}
-        style={{
-          width: `${imageData.width}px`,
-          aspectRatio: imageData.aspectRatio,
-        }}
-        onClick={(e) => {
-          const target = e.target as HTMLElement;
-          const isButton = target.closest('button[aria-label*="Add Image"]');
-          if (isButton) {
-            return;
-          }
-        }}
-        onPointerDown={(e) => {
-          // Stop Puck from capturing pointer events on the button
-          const target = e.target as HTMLElement;
-          const isButton = target.closest('button[aria-label*="Add Image"]');
-          if (isButton) {
-            e.stopPropagation();
-          }
-        }}
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
-          style={{
-            position: "absolute",
-            zIndex: 100,
-            inset: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEmptyImageClick(e, imageData.originalIndex);
-          }}
-          onMouseDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
-          onMouseUp={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEmptyImageClick(e as any, imageData.originalIndex);
-          }}
-          onPointerDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            // Prevent Puck drag handlers from activating
-            e.nativeEvent.stopImmediatePropagation();
-          }}
-          onPointerUp={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEmptyImageClick(e as any, imageData.originalIndex);
-          }}
-          onClickCapture={(e) => {
-            e.stopPropagation();
-          }}
-          type="button"
-          aria-label={pt("addImage", "Add Image")}
-        >
-          <ImagePlus size={24} className="stroke-2" />
-        </Button>
-      </div>
+      <EmptyImage imageData={imageData} onEmptyImageClick={onEmptyImageClick} />
     );
   }
 
@@ -249,7 +261,7 @@ const DesktopImageItem = ({
         "rounded-image-borderRadius",
         constrainToParent && "w-full h-auto object-contain max-w-full"
       )}
-      sizes={`min(${imageWidth}px, calc(100vw - 6rem))`}
+      sizes={sizes}
     />
   );
 
@@ -278,74 +290,7 @@ const MobileImageItem = ({
 }) => {
   if (imageData.isEmpty && isEditing) {
     return (
-      <div
-        className={themeManagerCn(
-          "w-full max-w-full rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
-        )}
-        style={{
-          maxWidth: `${Math.min(imageData.width || 1000, 250)}px`,
-          aspectRatio: imageData.aspectRatio,
-        }}
-        onClick={(e) => {
-          const target = e.target as HTMLElement;
-          const isButton = target.closest('button[aria-label*="Add Image"]');
-          if (isButton) {
-            return;
-          }
-        }}
-        onPointerDown={(e) => {
-          // Stop Puck from capturing pointer events on the button
-          const target = e.target as HTMLElement;
-          const isButton = target.closest('button[aria-label*="Add Image"]');
-          if (isButton) {
-            e.stopPropagation();
-          }
-        }}
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
-          style={{
-            position: "absolute",
-            zIndex: 100,
-            inset: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEmptyImageClick(e, imageData.originalIndex);
-          }}
-          onMouseDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-          }}
-          onMouseUp={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEmptyImageClick(e as any, imageData.originalIndex);
-          }}
-          onPointerDown={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            // Prevent Puck drag handlers from activating
-            e.nativeEvent.stopImmediatePropagation();
-          }}
-          onPointerUp={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onEmptyImageClick(e as any, imageData.originalIndex);
-          }}
-          onClickCapture={(e) => {
-            e.stopPropagation();
-          }}
-          type="button"
-          aria-label={pt("addImage", "Add Image")}
-        >
-          <ImagePlus size={24} className="stroke-2" />
-        </Button>
-      </div>
+      <EmptyImage imageData={imageData} onEmptyImageClick={onEmptyImageClick} />
     );
   }
 
@@ -361,7 +306,7 @@ const MobileImageItem = ({
         image={imageData.image}
         aspectRatio={imageData.aspectRatio}
         className="w-full h-auto object-contain"
-        sizes={`${Math.min(imageData.width || 1000, 250)}px`}
+        sizes={`100vw`}
       />
     </div>
   );
@@ -409,9 +354,9 @@ const DesktopCarousel = ({
                     >
                       <DesktopImageItem
                         imageData={imageData}
-                        imageWidth={imageWidth}
                         isEditing={isEditing}
                         onEmptyImageClick={onEmptyImageClick}
+                        sizes={`min(${imageWidth}px, calc((100vw - 6rem) / ${carouselImageCount}))`}
                         constrainToParent
                       />
                     </div>
@@ -526,9 +471,9 @@ const GalleryGrid = ({
           <div key={idx} className="flex justify-center">
             <DesktopImageItem
               imageData={imageData}
-              imageWidth={imageWidth}
               isEditing={isEditing}
               onEmptyImageClick={onEmptyImageClick}
+              sizes={`min(${imageWidth}px, (min-width: 1024px) calc((100vw - 6rem) / 3), (min-width: 640px) calc((100vw - 4rem) / 2), 100vw)`}
             />
           </div>
         ))}
