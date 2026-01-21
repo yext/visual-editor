@@ -1,6 +1,7 @@
 import {
   HoursStatus as HoursStatusJS,
   HoursType,
+  StatusParams,
 } from "@yext/pages-components";
 import { themeManagerCn } from "@yext/visual-editor";
 import * as React from "react";
@@ -33,38 +34,96 @@ export const HoursStatusAtom = React.memo(
   }: HoursStatusAtomProps): any => {
     const { t, i18n } = useTranslation();
 
+    const classNameResolved = themeManagerCn(
+      "components mb-2 font-body-fontFamily font-body-fontWeight",
+      bodyVariant === "lg"
+        ? "text-body-lg-fontSize"
+        : bodyVariant === "sm"
+          ? "text-body-sm-fontSize"
+          : "text-body-fontSize",
+      className
+    );
+
     return (
       <HoursStatusJS
         hours={hours}
-        className={themeManagerCn(
-          "components mb-2 font-body-fontFamily font-body-fontWeight",
-          bodyVariant === "lg"
-            ? "text-body-lg-fontSize"
-            : bodyVariant === "sm"
-              ? "text-body-sm-fontSize"
-              : "text-body-fontSize",
-          className
-        )}
-        currentTemplate={
-          showCurrentStatus
-            ? (params: HoursStatusParams) =>
-                hoursCurrentTemplateOverride(params, t, boldCurrentStatus)
-            : () => <></>
-        }
-        futureTemplate={(params: HoursStatusParams) =>
-          hoursFutureTemplateOverride(params, t)
-        }
-        separatorTemplate={showCurrentStatus ? undefined : () => <></>}
-        dayOfWeekTemplate={
-          showDayNames
-            ? (params: HoursStatusParams) =>
-                hoursDayOfWeekTemplateOverride(params, i18n.language)
-            : () => <></>
-        }
+        className={classNameResolved}
+        statusTemplate={(params: HoursStatusParams) => {
+          const isFuture = !isOpen24h(params) && !isIndefinitelyClosed(params);
+          let time = "";
+          if (params.isOpen) {
+            const interval = params.currentInterval;
+            time += interval
+              ? interval.getEndTime(i18n.language, params.timeOptions)
+              : "";
+          } else {
+            const interval = params.futureInterval;
+            time += interval
+              ? interval.getStartTime(i18n.language, params.timeOptions)
+              : "";
+          }
+
+          const showDayOfWeek = showDayNames && isFuture;
+          let dayOfWeek = "";
+          if (params.isOpen) {
+            const interval = params.currentInterval;
+            dayOfWeek +=
+              interval?.end
+                ?.setLocale(i18n.language)
+                .toLocaleString(params.dayOptions) || "";
+          } else {
+            const interval = params.futureInterval;
+            dayOfWeek +=
+              interval?.start
+                ?.setLocale(i18n.language)
+                .toLocaleString(params.dayOptions) || "";
+          }
+
+          let statusText = "";
+          if (isFuture && params.isOpen) {
+            if (showDayOfWeek) {
+              statusText = t(
+                "closesAtTimeWeek",
+                "Closes at {{time}} {{dayOfWeek}}",
+                {
+                  time,
+                  dayOfWeek,
+                }
+              );
+            } else {
+              statusText = t("closesAtTime", "Closes at {{time}}", { time });
+            }
+          }
+
+          if (isFuture && !params.isOpen) {
+            if (showDayOfWeek) {
+              statusText = t(
+                "opensAtTimeWeek",
+                "Opens at {{time}} {{dayOfWeek}}",
+                {
+                  time,
+                  dayOfWeek,
+                }
+              );
+            } else {
+              statusText = t("opensAtTime", "Opens at {{time}}", { time });
+            }
+          }
+
+          return (
+            <div className={themeManagerCn("HoursStatus", classNameResolved)}>
+              {showCurrentStatus &&
+                hoursCurrentTemplateOverride(params, t, boldCurrentStatus)}
+              {showCurrentStatus && defaultSeparatorTemplate(params)}
+              {statusText && (
+                <span className="HoursStatus-future">{statusText}</span>
+              )}
+            </div>
+          );
+        }}
         dayOptions={{ weekday: dayOfWeekFormat }}
         timeOptions={timeFormat ? { hour12: timeFormat === "12h" } : undefined}
         timezone={timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone}
-        timeTemplate={(params) => timeTemplate(params, i18n.language)}
       />
     );
   }
@@ -83,14 +142,14 @@ function hoursCurrentTemplateOverride(
 ): React.ReactNode {
   const style = boldCurrentStatus ? { fontWeight: "bolder" } : undefined;
 
-  if (params?.currentInterval?.is24h?.()) {
+  if (isOpen24h(params)) {
     return (
       <span className="HoursStatus-current" style={style}>
         {t("open24Hours", "Open 24 Hours")}
       </span>
     );
   }
-  if (!params.futureInterval) {
+  if (isIndefinitelyClosed(params)) {
     return (
       <span className="HoursStatus-current" style={style}>
         {t("temporarilyClosed", "Temporarily Closed")}
@@ -104,78 +163,20 @@ function hoursCurrentTemplateOverride(
   );
 }
 
-/**
- * Overrides the future status text to incorporate i18n
- * @param params used to determine the status
- * @param t translation function
- */
-function hoursFutureTemplateOverride(
-  params: HoursStatusParams,
-  t: TFunction
-): React.ReactNode {
-  if (params?.currentInterval?.is24h?.() || !params.futureInterval) {
-    return null;
-  }
-  return (
-    <span className="HoursStatus-future">
-      {params.isOpen ? t("closesAt", "Closes at") : t("opensAt", "Opens at")}
-    </span>
-  );
+function isOpen24h(params: StatusParams): boolean {
+  return params?.currentInterval?.is24h?.() || false;
 }
 
-/**
- * Overrides the day of the week appearance to pass through locale
- * @param params used to determine the day of the week
- * @param locale used to translate the day of the week
- */
-function hoursDayOfWeekTemplateOverride(
-  params: HoursStatusParams,
-  locale: string
-): React.ReactNode {
-  if (params?.currentInterval?.is24h?.() || !params.futureInterval) {
-    return null;
-  }
-  const dayOptions: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    ...params.dayOptions,
-  };
-
-  let dayOfWeek = "";
-  if (params.isOpen) {
-    const interval = params.currentInterval;
-    dayOfWeek +=
-      interval?.end?.setLocale(locale).toLocaleString(dayOptions) || "";
-  } else {
-    const interval = params.futureInterval;
-    dayOfWeek +=
-      interval?.start?.setLocale(locale).toLocaleString(dayOptions) || "";
-  }
-  return <span className="HoursStatus-dayOfWeek"> {dayOfWeek}</span>;
+function isIndefinitelyClosed(params: StatusParams): boolean {
+  return !params.futureInterval;
 }
 
-/**
- * Overrides the time shown in the status
- * @param params used to determine the time
- * @param locale used to set the formatting
- */
-const timeTemplate = (
-  params: HoursStatusParams,
-  locale: string
-): React.ReactNode => {
-  if (params?.currentInterval?.is24h?.() || !params.futureInterval) {
+function defaultSeparatorTemplate(params: StatusParams): React.ReactNode {
+  if (isOpen24h(params) || isIndefinitelyClosed(params)) {
     return null;
   }
-  let time = "";
-  if (params.isOpen) {
-    const interval = params.currentInterval;
-    time += interval ? interval.getEndTime(locale, params.timeOptions) : "";
-  } else {
-    const interval = params.futureInterval;
-    time += interval ? interval.getStartTime(locale, params.timeOptions) : "";
-  }
-  return <span className="HoursStatus-time"> {time}</span>;
-};
-
+  return <span className="HoursStatus-separator"> • </span>;
+}
 interface HoursStatusParams {
   isOpen: boolean;
   currentInterval: any | null;

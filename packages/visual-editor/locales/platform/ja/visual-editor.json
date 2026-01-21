@@ -63,7 +63,8 @@
   "closeHeaderMenu": "ヘッダーを閉じるメニュー",
   "closeMenu": "メニューを閉じます",
   "closed": "閉店",
-  "closesAt": "に閉まります",
+  "closesAtTime": "{{time}}に閉まります",
+  "closesAtTimeWeek": "{{time}} {{dayOfWeek}} に閉店",
   "componentErrorBoundary": {
     "error": "エラー",
     "message": "このセクションをレンダリングできません。コンポーネント ライブラリを更新してみてください。"
@@ -582,7 +583,8 @@
   "openHeaderMenu": "ヘッダーを開くメニュー",
   "openMenu": "メニューを開きます",
   "openNow": "営業中",
-  "opensAt": "で開きます",
+  "opensAtTime": "{{time}}に開店",
+  "opensAtTimeWeek": "{{time}} {{dayOfWeek}} に開店",
   "optional": "オプション",
   "outline": "概要",
   "page": "ページ",

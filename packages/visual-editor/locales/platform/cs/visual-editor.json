@@ -65,7 +65,8 @@
   "closeHeaderMenu": "Nabídka Zavřít záhlaví",
   "closeMenu": "Zavřít menu",
   "closed": "ZAVŘENO",
-  "closesAt": "Uzavírá",
+  "closesAtTime": "Zavírá v {{time}}",
+  "closesAtTimeWeek": "Zavírá v {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Chyba",
     "message": "Tuto sekci nelze vykreslit. Zkuste aktualizovat knihovnu komponent."
@@ -603,7 +604,8 @@
   "openHeaderMenu": "Nabídka otevřených záhlaví",
   "openMenu": "Otevřená nabídka",
   "openNow": "Otevřeno",
-  "opensAt": "Otevírá se na",
+  "opensAtTime": "Otevírá v {{time}}",
+  "opensAtTimeWeek": "Otevírá v {{time}} {{dayOfWeek}}",
   "optional": "Volitelný",
   "outline": "Obrys",
   "page": "Strana",

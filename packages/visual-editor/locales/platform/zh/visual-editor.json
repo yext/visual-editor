@@ -63,7 +63,8 @@
   "closeHeaderMenu": "关闭标题菜单",
   "closeMenu": "关闭菜单",
   "closed": "关闭",
-  "closesAt": "关闭",
+  "closesAtTime": "于 {{time}} 关闭",
+  "closesAtTimeWeek": "于 {{time}} {{dayOfWeek}} 关闭",
   "componentErrorBoundary": {
     "error": "错误",
     "message": "无法渲染此部分。尝试更新您的组件库。"
@@ -582,7 +583,8 @@
   "openHeaderMenu": "打开标题菜单",
   "openMenu": "开放菜单",
   "openNow": "现在打开",
-  "opensAt": "打开",
+  "opensAtTime": "开放时间：{{time}}",
+  "opensAtTimeWeek": "开放时间：{{time}} {{dayOfWeek}}",
   "optional": "选修的",
   "outline": "大纲",
   "page": "页",

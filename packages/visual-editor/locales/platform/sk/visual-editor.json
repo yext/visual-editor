@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Zavrieť ponuku hlavičky",
   "closeMenu": "Zavrieť menu",
   "closed": "Zatvorené",
-  "closesAt": "Uzatvára sa",
+  "closesAtTime": "Zatvára sa o {{time}}",
+  "closesAtTimeWeek": "Zatvára sa o {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Chyba",
     "message": "Túto sekciu nie je možné vykresliť. Skúste aktualizovať knižnicu komponentov."
@@ -598,7 +599,8 @@
   "openHeaderMenu": "Otvoriť ponuku hlavičky",
   "openMenu": "Otvoriť menu",
   "openNow": "Teraz",
-  "opensAt": "Otvára sa o",
+  "opensAtTime": "Otvára sa o {{time}}",
+  "opensAtTimeWeek": "Otvára sa o {{time}} {{dayOfWeek}}",
   "optional": "Voliteľný",
   "outline": "Obrys",
   "page": "Strana",

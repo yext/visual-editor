@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Menú de encabezado cerrar",
   "closeMenu": "Menú cerrado",
   "closed": "Cerrado",
-  "closesAt": "Cierra",
+  "closesAtTime": "Cierra a las {{time}}",
+  "closesAtTimeWeek": "Cierra a las {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Error",
     "message": "No se puede renderizar esta sección. Intente actualizar su biblioteca de componentes."
@@ -586,7 +587,8 @@
   "openHeaderMenu": "Abrir menú de encabezado",
   "openMenu": "Menú abierto",
   "openNow": "Abierto ahora",
-  "opensAt": "Abre a",
+  "opensAtTime": "Abre a las {{time}}",
+  "opensAtTimeWeek": "Abre a las {{time}} {{dayOfWeek}}",
   "optional": "Opcional",
   "outline": "Describir",
   "page": "Página",

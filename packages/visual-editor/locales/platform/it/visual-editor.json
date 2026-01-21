@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Chiudi il menu dell'intestazione",
   "closeMenu": "Chiudi menu",
   "closed": "Chiuso",
-  "closesAt": "Chiude a",
+  "closesAtTime": "Chiude alle {{time}}",
+  "closesAtTimeWeek": "Chiude alle {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Errore",
     "message": "Impossibile eseguire il rendering di questa sezione. Prova ad aggiornare la libreria dei componenti."
@@ -587,7 +588,8 @@
   "openHeaderMenu": "Menu di intestazione aperta",
   "openMenu": "Menu aperto",
   "openNow": "Aperto ora",
-  "opensAt": "Apre a",
+  "opensAtTime": "Apre alle {{time}}",
+  "opensAtTimeWeek": "Apre alle {{time}} {{dayOfWeek}}",
   "optional": "Opzionale",
   "outline": "Contorno",
   "page": "Pagina",

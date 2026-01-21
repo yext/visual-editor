@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Zamknij menu nagłówka",
   "closeMenu": "Zamknij menu",
   "closed": "Zamknięte",
-  "closesAt": "Zamyka się o",
+  "closesAtTime": "Zamyka się o {{time}}",
+  "closesAtTimeWeek": "Zamyka się o {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Błąd",
     "message": "Nie można wyrenderować tej sekcji. Spróbuj zaktualizować bibliotekę komponentów."
@@ -598,7 +599,8 @@
   "openHeaderMenu": "Otwórz menu nagłówka",
   "openMenu": "Otwórz menu",
   "openNow": "Otwarte teraz",
-  "opensAt": "Otwiera się o",
+  "opensAtTime": "Otwarte o {{time}}",
+  "opensAtTimeWeek": "Otwarte o {{time}} {{dayOfWeek}}",
   "optional": "Fakultatywny",
   "outline": "Zarys",
   "page": "Strona",
