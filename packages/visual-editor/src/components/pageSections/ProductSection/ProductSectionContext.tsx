@@ -13,13 +13,7 @@ export interface ProductSectionContextType {
   showPrice?: boolean;
   showDescription?: boolean;
   showCTA?: boolean;
-  cardBackgroundColor?: BackgroundStyle; // To pass section's card bg choice if needed? No, user didn't ask for that specifically, but hinted "styling for every card".
-  // Actually, ProductCard has a backgroundColor prop. ProductSection has a backgroundColor prop (for the section).
-  // The Prompt: "Changing the prop will change the styling for every card in the section."
-  // This refers to the VARIANT.
-  // But maybe the user assumes colors too?
-  // "The styling" implies the layout/variant.
-  // I will just pass the variant/visibility flags for now.
+  cardBackgroundColor?: BackgroundStyle;
 }
 
 const ProductSectionContext = createContext<ProductSectionContextType>({});

@@ -371,7 +371,7 @@
         "yearsOfExperience": "Lata doświadczenia"
       },
       "false": "FAŁSZ",
-      "fillContainer": "Napełnij pojemnik",
+      "fillContainer": "Wypełnij kontener",
       "fixed": "Naprawił",
       "fixedWidth": "Stała szerokość",
       "friday": "Piątek",
@@ -474,7 +474,7 @@
     "show": "Pokazywać",
     "showAddress": "Pokaż adres",
     "showAverageReview": "Pokaż średnią recenzję",
-    "showBrow": "Pokaż tekst brwi",
+    "showBrow": "Pokaż nadtytuł",
     "showBusinessName": "Pokaż nazwę firmy",
     "showCTA": "Pokaż wezwanie do działania",
     "showCredentials": "Pokaż poświadczenia",

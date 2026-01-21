@@ -14,6 +14,8 @@ import {
   getDefaultRTF,
   ImgSizesByBreakpoint,
   themeManagerCn,
+  resolveYextEntityField,
+  i18nComponentsInstance,
 } from "@yext/visual-editor";
 import {
   ComponentConfig,
@@ -425,22 +427,32 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   label: msg("slots.productCard", "Product Card"),
   fields: ProductCardFields,
   inline: true,
-  resolveData: (data) => {
+  resolveData: (data, params) => {
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
       | WithId<BodyTextProps>
       | undefined;
     const showPrice = Boolean(
-      priceSlotProps?.parentData
-        ? priceSlotProps.parentData.richText
-        : priceSlotProps?.data?.text
+      priceSlotProps &&
+        (priceSlotProps.parentData
+          ? priceSlotProps.parentData.richText
+          : resolveYextEntityField(
+              params.metadata.streamDocument,
+              priceSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            ))
     );
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<BodyTextProps>
       | undefined;
     const showBrow = Boolean(
-      browSlotProps?.parentData
-        ? browSlotProps.parentData.richText
-        : browSlotProps?.data?.text
+      browSlotProps &&
+        (browSlotProps.parentData
+          ? browSlotProps.parentData.richText
+          : resolveYextEntityField(
+              params.metadata.streamDocument,
+              browSlotProps.data.text,
+              i18nComponentsInstance.language || "en"
+            ))
     );
 
     let updatedData = {
