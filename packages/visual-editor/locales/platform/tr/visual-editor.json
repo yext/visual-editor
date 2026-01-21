@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Başlık menüsünü kapat",
   "closeMenu": "Kapat Menüsü",
   "closed": "Kapalı",
-  "closesAt": "Kapanır",
+  "closesAtTime": "{{time}} itibarıyla kapanıyor",
+  "closesAtTimeWeek": "{{time}} {{dayOfWeek}} itibarıyla kapanıyor",
   "componentErrorBoundary": {
     "error": "Hata",
     "message": "Bu bölüm oluşturulamıyor. Bileşen kitaplığınızı güncellemeyi deneyin."
@@ -587,7 +588,8 @@
   "openHeaderMenu": "Başlık Menüsünü Aç",
   "openMenu": "Açık Menü",
   "openNow": "Şu anda açık",
-  "opensAt": "Açılır",
+  "opensAtTime": "{{time}}'da açılıyor",
+  "opensAtTimeWeek": "{{time}} {{dayOfWeek}}'da açılıyor",
   "optional": "İsteğe bağlı",
   "outline": "Taslak",
   "page": "Sayfa",

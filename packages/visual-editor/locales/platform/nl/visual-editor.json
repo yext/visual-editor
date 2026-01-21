@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Sluit koptekstmenu",
   "closeMenu": "Sluit het menu",
   "closed": "Gesloten",
-  "closesAt": "Sluit om",
+  "closesAtTime": "Sluit om {{time}}",
+  "closesAtTimeWeek": "Sluit om {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Fout",
     "message": "Kan deze sectie niet weergeven. Probeer uw componentenbibliotheek bij te werken."
@@ -587,7 +588,8 @@
   "openHeaderMenu": "Open koptekstmenu",
   "openMenu": "Open het menu",
   "openNow": "Nu open",
-  "opensAt": "Opent bij",
+  "opensAtTime": "Opent om {{time}}",
+  "opensAtTimeWeek": "Opent om {{time}} {{dayOfWeek}}",
   "optional": "Optioneel",
   "outline": "Schetsen",
   "page": "Pagina",

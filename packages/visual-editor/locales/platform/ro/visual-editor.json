@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Închideți meniul antetului",
   "closeMenu": "Închideți meniul",
   "closed": "Închis",
-  "closesAt": "Se închide la",
+  "closesAtTime": "Se închide la {{time}}",
+  "closesAtTimeWeek": "Se închide la {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Eroare",
     "message": "Nu se poate reda această secțiune. Încercați să vă actualizați biblioteca de componente."
@@ -592,7 +593,8 @@
   "openHeaderMenu": "Deschideți meniul antetului",
   "openMenu": "Meniu Deschide",
   "openNow": "Deschide acum",
-  "opensAt": "Se deschide la",
+  "opensAtTime": "Se deschide la {{time}}",
+  "opensAtTimeWeek": "Se deschide la {{time}} {{dayOfWeek}}",
   "optional": "Opțional",
   "outline": "Contur",
   "page": "Pagină",

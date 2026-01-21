@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Zárja be a Fejléc menüjét",
   "closeMenu": "Zárja be a menüt",
   "closed": "Zárt",
-  "closesAt": "Bezár",
+  "closesAtTime": "Zárás: {{time}}",
+  "closesAtTimeWeek": "Zárás: {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Hiba",
     "message": "Ez a szakasz nem jeleníthető meg. Próbálja meg frissíteni az összetevőkönyvtárat."
@@ -587,7 +588,8 @@
   "openHeaderMenu": "Nyissa meg a fejléc menüjét",
   "openMenu": "Nyissa meg a menüt",
   "openNow": "Most nyitva",
-  "opensAt": "Kinyílik",
+  "opensAtTime": "Nyitás: {{time}}",
+  "opensAtTimeWeek": "Nyitás: {{time}} {{dayOfWeek}}",
   "optional": "Választható",
   "outline": "Vázlat",
   "page": "Oldal",

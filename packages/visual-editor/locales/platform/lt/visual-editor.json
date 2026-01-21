@@ -63,7 +63,8 @@
   "closeHeaderMenu": "Uždarykite antraštės meniu",
   "closeMenu": "Uždaryti meniu",
   "closed": "Uždarytas",
-  "closesAt": "Uždaroma",
+  "closesAtTime": "Uždaroma {{time}}",
+  "closesAtTimeWeek": "Uždaroma {{time}} {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Klaida",
     "message": "Nepavyko pateikti šios skilties. Pabandykite atnaujinti komponentų biblioteką."
@@ -597,7 +598,8 @@
   "openHeaderMenu": "Atidarykite antraštės meniu",
   "openMenu": "Atidaryti meniu",
   "openNow": "Atidarykite dabar",
-  "opensAt": "Atidaroma",
+  "opensAtTime": "Atidaroma {{time}}",
+  "opensAtTimeWeek": "Atidaroma {{time}} {{dayOfWeek}}",
   "optional": "Neprivaloma",
   "outline": "Kontūras",
   "page": "Puslapis",
