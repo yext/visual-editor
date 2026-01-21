@@ -6,9 +6,24 @@ export interface ImageStylingProps {
   /** The aspect ratio of the image */
   aspectRatio: number;
   width?: number;
+  imageConstrain?: "fill" | "fixed";
 }
 
 export const ImageStylingFields: Fields<ImageStylingProps> = {
+  imageConstrain: YextField(msg("fields.imageConstrain", "Image Constrain"), {
+    type: "radio",
+    options: [
+      {
+        label: msg("fields.options.fillContainer", "Fill Container"),
+        value: "fill",
+      },
+      {
+        label: msg("fields.options.fixedWidth", "Fixed Width"),
+        value: "fixed",
+      },
+    ],
+    visible: false,
+  }),
   width: YextField(msg("fields.options.width", "Width"), {
     type: "number",
     min: 0,

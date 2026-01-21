@@ -55,6 +55,9 @@ export interface ImageWrapperProps {
   sizes?: ImgSizesByBreakpoint;
 
   hideWidthProp?: boolean;
+
+  /** @internal If true, shows the imageConstrain prop. */
+  showImageConstrain?: boolean;
 }
 
 export const ImageWrapperFields: Fields<ImageWrapperProps> = {
@@ -81,6 +84,17 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
       ...ImageStylingFields,
     },
   }),
+  showImageConstrain: YextField(
+    msg("fields.showImageConstrain", "Show Image Constrain"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+      visible: false,
+    }
+  ),
 };
 
 const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
@@ -97,6 +111,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
         : "maxWidth / 2",
     },
     hideWidthProp,
+    showImageConstrain = false,
   } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
@@ -193,7 +208,12 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
           <Image
             image={resolvedImage}
             aspectRatio={styles.aspectRatio}
-            width={hideWidthProp ? undefined : styles.width}
+            width={
+              hideWidthProp ||
+              (showImageConstrain && styles.imageConstrain === "fill")
+                ? undefined
+                : styles.width
+            }
             className={
               className || "max-w-full rounded-image-borderRadius w-full h-full"
             }
@@ -231,17 +251,29 @@ export const ImageWrapper: ComponentConfig<{ props: ImageWrapperProps }> = {
   fields: ImageWrapperFields,
   defaultProps: imageDefaultProps,
   resolveFields: (data, params) => {
-    const fields = resolveDataFromParent(ImageWrapperFields, data);
+    let fields = resolveDataFromParent(ImageWrapperFields, data);
     const parentType = params.parent?.type;
 
-    if (data.props.hideWidthProp) {
-      return setDeep(fields, "styles.objectFields.width.visible", false);
+    if (
+      data.props.hideWidthProp ||
+      data.props.styles.imageConstrain === "fill"
+    ) {
+      fields = setDeep(fields, "styles.objectFields.width.visible", false);
+    } else {
+      fields = setDeep(fields, "styles.objectFields.width.visible", true);
     }
+
+    fields = setDeep(
+      fields,
+      "styles.objectFields.imageConstrain.visible",
+      !!data.props.showImageConstrain
+    );
+
     if (parentType !== "PrimaryHeaderSlot") {
       return setDeep(fields, "data.objectFields.link.visible", false);
     }
 
-    return setDeep(fields, "styles.objectFields.width.visible", true);
+    return fields;
   },
   render: (props) => <ImageWrapperComponent {...props} />,
 };

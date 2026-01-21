@@ -86,8 +86,18 @@ export type ProductStruct = {
    * @ai Always use ImageType
    */
   image?: ImageType | AssetImageType;
+  /**
+   * The product's brow text above the title/name
+   * @ai This should not be more than a few words
+   */
+  brow?: TranslatableString | TranslatableRichText;
   /** The product's name */
   name?: TranslatableString;
+  /**
+   * The product's price
+   * @ai This should not be more than a few words
+   */
+  price?: TranslatableString | TranslatableRichText;
   /** The product's description */
   description?: TranslatableRichText;
   /**
