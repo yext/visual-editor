@@ -15,24 +15,48 @@ export const productVariants: Migration = {
       }
 
       newProps.styles.showImage = newProps.styles.showImage ?? true;
-      newProps.styles.showBrow = newProps.styles.showBrow ?? false;
+      newProps.styles.showBrow = newProps.styles.showBrow ?? true;
       newProps.styles.showTitle = newProps.styles.showTitle ?? true;
       newProps.styles.showPrice = newProps.styles.showPrice ?? true;
       newProps.styles.showDescription = newProps.styles.showDescription ?? true;
       newProps.styles.showCTA = newProps.styles.showCTA ?? true;
 
-      // Migrate CategorySlot to PriceSlot
+      // Migrate CategorySlot to BrowSlot
       if (newProps.slots?.CardsWrapperSlot) {
-        newProps.slots.CardsWrapperSlot.forEach((wrapper: any) => {
-          if (wrapper.props?.slots?.CardSlot) {
-            wrapper.props.slots.CardSlot.forEach((card: any) => {
-              if (card.props?.slots?.CategorySlot) {
-                card.props.slots.PriceSlot = card.props.slots.CategorySlot;
-                delete card.props.slots.CategorySlot;
-              }
-            });
+        newProps.slots.CardsWrapperSlot = newProps.slots.CardsWrapperSlot.map(
+          (wrapper: any) => {
+            if (wrapper.props?.slots?.CardSlot) {
+              const newWrapper = {
+                ...wrapper,
+                props: {
+                  ...wrapper.props,
+                  slots: {
+                    ...wrapper.props.slots,
+                    CardSlot: wrapper.props.slots.CardSlot.map((card: any) => {
+                      if (card.props?.slots?.CategorySlot) {
+                        const newCard = {
+                          ...card,
+                          props: {
+                            ...card.props,
+                            slots: {
+                              ...card.props.slots,
+                              BrowSlot: card.props.slots.CategorySlot,
+                            },
+                          },
+                        };
+                        delete newCard.props.slots.CategorySlot;
+                        return newCard;
+                      }
+                      return card;
+                    }),
+                  },
+                },
+              };
+              return newWrapper;
+            }
+            return wrapper;
           }
-        });
+        );
       }
 
       return newProps;

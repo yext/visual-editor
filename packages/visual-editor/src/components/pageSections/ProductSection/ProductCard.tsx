@@ -463,6 +463,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
 
     const resolvedBrow =
       data.props.parentData?.product.brow ??
+      data.props.parentData?.product.category ??
       browSlotProps?.parentData?.richText ??
       (browSlotProps
         ? resolveYextEntityField(
@@ -533,7 +534,7 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
         "props.slots.BrowSlot[0].props.parentData",
         {
           field: field,
-          richText: product.brow, // will already be resolved
+          richText: product.brow ?? product.category, // will already be resolved
         } satisfies BodyTextProps["parentData"]
       );
       updatedData = setDeep(
