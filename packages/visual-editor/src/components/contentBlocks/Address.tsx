@@ -142,10 +142,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
         fieldId={data.address.field}
         constantValueEnabled={!parentData && data.address.constantValueEnabled}
       >
-        <RenderAddress
-          address={address}
-          lines={[["line1"], ["line2"], ["city", ",", "region", "postalCode"]]}
-        />
+        <RenderAddress address={address} />
       </EntityField>
       {(useAddressLink ? !!addressLink : !!listingsLink) &&
         styles.showGetDirectionsLink && (
