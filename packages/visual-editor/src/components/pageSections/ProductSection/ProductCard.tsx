@@ -237,6 +237,12 @@ export type ProductCardProps = {
   };
 
   /** @internal */
+  imageStyles?: {
+    aspectRatio?: number;
+    width?: number;
+  };
+
+  /** @internal */
   index?: number;
 };
 
@@ -268,7 +274,7 @@ const ProductCardFields: Fields<ProductCardProps> = {
 };
 
 const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
-  const { styles, puck, conditionalRender, slots } = props;
+  const { styles, puck, conditionalRender, slots, imageStyles } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: BackgroundStyle | undefined;
     slotStyles: Record<string, ProductCardProps["styles"]>;
@@ -385,6 +391,13 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
         <div className={variant === "classic" ? "px-8 pt-8" : ""}>
           <div
             className={imageConstrain === "fixed" ? "w-fit mx-auto" : "w-full"}
+            style={{
+              aspectRatio: imageStyles?.aspectRatio,
+              width:
+                imageConstrain === "fixed" && imageStyles?.width
+                  ? `${imageStyles.width}px`
+                  : undefined,
+            }}
           >
             <slots.ImageSlot style={{ height: "fit-content" }} allow={[]} />
           </div>
@@ -431,29 +444,40 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
       | WithId<BodyTextProps>
       | undefined;
-    const showPrice = Boolean(
-      priceSlotProps &&
-        (priceSlotProps.parentData
-          ? priceSlotProps.parentData.richText
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              priceSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
-    );
+
+    const resolvedPrice =
+      data.props.parentData?.product.price ??
+      priceSlotProps?.parentData?.richText ??
+      (priceSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            priceSlotProps?.data?.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined);
+    const showPrice = Boolean(resolvedPrice);
+
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
       | WithId<BodyTextProps>
       | undefined;
-    const showBrow = Boolean(
-      browSlotProps &&
-        (browSlotProps.parentData
-          ? browSlotProps.parentData.richText
-          : resolveYextEntityField(
-              params.metadata.streamDocument,
-              browSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
-    );
+
+    const resolvedBrow =
+      data.props.parentData?.product.brow ??
+      browSlotProps?.parentData?.richText ??
+      (browSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            browSlotProps?.data?.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined);
+    const showBrow = Boolean(resolvedBrow);
+
+    const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
+      | (WithId<ImageWrapperProps> & {
+          styles?: { aspectRatio?: number; width?: number };
+        })
+      | undefined;
 
     let updatedData = {
       ...data,
@@ -462,6 +486,10 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
         conditionalRender: {
           price: showPrice,
           brow: showBrow,
+        },
+        imageStyles: {
+          aspectRatio: imageSlotProps?.styles?.aspectRatio,
+          width: imageSlotProps?.styles?.width,
         },
       } satisfies ProductCardProps,
     };
