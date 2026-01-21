@@ -555,7 +555,7 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
       for (let entry of entries) {
         const width = entry.contentRect.width;
 
-        if (width < 640) {
+        if (width < 768) {
           setVisibleSlides(1);
         } else {
           setVisibleSlides(styles.carouselImageCount);
