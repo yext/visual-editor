@@ -329,7 +329,7 @@ const DesktopCarousel = ({
             <FaArrowLeft className="h-10 w-fit" />
           </ButtonBack>
         </DynamicChildColors>
-        <div className="flex flex-col gap-y-8 items-center w-auto max-w-full w-full overflow-hidden">
+        <div className="flex flex-col gap-y-8 items-center max-w-full w-full overflow-hidden">
           <EntityField
             displayName={pt("fields.images", "Images")}
             fieldId={imagesFieldId}
@@ -473,7 +473,7 @@ const GalleryGrid = ({
               imageData={imageData}
               isEditing={isEditing}
               onEmptyImageClick={onEmptyImageClick}
-              sizes={`min(${imageWidth}px, (min-width: 1024px) calc((100vw - 6rem) / 3), (min-width: 640px) calc((100vw - 4rem) / 2), 100vw)`}
+              sizes={`(min-width: 1024px) min(${imageWidth}px, calc((100vw - 6rem) / 3)), (min-width: 640px) min(${imageWidth}px, calc((100vw - 4rem) / 2)), min(${imageWidth}px, 100vw)`}
             />
           </div>
         ))}
