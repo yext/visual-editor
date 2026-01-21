@@ -164,10 +164,9 @@ const EmptyImage = ({
   return (
     <div
       className={themeManagerCn(
-        "rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
+        "w-full md:w-auto rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
       )}
       style={{
-        width: `${imageData.width}px`,
         aspectRatio: imageData.aspectRatio,
       }}
       onClick={(e) => {
@@ -409,6 +408,7 @@ const MobileCarousel = ({
         displayName={pt("fields.images", "Images")}
         fieldId={imagesFieldId}
         constantValueEnabled={constantValueEnabled}
+        className="max-w-full"
       >
         <Slider className="w-full">
           {allImages.map((imageData, idx) => {
