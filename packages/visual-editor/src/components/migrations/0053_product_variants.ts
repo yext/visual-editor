@@ -1,4 +1,5 @@
 import { Migration } from "../../utils/migrate";
+import { getDefaultRTF } from "@yext/visual-editor";
 
 export const productVariants: Migration = {
   ProductSection: {
@@ -17,7 +18,7 @@ export const productVariants: Migration = {
       newProps.styles.showImage = newProps.styles.showImage ?? true;
       newProps.styles.showBrow = newProps.styles.showBrow ?? true;
       newProps.styles.showTitle = newProps.styles.showTitle ?? true;
-      newProps.styles.showPrice = newProps.styles.showPrice ?? true;
+      newProps.styles.showPrice = newProps.styles.showPrice ?? false;
       newProps.styles.showDescription = newProps.styles.showDescription ?? true;
       newProps.styles.showCTA = newProps.styles.showCTA ?? true;
 
@@ -41,6 +42,28 @@ export const productVariants: Migration = {
                             slots: {
                               ...card.props.slots,
                               BrowSlot: card.props.slots.CategorySlot,
+                              PriceSlot: [
+                                {
+                                  type: "BodyTextSlot",
+                                  props: {
+                                    data: {
+                                      text: {
+                                        field: "",
+                                        constantValue: {
+                                          en: getDefaultRTF("$123.00", {
+                                            isBold: true,
+                                          }),
+                                          hasLocalizedValue: "true",
+                                        },
+                                        constantValueEnabled: true,
+                                      },
+                                    },
+                                    styles: {
+                                      variant: "base",
+                                    },
+                                  },
+                                },
+                              ],
                             },
                           },
                         };

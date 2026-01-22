@@ -463,7 +463,6 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
 
     const resolvedBrow =
       data.props.parentData?.product.brow ??
-      data.props.parentData?.product.category ??
       browSlotProps?.parentData?.richText ??
       (browSlotProps
         ? resolveYextEntityField(
