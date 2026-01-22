@@ -22,7 +22,8 @@ export const bodyVariants = cva(
 
 // Omit 'color' from HTMLAttributes<HTMLParagraphElement> to avoid conflict
 export interface BodyProps
-  extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
+  extends
+    Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
     VariantProps<typeof bodyVariants> {}
 
 export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
@@ -37,7 +38,7 @@ export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
           className
         )}
         style={{
-          // @ts-ignore: CSS variables are valid here but TS doesn't recognize the union type
+          // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-body-textTransform)`,
           ...style,
         }}

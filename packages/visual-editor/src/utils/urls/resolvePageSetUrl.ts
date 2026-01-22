@@ -37,6 +37,7 @@ const resolvers: Array<
     getLocationPath(streamDocument as LocationDocument, relativePrefixToRoot),
 ];
 
+// Resolves the URL for a PageSet entity using new or legacy methods
 export const resolvePageSetUrl = (
   streamDocument: StreamDocument,
   relativePrefixToRoot: string,
@@ -89,6 +90,7 @@ const childResolvers: Array<
     ),
 ];
 
+// Resolves the URL for a PageSet entity's child using new or legacy methods
 export const resolvePageSetUrlOfChild = (
   streamDocument: StreamDocument,
   relativePrefixToRoot?: string,

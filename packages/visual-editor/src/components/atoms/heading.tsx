@@ -65,7 +65,8 @@ export const headingVariants = cva("components", {
 
 // Omit 'color' from HTMLAttributes<HTMLHeadingElement> to avoid conflict
 export interface HeadingProps
-  extends Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
+  extends
+    Omit<React.HTMLAttributes<HTMLHeadingElement>, "color">,
     VariantProps<typeof headingVariants> {
   level: HeadingLevel;
   semanticLevelOverride?: HeadingLevel | "span";
@@ -113,7 +114,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           className
         )}
         style={{
-          // @ts-ignore: CSS variables are valid here but TS doesn't recognize the union type
+          // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-h${level}-textTransform)`,
           ...dynamicStyle,
           ...style,

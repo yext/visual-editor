@@ -10,7 +10,7 @@ function Toggle({
     <TogglePrimitive.Root
       data-slot="toggle"
       style={{
-        // @ts-ignore: CSS variables are valid here but TS doesn't recognize the union type
+        // @ts-ignore: the css variable here resolves to a valid enum value
         textTransform: "var(--textTransform-button-textTransform)",
       }}
       className={themeManagerCn(
