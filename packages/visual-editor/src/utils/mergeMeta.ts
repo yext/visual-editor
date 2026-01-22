@@ -1,3 +1,6 @@
+import { StreamDocument } from "./applyTheme.ts";
+import { getIsPrimaryLocale, getPageSetConfig } from "./pageset.ts";
+
 /**
  * Merges a profile object with meta fields from the streamDocument such as __, _pageset, and locale.
 
@@ -5,19 +8,16 @@
  * @param {Object} streamDocument
  * @returns {Object}
  */
-export function mergeMeta(profile: any, streamDocument: any): any {
+export function mergeMeta(profile: any, streamDocument: StreamDocument): any {
   const locale: string = profile?.meta?.locale || streamDocument?.locale;
 
-  // Get primaryLocale from pageset config, defaulting to "en" for backward compatibility
-  const pagesetJson =
-    typeof streamDocument?._pageset === "string"
-      ? JSON.parse(streamDocument._pageset || "{}")
-      : streamDocument?._pageset || {};
-  const pagesetConfig = pagesetJson?.config || {};
-  // Prioritize pageset config primaryLocale, if not set then fall back to legacy profile.meta.isPrimaryLocale
-  const isPrimaryLocale = !!pagesetConfig?.primaryLocale
-    ? locale === pagesetConfig.primaryLocale
-    : profile?.meta?.isPrimaryLocale;
+  const pageSetConfig = getPageSetConfig(streamDocument?._pageset);
+  const fallbackIsPrimaryLocale = streamDocument.__?.isPrimaryLocale;
+  const isPrimaryLocale = getIsPrimaryLocale({
+    locale,
+    pageSetConfig,
+    fallbackIsPrimaryLocale,
+  });
 
   return {
     locale: locale,

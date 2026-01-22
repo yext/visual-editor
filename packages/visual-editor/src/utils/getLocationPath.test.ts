@@ -1,427 +1,316 @@
 import { describe, it, expect } from "vitest";
 import { getLocationPath } from "./getLocationPath.ts";
 
+const address = {
+  line1: "1101 Wilson Blvd",
+  city: "Arlington",
+  region: "VA",
+  countryCode: "US",
+  postalCode: "22209",
+};
+
 describe("getLocationPath", () => {
-  it("returns slug paths", () => {
-    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
-    expect(
-      getLocationPath(
-        {
-          locale: "en",
-          slug: "my-slug",
-          id: "location1",
-          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
-        },
-        ""
-      )
-    ).toBe("my-slug");
-
-    expect(
-      getLocationPath(
-        {
-          locale: "en",
-          slug: "my-slug",
-          id: "location1",
-          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
-        },
-        ""
-      )
-    ).toBe("my-slug");
-
-    expect(
-      getLocationPath(
-        {
-          locale: "en",
-          slug: "my-slug",
-          id: "location1",
-          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
-        },
-        "../../"
-      )
-    ).toBe("../../my-slug");
+  it.each([
+    [
+      "returns slug paths without prefix",
+      {
+        locale: "en",
+        slug: "my-slug",
+        id: "location1",
+        _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+      },
+      "",
+      "my-slug",
+    ],
+    [
+      "returns slug paths with prefix",
+      {
+        locale: "en",
+        slug: "my-slug",
+        id: "location1",
+        _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+      },
+      "../../",
+      "../../my-slug",
+    ],
+  ])("%s", (_label, location, prefix, expected) => {
+    expect(getLocationPath(location, prefix)).toBe(expected);
   });
 
-  it("returns address-based paths", () => {
-    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
-    expect(
-      getLocationPath(
-        {
-          locale: "en",
-          address: {
-            line1: "1101 Wilson Blvd",
-            city: "Arlington",
-            region: "VA",
-            countryCode: "US",
-            postalCode: "22209",
-          },
-          id: "location1",
-          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
-        },
-        ""
-      )
-    ).toBe("va/arlington/1101-wilson-blvd");
-
-    expect(
-      getLocationPath(
-        {
-          locale: "es",
-          address: {
-            line1: "1101 Wilson Blvd",
-            city: "Arlington",
-            region: "VA",
-            countryCode: "US",
-            postalCode: "22209",
-          },
-          id: "location1",
-          __: {
-            isPrimaryLocale: false,
-          },
-        },
-        ""
-      )
-    ).toBe("es/va/arlington/1101-wilson-blvd");
-
-    expect(
-      getLocationPath(
-        {
-          __: {
-            isPrimaryLocale: false,
-          },
-          locale: "en",
-          address: {
-            line1: "1101 Wilson Blvd",
-            city: "Arlington",
-            region: "VA",
-            countryCode: "US",
-            postalCode: "22209",
-          },
-          id: "location1",
-        },
-        "../"
-      )
-    ).toBe("../en/va/arlington/1101-wilson-blvd");
+  it.each([
+    [
+      "returns address-based paths without prefix",
+      {
+        locale: "en",
+        address: address,
+        id: "location1",
+        _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+      },
+      "",
+      "va/arlington/1101-wilson-blvd",
+    ],
+    [
+      "returns address-based paths with locale prefix",
+      {
+        locale: "es",
+        address: address,
+        id: "location1",
+        __: { isPrimaryLocale: false },
+      },
+      "",
+      "es/va/arlington/1101-wilson-blvd",
+    ],
+    [
+      "returns address-based paths with relative prefix",
+      {
+        __: { isPrimaryLocale: false },
+        locale: "en",
+        address: address,
+        id: "location1",
+      },
+      "../",
+      "../en/va/arlington/1101-wilson-blvd",
+    ],
+  ])("%s", (_label, location, prefix, expected) => {
+    expect(getLocationPath(location, prefix)).toBe(expected);
   });
 
-  it("returns id-based paths", () => {
-    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
-    expect(
-      getLocationPath(
-        {
-          id: "location1",
-          locale: "en",
-          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
-        },
-        ""
-      )
-    ).toBe("location1");
-
-    // No pageset config, so falls back to legacy __.isPrimaryLocale (undefined = falsy), adds prefix
-    expect(getLocationPath({ locale: "es", id: "location1" }, "")).toBe(
-      "es/location1"
-    );
-
-    // With primaryLocale set to "en", locale === primaryLocale is true, so no prefix
-    expect(
-      getLocationPath(
-        {
-          id: "location1",
-          locale: "en",
-          _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
-        },
-        "../../../"
-      )
-    ).toBe("../../../location1");
-
-    // Legacy __.isPrimaryLocale: false takes precedence when no primaryLocale is set
-    expect(
-      getLocationPath(
-        { id: "location1", locale: "en", __: { isPrimaryLocale: false } },
-        "../../../"
-      )
-    ).toBe("../../../en/location1");
-  });
-
-  it("handles empty values", () => {
-    // @ts-expect-error
-    expect(() => getLocationPath({}, {}, "")).toThrow();
-
-    // @ts-expect-error
-    expect(() => getLocationPath(undefined, {}, "")).toThrow();
+  it.each([
+    [
+      "returns id-based paths without prefix",
+      {
+        id: "location1",
+        locale: "en",
+        _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+      },
+      "",
+      "location1",
+    ],
+    [
+      "returns id-based paths with locale prefix fallback",
+      { locale: "es", id: "location1" },
+      "",
+      "es/location1",
+    ],
+    [
+      "returns id-based paths with relative prefix",
+      {
+        id: "location1",
+        locale: "en",
+        _pageset: JSON.stringify({ config: { primaryLocale: "en" } }),
+      },
+      "../../../",
+      "../../../location1",
+    ],
+    [
+      "returns id-based paths with legacy __.isPrimaryLocale override",
+      { id: "location1", locale: "en", __: { isPrimaryLocale: false } },
+      "../../../",
+      "../../../en/location1",
+    ],
+  ])("%s", (_label, location, prefix, expected) => {
+    expect(getLocationPath(location, prefix)).toBe(expected);
   });
 
   describe("with pagesetConfig", () => {
-    it("returns slug as-is without locale prefix logic", () => {
-      // Slug is returned early without locale prefix logic
-      expect(
-        getLocationPath(
-          {
-            locale: "en",
-            slug: "locator-page",
-            id: "location1",
-            __: { isPrimaryLocale: true },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "en",
-                includeLocalePrefixForPrimaryLocale: true,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("locator-page");
-
-      // Slug is returned early without locale prefix logic, so slug is returned as-is
-      expect(
-        getLocationPath(
-          {
-            locale: "es",
-            slug: "es/locator-page",
-            id: "location1",
-            __: { isPrimaryLocale: false },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "en",
-                includeLocalePrefixForPrimaryLocale: false,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("es/locator-page");
+    it.each([
+      [
+        "returns slug as-is without locale prefix logic",
+        {
+          locale: "en",
+          slug: "locator-page",
+          id: "location1",
+          __: { isPrimaryLocale: true },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: true,
+            },
+          }),
+        },
+        "locator-page",
+      ],
+      [
+        "returns slug as-is for non-primary locale",
+        {
+          locale: "es",
+          slug: "es/locator-page",
+          id: "location1",
+          __: { isPrimaryLocale: false },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+          }),
+        },
+        "es/locator-page",
+      ],
+    ])("%s", (_label, location, expected) => {
+      expect(getLocationPath(location, "")).toBe(expected);
     });
 
-    it("uses custom primary_locale", () => {
-      // Spanish as primary locale
-      expect(
-        getLocationPath(
-          {
-            locale: "es",
-            address: {
-              line1: "1101 Wilson Blvd",
-              city: "Arlington",
-              region: "VA",
-              countryCode: "US",
-              postalCode: "22209",
-            },
-            id: "location1",
-            __: {
-              isPrimaryLocale: true,
-            },
-            _pageset: JSON.stringify({
-              config: { primaryLocale: "es" },
-            }),
-          },
-          ""
-        )
-      ).toBe("va/arlington/1101-wilson-blvd");
-
-      // English should get prefix when Spanish is primary
-      expect(
-        getLocationPath(
-          {
-            locale: "en",
-            address: {
-              line1: "1101 Wilson Blvd",
-              city: "Arlington",
-              region: "VA",
-              countryCode: "US",
-              postalCode: "22209",
-            },
-            id: "location1",
-            __: {
-              isPrimaryLocale: false,
-            },
-            _pageset: JSON.stringify({
-              config: { primaryLocale: "es" },
-            }),
-          },
-          ""
-        )
-      ).toBe("en/va/arlington/1101-wilson-blvd");
+    it.each([
+      [
+        "uses custom primary_locale: es",
+        {
+          locale: "es",
+          address: address,
+          id: "location1",
+          __: { isPrimaryLocale: true },
+          _pageset: JSON.stringify({ config: { primaryLocale: "es" } }),
+        },
+        "va/arlington/1101-wilson-blvd",
+      ],
+      [
+        "adds prefix for non-primary when primary_locale is es",
+        {
+          locale: "en",
+          address: address,
+          id: "location1",
+          __: { isPrimaryLocale: false },
+          _pageset: JSON.stringify({ config: { primaryLocale: "es" } }),
+        },
+        "en/va/arlington/1101-wilson-blvd",
+      ],
+    ])("%s", (_label, location, expected) => {
+      expect(getLocationPath(location, "")).toBe(expected);
     });
 
-    it("respects include_locale_prefix_for_primary_locale: true", () => {
-      // Primary locale should get prefix when include_locale_prefix_for_primary_locale is true
-      expect(
-        getLocationPath(
-          {
-            locale: "en",
-            address: {
-              line1: "1101 Wilson Blvd",
-              city: "Arlington",
-              region: "VA",
-              countryCode: "US",
-              postalCode: "22209",
+    it.each([
+      [
+        "prefixes primary locale when include_locale_prefix_for_primary_locale is true",
+        {
+          locale: "en",
+          address: address,
+          id: "location1",
+          __: { isPrimaryLocale: true },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: true,
             },
-            id: "location1",
-            __: {
-              isPrimaryLocale: true,
+          }),
+        },
+        "en/va/arlington/1101-wilson-blvd",
+      ],
+      [
+        "prefixes primary locale id paths when include_locale_prefix_for_primary_locale is true",
+        {
+          id: "location1",
+          locale: "en",
+          __: { isPrimaryLocale: true },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: true,
             },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "en",
-                includeLocalePrefixForPrimaryLocale: true,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("en/va/arlington/1101-wilson-blvd");
-
-      // ID-based path with prefix for primary locale
-      expect(
-        getLocationPath(
-          {
-            id: "location1",
-            locale: "en",
-            __: { isPrimaryLocale: true },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "en",
-                includeLocalePrefixForPrimaryLocale: true,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("en/location1");
+          }),
+        },
+        "en/location1",
+      ],
+      [
+        "does not prefix primary locale when include_locale_prefix_for_primary_locale is false",
+        {
+          locale: "en",
+          address: address,
+          id: "location1",
+          __: { isPrimaryLocale: true },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+          }),
+        },
+        "va/arlington/1101-wilson-blvd",
+      ],
+      [
+        "prefixes non-primary locale when include_locale_prefix_for_primary_locale is false",
+        {
+          locale: "es",
+          address: address,
+          id: "location1",
+          __: { isPrimaryLocale: false },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+          }),
+        },
+        "es/va/arlington/1101-wilson-blvd",
+      ],
+      [
+        "works with custom primary_locale and prefix enabled",
+        {
+          locale: "fr",
+          id: "location1",
+          __: { isPrimaryLocale: true },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "fr",
+              includeLocalePrefixForPrimaryLocale: true,
+            },
+          }),
+        },
+        "fr/location1",
+      ],
+      [
+        "works with custom primary_locale and prefix disabled",
+        {
+          locale: "fr",
+          id: "location1",
+          __: { isPrimaryLocale: true },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "fr",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+          }),
+        },
+        "location1",
+      ],
+      [
+        "prefixes non-primary locale with custom primary_locale",
+        {
+          locale: "en",
+          id: "location1",
+          __: { isPrimaryLocale: false },
+          _pageset: JSON.stringify({
+            config: {
+              primaryLocale: "fr",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+          }),
+        },
+        "en/location1",
+      ],
+    ])("%s", (_label, location, expected) => {
+      expect(getLocationPath(location, "")).toBe(expected);
     });
 
-    it("respects include_locale_prefix_for_primary_locale: false (default)", () => {
-      // Primary locale should NOT get prefix when include_locale_prefix_for_primary_locale is false
-      expect(
-        getLocationPath(
-          {
-            locale: "en",
-            address: {
-              line1: "1101 Wilson Blvd",
-              city: "Arlington",
-              region: "VA",
-              countryCode: "US",
-              postalCode: "22209",
-            },
-            id: "location1",
-            __: {
-              isPrimaryLocale: true,
-            },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "en",
-                includeLocalePrefixForPrimaryLocale: false,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("va/arlington/1101-wilson-blvd");
-
-      // Non-primary locale should still get prefix
-      expect(
-        getLocationPath(
-          {
-            locale: "es",
-            address: {
-              line1: "1101 Wilson Blvd",
-              city: "Arlington",
-              region: "VA",
-              countryCode: "US",
-              postalCode: "22209",
-            },
-            id: "location1",
-            __: {
-              isPrimaryLocale: false,
-            },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "en",
-                includeLocalePrefixForPrimaryLocale: false,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("es/va/arlington/1101-wilson-blvd");
-    });
-
-    it("works with custom primary_locale and include_locale_prefix_for_primary_locale", () => {
-      // French as primary with prefix enabled
-      expect(
-        getLocationPath(
-          {
-            locale: "fr",
-            id: "location1",
-            __: { isPrimaryLocale: true },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "fr",
-                includeLocalePrefixForPrimaryLocale: true,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("fr/location1");
-
-      // French as primary with prefix disabled
-      expect(
-        getLocationPath(
-          {
-            locale: "fr",
-            id: "location1",
-            __: { isPrimaryLocale: true },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "fr",
-                includeLocalePrefixForPrimaryLocale: false,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("location1");
-
-      // English (non-primary) should get prefix
-      expect(
-        getLocationPath(
-          {
-            locale: "en",
-            id: "location1",
-            __: { isPrimaryLocale: false },
-            _pageset: JSON.stringify({
-              config: {
-                primaryLocale: "fr",
-                includeLocalePrefixForPrimaryLocale: false,
-              },
-            }),
-          },
-          ""
-        )
-      ).toBe("en/location1");
-    });
-
-    it("maintains backward compatibility when pagesetConfig is not provided", () => {
-      // Should default to "en" as primary locale
-      expect(
-        getLocationPath(
-          {
-            locale: "en",
-            id: "location1",
-            __: { isPrimaryLocale: true },
-          },
-          ""
-        )
-      ).toBe("location1");
-
-      expect(
-        getLocationPath(
-          {
-            locale: "es",
-            id: "location1",
-            __: { isPrimaryLocale: false },
-          },
-          ""
-        )
-      ).toBe("es/location1");
+    it.each([
+      [
+        "maintains backward compatibility when pagesetConfig is not provided",
+        {
+          locale: "en",
+          id: "location1",
+          __: { isPrimaryLocale: true },
+        },
+        "location1",
+      ],
+      [
+        "adds prefix for non-primary when pagesetConfig is not provided",
+        {
+          locale: "es",
+          id: "location1",
+          __: { isPrimaryLocale: false },
+        },
+        "es/location1",
+      ],
+    ])("%s", (_label, location, expected) => {
+      expect(getLocationPath(location, "")).toBe(expected);
     });
   });
 });

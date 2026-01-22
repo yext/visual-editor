@@ -3,6 +3,11 @@ import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
 import { normalizeSlug } from "./slugifier";
 import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
 import { normalizeLocalesInObject } from "./normalizeLocale.ts";
+import {
+  getIsPrimaryLocale,
+  getLocalePrefix,
+  getPageSetConfig,
+} from "./pageset.ts";
 
 /**
  * Resolves a URL template using the base entity page set's URL template.
@@ -59,11 +64,8 @@ export const resolvePageSetUrlTemplate = (
   ) => string
 ): string => {
   // Use current page set template
-  const pagesetJson =
-    typeof streamDocument?._pageset === "string"
-      ? JSON.parse(streamDocument._pageset || "{}")
-      : streamDocument?._pageset || {};
-  const urlTemplates = pagesetJson?.config?.urlTemplate || {};
+  const pageSetConfig = getPageSetConfig(streamDocument?._pageset);
+  const urlTemplates = pageSetConfig?.urlTemplate || {};
 
   return resolveUrlTemplateWithTemplates(
     streamDocument,
@@ -150,20 +152,18 @@ const buildUrlFromTemplate = (
   }
 
   // Get pageset config from the document's _pageset
-  const pagesetJson =
-    typeof streamDocument?._pageset === "string"
-      ? JSON.parse(streamDocument._pageset || "{}")
-      : streamDocument?._pageset || {};
-  const pagesetConfig = pagesetJson?.config || {};
-  // Prioritize pageset config primaryLocale, if not set then fall back to __.isPrimaryLocale
-  const isPrimaryLocale = !!pagesetConfig?.primaryLocale
-    ? locale === pagesetConfig.primaryLocale
-    : streamDocument.__?.isPrimaryLocale;
-
-  const localePrefix =
-    !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
-      ? `${locale}/`
-      : "";
+  const pageSetConfig = getPageSetConfig(streamDocument?._pageset);
+  const isPrimaryLocale = getIsPrimaryLocale({
+    locale,
+    pageSetConfig,
+    fallbackIsPrimaryLocale: streamDocument.__?.isPrimaryLocale,
+  });
+  const localePrefix = getLocalePrefix({
+    locale,
+    isPrimaryLocale,
+    includeLocalePrefixForPrimaryLocale:
+      pageSetConfig?.includeLocalePrefixForPrimaryLocale,
+  });
 
   return relativePrefixToRoot + localePrefix + normalizedSlug;
 };

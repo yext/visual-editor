@@ -1,6 +1,11 @@
 import { normalizeSlug } from "./slugifier.ts";
 import { AddressType } from "@yext/pages-components";
 import { StreamDocument } from "./applyTheme.ts";
+import {
+  getIsPrimaryLocale,
+  getLocalePrefix,
+  getPageSetConfig,
+} from "./pageset.ts";
 
 export interface LocationDocument extends StreamDocument {
   id: string;
@@ -8,6 +13,9 @@ export interface LocationDocument extends StreamDocument {
   address?: AddressType;
 }
 
+// Returns the path for a location document, applying locale prefixes as needed.
+// If slug is present, uses slug. Otherwise, constructs path from address or id.
+// Should be used as a fallback when URL templates are not available.
 export const getLocationPath = (
   location: LocationDocument,
   relativePrefixToRoot: string = ""
@@ -16,7 +24,7 @@ export const getLocationPath = (
     throw new Error("Could not resolve location path.");
   }
 
-  // If there's a slug, apply locale prefix to it
+  // If there's a slug, don't apply locale prefix to it
   if (location.slug) {
     return `${relativePrefixToRoot}${location.slug}`;
   }
@@ -26,21 +34,18 @@ export const getLocationPath = (
     throw new Error("Missing locale for getLocationPath");
   }
 
-  // Get pageset config from the document's _pageset
-  const pagesetJson =
-    typeof location?._pageset === "string"
-      ? JSON.parse(location._pageset || "{}")
-      : location?._pageset || {};
-  const pagesetConfig = pagesetJson?.config || {};
-  // Prioritize pageset config primaryLocale, if not set then fall back to __.isPrimaryLocale
-  const isPrimaryLocale = !!pagesetConfig?.primaryLocale
-    ? locale === pagesetConfig.primaryLocale
-    : location.__?.isPrimaryLocale;
-
-  const localePrefix =
-    !isPrimaryLocale || pagesetConfig?.includeLocalePrefixForPrimaryLocale
-      ? `${locale}/`
-      : "";
+  const pageSetConfig = getPageSetConfig(location?._pageset);
+  const isPrimaryLocale = getIsPrimaryLocale({
+    locale,
+    pageSetConfig,
+    fallbackIsPrimaryLocale: location.__?.isPrimaryLocale,
+  });
+  const localePrefix = getLocalePrefix({
+    locale,
+    isPrimaryLocale,
+    includeLocalePrefixForPrimaryLocale:
+      pageSetConfig?.includeLocalePrefixForPrimaryLocale,
+  });
 
   const path = location.address
     ? `${localePrefix}${location.address.region}/${location.address.city}/${location.address.line1}`
