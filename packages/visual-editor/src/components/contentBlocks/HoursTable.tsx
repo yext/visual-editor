@@ -67,7 +67,7 @@ export const HoursTableStyleFields = {
     }
   ),
   showAdditionalHoursText: YextField<boolean>(
-    msg("fields.options.showAdditionalHoursText", "Show additional hours text"),
+    msg("fields.options.showAdditionalHoursText", "Show Additional Hours Text"),
     {
       type: "radio",
       options: [
@@ -89,16 +89,19 @@ export const hoursTableFields: Fields<HoursTableProps> = {
     type: "object",
     objectFields: {
       ...HoursTableStyleFields,
-      alignment: YextField(msg("fields.alignCard", "Align card"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.left", "Left"), value: "items-start" },
-          {
-            label: msg("fields.options.center", "Center"),
-            value: "items-center",
-          },
-        ],
-      }),
+      alignment: YextField(
+        msg("fields.contentAlignment", "Content Alignment"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.left", "Left"), value: "items-start" },
+            {
+              label: msg("fields.options.center", "Center"),
+              value: "items-center",
+            },
+          ],
+        }
+      ),
     },
   }),
 };

@@ -182,7 +182,6 @@
   "fields": {
     "CTAVariant": "CTA Varyantı",
     "address": "Adres",
-    "alignCard": "Kartı hizalayın",
     "alignContent": "İçeriği Hizala",
     "alignItems": "Öğeleri hizalayın",
     "alignment": "Uyuşma",
@@ -209,6 +208,7 @@
     "commaSeparated": "Virgülle Ayrılmış",
     "containerAlignment": "Konteyner Hizalaması",
     "content": "İçerik",
+    "contentAlignment": "İçerik Hizalaması",
     "contentType": "İçerik Türü",
     "contributorName": "Katkıda bulunan adı",
     "coordinate": "Koordinat",

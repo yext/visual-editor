@@ -188,7 +188,6 @@
   "fields": {
     "CTAVariant": "CTA-variant",
     "address": "Adresse",
-    "alignCard": "Juster kort",
     "alignContent": "Juster indhold",
     "alignItems": "Juster genstande",
     "alignment": "Justering",
@@ -215,6 +214,7 @@
     "commaSeparated": "Kommasepareret",
     "containerAlignment": "Beholderjustering",
     "content": "Indhold",
+    "contentAlignment": "Indholdsjustering",
     "contentType": "Indholdstype",
     "contributorName": "Bidragydernavn",
     "coordinate": "Koordinere",

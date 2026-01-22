@@ -182,7 +182,6 @@
   "fields": {
     "CTAVariant": "CTA-variantti",
     "address": "Osoite",
-    "alignCard": "Kohdistaa kortti",
     "alignContent": "Tasaa sisältö",
     "alignItems": "Kohdistaa kohteet",
     "alignment": "Linjaus",
@@ -209,6 +208,7 @@
     "commaSeparated": "Pilkulla erotettuna",
     "containerAlignment": "Säiliön kohdistus",
     "content": "Sisältö",
+    "contentAlignment": "Sisällön kohdistus",
     "contentType": "Sisältötyyppi",
     "contributorName": "Avustajan nimi",
     "coordinate": "Koordinoida",

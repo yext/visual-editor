@@ -182,7 +182,6 @@
   "fields": {
     "CTAVariant": "CTA varijanta",
     "address": "Adresa",
-    "alignCard": "Poravnavanje",
     "alignContent": "Uskladite sadržaj",
     "alignItems": "Poravnaj predmete",
     "alignment": "Poravnanje",
@@ -209,6 +208,7 @@
     "commaSeparated": "Odvojeno zarezom",
     "containerAlignment": "Usklađivanje spremnika",
     "content": "Sadržaj",
+    "contentAlignment": "Usklađivanje sadržaja",
     "contentType": "Vrsta sadržaja",
     "contributorName": "Naziv suradnika",
     "coordinate": "Koordinata",

@@ -186,7 +186,6 @@
   "fields": {
     "CTAVariant": "CTA-Variante",
     "address": "Adresse",
-    "alignCard": "Karte ausrichten",
     "alignContent": "Inhalte ausrichten",
     "alignItems": "Elemente ausrichten",
     "alignment": "Ausrichtung",
@@ -213,6 +212,7 @@
     "commaSeparated": "Komma getrennt",
     "containerAlignment": "Containerausrichtung",
     "content": "Inhalt",
+    "contentAlignment": "Inhaltsausrichtung",
     "contentType": "Inhaltstyp",
     "contributorName": "Mitwirkender Name",
     "coordinate": "Koordinieren",
@@ -537,7 +537,7 @@
     "search": "Schriftarten suchen ..."
   },
   "friday": "Freitag",
-  "getDirections": "Wegbeschreibung bekommen",
+  "getDirections": "Route planen",
   "heroBanner": "Heldenbanner",
   "heroHeader": "Heldenkopfzeile",
   "heroImage": "Heldenbild",

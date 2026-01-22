@@ -182,7 +182,6 @@
   "fields": {
     "CTAVariant": "CTA variant",
     "address": "Aadress",
-    "alignCard": "Joondama kaart",
     "alignContent": "Joonda sisu",
     "alignItems": "Esemeid joondama",
     "alignment": "Joondamine",
@@ -209,6 +208,7 @@
     "commaSeparated": "Komaga eraldatud",
     "containerAlignment": "Konteinerite joondamine",
     "content": "Sisu",
+    "contentAlignment": "Sisu joondamine",
     "contentType": "Sisu tüüp",
     "contributorName": "Kaastöötaja nimi",
     "coordinate": "Koordinaat",

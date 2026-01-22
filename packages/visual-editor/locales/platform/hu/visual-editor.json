@@ -182,7 +182,6 @@
   "fields": {
     "CTAVariant": "CTA-változat",
     "address": "Cím",
-    "alignCard": "Igazítson kártya",
     "alignContent": "Tartalom igazítása",
     "alignItems": "Hozzáigazítva az elemeket",
     "alignment": "Igazítás",
@@ -209,6 +208,7 @@
     "commaSeparated": "Vesszővel elválasztva",
     "containerAlignment": "Konténer igazítása",
     "content": "Tartalom",
+    "contentAlignment": "Tartalom igazítása",
     "contentType": "Tartalom típusa",
     "contributorName": "Közreműködő neve",
     "coordinate": "Koordináta",

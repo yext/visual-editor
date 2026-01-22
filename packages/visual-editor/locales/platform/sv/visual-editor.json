@@ -183,7 +183,6 @@
   "fields": {
     "CTAVariant": "CTA-variant",
     "address": "Adress",
-    "alignCard": "Justera kort",
     "alignContent": "Justera innehåll",
     "alignItems": "Justera föremål",
     "alignment": "Inriktning",
@@ -210,6 +209,7 @@
     "commaSeparated": "Kommaseparerad",
     "containerAlignment": "Behållaruppriktning",
     "content": "Innehåll",
+    "contentAlignment": "Innehållsjustering",
     "contentType": "Innehållstyp",
     "contributorName": "Bidragsgivarnamn",
     "coordinate": "Samordna",

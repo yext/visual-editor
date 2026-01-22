@@ -182,7 +182,6 @@
   "fields": {
     "CTAVariant": "CTA 变体",
     "address": "地址",
-    "alignCard": "对齐卡",
     "alignContent": "对齐内容",
     "alignItems": "对齐项目",
     "alignment": "结盟",
@@ -209,6 +208,7 @@
     "commaSeparated": "逗号分隔",
     "containerAlignment": "容器对齐",
     "content": "内容",
+    "contentAlignment": "内容对齐",
     "contentType": "内容类型",
     "contributorName": "贡献者名称",
     "coordinate": "协调",
