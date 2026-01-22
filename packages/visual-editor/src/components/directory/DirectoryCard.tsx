@@ -17,7 +17,7 @@ import { mergeMeta } from "../../utils/mergeMeta";
 import { useCardContext } from "../../hooks/useCardContext";
 import { useGetCardSlots } from "../../hooks/useGetCardSlots";
 import React from "react";
-import { resolvePageSetUrlOfChild } from "../../utils/urls/resolveUrlTemplate";
+import { resolvePageSetUrlOfChild } from "../../utils/urls/resolvePageSetUrl";
 
 export const defaultDirectoryCardSlotData = (
   id: string,
