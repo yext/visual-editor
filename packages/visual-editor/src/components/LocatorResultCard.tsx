@@ -20,7 +20,7 @@ import {
   PhoneAtom,
   useTemplateProps,
   resolveComponentData,
-  resolveUrlTemplateOfChild,
+  resolvePageSetUrlOfChild,
   mergeMeta,
   HoursStatusAtom,
   HoursTableAtom,
@@ -628,7 +628,7 @@ export const LocatorResultCard = React.memo(
       "TAP_TO_CALL"
     );
 
-    const resolvedUrl = resolveUrlTemplateOfChild(
+    const resolvedUrl = resolvePageSetUrlOfChild(
       mergeMeta(location, streamDocument),
       relativePrefixToRoot,
       puck.metadata?.resolveUrlTemplate

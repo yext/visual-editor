@@ -3,8 +3,8 @@ import {
   resolveUrlTemplateOfChild,
   resolvePageSetUrlTemplate,
 } from "./resolveUrlTemplate";
-import { StreamDocument } from "./applyTheme";
-import { normalizeSlug } from "./slugifier";
+import { StreamDocument } from "../types/StreamDocument";
+import { normalizeSlug } from "../slugifier";
 
 const mockStreamDocument: StreamDocument = {
   name: "Yext",
@@ -178,21 +178,6 @@ describe("resolvePageSetUrlTemplate", () => {
     };
     const result = resolvePageSetUrlTemplate(alternateLocaleDoc, "");
     assert.equal(result, "es/ny/new-york/61-9th-ave");
-  });
-
-  it("resolves alternate template for non-primary locale when locale format is bad", () => {
-    const alternateLocaleDoc = {
-      ...mockStreamDocument,
-      locale: "Zh_HANS-hk",
-      __: {
-        isPrimaryLocale: false,
-      },
-    };
-
-    assert.equal(
-      resolvePageSetUrlTemplate(alternateLocaleDoc, ""),
-      "zh-hans-hk/ny/new-york/61-9th-ave"
-    );
   });
 
   it("defaults to primary template if '__' is missing", () => {

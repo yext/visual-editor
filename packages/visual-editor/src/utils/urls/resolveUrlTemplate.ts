@@ -1,8 +1,7 @@
-import { StreamDocument } from "./applyTheme";
-import { resolveEmbeddedFieldsInString } from "./resolveYextEntityField";
-import { normalizeSlug } from "./slugifier";
+import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField.ts";
+import { normalizeSlug } from "../slugifier.ts";
 import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
-import { normalizeLocalesInObject } from "./normalizeLocale.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 /**
  * Resolves a URL template using the base entity page set's URL template.
@@ -58,7 +57,6 @@ export const resolvePageSetUrlTemplate = (
     relativePrefixToRoot: string
   ) => string
 ): string => {
-  // Use current page set template
   const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
   const urlTemplates = pagesetJson?.config?.urlTemplate || {};
 
@@ -83,7 +81,6 @@ const resolveUrlTemplateWithTemplates = (
     relativePrefixToRoot: string
   ) => string
 ): string => {
-  streamDocument = normalizeLocalesInObject(streamDocument);
   const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
   if (!locale) {
     throw new Error(`Could not determine locale from streamDocument`);
@@ -131,7 +128,7 @@ const selectUrlTemplate = (
 /**
  * Builds a URL from a template string by resolving embedded fields and normalizing the slug.
  */
-const buildUrlFromTemplate = (
+export const buildUrlFromTemplate = (
   urlTemplate: string,
   streamDocument: StreamDocument,
   locale: string,

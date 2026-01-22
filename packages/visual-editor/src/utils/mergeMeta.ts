@@ -1,3 +1,5 @@
+import { StreamDocument } from "./types/StreamDocument";
+
 /**
  * Merges a profile object with meta fields from the streamDocument such as __, _pageset, and locale.
 
@@ -5,7 +7,7 @@
  * @param {Object} streamDocument
  * @returns {Object}
  */
-export function mergeMeta(profile: any, streamDocument: any): any {
+export function mergeMeta(profile: any, streamDocument: StreamDocument): any {
   const locale: string = profile?.meta?.locale || streamDocument?.locale;
 
   let isPrimaryLocale: boolean;
@@ -27,7 +29,7 @@ export function mergeMeta(profile: any, streamDocument: any): any {
     __: {
       ...streamDocument.__,
       ...profile.__,
-      isPrimaryLocale: isPrimaryLocale,
+      isPrimaryLocale,
     },
     _pageset: streamDocument._pageset,
   };

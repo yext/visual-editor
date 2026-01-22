@@ -11,11 +11,11 @@ import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import { migrate } from "../../../utils/migrate.ts";
 import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
+import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import {
-  resolvePageSetUrlTemplate,
-  resolveUrlTemplateOfChild,
-} from "../../../utils/resolveUrlTemplate.ts";
-import { type StreamDocument } from "../../../utils/applyTheme.ts";
+  resolvePageSetUrl,
+  resolvePageSetUrlOfChild,
+} from "../../../utils/urls/resolvePageSetUrl.ts";
 
 const devLogger = new DevLogger();
 
@@ -82,9 +82,9 @@ export const useLayoutMessageReceivers = (
       streamDocument?.meta?.entityType?.id === "locator" ||
       streamDocument?.meta?.entityType?.id?.startsWith("dm_")
     ) {
-      path = resolveUrlTemplateOfChild(streamDocument, "");
+      path = resolvePageSetUrlOfChild(streamDocument, "");
     } else {
-      path = resolvePageSetUrlTemplate(streamDocument, "");
+      path = resolvePageSetUrl(streamDocument, "");
     }
 
     // Find the relativePrefixToRoot for the page being rendered in the editor

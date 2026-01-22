@@ -4,7 +4,7 @@ export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
 export { applyCertifiedFacts } from "./applyCertifiedFacts.ts";
-export { applyTheme, type StreamDocument } from "./applyTheme.ts";
+export { applyTheme } from "./applyTheme.ts";
 export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.ts";
@@ -20,7 +20,11 @@ export { resolveYextEntityField } from "./resolveYextEntityField.ts";
 export {
   resolveUrlTemplateOfChild,
   resolvePageSetUrlTemplate,
-} from "./resolveUrlTemplate.ts";
+} from "./urls/resolveUrlTemplate.ts";
+export {
+  resolvePageSetUrl,
+  resolvePageSetUrlOfChild,
+} from "./urls/resolvePageSetUrl.ts";
 export {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
@@ -45,3 +49,4 @@ export {
 } from "./fonts/visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
 export { mergeMeta } from "./mergeMeta.ts";
+export { type StreamDocument } from "./types/StreamDocument.ts";

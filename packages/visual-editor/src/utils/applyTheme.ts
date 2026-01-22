@@ -17,27 +17,7 @@ import {
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
 import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json";
-
-export type StreamDocument = {
-  [key: string]: any;
-  locale?: string;
-  meta?: {
-    locale?: string;
-    entityType?: {
-      id?: string;
-    };
-  };
-  __certified_facts?: any;
-  __?: {
-    layout?: string;
-    theme?: string;
-    codeTemplate?: string;
-    name?: string;
-    visualEditorConfig?: string;
-    isPrimaryLocale?: boolean;
-    entityPageSetUrlTemplates?: string;
-  };
-};
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 export const THEME_STYLE_TAG_ID = "visual-editor-theme";
 export const PUCK_PREVIEW_IFRAME_ID = "preview-frame";
