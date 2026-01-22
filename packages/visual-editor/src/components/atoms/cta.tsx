@@ -315,6 +315,7 @@ export const CTA = (props: CTAProps) => {
         onClick={onClick}
         // textTransform has to be applied via styles because there is no custom tailwind utility
         style={{
+          // @ts-ignore: CSS variables are valid here but TS doesn't recognize the union type
           textTransform: buttonVariant?.toLowerCase().includes("link")
             ? "var(--textTransform-link-textTransform)"
             : "var(--textTransform-button-textTransform)",

@@ -38,6 +38,7 @@ export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
           className
         )}
         style={{
+          // @ts-ignore: CSS variables are valid here but TS doesn't recognize the union type
           textTransform: `var(--textTransform-body-textTransform)`,
           ...style,
         }}

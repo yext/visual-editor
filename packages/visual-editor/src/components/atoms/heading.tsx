@@ -114,6 +114,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           className
         )}
         style={{
+          // @ts-ignore: CSS variables are valid here but TS doesn't recognize the union type
           textTransform: `var(--textTransform-h${level}-textTransform)`,
           ...dynamicStyle,
           ...style,
