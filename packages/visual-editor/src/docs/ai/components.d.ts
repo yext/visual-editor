@@ -818,6 +818,11 @@ interface PhotoGalleryStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+  /**
+   * The layout style for displaying images in the gallery.
+   * @defaultValue "gallery"
+   */
+  variant: "gallery" | "carousel";
 }
 
 type ProductSectionVariant = "immersive" | "classic" | "minimal";

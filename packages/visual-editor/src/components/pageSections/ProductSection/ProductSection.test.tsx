@@ -1170,7 +1170,7 @@ const tests: ComponentTest[] = [
     version: 32,
   },
   {
-    name: "version 53 - products with immersive variant",
+    name: "version 54 - products with immersive variant",
     document: productsData,
     props: {
       styles: {
@@ -1365,10 +1365,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "productsSection" },
       liveVisibility: true,
     },
-    version: 53,
+    version: 54,
   },
   {
-    name: "version 53 - products with classic variant",
+    name: "version 54 - products with classic variant",
     document: productsData,
     props: {
       styles: {
@@ -1563,10 +1563,10 @@ const tests: ComponentTest[] = [
       analytics: { scope: "productsSection" },
       liveVisibility: true,
     },
-    version: 53,
+    version: 54,
   },
   {
-    name: "version 53 - products with minimal variant",
+    name: "version 54 - products with minimal variant",
     document: productsData,
     props: {
       styles: {
@@ -1761,7 +1761,7 @@ const tests: ComponentTest[] = [
       analytics: { scope: "productsSection" },
       liveVisibility: true,
     },
-    version: 53,
+    version: 54,
   },
 ];
 
