@@ -22,8 +22,7 @@ export const bodyVariants = cva(
 
 // Omit 'color' from HTMLAttributes<HTMLParagraphElement> to avoid conflict
 export interface BodyProps
-  extends
-    Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
+  extends Omit<React.HTMLAttributes<HTMLParagraphElement>, "color">,
     VariantProps<typeof bodyVariants> {}
 
 export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
