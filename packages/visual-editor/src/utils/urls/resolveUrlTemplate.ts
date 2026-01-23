@@ -23,7 +23,7 @@ export const resolveUrlTemplateOfChild = (
     streamDocument: StreamDocument,
     relativePrefixToRoot: string
   ) => string
-): string => {
+): string | undefined => {
   // Use base entity template (entityPageSetUrlTemplates)
   const urlTemplates = JSON.parse(
     streamDocument?.__?.entityPageSetUrlTemplates || "{}"
@@ -56,8 +56,14 @@ export const resolvePageSetUrlTemplate = (
     streamDocument: StreamDocument,
     relativePrefixToRoot: string
   ) => string
-): string => {
+): string | undefined => {
   const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
+
+  // Don't attempt to resolve URL template for DIRECTORY or LOCATOR page sets
+  if (pagesetJson?.type === "DIRECTORY" || pagesetJson?.type === "LOCATOR") {
+    return;
+  }
+
   const urlTemplates = pagesetJson?.config?.urlTemplate || {};
 
   return resolveUrlTemplateWithTemplates(
@@ -80,10 +86,10 @@ const resolveUrlTemplateWithTemplates = (
     streamDocument: StreamDocument,
     relativePrefixToRoot: string
   ) => string
-): string => {
+): string | undefined => {
   const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
   if (!locale) {
-    throw new Error(`Could not determine locale from streamDocument`);
+    return;
   }
 
   if (alternateFunction) {
@@ -133,13 +139,13 @@ export const buildUrlFromTemplate = (
   streamDocument: StreamDocument,
   locale: string,
   relativePrefixToRoot: string
-): string => {
+): string | undefined => {
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
   ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
 
   if (!normalizedSlug) {
-    throw new Error(`Could not resolve URL template ${urlTemplate}`);
+    return;
   }
 
   return relativePrefixToRoot + normalizedSlug;

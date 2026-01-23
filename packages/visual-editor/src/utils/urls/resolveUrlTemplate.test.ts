@@ -20,6 +20,7 @@ const mockStreamDocument: StreamDocument = {
     isPrimaryLocale: true,
   },
   _pageset: JSON.stringify({
+    type: "ENTITY",
     config: {
       urlTemplate: {
         primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
@@ -48,7 +49,9 @@ const mockDirectoryMergedDocument: StreamDocument = {
       alternate: "[[locale]]/[[address.region]]/page/[[id]]",
     }),
   },
-  _pageset: JSON.stringify({}),
+  _pageset: JSON.stringify({
+    type: "DIRECTORY",
+  }),
 };
 
 const mockLocatorMergedDocument: StreamDocument = {
@@ -69,7 +72,9 @@ const mockLocatorMergedDocument: StreamDocument = {
       alternate: "[[locale]]/[[address.region]]/location/[[id]]",
     }),
   },
-  _pageset: JSON.stringify({}),
+  _pageset: JSON.stringify({
+    type: "LOCATOR",
+  }),
 };
 
 describe("resolveUrlTemplateOfChild", () => {
@@ -152,15 +157,13 @@ describe("resolveUrlTemplateOfChild", () => {
     assert.equal(result, "../custom-url-for-yext-en");
   });
 
-  it("throw error when locale cannot be determined", () => {
+  it("returns undefined when locale cannot be determined", () => {
     const alternateLocaleDoc = {
       ...mockDirectoryMergedDocument,
       locale: undefined,
       __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
     };
-    expect(() =>
-      resolveUrlTemplateOfChild(alternateLocaleDoc, "")
-    ).toThrowError();
+    expect(resolveUrlTemplateOfChild(alternateLocaleDoc, "")).toBeUndefined();
   });
 });
 
@@ -335,15 +338,13 @@ describe("resolvePageSetUrlTemplate", () => {
     assert.equal(result, "../ny/new-york/61-9th-ave");
   });
 
-  it("throw error when locale cannot be determined", () => {
+  it("returns undefined when locale cannot be determined", () => {
     const alternateLocaleDoc = {
       ...mockStreamDocument,
       locale: undefined,
       __: { isPrimaryLocale: false },
     };
-    expect(() =>
-      resolvePageSetUrlTemplate(alternateLocaleDoc, "")
-    ).toThrowError();
+    expect(resolvePageSetUrlTemplate(alternateLocaleDoc, "")).toBeUndefined();
   });
 
   it("uses current page set template for directory pages", () => {
