@@ -390,14 +390,19 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       {showImage && (
         <div className={variant === "classic" ? "px-8 pt-8" : ""}>
           <div
-            className={imageConstrain === "fixed" ? "w-fit mx-auto" : "w-full"}
-            style={{
-              aspectRatio: imageStyles?.aspectRatio,
-              width:
-                imageConstrain === "fixed" && imageStyles?.width
-                  ? `${imageStyles.width}px`
-                  : undefined,
-            }}
+            className={themeManagerCn(
+              imageConstrain === "fixed" ? "w-fit mx-auto" : "w-full",
+              imageStyles?.aspectRatio && "md:aspect-[var(--aspect-ratio)]"
+            )}
+            style={
+              {
+                "--aspect-ratio": imageStyles?.aspectRatio,
+                width:
+                  imageConstrain === "fixed" && imageStyles?.width
+                    ? `${imageStyles.width}px`
+                    : undefined,
+              } as React.CSSProperties
+            }
           >
             <slots.ImageSlot style={{ height: "fit-content" }} allow={[]} />
           </div>
