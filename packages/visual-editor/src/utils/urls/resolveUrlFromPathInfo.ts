@@ -11,9 +11,7 @@ export const resolveUrlFromPathInfo = (
     relativePrefixToRoot: string
   ) => string
 ): string | undefined => {
-  const pathInfoJson = JSON.parse(
-    streamDocument?.__?.pathInfo || "{}"
-  ) as PathInfoShape;
+  const pathInfoJson = getPathInfoJson(streamDocument);
   const urlTemplate = pathInfoJson?.template || "";
 
   if (!urlTemplate) {
@@ -54,9 +52,7 @@ export const resolveUrlFromPathInfo = (
  * 3. Default to 'en' as primary locale
  */
 export const isPrimaryLocale = (streamDocument: StreamDocument): boolean => {
-  const pathInfoJson = JSON.parse(
-    streamDocument?.__?.pathInfo || "{}"
-  ) as PathInfoShape;
+  const pathInfoJson = getPathInfoJson(streamDocument);
   const locale = streamDocument?.locale || streamDocument?.meta?.locale || "";
   if (pathInfoJson.primaryLocale) {
     return pathInfoJson?.primaryLocale === locale;
@@ -68,4 +64,13 @@ export const isPrimaryLocale = (streamDocument: StreamDocument): boolean => {
 
   // Default to 'en' as primary locale if nothing is specified
   return locale === "en";
+};
+
+// Parses the __.pathInfo JSON safely
+const getPathInfoJson = (streamDocument: StreamDocument): PathInfoShape => {
+  try {
+    return JSON.parse(streamDocument?.__?.pathInfo || "{}") as PathInfoShape;
+  } catch {
+    return {};
+  }
 };
