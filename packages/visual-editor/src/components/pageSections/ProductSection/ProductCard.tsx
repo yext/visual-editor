@@ -234,6 +234,8 @@ export type ProductCardProps = {
   conditionalRender?: {
     price?: boolean;
     brow?: boolean;
+    description?: boolean;
+    cta?: boolean;
   };
 
   /** @internal */
@@ -431,11 +433,13 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
             </div>
           )}
 
-          {showDescription && (
+          {conditionalRender?.description && showDescription && (
             <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
           )}
         </div>
-        {showCTA && <slots.CTASlot style={{ height: "auto" }} allow={[]} />}
+        {conditionalRender?.cta && showCTA && false && (
+          <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+        )}
       </div>
     </Background>
   );
@@ -478,6 +482,37 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
         : undefined);
     const showBrow = Boolean(resolvedBrow);
 
+    const descriptionSlotProps = data.props.slots.DescriptionSlot?.[0]
+      ?.props as WithId<BodyTextProps> | undefined;
+
+    const resolvedDescription =
+      data.props.parentData?.product.description ??
+      descriptionSlotProps?.parentData?.richText ??
+      (descriptionSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps?.data?.text,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined);
+    const showDescription = Boolean(resolvedDescription);
+
+    const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
+      | WithId<CTAWrapperProps>
+      | undefined;
+    const resolvedCTA =
+      data.props.parentData?.product.cta ??
+      ctaSlotProps?.parentData?.cta ??
+      (ctaSlotProps
+        ? resolveYextEntityField(
+            params.metadata.streamDocument,
+            ctaSlotProps?.data?.entityField,
+            i18nComponentsInstance.language || "en"
+          )
+        : undefined);
+    console.log("resolvedCTA", resolvedCTA);
+    const showCTA = Boolean(resolvedCTA);
+
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
       | (WithId<ImageWrapperProps> & {
           styles?: { aspectRatio?: number; width?: number };
@@ -491,6 +526,8 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
         conditionalRender: {
           price: showPrice,
           brow: showBrow,
+          description: showDescription,
+          cta: showCTA,
         },
         imageStyles: {
           aspectRatio: imageSlotProps?.styles?.aspectRatio,
