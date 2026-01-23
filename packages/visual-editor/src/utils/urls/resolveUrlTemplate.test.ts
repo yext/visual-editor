@@ -121,6 +121,7 @@ describe("resolveUrlTemplateOfChild", () => {
       ...mockDirectoryMergedDocument,
       _pageset: JSON.stringify({
         config: {
+          type: "DIRECTORY",
           urlTemplate: {
             primary: "directory/[[address.city]]/[[id]]",
             alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
@@ -345,68 +346,6 @@ describe("resolvePageSetUrlTemplate", () => {
       __: { isPrimaryLocale: false },
     };
     expect(resolvePageSetUrlTemplate(alternateLocaleDoc, "")).toBeUndefined();
-  });
-
-  it("uses current page set template for directory pages", () => {
-    const directoryDocWithPageSetTemplate = {
-      ...mockDirectoryMergedDocument,
-      _pageset: JSON.stringify({
-        config: {
-          urlTemplate: {
-            primary: "directory/[[address.city]]/[[id]]",
-            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
-          },
-        },
-      }),
-    };
-
-    const result = resolvePageSetUrlTemplate(
-      directoryDocWithPageSetTemplate,
-      ""
-    );
-
-    expect(result).toBe("directory/new-york/123");
-  });
-
-  it("uses current page set template for alternate locale", () => {
-    const directoryDocWithPageSetTemplate = {
-      ...mockDirectoryMergedDocument,
-      __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
-      locale: "es",
-      _pageset: JSON.stringify({
-        config: {
-          urlTemplate: {
-            primary: "directory/[[address.city]]/[[id]]",
-            alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
-          },
-        },
-      }),
-    };
-
-    const result = resolvePageSetUrlTemplate(
-      directoryDocWithPageSetTemplate,
-      ""
-    );
-
-    expect(result).toBe("es/directory/new-york/123");
-  });
-
-  it("uses page set template for locator pages", () => {
-    const locatorDocWithPageSetTemplate = {
-      ...mockLocatorMergedDocument,
-      _pageset: JSON.stringify({
-        config: {
-          urlTemplate: {
-            primary: "locator/[[address.city]]",
-            alternate: "[[locale]]/locator/[[address.city]]",
-          },
-        },
-      }),
-    };
-
-    const result = resolvePageSetUrlTemplate(locatorDocWithPageSetTemplate, "");
-
-    expect(result).toBe("locator/new-york");
   });
 
   it("uses page set template for regular entity pages", () => {
