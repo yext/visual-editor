@@ -667,7 +667,7 @@ export const LocatorResultCard = React.memo(
       >
         <Background
           background={
-            props.primaryHeading.color ?? backgroundColors.background6.value
+            props?.primaryHeading?.color ?? backgroundColors.background6.value
           }
           className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
         >
@@ -875,7 +875,7 @@ const HeadingTextSection = (props: {
   return (
     <div className="flex flex-col gap-2">
       <Heading
-        color={primaryHeading.color}
+        color={primaryHeading?.color}
         className="font-bold text-palette-primary-dark"
         level={primaryHeading.headingLevel}
       >

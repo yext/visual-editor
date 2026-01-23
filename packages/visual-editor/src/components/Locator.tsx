@@ -1107,11 +1107,9 @@ const LocatorInternal = ({
   const hasFilterModalToggle =
     openNowButton || showDistanceOptions || hasFacetOptions;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
-  const resolvedHeading = resolveComponentData(
-    pageHeading.title,
-    i18n.language,
-    streamDocument
-  );
+  const resolvedHeading =
+    resolveComponentData(pageHeading?.title, i18n.language, streamDocument) ??
+    DEFAULT_TITLE;
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
@@ -1121,7 +1119,7 @@ const LocatorInternal = ({
         id="locatorLeftDiv"
       >
         <div className="px-8 py-6 gap-4 flex flex-col">
-          <Heading level={1} color={pageHeading.color}>
+          <Heading level={1} color={pageHeading?.color}>
             {resolvedHeading}
           </Heading>
           <FilterSearch

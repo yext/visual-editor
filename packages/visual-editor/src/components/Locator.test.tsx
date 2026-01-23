@@ -16,6 +16,7 @@ import {
   migrationRegistry,
   VisualEditorProvider,
   LocatorComponent,
+  backgroundColors,
 } from "@yext/visual-editor";
 import { Render, Config } from "@measured/puck";
 import { page } from "@vitest/browser/context";
@@ -535,7 +536,7 @@ const tests: ComponentTest[] = [
         showDistanceOptions: false,
       },
       pageHeading: {
-        title: "Custom Heading",
+        title: { en: "Custom Heading", hasLocalizedValue: "true" },
       },
       resultCard: {
         primaryHeading: {
@@ -595,7 +596,211 @@ const tests: ComponentTest[] = [
         },
       },
     },
-    version: 24,
+    version: 54,
+  },
+  {
+    name: "version 54 custom heading and site color 2",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      pageHeading: {
+        title: { en: "Custom Heading", hasLocalizedValue: "true" },
+        color: backgroundColors.color2.value,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
+      },
+    },
+    version: 54,
+  },
+  {
+    name: "version 54 custom title and result cards with site color 3",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      pageHeading: {
+        title: { en: "Custom Heading", hasLocalizedValue: "true" },
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 3,
+          color: backgroundColors.color3.value,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
+      },
+    },
+    version: 54,
   },
 ];
 
