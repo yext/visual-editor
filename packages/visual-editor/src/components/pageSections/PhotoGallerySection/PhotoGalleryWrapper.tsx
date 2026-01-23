@@ -33,10 +33,7 @@ import "pure-react-carousel/dist/react-carousel.es.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ImagePlus } from "lucide-react";
 import { Button } from "../../../internal/puck/ui/button";
-import {
-  TARGET_ORIGINS,
-  useSendMessageToParent,
-} from "../../../internal/hooks/useMessage";
+import { updateFields } from "../HeroSection.tsx";
 
 export interface PhotoGalleryWrapperProps {
   data: {
@@ -53,6 +50,18 @@ export interface PhotoGalleryWrapperProps {
   styles: {
     /** Styling options for the gallery images, such as aspect ratio. */
     image: ImageStylingProps;
+
+    /**
+     * Number of images to show in carousel variant at once, either 1, 2, or 3.
+     * In Mobile view, only 1 image is shown at a time regardless of this setting.
+     * @defaultValue 1
+     */
+    carouselImageCount: number;
+  };
+
+  /** @internal */
+  parentData?: {
+    variant: "gallery" | "carousel";
   };
 }
 
@@ -81,6 +90,18 @@ const photoGalleryWrapperFields: Fields<PhotoGalleryWrapperProps> = {
         type: "object",
         objectFields: ImageStylingFields,
       }),
+      carouselImageCount: YextField(
+        msg("fields.carouselImageCount", "Carousel Image Count"),
+        {
+          type: "radio",
+          options: [
+            { label: "1", value: 1 },
+            { label: "2", value: 2 },
+            { label: "3", value: 3 },
+          ],
+          visible: false,
+        }
+      ),
     },
   }),
 };
@@ -111,6 +132,288 @@ const DynamicChildColors = ({
   });
 };
 
+type ResolvedGalleryImage = {
+  isEmpty: boolean;
+  originalIndex: number;
+  image: ImageType | AssetImageType;
+  aspectRatio?: number;
+  width?: number;
+  originalImage: unknown;
+};
+
+type GalleryRenderProps = {
+  allImages: ResolvedGalleryImage[];
+  imageWidth: number;
+  isEditing: boolean;
+  imagesFieldId: string;
+  constantValueEnabled?: boolean;
+};
+
+const EmptyImage = ({ imageData }: { imageData: ResolvedGalleryImage }) => {
+  return (
+    <div
+      className={themeManagerCn(
+        "w-full md:w-auto rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
+      )}
+      style={{
+        aspectRatio: imageData.aspectRatio,
+      }}
+    >
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
+        style={{
+          position: "absolute",
+          zIndex: 100,
+          inset: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+        type="button"
+        aria-label={pt("addImage", "Add Image")}
+      >
+        <ImagePlus size={24} className="stroke-2" />
+      </Button>
+    </div>
+  );
+};
+
+const DesktopImageItem = ({
+  imageData,
+  isEditing,
+  sizes,
+  constrainToParent = false,
+}: {
+  imageData: ResolvedGalleryImage;
+  isEditing: boolean;
+  sizes: string;
+  constrainToParent?: boolean;
+}) => {
+  if (imageData.isEmpty && isEditing) {
+    return <EmptyImage imageData={imageData} />;
+  }
+
+  const imageElement = (
+    <Image
+      image={imageData.image}
+      aspectRatio={imageData.aspectRatio}
+      width={imageData.width}
+      className={themeManagerCn(
+        "rounded-image-borderRadius",
+        constrainToParent && "w-full h-auto object-contain max-w-full"
+      )}
+      sizes={sizes}
+    />
+  );
+
+  if (!constrainToParent) {
+    return imageElement;
+  }
+
+  return (
+    <div
+      className="w-full max-w-full"
+      style={{ maxWidth: `${imageData.width}px` }}
+    >
+      {imageElement}
+    </div>
+  );
+};
+
+const MobileImageItem = ({
+  imageData,
+  isEditing,
+}: {
+  imageData: ResolvedGalleryImage;
+  isEditing: boolean;
+}) => {
+  if (imageData.isEmpty && isEditing) {
+    return <EmptyImage imageData={imageData} />;
+  }
+
+  return (
+    <div
+      className="w-full max-w-full overflow-hidden"
+      style={{
+        maxWidth: `${Math.min(imageData.width || 1000, 250)}px`,
+        width: "100%",
+      }}
+    >
+      <Image
+        image={imageData.image}
+        aspectRatio={imageData.aspectRatio}
+        className="w-full h-auto object-contain"
+        sizes={`100vw`}
+      />
+    </div>
+  );
+};
+
+const DesktopCarousel = ({
+  allImages,
+  imageWidth,
+  carouselImageCount,
+  isEditing,
+  imagesFieldId,
+  constantValueEnabled,
+}: GalleryRenderProps & { carouselImageCount: number }) => {
+  const hasCarouselGap = carouselImageCount > 1;
+  return (
+    <div className="hidden md:flex justify-center w-full">
+      <div className="flex items-center justify-center max-w-full gap-2">
+        <DynamicChildColors category="arrow">
+          <ButtonBack className="my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
+            <FaArrowLeft className="h-10 w-fit" />
+          </ButtonBack>
+        </DynamicChildColors>
+        <div className="flex flex-col gap-y-8 items-center max-w-full w-full overflow-hidden">
+          <EntityField
+            displayName={pt("fields.images", "Images")}
+            fieldId={imagesFieldId}
+            constantValueEnabled={constantValueEnabled}
+            className="max-w-full"
+          >
+            <Slider
+              className="w-auto max-w-full"
+              style={{
+                maxWidth: "100%",
+              }}
+            >
+              {allImages.map((imageData, idx) => {
+                return (
+                  <Slide index={idx} key={idx}>
+                    <div
+                      className={themeManagerCn(
+                        "flex justify-center",
+                        hasCarouselGap && "px-4"
+                      )}
+                    >
+                      <DesktopImageItem
+                        imageData={imageData}
+                        isEditing={isEditing}
+                        sizes={`min(${imageWidth}px, calc((100vw - 6rem) / ${carouselImageCount}))`}
+                        constrainToParent
+                      />
+                    </div>
+                  </Slide>
+                );
+              })}
+            </Slider>
+          </EntityField>
+          <div className="hidden md:flex justify-center w-full max-w-full gap-2">
+            {allImages.length < 20 &&
+              allImages.map((_, idx) => {
+                const afterStyles =
+                  "after:content-[' '] after:py-2 after:block";
+                return (
+                  <div
+                    key={idx}
+                    className="flex flex-1 min-w-6 max-w-16 justify-center"
+                  >
+                    <DynamicChildColors category="slide">
+                      <Dot
+                        slide={idx}
+                        className={`text-center w-full h-1.5 rounded-full disabled:cursor-default ${afterStyles}`}
+                      />
+                    </DynamicChildColors>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+        <DynamicChildColors category="arrow">
+          <ButtonNext className="pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
+            <FaArrowRight className="h-10 w-fit" />
+          </ButtonNext>
+        </DynamicChildColors>
+      </div>
+    </div>
+  );
+};
+
+const MobileCarousel = ({
+  allImages,
+  isEditing,
+  imagesFieldId,
+  constantValueEnabled,
+}: GalleryRenderProps) => {
+  return (
+    <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
+      <EntityField
+        displayName={pt("fields.images", "Images")}
+        fieldId={imagesFieldId}
+        constantValueEnabled={constantValueEnabled}
+        className="max-w-full"
+      >
+        <Slider className="w-full">
+          {allImages.map((imageData, idx) => {
+            return (
+              <Slide index={idx} key={idx}>
+                <div className="flex justify-center w-full max-w-full px-4">
+                  <MobileImageItem
+                    imageData={imageData}
+                    isEditing={isEditing}
+                  />
+                </div>
+              </Slide>
+            );
+          })}
+        </Slider>
+      </EntityField>
+      <div className="flex justify-between items-center px-4 gap-6 w-full">
+        <DynamicChildColors category="arrow">
+          <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
+            <FaArrowLeft className="h-6 w-fit" />
+          </ButtonBack>
+        </DynamicChildColors>
+        <div className="flex gap-2 justify-center flex-grow w-full">
+          {allImages.map((_, idx) => (
+            <DynamicChildColors category="slide" key={idx}>
+              <Dot
+                slide={idx}
+                className="h-1.5 w-full rounded-full disabled:cursor-default"
+              />
+            </DynamicChildColors>
+          ))}
+        </div>
+        <DynamicChildColors category="arrow">
+          <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
+            <FaArrowRight className="h-6 w-fit" />
+          </ButtonNext>
+        </DynamicChildColors>
+      </div>
+    </div>
+  );
+};
+
+const GalleryGrid = ({
+  allImages,
+  imageWidth,
+  isEditing,
+  imagesFieldId,
+  constantValueEnabled,
+}: GalleryRenderProps) => {
+  return (
+    <EntityField
+      displayName={pt("fields.images", "Images")}
+      fieldId={imagesFieldId}
+      constantValueEnabled={constantValueEnabled}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allImages.map((imageData, idx) => (
+          <div key={idx} className="flex justify-center">
+            <DesktopImageItem
+              imageData={imageData}
+              isEditing={isEditing}
+              sizes={`(min-width: 1024px) min(${imageWidth}px, calc((100vw - 6rem) / 3)), (min-width: 640px) min(${imageWidth}px, calc((100vw - 4rem) / 2)), min(${imageWidth}px, 100vw)`}
+            />
+          </div>
+        ))}
+      </div>
+    </EntityField>
+  );
+};
+
 export const PhotoGalleryWrapper: ComponentConfig<{
   props: PhotoGalleryWrapperProps;
 }> = {
@@ -132,7 +435,18 @@ export const PhotoGalleryWrapper: ComponentConfig<{
       image: {
         aspectRatio: 1.78,
       },
+      carouselImageCount: 1,
     },
+  },
+  resolveFields: (data) => {
+    if (data.props.parentData?.variant === "carousel") {
+      return updateFields(
+        photoGalleryWrapperFields,
+        ["styles.objectFields.carouselImageCount.visible"],
+        true
+      );
+    }
+    return photoGalleryWrapperFields;
   },
   render: (props) => <PhotoGalleryWrapperComponent {...props} />,
 };
@@ -140,15 +454,16 @@ export const PhotoGalleryWrapper: ComponentConfig<{
 const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
   data,
   styles,
+  parentData,
   puck,
 }) => {
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
 
-  const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
-    "constantValueEditorOpened",
-    TARGET_ORIGINS
+  const containerRef = React.useRef(null);
+  const [visibleSlides, setVisibleSlides] = React.useState(
+    styles.carouselImageCount
   );
 
   const resolvedImages = resolveComponentData(
@@ -217,344 +532,67 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
     })
     .filter((i) => puck?.isEditing || !i.isEmpty);
 
-  const handleEmptyImageClick = (
-    e: React.MouseEvent | undefined,
-    index: number
-  ) => {
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
-
-    if (data.images.constantValueEnabled && puck?.isEditing) {
-      if (window.location.href.includes("http://localhost:5173")) {
-        const userInput = prompt("Enter Image URL:");
-        if (!userInput) return;
-      } else {
-        const messageId = `ImageAsset-${Date.now()}-${index}`;
-        const currentImageValue = Array.isArray(data.images.constantValue)
-          ? data.images.constantValue[index]
-          : undefined;
-        const assetImageValue =
-          currentImageValue && "assetImage" in currentImageValue
-            ? (currentImageValue as { assetImage?: AssetImageType }).assetImage
-            : undefined;
-        openImageAssetSelector({
-          payload: {
-            type: "ImageAsset",
-            value: assetImageValue,
-            id: messageId,
-          },
-        });
-      }
-    }
-  };
-
   const hasAnyImages = allImages.length > 0;
   const imageWidth = styles.image?.width || 1000;
 
-  const renderImageOrEmpty = (imageData: (typeof allImages)[0]) => {
-    if (imageData.isEmpty && puck?.isEditing) {
-      return (
-        <div
-          className={themeManagerCn(
-            "rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
-          )}
-          style={{
-            width: `${imageData.width}px`,
-            aspectRatio: imageData.aspectRatio,
-          }}
-          onClick={(e) => {
-            // Only handle clicks that aren't on the button
-            const target = e.target as HTMLElement;
-            const isButton = target.closest('button[aria-label*="Add Image"]');
-            if (isButton) {
-              return;
-            }
-          }}
-          onPointerDown={(e) => {
-            // Stop Puck from capturing pointer events on the button
-            const target = e.target as HTMLElement;
-            const isButton = target.closest('button[aria-label*="Add Image"]');
-            if (isButton) {
-              e.stopPropagation();
-            }
-          }}
-        >
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
-            style={{
-              position: "absolute",
-              zIndex: 100,
-              inset: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              handleEmptyImageClick(e, imageData.originalIndex);
-            }}
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-            onMouseUp={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              handleEmptyImageClick(e as any, imageData.originalIndex);
-            }}
-            onPointerDown={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              // Prevent Puck drag handlers from activating
-              e.nativeEvent.stopImmediatePropagation();
-            }}
-            onPointerUp={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              handleEmptyImageClick(e as any, imageData.originalIndex);
-            }}
-            onClickCapture={(e) => {
-              e.stopPropagation();
-            }}
-            type="button"
-            aria-label={pt("addImage", "Add Image")}
-          >
-            <ImagePlus size={24} className="stroke-2" />
-          </Button>
-        </div>
-      );
-    }
-    return (
-      <Image
-        image={imageData.image}
-        aspectRatio={imageData.aspectRatio}
-        width={imageData.width}
-        className="rounded-image-borderRadius"
-        sizes={`min(${imageWidth}px, calc(100vw - 6rem))`}
-      />
-    );
+  const isEditing = Boolean(puck?.isEditing);
+  const sharedRenderProps: GalleryRenderProps = {
+    allImages,
+    imageWidth,
+    isEditing,
+    imagesFieldId: data.images.field,
+    constantValueEnabled: data.images.constantValueEnabled,
   };
 
+  // Update visibleSlides based on container width
+  // Mobile view always shows 1 slide
+  React.useEffect(() => {
+    if (!containerRef.current) {
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const width = entry.contentRect.width;
+
+        if (width < 750) {
+          setVisibleSlides(1);
+        } else {
+          setVisibleSlides(styles.carouselImageCount);
+        }
+      }
+    });
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [styles.carouselImageCount]);
+
   return (
-    <>
+    <div ref={containerRef}>
       {hasAnyImages ? (
-        <CarouselProvider
-          className="flex flex-col gap-8"
-          naturalSlideWidth={100}
-          naturalSlideHeight={100}
-          totalSlides={allImages.length}
-          isIntrinsicHeight={true}
-        >
-          <div className="hidden md:flex justify-center w-full">
-            <div
-              className="flex items-center gap-2"
-              style={{
-                width: `${imageWidth + 96}px`,
-                maxWidth: "calc(100vw - 2rem)",
-                minWidth: "fit-content",
-              }}
-            >
-              <DynamicChildColors category="arrow">
-                <ButtonBack className="my-auto pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default">
-                  <FaArrowLeft className="h-10 w-fit" />
-                </ButtonBack>
-              </DynamicChildColors>
-              <div className="flex flex-col gap-y-8 items-center w-auto">
-                <EntityField
-                  displayName={pt("fields.images", "Images")}
-                  fieldId={data.images.field}
-                  constantValueEnabled={data.images.constantValueEnabled}
-                >
-                  <Slider
-                    className="w-auto"
-                    style={{
-                      width: `min(${imageWidth}px, calc(100vw - 6rem))`,
-                      maxWidth: "100%",
-                    }}
-                  >
-                    {allImages.map((imageData, idx) => {
-                      return (
-                        <Slide index={idx} key={idx}>
-                          <div className="flex justify-center">
-                            {renderImageOrEmpty(imageData)}
-                          </div>
-                        </Slide>
-                      );
-                    })}
-                  </Slider>
-                </EntityField>
-                <div className="hidden md:flex justify-center">
-                  {allImages.map((_, idx) => {
-                    const afterStyles =
-                      "after:content-[' '] after:py-2 after:block";
-                    return (
-                      <div key={idx} className="w-16 flex justify-center">
-                        <DynamicChildColors category="slide">
-                          <Dot
-                            slide={idx}
-                            className={`text-center w-16 mx-2 basis-0 flex-grow h-1 rounded-full disabled:cursor-default ${afterStyles}`}
-                          ></Dot>
-                        </DynamicChildColors>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <DynamicChildColors category="arrow">
-                <ButtonNext className="pointer-events-auto w-8 h-8 sm:w-10 sm:h-10 disabled:cursor-default my-auto">
-                  <FaArrowRight className="h-10 w-fit" />
-                </ButtonNext>
-              </DynamicChildColors>
-            </div>
-          </div>
-          <div className="flex flex-col gap-y-8 items-center justify-center md:hidden w-full">
-            <EntityField
-              displayName={pt("fields.images", "Images")}
-              fieldId={data.images.field}
-              constantValueEnabled={data.images.constantValueEnabled}
-            >
-              <Slider className="w-full">
-                {allImages.map((imageData, idx) => {
-                  return (
-                    <Slide index={idx} key={idx}>
-                      <div className="flex justify-center w-full px-4">
-                        {imageData.isEmpty && puck?.isEditing ? (
-                          <div
-                            className={themeManagerCn(
-                              "w-full max-w-full rounded-image-borderRadius border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors overflow-hidden relative"
-                            )}
-                            style={{
-                              maxWidth: `${Math.min(imageData.width || 1000, 250)}px`,
-                              width: "100%",
-                              aspectRatio: imageData.aspectRatio,
-                            }}
-                            onClick={(e) => {
-                              const target = e.target as HTMLElement;
-                              const isButton = target.closest(
-                                'button[aria-label*="Add Image"]'
-                              );
-                              if (isButton) {
-                                return;
-                              }
-                            }}
-                            onPointerDown={(e) => {
-                              // Stop Puck from capturing pointer events on the button
-                              const target = e.target as HTMLElement;
-                              const isButton = target.closest(
-                                'button[aria-label*="Add Image"]'
-                              );
-                              if (isButton) {
-                                e.stopPropagation();
-                              }
-                            }}
-                          >
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="text-gray-400 hover:text-gray-600 hover:bg-transparent !z-[100] pointer-events-auto"
-                              style={{
-                                position: "absolute",
-                                zIndex: 100,
-                                inset: "50%",
-                                transform: "translate(-50%, -50%)",
-                              }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                handleEmptyImageClick(
-                                  e,
-                                  imageData.originalIndex
-                                );
-                              }}
-                              onMouseDown={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                              }}
-                              onMouseUp={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                handleEmptyImageClick(
-                                  e as any,
-                                  imageData.originalIndex
-                                );
-                              }}
-                              onPointerDown={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                // Prevent Puck drag handlers from activating
-                                e.nativeEvent.stopImmediatePropagation();
-                              }}
-                              onPointerUp={(e) => {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                handleEmptyImageClick(
-                                  e as any,
-                                  imageData.originalIndex
-                                );
-                              }}
-                              onClickCapture={(e) => {
-                                e.stopPropagation();
-                              }}
-                              type="button"
-                              aria-label={pt("addImage", "Add Image")}
-                            >
-                              <ImagePlus size={24} className="stroke-2" />
-                            </Button>
-                          </div>
-                        ) : (
-                          <div
-                            className="w-full max-w-full overflow-hidden"
-                            style={{
-                              maxWidth: `${Math.min(imageData.width || 1000, 250)}px`,
-                              width: "100%",
-                            }}
-                          >
-                            <Image
-                              image={imageData.image}
-                              aspectRatio={imageData.aspectRatio}
-                              className="w-full h-auto object-contain"
-                              sizes={`${Math.min(imageData.width || 1000, 250)}px`}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    </Slide>
-                  );
-                })}
-              </Slider>
-            </EntityField>
-            <div className="flex justify-between items-center px-4 gap-6 w-full">
-              <DynamicChildColors category="arrow">
-                <ButtonBack className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                  <FaArrowLeft className="h-6 w-fit" />
-                </ButtonBack>
-              </DynamicChildColors>
-              <div className="flex gap-2 justify-center flex-grow w-full">
-                {allImages.map((_, idx) => (
-                  <DynamicChildColors category="slide" key={idx}>
-                    <Dot
-                      slide={idx}
-                      className=" h-1.5 w-full rounded-full disabled:cursor-default"
-                    />
-                  </DynamicChildColors>
-                ))}
-              </div>
-              <DynamicChildColors category="arrow">
-                <ButtonNext className="pointer-events-auto w-8 h-8 disabled:cursor-default">
-                  <FaArrowRight className="h-6 w-fit" />
-                </ButtonNext>
-              </DynamicChildColors>
-            </div>
-          </div>
-        </CarouselProvider>
+        parentData?.variant === "gallery" ? (
+          <GalleryGrid {...sharedRenderProps} />
+        ) : (
+          <CarouselProvider
+            className="flex flex-col gap-8"
+            naturalSlideWidth={100}
+            naturalSlideHeight={100}
+            totalSlides={allImages.length}
+            visibleSlides={visibleSlides}
+            isIntrinsicHeight={true}
+          >
+            <DesktopCarousel
+              {...sharedRenderProps}
+              carouselImageCount={styles.carouselImageCount}
+            />
+            <MobileCarousel {...sharedRenderProps} />
+          </CarouselProvider>
+        )
       ) : puck?.isEditing ? (
         <div className="h-24"></div>
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 };

@@ -1,5 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+  Slot,
+} from "@measured/puck";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,
@@ -31,6 +37,12 @@ export interface PhotoGalleryStyles {
    * @defaultValue Background Color 1
    */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * The layout style for displaying images in the gallery.
+   * @defaultValue "gallery"
+   */
+  variant: "gallery" | "carousel";
 }
 
 export interface PhotoGallerySectionProps {
@@ -64,6 +76,16 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "select",
+        options: [
+          { label: msg("fields.options.gallery", "Gallery"), value: "gallery" },
+          {
+            label: msg("fields.options.carousel", "Carousel"),
+            value: "carousel",
+          },
+        ],
+      }),
     },
   }),
   slots: {
@@ -115,6 +137,7 @@ export const PhotoGallerySection: ComponentConfig<{
   fields: photoGallerySectionFields,
   defaultProps: {
     styles: {
+      variant: "gallery",
       backgroundColor: backgroundColors.background1.value,
     },
     slots: {
@@ -188,12 +211,30 @@ export const PhotoGallerySection: ComponentConfig<{
               image: {
                 aspectRatio: 1.78,
               },
+              carouselImageCount: 1,
+            },
+            parentData: {
+              variant: "gallery",
             },
           } satisfies PhotoGalleryWrapperProps,
         },
       ],
     },
     liveVisibility: true,
+  },
+  resolveData(data) {
+    if (
+      data.props.slots.PhotoGalleryWrapper[0]?.props.parentData?.variant ===
+      data.props.styles.variant
+    ) {
+      return data;
+    }
+
+    return setDeep(
+      data,
+      "props.slots.PhotoGalleryWrapper[0].props.parentData.variant",
+      data.props.styles.variant
+    );
   },
   render: (props) => (
     <ComponentErrorBoundary

@@ -133,7 +133,8 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
 export const transformProps: TransformProps<TemplateProps<any>> = async (
   data,
 ) => {
-  return await injectTranslations(data);
+  const translations = await injectTranslations(data.document);
+  return { ...data, translations };
 };
 
 export const getPath: GetPath<TemplateProps> = ({ document }) => {

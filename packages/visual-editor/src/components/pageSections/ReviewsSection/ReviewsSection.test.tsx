@@ -330,16 +330,11 @@ describe("ReviewsSection", async () => {
         streamDocument: document,
       });
 
-      const templateProps = {
-        document: document,
-        data: data,
-      };
-
-      const updatedData = await injectTranslations(templateProps);
+      const translations = await injectTranslations(document);
 
       const { container } = reactRender(
-        <VisualEditorProvider templateProps={updatedData}>
-          <Render config={puckConfig} data={updatedData.data} />
+        <VisualEditorProvider templateProps={{ document, translations }}>
+          <Render config={puckConfig} data={data} />
         </VisualEditorProvider>
       );
 
