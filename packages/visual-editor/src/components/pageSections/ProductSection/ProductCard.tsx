@@ -437,7 +437,7 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
             <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
           )}
         </div>
-        {conditionalRender?.cta && showCTA && false && (
+        {conditionalRender?.cta && showCTA && (
           <slots.CTASlot style={{ height: "auto" }} allow={[]} />
         )}
       </div>
@@ -510,7 +510,6 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
             i18nComponentsInstance.language || "en"
           )
         : undefined);
-    console.log("resolvedCTA", resolvedCTA);
     const showCTA = Boolean(resolvedCTA);
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
