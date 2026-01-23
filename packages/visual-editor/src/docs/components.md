@@ -622,9 +622,10 @@ The Photo Gallery Section is designed to display a collection of images in a vis
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                                                           | Default              |
-| :----------------------- | :---------------- | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color for the entire section, selected from the theme. | `Background Color 1` |
+| Prop                     | Type                      | Description                                                           | Default              |
+| :----------------------- | :------------------------ | :-------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`         | The background color for the entire section, selected from the theme. | `Background Color 1` |
+| `styles.variant`         | `"gallery" \| "carousel"` | The layout style for displaying images in the gallery.                | `"gallery"`          |
 
 #### Other Props
 

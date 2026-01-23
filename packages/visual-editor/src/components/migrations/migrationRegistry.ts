@@ -51,6 +51,7 @@ import { simplifyFaqSection } from "./0049_simplify_faq_section.ts";
 import { promoVariants } from "./0050_promo_variants.ts";
 import { updateLinksAlignmentMigration } from "./0051_update_link_align_prop.ts";
 import { addDefaultLocatorAndDirectoryMetaFields } from "./0052_add_default_locator_and_directory_meta_fields.ts";
+import { photoGalleryVariant } from "./0053_photo_gallery_variant.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -110,4 +111,5 @@ export const migrationRegistry: MigrationRegistry = [
   promoVariants,
   updateLinksAlignmentMigration,
   addDefaultLocatorAndDirectoryMetaFields,
+  photoGalleryVariant,
 ];
