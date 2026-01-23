@@ -120,8 +120,8 @@ describe("resolveUrlTemplateOfChild", () => {
     const directoryDocWithBothTemplates = {
       ...mockDirectoryMergedDocument,
       _pageset: JSON.stringify({
+        type: "DIRECTORY",
         config: {
-          type: "DIRECTORY",
           urlTemplate: {
             primary: "directory/[[address.city]]/[[id]]",
             alternate: "[[locale]]/directory/[[address.city]]/[[id]]",
