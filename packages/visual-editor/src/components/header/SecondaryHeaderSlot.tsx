@@ -123,7 +123,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
       background={styles.backgroundColor}
       className="md:flex md:justify-end md:gap-6 md:items-center"
     >
-      <slots.LinksSlot style={{ height: "auto", width: "fit-content" }} />
+      <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
       {data.showLanguageDropdown && showLanguageSelector && (
         <LanguageDropdown {...languageDropDownProps} />
       )}

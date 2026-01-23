@@ -1,4 +1,11 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  registerOverlayPortal,
+  Slot,
+  SlotComponent,
+} from "@measured/puck";
 import {
   backgroundColors,
   BackgroundStyle,
@@ -79,6 +86,39 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
   },
 };
 
+type CTAContainerProps = {
+  isMeasurementDiv: boolean;
+  showCTAs: boolean;
+  showHamburger: boolean;
+  PrimaryCTASlot: SlotComponent;
+  SecondaryCTASlot: SlotComponent;
+};
+
+const CTAContainer: React.FC<CTAContainerProps> = (props) => {
+  const {
+    isMeasurementDiv,
+    showCTAs,
+    showHamburger,
+    PrimaryCTASlot,
+    SecondaryCTASlot,
+  } = props;
+
+  if (!showCTAs) {
+    return null;
+  }
+
+  const margin = showHamburger ? (isMeasurementDiv ? "mr-8" : "mr-14") : "";
+
+  return (
+    <div
+      className={`flex flex-col md:flex-row gap-4 md:gap-2 md:items-center ${margin}`}
+    >
+      <PrimaryCTASlot style={{ height: "auto" }} />
+      <SecondaryCTASlot style={{ height: "auto" }} />
+    </div>
+  );
+};
+
 const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   styles,
   slots,
@@ -91,9 +131,15 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
+  const hamburgerButtonRef = React.useRef<HTMLButtonElement>(null);
   const showHamburger = useOverflow(containerRef, contentRef);
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
+
+  React.useEffect(
+    () => registerOverlayPortal(hamburgerButtonRef.current),
+    [hamburgerButtonRef.current]
+  );
 
   const LogoSlot = (
     <div
@@ -106,17 +152,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
     </div>
   );
 
-  const navContent = (
-    <>
-      <slots.LinksSlot style={{ height: "auto" }} />
-      {showCTAs && (
-        <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-          <slots.PrimaryCTASlot style={{ height: "auto" }} />
-          <slots.SecondaryCTASlot style={{ height: "auto" }} />
-        </div>
-      )}
-    </>
-  );
+  const NavContent = <slots.LinksSlot style={{ height: "auto" }} />;
 
   return (
     <>
@@ -141,24 +177,33 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
               {/* Its width is our source of truth. */}
               <div
                 ref={contentRef}
-                className="flex items-center gap-8 invisible h-0"
+                className="flex items-center gap-8 invisible h-0 opacity-0 pointer-events-none"
               >
-                {navContent}
+                <div>{NavContent}</div>
+                <CTAContainer
+                  isMeasurementDiv={true}
+                  showCTAs={!!showCTAs}
+                  showHamburger={showHamburger}
+                  PrimaryCTASlot={slots.PrimaryCTASlot}
+                  SecondaryCTASlot={slots.SecondaryCTASlot}
+                />
               </div>
 
               {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
-              <div
-                className={`hidden md:flex items-center gap-8 absolute ${
-                  showHamburger
-                    ? "opacity-0 pointer-events-none"
-                    : "opacity-100 pointer-events-auto"
-                }`}
-              >
-                {navContent}
+              <div className="hidden md:flex items-center gap-8 absolute">
+                {!showHamburger && <div>{NavContent}</div>}
+                <CTAContainer
+                  isMeasurementDiv={false}
+                  showCTAs={!!showCTAs}
+                  showHamburger={showHamburger}
+                  PrimaryCTASlot={slots.PrimaryCTASlot}
+                  SecondaryCTASlot={slots.SecondaryCTASlot}
+                />
               </div>
 
               {/* Hamburger Button - Shown when nav overflows or on small screens */}
               <button
+                ref={hamburgerButtonRef}
                 onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label={
                   isMobileMenuOpen
@@ -184,7 +229,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
       {isMobileMenuOpen && (
         <div
           id="mobile-menu"
-          className={`transition-all duration-300 ease-in-out ${
+          className={`absolute left-0 top-full w-full z-50 transition-all duration-300 ease-in-out ${
             isMobileMenuOpen
               ? "max-h-[1000px] opacity-100"
               : "max-h-0 opacity-0 overflow-hidden"
@@ -213,6 +258,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
               verticalPadding={"sm"}
               background={styles.backgroundColor}
               maxWidth={parentValues?.maxWidth}
+              outerClassName="md:hidden"
             >
               <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
                 <slots.PrimaryCTASlot style={{ height: "auto" }} />

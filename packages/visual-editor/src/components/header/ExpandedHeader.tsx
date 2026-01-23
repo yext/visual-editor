@@ -113,7 +113,9 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
         </div>
 
         {/* Primary Header w/ nav bar */}
-        <slots.PrimaryHeaderSlot style={{ height: "auto" }} />
+        <slots.PrimaryHeaderSlot
+          style={{ height: "auto", position: "relative" }}
+        />
       </div>
     </>
   );
