@@ -1112,6 +1112,7 @@ const LocatorInternal = ({
     i18n.language,
     streamDocument
   );
+
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
