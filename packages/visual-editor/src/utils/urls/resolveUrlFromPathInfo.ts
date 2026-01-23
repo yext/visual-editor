@@ -5,11 +5,7 @@ import { PathInfoShape, StreamDocument } from "../types/StreamDocument";
 // Resolves a URL from the streamDocument's __.pathInfo.template
 export const resolveUrlFromPathInfo = (
   streamDocument: StreamDocument,
-  relativePrefixToRoot: string = "",
-  alternateFunction?: (
-    streamDocument: StreamDocument,
-    relativePrefixToRoot: string
-  ) => string
+  relativePrefixToRoot: string = ""
 ): string | undefined => {
   const pathInfoJson = getPathInfoJson(streamDocument);
   const urlTemplate = pathInfoJson?.template || "";
@@ -18,16 +14,9 @@ export const resolveUrlFromPathInfo = (
     return;
   }
 
-  if (alternateFunction) {
-    // For Hybrid Developers, allow passing an alternate function to resolve the URL template
-    return alternateFunction(streamDocument, relativePrefixToRoot);
-  }
-
   const locale = streamDocument?.locale || streamDocument?.meta?.locale || "";
   if (!locale) {
-    return normalizeSlug(
-      resolveEmbeddedFieldsInString(urlTemplate, streamDocument)
-    ).replace(/\/+/g, "/");
+    throw new Error("Missing locale for resolveUrlFromPathInfo");
   }
 
   const normalizedSlug = normalizeSlug(

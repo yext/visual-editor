@@ -9,6 +9,7 @@ export interface LocationDocument extends StreamDocument {
   address?: AddressType;
 }
 
+// Fallback method to get location path when no URL template is defined
 export const getLocationPath = (
   location: LocationDocument,
   relativePrefixToRoot: string = ""

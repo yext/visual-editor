@@ -13,11 +13,10 @@ import {
   deepMerge,
 } from "@yext/visual-editor";
 import { Address } from "@yext/pages-components";
-import { mergeMeta } from "../../utils/mergeMeta";
 import { useCardContext } from "../../hooks/useCardContext";
 import { useGetCardSlots } from "../../hooks/useGetCardSlots";
 import React from "react";
-import { resolvePageSetUrlOfChild } from "../../utils/urls/resolvePageSetUrl";
+import { resolveUrlTemplateOfChild } from "../../utils/urls/resolveUrlTemplate";
 
 export const defaultDirectoryCardSlotData = (
   id: string,
@@ -161,10 +160,10 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
   const resolvedUrl = parentData
-    ? resolvePageSetUrlOfChild(
-        mergeMeta(parentData.profile, streamDocument),
-        relativePrefixToRoot,
-        puck.metadata?.resolveUrlTemplate
+    ? resolveUrlTemplateOfChild(
+        parentData.profile,
+        streamDocument,
+        relativePrefixToRoot
       )
     : undefined;
 

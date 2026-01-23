@@ -7,12 +7,14 @@ import {
   HeadingLevel,
   HoursStatusAtom,
   MaybeLink,
-  mergeMeta,
   PhoneAtom,
-  resolvePageSetUrl,
   useTemplateProps,
 } from "@yext/visual-editor";
 import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper";
+import {
+  mergeMeta,
+  resolveUrlTemplate,
+} from "../../../utils/urls/resolveUrlTemplate";
 
 /** A single card for the Nearby Locations Section */
 type NearbyLocationCardProps = {
@@ -46,7 +48,7 @@ type NearbyLocationCardProps = {
 export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
   props
 ) => {
-  const { locationData, styles, cardNumber, puck, sectionHeadingLevel } = props;
+  const { locationData, styles, cardNumber, sectionHeadingLevel } = props;
 
   if (!locationData) {
     return <></>;
@@ -56,10 +58,9 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
 
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
-  const resolvedUrl = resolvePageSetUrl(
+  const resolvedUrl = resolveUrlTemplate(
     mergeMeta(locationData, streamDocument),
-    relativePrefixToRoot ?? "",
-    puck.metadata?.resolveUrlTemplate
+    relativePrefixToRoot ?? ""
   );
 
   return (

@@ -16,42 +16,6 @@ describe("resolveUrlFromPathInfo", () => {
     expect(resolveUrlFromPathInfo(baseDocument, "")).toBeUndefined();
   });
 
-  it("uses alternateFunction when provided", () => {
-    const docWithPathInfo: StreamDocument = {
-      ...baseDocument,
-      __: {
-        ...baseDocument.__,
-        pathInfo: JSON.stringify({
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-        }),
-      },
-    };
-    const alternateFunction = (
-      streamDocument: StreamDocument,
-      relativePrefixToRoot: string
-    ) => `${relativePrefixToRoot}alt/${streamDocument.id}`;
-
-    expect(
-      resolveUrlFromPathInfo(docWithPathInfo, "../", alternateFunction)
-    ).toBe("../alt/123");
-  });
-
-  it("resolves without locale prefix when locale is missing", () => {
-    const docWithPathInfo: StreamDocument = {
-      ...baseDocument,
-      locale: undefined,
-      __: {
-        ...baseDocument.__,
-        pathInfo: JSON.stringify({
-          template: "stores/[[id]]",
-        }),
-      },
-    };
-
-    expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("stores/123");
-  });
-
   it("omits locale prefix for primary locale by default", () => {
     const docWithPathInfo: StreamDocument = {
       ...baseDocument,

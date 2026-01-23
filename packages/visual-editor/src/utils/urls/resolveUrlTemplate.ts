@@ -1,152 +1,125 @@
-import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField.ts";
-import { normalizeSlug } from "../slugifier.ts";
-import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
-import { StreamDocument } from "../types/StreamDocument.ts";
+import { normalizeLocalesInObject } from "../normalizeLocale";
+import { StreamDocument } from "../types/StreamDocument";
+import { getLocationPath, LocationDocument } from "./getLocationPath";
+import { resolveUrlFromPathInfo } from "./resolveUrlFromPathInfo";
+import {
+  legacyResolveUrlTemplate,
+  legacyResolveUrlTemplateOfChild,
+} from "./legacyResolveUrlTemplate";
 
-/**
- * Resolves a URL template using the base entity page set's URL template.
- * This function is specifically for resolving URLs of child entities (locations)
- * that are children of directory or locator pages, using the entityPageSetUrlTemplates.
- * The URL template can be either primary or alternate based on __.isPrimaryLocale.
- * It replaces embedded fields in the URL template with their corresponding values from the document.
- * If an alternate function is provided, it will be used to resolve the URL template instead of the default logic.
- *
- * @param streamDocument - The document containing the URL template and data.
- * @param relativePrefixToRoot - Prefix to prepend to the resolved URL.
- * @param alternateFunction - Alternate function to resolve the URL template (optional).
- * @returns The resolved and normalized URL.
- */
-export const resolveUrlTemplateOfChild = (
-  streamDocument: StreamDocument,
-  relativePrefixToRoot: string = "",
-  alternateFunction?: (
-    streamDocument: StreamDocument,
-    relativePrefixToRoot: string
-  ) => string
-): string | undefined => {
-  // Use base entity template (entityPageSetUrlTemplates)
-  const urlTemplates = JSON.parse(
-    streamDocument?.__?.entityPageSetUrlTemplates || "{}"
-  );
+type urlResolverProps = {
+  streamDocument: StreamDocument;
+  relativePrefixToRoot: string;
+};
 
-  return resolveUrlTemplateWithTemplates(
+// Order of resolvers to attempt for resolving the PageSet's url
+// 1. resolveUrlFromPathInfo
+// 2. legacyResolveUrlTemplate
+// 3. getLocationPath
+const resolvers: Array<
+  ({
     streamDocument,
     relativePrefixToRoot,
-    urlTemplates,
-    alternateFunction
-  );
-};
+  }: urlResolverProps) => string | undefined
+> = [
+  ({ streamDocument, relativePrefixToRoot }) =>
+    resolveUrlFromPathInfo(streamDocument, relativePrefixToRoot),
+  ({ streamDocument, relativePrefixToRoot }) =>
+    legacyResolveUrlTemplate(streamDocument, relativePrefixToRoot),
+  ({ streamDocument, relativePrefixToRoot }) =>
+    getLocationPath(streamDocument as LocationDocument, relativePrefixToRoot),
+];
 
-/**
- * Resolves a URL template using the current page set's URL template.
- * This should be used for language dropdown links and other cases where you want to stay within the same page set.
- * The URL template can be either primary or alternate based on __.isPrimaryLocale.
- * It replaces embedded fields in the URL template with their corresponding values from the document.
- * If an alternate function is provided, it will be used to resolve the URL template instead of the default logic.
- *
- * @param streamDocument - The document containing the URL template and data.
- * @param relativePrefixToRoot - Prefix to prepend to the resolved URL.
- * @param alternateFunction - Alternate function to resolve the URL template (optional).
- * @returns The resolved and normalized URL.
- */
-export const resolvePageSetUrlTemplate = (
+// Resolves the URL for a PageSet entity using new or legacy methods
+export const resolveUrlTemplate = (
   streamDocument: StreamDocument,
-  relativePrefixToRoot: string = "",
-  alternateFunction?: (
-    streamDocument: StreamDocument,
-    relativePrefixToRoot: string
-  ) => string
-): string | undefined => {
-  const pagesetJson = JSON.parse(streamDocument?._pageset || "{}");
-
-  // Don't attempt to resolve URL template for DIRECTORY or LOCATOR page sets
-  if (pagesetJson?.type === "DIRECTORY" || pagesetJson?.type === "LOCATOR") {
-    return;
-  }
-
-  const urlTemplates = pagesetJson?.config?.urlTemplate || {};
-
-  return resolveUrlTemplateWithTemplates(
-    streamDocument,
-    relativePrefixToRoot,
-    urlTemplates,
-    alternateFunction
-  );
-};
-
-/**
- * Core URL template resolution logic used by both resolveUrlTemplateOfChild and resolvePageSetUrlTemplate.
- * Resolves a URL template using the provided URL templates object.
- */
-const resolveUrlTemplateWithTemplates = (
-  streamDocument: StreamDocument,
-  relativePrefixToRoot: string,
-  urlTemplates: { primary?: string; alternate?: string },
-  alternateFunction?: (
-    streamDocument: StreamDocument,
-    relativePrefixToRoot: string
-  ) => string
-): string | undefined => {
-  const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
-  if (!locale) {
-    return;
-  }
-
-  if (alternateFunction) {
-    return alternateFunction(streamDocument, relativePrefixToRoot);
-  }
-
-  const urlTemplate = selectUrlTemplate(streamDocument, urlTemplates);
-
-  if (!urlTemplate) {
-    return getLocationPath(
-      streamDocument as LocationDocument,
-      relativePrefixToRoot
-    );
-  }
-
-  return buildUrlFromTemplate(
-    urlTemplate,
-    streamDocument,
-    locale,
-    relativePrefixToRoot
-  );
-};
-
-/**
- * Selects the appropriate URL template (primary or alternate) based on isPrimaryLocale.
- */
-const selectUrlTemplate = (
-  streamDocument: StreamDocument,
-  urlTemplates: { primary?: string; alternate?: string }
-): string | undefined => {
-  const isPrimaryLocale = streamDocument.__?.isPrimaryLocale !== false;
-
-  if (isPrimaryLocale && urlTemplates.primary) {
-    return urlTemplates.primary;
-  } else if (!isPrimaryLocale && urlTemplates.alternate) {
-    return urlTemplates.alternate;
-  } else {
-    return urlTemplates.primary || urlTemplates.alternate;
-  }
-};
-
-/**
- * Builds a URL from a template string by resolving embedded fields and normalizing the slug.
- */
-export const buildUrlFromTemplate = (
-  urlTemplate: string,
-  streamDocument: StreamDocument,
-  locale: string,
   relativePrefixToRoot: string
-): string | undefined => {
-  const normalizedSlug = normalizeSlug(
-    resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
-  ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
+): string => {
+  streamDocument = normalizeLocalesInObject(streamDocument);
 
-  if (!normalizedSlug) {
-    return;
+  for (const resolve of resolvers) {
+    try {
+      const result = resolve({
+        streamDocument,
+        relativePrefixToRoot,
+      });
+      if (result) {
+        return result;
+      }
+    } catch {
+      // Continue to the next resolver in the array
+    }
+  }
+  throw new Error("Could not resolve url.");
+};
+
+const childResolvers: Array<
+  ({
+    streamDocument,
+    relativePrefixToRoot,
+  }: urlResolverProps) => string | undefined
+> = [
+  ({ streamDocument, relativePrefixToRoot }) =>
+    resolveUrlFromPathInfo(streamDocument, relativePrefixToRoot),
+  ({ streamDocument, relativePrefixToRoot }) =>
+    legacyResolveUrlTemplateOfChild(streamDocument, relativePrefixToRoot),
+];
+
+// Resolves the URL for a PageSet's child using new or legacy methods
+export const resolveUrlTemplateOfChild = (
+  profile: any,
+  streamDocument: StreamDocument,
+  relativePrefixToRoot?: string
+): string => {
+  // Merge the child profile with streamDocument metadata
+  streamDocument = mergeMeta(profile, streamDocument);
+  streamDocument = normalizeLocalesInObject(streamDocument);
+
+  for (const resolve of childResolvers) {
+    try {
+      const result = resolve({
+        streamDocument,
+        relativePrefixToRoot: relativePrefixToRoot ?? "",
+      });
+      if (result) {
+        return result;
+      }
+    } catch {
+      // Continue to the next resolver in the array
+    }
   }
 
-  return relativePrefixToRoot + normalizedSlug;
+  throw new Error("Could not resolve url for child entity.");
+};
+
+export const mergeMeta = (
+  profile: any,
+  streamDocument: StreamDocument
+): StreamDocument => {
+  const locale: string = profile?.meta?.locale || streamDocument?.locale;
+
+  // Determine isPrimaryLocale value, prioritizing profile meta over streamDocument
+  let isPrimaryLocale: boolean;
+  if (profile?.meta?.isPrimaryLocale === true) {
+    isPrimaryLocale = true;
+  } else if (profile?.meta?.isPrimaryLocale === false) {
+    isPrimaryLocale = false;
+  } else {
+    isPrimaryLocale = locale === "en";
+  }
+
+  return {
+    locale: locale,
+    ...profile,
+    meta: {
+      ...streamDocument?.meta,
+      ...profile?.meta,
+    },
+    __: {
+      ...streamDocument.__,
+      ...profile.__,
+      isPrimaryLocale, // deprecated, use pathInfo.primaryLocale instead
+    },
+    _pageset: streamDocument._pageset,
+  };
 };

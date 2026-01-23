@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Field, PuckContext } from "@measured/puck";
+import { Field } from "@measured/puck";
 import {
   CardProps,
   Coordinate,
@@ -20,8 +20,7 @@ import {
   PhoneAtom,
   useTemplateProps,
   resolveComponentData,
-  resolvePageSetUrlOfChild,
-  mergeMeta,
+  resolveUrlTemplateOfChild,
   HoursStatusAtom,
   HoursTableAtom,
   YextField,
@@ -591,11 +590,9 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
-    puck,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
-    puck: PuckContext;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
@@ -628,10 +625,10 @@ export const LocatorResultCard = React.memo(
       "TAP_TO_CALL"
     );
 
-    const resolvedUrl = resolvePageSetUrlOfChild(
-      mergeMeta(location, streamDocument),
-      relativePrefixToRoot,
-      puck.metadata?.resolveUrlTemplate
+    const resolvedUrl = resolveUrlTemplateOfChild(
+      location,
+      streamDocument,
+      relativePrefixToRoot
     );
 
     const getDirectionsLink: string | undefined = (() => {

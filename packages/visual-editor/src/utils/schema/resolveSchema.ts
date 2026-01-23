@@ -6,12 +6,12 @@ import {
 import { StreamDocument } from "../types/StreamDocument";
 import { embeddedFieldRegex, findField } from "../resolveYextEntityField";
 import { removeEmptyValues } from "./helpers";
-import { mergeMeta } from "../mergeMeta";
 import { TemplateRenderProps } from "./getSchema";
 import {
-  resolvePageSetUrl,
-  resolvePageSetUrlOfChild,
-} from "../urls/resolvePageSetUrl";
+  mergeMeta,
+  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
+} from "../urls/resolveUrlTemplate";
 
 // Recompile the embedded field regex to support matching
 const EMBEDDED_FIELD_REGEX = new RegExp(embeddedFieldRegex.source);
@@ -225,8 +225,8 @@ const resolveDirectoryChildren = (
 
     // if the child has an address, we're at the city level
     const childPath = child.address
-      ? resolvePageSetUrlOfChild(mergeMeta(child, streamDocument), "")
-      : resolvePageSetUrl(mergeMeta(child, streamDocument), "");
+      ? resolveUrlTemplateOfChild(child, streamDocument, "")
+      : resolveUrlTemplate(mergeMeta(child, streamDocument), "");
 
     const childUrl = `${baseUrl}${childPath}`;
 

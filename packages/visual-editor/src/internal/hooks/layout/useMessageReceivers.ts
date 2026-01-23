@@ -13,9 +13,9 @@ import { migrate } from "../../../utils/migrate.ts";
 import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
 import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import {
-  resolvePageSetUrl,
-  resolvePageSetUrlOfChild,
-} from "../../../utils/urls/resolvePageSetUrl.ts";
+  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
+} from "../../../utils/urls/resolveUrlTemplate.ts";
 
 const devLogger = new DevLogger();
 
@@ -82,9 +82,9 @@ export const useLayoutMessageReceivers = (
       streamDocument?.meta?.entityType?.id === "locator" ||
       streamDocument?.meta?.entityType?.id?.startsWith("dm_")
     ) {
-      path = resolvePageSetUrlOfChild(streamDocument, "");
+      path = resolveUrlTemplateOfChild({}, streamDocument, "");
     } else {
-      path = resolvePageSetUrl(streamDocument, "");
+      path = resolveUrlTemplate(streamDocument, "");
     }
 
     // Find the relativePrefixToRoot for the page being rendered in the editor

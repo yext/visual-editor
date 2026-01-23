@@ -9,7 +9,6 @@ export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
-export { mergeMeta } from "./mergeMeta.ts";
 export {
   migrate,
   type Migration,
@@ -34,13 +33,9 @@ export {
 export { type ThemeConfig, themeResolver, deepMerge } from "./themeResolver.ts";
 export { type StreamDocument } from "./types/StreamDocument.ts";
 export {
+  resolveUrlTemplate,
   resolveUrlTemplateOfChild,
-  resolvePageSetUrlTemplate,
 } from "./urls/resolveUrlTemplate.ts";
-export {
-  resolvePageSetUrl,
-  resolvePageSetUrlOfChild,
-} from "./urls/resolvePageSetUrl.ts";
 export { VisualEditorProvider } from "./VisualEditorProvider.tsx";
 export {
   constructFontSelectOptions,
