@@ -118,7 +118,7 @@ describe("resolveUrlFromPathInfo", () => {
     expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("stores/123");
   });
 
-  it("throws on invalid pathInfo JSON", () => {
+  it("gracefully handles invalid pathInfo JSON", () => {
     const docWithInvalidPathInfo: StreamDocument = {
       ...baseDocument,
       __: {
@@ -127,6 +127,6 @@ describe("resolveUrlFromPathInfo", () => {
       },
     };
 
-    expect(() => resolveUrlFromPathInfo(docWithInvalidPathInfo, "")).toThrow();
+    expect(resolveUrlFromPathInfo(docWithInvalidPathInfo, "")).toBeUndefined();
   });
 });
