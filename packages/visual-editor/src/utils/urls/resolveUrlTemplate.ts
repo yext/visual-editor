@@ -53,6 +53,10 @@ export const resolveUrlTemplate = (
   throw new Error("Could not resolve url.");
 };
 
+// Order of resolvers to attempt for resolving the PageSet's child url
+// 1. resolveUrlFromPathInfo
+// 2. legacyResolveUrlTemplateOfChild
+// 3. getLocationPath
 const childResolvers: Array<
   ({
     streamDocument,
@@ -63,6 +67,8 @@ const childResolvers: Array<
     resolveUrlFromPathInfo(streamDocument, relativePrefixToRoot),
   ({ streamDocument, relativePrefixToRoot }) =>
     legacyResolveUrlTemplateOfChild(streamDocument, relativePrefixToRoot),
+  ({ streamDocument, relativePrefixToRoot }) =>
+    getLocationPath(streamDocument as LocationDocument, relativePrefixToRoot),
 ];
 
 // Resolves the URL for a PageSet's child using new or legacy methods
