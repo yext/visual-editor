@@ -8,7 +8,7 @@ import {
   DefaultComponentProps,
   Data,
   DefaultRootProps,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   migrationRegistry,
   OtherCategoryComponents,
