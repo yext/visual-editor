@@ -121,7 +121,10 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
             </div>
             <ChevronDown />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40 rounded p-0">
+          <DropdownMenuContent
+            align="end"
+            className="w-40 rounded p-0 hidden md:block"
+          >
             {(status === "COMPLETE" || status === "ERROR") &&
               Object.entries(validLocalesToPaths).map(([locale, path]) => (
                 <DropdownMenuItem
@@ -146,7 +149,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           onValueChange={(value) => handleOpenChange(!!value)}
         >
           <AccordionItem value="language-selector">
-            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 md:pb-4 ">
+            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 py-6 md:pb-4 ">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4" />
                 <Body variant="xs">{getLanguageName(selected)}</Body>
