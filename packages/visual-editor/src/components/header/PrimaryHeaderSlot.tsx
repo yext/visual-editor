@@ -136,7 +136,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   // If the editor user changes the primary links so they no longer
   // overflow, close the desktop/tablet expanded link menu
   React.useEffect(() => {
-    if (puck.isEditing || !containerRef.current?.clientWidth) {
+    if (!puck.isEditing || !containerRef.current?.clientWidth) {
       return;
     }
 
