@@ -3,7 +3,7 @@ import {
   Fields,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
   AssetImageType,

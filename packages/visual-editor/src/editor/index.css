@@ -1,4 +1,4 @@
-@import "@measured/puck/no-external.css";
+@import "@puckeditor/core/no-external.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

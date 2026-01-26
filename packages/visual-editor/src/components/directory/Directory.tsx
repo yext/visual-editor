@@ -9,7 +9,7 @@ import {
   HeadingTextProps,
   BreadcrumbsSectionProps,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { DirectoryList } from "./DirectoryWrapper";
 import { isDirectoryGrid } from "../../utils/directory/utils";

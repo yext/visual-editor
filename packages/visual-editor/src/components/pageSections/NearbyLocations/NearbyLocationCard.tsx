@@ -1,5 +1,5 @@
 import React from "react";
-import { PuckContext } from "@measured/puck";
+import { PuckContext } from "@puckeditor/core";
 import { HoursType, AddressType, Address } from "@yext/pages-components";
 import {
   Background,

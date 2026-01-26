@@ -1,7 +1,12 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { AnalyticsScopeProvider, CTA as CTAType } from "@yext/pages-components";
-import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  WithId,
+  WithPuckProps,
+} from "@puckeditor/core";
 import {
   Body,
   EntityField,

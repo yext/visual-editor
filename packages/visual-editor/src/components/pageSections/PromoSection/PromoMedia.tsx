@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { SlotComponent } from "@measured/puck";
+import { SlotComponent } from "@puckeditor/core";
 import { EntityField, pt, themeManagerCn } from "@yext/visual-editor";
 import { PromoData, PromoStyles } from "./PromoSection";
 

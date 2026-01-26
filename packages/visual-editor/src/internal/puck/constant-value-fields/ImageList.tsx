@@ -1,4 +1,4 @@
-import { Field } from "@measured/puck";
+import { Field } from "@puckeditor/core";
 import { pt } from "../../../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";

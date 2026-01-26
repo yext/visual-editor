@@ -1,4 +1,4 @@
-import { setDeep } from "@measured/puck";
+import { setDeep } from "@puckeditor/core";
 import { StreamDocument } from "./types/StreamDocument.ts";
 import { resolveComponentData } from "./resolveComponentData.tsx";
 

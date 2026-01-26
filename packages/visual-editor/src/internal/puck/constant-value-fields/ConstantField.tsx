@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { AutoField, FieldLabel } from "@measured/puck";
+import { AutoField, FieldLabel } from "@puckeditor/core";
 
 type ConstantFieldOption = {
   label: string;

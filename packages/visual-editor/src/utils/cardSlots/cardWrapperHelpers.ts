@@ -1,4 +1,4 @@
-import { Fields, Slot } from "@measured/puck";
+import { Fields, Slot } from "@puckeditor/core";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { YextField } from "../../editor/YextField";
 import { MsgString } from "../i18n/platform";

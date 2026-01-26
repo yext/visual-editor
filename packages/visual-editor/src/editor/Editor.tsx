@@ -3,7 +3,7 @@ import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { type Config } from "@measured/puck";
+import { type Config } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
@@ -51,7 +51,11 @@ export interface Metadata {
     relativePrefixToRoot: string
   ) => string;
   // The stream document for the current page
-  streamDocument?: any;
+  streamDocument?: StreamDocument;
+}
+
+declare module "@puckeditor/core" {
+  export interface PuckMetadata extends Metadata {}
 }
 
 export type EditorProps = {

@@ -13,7 +13,7 @@ import {
   migrationRegistry,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config, resolveAllData } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import {
   HeadingText,

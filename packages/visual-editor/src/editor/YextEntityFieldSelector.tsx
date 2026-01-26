@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
+import { AutoField, FieldLabel, Field, CustomField } from "@puckeditor/core";
 import {
   ConstantValueTypes,
   EntityFieldTypes,

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Field } from "@measured/puck";
+import { Field } from "@puckeditor/core";
 import {
   CardProps,
   Coordinate,

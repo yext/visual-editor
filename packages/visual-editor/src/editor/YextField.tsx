@@ -4,7 +4,7 @@ import {
   Field,
   NumberField,
   ObjectField,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   ThemeOptions,
   BasicSelector,

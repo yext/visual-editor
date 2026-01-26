@@ -6,7 +6,7 @@ import {
   ComplexImageType,
   useAnalytics,
 } from "@yext/pages-components";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields } from "@puckeditor/core";
 import {
   CTA,
   EntityField,

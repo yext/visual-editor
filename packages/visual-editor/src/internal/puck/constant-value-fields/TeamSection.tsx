@@ -1,4 +1,4 @@
-import { ArrayField } from "@measured/puck";
+import { ArrayField } from "@puckeditor/core";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 // This config is used by TeamCardsWrapper when constantValueEnabled is true

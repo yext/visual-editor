@@ -1,4 +1,4 @@
-import { Config, DropZone } from "@measured/puck";
+import { Config, DropZone } from "@puckeditor/core";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,

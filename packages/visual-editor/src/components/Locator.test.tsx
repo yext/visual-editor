@@ -17,7 +17,7 @@ import {
   VisualEditorProvider,
   LocatorComponent,
 } from "@yext/visual-editor";
-import { Render, Config } from "@measured/puck";
+import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import mapboxPackageJson from "mapbox-gl/package.json";
 

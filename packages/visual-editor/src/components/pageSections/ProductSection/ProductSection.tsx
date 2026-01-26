@@ -15,7 +15,7 @@ import {
   PuckComponent,
   Slot,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";

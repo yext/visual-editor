@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { YextField, msg, CTA, useBackground } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import {

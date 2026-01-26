@@ -5,7 +5,7 @@ import {
   DefaultRootProps,
   migrate as migratePuck,
   walkTree,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 

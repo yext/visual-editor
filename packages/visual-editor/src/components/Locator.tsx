@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
 import {
   AnalyticsProvider,
   AppliedFilters,

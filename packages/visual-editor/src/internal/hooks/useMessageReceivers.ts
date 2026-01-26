@@ -6,7 +6,7 @@ import {
   TemplateMetadata,
 } from "../types/templateMetadata.ts";
 import { DevLogger } from "../../utils/devLogger.ts";
-import { Config, Data } from "@measured/puck";
+import { Config, Data } from "@puckeditor/core";
 import { useCommonMessageSenders } from "./useMessageSenders.ts";
 import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";

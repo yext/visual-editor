@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoField } from "@measured/puck";
+import { AutoField } from "@puckeditor/core";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import {
   ThemeConfig,
