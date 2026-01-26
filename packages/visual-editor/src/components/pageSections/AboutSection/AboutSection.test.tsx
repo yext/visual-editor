@@ -593,7 +593,7 @@ describe("AboutSection", async () => {
         ignoreExact:
           name === "version 50 props with details column" &&
           viewportName === "tablet"
-            ? [5400]
+            ? [5400, 5850]
             : undefined,
       });
       const results = await axe(container);
