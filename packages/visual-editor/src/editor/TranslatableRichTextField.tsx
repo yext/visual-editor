@@ -94,10 +94,22 @@ export function TranslatableRichTextField<
   };
 }
 
+export type GetDefaultRTFOptions = {
+  isBold?: boolean;
+};
+
 /** Returns a simple RTF-format p tag wrapper for text  */
-export const getDefaultRTF = (text: string): RichText => {
+export const getDefaultRTF = (
+  text: string,
+  options?: GetDefaultRTFOptions
+): RichText => {
+  const isBold = options?.isBold ?? false;
+  const format = isBold ? 1 : 0;
+  const fontWeight = isBold ? "700 !important" : "400";
+  const tag = isBold ? "strong" : "span";
+
   return {
-    json: `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"${text}","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
-    html: `<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>${text}</span></p>`,
+    json: `{"root":{"children":[{"children":[{"detail":0,"format":${format},"mode":"normal","style":"","text":"${text}","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
+    html: `<p dir="ltr" style="font-size: 14.67px; font-weight: ${fontWeight}; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><${tag}>${text}</${tag}></p>`,
   };
 };
