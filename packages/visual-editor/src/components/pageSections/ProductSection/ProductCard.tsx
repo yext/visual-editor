@@ -380,6 +380,12 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
+  const hasPrice = conditionalRender?.price && showPrice;
+  const hasDescription = conditionalRender?.description && showDescription;
+  const hasCTA = conditionalRender?.cta && showCTA;
+  const hasBrow = conditionalRender?.brow && showBrow;
+  const bottomPadding = hasCTA ? "pb-8" : "pb-4";
+
   return (
     <Background
       className={themeManagerCn(
@@ -413,12 +419,13 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       <div
         className={themeManagerCn(
           "flex flex-col flex-grow gap-4 pt-4",
-          variant !== "minimal" && "pb-8 px-8"
+          variant !== "minimal" && bottomPadding,
+          variant !== "minimal" && "px-8"
         )}
       >
         <div className="gap-4 flex flex-col flex-grow">
           <div className="flex flex-col">
-            {conditionalRender?.brow && showBrow && (
+            {hasBrow && (
               <slots.BrowSlot style={{ height: "auto" }} allow={[]} />
             )}
 
@@ -427,19 +434,17 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
             )}
           </div>
 
-          {conditionalRender?.price && showPrice && (
+          {hasPrice && (
             <div className="flex gap-4 border-l-2 border-primary-200 pl-4 items-center">
               <slots.PriceSlot style={{ height: "auto" }} allow={[]} />
             </div>
           )}
 
-          {conditionalRender?.description && showDescription && (
+          {hasDescription && (
             <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
           )}
         </div>
-        {conditionalRender?.cta && showCTA && (
-          <slots.CTASlot style={{ height: "auto" }} allow={[]} />
-        )}
+        {hasCTA && <slots.CTASlot style={{ height: "auto" }} allow={[]} />}
       </div>
     </Background>
   );
@@ -500,16 +505,16 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     const ctaSlotProps = data.props.slots.CTASlot?.[0]?.props as
       | WithId<CTAWrapperProps>
       | undefined;
-    const resolvedCTA =
-      data.props.parentData?.product.cta ??
-      ctaSlotProps?.parentData?.cta ??
-      (ctaSlotProps
-        ? resolveYextEntityField(
-            params.metadata.streamDocument,
-            ctaSlotProps?.data?.entityField,
-            i18nComponentsInstance.language || "en"
-          )
-        : undefined);
+    const resolvedCTA = data.props.parentData
+      ? (data.props.parentData.product.cta ?? ctaSlotProps?.parentData?.cta)
+      : (ctaSlotProps?.parentData?.cta ??
+        (ctaSlotProps
+          ? resolveYextEntityField(
+              params.metadata.streamDocument,
+              ctaSlotProps?.data?.entityField,
+              i18nComponentsInstance.language || "en"
+            )
+          : undefined));
     const showCTA = Boolean(resolvedCTA);
 
     const imageSlotProps = data.props.slots.ImageSlot?.[0]?.props as
