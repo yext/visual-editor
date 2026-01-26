@@ -250,7 +250,7 @@ export const CTA = (props: CTAProps) => {
               variant === "directoryLink"
                 ? undefined
                 : showCaret
-                  ? "inline-block"
+                  ? "var(--display-link-caret)"
                   : "none",
           }}
         />
