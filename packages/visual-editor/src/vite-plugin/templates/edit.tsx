@@ -42,6 +42,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = ({
   document,
 }): HeadConfig => {
   return {
+    title: "Editor",
     other: fullStorySnippet + applyTheme(document, "./", defaultThemeConfig),
   };
 };
