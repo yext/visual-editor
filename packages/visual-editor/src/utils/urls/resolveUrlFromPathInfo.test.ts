@@ -21,10 +21,10 @@ describe("resolveUrlFromPathInfo", () => {
       ...baseDocument,
       __: {
         ...baseDocument.__,
-        pathInfo: JSON.stringify({
+        pathInfo: {
           template: "stores/[[id]]",
           primaryLocale: "en",
-        }),
+        },
       },
     };
 
@@ -36,11 +36,11 @@ describe("resolveUrlFromPathInfo", () => {
       ...baseDocument,
       __: {
         ...baseDocument.__,
-        pathInfo: JSON.stringify({
+        pathInfo: {
           template: "stores/[[id]]",
           primaryLocale: "en",
           includeLocalePrefixForPrimaryLocale: true,
-        }),
+        },
       },
     };
 
@@ -53,10 +53,10 @@ describe("resolveUrlFromPathInfo", () => {
       locale: "es",
       __: {
         ...baseDocument.__,
-        pathInfo: JSON.stringify({
+        pathInfo: {
           template: "stores/[[id]]",
           primaryLocale: "en",
-        }),
+        },
       },
     };
 
@@ -72,25 +72,13 @@ describe("resolveUrlFromPathInfo", () => {
       },
       __: {
         ...baseDocument.__,
-        pathInfo: JSON.stringify({
+        pathInfo: {
           template: "stores/[[id]]",
           primaryLocale: "en",
-        }),
+        },
       },
     };
 
     expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("stores/123");
-  });
-
-  it("gracefully handles invalid pathInfo JSON", () => {
-    const docWithInvalidPathInfo: StreamDocument = {
-      ...baseDocument,
-      __: {
-        ...baseDocument.__,
-        pathInfo: "{",
-      },
-    };
-
-    expect(resolveUrlFromPathInfo(docWithInvalidPathInfo, "")).toBeUndefined();
   });
 });

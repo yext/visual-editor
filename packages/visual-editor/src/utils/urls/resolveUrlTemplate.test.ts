@@ -32,10 +32,10 @@ const mockDMCityDocument: StreamDocument = {
   id: "arlington-va",
   locale: "en",
   __: {
-    pathInfo: JSON.stringify({
+    pathInfo: {
       template: "directory/[[id]]",
       primaryLocale: "en",
-    }),
+    },
   },
   _pageset: JSON.stringify({
     type: "DIRECTORY",
@@ -51,10 +51,10 @@ const mockChildProfile = {
     region: "VA",
   },
   __: {
-    pathInfo: JSON.stringify({
+    pathInfo: {
       template: "[[address.region]]/[[address.city]]/[[address.line1]]",
       primaryLocale: "en",
-    }),
+    },
   },
   _pageset: JSON.stringify({
     type: "ENTITY",
@@ -67,10 +67,10 @@ describe("resolveUrlTemplate", () => {
       ...mockStreamDocument,
       __: {
         ...mockStreamDocument.__,
-        pathInfo: JSON.stringify({
+        pathInfo: {
           template: "stores/[[id]]",
           primaryLocale: "en",
-        }),
+        },
       },
     };
 
@@ -118,11 +118,11 @@ describe("resolveUrlTemplate", () => {
       ...mockStreamDocument,
       __: {
         ...mockStreamDocument.__,
-        pathInfo: JSON.stringify({
+        pathInfo: {
           template: "stores/[[id]]",
           primaryLocale: "en",
           includeLocalePrefixForPrimaryLocale: true,
-        }),
+        },
       },
     };
 
@@ -135,28 +135,14 @@ describe("resolveUrlTemplate", () => {
       locale: "es",
       __: {
         ...mockStreamDocument.__,
-        pathInfo: JSON.stringify({
+        pathInfo: {
           template: "stores/[[id]]",
           primaryLocale: "en",
-        }),
+        },
       },
     };
 
     expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe("es/stores/123");
-  });
-
-  it("falls back to page set template when pathInfo JSON is invalid", () => {
-    const documentWithInvalidPathInfo: StreamDocument = {
-      ...mockStreamDocument,
-      __: {
-        ...mockStreamDocument.__,
-        pathInfo: "{",
-      },
-    };
-
-    expect(resolveUrlTemplate(documentWithInvalidPathInfo, "")).toBe(
-      "ny/new-york/61-9th-ave"
-    );
   });
 
   it("falls back to location path when no templates are available", () => {

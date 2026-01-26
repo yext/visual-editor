@@ -9,7 +9,7 @@ export type StreamDocument = {
   };
   __certified_facts?: any;
   __?: {
-    pathInfo?: string; // JSON stringified pathInfo object in PathInfoShape
+    pathInfo?: PathInfoShape;
     layout?: string;
     theme?: string;
     codeTemplate?: string;

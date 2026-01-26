@@ -1,13 +1,13 @@
 import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField";
 import { normalizeSlug } from "../slugifier";
-import { PathInfoShape, StreamDocument } from "../types/StreamDocument";
+import { StreamDocument } from "../types/StreamDocument";
 
 // Resolves a URL from the streamDocument's __.pathInfo.template
 export const resolveUrlFromPathInfo = (
   streamDocument: StreamDocument,
   relativePrefixToRoot: string = ""
 ): string | undefined => {
-  const pathInfoJson = getPathInfoJson(streamDocument);
+  const pathInfoJson = streamDocument.__?.pathInfo;
   const urlTemplate = pathInfoJson?.template || "";
 
   if (!urlTemplate) {
@@ -41,9 +41,9 @@ export const resolveUrlFromPathInfo = (
  * 3. Default to 'en' as primary locale
  */
 export const isPrimaryLocale = (streamDocument: StreamDocument): boolean => {
-  const pathInfoJson = getPathInfoJson(streamDocument);
+  const pathInfoJson = streamDocument.__?.pathInfo;
   const locale = streamDocument?.locale || streamDocument?.meta?.locale || "";
-  if (pathInfoJson.primaryLocale) {
+  if (pathInfoJson?.primaryLocale) {
     return pathInfoJson?.primaryLocale === locale;
   }
 
@@ -53,13 +53,4 @@ export const isPrimaryLocale = (streamDocument: StreamDocument): boolean => {
 
   // Default to 'en' as primary locale if nothing is specified
   return locale === "en";
-};
-
-// Parses the __.pathInfo JSON safely
-const getPathInfoJson = (streamDocument: StreamDocument): PathInfoShape => {
-  try {
-    return JSON.parse(streamDocument?.__?.pathInfo || "{}") as PathInfoShape;
-  } catch {
-    return {};
-  }
 };
