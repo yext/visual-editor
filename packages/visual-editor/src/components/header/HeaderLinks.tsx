@@ -119,7 +119,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const measureContainerRef = React.useRef<HTMLUListElement | null>(null);
   const linkRefs = React.useRef<Array<HTMLLIElement | null>>([]);
   const hamburgerButtonRef = React.useRef<HTMLDivElement | null>(null);
-  const isOverflow = useOverflow(navRef, measureContainerRef);
 
   React.useEffect(
     () => registerOverlayPortal(hamburgerButtonRef.current),
@@ -132,6 +131,13 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const validAlwaysCollapsedLinks =
     data.collapsedLinks?.filter((item) => !!item?.link) || [];
   const windowWidth = getWindow()?.innerWidth || 1024;
+
+  const isOverflow = useOverflow(
+    navRef,
+    measureContainerRef,
+    // when there are secondary collapsed links, adjust for the hamburger button width
+    isSecondary && validAlwaysCollapsedLinks.length ? 48 : 0
+  );
 
   const renderLink = (
     item: TranslatableCTA,
