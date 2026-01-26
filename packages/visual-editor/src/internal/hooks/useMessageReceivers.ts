@@ -12,7 +12,7 @@ import { ThemeData } from "../types/themeData.ts";
 import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { filterComponentsFromConfig } from "../../utils/filterComponents.ts";
-import { StreamDocument } from "../../utils/applyTheme.ts";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 

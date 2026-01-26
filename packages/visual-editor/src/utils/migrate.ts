@@ -7,7 +7,7 @@ import {
   walkTree,
 } from "@measured/puck";
 import { migrationRegistry as commonMigrationRegistry } from "../components/migrations/migrationRegistry.ts";
-import { StreamDocument } from "./applyTheme.ts";
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 export type MigrationAction =
   | {

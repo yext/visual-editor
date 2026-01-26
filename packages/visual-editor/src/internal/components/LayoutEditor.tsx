@@ -16,7 +16,7 @@ import { useLayoutMessageReceivers } from "../hooks/layout/useMessageReceivers.t
 import { LoadingScreen } from "../puck/components/LoadingScreen.tsx";
 import { ThemeData, ThemeHistory } from "../types/themeData.ts";
 import { ThemeConfig } from "../../utils/themeResolver.ts";
-import { StreamDocument, updateThemeInEditor } from "../../utils/applyTheme.ts";
+import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import { useThemeLocalStorage } from "../hooks/theme/useLocalStorage.ts";
 import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
 import { useProgress } from "../hooks/useProgress.ts";
@@ -26,6 +26,7 @@ import { Metadata } from "../../editor/Editor.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { toast } from "sonner";
 import { pt } from "../../utils/i18n/platform.ts";
+import { StreamDocument } from "../../utils/types/StreamDocument";
 
 const devLogger = new DevLogger();
 

@@ -1,4 +1,4 @@
-import { StreamDocument } from "../../utils/applyTheme.ts";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { Migration } from "../../utils/migrate.ts";
 
 /**

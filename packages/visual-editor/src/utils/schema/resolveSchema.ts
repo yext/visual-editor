@@ -3,15 +3,15 @@ import {
   OpeningHoursSpecificationSchema,
   PhotoGallerySchema,
 } from "@yext/pages-components";
-import { StreamDocument } from "../applyTheme";
+import { StreamDocument } from "../types/StreamDocument";
 import { embeddedFieldRegex, findField } from "../resolveYextEntityField";
 import { removeEmptyValues } from "./helpers";
-import {
-  resolvePageSetUrlTemplate,
-  resolveUrlTemplateOfChild,
-} from "../resolveUrlTemplate";
-import { mergeMeta } from "../mergeMeta";
 import { TemplateRenderProps } from "./getSchema";
+import {
+  mergeMeta,
+  resolveUrlTemplate,
+  resolveUrlTemplateOfChild,
+} from "../urls/resolveUrlTemplate";
 
 // Recompile the embedded field regex to support matching
 const EMBEDDED_FIELD_REGEX = new RegExp(embeddedFieldRegex.source);
@@ -225,8 +225,8 @@ const resolveDirectoryChildren = (
 
     // if the child has an address, we're at the city level
     const childPath = child.address
-      ? resolveUrlTemplateOfChild(mergeMeta(child, streamDocument), "")
-      : resolvePageSetUrlTemplate(mergeMeta(child, streamDocument), "");
+      ? resolveUrlTemplateOfChild(child, streamDocument, "")
+      : resolveUrlTemplate(mergeMeta(child, streamDocument), "");
 
     const childUrl = `${baseUrl}${childPath}`;
 

@@ -12,7 +12,7 @@ import {
   Body,
 } from "@yext/visual-editor";
 import { ComponentConfig, Field, Fields, PuckComponent } from "@measured/puck";
-import { StreamDocument } from "../../utils/applyTheme";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
 

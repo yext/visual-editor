@@ -1,4 +1,4 @@
-import { StreamDocument } from "../applyTheme";
+import { StreamDocument } from "../types/StreamDocument";
 import { TemplateRenderProps } from "./getSchema";
 import { getDirectoryParents } from "./helpers";
 

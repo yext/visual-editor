@@ -1,4 +1,4 @@
-import { StreamDocument } from "./applyTheme.ts";
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 /**
  * Applies the brand certified facts script to the head of the page.

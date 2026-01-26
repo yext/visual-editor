@@ -13,7 +13,6 @@ import {
   Fields,
   ComponentData,
   Slot,
-  PuckContext,
 } from "@measured/puck";
 import {
   ImageType,

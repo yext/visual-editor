@@ -20,7 +20,7 @@ import {
   i18nPlatformInstance,
   loadPlatformTranslations,
 } from "../utils/i18n/platform.ts";
-import { StreamDocument } from "../utils/applyTheme.ts";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   createDefaultThemeConfig,
   defaultThemeConfig,
