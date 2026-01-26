@@ -1,8 +1,5 @@
 import { assert, describe, it, expect } from "vitest";
-import {
-  legacyResolveUrlTemplateOfChild,
-  legacyResolveUrlTemplate,
-} from "./legacyResolveUrlTemplate";
+import { legacyResolveUrlTemplate } from "./legacyResolveUrlTemplate";
 import { StreamDocument } from "../types/StreamDocument";
 
 const mockStreamDocument: StreamDocument = {
@@ -76,41 +73,43 @@ const mockLocatorMergedDocument: StreamDocument = {
   }),
 };
 
-describe("legacyResolveUrlTemplateOfChild", () => {
+describe("legacyResolveUrlTemplate with isChild flag", () => {
   it("handles primary url template on directory pages", () => {
     expect(
-      legacyResolveUrlTemplateOfChild(mockDirectoryMergedDocument, "")
+      legacyResolveUrlTemplate(mockDirectoryMergedDocument, "", true)
     ).toBe("ny/page/123");
   });
 
   it("handles alternate url templates on directory pages", () => {
     expect(
-      legacyResolveUrlTemplateOfChild(
+      legacyResolveUrlTemplate(
         {
           ...mockDirectoryMergedDocument,
           __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
           locale: "es",
         },
-        ""
+        "",
+        true
       )
     ).toBe("es/ny/page/123");
   });
 
   it("handles primary url template on locator pages", () => {
-    expect(legacyResolveUrlTemplateOfChild(mockLocatorMergedDocument, "")).toBe(
+    expect(legacyResolveUrlTemplate(mockLocatorMergedDocument, "", true)).toBe(
       "ny/location/123"
     );
   });
 
   it("handles alternate url templates on locator pages", () => {
     expect(
-      legacyResolveUrlTemplateOfChild(
+      legacyResolveUrlTemplate(
         {
           ...mockLocatorMergedDocument,
           __: { ...mockLocatorMergedDocument.__, isPrimaryLocale: false },
           locale: "es",
         },
-        ""
+        "",
+        true
       )
     ).toBe("es/ny/location/123");
   });
@@ -130,9 +129,10 @@ describe("legacyResolveUrlTemplateOfChild", () => {
     };
 
     // Should use entityPageSetUrlTemplates, not _pageset urlTemplate
-    const result = legacyResolveUrlTemplateOfChild(
+    const result = legacyResolveUrlTemplate(
       directoryDocWithBothTemplates,
-      ""
+      "",
+      true
     );
 
     expect(result).toBe("ny/page/123");
@@ -145,7 +145,7 @@ describe("legacyResolveUrlTemplateOfChild", () => {
       __: { ...mockDirectoryMergedDocument.__, isPrimaryLocale: false },
     };
     expect(
-      legacyResolveUrlTemplateOfChild(alternateLocaleDoc, "")
+      legacyResolveUrlTemplate(alternateLocaleDoc, "", true)
     ).toBeUndefined();
   });
 });

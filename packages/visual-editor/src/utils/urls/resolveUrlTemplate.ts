@@ -2,14 +2,12 @@ import { normalizeLocalesInObject } from "../normalizeLocale";
 import { StreamDocument } from "../types/StreamDocument";
 import { getLocationPath, LocationDocument } from "./getLocationPath";
 import { resolveUrlFromPathInfo } from "./resolveUrlFromPathInfo";
-import {
-  legacyResolveUrlTemplate,
-  legacyResolveUrlTemplateOfChild,
-} from "./legacyResolveUrlTemplate";
+import { legacyResolveUrlTemplate } from "./legacyResolveUrlTemplate";
 
 type urlResolverProps = {
   streamDocument: StreamDocument;
   relativePrefixToRoot: string;
+  isChild?: boolean;
 };
 
 // Order of resolvers to attempt for resolving the PageSet's url
@@ -20,12 +18,13 @@ const resolvers: Array<
   ({
     streamDocument,
     relativePrefixToRoot,
+    isChild,
   }: urlResolverProps) => string | undefined
 > = [
   ({ streamDocument, relativePrefixToRoot }) =>
     resolveUrlFromPathInfo(streamDocument, relativePrefixToRoot),
-  ({ streamDocument, relativePrefixToRoot }) =>
-    legacyResolveUrlTemplate(streamDocument, relativePrefixToRoot),
+  ({ streamDocument, relativePrefixToRoot, isChild }) =>
+    legacyResolveUrlTemplate(streamDocument, relativePrefixToRoot, isChild),
   ({ streamDocument, relativePrefixToRoot }) =>
     getLocationPath(streamDocument as LocationDocument, relativePrefixToRoot),
 ];
@@ -53,24 +52,6 @@ export const resolveUrlTemplate = (
   throw new Error("Could not resolve url.");
 };
 
-// Order of resolvers to attempt for resolving the PageSet's child url
-// 1. resolveUrlFromPathInfo
-// 2. legacyResolveUrlTemplateOfChild
-// 3. getLocationPath
-const childResolvers: Array<
-  ({
-    streamDocument,
-    relativePrefixToRoot,
-  }: urlResolverProps) => string | undefined
-> = [
-  ({ streamDocument, relativePrefixToRoot }) =>
-    resolveUrlFromPathInfo(streamDocument, relativePrefixToRoot),
-  ({ streamDocument, relativePrefixToRoot }) =>
-    legacyResolveUrlTemplateOfChild(streamDocument, relativePrefixToRoot),
-  ({ streamDocument, relativePrefixToRoot }) =>
-    getLocationPath(streamDocument as LocationDocument, relativePrefixToRoot),
-];
-
 // Resolves the URL for a PageSet's child using new or legacy methods
 export const resolveUrlTemplateOfChild = (
   profile: any,
@@ -81,11 +62,12 @@ export const resolveUrlTemplateOfChild = (
   streamDocument = mergeMeta(profile, streamDocument);
   streamDocument = normalizeLocalesInObject(streamDocument);
 
-  for (const resolve of childResolvers) {
+  for (const resolve of resolvers) {
     try {
       const result = resolve({
         streamDocument,
         relativePrefixToRoot: relativePrefixToRoot ?? "",
+        isChild: true,
       });
       if (result) {
         return result;
