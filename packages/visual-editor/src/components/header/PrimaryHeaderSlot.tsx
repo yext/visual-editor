@@ -87,7 +87,6 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
 };
 
 type CTAContainerProps = {
-  isMeasurementDiv: boolean;
   showCTAs: boolean;
   showHamburger: boolean;
   PrimaryCTASlot: SlotComponent;
@@ -95,23 +94,15 @@ type CTAContainerProps = {
 };
 
 const CTAContainer: React.FC<CTAContainerProps> = (props) => {
-  const {
-    isMeasurementDiv,
-    showCTAs,
-    showHamburger,
-    PrimaryCTASlot,
-    SecondaryCTASlot,
-  } = props;
+  const { showCTAs, PrimaryCTASlot, SecondaryCTASlot } = props;
 
   if (!showCTAs) {
     return null;
   }
 
-  const margin = showHamburger ? (isMeasurementDiv ? "mr-8" : "mr-14") : "";
-
   return (
     <div
-      className={`flex flex-col md:flex-row gap-4 md:gap-2 md:items-center ${margin}`}
+      className={`flex flex-col md:flex-row gap-4 md:gap-2 md:items-center ${props.showHamburger ? "mr-8" : ""}`}
     >
       <PrimaryCTASlot style={{ height: "auto" }} />
       <SecondaryCTASlot style={{ height: "auto" }} />
@@ -136,10 +127,27 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
 
+  // Make the hamburger button interactive in the editor
   React.useEffect(
     () => registerOverlayPortal(hamburgerButtonRef.current),
     [hamburgerButtonRef.current]
   );
+
+  // If the editor user changes the primary links so they no longer
+  // overflow, close the desktop/tablet expanded link menu
+  React.useEffect(() => {
+    if (!puck.isEditing || !containerRef.current?.clientWidth) {
+      return;
+    }
+
+    if (
+      !showHamburger &&
+      isMobileMenuOpen &&
+      containerRef.current.clientWidth > 360
+    ) {
+      setMobileMenuOpen(false);
+    }
+  }, [puck.isEditing, showHamburger, isMobileMenuOpen, containerRef.current]);
 
   const LogoSlot = (
     <div
@@ -177,11 +185,10 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
               {/* Its width is our source of truth. */}
               <div
                 ref={contentRef}
-                className="flex items-center gap-8 invisible h-0 opacity-0 pointer-events-none"
+                className="flex items-center gap-8 h-0 opacity-0 pointer-events-none absolute top-0 left-[-9999px] invisible"
               >
                 <div>{NavContent}</div>
                 <CTAContainer
-                  isMeasurementDiv={true}
                   showCTAs={!!showCTAs}
                   showHamburger={showHamburger}
                   PrimaryCTASlot={slots.PrimaryCTASlot}
@@ -190,10 +197,9 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
               </div>
 
               {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
-              <div className="hidden md:flex items-center gap-8 absolute">
+              <div className="hidden md:flex items-center gap-8">
                 {!showHamburger && <div>{NavContent}</div>}
                 <CTAContainer
-                  isMeasurementDiv={false}
                   showCTAs={!!showCTAs}
                   showHamburger={showHamburger}
                   PrimaryCTASlot={slots.PrimaryCTASlot}

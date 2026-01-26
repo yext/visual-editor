@@ -1,3 +1,6 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { FaBars } from "react-icons/fa6";
 import {
   ArrayField,
   ComponentConfig,
@@ -16,17 +19,13 @@ import {
   useOverflow,
   YextField,
 } from "@yext/visual-editor";
-import { useTranslation } from "react-i18next";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../atoms/dropdown";
-import { FaBars } from "react-icons/fa6";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction";
-import React, { useRef, useState } from "react";
-import { get } from "http";
 
 export type HeaderLinksProps = {
   data: {
@@ -115,81 +114,24 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
-  const type = parentData?.type || "Primary";
-  const isSecondary = type === "Secondary";
 
   const navRef = React.useRef<HTMLDivElement | null>(null);
   const measureContainerRef = React.useRef<HTMLUListElement | null>(null);
-  const linkRefs = useRef<Array<HTMLLIElement | null>>([]);
-  const hamburgerButtonRef = useRef<HTMLDivElement | null>(null);
-  const [visibleCount, setVisibleCount] = useState(data.links?.length || 0);
-  // const [windowWidth, setWindowWidth] = useState(0);
-
+  const linkRefs = React.useRef<Array<HTMLLIElement | null>>([]);
+  const hamburgerButtonRef = React.useRef<HTMLDivElement | null>(null);
   const isOverflow = useOverflow(navRef, measureContainerRef);
 
-  if (isSecondary) {
-    console.log(
-      "navRef",
-      navRef.current,
-      "measureContainerRef:",
-      measureContainerRef,
-      "isOverflow:",
-      isOverflow
-    );
-  }
   React.useEffect(
     () => registerOverlayPortal(hamburgerButtonRef.current),
     [hamburgerButtonRef.current]
   );
 
-  // const measure = () => {
-  //   if (styles.alwaysCollapse || !isSecondary) {
-  //     return;
-  //   }
-
-  //   const w = getWindow();
-  //   setWindowWidth(w?.innerWidth || 0);
-
-  //   requestAnimationFrame(() => {
-  //     const linkWidths = linkRefs.current.map(
-  //       (l) => l?.getBoundingClientRect().width || 0
-  //     );
-  //     console.log(linkRefs, "linkWidths:", linkWidths);
-
-  //     const gapWidth = 24;
-  //     const hamburgerWidth = 16;
-  //     const navWidth =
-  //       (navRef.current?.offsetWidth || 0) - gapWidth - hamburgerWidth;
-
-  //     let total = 0;
-  //     let fitCount = linkWidths.length;
-
-  //     for (let i = 0; i < linkWidths.length; i++) {
-  //       total += linkWidths[i] + gapWidth;
-
-  //       if (total > navWidth) {
-  //         fitCount = i;
-  //         break;
-  //       }
-  //     }
-
-  //     setVisibleCount(fitCount);
-  //   });
-  // };
-
-  // React.useEffect(() => {
-  //   measure();
-
-  //   const w = getWindow();
-  //   if (!w) {
-  //     return;
-  //   }
-
-  //   w.addEventListener("resize", measure);
-  //   return () => {
-  //     w.removeEventListener("resize", measure);
-  //   };
-  // }, [data.links, styles.alwaysCollapse, isSecondary]);
+  const type = parentData?.type || "Primary";
+  const isSecondary = type === "Secondary";
+  const validLinks = data.links?.filter((item) => !!item?.link) || [];
+  const validAlwaysCollapsedLinks =
+    data.collapsedLinks?.filter((item) => !!item?.link) || [];
+  const windowWidth = getWindow()?.innerWidth || 1024;
 
   const renderLink = (
     item: TranslatableCTA,
@@ -211,9 +153,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     />
   );
 
-  const validLinks = data.links?.filter((item) => !!item?.link) || [];
-
-  if (validLinks.length === 0) {
+  if (validLinks.concat(validAlwaysCollapsedLinks).length === 0) {
     if (puck.isEditing) {
       return (
         <nav
@@ -232,22 +172,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       );
     }
     return <></>;
-  }
-  const windowWidth = navRef.current?.clientWidth || 1000;
-
-  if (isSecondary) {
-    console.log("windowWidth:", windowWidth, "visibleCount:", visibleCount);
-    // console.log("validLinks", validLinks);
-    console.log(
-      "sliced",
-      validLinks
-        .slice(0, windowWidth <= 360 ? undefined : visibleCount)
-        .concat(windowWidth <= 360 ? data.collapsedLinks : [])
-    );
-    // console.log(
-    //   "show",
-    //   !styles?.alwaysCollapse || windowWidth >= 360 || !isSecondary
-    // );
   }
 
   return (
@@ -282,7 +206,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       {(!isSecondary || windowWidth <= 360 || !isOverflow) && (
         <ul className="flex flex-col md:flex-row w-full sm:w-auto gap-0 md:gap-6 md:items-center justify-end">
           {validLinks
-            .concat(windowWidth <= 360 ? data.collapsedLinks : [])
+            .concat(windowWidth <= 360 ? validAlwaysCollapsedLinks : [])
             .map((item, index) => {
               return (
                 <li
@@ -297,7 +221,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       )}
 
       {isSecondary &&
-        (isOverflow || data.collapsedLinks.length > 0) &&
+        (isOverflow || validAlwaysCollapsedLinks.length > 0) &&
         windowWidth > 360 && (
           <div className="hidden md:block py-4 md:py-0">
             <DropdownMenu>
@@ -318,13 +242,13 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
               <DropdownMenuContent className="bg-white border rounded shadow-md p-2 min-w-[200px] z-[9999]">
                 {([] as typeof validLinks)
                   .concat(isOverflow ? validLinks : [])
-                  .concat(data.collapsedLinks)
+                  .concat(validAlwaysCollapsedLinks)
                   .map((item, index) => (
                     <DropdownMenuItem
                       key={`overflow-${index}`}
                       className={`cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100 ${puck.isEditing ? "pointer-events-none" : "pointer-events-auto"}`}
                     >
-                      {renderLink(item, visibleCount + index, "overflow")}
+                      {renderLink(item, index, "overflow")}
                     </DropdownMenuItem>
                   ))}
               </DropdownMenuContent>

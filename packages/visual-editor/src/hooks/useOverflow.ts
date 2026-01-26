@@ -22,14 +22,6 @@ export const useOverflow = (
 
     const observer = new ResizeObserver(() => {
       const hasOverflow = content.scrollWidth > container.clientWidth;
-      console.log(
-        "comparing",
-        content.scrollWidth,
-        ">",
-        container.clientWidth,
-        "=",
-        hasOverflow
-      );
       setIsOverflowing(hasOverflow);
     });
 

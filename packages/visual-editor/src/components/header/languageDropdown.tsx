@@ -146,7 +146,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
           onValueChange={(value) => handleOpenChange(!!value)}
         >
           <AccordionItem value="language-selector">
-            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 px-4 py-6 md:pb-4 ">
+            <AccordionTrigger className="group flex w-full items-center justify-between text-body-sm-fontSize font-medium text-gray-900 md:pb-4 ">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4" />
                 <Body variant="xs">{getLanguageName(selected)}</Body>
