@@ -3,10 +3,13 @@ import { useTranslation } from "react-i18next";
 import { FaBars } from "react-icons/fa6";
 import {
   ArrayField,
+  AutoField,
   ComponentConfig,
+  FieldLabel,
   Fields,
   PuckComponent,
   registerOverlayPortal,
+  setDeep,
 } from "@measured/puck";
 import {
   CTA,
@@ -83,7 +86,32 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      links: YextField(msg("fields.links", "Links"), linkFieldConfig),
+      links: {
+        type: "custom",
+        render: ({ onChange, value }) => {
+          return (
+            <div>
+              <FieldLabel
+                label={pt("fields.links", "Links")}
+                el="div"
+                className="mb-3"
+              >
+                <p className="ve-text-xs ve-mb-3">
+                  {pt(
+                    "fields.linksTooltip",
+                    "Links will automatically collapse if the viewport is too narrow"
+                  )}
+                </p>
+                <AutoField
+                  value={value}
+                  onChange={onChange}
+                  field={linkFieldConfig}
+                />
+              </FieldLabel>
+            </div>
+          );
+        },
+      },
       collapsedLinks: YextField(
         msg("fields.alwaysCollapsedLinks", "Always Collapsed Links"),
         linkFieldConfig
@@ -275,6 +303,20 @@ export const defaultHeaderLinkProps: HeaderLinksProps = {
 export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
+  resolveFields: (data) => {
+    if (data.props.parentData?.type === "Secondary") {
+      return setDeep(
+        headerLinksFields,
+        "data.objectFields.collapsedLinks.visible",
+        true
+      );
+    }
+    return setDeep(
+      headerLinksFields,
+      "data.objectFields.collapsedLinks.visible",
+      false
+    );
+  },
   defaultProps: defaultHeaderLinkProps,
   render: (props) => <HeaderLinksComponent {...props} />,
 };

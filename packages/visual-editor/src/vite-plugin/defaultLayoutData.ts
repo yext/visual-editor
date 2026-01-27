@@ -15,13 +15,16 @@ const mainDefaultLayout = {
     {
       type: "ExpandedHeader",
       props: {
-        styles: { maxWidth: "theme", headerPosition: "scrollsWithPage" },
+        styles: {
+          maxWidth: "theme",
+          headerPosition: "scrollsWithPage",
+        },
         slots: {
           PrimaryHeaderSlot: [
             {
               type: "PrimaryHeaderSlot",
               props: {
-                id: "PrimaryHeaderSlot-0d3864b1-add7-4268-9a02-f0526eb35c9b",
+                id: "PrimaryHeaderSlot-326efc21-4048-437b-844c-9fad6adf6b10",
                 styles: {
                   backgroundColor: {
                     bgColor: "bg-white",
@@ -33,22 +36,22 @@ const mainDefaultLayout = {
                     {
                       type: "ImageSlot",
                       props: {
-                        id: "ImageSlot-dbf6589a-4cff-4ef8-ada0-1a53bf5af37a",
+                        id: "ImageSlot-f061015b-962c-47c9-a3f0-d558a0afb18c",
                         data: {
                           image: {
                             field: "",
                             constantValue: {
-                              hasLocalizedValue: "true",
-                              en: {
-                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                                height: 100,
-                                width: 100,
-                              },
+                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                              height: 100,
+                              width: 100,
                             },
                             constantValueEnabled: true,
                           },
                         },
-                        styles: { aspectRatio: 1, width: 100 },
+                        styles: {
+                          aspectRatio: 1,
+                          width: 100,
+                        },
                       },
                     },
                   ],
@@ -56,7 +59,7 @@ const mainDefaultLayout = {
                     {
                       type: "HeaderLinks",
                       props: {
-                        id: "HeaderLinks-48f4506c-6421-4f54-95c2-0a44f6d89c29",
+                        id: "HeaderLinks-5d0fa0df-2333-4fd2-b155-be9bc58894a0",
                         data: {
                           links: [
                             {
@@ -66,6 +69,7 @@ const mainDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -74,6 +78,7 @@ const mainDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -82,10 +87,14 @@ const mainDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                           ],
+                          collapsedLinks: [],
                         },
-                        parentData: { type: "Primary" },
+                        parentData: {
+                          type: "Primary",
+                        },
                       },
                     },
                   ],
@@ -93,7 +102,7 @@ const mainDefaultLayout = {
                     {
                       type: "CTASlot",
                       props: {
-                        id: "CTASlot-6ff4af13-e9a4-4ec2-8884-8e0cd165f900",
+                        id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
                           show: true,
                           entityField: {
@@ -103,7 +112,10 @@ const mainDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: { en: "#", hasLocalizedValue: "true" },
+                              link: {
+                                en: "#",
+                                hasLocalizedValue: "true",
+                              },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -114,6 +126,7 @@ const mainDefaultLayout = {
                           variant: "primary",
                           presetImage: "app-store",
                         },
+                        eventName: "primaryCta",
                       },
                     },
                   ],
@@ -121,7 +134,7 @@ const mainDefaultLayout = {
                     {
                       type: "CTASlot",
                       props: {
-                        id: "CTASlot-203ce7a4-6207-42b5-bd8d-500051893a78",
+                        id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
                           show: true,
                           entityField: {
@@ -131,7 +144,10 @@ const mainDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: { en: "#", hasLocalizedValue: "true" },
+                              link: {
+                                en: "#",
+                                hasLocalizedValue: "true",
+                              },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -142,6 +158,7 @@ const mainDefaultLayout = {
                           variant: "secondary",
                           presetImage: "app-store",
                         },
+                        eventName: "secondaryCta",
                       },
                     },
                   ],
@@ -152,8 +169,11 @@ const mainDefaultLayout = {
                     {
                       type: "SecondaryHeaderSlot",
                       props: {
-                        id: "SecondaryHeaderSlot-27cae493-886a-4c73-a9fa-376d28a0baf3",
-                        data: { show: true, showLanguageDropdown: false },
+                        id: "SecondaryHeaderSlot-8c8e4511-4f48-4fab-a1ac-bb0e94ba6761",
+                        data: {
+                          show: true,
+                          showLanguageDropdown: false,
+                        },
                         styles: {
                           backgroundColor: {
                             bgColor: "bg-palette-primary-light",
@@ -165,7 +185,7 @@ const mainDefaultLayout = {
                             {
                               type: "HeaderLinks",
                               props: {
-                                id: "HeaderLinks-76826121-e9bc-452a-8b99-c663a5803dc3",
+                                id: "HeaderLinks-b6a70e27-ca02-47b0-b115-8915020bc7a7",
                                 data: {
                                   links: [
                                     {
@@ -175,6 +195,7 @@ const mainDefaultLayout = {
                                         hasLocalizedValue: "true",
                                       },
                                       link: "#",
+                                      openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
@@ -183,6 +204,7 @@ const mainDefaultLayout = {
                                         hasLocalizedValue: "true",
                                       },
                                       link: "#",
+                                      openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
@@ -191,20 +213,30 @@ const mainDefaultLayout = {
                                         hasLocalizedValue: "true",
                                       },
                                       link: "#",
+                                      openInNewTab: false,
                                     },
                                   ],
+                                  collapsedLinks: [],
                                 },
-                                parentData: { type: "Secondary" },
+                                parentData: {
+                                  type: "Secondary",
+                                },
                               },
                             },
                           ],
                         },
-                        parentStyles: { maxWidth: "theme" },
+                        parentStyles: {
+                          maxWidth: "theme",
+                        },
                       },
                     },
                   ],
                 },
-                conditionalRender: { navContent: true, CTAs: true },
+                conditionalRender: {
+                  navContent: true,
+                  CTAs: true,
+                  hasLogoImage: true,
+                },
               },
             },
           ],
@@ -212,8 +244,11 @@ const mainDefaultLayout = {
             {
               type: "SecondaryHeaderSlot",
               props: {
-                id: "SecondaryHeaderSlot-27cae493-886a-4c73-a9fa-376d28a0baf3",
-                data: { show: true, showLanguageDropdown: false },
+                id: "SecondaryHeaderSlot-8c8e4511-4f48-4fab-a1ac-bb0e94ba6761",
+                data: {
+                  show: true,
+                  showLanguageDropdown: false,
+                },
                 styles: {
                   backgroundColor: {
                     bgColor: "bg-palette-primary-light",
@@ -225,7 +260,7 @@ const mainDefaultLayout = {
                     {
                       type: "HeaderLinks",
                       props: {
-                        id: "HeaderLinks-76826121-e9bc-452a-8b99-c663a5803dc3",
+                        id: "HeaderLinks-b6a70e27-ca02-47b0-b115-8915020bc7a7",
                         data: {
                           links: [
                             {
@@ -235,6 +270,7 @@ const mainDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -243,6 +279,7 @@ const mainDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                             {
                               linkType: "URL",
@@ -251,22 +288,30 @@ const mainDefaultLayout = {
                                 hasLocalizedValue: "true",
                               },
                               link: "#",
+                              openInNewTab: false,
                             },
                           ],
+                          collapsedLinks: [],
                         },
-                        parentData: { type: "Secondary" },
+                        parentData: {
+                          type: "Secondary",
+                        },
                       },
                     },
                   ],
                 },
-                parentStyles: { maxWidth: "theme" },
+                parentStyles: {
+                  maxWidth: "theme",
+                },
               },
             },
           ],
         },
-        analytics: { scope: "expandedHeader" },
-        id: "ExpandedHeader-92679ccf-a7de-4b5b-90d3-fea0f03449d0",
-        ignoreLocaleWarning: ["slots.SecondaryHeaderSlot"],
+        analytics: {
+          scope: "expandedHeader",
+        },
+        id: "ExpandedHeader-b31ee6d4-4c61-4f07-832c-421ba5c4e797",
+        ignoreLocaleWarning: [],
       },
     },
     {
@@ -3906,13 +3951,16 @@ const directoryDefaultLayout = {
     {
       type: "ExpandedHeader",
       props: {
-        styles: { maxWidth: "theme", headerPosition: "scrollsWithPage" },
+        styles: {
+          maxWidth: "theme",
+          headerPosition: "scrollsWithPage",
+        },
         slots: {
           PrimaryHeaderSlot: [
             {
               type: "PrimaryHeaderSlot",
               props: {
-                id: "PrimaryHeaderSlot-6bec7d2b-1bea-4c98-971d-22417036e3f1",
+                id: "PrimaryHeaderSlot-326efc21-4048-437b-844c-9fad6adf6b10",
                 styles: {
                   backgroundColor: {
                     bgColor: "bg-white",
@@ -3924,7 +3972,7 @@ const directoryDefaultLayout = {
                     {
                       type: "ImageSlot",
                       props: {
-                        id: "ImageSlot-e1a34076-0cb5-415d-bb3c-bc7b17e5cf78",
+                        id: "ImageSlot-f061015b-962c-47c9-a3f0-d558a0afb18c",
                         data: {
                           image: {
                             field: "",
@@ -3936,7 +3984,10 @@ const directoryDefaultLayout = {
                             constantValueEnabled: true,
                           },
                         },
-                        styles: { aspectRatio: 1, width: 100 },
+                        styles: {
+                          aspectRatio: 1,
+                          width: 100,
+                        },
                       },
                     },
                   ],
@@ -3944,7 +3995,7 @@ const directoryDefaultLayout = {
                     {
                       type: "HeaderLinks",
                       props: {
-                        id: "HeaderLinks-7369f769-4b5e-4f7d-a0ad-be85c3df008f",
+                        id: "HeaderLinks-5d0fa0df-2333-4fd2-b155-be9bc58894a0",
                         data: {
                           links: [
                             {
@@ -3975,8 +4026,11 @@ const directoryDefaultLayout = {
                               openInNewTab: false,
                             },
                           ],
+                          collapsedLinks: [],
                         },
-                        parentData: { type: "Primary" },
+                        parentData: {
+                          type: "Primary",
+                        },
                       },
                     },
                   ],
@@ -3984,7 +4038,7 @@ const directoryDefaultLayout = {
                     {
                       type: "CTASlot",
                       props: {
-                        id: "CTASlot-47ab637c-9bb8-4c19-9134-1f36f6a8317b",
+                        id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
                           show: true,
                           entityField: {
@@ -3994,7 +4048,10 @@ const directoryDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: { en: "#", hasLocalizedValue: "true" },
+                              link: {
+                                en: "#",
+                                hasLocalizedValue: "true",
+                              },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -4013,7 +4070,7 @@ const directoryDefaultLayout = {
                     {
                       type: "CTASlot",
                       props: {
-                        id: "CTASlot-80a6423e-dc73-477c-8e52-e50eccb36e47",
+                        id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
                           show: true,
                           entityField: {
@@ -4023,7 +4080,10 @@ const directoryDefaultLayout = {
                                 en: "Call to Action",
                                 hasLocalizedValue: "true",
                               },
-                              link: { en: "#", hasLocalizedValue: "true" },
+                              link: {
+                                en: "#",
+                                hasLocalizedValue: "true",
+                              },
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -4045,8 +4105,11 @@ const directoryDefaultLayout = {
                     {
                       type: "SecondaryHeaderSlot",
                       props: {
-                        id: "SecondaryHeaderSlot-c6938360-c677-439c-8013-4e5903ac83c0",
-                        data: { show: true, showLanguageDropdown: false },
+                        id: "SecondaryHeaderSlot-8c8e4511-4f48-4fab-a1ac-bb0e94ba6761",
+                        data: {
+                          show: true,
+                          showLanguageDropdown: false,
+                        },
                         styles: {
                           backgroundColor: {
                             bgColor: "bg-palette-primary-light",
@@ -4058,7 +4121,7 @@ const directoryDefaultLayout = {
                             {
                               type: "HeaderLinks",
                               props: {
-                                id: "HeaderLinks-7367fdd1-0206-4045-8108-fcee3bc5f626",
+                                id: "HeaderLinks-b6a70e27-ca02-47b0-b115-8915020bc7a7",
                                 data: {
                                   links: [
                                     {
@@ -4089,13 +4152,18 @@ const directoryDefaultLayout = {
                                       openInNewTab: false,
                                     },
                                   ],
+                                  collapsedLinks: [],
                                 },
-                                parentData: { type: "Secondary" },
+                                parentData: {
+                                  type: "Secondary",
+                                },
                               },
                             },
                           ],
                         },
-                        parentStyles: { maxWidth: "theme" },
+                        parentStyles: {
+                          maxWidth: "theme",
+                        },
                       },
                     },
                   ],
@@ -4112,8 +4180,11 @@ const directoryDefaultLayout = {
             {
               type: "SecondaryHeaderSlot",
               props: {
-                id: "SecondaryHeaderSlot-c6938360-c677-439c-8013-4e5903ac83c0",
-                data: { show: true, showLanguageDropdown: false },
+                id: "SecondaryHeaderSlot-8c8e4511-4f48-4fab-a1ac-bb0e94ba6761",
+                data: {
+                  show: true,
+                  showLanguageDropdown: false,
+                },
                 styles: {
                   backgroundColor: {
                     bgColor: "bg-palette-primary-light",
@@ -4125,7 +4196,7 @@ const directoryDefaultLayout = {
                     {
                       type: "HeaderLinks",
                       props: {
-                        id: "HeaderLinks-7367fdd1-0206-4045-8108-fcee3bc5f626",
+                        id: "HeaderLinks-b6a70e27-ca02-47b0-b115-8915020bc7a7",
                         data: {
                           links: [
                             {
@@ -4156,19 +4227,26 @@ const directoryDefaultLayout = {
                               openInNewTab: false,
                             },
                           ],
+                          collapsedLinks: [],
                         },
-                        parentData: { type: "Secondary" },
+                        parentData: {
+                          type: "Secondary",
+                        },
                       },
                     },
                   ],
                 },
-                parentStyles: { maxWidth: "theme" },
+                parentStyles: {
+                  maxWidth: "theme",
+                },
               },
             },
           ],
         },
-        analytics: { scope: "expandedHeader" },
-        id: "ExpandedHeader-a7953e49-f085-4132-b107-cfb9936fb6c7",
+        analytics: {
+          scope: "expandedHeader",
+        },
+        id: "ExpandedHeader-b31ee6d4-4c61-4f07-832c-421ba5c4e797",
         ignoreLocaleWarning: [],
       },
     },
