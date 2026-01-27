@@ -14,6 +14,7 @@ import {
   ThemeOptions,
   HeadingLevel,
   BackgroundStyle,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 
@@ -127,28 +128,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
 export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
   label: msg("components.headingText", "Heading Text"),
   fields: headingTextFields,
-  resolveFields: (data) => {
-    if (data.props.parentData) {
-      return {
-        ...headingTextFields,
-        data: {
-          label: msg("fields.data", "Data"),
-          type: "object",
-          objectFields: {
-            info: {
-              type: "custom",
-              render: () => (
-                <p style={{ fontSize: "var(--puck-font-size-xxs)" }}>
-                  Data is inherited from the parent section.
-                </p>
-              ),
-            },
-          },
-        },
-      } as any;
-    }
-    return headingTextFields;
-  },
+  resolveFields: (data) => resolveDataFromParent(headingTextFields, data),
   defaultProps: {
     data: {
       text: {

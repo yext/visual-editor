@@ -388,6 +388,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
+      el="div"
       className={`ve-inline-block w-full ${
         constantFieldConfig.label ? "ve-pt-3" : ""
       }`}
