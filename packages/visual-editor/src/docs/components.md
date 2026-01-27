@@ -649,9 +649,9 @@ The Product Section is used to display a curated list of products in a dedicated
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                 | Default |
-| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                                                                                                                                                           | Description                                                                 | Default |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; cardVariant?: ProductSectionVariant; showImage?: boolean; showBrow?: boolean; showTitle?: boolean; showPrice?: boolean; showDescription?: boolean; showCTA?: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 

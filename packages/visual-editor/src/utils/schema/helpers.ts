@@ -1,4 +1,4 @@
-import { StreamDocument } from "../applyTheme";
+import { StreamDocument } from "../types/StreamDocument";
 
 /**
  * isValidDirectoryParents returns true if the array from dm_directoryParents

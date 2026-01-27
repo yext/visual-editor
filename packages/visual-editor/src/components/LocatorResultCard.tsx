@@ -1,4 +1,4 @@
-import { Field, PuckContext } from "@measured/puck";
+import { Field } from "@measured/puck";
 import {
   Address,
   AddressType,
@@ -26,7 +26,6 @@ import {
   HoursStatusAtom,
   HoursTableAtom,
   Image,
-  mergeMeta,
   msg,
   PhoneAtom,
   resolveComponentData,
@@ -597,11 +596,9 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
-    puck,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
-    puck: PuckContext;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
@@ -635,9 +632,9 @@ export const LocatorResultCard = React.memo(
     );
 
     const resolvedUrl = resolveUrlTemplateOfChild(
-      mergeMeta(location, streamDocument),
-      relativePrefixToRoot,
-      puck.metadata?.resolveUrlTemplate
+      location,
+      streamDocument,
+      relativePrefixToRoot
     );
 
     const getDirectionsLink: string | undefined = (() => {

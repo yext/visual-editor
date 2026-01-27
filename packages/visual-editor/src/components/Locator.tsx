@@ -832,13 +832,9 @@ const LocatorInternal = ({
 
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => (
-      <LocatorResultCard
-        {...result}
-        puck={puck}
-        resultCardProps={resultCardProps}
-      />
+      <LocatorResultCard {...result} resultCardProps={resultCardProps} />
     ),
-    [puck, resultCardProps]
+    [resultCardProps]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =

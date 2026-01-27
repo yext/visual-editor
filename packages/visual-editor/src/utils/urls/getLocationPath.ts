@@ -1,6 +1,7 @@
-import { normalizeSlug } from "./slugifier.ts";
+import { StreamDocument } from "../index.ts";
+import { normalizeSlug } from "../slugifier.ts";
 import { AddressType } from "@yext/pages-components";
-import { StreamDocument } from "./applyTheme.ts";
+import { isPrimaryLocale } from "./resolveUrlFromPathInfo.ts";
 
 export interface LocationDocument extends StreamDocument {
   id: string;
@@ -8,6 +9,7 @@ export interface LocationDocument extends StreamDocument {
   address?: AddressType;
 }
 
+// Fallback method to get location path when no URL template is defined
 export const getLocationPath = (
   location: LocationDocument,
   relativePrefixToRoot: string = ""
@@ -25,11 +27,9 @@ export const getLocationPath = (
     throw new Error("Missing locale for getLocationPath");
   }
 
-  const isPrimaryLocale =
-    location.__?.isPrimaryLocale === true ||
-    (location.__?.isPrimaryLocale === undefined && location.locale === "en");
+  const isPrimary = isPrimaryLocale(location);
 
-  const localePath = isPrimaryLocale ? "" : `${locale}/`;
+  const localePath = isPrimary ? "" : `${locale}/`;
   const path = location.address
     ? `${localePath}${location.address.region}/${location.address.city}/${location.address.line1}`
     : `${localePath}${location.id}`;

@@ -13,7 +13,6 @@ import {
   Fields,
   ComponentData,
   Slot,
-  PuckContext,
 } from "@measured/puck";
 import {
   ImageType,
@@ -389,6 +388,41 @@ interface ProductSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * The variant of the product cards.
+     * @defaultValue Immersive
+     */
+    cardVariant?: ProductSectionVariant;
+    /**
+     * Whether to show the product image.
+     * @defaultValue true
+     */
+    showImage?: boolean;
+    /**
+     * Whether to show the product brow text.
+     * @defaultValue true
+     */
+    showBrow?: boolean;
+    /**
+     * Whether to show the product title.
+     * @defaultValue true
+     */
+    showTitle?: boolean;
+    /**
+     * Whether to show the product price.
+     * @defaultValue true
+     */
+    showPrice?: boolean;
+    /**
+     * Whether to show the product description.
+     * @defaultValue true
+     */
+    showDescription?: boolean;
+    /**
+     * Whether to show the product CTA.
+     * @defaultValue true
+     */
+    showCTA?: boolean;
   };
   slots: {
     SectionHeadingSlot: Slot;
@@ -789,6 +823,8 @@ interface PhotoGalleryStyles {
    */
   variant: "gallery" | "carousel";
 }
+
+type ProductSectionVariant = "immersive" | "classic" | "minimal";
 
 interface ProfessionalHeroStyles {
   /**

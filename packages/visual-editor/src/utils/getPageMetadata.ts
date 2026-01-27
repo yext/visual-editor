@@ -1,5 +1,5 @@
 import { setDeep } from "@measured/puck";
-import { StreamDocument } from "./applyTheme.ts";
+import { StreamDocument } from "./types/StreamDocument.ts";
 import { resolveComponentData } from "./resolveComponentData.tsx";
 
 export type RootConfig = {

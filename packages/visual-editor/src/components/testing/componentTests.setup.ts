@@ -5,19 +5,24 @@ import "./componentTests.css";
 import "../../../dist/style.css";
 // Enabled expect().toHaveNoViolations()
 import "jest-axe/extend-expect";
-import { expect, vi } from "vitest";
+import { expect, vi, beforeEach } from "vitest";
 import { BrowserPage, commands, page } from "@vitest/browser/context";
 import { act } from "@testing-library/react";
 import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
 import { applyTheme } from "../../utils/applyTheme.ts";
+import { ThemeData } from "../../internal/types/themeData.ts";
 
-// Applies the theme variables and mocks the date
-beforeEach(() => {
+// Applies the default theme variables and mocks the date
+export const testSetup = (theme: ThemeData) => {
   // July 1, 2025 Noon (month is 0-indexed)
   vi.setSystemTime(new Date(2025, 6, 1, 12, 0, 0).valueOf());
 
   const tag = document.createElement("style");
-  const themeTags = applyTheme({}, "./", defaultThemeConfig);
+  const themeTags = applyTheme(
+    { __: { theme: JSON.stringify(theme) } },
+    "./",
+    defaultThemeConfig
+  );
 
   // don't load fonts
   const matches = [...themeTags.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)];
@@ -29,7 +34,10 @@ beforeEach(() => {
   } else {
     console.error("failed to apply theme");
   }
-});
+};
+
+// Run the test setup before each test
+beforeEach(() => testSetup({}));
 
 // Adds the toMatchScreenshot method to vitest's expect.
 // This portion is run in the browser environment while

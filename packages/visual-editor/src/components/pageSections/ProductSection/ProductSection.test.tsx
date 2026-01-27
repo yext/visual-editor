@@ -1169,6 +1169,600 @@ const tests: ComponentTest[] = [
     },
     version: 32,
   },
+  {
+    name: "version 54 - products with immersive variant",
+    document: productsData,
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-background-2",
+          textColor: "text-foreground",
+        },
+        cardVariant: "immersive",
+        showImage: true,
+        showBrow: true,
+        showTitle: true,
+        showPrice: true,
+        showDescription: true,
+        showCTA: true,
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Immersive Variant",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "ProductCard",
+                    props: {
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-background-1",
+                          textColor: "text-foreground",
+                        },
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/640x360",
+                                    height: 360,
+                                    width: 640,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1.78,
+                                width: 640,
+                                imageConstrain: "fill",
+                              },
+                            },
+                          },
+                        ],
+                        BrowSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"Brow Text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>Brow Text</strong></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "sm" },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: "Title",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { level: 3, align: "left" },
+                            },
+                          },
+                        ],
+                        PriceSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$10.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$10.00</strong></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "base" },
+                            },
+                          },
+                        ],
+                        DescriptionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Description","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Description</span></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "base" },
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "CTA",
+                                    link: "#",
+                                    linkType: "URL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "primary",
+                                presetImage: "app-store",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "productsSection" },
+      liveVisibility: true,
+    },
+    version: 54,
+  },
+  {
+    name: "version 54 - products with classic variant",
+    document: productsData,
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-background-2",
+          textColor: "text-foreground",
+        },
+        cardVariant: "classic",
+        showImage: true,
+        showBrow: true,
+        showTitle: true,
+        showPrice: true,
+        showDescription: true,
+        showCTA: true,
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Classic Variant",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "ProductCard",
+                    props: {
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-background-1",
+                          textColor: "text-foreground",
+                        },
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/640x360",
+                                    height: 360,
+                                    width: 640,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1.78,
+                                width: 640,
+                                imageConstrain: "fill",
+                              },
+                            },
+                          },
+                        ],
+                        BrowSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"Brow Text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>Brow Text</strong></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "sm" },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: "Title",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { level: 3, align: "left" },
+                            },
+                          },
+                        ],
+                        PriceSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$10.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$10.00</strong></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "base" },
+                            },
+                          },
+                        ],
+                        DescriptionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Description","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Description</span></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "base" },
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "CTA",
+                                    link: "#",
+                                    linkType: "URL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "primary",
+                                presetImage: "app-store",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "productsSection" },
+      liveVisibility: true,
+    },
+    version: 54,
+  },
+  {
+    name: "version 54 - products with minimal variant",
+    document: productsData,
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-background-2",
+          textColor: "text-foreground",
+        },
+        cardVariant: "minimal",
+        showImage: true,
+        showBrow: true,
+        showTitle: true,
+        showPrice: true,
+        showDescription: true,
+        showCTA: true,
+      },
+      slots: {
+        SectionHeadingSlot: [
+          {
+            type: "HeadingTextSlot",
+            props: {
+              data: {
+                text: {
+                  field: "",
+                  constantValue: {
+                    en: "Minimal Variant",
+                    hasLocalizedValue: "true",
+                  },
+                  constantValueEnabled: true,
+                },
+              },
+              styles: { level: 2, align: "left" },
+            },
+          },
+        ],
+        CardsWrapperSlot: [
+          {
+            type: "ProductCardsWrapper",
+            props: {
+              data: {
+                field: "",
+                constantValueEnabled: true,
+                constantValue: [{}],
+              },
+              slots: {
+                CardSlot: [
+                  {
+                    type: "ProductCard",
+                    props: {
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-background-1",
+                          textColor: "text-foreground",
+                        },
+                      },
+                      slots: {
+                        ImageSlot: [
+                          {
+                            type: "ImageSlot",
+                            props: {
+                              data: {
+                                image: {
+                                  field: "",
+                                  constantValue: {
+                                    url: "https://placehold.co/640x360",
+                                    height: 360,
+                                    width: 640,
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                aspectRatio: 1.78,
+                                width: 640,
+                                imageConstrain: "fill",
+                              },
+                            },
+                          },
+                        ],
+                        BrowSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"Brow Text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>Brow Text</strong></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "sm" },
+                            },
+                          },
+                        ],
+                        TitleSlot: [
+                          {
+                            type: "HeadingTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: "Title",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { level: 3, align: "left" },
+                            },
+                          },
+                        ],
+                        PriceSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$10.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$10.00</strong></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "base" },
+                            },
+                          },
+                        ],
+                        DescriptionSlot: [
+                          {
+                            type: "BodyTextSlot",
+                            props: {
+                              data: {
+                                text: {
+                                  field: "",
+                                  constantValue: {
+                                    en: {
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Description","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Description</span></p>',
+                                    },
+                                    hasLocalizedValue: "true",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: { variant: "base" },
+                            },
+                          },
+                        ],
+                        CTASlot: [
+                          {
+                            type: "CTASlot",
+                            props: {
+                              data: {
+                                entityField: {
+                                  field: "",
+                                  constantValue: {
+                                    label: "CTA",
+                                    link: "#",
+                                    linkType: "URL",
+                                    ctaType: "textAndLink",
+                                  },
+                                  constantValueEnabled: true,
+                                },
+                              },
+                              styles: {
+                                variant: "primary",
+                                presetImage: "app-store",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      analytics: { scope: "productsSection" },
+      liveVisibility: true,
+    },
+    version: 54,
+  },
 ];
 
 describe("ProductSection", async () => {

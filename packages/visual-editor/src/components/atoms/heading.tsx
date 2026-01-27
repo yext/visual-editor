@@ -113,7 +113,7 @@ export const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
           className
         )}
         style={{
-          // @ts-expect-error ts(2322) the css variable here resolves to a valid enum value
+          // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: `var(--textTransform-h${level}-textTransform)`,
           ...dynamicStyle,
           ...style,
