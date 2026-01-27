@@ -2,7 +2,7 @@ import { PageSection, themeManagerCn } from "@yext/visual-editor";
 import { useTranslation } from "react-i18next";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 
 const ClassicHeroImage: PuckComponent<HeroImageProps> = (props) => {
   const { className, styles, slots, puck } = props;

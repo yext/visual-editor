@@ -1,5 +1,5 @@
 import React from "react";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,

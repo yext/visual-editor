@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   Background,
   HeadingTextProps,
@@ -13,11 +13,10 @@ import {
   deepMerge,
 } from "@yext/visual-editor";
 import { Address } from "@yext/pages-components";
-import { mergeMeta } from "../../utils/mergeMeta";
-import { resolveUrlTemplateOfChild } from "../../utils/resolveUrlTemplate";
 import { useCardContext } from "../../hooks/useCardContext";
 import { useGetCardSlots } from "../../hooks/useGetCardSlots";
 import React from "react";
+import { resolveUrlTemplateOfChild } from "../../utils/urls/resolveUrlTemplate";
 
 export const defaultDirectoryCardSlotData = (
   id: string,
@@ -162,9 +161,9 @@ const DirectoryCardComponent: PuckComponent<DirectoryCardProps> = (props) => {
 
   const resolvedUrl = parentData
     ? resolveUrlTemplateOfChild(
-        mergeMeta(parentData.profile, streamDocument),
-        relativePrefixToRoot,
-        puck.metadata?.resolveUrlTemplate
+        parentData.profile,
+        streamDocument,
+        relativePrefixToRoot
       )
     : undefined;
 

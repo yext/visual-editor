@@ -1,5 +1,5 @@
 import { cva, VariantProps } from "class-variance-authority";
-import { Fields } from "@measured/puck";
+import { Fields } from "@puckeditor/core";
 import {
   SpacingSelector,
   BackgroundStyle,

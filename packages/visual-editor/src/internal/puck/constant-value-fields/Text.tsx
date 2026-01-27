@@ -1,4 +1,4 @@
-import { CustomField, TextField } from "@measured/puck";
+import { CustomField, TextField } from "@puckeditor/core";
 import {
   TranslatableRichText,
   TranslatableString,

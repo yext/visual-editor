@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, CustomField } from "@measured/puck";
+import { ComponentConfig, Fields, CustomField } from "@puckeditor/core";
 import { msg, YextField, useDocument } from "@yext/visual-editor";
 import React from "react";
 import {

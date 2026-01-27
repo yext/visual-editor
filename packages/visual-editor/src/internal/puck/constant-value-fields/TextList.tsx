@@ -1,4 +1,4 @@
-import { AutoField, Button, CustomField, IconButton } from "@measured/puck";
+import { AutoField, Button, CustomField, IconButton } from "@puckeditor/core";
 import { Plus as PlusIcon, Trash2 as TrashIcon } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { RichText, TranslatableRichText } from "../../../types/types.ts";
@@ -75,7 +75,6 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
             <span style={{ color: TEXT_LIST_BUTTON_COLOR }}>
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >
@@ -181,7 +180,6 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
             <div className="ve-flex ve-justify-end">
               <IconButton
                 onClick={() => removeItem(index)}
-                variant="secondary"
                 title={pt("deleteItem", "Delete Item")}
                 type="button"
               >

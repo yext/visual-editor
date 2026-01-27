@@ -1,4 +1,4 @@
-import { Config, Render } from "@measured/puck";
+import { Config, Render } from "@puckeditor/core";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { page } from "@vitest/browser/context";
 import {

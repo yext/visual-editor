@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, FieldLabel } from "@measured/puck";
+import { Field, FieldLabel } from "@puckeditor/core";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";

@@ -9,12 +9,22 @@ import {
   getAnalyticsScopeHash,
   HeadingTextProps,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  Slot,
+  setDeep,
+} from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import {
+  ProductSectionProvider,
+  ProductSectionVariant,
+} from "./ProductSectionContext.tsx";
 
 export interface ProductSectionProps {
   /**
@@ -27,6 +37,48 @@ export interface ProductSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * The variant of the product cards.
+     * @defaultValue Immersive
+     */
+    cardVariant?: ProductSectionVariant;
+
+    /**
+     * Whether to show the product image.
+     * @defaultValue true
+     */
+    showImage?: boolean;
+
+    /**
+     * Whether to show the product brow text.
+     * @defaultValue true
+     */
+    showBrow?: boolean;
+
+    /**
+     * Whether to show the product title.
+     * @defaultValue true
+     */
+    showTitle?: boolean;
+
+    /**
+     * Whether to show the product price.
+     * @defaultValue true
+     */
+    showPrice?: boolean;
+
+    /**
+     * Whether to show the product description.
+     * @defaultValue true
+     */
+    showDescription?: boolean;
+
+    /**
+     * Whether to show the product CTA.
+     * @defaultValue true
+     */
+    showCTA?: boolean;
   };
 
   slots: {
@@ -57,6 +109,62 @@ const productSectionFields: Fields<ProductSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      cardVariant: YextField(msg("fields.cardVariant", "Card Variant"), {
+        type: "select",
+        options: [
+          {
+            label: msg("fields.options.immersive", "Immersive"),
+            value: "immersive",
+          },
+          { label: msg("fields.options.classic", "Classic"), value: "classic" },
+          { label: msg("fields.options.minimal", "Minimal"), value: "minimal" },
+        ],
+      }),
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      }),
+      showBrow: YextField(msg("fields.showBrow", "Show Brow Text"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      }),
+      showTitle: YextField(msg("fields.showTitle", "Show Title"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      }),
+      showPrice: YextField(msg("fields.showPrice", "Show Price"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      }),
+      showDescription: YextField(
+        msg("fields.showDescription", "Show Description"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.show", "Show"), value: true },
+            { label: msg("fields.options.hide", "Hide"), value: false },
+          ],
+        }
+      ),
+      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.show", "Show"), value: true },
+          { label: msg("fields.options.hide", "Hide"), value: false },
+        ],
+      }),
     },
   }),
   slots: {
@@ -92,13 +200,25 @@ const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
   const { slots, styles } = props;
 
   return (
-    <PageSection
-      background={styles?.backgroundColor}
-      className="flex flex-col gap-8"
+    <ProductSectionProvider
+      value={{
+        variant: styles.cardVariant ?? "immersive",
+        showImage: styles.showImage ?? true,
+        showBrow: styles.showBrow ?? true,
+        showTitle: styles.showTitle ?? true,
+        showPrice: styles.showPrice ?? true,
+        showDescription: styles.showDescription ?? true,
+        showCTA: styles.showCTA ?? true,
+      }}
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-    </PageSection>
+      <PageSection
+        background={styles?.backgroundColor}
+        className="flex flex-col gap-8"
+      >
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+      </PageSection>
+    </ProductSectionProvider>
   );
 };
 
@@ -112,6 +232,13 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
+      cardVariant: "immersive",
+      showImage: true,
+      showBrow: true,
+      showTitle: true,
+      showPrice: true,
+      showDescription: true,
+      showCTA: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -161,7 +288,39 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
     liveVisibility: true,
   },
   resolveData: (data) => {
-    return forwardHeadingLevel(data, "TitleSlot");
+    let updatedData = forwardHeadingLevel(data, "TitleSlot");
+
+    const isImmersive = updatedData.props.styles.cardVariant === "immersive";
+    const showImageConstrain = !isImmersive;
+
+    const cards =
+      updatedData.props.slots.CardsWrapperSlot?.[0]?.props?.slots?.CardSlot;
+
+    if (cards) {
+      cards.forEach((_: any, i: number) => {
+        updatedData = setDeep(
+          updatedData,
+          `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.showImageConstrain`,
+          showImageConstrain
+        );
+
+        if (isImmersive) {
+          updatedData = setDeep(
+            updatedData,
+            `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.hideWidthProp`,
+            true
+          );
+        } else {
+          updatedData = setDeep(
+            updatedData,
+            `props.slots.CardsWrapperSlot[0].props.slots.CardSlot[${i}].props.slots.ImageSlot[0].props.hideWidthProp`,
+            false
+          );
+        }
+      });
+    }
+
+    return updatedData;
   },
   render: (props) => {
     return (

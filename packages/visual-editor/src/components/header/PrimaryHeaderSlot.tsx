@@ -5,7 +5,7 @@ import {
   registerOverlayPortal,
   Slot,
   SlotComponent,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,

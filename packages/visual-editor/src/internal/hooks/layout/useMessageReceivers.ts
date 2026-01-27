@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AppState, Config } from "@measured/puck";
+import { AppState, Config } from "@puckeditor/core";
 import { DevLogger } from "../../../utils/devLogger.ts";
 import { LayoutSaveState } from "../../types/saveState.ts";
 import {
@@ -11,11 +11,11 @@ import { useCommonMessageSenders } from "../useMessageSenders.ts";
 import { migrationRegistry } from "../../../components/migrations/migrationRegistry.ts";
 import { migrate } from "../../../utils/migrate.ts";
 import { resolveSchemaJson } from "../../../utils/schema/resolveSchema.ts";
+import { type StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import {
-  resolvePageSetUrlTemplate,
+  resolveUrlTemplate,
   resolveUrlTemplateOfChild,
-} from "../../../utils/resolveUrlTemplate.ts";
-import { type StreamDocument } from "../../../utils/applyTheme.ts";
+} from "../../../utils/urls/resolveUrlTemplate.ts";
 
 const devLogger = new DevLogger();
 
@@ -82,9 +82,9 @@ export const useLayoutMessageReceivers = (
       streamDocument?.meta?.entityType?.id === "locator" ||
       streamDocument?.meta?.entityType?.id?.startsWith("dm_")
     ) {
-      path = resolveUrlTemplateOfChild(streamDocument, "");
+      path = resolveUrlTemplateOfChild({}, streamDocument, "");
     } else {
-      path = resolvePageSetUrlTemplate(streamDocument, "");
+      path = resolveUrlTemplate(streamDocument, "");
     }
 
     // Find the relativePrefixToRoot for the page being rendered in the editor

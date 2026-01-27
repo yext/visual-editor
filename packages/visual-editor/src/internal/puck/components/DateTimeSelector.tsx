@@ -1,4 +1,4 @@
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 export const DateTimeSelector: CustomField<string | undefined> = {

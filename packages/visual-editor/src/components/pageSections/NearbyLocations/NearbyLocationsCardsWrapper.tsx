@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useQuery } from "@tanstack/react-query";
 import {
   backgroundColors,

@@ -11,7 +11,7 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Render, resolveAllData } from "@measured/puck";
+import { Render, resolveAllData } from "@puckeditor/core";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -22,12 +22,12 @@ import {
   migrate,
   migrationRegistry,
   filterComponentsFromConfig,
-  resolvePageSetUrlTemplate,
   defaultThemeConfig,
   mainConfig,
   getSchema,
   injectTranslations,
   getCanonicalUrl,
+  resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
 
@@ -100,7 +100,7 @@ export const getPath: GetPath<TemplateProps> = ({
   document,
   relativePrefixToRoot,
 }) => {
-  return resolvePageSetUrlTemplate(document, relativePrefixToRoot);
+  return resolveUrlTemplate(document, relativePrefixToRoot);
 };
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {

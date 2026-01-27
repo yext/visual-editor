@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { ComponentConfig, Fields, WithPuckProps } from "@measured/puck";
+import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
 import {
   AnalyticsProvider,
   AppliedFilters,
@@ -802,13 +802,9 @@ const LocatorInternal = ({
 
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => (
-      <LocatorResultCard
-        {...result}
-        puck={puck}
-        resultCardProps={resultCardProps}
-      />
+      <LocatorResultCard {...result} resultCardProps={resultCardProps} />
     ),
-    [puck, resultCardProps]
+    [resultCardProps]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
@@ -1095,7 +1091,7 @@ const LocatorInternal = ({
             placeholder={t("searchHere", "Search here...")}
             ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
             customCssClasses={{
-              focusedOption: "bg-gray-200 hover:bg-gray-200",
+              focusedOption: "bg-gray-200 hover:bg-gray-200 block",
               option: "hover:bg-gray-100 px-4 py-3",
               inputElement: "rounded-md p-4 h-11",
               currentLocationButton: "h-7 w-7 text-palette-primary-dark",

@@ -10,7 +10,7 @@ import {
   PuckComponent,
   registerOverlayPortal,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   CTA,
   msg,

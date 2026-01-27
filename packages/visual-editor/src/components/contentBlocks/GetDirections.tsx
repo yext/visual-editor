@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, setDeep } from "@measured/puck";
+import { ComponentConfig, Fields, setDeep } from "@puckeditor/core";
 import "@yext/pages-components/style.css";
 import {
   BackgroundStyle,

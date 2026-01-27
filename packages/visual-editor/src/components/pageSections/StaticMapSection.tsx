@@ -10,7 +10,7 @@ import {
   MapboxStaticMapComponent,
   mapStyleField,
 } from "../contentBlocks/MapboxStaticMap.tsx";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 
 export interface StaticMapData {

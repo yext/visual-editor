@@ -15,7 +15,7 @@ import {
   PhoneStyleFields,
   PhoneProps,
 } from "./Phone";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 
 export interface PhoneListProps {

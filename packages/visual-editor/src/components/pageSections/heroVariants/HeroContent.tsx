@@ -6,7 +6,7 @@ import {
   themeManagerCn,
 } from "@yext/visual-editor";
 import { HeroVariantProps } from "../HeroSection";
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 
 // Shared styling for the various parent containers of HeroContent
 export const heroContentParentCn = (styles: HeroVariantProps["styles"]) => {

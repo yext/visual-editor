@@ -1,4 +1,4 @@
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { AssetVideo, msg, YextField, VideoAtom } from "@yext/visual-editor";
 
 export type VideoProps = {

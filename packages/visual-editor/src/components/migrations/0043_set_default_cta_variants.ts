@@ -1,4 +1,4 @@
-import { setDeep } from "@measured/puck";
+import { setDeep } from "@puckeditor/core";
 import { Migration } from "../../utils/migrate";
 
 export const setDefaultCtaVariants: Migration = {

@@ -1,7 +1,7 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getTranslations } from "./getTranslations";
-import { StreamDocument } from "../applyTheme";
+import { StreamDocument } from "../types/StreamDocument";
 import { normalizeLocalesInObject } from "../normalizeLocale";
 
 const NAMESPACE = "visual-editor";

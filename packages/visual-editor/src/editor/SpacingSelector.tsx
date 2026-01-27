@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoField, Field, FieldLabel } from "@measured/puck";
+import { AutoField, Field, FieldLabel } from "@puckeditor/core";
 import { useTailwindConfig } from "../hooks/useTailwindConfig.tsx";
 import { TailwindConfig } from "../utils/themeResolver.ts";
 import { pt } from "../utils/i18n/platform.ts";

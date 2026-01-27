@@ -1,7 +1,6 @@
-import { mergeMeta } from "../mergeMeta.ts";
-import { StreamDocument } from "../applyTheme.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 import { normalizeLocale } from "../normalizeLocale.ts";
-import { resolvePageSetUrlTemplate } from "../resolveUrlTemplate.ts";
+import { mergeMeta, resolveUrlTemplate } from "../urls/resolveUrlTemplate.ts";
 
 const V_PARAM = "20250407";
 
@@ -44,8 +43,7 @@ export const fetchLocalesToPathsForEntity = async ({
           // Merge profile with streamDocument metadata
           const mergedDocument = mergeMeta(profile, streamDocument);
 
-          // Use resolvePageSetUrlTemplate to get the URL based on the current page set template
-          const resolvedUrl = resolvePageSetUrlTemplate(mergedDocument, "");
+          const resolvedUrl = resolveUrlTemplate(mergedDocument, "");
           localeToPath[normalizeLocale(profile.meta.locale)] = resolvedUrl;
         } catch (e) {
           console.warn(

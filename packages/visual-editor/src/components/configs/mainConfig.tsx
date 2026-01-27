@@ -1,4 +1,4 @@
-import { DropZone, Config } from "@measured/puck";
+import { DropZone, Config } from "@puckeditor/core";
 import { pt } from "@yext/visual-editor";
 import {
   DeprecatedCategory,

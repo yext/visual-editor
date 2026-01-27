@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import {
   TARGET_ORIGINS,
   useReceiveMessage,

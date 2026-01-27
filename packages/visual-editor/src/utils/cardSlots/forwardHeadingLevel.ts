@@ -1,4 +1,4 @@
-import { Slot, setDeep } from "@measured/puck";
+import { Slot, setDeep } from "@puckeditor/core";
 
 interface CardWrapper {
   slots: {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Field, PuckContext } from "@measured/puck";
+import { Field } from "@puckeditor/core";
 import {
   CardProps,
   Coordinate,
@@ -21,7 +21,6 @@ import {
   useTemplateProps,
   resolveComponentData,
   resolveUrlTemplateOfChild,
-  mergeMeta,
   HoursStatusAtom,
   HoursTableAtom,
   YextField,
@@ -591,11 +590,9 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
-    puck,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
-    puck: PuckContext;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
@@ -629,9 +626,9 @@ export const LocatorResultCard = React.memo(
     );
 
     const resolvedUrl = resolveUrlTemplateOfChild(
-      mergeMeta(location, streamDocument),
-      relativePrefixToRoot,
-      puck.metadata?.resolveUrlTemplate
+      location,
+      streamDocument,
+      relativePrefixToRoot
     );
 
     const getDirectionsLink: string | undefined = (() => {

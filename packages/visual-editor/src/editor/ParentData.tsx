@@ -1,4 +1,4 @@
-import { ComponentData, DefaultComponentProps, Fields } from "@measured/puck";
+import { ComponentData, DefaultComponentProps, Fields } from "@puckeditor/core";
 import { msg, pt } from "../utils/i18n/platform";
 
 export const resolveDataFromParent = <T extends DefaultComponentProps>(

@@ -11,8 +11,13 @@ import {
   themeManagerCn,
   Body,
 } from "@yext/visual-editor";
-import { ComponentConfig, Field, Fields, PuckComponent } from "@measured/puck";
-import { StreamDocument } from "../../utils/applyTheme";
+import {
+  ComponentConfig,
+  Field,
+  Fields,
+  PuckComponent,
+} from "@puckeditor/core";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import mapboxLogo from "../assets/mapbox-logo-black.svg";
 import { Map } from "lucide-react";
 

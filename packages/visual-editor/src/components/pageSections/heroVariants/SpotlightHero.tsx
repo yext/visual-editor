@@ -8,7 +8,7 @@ import {
 import { getImageUrl } from "@yext/pages-components";
 import { HeroVariantProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 
 export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
   const { data, styles } = props;

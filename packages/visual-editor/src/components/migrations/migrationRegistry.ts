@@ -52,6 +52,7 @@ import { promoVariants } from "./0050_promo_variants.ts";
 import { updateLinksAlignmentMigration } from "./0051_update_link_align_prop.ts";
 import { addDefaultLocatorAndDirectoryMetaFields } from "./0052_add_default_locator_and_directory_meta_fields.ts";
 import { photoGalleryVariant } from "./0053_photo_gallery_variant.ts";
+import { productVariants } from "./0054_product_variants.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -112,4 +113,5 @@ export const migrationRegistry: MigrationRegistry = [
   updateLinksAlignmentMigration,
   addDefaultLocatorAndDirectoryMetaFields,
   photoGalleryVariant,
+  productVariants,
 ];

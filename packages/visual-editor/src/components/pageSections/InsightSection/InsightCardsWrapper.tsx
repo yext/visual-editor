@@ -15,7 +15,7 @@ import {
   ComponentData,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   defaultInsightCardSlotData,

@@ -7,7 +7,7 @@ import {
 } from "@yext/visual-editor";
 import { getImageUrl } from "@yext/pages-components";
 import { PromoContent, promoContentParentCn } from "./PromoContent";
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 import { PromoVariantProps } from "./PromoSection";
 
 export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {

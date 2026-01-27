@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField, FieldLabel } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import {
   TARGET_ORIGINS,
