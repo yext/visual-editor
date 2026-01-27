@@ -55,7 +55,7 @@ export const removeDuplicateImageActionBars = (): void => {
 
   const targets = [
     pt("image", "Image"),
-    pt("callToAction", "callToAction"),
+    pt("callToAction", "Call To Action"),
     pt("components.secondaryHeader", "Secondary Header"),
     pt("components.headerLinks", "Header Links"),
   ];

@@ -23,8 +23,11 @@ export const useOverflow = (
     }
 
     const observer = new ResizeObserver(() => {
-      const hasOverflow =
-        content.scrollWidth > container.clientWidth - containerAdjustment;
+      const adjustedWidth = Math.max(
+        0,
+        container.clientWidth - containerAdjustment
+      );
+      const hasOverflow = content.scrollWidth > adjustedWidth;
       setIsOverflowing(hasOverflow);
     });
 
