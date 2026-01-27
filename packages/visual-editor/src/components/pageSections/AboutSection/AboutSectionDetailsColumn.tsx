@@ -5,7 +5,7 @@ import {
   FieldLabel,
   Fields,
   PuckComponent,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import {
   Body,

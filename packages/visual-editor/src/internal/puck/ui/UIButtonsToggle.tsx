@@ -1,6 +1,6 @@
 import "./puck.css";
 import React from "react";
-import { createUsePuck, useGetPuck } from "@measured/puck";
+import { createUsePuck, useGetPuck } from "@puckeditor/core";
 import { PanelLeft, PanelRight } from "lucide-react";
 import { useCallback } from "react";
 import { Button } from "../ui/button.tsx";

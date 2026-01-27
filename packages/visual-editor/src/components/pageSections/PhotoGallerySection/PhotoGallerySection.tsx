@@ -5,7 +5,7 @@ import {
   PuckComponent,
   setDeep,
   Slot,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,

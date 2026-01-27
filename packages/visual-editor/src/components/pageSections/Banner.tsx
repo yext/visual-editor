@@ -14,7 +14,7 @@ import {
   Body,
   getDefaultRTF,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,

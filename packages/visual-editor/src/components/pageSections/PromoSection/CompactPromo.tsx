@@ -1,5 +1,5 @@
 import { themeManagerCn, Background } from "@yext/visual-editor";
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 import { PromoMedia } from "./PromoMedia";
 import { PromoContent, promoContentParentCn } from "./PromoContent";
 import { PromoVariantProps } from "./PromoSection";

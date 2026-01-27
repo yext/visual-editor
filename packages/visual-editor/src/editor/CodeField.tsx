@@ -1,4 +1,4 @@
-import { CustomField, FieldLabel } from "@measured/puck";
+import { CustomField, FieldLabel } from "@puckeditor/core";
 import React from "react";
 import {
   TARGET_ORIGINS,

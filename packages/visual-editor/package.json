@@ -61,10 +61,10 @@
     "i18n:fix-plurals": "pnpm exec tsx scripts/fixPlurals.ts && pnpm run i18n:sort"
   },
   "dependencies": {
-    "@measured/puck": "0.20.2",
     "@microsoft/api-documenter": "^7.26.29",
     "@microsoft/api-extractor": "^7.52.8",
     "@microsoft/api-extractor-model": "^7.30.6",
+    "@puckeditor/core": "0.21.1",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.13",

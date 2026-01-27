@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import * as React from "react";
 import {
   backgroundColors,

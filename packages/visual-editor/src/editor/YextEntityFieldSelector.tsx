@@ -1,5 +1,5 @@
 import React from "react";
-import { AutoField, FieldLabel, Field, CustomField } from "@measured/puck";
+import { AutoField, FieldLabel, Field, CustomField } from "@puckeditor/core";
 import {
   ConstantValueTypes,
   EntityFieldTypes,
@@ -388,6 +388,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   ) : (
     <FieldLabel
       label={constantFieldConfig.label ?? "Value"}
+      el="div"
       className={`ve-inline-block w-full ${
         constantFieldConfig.label ? "ve-pt-3" : ""
       }`}

@@ -5,7 +5,7 @@ import {
   PuckComponent,
   Slot,
   WithId,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,

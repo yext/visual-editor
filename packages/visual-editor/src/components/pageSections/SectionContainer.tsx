@@ -16,7 +16,7 @@ import {
   resolveComponentData,
   msg,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields, Slot, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 

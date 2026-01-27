@@ -3,7 +3,7 @@ import {
   SelectField,
   NumberField,
   CustomField,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { CoreStyle, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";

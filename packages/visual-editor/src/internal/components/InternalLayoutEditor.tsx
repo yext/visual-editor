@@ -12,7 +12,7 @@ import {
   FieldLabel,
   createUsePuck,
   resolveAllData,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";

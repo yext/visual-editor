@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FieldLabel } from "@measured/puck";
+import { FieldLabel } from "@puckeditor/core";
 import { StyleSelectOption } from "../../../utils/themeResolver.ts";
 import "../ui/puck.css";
 import { Search } from "lucide-react";

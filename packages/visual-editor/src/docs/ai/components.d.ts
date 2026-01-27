@@ -13,7 +13,7 @@ import {
   Fields,
   ComponentData,
   Slot,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   ImageType,
   CTA as CTA$1,

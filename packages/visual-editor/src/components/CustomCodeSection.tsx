@@ -10,7 +10,12 @@ import {
   msg,
   useDocument,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields, WithId, WithPuckProps } from "@measured/puck";
+import {
+  ComponentConfig,
+  Fields,
+  WithId,
+  WithPuckProps,
+} from "@puckeditor/core";
 import { resolveEmbeddedFieldsInString } from "../utils/resolveYextEntityField";
 
 export interface CustomCodeSectionProps {

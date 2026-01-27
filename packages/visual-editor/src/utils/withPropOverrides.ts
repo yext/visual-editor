@@ -1,4 +1,4 @@
-import { ComponentConfig } from "@measured/puck";
+import { ComponentConfig } from "@puckeditor/core";
 
 export function withPropOverrides<C extends ComponentConfig>(
   base: C,

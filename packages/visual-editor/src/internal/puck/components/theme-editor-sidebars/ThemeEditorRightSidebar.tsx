@@ -2,7 +2,7 @@ import React from "react";
 import { Alert, AlertDescription } from "../../ui/atoms/Alert.tsx";
 import { ThemeConfig } from "../../../../utils/themeResolver.ts";
 import { OnThemeChangeFunc, ThemeHistories } from "../../../types/themeData.ts";
-import "@measured/puck/dist/index.css";
+import "@puckeditor/core/dist/index.css";
 import { ThemeFieldsSidebar } from "./ThemeFieldsSidebar.tsx";
 import { pt } from "../../../../utils/i18n/platform.ts";
 

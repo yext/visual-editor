@@ -26,7 +26,7 @@ export default defineConfig(() => ({
       external: [
         "react",
         "react-dom",
-        "@measured/puck",
+        "@puckeditor/core",
         "uuid",
         "@yext/pages-components",
         "mapbox-gl",

@@ -4,7 +4,7 @@ import {
   Fields,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   msg,
   resolveDataFromParent,

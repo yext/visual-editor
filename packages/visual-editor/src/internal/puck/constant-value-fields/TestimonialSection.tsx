@@ -1,5 +1,5 @@
 import { pt } from "../../../utils/i18n/platform.ts";
-import { ArrayField } from "@measured/puck";
+import { ArrayField } from "@puckeditor/core";
 
 // This config is used by TestimonialCardsWrapper when constantValueEnabled is true
 // It just manages an array of card IDs, not the full TestimonialStruct data

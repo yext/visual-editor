@@ -1,5 +1,10 @@
 import React from "react";
-import { createUsePuck, Data, useGetPuck, type History } from "@measured/puck";
+import {
+  createUsePuck,
+  Data,
+  useGetPuck,
+  type History,
+} from "@puckeditor/core";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { useEffect } from "react";
 import { Separator } from "@radix-ui/react-separator";

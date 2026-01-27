@@ -6,7 +6,7 @@ import {
   Slot,
   WithId,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   BackgroundStyle,
   YextField,

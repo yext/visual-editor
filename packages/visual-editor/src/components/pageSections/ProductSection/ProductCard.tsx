@@ -24,7 +24,7 @@ import {
   setDeep,
   Slot,
   WithId,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";

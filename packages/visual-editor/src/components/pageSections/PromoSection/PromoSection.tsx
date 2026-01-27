@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, Fields, setDeep, Slot } from "@measured/puck";
+import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
 import {
   PromoSectionType,
   backgroundColors,

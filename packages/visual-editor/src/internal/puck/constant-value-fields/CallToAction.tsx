@@ -1,4 +1,4 @@
-import { Field } from "@measured/puck";
+import { Field } from "@puckeditor/core";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
 import React, { useMemo } from "react";

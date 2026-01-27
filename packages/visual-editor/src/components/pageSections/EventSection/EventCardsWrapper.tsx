@@ -4,7 +4,7 @@ import {
   ComponentData,
   PuckComponent,
   setDeep,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   EventSectionType,
   ComponentFields,

@@ -1,5 +1,5 @@
 import React from "react";
-import { createUsePuck, Slot, useGetPuck } from "@measured/puck";
+import { createUsePuck, Slot, useGetPuck } from "@puckeditor/core";
 
 const usePuck = createUsePuck();
 

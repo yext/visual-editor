@@ -4,7 +4,7 @@ import {
   Fields,
   setDeep,
   Slot,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   backgroundColors,

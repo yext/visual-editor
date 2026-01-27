@@ -1,4 +1,4 @@
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 import { PageSection, themeManagerCn } from "@yext/visual-editor";
 import { PromoVariantProps } from "./PromoSection";
 import { PromoMedia } from "./PromoMedia";

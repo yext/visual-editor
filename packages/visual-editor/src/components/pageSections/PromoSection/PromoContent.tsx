@@ -1,4 +1,4 @@
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 import { PromoVariantProps } from "./PromoSection";
 
 /** Shared styling for the various parent containers of PromoContent  */

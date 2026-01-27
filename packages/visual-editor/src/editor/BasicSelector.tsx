@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, FieldLabel } from "@measured/puck";
+import { Field, FieldLabel } from "@puckeditor/core";
 import {
   Combobox,
   ComboboxOption,

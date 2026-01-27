@@ -1,4 +1,4 @@
-import { AutoField, CustomField, FieldLabel } from "@measured/puck";
+import { AutoField, CustomField, FieldLabel } from "@puckeditor/core";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   EnhancedTranslatableCTA,

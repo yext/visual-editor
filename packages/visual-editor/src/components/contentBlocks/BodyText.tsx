@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   BodyProps,
   useDocument,

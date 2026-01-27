@@ -6,7 +6,7 @@ import {
   PuckComponent,
   setDeep,
   Slot,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { msg, YextField, PageSectionProps } from "@yext/visual-editor";
 import { cva } from "class-variance-authority";
 import { defaultPrimaryHeaderProps } from "./PrimaryHeaderSlot.tsx";

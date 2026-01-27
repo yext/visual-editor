@@ -1,4 +1,4 @@
-import { Fields } from "@measured/puck";
+import { Fields } from "@puckeditor/core";
 import { YextField, msg } from "@yext/visual-editor";
 
 /** Props for displaying an image */

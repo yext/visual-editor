@@ -1,4 +1,4 @@
-import { Puck, Config, InitialHistory, FieldLabel } from "@measured/puck";
+import { Puck, Config, InitialHistory, FieldLabel } from "@puckeditor/core";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";

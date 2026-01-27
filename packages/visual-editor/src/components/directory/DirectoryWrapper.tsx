@@ -4,7 +4,7 @@ import {
   PuckComponent,
   setDeep,
   Slot,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import {
   backgroundColors,
   Body,
@@ -115,6 +115,10 @@ export const DirectoryGrid: ComponentConfig<{
   },
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
+
+    if (!streamDocument?.dm_directoryChildren) {
+      return data;
+    }
 
     const sortedDirectoryChildren = sortAlphabetically(
       streamDocument.dm_directoryChildren,

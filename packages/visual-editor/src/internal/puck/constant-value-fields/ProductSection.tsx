@@ -1,4 +1,4 @@
-import { ArrayField } from "@measured/puck";
+import { ArrayField } from "@puckeditor/core";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 export const PRODUCT_SECTION_CONSTANT_CONFIG: ArrayField<any> = {

@@ -14,7 +14,7 @@ import {
   SlotsCategoryComponents,
   VisualEditorProvider,
 } from "@yext/visual-editor";
-import { Render, Config, resolveAllData } from "@measured/puck";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 
 const testDocument = {
@@ -593,7 +593,7 @@ describe("AboutSection", async () => {
         ignoreExact:
           name === "version 50 props with details column" &&
           viewportName === "tablet"
-            ? [5400]
+            ? [5400, 5850]
             : undefined,
       });
       const results = await axe(container);

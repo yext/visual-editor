@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AppState, Config } from "@measured/puck";
+import { AppState, Config } from "@puckeditor/core";
 import { DevLogger } from "../../../utils/devLogger.ts";
 import { LayoutSaveState } from "../../types/saveState.ts";
 import {

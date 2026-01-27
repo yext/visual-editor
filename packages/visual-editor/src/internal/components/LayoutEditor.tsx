@@ -6,7 +6,7 @@ import {
   Data,
   History,
   AppState,
-} from "@measured/puck";
+} from "@puckeditor/core";
 import { InternalLayoutEditor } from "./InternalLayoutEditor.tsx";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { useLayoutLocalStorage } from "../hooks/layout/useLocalStorage.ts";

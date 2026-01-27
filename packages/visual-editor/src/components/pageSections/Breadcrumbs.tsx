@@ -12,7 +12,7 @@ import {
   resolveComponentData,
   getDirectoryParents,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields } from "@measured/puck";
+import { ComponentConfig, Fields } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
 

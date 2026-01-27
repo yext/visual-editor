@@ -17,7 +17,7 @@ import {
   AssetImageType,
   TranslatableAssetImage,
 } from "@yext/visual-editor";
-import { ComponentConfig, Fields, PuckComponent } from "@measured/puck";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
 import { useTranslation } from "react-i18next";

@@ -8,7 +8,7 @@ import { PromoVariantProps } from "./PromoSection";
 import { PromoContent, promoContentParentCn } from "./PromoContent";
 import { useTranslation } from "react-i18next";
 import { getImageUrl } from "@yext/pages-components";
-import { PuckComponent } from "@measured/puck";
+import { PuckComponent } from "@puckeditor/core";
 
 export const ImmersivePromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles } = props;
