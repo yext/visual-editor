@@ -26,10 +26,6 @@ export const normalizeLink = (
     return "";
   }
 
-  if (content === "") {
-    return content;
-  }
-
   if (linkType === "EMAIL" || linkType === "PHONE") {
     return content;
   }
