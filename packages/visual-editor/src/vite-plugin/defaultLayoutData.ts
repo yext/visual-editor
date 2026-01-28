@@ -1,8 +1,12 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 46,
-      title: { field: "name", constantValue: "", constantValueEnabled: false },
+      version: 55,
+      title: {
+        field: "name",
+        constantValue: "",
+        constantValueEnabled: false,
+      },
       description: {
         field: "description",
         constantValue: "",
@@ -10,7 +14,6 @@ const mainDefaultLayout = {
       },
     },
   },
-  zones: {},
   content: [
     {
       type: "ExpandedHeader",
@@ -41,9 +44,12 @@ const mainDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                              height: 100,
-                              width: 100,
+                              hasLocalizedValue: "true",
+                              en: {
+                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                                height: 100,
+                                width: 100,
+                              },
                             },
                             constantValueEnabled: true,
                           },
@@ -346,12 +352,20 @@ const mainDefaultLayout = {
       type: "BreadcrumbsSection",
       props: {
         data: {
-          directoryRoot: { en: "Directory Root", hasLocalizedValue: "true" },
+          directoryRoot: {
+            en: "Directory Root",
+            hasLocalizedValue: "true",
+          },
         },
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
         },
-        analytics: { scope: "breadcrumbs" },
+        analytics: {
+          scope: "breadcrumbs",
+        },
         liveVisibility: true,
         id: "BreadcrumbsSection-23f3c339-618a-4e10-9ce1-68117745e3b6",
       },
@@ -375,7 +389,10 @@ const mainDefaultLayout = {
         },
         styles: {
           variant: "classic",
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
           showAverageReview: true,
           showImage: true,
           imageHeight: 500,
@@ -400,7 +417,11 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 3, align: "left", semanticLevelOverride: 2 },
+                styles: {
+                  level: 3,
+                  align: "left",
+                  semanticLevelOverride: 2,
+                },
               },
             },
           ],
@@ -419,7 +440,10 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 1, align: "left" },
+                styles: {
+                  level: 1,
+                  align: "left",
+                },
               },
             },
           ],
@@ -428,7 +452,12 @@ const mainDefaultLayout = {
               type: "HoursStatusSlot",
               props: {
                 id: "HoursStatusSlot-4b970196-2462-4b19-b166-79e7554f7513",
-                data: { hours: { field: "hours", constantValue: {} } },
+                data: {
+                  hours: {
+                    field: "hours",
+                    constantValue: {},
+                  },
+                },
                 styles: {
                   dayOfWeekFormat: "long",
                   showDayNames: true,
@@ -456,7 +485,10 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { aspectRatio: 1.78, width: 490 },
+                styles: {
+                  aspectRatio: 1.78,
+                  width: 490,
+                },
                 variant: "classic",
                 className:
                   "mx-auto max-w-full md:max-w-[350px] lg:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius",
@@ -476,14 +508,20 @@ const mainDefaultLayout = {
                         en: "Call To Action",
                         hasLocalizedValue: "true",
                       },
-                      link: { en: "#", hasLocalizedValue: "true" },
+                      link: {
+                        en: "#",
+                        hasLocalizedValue: "true",
+                      },
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
                   },
                 },
                 eventName: "primaryCta",
-                styles: { variant: "primary", presetImage: "app-store" },
+                styles: {
+                  variant: "primary",
+                  presetImage: "app-store",
+                },
                 parentStyles: {},
               },
             },
@@ -497,32 +535,48 @@ const mainDefaultLayout = {
                   entityField: {
                     field: "",
                     constantValue: {
-                      label: { en: "Learn More", hasLocalizedValue: "true" },
-                      link: { en: "#", hasLocalizedValue: "true" },
+                      label: {
+                        en: "Learn More",
+                        hasLocalizedValue: "true",
+                      },
+                      link: {
+                        en: "#",
+                        hasLocalizedValue: "true",
+                      },
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
                     selectedType: "textAndLink",
                   },
                 },
-                styles: { variant: "secondary", presetImage: "app-store" },
+                styles: {
+                  variant: "secondary",
+                  presetImage: "app-store",
+                },
                 eventName: "secondaryCta",
                 parentStyles: {},
               },
             },
           ],
         },
-        analytics: { scope: "heroSection" },
+        analytics: {
+          scope: "heroSection",
+        },
         liveVisibility: true,
         id: "HeroSection-6171b068-a44d-406e-9094-95f1ca7a53c5",
-        conditionalRender: { hours: true },
+        conditionalRender: {
+          hours: true,
+        },
       },
     },
     {
       type: "CoreInfoSection",
       props: {
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
         },
         slots: {
           CoreInfoHeadingSlot: [
@@ -540,7 +594,10 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 3, align: "left" },
+                styles: {
+                  level: 3,
+                  align: "left",
+                },
               },
             },
           ],
@@ -560,7 +617,10 @@ const mainDefaultLayout = {
                     field: "address",
                   },
                 },
-                styles: { showGetDirectionsLink: true, ctaVariant: "link" },
+                styles: {
+                  showGetDirectionsLink: true,
+                  ctaVariant: "link",
+                },
               },
             },
           ],
@@ -572,8 +632,14 @@ const mainDefaultLayout = {
                 data: {
                   phoneNumbers: [
                     {
-                      number: { field: "mainPhone", constantValue: "" },
-                      label: { en: "Phone", hasLocalizedValue: "true" },
+                      number: {
+                        field: "mainPhone",
+                        constantValue: "",
+                      },
+                      label: {
+                        en: "Phone",
+                        hasLocalizedValue: "true",
+                      },
                     },
                   ],
                 },
@@ -589,8 +655,15 @@ const mainDefaultLayout = {
               type: "EmailsSlot",
               props: {
                 id: "EmailsSlot-15e44360-bc22-43e3-b6c2-c86d26dba9f1",
-                data: { list: { field: "emails", constantValue: [] } },
-                styles: { listLength: 1 },
+                data: {
+                  list: {
+                    field: "emails",
+                    constantValue: [],
+                  },
+                },
+                styles: {
+                  listLength: 1,
+                },
               },
             },
           ],
@@ -601,12 +674,18 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-05556e7b-c4ef-4251-8d94-1f57cbebb8be",
                 data: {
                   text: {
-                    constantValue: { en: "Hours", hasLocalizedValue: "true" },
+                    constantValue: {
+                      en: "Hours",
+                      hasLocalizedValue: "true",
+                    },
                     constantValueEnabled: true,
                     field: "",
                   },
                 },
-                styles: { level: 3, align: "left" },
+                styles: {
+                  level: 3,
+                  align: "left",
+                },
               },
             },
           ],
@@ -615,7 +694,12 @@ const mainDefaultLayout = {
               type: "HoursTableSlot",
               props: {
                 id: "HoursTableSlot-f2625bcc-e225-44d9-a4ae-e6861b100b19",
-                data: { hours: { field: "hours", constantValue: {} } },
+                data: {
+                  hours: {
+                    field: "hours",
+                    constantValue: {},
+                  },
+                },
                 styles: {
                   startOfWeek: "today",
                   collapseDays: false,
@@ -640,7 +724,10 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 3, align: "left" },
+                styles: {
+                  level: 3,
+                  align: "left",
+                },
               },
             },
           ],
@@ -649,13 +736,18 @@ const mainDefaultLayout = {
               type: "TextListSlot",
               props: {
                 id: "ServicesListSlot-2ab9809e-7c31-4a55-934d-2dd7d2f3b105",
-                list: { field: "services", constantValue: [] },
+                list: {
+                  field: "services",
+                  constantValue: [],
+                },
                 commaSeparated: false,
               },
             },
           ],
         },
-        analytics: { scope: "coreInfoSection" },
+        analytics: {
+          scope: "coreInfoSection",
+        },
         liveVisibility: true,
         id: "CoreInfoSection-660d4d53-8a6f-4f01-ac84-e9c23d485554",
         conditionalRender: {
@@ -669,12 +761,31 @@ const mainDefaultLayout = {
       type: "PromoSection",
       props: {
         data: {
-          promo: { field: "", constantValue: {}, constantValueEnabled: true },
+          promo: {
+            field: "",
+            constantValue: {},
+            constantValueEnabled: true,
+          },
           media: "image",
+          backgroundImage: {
+            field: "",
+            constantValue: {
+              en: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=900&width=1440&fit=max",
+              hasLocalizedValue: "true",
+            },
+            constantValueEnabled: true,
+          },
         },
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          orientation: "left",
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
+          variant: "classic",
+          desktopImagePosition: "left",
+          mobileImagePosition: "top",
+          imageHeight: 500,
+          containerAlignment: "left",
         },
         slots: {
           HeadingSlot: [
@@ -692,7 +803,10 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
@@ -714,7 +828,9 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { variant: "base" },
+                styles: {
+                  variant: "base",
+                },
               },
             },
           ],
@@ -746,7 +862,10 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { aspectRatio: 1.78, width: 640 },
+                styles: {
+                  aspectRatio: 1.78,
+                  width: 640,
+                },
                 sizes: {
                   base: "calc(100vw - 32px)",
                   md: "min(width, 450px)",
@@ -766,25 +885,38 @@ const mainDefaultLayout = {
                   entityField: {
                     field: "",
                     constantValue: {
-                      label: "Learn More",
-                      link: { en: "#", hasLocalizedValue: "true" },
+                      label: {
+                        hasLocalizedValue: "true",
+                        en: "Learn More",
+                      },
+                      link: {
+                        en: "#",
+                        hasLocalizedValue: "true",
+                      },
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
                     selectedType: "textAndLink",
                   },
                 },
-                styles: { variant: "primary", presetImage: "app-store" },
+                styles: {
+                  variant: "primary",
+                  presetImage: "app-store",
+                },
                 eventName: "cta",
               },
             },
           ],
         },
-        analytics: { scope: "promoSection" },
+        analytics: {
+          scope: "promoSection",
+        },
         liveVisibility: true,
         id: "PromoSection-f4ad4730-016a-46cf-8ae2-e307c23c3c47",
       },
-      readOnly: { "data.media": false },
+      readOnly: {
+        "data.media": false,
+      },
     },
     {
       type: "ProductSection",
@@ -794,6 +926,13 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
+          cardVariant: "immersive",
+          showImage: true,
+          showBrow: true,
+          showTitle: true,
+          showPrice: false,
+          showDescription: true,
+          showCTA: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -811,7 +950,10 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
@@ -822,7 +964,7 @@ const mainDefaultLayout = {
                 id: "ProductCardsWrapper-31103b0f-5bfb-4dfe-a4e5-9f18cfd7cfcf",
                 data: {
                   field: "",
-                  constantValueEnabled: true,
+                  constantValueEnabled: false,
                   constantValue: [
                     {
                       id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447",
@@ -868,7 +1010,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
                                   md: "calc((maxWidth - 32px) / 2)",
@@ -892,29 +1037,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
-                              },
-                            },
-                          ],
-                          CategorySlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-category",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
                                 },
-                                styles: { variant: "base" },
                               },
                             },
                           ],
@@ -936,7 +1062,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -968,8 +1096,65 @@ const mainDefaultLayout = {
                               },
                             },
                           ],
+                          BrowSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-category",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                              },
+                            },
+                          ],
+                          PriceSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "BodyTextSlot-425f0992-8c49-4e62-8eb7-75db2cc2adff",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$123.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700 !important; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$123.00</strong></p>',
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                              },
+                            },
+                          ],
                         },
-                        conditionalRender: { category: true },
+                        conditionalRender: {
+                          price: true,
+                          brow: true,
+                          description: true,
+                          cta: true,
+                        },
+                        imageStyles: {
+                          aspectRatio: 1.78,
+                          width: 640,
+                        },
                       },
                     },
                     {
@@ -1003,7 +1188,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
                                   md: "calc((maxWidth - 32px) / 2)",
@@ -1027,29 +1215,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
-                              },
-                            },
-                          ],
-                          CategorySlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-category",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
                                 },
-                                styles: { variant: "base" },
                               },
                             },
                           ],
@@ -1071,7 +1240,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -1103,8 +1274,65 @@ const mainDefaultLayout = {
                               },
                             },
                           ],
+                          BrowSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-category",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                              },
+                            },
+                          ],
+                          PriceSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "BodyTextSlot-67ca55b8-2f3b-4c9d-a141-1568946fcdf1",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$123.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700 !important; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$123.00</strong></p>',
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                              },
+                            },
+                          ],
                         },
-                        conditionalRender: { category: true },
+                        conditionalRender: {
+                          price: true,
+                          brow: true,
+                          description: true,
+                          cta: true,
+                        },
+                        imageStyles: {
+                          aspectRatio: 1.78,
+                          width: 640,
+                        },
                       },
                     },
                     {
@@ -1138,7 +1366,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
                                   md: "calc((maxWidth - 32px) / 2)",
@@ -1162,29 +1393,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
-                              },
-                            },
-                          ],
-                          CategorySlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-category",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
                                 },
-                                styles: { variant: "base" },
                               },
                             },
                           ],
@@ -1206,7 +1418,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -1238,8 +1452,65 @@ const mainDefaultLayout = {
                               },
                             },
                           ],
+                          BrowSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-category",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                              },
+                            },
+                          ],
+                          PriceSlot: [
+                            {
+                              type: "BodyTextSlot",
+                              props: {
+                                id: "BodyTextSlot-49c146a0-6dcc-4536-ae77-de34d37fd36b",
+                                data: {
+                                  text: {
+                                    field: "",
+                                    constantValue: {
+                                      en: {
+                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$123.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700 !important; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$123.00</strong></p>',
+                                      },
+                                      hasLocalizedValue: "true",
+                                    },
+                                    constantValueEnabled: true,
+                                  },
+                                },
+                                styles: {
+                                  variant: "base",
+                                },
+                              },
+                            },
+                          ],
                         },
-                        conditionalRender: { category: true },
+                        conditionalRender: {
+                          price: true,
+                          brow: true,
+                          description: true,
+                          cta: true,
+                        },
+                        imageStyles: {
+                          aspectRatio: 1.78,
+                          width: 640,
+                        },
                       },
                     },
                   ],
@@ -1248,7 +1519,9 @@ const mainDefaultLayout = {
             },
           ],
         },
-        analytics: { scope: "productsSection" },
+        analytics: {
+          scope: "productsSection",
+        },
         liveVisibility: true,
         id: "ProductSection-985d98bc-d5cf-4f69-aea5-597183c27cea",
       },
@@ -1278,7 +1551,10 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
@@ -1331,7 +1607,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -1417,7 +1695,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -1503,7 +1783,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -1568,7 +1850,9 @@ const mainDefaultLayout = {
             },
           ],
         },
-        analytics: { scope: "testimonialSection" },
+        analytics: {
+          scope: "testimonialSection",
+        },
         liveVisibility: true,
         id: "TestimonialSection-21edd977-c45d-4a7b-ab17-e6273774b815",
       },
@@ -1576,6 +1860,32 @@ const mainDefaultLayout = {
     {
       type: "FAQSection",
       props: {
+        id: "FAQSection-bbfde40e-2d68-4f33-afc2-836aa183d7b0",
+        analytics: {
+          scope: "faqsSection",
+        },
+        liveVisibility: true,
+        styles: {
+          backgroundColor: {
+            bgColor: "bg-palette-primary-light",
+            textColor: "text-black",
+          },
+        },
+        data: {
+          field: "",
+          constantValueEnabled: true,
+          constantValue: [
+            {
+              id: "FAQCard-499a5bbc-d6a4-4b7c-bd98-621d2be7425d",
+            },
+            {
+              id: "FAQCard-a585bc61-0861-4a96-be7e-5b85a70f89eb",
+            },
+            {
+              id: "FAQCard-19a25060-a7af-4f17-80a3-c63cceb619ad",
+            },
+          ],
+        },
         slots: {
           HeadingSlot: [
             {
@@ -1592,196 +1902,121 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
-          FAQsWrapperSlot: [
+          CardSlot: [
             {
-              type: "FAQsWrapperSlot",
+              type: "FAQCard",
               props: {
-                id: "FAQsWrapperSlot-3393daed-5f2f-4d49-b780-fdfa0470a7fa",
+                id: "FAQCard-499a5bbc-d6a4-4b7c-bd98-621d2be7425d",
+                index: 0,
                 data: {
-                  field: "",
-                  constantValueEnabled: true,
-                  constantValue: [{}, {}, {}],
+                  question: {
+                    constantValueEnabled: true,
+                    constantValue: {
+                      en: {
+                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    field: "",
+                  },
+                  answer: {
+                    constantValueEnabled: true,
+                    constantValue: {
+                      en: {
+                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    field: "",
+                  },
                 },
-                slots: {
-                  CardSlot: [
-                    {
-                      type: "FAQSlot",
-                      props: {
-                        id: "FAQSlot-78b11aa9-f2c5-4edb-9883-ac5c3560b60b",
-                        index: 0,
-                        slots: {
-                          QuestionSlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "BodyTextSlot-5ce3179e-ecf0-4f4a-80aa-014c94dbec70",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
-                                },
-                                styles: { variant: "base" },
-                              },
-                            },
-                          ],
-                          AnswerSlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "BodyTextSlot-720ee698-c08c-49ce-994d-32d243dde4fe",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
-                                },
-                                styles: { variant: "base" },
-                              },
-                            },
-                          ],
-                        },
+                styles: {
+                  questionVariant: "base",
+                  answerVariant: "base",
+                },
+              },
+            },
+            {
+              type: "FAQCard",
+              props: {
+                id: "FAQCard-a585bc61-0861-4a96-be7e-5b85a70f89eb",
+                index: 1,
+                data: {
+                  question: {
+                    constantValueEnabled: true,
+                    constantValue: {
+                      en: {
+                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
                       },
+                      hasLocalizedValue: "true",
                     },
-                    {
-                      type: "FAQSlot",
-                      props: {
-                        id: "FAQSlot-0388f33b-cb2e-497b-81a8-193d89799bc5",
-                        index: 1,
-                        slots: {
-                          QuestionSlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "BodyTextSlot-1a1a5aee-c627-464b-b3a8-fdcfaf0522d3",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
-                                },
-                                styles: { variant: "base" },
-                              },
-                            },
-                          ],
-                          AnswerSlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "BodyTextSlot-11816667-19ef-47fa-b5f7-1113b2af12f7",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
-                                },
-                                styles: { variant: "base" },
-                              },
-                            },
-                          ],
-                        },
+                    field: "",
+                  },
+                  answer: {
+                    constantValueEnabled: true,
+                    constantValue: {
+                      en: {
+                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
                       },
+                      hasLocalizedValue: "true",
                     },
-                    {
-                      type: "FAQSlot",
-                      props: {
-                        id: "FAQSlot-50b2fcaa-6024-48d7-bc23-159b95d1cead",
-                        index: 2,
-                        slots: {
-                          QuestionSlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "BodyTextSlot-80862902-c0c1-4803-b550-26409298960f",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
-                                },
-                                styles: { variant: "base" },
-                              },
-                            },
-                          ],
-                          AnswerSlot: [
-                            {
-                              type: "BodyTextSlot",
-                              props: {
-                                id: "BodyTextSlot-f38a831e-2fed-4579-8eba-1daf4db4ec9f",
-                                data: {
-                                  text: {
-                                    field: "",
-                                    constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
-                                    },
-                                    constantValueEnabled: true,
-                                  },
-                                },
-                                styles: { variant: "base" },
-                              },
-                            },
-                          ],
-                        },
+                    field: "",
+                  },
+                },
+                styles: {
+                  questionVariant: "base",
+                  answerVariant: "base",
+                },
+              },
+            },
+            {
+              type: "FAQCard",
+              props: {
+                id: "FAQCard-19a25060-a7af-4f17-80a3-c63cceb619ad",
+                index: 2,
+                data: {
+                  question: {
+                    constantValueEnabled: true,
+                    constantValue: {
+                      en: {
+                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
                       },
+                      hasLocalizedValue: "true",
                     },
-                  ],
+                    field: "",
+                  },
+                  answer: {
+                    constantValueEnabled: true,
+                    constantValue: {
+                      en: {
+                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
+                      },
+                      hasLocalizedValue: "true",
+                    },
+                    field: "",
+                  },
+                },
+                styles: {
+                  questionVariant: "base",
+                  answerVariant: "base",
                 },
               },
             },
           ],
         },
-        styles: {
-          backgroundColor: {
-            bgColor: "bg-palette-primary-light",
-            textColor: "text-black",
-          },
-        },
-        liveVisibility: true,
-        analytics: { scope: "faqsSection" },
-        id: "FAQSection-bbfde40e-2d68-4f33-afc2-836aa183d7b0",
       },
     },
     {
@@ -1809,7 +2044,10 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
@@ -1866,7 +2104,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1, width: 200 },
+                                styles: {
+                                  aspectRatio: 1,
+                                  width: 200,
+                                },
                                 hideWidthProp: true,
                                 className: "max-w-full h-full object-cover",
                                 sizes: {
@@ -1891,7 +2132,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -2037,7 +2281,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1, width: 200 },
+                                styles: {
+                                  aspectRatio: 1,
+                                  width: 200,
+                                },
                                 hideWidthProp: true,
                                 className: "max-w-full h-full object-cover",
                                 sizes: {
@@ -2062,7 +2309,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -2128,7 +2378,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { listLength: 1 },
+                                styles: {
+                                  listLength: 1,
+                                },
                                 eventName: "card1-email",
                               },
                             },
@@ -2206,7 +2458,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1, width: 200 },
+                                styles: {
+                                  aspectRatio: 1,
+                                  width: 200,
+                                },
                                 hideWidthProp: true,
                                 className: "max-w-full h-full object-cover",
                                 sizes: {
@@ -2231,7 +2486,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -2297,7 +2555,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { listLength: 1 },
+                                styles: {
+                                  listLength: 1,
+                                },
                                 eventName: "card2-email",
                               },
                             },
@@ -2350,7 +2610,9 @@ const mainDefaultLayout = {
             },
           ],
         },
-        analytics: { scope: "teamSection" },
+        analytics: {
+          scope: "teamSection",
+        },
         liveVisibility: true,
         id: "TeamSection-c3e1d6c3-7105-4a52-b6c7-16f47d4d112e",
       },
@@ -2380,7 +2642,10 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { level: 3, align: "left" },
+                styles: {
+                  level: 3,
+                  align: "left",
+                },
               },
             },
           ],
@@ -2393,9 +2658,15 @@ const mainDefaultLayout = {
                   field: "",
                   constantValueEnabled: true,
                   constantValue: [
-                    { id: "InsightCard-1" },
-                    { id: "InsightCard-2" },
-                    { id: "InsightCard-3" },
+                    {
+                      id: "InsightCard-1",
+                    },
+                    {
+                      id: "InsightCard-2",
+                    },
+                    {
+                      id: "InsightCard-3",
+                    },
                   ],
                 },
                 slots: {
@@ -2434,7 +2705,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
                                   md: "calc((maxWidth - 32px) / 2)",
@@ -2458,7 +2732,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 4, align: "left" },
+                                styles: {
+                                  level: 4,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -2480,7 +2757,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -2502,7 +2781,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -2598,7 +2879,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
                                   md: "calc((maxWidth - 32px) / 2)",
@@ -2622,7 +2906,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 4, align: "left" },
+                                styles: {
+                                  level: 4,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -2644,7 +2931,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -2666,7 +2955,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -2762,7 +3053,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
                                   md: "calc((maxWidth - 32px) / 2)",
@@ -2786,7 +3080,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 4, align: "left" },
+                                styles: {
+                                  level: 4,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -2808,7 +3105,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -2830,7 +3129,9 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
+                                styles: {
+                                  variant: "base",
+                                },
                               },
                             },
                           ],
@@ -2898,7 +3199,9 @@ const mainDefaultLayout = {
             },
           ],
         },
-        analytics: { scope: "insightsSection" },
+        analytics: {
+          scope: "insightsSection",
+        },
         liveVisibility: true,
         id: "InsightSection-bdb34130-f7d5-49b0-8efa-385f7f81790d",
       },
@@ -2907,22 +3210,32 @@ const mainDefaultLayout = {
       type: "PhotoGallerySection",
       props: {
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          variant: "gallery",
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
         },
         slots: {
           HeadingSlot: [
             {
               type: "HeadingTextSlot",
               props: {
-                id: "HeadingTextSlot-ddc30c55-8671-4509-ae10-e4cb198a95a6",
+                id: "HeadingTextSlot-aefbd5db-c55d-415f-909c-31998b658649",
                 data: {
                   text: {
                     field: "",
-                    constantValue: { en: "Gallery", hasLocalizedValue: "true" },
+                    constantValue: {
+                      en: "Gallery",
+                      hasLocalizedValue: "true",
+                    },
                     constantValueEnabled: true,
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
@@ -2930,25 +3243,29 @@ const mainDefaultLayout = {
             {
               type: "PhotoGalleryWrapper",
               props: {
-                id: "PhotoGalleryWrapper-68527f41-e591-46ad-9e2f-21657028f48e",
+                id: "PhotoGalleryWrapper-7cfce52a-ddd4-4dd7-9ae2-fc100ece3112",
                 data: {
                   images: {
                     field: "",
                     constantValue: [
                       {
                         assetImage: {
-                          url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
                           width: 1000,
                           height: 570,
-                          assetImage: { name: "Placeholder" },
+                          assetImage: {
+                            name: "Placeholder",
+                          },
                         },
                       },
                       {
                         assetImage: {
-                          url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
+                          url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
                           width: 1000,
                           height: 570,
-                          assetImage: { name: "Placeholder" },
+                          assetImage: {
+                            name: "Placeholder",
+                          },
                         },
                       },
                       {
@@ -2956,20 +3273,30 @@ const mainDefaultLayout = {
                           url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=570&width=1000&fit=max",
                           width: 1000,
                           height: 570,
-                          assetImage: { name: "Placeholder" },
+                          assetImage: {
+                            name: "Placeholder",
+                          },
                         },
                       },
                     ],
                     constantValueEnabled: true,
                   },
                 },
-                styles: { image: { aspectRatio: 1.78 } },
+                styles: {
+                  image: {
+                    aspectRatio: 1.78,
+                  },
+                  carouselImageCount: 1,
+                },
+                parentData: {
+                  variant: "gallery",
+                },
               },
             },
           ],
         },
         liveVisibility: true,
-        id: "PhotoGallerySection-9526fe23-bbc4-46b7-b4f3-339f17a303c8",
+        id: "PhotoGallerySection-18c0f99b-1182-4c4e-9c26-85542d81537f",
       },
     },
     {
@@ -2997,7 +3324,10 @@ const mainDefaultLayout = {
                     field: "",
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
@@ -3056,7 +3386,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 hideWidthProp: true,
                                 className: "max-w-full h-full object-cover",
                                 sizes: {
@@ -3081,7 +3414,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -3127,8 +3463,12 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
-                                parentStyles: { className: "md:line-clamp-2" },
+                                styles: {
+                                  variant: "base",
+                                },
+                                parentStyles: {
+                                  className: "md:line-clamp-2",
+                                },
                               },
                             },
                           ],
@@ -3141,7 +3481,10 @@ const mainDefaultLayout = {
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: "Learn More",
+                                      label: {
+                                        hasLocalizedValue: "true",
+                                        en: "Learn More",
+                                      },
                                       link: {
                                         en: "#",
                                         hasLocalizedValue: "true",
@@ -3203,7 +3546,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 hideWidthProp: true,
                                 className: "max-w-full h-full object-cover",
                                 sizes: {
@@ -3228,7 +3574,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -3274,8 +3623,12 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
-                                parentStyles: { className: "md:line-clamp-2" },
+                                styles: {
+                                  variant: "base",
+                                },
+                                parentStyles: {
+                                  className: "md:line-clamp-2",
+                                },
                               },
                             },
                           ],
@@ -3288,7 +3641,10 @@ const mainDefaultLayout = {
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: "Learn More",
+                                      label: {
+                                        hasLocalizedValue: "true",
+                                        en: "Learn More",
+                                      },
                                       link: {
                                         en: "#",
                                         hasLocalizedValue: "true",
@@ -3350,7 +3706,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { aspectRatio: 1.78, width: 640 },
+                                styles: {
+                                  aspectRatio: 1.78,
+                                  width: 640,
+                                },
                                 hideWidthProp: true,
                                 className: "max-w-full h-full object-cover",
                                 sizes: {
@@ -3375,7 +3734,10 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { level: 3, align: "left" },
+                                styles: {
+                                  level: 3,
+                                  align: "left",
+                                },
                               },
                             },
                           ],
@@ -3421,8 +3783,12 @@ const mainDefaultLayout = {
                                     constantValueEnabled: true,
                                   },
                                 },
-                                styles: { variant: "base" },
-                                parentStyles: { className: "md:line-clamp-2" },
+                                styles: {
+                                  variant: "base",
+                                },
+                                parentStyles: {
+                                  className: "md:line-clamp-2",
+                                },
                               },
                             },
                           ],
@@ -3435,7 +3801,10 @@ const mainDefaultLayout = {
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: "Learn More",
+                                      label: {
+                                        hasLocalizedValue: "true",
+                                        en: "Learn More",
+                                      },
                                       link: {
                                         en: "#",
                                         hasLocalizedValue: "true",
@@ -3470,7 +3839,9 @@ const mainDefaultLayout = {
             },
           ],
         },
-        analytics: { scope: "eventsSection" },
+        analytics: {
+          scope: "eventsSection",
+        },
         liveVisibility: true,
         id: "EventSection-6015ba31-ab1b-4cb3-8942-4adf3bcea430",
       },
@@ -3479,9 +3850,14 @@ const mainDefaultLayout = {
       type: "NearbyLocationsSection",
       props: {
         styles: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+          backgroundColor: {
+            bgColor: "bg-white",
+            textColor: "text-black",
+          },
         },
-        analytics: { scope: "nearbyLocationsSection" },
+        analytics: {
+          scope: "nearbyLocationsSection",
+        },
         slots: {
           SectionHeadingSlot: [
             {
@@ -3498,7 +3874,10 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { level: 2, align: "left" },
+                styles: {
+                  level: 2,
+                  align: "left",
+                },
               },
             },
           ],
@@ -3539,7 +3918,11 @@ const mainDefaultLayout = {
     {
       type: "ExpandedFooter",
       props: {
-        data: { primaryFooter: { expandedFooter: false } },
+        data: {
+          primaryFooter: {
+            expandedFooter: false,
+          },
+        },
         slots: {
           LogoSlot: [
             {
@@ -3550,6 +3933,12 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
+                      height: 100,
+                      width: 100,
+                      alternateText: {
+                        en: "Logo",
+                        hasLocalizedValue: "true",
+                      },
                       hasLocalizedValue: "true",
                       en: {
                         url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
@@ -3564,7 +3953,10 @@ const mainDefaultLayout = {
                     constantValueEnabled: true,
                   },
                 },
-                styles: { width: 100, aspectRatio: 1 },
+                styles: {
+                  width: 100,
+                  aspectRatio: 1,
+                },
               },
             },
           ],
@@ -3590,8 +3982,13 @@ const mainDefaultLayout = {
               type: "FooterUtilityImagesSlot",
               props: {
                 id: "FooterUtilityImagesSlot-b1702480-10c2-4fa7-8b27-cbb2c0fa83d2",
-                data: { utilityImages: [] },
-                styles: { width: 0, aspectRatio: 1 },
+                data: {
+                  utilityImages: [],
+                },
+                styles: {
+                  width: 0,
+                  aspectRatio: 1,
+                },
               },
             },
           ],
@@ -3604,28 +4001,58 @@ const mainDefaultLayout = {
                   links: [
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      label: {
+                        en: "Footer Link",
+                        hasLocalizedValue: "true",
+                      },
+                      link: {
+                        hasLocalizedValue: "true",
+                        en: "#",
+                      },
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      label: {
+                        en: "Footer Link",
+                        hasLocalizedValue: "true",
+                      },
+                      link: {
+                        hasLocalizedValue: "true",
+                        en: "#",
+                      },
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      label: {
+                        en: "Footer Link",
+                        hasLocalizedValue: "true",
+                      },
+                      link: {
+                        hasLocalizedValue: "true",
+                        en: "#",
+                      },
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      label: {
+                        en: "Footer Link",
+                        hasLocalizedValue: "true",
+                      },
+                      link: {
+                        hasLocalizedValue: "true",
+                        en: "#",
+                      },
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
-                      link: "#",
+                      label: {
+                        en: "Footer Link",
+                        hasLocalizedValue: "true",
+                      },
+                      link: {
+                        hasLocalizedValue: "true",
+                        en: "#",
+                      },
                     },
                   ],
                 },
@@ -3642,7 +4069,10 @@ const mainDefaultLayout = {
                 data: {
                   sections: [
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: {
+                        en: "Footer Label",
+                        hasLocalizedValue: "true",
+                      },
                       links: [
                         {
                           linkType: "URL",
@@ -3687,7 +4117,10 @@ const mainDefaultLayout = {
                       ],
                     },
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: {
+                        en: "Footer Label",
+                        hasLocalizedValue: "true",
+                      },
                       links: [
                         {
                           linkType: "URL",
@@ -3732,7 +4165,10 @@ const mainDefaultLayout = {
                       ],
                     },
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: {
+                        en: "Footer Label",
+                        hasLocalizedValue: "true",
+                      },
                       links: [
                         {
                           linkType: "URL",
@@ -3777,7 +4213,10 @@ const mainDefaultLayout = {
                       ],
                     },
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: {
+                        en: "Footer Label",
+                        hasLocalizedValue: "true",
+                      },
                       links: [
                         {
                           linkType: "URL",
@@ -3831,13 +4270,8 @@ const mainDefaultLayout = {
               type: "SecondaryFooterSlot",
               props: {
                 id: "SecondaryFooterSlot-014d0906-830d-40ae-bb74-dcbc1188ae73",
-                data: { show: true },
-                styles: {
-                  backgroundColor: {
-                    bgColor: "bg-palette-primary-light",
-                    textColor: "text-black",
-                  },
-                  linksPosition: "left",
+                data: {
+                  show: true,
                 },
                 maxWidth: "theme",
                 slots: {
@@ -3901,17 +4335,34 @@ const mainDefaultLayout = {
                       type: "CopyrightMessageSlot",
                       props: {
                         id: "CopyrightMessageSlot-e0142469-df41-4ed7-9213-6a1ae84433e0",
-                        data: { text: { en: "", hasLocalizedValue: "true" } },
+                        data: {
+                          text: {
+                            en: "",
+                            hasLocalizedValue: "true",
+                          },
+                        },
                         alignment: "left",
                       },
                     },
                   ],
                 },
                 ignoreLocaleWarning: [],
+                styles: {
+                  backgroundColor: {
+                    bgColor: "bg-palette-primary-light",
+                    textColor: "text-black",
+                  },
+                  linksPosition: "left",
+                },
               },
             },
           ],
         },
+        analytics: {
+          scope: "expandedFooter",
+        },
+        id: "ExpandedFooter-2c5d3c6c-615b-4d94-9b0b-16220bd840a0",
+        ignoreLocaleWarning: ["slots.ExpandedLinksWrapperSlot"],
         styles: {
           primaryFooter: {
             backgroundColor: {
@@ -3922,18 +4373,16 @@ const mainDefaultLayout = {
           },
           maxWidth: "theme",
         },
-        analytics: { scope: "expandedFooter" },
-        id: "ExpandedFooter-2c5d3c6c-615b-4d94-9b0b-16220bd840a0",
-        ignoreLocaleWarning: ["slots.ExpandedLinksWrapperSlot"],
       },
     },
   ],
+  zones: {},
 };
 
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 52,
+      version: 55,
       title: {
         field: "",
         constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
@@ -4750,7 +5199,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 52,
+      version: 55,
       title: {
         field: "",
         constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
