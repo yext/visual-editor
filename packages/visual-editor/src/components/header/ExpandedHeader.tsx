@@ -210,12 +210,6 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
       );
     }
 
-    data = setDeep(
-      data,
-      "props.slots.SecondaryHeaderSlot[0].props.slots.SecondaryHeaderSlot[0].props.slots.LinksSlot[0].props.parentData.type",
-      "Secondary"
-    );
-
     return {
       ...data,
       props: {
