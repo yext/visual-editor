@@ -2,10 +2,8 @@ import { describe, it, expect } from "vitest";
 import { normalizeLink } from "./normalizeLink";
 
 describe("normalizeLink", () => {
-  it("should throw an error if content is null", () => {
-    expect(() => normalizeLink(null as any)).toThrowError(
-      "Content cannot be null"
-    );
+  it("should return '' if content is null", () => {
+    expect(normalizeLink(null as any)).toBe("");
   });
 
   it("should return an empty string if content is empty", () => {
@@ -64,5 +62,12 @@ describe("normalizeLink", () => {
     expect(normalizeLink(input)).toBe(
       "https://mywebsite.com/page-name?query=true"
     );
+  });
+
+  it("should not normalize links for EMAIL and PHONE link types", () => {
+    const email = "test@email.com";
+    const phone = "+1 (123) 456-7890";
+    expect(normalizeLink(email, "EMAIL")).toBe(email);
+    expect(normalizeLink(phone, "PHONE")).toBe(phone);
   });
 });

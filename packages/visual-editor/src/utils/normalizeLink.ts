@@ -1,3 +1,5 @@
+import { LinkType } from "@yext/pages-components";
+
 // Includes letters, numbers, and: ( ) [ ] _ ~ : @ ; = / $ * - . & ? #
 const NON_LINK_CHAR_PATTERN = /[^\p{L}\p{N}()_[\]~:@;=/$*+\-.&?#]+/gu;
 
@@ -14,13 +16,21 @@ const DANGLING_HYPHEN_CHAR_REPLACEMENT_PATTERN =
 /**
  * Normalizes the provided content by converting upper-case ones to lower case,
  * replacing white spaces with a "-" and stripping all other illegal characters.
+ * Does not normalize links for EMAIL and PHONE link types.
  */
-export const normalizeLink = (content: string): string => {
-  if (content == null) {
-    throw new Error("Content cannot be null");
+export const normalizeLink = (
+  content?: string,
+  linkType?: LinkType
+): string => {
+  if (!content) {
+    return "";
   }
 
   if (content === "") {
+    return content;
+  }
+
+  if (linkType === "EMAIL" || linkType === "PHONE") {
     return content;
   }
 
