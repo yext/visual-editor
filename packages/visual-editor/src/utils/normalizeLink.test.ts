@@ -16,8 +16,12 @@ describe("normalizeLink", () => {
     expect(normalizeLink("Hello World")).toBe("hello-world");
   });
 
-  it("should PRESERVE '?' but still remove illegal characters like '>'", () => {
+  it("should preserve '?' but still remove illegal characters like '>'", () => {
     expect(normalizeLink("hello?world>")).toBe("hello?world");
+  });
+
+  it("should preserve '#' but still remove illegal characters like '!'", () => {
+    expect(normalizeLink("hello#world!")).toBe("hello#world");
   });
 
   it("should replace spaces with hyphens but keep the '?'", () => {
