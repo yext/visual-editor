@@ -13,6 +13,7 @@ import {
 } from "@puckeditor/core";
 import {
   CTA,
+  i18nComponentsInstance,
   msg,
   pt,
   resolveComponentData,
@@ -59,11 +60,10 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
     link: YextField(msg("fields.link", "Link"), {
       type: "text",
     }),
-    linkType: {
-      label: pt("fields.linkType", "Link Type"),
+    linkType: YextField(msg("fields.linkType", "Link Type"), {
       type: "select",
       options: linkTypeOptions(),
-    },
+    }),
     openInNewTab: YextField(msg("fields.openInNewTab", "Open in new tab"), {
       type: "radio",
       options: [
@@ -74,9 +74,8 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
   },
   defaultItemProps: defaultLink satisfies TranslatableCTA,
   getItemSummary: (item, i) => {
-    const { i18n } = useTranslation();
     return (
-      resolveComponentData(item.label, i18n.language) ||
+      resolveComponentData(item.label, i18nComponentsInstance.language) ||
       pt("Link", "Link") + " " + ((i ?? 0) + 1)
     );
   },
@@ -89,6 +88,10 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
       links: {
         type: "custom",
         render: ({ onChange, value }) => {
+          const tooltip = pt(
+            "fields.linksTooltip",
+            "Links will automatically collapse if the viewport is too narrow"
+          );
           return (
             <div>
               <FieldLabel
@@ -96,12 +99,7 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
                 el="div"
                 className="mb-3"
               >
-                <p className="ve-text-xs ve-mb-3">
-                  {pt(
-                    "fields.linksTooltip",
-                    "Links will automatically collapse if the viewport is too narrow"
-                  )}
-                </p>
+                <p className="ve-text-xs ve-mb-3">{tooltip}</p>
                 <AutoField
                   value={value}
                   onChange={onChange}
@@ -113,7 +111,7 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
         },
       },
       collapsedLinks: YextField(
-        msg("fields.alwaysCollapsedLinks", "Always Collapsed Links"),
+        msg("fields.collapsedLinks", "Collapsed Links"),
         linkFieldConfig
       ),
     },
@@ -140,6 +138,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   parentData,
   puck,
 }) => {
+  console.log("render", data, parentData);
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
 
@@ -303,11 +302,11 @@ export const defaultHeaderLinkProps: HeaderLinksProps = {
 export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
-  resolveFields: (data) => {
+  resolveFields: (data, params) => {
     return setDeep(
       headerLinksFields,
       "data.objectFields.collapsedLinks.visible",
-      data.props.parentData?.type === "Secondary"
+      params.parent?.type === "SecondaryHeaderSlot"
     );
   },
   defaultProps: defaultHeaderLinkProps,
