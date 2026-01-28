@@ -138,7 +138,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   parentData,
   puck,
 }) => {
-  console.log("render", data, parentData);
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
 

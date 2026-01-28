@@ -216,7 +216,6 @@ export const ExpandedHeader: ComponentConfig<{ props: ExpandedHeaderProps }> = {
       "Secondary"
     );
 
-    console.log("EH data", data);
     return {
       ...data,
       props: {
