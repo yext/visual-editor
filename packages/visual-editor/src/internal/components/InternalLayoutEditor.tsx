@@ -29,7 +29,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Metadata } from "../../editor/Editor.tsx";
 import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
-import { removeDuplicateImageActionBars } from "../utils/removeDuplicateImageActionBars.ts";
+import { removeDuplicateActionBars } from "../utils/removeDuplicateActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
@@ -424,9 +424,7 @@ export const InternalLayoutEditor = ({
               (s) => s.appState.ui.itemSelector
             );
 
-            React.useEffect(removeDuplicateImageActionBars, [
-              itemSelectorState,
-            ]);
+            React.useEffect(removeDuplicateActionBars, [itemSelectorState]);
 
             const isAdvancedSettingsSelected =
               appState?.ui?.itemSelector &&

@@ -1520,7 +1520,7 @@ const tests: ComponentTest[] = [
                           {
                             linkType: "URL",
                             label: {
-                              en: "Header Link",
+                              en: "Header Link Very Long English Label For The Link",
                               hasLocalizedValue: "true",
                             },
                             link: "#",
@@ -1529,7 +1529,7 @@ const tests: ComponentTest[] = [
                           {
                             linkType: "URL",
                             label: {
-                              en: "Header Link",
+                              en: "Header Link Very Long English Label For The Link",
                               hasLocalizedValue: "true",
                             },
                             link: "#",
@@ -1538,7 +1538,7 @@ const tests: ComponentTest[] = [
                           {
                             linkType: "URL",
                             label: {
-                              en: "Header Link",
+                              en: "Header Link Very Long English Label For The Link",
                               hasLocalizedValue: "true",
                             },
                             link: "#",
@@ -1547,7 +1547,7 @@ const tests: ComponentTest[] = [
                           {
                             linkType: "URL",
                             label: {
-                              en: "Header Link",
+                              en: "Header Link Very Long English Label For The Link",
                               hasLocalizedValue: "true",
                             },
                             link: "#",
@@ -1556,7 +1556,7 @@ const tests: ComponentTest[] = [
                           {
                             linkType: "URL",
                             label: {
-                              en: "Header Link",
+                              en: "Header Link Very Long English Label For The Link",
                               hasLocalizedValue: "true",
                             },
                             link: "#",
@@ -1565,7 +1565,7 @@ const tests: ComponentTest[] = [
                           {
                             linkType: "URL",
                             label: {
-                              en: "Header Link",
+                              en: "Header Link Very Long English Label For The Link",
                               hasLocalizedValue: "true",
                             },
                             link: "#",

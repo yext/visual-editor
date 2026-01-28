@@ -1,26 +1,40 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { FaBars } from "react-icons/fa6";
+import {
+  ArrayField,
+  AutoField,
+  ComponentConfig,
+  FieldLabel,
+  Fields,
+  PuckComponent,
+  registerOverlayPortal,
+  setDeep,
+} from "@puckeditor/core";
 import {
   CTA,
+  i18nComponentsInstance,
   msg,
   pt,
   resolveComponentData,
+  themeManagerCn,
   TranslatableCTA,
   useDocument,
+  useOverflow,
   YextField,
 } from "@yext/visual-editor";
-import { useTranslation } from "react-i18next";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../atoms/dropdown";
-import { FaBars } from "react-icons/fa6";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction";
 
 export type HeaderLinksProps = {
   data: {
     links: TranslatableCTA[];
+    collapsedLinks: TranslatableCTA[];
   };
 
   /** @internal data from the parent section */
@@ -36,47 +50,87 @@ const defaultLink: TranslatableCTA = {
   openInNewTab: false,
 };
 
+const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
+  type: "array",
+  arrayFields: {
+    label: YextField(msg("fields.label", "Label"), {
+      type: "translatableString",
+      filter: { types: ["type.string"] },
+    }),
+    link: YextField(msg("fields.link", "Link"), {
+      type: "text",
+    }),
+    linkType: YextField(msg("fields.linkType", "Link Type"), {
+      type: "select",
+      options: linkTypeOptions(),
+    }),
+    openInNewTab: YextField(msg("fields.openInNewTab", "Open in new tab"), {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
+    }),
+  },
+  defaultItemProps: defaultLink satisfies TranslatableCTA,
+  getItemSummary: (item, i) => {
+    return (
+      resolveComponentData(item.label, i18nComponentsInstance.language) ||
+      pt("Link", "Link") + " " + ((i ?? 0) + 1)
+    );
+  },
+};
+
 const headerLinksFields: Fields<HeaderLinksProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      links: YextField(msg("fields.links", "Links"), {
-        type: "array",
-        arrayFields: {
-          label: YextField(msg("fields.label", "Label"), {
-            type: "translatableString",
-            filter: { types: ["type.string"] },
-          }),
-          link: YextField(msg("fields.link", "Link"), {
-            type: "text",
-          }),
-          linkType: {
-            label: pt("fields.linkType", "Link Type"),
-            type: "select",
-            options: linkTypeOptions(),
-          },
-          openInNewTab: YextField(
-            msg("fields.openInNewTab", "Open in new tab"),
-            {
-              type: "radio",
-              options: [
-                { label: msg("fields.options.yes", "Yes"), value: true },
-                { label: msg("fields.options.no", "No"), value: false },
-              ],
-            }
-          ),
-        },
-        defaultItemProps: defaultLink satisfies TranslatableCTA,
-        getItemSummary: (item, i) => {
-          const { i18n } = useTranslation();
+      links: {
+        type: "custom",
+        render: ({ onChange, value }) => {
+          const tooltip = pt(
+            "fields.linksTooltip",
+            "Links will automatically collapse if the viewport is too narrow"
+          );
           return (
-            resolveComponentData(item.label, i18n.language) ||
-            pt("Link", "Link") + " " + ((i ?? 0) + 1)
+            <div>
+              <FieldLabel
+                label={pt("fields.links", "Links")}
+                el="div"
+                className="mb-3"
+              >
+                <p className="ve-text-xs ve-mb-3">{tooltip}</p>
+                <AutoField
+                  value={value}
+                  onChange={onChange}
+                  field={linkFieldConfig}
+                />
+              </FieldLabel>
+            </div>
           );
         },
-      }),
+      },
+      collapsedLinks: YextField(
+        msg("fields.collapsedLinks", "Collapsed Links"),
+        linkFieldConfig
+      ),
     },
   }),
+};
+
+const getWindow = (): Window | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const iframe = document.getElementById(
+    "preview-frame"
+  ) as HTMLIFrameElement | null;
+  if (iframe) {
+    return iframe?.contentWindow;
+  }
+
+  return window;
 };
 
 const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
@@ -86,9 +140,30 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
-  const MAX_VISIBLE = 5;
+
+  const navRef = React.useRef<HTMLDivElement | null>(null);
+  const measureContainerRef = React.useRef<HTMLUListElement | null>(null);
+  const linkRefs = React.useRef<Array<HTMLLIElement | null>>([]);
+  const hamburgerButtonRef = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(
+    () => registerOverlayPortal(hamburgerButtonRef.current),
+    [hamburgerButtonRef.current]
+  );
+
   const type = parentData?.type || "Primary";
   const isSecondary = type === "Secondary";
+  const validLinks = data.links?.filter((item) => !!item?.link) || [];
+  const validAlwaysCollapsedLinks =
+    data.collapsedLinks?.filter((item) => !!item?.link) || [];
+  const windowWidth = getWindow()?.innerWidth || 1024;
+
+  const isOverflow = useOverflow(
+    navRef,
+    measureContainerRef,
+    // when there are secondary collapsed links, adjust for the hamburger button width
+    isSecondary && validAlwaysCollapsedLinks.length ? 48 : 0
+  );
 
   const renderLink = (
     item: TranslatableCTA,
@@ -106,13 +181,11 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}
       link={resolveComponentData(item.link, i18n.language, streamDocument)}
-      className="justify-start w-full text-left"
+      className="justify-start w-full text-left text-wrap break-words"
     />
   );
 
-  const validLinks = data.links?.filter((item) => !!item?.link) || [];
-
-  if (validLinks.length === 0) {
+  if (validLinks.concat(validAlwaysCollapsedLinks).length === 0) {
     if (puck.isEditing) {
       return (
         <nav
@@ -135,27 +208,54 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
 
   return (
     <nav
+      ref={navRef}
+      className="flex md:gap-6 md:items-center justify-end"
       aria-label={
         type === "Primary"
           ? pt("primaryHeaderLinks", "Primary Header Links")
           : pt("secondaryHeaderLinks", "Secondary Header Links")
       }
     >
-      <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
+      {/* Measure div */}
+      <ul
+        ref={measureContainerRef}
+        className="flex flex-col md:flex-row w-fit sm:w-auto gap-0 md:gap-6 md:items-center absolute top-0 left-[-9999px] invisible"
+      >
         {validLinks.map((item, index) => {
-          const isOverflowed = isSecondary && index >= MAX_VISIBLE;
           return (
             <li
               key={`${type.toLowerCase()}.${index}`}
-              className={`py-4 md:py-0 ${isOverflowed ? "md:hidden" : ""}`}
+              ref={(el) => (linkRefs.current[index] = el)}
+              className={themeManagerCn("py-4 md:py-0")}
             >
               {renderLink(item, index, type.toLowerCase())}
             </li>
           );
         })}
+      </ul>
 
-        {isSecondary && validLinks.length > MAX_VISIBLE && (
-          <li className="hidden md:block py-4 md:py-0">
+      {/* Visible div */}
+      {(!isSecondary || windowWidth <= 360 || !isOverflow) && (
+        <ul className="flex flex-col md:flex-row w-full sm:w-auto gap-0 md:gap-6 md:items-center justify-end">
+          {validLinks
+            .concat(windowWidth <= 360 ? validAlwaysCollapsedLinks : [])
+            .map((item, index) => {
+              return (
+                <li
+                  key={`${type.toLowerCase()}.${index}`}
+                  className={"py-4 md:py-0"}
+                >
+                  {renderLink(item, index, type.toLowerCase())}
+                </li>
+              );
+            })}
+        </ul>
+      )}
+
+      {isSecondary &&
+        (isOverflow || validAlwaysCollapsedLinks.length > 0) &&
+        windowWidth > 360 && (
+          <div className="hidden md:block py-4 md:py-0">
             <DropdownMenu>
               <DropdownMenuTrigger
                 className="flex flex-row md:items-center gap-4 justify-between w-full"
@@ -164,24 +264,29 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
                   "Show additional header links"
                 )}
               >
-                <div className="flex gap-4 items-center">
+                <div
+                  ref={hamburgerButtonRef}
+                  className="flex gap-4 items-center"
+                >
                   <FaBars />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white border rounded shadow-md p-2 min-w-[200px] z-[9999]">
-                {validLinks.slice(MAX_VISIBLE).map((item, index) => (
-                  <DropdownMenuItem
-                    key={`overflow-${index}`}
-                    className="cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100"
-                  >
-                    {renderLink(item, index + MAX_VISIBLE, "overflow")}
-                  </DropdownMenuItem>
-                ))}
+                {([] as typeof validLinks)
+                  .concat(isOverflow ? validLinks : [])
+                  .concat(validAlwaysCollapsedLinks)
+                  .map((item, index) => (
+                    <DropdownMenuItem
+                      key={`overflow-${index}`}
+                      className={`cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100 ${puck.isEditing ? "pointer-events-none" : "pointer-events-auto"}`}
+                    >
+                      {renderLink(item, index, "overflow")}
+                    </DropdownMenuItem>
+                  ))}
               </DropdownMenuContent>
             </DropdownMenu>
-          </li>
+          </div>
         )}
-      </ul>
     </nav>
   );
 };
@@ -189,12 +294,20 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
 export const defaultHeaderLinkProps: HeaderLinksProps = {
   data: {
     links: [defaultLink, defaultLink, defaultLink],
+    collapsedLinks: [],
   },
 };
 
 export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
+  resolveFields: (data, params) => {
+    return setDeep(
+      headerLinksFields,
+      "data.objectFields.collapsedLinks.visible",
+      params.parent?.type === "SecondaryHeaderSlot"
+    );
+  },
   defaultProps: defaultHeaderLinkProps,
   render: (props) => <HeaderLinksComponent {...props} />,
 };

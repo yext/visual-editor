@@ -1,6 +1,9 @@
 import { pt } from "../../utils/i18n/platform";
 
-const findTargetDiv = (iframe: HTMLIFrameElement): HTMLDivElement | null => {
+const findTargetDiv = (
+  iframe: HTMLIFrameElement,
+  translatedTarget: string
+): HTMLDivElement | null => {
   // Get all action bar divs
   const targets = iframe?.contentDocument?.querySelectorAll(
     'div[class^="_ActionBar"]'
@@ -26,7 +29,7 @@ const findTargetDiv = (iframe: HTMLIFrameElement): HTMLDivElement | null => {
       );
 
       // The grandchild of the duplicate bar will have the translation of "Image"
-      if (grandchild && grandchild.textContent.includes(pt("image", "Image"))) {
+      if (grandchild && grandchild.textContent.includes(translatedTarget)) {
         return targetDiv as HTMLDivElement;
       }
     }
@@ -36,12 +39,12 @@ const findTargetDiv = (iframe: HTMLIFrameElement): HTMLDivElement | null => {
 };
 
 /**
- * Uses querySelector to hide duplicate "Image" action bars
+ * Uses querySelector to hide duplicate action bars
  * that are created by Puck when we render
  * the same slot in multiple places in order to create
  * different layouts for different viewports.
  */
-export const removeDuplicateImageActionBars = (): void => {
+export const removeDuplicateActionBars = (): void => {
   const iframe = document.getElementById(
     "preview-frame"
   ) as HTMLIFrameElement | null;
@@ -50,10 +53,19 @@ export const removeDuplicateImageActionBars = (): void => {
     return;
   }
 
-  const targetDiv = findTargetDiv(iframe);
+  const targets = [
+    pt("image", "Image"),
+    pt("callToAction", "Call To Action"),
+    pt("components.secondaryHeader", "Secondary Header"),
+    pt("components.headerLinks", "Header Links"),
+  ];
 
-  // Hide the duplicate action bar if found
-  if (targetDiv) {
-    targetDiv.style.display = "none";
-  }
+  targets.forEach((target) => {
+    const targetDiv = findTargetDiv(iframe, target);
+
+    // Hide the duplicate action bar if found
+    if (targetDiv) {
+      targetDiv.style.display = "none";
+    }
+  });
 };
