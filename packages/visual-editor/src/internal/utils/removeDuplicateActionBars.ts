@@ -39,12 +39,12 @@ const findTargetDiv = (
 };
 
 /**
- * Uses querySelector to hide duplicate "Image" action bars
+ * Uses querySelector to hide duplicate action bars
  * that are created by Puck when we render
  * the same slot in multiple places in order to create
  * different layouts for different viewports.
  */
-export const removeDuplicateImageActionBars = (): void => {
+export const removeDuplicateActionBars = (): void => {
   const iframe = document.getElementById(
     "preview-frame"
   ) as HTMLIFrameElement | null;

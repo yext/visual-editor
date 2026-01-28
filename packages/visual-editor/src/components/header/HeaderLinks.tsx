@@ -304,17 +304,10 @@ export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
   resolveFields: (data) => {
-    if (data.props.parentData?.type === "Secondary") {
-      return setDeep(
-        headerLinksFields,
-        "data.objectFields.collapsedLinks.visible",
-        true
-      );
-    }
     return setDeep(
       headerLinksFields,
       "data.objectFields.collapsedLinks.visible",
-      false
+      data.props.parentData?.type === "Secondary"
     );
   },
   defaultProps: defaultHeaderLinkProps,
