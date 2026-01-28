@@ -5,7 +5,7 @@ import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import {
   BackgroundStyle,
-  normalizeSlug,
+  normalizeLink,
   themeManagerCn,
   useBackground,
   useDocument,
@@ -89,7 +89,8 @@ const useResolvedCtaProps = (props: CTAProps) => {
         // Prefer hardcoded link, then listings link, then coordinate link
         // User settable link props should not be used for get directions
         return {
-          link: props.link || listingsLink || coordinateLink || "#",
+          link:
+            normalizeLink(props.link) || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
           label: props.label || t("getDirections", "Get Directions"),
           ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
@@ -119,7 +120,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
         }
 
         return {
-          link: props.link || "#",
+          link: normalizeLink(props.link, props.linkType) || "#",
           linkType: props.linkType ?? "URL",
           label,
           ariaLabel:
@@ -132,7 +133,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
       case "textAndLink":
       default:
         return {
-          link: props.link || "#",
+          link: normalizeLink(props.link, props.linkType) || "#",
           linkType: props.linkType ?? "URL",
           label: props.label,
           ariaLabel: ariaLabel ?? "",
@@ -282,12 +283,6 @@ export const CTA = (props: CTAProps) => {
     );
   }
 
-  // Normalize link for all link types except EMAIL and PHONE
-  const normalizedLink =
-    linkType === "EMAIL" || linkType === "PHONE"
-      ? link
-      : normalizeSlug(link) || "#";
-
   const computedAriaLabel =
     openInNewTab && ariaLabel && ariaLabel.trim() !== ""
       ? t("aria.opensInNewTab", "{{label}} (opens in a new tab)", {
@@ -307,7 +302,7 @@ export const CTA = (props: CTAProps) => {
       linkPadding={linkPadding}
     >
       <Link
-        cta={{ link: normalizedLink, linkType }}
+        cta={{ link: link || "#", linkType }}
         eventName={eventName}
         target={openInNewTab ? "_blank" : target}
         aria-label={computedAriaLabel}
