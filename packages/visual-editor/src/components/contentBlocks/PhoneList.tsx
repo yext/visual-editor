@@ -1,12 +1,12 @@
 import {
   backgroundColors,
   EntityField,
+  i18nComponentsInstance,
   msg,
   PhoneAtom,
   pt,
   resolveComponentData,
   useDocument,
-  usePlatformTranslation,
   YextField,
 } from "@yext/visual-editor";
 import {
@@ -36,14 +36,13 @@ export const phoneListFields: Fields<PhoneListProps> = {
         type: "array",
         arrayFields: PhoneDataFields,
         defaultItemProps: defaultPhoneDataProps,
-        getItemSummary: (item): string => {
-          const { i18n } = usePlatformTranslation();
-          const streamDocument = useDocument();
-          const resolvedValue = resolveComponentData(
-            item.label,
-            i18n.language,
-            streamDocument
-          );
+        getItemSummary: (item) => {
+          const locale = i18nComponentsInstance.language;
+          const resolvedValue =
+            typeof item.label === "object" && "hasLocalizedValue" in item.label
+              ? item.label?.[locale]
+              : item.label;
+
           if (resolvedValue) {
             return resolvedValue;
           }

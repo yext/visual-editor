@@ -13,6 +13,7 @@ import {
   FooterSocialLinksSlotProps,
   Heading,
   HeadingLevel,
+  i18nComponentsInstance,
   msg,
   pt,
   resolveComponentData,
@@ -308,9 +309,9 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
         },
       },
       getItemSummary: (item, i) => {
-        const { i18n } = useTranslation();
+        const locale = i18nComponentsInstance.language || "en";
         return (
-          resolveComponentData(item.header, i18n.language) ||
+          resolveComponentData(item.header, locale) ||
           pt("section", "Section") + " " + ((i ?? 0) + 1)
         );
       },
