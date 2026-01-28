@@ -17,7 +17,6 @@ describe("normalizeLink", () => {
   });
 
   it("should PRESERVE '?' but still remove illegal characters like '>'", () => {
-    // The '?' stays, the '>' is deleted
     expect(normalizeLink("hello?world>")).toBe("hello?world");
   });
 
@@ -43,12 +42,10 @@ describe("normalizeLink", () => {
   });
 
   it("should handle complex strings with '?' correctly", () => {
-    // Spaces become hyphens, '?' stays, '!' is stripped
     expect(normalizeLink("What is the Price? Now!")).toBe(
       "what-is-the-price?-now"
     );
 
-    // Valid characters from your list should all persist
     expect(normalizeLink("valid~[link]with*various_$_chars?日本語123")).toBe(
       "valid~[link]with*various_$_chars?日本語123"
     );

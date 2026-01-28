@@ -12,8 +12,8 @@ const DANGLING_HYPHEN_CHAR_REPLACEMENT_PATTERN =
   /(?<=[\p{L}\p{N}])-+(?=($|\/))/gu;
 
 /**
- * Normalizes content for a URL link.
- * Keeps '?' and other protocol-friendly characters while cleaning up spaces.
+ * Normalizes the provided content by converting upper-case ones to lower case,
+ * replacing white spaces with a "-" and stripping all other illegal characters.
  */
 export const normalizeLink = (content: string): string => {
   if (content == null) {
