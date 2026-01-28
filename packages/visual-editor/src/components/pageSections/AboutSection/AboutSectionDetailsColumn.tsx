@@ -309,7 +309,7 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
         },
       },
       getItemSummary: (item, i) => {
-        const locale = i18nComponentsInstance.language || "en";
+        const locale = i18nComponentsInstance.language;
         return (
           resolveComponentData(item.header, locale) ||
           pt("section", "Section") + " " + ((i ?? 0) + 1)

@@ -38,10 +38,7 @@ export const phoneListFields: Fields<PhoneListProps> = {
         defaultItemProps: defaultPhoneDataProps,
         getItemSummary: (item) => {
           const locale = i18nComponentsInstance.language;
-          const resolvedValue =
-            typeof item.label === "object" && "hasLocalizedValue" in item.label
-              ? item.label?.[locale]
-              : item.label;
+          const resolvedValue = resolveComponentData(item.label, locale);
 
           if (resolvedValue) {
             return resolvedValue;
