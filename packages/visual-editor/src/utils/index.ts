@@ -9,6 +9,7 @@ export { getCanonicalUrl } from "./canonicalUrl.ts";
 export { themeManagerCn, themeManagerTwMergeConfiguration } from "./cn.ts";
 export { filterComponentsFromConfig } from "./filterComponents.ts";
 export { getPageMetadata } from "./getPageMetadata.ts";
+export { normalizeLink } from "./normalizeLink.ts";
 export {
   migrate,
   type Migration,

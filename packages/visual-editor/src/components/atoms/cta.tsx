@@ -5,7 +5,7 @@ import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import {
   BackgroundStyle,
-  normalizeSlug,
+  normalizeLink,
   themeManagerCn,
   useBackground,
   useDocument,
@@ -286,7 +286,7 @@ export const CTA = (props: CTAProps) => {
   const normalizedLink =
     linkType === "EMAIL" || linkType === "PHONE"
       ? link
-      : normalizeSlug(link) || "#";
+      : normalizeLink(link) || "#";
 
   const computedAriaLabel =
     openInNewTab && ariaLabel && ariaLabel.trim() !== ""

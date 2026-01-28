@@ -1,0 +1,67 @@
+import { describe, it, expect } from "vitest";
+import { normalizeLink } from "./normalizeLink";
+
+describe("normalizeLink", () => {
+  it("should throw an error if content is null", () => {
+    expect(() => normalizeLink(null as any)).toThrowError(
+      "Content cannot be null"
+    );
+  });
+
+  it("should return an empty string if content is empty", () => {
+    expect(normalizeLink("")).toBe("");
+  });
+
+  it("should convert all characters to lowercase", () => {
+    expect(normalizeLink("Hello World")).toBe("hello-world");
+  });
+
+  it("should PRESERVE '?' but still remove illegal characters like '>'", () => {
+    // The '?' stays, the '>' is deleted
+    expect(normalizeLink("hello?world>")).toBe("hello?world");
+  });
+
+  it("should replace spaces with hyphens but keep the '?'", () => {
+    expect(normalizeLink("search results? query")).toBe(
+      "search-results?-query"
+    );
+  });
+
+  it("should remove illegal characters (like emoji or math symbols)", () => {
+    expect(normalizeLink("hello🚀world")).toBe("helloworld");
+    expect(normalizeLink("illegal>char<")).toBe("illegalchar");
+  });
+
+  it("should remove repeated hyphens and replace with a single hyphen", () => {
+    expect(normalizeLink("link--with---hyphens")).toBe("link-with-hyphens");
+  });
+
+  it("should remove dangling hyphens at the end or before slashes", () => {
+    expect(normalizeLink("link-")).toBe("link");
+    expect(normalizeLink("link-hello--")).toBe("link-hello");
+    expect(normalizeLink("folder-/page-")).toBe("folder/page");
+  });
+
+  it("should handle complex strings with '?' correctly", () => {
+    // Spaces become hyphens, '?' stays, '!' is stripped
+    expect(normalizeLink("What is the Price? Now!")).toBe(
+      "what-is-the-price?-now"
+    );
+
+    // Valid characters from your list should all persist
+    expect(normalizeLink("valid~[link]with*various_$_chars?日本語123")).toBe(
+      "valid~[link]with*various_$_chars?日本語123"
+    );
+  });
+
+  it("should handle multiple '?' correctly", () => {
+    expect(normalizeLink("is?it?working")).toBe("is?it?working");
+  });
+
+  it("should preserve https:// and not mangle the slashes", () => {
+    const input = "https://MyWebsite.com/Page Name?Query=True";
+    expect(normalizeLink(input)).toBe(
+      "https://mywebsite.com/page-name?query=true"
+    );
+  });
+});
