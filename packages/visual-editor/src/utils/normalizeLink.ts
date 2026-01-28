@@ -28,12 +28,12 @@ export const normalizeLink = (content: string): string => {
   normalized = normalized.trim();
 
   normalized = normalized.replace(SPACE_REPLACEMENT_PATTERN, "-");
+  normalized = normalized.replace(NON_LINK_CHAR_PATTERN, "");
   normalized = normalized.replace(
     REPEATED_HYPHEN_CHAR_REPLACEMENT_PATTERN,
     "-"
   );
   normalized = normalized.replace(DANGLING_HYPHEN_CHAR_REPLACEMENT_PATTERN, "");
-  normalized = normalized.replace(NON_LINK_CHAR_PATTERN, "");
 
   return normalized;
 };
