@@ -35,7 +35,24 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
 ): HeadConfig => {
   const { document, relativePrefixToRoot } = data;
-  const { title, description } = getPageMetadata(document);
+  const migratedDocument = document?.__?.layout
+    ? {
+        ...document,
+        __: {
+          ...document.__,
+          layout: JSON.stringify(
+            migrate(
+              JSON.parse(document.__.layout),
+              migrationRegistry,
+              mainConfig,
+              document
+            )
+          ),
+        },
+      }
+    : document;
+
+  const { title, description } = getPageMetadata(migratedDocument);
   const schema = getSchema(data);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
 
