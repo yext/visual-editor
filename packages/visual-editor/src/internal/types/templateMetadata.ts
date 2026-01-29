@@ -20,6 +20,7 @@ export type TemplateMetadata = {
   layoutTaskApprovals: boolean;
   locatorDisplayFields?: Record<string, FieldTypeData>;
   customFonts?: FontRegistry;
+  aiPageGeneration?: boolean;
 };
 
 export type FieldTypeData = {
