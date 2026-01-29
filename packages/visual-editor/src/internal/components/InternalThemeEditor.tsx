@@ -199,9 +199,24 @@ export const InternalThemeEditor = ({
           fields: fieldsOverride,
           iframe: loadMapboxIntoIframe,
           // oxlint-disable-next-line no-unused-vars removed all icons from all field labels
-          fieldLabel: ({ icon, children, ...rest }) => (
-            <FieldLabel {...rest}>{children}</FieldLabel>
-          ),
+          fieldLabel: ({ icon, children, className, readOnly, ...rest }) => {
+            // FIXME: fix this properly, talk to puck team
+            const modifiedChildren = React.Children.map(children, (child) => {
+              if (React.isValidElement(child)) {
+                // This "un-disables" the child element
+                return React.cloneElement(child, { disabled: false });
+              }
+              return child;
+            });
+
+            const newClassName = className?.replace("--readOnly", "");
+
+            return (
+              <FieldLabel {...rest} className={newClassName}>
+                {modifiedChildren}
+              </FieldLabel>
+            );
+          },
         }}
         metadata={metadata}
       />
