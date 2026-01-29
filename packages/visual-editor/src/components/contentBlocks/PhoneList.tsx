@@ -6,6 +6,7 @@ import {
   PhoneAtom,
   pt,
   resolveComponentData,
+  resolveDataFromParent,
   useDocument,
   YextField,
 } from "@yext/visual-editor";
@@ -26,6 +27,15 @@ export interface PhoneListProps {
 
   /** @internal Event name to be used for click analytics */
   eventName?: string;
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    phoneNumbers: {
+      label: string;
+      number: string;
+    }[];
+  };
 }
 
 export const phoneListFields: Fields<PhoneListProps> = {
@@ -87,15 +97,13 @@ export const resolvePhoneNumbers = (
 };
 
 export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
-  const { data, styles, puck } = props;
+  const { data, styles, parentData, puck } = props;
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedPhoneNumbers = resolvePhoneNumbers(
-    data.phoneNumbers,
-    locale,
-    streamDocument
-  );
+  const resolvedPhoneNumbers = parentData
+    ? parentData.phoneNumbers
+    : resolvePhoneNumbers(data.phoneNumbers, locale, streamDocument);
 
   return resolvedPhoneNumbers.length > 0 ? (
     <ul className="flex flex-col gap-4">
@@ -107,7 +115,11 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
           >
             <EntityField
               displayName={pt("fields.phoneNumber", "Phone Number")}
-              fieldId={data.phoneNumbers[idx]?.number?.field}
+              fieldId={
+                parentData
+                  ? parentData.field
+                  : data.phoneNumbers[idx]?.number?.field
+              }
               constantValueEnabled={
                 data.phoneNumbers[idx]?.number?.constantValueEnabled
               }
@@ -140,6 +152,7 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
 export const PhoneList: ComponentConfig<{ props: PhoneListProps }> = {
   label: msg("components.phoneList", "Phone List"),
   fields: phoneListFields,
+  resolveFields: (data) => resolveDataFromParent(phoneListFields, data),
   defaultProps: {
     data: {
       phoneNumbers: [],

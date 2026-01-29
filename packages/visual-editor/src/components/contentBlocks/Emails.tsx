@@ -12,6 +12,7 @@ import {
   pt,
   Background,
   backgroundColors,
+  resolveDataFromParent,
 } from "@yext/visual-editor";
 
 export interface EmailsProps {
@@ -25,6 +26,12 @@ export interface EmailsProps {
 
   /** @internal Event name to be used for click analytics */
   eventName?: string;
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    list: string[];
+  };
 }
 
 // Email fields used in Emails and CoreInfoSection
@@ -46,14 +53,12 @@ export const EmailsFields: Fields<EmailsProps> = {
 };
 
 const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
-  const { data, styles, puck, eventName } = props;
+  const { data, styles, parentData, puck, eventName } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
-  let resolvedEmailList = resolveComponentData(
-    data.list,
-    i18n.language,
-    streamDocument
-  );
+  let resolvedEmailList = parentData
+    ? parentData.list
+    : resolveComponentData(data.list, i18n.language, streamDocument);
 
   if (!!resolvedEmailList && !Array.isArray(resolvedEmailList)) {
     resolvedEmailList = [resolvedEmailList];
@@ -73,7 +78,7 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
   return filteredEmailList?.length ? (
     <EntityField
       displayName={pt("fields.emailList", "Email List")}
-      fieldId={data.list.field}
+      fieldId={parentData ? parentData.field : data.list.field}
       constantValueEnabled={data.list.constantValueEnabled}
     >
       <ul className="list-inside flex flex-col gap-4">
@@ -107,13 +112,15 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
 export const Emails: ComponentConfig<EmailsProps> = {
   label: msg("components.emails", "Emails"),
   fields: EmailsFields,
-  resolveFields: (data, { fields }) => {
+  resolveFields: (data) => {
+    const updatedFields = resolveDataFromParent(EmailsFields, data);
+
     if (data.props.data.list.constantValueEnabled) {
-      return fields;
+      return updatedFields;
     }
 
     return {
-      ...fields,
+      ...updatedFields,
       styles: YextField(msg("fields.styles", "Styles"), {
         type: "object",
         objectFields: {
