@@ -27,6 +27,7 @@ import {
   DynamicOption,
   DynamicOptionsSingleSelectorType,
   TranslatableString,
+  BackgroundStyle,
 } from "@yext/visual-editor";
 import {
   Address,
@@ -65,6 +66,7 @@ export interface LocatorResultCardProps {
     field: DynamicOptionsSingleSelectorType<string>;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
+    color?: BackgroundStyle;
   };
 
   /** Settings for the secondary heading of the card */
@@ -275,6 +277,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           type: "select",
           hasSearch: true,
           options: "HEADING_LEVEL",
+        }),
+        color: YextField(msg("fields.color", "Color"), {
+          type: "select",
+          options: "SITE_COLOR",
         }),
       },
     },
@@ -657,7 +663,9 @@ export const LocatorResultCard = React.memo(
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
       >
         <Background
-          background={backgroundColors.background6.value}
+          background={
+            props?.primaryHeading?.color ?? backgroundColors.background6.value
+          }
           className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
         >
           {result.index}
@@ -864,6 +872,7 @@ const HeadingTextSection = (props: {
   return (
     <div className="flex flex-col gap-2">
       <Heading
+        color={primaryHeading?.color}
         className="font-bold text-palette-primary-dark"
         level={primaryHeading.headingLevel}
       >

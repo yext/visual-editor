@@ -46,6 +46,10 @@ import {
   YextField,
   getPreferredDistanceUnit,
   toKilometers,
+  BackgroundStyle,
+  TranslatableString,
+  TranslatableStringField,
+  resolveComponentData,
 } from "@yext/visual-editor";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
@@ -72,6 +76,7 @@ const DEFAULT_RADIUS_MILES = 25;
 const HOURS_FIELD = "builtin.hours";
 const MILES_TO_METERS = 1609.34;
 const INITIAL_LOCATION_KEY = "initialLocation";
+const DEFAULT_TITLE = "Find a Location";
 
 const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();
@@ -442,7 +447,10 @@ export interface LocatorProps {
     latitude: string;
     longitude: string;
   };
-
+  pageHeading: {
+    title: TranslatableString;
+    color?: BackgroundStyle;
+  };
   /**
    * Props to customize the locator result card component.
    * Controls which fields are displayed and their styling.
@@ -535,6 +543,22 @@ const locatorFields: Fields<LocatorProps> = {
       },
     }
   ),
+  pageHeading: {
+    label: msg("fields.pageHeading", "Page Heading"),
+    type: "object",
+    objectFields: {
+      title: TranslatableStringField<TranslatableString>(
+        msg("fields.title", "Title"),
+        undefined,
+        false,
+        false
+      ),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
+    },
+  },
   resultCard: LocatorResultCardFields,
 };
 
@@ -547,6 +571,12 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     filters: {
       openNowButton: false,
       showDistanceOptions: false,
+    },
+    pageHeading: {
+      title: {
+        en: DEFAULT_TITLE,
+        hasLocalizedValue: "true",
+      },
     },
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
@@ -598,8 +628,9 @@ const LocatorInternal = ({
   mapStartingLocation,
   resultCard: resultCardProps,
   puck,
+  pageHeading,
 }: WithPuckProps<LocatorProps>) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const streamDocument = useDocument();
   const resultCount = useSearchState(
@@ -1073,6 +1104,9 @@ const LocatorInternal = ({
   const hasFilterModalToggle =
     openNowButton || showDistanceOptions || hasFacetOptions;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
+  const resolvedHeading =
+    resolveComponentData(pageHeading?.title, i18n.language, streamDocument) ??
+    DEFAULT_TITLE;
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
@@ -1082,7 +1116,9 @@ const LocatorInternal = ({
         id="locatorLeftDiv"
       >
         <div className="px-8 py-6 gap-4 flex flex-col">
-          <Heading level={3}>{t("findALocation", "Find a Location")}</Heading>
+          <Heading level={1} color={pageHeading?.color}>
+            {resolvedHeading}
+          </Heading>
           <FilterSearch
             searchFields={[
               { fieldApiName: LOCATION_FIELD, entityType: entityType },
