@@ -33,24 +33,7 @@ export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
 ): HeadConfig => {
   const { document, relativePrefixToRoot } = data;
-  const migratedDocument = document?.__?.layout
-    ? {
-        ...document,
-        __: {
-          ...document.__,
-          layout: JSON.stringify(
-            migrate(
-              JSON.parse(document.__.layout),
-              migrationRegistry,
-              directoryConfig,
-              document
-            )
-          ),
-        },
-      }
-    : document;
-
-  const { title, description } = getPageMetadata(migratedDocument);
+  const { title, description } = getPageMetadata(document);
   const schema = getSchema(data);
   const faviconUrl = document?._favicon ?? document?._site?.favicon?.url;
 
@@ -129,13 +112,15 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const resolvedPuckData = await resolveAllData(migratedData, directoryConfig, {
     streamDocument: document,
   });
+  document.__.layout = JSON.stringify(resolvedPuckData);
   const translations = await injectTranslations(document);
 
-  return { ...props, data: resolvedPuckData, translations };
+  return { ...props, document, translations };
 };
 
 const Directory: Template<TemplateRenderProps> = (props) => {
-  const { document, data } = props;
+  const { document } = props;
+  const data = JSON.parse(document.__.layout);
 
   return (
     <AnalyticsProvider
