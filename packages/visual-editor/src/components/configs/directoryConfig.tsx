@@ -21,6 +21,7 @@ import {
   SlotsCategoryProps,
 } from "../categories/SlotsCategory";
 import { resolveDirectoryRootProps } from "../../utils/getPageMetadata";
+import { pt } from "../../utils/i18n/platform";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,
@@ -41,7 +42,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   },
   categories: {
     pageSections: {
-      title: "Page Sections",
+      title: pt("categories.standardSections", "Standard Sections"),
       components: [...DirectoryCategory, "BannerSection"],
     },
     slots: {

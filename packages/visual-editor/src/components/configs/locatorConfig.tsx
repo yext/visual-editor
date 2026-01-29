@@ -20,6 +20,7 @@ import {
   SlotsCategoryComponents,
   SlotsCategoryProps,
 } from "../categories/SlotsCategory";
+import { pt } from "../../utils/i18n/platform";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
@@ -40,7 +41,7 @@ export const locatorConfig: Config<LocatorConfigProps> = {
   },
   categories: {
     pageSections: {
-      title: "Page Sections",
+      title: pt("categories.standardSections", "Standard Sections"),
       components: [...LocatorCategory, "BannerSection"],
     },
     slots: {

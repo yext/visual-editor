@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Põhiteave",
     "other": "Teine",
-    "pageSections": "Leheosad"
+    "standardSections": "Standardsektsioonid"
   },
   "category": "Kategooria",
   "change": "Vahetus",
@@ -683,6 +683,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundaarne päis (reaalajas lehel peidetud)",
   "secondaryHeaderLinks": "Teisese päise lingid",
   "section": "jaotis",
+  "sections": "Sektsioonid",
   "selectAnOption": "Valige suvand",
   "selectDistanceLessThan": "Valige kaugus väiksem kui",
   "services": "Teenused",

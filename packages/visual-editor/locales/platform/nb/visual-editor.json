@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Kjerneinformasjon",
     "other": "ANNEN",
-    "pageSections": "Sideseksjoner"
+    "standardSections": "Standard seksjoner"
   },
   "category": "Kategori",
   "change": "Endre",
@@ -683,6 +683,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundær topptekst (skjult på live-side)",
   "secondaryHeaderLinks": "Sekundære overskriftskoblinger",
   "section": "Del",
+  "sections": "Seksjoner",
   "selectAnOption": "Velg et alternativ",
   "selectDistanceLessThan": "Velg avstand mindre enn",
   "services": "Tjenester",

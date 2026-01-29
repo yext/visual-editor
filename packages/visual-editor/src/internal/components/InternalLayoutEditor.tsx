@@ -12,6 +12,8 @@ import {
   FieldLabel,
   createUsePuck,
   resolveAllData,
+  blocksPlugin,
+  outlinePlugin,
 } from "@puckeditor/core";
 import React from "react";
 import { useState, useRef, useCallback } from "react";
@@ -37,6 +39,8 @@ import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
+const blocks = blocksPlugin();
+const outline = outlinePlugin();
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -394,6 +398,7 @@ export const InternalLayoutEditor = ({
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
+        plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
         overrides={{
           fields: fieldsOverride,
           header: () => (

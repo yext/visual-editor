@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Pamatinformācija",
     "other": "Cits",
-    "pageSections": "Lapas sadaļas"
+    "standardSections": "Standarta sadaļas"
   },
   "category": "Kategorija",
   "change": "Mainīt",
@@ -688,6 +688,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundārā galvene (paslēpta tiešsaistes lapā)",
   "secondaryHeaderLinks": "Sekundārās galvenes saites",
   "section": "sadaļa",
+  "sections": "Sadaļas",
   "selectAnOption": "Atlasiet opciju",
   "selectDistanceLessThan": "Izvēlieties attālumu, kas mazāks par",
   "services": "Pakalpojumi",

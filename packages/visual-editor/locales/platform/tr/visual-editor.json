@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Temel Bilgiler",
     "other": "DİĞER",
-    "pageSections": "Sayfa bölümleri"
+    "standardSections": "Standart Bölümler"
   },
   "category": "Kategori",
   "change": "Değiştirmek",
@@ -683,6 +683,7 @@
   "secondaryHeaderHiddenOnLivePage": "İkincil Başlık (Yayınlanan sayfada gizli)",
   "secondaryHeaderLinks": "İkincil Başlık Bağlantıları",
   "section": "Bölüm",
+  "sections": "Bölümler",
   "selectAnOption": "Bir seçenek seçin",
   "selectDistanceLessThan": "Şundan daha az mesafeyi seçin:",
   "services": "Hizmetler",

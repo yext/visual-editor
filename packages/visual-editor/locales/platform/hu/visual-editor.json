@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Alapvető információk",
     "other": "MÁS",
-    "pageSections": "Oldalszakaszok"
+    "standardSections": "Szabványos szakaszok"
   },
   "category": "Kategória",
   "change": "Változás",
@@ -683,6 +683,7 @@
   "secondaryHeaderHiddenOnLivePage": "Másodlagos fejléc (rejtett az élő oldalon)",
   "secondaryHeaderLinks": "Másodlagos fejléc hivatkozások",
   "section": "Szakasz",
+  "sections": "Szakaszok",
   "selectAnOption": "Válasszon egy opciót",
   "selectDistanceLessThan": "Válasszon kisebb távolságot, mint",
   "services": "Szolgáltatások",
