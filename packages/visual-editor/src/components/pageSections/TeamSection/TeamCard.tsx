@@ -589,15 +589,8 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
           phoneNumbers: person.phoneNumber
             ? [
                 {
-                  number: {
-                    field: field,
-                    constantValue: person.phoneNumber,
-                    constantValueEnabled: true,
-                  },
-                  label: {
-                    en: "Phone",
-                    hasLocalizedValue: "true",
-                  },
+                  number: person.phoneNumber,
+                  label: "",
                 },
               ]
             : [],
