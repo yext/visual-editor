@@ -54,7 +54,7 @@
     "directory": "Verzeichnis",
     "locator": "Locator",
     "other": "ANDERE",
-    "pageSections": "Seitenabschnitte"
+    "standardSections": "Standardabschnitte"
   },
   "category": "Kategorie",
   "change": "Ändern",
@@ -688,6 +688,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundärer Header (auf der Live-Seite ausgeblendet)",
   "secondaryHeaderLinks": "Sekundäre Header-Links",
   "section": "Abschnitt",
+  "sections": "Abschnitte",
   "selectAnOption": "Wählen Sie eine Option aus",
   "selectDistanceLessThan": "Wählen Sie den Abstand kleiner als",
   "services": "Dienstleistungen",

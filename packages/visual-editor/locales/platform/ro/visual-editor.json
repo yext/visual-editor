@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Informații de bază",
     "other": "ALTE",
-    "pageSections": "Secțiuni de pagini"
+    "standardSections": "Secțiuni standard"
   },
   "category": "Categorie",
   "change": "Schimba",
@@ -688,6 +688,7 @@
   "secondaryHeaderHiddenOnLivePage": "Antet secundar (ascuns pe pagina live)",
   "secondaryHeaderLinks": "Linkuri de antet secundare",
   "section": "Secțiune",
+  "sections": "Secțiuni",
   "selectAnOption": "Selectați o opțiune",
   "selectDistanceLessThan": "Selectați distanța mai mică decât",
   "services": "Servicii",

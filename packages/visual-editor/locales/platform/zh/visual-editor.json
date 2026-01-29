@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "核心信息",
     "other": "其他",
-    "pageSections": "页面部分"
+    "standardSections": "标准型材"
   },
   "category": "类别",
   "change": "改变",
@@ -678,6 +678,7 @@
   "secondaryHeaderHiddenOnLivePage": "辅助标题（隐藏在实时页面上）",
   "secondaryHeaderLinks": "二级标题链接",
   "section": "部分",
+  "sections": "部分",
   "selectAnOption": "选择一个选项",
   "selectDistanceLessThan": "选择距离小于",
   "services": "服务",

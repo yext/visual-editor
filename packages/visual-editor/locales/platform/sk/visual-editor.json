@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Základné informácie",
     "other": "Druhý",
-    "pageSections": "Sekcie stránok"
+    "standardSections": "Štandardné sekcie"
   },
   "category": "Kategória",
   "change": "Zmena",
@@ -694,6 +694,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundárna hlavička (skrytá na aktívnej stránke)",
   "secondaryHeaderLinks": "Sekundárne odkazy hlavičky",
   "section": "oddiel",
+  "sections": "Sekcie",
   "selectAnOption": "Vyberte možnosť",
   "selectDistanceLessThan": "Zvoľte vzdialenosť menšiu ako",
   "services": "Služby",

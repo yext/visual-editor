@@ -54,7 +54,7 @@
     "directory": "Vejviser",
     "locator": "Locator",
     "other": "ANDRE",
-    "pageSections": "Sidesektioner"
+    "standardSections": "Standard sektioner"
   },
   "category": "Kategori",
   "change": "Forandring",
@@ -690,6 +690,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundær overskrift (skjult på live-side)",
   "secondaryHeaderLinks": "Sekundære overskriftslinks",
   "section": "Afsnit",
+  "sections": "Afsnit",
   "selectAnOption": "Vælg en mulighed",
   "selectDistanceLessThan": "Vælg afstand mindre end",
   "services": "Tjenester",

@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Osnovne informacije",
     "other": "Drugi",
-    "pageSections": "Odjeljci stranica"
+    "standardSections": "Standardni odjeljci"
   },
   "category": "Kategorija",
   "change": "Promijeniti",
@@ -688,6 +688,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundarno zaglavlje (skriveno na stranici uživo)",
   "secondaryHeaderLinks": "Veze sekundarnog zaglavlja",
   "section": "Odjeljak",
+  "sections": "Sekcije",
   "selectAnOption": "Odaberite opciju",
   "selectDistanceLessThan": "Odaberite udaljenost manju od",
   "services": "Usluge",

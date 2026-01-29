@@ -46,7 +46,7 @@ export const mainConfig: Config<MainConfigProps> = {
   components,
   categories: {
     pageSections: {
-      title: pt("categories.pageSections", "Page Sections"),
+      title: pt("categories.standardSections", "Standard Sections"),
       components: PageSectionCategory,
     },
     coreInformation: {
