@@ -120,7 +120,14 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
 
 const Directory: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
-  const data = JSON.parse(document.__.layout);
+
+  const layoutString = document.__.layout;
+  let data: any = {};
+  try {
+    data = JSON.parse(layoutString);
+  } catch (e) {
+    console.error("Failed to parse layout JSON:", e);
+  }
 
   return (
     <AnalyticsProvider
