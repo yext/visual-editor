@@ -1,4 +1,5 @@
 @import "@puckeditor/core/no-external.css";
+@import "@puckeditor/plugin-ai/styles.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

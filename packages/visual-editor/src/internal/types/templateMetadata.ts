@@ -64,6 +64,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
         field_type_id: "type.phone",
       },
     },
+    aiPageGeneration: true,
   };
 }
 
