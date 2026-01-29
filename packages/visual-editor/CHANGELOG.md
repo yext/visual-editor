@@ -1,3 +1,11 @@
+#### 1.0.7 (2026-01-29)
+
+##### Bug Fixes
+
+- add migrated layout to document before getHeadConfig ([#1008](https://github.com/yext/visual-editor/pull/1008)) ([65bdce17](https://github.com/yext/visual-editor/commit/65bdce173481b69a1ac35fbd8c9b6bc4a77ee642))
+- rename blocks plugin to sections ([#1009](https://github.com/yext/visual-editor/pull/1009)) ([34d4b830](https://github.com/yext/visual-editor/commit/34d4b830e8c23605eda17542d1ea1a61ecfd0166))
+- team section entity values ([#1007](https://github.com/yext/visual-editor/pull/1007)) ([638156f1](https://github.com/yext/visual-editor/commit/638156f15ab4f847548861eaeca9d5e4302176fa))
+
 #### 1.0.6 (2026-01-28)
 
 ##### Chores
