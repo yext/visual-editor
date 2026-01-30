@@ -20,13 +20,13 @@ export const emptyTitleFix: Migration = {
       streamDocument: StreamDocument
     ) => {
       try {
-        if (!props.title.constantValueEnabled) {
+        if (props?.title && !props.title.constantValueEnabled) {
           return props;
         }
 
         const updatedProps = { ...props };
 
-        if (!props.title.constantValue || props.title.constantValue === "") {
+        if (!props?.title?.constantValue) {
           return {
             ...updatedProps,
             title: {
@@ -44,10 +44,7 @@ export const emptyTitleFix: Migration = {
           const locales = getLocales(streamDocument);
           let missingValue = false;
           locales.forEach((locale) => {
-            if (
-              !props.title.constantValue[locale] ||
-              props.title.constantValue[locale] === ""
-            ) {
+            if (!props.title.constantValue?.[locale]) {
               missingValue = true;
             }
           });
