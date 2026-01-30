@@ -10,10 +10,8 @@ const getLocales = (streamDocument: any): string[] => {
 };
 
 /**
- * Migration to add default meta fields for locator and directory pages.
- * If the title or description fields are missing, add them to the root props.
- * If they are present but have empty constantValue, set a default constantValue.
- * If the field is empty, enable constantValueEnabled.
+ * Empty titles now fail page generation. Ensure the title is not set to
+ * constantValueEnabled with an empty constantValue.
  */
 export const emptyTitleFix: Migration = {
   root: {
