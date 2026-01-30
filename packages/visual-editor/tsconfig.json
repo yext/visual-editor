@@ -26,6 +26,6 @@
   "exclude": [
     "node_modules",
     "src/vite-plugin/templates/*",
-    "src/components/testing/componentTests.tailwind.config.ts"
+    "src/components/testing/componentTests.tailwind.config.cjs"
   ]
 }
