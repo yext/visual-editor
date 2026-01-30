@@ -1,5 +1,7 @@
 const { themeResolver } = require("../../utils/themeResolver.ts");
-const { defaultThemeTailwindExtensions } = require("../../utils/themeConfigOptions.ts");
+const {
+  defaultThemeTailwindExtensions,
+} = require("../../utils/themeConfigOptions.ts");
 const { defaultThemeConfig } = require("../DefaultThemeConfig.ts");
 
 // This Tailwind Config applies Theme Editor styles to our components
