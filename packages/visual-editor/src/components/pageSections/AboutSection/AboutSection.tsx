@@ -9,22 +9,22 @@ import {
 import {
   backgroundColors,
   BackgroundStyle,
-  BodyTextProps,
-  Button,
   HeadingLevel,
-  HeadingTextProps,
-  msg,
-  PageSection,
-  VisibilityWrapper,
-  YextField,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { Button } from "../../../internal/puck/ui/button.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 import { useTranslation } from "react-i18next";
 import { FaChevronDown } from "react-icons/fa";
 import {
   AboutSectionDetailsColumnProps,
   defaultAboutSectionProps,
-} from "./AboutSectionDetailsColumn";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+} from "./AboutSectionDetailsColumn.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 const placeholderText = {
   en: {

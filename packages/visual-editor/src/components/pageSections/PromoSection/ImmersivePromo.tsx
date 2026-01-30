@@ -1,11 +1,9 @@
-import {
-  backgroundColors,
-  PageSection,
-  resolveYextEntityField,
-  useDocument,
-} from "@yext/visual-editor";
-import { PromoVariantProps } from "./PromoSection";
-import { PromoContent, promoContentParentCn } from "./PromoContent";
+import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { PromoVariantProps } from "./PromoSection.tsx";
+import { PromoContent, promoContentParentCn } from "./PromoContent.tsx";
 import { useTranslation } from "react-i18next";
 import { getImageUrl } from "@yext/pages-components";
 import { PuckComponent } from "@puckeditor/core";

@@ -3,25 +3,25 @@ import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
   type DeprecatedCategoryProps,
-} from "../categories/DeprecatedCategory";
+} from "../categories/DeprecatedCategory.tsx";
 import {
   DirectoryCategory,
   DirectoryCategoryComponents,
   type DirectoryCategoryProps,
-} from "../categories/DirectoryCategory";
+} from "../categories/DirectoryCategory.tsx";
 import {
   OtherCategory,
   OtherCategoryComponents,
   type OtherCategoryProps,
-} from "../categories/OtherCategory";
-import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
+} from "../categories/OtherCategory.tsx";
+import { BannerSection, BannerSectionProps } from "../pageSections/Banner.tsx";
 import {
   SlotsCategory,
   SlotsCategoryComponents,
   SlotsCategoryProps,
-} from "../categories/SlotsCategory";
-import { resolveDirectoryRootProps } from "../../utils/getPageMetadata";
-import { pt } from "../../utils/i18n/platform";
+} from "../categories/SlotsCategory.tsx";
+import { resolveDirectoryRootProps } from "../../utils/getPageMetadata.ts";
+import { pt } from "../../utils/i18n/platform.ts";
 
 export interface DirectoryConfigProps
   extends DirectoryCategoryProps,

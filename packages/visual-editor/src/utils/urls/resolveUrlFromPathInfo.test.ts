@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { resolveUrlFromPathInfo } from "./resolveUrlFromPathInfo";
-import { StreamDocument } from "../types/StreamDocument";
+import { resolveUrlFromPathInfo } from "./resolveUrlFromPathInfo.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 const baseDocument: StreamDocument = {
   id: "123",

@@ -5,13 +5,11 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
-import {
-  TestimonialSectionType,
-  ComponentFields,
-  msg,
-  i18nComponentsInstance,
-  resolveYextEntityField,
-} from "@yext/visual-editor";
+import { TestimonialSectionType } from "../../../types/types.ts";
+import { ComponentFields } from "../../../types/fields.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import {
   cardWrapperFields,

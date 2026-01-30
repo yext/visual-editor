@@ -1,13 +1,10 @@
 import { ComponentConfig, Fields, setDeep } from "@puckeditor/core";
 import "@yext/pages-components/style.css";
-import {
-  BackgroundStyle,
-  CTA,
-  CTAVariant,
-  YextField,
-  msg,
-  resolveDataFromParent,
-} from "@yext/visual-editor";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { CTA, CTAVariant } from "../atoms/cta.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
 
 export type GetDirectionsProps = {

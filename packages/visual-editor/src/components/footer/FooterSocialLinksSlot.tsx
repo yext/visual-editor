@@ -1,6 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { YextField, msg, CTA, useBackground } from "@yext/visual-editor";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { CTA } from "../atoms/cta.tsx";
+import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import {
   FaFacebook,
@@ -11,7 +14,7 @@ import {
   FaTiktok,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { validPatterns } from "./ExpandedFooter";
+import { validPatterns } from "./ExpandedFooter.tsx";
 
 export interface FooterSocialLinksSlotProps {
   data: {

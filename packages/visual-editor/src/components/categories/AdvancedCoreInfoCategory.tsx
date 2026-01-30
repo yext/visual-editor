@@ -26,7 +26,7 @@ import {
 } from "../contentBlocks/MapboxStaticMap.tsx";
 import { Phone, PhoneProps } from "../contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
-import { CTAGroup, CTAGroupProps } from "../contentBlocks/CTAGroup";
+import { CTAGroup, CTAGroupProps } from "../contentBlocks/CTAGroup.tsx";
 
 export interface AdvancedCoreInfoCategoryProps {
   Grid: GridProps;
@@ -54,8 +54,8 @@ export const AdvancedCoreInfoCategoryComponents = {
   Emails,
   GetDirections,
   HeadingText,
-  HoursStatus,
   HoursTable,
+  HoursStatus,
   ImageWrapper,
   MapboxStaticMap,
   Phone,

@@ -8,23 +8,24 @@ import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
   AssetImageType,
   TranslatableAssetImage,
-  EntityField,
+} from "../../../types/images.ts";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import {
   Image,
   ImgSizesByBreakpoint,
-  MaybeLink,
-  TranslatableString,
-  YextEntityField,
-  YextField,
   imgSizesHelper,
-  msg,
-  pt,
-  resolveComponentData,
-  resolveDataFromParent,
-  useDocument,
-} from "@yext/visual-editor";
+} from "../../atoms/image.tsx";
+import { MaybeLink } from "../../atoms/maybeLink.tsx";
+import { TranslatableString } from "../../../types/types.ts";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { EmptyImageState } from "./EmptyImageState";
+import { EmptyImageState } from "./EmptyImageState.tsx";
 import { ImageStylingFields, ImageStylingProps } from "./styling.ts";
 
 const PLACEHOLDER_IMAGE_URL = "https://placehold.co/640x360";

@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { SlotComponent } from "@puckeditor/core";
-import { EntityField, pt, themeManagerCn } from "@yext/visual-editor";
-import { PromoData, PromoStyles } from "./PromoSection";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import { pt } from "../../../utils/i18n/platform.ts";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { PromoData, PromoStyles } from "./PromoSection.tsx";
 
 export const PromoMedia = ({
   className,

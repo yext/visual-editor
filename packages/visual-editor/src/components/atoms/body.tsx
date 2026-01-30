@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { themeManagerCn } from "@yext/visual-editor";
+import { themeManagerCn } from "../../utils/cn.ts";
 
 // Define the variants for the body component
 export const bodyVariants = cva(

@@ -1,21 +1,18 @@
-import {
-  backgroundColors,
-  EntityField,
-  i18nComponentsInstance,
-  msg,
-  PhoneAtom,
-  pt,
-  resolveComponentData,
-  resolveDataFromParent,
-  useDocument,
-  YextField,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { PhoneAtom } from "../atoms/phone.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextField } from "../../editor/YextField.tsx";
 import {
   defaultPhoneDataProps,
   PhoneDataFields,
   PhoneStyleFields,
   PhoneProps,
-} from "./Phone";
+} from "./Phone.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 

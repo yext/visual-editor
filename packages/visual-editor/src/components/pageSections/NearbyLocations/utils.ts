@@ -1,4 +1,4 @@
-import { StreamDocument } from "@yext/visual-editor";
+import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 
 /** parseDocument parses the streamDocument to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain */
 export const parseDocument = (

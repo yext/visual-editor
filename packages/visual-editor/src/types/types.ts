@@ -1,6 +1,6 @@
 import { ImageType, CTA as CTAType } from "@yext/pages-components";
-import { AssetImageType } from "./images";
-import { AssetVideo } from "./videos";
+import { AssetImageType } from "./images.ts";
+import { AssetVideo } from "./videos.ts";
 
 /**
  * A pages-components CTA with a translatable label and link

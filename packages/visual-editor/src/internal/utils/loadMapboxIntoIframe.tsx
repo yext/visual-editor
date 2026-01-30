@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from "react";
-import mapboxPackageJson from "mapbox-gl/package.json";
+import mapboxPackageJson from "mapbox-gl/package.json" with { type: "json" };
 
 /**
  * For use in Puck's iframe override. Loads the Mapbox script and stylesheet into the iframe document.

@@ -1,7 +1,8 @@
-import { PageSection, themeManagerCn } from "@yext/visual-editor";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { themeManagerCn } from "../../../utils/cn.ts";
 import { useTranslation } from "react-i18next";
-import { HeroVariantProps, HeroImageProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { HeroVariantProps, HeroImageProps } from "../HeroSection.tsx";
+import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
 import { PuckComponent } from "@puckeditor/core";
 
 const ClassicHeroImage: PuckComponent<HeroImageProps> = (props) => {

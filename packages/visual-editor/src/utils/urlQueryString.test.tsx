@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   getValueFromQueryString,
   getRecordFromQueryString,
-} from "./urlQueryString";
+} from "./urlQueryString.tsx";
 
 describe("getRecordFromQueryString", () => {
   it("returns empty object for empty string", () => {

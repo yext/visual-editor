@@ -1,11 +1,11 @@
 import * as React from "react";
 import {
   BackgroundStyle,
-  BackgroundProvider,
   backgroundColors,
-  themeManagerCn,
-  useDocument,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { BackgroundProvider } from "../../hooks/useBackground.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;

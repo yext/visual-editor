@@ -1,6 +1,6 @@
-import { StreamDocument } from "../types/StreamDocument";
-import { TemplateRenderProps } from "./getSchema";
-import { getDirectoryParents } from "./helpers";
+import { StreamDocument } from "../types/StreamDocument.ts";
+import { TemplateRenderProps } from "./getSchema.ts";
+import { getDirectoryParents } from "./helpers.ts";
 
 export const getBreadcrumbsSchema = (
   data: TemplateRenderProps,

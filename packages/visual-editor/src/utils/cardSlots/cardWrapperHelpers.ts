@@ -1,8 +1,8 @@
 import { Fields, Slot } from "@puckeditor/core";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { YextField } from "../../editor/YextField";
-import { MsgString } from "../i18n/platform";
-import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { MsgString } from "../i18n/platform.ts";
+import { EntityFieldTypes } from "../../internal/utils/getFilteredEntityFields.ts";
 
 export interface CardWrapperType<T> {
   data: Omit<YextEntityField<T>, "constantValue"> & {

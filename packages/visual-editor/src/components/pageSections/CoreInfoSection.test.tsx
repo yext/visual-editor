@@ -7,12 +7,10 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import {
-  CoreInfoSection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { CoreInfoSection } from "./CoreInfoSection.tsx";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import {

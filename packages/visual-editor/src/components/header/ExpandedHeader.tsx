@@ -7,7 +7,9 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import { msg, YextField, PageSectionProps } from "@yext/visual-editor";
+import { msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { PageSectionProps } from "../atoms/pageSection.tsx";
 import { cva } from "class-variance-authority";
 import { defaultPrimaryHeaderProps } from "./PrimaryHeaderSlot.tsx";
 import { defaultSecondaryHeaderProps } from "./SecondaryHeaderSlot.tsx";

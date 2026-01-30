@@ -9,29 +9,28 @@ import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import {
   backgroundColors,
   BackgroundStyle,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  YextEntityField,
-  themeManagerCn,
-  CTAVariant,
   HeadingLevel,
-  HeadingTextProps,
-  HoursStatusProps,
-  ImageWrapperProps,
-  CTAWrapperProps,
-  resolveComponentData,
   ThemeOptions,
-  TranslatableAssetImage,
-  AssetImageType,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { CTAVariant } from "../atoms/cta.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { TranslatableAssetImage, AssetImageType } from "../../types/images.ts";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
-import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface HeroData {
   backgroundImage: YextEntityField<

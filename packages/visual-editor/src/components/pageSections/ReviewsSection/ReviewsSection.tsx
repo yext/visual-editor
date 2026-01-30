@@ -5,27 +5,24 @@ import * as React from "react";
 import {
   backgroundColors,
   type BackgroundStyle,
-  Body,
-  Button,
-  getAggregateRating,
-  getAnalyticsScopeHash,
-  msg,
-  PageSection,
-  ReviewStars,
-  TimestampAtom,
-  TimestampOption,
-  useBackground,
-  useDocument,
-  YextField,
-  VisibilityWrapper,
-  HeadingTextProps,
-  pt,
-  StreamDocument,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { Body } from "../../atoms/body.tsx";
+import { Button } from "../../../internal/puck/ui/button.tsx";
+import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars.tsx";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { TimestampAtom, TimestampOption } from "../../atoms/timestamp.tsx";
+import { useBackground } from "../../../hooks/useBackground.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
-import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 type Review = {
   authorName: string;

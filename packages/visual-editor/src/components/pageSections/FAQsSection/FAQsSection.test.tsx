@@ -7,16 +7,14 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, act } from "@testing-library/react";
-import {
-  FAQSection,
-  getDefaultRTF,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { FAQSection } from "./FAQsSection.tsx";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
-import { SlotsCategoryComponents } from "../../categories/SlotsCategory";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 
 const interactionsDelay = 200;
 

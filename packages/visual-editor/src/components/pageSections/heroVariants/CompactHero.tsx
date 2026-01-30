@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { themeManagerCn, Background } from "@yext/visual-editor";
-import { HeroVariantProps, HeroImageProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { Background } from "../../atoms/background.tsx";
+import { HeroVariantProps, HeroImageProps } from "../HeroSection.tsx";
+import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
 import { PuckComponent } from "@puckeditor/core";
 
 const CompactHeroImage: PuckComponent<HeroImageProps> = ({

@@ -5,20 +5,20 @@ import {
   TARGET_ORIGINS,
   useReceiveMessage,
   useSendMessageToParent,
-} from "../../hooks/useMessage";
-import { Button } from "../ui/button";
+} from "../../hooks/useMessage.ts";
+import { Button } from "../ui/button.tsx";
 import {
   ImageContentData,
   TranslatableAssetImage,
   AssetImageType,
-} from "../../../types/images";
-import { useDocument } from "../../../hooks/useDocument";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField";
-import { resolveComponentData } from "../../../utils/resolveComponentData";
-import { TranslatableString } from "../../../types/types";
-import { msg, pt } from "../../../utils/i18n/platform";
-import { TemplateMetadata } from "../../types/templateMetadata";
-import { useTemplateMetadata } from "../../hooks/useMessageReceivers";
+} from "../../../types/images.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { TranslatableString } from "../../../types/types.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { TemplateMetadata } from "../../types/templateMetadata.ts";
+import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 
 export type ImagePayload = {
   id: string;

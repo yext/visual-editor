@@ -1,16 +1,16 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import { themeManagerCn } from "../../utils/cn.ts";
 import {
-  themeManagerCn,
   backgroundColors,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  getAnalyticsScopeHash,
-  msg,
-  AdvancedCoreInfoCategory,
   ThemeOptions,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { AdvancedCoreInfoCategory } from "../categories/AdvancedCoreInfoCategory.tsx";
 import { layoutProps, layoutVariants } from "../Layout.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 

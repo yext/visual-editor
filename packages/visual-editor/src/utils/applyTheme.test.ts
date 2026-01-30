@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { applyTheme } from "./applyTheme.ts";
 import { ThemeConfig } from "./themeResolver.ts";
-import { StreamDocument } from "./types/StreamDocument";
+import { StreamDocument } from "./types/StreamDocument.ts";
 
 describe("buildCssOverridesStyle", () => {
   it("should generate correct CSS with one override in c_theme", () => {

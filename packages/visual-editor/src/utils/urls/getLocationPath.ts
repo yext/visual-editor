@@ -1,7 +1,7 @@
-import { StreamDocument } from "../index.ts";
 import { normalizeSlug } from "../slugifier.ts";
 import { AddressType } from "@yext/pages-components";
 import { isPrimaryLocale } from "./resolveUrlFromPathInfo.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 export interface LocationDocument extends StreamDocument {
   id: string;

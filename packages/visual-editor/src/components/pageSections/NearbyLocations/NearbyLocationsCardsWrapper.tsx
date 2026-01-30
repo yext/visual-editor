@@ -5,20 +5,24 @@ import { useQuery } from "@tanstack/react-query";
 import {
   backgroundColors,
   BackgroundStyle,
-  Body,
   HeadingLevel,
+} from "../../../utils/themeConfigOptions.ts";
+import { Body } from "../../atoms/body.tsx";
+import {
   msg,
   pt,
-  resolveComponentData,
-  useDocument,
-  YextField,
+  usePlatformTranslation,
+} from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import {
   getPreferredDistanceUnit,
   toKilometers,
-  usePlatformTranslation,
-} from "@yext/visual-editor";
-import { parseDocument, fetchNearbyLocations } from "./utils";
-import { NearbyLocationCard } from "./NearbyLocationCard";
-import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+} from "../../../utils/i18n/distance.ts";
+import { parseDocument, fetchNearbyLocations } from "./utils.ts";
+import { NearbyLocationCard } from "./NearbyLocationCard.tsx";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { MapPinOff } from "lucide-react";
 
 export type NearbyLocationCardsWrapperProps = {

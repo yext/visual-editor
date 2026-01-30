@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalizeThemeColor } from "./normalizeThemeColor";
+import { normalizeThemeColor } from "./normalizeThemeColor.ts";
 
 describe("normalizeThemeColor", () => {
   it("returns undefined when token is undefined", () => {

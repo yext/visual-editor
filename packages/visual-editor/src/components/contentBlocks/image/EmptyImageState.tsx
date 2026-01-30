@@ -1,18 +1,16 @@
 import * as React from "react";
-import {
-  EntityField,
-  pt,
-  themeManagerCn,
-  AssetImageType,
-} from "@yext/visual-editor";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import { pt } from "../../../utils/i18n/platform.ts";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { AssetImageType } from "../../../types/images.ts";
 import { ImagePlus } from "lucide-react";
-import { Button } from "../../../internal/puck/ui/button";
+import { Button } from "../../../internal/puck/ui/button.tsx";
 import {
   TARGET_ORIGINS,
   useSendMessageToParent,
   useReceiveMessage,
-} from "../../../internal/hooks/useMessage";
-import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image";
+} from "../../../internal/hooks/useMessage.ts";
+import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
 
 interface EmptyImageStateProps {
   isEmpty: boolean;

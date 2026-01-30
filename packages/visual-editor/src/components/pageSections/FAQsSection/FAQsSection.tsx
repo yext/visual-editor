@@ -9,22 +9,22 @@ import {
 import {
   backgroundColors,
   BackgroundStyle,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  HeadingTextProps,
-  FAQSectionType,
-  YextEntityField,
-  ComponentFields,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { FAQSectionType } from "../../../types/types.ts";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { ComponentFields } from "../../../types/fields.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
-import { CardContextProvider } from "../../../hooks/useCardContext";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface FAQStyles {
   /**

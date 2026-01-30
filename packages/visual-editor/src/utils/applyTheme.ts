@@ -16,7 +16,7 @@ import {
 } from "./fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
-import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json";
+import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };
 import { StreamDocument } from "./types/StreamDocument.ts";
 
 export const THEME_STYLE_TAG_ID = "visual-editor-theme";

@@ -6,28 +6,25 @@ import {
   Coordinate,
   useCardAnalyticsCallback,
 } from "@yext/search-ui-react";
+import { Background } from "./atoms/background.tsx";
+import { backgroundColors, HeadingLevel } from "../utils/themeConfigOptions.ts";
+import { Body, BodyProps } from "./atoms/body.tsx";
+import { CTA, CTAVariant } from "./atoms/cta.tsx";
+import { Heading } from "./atoms/heading.tsx";
+import { Image } from "./atoms/image.tsx";
+import { msg } from "../utils/i18n/platform.ts";
+import { PhoneAtom } from "./atoms/phone.tsx";
+import { useTemplateProps } from "../hooks/useDocument.tsx";
+import { resolveComponentData } from "../utils/resolveComponentData.tsx";
+import { resolveUrlTemplateOfChild } from "../utils/urls/resolveUrlTemplate.ts";
+import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
+import { HoursTableAtom } from "./atoms/hoursTable.tsx";
+import { YextField } from "../editor/YextField.tsx";
 import {
-  Background,
-  backgroundColors,
-  Body,
-  BodyProps,
-  CTA,
-  CTAVariant,
-  Heading,
-  HeadingLevel,
-  Image,
-  msg,
-  PhoneAtom,
-  useTemplateProps,
-  resolveComponentData,
-  resolveUrlTemplateOfChild,
-  HoursStatusAtom,
-  HoursTableAtom,
-  YextField,
   DynamicOption,
   DynamicOptionsSingleSelectorType,
-  TranslatableString,
-} from "@yext/visual-editor";
+} from "../editor/DynamicOptionsSelector.tsx";
+import { TranslatableString } from "../types/types.ts";
 import {
   Address,
   AddressType,
@@ -52,8 +49,8 @@ import {
   FaRegClock,
   FaRegEnvelope,
 } from "react-icons/fa";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers";
-import { FieldTypeData } from "../internal/types/templateMetadata";
+import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
+import { FieldTypeData } from "../internal/types/templateMetadata.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */

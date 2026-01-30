@@ -1,6 +1,6 @@
 import { createFontStack } from "@capsizecss/core";
 import { fontFamilyToCamelCase } from "@capsizecss/metrics";
-import { defaultFonts } from "./font_registry";
+import { defaultFonts } from "./font_registry.js";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 

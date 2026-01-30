@@ -1,4 +1,4 @@
-import { LocatorProps, LocatorComponent } from "../Locator";
+import { LocatorProps, LocatorComponent } from "../Locator.tsx";
 
 export interface LocatorCategoryProps {
   Locator: LocatorProps;

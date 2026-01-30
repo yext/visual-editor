@@ -24,7 +24,7 @@ import { StreamDocument } from "../utils/types/StreamDocument.ts";
 import {
   createDefaultThemeConfig,
   defaultThemeConfig,
-} from "../components/DefaultThemeConfig";
+} from "../components/DefaultThemeConfig.ts";
 import {
   defaultFonts,
   loadFontsIntoDOM,

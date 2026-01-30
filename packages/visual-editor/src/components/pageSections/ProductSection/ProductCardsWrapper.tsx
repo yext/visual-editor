@@ -1,11 +1,9 @@
 import * as React from "react";
-import {
-  ProductSectionType,
-  ComponentFields,
-  msg,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
+import { ProductSectionType } from "../../../types/types.ts";
+import { ComponentFields } from "../../../types/fields.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import {
   ComponentConfig,
   ComponentData,

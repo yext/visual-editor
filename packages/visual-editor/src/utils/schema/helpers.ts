@@ -1,4 +1,4 @@
-import { StreamDocument } from "../types/StreamDocument";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 /**
  * isValidDirectoryParents returns true if the array from dm_directoryParents

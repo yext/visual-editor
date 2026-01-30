@@ -1,11 +1,9 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Fields } from "@puckeditor/core";
-import {
-  SpacingSelector,
-  BackgroundStyle,
-  YextField,
-  msg,
-} from "@yext/visual-editor";
+import { SpacingSelector } from "../editor/SpacingSelector.tsx";
+import { BackgroundStyle } from "../utils/themeConfigOptions.ts";
+import { YextField } from "../editor/YextField.tsx";
+import { msg } from "../utils/i18n/platform.ts";
 
 export const layoutVariants = cva("components w-full", {
   variants: {

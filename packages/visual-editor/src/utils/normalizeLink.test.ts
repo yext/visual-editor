@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { normalizeLink } from "./normalizeLink";
+import { normalizeLink } from "./normalizeLink.ts";
 
 describe("normalizeLink", () => {
   it("should return '' if content is null", () => {

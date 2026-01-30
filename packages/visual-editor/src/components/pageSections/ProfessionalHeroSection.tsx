@@ -3,28 +3,27 @@ import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  themeManagerCn,
-  HeadingTextProps,
-  BodyTextProps,
-  ImageWrapperProps,
-  CTAWrapperProps,
-  AddressProps,
-  PhoneListProps,
-  EmailsProps,
-  ReviewStars,
-  useDocument,
-  getAggregateRating,
-  PageSection,
   ThemeOptions,
-  resolveComponentData,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../contentBlocks/BodyText.tsx";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { AddressProps } from "../contentBlocks/Address.tsx";
+import { PhoneListProps } from "../contentBlocks/PhoneList.tsx";
+import { EmailsProps } from "../contentBlocks/Emails.tsx";
+import { ReviewStars, getAggregateRating } from "../atoms/reviewStars.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface ProfessionalHeroStyles {
   /**

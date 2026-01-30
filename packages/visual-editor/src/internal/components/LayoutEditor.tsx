@@ -26,7 +26,7 @@ import { Metadata } from "../../editor/Editor.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { toast } from "sonner";
 import { pt } from "../../utils/i18n/platform.ts";
-import { StreamDocument } from "../../utils/types/StreamDocument";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 

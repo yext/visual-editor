@@ -10,9 +10,18 @@ const usePuck = createUsePuck();
  * @returns getPuck a function to retrieve the puck state
  * @returns slotProps the raw slot data from puck
  */
+type UseGetCardSlotsResult<T extends { slots: Record<string, Slot> }> = {
+  slotStyles: Record<
+    string,
+    T extends { styles: infer S } ? S : Record<string, unknown>
+  >;
+  getPuck?: ReturnType<typeof useGetPuck>;
+  slotProps?: T["slots"];
+};
+
 export const useGetCardSlots = <T extends { slots: Record<string, Slot> }>(
   id: string
-) => {
+): UseGetCardSlotsResult<T> => {
   // In editor, use puck hooks to get the slot props
   let slotProps: T["slots"] | undefined = undefined;
   let getPuck: ReturnType<typeof useGetPuck>;

@@ -1,5 +1,5 @@
 import { setDeep } from "@puckeditor/core";
-import { Migration } from "../../utils/migrate";
+import { Migration } from "../../utils/migrate.ts";
 
 export const setDefaultCtaVariants: Migration = {
   InsightCard: {

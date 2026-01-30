@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPageMetadata } from "./getPageMetadata";
+import { getPageMetadata } from "./getPageMetadata.ts";
 
 describe("getPageMetadata", () => {
   it("works with entity values ", async () => {
