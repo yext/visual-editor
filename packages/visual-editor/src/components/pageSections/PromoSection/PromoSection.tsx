@@ -25,7 +25,10 @@ import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { TranslatableAssetImage, AssetImageType } from "../../../types/images.ts";
+import {
+  TranslatableAssetImage,
+  AssetImageType,
+} from "../../../types/images.ts";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { updateFields } from "../HeroSection.tsx";

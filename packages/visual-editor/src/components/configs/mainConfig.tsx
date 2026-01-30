@@ -52,7 +52,6 @@ export const mainConfig: Config<MainConfigProps> = {
     coreInformation: {
       title: pt("categories.coreInformation", "Core Information"),
       components: AdvancedCoreInfoCategory,
-
     },
     other: {
       title: pt("categories.other", "Other"),

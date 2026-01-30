@@ -8,7 +8,11 @@ import {
   HeadingLevel,
 } from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
-import { msg, pt, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
+import {
+  msg,
+  pt,
+  usePlatformTranslation,
+} from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextField } from "../../../editor/YextField.tsx";

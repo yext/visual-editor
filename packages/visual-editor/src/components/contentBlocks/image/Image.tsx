@@ -5,9 +5,16 @@ import {
   setDeep,
 } from "@puckeditor/core";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { AssetImageType, TranslatableAssetImage } from "../../../types/images.ts";
+import {
+  AssetImageType,
+  TranslatableAssetImage,
+} from "../../../types/images.ts";
 import { EntityField } from "../../../editor/EntityField.tsx";
-import { Image, ImgSizesByBreakpoint, imgSizesHelper } from "../../atoms/image.tsx";
+import {
+  Image,
+  ImgSizesByBreakpoint,
+  imgSizesHelper,
+} from "../../atoms/image.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { TranslatableString } from "../../../types/types.ts";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";

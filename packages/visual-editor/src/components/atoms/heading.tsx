@@ -1,4 +1,7 @@
-import { BackgroundStyle, HeadingLevel } from "../../utils/themeConfigOptions.ts";
+import {
+  BackgroundStyle,
+  HeadingLevel,
+} from "../../utils/themeConfigOptions.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";

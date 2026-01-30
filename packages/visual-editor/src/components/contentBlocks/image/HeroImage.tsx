@@ -6,7 +6,10 @@ import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../../editor/EntityField.tsx";
 import { Image, imgSizesHelper } from "../../atoms/image.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { AssetImageType, TranslatableAssetImage } from "../../../types/images.ts";
+import {
+  AssetImageType,
+  TranslatableAssetImage,
+} from "../../../types/images.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { updateFields } from "../../pageSections/HeroSection.tsx";
 import {

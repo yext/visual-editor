@@ -49,7 +49,10 @@ import {
 import { msg } from "../utils/i18n/platform.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { YextField } from "../editor/YextField.tsx";
-import { getPreferredDistanceUnit, toKilometers } from "../utils/i18n/distance.ts";
+import {
+  getPreferredDistanceUnit,
+  toKilometers,
+} from "../utils/i18n/distance.ts";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   LocatorResultCardFields,

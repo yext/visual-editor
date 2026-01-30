@@ -27,7 +27,11 @@ import {
   hoursStatusWrapperFields,
 } from "../../contentBlocks/HoursStatus.tsx";
 import { Phone, PhoneProps, PhoneFields } from "../../contentBlocks/Phone.tsx";
-import { Emails, EmailsProps, EmailsFields } from "../../contentBlocks/Emails.tsx";
+import {
+  Emails,
+  EmailsProps,
+  EmailsFields,
+} from "../../contentBlocks/Emails.tsx";
 import {
   TextList,
   TextListProps,

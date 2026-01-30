@@ -12,7 +12,10 @@ import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { AssetImageType, TranslatableAssetImage } from "../../../types/images.ts";
+import {
+  AssetImageType,
+  TranslatableAssetImage,
+} from "../../../types/images.ts";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
