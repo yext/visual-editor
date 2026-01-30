@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "nodenext",
+    "module": "NodeNext",
     "jsx": "react-jsx",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "NodeNext",
     "types": ["vite/client", "node"],
     "allowImportingTsExtensions": true,
     "allowJs": true,
@@ -22,10 +22,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src", "src/components/testing/componentTests.d.ts"],
+  "include": ["src", "global.d.ts","src/components/testing/componentTests.d.ts"],
   "exclude": [
     "node_modules",
-    "src/vite-plugin/templates/*",
-    "src/components/testing/componentTests.tailwind.config.cjs"
+    "src/vite-plugin/templates/*"
   ]
 }
