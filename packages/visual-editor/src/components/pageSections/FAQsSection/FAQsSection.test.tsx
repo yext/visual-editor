@@ -7,13 +7,11 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, act } from "@testing-library/react";
-import {
-  FAQSection,
-  getDefaultRTF,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { FAQSection } from "./FAQsSection";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
+import { migrate } from "../../../utils/migrate";
+import { migrationRegistry } from "../../migrations/migrationRegistry";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { SlotsCategoryComponents } from "../../categories/SlotsCategory";

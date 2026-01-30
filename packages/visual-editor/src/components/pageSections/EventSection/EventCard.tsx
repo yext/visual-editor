@@ -7,24 +7,21 @@ import {
   WithId,
   setDeep,
 } from "@puckeditor/core";
-import {
-  BackgroundStyle,
-  YextField,
-  Background,
-  backgroundColors,
-  EventStruct,
-  msg,
-  ImageWrapperProps,
-  HeadingTextProps,
-  BodyTextProps,
-  CTAWrapperProps,
-  TimestampProps,
-  deepMerge,
-  ImgSizesByBreakpoint,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-  resolveComponentData,
-} from "@yext/visual-editor";
+import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import { YextField } from "../../../editor/YextField";
+import { Background } from "../../atoms/background";
+import { EventStruct } from "../../../types/types";
+import { msg } from "../../../utils/i18n/platform";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { BodyTextProps } from "../../contentBlocks/BodyText";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";
+import { TimestampProps } from "../../contentBlocks/Timestamp";
+import { deepMerge } from "../../../utils/themeResolver";
+import { ImgSizesByBreakpoint } from "../../atoms/image";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";

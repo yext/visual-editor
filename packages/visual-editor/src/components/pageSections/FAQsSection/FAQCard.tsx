@@ -1,19 +1,15 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import {
-  Body,
-  BodyProps,
-  FAQStruct,
-  getDefaultRTF,
-  msg,
-  resolveComponentData,
-  resolveDataFromParent,
-  TranslatableRichText,
-  useBackground,
-  useDocument,
-  YextEntityField,
-  YextField,
-} from "@yext/visual-editor";
+import { Body, BodyProps } from "../../atoms/body";
+import { FAQStruct, TranslatableRichText } from "../../../types/types";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
+import { msg } from "../../../utils/i18n/platform";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
+import { resolveDataFromParent } from "../../../editor/ParentData";
+import { useBackground } from "../../../hooks/useBackground";
+import { useDocument } from "../../../hooks/useDocument";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
+import { YextField } from "../../../editor/YextField";
 import {
   AccordionContent,
   AccordionItem,

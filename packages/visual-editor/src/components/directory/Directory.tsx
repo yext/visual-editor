@@ -1,14 +1,11 @@
-import {
-  useTemplateProps,
-  backgroundColors,
-  PageSection,
-  msg,
-  YextField,
-  BackgroundStyle,
-  Background,
-  HeadingTextProps,
-  BreadcrumbsSectionProps,
-} from "@yext/visual-editor";
+import { useTemplateProps } from "../../hooks/useDocument";
+import { backgroundColors, BackgroundStyle } from "../../utils/themeConfigOptions";
+import { PageSection } from "../atoms/pageSection";
+import { msg } from "../../utils/i18n/platform";
+import { YextField } from "../../editor/YextField";
+import { Background } from "../atoms/background";
+import { HeadingTextProps } from "../contentBlocks/HeadingText";
+import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { DirectoryList } from "./DirectoryWrapper";

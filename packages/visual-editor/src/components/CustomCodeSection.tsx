@@ -3,13 +3,11 @@ import Handlebars from "handlebars";
 import { useTranslation } from "react-i18next";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  StreamDocument,
-  VisibilityWrapper,
-  YextField,
-  msg,
-  useDocument,
-} from "@yext/visual-editor";
+import { StreamDocument } from "../utils/types/StreamDocument";
+import { VisibilityWrapper } from "./atoms/visibilityWrapper";
+import { YextField } from "../editor/YextField";
+import { msg } from "../utils/i18n/platform";
+import { useDocument } from "../hooks/useDocument";
 import {
   ComponentConfig,
   Fields,

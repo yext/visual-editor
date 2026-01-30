@@ -1,19 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { FaRegEnvelope } from "react-icons/fa";
-import {
-  useDocument,
-  EntityField,
-  YextEntityField,
-  CTA,
-  YextField,
-  resolveComponentData,
-  msg,
-  pt,
-  Background,
-  backgroundColors,
-  resolveDataFromParent,
-} from "@yext/visual-editor";
+import { useDocument } from "../../hooks/useDocument";
+import { EntityField } from "../../editor/EntityField";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { CTA } from "../atoms/cta";
+import { YextField } from "../../editor/YextField";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { msg, pt } from "../../utils/i18n/platform";
+import { Background } from "../atoms/background";
+import { backgroundColors } from "../../utils/themeConfigOptions";
+import { resolveDataFromParent } from "../../editor/ParentData";
 
 export interface EmailsProps {
   data: {

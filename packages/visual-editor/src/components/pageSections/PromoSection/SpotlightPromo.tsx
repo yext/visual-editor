@@ -1,10 +1,8 @@
 import { useTranslation } from "react-i18next";
-import {
-  PageSection,
-  useDocument,
-  Background,
-  resolveYextEntityField,
-} from "@yext/visual-editor";
+import { PageSection } from "../../atoms/pageSection";
+import { useDocument } from "../../../hooks/useDocument";
+import { Background } from "../../atoms/background";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
 import { getImageUrl } from "@yext/pages-components";
 import { PromoContent, promoContentParentCn } from "./PromoContent";
 import { PuckComponent } from "@puckeditor/core";

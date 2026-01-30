@@ -7,15 +7,12 @@ import {
   Slot,
   WithId,
 } from "@puckeditor/core";
-import {
-  BackgroundStyle,
-  backgroundColors,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  HeadingTextProps,
-} from "@yext/visual-editor";
+import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import { PageSection } from "../../atoms/pageSection";
+import { YextField } from "../../../editor/YextField";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
+import { msg } from "../../../utils/i18n/platform";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";

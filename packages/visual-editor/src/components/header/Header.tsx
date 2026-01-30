@@ -7,19 +7,16 @@ import {
   useAnalytics,
 } from "@yext/pages-components";
 import { ComponentConfig, Fields } from "@puckeditor/core";
-import {
-  CTA,
-  EntityField,
-  useDocument,
-  MaybeLink,
-  PageSection,
-  backgroundColors,
-  Background,
-  YextField,
-  Image,
-  msg,
-  pt,
-} from "@yext/visual-editor";
+import { CTA } from "../atoms/cta";
+import { EntityField } from "../../editor/EntityField";
+import { useDocument } from "../../hooks/useDocument";
+import { MaybeLink } from "../atoms/maybeLink";
+import { PageSection } from "../atoms/pageSection";
+import { backgroundColors } from "../../utils/themeConfigOptions";
+import { Background } from "../atoms/background";
+import { YextField } from "../../editor/YextField";
+import { Image } from "../atoms/image";
+import { msg, pt } from "../../utils/i18n/platform";
 import { FaTimes, FaBars } from "react-icons/fa";
 import {
   LanguageDropdown,

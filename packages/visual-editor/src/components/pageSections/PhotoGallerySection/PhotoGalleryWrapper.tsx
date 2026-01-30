@@ -3,20 +3,16 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../../contentBlocks/image/styling.ts";
-import {
-  EntityField,
-  Image,
-  themeManagerCn,
-  useBackground,
-  useDocument,
-  YextEntityField,
-  YextField,
-  msg,
-  pt,
-  resolveComponentData,
-  AssetImageType,
-  TranslatableAssetImage,
-} from "@yext/visual-editor";
+import { EntityField } from "../../../editor/EntityField";
+import { Image } from "../../atoms/image";
+import { themeManagerCn } from "../../../utils/cn";
+import { useBackground } from "../../../hooks/useBackground";
+import { useDocument } from "../../../hooks/useDocument";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
+import { YextField } from "../../../editor/YextField";
+import { msg, pt } from "../../../utils/i18n/platform";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
+import { AssetImageType, TranslatableAssetImage } from "../../../types/images";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";

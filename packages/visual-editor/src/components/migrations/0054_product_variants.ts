@@ -1,5 +1,5 @@
 import { Migration } from "../../utils/migrate";
-import { getDefaultRTF } from "@yext/visual-editor";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField";
 
 export const productVariants: Migration = {
   ProductSection: {

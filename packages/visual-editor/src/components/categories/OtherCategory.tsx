@@ -4,6 +4,7 @@ import {
 } from "../CustomCodeSection";
 import { ExpandedFooterProps, ExpandedFooter } from "../footer";
 import { ExpandedHeaderProps, ExpandedHeader } from "../header";
+import { OtherCategory } from "./OtherCategoryList";
 
 export interface OtherCategoryProps {
   ExpandedHeader: ExpandedHeaderProps;
@@ -12,11 +13,15 @@ export interface OtherCategoryProps {
 }
 
 export const OtherCategoryComponents = {
-  ExpandedHeader,
-  ExpandedFooter,
-  CustomCodeSection,
+  get ExpandedHeader() {
+    return ExpandedHeader;
+  },
+  get ExpandedFooter() {
+    return ExpandedFooter;
+  },
+  get CustomCodeSection() {
+    return CustomCodeSection;
+  },
 };
 
-export const OtherCategory = Object.keys(
-  OtherCategoryComponents
-) as (keyof OtherCategoryProps)[];
+export { OtherCategory };

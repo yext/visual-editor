@@ -7,13 +7,11 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import {
-  PromoSection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-  SlotsCategoryComponents,
-} from "@yext/visual-editor";
+import { PromoSection } from "./PromoSection";
+import { migrate } from "../../../utils/migrate";
+import { migrationRegistry } from "../../migrations/migrationRegistry";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 

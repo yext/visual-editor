@@ -1,4 +1,4 @@
-import { themeManagerCn } from "@yext/visual-editor";
+import { themeManagerCn } from "../../utils/cn";
 
 export type VideoAtomProps = {
   youTubeEmbedUrl: string;

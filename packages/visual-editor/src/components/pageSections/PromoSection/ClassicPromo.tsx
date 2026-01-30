@@ -1,5 +1,6 @@
 import { PuckComponent } from "@puckeditor/core";
-import { PageSection, themeManagerCn } from "@yext/visual-editor";
+import { PageSection } from "../../atoms/pageSection";
+import { themeManagerCn } from "../../../utils/cn";
 import { PromoVariantProps } from "./PromoSection";
 import { PromoMedia } from "./PromoMedia";
 import { PromoContent } from "./PromoContent";

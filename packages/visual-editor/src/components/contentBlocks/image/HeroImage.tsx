@@ -1,17 +1,12 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
-import {
-  useDocument,
-  resolveComponentData,
-  EntityField,
-  Image,
-  msg,
-  pt,
-  imgSizesHelper,
-  AssetImageType,
-  TranslatableAssetImage,
-} from "@yext/visual-editor";
+import { useDocument } from "../../../hooks/useDocument";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
+import { EntityField } from "../../../editor/EntityField";
+import { Image, imgSizesHelper } from "../../atoms/image";
+import { msg, pt } from "../../../utils/i18n/platform";
+import { AssetImageType, TranslatableAssetImage } from "../../../types/images";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { updateFields } from "../../pageSections/HeroSection";
 import {

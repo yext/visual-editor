@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
-import { themeManagerCn } from "@yext/visual-editor";
+import { themeManagerCn } from "../../utils/cn";
 
 function Toggle({
   className,

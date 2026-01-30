@@ -6,18 +6,14 @@ import {
   Slot,
   WithId,
 } from "@puckeditor/core";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  BodyTextProps,
-  Button,
-  HeadingLevel,
-  HeadingTextProps,
-  msg,
-  PageSection,
-  VisibilityWrapper,
-  YextField,
-} from "@yext/visual-editor";
+import { backgroundColors, BackgroundStyle, HeadingLevel } from "../../../utils/themeConfigOptions";
+import { BodyTextProps } from "../../contentBlocks/BodyText";
+import { Button } from "../../../internal/puck/ui/button";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { msg } from "../../../utils/i18n/platform";
+import { PageSection } from "../../atoms/pageSection";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
+import { YextField } from "../../../editor/YextField";
 import { useTranslation } from "react-i18next";
 import { FaChevronDown } from "react-icons/fa";
 import {

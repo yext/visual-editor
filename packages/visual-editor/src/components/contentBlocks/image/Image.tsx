@@ -5,23 +5,17 @@ import {
   setDeep,
 } from "@puckeditor/core";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import {
-  AssetImageType,
-  TranslatableAssetImage,
-  EntityField,
-  Image,
-  ImgSizesByBreakpoint,
-  MaybeLink,
-  TranslatableString,
-  YextEntityField,
-  YextField,
-  imgSizesHelper,
-  msg,
-  pt,
-  resolveComponentData,
-  resolveDataFromParent,
-  useDocument,
-} from "@yext/visual-editor";
+import { AssetImageType, TranslatableAssetImage } from "../../../types/images";
+import { EntityField } from "../../../editor/EntityField";
+import { Image, ImgSizesByBreakpoint, imgSizesHelper } from "../../atoms/image";
+import { MaybeLink } from "../../atoms/maybeLink";
+import { TranslatableString } from "../../../types/types";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
+import { YextField } from "../../../editor/YextField";
+import { msg, pt } from "../../../utils/i18n/platform";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
+import { resolveDataFromParent } from "../../../editor/ParentData";
+import { useDocument } from "../../../hooks/useDocument";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { EmptyImageState } from "./EmptyImageState";

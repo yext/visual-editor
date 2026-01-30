@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CTAVariant, CTA } from "@yext/visual-editor";
+import { CTAVariant, CTA } from "./cta";
 
 export type MaybeLinkProps = {
   href?: string;

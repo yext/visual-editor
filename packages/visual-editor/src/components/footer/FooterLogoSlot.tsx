@@ -1,16 +1,13 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
-import {
-  YextField,
-  AssetImageType,
-  msg,
-  useDocument,
-  resolveComponentData,
-  MaybeLink,
-  Image,
-  YextEntityField,
-  TranslatableAssetImage,
-} from "@yext/visual-editor";
+import { YextField } from "../../editor/YextField";
+import { AssetImageType, TranslatableAssetImage } from "../../types/images";
+import { msg } from "../../utils/i18n/platform";
+import { useDocument } from "../../hooks/useDocument";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { MaybeLink } from "../atoms/maybeLink";
+import { Image } from "../atoms/image";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling";
 

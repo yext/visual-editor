@@ -30,23 +30,16 @@ import {
   FieldValueFilter,
 } from "@yext/search-headless-react";
 import React from "react";
-import {
-  BasicSelector,
-  Button,
-  createSearchAnalyticsConfig,
-  createSearchHeadlessConfig,
-  DynamicOption,
-  DynamicOptionsSelectorType,
-  Heading,
-  Location,
-  LocatorResultCard,
-  LocatorResultCardProps,
-  msg,
-  useDocument,
-  YextField,
-  getPreferredDistanceUnit,
-  toKilometers,
-} from "@yext/visual-editor";
+import { BasicSelector } from "../editor/BasicSelector";
+import { Button } from "../internal/puck/ui/button";
+import { createSearchAnalyticsConfig, createSearchHeadlessConfig } from "../utils/searchHeadlessConfig";
+import { DynamicOption, DynamicOptionsSelectorType } from "../editor/DynamicOptionsSelector";
+import { Heading } from "./atoms/heading";
+import { Location, LocatorResultCard, LocatorResultCardProps } from "./LocatorResultCard";
+import { msg } from "../utils/i18n/platform";
+import { useDocument } from "../hooks/useDocument";
+import { YextField } from "../editor/YextField";
+import { getPreferredDistanceUnit, toKilometers } from "../utils/i18n/distance";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   LocatorResultCardFields,

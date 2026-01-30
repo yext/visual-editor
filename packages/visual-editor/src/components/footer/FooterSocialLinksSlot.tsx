@@ -1,6 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { YextField, msg, CTA, useBackground } from "@yext/visual-editor";
+import { YextField } from "../../editor/YextField";
+import { msg } from "../../utils/i18n/platform";
+import { CTA } from "../atoms/cta";
+import { useBackground } from "../../hooks/useBackground";
 import { useTranslation } from "react-i18next";
 import {
   FaFacebook,

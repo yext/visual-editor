@@ -1,19 +1,16 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import {
-  YextEntityField,
-  resolveComponentData,
-  useDocument,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  EntityField,
-  TranslatableRichText,
-  msg,
-  pt,
-  Body,
-  getDefaultRTF,
-} from "@yext/visual-editor";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { useDocument } from "../../hooks/useDocument";
+import { PageSection } from "../atoms/pageSection";
+import { YextField } from "../../editor/YextField";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper";
+import { EntityField } from "../../editor/EntityField";
+import { TranslatableRichText } from "../../types/types";
+import { msg, pt } from "../../utils/i18n/platform";
+import { Body } from "../atoms/body";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,

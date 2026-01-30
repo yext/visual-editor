@@ -9,14 +9,12 @@ import {
   Data,
   DefaultRootProps,
 } from "@puckeditor/core";
-import {
-  migrationRegistry,
-  OtherCategoryComponents,
-  PageSectionCategoryComponents,
-  SlotsCategoryComponents,
-  VisualEditorProvider,
-  migrate,
-} from "@yext/visual-editor";
+import { migrationRegistry } from "../migrations/migrationRegistry";
+import { OtherCategoryComponents } from "../categories/OtherCategory";
+import { PageSectionCategoryComponents } from "../categories/PageSectionCategory";
+import { SlotsCategoryComponents } from "../categories/SlotsCategory";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider";
+import { migrate } from "../../utils/migrate";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import {
   testHours,

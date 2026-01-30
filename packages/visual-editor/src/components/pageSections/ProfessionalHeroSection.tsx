@@ -1,27 +1,22 @@
 import React from "react";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  themeManagerCn,
-  HeadingTextProps,
-  BodyTextProps,
-  ImageWrapperProps,
-  CTAWrapperProps,
-  AddressProps,
-  PhoneListProps,
-  EmailsProps,
-  ReviewStars,
-  useDocument,
-  getAggregateRating,
-  PageSection,
-  ThemeOptions,
-  resolveComponentData,
-} from "@yext/visual-editor";
+import { backgroundColors, BackgroundStyle, ThemeOptions } from "../../utils/themeConfigOptions";
+import { YextField } from "../../editor/YextField";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper";
+import { msg } from "../../utils/i18n/platform";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics";
+import { themeManagerCn } from "../../utils/cn";
+import { HeadingTextProps } from "../contentBlocks/HeadingText";
+import { BodyTextProps } from "../contentBlocks/BodyText";
+import { ImageWrapperProps } from "../contentBlocks/image/Image";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
+import { AddressProps } from "../contentBlocks/Address";
+import { PhoneListProps } from "../contentBlocks/PhoneList";
+import { EmailsProps } from "../contentBlocks/Emails";
+import { ReviewStars, getAggregateRating } from "../atoms/reviewStars";
+import { useDocument } from "../../hooks/useDocument";
+import { PageSection } from "../atoms/pageSection";
+import { resolveComponentData } from "../../utils/resolveComponentData";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";

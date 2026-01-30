@@ -1,5 +1,5 @@
 import { DropZone, Config } from "@puckeditor/core";
-import { pt } from "@yext/visual-editor";
+import { pt } from "../../utils/i18n/platform";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,

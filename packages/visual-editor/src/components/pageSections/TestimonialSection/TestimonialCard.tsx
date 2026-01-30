@@ -7,21 +7,18 @@ import {
   WithId,
   setDeep,
 } from "@puckeditor/core";
-import {
-  BackgroundStyle,
-  YextField,
-  Background,
-  backgroundColors,
-  TestimonialStruct,
-  msg,
-  HeadingTextProps,
-  BodyTextProps,
-  deepMerge,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-  getDefaultRTF,
-  TimestampProps,
-} from "@yext/visual-editor";
+import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import { YextField } from "../../../editor/YextField";
+import { Background } from "../../atoms/background";
+import { TestimonialStruct } from "../../../types/types";
+import { msg } from "../../../utils/i18n/platform";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { BodyTextProps } from "../../contentBlocks/BodyText";
+import { deepMerge } from "../../../utils/themeResolver";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
+import { TimestampProps } from "../../contentBlocks/Timestamp";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 

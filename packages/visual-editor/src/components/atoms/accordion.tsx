@@ -1,5 +1,5 @@
 import React from "react";
-import { themeManagerCn } from "@yext/visual-editor";
+import { themeManagerCn } from "../../utils/cn";
 
 export const Accordion = React.forwardRef<
   HTMLDivElement,

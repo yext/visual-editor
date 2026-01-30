@@ -3,8 +3,8 @@ import { useDocument, useEntityFields } from "../hooks";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields";
 import {
   getFieldsForSelector,
-  YextEntityField,
-} from "./YextEntityFieldSelector";
+  type YextEntityField,
+} from "./yextEntityFieldUtils.ts";
 import { pt, resolveComponentData } from "../utils";
 import {
   Command,

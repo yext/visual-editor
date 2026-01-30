@@ -1,12 +1,7 @@
-import {
-  ThemeConfig,
-  defaultFonts,
-  FontRegistry,
-  getFontWeightOptions,
-  ThemeOptions,
-  msg,
-  constructFontSelectOptions,
-} from "@yext/visual-editor";
+import { ThemeConfig } from "../utils/themeResolver";
+import { defaultFonts, FontRegistry, getFontWeightOptions, constructFontSelectOptions } from "../utils/fonts/visualEditorFonts";
+import { ThemeOptions } from "../utils/themeConfigOptions";
+import { msg } from "../utils/i18n/platform";
 
 export function createDefaultThemeConfig(
   customFonts: FontRegistry = {}

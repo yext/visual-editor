@@ -9,27 +9,12 @@ import { YextField } from "../../editor/YextField.tsx";
 import { PageSection, Background, PageSectionProps } from "../atoms/index.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
+import { defaultLink, defaultLinks } from "./footerDefaults.ts";
+
+export { defaultLink, defaultLinks } from "./footerDefaults.ts";
 
 const PLACEHOLDER_LOGO_IMAGE: string =
   "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg";
-
-export const defaultLink = {
-  linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
-  link: "#",
-  openInNewTab: false,
-};
-
-export const defaultLinks = [
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-  { ...defaultLink },
-];
 
 export const validPatterns: Record<string, RegExp> = {
   xLink: /^https:\/\/(www\.)?(x\.com|twitter\.com)\/.+/,

@@ -1,4 +1,5 @@
-import { themeManagerCn, Background } from "@yext/visual-editor";
+import { themeManagerCn } from "../../../utils/cn";
+import { Background } from "../../atoms/background";
 import { PuckComponent } from "@puckeditor/core";
 import { PromoMedia } from "./PromoMedia";
 import { PromoContent, promoContentParentCn } from "./PromoContent";

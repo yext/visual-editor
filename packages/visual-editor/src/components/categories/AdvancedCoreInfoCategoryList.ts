@@ -1,0 +1,16 @@
+export const AdvancedCoreInfoCategory = [
+  "Grid",
+  "Address",
+  "BodyText",
+  "CTAGroup",
+  "CTAWrapper",
+  "Emails",
+  "GetDirections",
+  "HeadingText",
+  "HoursTable",
+  "HoursStatus",
+  "ImageWrapper",
+  "MapboxStaticMap",
+  "Phone",
+  "TextList",
+] as const;

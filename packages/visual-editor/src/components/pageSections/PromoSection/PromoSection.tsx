@@ -1,30 +1,24 @@
 import * as React from "react";
 import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
-import {
-  PromoSectionType,
-  backgroundColors,
-  BackgroundStyle,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  ComponentFields,
-  YextEntityField,
-  YextEntityFieldSelector,
-  resolveYextEntityField,
-  BodyTextProps,
-  CTAWrapperProps,
-  HeadingTextProps,
-  ImageWrapperProps,
-  VideoProps,
-  i18nComponentsInstance,
-  getDefaultRTF,
-  themeManagerCn,
-  useDocument,
-  ThemeOptions,
-  TranslatableAssetImage,
-  AssetImageType,
-} from "@yext/visual-editor";
+import { PromoSectionType } from "../../../types/types";
+import { backgroundColors, BackgroundStyle, ThemeOptions } from "../../../utils/themeConfigOptions";
+import { YextField } from "../../../editor/YextField";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
+import { msg } from "../../../utils/i18n/platform";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics";
+import { ComponentFields } from "../../../types/fields";
+import { YextEntityField, YextEntityFieldSelector } from "../../../editor/YextEntityFieldSelector";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { BodyTextProps } from "../../contentBlocks/BodyText";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image";
+import { VideoProps } from "../../contentBlocks/Video";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
+import { themeManagerCn } from "../../../utils/cn";
+import { useDocument } from "../../../hooks/useDocument";
+import { TranslatableAssetImage, AssetImageType } from "../../../types/images";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
 import { updateFields } from "../HeroSection";

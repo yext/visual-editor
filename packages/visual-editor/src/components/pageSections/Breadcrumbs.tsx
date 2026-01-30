@@ -1,17 +1,14 @@
 import { useTranslation } from "react-i18next";
-import {
-  useTemplateProps,
-  MaybeLink,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  TranslatableString,
-  BackgroundStyle,
-  backgroundColors,
-  resolveComponentData,
-  getDirectoryParents,
-} from "@yext/visual-editor";
+import { useTemplateProps } from "../../hooks/useDocument";
+import { MaybeLink } from "../atoms/maybeLink";
+import { PageSection } from "../atoms/pageSection";
+import { YextField } from "../../editor/YextField";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper";
+import { msg } from "../../utils/i18n/platform";
+import { TranslatableString } from "../../types/types";
+import { BackgroundStyle, backgroundColors } from "../../utils/themeConfigOptions";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { getDirectoryParents } from "../../utils/schema/helpers";
 import { ComponentConfig, Fields } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";

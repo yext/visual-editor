@@ -7,23 +7,20 @@ import {
   PuckComponent,
 } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
-import {
-  Body,
-  EntityField,
-  FooterSocialLinksSlotProps,
-  Heading,
-  HeadingLevel,
-  i18nComponentsInstance,
-  msg,
-  pt,
-  resolveComponentData,
-  resolveYextEntityField,
-  StreamDocument,
-  TranslatableString,
-  useDocument,
-  YextEntityField,
-  YextField,
-} from "@yext/visual-editor";
+import { Body } from "../../atoms/body";
+import { EntityField } from "../../../editor/EntityField";
+import { FooterSocialLinksSlotProps } from "../../footer/FooterSocialLinksSlot";
+import { Heading } from "../../atoms/heading";
+import { HeadingLevel } from "../../../utils/themeConfigOptions";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
+import { msg, pt } from "../../../utils/i18n/platform";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { StreamDocument } from "../../../utils/types/StreamDocument";
+import { TranslatableString } from "../../../types/types";
+import { useDocument } from "../../../hooks/useDocument";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
+import { YextField } from "../../../editor/YextField";
 import {
   HoursStatus,
   HoursStatusProps,

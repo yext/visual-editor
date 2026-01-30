@@ -6,26 +6,20 @@ import {
   Slot,
 } from "@puckeditor/core";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  YextEntityField,
-  themeManagerCn,
-  CTAVariant,
-  HeadingLevel,
-  HeadingTextProps,
-  HoursStatusProps,
-  ImageWrapperProps,
-  CTAWrapperProps,
-  resolveComponentData,
-  ThemeOptions,
-  TranslatableAssetImage,
-  AssetImageType,
-} from "@yext/visual-editor";
+import { backgroundColors, BackgroundStyle, HeadingLevel, ThemeOptions } from "../../utils/themeConfigOptions";
+import { YextField } from "../../editor/YextField";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper";
+import { msg } from "../../utils/i18n/platform";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { themeManagerCn } from "../../utils/cn";
+import { CTAVariant } from "../atoms/cta";
+import { HeadingTextProps } from "../contentBlocks/HeadingText";
+import { HoursStatusProps } from "../contentBlocks/HoursStatus";
+import { ImageWrapperProps } from "../contentBlocks/image/Image";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { TranslatableAssetImage, AssetImageType } from "../../types/images";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";

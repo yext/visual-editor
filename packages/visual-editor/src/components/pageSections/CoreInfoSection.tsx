@@ -1,23 +1,20 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AddressType, AnalyticsScopeProvider } from "@yext/pages-components";
-import {
-  YextEntityField,
-  BackgroundStyle,
-  PageSection,
-  backgroundColors,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  resolveComponentData,
-  TranslatableString,
-  HeadingTextProps,
-  HoursTableProps,
-  TextListProps,
-  EmailsProps,
-  AddressProps,
-} from "@yext/visual-editor";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { BackgroundStyle, backgroundColors } from "../../utils/themeConfigOptions";
+import { PageSection } from "../atoms/pageSection";
+import { YextField } from "../../editor/YextField";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper";
+import { msg } from "../../utils/i18n/platform";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { TranslatableString } from "../../types/types";
+import { HeadingTextProps } from "../contentBlocks/HeadingText";
+import { HoursTableProps } from "../contentBlocks/HoursTable";
+import { TextListProps } from "../contentBlocks/TextList";
+import { EmailsProps } from "../contentBlocks/Emails";
+import { AddressProps } from "../contentBlocks/Address";
 import {
   PhoneListProps,
   resolvePhoneNumbers,

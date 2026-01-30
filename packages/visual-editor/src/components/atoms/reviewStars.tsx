@@ -1,6 +1,8 @@
 import * as React from "react";
 import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
-import { Body, themeManagerCn, useBackground } from "@yext/visual-editor";
+import { Body } from "./body";
+import { themeManagerCn } from "../../utils/cn";
+import { useBackground } from "../../hooks/useBackground";
 import { useTranslation } from "react-i18next";
 
 export type AggregateRating = {

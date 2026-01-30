@@ -1,22 +1,19 @@
 import * as React from "react";
-import {
-  BackgroundStyle,
-  YextField,
-  backgroundColors,
-  msg,
-  Background,
-  CTAWrapperProps,
-  BodyTextProps,
-  HeadingTextProps,
-  ImageWrapperProps,
-  ProductStruct,
-  deepMerge,
-  getDefaultRTF,
-  ImgSizesByBreakpoint,
-  themeManagerCn,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
+import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import { YextField } from "../../../editor/YextField";
+import { msg } from "../../../utils/i18n/platform";
+import { Background } from "../../atoms/background";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";
+import { BodyTextProps } from "../../contentBlocks/BodyText";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image";
+import { ProductStruct } from "../../../types/types";
+import { deepMerge } from "../../../utils/themeResolver";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
+import { ImgSizesByBreakpoint } from "../../atoms/image";
+import { themeManagerCn } from "../../../utils/cn";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
 import {
   ComponentConfig,
   Fields,

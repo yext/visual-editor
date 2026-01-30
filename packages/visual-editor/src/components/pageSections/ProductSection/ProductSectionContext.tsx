@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { BackgroundStyle } from "@yext/visual-editor";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";

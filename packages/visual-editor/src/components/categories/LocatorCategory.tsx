@@ -5,7 +5,9 @@ export interface LocatorCategoryProps {
 }
 
 export const LocatorCategoryComponents = {
-  Locator: LocatorComponent,
+  get Locator() {
+    return LocatorComponent;
+  },
 };
 
 export const LocatorCategory = Object.keys(

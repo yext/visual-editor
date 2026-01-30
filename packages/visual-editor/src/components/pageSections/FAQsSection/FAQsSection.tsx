@@ -6,21 +6,18 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  HeadingTextProps,
-  FAQSectionType,
-  YextEntityField,
-  ComponentFields,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
+import { backgroundColors, BackgroundStyle } from "../../../utils/themeConfigOptions";
+import { PageSection } from "../../atoms/pageSection";
+import { YextField } from "../../../editor/YextField";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
+import { msg } from "../../../utils/i18n/platform";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { FAQSectionType } from "../../../types/types";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
+import { ComponentFields } from "../../../types/fields";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext";

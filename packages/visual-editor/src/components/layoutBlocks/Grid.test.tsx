@@ -1,12 +1,10 @@
 import { Config, Render } from "@puckeditor/core";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { page } from "@vitest/browser/context";
-import {
-  backgroundColors,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../utils/themeConfigOptions";
+import { migrate } from "../../utils/migrate";
+import { migrationRegistry } from "../migrations/migrationRegistry";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider";
 import { describe, expect, it } from "vitest";
 import {
   Address,

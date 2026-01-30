@@ -5,13 +5,11 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import {
-  backgroundColors,
-  Body,
-  MaybeLink,
-  msg,
-  PageSection,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../utils/themeConfigOptions";
+import { Body } from "../atoms/body";
+import { MaybeLink } from "../atoms/maybeLink";
+import { msg } from "../../utils/i18n/platform";
+import { PageSection } from "../atoms/pageSection";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
 import { sortAlphabetically } from "../../utils/directory/utils";
 import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";

@@ -6,21 +6,16 @@ import {
   Slot,
   SlotComponent,
 } from "@puckeditor/core";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  CTAWrapperProps,
-  EnhancedTranslatableCTA,
-  ImageWrapperProps,
-  msg,
-  PageSection,
-  PageSectionProps,
-  resolveComponentData,
-  TranslatableCTA,
-  useOverflow,
-  YextEntityField,
-  YextField,
-} from "@yext/visual-editor";
+import { backgroundColors, BackgroundStyle } from "../../utils/themeConfigOptions";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
+import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types";
+import { ImageWrapperProps } from "../contentBlocks/image/Image";
+import { msg } from "../../utils/i18n/platform";
+import { PageSection, PageSectionProps } from "../atoms/pageSection";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { useOverflow } from "../../hooks/useOverflow";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { YextField } from "../../editor/YextField";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { FaBars, FaTimes } from "react-icons/fa";

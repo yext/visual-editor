@@ -4,22 +4,17 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
-import {
-  BackgroundStyle,
-  CTA,
-  CTAVariant,
-  EnhancedTranslatableCTA,
-  EntityField,
-  PresetImageType,
-  YextEntityField,
-  YextField,
-  msg,
-  pt,
-  resolveComponentData,
-  resolveDataFromParent,
-  themeManagerCn,
-  useDocument,
-} from "@yext/visual-editor";
+import { BackgroundStyle } from "../../utils/themeConfigOptions";
+import { CTA, CTAVariant } from "../atoms/cta";
+import { EnhancedTranslatableCTA, PresetImageType } from "../../types/types";
+import { EntityField } from "../../editor/EntityField";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { YextField } from "../../editor/YextField";
+import { msg, pt } from "../../utils/i18n/platform";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { resolveDataFromParent } from "../../editor/ParentData";
+import { themeManagerCn } from "../../utils/cn";
+import { useDocument } from "../../hooks/useDocument";
 import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,

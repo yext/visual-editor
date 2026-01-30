@@ -1,10 +1,8 @@
 import * as React from "react";
-import {
-  EntityField,
-  pt,
-  themeManagerCn,
-  AssetImageType,
-} from "@yext/visual-editor";
+import { EntityField } from "../../../editor/EntityField";
+import { pt } from "../../../utils/i18n/platform";
+import { themeManagerCn } from "../../../utils/cn";
+import { AssetImageType } from "../../../types/images";
 import { ImagePlus } from "lucide-react";
 import { Button } from "../../../internal/puck/ui/button";
 import {

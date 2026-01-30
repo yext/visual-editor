@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { themeManagerCn, Background } from "@yext/visual-editor";
+import { themeManagerCn } from "../../../utils/cn";
+import { Background } from "../../atoms/background";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";
 import { PuckComponent } from "@puckeditor/core";

@@ -1,14 +1,11 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import {
-  BackgroundStyle,
-  YextField,
-  PageSection,
-  backgroundColors,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-} from "@yext/visual-editor";
+import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import { YextField } from "../../../editor/YextField";
+import { PageSection } from "../../atoms/pageSection";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
+import { msg } from "../../../utils/i18n/platform";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultEventCardSlotData } from "./EventCard.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";

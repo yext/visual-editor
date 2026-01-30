@@ -1,11 +1,9 @@
 import * as React from "react";
-import {
-  InsightSectionType,
-  ComponentFields,
-  msg,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
+import { InsightSectionType } from "../../../types/types";
+import { ComponentFields } from "../../../types/fields";
+import { msg } from "../../../utils/i18n/platform";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
 import {
   cardWrapperFields,
   CardWrapperType,

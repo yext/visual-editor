@@ -1,4 +1,5 @@
-import { PageSection, themeManagerCn } from "@yext/visual-editor";
+import { PageSection } from "../../atoms/pageSection";
+import { themeManagerCn } from "../../../utils/cn";
 import { useTranslation } from "react-i18next";
 import { HeroVariantProps, HeroImageProps } from "../HeroSection";
 import { HeroContent, heroContentParentCn } from "./HeroContent";

@@ -1,15 +1,13 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { layoutFields, layoutProps, layoutVariants } from "../Layout.tsx";
-import {
-  backgroundColors,
-  themeManagerCn,
-  Background,
-  YextField,
-  VisibilityWrapper,
-  AdvancedCoreInfoCategory,
-  msg,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../utils/themeConfigOptions";
+import { themeManagerCn } from "../../utils/cn";
+import { Background } from "../atoms/background";
+import { YextField } from "../../editor/YextField";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper";
+import { AdvancedCoreInfoCategory } from "../categories/AdvancedCoreInfoCategoryList";
+import { msg } from "../../utils/i18n/platform";
 
 export interface FlexProps extends layoutProps {
   justifyContent: "start" | "center" | "end";

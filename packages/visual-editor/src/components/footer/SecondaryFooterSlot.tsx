@@ -1,12 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
-import {
-  YextField,
-  msg,
-  BackgroundStyle,
-  PageSection,
-  PageSectionProps,
-} from "@yext/visual-editor";
+import { YextField } from "../../editor/YextField";
+import { msg } from "../../utils/i18n/platform";
+import { BackgroundStyle } from "../../utils/themeConfigOptions";
+import { PageSection, PageSectionProps } from "../atoms/pageSection";
 import { useTranslation } from "react-i18next";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 

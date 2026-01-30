@@ -1,15 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import {
-  useDocument,
-  EntityField,
-  YextEntityField,
-  YextField,
-  TranslatableString,
-  resolveComponentData,
-  msg,
-  pt,
-} from "@yext/visual-editor";
+import { useDocument } from "../../hooks/useDocument";
+import { EntityField } from "../../editor/EntityField";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { YextField } from "../../editor/YextField";
+import { TranslatableString } from "../../types/types";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { msg, pt } from "../../utils/i18n/platform";
 
 export interface TextListProps {
   list: YextEntityField<TranslatableString[]>;

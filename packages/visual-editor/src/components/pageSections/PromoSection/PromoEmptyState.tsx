@@ -1,5 +1,8 @@
 import { CircleSlash2 } from "lucide-react";
-import { PageSection, Body, pt, BackgroundStyle } from "@yext/visual-editor";
+import { PageSection } from "../../atoms/pageSection";
+import { Body } from "../../atoms/body";
+import { pt } from "../../../utils/i18n/platform";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
 
 export const PromoEmptyState: React.FC<{

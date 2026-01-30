@@ -7,13 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
-import {
-  Background,
-  BackgroundStyle,
-  Body,
-  fetchLocalesToPathsForEntity,
-  useDocument,
-} from "@yext/visual-editor";
+import { Background } from "../atoms/background";
+import { BackgroundStyle } from "../../utils/themeConfigOptions";
+import { Body } from "../atoms/body";
+import { fetchLocalesToPathsForEntity } from "../../utils/api/fetchLocalesToPathsForEntity";
+import { useDocument } from "../../hooks/useDocument";
 import {
   Accordion,
   AccordionContent,

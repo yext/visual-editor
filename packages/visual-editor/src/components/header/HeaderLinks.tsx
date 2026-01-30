@@ -11,18 +11,15 @@ import {
   registerOverlayPortal,
   setDeep,
 } from "@puckeditor/core";
-import {
-  CTA,
-  i18nComponentsInstance,
-  msg,
-  pt,
-  resolveComponentData,
-  themeManagerCn,
-  TranslatableCTA,
-  useDocument,
-  useOverflow,
-  YextField,
-} from "@yext/visual-editor";
+import { CTA } from "../atoms/cta";
+import { i18nComponentsInstance } from "../../utils/i18n/components";
+import { msg, pt } from "../../utils/i18n/platform";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { themeManagerCn } from "../../utils/cn";
+import { TranslatableCTA } from "../../types/types";
+import { useDocument } from "../../hooks/useDocument";
+import { useOverflow } from "../../hooks/useOverflow";
+import { YextField } from "../../editor/YextField";
 import {
   DropdownMenu,
   DropdownMenuContent,

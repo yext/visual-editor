@@ -1,21 +1,16 @@
 import * as React from "react";
-import {
-  PageSection,
-  Heading,
-  BackgroundStyle,
-  YextEntityField,
-  ThemeOptions,
-  HeadingProps,
-  backgroundColors,
-  OtherCategory,
-  PageSectionCategory,
-  useDocument,
-  YextField,
-  VisibilityWrapper,
-  TranslatableString,
-  resolveComponentData,
-  msg,
-} from "@yext/visual-editor";
+import { PageSection } from "../atoms/pageSection";
+import { Heading, HeadingProps } from "../atoms/heading";
+import { BackgroundStyle, ThemeOptions, backgroundColors } from "../../utils/themeConfigOptions";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { OtherCategory } from "../categories/OtherCategoryList";
+import { PageSectionCategory } from "../categories/PageSectionCategoryList";
+import { useDocument } from "../../hooks/useDocument";
+import { YextField } from "../../editor/YextField";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper";
+import { TranslatableString } from "../../types/types";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { msg } from "../../utils/i18n/platform";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";

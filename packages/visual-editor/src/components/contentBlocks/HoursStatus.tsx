@@ -1,17 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { HoursType } from "@yext/pages-components";
-import {
-  useDocument,
-  resolveComponentData,
-  EntityField,
-  YextEntityField,
-  YextField,
-  msg,
-  pt,
-  HoursStatusAtom,
-  resolveDataFromParent,
-} from "@yext/visual-editor";
+import { useDocument } from "../../hooks/useDocument";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { EntityField } from "../../editor/EntityField";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { YextField } from "../../editor/YextField";
+import { msg, pt } from "../../utils/i18n/platform";
+import { HoursStatusAtom } from "../atoms/hoursStatus";
+import { resolveDataFromParent } from "../../editor/ParentData";
 
 export interface HoursStatusProps {
   data: {

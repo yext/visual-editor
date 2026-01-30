@@ -1,5 +1,7 @@
 import { ComponentConfig, Fields, CustomField } from "@puckeditor/core";
-import { msg, YextField, useDocument } from "@yext/visual-editor";
+import { msg } from "../../utils/i18n/platform";
+import { YextField } from "../../editor/YextField";
+import { useDocument } from "../../hooks/useDocument";
 import React from "react";
 import {
   useSendMessageToParent,

@@ -1,8 +1,6 @@
-import {
-  FAQSectionType,
-  resolveYextEntityField,
-  YextEntityField,
-} from "@yext/visual-editor";
+import { FAQSectionType } from "../../types/types";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { Migration } from "../../utils/migrate";
 
 export const simplifyFaqSection: Migration = {

@@ -1,4 +1,6 @@
-import { Body, BodyProps, RichText, useBackground } from "@yext/visual-editor";
+import { Body, BodyProps } from "./body";
+import { RichText } from "../../types/types";
+import { useBackground } from "../../hooks/useBackground";
 import "./maybeRTF.css";
 
 export interface MaybeRTFProps extends Record<string, any> {

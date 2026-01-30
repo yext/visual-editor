@@ -2,20 +2,13 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useQuery } from "@tanstack/react-query";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  Body,
-  HeadingLevel,
-  msg,
-  pt,
-  resolveComponentData,
-  useDocument,
-  YextField,
-  getPreferredDistanceUnit,
-  toKilometers,
-  usePlatformTranslation,
-} from "@yext/visual-editor";
+import { backgroundColors, BackgroundStyle, HeadingLevel } from "../../../utils/themeConfigOptions";
+import { Body } from "../../atoms/body";
+import { msg, pt, usePlatformTranslation } from "../../../utils/i18n/platform";
+import { resolveComponentData } from "../../../utils/resolveComponentData";
+import { useDocument } from "../../../hooks/useDocument";
+import { YextField } from "../../../editor/YextField";
+import { getPreferredDistanceUnit, toKilometers } from "../../../utils/i18n/distance";
 import { parseDocument, fetchNearbyLocations } from "./utils";
 import { NearbyLocationCard } from "./NearbyLocationCard";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";

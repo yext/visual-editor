@@ -1,9 +1,7 @@
-import {
-  backgroundColors,
-  PageSection,
-  resolveYextEntityField,
-  useDocument,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../../utils/themeConfigOptions";
+import { PageSection } from "../../atoms/pageSection";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { useDocument } from "../../../hooks/useDocument";
 import { PromoVariantProps } from "./PromoSection";
 import { PromoContent, promoContentParentCn } from "./PromoContent";
 import { useTranslation } from "react-i18next";

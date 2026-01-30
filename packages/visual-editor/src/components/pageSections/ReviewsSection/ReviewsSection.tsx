@@ -2,26 +2,20 @@ import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import * as React from "react";
-import {
-  backgroundColors,
-  type BackgroundStyle,
-  Body,
-  Button,
-  getAggregateRating,
-  getAnalyticsScopeHash,
-  msg,
-  PageSection,
-  ReviewStars,
-  TimestampAtom,
-  TimestampOption,
-  useBackground,
-  useDocument,
-  YextField,
-  VisibilityWrapper,
-  HeadingTextProps,
-  pt,
-  StreamDocument,
-} from "@yext/visual-editor";
+import { backgroundColors, type BackgroundStyle } from "../../../utils/themeConfigOptions";
+import { Body } from "../../atoms/body";
+import { Button } from "../../../internal/puck/ui/button";
+import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics";
+import { msg, pt } from "../../../utils/i18n/platform";
+import { PageSection } from "../../atoms/pageSection";
+import { TimestampAtom, TimestampOption } from "../../atoms/timestamp";
+import { useBackground } from "../../../hooks/useBackground";
+import { useDocument } from "../../../hooks/useDocument";
+import { YextField } from "../../../editor/YextField";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { StreamDocument } from "../../../utils/types/StreamDocument";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
 import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";

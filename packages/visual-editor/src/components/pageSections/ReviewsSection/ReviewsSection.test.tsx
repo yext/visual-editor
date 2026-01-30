@@ -7,14 +7,12 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { act, render as reactRender } from "@testing-library/react";
-import {
-  migrate,
-  migrationRegistry,
-  ReviewsSection,
-  VisualEditorProvider,
-  SlotsCategoryComponents,
-  injectTranslations,
-} from "@yext/visual-editor";
+import { migrate } from "../../../utils/migrate";
+import { migrationRegistry } from "../../migrations/migrationRegistry";
+import { ReviewsSection } from "./ReviewsSection";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory";
+import { injectTranslations } from "../../../utils/i18n/components";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 

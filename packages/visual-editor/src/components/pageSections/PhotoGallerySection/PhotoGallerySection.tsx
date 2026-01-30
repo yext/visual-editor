@@ -7,15 +7,12 @@ import {
   Slot,
 } from "@puckeditor/core";
 import "pure-react-carousel/dist/react-carousel.es.css";
-import {
-  backgroundColors,
-  BackgroundStyle,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  HeadingTextProps,
-} from "@yext/visual-editor";
+import { backgroundColors, BackgroundStyle } from "../../../utils/themeConfigOptions";
+import { PageSection } from "../../atoms/pageSection";
+import { YextField } from "../../../editor/YextField";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
+import { msg } from "../../../utils/i18n/platform";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";

@@ -27,6 +27,7 @@ import {
 import { Phone, PhoneProps } from "../contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
 import { CTAGroup, CTAGroupProps } from "../contentBlocks/CTAGroup";
+import { AdvancedCoreInfoCategory } from "./AdvancedCoreInfoCategoryList";
 
 export interface AdvancedCoreInfoCategoryProps {
   Grid: GridProps;
@@ -46,22 +47,48 @@ export interface AdvancedCoreInfoCategoryProps {
 }
 
 export const AdvancedCoreInfoCategoryComponents = {
-  Grid,
-  Address,
-  BodyText,
-  CTAGroup,
-  CTAWrapper,
-  Emails,
-  GetDirections,
-  HeadingText,
-  HoursStatus,
-  HoursTable,
-  ImageWrapper,
-  MapboxStaticMap,
-  Phone,
-  TextList,
+  get Grid() {
+    return Grid;
+  },
+  get Address() {
+    return Address;
+  },
+  get BodyText() {
+    return BodyText;
+  },
+  get CTAGroup() {
+    return CTAGroup;
+  },
+  get CTAWrapper() {
+    return CTAWrapper;
+  },
+  get Emails() {
+    return Emails;
+  },
+  get GetDirections() {
+    return GetDirections;
+  },
+  get HeadingText() {
+    return HeadingText;
+  },
+  get HoursStatus() {
+    return HoursStatus;
+  },
+  get HoursTable() {
+    return HoursTable;
+  },
+  get ImageWrapper() {
+    return ImageWrapper;
+  },
+  get MapboxStaticMap() {
+    return MapboxStaticMap;
+  },
+  get Phone() {
+    return Phone;
+  },
+  get TextList() {
+    return TextList;
+  },
 };
 
-export const AdvancedCoreInfoCategory = Object.keys(
-  AdvancedCoreInfoCategoryComponents
-) as (keyof AdvancedCoreInfoCategoryProps)[];
+export { AdvancedCoreInfoCategory };

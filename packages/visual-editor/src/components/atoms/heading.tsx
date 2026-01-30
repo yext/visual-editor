@@ -1,8 +1,5 @@
-import {
-  BackgroundStyle,
-  HeadingLevel,
-  themeManagerCn,
-} from "@yext/visual-editor";
+import { BackgroundStyle, HeadingLevel } from "../../utils/themeConfigOptions";
+import { themeManagerCn } from "../../utils/cn";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { normalizeThemeColor } from "../../utils/normalizeThemeColor";

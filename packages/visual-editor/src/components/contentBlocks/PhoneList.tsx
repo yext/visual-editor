@@ -1,15 +1,12 @@
-import {
-  backgroundColors,
-  EntityField,
-  i18nComponentsInstance,
-  msg,
-  PhoneAtom,
-  pt,
-  resolveComponentData,
-  resolveDataFromParent,
-  useDocument,
-  YextField,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../utils/themeConfigOptions";
+import { EntityField } from "../../editor/EntityField";
+import { i18nComponentsInstance } from "../../utils/i18n/components";
+import { msg, pt } from "../../utils/i18n/platform";
+import { PhoneAtom } from "../atoms/phone";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { resolveDataFromParent } from "../../editor/ParentData";
+import { useDocument } from "../../hooks/useDocument";
+import { YextField } from "../../editor/YextField";
 import {
   defaultPhoneDataProps,
   PhoneDataFields,

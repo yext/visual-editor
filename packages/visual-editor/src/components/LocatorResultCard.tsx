@@ -6,28 +6,22 @@ import {
   Coordinate,
   useCardAnalyticsCallback,
 } from "@yext/search-ui-react";
-import {
-  Background,
-  backgroundColors,
-  Body,
-  BodyProps,
-  CTA,
-  CTAVariant,
-  Heading,
-  HeadingLevel,
-  Image,
-  msg,
-  PhoneAtom,
-  useTemplateProps,
-  resolveComponentData,
-  resolveUrlTemplateOfChild,
-  HoursStatusAtom,
-  HoursTableAtom,
-  YextField,
-  DynamicOption,
-  DynamicOptionsSingleSelectorType,
-  TranslatableString,
-} from "@yext/visual-editor";
+import { Background } from "./atoms/background";
+import { backgroundColors, HeadingLevel } from "../utils/themeConfigOptions";
+import { Body, BodyProps } from "./atoms/body";
+import { CTA, CTAVariant } from "./atoms/cta";
+import { Heading } from "./atoms/heading";
+import { Image } from "./atoms/image";
+import { msg } from "../utils/i18n/platform";
+import { PhoneAtom } from "./atoms/phone";
+import { useTemplateProps } from "../hooks/useDocument";
+import { resolveComponentData } from "../utils/resolveComponentData";
+import { resolveUrlTemplateOfChild } from "../utils/urls/resolveUrlTemplate";
+import { HoursStatusAtom } from "./atoms/hoursStatus";
+import { HoursTableAtom } from "./atoms/hoursTable";
+import { YextField } from "../editor/YextField";
+import { DynamicOption, DynamicOptionsSingleSelectorType } from "../editor/DynamicOptionsSelector";
+import { TranslatableString } from "../types/types";
 import {
   Address,
   AddressType,

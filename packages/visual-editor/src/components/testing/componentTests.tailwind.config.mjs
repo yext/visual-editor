@@ -1,15 +1,15 @@
-import { themeResolver } from "../../utils/themeResolver";
-import { defaultThemeTailwindExtensions } from "../../utils/themeConfigOptions";
-import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
+import {
+  defaultThemeConfig,
+  defaultThemeTailwindExtensions,
+  themeResolver,
+} from "../../../dist/tailwind.js";
 
 // This Tailwind Config applies Theme Editor styles to our components
 // during playwright testing
-const config = {
+export default {
   content: ["./src/components/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),
   },
   plugins: [],
 };
-
-export default config;

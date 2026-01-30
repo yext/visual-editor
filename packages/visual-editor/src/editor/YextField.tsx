@@ -5,23 +5,14 @@ import {
   NumberField,
   ObjectField,
 } from "@puckeditor/core";
-import {
-  ThemeOptions,
-  BasicSelector,
-  DynamicOption,
-  DynamicOptionsSelector,
-  DynamicOptionsSingleSelector,
-  DynamicOptionValueTypes,
-  OptionalNumberFieldProps,
-  OptionalNumberField,
-  CodeFieldProps,
-  CodeField,
-  getMaxWidthOptions,
-  msg,
-  TranslatableStringField,
-  DynamicOptionsSelectorType,
-  DynamicOptionsSingleSelectorType,
-} from "@yext/visual-editor";
+import { ThemeOptions } from "../utils/themeConfigOptions";
+import { BasicSelector } from "./BasicSelector";
+import { DynamicOption, DynamicOptionsSelector, DynamicOptionsSingleSelector, DynamicOptionValueTypes, DynamicOptionsSelectorType, DynamicOptionsSingleSelectorType } from "./DynamicOptionsSelector";
+import { OptionalNumberFieldProps, OptionalNumberField } from "./OptionalNumberField";
+import { CodeFieldProps, CodeField } from "./CodeField";
+import { getMaxWidthOptions } from "./MaxWidthSelector";
+import { msg } from "../utils/i18n/platform";
+import { TranslatableStringField } from "./TranslatableStringField";
 import {
   RenderYextEntityFieldSelectorProps,
   YextEntityField,

@@ -7,24 +7,21 @@ import {
   WithId,
   setDeep,
 } from "@puckeditor/core";
-import {
-  BackgroundStyle,
-  YextField,
-  Background,
-  backgroundColors,
-  PersonStruct,
-  msg,
-  ImageWrapperProps,
-  HeadingTextProps,
-  BodyTextProps,
-  CTAWrapperProps,
-  deepMerge,
-  ImgSizesByBreakpoint,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-  EmailsProps,
-  PhoneListProps,
-} from "@yext/visual-editor";
+import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import { YextField } from "../../../editor/YextField";
+import { Background } from "../../atoms/background";
+import { PersonStruct } from "../../../types/types";
+import { msg } from "../../../utils/i18n/platform";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { BodyTextProps } from "../../contentBlocks/BodyText";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";
+import { deepMerge } from "../../../utils/themeResolver";
+import { ImgSizesByBreakpoint } from "../../atoms/image";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { i18nComponentsInstance } from "../../../utils/i18n/components";
+import { EmailsProps } from "../../contentBlocks/Emails";
+import { PhoneListProps } from "../../contentBlocks/PhoneList";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";

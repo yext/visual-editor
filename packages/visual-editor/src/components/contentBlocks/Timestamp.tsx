@@ -5,14 +5,12 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
-import {
-  msg,
-  resolveDataFromParent,
-  resolveYextEntityField,
-  useDocument,
-  YextEntityField,
-  YextField,
-} from "@yext/visual-editor";
+import { msg } from "../../utils/i18n/platform";
+import { resolveDataFromParent } from "../../editor/ParentData";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
+import { useDocument } from "../../hooks/useDocument";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { YextField } from "../../editor/YextField";
 import { TimestampAtom, TimestampOption } from "../atoms/timestamp";
 
 export type TimestampProps = {

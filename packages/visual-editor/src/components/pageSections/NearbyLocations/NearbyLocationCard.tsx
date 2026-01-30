@@ -1,15 +1,13 @@
 import React from "react";
 import { PuckContext } from "@puckeditor/core";
 import { HoursType, AddressType, Address } from "@yext/pages-components";
-import {
-  Background,
-  Heading,
-  HeadingLevel,
-  HoursStatusAtom,
-  MaybeLink,
-  PhoneAtom,
-  useTemplateProps,
-} from "@yext/visual-editor";
+import { Background } from "../../atoms/background";
+import { Heading } from "../../atoms/heading";
+import { HeadingLevel } from "../../../utils/themeConfigOptions";
+import { HoursStatusAtom } from "../../atoms/hoursStatus";
+import { MaybeLink } from "../../atoms/maybeLink";
+import { PhoneAtom } from "../../atoms/phone";
+import { useTemplateProps } from "../../../hooks/useDocument";
 import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper";
 import {
   mergeMeta,

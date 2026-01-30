@@ -1,20 +1,16 @@
 import * as React from "react";
-import {
-  BackgroundStyle,
-  YextField,
-  backgroundColors,
-  msg,
-  Background,
-  CTAWrapperProps,
-  BodyTextProps,
-  HeadingTextProps,
-  ImageWrapperProps,
-  InsightStruct,
-  deepMerge,
-  getDefaultRTF,
-  TranslatableRichText,
-  YextEntityField,
-} from "@yext/visual-editor";
+import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import { YextField } from "../../../editor/YextField";
+import { msg } from "../../../utils/i18n/platform";
+import { Background } from "../../atoms/background";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";
+import { BodyTextProps } from "../../contentBlocks/BodyText";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image";
+import { InsightStruct, TranslatableRichText } from "../../../types/types";
+import { deepMerge } from "../../../utils/themeResolver";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";

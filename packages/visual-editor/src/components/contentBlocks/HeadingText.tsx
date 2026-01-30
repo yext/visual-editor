@@ -1,21 +1,15 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import {
-  useDocument,
-  EntityField,
-  YextEntityField,
-  Heading,
-  HeadingProps,
-  YextField,
-  TranslatableString,
-  resolveComponentData,
-  pt,
-  msg,
-  ThemeOptions,
-  HeadingLevel,
-  BackgroundStyle,
-  resolveDataFromParent,
-} from "@yext/visual-editor";
+import { useDocument } from "../../hooks/useDocument";
+import { EntityField } from "../../editor/EntityField";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { Heading, HeadingProps } from "../atoms/heading";
+import { YextField } from "../../editor/YextField";
+import { TranslatableString } from "../../types/types";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { pt, msg } from "../../utils/i18n/platform";
+import { ThemeOptions, HeadingLevel, BackgroundStyle } from "../../utils/themeConfigOptions";
+import { resolveDataFromParent } from "../../editor/ParentData";
 import { useTranslation } from "react-i18next";
 
 export type HeadingTextProps = {

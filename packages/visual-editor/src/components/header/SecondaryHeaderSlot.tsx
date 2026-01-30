@@ -1,13 +1,9 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import {
-  YextField,
-  msg,
-  BackgroundStyle,
-  backgroundColors,
-  useDocument,
-  PageSection,
-  PageSectionProps,
-} from "@yext/visual-editor";
+import { YextField } from "../../editor/YextField";
+import { msg } from "../../utils/i18n/platform";
+import { BackgroundStyle, backgroundColors } from "../../utils/themeConfigOptions";
+import { useDocument } from "../../hooks/useDocument";
+import { PageSection, PageSectionProps } from "../atoms/pageSection";
 import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,

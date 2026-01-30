@@ -1,14 +1,11 @@
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import {
-  BackgroundStyle,
-  CTA,
-  PresetImageType,
-  YextField,
-  msg,
-  pt,
-  resolveComponentData,
-  useDocument,
-} from "@yext/visual-editor";
+import { BackgroundStyle } from "../../utils/themeConfigOptions";
+import { CTA } from "../atoms/cta";
+import { PresetImageType } from "../../types/types";
+import { YextField } from "../../editor/YextField";
+import { msg, pt } from "../../utils/i18n/platform";
+import { resolveComponentData } from "../../utils/resolveComponentData";
+import { useDocument } from "../../hooks/useDocument";
 import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,

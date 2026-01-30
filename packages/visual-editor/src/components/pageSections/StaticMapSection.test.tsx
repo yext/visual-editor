@@ -7,11 +7,9 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { act, render as reactRender, waitFor } from "@testing-library/react";
-import {
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { migrate } from "../../utils/migrate";
+import { migrationRegistry } from "../migrations/migrationRegistry";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { StaticMapSection } from "./StaticMapSection.tsx";
