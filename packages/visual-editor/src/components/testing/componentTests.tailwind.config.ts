@@ -1,12 +1,10 @@
-const { themeResolver } = require("../../utils/themeResolver.ts");
-const {
-  defaultThemeTailwindExtensions,
-} = require("../../utils/themeConfigOptions.ts");
-const { defaultThemeConfig } = require("../DefaultThemeConfig.ts");
-
 // This Tailwind Config applies Theme Editor styles to our components
+import { themeResolver } from "../../utils/themeResolver.ts";
+import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
+import { defaultThemeTailwindExtensions } from "../../utils/themeConfigOptions.ts";
+
 // during playwright testing
-module.exports = {
+export default {
   content: ["./src/components/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: themeResolver(defaultThemeTailwindExtensions, defaultThemeConfig),

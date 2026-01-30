@@ -1,11 +1,9 @@
 import React from "react";
-import { useDocument, useEntityFields } from "../hooks/index.ts";
 import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import {
   getFieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
-import { pt, resolveComponentData } from "../utils/index.ts";
 import {
   Command,
   CommandEmpty,
@@ -21,6 +19,10 @@ import {
 } from "../internal/puck/ui/Popover.tsx";
 import { SquarePlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { pt } from "../utils/i18n/platform.ts";
+import { resolveComponentData } from "../utils/resolveComponentData.tsx";
+import { useEntityFields } from "../hooks/useEntityFields.tsx";
+import { useDocument } from "../hooks/useDocument.tsx";
 
 /**
  * A debounced string input that allows embedding entity fields via a popover selector.
