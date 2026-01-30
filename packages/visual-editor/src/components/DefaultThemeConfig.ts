@@ -1,5 +1,10 @@
 import { ThemeConfig } from "../utils/themeResolver";
-import { defaultFonts, FontRegistry, getFontWeightOptions, constructFontSelectOptions } from "../utils/fonts/visualEditorFonts";
+import {
+  defaultFonts,
+  FontRegistry,
+  getFontWeightOptions,
+  constructFontSelectOptions,
+} from "../utils/fonts/visualEditorFonts";
 import { ThemeOptions } from "../utils/themeConfigOptions";
 import { msg } from "../utils/i18n/platform";
 

@@ -1,5 +1,8 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import { backgroundColors, BackgroundStyle } from "../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions";
 import { msg } from "../../utils/i18n/platform";
 import { PageSection } from "../atoms/pageSection";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper";

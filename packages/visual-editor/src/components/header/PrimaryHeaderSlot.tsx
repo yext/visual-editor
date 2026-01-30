@@ -6,7 +6,10 @@ import {
   Slot,
   SlotComponent,
 } from "@puckeditor/core";
-import { backgroundColors, BackgroundStyle } from "../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions";
 import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
 import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types";
 import { ImageWrapperProps } from "../contentBlocks/image/Image";

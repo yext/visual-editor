@@ -20,7 +20,10 @@ import { resolveUrlTemplateOfChild } from "../utils/urls/resolveUrlTemplate";
 import { HoursStatusAtom } from "./atoms/hoursStatus";
 import { HoursTableAtom } from "./atoms/hoursTable";
 import { YextField } from "../editor/YextField";
-import { DynamicOption, DynamicOptionsSingleSelectorType } from "../editor/DynamicOptionsSelector";
+import {
+  DynamicOption,
+  DynamicOptionsSingleSelectorType,
+} from "../editor/DynamicOptionsSelector";
 import { TranslatableString } from "../types/types";
 import {
   Address,

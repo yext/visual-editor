@@ -7,7 +7,10 @@ import {
   WithId,
   setDeep,
 } from "@puckeditor/core";
-import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../../../utils/themeConfigOptions";
 import { YextField } from "../../../editor/YextField";
 import { Background } from "../../atoms/background";
 import { TestimonialStruct } from "../../../types/types";

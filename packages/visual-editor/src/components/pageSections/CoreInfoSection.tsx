@@ -2,7 +2,10 @@ import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AddressType, AnalyticsScopeProvider } from "@yext/pages-components";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { BackgroundStyle, backgroundColors } from "../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../../utils/themeConfigOptions";
 import { PageSection } from "../atoms/pageSection";
 import { YextField } from "../../editor/YextField";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper";

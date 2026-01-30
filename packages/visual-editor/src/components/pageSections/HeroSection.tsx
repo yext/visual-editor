@@ -6,7 +6,12 @@ import {
   Slot,
 } from "@puckeditor/core";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
-import { backgroundColors, BackgroundStyle, HeadingLevel, ThemeOptions } from "../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+  HeadingLevel,
+  ThemeOptions,
+} from "../../utils/themeConfigOptions";
 import { YextField } from "../../editor/YextField";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper";
 import { msg } from "../../utils/i18n/platform";

@@ -7,7 +7,10 @@ import {
   Slot,
 } from "@puckeditor/core";
 import "pure-react-carousel/dist/react-carousel.es.css";
-import { backgroundColors, BackgroundStyle } from "../../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../../utils/themeConfigOptions";
 import { PageSection } from "../../atoms/pageSection";
 import { YextField } from "../../../editor/YextField";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper";

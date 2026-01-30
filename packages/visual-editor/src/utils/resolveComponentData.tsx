@@ -1,6 +1,10 @@
 import { BodyProps } from "../components/atoms/body";
 import { MaybeRTF } from "../components/atoms/maybeRTF";
-import { type RichText, type TranslatableRichText, type TranslatableString } from "../types/types";
+import {
+  type RichText,
+  type TranslatableRichText,
+  type TranslatableString,
+} from "../types/types";
 import { type YextEntityField } from "../editor/YextEntityFieldSelector";
 import React from "react";
 import {

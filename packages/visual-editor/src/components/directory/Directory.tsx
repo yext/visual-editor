@@ -1,5 +1,8 @@
 import { useTemplateProps } from "../../hooks/useDocument";
-import { backgroundColors, BackgroundStyle } from "../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions";
 import { PageSection } from "../atoms/pageSection";
 import { msg } from "../../utils/i18n/platform";
 import { YextField } from "../../editor/YextField";

@@ -1,7 +1,11 @@
 import * as React from "react";
 import { PageSection } from "../atoms/pageSection";
 import { Heading, HeadingProps } from "../atoms/heading";
-import { BackgroundStyle, ThemeOptions, backgroundColors } from "../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  ThemeOptions,
+  backgroundColors,
+} from "../../utils/themeConfigOptions";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector";
 import { OtherCategory } from "../categories/OtherCategoryList";
 import { PageSectionCategory } from "../categories/PageSectionCategoryList";

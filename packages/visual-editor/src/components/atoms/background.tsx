@@ -1,5 +1,8 @@
 import * as React from "react";
-import { BackgroundStyle, backgroundColors } from "../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../../utils/themeConfigOptions";
 import { BackgroundProvider } from "../../hooks/useBackground";
 import { themeManagerCn } from "../../utils/cn";
 import { useDocument } from "../../hooks/useDocument";

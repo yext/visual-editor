@@ -32,10 +32,20 @@ import {
 import React from "react";
 import { BasicSelector } from "../editor/BasicSelector";
 import { Button } from "../internal/puck/ui/button";
-import { createSearchAnalyticsConfig, createSearchHeadlessConfig } from "../utils/searchHeadlessConfig";
-import { DynamicOption, DynamicOptionsSelectorType } from "../editor/DynamicOptionsSelector";
+import {
+  createSearchAnalyticsConfig,
+  createSearchHeadlessConfig,
+} from "../utils/searchHeadlessConfig";
+import {
+  DynamicOption,
+  DynamicOptionsSelectorType,
+} from "../editor/DynamicOptionsSelector";
 import { Heading } from "./atoms/heading";
-import { Location, LocatorResultCard, LocatorResultCardProps } from "./LocatorResultCard";
+import {
+  Location,
+  LocatorResultCard,
+  LocatorResultCardProps,
+} from "./LocatorResultCard";
 import { msg } from "../utils/i18n/platform";
 import { useDocument } from "../hooks/useDocument";
 import { YextField } from "../editor/YextField";

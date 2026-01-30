@@ -6,7 +6,11 @@ import {
   Slot,
   WithId,
 } from "@puckeditor/core";
-import { backgroundColors, BackgroundStyle, HeadingLevel } from "../../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+  HeadingLevel,
+} from "../../../utils/themeConfigOptions";
 import { BodyTextProps } from "../../contentBlocks/BodyText";
 import { Button } from "../../../internal/puck/ui/button";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText";

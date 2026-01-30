@@ -6,7 +6,10 @@ import { YextField } from "../../editor/YextField";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper";
 import { msg } from "../../utils/i18n/platform";
 import { TranslatableString } from "../../types/types";
-import { BackgroundStyle, backgroundColors } from "../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../../utils/themeConfigOptions";
 import { resolveComponentData } from "../../utils/resolveComponentData";
 import { getDirectoryParents } from "../../utils/schema/helpers";
 import { ComponentConfig, Fields } from "@puckeditor/core";

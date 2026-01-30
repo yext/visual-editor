@@ -5,7 +5,10 @@ import { MaybeLink } from "../atoms/maybeLink";
 import { useTemplateProps } from "../../hooks/useDocument";
 import { YextField } from "../../editor/YextField";
 import { msg } from "../../utils/i18n/platform";
-import { backgroundColors, BackgroundStyle } from "../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions";
 import { HoursStatusProps } from "../contentBlocks/HoursStatus";
 import { PhoneProps } from "../contentBlocks/Phone";
 import { deepMerge } from "../../utils/themeResolver";

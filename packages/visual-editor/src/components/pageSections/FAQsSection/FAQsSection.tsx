@@ -6,7 +6,10 @@ import {
   setDeep,
   Slot,
 } from "@puckeditor/core";
-import { backgroundColors, BackgroundStyle } from "../../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../../utils/themeConfigOptions";
 import { PageSection } from "../../atoms/pageSection";
 import { YextField } from "../../../editor/YextField";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper";

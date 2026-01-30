@@ -8,7 +8,11 @@ import { YextField } from "../../editor/YextField";
 import { TranslatableString } from "../../types/types";
 import { resolveComponentData } from "../../utils/resolveComponentData";
 import { pt, msg } from "../../utils/i18n/platform";
-import { ThemeOptions, HeadingLevel, BackgroundStyle } from "../../utils/themeConfigOptions";
+import {
+  ThemeOptions,
+  HeadingLevel,
+  BackgroundStyle,
+} from "../../utils/themeConfigOptions";
 import { resolveDataFromParent } from "../../editor/ParentData";
 import { useTranslation } from "react-i18next";
 

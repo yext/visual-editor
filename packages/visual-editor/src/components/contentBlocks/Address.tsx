@@ -19,7 +19,10 @@ import { CTA, CTAVariant } from "../atoms/cta";
 import { pt, msg } from "../../utils/i18n/platform";
 import { YextField } from "../../editor/YextField";
 import { resolveComponentData } from "../../utils/resolveComponentData";
-import { BackgroundStyle, backgroundColors } from "../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../../utils/themeConfigOptions";
 import { resolveDataFromParent } from "../../editor/ParentData";
 
 /** Props for the Address component */

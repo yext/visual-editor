@@ -7,8 +7,18 @@ import {
 } from "@puckeditor/core";
 import { ThemeOptions } from "../utils/themeConfigOptions";
 import { BasicSelector } from "./BasicSelector";
-import { DynamicOption, DynamicOptionsSelector, DynamicOptionsSingleSelector, DynamicOptionValueTypes, DynamicOptionsSelectorType, DynamicOptionsSingleSelectorType } from "./DynamicOptionsSelector";
-import { OptionalNumberFieldProps, OptionalNumberField } from "./OptionalNumberField";
+import {
+  DynamicOption,
+  DynamicOptionsSelector,
+  DynamicOptionsSingleSelector,
+  DynamicOptionValueTypes,
+  DynamicOptionsSelectorType,
+  DynamicOptionsSingleSelectorType,
+} from "./DynamicOptionsSelector";
+import {
+  OptionalNumberFieldProps,
+  OptionalNumberField,
+} from "./OptionalNumberField";
 import { CodeFieldProps, CodeField } from "./CodeField";
 import { getMaxWidthOptions } from "./MaxWidthSelector";
 import { msg } from "../utils/i18n/platform";

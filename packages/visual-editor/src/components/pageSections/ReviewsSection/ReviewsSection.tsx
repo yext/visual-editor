@@ -2,7 +2,10 @@ import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaArrowRight, FaChevronDown } from "react-icons/fa";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import * as React from "react";
-import { backgroundColors, type BackgroundStyle } from "../../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  type BackgroundStyle,
+} from "../../../utils/themeConfigOptions";
 import { Body } from "../../atoms/body";
 import { Button } from "../../../internal/puck/ui/button";
 import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars";

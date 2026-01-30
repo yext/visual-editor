@@ -1,13 +1,20 @@
 import * as React from "react";
 import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
 import { PromoSectionType } from "../../../types/types";
-import { backgroundColors, BackgroundStyle, ThemeOptions } from "../../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+  ThemeOptions,
+} from "../../../utils/themeConfigOptions";
 import { YextField } from "../../../editor/YextField";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
 import { msg } from "../../../utils/i18n/platform";
 import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics";
 import { ComponentFields } from "../../../types/fields";
-import { YextEntityField, YextEntityFieldSelector } from "../../../editor/YextEntityFieldSelector";
+import {
+  YextEntityField,
+  YextEntityFieldSelector,
+} from "../../../editor/YextEntityFieldSelector";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
 import { BodyTextProps } from "../../contentBlocks/BodyText";
 import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";

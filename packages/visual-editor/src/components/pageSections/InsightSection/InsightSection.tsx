@@ -1,5 +1,8 @@
 import * as React from "react";
-import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../../../utils/themeConfigOptions";
 import { YextField } from "../../../editor/YextField";
 import { PageSection } from "../../atoms/pageSection";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper";

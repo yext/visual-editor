@@ -1,5 +1,8 @@
 import * as React from "react";
-import { BackgroundStyle, backgroundColors } from "../../../utils/themeConfigOptions";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../../../utils/themeConfigOptions";
 import { YextField } from "../../../editor/YextField";
 import { msg } from "../../../utils/i18n/platform";
 import { Background } from "../../atoms/background";

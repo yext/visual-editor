@@ -1,6 +1,10 @@
 import React from "react";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
-import { backgroundColors, BackgroundStyle, ThemeOptions } from "../../utils/themeConfigOptions";
+import {
+  backgroundColors,
+  BackgroundStyle,
+  ThemeOptions,
+} from "../../utils/themeConfigOptions";
 import { YextField } from "../../editor/YextField";
 import { VisibilityWrapper } from "../atoms/visibilityWrapper";
 import { msg } from "../../utils/i18n/platform";
