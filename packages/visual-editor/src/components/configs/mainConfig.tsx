@@ -51,7 +51,9 @@ export const mainConfig: Config<MainConfigProps> = {
     },
     coreInformation: {
       title: pt("categories.coreInformation", "Core Information"),
-      components: Array.from(AdvancedCoreInfoCategory) as (keyof MainConfigProps)[],
+      components: Array.from(
+        AdvancedCoreInfoCategory
+      ) as (keyof MainConfigProps)[],
     },
     other: {
       title: pt("categories.other", "Other"),
@@ -77,7 +79,9 @@ export const mainConfig: Config<MainConfigProps> = {
             flexDirection: "column",
             minHeight: "100vh",
           }}
-          disallow={Array.from(AdvancedCoreInfoCategory).filter((k) => k !== "Grid")}
+          disallow={Array.from(AdvancedCoreInfoCategory).filter(
+            (k) => k !== "Grid"
+          )}
         />
       );
     },
