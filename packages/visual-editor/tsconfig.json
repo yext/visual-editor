@@ -22,9 +22,10 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src", "global.d.ts","src/components/testing/componentTests.d.ts"],
-  "exclude": [
-    "node_modules",
-    "src/vite-plugin/templates/*"
-  ]
+  "include": [
+    "src",
+    "global.d.ts",
+    "src/components/testing/componentTests.d.ts"
+  ],
+  "exclude": ["node_modules", "src/vite-plugin/templates/*"]
 }
