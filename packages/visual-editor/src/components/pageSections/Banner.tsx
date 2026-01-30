@@ -1,25 +1,25 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { useDocument } from "../../hooks/useDocument";
-import { PageSection } from "../atoms/pageSection";
-import { YextField } from "../../editor/YextField";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper";
-import { EntityField } from "../../editor/EntityField";
-import { TranslatableRichText } from "../../types/types";
-import { msg, pt } from "../../utils/i18n/platform";
-import { Body } from "../atoms/body";
-import { getDefaultRTF } from "../../editor/TranslatableRichTextField";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { TranslatableRichText } from "../../types/types.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { Body } from "../atoms/body.tsx";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.js";
 import { CircleSlash2 } from "lucide-react";
-import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers";
-import { resolveYextEntityField } from "../../utils/resolveYextEntityField";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
+import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface BannerData {
   /**

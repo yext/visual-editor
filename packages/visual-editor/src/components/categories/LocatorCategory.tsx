@@ -1,13 +1,11 @@
-import { LocatorProps, LocatorComponent } from "../Locator";
+import { LocatorProps, LocatorComponent } from "../Locator.tsx";
 
 export interface LocatorCategoryProps {
   Locator: LocatorProps;
 }
 
 export const LocatorCategoryComponents = {
-  get Locator() {
-    return LocatorComponent;
-  },
+  Locator: LocatorComponent,
 };
 
 export const LocatorCategory = Object.keys(

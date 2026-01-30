@@ -2,10 +2,10 @@ import * as React from "react";
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../utils/themeConfigOptions";
-import { BackgroundProvider } from "../../hooks/useBackground";
-import { themeManagerCn } from "../../utils/cn";
-import { useDocument } from "../../hooks/useDocument";
+} from "../../utils/themeConfigOptions.ts";
+import { BackgroundProvider } from "../../hooks/useBackground.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;

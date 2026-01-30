@@ -5,24 +5,24 @@ import * as React from "react";
 import {
   backgroundColors,
   type BackgroundStyle,
-} from "../../../utils/themeConfigOptions";
-import { Body } from "../../atoms/body";
-import { Button } from "../../../internal/puck/ui/button";
-import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars";
-import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics";
-import { msg, pt } from "../../../utils/i18n/platform";
-import { PageSection } from "../../atoms/pageSection";
-import { TimestampAtom, TimestampOption } from "../../atoms/timestamp";
-import { useBackground } from "../../../hooks/useBackground";
-import { useDocument } from "../../../hooks/useDocument";
-import { YextField } from "../../../editor/YextField";
-import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText";
-import { StreamDocument } from "../../../utils/types/StreamDocument";
+} from "../../../utils/themeConfigOptions.ts";
+import { Body } from "../../atoms/body.tsx";
+import { Button } from "../../../internal/puck/ui/button.tsx";
+import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars.tsx";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { TimestampAtom, TimestampOption } from "../../atoms/timestamp.tsx";
+import { useBackground } from "../../../hooks/useBackground.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { StarOff } from "lucide-react";
 import { AnalyticsScopeProvider, useAnalytics } from "@yext/pages-components";
-import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 type Review = {
   authorName: string;

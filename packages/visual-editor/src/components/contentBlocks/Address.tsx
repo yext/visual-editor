@@ -12,18 +12,18 @@ import {
   getDirections,
   Address as RenderAddress,
 } from "@yext/pages-components";
-import { useDocument } from "../../hooks/useDocument";
-import { EntityField } from "../../editor/EntityField";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { CTA, CTAVariant } from "../atoms/cta";
-import { pt, msg } from "../../utils/i18n/platform";
-import { YextField } from "../../editor/YextField";
-import { resolveComponentData } from "../../utils/resolveComponentData";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { CTA, CTAVariant } from "../atoms/cta.tsx";
+import { pt, msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../utils/themeConfigOptions";
-import { resolveDataFromParent } from "../../editor/ParentData";
+} from "../../utils/themeConfigOptions.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 /** Props for the Address component */
 export interface AddressProps {

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
-import { Body } from "./body";
-import { themeManagerCn } from "../../utils/cn";
-import { useBackground } from "../../hooks/useBackground";
+import { Body } from "./body.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 
 export type AggregateRating = {

@@ -1,16 +1,16 @@
-import { BodyProps } from "../components/atoms/body";
-import { MaybeRTF } from "../components/atoms/maybeRTF";
+import { BodyProps } from "../components/atoms/body.tsx";
+import { MaybeRTF } from "../components/atoms/maybeRTF.tsx";
 import {
   type RichText,
   type TranslatableRichText,
   type TranslatableString,
-} from "../types/types";
-import { type YextEntityField } from "../editor/YextEntityFieldSelector";
+} from "../types/types.ts";
+import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import React from "react";
 import {
   resolveEmbeddedFieldsRecursively,
   resolveYextEntityField,
-} from "./resolveYextEntityField";
+} from "./resolveYextEntityField.ts";
 
 /**
  * The primary function for resolving all component data. It handles entity

@@ -1,4 +1,4 @@
-import { Migration } from "../../utils/migrate";
+import { Migration } from "../../utils/migrate.ts";
 
 export const heroSectionSlots: Migration = {
   HoursStatus: {

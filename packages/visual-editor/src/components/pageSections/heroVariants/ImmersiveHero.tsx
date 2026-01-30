@@ -1,9 +1,9 @@
-import { backgroundColors } from "../../../utils/themeConfigOptions";
-import { PageSection } from "../../atoms/pageSection";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
-import { useDocument } from "../../../hooks/useDocument";
-import { HeroVariantProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { HeroVariantProps } from "../HeroSection.tsx";
+import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
 import { useTranslation } from "react-i18next";
 import { getImageUrl } from "@yext/pages-components";
 import { PuckComponent } from "@puckeditor/core";

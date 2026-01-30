@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { themeManagerCn } from "../../utils/cn";
+import { themeManagerCn } from "../../utils/cn.ts";
 
 function DropdownMenu({
   ...props

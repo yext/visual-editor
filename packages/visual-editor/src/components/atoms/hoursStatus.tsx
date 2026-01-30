@@ -3,7 +3,7 @@ import {
   HoursType,
   StatusParams,
 } from "@yext/pages-components";
-import { themeManagerCn } from "../../utils/cn";
+import { themeManagerCn } from "../../utils/cn.ts";
 import * as React from "react";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";

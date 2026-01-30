@@ -1,30 +1,30 @@
 import { DropZone, Config } from "@puckeditor/core";
-import { pt } from "../../utils/i18n/platform";
+import { pt } from "../../utils/i18n/platform.ts";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
   type DeprecatedCategoryProps,
-} from "../categories/DeprecatedCategory";
+} from "../categories/DeprecatedCategory.tsx";
 import {
   PageSectionCategory,
   PageSectionCategoryComponents,
   type PageSectionCategoryProps,
-} from "../categories/PageSectionCategory";
+} from "../categories/PageSectionCategory.tsx";
 import {
   OtherCategory,
   OtherCategoryComponents,
   type OtherCategoryProps,
-} from "../categories/OtherCategory";
+} from "../categories/OtherCategory.tsx";
 import {
   AdvancedCoreInfoCategory,
   AdvancedCoreInfoCategoryComponents,
   type AdvancedCoreInfoCategoryProps,
-} from "../categories/AdvancedCoreInfoCategory";
+} from "../categories/AdvancedCoreInfoCategory.tsx";
 import {
   SlotsCategory,
   SlotsCategoryComponents,
   SlotsCategoryProps,
-} from "../categories";
+} from "../categories/index.ts";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
@@ -47,26 +47,25 @@ export const mainConfig: Config<MainConfigProps> = {
   categories: {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
-      components: Array.from(PageSectionCategory) as (keyof MainConfigProps)[],
+      components: PageSectionCategory,
     },
     coreInformation: {
       title: pt("categories.coreInformation", "Core Information"),
-      components: Array.from(
-        AdvancedCoreInfoCategory
-      ) as (keyof MainConfigProps)[],
+      components: AdvancedCoreInfoCategory,
+
     },
     other: {
       title: pt("categories.other", "Other"),
-      components: Array.from(OtherCategory) as (keyof MainConfigProps)[],
+      components: OtherCategory,
     },
     slots: {
-      components: Array.from(SlotsCategory) as (keyof MainConfigProps)[],
+      components: SlotsCategory,
       visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
       visible: false,
-      components: Array.from(DeprecatedCategory) as (keyof MainConfigProps)[],
+      components: DeprecatedCategory,
     },
   },
   root: {
@@ -79,9 +78,7 @@ export const mainConfig: Config<MainConfigProps> = {
             flexDirection: "column",
             minHeight: "100vh",
           }}
-          disallow={Array.from(AdvancedCoreInfoCategory).filter(
-            (k) => k !== "Grid"
-          )}
+          disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
         />
       );
     },

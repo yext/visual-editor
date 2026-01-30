@@ -3,18 +3,18 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../../utils/themeConfigOptions";
-import { YextField } from "../../../editor/YextField";
-import { PageSection } from "../../atoms/pageSection";
-import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
-import { msg } from "../../../utils/i18n/platform";
-import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface TeamSectionProps {
   /**

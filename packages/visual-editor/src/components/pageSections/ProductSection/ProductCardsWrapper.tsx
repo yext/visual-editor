@@ -1,9 +1,9 @@
 import * as React from "react";
-import { ProductSectionType } from "../../../types/types";
-import { ComponentFields } from "../../../types/fields";
-import { msg } from "../../../utils/i18n/platform";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
-import { i18nComponentsInstance } from "../../../utils/i18n/components";
+import { ProductSectionType } from "../../../types/types.ts";
+import { ComponentFields } from "../../../types/fields.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import {
   ComponentConfig,
   ComponentData,

@@ -1,6 +1,6 @@
-import { Body, BodyProps } from "./body";
-import { RichText } from "../../types/types";
-import { useBackground } from "../../hooks/useBackground";
+import { Body, BodyProps } from "./body.tsx";
+import { RichText } from "../../types/types.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
 import "./maybeRTF.css";
 
 export interface MaybeRTFProps extends Record<string, any> {

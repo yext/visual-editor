@@ -7,7 +7,7 @@ import {
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 
 export const ctaTypeOptions = () => {
   return [

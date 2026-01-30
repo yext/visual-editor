@@ -4,11 +4,11 @@ import {
   Image as ImageComponent,
   ImageType,
 } from "@yext/pages-components";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { themeManagerCn } from "../../utils/cn";
-import { useDocument } from "../../hooks/useDocument";
-import { AssetImageType, TranslatableAssetImage } from "../../types/images";
-import { TranslatableString } from "../../types/types";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { AssetImageType, TranslatableAssetImage } from "../../types/images.ts";
+import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 
 export interface ImageProps {

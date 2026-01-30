@@ -1,8 +1,8 @@
-import { BackgroundStyle, HeadingLevel } from "../../utils/themeConfigOptions";
-import { themeManagerCn } from "../../utils/cn";
+import { BackgroundStyle, HeadingLevel } from "../../utils/themeConfigOptions.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { normalizeThemeColor } from "../../utils/normalizeThemeColor";
+import { normalizeThemeColor } from "../../utils/normalizeThemeColor.ts";
 
 // Define the variants for the heading component
 export const headingVariants = cva("components", {

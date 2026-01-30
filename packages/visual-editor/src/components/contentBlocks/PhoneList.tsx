@@ -1,18 +1,18 @@
-import { backgroundColors } from "../../utils/themeConfigOptions";
-import { EntityField } from "../../editor/EntityField";
-import { i18nComponentsInstance } from "../../utils/i18n/components";
-import { msg, pt } from "../../utils/i18n/platform";
-import { PhoneAtom } from "../atoms/phone";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { resolveDataFromParent } from "../../editor/ParentData";
-import { useDocument } from "../../hooks/useDocument";
-import { YextField } from "../../editor/YextField";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { PhoneAtom } from "../atoms/phone.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextField } from "../../editor/YextField.tsx";
 import {
   defaultPhoneDataProps,
   PhoneDataFields,
   PhoneStyleFields,
   PhoneProps,
-} from "./Phone";
+} from "./Phone.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 

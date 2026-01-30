@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "nodenext",
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "types": ["vite/client", "node"],
     "allowImportingTsExtensions": true,
     "allowJs": true,
@@ -12,6 +12,7 @@
     "removeComments": false,
     "emitDeclarationOnly": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -19,16 +20,10 @@
     "strict": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@yext/visual-editor": ["./src/index.ts"]
-    }
+    "resolveJsonModule": true
   },
   "include": [
     "src",
-    "index.d.ts",
-    ".eslintrc.json",
     "src/components/testing/componentTests.d.ts"
   ],
   "exclude": [

@@ -9,20 +9,20 @@ import {
 import {
   backgroundColors,
   BackgroundStyle,
-} from "../../utils/themeConfigOptions";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
-import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types";
-import { ImageWrapperProps } from "../contentBlocks/image/Image";
-import { msg } from "../../utils/i18n/platform";
-import { PageSection, PageSectionProps } from "../atoms/pageSection";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { useOverflow } from "../../hooks/useOverflow";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { YextField } from "../../editor/YextField";
+} from "../../utils/themeConfigOptions.ts";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { EnhancedTranslatableCTA, TranslatableCTA } from "../../types/types.ts";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useOverflow } from "../../hooks/useOverflow.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
+import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
 
 export interface PrimaryHeaderSlotProps {
   styles: {

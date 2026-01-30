@@ -1,16 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { FaRegEnvelope } from "react-icons/fa";
-import { useDocument } from "../../hooks/useDocument";
-import { EntityField } from "../../editor/EntityField";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { CTA } from "../atoms/cta";
-import { YextField } from "../../editor/YextField";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { msg, pt } from "../../utils/i18n/platform";
-import { Background } from "../atoms/background";
-import { backgroundColors } from "../../utils/themeConfigOptions";
-import { resolveDataFromParent } from "../../editor/ParentData";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { CTA } from "../atoms/cta.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { Background } from "../atoms/background.tsx";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 export interface EmailsProps {
   data: {

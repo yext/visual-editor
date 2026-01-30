@@ -1,5 +1,5 @@
-import { Migration } from "../../utils/migrate";
-import { getDefaultRTF } from "../../editor/TranslatableRichTextField";
+import { Migration } from "../../utils/migrate.ts";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 
 export const productVariants: Migration = {
   ProductSection: {

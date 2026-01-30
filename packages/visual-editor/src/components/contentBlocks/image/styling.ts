@@ -1,6 +1,6 @@
 import { Fields } from "@puckeditor/core";
-import { YextField } from "../../../editor/YextField";
-import { msg } from "../../../utils/i18n/platform";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
 
 /** Props for displaying an image */
 export interface ImageStylingProps {

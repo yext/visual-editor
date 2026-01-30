@@ -1,15 +1,15 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField";
-import { AssetImageType, TranslatableAssetImage } from "../../types/images";
-import { msg } from "../../utils/i18n/platform";
-import { useDocument } from "../../hooks/useDocument";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { MaybeLink } from "../atoms/maybeLink";
-import { Image } from "../atoms/image";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
+import { YextField } from "../../editor/YextField.tsx";
+import { AssetImageType, TranslatableAssetImage } from "../../types/images.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { Image } from "../atoms/image.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
-import { ImageStylingFields } from "../contentBlocks/image/styling";
+import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 
 export interface FooterLogoSlotProps {
   data: {

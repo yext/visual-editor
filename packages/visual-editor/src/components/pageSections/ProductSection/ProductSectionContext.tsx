@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from "react";
-import { BackgroundStyle } from "../../../utils/themeConfigOptions";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";

@@ -1,11 +1,11 @@
 import React from "react";
-import { useDocument, useEntityFields } from "../hooks";
-import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields";
+import { useDocument, useEntityFields } from "../hooks/index.ts";
+import { RenderEntityFieldFilter } from "../internal/utils/getFilteredEntityFields.ts";
 import {
   getFieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
-import { pt, resolveComponentData } from "../utils";
+import { pt, resolveComponentData } from "../utils/index.ts";
 import {
   Command,
   CommandEmpty,

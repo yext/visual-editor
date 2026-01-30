@@ -1,9 +1,9 @@
-import { themeManagerCn } from "../../../utils/cn";
-import { Background } from "../../atoms/background";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { Background } from "../../atoms/background.tsx";
 import { PuckComponent } from "@puckeditor/core";
-import { PromoMedia } from "./PromoMedia";
-import { PromoContent, promoContentParentCn } from "./PromoContent";
-import { PromoVariantProps } from "./PromoSection";
+import { PromoMedia } from "./PromoMedia.tsx";
+import { PromoContent, promoContentParentCn } from "./PromoContent.tsx";
+import { PromoVariantProps } from "./PromoSection.tsx";
 
 export const CompactPromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles, slots } = props;

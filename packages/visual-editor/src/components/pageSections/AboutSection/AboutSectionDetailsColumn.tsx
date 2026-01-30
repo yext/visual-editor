@@ -7,47 +7,47 @@ import {
   PuckComponent,
 } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
-import { Body } from "../../atoms/body";
-import { EntityField } from "../../../editor/EntityField";
-import { FooterSocialLinksSlotProps } from "../../footer/FooterSocialLinksSlot";
-import { Heading } from "../../atoms/heading";
-import { HeadingLevel } from "../../../utils/themeConfigOptions";
-import { i18nComponentsInstance } from "../../../utils/i18n/components";
-import { msg, pt } from "../../../utils/i18n/platform";
-import { resolveComponentData } from "../../../utils/resolveComponentData";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
-import { StreamDocument } from "../../../utils/types/StreamDocument";
-import { TranslatableString } from "../../../types/types";
-import { useDocument } from "../../../hooks/useDocument";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
-import { YextField } from "../../../editor/YextField";
+import { Body } from "../../atoms/body.tsx";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import { FooterSocialLinksSlotProps } from "../../footer/FooterSocialLinksSlot.tsx";
+import { Heading } from "../../atoms/heading.tsx";
+import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import { TranslatableString } from "../../../types/types.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 import {
   HoursStatus,
   HoursStatusProps,
   hoursStatusWrapperFields,
-} from "../../contentBlocks/HoursStatus";
-import { Phone, PhoneProps, PhoneFields } from "../../contentBlocks/Phone";
-import { Emails, EmailsProps, EmailsFields } from "../../contentBlocks/Emails";
+} from "../../contentBlocks/HoursStatus.tsx";
+import { Phone, PhoneProps, PhoneFields } from "../../contentBlocks/Phone.tsx";
+import { Emails, EmailsProps, EmailsFields } from "../../contentBlocks/Emails.tsx";
 import {
   TextList,
   TextListProps,
   textListFields,
-} from "../../contentBlocks/TextList";
+} from "../../contentBlocks/TextList.tsx";
 import {
   FooterSocialLinksSlot,
   FooterSocialLinksSlotFields,
-} from "../../footer/FooterSocialLinksSlot";
+} from "../../footer/FooterSocialLinksSlot.tsx";
 import {
   addressFields,
   Address,
   AddressProps,
   resolveAddressFields,
-} from "../../contentBlocks/Address";
+} from "../../contentBlocks/Address.tsx";
 import {
   HoursTableProps,
   hoursTableFields,
   HoursTable,
-} from "../../contentBlocks/HoursTable";
+} from "../../contentBlocks/HoursTable.tsx";
 
 export type AboutSectionDetailsColumnProps = {
   sections: DetailSection[];

@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars";
-import { useDocument } from "../../../hooks/useDocument";
-import { themeManagerCn } from "../../../utils/cn";
-import { HeroVariantProps } from "../HeroSection";
+import { getAggregateRating, ReviewStars } from "../../atoms/reviewStars.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { HeroVariantProps } from "../HeroSection.tsx";
 import { PuckComponent } from "@puckeditor/core";
 
 // Shared styling for the various parent containers of HeroContent

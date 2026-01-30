@@ -1,8 +1,8 @@
-import { normalizeLocalesInObject } from "../normalizeLocale";
-import { StreamDocument } from "../types/StreamDocument";
-import { getLocationPath, LocationDocument } from "./getLocationPath";
-import { resolveUrlFromPathInfo } from "./resolveUrlFromPathInfo";
-import { legacyResolveUrlTemplate } from "./legacyResolveUrlTemplate";
+import { normalizeLocalesInObject } from "../normalizeLocale.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
+import { getLocationPath, LocationDocument } from "./getLocationPath.ts";
+import { resolveUrlFromPathInfo } from "./resolveUrlFromPathInfo.ts";
+import { legacyResolveUrlTemplate } from "./legacyResolveUrlTemplate.ts";
 
 type urlResolverProps = {
   streamDocument: StreamDocument;

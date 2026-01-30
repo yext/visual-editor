@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isDeepEqual } from "./deepEqual"; // Import the function
+import { isDeepEqual } from "./deepEqual.ts"; // Import the function
 
 describe("isDeepEqual", () => {
   // --- Primitives Tests ---

@@ -61,7 +61,6 @@ import {
   ProfessionalHeroSection,
   ProfessionalHeroSectionProps,
 } from "../pageSections/ProfessionalHeroSection.tsx";
-import { PageSectionCategory } from "./PageSectionCategoryList";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -85,60 +84,26 @@ export interface PageSectionCategoryProps {
 }
 
 export const PageSectionCategoryComponents = {
-  get AboutSection() {
-    return AboutSection;
-  },
-  get BannerSection() {
-    return BannerSection;
-  },
-  get BreadcrumbsSection() {
-    return BreadcrumbsSection;
-  },
-  get CoreInfoSection() {
-    return CoreInfoSection;
-  },
-  get EventSection() {
-    return EventSection;
-  },
-  get FAQSection() {
-    return FAQSection;
-  },
-  get HeroSection() {
-    return HeroSection;
-  },
-  get InsightSection() {
-    return InsightSection;
-  },
-  get NearbyLocationsSection() {
-    return NearbyLocationsSection;
-  },
-  get PhotoGallerySection() {
-    return PhotoGallerySection;
-  },
-  get ProductSection() {
-    return ProductSection;
-  },
-  get ProfessionalHeroSection() {
-    return ProfessionalHeroSection;
-  },
-  get PromoSection() {
-    return PromoSection;
-  },
-  get ReviewsSection() {
-    return ReviewsSection;
-  },
-  get StaticMapSection() {
-    return StaticMapSection;
-  },
-  get TeamSection() {
-    return TeamSection;
-  },
-  get TestimonialSection() {
-    return TestimonialSection;
-  },
-  get VideoSection() {
-    return VideoSection;
-  },
+  AboutSection,
+  BannerSection,
+  BreadcrumbsSection,
+  CoreInfoSection,
+  EventSection,
+  FAQSection,
+  HeroSection,
+  InsightSection,
+  NearbyLocationsSection,
+  PhotoGallerySection,
+  ProductSection,
+  ProfessionalHeroSection,
+  PromoSection,
+  ReviewsSection,
+  StaticMapSection,
+  TeamSection,
+  TestimonialSection,
+  VideoSection,
 };
 
-export { PageSectionCategory };
+export const PageSectionCategory = Object.keys(
+  PageSectionCategoryComponents
+) as (keyof PageSectionCategoryProps)[];

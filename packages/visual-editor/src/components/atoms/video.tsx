@@ -1,4 +1,4 @@
-import { themeManagerCn } from "../../utils/cn";
+import { themeManagerCn } from "../../utils/cn.ts";
 
 export type VideoAtomProps = {
   youTubeEmbedUrl: string;

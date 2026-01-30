@@ -10,18 +10,18 @@ import {
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../../utils/themeConfigOptions";
-import { YextField } from "../../../editor/YextField";
-import { Background } from "../../atoms/background";
-import { TestimonialStruct } from "../../../types/types";
-import { msg } from "../../../utils/i18n/platform";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText";
-import { BodyTextProps } from "../../contentBlocks/BodyText";
-import { deepMerge } from "../../../utils/themeResolver";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
-import { i18nComponentsInstance } from "../../../utils/i18n/components";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
-import { TimestampProps } from "../../contentBlocks/Timestamp";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { TestimonialStruct } from "../../../types/types.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 

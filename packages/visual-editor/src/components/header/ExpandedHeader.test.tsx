@@ -6,12 +6,12 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { act, render as reactRender, waitFor } from "@testing-library/react";
-import { BannerSection } from "../pageSections/Banner";
-import { ExpandedHeader } from "./ExpandedHeader";
-import { migrate } from "../../utils/migrate";
-import { migrationRegistry } from "../migrations/migrationRegistry";
-import { SlotsCategoryComponents } from "../categories/SlotsCategory";
-import { VisualEditorProvider } from "../../utils/VisualEditorProvider";
+import { BannerSection } from "../pageSections/Banner.tsx";
+import { ExpandedHeader } from "./ExpandedHeader.tsx";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import { defaultBannerProps } from "../pageSections/Banner.tsx";

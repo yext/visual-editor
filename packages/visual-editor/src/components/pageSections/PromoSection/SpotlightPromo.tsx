@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { PageSection } from "../../atoms/pageSection";
-import { useDocument } from "../../../hooks/useDocument";
-import { Background } from "../../atoms/background";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { getImageUrl } from "@yext/pages-components";
-import { PromoContent, promoContentParentCn } from "./PromoContent";
+import { PromoContent, promoContentParentCn } from "./PromoContent.tsx";
 import { PuckComponent } from "@puckeditor/core";
-import { PromoVariantProps } from "./PromoSection";
+import { PromoVariantProps } from "./PromoSection.tsx";
 
 export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles } = props;

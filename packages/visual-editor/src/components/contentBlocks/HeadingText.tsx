@@ -1,19 +1,19 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { useDocument } from "../../hooks/useDocument";
-import { EntityField } from "../../editor/EntityField";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { Heading, HeadingProps } from "../atoms/heading";
-import { YextField } from "../../editor/YextField";
-import { TranslatableString } from "../../types/types";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { pt, msg } from "../../utils/i18n/platform";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { Heading, HeadingProps } from "../atoms/heading.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { pt, msg } from "../../utils/i18n/platform.ts";
 import {
   ThemeOptions,
   HeadingLevel,
   BackgroundStyle,
-} from "../../utils/themeConfigOptions";
-import { resolveDataFromParent } from "../../editor/ParentData";
+} from "../../utils/themeConfigOptions.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
 
 export type HeadingTextProps = {

@@ -10,16 +10,16 @@ import "pure-react-carousel/dist/react-carousel.es.css";
 import {
   backgroundColors,
   BackgroundStyle,
-} from "../../../utils/themeConfigOptions";
-import { PageSection } from "../../atoms/pageSection";
-import { YextField } from "../../../editor/YextField";
-import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
-import { msg } from "../../../utils/i18n/platform";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText";
+} from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {

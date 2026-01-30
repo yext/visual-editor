@@ -2,23 +2,23 @@ import * as React from "react";
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../../utils/themeConfigOptions";
-import { YextField } from "../../../editor/YextField";
-import { msg } from "../../../utils/i18n/platform";
-import { Background } from "../../atoms/background";
-import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";
-import { BodyTextProps } from "../../contentBlocks/BodyText";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText";
-import { ImageWrapperProps } from "../../contentBlocks/image/Image";
-import { InsightStruct, TranslatableRichText } from "../../../types/types";
-import { deepMerge } from "../../../utils/themeResolver";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { Background } from "../../atoms/background.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { InsightStruct, TranslatableRichText } from "../../../types/types.ts";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 
 const defaultInsight = {
   image: {

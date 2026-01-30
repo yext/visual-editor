@@ -6,19 +6,19 @@ import {
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
-} from "../../../utils/themeConfigOptions";
-import { Body } from "../../atoms/body";
-import { msg, pt, usePlatformTranslation } from "../../../utils/i18n/platform";
-import { resolveComponentData } from "../../../utils/resolveComponentData";
-import { useDocument } from "../../../hooks/useDocument";
-import { YextField } from "../../../editor/YextField";
+} from "../../../utils/themeConfigOptions.ts";
+import { Body } from "../../atoms/body.tsx";
+import { msg, pt, usePlatformTranslation } from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 import {
   getPreferredDistanceUnit,
   toKilometers,
-} from "../../../utils/i18n/distance";
-import { parseDocument, fetchNearbyLocations } from "./utils";
-import { NearbyLocationCard } from "./NearbyLocationCard";
-import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers";
+} from "../../../utils/i18n/distance.ts";
+import { parseDocument, fetchNearbyLocations } from "./utils.ts";
+import { NearbyLocationCard } from "./NearbyLocationCard.tsx";
+import { useTemplateMetadata } from "../../../internal/hooks/useMessageReceivers.ts";
 import { MapPinOff } from "lucide-react";
 
 export type NearbyLocationCardsWrapperProps = {

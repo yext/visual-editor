@@ -1,9 +1,9 @@
 import { PuckComponent } from "@puckeditor/core";
-import { PageSection } from "../../atoms/pageSection";
-import { themeManagerCn } from "../../../utils/cn";
-import { PromoVariantProps } from "./PromoSection";
-import { PromoMedia } from "./PromoMedia";
-import { PromoContent } from "./PromoContent";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { PromoVariantProps } from "./PromoSection.tsx";
+import { PromoMedia } from "./PromoMedia.tsx";
+import { PromoContent } from "./PromoContent.tsx";
 
 export const ClassicPromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles, slots } = props;

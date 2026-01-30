@@ -10,21 +10,21 @@ import {
   backgroundColors,
   BackgroundStyle,
   HeadingLevel,
-} from "../../../utils/themeConfigOptions";
-import { BodyTextProps } from "../../contentBlocks/BodyText";
-import { Button } from "../../../internal/puck/ui/button";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText";
-import { msg } from "../../../utils/i18n/platform";
-import { PageSection } from "../../atoms/pageSection";
-import { VisibilityWrapper } from "../../atoms/visibilityWrapper";
-import { YextField } from "../../../editor/YextField";
+} from "../../../utils/themeConfigOptions.ts";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { Button } from "../../../internal/puck/ui/button.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 import { useTranslation } from "react-i18next";
 import { FaChevronDown } from "react-icons/fa";
 import {
   AboutSectionDetailsColumnProps,
   defaultAboutSectionProps,
-} from "./AboutSectionDetailsColumn";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+} from "./AboutSectionDetailsColumn.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 const placeholderText = {
   en: {

@@ -1,14 +1,14 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField";
-import { AssetImageType } from "../../types/images";
-import { msg, pt } from "../../utils/i18n/platform";
-import { MaybeLink } from "../atoms/maybeLink";
-import { Image } from "../atoms/image";
-import { useDocument } from "../../hooks/useDocument";
-import { resolveComponentData } from "../../utils/resolveComponentData";
+import { YextField } from "../../editor/YextField.tsx";
+import { AssetImageType } from "../../types/images.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { Image } from "../atoms/image.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useTranslation } from "react-i18next";
-import { ImageStylingFields } from "../contentBlocks/image/styling";
+import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 
 export interface FooterUtilityImagesSlotProps {
   data: {

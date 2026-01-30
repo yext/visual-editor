@@ -1,18 +1,18 @@
 import React from "react";
 import { PuckContext } from "@puckeditor/core";
 import { HoursType, AddressType, Address } from "@yext/pages-components";
-import { Background } from "../../atoms/background";
-import { Heading } from "../../atoms/heading";
-import { HeadingLevel } from "../../../utils/themeConfigOptions";
-import { HoursStatusAtom } from "../../atoms/hoursStatus";
-import { MaybeLink } from "../../atoms/maybeLink";
-import { PhoneAtom } from "../../atoms/phone";
-import { useTemplateProps } from "../../../hooks/useDocument";
-import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper";
+import { Background } from "../../atoms/background.tsx";
+import { Heading } from "../../atoms/heading.tsx";
+import { HeadingLevel } from "../../../utils/themeConfigOptions.ts";
+import { HoursStatusAtom } from "../../atoms/hoursStatus.tsx";
+import { MaybeLink } from "../../atoms/maybeLink.tsx";
+import { PhoneAtom } from "../../atoms/phone.tsx";
+import { useTemplateProps } from "../../../hooks/useDocument.tsx";
+import { NearbyLocationCardsWrapperProps } from "./NearbyLocationsCardsWrapper.tsx";
 import {
   mergeMeta,
   resolveUrlTemplate,
-} from "../../../utils/urls/resolveUrlTemplate";
+} from "../../../utils/urls/resolveUrlTemplate.ts";
 
 /** A single card for the Nearby Locations Section */
 type NearbyLocationCardProps = {

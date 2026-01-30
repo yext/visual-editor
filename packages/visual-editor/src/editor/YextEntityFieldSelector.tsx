@@ -41,7 +41,7 @@ import { useTranslation } from "react-i18next";
 import { EmbeddedFieldStringInputFromEntity } from "./EmbeddedFieldStringInput.tsx";
 import { ComboboxOption } from "../internal/puck/ui/Combobox.tsx";
 import { DATE_TIME_CONSTANT_CONFIG } from "../internal/puck/components/DateTimeSelector.tsx";
-import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection";
+import { FAQ_SECTION_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/FAQsSection.tsx";
 import {
   getFieldsForSelector,
   type YextEntityField,

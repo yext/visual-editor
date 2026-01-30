@@ -11,26 +11,26 @@ import {
   BackgroundStyle,
   HeadingLevel,
   ThemeOptions,
-} from "../../utils/themeConfigOptions";
-import { YextField } from "../../editor/YextField";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper";
-import { msg } from "../../utils/i18n/platform";
-import { getAnalyticsScopeHash } from "../../utils/applyAnalytics";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { themeManagerCn } from "../../utils/cn";
-import { CTAVariant } from "../atoms/cta";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
-import { HoursStatusProps } from "../contentBlocks/HoursStatus";
-import { ImageWrapperProps } from "../contentBlocks/image/Image";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { TranslatableAssetImage, AssetImageType } from "../../types/images";
+} from "../../utils/themeConfigOptions.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { CTAVariant } from "../atoms/cta.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { TranslatableAssetImage, AssetImageType } from "../../types/images.ts";
 import { ClassicHero } from "./heroVariants/ClassicHero.js";
 import { CompactHero } from "./heroVariants/CompactHero.js";
 import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
-import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface HeroData {
   backgroundImage: YextEntityField<

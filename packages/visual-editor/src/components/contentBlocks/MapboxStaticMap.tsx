@@ -1,13 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { Coordinate } from "@yext/pages-components";
-import { EntityField } from "../../editor/EntityField";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { useDocument } from "../../hooks/useDocument";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { YextField } from "../../editor/YextField";
-import { msg, pt } from "../../utils/i18n/platform";
-import { themeManagerCn } from "../../utils/cn";
-import { Body } from "../atoms/body";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { Body } from "../atoms/body.tsx";
 import {
   ComponentConfig,
   Field,

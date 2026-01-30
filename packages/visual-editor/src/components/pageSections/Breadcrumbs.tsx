@@ -1,20 +1,20 @@
 import { useTranslation } from "react-i18next";
-import { useTemplateProps } from "../../hooks/useDocument";
-import { MaybeLink } from "../atoms/maybeLink";
-import { PageSection } from "../atoms/pageSection";
-import { YextField } from "../../editor/YextField";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper";
-import { msg } from "../../utils/i18n/platform";
-import { TranslatableString } from "../../types/types";
+import { useTemplateProps } from "../../hooks/useDocument.tsx";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { TranslatableString } from "../../types/types.ts";
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../utils/themeConfigOptions";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { getDirectoryParents } from "../../utils/schema/helpers";
+} from "../../utils/themeConfigOptions.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { getDirectoryParents } from "../../utils/schema/helpers.ts";
 import { ComponentConfig, Fields } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface BreadcrumbsData {
   /**

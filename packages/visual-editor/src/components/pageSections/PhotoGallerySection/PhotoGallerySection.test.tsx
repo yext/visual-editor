@@ -6,11 +6,11 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import { PhotoGallerySection } from "./PhotoGallerySection";
-import { migrate } from "../../../utils/migrate";
-import { migrationRegistry } from "../../migrations/migrationRegistry";
-import { VisualEditorProvider } from "../../../utils/VisualEditorProvider";
-import { SlotsCategoryComponents } from "../../categories/SlotsCategory";
+import { PhotoGallerySection } from "./PhotoGallerySection.tsx";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 

@@ -1,22 +1,22 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import { Background } from "../atoms/background";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
-import { MaybeLink } from "../atoms/maybeLink";
-import { useTemplateProps } from "../../hooks/useDocument";
-import { YextField } from "../../editor/YextField";
-import { msg } from "../../utils/i18n/platform";
+import { Background } from "../atoms/background.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { useTemplateProps } from "../../hooks/useDocument.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
 import {
   backgroundColors,
   BackgroundStyle,
-} from "../../utils/themeConfigOptions";
-import { HoursStatusProps } from "../contentBlocks/HoursStatus";
-import { PhoneProps } from "../contentBlocks/Phone";
-import { deepMerge } from "../../utils/themeResolver";
+} from "../../utils/themeConfigOptions.ts";
+import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
+import { PhoneProps } from "../contentBlocks/Phone.tsx";
+import { deepMerge } from "../../utils/themeResolver.ts";
 import { Address } from "@yext/pages-components";
-import { useCardContext } from "../../hooks/useCardContext";
-import { useGetCardSlots } from "../../hooks/useGetCardSlots";
+import { useCardContext } from "../../hooks/useCardContext.tsx";
+import { useGetCardSlots } from "../../hooks/useGetCardSlots.tsx";
 import React from "react";
-import { resolveUrlTemplateOfChild } from "../../utils/urls/resolveUrlTemplate";
+import { resolveUrlTemplateOfChild } from "../../utils/urls/resolveUrlTemplate.ts";
 
 export const defaultDirectoryCardSlotData = (
   id: string,

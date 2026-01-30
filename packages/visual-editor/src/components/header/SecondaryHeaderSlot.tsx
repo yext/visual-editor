@@ -1,18 +1,18 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import { YextField } from "../../editor/YextField";
-import { msg } from "../../utils/i18n/platform";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../utils/themeConfigOptions";
-import { useDocument } from "../../hooks/useDocument";
-import { PageSection, PageSectionProps } from "../atoms/pageSection";
+} from "../../utils/themeConfigOptions.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,
-} from "./languageDropdown";
-import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks";
-import { pt } from "../../utils/i18n/platform";
+} from "./languageDropdown.tsx";
+import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
+import { pt } from "../../utils/i18n/platform.ts";
 
 export interface SecondaryHeaderSlotProps {
   data: {

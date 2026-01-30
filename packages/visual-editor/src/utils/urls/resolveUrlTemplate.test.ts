@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   resolveUrlTemplate,
   resolveUrlTemplateOfChild,
-} from "./resolveUrlTemplate";
-import { StreamDocument } from "../types/StreamDocument";
+} from "./resolveUrlTemplate.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 const mockStreamDocument: StreamDocument = {
   id: "123",

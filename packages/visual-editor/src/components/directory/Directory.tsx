@@ -1,18 +1,18 @@
-import { useTemplateProps } from "../../hooks/useDocument";
+import { useTemplateProps } from "../../hooks/useDocument.tsx";
 import {
   backgroundColors,
   BackgroundStyle,
-} from "../../utils/themeConfigOptions";
-import { PageSection } from "../atoms/pageSection";
-import { msg } from "../../utils/i18n/platform";
-import { YextField } from "../../editor/YextField";
-import { Background } from "../atoms/background";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
-import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs";
+} from "../../utils/themeConfigOptions.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { Background } from "../atoms/background.tsx";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { BreadcrumbsSectionProps } from "../pageSections/Breadcrumbs.tsx";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { DirectoryList } from "./DirectoryWrapper";
-import { isDirectoryGrid } from "../../utils/directory/utils";
+import { DirectoryList } from "./DirectoryWrapper.tsx";
+import { isDirectoryGrid } from "../../utils/directory/utils.ts";
 
 export interface DirectoryStyles {
   /**

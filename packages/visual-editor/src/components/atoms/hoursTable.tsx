@@ -1,7 +1,7 @@
 import "./hours.css";
 import { HoursTable, HoursTableProps } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
-import { themeManagerCn } from "../../utils/cn";
+import { themeManagerCn } from "../../utils/cn.ts";
 
 export interface HoursTableAtomProps
   extends Omit<

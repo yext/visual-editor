@@ -7,11 +7,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
-import { Background } from "../atoms/background";
-import { BackgroundStyle } from "../../utils/themeConfigOptions";
-import { Body } from "../atoms/body";
-import { fetchLocalesToPathsForEntity } from "../../utils/api/fetchLocalesToPathsForEntity";
-import { useDocument } from "../../hooks/useDocument";
+import { Background } from "../atoms/background.tsx";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { Body } from "../atoms/body.tsx";
+import { fetchLocalesToPathsForEntity } from "../../utils/api/fetchLocalesToPathsForEntity.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import {
   Accordion,
   AccordionContent,

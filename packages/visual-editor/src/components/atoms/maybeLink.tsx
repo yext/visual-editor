@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CTAVariant, CTA } from "./cta";
+import { CTAVariant, CTA } from "./cta.tsx";
 
 export type MaybeLinkProps = {
   href?: string;

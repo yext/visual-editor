@@ -1,23 +1,23 @@
 import * as React from "react";
-import { PageSection } from "../atoms/pageSection";
-import { Heading, HeadingProps } from "../atoms/heading";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { Heading, HeadingProps } from "../atoms/heading.tsx";
 import {
   BackgroundStyle,
   ThemeOptions,
   backgroundColors,
-} from "../../utils/themeConfigOptions";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { OtherCategory } from "../categories/OtherCategoryList";
-import { PageSectionCategory } from "../categories/PageSectionCategoryList";
-import { useDocument } from "../../hooks/useDocument";
-import { YextField } from "../../editor/YextField";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper";
-import { TranslatableString } from "../../types/types";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { msg } from "../../utils/i18n/platform";
+} from "../../utils/themeConfigOptions.ts";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { OtherCategory } from "../categories/OtherCategory.tsx";
+import { PageSectionCategory } from "../categories/PageSectionCategory.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export type SectionContainerProps = {
   background?: BackgroundStyle;

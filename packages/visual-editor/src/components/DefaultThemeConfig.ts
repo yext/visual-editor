@@ -1,12 +1,12 @@
-import { ThemeConfig } from "../utils/themeResolver";
+import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
   defaultFonts,
   FontRegistry,
   getFontWeightOptions,
   constructFontSelectOptions,
-} from "../utils/fonts/visualEditorFonts";
-import { ThemeOptions } from "../utils/themeConfigOptions";
-import { msg } from "../utils/i18n/platform";
+} from "../utils/fonts/visualEditorFonts.ts";
+import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { msg } from "../utils/i18n/platform.ts";
 
 export function createDefaultThemeConfig(
   customFonts: FontRegistry = {}

@@ -1,13 +1,13 @@
 import { ComponentConfig, Fields, CustomField } from "@puckeditor/core";
-import { msg } from "../../utils/i18n/platform";
-import { YextField } from "../../editor/YextField";
-import { useDocument } from "../../hooks/useDocument";
+import { msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import React from "react";
 import {
   useSendMessageToParent,
   useReceiveMessage,
   TARGET_ORIGINS,
-} from "../hooks/useMessage";
+} from "../hooks/useMessage.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
 
 export interface AdvancedSettingsProps {

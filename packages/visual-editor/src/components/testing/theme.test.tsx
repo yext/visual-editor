@@ -9,12 +9,12 @@ import {
   Data,
   DefaultRootProps,
 } from "@puckeditor/core";
-import { migrationRegistry } from "../migrations/migrationRegistry";
-import { OtherCategoryComponents } from "../categories/OtherCategory";
-import { PageSectionCategoryComponents } from "../categories/PageSectionCategory";
-import { SlotsCategoryComponents } from "../categories/SlotsCategory";
-import { VisualEditorProvider } from "../../utils/VisualEditorProvider";
-import { migrate } from "../../utils/migrate";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { OtherCategoryComponents } from "../categories/OtherCategory.tsx";
+import { PageSectionCategoryComponents } from "../categories/PageSectionCategory.tsx";
+import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
+import { migrate } from "../../utils/migrate.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 import {
   testHours,

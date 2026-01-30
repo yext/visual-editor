@@ -1,6 +1,6 @@
 import { assert, describe, it, expect } from "vitest";
-import { legacyResolveUrlTemplate } from "./legacyResolveUrlTemplate";
-import { StreamDocument } from "../types/StreamDocument";
+import { legacyResolveUrlTemplate } from "./legacyResolveUrlTemplate.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 const mockStreamDocument: StreamDocument = {
   name: "Yext",

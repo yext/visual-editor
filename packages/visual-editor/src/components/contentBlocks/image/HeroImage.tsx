@@ -1,20 +1,20 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
-import { useDocument } from "../../../hooks/useDocument";
-import { resolveComponentData } from "../../../utils/resolveComponentData";
-import { EntityField } from "../../../editor/EntityField";
-import { Image, imgSizesHelper } from "../../atoms/image";
-import { msg, pt } from "../../../utils/i18n/platform";
-import { AssetImageType, TranslatableAssetImage } from "../../../types/images";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import { Image, imgSizesHelper } from "../../atoms/image.tsx";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { AssetImageType, TranslatableAssetImage } from "../../../types/images.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
-import { updateFields } from "../../pageSections/HeroSection";
+import { updateFields } from "../../pageSections/HeroSection.tsx";
 import {
   imageDefaultProps,
   ImageWrapperFields,
   ImageWrapperProps,
 } from "./Image.tsx";
-import { EmptyImageState } from "./EmptyImageState";
+import { EmptyImageState } from "./EmptyImageState.tsx";
 
 export interface HeroImageProps extends ImageWrapperProps {
   /** @internal from the parent Hero Section Component */

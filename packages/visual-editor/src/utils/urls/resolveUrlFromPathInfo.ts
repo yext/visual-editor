@@ -1,6 +1,6 @@
-import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField";
-import { normalizeSlug } from "../slugifier";
-import { StreamDocument } from "../types/StreamDocument";
+import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField.ts";
+import { normalizeSlug } from "../slugifier.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 // Resolves a URL from the streamDocument's __.pathInfo.template
 export const resolveUrlFromPathInfo = (

@@ -1,8 +1,8 @@
 import { FaPhone } from "react-icons/fa";
-import { CTA } from "./cta";
-import { Body } from "./body";
+import { CTA } from "./cta.tsx";
+import { Body } from "./body.tsx";
 import { parsePhoneNumber } from "awesome-phonenumber";
-import { BackgroundStyle } from "../../utils/themeConfigOptions";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 
 export type PhoneAtomProps = {
   phoneNumber: string;

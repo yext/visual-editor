@@ -10,21 +10,21 @@ import {
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../../utils/themeConfigOptions";
-import { YextField } from "../../../editor/YextField";
-import { Background } from "../../atoms/background";
-import { PersonStruct } from "../../../types/types";
-import { msg } from "../../../utils/i18n/platform";
-import { ImageWrapperProps } from "../../contentBlocks/image/Image";
-import { HeadingTextProps } from "../../contentBlocks/HeadingText";
-import { BodyTextProps } from "../../contentBlocks/BodyText";
-import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper";
-import { deepMerge } from "../../../utils/themeResolver";
-import { ImgSizesByBreakpoint } from "../../atoms/image";
-import { resolveYextEntityField } from "../../../utils/resolveYextEntityField";
-import { i18nComponentsInstance } from "../../../utils/i18n/components";
-import { EmailsProps } from "../../contentBlocks/Emails";
-import { PhoneListProps } from "../../contentBlocks/PhoneList";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { PersonStruct } from "../../../types/types.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { EmailsProps } from "../../contentBlocks/Emails.tsx";
+import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";

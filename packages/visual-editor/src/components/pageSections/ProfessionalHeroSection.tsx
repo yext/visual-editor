@@ -4,26 +4,26 @@ import {
   backgroundColors,
   BackgroundStyle,
   ThemeOptions,
-} from "../../utils/themeConfigOptions";
-import { YextField } from "../../editor/YextField";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper";
-import { msg } from "../../utils/i18n/platform";
-import { getAnalyticsScopeHash } from "../../utils/applyAnalytics";
-import { themeManagerCn } from "../../utils/cn";
-import { HeadingTextProps } from "../contentBlocks/HeadingText";
-import { BodyTextProps } from "../contentBlocks/BodyText";
-import { ImageWrapperProps } from "../contentBlocks/image/Image";
-import { CTAWrapperProps } from "../contentBlocks/CtaWrapper";
-import { AddressProps } from "../contentBlocks/Address";
-import { PhoneListProps } from "../contentBlocks/PhoneList";
-import { EmailsProps } from "../contentBlocks/Emails";
-import { ReviewStars, getAggregateRating } from "../atoms/reviewStars";
-import { useDocument } from "../../hooks/useDocument";
-import { PageSection } from "../atoms/pageSection";
-import { resolveComponentData } from "../../utils/resolveComponentData";
+} from "../../utils/themeConfigOptions.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../contentBlocks/BodyText.tsx";
+import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
+import { CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
+import { AddressProps } from "../contentBlocks/Address.tsx";
+import { PhoneListProps } from "../contentBlocks/PhoneList.tsx";
+import { EmailsProps } from "../contentBlocks/Emails.tsx";
+import { ReviewStars, getAggregateRating } from "../atoms/reviewStars.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface ProfessionalHeroStyles {
   /**

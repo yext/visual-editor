@@ -3,16 +3,16 @@ import {
   ImageStylingFields,
   ImageStylingProps,
 } from "../../contentBlocks/image/styling.ts";
-import { EntityField } from "../../../editor/EntityField";
-import { Image } from "../../atoms/image";
-import { themeManagerCn } from "../../../utils/cn";
-import { useBackground } from "../../../hooks/useBackground";
-import { useDocument } from "../../../hooks/useDocument";
-import { YextEntityField } from "../../../editor/YextEntityFieldSelector";
-import { YextField } from "../../../editor/YextField";
-import { msg, pt } from "../../../utils/i18n/platform";
-import { resolveComponentData } from "../../../utils/resolveComponentData";
-import { AssetImageType, TranslatableAssetImage } from "../../../types/images";
+import { EntityField } from "../../../editor/EntityField.tsx";
+import { Image } from "../../atoms/image.tsx";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { useBackground } from "../../../hooks/useBackground.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { AssetImageType, TranslatableAssetImage } from "../../../types/images.ts";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { PLACEHOLDER } from "./PhotoGallerySection.tsx";
 import React, { cloneElement } from "react";
@@ -28,7 +28,7 @@ import {
 import "pure-react-carousel/dist/react-carousel.es.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { ImagePlus } from "lucide-react";
-import { Button } from "../../../internal/puck/ui/button";
+import { Button } from "../../../internal/puck/ui/button.tsx";
 import { updateFields } from "../HeroSection.tsx";
 
 export interface PhotoGalleryWrapperProps {

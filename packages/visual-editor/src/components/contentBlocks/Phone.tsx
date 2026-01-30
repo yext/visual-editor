@@ -1,15 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields } from "@puckeditor/core";
-import { useDocument } from "../../hooks/useDocument";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { EntityField } from "../../editor/EntityField";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { PhoneAtom } from "../atoms/phone";
-import { msg, pt } from "../../utils/i18n/platform";
-import { YextField } from "../../editor/YextField";
-import { TranslatableString } from "../../types/types";
-import { backgroundColors } from "../../utils/themeConfigOptions";
-import { resolveDataFromParent } from "../../editor/ParentData";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { PhoneAtom } from "../atoms/phone.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 /** The props for the Phone component */
 export interface PhoneProps {

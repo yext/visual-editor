@@ -30,26 +30,26 @@ import {
   FieldValueFilter,
 } from "@yext/search-headless-react";
 import React from "react";
-import { BasicSelector } from "../editor/BasicSelector";
-import { Button } from "../internal/puck/ui/button";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { Button } from "../internal/puck/ui/button.tsx";
 import {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
-} from "../utils/searchHeadlessConfig";
+} from "../utils/searchHeadlessConfig.ts";
 import {
   DynamicOption,
   DynamicOptionsSelectorType,
-} from "../editor/DynamicOptionsSelector";
-import { Heading } from "./atoms/heading";
+} from "../editor/DynamicOptionsSelector.tsx";
+import { Heading } from "./atoms/heading.tsx";
 import {
   Location,
   LocatorResultCard,
   LocatorResultCardProps,
-} from "./LocatorResultCard";
-import { msg } from "../utils/i18n/platform";
-import { useDocument } from "../hooks/useDocument";
-import { YextField } from "../editor/YextField";
-import { getPreferredDistanceUnit, toKilometers } from "../utils/i18n/distance";
+} from "./LocatorResultCard.tsx";
+import { msg } from "../utils/i18n/platform.ts";
+import { useDocument } from "../hooks/useDocument.tsx";
+import { YextField } from "../editor/YextField.tsx";
+import { getPreferredDistanceUnit, toKilometers } from "../utils/i18n/distance.ts";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   LocatorResultCardFields,
@@ -64,7 +64,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { useCollapse } from "react-collapsed";
-import { getValueFromQueryString } from "../utils/urlQueryString";
+import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";

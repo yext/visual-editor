@@ -1,17 +1,17 @@
 import {
   backgroundColors,
   BackgroundStyle,
-} from "../../utils/themeConfigOptions";
-import { msg } from "../../utils/i18n/platform";
-import { PageSection } from "../atoms/pageSection";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper";
-import { YextField } from "../../editor/YextField";
+} from "../../utils/themeConfigOptions.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { YextField } from "../../editor/YextField.tsx";
 import {
   MapboxStaticMapComponent,
   mapStyleField,
 } from "../contentBlocks/MapboxStaticMap.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface StaticMapData {
   /**

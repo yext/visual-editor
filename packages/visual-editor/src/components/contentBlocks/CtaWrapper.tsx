@@ -4,17 +4,17 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
-import { BackgroundStyle } from "../../utils/themeConfigOptions";
-import { CTA, CTAVariant } from "../atoms/cta";
-import { EnhancedTranslatableCTA, PresetImageType } from "../../types/types";
-import { EntityField } from "../../editor/EntityField";
-import { YextEntityField } from "../../editor/YextEntityFieldSelector";
-import { YextField } from "../../editor/YextField";
-import { msg, pt } from "../../utils/i18n/platform";
-import { resolveComponentData } from "../../utils/resolveComponentData";
-import { resolveDataFromParent } from "../../editor/ParentData";
-import { themeManagerCn } from "../../utils/cn";
-import { useDocument } from "../../hooks/useDocument";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { CTA, CTAVariant } from "../atoms/cta.tsx";
+import { EnhancedTranslatableCTA, PresetImageType } from "../../types/types.ts";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import { useTranslation } from "react-i18next";
 import {
   ctaTypeOptions,
