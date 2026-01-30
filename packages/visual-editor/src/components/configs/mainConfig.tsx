@@ -47,24 +47,24 @@ export const mainConfig: Config<MainConfigProps> = {
   categories: {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
-      components: PageSectionCategory,
+      components: Array.from(PageSectionCategory) as (keyof MainConfigProps)[],
     },
     coreInformation: {
       title: pt("categories.coreInformation", "Core Information"),
-      components: AdvancedCoreInfoCategory,
+      components: Array.from(AdvancedCoreInfoCategory) as (keyof MainConfigProps)[],
     },
     other: {
       title: pt("categories.other", "Other"),
-      components: OtherCategory,
+      components: Array.from(OtherCategory) as (keyof MainConfigProps)[],
     },
     slots: {
-      components: SlotsCategory,
+      components: Array.from(SlotsCategory) as (keyof MainConfigProps)[],
       visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page
     deprecatedComponents: {
       visible: false,
-      components: DeprecatedCategory,
+      components: Array.from(DeprecatedCategory) as (keyof MainConfigProps)[],
     },
   },
   root: {
@@ -77,7 +77,7 @@ export const mainConfig: Config<MainConfigProps> = {
             flexDirection: "column",
             minHeight: "100vh",
           }}
-          disallow={AdvancedCoreInfoCategory.filter((k) => k !== "Grid")}
+          disallow={Array.from(AdvancedCoreInfoCategory).filter((k) => k !== "Grid")}
         />
       );
     },

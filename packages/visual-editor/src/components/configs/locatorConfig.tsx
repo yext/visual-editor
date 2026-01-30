@@ -42,7 +42,10 @@ export const locatorConfig: Config<LocatorConfigProps> = {
   categories: {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
-      components: [...LocatorCategory, "BannerSection"],
+      components: [
+        ...Array.from(LocatorCategory),
+        "BannerSection",
+      ] as (keyof LocatorConfigProps)[],
     },
     slots: {
       components: SlotsCategory,
@@ -54,7 +57,7 @@ export const locatorConfig: Config<LocatorConfigProps> = {
       components: DeprecatedCategory,
     },
     other: {
-      components: OtherCategory,
+      components: Array.from(OtherCategory) as (keyof LocatorConfigProps)[],
     },
   },
   root: {

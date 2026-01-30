@@ -31,5 +31,9 @@
     ".eslintrc.json",
     "src/components/testing/componentTests.d.ts"
   ],
-  "exclude": ["node_modules", "src/vite-plugin/templates/*"]
+  "exclude": [
+    "node_modules",
+    "src/vite-plugin/templates/*",
+    "src/components/testing/componentTests.tailwind.config.mjs"
+  ]
 }

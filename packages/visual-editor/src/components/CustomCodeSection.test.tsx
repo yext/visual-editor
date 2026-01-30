@@ -7,7 +7,7 @@ import {
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { CustomCodeSection } from "./CustomCodeSection";
 import { migrate } from "../utils/migrate";
-import { migrationRegistry } from "migrations/migrationRegistry";
+import { migrationRegistry } from "./migrations/migrationRegistry";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";

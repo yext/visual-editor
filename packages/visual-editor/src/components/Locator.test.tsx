@@ -12,7 +12,7 @@ import {
   waitFor,
 } from "@testing-library/react";
 import { migrate } from "../utils/migrate";
-import { migrationRegistry } from "migrations/migrationRegistry";
+import { migrationRegistry } from "./migrations/migrationRegistry";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider";
 import { LocatorComponent } from "./Locator";
 import { Render, Config } from "@puckeditor/core";

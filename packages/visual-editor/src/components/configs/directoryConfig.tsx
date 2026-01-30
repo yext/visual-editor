@@ -43,7 +43,10 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
   categories: {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
-      components: [...DirectoryCategory, "BannerSection"],
+      components: [
+        ...Array.from(DirectoryCategory),
+        "BannerSection",
+      ] as (keyof DirectoryConfigProps)[],
     },
     slots: {
       components: SlotsCategory,
@@ -55,7 +58,7 @@ export const directoryConfig: Config<DirectoryConfigProps> = {
       components: DeprecatedCategory,
     },
     other: {
-      components: OtherCategory,
+      components: Array.from(OtherCategory) as (keyof DirectoryConfigProps)[],
     },
   },
 
