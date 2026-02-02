@@ -447,7 +447,7 @@ export interface LocatorProps {
     latitude: string;
     longitude: string;
   };
-  pageHeading: {
+  pageHeading?: {
     title: TranslatableString;
     color?: BackgroundStyle;
   };
@@ -1104,9 +1104,9 @@ const LocatorInternal = ({
   const hasFilterModalToggle =
     openNowButton || showDistanceOptions || hasFacetOptions;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
-  const resolvedHeading =
-    resolveComponentData(pageHeading?.title, i18n.language, streamDocument) ??
-    DEFAULT_TITLE;
+  const resolvedHeading = pageHeading?.title
+    ? resolveComponentData(pageHeading.title, i18n.language, streamDocument)
+    : DEFAULT_TITLE;
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
