@@ -45,7 +45,7 @@ import {
   getFieldsForSelector,
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
-import { ComboboxOption } from "../internal/types/combobox.ts";
+import { type ComboboxOption } from "../internal/types/combobox.ts";
 
 const devLogger = new DevLogger();
 

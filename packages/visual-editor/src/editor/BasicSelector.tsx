@@ -1,12 +1,11 @@
 import React from "react";
 import { Field, FieldLabel } from "@puckeditor/core";
-import { Combobox } from "../internal/puck/ui/Combobox.tsx";
+import {
+  Combobox,
+} from "../internal/puck/ui/Combobox.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 import { Button } from "../internal/puck/ui/button.tsx";
-import {
-  ComboboxOption,
-  ComboboxOptionGroup,
-} from "../internal/types/combobox.ts";
+import { type ComboboxOption, type ComboboxOptionGroup } from "../internal/types/combobox.ts";
 
 type BasicSelectorProps = {
   label?: string;
