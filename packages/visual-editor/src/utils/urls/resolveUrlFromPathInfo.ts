@@ -21,27 +21,18 @@ export const resolveUrlFromPathInfo = (
 
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
-  ).replace(/\/+/g, "/");
+  )
+    .replace(/\/+/g, "/") // Collapses multiple slashes into one
+    .replace(/^\//, ""); // Removes a leading slash if it exists
 
   const isPrimary = isPrimaryLocale(streamDocument);
   const shouldIncludeLocalePrefix =
     !isPrimary ||
     (isPrimary && pathInfoJson?.includeLocalePrefixForPrimaryLocale);
 
-  console.log(
-    "Resolved URL:",
-    locale,
-    normalizedSlug,
-    isPrimary,
-    shouldIncludeLocalePrefix,
-    relativePrefixToRoot
-  );
-
-  return normalizeSlug(
+  return (
     relativePrefixToRoot +
-      (shouldIncludeLocalePrefix
-        ? `${locale}/${normalizedSlug}`
-        : normalizedSlug)
+    (shouldIncludeLocalePrefix ? `${locale}/${normalizedSlug}` : normalizedSlug)
   );
 };
 
