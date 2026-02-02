@@ -28,6 +28,15 @@ export const resolveUrlFromPathInfo = (
     !isPrimary ||
     (isPrimary && pathInfoJson?.includeLocalePrefixForPrimaryLocale);
 
+  console.log(
+    "Resolved URL:",
+    locale,
+    normalizedSlug,
+    isPrimary,
+    shouldIncludeLocalePrefix,
+    relativePrefixToRoot
+  );
+
   return normalizeSlug(
     relativePrefixToRoot +
       (shouldIncludeLocalePrefix
