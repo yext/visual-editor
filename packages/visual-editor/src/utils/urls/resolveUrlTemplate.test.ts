@@ -153,7 +153,7 @@ describe("resolveUrlTemplate", () => {
 });
 
 describe("resolveUrlTemplateOfChild", () => {
-  it("Uses sourceEntityPageSetTemplate for child URL", () => {
+  it("uses sourceEntityPageSetTemplate for child URL", () => {
     expect(
       resolveUrlTemplateOfChild(mockChildProfile, mockDMCityDocument, "")
     ).toBe("va/fairfax/2000-university-dr");
