@@ -21,8 +21,8 @@ const resolvers: Array<
     isChild,
   }: urlResolverProps) => string | undefined
 > = [
-  ({ streamDocument, relativePrefixToRoot }) =>
-    resolveUrlFromPathInfo(streamDocument, relativePrefixToRoot),
+  ({ streamDocument, relativePrefixToRoot, isChild }) =>
+    resolveUrlFromPathInfo(streamDocument, relativePrefixToRoot, isChild),
   ({ streamDocument, relativePrefixToRoot, isChild }) =>
     legacyResolveUrlTemplate(streamDocument, relativePrefixToRoot, isChild),
   ({ streamDocument, relativePrefixToRoot }) =>
