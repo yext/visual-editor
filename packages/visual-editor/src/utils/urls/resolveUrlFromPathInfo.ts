@@ -3,12 +3,20 @@ import { normalizeSlug } from "../slugifier";
 import { StreamDocument } from "../types/StreamDocument";
 
 // Resolves a URL from the streamDocument's __.pathInfo.template
+// or __.pathInfo.sourceEntityPageSetTemplate (if isChild is true).
 export const resolveUrlFromPathInfo = (
   streamDocument: StreamDocument,
-  relativePrefixToRoot: string = ""
+  relativePrefixToRoot: string = "",
+  isChild: boolean = false
 ): string | undefined => {
   const pathInfoJson = streamDocument.__?.pathInfo;
-  const urlTemplate = pathInfoJson?.template || "";
+
+  let urlTemplate;
+  if (isChild) {
+    urlTemplate = pathInfoJson?.sourceEntityPageSetTemplate || "";
+  } else {
+    urlTemplate = pathInfoJson?.template || "";
+  }
 
   if (!urlTemplate) {
     return;

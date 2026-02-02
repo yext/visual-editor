@@ -52,7 +52,9 @@ const mockChildProfile = {
   },
   __: {
     pathInfo: {
-      template: "[[address.region]]/[[address.city]]/[[address.line1]]",
+      sourceEntityPageSetTemplate:
+        "[[address.region]]/[[address.city]]/[[address.line1]]",
+      template: "",
       primaryLocale: "en",
     },
   },

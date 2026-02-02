@@ -25,5 +25,6 @@ export type PathInfoShape = {
   includeLocalePrefixForPrimaryLocale?: boolean;
   template?: string;
   breadcrumbTemplates?: string[];
+  sourceEntityPageSetTemplate?: string;
   [key: string]: any; // allow any other fields
 };
