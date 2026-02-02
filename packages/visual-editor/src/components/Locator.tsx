@@ -46,6 +46,7 @@ import {
   YextField,
   getPreferredDistanceUnit,
   toKilometers,
+  Body,
 } from "@yext/visual-editor";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
@@ -1093,8 +1094,12 @@ const LocatorInternal = ({
             customCssClasses={{
               focusedOption: "bg-gray-200 hover:bg-gray-200 block",
               option: "hover:bg-gray-100 px-4 py-3",
-              inputElement: "rounded-md p-4 h-11",
-              currentLocationButton: "h-7 w-7 text-palette-primary-dark",
+              inputElement:
+                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize",
+              currentLocationButton:
+                "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
+              label:
+                "font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
             }}
             showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
@@ -1113,10 +1118,12 @@ const LocatorInternal = ({
               />
               {hasFilterModalToggle && (
                 <button
-                  className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark"
                   onClick={() => setShowFilterModal((prev) => !prev)}
                 >
-                  {t("filter", "Filter")}
+                  <Body variant="sm" className="font-bold">
+                    {t("filter", "Filter")}
+                  </Body>
                   {<FaSlidersH />}
                 </button>
               )}
@@ -1173,7 +1180,7 @@ const LocatorInternal = ({
               onClick={handleSearchAreaClick}
               className="py-2 px-4 shadow-xl"
             >
-              {t("searchThisArea", "Search This Area")}
+              <Body>{t("searchThisArea", "Search This Area")}</Body>
             </Button>
           </div>
         )}
@@ -1197,21 +1204,21 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   if (resultCount === 0) {
     if (searchState === "not started") {
       return (
-        <div>
+        <Body>
           {t(
             "useOurLocatorToFindALocationNearYou",
             "Use our locator to find a location near you"
           )}
-        </div>
+        </Body>
       );
     } else if (searchState === "complete") {
       return (
-        <div>
+        <Body>
           {t("noResultsFoundForThisArea", "No results found for this area")}
-        </div>
+        </Body>
       );
     } else {
-      return <div></div>;
+      return <div />;
     }
   } else {
     if (filterDisplayName) {
@@ -1222,32 +1229,32 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
             ? selectedDistanceMiles
             : toKilometers(selectedDistanceMiles);
         return (
-          <div>
+          <Body>
             {t("locationsWithinDistanceOf", {
               count: resultCount,
               distance: distance,
               unit: t(unit, { count: distance }),
               name: filterDisplayName,
             })}
-          </div>
+          </Body>
         );
       } else {
         return (
-          <div>
+          <Body>
             {t("locationsNear", {
               count: resultCount,
               name: filterDisplayName,
             })}
-          </div>
+          </Body>
         );
       }
     } else {
       return (
-        <div>
+        <Body>
           {t("locationWithCount", {
             count: resultCount,
           })}
-        </div>
+        </Body>
       );
     }
   }
@@ -1289,9 +1296,9 @@ const Map: React.FC<MapProps> = ({
     return (
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
-          <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
+          <Body className="text-gray-700" variant="lg">
             {t("loadingMap", "Loading Map...")}
-          </span>
+          </Body>
         </div>
       </div>
     );
@@ -1388,9 +1395,9 @@ const FilterModal = (props: FilterModalProps) => {
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
-        <div className="font-bold">
+        <Body className="font-bold">
           {t("refineYourSearch", "Refine Your Search")}
-        </div>
+        </Body>
         <button
           className="text-palette-primary-dark"
           onClick={handleCloseModalClick}
@@ -1434,10 +1441,10 @@ const FilterModal = (props: FilterModalProps) => {
       </div>
       <div className="border-y border-gray-300 justify-center align-middle">
         <button
-          className="w-full py-4 text-center font-bold text-palette-primary-dark"
+          className="w-full py-4 text-center text-palette-primary-dark"
           onClick={handleClearFiltersClick}
         >
-          {t("clearAll", "Clear All")}
+          <Body className="font-bold">{t("clearAll", "Clear All")}</Body>
         </button>
       </div>
     </div>
@@ -1466,7 +1473,7 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
         className="w-full flex justify-between items-center"
         {...getToggleProps()}
       >
-        <div className="font-bold">{t("hours", "Hours")}</div>
+        <Body className="font-bold">{t("hours", "Hours")}</Body>
         <FaChevronUp className={iconClassName} />
       </button>
       <div className="flex flex-row gap-1" {...getCollapseProps()}>
@@ -1481,7 +1488,10 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
             }
             onChange={() => onChange(!isSelected)}
           />
-          <label htmlFor={openNowCheckBoxId}>{t("openNow", "Open Now")}</label>
+          <label htmlFor={openNowCheckBoxId}>
+            {" "}
+            <Body>{t("openNow", "Open Now")}</Body>
+          </label>
         </div>
       </div>
     </div>
@@ -1510,7 +1520,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
         className="w-full flex justify-between items-center"
         {...getToggleProps()}
       >
-        <div className="font-bold">{t("distance", "Distance")}</div>
+        <Body className="font-bold">{t("distance", "Distance")}</Body>
         <FaChevronUp className={iconClassName} />
       </button>
       <div {...getCollapseProps()}>
@@ -1533,9 +1543,9 @@ const DistanceFilter = (props: DistanceFilterProps) => {
                 )}
               </div>
             </button>
-            <div className="inline-flex">
+            <Body className="inline-flex">
               {`< ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
-            </div>
+            </Body>
           </div>
         ))}
       </div>
