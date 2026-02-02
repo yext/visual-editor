@@ -442,7 +442,7 @@ const tests: ComponentTest[] = [
     version: 36,
   },
   {
-    name: "version 56 with multiple nearby locations with site color 3",
+    name: "version 57 with multiple nearby locations with site color 3",
     document: {
       locale: "en",
       id: "1101-wilson-blvd",
@@ -531,7 +531,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 56,
+    version: 57,
   },
 ];
 
@@ -611,7 +611,7 @@ describe("NearbyLocationsSection", async () => {
         `NearbyLocationsSection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
       const results = await axe(container);
-      if (version === 56) {
+      if (version === 57) {
         console.warn(results);
       } else {
         expect(results).toHaveNoViolations();
@@ -622,7 +622,7 @@ describe("NearbyLocationsSection", async () => {
           `NearbyLocationsSection/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
         const results = await axe(container);
-        if (version === 56) {
+        if (version === 57) {
           console.warn(results);
         } else {
           expect(results).toHaveNoViolations();

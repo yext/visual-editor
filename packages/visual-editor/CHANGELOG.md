@@ -1,3 +1,11 @@
+#### 1.0.8 (2026-01-30)
+
+##### Bug Fixes
+
+- add title migration fallback ([#1014](https://github.com/yext/visual-editor/pull/1014)) ([7716ddea](https://github.com/yext/visual-editor/commit/7716ddea066fbf138d309e8c46a663cf28ab18b6))
+- product card image aspect ratios ([#1012](https://github.com/yext/visual-editor/pull/1012)) ([45e41726](https://github.com/yext/visual-editor/commit/45e41726159776bf4931c251a15ac2094c7b22ab))
+- theme is not disabled anymore ([#1011](https://github.com/yext/visual-editor/pull/1011)) ([ae80a367](https://github.com/yext/visual-editor/commit/ae80a367445115a08f6f6b00af06e70f0bd56217))
+
 #### 1.0.7 (2026-01-29)
 
 ##### Bug Fixes

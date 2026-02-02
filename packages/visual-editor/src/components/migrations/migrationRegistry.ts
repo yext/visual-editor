@@ -54,7 +54,8 @@ import { addDefaultLocatorAndDirectoryMetaFields } from "./0052_add_default_loca
 import { photoGalleryVariant } from "./0053_photo_gallery_variant.ts";
 import { productVariants } from "./0054_product_variants.ts";
 import { headerLinksUpdate } from "./0055_header_link_updates.ts";
-import { addDefaultLocatorPageTitle } from "./0056_add_default_locator_title.ts";
+import { emptyTitleFix } from "./0056_empty_title_fix.ts";
+import { addDefaultLocatorPageTitle } from "./0057_add_default_locator_title.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -117,5 +118,6 @@ export const migrationRegistry: MigrationRegistry = [
   photoGalleryVariant,
   productVariants,
   headerLinksUpdate,
+  emptyTitleFix,
   addDefaultLocatorPageTitle,
 ];

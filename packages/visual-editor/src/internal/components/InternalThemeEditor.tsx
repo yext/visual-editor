@@ -175,7 +175,7 @@ export const InternalThemeEditor = ({
           duplicate: false,
           delete: false,
           insert: false,
-          edit: false,
+          edit: true,
         }}
         plugins={[legacySidebar]}
         overrides={{
