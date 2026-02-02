@@ -35,6 +35,8 @@ const mockDMCityDocument: StreamDocument = {
     pathInfo: {
       template: "directory/[[id]]",
       primaryLocale: "en",
+      sourceEntityPageSetTemplate:
+        "[[address.region]]/[[address.city]]/[[address.line1]]",
     },
   },
   _pageset: JSON.stringify({
@@ -50,17 +52,6 @@ const mockChildProfile = {
     city: "Fairfax",
     region: "VA",
   },
-  __: {
-    pathInfo: {
-      sourceEntityPageSetTemplate:
-        "[[address.region]]/[[address.city]]/[[address.line1]]",
-      template: "",
-      primaryLocale: "en",
-    },
-  },
-  _pageset: JSON.stringify({
-    type: "ENTITY",
-  }),
 };
 
 describe("resolveUrlTemplate", () => {
@@ -162,7 +153,7 @@ describe("resolveUrlTemplate", () => {
 });
 
 describe("resolveUrlTemplateOfChild", () => {
-  it("resolves child profile URL using its own pathInfo template", () => {
+  it("Uses sourceEntityPageSetTemplate for child URL", () => {
     expect(
       resolveUrlTemplateOfChild(mockChildProfile, mockDMCityDocument, "")
     ).toBe("va/fairfax/2000-university-dr");
