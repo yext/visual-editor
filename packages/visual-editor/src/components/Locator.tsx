@@ -1092,10 +1092,11 @@ const LocatorInternal = ({
             placeholder={t("searchHere", "Search here...")}
             ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
             customCssClasses={{
+              filterSearchContainer: "font-body-fontFamily",
               focusedOption: "bg-gray-200 hover:bg-gray-200 block",
               option: "hover:bg-gray-100 px-4 py-3",
               inputElement:
-                "rounded-md p-4 h-11 font-body-fontWeight text-body-fontSize font-body-fontFamily placeholder:font-body-fontFamily",
+                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize",
               currentLocationButton:
                 "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
               label:
@@ -1132,7 +1133,8 @@ const LocatorInternal = ({
               <AppliedFilters
                 hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
                 customCssClasses={{
-                  removableFilter: "text-md font-normal mt-2 mb-0",
+                  removableFilter:
+                    "text-md font-normal mt-2 mb-0 font-body-fontFamily",
                   clearAllButton: "hidden",
                   appliedFiltersContainer: "mt-0 mb-0",
                 }}
@@ -1431,9 +1433,9 @@ const FilterModal = (props: FilterModalProps) => {
           <Facets
             customCssClasses={{
               divider: "bg-white",
-              titleLabel: "font-bold text-md",
+              titleLabel: "font-bold text-md font-body-fontFamily",
               optionInput: "h-4 w-4 accent-palette-primary-dark",
-              optionLabel: "text-md",
+              optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
               option: "space-x-4",
             }}
           />
