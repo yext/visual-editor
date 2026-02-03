@@ -1,40 +1,44 @@
 import * as React from "react";
 import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
+import { PromoSectionType } from "../../../types/types.ts";
 import {
-  PromoSectionType,
   backgroundColors,
   BackgroundStyle,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  getAnalyticsScopeHash,
-  ComponentFields,
+  ThemeOptions,
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { getAnalyticsScopeHash } from "../../../utils/applyAnalytics.ts";
+import { ComponentFields } from "../../../types/fields.ts";
+import {
   YextEntityField,
   YextEntityFieldSelector,
-  resolveYextEntityField,
-  BodyTextProps,
-  CTAWrapperProps,
-  HeadingTextProps,
-  ImageWrapperProps,
-  VideoProps,
-  i18nComponentsInstance,
-  getDefaultRTF,
-  themeManagerCn,
-  useDocument,
-  ThemeOptions,
+} from "../../../editor/YextEntityFieldSelector.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { VideoProps } from "../../contentBlocks/Video.tsx";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import {
   TranslatableAssetImage,
   AssetImageType,
-} from "@yext/visual-editor";
+} from "../../../types/images.ts";
 import { AnalyticsScopeProvider, ImageType } from "@yext/pages-components";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
-import { updateFields } from "../HeroSection";
-import { ClassicPromo } from "./ClassicPromo";
-import { SpotlightPromo } from "./SpotlightPromo";
-import { ImmersivePromo } from "./ImmersivePromo";
-import { CompactPromo } from "./CompactPromo";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { updateFields } from "../HeroSection.tsx";
+import { ClassicPromo } from "./ClassicPromo.tsx";
+import { SpotlightPromo } from "./SpotlightPromo.tsx";
+import { ImmersivePromo } from "./ImmersivePromo.tsx";
+import { CompactPromo } from "./CompactPromo.tsx";
 import { useTranslation } from "react-i18next";
-import { PromoEmptyState } from "./PromoEmptyState";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import { PromoEmptyState } from "./PromoEmptyState.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface PromoData {
   /**

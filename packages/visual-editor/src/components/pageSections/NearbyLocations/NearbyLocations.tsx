@@ -10,15 +10,15 @@ import {
 import {
   BackgroundStyle,
   backgroundColors,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  HeadingTextProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper";
-import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary";
+import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface NearbyLocationsSectionProps {
   /**

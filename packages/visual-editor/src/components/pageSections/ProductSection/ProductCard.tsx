@@ -1,22 +1,22 @@
 import * as React from "react";
 import {
   BackgroundStyle,
-  YextField,
   backgroundColors,
-  msg,
-  Background,
-  CTAWrapperProps,
-  BodyTextProps,
-  HeadingTextProps,
-  ImageWrapperProps,
-  ProductStruct,
-  deepMerge,
-  getDefaultRTF,
-  ImgSizesByBreakpoint,
-  themeManagerCn,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { Background } from "../../atoms/background.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { ProductStruct } from "../../../types/types.ts";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import {
   ComponentConfig,
   Fields,
@@ -27,7 +27,7 @@ import {
 } from "@puckeditor/core";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { useProductSectionContext } from "./ProductSectionContext.tsx";
 
 const defaultProduct = {

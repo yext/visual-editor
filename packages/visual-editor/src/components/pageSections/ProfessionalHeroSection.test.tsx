@@ -6,11 +6,9 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import {
-  ProfessionalHeroSection,
-  VisualEditorProvider,
-  SlotsCategoryComponents,
-} from "@yext/visual-editor";
+import { ProfessionalHeroSection } from "./ProfessionalHeroSection.tsx";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
+import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 

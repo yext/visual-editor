@@ -1,8 +1,8 @@
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { createUsePuck, useGetPuck } from "@puckeditor/core";
-import { AdvancedSettings } from "../../../internal/components/AdvancedSettings";
-import { msg, pt } from "../../../utils/i18n/platform";
+import { AdvancedSettings } from "../../../internal/components/AdvancedSettings.tsx";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 
 const usePuck = createUsePuck();
 

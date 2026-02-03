@@ -1,18 +1,14 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
-import {
-  YextField,
-  msg,
-  pt,
-  TranslatableString,
-  TranslatableCTA,
-  i18nComponentsInstance,
-  useDocument,
-  resolveComponentData,
-  CTA,
-  useBackground,
-  Body,
-} from "@yext/visual-editor";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { CTA } from "../atoms/cta.tsx";
+import { useBackground } from "../../hooks/useBackground.tsx";
+import { Body } from "../atoms/body.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 

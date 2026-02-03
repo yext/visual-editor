@@ -11,16 +11,14 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import {
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-  LocatorComponent,
-} from "@yext/visual-editor";
+import { injectTranslations } from "../utils/i18n/components";
+import { migrate } from "../utils/migrate.ts";
+import { migrationRegistry } from "./migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
+import { LocatorComponent } from "./Locator.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
-import mapboxPackageJson from "mapbox-gl/package.json";
-import { injectTranslations } from "../utils/i18n/components";
+import mapboxPackageJson from "mapbox-gl/package.json" with { type: "json" };
 
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations

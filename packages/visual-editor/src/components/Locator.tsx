@@ -30,24 +30,29 @@ import {
   FieldValueFilter,
 } from "@yext/search-headless-react";
 import React from "react";
+import { BasicSelector } from "../editor/BasicSelector.tsx";
+import { Button } from "../internal/puck/ui/button.tsx";
 import {
-  BasicSelector,
-  Button,
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
+} from "../utils/searchHeadlessConfig.ts";
+import {
   DynamicOption,
   DynamicOptionsSelectorType,
-  Heading,
+} from "../editor/DynamicOptionsSelector.tsx";
+import { Heading } from "./atoms/heading.tsx";
+import {
   Location,
   LocatorResultCard,
   LocatorResultCardProps,
-  msg,
-  useDocument,
-  YextField,
+} from "./LocatorResultCard.tsx";
+import { msg } from "../utils/i18n/platform.ts";
+import { useDocument } from "../hooks/useDocument.tsx";
+import { YextField } from "../editor/YextField.tsx";
+import {
   getPreferredDistanceUnit,
   toKilometers,
-  Body,
-} from "@yext/visual-editor";
+} from "../utils/i18n/distance.ts";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   LocatorResultCardFields,
@@ -62,7 +67,8 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { useCollapse } from "react-collapsed";
-import { getValueFromQueryString } from "../utils/urlQueryString";
+import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
+import { Body } from "./atoms/body.tsx";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";

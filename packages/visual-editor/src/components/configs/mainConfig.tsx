@@ -1,30 +1,30 @@
 import { DropZone, Config } from "@puckeditor/core";
-import { pt } from "@yext/visual-editor";
+import { pt } from "../../utils/i18n/platform.ts";
 import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
   type DeprecatedCategoryProps,
-} from "../categories/DeprecatedCategory";
+} from "../categories/DeprecatedCategory.tsx";
 import {
   PageSectionCategory,
   PageSectionCategoryComponents,
   type PageSectionCategoryProps,
-} from "../categories/PageSectionCategory";
+} from "../categories/PageSectionCategory.tsx";
 import {
   OtherCategory,
   OtherCategoryComponents,
   type OtherCategoryProps,
-} from "../categories/OtherCategory";
+} from "../categories/OtherCategory.tsx";
 import {
   AdvancedCoreInfoCategory,
   AdvancedCoreInfoCategoryComponents,
   type AdvancedCoreInfoCategoryProps,
-} from "../categories/AdvancedCoreInfoCategory";
+} from "../categories/AdvancedCoreInfoCategory.tsx";
 import {
   SlotsCategory,
   SlotsCategoryComponents,
   SlotsCategoryProps,
-} from "../categories";
+} from "../categories/SlotsCategory.tsx";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,

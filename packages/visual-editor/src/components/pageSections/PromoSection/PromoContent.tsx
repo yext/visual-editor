@@ -1,5 +1,5 @@
 import { PuckComponent } from "@puckeditor/core";
-import { PromoVariantProps } from "./PromoSection";
+import { PromoVariantProps } from "./PromoSection.tsx";
 
 /** Shared styling for the various parent containers of PromoContent  */
 export const promoContentParentCn = (styles: PromoVariantProps["styles"]) => {

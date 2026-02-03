@@ -6,12 +6,10 @@ import {
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { render as reactRender } from "@testing-library/react";
-import {
-  BannerSection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { BannerSection } from "./Banner.tsx";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 

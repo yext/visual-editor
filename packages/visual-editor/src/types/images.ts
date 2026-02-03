@@ -1,5 +1,5 @@
 import { ImageType } from "@yext/pages-components";
-import { TranslatableString } from "./types";
+import { TranslatableString } from "./types.ts";
 
 /** Describes an image's aspect ratio. */
 type ImageAspectRatio = {

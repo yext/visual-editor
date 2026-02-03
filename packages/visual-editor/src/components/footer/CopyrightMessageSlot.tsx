@@ -1,13 +1,11 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
-import {
-  YextField,
-  msg,
-  useDocument,
-  resolveComponentData,
-  TranslatableString,
-  Body,
-} from "@yext/visual-editor";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { TranslatableString } from "../../types/types.ts";
+import { Body } from "../atoms/body.tsx";
 import { useTranslation } from "react-i18next";
 
 export interface CopyrightMessageSlotProps {
