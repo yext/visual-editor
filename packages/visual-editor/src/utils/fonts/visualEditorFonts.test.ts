@@ -6,6 +6,7 @@ import {
   defaultFonts,
   constructGoogleFontLinkTags,
   extractCustomFontPreloadMap,
+  extractCustomFontFilesFromCss,
 } from "./visualEditorFonts.ts";
 
 describe("extractInUseFontFamilies", () => {
@@ -276,15 +277,61 @@ describe("extractCustomFontPreloadMap", () => {
       "--fontWeight-h2-fontWeight": "700",
     };
 
+    const customFontFilesMap = {
+      "Custom Static": {
+        "700": "customstatic-bold.woff2",
+      },
+      "Custom Variable": {
+        "400": "customvariable-regular.woff2",
+      },
+    };
+
     const result = extractCustomFontPreloadMap(
       themeData,
       customFonts,
-      defaultFonts
+      defaultFonts,
+      customFontFilesMap
     );
 
     expect(result).toEqual({
-      "Custom Static": { kind: "static", weights: ["700"] },
-      "Custom Variable": { kind: "variable", weights: ["400"] },
+      "Custom Static": {
+        kind: "static",
+        weights: ["700"],
+        files: { "700": "customstatic-bold.woff2" },
+      },
+      "Custom Variable": {
+        kind: "variable",
+        weights: ["400"],
+        files: { "400": "customvariable-regular.woff2" },
+      },
+    });
+  });
+});
+
+describe("extractCustomFontFilesFromCss", () => {
+  it("should map font weights to woff2 filenames", () => {
+    const cssText = `
+      @font-face {
+        font-family: 'Christmas Lights';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('/y-fonts/christmaslights-regular.woff2');
+      }
+      @font-face {
+        font-family: 'Christmas Lights';
+        font-style: normal;
+        font-weight: bold;
+        font-display: swap;
+        src: url('/y-fonts/christmaslights-bold.woff2');
+      }
+    `;
+
+    const result = extractCustomFontFilesFromCss(cssText, "Christmas Lights");
+
+    expect(result).toEqual({
+      "400": "christmaslights-regular.woff2",
+      "700": "christmaslights-bold.woff2",
     });
   });
 });

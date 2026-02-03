@@ -60,6 +60,7 @@ export type FontLinkData = {
 export type CustomFontPreloadEntry = {
   kind: "static" | "variable";
   weights: string[];
+  files?: Record<string, string>;
 };
 
 export type CustomFontPreloadMap = Record<string, CustomFontPreloadEntry>;
@@ -119,6 +120,61 @@ export const generateGoogleFontLinkData = (
 export const normalizeFontFileName = (fontName: string) =>
   fontName.replaceAll(" ", "").toLowerCase();
 
+const normalizeFontWeightToken = (weight: string) => {
+  const trimmed = weight.trim().toLowerCase();
+  if (trimmed === "normal") {
+    return "400";
+  }
+  if (trimmed === "bold") {
+    return "700";
+  }
+  const numeric = Number.parseInt(trimmed, 10);
+  return Number.isNaN(numeric) ? trimmed : String(numeric);
+};
+
+export const extractCustomFontFilesFromCss = (
+  cssText: string,
+  fontFamily: string
+): Record<string, string> => {
+  const filesByWeight: Record<string, string> = {};
+  const fontFaceBlocks = cssText.match(/@font-face\s*{[^}]*}/g) ?? [];
+  const normalizedFamily = fontFamily.trim().toLowerCase();
+
+  fontFaceBlocks.forEach((block) => {
+    const familyMatch = block.match(/font-family:\s*([^;]+);/i);
+    if (!familyMatch) {
+      return;
+    }
+    const familyValue = familyMatch[1]
+      .trim()
+      .replace(/^['"]|['"]$/g, "")
+      .toLowerCase();
+    if (familyValue !== normalizedFamily) {
+      return;
+    }
+
+    const weightMatch = block.match(/font-weight:\s*([^;]+);/i);
+    if (!weightMatch) {
+      return;
+    }
+    const weight = normalizeFontWeightToken(weightMatch[1]);
+
+    const urlMatch = block.match(/url\(([^)]+\.woff2[^)]*)\)/i);
+    if (!urlMatch) {
+      return;
+    }
+    const rawUrl = urlMatch[1].trim().replace(/^['"]|['"]$/g, "");
+    const fileName = rawUrl.split("/").pop();
+    if (!fileName) {
+      return;
+    }
+
+    filesByWeight[weight] = fileName;
+  });
+
+  return filesByWeight;
+};
+
 export const generateCustomFontLinkData = (
   customFonts: string[],
   relativePrefixToRoot: string
@@ -134,7 +190,8 @@ export const generateCustomFontLinkData = (
 export const extractCustomFontPreloadMap = (
   themeData: ThemeData,
   customFonts: FontRegistry,
-  googleFonts: FontRegistry
+  googleFonts: FontRegistry,
+  customFontFilesMap: Record<string, Record<string, string>> = {}
 ): CustomFontPreloadMap => {
   const fontFamiliesBySection = new Map<string, string>();
   const fontWeightsBySection = new Map<string, string>();
@@ -183,6 +240,13 @@ export const extractCustomFontPreloadMap = (
       preloadMap[fontFamily] = { kind, weights: [] };
     }
     preloadMap[fontFamily].weights.push(weight);
+    const filesForFont = customFontFilesMap[fontFamily];
+    if (filesForFont?.[weight]) {
+      if (!preloadMap[fontFamily].files) {
+        preloadMap[fontFamily].files = {};
+      }
+      preloadMap[fontFamily].files![weight] = filesForFont[weight];
+    }
   }
 
   for (const entry of Object.values(preloadMap)) {
@@ -203,8 +267,14 @@ export const generateCustomFontPreloadLinkData = (
   for (const [fontFamily, entry] of Object.entries(preloadMap)) {
     const normalizedName = normalizeFontFileName(fontFamily);
     entry.weights.forEach((weight) => {
+      const fileName =
+        entry.files?.[weight] ?? `${normalizedName}-${weight}.woff2`;
+      const trimmed = fileName.startsWith("/") ? fileName.slice(1) : fileName;
+      const href = trimmed.startsWith("y-fonts/")
+        ? `${relativePrefixToRoot}${trimmed}`
+        : `${relativePrefixToRoot}y-fonts/${trimmed}`;
       links.push({
-        href: `${relativePrefixToRoot}y-fonts/${normalizedName}-${weight}.woff2`,
+        href,
         rel: "preload",
         as: "font",
         type: "font/woff2",

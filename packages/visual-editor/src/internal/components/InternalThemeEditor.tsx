@@ -17,6 +17,8 @@ import { updateThemeInEditor } from "../../utils/applyTheme.ts";
 import {
   defaultFonts,
   extractCustomFontPreloadMap,
+  extractCustomFontFilesFromCss,
+  normalizeFontFileName,
 } from "../../utils/fonts/visualEditorFonts.ts";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { v4 as uuidv4 } from "uuid";
@@ -70,10 +72,56 @@ export const InternalThemeEditor = ({
   // wrapped in useCallback to maintain internal state. Refs can be used
   // to pass parent state into the overrides.
   const themeHistoriesRef = useRef(themeHistories);
+  const customFontFilesRef = useRef<Record<string, Record<string, string>>>({});
 
   useEffect(() => {
     themeHistoriesRef.current = themeHistories;
   }, [themeHistories]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadCustomFontFiles = async () => {
+      if (!templateMetadata.customFonts) {
+        customFontFilesRef.current = {};
+        return;
+      }
+
+      const entries = Object.keys(templateMetadata.customFonts);
+      const nextMap: Record<string, Record<string, string>> = {};
+
+      await Promise.all(
+        entries.map(async (fontFamily) => {
+          const normalizedName = normalizeFontFileName(fontFamily);
+          try {
+            const response = await fetch(`./y-fonts/${normalizedName}.css`);
+            if (!response.ok) {
+              return;
+            }
+            const cssText = await response.text();
+            const filesByWeight = extractCustomFontFilesFromCss(
+              cssText,
+              fontFamily
+            );
+            if (Object.keys(filesByWeight).length > 0) {
+              nextMap[fontFamily] = filesByWeight;
+            }
+          } catch (error) {
+            console.warn("Failed to load custom font CSS", fontFamily, error);
+          }
+        })
+      );
+
+      if (!cancelled) {
+        customFontFilesRef.current = nextMap;
+      }
+    };
+
+    loadCustomFontFiles();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [templateMetadata.customFonts]);
 
   const handlePublishTheme = async () => {
     devLogger.logFunc("saveThemeData");
@@ -107,7 +155,8 @@ export const InternalThemeEditor = ({
       const customFontPreloadMap = extractCustomFontPreloadMap(
         nextThemeValues,
         templateMetadata.customFonts,
-        defaultFonts
+        defaultFonts,
+        customFontFilesRef.current
       );
       if (Object.keys(customFontPreloadMap).length > 0) {
         nextThemeValues.__customFontPreload = customFontPreloadMap;
