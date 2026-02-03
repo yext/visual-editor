@@ -266,9 +266,17 @@ export const generateCustomFontPreloadLinkData = (
 
   for (const [fontFamily, entry] of Object.entries(preloadMap)) {
     const normalizedName = normalizeFontFileName(fontFamily);
+    const fallbackFileForVariable =
+      entry.kind === "variable" &&
+      entry.files &&
+      Object.keys(entry.files).length === 1
+        ? Object.values(entry.files)[0]
+        : undefined;
     entry.weights.forEach((weight) => {
       const fileName =
-        entry.files?.[weight] ?? `${normalizedName}-${weight}.woff2`;
+        entry.files?.[weight] ??
+        fallbackFileForVariable ??
+        `${normalizedName}-${weight}.woff2`;
       const trimmed = fileName.startsWith("/") ? fileName.slice(1) : fileName;
       const href = trimmed.startsWith("y-fonts/")
         ? `${relativePrefixToRoot}${trimmed}`

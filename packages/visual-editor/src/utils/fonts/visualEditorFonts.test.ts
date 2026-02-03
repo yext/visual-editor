@@ -7,6 +7,7 @@ import {
   constructGoogleFontLinkTags,
   extractCustomFontPreloadMap,
   extractCustomFontFilesFromCss,
+  generateCustomFontPreloadLinkData,
 } from "./visualEditorFonts.ts";
 
 describe("extractInUseFontFamilies", () => {
@@ -333,5 +334,36 @@ describe("extractCustomFontFilesFromCss", () => {
       "400": "christmaslights-regular.woff2",
       "700": "christmaslights-bold.woff2",
     });
+  });
+});
+
+describe("generateCustomFontPreloadLinkData", () => {
+  it("should reuse the single variable font file for any weight", () => {
+    const preloadMap = {
+      "Variable Font": {
+        kind: "variable",
+        weights: ["300", "600"],
+        files: { "100": "variablefont.woff2" },
+      },
+    };
+
+    const result = generateCustomFontPreloadLinkData(preloadMap, "./");
+
+    expect(result).toEqual([
+      {
+        href: "./y-fonts/variablefont.woff2",
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+      {
+        href: "./y-fonts/variablefont.woff2",
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      },
+    ]);
   });
 });
