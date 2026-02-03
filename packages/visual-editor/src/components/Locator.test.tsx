@@ -20,6 +20,7 @@ import {
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import mapboxPackageJson from "mapbox-gl/package.json";
+import { injectTranslations } from "../utils/i18n/components";
 
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
@@ -538,6 +539,8 @@ describe("Locator", async () => {
         document
       );
 
+      const translations = await injectTranslations(document);
+
       const { container } = reactRender(
         <>
           <script
@@ -549,7 +552,7 @@ describe("Locator", async () => {
             rel="stylesheet"
             href={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.css`}
           />
-          <VisualEditorProvider templateProps={{ document }}>
+          <VisualEditorProvider templateProps={{ document, translations }}>
             <Render config={puckConfig} data={data} />
           </VisualEditorProvider>
         </>
