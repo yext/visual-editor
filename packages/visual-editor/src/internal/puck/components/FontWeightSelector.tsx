@@ -39,6 +39,18 @@ export const FontWeightSelector = ({
   }, [options]);
 
   useEffect(() => {
+    if (!availableOptions.length) {
+      return;
+    }
+
+    const isValid = availableOptions.some((option) => option.value === value);
+    if (!isValid) {
+      // If the existing font weight value is no longer valid, reset to the first available option
+      onChange(availableOptions[0].value);
+    }
+  }, [availableOptions, onChange, value]);
+
+  useEffect(() => {
     let styleObserver: MutationObserver | null = null;
     let iframeObserver: MutationObserver | null = null;
 
