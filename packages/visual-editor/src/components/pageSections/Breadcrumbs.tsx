@@ -127,6 +127,9 @@ export const BreadcrumbsComponent = ({
     streamDocument
   );
 
+  console.log("streamDocument:", streamDocument);
+  console.log("Breadcrumbs:", breadcrumbs);
+
   if (!breadcrumbs?.length) {
     return <PageSection></PageSection>;
   }
