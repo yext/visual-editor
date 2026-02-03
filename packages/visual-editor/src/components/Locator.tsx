@@ -1436,7 +1436,7 @@ const FilterModal = (props: FilterModalProps) => {
               titleLabel: "font-bold text-md font-body-fontFamily",
               optionInput: "h-4 w-4 accent-palette-primary-dark",
               optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
-              option: "space-x-4",
+              option: "space-x-4 font-body-fontFamily",
             }}
           />
         </div>
