@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   transformTests,
 } from "./testing/componentTests.setup.ts";
 import {
@@ -18,6 +19,7 @@ import { LocatorComponent } from "./Locator.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import mapboxPackageJson from "mapbox-gl/package.json" with { type: "json" };
+import { injectTranslations } from "../index.ts";
 
 // Uses the content endpoint from
 // https://www.yext.com/s/4174974/yextsites/155048/editor#pageSetId=locations
@@ -536,6 +538,8 @@ describe("Locator", async () => {
         document
       );
 
+      const translations = await injectTranslations(document);
+
       const { container } = reactRender(
         <>
           <script
@@ -547,7 +551,7 @@ describe("Locator", async () => {
             rel="stylesheet"
             href={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.css`}
           />
-          <VisualEditorProvider templateProps={{ document }}>
+          <VisualEditorProvider templateProps={{ document, translations }}>
             <Render config={puckConfig} data={data} />
           </VisualEditorProvider>
         </>
@@ -564,6 +568,7 @@ describe("Locator", async () => {
             expect(getComputedStyle(opacityContainer).opacity).toBe("1");
           }
         });
+        await delay(10_000); // Wait for map to load
       }
 
       // Hide the distance to each location because it is based on the test runner's IP address
