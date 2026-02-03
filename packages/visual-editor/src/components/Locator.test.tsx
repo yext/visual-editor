@@ -17,7 +17,7 @@ import {
   VisualEditorProvider,
   LocatorComponent,
 } from "@yext/visual-editor";
-import { Render, Config } from "@puckeditor/core";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import mapboxPackageJson from "mapbox-gl/package.json";
 import { injectTranslations } from "../utils/i18n/components";
@@ -400,7 +400,7 @@ const tests: ComponentTest[] = [
     version: 22,
   },
   {
-    name: "version 24 default props",
+    name: "version 24 with filters",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -434,8 +434,8 @@ const tests: ComponentTest[] = [
     },
     props: {
       filters: {
-        openNowButton: false,
-        showDistanceOptions: false,
+        openNowButton: true,
+        showDistanceOptions: true,
       },
       resultCard: {
         primaryHeading: {
@@ -495,6 +495,12 @@ const tests: ComponentTest[] = [
         },
       },
     },
+    interactions: async (page) => {
+      const filterButton = page.getByText("Filter");
+      await act(async () => {
+        await filterButton.click();
+      });
+    },
     version: 24,
   },
 ];
@@ -520,7 +526,7 @@ describe("Locator", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -538,6 +544,10 @@ describe("Locator", async () => {
         puckConfig,
         document
       );
+
+      data = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
 
       const translations = await injectTranslations(document);
 
