@@ -117,6 +117,9 @@ const advancedSettingsFields: Fields<AdvancedSettingsProps> = {
     objectFields: {
       schemaMarkup: SCHEMA_MARKUP_FIELD,
     },
+    ai: {
+      exclude: true,
+    },
   },
 };
 
