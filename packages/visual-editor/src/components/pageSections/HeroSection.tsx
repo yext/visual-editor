@@ -427,6 +427,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {
@@ -457,6 +458,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {

@@ -383,6 +383,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           props: {
             data: {
               actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {

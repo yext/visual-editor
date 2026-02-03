@@ -180,6 +180,7 @@ export const defaultInsightCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
+                buttonText: { en: "Button", hasLocalizedValue: "true" },
                 entityField: {
                   field: "",
                   constantValue: defaultInsight.cta,

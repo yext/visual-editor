@@ -322,6 +322,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
+            buttonText: { en: "Button", hasLocalizedValue: "true" },
             entityField: {
               field: "",
               constantValue: {
@@ -348,6 +349,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
+            buttonText: { en: "Button", hasLocalizedValue: "true" },
             entityField: {
               field: "",
               constantValue: {
