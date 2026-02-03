@@ -4,9 +4,10 @@ import {
   backgroundColors,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.ts";
-import { msg } from "../../utils/i18n/index.ts";
+import { msg } from "../../utils/i18n/platform.ts";
 import { YextField } from "../../editor/YextField.tsx";
-import { PageSection, Background, PageSectionProps } from "../atoms/index.ts";
+import { Background } from "../atoms/background.tsx";
+import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 

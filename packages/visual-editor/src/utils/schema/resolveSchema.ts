@@ -3,15 +3,15 @@ import {
   OpeningHoursSpecificationSchema,
   PhotoGallerySchema,
 } from "@yext/pages-components";
-import { StreamDocument } from "../types/StreamDocument";
-import { embeddedFieldRegex, findField } from "../resolveYextEntityField";
-import { removeEmptyValues } from "./helpers";
-import { TemplateRenderProps } from "./getSchema";
+import { StreamDocument } from "../types/StreamDocument.ts";
+import { embeddedFieldRegex, findField } from "../resolveYextEntityField.ts";
+import { removeEmptyValues } from "./helpers.ts";
+import { TemplateRenderProps } from "./getSchema.ts";
 import {
   mergeMeta,
   resolveUrlTemplate,
   resolveUrlTemplateOfChild,
-} from "../urls/resolveUrlTemplate";
+} from "../urls/resolveUrlTemplate.ts";
 
 // Recompile the embedded field regex to support matching
 const EMBEDDED_FIELD_REGEX = new RegExp(embeddedFieldRegex.source);

@@ -11,25 +11,22 @@ import {
   registerOverlayPortal,
   setDeep,
 } from "@puckeditor/core";
-import {
-  CTA,
-  i18nComponentsInstance,
-  msg,
-  pt,
-  resolveComponentData,
-  themeManagerCn,
-  TranslatableCTA,
-  useDocument,
-  useOverflow,
-  YextField,
-} from "@yext/visual-editor";
+import { CTA } from "../atoms/cta.tsx";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { TranslatableCTA } from "../../types/types.ts";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { useOverflow } from "../../hooks/useOverflow.ts";
+import { YextField } from "../../editor/YextField.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../atoms/dropdown";
-import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction";
+} from "../atoms/dropdown.tsx";
+import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
 
 export type HeaderLinksProps = {
   data: {

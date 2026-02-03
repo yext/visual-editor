@@ -1,12 +1,12 @@
+import { ThemeConfig } from "../utils/themeResolver.ts";
 import {
-  ThemeConfig,
   defaultFonts,
   FontRegistry,
   getFontWeightOptions,
-  ThemeOptions,
-  msg,
   constructFontSelectOptions,
-} from "@yext/visual-editor";
+} from "../utils/fonts/visualEditorFonts.ts";
+import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import { msg } from "../utils/i18n/platform.ts";
 
 export function createDefaultThemeConfig(
   customFonts: FontRegistry = {}
@@ -15,7 +15,12 @@ export function createDefaultThemeConfig(
     ...defaultFonts,
     ...customFonts,
   };
-  const fontOptions = constructFontSelectOptions(fonts);
+  const fontOptions = [
+    ...constructFontSelectOptions(customFonts),
+    ...constructFontSelectOptions(defaultFonts).filter(
+      (option) => !(option.label in customFonts)
+    ),
+  ];
   const fontWeightOptions = (fontVariable?: string) => {
     return () =>
       getFontWeightOptions({

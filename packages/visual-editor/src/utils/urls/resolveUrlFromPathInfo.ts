@@ -1,14 +1,22 @@
-import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField";
-import { normalizeSlug } from "../slugifier";
-import { StreamDocument } from "../types/StreamDocument";
+import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField.ts";
+import { normalizeSlug } from "../slugifier.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 // Resolves a URL from the streamDocument's __.pathInfo.template
+// or __.pathInfo.sourceEntityPageSetTemplate (if isChild is true).
 export const resolveUrlFromPathInfo = (
   streamDocument: StreamDocument,
-  relativePrefixToRoot: string = ""
+  relativePrefixToRoot: string = "",
+  isChild: boolean = false
 ): string | undefined => {
   const pathInfoJson = streamDocument.__?.pathInfo;
-  const urlTemplate = pathInfoJson?.template || "";
+
+  let urlTemplate;
+  if (isChild) {
+    urlTemplate = pathInfoJson?.sourceEntityPageSetTemplate || "";
+  } else {
+    urlTemplate = pathInfoJson?.template || "";
+  }
 
   if (!urlTemplate) {
     return;
@@ -21,7 +29,9 @@ export const resolveUrlFromPathInfo = (
 
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
-  ).replace(/\/+/g, "/");
+  )
+    .replace(/\/+/g, "/") // Collapses multiple slashes into one
+    .replace(/^\//, ""); // Removes a leading slash if it exists
 
   const isPrimary = isPrimaryLocale(streamDocument);
   const shouldIncludeLocalePrefix =

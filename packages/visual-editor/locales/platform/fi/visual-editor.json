@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Perustiedot",
     "other": "Muut",
-    "pageSections": "Page -osiot"
+    "standardSections": "Vakiojaksot"
   },
   "category": "Luokka",
   "change": "Muuttaa",
@@ -683,6 +683,7 @@
   "secondaryHeaderHiddenOnLivePage": "Toissijainen otsikko (piilotettu live-sivulla)",
   "secondaryHeaderLinks": "Toissijaiset otsikkolinkit",
   "section": "osio",
+  "sections": "Osat",
   "selectAnOption": "Valitse vaihtoehto",
   "selectDistanceLessThan": "Valitse etäisyys pienempi kuin",
   "services": "Palvelut",

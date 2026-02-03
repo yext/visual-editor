@@ -1,20 +1,18 @@
-import {
-  backgroundColors,
-  EntityField,
-  i18nComponentsInstance,
-  msg,
-  PhoneAtom,
-  pt,
-  resolveComponentData,
-  useDocument,
-  YextField,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { PhoneAtom } from "../atoms/phone.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextField } from "../../editor/YextField.tsx";
 import {
   defaultPhoneDataProps,
   PhoneDataFields,
   PhoneStyleFields,
   PhoneProps,
-} from "./Phone";
+} from "./Phone.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useTranslation } from "react-i18next";
 
@@ -26,6 +24,15 @@ export interface PhoneListProps {
 
   /** @internal Event name to be used for click analytics */
   eventName?: string;
+
+  /** @internal */
+  parentData?: {
+    field: string;
+    phoneNumbers: {
+      label: string;
+      number: string;
+    }[];
+  };
 }
 
 export const phoneListFields: Fields<PhoneListProps> = {
@@ -87,15 +94,13 @@ export const resolvePhoneNumbers = (
 };
 
 export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
-  const { data, styles, puck } = props;
+  const { data, styles, parentData, puck } = props;
   const { i18n } = useTranslation();
   const locale = i18n.language;
   const streamDocument = useDocument();
-  const resolvedPhoneNumbers = resolvePhoneNumbers(
-    data.phoneNumbers,
-    locale,
-    streamDocument
-  );
+  const resolvedPhoneNumbers = parentData
+    ? parentData.phoneNumbers
+    : resolvePhoneNumbers(data.phoneNumbers, locale, streamDocument);
 
   return resolvedPhoneNumbers.length > 0 ? (
     <ul className="flex flex-col gap-4">
@@ -107,7 +112,11 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
           >
             <EntityField
               displayName={pt("fields.phoneNumber", "Phone Number")}
-              fieldId={data.phoneNumbers[idx]?.number?.field}
+              fieldId={
+                parentData
+                  ? parentData.field
+                  : data.phoneNumbers[idx]?.number?.field
+              }
               constantValueEnabled={
                 data.phoneNumbers[idx]?.number?.constantValueEnabled
               }
@@ -140,6 +149,7 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
 export const PhoneList: ComponentConfig<{ props: PhoneListProps }> = {
   label: msg("components.phoneList", "Phone List"),
   fields: phoneListFields,
+  resolveFields: (data) => resolveDataFromParent(phoneListFields, data),
   defaultProps: {
     data: {
       phoneNumbers: [],

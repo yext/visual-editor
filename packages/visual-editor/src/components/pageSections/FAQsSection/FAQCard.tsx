@@ -1,28 +1,24 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import {
-  Body,
-  BodyProps,
-  FAQStruct,
-  getDefaultRTF,
-  msg,
-  resolveComponentData,
-  resolveDataFromParent,
-  TranslatableRichText,
-  useBackground,
-  useDocument,
-  YextEntityField,
-  YextField,
-} from "@yext/visual-editor";
+import { Body, BodyProps } from "../../atoms/body.tsx";
+import { FAQStruct, TranslatableRichText } from "../../../types/types.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
+import { useBackground } from "../../../hooks/useBackground.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../../atoms/accordion";
+} from "../../atoms/accordion.tsx";
 import { useAnalytics } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
-import { useCardContext } from "../../../hooks/useCardContext";
-import { useGetCardSlots } from "../../../hooks/useGetCardSlots";
+import { useCardContext } from "../../../hooks/useCardContext.tsx";
+import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 
 const defaultFAQ = {
   question: {

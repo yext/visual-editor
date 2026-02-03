@@ -1,4 +1,4 @@
-import { themeManagerCn } from "@yext/visual-editor";
+import { themeManagerCn } from "../../utils/cn.ts";
 import { cva, VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { FaEyeSlash } from "react-icons/fa";

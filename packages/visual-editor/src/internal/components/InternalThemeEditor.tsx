@@ -1,4 +1,10 @@
-import { Puck, Config, InitialHistory, FieldLabel } from "@puckeditor/core";
+import {
+  Puck,
+  Config,
+  InitialHistory,
+  FieldLabel,
+  legacySideBarPlugin,
+} from "@puckeditor/core";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
@@ -15,6 +21,8 @@ import * as lzstring from "lz-string";
 import { Metadata } from "../../editor/Editor.tsx";
 
 const devLogger = new DevLogger();
+// Used because we want the sidebar to be hidden
+const legacySidebar = legacySideBarPlugin();
 
 type InternalThemeEditorProps = {
   puckConfig: Config;
@@ -167,8 +175,9 @@ export const InternalThemeEditor = ({
           duplicate: false,
           delete: false,
           insert: false,
-          edit: false,
+          edit: true,
         }}
+        plugins={[legacySidebar]}
         overrides={{
           header: () => (
             <ThemeHeader

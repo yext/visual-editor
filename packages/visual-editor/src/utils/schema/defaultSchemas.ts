@@ -1,4 +1,4 @@
-import { StreamDocument } from "../types/StreamDocument";
+import { StreamDocument } from "../types/StreamDocument.ts";
 
 export const schemaWhitespaceRegex = /\n\s*/g;
 

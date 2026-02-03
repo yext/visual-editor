@@ -1,5 +1,5 @@
 import { describe, it, assert } from "vitest";
-import { getDirectoryParents, removeEmptyValues } from "./helpers";
+import { getDirectoryParents, removeEmptyValues } from "./helpers.ts";
 
 describe("getDirectoryParents", () => {
   it("returns directory parents when a valid directory parents field exists", () => {

@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Informazioni fondamentali",
     "other": "ALTRO",
-    "pageSections": "Sezioni di pagina"
+    "standardSections": "Sezioni standard"
   },
   "category": "Categoria",
   "change": "Modifica",
@@ -683,6 +683,7 @@
   "secondaryHeaderHiddenOnLivePage": "Intestazione secondaria (nascosta nella pagina live)",
   "secondaryHeaderLinks": "Collegamenti di intestazione secondari",
   "section": "Sezione",
+  "sections": "Sezioni",
   "selectAnOption": "Seleziona un'opzione",
   "selectDistanceLessThan": "Seleziona distanza inferiore a",
   "services": "Servizi",

@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Kerninformatie",
     "other": "ANDER",
-    "pageSections": "Paginagecties"
+    "standardSections": "Standaard secties"
   },
   "category": "Categorie",
   "change": "Wijziging",
@@ -683,6 +683,7 @@
   "secondaryHeaderHiddenOnLivePage": "Secundaire koptekst (verborgen op livepagina)",
   "secondaryHeaderLinks": "Secundaire koptekstkoppelingen",
   "section": "Sectie",
+  "sections": "Secties",
   "selectAnOption": "Selecteer een optie",
   "selectDistanceLessThan": "Selecteer afstand kleiner dan",
   "services": "Diensten",

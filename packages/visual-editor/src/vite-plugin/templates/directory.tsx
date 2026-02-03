@@ -112,13 +112,22 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const resolvedPuckData = await resolveAllData(migratedData, directoryConfig, {
     streamDocument: document,
   });
+  document.__.layout = JSON.stringify(resolvedPuckData);
   const translations = await injectTranslations(document);
 
-  return { ...props, data: resolvedPuckData, translations };
+  return { ...props, document, translations };
 };
 
 const Directory: Template<TemplateRenderProps> = (props) => {
-  const { document, data } = props;
+  const { document } = props;
+
+  const layoutString = document.__.layout;
+  let data: any = {};
+  try {
+    data = JSON.parse(layoutString);
+  } catch (e) {
+    console.error("Failed to parse layout JSON:", e);
+  }
 
   return (
     <AnalyticsProvider

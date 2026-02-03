@@ -54,7 +54,7 @@
     "directory": "Adresář",
     "locator": "Lokátor",
     "other": "OSTATNÍ",
-    "pageSections": "Sekce stránek"
+    "standardSections": "Standardní sekce"
   },
   "category": "Kategorie",
   "change": "Přeměna",
@@ -699,6 +699,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundární záhlaví (skryté na aktivní stránce)",
   "secondaryHeaderLinks": "Sekundární odkazy záhlaví",
   "section": "Sekce",
+  "sections": "Sekce",
   "selectAnOption": "Vyberte možnost",
   "selectDistanceLessThan": "Vyberte vzdálenost menší než",
   "services": "Služby",

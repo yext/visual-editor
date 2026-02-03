@@ -1,34 +1,18 @@
 import { Config, Render } from "@puckeditor/core";
 import { render as reactRender, waitFor } from "@testing-library/react";
 import { page } from "@vitest/browser/context";
-import {
-  backgroundColors,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { backgroundColors } from "../../utils/themeConfigOptions.ts";
+import { migrate } from "../../utils/migrate.ts";
+import { migrationRegistry } from "../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { describe, expect, it } from "vitest";
-import {
-  Address,
-  BodyText,
-  CTAGroup,
-  CTAWrapper,
-  Emails,
-  GetDirections,
-  HeadingText,
-  HoursStatus,
-  HoursTable,
-  ImageWrapper,
-  Phone,
-  TextList,
-} from "../contentBlocks/index.ts";
 import {
   axe,
   ComponentTest,
   testHours,
   transformTests,
 } from "../testing/componentTests.setup.ts";
-import { Grid } from "./Grid.tsx";
+import { AdvancedCoreInfoCategoryComponents } from "../categories/AdvancedCoreInfoCategory.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -2064,21 +2048,7 @@ const tests: ComponentTest[] = [
 
 describe("Grid", async () => {
   const puckConfig: Config = {
-    components: {
-      Address,
-      BodyText,
-      CTAGroup,
-      CTAWrapper,
-      Emails,
-      GetDirections,
-      Grid,
-      HeadingText,
-      HoursStatus,
-      HoursTable,
-      ImageWrapper,
-      Phone,
-      TextList,
-    },
+    components: AdvancedCoreInfoCategoryComponents,
     root: {
       render: ({ children }: { children: React.ReactNode }) => <>{children}</>,
     },

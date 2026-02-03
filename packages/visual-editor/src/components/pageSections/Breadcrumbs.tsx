@@ -1,20 +1,20 @@
 import { useTranslation } from "react-i18next";
+import { useTemplateProps } from "../../hooks/useDocument.tsx";
+import { MaybeLink } from "../atoms/maybeLink.tsx";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { msg } from "../../utils/i18n/platform.ts";
+import { TranslatableString } from "../../types/types.ts";
 import {
-  useTemplateProps,
-  MaybeLink,
-  PageSection,
-  YextField,
-  VisibilityWrapper,
-  msg,
-  TranslatableString,
   BackgroundStyle,
   backgroundColors,
-  resolveComponentData,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { ComponentConfig, Fields } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
-import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
 
 export interface BreadcrumbsData {
   /**

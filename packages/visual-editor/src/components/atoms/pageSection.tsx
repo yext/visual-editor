@@ -1,9 +1,7 @@
 import * as React from "react";
-import {
-  themeManagerCn,
-  BackgroundStyle,
-  Background,
-} from "@yext/visual-editor";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { Background } from "./background.tsx";
 import { cva, VariantProps } from "class-variance-authority";
 
 const pageSectionVariants = cva("px-4 md:px-6", {

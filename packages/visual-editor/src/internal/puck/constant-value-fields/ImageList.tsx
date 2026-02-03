@@ -1,7 +1,7 @@
 import { Field } from "@puckeditor/core";
 import { pt } from "../../../utils/i18n/platform.ts";
 import { IMAGE_CONSTANT_CONFIG } from "./Image.tsx";
-import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders";
+import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 
 export const IMAGE_LIST_CONSTANT_CONFIG = (): Field<any> => {
   return {

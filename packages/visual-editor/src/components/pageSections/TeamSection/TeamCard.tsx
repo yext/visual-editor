@@ -9,22 +9,22 @@ import {
 } from "@puckeditor/core";
 import {
   BackgroundStyle,
-  YextField,
-  Background,
   backgroundColors,
-  PersonStruct,
-  msg,
-  ImageWrapperProps,
-  HeadingTextProps,
-  BodyTextProps,
-  CTAWrapperProps,
-  deepMerge,
-  ImgSizesByBreakpoint,
-  resolveYextEntityField,
-  i18nComponentsInstance,
-  EmailsProps,
-  PhoneListProps,
-} from "@yext/visual-editor";
+} from "../../../utils/themeConfigOptions.ts";
+import { YextField } from "../../../editor/YextField.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { PersonStruct } from "../../../types/types.ts";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
+import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
+import { deepMerge } from "../../../utils/themeResolver.ts";
+import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
+import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
+import { EmailsProps } from "../../contentBlocks/Emails.tsx";
+import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
@@ -589,15 +589,8 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
           phoneNumbers: person.phoneNumber
             ? [
                 {
-                  number: {
-                    field: field,
-                    constantValue: person.phoneNumber,
-                    constantValueEnabled: true,
-                  },
-                  label: {
-                    en: "Phone",
-                    hasLocalizedValue: "true",
-                  },
+                  number: person.phoneNumber,
+                  label: "",
                 },
               ]
             : [],

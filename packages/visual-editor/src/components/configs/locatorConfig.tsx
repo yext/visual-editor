@@ -3,23 +3,24 @@ import {
   DeprecatedCategory,
   DeprecatedCategoryComponents,
   type DeprecatedCategoryProps,
-} from "../categories/DeprecatedCategory";
+} from "../categories/DeprecatedCategory.tsx";
 import {
   LocatorCategory,
   LocatorCategoryComponents,
   type LocatorCategoryProps,
-} from "../categories/LocatorCategory";
+} from "../categories/LocatorCategory.tsx";
 import {
   OtherCategory,
   OtherCategoryComponents,
   type OtherCategoryProps,
-} from "../categories/OtherCategory";
-import { BannerSection, BannerSectionProps } from "../pageSections/Banner";
+} from "../categories/OtherCategory.tsx";
+import { BannerSection, BannerSectionProps } from "../pageSections/Banner.tsx";
 import {
   SlotsCategory,
   SlotsCategoryComponents,
   SlotsCategoryProps,
-} from "../categories/SlotsCategory";
+} from "../categories/SlotsCategory.tsx";
+import { pt } from "../../utils/i18n/platform.ts";
 
 export interface LocatorConfigProps
   extends LocatorCategoryProps,
@@ -40,7 +41,7 @@ export const locatorConfig: Config<LocatorConfigProps> = {
   },
   categories: {
     pageSections: {
-      title: "Page Sections",
+      title: pt("categories.standardSections", "Standard Sections"),
       components: [...LocatorCategory, "BannerSection"],
     },
     slots: {

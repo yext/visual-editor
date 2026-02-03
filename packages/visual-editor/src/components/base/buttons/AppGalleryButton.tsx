@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes } from "react";
-import { cn } from "../../../utils/cn";
-import { pt } from "../../../utils/i18n/platform";
+import { cn } from "../../../utils/cn.ts";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export const AppGalleryButton = ({
   size = "md",

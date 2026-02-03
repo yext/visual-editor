@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Kärninformation",
     "other": "ANDRA",
-    "pageSections": "Sidavsnitt"
+    "standardSections": "Standardsektioner"
   },
   "category": "Kategori",
   "change": "Ändra",
@@ -684,6 +684,7 @@
   "secondaryHeaderHiddenOnLivePage": "Sekundär sidhuvud (dold på livesida)",
   "secondaryHeaderLinks": "Sekundära rubriklänkar",
   "section": "Avsnitt",
+  "sections": "Avsnitt",
   "selectAnOption": "Välj ett alternativ",
   "selectDistanceLessThan": "Välj avstånd mindre än",
   "services": "Tjänster",

@@ -6,13 +6,11 @@ import {
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import {
-  TeamSection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-  SlotsCategoryComponents,
-} from "@yext/visual-editor";
+import { TeamSection } from "./TeamSection.tsx";
+import { migrate } from "../../../utils/migrate.ts";
+import { migrationRegistry } from "../../migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../../../utils/VisualEditorProvider.tsx";
+import { SlotsCategoryComponents } from "../../categories/SlotsCategory.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 
@@ -58,7 +56,7 @@ const teamData = {
         width: 2048,
       },
       name: "Captain Cosmo",
-      phoneNumber: "+18005551010",
+      phoneNumber: "+18005552020",
       title: "Founder \u0026 CEO",
     },
     {
@@ -479,7 +477,9 @@ const tests: ComponentTest[] = [
                               data: {
                                 list: {
                                   field: "",
-                                  constantValue: ["cosmo@galaxygrill.com"],
+                                  constantValue: [
+                                    "constantValue@galaxygrill.com",
+                                  ],
                                   constantValueEnabled: true,
                                 },
                               },
@@ -496,7 +496,7 @@ const tests: ComponentTest[] = [
                                   field: "",
                                   constantValue: {
                                     label: "Email Me",
-                                    link: "cosmo@galaxygrill.com",
+                                    link: "constantValue@galaxygrill.com",
                                     linkType: "EMAIL",
                                     ctaType: "textAndLink",
                                   },

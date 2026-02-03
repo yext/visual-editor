@@ -1,5 +1,8 @@
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { AssetVideo, msg, YextField, VideoAtom } from "@yext/visual-editor";
+import { AssetVideo } from "../../types/videos.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { YextField } from "../../editor/YextField.tsx";
+import { VideoAtom } from "../atoms/video.tsx";
 
 export type VideoProps = {
   data: {

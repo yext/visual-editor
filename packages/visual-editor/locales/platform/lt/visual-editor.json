@@ -52,7 +52,7 @@
   "categories": {
     "coreInformation": "Pagrindinė informacija",
     "other": "Kita",
-    "pageSections": "Puslapių skyriai"
+    "standardSections": "Standartiniai skyriai"
   },
   "category": "Kategorija",
   "change": "Pakeisti",
@@ -693,6 +693,7 @@
   "secondaryHeaderHiddenOnLivePage": "Antrinė antraštė (paslėpta tiesioginiame puslapyje)",
   "secondaryHeaderLinks": "Antrinės antraštės nuorodos",
   "section": "Skyrius",
+  "sections": "Skyriai",
   "selectAnOption": "Pasirinkite parinktį",
   "selectDistanceLessThan": "Pasirinkite atstumą, mažesnį nei",
   "services": "Paslaugos",

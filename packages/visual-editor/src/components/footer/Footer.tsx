@@ -7,18 +7,17 @@ import {
   WithId,
   WithPuckProps,
 } from "@puckeditor/core";
+import { Body } from "../atoms/body.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { CTA } from "../atoms/cta.tsx";
 import {
-  Body,
-  EntityField,
-  useDocument,
-  CTA,
   type BackgroundStyle,
   backgroundColors,
-  PageSection,
-  YextField,
-  msg,
-  pt,
-} from "@yext/visual-editor";
+} from "../../utils/themeConfigOptions.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
 import {
   FaFacebook,
   FaInstagram,
