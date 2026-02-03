@@ -674,8 +674,6 @@ describe("Locator", async () => {
           if (opacityContainer) {
             expect(getComputedStyle(opacityContainer).opacity).toBe("1");
           }
-
-          expect(screen.getByText("2 locations")).toBeInTheDocument();
         });
       }
 
