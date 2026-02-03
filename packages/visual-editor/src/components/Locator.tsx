@@ -1495,7 +1495,6 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
             onChange={() => onChange(!isSelected)}
           />
           <label htmlFor={openNowCheckBoxId}>
-            {" "}
             <Body>{t("openNow", "Open Now")}</Body>
           </label>
         </div>
