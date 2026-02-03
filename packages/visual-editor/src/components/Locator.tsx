@@ -1119,12 +1119,10 @@ const LocatorInternal = ({
               />
               {hasFilterModalToggle && (
                 <button
-                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark"
+                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
                   onClick={() => setShowFilterModal((prev) => !prev)}
                 >
-                  <Body variant="sm" className="font-bold">
-                    {t("filter", "Filter")}
-                  </Body>
+                  {t("filter", "Filter")}
                   {<FaSlidersH />}
                 </button>
               )}
@@ -1443,10 +1441,10 @@ const FilterModal = (props: FilterModalProps) => {
       </div>
       <div className="border-y border-gray-300 justify-center align-middle">
         <button
-          className="w-full py-4 text-center text-palette-primary-dark"
+          className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
           onClick={handleClearFiltersClick}
         >
-          <Body className="font-bold">{t("clearAll", "Clear All")}</Body>
+          {t("clearAll", "Clear All")}
         </button>
       </div>
     </div>
@@ -1472,10 +1470,10 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center"
+        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
         {...getToggleProps()}
       >
-        <Body className="font-bold">{t("hours", "Hours")}</Body>
+        {t("hours", "Hours")}
         <FaChevronUp className={iconClassName} />
       </button>
       <div className="flex flex-row gap-1" {...getCollapseProps()}>
@@ -1519,10 +1517,10 @@ const DistanceFilter = (props: DistanceFilterProps) => {
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center"
+        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
         {...getToggleProps()}
       >
-        <Body className="font-bold">{t("distance", "Distance")}</Body>
+        {t("distance", "Distance")}
         <FaChevronUp className={iconClassName} />
       </button>
       <div {...getCollapseProps()}>
