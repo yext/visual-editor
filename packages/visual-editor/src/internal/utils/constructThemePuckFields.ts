@@ -9,7 +9,6 @@ import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
 import { FontWeightSelector } from "../puck/components/FontWeightSelector.tsx";
-import { useCallback } from "react";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
@@ -73,32 +72,26 @@ export const convertStyleToPuckField = (
           label: t(style.label),
           type: "custom",
           options: style.options,
-          render: useCallback(
-            ({ onChange, value }: RenderProps) =>
-              FontSelector({
-                label: t(style.label),
-                options: optionsFactory(),
-                value,
-                onChange,
-              }),
-            []
-          ),
+          render: ({ onChange, value }: RenderProps) =>
+            FontSelector({
+              label: t(style.label),
+              options: optionsFactory(),
+              value,
+              onChange,
+            }),
         } as CustomField<string>;
       } else if (plugin === "fontWeight") {
         return {
           label: t(style.label),
           type: "custom",
           options: optionsFactory,
-          render: useCallback(
-            ({ onChange, value }: RenderProps) =>
-              FontWeightSelector({
-                label: t(style.label),
-                options: optionsFactory,
-                value,
-                onChange,
-              }),
-            []
-          ),
+          render: ({ onChange, value }: RenderProps) =>
+            FontWeightSelector({
+              label: t(style.label),
+              options: optionsFactory,
+              value,
+              onChange,
+            }),
         } as CustomField<string>;
       } else {
         return {
