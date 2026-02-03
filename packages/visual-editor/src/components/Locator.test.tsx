@@ -675,10 +675,7 @@ describe("Locator", async () => {
             expect(getComputedStyle(opacityContainer).opacity).toBe("1");
           }
 
-          // wait for map to load
-          expect(
-            container.getElementsByClassName("mapboxgl-map").length
-          ).toBeGreaterThan(0);
+          expect(screen.getByText("2 locations")).toBeInTheDocument();
         });
       }
 
