@@ -681,6 +681,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
               entityField: {
                 field: "",
                 constantValue: {
@@ -709,6 +710,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
               entityField: {
                 field: "",
                 constantValue: {

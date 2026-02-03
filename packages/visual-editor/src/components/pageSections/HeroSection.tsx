@@ -426,6 +426,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
               entityField: {
                 field: "",
                 constantValue: {
@@ -455,6 +456,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
               entityField: {
                 field: "",
                 constantValue: {

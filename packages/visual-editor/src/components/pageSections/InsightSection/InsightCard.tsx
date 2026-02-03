@@ -179,6 +179,7 @@ export const defaultInsightCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
                 entityField: {
                   field: "",
                   constantValue: defaultInsight.cta,

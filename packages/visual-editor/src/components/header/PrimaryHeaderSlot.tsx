@@ -321,6 +321,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
         props: {
           data: {
             show: true,
+            actionType: "link",
             entityField: {
               field: "",
               constantValue: {
@@ -346,6 +347,7 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
         props: {
           data: {
             show: true,
+            actionType: "link",
             entityField: {
               field: "",
               constantValue: {

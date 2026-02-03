@@ -167,6 +167,7 @@ export const defaultEventCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
                 entityField: {
                   field: "",
                   constantValue: defaultEvent.cta,
