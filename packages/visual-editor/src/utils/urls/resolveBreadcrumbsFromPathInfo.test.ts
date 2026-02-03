@@ -3,30 +3,38 @@ import { resolveBreadcrumbsFromPathInfo } from "./resolveBreadcrumbsFromPathInfo
 import { StreamDocument } from "../types/StreamDocument.ts";
 
 const baseDocument: StreamDocument = {
-  id: "123",
-  name: "Current",
+  name: "123 Test Rd",
+  address: {
+    line1: "123 Test Rd",
+    city: "Testville",
+    region: "TS",
+    postalCode: "12345",
+    countryCode: "US",
+  },
   locale: "en",
   __: {
     pathInfo: {
       primaryLocale: "en",
+      breadcrumbTemplates: [
+        "index.html",
+        "[[address.countryCode]]",
+        "[[address.countryCode]]/[[address.region]]",
+        "[[address.countryCode]]/[[address.region]]/[[address.city]]",
+      ],
     },
   },
 };
 
 describe("resolveBreadcrumbsFromPathInfo", () => {
   it("builds breadcrumbs from templates for the primary locale without prefix", () => {
-    const documentWithTemplates: StreamDocument = {
-      ...baseDocument,
-      __: {
-        pathInfo: {
-          primaryLocale: "en",
-          breadcrumbTemplates: ["stores/[[id]]/overview"],
-        },
-      },
-    };
+    const englishDocument = baseDocument;
 
-    expect(resolveBreadcrumbsFromPathInfo(documentWithTemplates)).toEqual([
-      { name: "overview", slug: "stores/123/overview" },
+    expect(resolveBreadcrumbsFromPathInfo(englishDocument)).toEqual([
+      { name: "index.html", slug: "index.html" },
+      { name: "US", slug: "US" },
+      { name: "TS", slug: "US/TS" },
+      { name: "Testville", slug: "US/TS/Testville" },
+      { name: "123 Test Rd", slug: "" },
     ]);
   });
 
@@ -34,16 +42,14 @@ describe("resolveBreadcrumbsFromPathInfo", () => {
     const spanishDocument: StreamDocument = {
       ...baseDocument,
       locale: "es",
-      __: {
-        pathInfo: {
-          primaryLocale: "en",
-          breadcrumbTemplates: ["stores///[[id]]"],
-        },
-      },
     };
 
     expect(resolveBreadcrumbsFromPathInfo(spanishDocument)).toEqual([
-      { name: "123", slug: "es/stores/123" },
+      { name: "index.html", slug: "es/index.html" },
+      { name: "US", slug: "es/US" },
+      { name: "TS", slug: "es/US/TS" },
+      { name: "Testville", slug: "es/US/TS/Testville" },
+      { name: "123 Test Rd", slug: "" },
     ]);
   });
 });
