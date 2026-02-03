@@ -11,7 +11,7 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import { injectTranslations } from "../utils/i18n/components";
+import { injectTranslations } from "../utils/i18n/components.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "./migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
