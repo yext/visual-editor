@@ -1,9 +1,9 @@
 import { getDirectoryParents } from "@yext/visual-editor";
-import { StreamDocument } from "../types/StreamDocument";
+import { StreamDocument } from "../types/StreamDocument.ts";
 import {
   resolveBreadcrumbsFromPathInfo,
   BreadcrumbLink,
-} from "./resolveBreadcrumbsFromPathInfo";
+} from "./resolveBreadcrumbsFromPathInfo.ts";
 
 type BreadcrumbResolver = (
   streamDocument: StreamDocument

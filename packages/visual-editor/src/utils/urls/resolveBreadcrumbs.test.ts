@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach, type Mock } from "vitest";
-import { resolveBreadcrumbs } from "./resolveBreadcrumbs";
-import { StreamDocument } from "../types/StreamDocument";
+import { resolveBreadcrumbs } from "./resolveBreadcrumbs.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
 import { getDirectoryParents } from "@yext/visual-editor";
 
 vi.mock("@yext/visual-editor", () => ({

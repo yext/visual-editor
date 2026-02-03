@@ -1,7 +1,7 @@
-import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField";
-import { normalizeSlug } from "../slugifier";
-import { StreamDocument } from "../types/StreamDocument";
-import { isPrimaryLocale } from "./resolveUrlFromPathInfo";
+import { resolveEmbeddedFieldsInString } from "../resolveYextEntityField.ts";
+import { normalizeSlug } from "../slugifier.ts";
+import { StreamDocument } from "../types/StreamDocument.ts";
+import { isPrimaryLocale } from "./resolveUrlFromPathInfo.ts";
 
 export type BreadcrumbLink = {
   name: string;
