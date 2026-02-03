@@ -156,7 +156,7 @@
     "textAndLink": "Tekst og lenke"
   },
   "customSearchArea": "Tilpasset søkeområde",
-  "dataAttribute": "Attributt",
+  "dataAttribute": "Dataattributt",
   "date": "Dato",
   "dateAndTime": "Dato og tid",
   "default": "Misligholde",
@@ -402,7 +402,7 @@
       "left": "Igjen",
       "left_direction": "Venstre",
       "light": "Lys",
-      "link": "Link",
+      "link": "Lenke",
       "long": "Lang",
       "mapStartingLocation": "Kartstartsted",
       "matchOtherSections": "Match andre seksjoner ({{value}})",
