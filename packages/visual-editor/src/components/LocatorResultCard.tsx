@@ -66,6 +66,10 @@ export interface LocatorResultCardProps {
     field: DynamicOptionsSingleSelectorType<string>;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
+    /**
+     * The color applied to the primary heading text
+     * @defaultValue inherited from theme
+     */
     color?: BackgroundStyle;
   };
 

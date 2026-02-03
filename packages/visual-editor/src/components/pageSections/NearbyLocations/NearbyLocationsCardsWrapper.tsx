@@ -44,6 +44,10 @@ export type NearbyLocationCardsWrapperProps = {
 
     /** The heading level for the card title. */
     headingLevel?: HeadingLevel;
+    /**
+     * The color applied to the card title
+     * @defaultValue inherited from theme
+     */
     color?: BackgroundStyle;
     phone: {
       /**

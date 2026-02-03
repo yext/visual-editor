@@ -447,8 +447,17 @@ export interface LocatorProps {
     latitude: string;
     longitude: string;
   };
+  /**
+   * Configuration for the locator page heading.
+   * Allows customizing the title text and its color.
+   */
   pageHeading?: {
+    /** The title displayed at the top of the locator page. */
     title: TranslatableString;
+    /**
+     * The color applied to the locator page title.
+     * @defaultValue inherited from theme
+     */
     color?: BackgroundStyle;
   };
   /**
@@ -1104,9 +1113,10 @@ const LocatorInternal = ({
   const hasFilterModalToggle =
     openNowButton || showDistanceOptions || hasFacetOptions;
   const [showFilterModal, setShowFilterModal] = React.useState(false);
-  const resolvedHeading = pageHeading?.title
-    ? resolveComponentData(pageHeading.title, i18n.language, streamDocument)
-    : DEFAULT_TITLE;
+  const resolvedHeading =
+    (pageHeading?.title &&
+      resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
+    t(DEFAULT_TITLE);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
