@@ -52,11 +52,13 @@ export const resolveBreadcrumbsFromPathInfo = (
       ? `${locale}/${normalizedSlug}`
       : normalizedSlug;
 
-    const segment = normalizedSlug.split("/").filter(Boolean).pop();
+    const segment = resolved.split("/").filter(Boolean).pop();
     const name = segment || streamDocument.name || slug;
 
     crumbs.push({ name, slug });
   }
+
+  crumbs.push({ name: streamDocument.name ?? "", slug: "" });
 
   return crumbs.length ? crumbs : undefined;
 };
