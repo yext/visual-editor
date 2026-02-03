@@ -17,6 +17,7 @@ import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import {
+  formatDistance,
   getPreferredDistanceUnit,
   toKilometers,
 } from "../../../utils/i18n/distance.ts";
@@ -385,7 +386,7 @@ const NearbyLocationsEmptyState: React.FC<{
             entityType: entityTypeDisplayName
               ? entityTypeDisplayName
               : "entity",
-            radius: distance,
+            radius: formatDistance(distance, i18n.language, 0, 0),
             unit: pt(unit, { count: distance }),
           })}
         </Body>

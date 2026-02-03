@@ -52,6 +52,7 @@ import { YextField } from "../editor/YextField.tsx";
 import {
   getPreferredDistanceUnit,
   toKilometers,
+  toMiles,
 } from "../utils/i18n/distance.ts";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
@@ -1517,7 +1518,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
   const iconClassName = isExpanded
     ? "w-3 text-gray-400"
     : "w-3 text-gray-400 transform rotate-180";
-  const distanceOptionsMiles = [5, 10, 25, 50];
+  const distanceOptions = [5, 10, 25, 50];
   const unit = getPreferredDistanceUnit(i18n.language);
 
   return (
@@ -1530,19 +1531,24 @@ const DistanceFilter = (props: DistanceFilterProps) => {
         <FaChevronUp className={iconClassName} />
       </button>
       <div {...getCollapseProps()}>
-        {distanceOptionsMiles.map((distanceMiles) => (
+        {distanceOptions.map((distanceOption) => (
           <div
             className="flex flex-row gap-4 items-center"
-            id={`distanceOption-${distanceMiles}`}
-            key={distanceMiles}
+            id={`distanceOption-${distanceOption}`}
+            key={distanceOption}
           >
             <button
               className="inline-flex bg-white"
-              onClick={() => onChange(distanceMiles)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
+              onClick={() =>
+                onChange(
+                  // onChange treats the underlying unit as miles. If we're viewing in km, convert back to miles
+                  unit === "mile" ? distanceOption : toMiles(distanceOption)
+                )
+              }
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${t("mile", { count: distanceOption })}`}
             >
               <div className="text-palette-primary-dark">
-                {selectedDistanceMiles === distanceMiles ? (
+                {selectedDistanceMiles === distanceOption ? (
                   <FaDotCircle />
                 ) : (
                   <FaRegCircle />
@@ -1550,11 +1556,8 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <Body className="inline-flex">
-              {`< ${
-                unit === "mile" ? distanceMiles : toKilometers(distanceMiles)
-              } ${t(unit, {
-                count:
-                  unit === "mile" ? distanceMiles : toKilometers(distanceMiles),
+              {`< ${distanceOption} ${t(unit, {
+                count: distanceOption,
               })}`}
             </Body>
           </div>

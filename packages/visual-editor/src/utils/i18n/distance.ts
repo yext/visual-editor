@@ -10,7 +10,17 @@ export const getPreferredDistanceUnit = (locale: string) => {
 /**
  * Converts miles to kilometers.
  */
-export const toKilometers = (miles: number, round = true) => {
-  const kilometers = miles * 1.609344;
-  return round ? Math.round(kilometers) : kilometers;
+export const toKilometers = (miles: number) => {
+  return miles * 1.609344;
+};
+
+export const toMiles = (kilometers: number) => {
+  return kilometers / 1.609344;
+};
+
+export const formatDistance = (distance: number, locale: string, minDigits = 1, maxDigits = 1) => {
+return new Intl.NumberFormat(locale, {
+            minimumFractionDigits: minDigits,
+            maximumFractionDigits: maxDigits,
+          }).format(distance)
 };

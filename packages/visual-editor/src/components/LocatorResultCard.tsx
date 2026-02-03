@@ -51,7 +51,10 @@ import {
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { FieldTypeData } from "../internal/types/templateMetadata.ts";
-import { getPreferredDistanceUnit } from "../utils/i18n/distance.ts";
+import {
+  formatDistance,
+  getPreferredDistanceUnit,
+} from "../utils/i18n/distance.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -599,14 +602,19 @@ export const LocatorResultCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const distanceInMiles =
-      typeof distance === "number"
-        ? Number((distance / 1609.344).toFixed(1))
-        : undefined;
     const distanceInKilometers =
-      typeof distance === "number"
-        ? Number((distance / 1000).toFixed(1))
-        : undefined;
+      typeof distance === "number" ? distance / 1000 : undefined;
+    const distanceInMiles =
+      typeof distance === "number" ? distance / 1609.344 : undefined;
+    const unit = getPreferredDistanceUnit(i18n.language);
+    const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
+    let displayDistance;
+    if (distanceInMiles && distanceInKilometers) {
+      displayDistance =
+        unit === "mile"
+          ? `${formatDistance(distanceInMiles, i18n.language)} ${unitLabel}`
+          : `${formatDistance(distanceInKilometers, i18n.language)} ${unitLabel}`;
+    }
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -651,8 +659,6 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
-    const unit = getPreferredDistanceUnit(i18n.language);
-
     return (
       <Background
         background={backgroundColors.background1.value}
@@ -677,15 +683,13 @@ export const LocatorResultCard = React.memo(
                   location={location}
                 />
               </div>
-              {typeof distance === "number" && (
+              {displayDistance && (
                 <div
                   className={
                     "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex"
                   }
                 >
-                  {unit === "mile"
-                    ? `${distanceInMiles} mi`
-                    : `${distanceInKilometers} km`}
+                  {displayDistance}
                 </div>
               )}
             </div>
@@ -755,17 +759,14 @@ export const LocatorResultCard = React.memo(
               </div>
             </div>
           </div>
-          {typeof distance === "number" && (
+          {displayDistance && (
             <div
               className={`
               font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
               ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}
               `}
             >
-              {t("distanceInUnit", `${distanceInMiles} mi`, {
-                distanceInMiles,
-                distanceInKilometers,
-              })}
+              {displayDistance}
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
