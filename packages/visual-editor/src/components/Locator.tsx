@@ -1095,7 +1095,7 @@ const LocatorInternal = ({
               focusedOption: "bg-gray-200 hover:bg-gray-200 block",
               option: "hover:bg-gray-100 px-4 py-3",
               inputElement:
-                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize",
+                "rounded-md p-4 h-11 font-body-fontWeight text-body-fontSize font-body-fontFamily placeholder:font-body-fontFamily",
               currentLocationButton:
                 "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
               label:
