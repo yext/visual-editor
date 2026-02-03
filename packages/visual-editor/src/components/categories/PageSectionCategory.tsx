@@ -64,6 +64,7 @@ import {
   ProfessionalHeroSection,
   ProfessionalHeroSectionProps,
 } from "../pageSections/ProfessionalHeroSection.tsx";
+import { SearchComponent, SearchProps } from "../pageSections/index.ts";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -84,6 +85,7 @@ export interface PageSectionCategoryProps {
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
+  SearchComponent: SearchProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -105,6 +107,7 @@ export const PageSectionCategoryComponents = {
   TeamSection,
   TestimonialSection,
   VideoSection,
+  SearchComponent,
 };
 
 export const PageSectionCategory = Object.keys(
