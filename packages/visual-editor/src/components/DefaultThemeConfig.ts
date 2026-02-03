@@ -15,7 +15,12 @@ export function createDefaultThemeConfig(
     ...defaultFonts,
     ...customFonts,
   };
-  const fontOptions = constructFontSelectOptions(fonts);
+  const fontOptions = [
+    ...constructFontSelectOptions(customFonts),
+    ...constructFontSelectOptions(defaultFonts).filter(
+      (option) => !(option.label in customFonts)
+    ),
+  ];
   const fontWeightOptions = (fontVariable?: string) => {
     return () =>
       getFontWeightOptions({
