@@ -45,6 +45,9 @@ const outline = outlinePlugin();
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
   type: "custom" as const,
+  ai: {
+    exclude: true,
+  },
   render: () => {
     const getPuck = useGetPuck();
 
@@ -108,11 +111,29 @@ export const InternalLayoutEditor = ({
   metadata,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
+  const [aiPlugin, setAiPlugin] = useState<any | null>(null);
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount } = useErrorContext();
 
+  // Importing the AI plugin statically causes build issues, however this dynamic import works
+  React.useEffect(() => {
+    let cancelled = false;
+
+    import("@puckeditor/plugin-ai")
+      .then((mod) => {
+        if (cancelled || !templateMetadata.aiPageGeneration) {
+          return;
+        }
+        setAiPlugin(mod.createAiPlugin({}));
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   /**
    * When the Puck history changes save it to localStorage and send a message
    * to the parent which saves the state to the VES database.
@@ -398,7 +419,11 @@ export const InternalLayoutEditor = ({
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
-        plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
+        plugins={[
+          { ...blocks, label: pt("sections", "Sections") },
+          outline,
+          ...(aiPlugin ? [aiPlugin] : []),
+        ]}
         overrides={{
           fields: fieldsOverride,
           header: () => (

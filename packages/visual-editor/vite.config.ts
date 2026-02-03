@@ -27,6 +27,8 @@ export default defineConfig(() => ({
         "react",
         "react-dom",
         "@puckeditor/core",
+        "@puckeditor/plugin-ai",
+        "@puckeditor/cloud-client",
         "uuid",
         "@yext/pages-components",
         "mapbox-gl",

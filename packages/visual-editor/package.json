@@ -62,7 +62,6 @@
     "@microsoft/api-documenter": "^7.26.29",
     "@microsoft/api-extractor": "^7.52.8",
     "@microsoft/api-extractor-model": "^7.30.6",
-    "@puckeditor/core": "0.21.1",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.13",
@@ -163,6 +162,9 @@
     "@yext/search-ui-react": "^2.0.2",
     "mapbox-gl": "^2.9.2",
     "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+    "react-dom": "^17.0.2 || ^18.2.0",
+    "@puckeditor/cloud-client": "^0.5.0",
+    "@puckeditor/core": "0.21.1",
+    "@puckeditor/plugin-ai": "^0.5.0"
   }
 }

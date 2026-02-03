@@ -1,5 +1,6 @@
 export * from "./i18n/index.ts";
 export * from "./schema/index.ts";
+export * from "./ai/index.ts";
 export { fetchLocalesToPathsForEntity } from "./api/fetchLocalesToPathsForEntity.ts";
 export { applyAnalytics, getAnalyticsScopeHash } from "./applyAnalytics.ts";
 export { applyHeaderScript } from "./applyHeaderScript.ts";
