@@ -3,7 +3,6 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
-  delay,
   transformTests,
 } from "./testing/componentTests.setup.ts";
 import {
@@ -675,8 +674,12 @@ describe("Locator", async () => {
           if (opacityContainer) {
             expect(getComputedStyle(opacityContainer).opacity).toBe("1");
           }
+
+          // wait for map to load
+          expect(
+            container.getElementsByClassName("mapboxgl-map").length
+          ).toBeGreaterThan(0);
         });
-        await delay(1000);
       }
 
       // Hide the distance to each location because it is based on the test runner's IP address
