@@ -13,6 +13,8 @@ import {
   type FontRegistry,
   type FontLinkData,
   generateCustomFontLinkData,
+  generateCustomFontPreloadLinkData,
+  type CustomFontPreloadMap,
 } from "./fonts/visualEditorFonts.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
@@ -71,7 +73,13 @@ export const applyTheme = (
     } else {
       fontLinkData = generateGoogleFontLinkData(inUseGoogleFonts);
     }
+    const customFontPreloadMap = (mergedThemeData.__customFontPreload ??
+      {}) as CustomFontPreloadMap;
     fontLinkData = [
+      ...generateCustomFontPreloadLinkData(
+        customFontPreloadMap,
+        relativePrefixToRoot
+      ),
       ...generateCustomFontLinkData(inUseCustomFonts, relativePrefixToRoot),
       ...fontLinkData,
     ];
@@ -118,9 +126,13 @@ const internalApplyTheme = (
 
   devLogger.logData("THEME_VALUES_TO_APPLY", themeValuesToApply);
 
+  const cssVariablesOnly = Object.entries(themeValuesToApply).filter(([key]) =>
+    key.startsWith("--")
+  );
+
   return (
     `.components{` +
-    Object.entries(themeValuesToApply)
+    cssVariablesOnly
       .map(([key, value]) => `${key}:${value} !important`)
       .join(";") +
     "}"
@@ -152,7 +164,8 @@ const generateContrastingColors = (themeData: ThemeData) => {
 const updateFontLinksInDocument = (
   document: Document,
   fonts: FontRegistry,
-  customFonts: string[]
+  customFonts: string[],
+  customFontPreloadMap: CustomFontPreloadMap = {}
 ) => {
   // Remove only theme-specific font links, preserve default fonts
   const existingLinks = document.querySelectorAll(
@@ -161,7 +174,11 @@ const updateFontLinksInDocument = (
   existingLinks.forEach((link) => link.remove());
 
   if (Object.keys(fonts).length + customFonts.length > 0) {
-    const links = createFontLinkElements(fonts, customFonts);
+    const links = createFontLinkElements(
+      fonts,
+      customFonts,
+      customFontPreloadMap
+    );
     links.forEach((link) => {
       document.head.appendChild(link);
     });
@@ -204,7 +221,14 @@ export const updateThemeInEditor = async (
       fontsToLoad = inUseGoogleFonts;
     }
 
-    updateFontLinksInDocument(window.document, fontsToLoad, inUseCustomFonts);
+    const customFontPreloadMap = (mergedThemeData.__customFontPreload ??
+      {}) as CustomFontPreloadMap;
+    updateFontLinksInDocument(
+      window.document,
+      fontsToLoad,
+      inUseCustomFonts,
+      customFontPreloadMap
+    );
 
     const observer = new MutationObserver(() => {
       const iframe = document.getElementById(
@@ -220,7 +244,8 @@ export const updateThemeInEditor = async (
         updateFontLinksInDocument(
           iframe.contentDocument!,
           fontsToLoad,
-          inUseCustomFonts
+          inUseCustomFonts,
+          customFontPreloadMap
         );
       }
     });

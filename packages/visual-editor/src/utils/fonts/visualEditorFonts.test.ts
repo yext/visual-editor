@@ -5,6 +5,7 @@ import {
   FontRegistry,
   defaultFonts,
   constructGoogleFontLinkTags,
+  extractCustomFontPreloadMap,
 } from "./visualEditorFonts.ts";
 
 describe("extractInUseFontFamilies", () => {
@@ -245,5 +246,45 @@ describe("constructGoogleFontLinkTags", () => {
       '<link href="https://fonts.googleapis.com/css2?family=Font8:wght@400&display=swap" rel="stylesheet">';
 
     expect(constructGoogleFontLinkTags(fonts)).toBe(expected);
+  });
+});
+
+describe("extractCustomFontPreloadMap", () => {
+  it("should extract distinct preload weights for custom fonts", () => {
+    const customFonts: FontRegistry = {
+      "Custom Static": {
+        italics: false,
+        weights: [400, 700],
+        fallback: "sans-serif",
+      },
+      "Custom Variable": {
+        italics: false,
+        minWeight: 200,
+        maxWeight: 900,
+        fallback: "serif",
+      },
+    };
+
+    const themeData: ThemeData = {
+      "--fontFamily-h1-fontFamily": "'Custom Static', sans-serif",
+      "--fontWeight-h1-fontWeight": "700",
+      "--fontFamily-h3-fontFamily": "'Custom Static', sans-serif",
+      "--fontWeight-h3-fontWeight": "700",
+      "--fontFamily-body-fontFamily": "'Custom Variable', serif",
+      "--fontWeight-body-fontWeight": "400",
+      "--fontFamily-h2-fontFamily": "'Open Sans', sans-serif",
+      "--fontWeight-h2-fontWeight": "700",
+    };
+
+    const result = extractCustomFontPreloadMap(
+      themeData,
+      customFonts,
+      defaultFonts
+    );
+
+    expect(result).toEqual({
+      "Custom Static": { kind: "static", weights: ["700"] },
+      "Custom Variable": { kind: "variable", weights: ["400"] },
+    });
   });
 });

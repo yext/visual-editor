@@ -39,6 +39,9 @@ describe("buildCssOverridesStyle", () => {
           "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
           "--fontFamily-h2-fontFamily": "'Yext Custom', serif",
           "--borderRadius-border-lg": "20px",
+          __customFontPreload: {
+            "Yext Custom": { kind: "static", weights: ["700"] },
+          },
         }),
       },
     };
@@ -52,6 +55,9 @@ describe("buildCssOverridesStyle", () => {
     );
     expect(result).toContain(
       '<link href="./y-fonts/yextcustom.css" rel="stylesheet">'
+    );
+    expect(result).toContain(
+      '<link rel="preload" href="./y-fonts/yextcustom-700.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
     );
     expect(result).toContain(
       '<style id="visual-editor-theme" type="text/css">.components{'
@@ -91,6 +97,9 @@ describe("buildCssOverridesStyle", () => {
             "'Adamina', 'Adamina Fallback', serif",
           "--fontFamily-h2-fontFamily":
             "'Yext Custom', 'Yext Custom Fallback', serif",
+          __customFontPreload: {
+            "Yext Custom": { kind: "static", weights: ["700"] },
+          },
         }),
       },
     };
@@ -98,7 +107,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(streamDocument, "./", themeConfig);
 
     expect(result).toBe(
-      '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
+      '<link rel="preload" href="./y-fonts/yextcustom-700.woff2" as="font" type="font/woff2" crossorigin="anonymous">\n' +
+        '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
         '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n' +
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
@@ -121,6 +131,23 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme({} as StreamDocument, "./", {}, base);
 
     expect(result).toBe(base);
+  });
+
+  it("should not include custom font preload metadata in CSS output", () => {
+    const streamDocument: StreamDocument = {
+      siteId: 123,
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h2-fontFamily": "'Yext Custom', serif",
+          __customFontPreload: {
+            "Yext Custom": { kind: "static", weights: ["700"] },
+          },
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+    expect(result).not.toContain("__customFontPreload");
   });
 
   it("should ignore saved values that are no longer in the themeConfig", () => {

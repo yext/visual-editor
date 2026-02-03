@@ -52,8 +52,17 @@ export const constructGoogleFontLinkTags = (fonts: FontRegistry): string => {
 export type FontLinkData = {
   href: string;
   rel: string;
+  as?: "font";
+  type?: "font/woff2";
   crossOrigin?: "anonymous" | "use-credentials";
 };
+
+export type CustomFontPreloadEntry = {
+  kind: "static" | "variable";
+  weights: string[];
+};
+
+export type CustomFontPreloadMap = Record<string, CustomFontPreloadEntry>;
 
 // Helper function to generate weight parameter for Google Fonts API
 const generateWeightParam = (fontDetails: FontSpecification): string => {
@@ -107,16 +116,104 @@ export const generateGoogleFontLinkData = (
   return [...PRECONNECT_LINKS, ...fontLinks];
 };
 
+export const normalizeFontFileName = (fontName: string) =>
+  fontName.replaceAll(" ", "").toLowerCase();
+
 export const generateCustomFontLinkData = (
   customFonts: string[],
   relativePrefixToRoot: string
 ): FontLinkData[] => {
   return customFonts.map((fontName) => {
     return {
-      href: `${relativePrefixToRoot}y-fonts/${fontName.replaceAll(" ", "").toLowerCase()}.css`,
+      href: `${relativePrefixToRoot}y-fonts/${normalizeFontFileName(fontName)}.css`,
       rel: "stylesheet",
     };
   });
+};
+
+export const extractCustomFontPreloadMap = (
+  themeData: ThemeData,
+  customFonts: FontRegistry,
+  googleFonts: FontRegistry
+): CustomFontPreloadMap => {
+  const fontFamiliesBySection = new Map<string, string>();
+  const fontWeightsBySection = new Map<string, string>();
+
+  for (const [key, value] of Object.entries(themeData)) {
+    if (typeof key !== "string") {
+      continue;
+    }
+
+    const fontFamilyMatch = key.match(/^--fontFamily-(.+)-fontFamily$/);
+    if (fontFamilyMatch) {
+      const rawValue = typeof value === "string" ? value : "";
+      const firstFont = rawValue.split(",")[0];
+      const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
+      if (cleanedFontName) {
+        fontFamiliesBySection.set(fontFamilyMatch[1], cleanedFontName);
+      }
+      continue;
+    }
+
+    const fontWeightMatch = key.match(/^--fontWeight-(.+)-fontWeight$/);
+    if (fontWeightMatch && typeof value === "string" && value.length > 0) {
+      fontWeightsBySection.set(fontWeightMatch[1], value);
+    }
+  }
+
+  const preloadMap: CustomFontPreloadMap = {};
+
+  for (const [sectionKey, fontFamily] of fontFamiliesBySection.entries()) {
+    if (googleFonts[fontFamily]) {
+      continue;
+    }
+
+    const customFont = customFonts[fontFamily];
+    if (!customFont) {
+      continue;
+    }
+
+    const weight = fontWeightsBySection.get(sectionKey);
+    if (!weight) {
+      continue;
+    }
+
+    const kind = "weights" in customFont ? "static" : "variable";
+    if (!preloadMap[fontFamily]) {
+      preloadMap[fontFamily] = { kind, weights: [] };
+    }
+    preloadMap[fontFamily].weights.push(weight);
+  }
+
+  for (const entry of Object.values(preloadMap)) {
+    entry.weights = Array.from(new Set(entry.weights)).sort(
+      (a, b) => Number(a) - Number(b)
+    );
+  }
+
+  return preloadMap;
+};
+
+export const generateCustomFontPreloadLinkData = (
+  preloadMap: CustomFontPreloadMap,
+  relativePrefixToRoot: string
+): FontLinkData[] => {
+  const links: FontLinkData[] = [];
+
+  for (const [fontFamily, entry] of Object.entries(preloadMap)) {
+    const normalizedName = normalizeFontFileName(fontFamily);
+    entry.weights.forEach((weight) => {
+      links.push({
+        href: `${relativePrefixToRoot}y-fonts/${normalizedName}-${weight}.woff2`,
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous",
+      });
+    });
+  }
+
+  return links;
 };
 
 // Convert font link data to HTML string
@@ -128,6 +225,10 @@ export const fontLinkDataToHTML = (linkData: FontLinkData[]): string => {
         : "";
       if (link.rel === "preconnect") {
         return `<link rel="${link.rel}" href="${link.href}"${crossOriginAttr}>`;
+      } else if (link.rel === "preload") {
+        const asAttr = link.as ? ` as="${link.as}"` : "";
+        const typeAttr = link.type ? ` type="${link.type}"` : "";
+        return `<link rel="${link.rel}" href="${link.href}"${asAttr}${typeAttr}${crossOriginAttr}>`;
       } else {
         return `<link href="${link.href}" rel="${link.rel}"${crossOriginAttr}>`;
       }
@@ -142,15 +243,34 @@ export const googleFontLinkTags = fontLinkDataToHTML(
 // Create DOM elements directly from font data
 export const createFontLinkElements = (
   googleFonts: FontRegistry,
-  customFonts: string[]
+  customFonts: string[],
+  customFontPreloadMap: CustomFontPreloadMap = {},
+  relativePrefixToRoot: string = "./"
 ): HTMLLinkElement[] => {
   const googleFontLinkData = generateGoogleFontLinkData(googleFonts);
-  const customFontLinkData = generateCustomFontLinkData(customFonts, "./");
+  const customFontLinkData = generateCustomFontLinkData(
+    customFonts,
+    relativePrefixToRoot
+  );
+  const customFontPreloadLinkData = generateCustomFontPreloadLinkData(
+    customFontPreloadMap,
+    relativePrefixToRoot
+  );
 
-  return [...customFontLinkData, ...googleFontLinkData].map((link) => {
+  return [
+    ...customFontPreloadLinkData,
+    ...customFontLinkData,
+    ...googleFontLinkData,
+  ].map((link) => {
     const element = document.createElement("link");
     element.href = link.href;
     element.rel = link.rel;
+    if (link.as) {
+      element.as = link.as;
+    }
+    if (link.type) {
+      element.type = link.type;
+    }
     if (link.crossOrigin) {
       element.crossOrigin = link.crossOrigin;
     }

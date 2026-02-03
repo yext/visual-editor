@@ -14,6 +14,10 @@ import { ThemeEditorRightSidebar } from "../puck/components/theme-editor-sidebar
 import { ThemeConfig } from "../../utils/themeResolver.ts";
 import { ThemeHeader } from "../puck/components/ThemeHeader.tsx";
 import { updateThemeInEditor } from "../../utils/applyTheme.ts";
+import {
+  defaultFonts,
+  extractCustomFontPreloadMap,
+} from "../../utils/fonts/visualEditorFonts.ts";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
 import { v4 as uuidv4 } from "uuid";
 import { ThemeHistories, ThemeHistory } from "../types/themeData.ts";
@@ -98,13 +102,29 @@ export const InternalThemeEditor = ({
       return;
     }
 
+    const nextThemeValues = { ...newThemeValues };
+    if (templateMetadata.customFonts) {
+      const customFontPreloadMap = extractCustomFontPreloadMap(
+        nextThemeValues,
+        templateMetadata.customFonts,
+        defaultFonts
+      );
+      if (Object.keys(customFontPreloadMap).length > 0) {
+        nextThemeValues.__customFontPreload = customFontPreloadMap;
+      } else {
+        delete nextThemeValues.__customFontPreload;
+      }
+    } else {
+      delete nextThemeValues.__customFontPreload;
+    }
+
     const newHistory = {
       histories: [
         ...themeHistoriesRef.current.histories.slice(
           0,
           themeHistoriesRef.current.index + 1
         ),
-        { id: uuidv4(), data: newThemeValues },
+        { id: uuidv4(), data: nextThemeValues },
       ] as ThemeHistory[],
       index: themeHistoriesRef.current.index + 1,
     };
@@ -115,7 +135,7 @@ export const InternalThemeEditor = ({
         buildThemeLocalStorageKey(),
         lzstring.compress(JSON.stringify(newHistory.histories))
       );
-      updateThemeInEditor(newThemeValues, themeConfig, true);
+      updateThemeInEditor(nextThemeValues, themeConfig, true);
       setThemeHistories(newHistory);
       return;
     }
@@ -139,7 +159,7 @@ export const InternalThemeEditor = ({
       });
     }
 
-    updateThemeInEditor(newThemeValues, themeConfig, true);
+    updateThemeInEditor(nextThemeValues, themeConfig, true);
     setThemeHistories(newHistory);
   };
 
