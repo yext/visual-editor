@@ -24,7 +24,7 @@ import {
   SlotsCategory,
   SlotsCategoryComponents,
   SlotsCategoryProps,
-} from "../categories/index.ts";
+} from "../categories/SlotsCategory.tsx";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,

@@ -13,14 +13,7 @@ import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
-import {
-  HeadingText,
-  Address,
-  HoursTable,
-  Emails,
-  TextList,
-} from "../contentBlocks/index.ts";
-import { PhoneList } from "../contentBlocks/PhoneList.tsx";
+import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 
 const testAddress = {
   city: "Brooklyn",
@@ -675,12 +668,7 @@ describe("CoreInfoSection", async () => {
   const puckConfig: Config = {
     components: {
       CoreInfoSection,
-      AddressSlot: Address,
-      EmailsSlot: Emails,
-      HeadingTextSlot: HeadingText,
-      HoursTableSlot: HoursTable,
-      PhoneNumbersSlot: PhoneList,
-      TextListSlot: TextList,
+      ...SlotsCategoryComponents,
     },
     root: {
       render: ({ children }: { children: React.ReactNode }) => {
