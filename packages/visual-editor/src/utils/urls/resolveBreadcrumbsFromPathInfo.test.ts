@@ -31,9 +31,9 @@ describe("resolveBreadcrumbsFromPathInfo", () => {
 
     expect(resolveBreadcrumbsFromPathInfo(englishDocument)).toEqual([
       { name: "index.html", slug: "index.html" },
-      { name: "US", slug: "US" },
-      { name: "TS", slug: "US/TS" },
-      { name: "Testville", slug: "US/TS/Testville" },
+      { name: "US", slug: "us" },
+      { name: "TS", slug: "us/ts" },
+      { name: "Testville", slug: "us/ts/testville" },
       { name: "123 Test Rd", slug: "" },
     ]);
   });
@@ -46,9 +46,9 @@ describe("resolveBreadcrumbsFromPathInfo", () => {
 
     expect(resolveBreadcrumbsFromPathInfo(spanishDocument)).toEqual([
       { name: "index.html", slug: "es/index.html" },
-      { name: "US", slug: "es/US" },
-      { name: "TS", slug: "es/US/TS" },
-      { name: "Testville", slug: "es/US/TS/Testville" },
+      { name: "US", slug: "es/us" },
+      { name: "TS", slug: "es/us/ts" },
+      { name: "Testville", slug: "es/us/ts/testville" },
       { name: "123 Test Rd", slug: "" },
     ]);
   });

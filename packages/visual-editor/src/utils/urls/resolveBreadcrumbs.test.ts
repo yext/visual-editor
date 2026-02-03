@@ -10,12 +10,24 @@ vi.mock("@yext/visual-editor", () => ({
 const mockedGetDirectoryParents = getDirectoryParents as unknown as Mock;
 
 const baseDocument: StreamDocument = {
-  id: "123",
-  name: "Current",
+  name: "123 Test Rd",
+  address: {
+    line1: "123 Test Rd",
+    city: "Testville",
+    region: "TS",
+    postalCode: "12345",
+    countryCode: "US",
+  },
   locale: "en",
   __: {
     pathInfo: {
       primaryLocale: "en",
+      breadcrumbTemplates: [
+        "index.html",
+        "[[address.countryCode]]",
+        "[[address.countryCode]]/[[address.region]]",
+        "[[address.countryCode]]/[[address.region]]/[[address.city]]",
+      ],
     },
   },
 };
@@ -26,23 +38,18 @@ beforeEach(() => {
 
 describe("resolveBreadcrumbs", () => {
   it("prefers pathInfo breadcrumbs over directory parents", () => {
-    const documentWithBreadcrumbs: StreamDocument = {
-      ...baseDocument,
-      __: {
-        pathInfo: {
-          primaryLocale: "en",
-          breadcrumbTemplates: ["stores/[[id]]", "stores/[[id]]/team"],
-        },
-      },
-    };
+    const documentWithBreadcrumbs: StreamDocument = baseDocument;
 
     mockedGetDirectoryParents.mockReturnValue([
       { name: "Directory Parent", slug: "directory-parent" },
     ]);
 
     expect(resolveBreadcrumbs(documentWithBreadcrumbs)).toEqual([
-      { name: "123", slug: "stores/123" },
-      { name: "team", slug: "stores/123/team" },
+      { name: "index.html", slug: "index.html" },
+      { name: "US", slug: "us" },
+      { name: "TS", slug: "us/ts" },
+      { name: "Testville", slug: "us/ts/testville" },
+      { name: "123 Test Rd", slug: "" },
     ]);
   });
 
@@ -58,7 +65,7 @@ describe("resolveBreadcrumbs", () => {
 
     expect(resolveBreadcrumbs(documentWithoutPathInfo)).toEqual([
       { name: "Directory Parent", slug: "directory-parent" },
-      { name: "Current", slug: "" },
+      { name: "123 Test Rd", slug: "" },
     ]);
   });
 
@@ -72,7 +79,7 @@ describe("resolveBreadcrumbs", () => {
     mockedGetDirectoryParents.mockReturnValue(undefined);
 
     expect(resolveBreadcrumbs(documentWithChildren)).toEqual([
-      { name: "Current", slug: "" },
+      { name: "123 Test Rd", slug: "" },
     ]);
   });
 
