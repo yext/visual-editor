@@ -41,6 +41,7 @@ export const ThemeFieldsSidebar = ({
     let isActive = true;
 
     const loadIndex = async () => {
+      // Build a cached index of @font-face rules for custom fonts to map weights -> files.
       if (!customFonts || Object.keys(customFonts).length === 0) {
         if (isActive) {
           setCustomFontCssIndex(null);

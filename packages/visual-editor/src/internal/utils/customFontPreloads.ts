@@ -68,6 +68,7 @@ const parseFontFaceBlock = (block: string) => {
   }
 
   const fontStyle = fontStyleRaw.trim().toLowerCase();
+  // Theme data does not track italic styles; only preload normal rules.
   if (fontStyle !== "normal") {
     return undefined;
   }
