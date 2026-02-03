@@ -51,6 +51,7 @@ import {
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { FieldTypeData } from "../internal/types/templateMetadata.ts";
+import { getPreferredDistanceUnit } from "../utils/i18n/distance.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -600,10 +601,12 @@ export const LocatorResultCard = React.memo(
 
     const distanceInMiles =
       typeof distance === "number"
-        ? (distance / 1609.344).toFixed(1)
+        ? Number((distance / 1609.344).toFixed(1))
         : undefined;
     const distanceInKilometers =
-      typeof distance === "number" ? (distance / 1000).toFixed(1) : undefined;
+      typeof distance === "number"
+        ? Number((distance / 1000).toFixed(1))
+        : undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -648,6 +651,8 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
+    const unit = getPreferredDistanceUnit(i18n.language);
+
     return (
       <Background
         background={backgroundColors.background1.value}
@@ -678,13 +683,13 @@ export const LocatorResultCard = React.memo(
                     "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex"
                   }
                 >
-                  {t("distanceInUnit", `${distanceInMiles} mi`, {
-                    distanceInMiles,
-                    distanceInKilometers,
-                  })}
+                  {unit === "mile"
+                    ? `${distanceInMiles} mi`
+                    : `${distanceInKilometers} km`}
                 </div>
               )}
             </div>
+
             <HoursSection
               location={location}
               result={result}

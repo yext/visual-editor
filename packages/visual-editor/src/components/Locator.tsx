@@ -1510,7 +1510,7 @@ interface DistanceFilterProps {
 
 const DistanceFilter = (props: DistanceFilterProps) => {
   const { selectedDistanceMiles, onChange } = props;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
   });
@@ -1518,6 +1518,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
     ? "w-3 text-gray-400"
     : "w-3 text-gray-400 transform rotate-180";
   const distanceOptionsMiles = [5, 10, 25, 50];
+  const unit = getPreferredDistanceUnit(i18n.language);
 
   return (
     <div className="flex flex-col gap-4">
@@ -1549,7 +1550,12 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <Body className="inline-flex">
-              {`< ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
+              {`< ${
+                unit === "mile" ? distanceMiles : toKilometers(distanceMiles)
+              } ${t(unit, {
+                count:
+                  unit === "mile" ? distanceMiles : toKilometers(distanceMiles),
+              })}`}
             </Body>
           </div>
         ))}
