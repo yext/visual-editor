@@ -20,6 +20,7 @@ export const FontSelector = ({
 }: FontSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -37,6 +38,12 @@ export const FontSelector = ({
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
+
+  React.useEffect(() => {
+    if (isOpen) {
+      searchInputRef.current?.focus();
+    }
+  }, [isOpen]);
 
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(searchTerm.toLowerCase())
@@ -66,6 +73,7 @@ export const FontSelector = ({
               className="font-search-input"
               value={searchTerm}
               onChange={handleSearchChange}
+              ref={searchInputRef}
             />
           </div>
           {filteredOptions.length > 0 ? (
