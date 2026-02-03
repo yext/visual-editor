@@ -2,17 +2,14 @@ import { useTranslation } from "react-i18next";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { DayOfWeekNames, HoursType } from "@yext/pages-components";
 import "@yext/pages-components/style.css";
-import {
-  EntityField,
-  HoursTableAtom,
-  resolveComponentData,
-  useDocument,
-  YextEntityField,
-  YextField,
-  msg,
-  pt,
-  Body,
-} from "@yext/visual-editor";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { HoursTableAtom } from "../atoms/hoursTable.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { msg, pt } from "../../utils/i18n/platform.ts";
+import { Body } from "../atoms/body.tsx";
 
 /** Props for the HoursTable component. */
 export interface HoursTableProps {

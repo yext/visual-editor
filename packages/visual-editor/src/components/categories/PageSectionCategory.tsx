@@ -1,4 +1,7 @@
-import { AboutSection, AboutSectionProps } from "../pageSections/index.ts";
+import {
+  AboutSection,
+  AboutSectionProps,
+} from "../pageSections/AboutSection/AboutSection.tsx";
 import { BannerSection, BannerSectionProps } from "../pageSections/Banner.tsx";
 import {
   BreadcrumbsSection,

@@ -1,9 +1,9 @@
 import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { OctagonX } from "lucide-react";
-import { useCommonMessageSenders } from "../hooks/useMessageSenders";
-import { useErrorContext } from "../../contexts/ErrorContext";
-import { pt } from "../../utils/i18n/platform";
+import { useCommonMessageSenders } from "../hooks/useMessageSenders.ts";
+import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { pt } from "../../utils/i18n/platform.ts";
 
 interface ComponentErrorBoundaryProps {
   children: React.ReactNode;

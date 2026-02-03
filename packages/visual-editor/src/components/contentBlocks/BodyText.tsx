@@ -1,20 +1,16 @@
 import { useTranslation } from "react-i18next";
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import {
-  BodyProps,
-  useDocument,
-  resolveComponentData,
-  EntityField,
-  YextEntityField,
-  YextField,
-  pt,
-  msg,
-  TranslatableRichText,
-  useBackground,
-  resolveDataFromParent,
-  Body,
-} from "@yext/visual-editor";
+import { BodyProps, Body } from "../atoms/body.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import { EntityField } from "../../editor/EntityField.tsx";
+import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { pt, msg } from "../../utils/i18n/platform.ts";
+import { TranslatableRichText } from "../../types/types.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
+import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 
 export type BodyTextProps = {
   data: {

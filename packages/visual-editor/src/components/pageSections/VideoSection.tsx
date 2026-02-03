@@ -2,12 +2,12 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   backgroundColors,
   BackgroundStyle,
-  msg,
-  PageSection,
-  VisibilityWrapper,
-  YextField,
-} from "@yext/visual-editor";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary";
+} from "../../utils/themeConfigOptions.ts";
+import { msg } from "../../utils/i18n/platform.ts";
+import { PageSection } from "../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
+import { YextField } from "../../editor/YextField.tsx";
+import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 
 export interface VideoSectionProps {
   /**

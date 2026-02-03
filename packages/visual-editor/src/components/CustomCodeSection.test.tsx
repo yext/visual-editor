@@ -5,12 +5,10 @@ import {
   transformTests,
 } from "./testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
-import {
-  CustomCodeSection,
-  migrate,
-  migrationRegistry,
-  VisualEditorProvider,
-} from "@yext/visual-editor";
+import { CustomCodeSection } from "./CustomCodeSection.tsx";
+import { migrate } from "../utils/migrate.ts";
+import { migrationRegistry } from "./migrations/migrationRegistry.ts";
+import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
 import { Render, Config } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 

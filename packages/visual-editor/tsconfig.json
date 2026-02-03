@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "NodeNext",
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "types": ["vite/client", "node"],
     "allowImportingTsExtensions": true,
     "allowJs": true,
@@ -12,6 +12,7 @@
     "removeComments": false,
     "emitDeclarationOnly": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -19,17 +20,12 @@
     "strict": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@yext/visual-editor": ["./src/index.ts"]
-    }
+    "resolveJsonModule": true
   },
-  "include": [
-    "src",
-    "index.d.ts",
-    ".eslintrc.json",
-    "src/components/testing/componentTests.d.ts"
-  ],
-  "exclude": ["node_modules", "src/vite-plugin/templates/*"]
+  "include": ["src", "src/components/testing/componentTests.d.ts"],
+  "exclude": [
+    "node_modules",
+    "src/vite-plugin/templates/*",
+    "src/components/testing/componentTests.tailwind.config.ts"
+  ]
 }

@@ -1,4 +1,4 @@
-import { pt } from "../../utils/i18n/platform";
+import { pt } from "../../utils/i18n/platform.ts";
 
 const findTargetDiv = (
   iframe: HTMLIFrameElement,

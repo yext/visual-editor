@@ -3,17 +3,15 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
-import {
-  BackgroundStyle,
-  normalizeLink,
-  themeManagerCn,
-  useBackground,
-  useDocument,
-} from "@yext/visual-editor";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { normalizeLink } from "../../utils/normalizeLink.ts";
+import { themeManagerCn } from "../../utils/cn.ts";
+import { useBackground } from "../../hooks/useBackground.tsx";
+import { useDocument } from "../../hooks/useDocument.tsx";
 import { FaAngleRight, FaExternalLinkAlt } from "react-icons/fa";
 import { getDirections } from "@yext/pages-components";
-import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types";
-import { presetImageIcons } from "../../utils/presetImageIcons";
+import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
+import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
 
 export type CTAProps = {

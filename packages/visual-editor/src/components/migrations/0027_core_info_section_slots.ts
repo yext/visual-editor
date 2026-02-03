@@ -1,4 +1,4 @@
-import { Migration } from "@yext/visual-editor";
+import { Migration } from "../../utils/migrate.ts";
 
 export const coreInfoSectionSlots: Migration = {
   Emails: {

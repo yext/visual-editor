@@ -1,13 +1,11 @@
 import { useTranslation } from "react-i18next";
-import {
-  PageSection,
-  useDocument,
-  Background,
-  resolveYextEntityField,
-} from "@yext/visual-editor";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { Background } from "../../atoms/background.tsx";
+import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { getImageUrl } from "@yext/pages-components";
-import { HeroVariantProps } from "../HeroSection";
-import { HeroContent, heroContentParentCn } from "./HeroContent";
+import { HeroVariantProps } from "../HeroSection.tsx";
+import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
 import { PuckComponent } from "@puckeditor/core";
 
 export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
