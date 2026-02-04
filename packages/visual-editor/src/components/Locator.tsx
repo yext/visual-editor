@@ -643,6 +643,9 @@ const LocatorInternal = ({
   const [selectedDistanceMeters, setSelectedDistanceMeters] = React.useState<
     number | null
   >(null);
+  const [selectedDistanceOption, setSelectedDistanceOption] = React.useState<
+    number | null
+  >(null);
   /** Radius of last location near filter returned by the filter search API */
   const apiFilterRadius = React.useRef<number | null>(null);
 
@@ -770,6 +773,14 @@ const LocatorInternal = ({
       setSearchState("complete");
     }
   }, [searchLoading, searchState]);
+
+  React.useEffect(() => {
+    if (selectedDistanceOption === null) {
+      setSelectedDistanceMeters(null);
+      return;
+    }
+    setSelectedDistanceMeters(toMeters(selectedDistanceOption, preferredUnit));
+  }, [preferredUnit, selectedDistanceOption]);
 
   const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const resultsContainer = React.useRef<HTMLDivElement>(null);
@@ -1024,15 +1035,16 @@ const LocatorInternal = ({
     const existingFilters = searchFilters.static || [];
     let updatedFilters: SelectableStaticFilter[];
     const distanceInMeters = toMeters(distance, distanceUnit);
-    if (distanceInMeters === selectedDistanceMeters) {
+    if (selectedDistanceOption === distance) {
       setSelectedDistanceMeters(null);
+      setSelectedDistanceOption(null);
       // revert to API radius (or default if none was found) if user clicks the same distance again
       updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
         apiFilterRadius.current ?? toMeters(DEFAULT_RADIUS, preferredUnit)
       );
     } else {
-      setSelectedDistanceMeters(distanceInMeters);
+      setSelectedDistanceOption(distance);
       updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
         distanceInMeters
@@ -1060,6 +1072,7 @@ const LocatorInternal = ({
     searchActions.setOffset(0);
     executeSearch(searchActions);
     setSelectedDistanceMeters(null);
+    setSelectedDistanceOption(null);
   };
 
   // If something else causes the filters to update, check if the hours filter is still present
@@ -1130,7 +1143,7 @@ const LocatorInternal = ({
               <ResultsCountSummary
                 searchState={searchState}
                 resultCount={resultCount}
-                selectedDistanceMeters={selectedDistanceMeters}
+                selectedDistanceOption={selectedDistanceOption}
                 filterDisplayName={filterDisplayName}
               />
               {hasFilterModalToggle && (
@@ -1179,7 +1192,7 @@ const LocatorInternal = ({
             isOpenNowSelected={isOpenNowSelected}
             handleOpenNowClick={handleOpenNowClick}
             showDistanceOptions={showDistanceOptions}
-            selectedDistanceMeters={selectedDistanceMeters}
+            selectedDistanceOption={selectedDistanceOption}
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
             handleClearFiltersClick={handleClearFiltersClick}
@@ -1208,7 +1221,7 @@ const LocatorInternal = ({
 interface ResultsCountSummaryProps {
   searchState: SearchState;
   resultCount: number;
-  selectedDistanceMeters: number | null;
+  selectedDistanceOption: number | null;
   filterDisplayName?: string;
 }
 
@@ -1216,7 +1229,7 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   const {
     searchState,
     resultCount,
-    selectedDistanceMeters,
+    selectedDistanceOption,
     filterDisplayName,
   } = props;
   const { t, i18n } = useTranslation();
@@ -1242,15 +1255,14 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
     }
   } else {
     if (filterDisplayName) {
-      if (selectedDistanceMeters) {
+      if (selectedDistanceOption) {
         const unit = getPreferredDistanceUnit(i18n.language);
-        const distance = fromMeters(selectedDistanceMeters, unit);
         return (
           <Body>
             {t("locationsWithinDistanceOf", {
               count: resultCount,
-              distance: formatDistance(distance, i18n.language, 0, 0),
-              unit: t(unit, { count: distance }),
+              distance: selectedDistanceOption,
+              unit: t(unit, { count: selectedDistanceOption }),
               name: filterDisplayName,
             })}
           </Body>
@@ -1383,7 +1395,7 @@ interface FilterModalProps {
   showOpenNowOption: boolean; // whether to show the Open Now filter option
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
   showDistanceOptions: boolean; // whether to show the Distance filter option
-  selectedDistanceMeters: number | null;
+  selectedDistanceOption: number | null;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
   handleDistanceClick: (
@@ -1399,7 +1411,7 @@ const FilterModal = (props: FilterModalProps) => {
     showOpenNowOption,
     isOpenNowSelected,
     showDistanceOptions,
-    selectedDistanceMeters,
+    selectedDistanceOption,
     handleCloseModalClick,
     handleOpenNowClick,
     handleDistanceClick,
@@ -1445,7 +1457,7 @@ const FilterModal = (props: FilterModalProps) => {
           {showDistanceOptions && (
             <DistanceFilter
               onChange={handleDistanceClick}
-              selectedDistanceMeters={selectedDistanceMeters}
+              selectedDistanceOption={selectedDistanceOption}
             />
           )}
           <Facets
@@ -1519,11 +1531,11 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 
 interface DistanceFilterProps {
   onChange: (distance: number, unit: "mile" | "kilometer") => void;
-  selectedDistanceMeters: number | null;
+  selectedDistanceOption: number | null;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
-  const { selectedDistanceMeters, onChange } = props;
+  const { selectedDistanceOption, onChange } = props;
   const { t, i18n } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
@@ -1556,7 +1568,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${t(unit, { count: distanceOption })}`}
             >
               <div className="text-palette-primary-dark">
-                {selectedDistanceMeters === toMeters(distanceOption, unit) ? (
+                {selectedDistanceOption === distanceOption ? (
                   <FaDotCircle />
                 ) : (
                   <FaRegCircle />
