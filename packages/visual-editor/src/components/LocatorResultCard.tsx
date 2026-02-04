@@ -53,6 +53,7 @@ import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { FieldTypeData } from "../internal/types/templateMetadata.ts";
 import {
   formatDistance,
+  fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
 
@@ -602,19 +603,12 @@ export const LocatorResultCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const distanceInKilometers =
-      typeof distance === "number" ? distance / 1000 : undefined;
-    const distanceInMiles =
-      typeof distance === "number" ? distance / 1609.344 : undefined;
     const unit = getPreferredDistanceUnit(i18n.language);
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
-    let displayDistance;
-    if (distanceInMiles !== undefined && distanceInKilometers !== undefined) {
-      displayDistance =
-        unit === "mile"
-          ? `${formatDistance(distanceInMiles, i18n.language)} ${unitLabel}`
-          : `${formatDistance(distanceInKilometers, i18n.language)} ${unitLabel}`;
-    }
+    const displayDistance =
+      typeof distance === "number"
+        ? `${formatDistance(fromMeters(distance, unit), i18n.language)} ${unitLabel}`
+        : undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,

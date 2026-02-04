@@ -51,8 +51,9 @@ import { useDocument } from "../hooks/useDocument.tsx";
 import { YextField } from "../editor/YextField.tsx";
 import {
   formatDistance,
+  fromMeters,
   getPreferredDistanceUnit,
-  toKilometers,
+  toMeters,
   toMiles,
 } from "../utils/i18n/distance.ts";
 import {
@@ -77,9 +78,8 @@ const LOCATION_FIELD = "builtin.location";
 const COUNTRY_CODE_FIELD = "address.countryCode";
 const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
-const DEFAULT_RADIUS_MILES = 25;
+const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
-const MILES_TO_METERS = 1609.34;
 const INITIAL_LOCATION_KEY = "initialLocation";
 
 const getEntityType = (entityTypeEnvVar?: string) => {
@@ -608,7 +608,8 @@ const LocatorInternal = ({
   resultCard: resultCardProps,
   puck,
 }: WithPuckProps<LocatorProps>) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const streamDocument = useDocument();
   const resultCount = useSearchState(
@@ -638,10 +639,9 @@ const LocatorInternal = ({
   const [showSearchAreaButton, setShowSearchAreaButton] = React.useState(false);
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
   const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
-  /** Explicit filter radius selected by the user */
-  const [selectedDistanceMiles, setSelectedDistanceMiles] = React.useState<
-    number | null
-  >(null);
+  /** Explicit filter radius selected by the user, in meters */
+  const [selectedDistanceMeters, setSelectedDistanceMeters] =
+    React.useState<number | null>(null);
   /** Radius of last location near filter returned by the filter search API */
   const apiFilterRadius = React.useRef<number | null>(null);
 
@@ -724,8 +724,8 @@ const LocatorInternal = ({
         apiFilterRadius.current = nearFilterValue.radius;
         // only overwrite radius from filter if display options are enabled
         const radius =
-          showDistanceOptions && selectedDistanceMiles
-            ? selectedDistanceMiles * MILES_TO_METERS
+          showDistanceOptions && selectedDistanceMeters
+            ? selectedDistanceMeters
             : nearFilterValue.radius;
         locationFilter = buildNearLocationFilterFromPrevious(
           nearFilterValue,
@@ -828,9 +828,9 @@ const LocatorInternal = ({
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
       const radius =
-        showDistanceOptions && selectedDistanceMiles
-          ? selectedDistanceMiles * MILES_TO_METERS
-          : DEFAULT_RADIUS_MILES * MILES_TO_METERS;
+        showDistanceOptions && selectedDistanceMeters
+          ? selectedDistanceMeters
+          : toMeters(DEFAULT_RADIUS, preferredUnit);
       // default location filter to NYC
       let initialLocationFilter = buildNearLocationFilterFromCoords(
         DEFAULT_MAP_CENTER[1],
@@ -1016,21 +1016,25 @@ const LocatorInternal = ({
     previousOffset.current = currentOffset;
   }, [currentOffset]);
 
-  const handleDistanceClick = (distanceMiles: number) => {
+  const handleDistanceClick = (
+    distance: number,
+    distanceUnit: "mile" | "kilometer"
+  ) => {
     const existingFilters = searchFilters.static || [];
     let updatedFilters: SelectableStaticFilter[];
-    if (distanceMiles === selectedDistanceMiles) {
-      setSelectedDistanceMiles(null);
+    const distanceInMeters = toMeters(distance, distanceUnit);
+    if (distanceInMeters === selectedDistanceMeters) {
+      setSelectedDistanceMeters(null);
       // revert to API radius (or default if none was found) if user clicks the same distance again
       updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
-        apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
+        apiFilterRadius.current ?? toMeters(DEFAULT_RADIUS, preferredUnit)
       );
     } else {
-      setSelectedDistanceMiles(distanceMiles);
+      setSelectedDistanceMeters(distanceInMeters);
       updatedFilters = updateRadiusInNearFiltersOnLocationField(
         existingFilters,
-        distanceMiles * MILES_TO_METERS
+        distanceInMeters
       );
     }
     searchActions.setStaticFilters(updatedFilters);
@@ -1043,7 +1047,7 @@ const LocatorInternal = ({
     // revert to API radius (or default if none was found)
     const partiallyUpdatedFilters = updateRadiusInNearFiltersOnLocationField(
       existingFilters,
-      apiFilterRadius.current ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS
+      apiFilterRadius.current ?? toMeters(DEFAULT_RADIUS, preferredUnit)
     );
     const updatedFilters = deselectOpenNowFilters(partiallyUpdatedFilters);
 
@@ -1054,7 +1058,7 @@ const LocatorInternal = ({
     // Execute search to update AppliedFilters components
     searchActions.setOffset(0);
     executeSearch(searchActions);
-    setSelectedDistanceMiles(null);
+    setSelectedDistanceMeters(null);
   };
 
   // If something else causes the filters to update, check if the hours filter is still present
@@ -1112,7 +1116,10 @@ const LocatorInternal = ({
             }}
             showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
-              radius: DEFAULT_RADIUS_MILES, // this component uses miles, not meters
+              radius:
+                preferredUnit === "mile"
+                  ? DEFAULT_RADIUS
+                  : toMiles(DEFAULT_RADIUS), // this component uses miles, not meters
             }}
           />
         </div>
@@ -1122,7 +1129,7 @@ const LocatorInternal = ({
               <ResultsCountSummary
                 searchState={searchState}
                 resultCount={resultCount}
-                selectedDistanceMiles={selectedDistanceMiles}
+                selectedDistanceMeters={selectedDistanceMeters}
                 filterDisplayName={filterDisplayName}
               />
               {hasFilterModalToggle && (
@@ -1171,7 +1178,7 @@ const LocatorInternal = ({
             isOpenNowSelected={isOpenNowSelected}
             handleOpenNowClick={handleOpenNowClick}
             showDistanceOptions={showDistanceOptions}
-            selectedDistanceMiles={selectedDistanceMiles}
+            selectedDistanceMeters={selectedDistanceMeters}
             handleDistanceClick={handleDistanceClick}
             handleCloseModalClick={() => setShowFilterModal(false)}
             handleClearFiltersClick={handleClearFiltersClick}
@@ -1200,13 +1207,17 @@ const LocatorInternal = ({
 interface ResultsCountSummaryProps {
   searchState: SearchState;
   resultCount: number;
-  selectedDistanceMiles: number | null;
+  selectedDistanceMeters: number | null;
   filterDisplayName?: string;
 }
 
 const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
-  const { searchState, resultCount, selectedDistanceMiles, filterDisplayName } =
-    props;
+  const {
+    searchState,
+    resultCount,
+    selectedDistanceMeters,
+    filterDisplayName,
+  } = props;
   const { t, i18n } = useTranslation();
 
   if (resultCount === 0) {
@@ -1230,12 +1241,9 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
     }
   } else {
     if (filterDisplayName) {
-      if (selectedDistanceMiles) {
+      if (selectedDistanceMeters) {
         const unit = getPreferredDistanceUnit(i18n.language);
-        const distance =
-          unit === "mile"
-            ? selectedDistanceMiles
-            : toKilometers(selectedDistanceMiles);
+        const distance = fromMeters(selectedDistanceMeters, unit);
         return (
           <Body>
             {t("locationsWithinDistanceOf", {
@@ -1374,10 +1382,13 @@ interface FilterModalProps {
   showOpenNowOption: boolean; // whether to show the Open Now filter option
   isOpenNowSelected: boolean; // whether the Open Now filter is currently selected by the user
   showDistanceOptions: boolean; // whether to show the Distance filter option
-  selectedDistanceMiles: number | null;
+  selectedDistanceMeters: number | null;
   handleCloseModalClick: () => void;
   handleOpenNowClick: (selected: boolean) => void;
-  handleDistanceClick: (distance: number) => void;
+  handleDistanceClick: (
+    distance: number,
+    distanceUnit: "mile" | "kilometer"
+  ) => void;
   handleClearFiltersClick: () => void;
 }
 
@@ -1387,7 +1398,7 @@ const FilterModal = (props: FilterModalProps) => {
     showOpenNowOption,
     isOpenNowSelected,
     showDistanceOptions,
-    selectedDistanceMiles,
+    selectedDistanceMeters,
     handleCloseModalClick,
     handleOpenNowClick,
     handleDistanceClick,
@@ -1433,7 +1444,7 @@ const FilterModal = (props: FilterModalProps) => {
           {showDistanceOptions && (
             <DistanceFilter
               onChange={handleDistanceClick}
-              selectedDistanceMiles={selectedDistanceMiles}
+              selectedDistanceMeters={selectedDistanceMeters}
             />
           )}
           <Facets
@@ -1506,12 +1517,12 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
 };
 
 interface DistanceFilterProps {
-  onChange: (distance: number) => void;
-  selectedDistanceMiles: number | null;
+  onChange: (distance: number, unit: "mile" | "kilometer") => void;
+  selectedDistanceMeters: number | null;
 }
 
 const DistanceFilter = (props: DistanceFilterProps) => {
-  const { selectedDistanceMiles, onChange } = props;
+  const { selectedDistanceMeters, onChange } = props;
   const { t, i18n } = useTranslation();
   const { isExpanded, getToggleProps, getCollapseProps } = useCollapse({
     defaultExpanded: true,
@@ -1540,16 +1551,12 @@ const DistanceFilter = (props: DistanceFilterProps) => {
           >
             <button
               className="inline-flex bg-white"
-              onClick={() =>
-                onChange(
-                  // onChange treats the underlying unit as miles. If we're viewing in km, convert back to miles
-                  unit === "mile" ? distanceOption : toMiles(distanceOption)
-                )
-              }
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${t("mile", { count: distanceOption })}`}
+              onClick={() => onChange(distanceOption, unit)}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${t(unit, { count: distanceOption })}`}
             >
               <div className="text-palette-primary-dark">
-                {selectedDistanceMiles === distanceOption ? (
+                {selectedDistanceMeters ===
+                toMeters(distanceOption, unit) ? (
                   <FaDotCircle />
                 ) : (
                   <FaRegCircle />
@@ -1654,7 +1661,7 @@ function buildNearLocationFilterFromPrevious(
 function buildNearLocationFilterFromCoords(
   lat: number,
   lng: number,
-  radius?: number,
+  radius: number,
   displayName?: string
 ): SelectableStaticFilter {
   return {
@@ -1666,7 +1673,7 @@ function buildNearLocationFilterFromCoords(
       value: {
         lat,
         lng,
-        radius: radius ?? DEFAULT_RADIUS_MILES * MILES_TO_METERS,
+        radius,
       },
       matcher: Matcher.Near,
     },
