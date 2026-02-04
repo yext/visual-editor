@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "nodenext",
+    "module": "ESNext",
     "jsx": "react-jsx",
-    "moduleResolution": "nodenext",
-    "types": ["vite/client", "node"],
+    "moduleResolution": "bundler",
+    "types": ["vite/client"],
     "allowJs": true,
     "checkJs": false,
     "resolveJsonModule": true,

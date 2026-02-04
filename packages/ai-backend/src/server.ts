@@ -99,7 +99,7 @@ const server = http.createServer(async (req, res) => {
 
     const puckRequest = new Request(`${origin}/api/puck/${route}`, {
       method: "POST",
-      body: {
+      body: JSON.stringify({
         ...body,
         config: {
           ...body.config,
@@ -109,7 +109,7 @@ const server = http.createServer(async (req, res) => {
             ),
           ),
         },
-      },
+      }),
     });
 
     const puckResponse = await puckHandler(puckRequest, {
