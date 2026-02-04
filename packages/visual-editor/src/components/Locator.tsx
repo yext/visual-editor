@@ -640,8 +640,9 @@ const LocatorInternal = ({
   const [mapCenter, setMapCenter] = React.useState<LngLat | undefined>();
   const [mapBounds, setMapBounds] = React.useState<LngLatBounds | undefined>();
   /** Explicit filter radius selected by the user, in meters */
-  const [selectedDistanceMeters, setSelectedDistanceMeters] =
-    React.useState<number | null>(null);
+  const [selectedDistanceMeters, setSelectedDistanceMeters] = React.useState<
+    number | null
+  >(null);
   /** Radius of last location near filter returned by the filter search API */
   const apiFilterRadius = React.useRef<number | null>(null);
 
@@ -1555,8 +1556,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${t(unit, { count: distanceOption })}`}
             >
               <div className="text-palette-primary-dark">
-                {selectedDistanceMeters ===
-                toMeters(distanceOption, unit) ? (
+                {selectedDistanceMeters === toMeters(distanceOption, unit) ? (
                   <FaDotCircle />
                 ) : (
                   <FaRegCircle />
