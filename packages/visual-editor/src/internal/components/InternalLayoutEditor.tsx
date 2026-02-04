@@ -126,14 +126,22 @@ export const InternalLayoutEditor = ({
         if (cancelled || !templateMetadata.aiPageGeneration) {
           return;
         }
-        setAiPlugin(mod.createAiPlugin({}));
+        setAiPlugin(
+          mod.createAiPlugin(
+            localDev
+              ? {
+                  host: "http://127.0.0.1:8787/api/puck/chat",
+                }
+              : undefined
+          )
+        );
       })
       .catch(() => {});
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [localDev]);
   /**
    * When the Puck history changes save it to localStorage and send a message
    * to the parent which saves the state to the VES database.
