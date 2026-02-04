@@ -609,7 +609,7 @@ export const LocatorResultCard = React.memo(
     const unit = getPreferredDistanceUnit(i18n.language);
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
     let displayDistance;
-    if (distanceInMiles && distanceInKilometers) {
+    if (distanceInMiles !== undefined && distanceInKilometers !== undefined) {
       displayDistance =
         unit === "mile"
           ? `${formatDistance(distanceInMiles, i18n.language)} ${unitLabel}`

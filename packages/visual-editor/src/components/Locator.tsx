@@ -50,6 +50,7 @@ import { msg } from "../utils/i18n/platform.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { YextField } from "../editor/YextField.tsx";
 import {
+  formatDistance,
   getPreferredDistanceUnit,
   toKilometers,
   toMiles,
@@ -1239,7 +1240,7 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
           <Body>
             {t("locationsWithinDistanceOf", {
               count: resultCount,
-              distance: distance,
+              distance: formatDistance(distance, i18n.language, 0, 0),
               unit: t(unit, { count: distance }),
               name: filterDisplayName,
             })}

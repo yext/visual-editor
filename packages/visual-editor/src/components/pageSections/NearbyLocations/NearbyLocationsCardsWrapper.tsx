@@ -362,6 +362,9 @@ const NearbyLocationsEmptyState: React.FC<{
   const unit = getPreferredDistanceUnit(i18n.language);
   const distance =
     unit === "mile" ? (radius ?? 10) : toKilometers(radius ?? 10);
+  const formattedDistance = Number(
+    formatDistance(distance, i18n.language, 0, 0)
+  );
 
   return (
     <div
@@ -386,8 +389,8 @@ const NearbyLocationsEmptyState: React.FC<{
             entityType: entityTypeDisplayName
               ? entityTypeDisplayName
               : "entity",
-            radius: formatDistance(distance, i18n.language, 0, 0),
-            unit: pt(unit, { count: distance }),
+            radius: formattedDistance,
+            unit: pt(unit, { count: formattedDistance }),
           })}
         </Body>
       </div>
