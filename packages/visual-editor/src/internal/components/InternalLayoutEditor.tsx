@@ -15,7 +15,7 @@ import {
   blocksPlugin,
   outlinePlugin,
 } from "@puckeditor/core";
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -115,15 +115,19 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount } = useErrorContext();
-  const aiPlugin = templateMetadata.aiPageGeneration
-    ? createAiPlugin(
-        localDev
-          ? {
-              host: "http://127.0.0.1:8787/api/puck/chat",
-            }
-          : undefined
-      )
-    : undefined;
+  const aiPlugin = useMemo(
+    () =>
+      templateMetadata.aiPageGeneration
+        ? createAiPlugin(
+            localDev
+              ? {
+                  host: "http://127.0.0.1:8787/api/puck/chat",
+                }
+              : undefined
+          )
+        : undefined,
+    [templateMetadata.aiPageGeneration, localDev]
+  );
 
   /**
    * When the Puck history changes save it to localStorage and send a message
