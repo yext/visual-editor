@@ -15,18 +15,39 @@ type CustomFontFaceIndex = {
 
 export type CustomFontCssIndex = Record<string, CustomFontFaceIndex>;
 
+/**
+ * Removes wrapping single or double quotes from a string.
+ */
 const stripQuotes = (value: string) => value.trim().replace(/^['"]|['"]$/g, "");
 
+/**
+ * Extracts the first font-family name from a font-family declaration value.
+ * For example, given "'Alpha', sans-serif", it returns "Alpha".
+ */
 const extractFontFamilyName = (value: string) => {
   const firstFont = value.split(",")[0];
   return stripQuotes(firstFont);
 };
 
+/**
+ * Returns all @font-face blocks found in the css text.
+ * For example:
+ *   @font-face {
+ *     font-family: 'Alpha';
+ *     font-weight: 400;
+ *     src: url('/y-fonts/alpha-400.woff2');
+ *   }
+ */
 const extractFontFaceBlocks = (cssText: string) => {
+  // Matches each "@font-face { ... }" block up to the first closing brace.
   return cssText.match(/@font-face\s*{[^}]*}/gi) ?? [];
 };
 
+/**
+ * Extracts the first URL from a css src declaration.
+ */
 const extractFirstUrl = (srcValue: string) => {
+  // Captures the first url(...) occurrence in srcValue
   const match = srcValue.match(/url\(([^)]+)\)/i);
   if (!match) {
     return undefined;
@@ -34,6 +55,9 @@ const extractFirstUrl = (srcValue: string) => {
   return stripQuotes(match[1]);
 };
 
+/**
+ * Parses a font-weight value that can be a single number or a range.
+ */
 const parseFontWeight = (value: string) => {
   const normalized = value.trim().replace(/\s+/g, " ");
   if (normalized.includes(" ")) {
@@ -52,7 +76,25 @@ const parseFontWeight = (value: string) => {
   return undefined;
 };
 
+/**
+ * Parses a single @font-face block into its family, weight, and file source.
+ * For example, given the block:
+ *   @font-face {
+ *     font-family: 'Alpha';
+ *     font-weight: 400;
+ *     font-style: normal;
+ *     src: url('/y-fonts/alpha-400.woff2');
+ *   }
+ * It returns:
+ *   {
+ *     fontFamily: "Alpha",
+ *     weight: { type: "single", weight: 400 },
+ *     src: "/y-fonts/alpha-400.woff2"
+ *   }
+ * It returns undefined if required properties are missing or if the style is not normal.
+ */
 const parseFontFaceBlock = (block: string) => {
+  // Capture property values up to the semicolon (case-insensitive).
   const familyMatch = block.match(/font-family\s*:\s*([^;]+);/i);
   const weightMatch = block.match(/font-weight\s*:\s*([^;]+);/i);
   const styleMatch = block.match(/font-style\s*:\s*([^;]+);/i);
@@ -84,6 +126,9 @@ const parseFontFaceBlock = (block: string) => {
   return { fontFamily, weight, src };
 };
 
+/**
+ * Builds an index of @font-face rules for custom fonts by fetching their css.
+ */
 export const loadCustomFontCssIndex = async (
   customFonts: FontRegistry
 ): Promise<CustomFontCssIndex> => {
@@ -130,6 +175,9 @@ export const loadCustomFontCssIndex = async (
   return index;
 };
 
+/**
+ * Computes the list of custom font files to preload based on theme values.
+ */
 export const buildCustomFontPreloads = ({
   themeConfig,
   themeValues,
@@ -188,6 +236,9 @@ export const buildCustomFontPreloads = ({
   return preloads;
 };
 
+/**
+ * Removes the custom font preloads key from theme data if present.
+ */
 export const removeCustomFontPreloads = (themeValues: ThemeData) => {
   if (!(CUSTOM_FONT_PRELOADS_KEY in themeValues)) {
     return themeValues;
@@ -197,6 +248,9 @@ export const removeCustomFontPreloads = (themeValues: ThemeData) => {
   return rest;
 };
 
+/**
+ * Returns the custom font preload list from theme data, if available.
+ */
 export const getCustomFontPreloads = (themeValues: ThemeData | undefined) => {
   if (!themeValues) {
     return [];
