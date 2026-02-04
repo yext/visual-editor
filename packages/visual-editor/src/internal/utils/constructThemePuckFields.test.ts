@@ -172,6 +172,30 @@ describe("convertStyleToPuckField", () => {
     });
   });
 
+  it("converts fontWeight style to custom field", () => {
+    const fontWeightStyle: Style = {
+      label: "Font Weight",
+      type: "select",
+      plugin: "fontWeight",
+      default: "400",
+      options: [
+        { label: "Normal (400)", value: "400" },
+        { label: "Bold (700)", value: "700" },
+      ],
+    };
+
+    const result = convertStyleToPuckField(
+      fontWeightStyle,
+      fontWeightStyle.plugin
+    );
+
+    expect(result).toMatchObject({
+      label: "Font Weight",
+      type: "custom",
+    });
+    expect(typeof (result as any).options).toBe("function");
+  });
+
   it("converts color style to color field", () => {
     const colorStyle: Style = {
       label: "Main Color",
