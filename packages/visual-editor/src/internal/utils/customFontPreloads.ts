@@ -68,7 +68,7 @@ const parseFontFaceBlock = (block: string) => {
   }
 
   const fontStyle = fontStyleRaw.trim().toLowerCase();
-  // Theme data does not track italic styles; only preload normal rules.
+  // Theme data does not track italic styles; only preload normal font styles.
   if (fontStyle !== "normal") {
     return undefined;
   }
@@ -192,8 +192,8 @@ export const removeCustomFontPreloads = (themeValues: ThemeData) => {
   if (!(CUSTOM_FONT_PRELOADS_KEY in themeValues)) {
     return themeValues;
   }
+  // oxlint-disable-next-line no-unused-vars: ignore unused _
   const { [CUSTOM_FONT_PRELOADS_KEY]: _, ...rest } = themeValues;
-  console.log(_);
   return rest;
 };
 
