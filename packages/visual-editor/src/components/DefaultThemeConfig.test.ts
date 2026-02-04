@@ -1,6 +1,21 @@
 import { describe, it, expect } from "vitest";
 import { createDefaultThemeConfig } from "./DefaultThemeConfig.ts";
 import { FontRegistry } from "../utils/fonts/visualEditorFonts.ts";
+import { beforeEach, vi } from "vitest";
+
+vi.mock("../utils/i18n/platform.ts", async () => {
+  const actual = await vi.importActual<
+    typeof import("../utils/i18n/platform.ts")
+  >("../utils/i18n/platform.ts");
+  return {
+    ...actual,
+    msg: (_key: string, defaultValue: string) => defaultValue,
+  };
+});
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 describe("createDefaultThemeConfig", () => {
   it("should include custom fonts in the font options", () => {
