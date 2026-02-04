@@ -18,7 +18,10 @@ export default defineConfig(() => ({
   build: {
     cssCodeSplit: true,
     lib: {
-      entry: path.resolve(__dirname, "src/index.ts"),
+      entry: {
+        "visual-editor": path.resolve(__dirname, "src/index.ts"),
+        tailwind: path.resolve(__dirname, "src/tailwind.ts"),
+      },
       name: "visual-editor",
       formats: ["es"] as LibraryFormats[], // typescript is unhappy without this forced type definition
     },
@@ -41,7 +44,9 @@ export default defineConfig(() => ({
         },
       },
       input: {
-        editor: path.resolve(__dirname, "src/index.ts"),
+        "visual-editor": path.resolve(__dirname, "src/index.ts"),
+        tailwind: path.resolve(__dirname, "src/tailwind.ts"),
+        editor: path.resolve(__dirname, "src/editor/index.css"),
         style: path.resolve(__dirname, "src/components/styles.css"),
       },
     },
@@ -81,7 +86,7 @@ const dts = (): Plugin => ({
       return;
     }
 
-    exec("tsup src/index.ts --format esm --dts-only", (err) => {
+    exec("tsup src/index.ts src/tailwind.ts --format esm --dts-only", (err) => {
       if (err) {
         throw new Error("Failed to generate declaration files");
       }
