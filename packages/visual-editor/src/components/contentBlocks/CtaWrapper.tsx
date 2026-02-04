@@ -191,9 +191,9 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     );
   }
 
-  let resolvedLabel =
+  let resolvedLinkLabel =
     cta && resolveComponentData(cta.label, i18n.language, streamDocument);
-  const resolvedButtonText = data.buttonText
+  const resolvedButtonLabel = data.buttonText
     ? resolveComponentData(data.buttonText, i18n.language, streamDocument)
     : "";
   const resolvedAriaLabel = data.ariaLabel
@@ -204,22 +204,22 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     (parentData || !data.entityField.constantValueEnabled) &&
     ctaType === "getDirections"
   ) {
-    resolvedLabel = t("getDirections", "Get Directions");
+    resolvedLinkLabel = t("getDirections", "Get Directions");
   }
 
   const showCTA =
     actionType === "button"
-      ? Boolean(resolvedButtonText?.trim()) && (data.show ?? true)
+      ? Boolean(resolvedButtonLabel?.trim()) && (data.show ?? true)
       : Boolean(
           cta &&
-            (ctaType === "presetImage" || resolvedLabel) &&
+            (ctaType === "presetImage" || resolvedLinkLabel) &&
             (data.show ?? true)
         );
 
-  const resolvedButtonClassName =
-    actionType === "button" && data.customClass
-      ? themeManagerCn(combinedClassName, data.customClass)
-      : combinedClassName;
+  const resolvedButtonClassName = themeManagerCn(
+    combinedClassName,
+    actionType === "button" ? data.customClass : undefined
+  );
 
   const dataAttributeProps =
     actionType === "button" && data.dataAttributes?.length
@@ -239,6 +239,33 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
         )
       : undefined;
 
+  const ctaElement = (
+    <CTA
+      actionType={actionType}
+      setPadding={true}
+      label={actionType === "button" ? resolvedButtonLabel : resolvedLinkLabel}
+      link={
+        actionType === "link" && cta
+          ? ctaType === "getDirections"
+            ? undefined
+            : resolveComponentData(cta.link, i18n.language, streamDocument)
+          : undefined
+      }
+      linkType={actionType === "link" && cta ? cta.linkType : undefined}
+      ctaType={actionType === "button" ? "textAndLink" : ctaType}
+      presetImageType={actionType === "link" ? styles.presetImage : undefined}
+      variant={styles.variant}
+      className={
+        actionType === "button" ? resolvedButtonClassName : combinedClassName
+      }
+      eventName={eventName}
+      color={styles.color}
+      id={data.customId}
+      ariaLabel={actionType === "button" ? resolvedAriaLabel : undefined}
+      dataAttributes={dataAttributeProps}
+    />
+  );
+
   return showCTA ? (
     actionType === "link" ? (
       <EntityField
@@ -248,38 +275,10 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           !parentData && data.entityField.constantValueEnabled
         }
       >
-        {cta && (
-          <CTA
-            setPadding={true}
-            label={resolvedLabel}
-            link={
-              ctaType === "getDirections"
-                ? undefined
-                : resolveComponentData(cta.link, i18n.language, streamDocument)
-            }
-            linkType={cta.linkType}
-            ctaType={ctaType}
-            presetImageType={styles.presetImage}
-            variant={styles.variant}
-            className={combinedClassName}
-            eventName={eventName}
-            color={styles.color}
-          />
-        )}
+        {cta && ctaElement}
       </EntityField>
     ) : (
-      <CTA
-        actionType="button"
-        setPadding={true}
-        label={resolvedButtonText}
-        ctaType="textAndLink"
-        variant={styles.variant}
-        className={resolvedButtonClassName}
-        color={styles.color}
-        id={data.customId}
-        ariaLabel={resolvedAriaLabel}
-        dataAttributes={dataAttributeProps}
-      />
+      ctaElement
     )
   ) : puck.isEditing ? (
     <div className="h-[50px] min-w-[130px]" />
