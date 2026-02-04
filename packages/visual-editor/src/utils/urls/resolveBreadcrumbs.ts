@@ -1,4 +1,4 @@
-import { getDirectoryParents } from "@yext/visual-editor";
+import { getDirectoryParents } from "../schema/helpers.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 import {
   resolveBreadcrumbsFromPathInfo,

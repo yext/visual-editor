@@ -1,4 +1,4 @@
-import type { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 
 export const embeddedFieldRegex = /\[\[([a-zA-Z0-9._]+)\]\]/g;
 
