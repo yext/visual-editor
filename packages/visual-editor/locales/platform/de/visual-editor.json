@@ -758,6 +758,7 @@
       "standard": "Standard (1024px)",
       "wide": "Breit (1280px)"
     },
+    "defaultFont": "Standardschriftart",
     "font": "Schriftart",
     "fontSize": "Schriftgröße",
     "fontWeight": {
@@ -772,6 +773,7 @@
       "semibold": "Halbfett (600)",
       "thin": "Dünn (100)"
     },
+    "headers": "Überschriften",
     "image": "Bild",
     "includeCaret": "Pflege einbeziehen",
     "letterSpacing": {

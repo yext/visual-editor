@@ -753,6 +753,7 @@
       "standard": "Padrão (1024px)",
       "wide": "Largo (1280px)"
     },
+    "defaultFont": "Fonte padrão",
     "font": "Fonte",
     "fontSize": "Tamanho da fonte",
     "fontWeight": {
@@ -767,6 +768,7 @@
       "semibold": "Semibold (600)",
       "thin": "Thin (100)"
     },
+    "headers": "Cabeçalhos",
     "image": "Imagem",
     "includeCaret": "Inclua Caret",
     "letterSpacing": {

@@ -22,7 +22,7 @@ export function createDefaultThemeConfig(
     ),
   ];
   const defaultHeaderFontOption = {
-    label: msg("theme.font.defaultFont", "Default font"),
+    label: msg("theme.defaultFont", "Default font"),
     value: "var(--fontFamily-headers-defaultFont)",
   };
   const headerFontOptions = [defaultHeaderFontOption, ...fontOptions];
@@ -39,7 +39,7 @@ export function createDefaultThemeConfig(
       label: msg("theme.headers", "Headers"),
       styles: {
         defaultFont: {
-          label: msg("theme.font.defaultFont", "Default font"),
+          label: msg("theme.defaultFont", "Default font"),
           type: "select",
           plugin: "fontFamily",
           options: fontOptions,

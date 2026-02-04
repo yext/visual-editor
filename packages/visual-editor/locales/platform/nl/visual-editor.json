@@ -753,6 +753,7 @@
       "standard": "Standaard (1024px)",
       "wide": "Breed (1280px)"
     },
+    "defaultFont": "Standaardlettertype",
     "font": "Lettertype",
     "fontSize": "Lettergrootte",
     "fontWeight": {
@@ -767,6 +768,7 @@
       "semibold": "Semibold (600)",
       "thin": "Dun (100)"
     },
+    "headers": "Kopteksten",
     "image": "Afbeelding",
     "includeCaret": "Bevat Caret",
     "letterSpacing": {

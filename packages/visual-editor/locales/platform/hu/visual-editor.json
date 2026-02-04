@@ -753,6 +753,7 @@
       "standard": "Standard (1024PX)",
       "wide": "Széles (1280px)"
     },
+    "defaultFont": "Alapértelmezett betűtípus",
     "font": "Betűtípus",
     "fontSize": "Betűkészlet",
     "fontWeight": {
@@ -767,6 +768,7 @@
       "semibold": "Félbold (600)",
       "thin": "Vékony (100)"
     },
+    "headers": "Fejlécek",
     "image": "Kép",
     "includeCaret": "Tartalmazza a Caret -t",
     "letterSpacing": {
