@@ -15,12 +15,43 @@ import {
   ComponentData,
 } from "@puckeditor/core";
 import {
-  ImageType,
-  CTA as CTA$1,
+  B as BackgroundStyle,
+  C as ComboboxOption,
+  P as PresetImageType,
+  T as TranslatableString,
+  H as HeadingLevel,
+  a as TranslatableRichText,
+  E as EnhancedTranslatableCTA,
+  b as TranslatableAssetImage,
+  A as AssetVideo,
+  c as ProductSectionType,
+  d as ProductStruct,
+  e as EventSectionType,
+  f as EventStruct,
+  I as InsightSectionType,
+  g as InsightStruct,
+  h as AssetImageType,
+  F as FAQStruct,
+  i as TeamSectionType,
+  j as PersonStruct,
+  k as TestimonialSectionType,
+  l as TestimonialStruct,
+  m as TranslatableCTA,
+  R as RichText,
+  n as PromoSectionType,
+  o as FAQSectionType,
+  p as ThemeConfig,
+  q as TailwindConfig,
+  r as ComboboxOptionGroup,
+  M as MsgString,
+  s as ThemeOptions,
+} from "./tailwind-OYABrkaU.js";
+import {
   LinkType,
   AddressType,
   HoursType,
   DayOfWeekNames,
+  ImageType,
   ComplexImageType,
   HoursTableProps as HoursTableProps$1,
   Coordinate,
@@ -657,26 +688,6 @@ interface ExpandedFooterStyles {
   maxWidth: PageSectionProps["maxWidth"];
 }
 
-/**
- * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
- */
-type BackgroundStyle = {
-  /** The tailwind background color class */
-  bgColor: string;
-  /** The tailwind text color class */
-  textColor: string;
-  /** Whether the background color is dark (for adjusting other styles based on background) */
-  isDarkBackground?: boolean;
-};
-
 interface BannerData {
   /**
    * The rich text to display. It can be linked to a Yext entity field or set as a constant value.
@@ -740,11 +751,6 @@ type YextEntityField<T> = {
    * @ai always omit this property
    */
   selectedType?: string;
-};
-
-/** Data for the FAQSection */
-type FAQSectionType = {
-  faqs: Array<FAQStruct>;
 };
 
 interface FAQStyles {
@@ -983,169 +989,3 @@ interface PageSectionProps
   outerClassName?: string;
   outerStyle?: React.CSSProperties;
 }
-
-/**
- * Rich text that can be translated for different locales.
- * @ai This should always be Record<string, RichText>
- */
-type TranslatableRichText =
-  | (string | RichText)
-  | Record<string, string | RichText>;
-
-/**
- * A string that can be translated for different locales.
- * @ai This should always be the LocalizedValues type
- */
-type TranslatableString = string | LocalizedValues;
-
-/** An individual FAQ */
-type FAQStruct = {
-  /** The question (always visible on the page) */
-  question: TranslatableString | TranslatableRichText;
-  /** The answer (visible when the question is clicked) */
-  answer: TranslatableRichText;
-};
-
-type AssetImageType = Omit<ImageType, "alternateText"> & {
-  alternateText?: TranslatableString;
-  assetImage?: ImageContentData;
-};
-
-type TranslatableAssetImage = AssetImageType | LocalizedAssetImage;
-
-/** Data for the PromoSection */
-type PromoSectionType = {
-  /**
-   * The image or video to show in the promo
-   * @ai Always use ImageType
-   */
-  image?: ImageType | AssetImageType | AssetVideo;
-  /** The main text to display in the promo */
-  title?: TranslatableString;
-  /** The sub text to display in the promo */
-  description?: TranslatableRichText;
-  /** The CTA button for the promo */
-  cta: EnhancedTranslatableCTA;
-};
-
-/**
- * A rich text object with HTML and JSON (LexicalRichText) representations.
- * The HTML representation is used on the live page.
- * The JSON representation is used in the editor for rich text editing.
- */
-type RichText = {
-  html?: string;
-  json?: string;
-};
-
-/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
-type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
-
-/** Describes the data corresponding to a piece of image content. */
-type ImageContentData = {
-  name?: string;
-  transformedImage?: ImageData;
-  originalImage?: ImageData;
-  childImages?: ImageData[];
-  transformations?: ImageTransformations;
-  sourceUrl?: string;
-  altText?: string;
-};
-
-type LocalizedAssetImage = {
-  hasLocalizedValue: "true";
-} & {
-  [key: string]: AssetImageType | undefined;
-};
-
-type AssetVideo = {
-  video: Video$1;
-  /** Asset video description field */
-  videoDescription?: string;
-  /** Asset name (unique) */
-  name: string;
-  /** Asset internal id */
-  id: string;
-};
-
-/** Enhanced CTA options */
-type EnhancedTranslatableCTA = TranslatableCTA & {
-  /**
-   * The type of CTA button to display.
-   * textAndLink is a standard button
-   * getDirections is a button that opens a map based on the coordinate field
-   * presetImage uses a preset image such as app store or food delivery logos for the button
-   * @defaultValue "textAndLink"
-   */
-  ctaType?: "textAndLink" | "getDirections" | "presetImage";
-};
-
-/** Describes the data corresponding to a single image. */
-type ImageData = {
-  url: string;
-  dimension?: ImageDimension;
-  exifMetadata?: {
-    rotate: number;
-  };
-};
-
-type ImageTransformations = Partial<Record<TransformKind, ImageTransformation>>;
-
-type Video$1 = {
-  /** The YouTube video URL */
-  url: string;
-  /** The YouTube video ID */
-  id: string;
-  /** The YouTube video title */
-  title: string;
-  /** The YouTube video thumbnail URL */
-  thumbnail: string;
-  /** The YouTube video duration */
-  duration: string;
-  /** The embedded YouTube video URL (https://youtube.com/embed/<video_id>) */
-  embeddedUrl: string;
-};
-
-/**
- * A pages-components CTA with a translatable label and link
- */
-type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
-  /** The text to display in the CTA */
-  label: TranslatableString;
-  /** The link the for the CTA */
-  link: TranslatableString;
-  openInNewTab?: boolean;
-};
-
-/** Describes the dimensions of an image. */
-type ImageDimension = {
-  width: number;
-  height: number;
-};
-
-type TransformKind = "CROP" | "ROTATION";
-
-/** Outlines the possible image transformations. */
-type ImageTransformation = ImageRotation | ImageCrop;
-
-/** Describes the data corresponding to an image rotation. */
-type ImageRotation = {
-  degree: number;
-};
-
-/** Describes the crop boundary box data */
-type ImageCrop = {
-  left: number;
-  top: number;
-  height: number;
-  width: number;
-  aspectRatio?: ImageAspectRatio;
-};
-
-/** Describes an image's aspect ratio. */
-type ImageAspectRatio = {
-  horizontalFactor: number;
-  verticalFactor: number;
-};
