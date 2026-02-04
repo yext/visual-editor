@@ -280,6 +280,7 @@ const filterFontWeights = (
   );
   let fontName = styleContent.match(regex)?.[2];
 
+  // Support "Default font" reference by resolving var(--fontFamily-headers-defaultFont).
   if (fontName?.startsWith("var(")) {
     const variableMatch = fontName.match(/var\((--[^)]+)\)/);
     if (variableMatch?.[1]) {

@@ -95,6 +95,9 @@ export const ThemeFieldsSidebar = ({
     );
   };
 
+  // Avoid rendering H1-H6 twice when we also show them nested under Headers.
+  // If the themeConfig has a "headers" section (which it usually will),
+  // we will render H1-H6 as part of that section and skip them in the main loop below.
   const sectionsToSkip = new Set<string>();
   if (hasHeadersSection) {
     headerSectionKeys.forEach((key) => sectionsToSkip.add(key));
