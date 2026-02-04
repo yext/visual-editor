@@ -278,7 +278,21 @@ const filterFontWeights = (
     `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
     "i"
   );
-  const fontName = styleContent.match(regex)?.[2];
+  let fontName = styleContent.match(regex)?.[2];
+
+  if (fontName?.startsWith("var(")) {
+    const variableMatch = fontName.match(/var\((--[^)]+)\)/);
+    if (variableMatch?.[1]) {
+      const variableName = variableMatch[1];
+      const variableRegex = new RegExp(`${variableName}:\\s*([^;]+)`, "i");
+      const variableValue = styleContent.match(variableRegex)?.[1];
+      if (variableValue) {
+        const cleanedValue = variableValue.replace(/!important/g, "").trim();
+        const firstFont = cleanedValue.split(",")[0];
+        fontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
+      }
+    }
+  }
 
   if (!fontName || !fontList[fontName]) {
     return weightOptions;
@@ -305,6 +319,21 @@ export const extractInUseFontFamilies = (
   availableFonts: FontRegistry
 ): { inUseGoogleFonts: FontRegistry; inUseCustomFonts: string[] } => {
   const fontFamilies = new Set<string>();
+  const resolveFontFamilyValue = (value: string): string => {
+    let currentValue = value;
+    for (let i = 0; i < 2; i++) {
+      const match = currentValue.match(/var\((--[^)]+)\)/);
+      if (!match) {
+        break;
+      }
+      const resolved = data[match[1]];
+      if (typeof resolved !== "string" || resolved.length === 0) {
+        break;
+      }
+      currentValue = resolved;
+    }
+    return currentValue;
+  };
 
   // Iterate over all the keys in the theme data to find font names.
   for (const key in data) {
@@ -314,7 +343,8 @@ export const extractInUseFontFamilies = (
       // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
       // parses fontName from the value
       if (typeof value === "string" && value.length > 0) {
-        const firstFont = value.split(",")[0];
+        const resolvedValue = resolveFontFamilyValue(value);
+        const firstFont = resolvedValue.split(",")[0];
         const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
         fontFamilies.add(cleanedFontName);
       }

@@ -16,6 +16,10 @@ describe("createDefaultThemeConfig", () => {
 
     const h1FontOptions = (result.h1.styles.fontFamily as any).options;
 
+    expect(h1FontOptions[0]).toEqual({
+      label: "Default font",
+      value: "var(--fontFamily-headers-defaultFont)",
+    });
     expect(h1FontOptions).toContainEqual({
       label: "Custom Font",
       value: "'Custom Font', 'Custom Font Fallback', sans-serif",
@@ -55,12 +59,30 @@ describe("createDefaultThemeConfig", () => {
     const result = createDefaultThemeConfig(customFonts);
 
     const h1FontOptions = (result.h1.styles.fontFamily as any).options;
+    const defaultHeaderOption = h1FontOptions[0];
+    expect(defaultHeaderOption).toEqual({
+      label: "Default font",
+      value: "var(--fontFamily-headers-defaultFont)",
+    });
     expect(h1FontOptions).toContainEqual({
       label: "Custom Font",
       value: "'Custom Font', 'Custom Font Fallback', serif",
     });
 
     expect(h1FontOptions).toContainEqual({
+      label: "Open Sans",
+      value: "'Open Sans', 'Open Sans Fallback', sans-serif",
+    });
+  });
+
+  it("should create a headers section with the default font", () => {
+    const result = createDefaultThemeConfig();
+    const headersFont = result.headers.styles.defaultFont as any;
+
+    expect(headersFont.default).toBe(
+      "'Open Sans', 'Open Sans Fallback', sans-serif"
+    );
+    expect(headersFont.options).toContainEqual({
       label: "Open Sans",
       value: "'Open Sans', 'Open Sans Fallback', sans-serif",
     });
