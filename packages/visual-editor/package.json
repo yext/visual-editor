@@ -21,6 +21,11 @@
       "import": "./dist/visual-editor.js",
       "default": "./dist/visual-editor.js"
     },
+    "./tailwind": {
+      "types": "./tailwind.d.ts",
+      "import": "./dist/tailwind.js",
+      "default": "./dist/tailwind.js"
+    },
     "./plugin": {
       "import": "./dist/plugin/plugin.js",
       "default": "./dist/plugin/plugin.js"

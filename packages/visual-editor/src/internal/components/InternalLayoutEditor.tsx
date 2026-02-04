@@ -15,8 +15,7 @@ import {
   blocksPlugin,
   outlinePlugin,
 } from "@puckeditor/core";
-import React from "react";
-import { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -36,6 +35,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { createAiPlugin } from "@puckeditor/plugin-ai";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -111,37 +111,20 @@ export const InternalLayoutEditor = ({
   metadata,
 }: InternalLayoutEditorProps) => {
   const [canEdit, setCanEdit] = useState<boolean>(false); // helps sync puck preview and save state
-  const [aiPlugin, setAiPlugin] = useState<any | null>(null);
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount } = useErrorContext();
+  const aiPlugin = templateMetadata.aiPageGeneration
+    ? createAiPlugin(
+        localDev
+          ? {
+              host: "http://127.0.0.1:8787/api/puck/chat",
+            }
+          : undefined
+      )
+    : undefined;
 
-  // Importing the AI plugin statically causes build issues, however this dynamic import works
-  React.useEffect(() => {
-    let cancelled = false;
-
-    import("@puckeditor/plugin-ai")
-      .then((mod) => {
-        if (cancelled || !templateMetadata.aiPageGeneration) {
-          return;
-        }
-        setAiPlugin(
-          mod.createAiPlugin(
-            localDev
-              ? {
-                  host: "http://127.0.0.1:8787/api/puck/chat",
-                }
-              : undefined
-          )
-        );
-      })
-      .catch(() => {});
-
-    return () => {
-      cancelled = true;
-    };
-  }, [localDev]);
   /**
    * When the Puck history changes save it to localStorage and send a message
    * to the parent which saves the state to the VES database.
