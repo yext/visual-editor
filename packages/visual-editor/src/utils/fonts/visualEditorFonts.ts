@@ -324,7 +324,9 @@ export const extractInUseFontFamilies = (
   const resolveFontFamilyValue = (value: string): string => {
     let currentValue = value;
     for (let i = 0; i < 2; i++) {
-      // Shallow resolution avoids cycles while covering the common one-hop case.
+      // Shallow resolution avoids cyclical font references.
+      // Only fonts with one level of depth in their references (like "Default font")
+      // will be resolved, which is sufficient for our use case.
       const match = currentValue.match(/var\((--[^)]+)\)/);
       if (!match) {
         break;

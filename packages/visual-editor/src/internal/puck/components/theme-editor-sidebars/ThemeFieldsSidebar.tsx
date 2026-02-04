@@ -136,7 +136,7 @@ export const ThemeFieldsSidebar = ({
               }
               value={headerValues}
             />
-            <div className="ve-mt-3 ve-ml-3">
+            <div className="ve-mt-3">
               {headerSectionKeys
                 .filter((key) => key in themeConfig)
                 .map((key) =>
