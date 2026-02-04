@@ -50,8 +50,6 @@ import { msg } from "../utils/i18n/platform.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { YextField } from "../editor/YextField.tsx";
 import {
-  formatDistance,
-  fromMeters,
   getPreferredDistanceUnit,
   toMeters,
   toMiles,
