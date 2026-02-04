@@ -22,7 +22,7 @@
       "default": "./dist/visual-editor.js"
     },
     "./tailwind": {
-      "types": "./tailwind.d.ts",
+      "types": "./dist/tailwind.d.ts",
       "import": "./dist/tailwind.js",
       "default": "./dist/tailwind.js"
     },
