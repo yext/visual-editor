@@ -319,9 +319,12 @@ export const extractInUseFontFamilies = (
   availableFonts: FontRegistry
 ): { inUseGoogleFonts: FontRegistry; inUseCustomFonts: string[] } => {
   const fontFamilies = new Set<string>();
+  // Resolve "Default font" references like var(--fontFamily-headers-defaultFont)
+  // so we load the actual font used for headers.
   const resolveFontFamilyValue = (value: string): string => {
     let currentValue = value;
     for (let i = 0; i < 2; i++) {
+      // Shallow resolution avoids cycles while covering the common one-hop case.
       const match = currentValue.match(/var\((--[^)]+)\)/);
       if (!match) {
         break;
@@ -343,6 +346,7 @@ export const extractInUseFontFamilies = (
       // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
       // parses fontName from the value
       if (typeof value === "string" && value.length > 0) {
+        // Replace var(...) values with the actual font family string.
         const resolvedValue = resolveFontFamilyValue(value);
         const firstFont = resolvedValue.split(",")[0];
         const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
