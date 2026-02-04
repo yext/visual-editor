@@ -59,6 +59,72 @@ const getSseErrorText = (payload: string): string | null => {
   return null;
 };
 
+const streamSseResponse = async (
+  puckResponse: Response,
+  res: http.ServerResponse,
+) => {
+  if (!puckResponse.body) {
+    res.statusCode = puckResponse.status;
+    res.end();
+    return;
+  }
+
+  const reader = Readable.fromWeb(
+    puckResponse.body as unknown as NodeReadableStream,
+  );
+  let buffer = "";
+
+  const sendHeadersIfNeeded = () => {
+    if (res.headersSent) {
+      return;
+    }
+    res.statusCode = puckResponse.status;
+    puckResponse.headers.forEach((value, key) => {
+      res.setHeader(key, value);
+    });
+  };
+
+  try {
+    for await (const chunk of reader) {
+      const chunkText = chunk.toString("utf8");
+      buffer += chunkText;
+
+      const errorText = getSseErrorText(buffer);
+      if (errorText) {
+        if (!res.headersSent) {
+          res.statusCode = 400;
+          res.setHeader("Content-Type", "text/plain; charset=utf-8");
+          res.end(errorText);
+        } else {
+          res.end();
+        }
+        reader.destroy();
+        return;
+      }
+
+      sendHeadersIfNeeded();
+      res.write(chunk);
+
+      if (buffer.length > 64 * 1024) {
+        buffer = buffer.slice(-4096);
+      }
+    }
+
+    if (!res.headersSent) {
+      sendHeadersIfNeeded();
+    }
+    res.end();
+  } catch (error) {
+    console.error(error);
+    if (!res.headersSent) {
+      res.writeHead(500);
+      res.end("Internal server error");
+    } else {
+      res.end();
+    }
+  }
+};
+
 const server = http.createServer(async (req, res) => {
   try {
     if (!req.url) {
@@ -118,22 +184,8 @@ const server = http.createServer(async (req, res) => {
     });
 
     const contentType = puckResponse.headers.get("content-type") ?? "";
-    if (contentType.includes("text/event-stream") && puckResponse.body) {
-      const buffer = Buffer.from(await puckResponse.arrayBuffer());
-      const errorText = getSseErrorText(buffer.toString("utf8"));
-
-      if (errorText) {
-        res.statusCode = 400;
-        res.setHeader("Content-Type", "text/plain; charset=utf-8");
-        res.end(errorText);
-        return;
-      }
-
-      res.statusCode = puckResponse.status;
-      puckResponse.headers.forEach((value, key) => {
-        res.setHeader(key, value);
-      });
-      res.end(buffer);
+    if (contentType.includes("text/event-stream")) {
+      await streamSseResponse(puckResponse, res);
       return;
     }
 
