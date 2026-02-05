@@ -159,6 +159,7 @@ export const InternalThemeEditor = ({
         themeHistoriesRef={themeHistoriesRef}
         themeConfig={themeConfig}
         onThemeChange={handleThemeChange}
+        customFonts={templateMetadata.customFonts}
       />
     );
   }, []);

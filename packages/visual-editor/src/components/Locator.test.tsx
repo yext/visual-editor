@@ -11,11 +11,12 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
+import { injectTranslations } from "../utils/i18n/components.ts";
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "./migrations/migrationRegistry.ts";
 import { VisualEditorProvider } from "../utils/VisualEditorProvider.tsx";
 import { LocatorComponent } from "./Locator.tsx";
-import { Render, Config } from "@puckeditor/core";
+import { Render, Config, resolveAllData } from "@puckeditor/core";
 import { page } from "@vitest/browser/context";
 import mapboxPackageJson from "mapbox-gl/package.json" with { type: "json" };
 
@@ -494,6 +495,110 @@ const tests: ComponentTest[] = [
     },
     version: 24,
   },
+  {
+    name: "version 24 with filters",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: true,
+        showDistanceOptions: true,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: "name",
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          liveVisibility: false,
+        },
+      },
+    },
+    interactions: async (page) => {
+      const filterButton = page.getByText("Filter");
+      await act(async () => {
+        await filterButton.click();
+      });
+    },
+    version: 24,
+  },
 ];
 
 const screenshotThreshold = 30;
@@ -517,7 +622,7 @@ describe("Locator", async () => {
       version,
       viewport: { width, height, name: viewportName },
     }) => {
-      const data = migrate(
+      let data = migrate(
         {
           root: {
             props: {
@@ -536,6 +641,12 @@ describe("Locator", async () => {
         document
       );
 
+      data = await resolveAllData(data, puckConfig, {
+        streamDocument: document,
+      });
+
+      const translations = await injectTranslations(document);
+
       const { container } = reactRender(
         <>
           <script
@@ -547,7 +658,7 @@ describe("Locator", async () => {
             rel="stylesheet"
             href={`https://api.mapbox.com/mapbox-gl-js/v${mapboxPackageJson.version}/mapbox-gl.css`}
           />
-          <VisualEditorProvider templateProps={{ document }}>
+          <VisualEditorProvider templateProps={{ document, translations }}>
             <Render config={puckConfig} data={data} />
           </VisualEditorProvider>
         </>

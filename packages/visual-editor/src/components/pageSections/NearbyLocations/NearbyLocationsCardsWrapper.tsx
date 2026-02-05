@@ -17,6 +17,7 @@ import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import {
+  formatDistance,
   getPreferredDistanceUnit,
   toKilometers,
 } from "../../../utils/i18n/distance.ts";
@@ -408,6 +409,9 @@ const NearbyLocationsEmptyState: React.FC<{
   const unit = getPreferredDistanceUnit(i18n.language);
   const distance =
     unit === "mile" ? (radius ?? 10) : toKilometers(radius ?? 10);
+  const formattedDistance = Number(
+    formatDistance(distance, i18n.language, 0, 0)
+  );
 
   return (
     <div
@@ -432,8 +436,8 @@ const NearbyLocationsEmptyState: React.FC<{
             entityType: entityTypeDisplayName
               ? entityTypeDisplayName
               : "entity",
-            radius: distance,
-            unit: pt(unit, { count: distance }),
+            radius: formattedDistance,
+            unit: pt(unit, { count: formattedDistance }),
           })}
         </Body>
       </div>
