@@ -1,9 +1,18 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
+
+export type ErrorSource = "component" | "metaTitle" | (string & {});
 
 interface ErrorContextType {
   errorCount: number;
-  incrementErrorCount: () => void;
-  decrementErrorCount: () => void;
+  errorSources: ErrorSource[];
+  incrementErrorCount: (source?: ErrorSource) => void;
+  decrementErrorCount: (source?: ErrorSource) => void;
 }
 
 const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
@@ -11,19 +20,55 @@ const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
 export const ErrorProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [errorCount, setErrorCount] = useState(0);
+  const [errorCounts, setErrorCounts] = useState<
+    Partial<Record<ErrorSource, number>>
+  >({});
 
-  const incrementErrorCount = useCallback(() => {
-    setErrorCount((prev) => prev + 1);
-  }, []);
+  const incrementErrorCount = useCallback(
+    (source: ErrorSource = "component") => {
+      setErrorCounts((prev) => ({
+        ...prev,
+        [source]: (prev[source] ?? 0) + 1,
+      }));
+    },
+    []
+  );
 
-  const decrementErrorCount = useCallback(() => {
-    setErrorCount((prev) => Math.max(0, prev - 1));
-  }, []);
+  const decrementErrorCount = useCallback(
+    (source: ErrorSource = "component") => {
+      setErrorCounts((prev) => {
+        const current = prev[source] ?? 0;
+        const next = Math.max(0, current - 1);
+        if (next === 0) {
+          const nextCounts = { ...prev };
+          delete nextCounts[source];
+          return nextCounts;
+        }
+        return { ...prev, [source]: next };
+      });
+    },
+    []
+  );
+
+  const errorSources = useMemo(
+    () => Object.keys(errorCounts) as ErrorSource[],
+    [errorCounts]
+  );
+  const errorCount = useMemo<number>(() => {
+    return Object.values(errorCounts).reduce<number>(
+      (sum, value) => sum + (value ?? 0),
+      0
+    );
+  }, [errorCounts]);
 
   return (
     <ErrorContext.Provider
-      value={{ errorCount, incrementErrorCount, decrementErrorCount }}
+      value={{
+        errorCount,
+        errorSources,
+        incrementErrorCount,
+        decrementErrorCount,
+      }}
     >
       {children}
     </ErrorContext.Provider>

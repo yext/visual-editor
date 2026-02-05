@@ -39,12 +39,16 @@ export const MetaTitleField = (): Field<
               { locales: missingLocales.join(", ") }
             );
 
-      const metaTitleField = YextEntityFieldSelector<any, TranslatableString>({
-        label: msg("fields.metaTitle", "Meta Title"),
-        filter: {
-          types: ["type.string"],
-        },
-      });
+      const metaTitleField = React.useMemo(
+        () =>
+          YextEntityFieldSelector<any, TranslatableString>({
+            label: msg("fields.metaTitle", "Meta Title"),
+            filter: {
+              types: ["type.string"],
+            },
+          }),
+        []
+      );
 
       return (
         <div className="ve-w-full">

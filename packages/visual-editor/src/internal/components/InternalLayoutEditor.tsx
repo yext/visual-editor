@@ -113,7 +113,7 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
-  const { errorCount } = useErrorContext();
+  const { errorCount, errorSources } = useErrorContext();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -304,6 +304,16 @@ export const InternalLayoutEditor = ({
     [streamDocument]
   );
 
+  const puckOverride = React.useCallback(
+    (props: { children: React.ReactNode }) => (
+      <>
+        <MetaTitleValidationReporter />
+        {reloadDataOnDocumentChange(props)}
+      </>
+    ),
+    [reloadDataOnDocumentChange]
+  );
+
   // Prevent setPointerCapture errors by wrapping the native method, this is a workaround for a bug in the Puck library where the pointer gets stuck in a drag state when it is no longer active.
   React.useEffect(() => {
     const originalSetPointerCapture = Element.prototype.setPointerCapture;
@@ -399,18 +409,16 @@ export const InternalLayoutEditor = ({
         overrides={{
           fields: fieldsOverride,
           header: () => (
-            <>
-              <MetaTitleValidationReporter />
-              <LayoutHeader
-                templateMetadata={templateMetadata}
-                onClearLocalChanges={handleClearLocalChanges}
-                onHistoryChange={handleHistoryChange}
-                onPublishLayout={handlePublishLayout}
-                onSendLayoutForApproval={handleSendLayoutForApproval}
-                localDev={localDev}
-                hasErrors={errorCount > 0}
-              />
-            </>
+            <LayoutHeader
+              templateMetadata={templateMetadata}
+              onClearLocalChanges={handleClearLocalChanges}
+              onHistoryChange={handleHistoryChange}
+              onPublishLayout={handlePublishLayout}
+              onSendLayoutForApproval={handleSendLayoutForApproval}
+              localDev={localDev}
+              hasErrors={errorCount > 0}
+              errorSources={errorSources}
+            />
           ),
           iframe: loadMapboxIntoIframe,
           fieldTypes: {
@@ -580,7 +588,7 @@ export const InternalLayoutEditor = ({
           fieldLabel: ({ icon, children, ...rest }) => (
             <FieldLabel {...rest}>{children}</FieldLabel>
           ),
-          puck: reloadDataOnDocumentChange,
+          puck: puckOverride,
         }}
         metadata={metadata}
       />

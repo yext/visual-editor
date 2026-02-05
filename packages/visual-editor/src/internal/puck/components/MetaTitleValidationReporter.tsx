@@ -30,13 +30,13 @@ export const MetaTitleValidationReporter = () => {
 
   React.useEffect(() => {
     if (hasError && !didIncrementRef.current) {
-      incrementErrorCount();
+      incrementErrorCount("metaTitle");
       didIncrementRef.current = true;
     }
 
     return () => {
       if (didIncrementRef.current) {
-        decrementErrorCount();
+        decrementErrorCount("metaTitle");
         didIncrementRef.current = false;
       }
     };
