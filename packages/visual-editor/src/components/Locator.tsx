@@ -82,7 +82,7 @@ const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 
 const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: any = useDocument();
+  const entityDocument: StreamDocument = useDocument();
   if (!entityDocument._pageset && entityTypeEnvVar) {
     return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
   }
