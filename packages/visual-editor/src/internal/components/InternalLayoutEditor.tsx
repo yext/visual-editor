@@ -21,6 +21,8 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
+import { MetaTitleField } from "../puck/components/MetaTitleField.tsx";
+import { MetaTitleValidationReporter } from "../puck/components/MetaTitleValidationReporter.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
@@ -238,12 +240,7 @@ export const InternalLayoutEditor = ({
       root: {
         ...puckConfig.root,
         fields: {
-          title: YextEntityFieldSelector<any, string>({
-            label: msg("fields.metaTitle", "Meta Title"),
-            filter: {
-              types: ["type.string"],
-            },
-          }),
+          title: MetaTitleField(),
           description: YextEntityFieldSelector<any, string>({
             label: msg("fields.metaDescription", "Meta Description"),
             filter: {
@@ -402,15 +399,18 @@ export const InternalLayoutEditor = ({
         overrides={{
           fields: fieldsOverride,
           header: () => (
-            <LayoutHeader
-              templateMetadata={templateMetadata}
-              onClearLocalChanges={handleClearLocalChanges}
-              onHistoryChange={handleHistoryChange}
-              onPublishLayout={handlePublishLayout}
-              onSendLayoutForApproval={handleSendLayoutForApproval}
-              localDev={localDev}
-              hasErrors={errorCount > 0}
-            />
+            <>
+              <MetaTitleValidationReporter />
+              <LayoutHeader
+                templateMetadata={templateMetadata}
+                onClearLocalChanges={handleClearLocalChanges}
+                onHistoryChange={handleHistoryChange}
+                onPublishLayout={handlePublishLayout}
+                onSendLayoutForApproval={handleSendLayoutForApproval}
+                localDev={localDev}
+                hasErrors={errorCount > 0}
+              />
+            </>
           ),
           iframe: loadMapboxIntoIframe,
           fieldTypes: {

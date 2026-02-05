@@ -272,7 +272,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                     <p>
                       {pt(
                         "fixErrorsToPublish",
-                        "To publish, delete or fix sections with errors"
+                        "To publish, resolve the errors highlighted in the editor"
                       )}
                     </p>
                   </TooltipContent>

@@ -96,7 +96,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
       toast.error(
         pt(
           "cannotPublishWithErrors",
-          "Cannot publish while components have errors."
+          "Cannot publish while there are errors in the editor."
         )
       );
       return;
