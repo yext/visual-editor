@@ -80,6 +80,18 @@ const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 
+const translateDistanceUnit = (
+  t: (key: string, options?: Record<string, unknown>) => string,
+  unit: "mile" | "kilometer",
+  count: number
+) => {
+  if (unit === "mile") {
+    return t("mile", { count, defaultValue: "mile" });
+  }
+
+  return t("kilometer", { count, defaultValue: "kilometer" });
+};
+
 const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: any = useDocument();
   if (!entityDocument._pageset && entityTypeEnvVar) {
@@ -1260,7 +1272,7 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
             {t("locationsWithinDistanceOf", {
               count: resultCount,
               distance: selectedDistanceOption,
-              unit: t(unit, { count: selectedDistanceOption }),
+              unit: translateDistanceUnit(t, unit, selectedDistanceOption),
               name: filterDisplayName,
             })}
           </Body>
@@ -1563,7 +1575,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
             <button
               className="inline-flex bg-white"
               onClick={() => onChange(distanceOption, unit)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${t(unit, { count: distanceOption })}`}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             >
               <div className="text-palette-primary-dark">
                 {selectedDistanceOption === distanceOption ? (
@@ -1574,9 +1586,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <Body className="inline-flex">
-              {`< ${distanceOption} ${t(unit, {
-                count: distanceOption,
-              })}`}
+              {`< ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             </Body>
           </div>
         ))}

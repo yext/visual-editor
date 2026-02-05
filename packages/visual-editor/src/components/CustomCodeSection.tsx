@@ -1,12 +1,11 @@
 import React from "react";
 import Handlebars from "handlebars";
-import { useTranslation } from "react-i18next";
 import { CodeXml } from "lucide-react";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
 import { VisibilityWrapper } from "./atoms/visibilityWrapper.tsx";
 import { YextField } from "../editor/YextField.tsx";
-import { msg } from "../utils/i18n/platform.ts";
+import { msg, pt } from "../utils/i18n/platform.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import {
   ComponentConfig,
@@ -109,14 +108,12 @@ function processHandlebarsTemplate(html: string, data: StreamDocument): string {
 }
 
 const EmptyCustomCodeSection = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="p-3">
       <div className="flex flex-col items-center justify-center gap-4 p-3 bg-gray-100 rounded-md">
         <CodeXml className="w-12 h-12 text-gray-300" />
         <span className="text-gray-500 text-lg font-medium font-body-fontFamily">
-          {t("missingHtmlWidget", "Add HTML to view component")}
+          {pt("missingHtmlWidget", "Add HTML to view component")}
         </span>
       </div>
     </div>

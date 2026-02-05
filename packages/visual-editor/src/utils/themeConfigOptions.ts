@@ -360,17 +360,20 @@ const presetImageTypeOptions: {
   label: string;
   value: PresetImageType;
 }[] = [
-  { label: msg("presetImages.appStore", "App Store"), value: "app-store" },
   {
-    label: msg("presetImages.googlePlay", "Google Play"),
+    label: "App Store",
+    value: "app-store",
+  },
+  {
+    label: "Google Play",
     value: "google-play",
   },
   {
-    label: msg("presetImages.galaxyStore", "Galaxy Store"),
+    label: "Galaxy Store",
     value: "galaxy-store",
   },
   {
-    label: msg("presetImages.appGallery", "App Gallery"),
+    label: "App Gallery",
     value: "app-gallery",
   },
   { label: "Deliveroo", value: "deliveroo" },
