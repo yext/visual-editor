@@ -70,6 +70,7 @@ import {
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
+import { StreamDocument } from "../utils";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -1303,7 +1304,7 @@ const Map: React.FC<MapProps> = ({
   markerOptionsOverride,
 }) => {
   const { t } = useTranslation();
-  const entityDocument: any = useDocument();
+  const entityDocument: StreamDocument = useDocument();
 
   const documentIsUndefined = typeof document === "undefined";
   const iframe = documentIsUndefined
