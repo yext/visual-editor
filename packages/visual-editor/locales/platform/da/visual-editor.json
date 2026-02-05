@@ -760,6 +760,7 @@
       "standard": "Standard (1024px)",
       "wide": "Bred (1280px)"
     },
+    "defaultFont": "Standard skrifttype",
     "font": "Skrifttype",
     "fontSize": "Skrifttypestørrelse",
     "fontWeight": {
@@ -774,6 +775,7 @@
       "semibold": "Semibold (600)",
       "thin": "Tynd (100)"
     },
+    "headers": "Overskrifter",
     "image": "Billede",
     "includeCaret": "Inkluder Caret",
     "letterSpacing": {

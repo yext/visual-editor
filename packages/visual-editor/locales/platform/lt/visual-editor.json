@@ -763,6 +763,7 @@
       "standard": "Standartas (1024 pikselių)",
       "wide": "Platus (1280 pikselių)"
     },
+    "defaultFont": "Numatytasis šriftas",
     "font": "Šriftas",
     "fontSize": "Šrifto dydis",
     "fontWeight": {
@@ -777,6 +778,7 @@
       "semibold": "Pusiau (600)",
       "thin": "Plonas (100)"
     },
+    "headers": "Antraštės",
     "image": "Vaizdas",
     "includeCaret": "Įtraukite Caret",
     "letterSpacing": {

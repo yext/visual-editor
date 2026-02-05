@@ -753,6 +753,7 @@
       "standard": "Standardi (1024px)",
       "wide": "Leveä (1280px)"
     },
+    "defaultFont": "Oletusfontti",
     "font": "Fontti",
     "fontSize": "Fontin koko",
     "fontWeight": {
@@ -767,6 +768,7 @@
       "semibold": "Puoliväli (600)",
       "thin": "Ohut (100)"
     },
+    "headers": "Otsikot",
     "image": "Kuva",
     "includeCaret": "Sisällytä caret",
     "letterSpacing": {

@@ -4,6 +4,8 @@ import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "../i18n/platform.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 
+const variableFontRegex = /var\((--[^)]+)\)/;
+
 export type FontRegistry = Record<string, FontSpecification>;
 type FontSpecification = {
   italics: boolean; // whether the font supports italics
@@ -278,7 +280,30 @@ const filterFontWeights = (
     `${fontCssVariable}:\\s*(['"]?([^',\\s]+(?:\\s+[^',\\s]+)*)['"]?)(?:,|\\s|;|$)`,
     "i"
   );
-  const fontName = styleContent.match(regex)?.[2];
+  let fontName = styleContent.match(regex)?.[2];
+
+  // Support "Default font" reference by resolving var(--fontFamily-headers-defaultFont).
+  if (fontName?.startsWith("var(")) {
+    const variableMatch = fontName.match(variableFontRegex);
+    if (variableMatch?.[1]) {
+      const variableName = variableMatch[1];
+      // Escape regex special characters to prevent ReDoS from malformed CSS
+      const escapedVariableName = variableName.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+      const variableRegex = new RegExp(
+        `${escapedVariableName}:\\s*([^;]+)`,
+        "i"
+      );
+      const variableValue = styleContent.match(variableRegex)?.[1];
+      if (variableValue) {
+        const cleanedValue = variableValue.replace(/!important/g, "").trim();
+        const firstFont = cleanedValue.split(",")[0];
+        fontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
+      }
+    }
+  }
 
   if (!fontName || !fontList[fontName]) {
     return weightOptions;
@@ -305,6 +330,26 @@ export const extractInUseFontFamilies = (
   availableFonts: FontRegistry
 ): { inUseGoogleFonts: FontRegistry; inUseCustomFonts: string[] } => {
   const fontFamilies = new Set<string>();
+  // Resolve "Default font" references like var(--fontFamily-headers-defaultFont)
+  // so we load the actual font used for headers.
+  const resolveFontFamilyValue = (value: string): string => {
+    let currentValue = value;
+    for (let i = 0; i < 2; i++) {
+      // Shallow resolution avoids cyclical font references.
+      // Only fonts with one level of depth in their references (like "Default font")
+      // will be resolved, which is sufficient for our use case.
+      const match = currentValue.match(variableFontRegex);
+      if (!match) {
+        break;
+      }
+      const resolved = data[match[1]];
+      if (typeof resolved !== "string" || resolved.length === 0) {
+        break;
+      }
+      currentValue = resolved;
+    }
+    return currentValue;
+  };
 
   // Iterate over all the keys in the theme data to find font names.
   for (const key in data) {
@@ -314,7 +359,9 @@ export const extractInUseFontFamilies = (
       // key / value looks like "--fontFamily-h1-fontFamily": "'Open Sans', sans-serif"
       // parses fontName from the value
       if (typeof value === "string" && value.length > 0) {
-        const firstFont = value.split(",")[0];
+        // Replace var(...) values with the actual font family string.
+        const resolvedValue = resolveFontFamilyValue(value);
+        const firstFont = resolvedValue.split(",")[0];
         const cleanedFontName = firstFont.trim().replace(/^['"]|['"]$/g, "");
         fontFamilies.add(cleanedFontName);
       }
