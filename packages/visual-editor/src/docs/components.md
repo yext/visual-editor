@@ -648,7 +648,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Product Section is used to display a curated list of products in a dedicated section. It features a main heading and renders each product as an individual card, making it ideal for showcasing featured items, new arrivals, or bestsellers. Available on Location templates.
 
-![Preview of the ProductSection component](../components/testing/screenshots/ProductSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
+![Preview of the ProductSection component](../components/testing/screenshots/ProductSection/%5Bdesktop%5D%20%5Bimmersive%5D%20version%2059%20with%20showSectionHeading,%20showImage%20false.png)
 
 ### Props
 
