@@ -28,6 +28,7 @@ import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultPerson = {
   name: { en: "First Last", hasLocalizedValue: "true" },
@@ -207,6 +208,7 @@ export type TeamCardProps = {
     /** The background color of each team card */
     backgroundColor?: BackgroundStyle;
   };
+
   /** @internal */
   slots: {
     ImageSlot: Slot;
@@ -221,6 +223,15 @@ export type TeamCardProps = {
   parentData?: {
     field: string;
     person: PersonStruct;
+  };
+
+  /** @internal */
+  parentStyles?: {
+    showImage: boolean;
+    showTitle: boolean;
+    showPhone: boolean;
+    showEmail: boolean;
+    showCTA: boolean;
   };
 
   /** @internal */
@@ -265,7 +276,7 @@ const teamCardFields: Fields<TeamCardProps> = {
 };
 
 const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender } = props;
+  const { styles, slots, puck, conditionalRender, parentStyles } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: TeamCardProps["styles"];
@@ -277,10 +288,21 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
   );
 
   const showName = Boolean(conditionalRender?.name || puck.isEditing);
-  const showTitle = Boolean(conditionalRender?.title || puck.isEditing);
-  const showPhone = Boolean(conditionalRender?.phone || puck.isEditing);
-  const showEmail = Boolean(conditionalRender?.email || puck.isEditing);
-  const showCta = Boolean(conditionalRender?.cta || puck.isEditing);
+  const showTitle =
+    parentStyles?.showTitle &&
+    Boolean(conditionalRender?.title || puck.isEditing);
+  const showPhone =
+    parentStyles?.showPhone &&
+    Boolean(conditionalRender?.phone || puck.isEditing);
+  const showEmail =
+    parentStyles?.showEmail &&
+    Boolean(conditionalRender?.email || puck.isEditing);
+  const showCta =
+    parentStyles?.showCTA && Boolean(conditionalRender?.cta || puck.isEditing);
+
+  const showTopSection = parentStyles?.showImage || showName || showTitle;
+
+  const showBottomSection = showPhone || showEmail || showCta;
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -368,39 +390,47 @@ const TeamCardComponent: PuckComponent<TeamCardProps> = (props) => {
       ref={puck.dragRef}
       className="flex flex-col rounded-lg overflow-hidden border bg-white h-full"
     >
-      <Background
-        background={styles.backgroundColor}
-        className="flex p-8 gap-6"
-      >
-        <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
-          <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
-        </div>
-        <div className="flex flex-col justify-center gap-1">
-          {showName && <slots.NameSlot style={{ height: "auto" }} allow={[]} />}
-          {showTitle && (
-            <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
-          )}
-        </div>
-      </Background>
-      <hr className="border" />
-      <Background
-        background={backgroundColors.background1.value}
-        className="flex flex-grow p-8"
-      >
-        <div className="flex flex-col flex-grow gap-4">
-          {showPhone && (
-            <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
-          )}
-          {showEmail && (
-            <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
-          )}
-          {showCta && (
-            <div className="mt-auto w-full md:w-auto">
-              <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+      {showTopSection && (
+        <Background
+          background={styles.backgroundColor}
+          className="flex p-8 gap-6"
+        >
+          {parentStyles?.showImage && (
+            <div className="w-20 h-20 flex-shrink-0 rounded-full overflow-hidden">
+              <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
             </div>
           )}
-        </div>
-      </Background>
+          <div className="flex flex-col justify-center gap-1">
+            {showName && (
+              <slots.NameSlot style={{ height: "auto" }} allow={[]} />
+            )}
+            {showTitle && (
+              <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
+            )}
+          </div>
+        </Background>
+      )}
+      {showTopSection && showBottomSection && <hr className="border" />}
+      {showBottomSection && (
+        <Background
+          background={backgroundColors.background1.value}
+          className="flex flex-grow p-8"
+        >
+          <div className="flex flex-col flex-grow gap-4">
+            {showPhone && (
+              <slots.PhoneSlot style={{ height: "auto" }} allow={[]} />
+            )}
+            {showEmail && (
+              <slots.EmailSlot style={{ height: "auto" }} allow={[]} />
+            )}
+            {showCta && (
+              <div className="mt-auto w-full md:w-auto">
+                <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+              </div>
+            )}
+          </div>
+        </Background>
+      )}
     </div>
   );
 };
@@ -448,62 +478,62 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
 
     const showImage = Boolean(
       person?.headshot ||
-        imageSlotProps?.parentData?.image ||
-        (imageSlotProps &&
-          (imageSlotProps?.data.image.field ||
-            (imageSlotProps.data.image.constantValue &&
-              "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
-            (imageSlotProps.data.image.constantValue &&
-              "url" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.url) ||
-            (imageSlotProps.data.image.constantValue &&
-              "image" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.image?.url)))
+      imageSlotProps?.parentData?.image ||
+      (imageSlotProps &&
+        (imageSlotProps?.data.image.field ||
+          (imageSlotProps.data.image.constantValue &&
+            "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
+          (imageSlotProps.data.image.constantValue &&
+            "url" in imageSlotProps.data.image.constantValue &&
+            imageSlotProps.data.image.constantValue.url) ||
+          (imageSlotProps.data.image.constantValue &&
+            "image" in imageSlotProps.data.image.constantValue &&
+            imageSlotProps.data.image.constantValue.image?.url)))
     );
     const showName = Boolean(
       person?.name ||
-        nameSlotProps?.parentData?.text ||
-        (nameSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            nameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      nameSlotProps?.parentData?.text ||
+      (nameSlotProps &&
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          nameSlotProps.data.text,
+          i18nComponentsInstance.language || "en"
+        ))
     );
     const showTitle = Boolean(
       person?.title ||
-        titleSlotProps?.parentData?.richText ||
-        (titleSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            titleSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      titleSlotProps?.parentData?.richText ||
+      (titleSlotProps &&
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          titleSlotProps.data.text,
+          i18nComponentsInstance.language || "en"
+        ))
     );
     const showPhone = Boolean(
       person?.phoneNumber ||
-        phoneSlotProps?.parentData?.phoneNumbers?.length ||
-        (phoneSlotProps?.data?.phoneNumbers?.length &&
-          phoneSlotProps.data.phoneNumbers.some(
-            (phone: any) => phone.number?.constantValue || phone.number?.field
-          ))
+      phoneSlotProps?.parentData?.phoneNumbers?.length ||
+      (phoneSlotProps?.data?.phoneNumbers?.length &&
+        phoneSlotProps.data.phoneNumbers.some(
+          (phone: any) => phone.number?.constantValue || phone.number?.field
+        ))
     );
     const showEmail = Boolean(
       person?.email ||
-        emailSlotProps?.parentData?.list?.length ||
-        emailSlotProps?.data?.list?.constantValue?.length ||
-        emailSlotProps?.data?.list?.field
+      emailSlotProps?.parentData?.list?.length ||
+      emailSlotProps?.data?.list?.constantValue?.length ||
+      emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
       person?.cta?.label ||
-        ctaSlotProps?.parentData?.cta?.label ||
-        ctaSlotProps?.data?.entityField?.constantValue?.label ||
-        ctaSlotProps?.data?.entityField?.field ||
-        (ctaSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            ctaSlotProps.data.entityField
-          )?.label)
+      ctaSlotProps?.parentData?.cta?.label ||
+      ctaSlotProps?.data?.entityField?.constantValue?.label ||
+      ctaSlotProps?.data?.entityField?.field ||
+      (ctaSlotProps &&
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          ctaSlotProps.data.entityField
+        )?.label)
     );
 
     let updatedData = {
@@ -551,6 +581,14 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
       "props.slots.EmailSlot[0].props.eventName",
       `card${data.props.index}-email`
     );
+
+    updatedData = syncParentStyles(params, updatedData, [
+      "showImage",
+      "showTitle",
+      "showPhone",
+      "showEmail",
+      "showCTA",
+    ]);
 
     // Set parentData for all slots if parentData is provided
     if (data.props.parentData) {

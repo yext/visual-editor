@@ -20,13 +20,60 @@ import {
   ProductCardProps,
 } from "./ProductCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { ProductSectionVariant } from "./ProductSection.tsx";
 
-export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType>;
+export type ProductCardsWrapperProps = CardWrapperType<ProductSectionType> & {
+  styles: {
+    showImage: boolean;
+    showBrow: boolean;
+    showTitle: boolean;
+    showPrice: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
 
-const productCardsWrapperFields = cardWrapperFields<ProductCardsWrapperProps>(
-  msg("components.products", "Products"),
-  ComponentFields.ProductSection.type
-);
+    variant?: ProductSectionVariant;
+  };
+};
+
+const productCardsWrapperFields = {
+  ...cardWrapperFields<ProductCardsWrapperProps>(
+    msg("components.products", "Products"),
+    ComponentFields.ProductSection.type
+  ),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showBrow: YextField(msg("fields.showBrow", "Show Brow Text"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showTitle: YextField(msg("fields.showTitle", "Show Title"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showPrice: YextField(msg("fields.showPrice", "Show Price"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showDescription: YextField(
+        msg("fields.showDescription", "Show Description"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+    },
+  }),
+};
 
 const ProductCardsWrapperComponent: PuckComponent<ProductCardsWrapperProps> = (
   props
@@ -53,6 +100,14 @@ export const ProductCardsWrapper: ComponentConfig<{
       field: "",
       constantValueEnabled: true,
       constantValue: [],
+    },
+    styles: {
+      showImage: true,
+      showBrow: true,
+      showTitle: true,
+      showPrice: true,
+      showDescription: true,
+      showCTA: true,
     },
     slots: {
       CardSlot: [],

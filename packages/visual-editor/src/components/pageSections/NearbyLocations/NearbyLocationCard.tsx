@@ -86,7 +86,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           {name}
         </Heading>
       </MaybeLink>
-      {hours && (
+      {styles.showHours && hours && (
         <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
           <HoursStatusAtom
             hours={hours}
@@ -99,7 +99,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           />
         </div>
       )}
-      {mainPhone && (
+      {styles.showPhone && mainPhone && (
         <PhoneAtom
           eventName={`phone${cardNumber}`}
           phoneNumber={mainPhone}
@@ -108,7 +108,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           includeIcon={false}
         />
       )}
-      {address && (
+      {styles.showAddress && address && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
             address={address}

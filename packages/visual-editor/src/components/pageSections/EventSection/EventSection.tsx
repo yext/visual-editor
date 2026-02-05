@@ -27,7 +27,7 @@ export interface EventSectionProps {
     backgroundColor?: BackgroundStyle;
 
     /**
-     * Whether or not to show the section heading.
+     * Whether to show the section heading.
      * @defaultValue true
      */
     showSectionHeading: boolean;

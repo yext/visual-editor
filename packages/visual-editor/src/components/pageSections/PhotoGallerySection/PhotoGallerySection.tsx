@@ -45,7 +45,7 @@ export interface PhotoGalleryStyles {
   variant: "gallery" | "carousel";
 
   /**
-   * Whether or not to show the section heading
+   * Whether to show the section heading
    * @defaultValue true
    */
   showSectionHeading: boolean;
