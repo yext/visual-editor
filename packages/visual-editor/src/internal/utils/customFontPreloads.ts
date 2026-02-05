@@ -1,3 +1,12 @@
+/**
+ * Custom font preloads
+ *
+ * High-level flow:
+ * 1. Load custom font CSS from /y-fonts/*.css and index for @font-face rules.
+ * 2. Use theme values (font family + weight) to choose the correct file per font.
+ * 3. Store the resulting file list in themeData for head preloading.
+ */
+
 import {
   FontRegistry,
   generateCustomFontLinkData,
@@ -257,4 +266,33 @@ export const getCustomFontPreloads = (themeValues: ThemeData | undefined) => {
   }
   const preloads = themeValues[CUSTOM_FONT_PRELOADS_KEY];
   return Array.isArray(preloads) ? preloads.filter(Boolean) : [];
+};
+
+/**
+ * Builds the HTML link tags for preloading custom fonts.
+ */
+export const buildFontPreloadTags = (
+  preloads: string[],
+  relativePrefixToRoot: string
+) => {
+  if (preloads.length === 0) {
+    return "";
+  }
+
+  return (
+    preloads
+      .map((href) => {
+        const normalizedHref =
+          href.startsWith("http://") ||
+          href.startsWith("https://") ||
+          href.startsWith("/") ||
+          href.startsWith("./") ||
+          href.startsWith("../")
+            ? href
+            : `${relativePrefixToRoot}${href}`;
+
+        return `<link rel="preload" href="${normalizedHref}" as="font" type="font/woff2" crossorigin="anonymous">`;
+      })
+      .join("\n") + "\n"
+  );
 };

@@ -14,7 +14,10 @@ import {
   type FontLinkData,
   generateCustomFontLinkData,
 } from "./fonts/visualEditorFonts.ts";
-import { getCustomFontPreloads } from "../internal/utils/customFontPreloads.ts";
+import {
+  buildFontPreloadTags,
+  getCustomFontPreloads,
+} from "../internal/utils/customFontPreloads.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
 import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };
@@ -239,30 +242,4 @@ export const updateThemeInEditor = async (
       subtree: true,
     });
   }
-};
-
-const buildFontPreloadTags = (
-  preloads: string[],
-  relativePrefixToRoot: string
-) => {
-  if (preloads.length === 0) {
-    return "";
-  }
-
-  return (
-    preloads
-      .map((href) => {
-        const normalizedHref =
-          href.startsWith("http://") ||
-          href.startsWith("https://") ||
-          href.startsWith("/") ||
-          href.startsWith("./") ||
-          href.startsWith("../")
-            ? href
-            : `${relativePrefixToRoot}${href}`;
-
-        return `<link rel="preload" href="${normalizedHref}" as="font" type="font/woff2" crossorigin="anonymous">`;
-      })
-      .join("\n") + "\n"
-  );
 };
