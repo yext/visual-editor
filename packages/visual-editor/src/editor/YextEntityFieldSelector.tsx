@@ -207,8 +207,8 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
                   type: "object",
                   properties: {
                     hasLocalizedValue: {
-                      type: "boolean",
-                      enum: [true],
+                      type: "string",
+                      enum: ["true"],
                     },
                     en: {
                       type: "string",

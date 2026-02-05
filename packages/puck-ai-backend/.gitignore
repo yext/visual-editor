@@ -1,13 +1,3 @@
-# Logs
-
-logs
-_.log
-npm-debug.log_
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnpm-debug.log*
-
 # wrangler project
 
 .dev.vars*

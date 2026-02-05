@@ -20,7 +20,11 @@ const parseBody = async (
     contentType.includes("multipart/form-data")
   ) {
     try {
-      return (await c.req.parseBody()) as any as PuckChatRequestBody;
+      const parsedBody = await c.req.parseBody();
+      if (typeof parsedBody === "object" && "chatId" in parsedBody) {
+        return parsedBody as unknown as PuckChatRequestBody;
+      }
+      return;
     } catch {
       return;
     }
@@ -37,6 +41,9 @@ export const puckRouter = async (c: Context) => {
     }
 
     const origin = c.req.header("Origin");
+    if (!origin) {
+      return c.json({ success: false, error: "Missing Origin header" }, 400);
+    }
     const pathname = `/api/puck/${c.req.param("route") ?? ""}`.replace(
       /\/+$/,
       "",
@@ -88,6 +95,6 @@ export const puckRouter = async (c: Context) => {
     });
   } catch (error) {
     console.error(error);
-    return c.json({ success: false, error: "Failed to fetch members" }, 500);
+    return c.json({ success: false, error }, 500);
   }
 };
