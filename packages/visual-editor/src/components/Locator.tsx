@@ -70,6 +70,7 @@ import {
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -81,7 +82,7 @@ const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 
 const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: any = useDocument();
+  const entityDocument: StreamDocument = useDocument();
   if (!entityDocument._pageset && entityTypeEnvVar) {
     return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
   }
@@ -1303,6 +1304,7 @@ const Map: React.FC<MapProps> = ({
   markerOptionsOverride,
 }) => {
   const { t } = useTranslation();
+  const entityDocument: StreamDocument = useDocument();
 
   const documentIsUndefined = typeof document === "undefined";
   const iframe = documentIsUndefined
@@ -1314,7 +1316,19 @@ const Map: React.FC<MapProps> = ({
     : ((iframe?.contentDocument || document)?.getElementById(
         "locatorMapDiv"
       ) as HTMLDivElement | null);
-  const mapPadding = getMapboxMapPadding(locatorMapDiv);
+
+  const mapPadding = React.useMemo(
+    () => getMapboxMapPadding(locatorMapDiv),
+    [locatorMapDiv]
+  );
+  const mapboxOptions = React.useMemo(
+    () => ({
+      center: centerCoords,
+      fitBoundsOptions: { padding: mapPadding },
+      ...(mapStyle ? { style: mapStyle } : {}),
+    }),
+    [centerCoords, mapPadding, mapStyle]
+  );
 
   // During page generation we don't exist in a browser context
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
@@ -1331,7 +1345,6 @@ const Map: React.FC<MapProps> = ({
     );
   }
 
-  const entityDocument: any = useDocument();
   let mapboxApiKey = entityDocument._env?.YEXT_MAPBOX_API_KEY;
   if (
     iframe?.contentDocument &&
@@ -1344,11 +1357,7 @@ const Map: React.FC<MapProps> = ({
   return (
     <MapboxMap
       mapboxAccessToken={mapboxApiKey || ""}
-      mapboxOptions={{
-        center: centerCoords,
-        fitBoundsOptions: { padding: mapPadding },
-        ...(mapStyle ? { style: mapStyle } : {}),
-      }}
+      mapboxOptions={mapboxOptions}
       onDrag={onDragHandler}
       PinComponent={LocatorMapPin}
       iframeWindow={iframe?.contentWindow ?? undefined}
