@@ -28,14 +28,14 @@ export const MetaTitleField = (): Field<
         missingLocales.length === 1
           ? pt(
               "metaTitleMissingLocale",
-              "Meta title is required for {{locale}}.",
+              "Meta title is missing for {{locale}}.",
               {
                 locale: missingLocales[0],
               }
             )
           : pt(
               "metaTitleMissingLocales",
-              "Meta title is required for {{locales}}.",
+              "Meta title is missing for {{locales}}.",
               { locales: missingLocales.join(", ") }
             );
 

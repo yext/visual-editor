@@ -15,7 +15,7 @@ const PUBLISH_ERROR_ACTIONS: Record<string, (details?: ErrorDetail) => string> =
       if (missingLocales.length > 0) {
         return pt(
           "publishError.metaTitleWithLocales",
-          "fill in Meta Title for locales: {{locales}}",
+          "fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}",
           { locales: formatLocaleList(missingLocales) }
         );
       }
