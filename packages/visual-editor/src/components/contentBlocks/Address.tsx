@@ -38,6 +38,7 @@ export interface AddressProps {
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
     color?: BackgroundStyle;
+    hideCountry?: boolean;
   };
 
   /** @internal */
@@ -94,6 +95,7 @@ export const addressFields: Fields<AddressProps> = {
 const AddressComponent: PuckComponent<AddressProps> = (props) => {
   const { data, styles, puck, parentData } = props;
   const { t, i18n } = useTranslation();
+  const { hideCountry = false } = styles;
   const streamDocument = useDocument();
 
   const resolvedColor = styles.color;
@@ -140,7 +142,14 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
         fieldId={data.address.field}
         constantValueEnabled={!parentData && data.address.constantValueEnabled}
       >
-        <RenderAddress address={address} />
+        <RenderAddress
+          address={address}
+          lines={
+            hideCountry
+              ? [["line1"], ["line2"], ["city", "region", "postalCode"]]
+              : undefined
+          }
+        />
       </EntityField>
       {(useAddressLink ? !!addressLink : !!listingsLink) &&
         styles.showGetDirectionsLink && (
@@ -210,6 +219,7 @@ export const Address: ComponentConfig<{
       showGetDirectionsLink: true,
       ctaVariant: "link",
       color: backgroundColors.color1.value,
+      hideCountry: false,
     },
   },
   resolveFields: resolveAddressFields,

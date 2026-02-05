@@ -4712,14 +4712,9 @@ const directoryDefaultLayout = {
               props: {
                 id: "HeadingTextSlot-1a871989-a34d-426c-b24a-a1888c1a46ea",
                 data: {
-                  text: {
-                    constantValue: {
-                      en: "[[name]]",
-                      hasLocalizedValue: "true",
-                    },
-                    constantValueEnabled: true,
-                    field: "",
-                  },
+                  constantValue: { en: "", hasLocalizedValue: "true" },
+                  constantValueEnabled: false,
+                  field: "name",
                 },
                 styles: { level: 2, align: "center" },
               },
