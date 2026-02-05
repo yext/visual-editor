@@ -119,7 +119,7 @@ const mainDefaultLayout = {
                           customClass: "",
                           dataAttributes: [],
                           ariaLabel: {
-                            en: "",
+                            en: "Button",
                             hasLocalizedValue: "true",
                           },
                           show: true,
@@ -163,7 +163,7 @@ const mainDefaultLayout = {
                           customClass: "",
                           dataAttributes: [],
                           ariaLabel: {
-                            en: "",
+                            en: "Button",
                             hasLocalizedValue: "true",
                           },
                           show: true,
@@ -534,7 +534,7 @@ const mainDefaultLayout = {
                   customClass: "",
                   dataAttributes: [],
                   ariaLabel: {
-                    en: "",
+                    en: "Button",
                     hasLocalizedValue: "true",
                   },
                   entityField: {
@@ -577,7 +577,7 @@ const mainDefaultLayout = {
                   customClass: "",
                   dataAttributes: [],
                   ariaLabel: {
-                    en: "",
+                    en: "Button",
                     hasLocalizedValue: "true",
                   },
                   entityField: {
@@ -939,7 +939,7 @@ const mainDefaultLayout = {
                   customClass: "",
                   dataAttributes: [],
                   ariaLabel: {
-                    en: "",
+                    en: "Button",
                     hasLocalizedValue: "true",
                   },
                   entityField: {
@@ -1144,7 +1144,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -1335,7 +1335,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -1526,7 +1526,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -2322,7 +2322,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -2511,7 +2511,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -2700,7 +2700,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -2961,7 +2961,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -3147,7 +3147,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -3333,7 +3333,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -3658,7 +3658,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -3830,7 +3830,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -4002,7 +4002,7 @@ const mainDefaultLayout = {
                                   customClass: "",
                                   dataAttributes: [],
                                   ariaLabel: {
-                                    en: "",
+                                    en: "Button",
                                     hasLocalizedValue: "true",
                                   },
                                   entityField: {
@@ -4705,7 +4705,7 @@ const directoryDefaultLayout = {
                           customClass: "",
                           dataAttributes: [],
                           ariaLabel: {
-                            en: "",
+                            en: "Button",
                             hasLocalizedValue: "true",
                           },
                           show: true,
@@ -4749,7 +4749,7 @@ const directoryDefaultLayout = {
                           customClass: "",
                           dataAttributes: [],
                           ariaLabel: {
-                            en: "",
+                            en: "Button",
                             hasLocalizedValue: "true",
                           },
                           show: true,

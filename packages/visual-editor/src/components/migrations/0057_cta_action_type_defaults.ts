@@ -20,7 +20,7 @@ export const ctaActionTypeDefaults: Migration = {
         customId: data.customId ?? "",
         customClass: data.customClass ?? "",
         dataAttributes: data.dataAttributes ?? [],
-        ariaLabel: ariaLabel ?? { en: "", hasLocalizedValue: "true" },
+        ariaLabel: ariaLabel ?? { en: "Button", hasLocalizedValue: "true" },
       };
 
       return {

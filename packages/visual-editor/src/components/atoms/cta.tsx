@@ -19,13 +19,15 @@ export type CTAProps = {
   label: React.ReactNode;
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
   actionType?: "link" | "button";
-  id?: string;
-  dataAttributes?: Record<`data-${string}`, string>;
 
   // ctaType specific props
   link?: string;
   linkType?: LinkType;
   presetImageType?: PresetImageType;
+
+  // button actionType specific props
+  id?: string;
+  dataAttributes?: Record<`data-${string}`, string>;
 
   // Styling and behavior props
   variant?: ButtonProps["variant"];

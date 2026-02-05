@@ -14,7 +14,6 @@ import {
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
-import { TranslatableStringField } from "../../editor/TranslatableStringField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
@@ -109,10 +108,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
           },
         },
       }),
-      buttonText: TranslatableStringField(
-        msg("fields.buttonText", "Button Text"),
-        { types: ["type.string"] }
-      ),
+      buttonText: YextField(msg("fields.buttonText", "Button Text"), {
+        type: "translatableString",
+        filter: { types: ["type.string"] },
+      }),
       customId: YextField(msg("fields.customId", "Custom ID"), {
         type: "text",
       }),
@@ -137,12 +136,10 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
               : `${pt("dataAttribute", "Attribute")} ${(index ?? 0) + 1}`,
         }
       ),
-      ariaLabel: TranslatableStringField(
-        msg("fields.ariaLabel", "Aria Label"),
-        {
-          types: ["type.string"],
-        }
-      ),
+      ariaLabel: YextField(msg("fields.ariaLabel", "Aria Label"), {
+        type: "translatableString",
+        filter: { types: ["type.string"] },
+      }),
     },
   },
   styles: {
@@ -275,7 +272,7 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
           !parentData && data.entityField.constantValueEnabled
         }
       >
-        {cta && ctaElement}
+        {ctaElement}
       </EntityField>
     ) : (
       ctaElement
@@ -310,7 +307,7 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
       customClass: "",
       dataAttributes: [],
       ariaLabel: {
-        en: "",
+        en: "Button",
         hasLocalizedValue: "true",
       },
     },
