@@ -70,7 +70,7 @@ import {
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
-import { StreamDocument } from "../utils";
+import { StreamDocument } from "../utils/types/StreamDocument.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
