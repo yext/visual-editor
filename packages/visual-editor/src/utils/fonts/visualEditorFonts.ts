@@ -4,6 +4,8 @@ import { defaultFonts as fontsJs } from "./font_registry.js";
 import { msg } from "../i18n/platform.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 
+const variableFontRegex = /var\((--[^)]+)\)/;
+
 export type FontRegistry = Record<string, FontSpecification>;
 type FontSpecification = {
   italics: boolean; // whether the font supports italics
@@ -282,7 +284,7 @@ const filterFontWeights = (
 
   // Support "Default font" reference by resolving var(--fontFamily-headers-defaultFont).
   if (fontName?.startsWith("var(")) {
-    const variableMatch = fontName.match(/var\((--[^)]+)\)/);
+    const variableMatch = fontName.match(variableFontRegex);
     if (variableMatch?.[1]) {
       const variableName = variableMatch[1];
       const variableRegex = new RegExp(`${variableName}:\\s*([^;]+)`, "i");
@@ -328,7 +330,7 @@ export const extractInUseFontFamilies = (
       // Shallow resolution avoids cyclical font references.
       // Only fonts with one level of depth in their references (like "Default font")
       // will be resolved, which is sufficient for our use case.
-      const match = currentValue.match(/var\((--[^)]+)\)/);
+      const match = currentValue.match(variableFontRegex);
       if (!match) {
         break;
       }
