@@ -37,7 +37,7 @@ const createRequestOrigin = (
   hostHeader: string | undefined,
 ) => originHeader ?? `http://${hostHeader ?? "localhost"}`;
 
-const getSseErrorText = (payload: string): string | null => {
+const getServerSideEventsErrorText = (payload: string): string | null => {
   const lines = payload.split(/\r?\n/);
   for (const line of lines) {
     if (!line.startsWith("data:")) {
@@ -59,7 +59,7 @@ const getSseErrorText = (payload: string): string | null => {
   return null;
 };
 
-const streamSseResponse = async (
+const streamServerSideEventsResponse = async (
   puckResponse: Response,
   res: http.ServerResponse,
 ) => {
@@ -89,7 +89,7 @@ const streamSseResponse = async (
       const chunkText = chunk.toString("utf8");
       buffer += chunkText;
 
-      const errorText = getSseErrorText(buffer);
+      const errorText = getServerSideEventsErrorText(buffer);
       if (errorText) {
         if (!res.headersSent) {
           res.statusCode = 400;
@@ -185,7 +185,7 @@ const server = http.createServer(async (req, res) => {
 
     const contentType = puckResponse.headers.get("content-type") ?? "";
     if (contentType.includes("text/event-stream")) {
-      await streamSseResponse(puckResponse, res);
+      await streamServerSideEventsResponse(puckResponse, res);
       return;
     }
 
