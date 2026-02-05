@@ -1,12 +1,24 @@
 import fs from "fs/promises";
 import path from "path";
 
+/**
+ * Synchronizes components locale files from platform locale files.
+ *
+ * Rules:
+ * - components/en key membership is authoritative.
+ * - For each locale, matching keys are copied from platform/<locale>.
+ * - Extra keys are dropped from components locales.
+ * - Output is sorted and written deterministically.
+ */
 const NAMESPACE = "visual-editor.json";
 const ROOT = path.resolve(process.cwd(), "locales");
 const PLATFORM_DIR = path.join(ROOT, "platform");
 const COMPONENTS_DIR = path.join(ROOT, "components");
 const COMPONENTS_EN_PATH = path.join(COMPONENTS_DIR, "en", NAMESPACE);
 
+/**
+ * Loads a JSON file and returns {} when missing or invalid.
+ */
 async function loadJsonSafe(filePath) {
   try {
     return JSON.parse(await fs.readFile(filePath, "utf-8"));
@@ -15,6 +27,9 @@ async function loadJsonSafe(filePath) {
   }
 }
 
+/**
+ * Flattens nested objects into dot-delimited key/value pairs.
+ */
 function flatten(obj, prefix = "") {
   const result = {};
   for (const key of Object.keys(obj)) {
@@ -29,6 +44,9 @@ function flatten(obj, prefix = "") {
   return result;
 }
 
+/**
+ * Rebuilds nested objects from dot-delimited key/value pairs.
+ */
 function unflatten(flat) {
   const result = {};
   for (const key of Object.keys(flat)) {
@@ -47,6 +65,9 @@ function unflatten(flat) {
   return result;
 }
 
+/**
+ * Recursively sorts object keys for deterministic output.
+ */
 function sortObject(obj) {
   if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
     return obj;
@@ -60,6 +81,9 @@ function sortObject(obj) {
     }, {});
 }
 
+/**
+ * Returns sorted child directory names for a given base folder.
+ */
 async function getLocales(baseDir) {
   const entries = await fs.readdir(baseDir, { withFileTypes: true });
   return entries
@@ -68,6 +92,9 @@ async function getLocales(baseDir) {
     .sort();
 }
 
+/**
+ * Syncs a single components locale file from the corresponding platform locale.
+ */
 async function propagateLocale(locale, allowedKeys) {
   const platformPath = path.join(PLATFORM_DIR, locale, NAMESPACE);
   const componentsPath = path.join(COMPONENTS_DIR, locale, NAMESPACE);
@@ -97,6 +124,11 @@ async function propagateLocale(locale, allowedKeys) {
   console.log(`Synced components locale from platform: ${locale}`);
 }
 
+/**
+ * Script entrypoint:
+ * - loads components/en keys
+ * - propagates each platform locale into components
+ */
 async function run() {
   const componentsEn = flatten(await loadJsonSafe(COMPONENTS_EN_PATH));
   const allowedKeys = Object.keys(componentsEn);
