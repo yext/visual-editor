@@ -24,6 +24,7 @@ import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultTestimonial = {
   description: {
@@ -131,6 +132,7 @@ export type TestimonialCardProps = {
     /** The background color of each testimonial card */
     backgroundColor?: BackgroundStyle;
   };
+
   /** @internal */
   slots: {
     DescriptionSlot: Slot;
@@ -145,10 +147,16 @@ export type TestimonialCardProps = {
   };
 
   /** @internal */
+  parentStyles?: {
+    showName: boolean;
+    showDate: boolean;
+  };
+
+  /** @internal */
   conditionalRender?: {
     description: boolean;
     contributorName: boolean;
-    contributionDate?: boolean;
+    contributionDate: boolean;
   };
 
   /** @internal */
@@ -182,7 +190,7 @@ const testimonialCardFields: Fields<TestimonialCardProps> = {
 const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   props
 ) => {
-  const { styles, slots, puck, conditionalRender } = props;
+  const { styles, slots, puck, conditionalRender, parentStyles } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: TestimonialCardProps["styles"];
@@ -195,12 +203,12 @@ const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
   const showDescription = Boolean(
     conditionalRender?.description || puck.isEditing
   );
-  const showContributorName = Boolean(
-    conditionalRender?.contributorName || puck.isEditing
-  );
-  const showContributionDate = Boolean(
-    conditionalRender?.contributionDate || puck.isEditing
-  );
+  const showContributorName =
+    parentStyles?.showName &&
+    Boolean(conditionalRender?.contributorName || puck.isEditing);
+  const showContributionDate =
+    parentStyles?.showDate &&
+    Boolean(conditionalRender?.contributionDate || puck.isEditing);
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -293,16 +301,24 @@ const TestimonialCardComponent: PuckComponent<TestimonialCardProps> = (
           <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
         )}
       </Background>
-      <Background background={styles.backgroundColor} className="p-8">
-        <div className="flex flex-col gap-1">
-          {showContributorName && (
-            <slots.ContributorNameSlot style={{ height: "auto" }} allow={[]} />
-          )}
-          {showContributionDate && (
-            <slots.ContributionDateSlot style={{ height: "auto" }} allow={[]} />
-          )}
-        </div>
-      </Background>
+      {(showContributorName || showContributionDate) && (
+        <Background background={styles.backgroundColor} className="p-8">
+          <div className="flex flex-col gap-1">
+            {showContributorName && (
+              <slots.ContributorNameSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            )}
+            {showContributionDate && (
+              <slots.ContributionDateSlot
+                style={{ height: "auto" }}
+                allow={[]}
+              />
+            )}
+          </div>
+        </Background>
+      )}
     </div>
   );
 };
@@ -336,29 +352,29 @@ export const TestimonialCard: ComponentConfig<{ props: TestimonialCardProps }> =
 
       const showDescription = Boolean(
         testimonial?.description ||
-          descriptionSlotProps?.parentData?.richText ||
-          (descriptionSlotProps &&
-            resolveYextEntityField(
-              params.metadata.streamDocument,
-              descriptionSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
+        descriptionSlotProps?.parentData?.richText ||
+        (descriptionSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            descriptionSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
       );
       const showContributorName = Boolean(
         testimonial?.contributorName ||
-          contributorNameSlotProps?.parentData?.text ||
-          (contributorNameSlotProps &&
-            resolveYextEntityField(
-              params.metadata.streamDocument,
-              contributorNameSlotProps.data.text,
-              i18nComponentsInstance.language || "en"
-            ))
+        contributorNameSlotProps?.parentData?.text ||
+        (contributorNameSlotProps &&
+          resolveYextEntityField(
+            params.metadata.streamDocument,
+            contributorNameSlotProps.data.text,
+            i18nComponentsInstance.language || "en"
+          ))
       );
       const showContributionDate = Boolean(
         testimonial?.contributionDate ||
-          contributionDateSlotProps?.parentData?.date ||
-          contributionDateSlotProps?.data?.date?.constantValue ||
-          contributionDateSlotProps?.data?.date?.field
+        contributionDateSlotProps?.parentData?.date ||
+        contributionDateSlotProps?.data?.date?.constantValue ||
+        contributionDateSlotProps?.data?.date?.field
       );
 
       let updatedData = {
@@ -372,6 +388,13 @@ export const TestimonialCard: ComponentConfig<{ props: TestimonialCardProps }> =
           },
         } satisfies TestimonialCardProps,
       };
+
+      updatedData = syncParentStyles(params, updatedData, [
+        "showName",
+        "showDate",
+        "showHeading",
+        "showIcon",
+      ]);
 
       // Set parentData for all slots if parentData is provided
       if (data.props.parentData) {

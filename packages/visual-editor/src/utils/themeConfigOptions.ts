@@ -478,6 +478,11 @@ const maxWidthOptions = [
   },
 ];
 
+const showHideOptions = [
+  { label: msg("fields.options.show", "Show"), value: true },
+  { label: msg("fields.options.hide", "Hide"), value: false },
+];
+
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
@@ -497,6 +502,7 @@ export const ThemeOptions = {
   HOURS_OPTIONS: hoursOptions,
   PHONE_OPTIONS: phoneOptions,
   MAX_WIDTH: maxWidthOptions,
+  SHOW_HIDE: showHideOptions,
 };
 
 // Content path for applying tailwind config to visual-editor components

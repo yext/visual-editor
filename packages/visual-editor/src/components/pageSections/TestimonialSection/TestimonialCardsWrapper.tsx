@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   ComponentConfig,
   ComponentData,
@@ -20,15 +19,44 @@ import {
   TestimonialCardProps,
 } from "./TestimonialCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 
 export type TestimonialCardsWrapperProps =
-  CardWrapperType<TestimonialSectionType>;
+  CardWrapperType<TestimonialSectionType> & {
+    styles: {
+      /**
+       * Whether to show the name slot in the testimonial cards.
+       * @defaultValue true
+       */
+      showName: boolean;
 
-const testimonialCardsWrapperFields =
-  cardWrapperFields<TestimonialCardsWrapperProps>(
+      /**
+       * Whether to show the date slot in the testimonial cards.
+       * @defaultValue true
+       */
+      showDate: boolean;
+    };
+  };
+
+const testimonialCardsWrapperFields = {
+  ...cardWrapperFields<TestimonialCardsWrapperProps>(
     msg("components.testimonial", "Testimonial"),
     ComponentFields.TestimonialSection.type
-  );
+  ),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      showName: YextField(msg("fields.showName", "Show Name"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showDate: YextField(msg("fields.showDate", "Show Date"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+    },
+  }),
+};
 
 const TestimonialCardsWrapperComponent: PuckComponent<
   TestimonialCardsWrapperProps
@@ -58,6 +86,10 @@ export const TestimonialCardsWrapper: ComponentConfig<{
     },
     slots: {
       CardSlot: [],
+    },
+    styles: {
+      showName: true,
+      showDate: true,
     },
   },
   resolveData: (data, params) => {

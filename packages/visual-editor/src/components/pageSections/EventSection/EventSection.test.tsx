@@ -108,6 +108,560 @@ const eventsData = {
   ],
 };
 
+const version59Props = {
+  styles: {
+    backgroundColor: {
+      bgColor: "bg-palette-secondary-light",
+      textColor: "text-black",
+    },
+    showSectionHeading: true,
+  },
+  slots: {
+    SectionHeadingSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-4340bfc0-16f0-4cb2-92cf-ae5dfca29806",
+          data: {
+            text: {
+              constantValue: {
+                en: "Upcoming Events",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "",
+            },
+          },
+          styles: {
+            level: 2,
+            align: "left",
+          },
+        },
+      },
+    ],
+    CardsWrapperSlot: [
+      {
+        type: "EventCardsWrapper",
+        props: {
+          id: "EventCardsWrapper-66b912c0-dad3-4e04-a4d3-9d301e12df0b",
+          data: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: [
+              {
+                id: "EventCard-30c26291-b06b-4c96-8d69-cb6a36d3fdb8",
+              },
+              {
+                id: "EventCard-4d14535d-5594-4c72-b170-886e3d823114",
+              },
+              {
+                id: "EventCard-ba6fa9cd-af96-4e08-84b4-ee14a3a5edb1",
+              },
+            ],
+          },
+          styles: {
+            showImage: true,
+            showDateTime: true,
+            showDescription: true,
+            showCTA: true,
+          },
+          slots: {
+            CardSlot: [
+              {
+                type: "EventCard",
+                props: {
+                  id: "EventCard-30c26291-b06b-4c96-8d69-cb6a36d3fdb8",
+                  index: 0,
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                    truncateDescription: true,
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "EventCard-30c26291-b06b-4c96-8d69-cb6a36d3fdb8-image",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                width: 640,
+                                height: 360,
+                                alternateText: "Event Image",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1.78,
+                            width: 640,
+                          },
+                          hideWidthProp: true,
+                          className: "max-w-full h-full object-cover",
+                          sizes: {
+                            base: "calc(100vw - 32px)",
+                            lg: "calc(maxWidth * 0.45)",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "EventCard-30c26291-b06b-4c96-8d69-cb6a36d3fdb8-title",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "Event Title",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 3,
+                            align: "left",
+                            semanticLevelOverride: 3,
+                          },
+                        },
+                      },
+                    ],
+                    DateTimeSlot: [
+                      {
+                        type: "Timestamp",
+                        props: {
+                          id: "EventCard-30c26291-b06b-4c96-8d69-cb6a36d3fdb8-timestamp",
+                          data: {
+                            date: {
+                              field: "",
+                              constantValue: "2022-12-12T14:00:00",
+                              constantValueEnabled: true,
+                            },
+                            endDate: {
+                              field: "",
+                              constantValue: "",
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            includeTime: true,
+                            includeRange: false,
+                          },
+                        },
+                      },
+                    ],
+                    DescriptionSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "EventCard-30c26291-b06b-4c96-8d69-cb6a36d3fdb8-description",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                          parentStyles: {
+                            className: "md:line-clamp-2",
+                          },
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "EventCard-30c26291-b06b-4c96-8d69-cb6a36d3fdb8-cta",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Learn More",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "cta0",
+                        },
+                      },
+                    ],
+                  },
+                  conditionalRender: {
+                    image: true,
+                    title: true,
+                    dateTime: true,
+                    description: true,
+                    cta: true,
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showDateTime: true,
+                    showDescription: true,
+                    showCTA: true,
+                  },
+                },
+              },
+              {
+                type: "EventCard",
+                props: {
+                  id: "EventCard-4d14535d-5594-4c72-b170-886e3d823114",
+                  index: 1,
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                    truncateDescription: true,
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "EventCard-4d14535d-5594-4c72-b170-886e3d823114-image",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                width: 640,
+                                height: 360,
+                                alternateText: "Event Image",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1.78,
+                            width: 640,
+                          },
+                          hideWidthProp: true,
+                          className: "max-w-full h-full object-cover",
+                          sizes: {
+                            base: "calc(100vw - 32px)",
+                            lg: "calc(maxWidth * 0.45)",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "EventCard-4d14535d-5594-4c72-b170-886e3d823114-title",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "Event Title",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 3,
+                            align: "left",
+                            semanticLevelOverride: 3,
+                          },
+                        },
+                      },
+                    ],
+                    DateTimeSlot: [
+                      {
+                        type: "Timestamp",
+                        props: {
+                          id: "EventCard-4d14535d-5594-4c72-b170-886e3d823114-timestamp",
+                          data: {
+                            date: {
+                              field: "",
+                              constantValue: "2022-12-12T14:00:00",
+                              constantValueEnabled: true,
+                            },
+                            endDate: {
+                              field: "",
+                              constantValue: "",
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            includeTime: true,
+                            includeRange: false,
+                          },
+                        },
+                      },
+                    ],
+                    DescriptionSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "EventCard-4d14535d-5594-4c72-b170-886e3d823114-description",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                          parentStyles: {
+                            className: "md:line-clamp-2",
+                          },
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "EventCard-4d14535d-5594-4c72-b170-886e3d823114-cta",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Learn More",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "cta1",
+                        },
+                      },
+                    ],
+                  },
+                  conditionalRender: {
+                    image: true,
+                    title: true,
+                    dateTime: true,
+                    description: true,
+                    cta: true,
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showDateTime: true,
+                    showDescription: true,
+                    showCTA: true,
+                  },
+                },
+              },
+              {
+                type: "EventCard",
+                props: {
+                  id: "EventCard-ba6fa9cd-af96-4e08-84b4-ee14a3a5edb1",
+                  index: 2,
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                    truncateDescription: true,
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "EventCard-ba6fa9cd-af96-4e08-84b4-ee14a3a5edb1-image",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                width: 640,
+                                height: 360,
+                                alternateText: "Event Image",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1.78,
+                            width: 640,
+                          },
+                          hideWidthProp: true,
+                          className: "max-w-full h-full object-cover",
+                          sizes: {
+                            base: "calc(100vw - 32px)",
+                            lg: "calc(maxWidth * 0.45)",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "EventCard-ba6fa9cd-af96-4e08-84b4-ee14a3a5edb1-title",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "Event Title",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 3,
+                            align: "left",
+                            semanticLevelOverride: 3,
+                          },
+                        },
+                      },
+                    ],
+                    DateTimeSlot: [
+                      {
+                        type: "Timestamp",
+                        props: {
+                          id: "EventCard-ba6fa9cd-af96-4e08-84b4-ee14a3a5edb1-timestamp",
+                          data: {
+                            date: {
+                              field: "",
+                              constantValue: "2022-12-12T14:00:00",
+                              constantValueEnabled: true,
+                            },
+                            endDate: {
+                              field: "",
+                              constantValue: "",
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            includeTime: true,
+                            includeRange: false,
+                          },
+                        },
+                      },
+                    ],
+                    DescriptionSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "EventCard-ba6fa9cd-af96-4e08-84b4-ee14a3a5edb1-description",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                          parentStyles: {
+                            className: "md:line-clamp-2",
+                          },
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "EventCard-ba6fa9cd-af96-4e08-84b4-ee14a3a5edb1-cta",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Learn More",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "cta2",
+                        },
+                      },
+                    ],
+                  },
+                  conditionalRender: {
+                    image: true,
+                    title: true,
+                    dateTime: true,
+                    description: true,
+                    cta: true,
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showDateTime: true,
+                    showDescription: true,
+                    showCTA: true,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  },
+  analytics: {
+    scope: "eventsSection",
+  },
+  liveVisibility: true,
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
@@ -1907,6 +2461,59 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "EventSection-2fb8d8fc-66d5-442b-8d4f-8b50f3a9d8aa",
     },
+  },
+  {
+    name: "version 59 with showSectionHeading, showImage false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        showSectionHeading: false,
+      },
+      slots: {
+        ...version59Props.slots,
+        CardsWrapperSlot: [
+          {
+            ...version59Props.slots.CardsWrapperSlot[0],
+            props: {
+              ...version59Props.slots.CardsWrapperSlot[0].props,
+              styles: {
+                ...version59Props.slots.CardsWrapperSlot[0].props.styles,
+                showImage: false,
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "version 59 with showName, showDateTime, showDescription, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      slots: {
+        ...version59Props.slots,
+        CardsWrapperSlot: [
+          {
+            ...version59Props.slots.CardsWrapperSlot[0],
+            props: {
+              ...version59Props.slots.CardsWrapperSlot[0].props,
+              styles: {
+                ...version59Props.slots.CardsWrapperSlot[0].props.styles,
+                showName: false,
+                showDateTime: false,
+                showDescription: false,
+                showCTA: false,
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 59,
   },
 ];
 
