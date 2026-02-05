@@ -287,7 +287,15 @@ const filterFontWeights = (
     const variableMatch = fontName.match(variableFontRegex);
     if (variableMatch?.[1]) {
       const variableName = variableMatch[1];
-      const variableRegex = new RegExp(`${variableName}:\\s*([^;]+)`, "i");
+      // Escape regex special characters to prevent ReDoS from malformed CSS
+      const escapedVariableName = variableName.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+      const variableRegex = new RegExp(
+        `${escapedVariableName}:\\s*([^;]+)`,
+        "i"
+      );
       const variableValue = styleContent.match(variableRegex)?.[1];
       if (variableValue) {
         const cleanedValue = variableValue.replace(/!important/g, "").trim();
