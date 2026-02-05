@@ -68,6 +68,7 @@ import {
 } from "react-icons/fa";
 import { useCollapse } from "react-collapsed";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
+import { Body } from "./atoms/body.tsx";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -1097,10 +1098,15 @@ const LocatorInternal = ({
             placeholder={t("searchHere", "Search here...")}
             ariaLabel={t("searchDropdownHere", "Search Dropdown Input")}
             customCssClasses={{
+              filterSearchContainer: "font-body-fontFamily",
               focusedOption: "bg-gray-200 hover:bg-gray-200 block",
               option: "hover:bg-gray-100 px-4 py-3",
-              inputElement: "rounded-md p-4 h-11",
-              currentLocationButton: "h-7 w-7 text-palette-primary-dark",
+              inputElement:
+                "rounded-md p-4 h-11 font-body-fontFamily font-body-fontWeight text-body-fontSize",
+              currentLocationButton:
+                "h-7 w-7 font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
+              label:
+                "font-body-fontFamily font-body-fontWeight text-body-fontSize text-palette-primary-dark",
             }}
             showCurrentLocationButton={userLocationRetrieved}
             geolocationProps={{
@@ -1119,7 +1125,7 @@ const LocatorInternal = ({
               />
               {hasFilterModalToggle && (
                 <button
-                  className="inline-flex justify-between items-center gap-2 font-bold text-body-sm-fontSize bg-white text-palette-primary-dark"
+                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
                   onClick={() => setShowFilterModal((prev) => !prev)}
                 >
                   {t("filter", "Filter")}
@@ -1131,7 +1137,8 @@ const LocatorInternal = ({
               <AppliedFilters
                 hiddenFields={[LOCATION_FIELD, COUNTRY_CODE_FIELD]}
                 customCssClasses={{
-                  removableFilter: "text-md font-normal mt-2 mb-0",
+                  removableFilter:
+                    "text-md font-normal mt-2 mb-0 font-body-fontFamily",
                   clearAllButton: "hidden",
                   appliedFiltersContainer: "mt-0 mb-0",
                 }}
@@ -1179,7 +1186,7 @@ const LocatorInternal = ({
               onClick={handleSearchAreaClick}
               className="py-2 px-4 shadow-xl"
             >
-              {t("searchThisArea", "Search This Area")}
+              <Body>{t("searchThisArea", "Search This Area")}</Body>
             </Button>
           </div>
         )}
@@ -1203,21 +1210,21 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
   if (resultCount === 0) {
     if (searchState === "not started") {
       return (
-        <div>
+        <Body>
           {t(
             "useOurLocatorToFindALocationNearYou",
             "Use our locator to find a location near you"
           )}
-        </div>
+        </Body>
       );
     } else if (searchState === "complete") {
       return (
-        <div>
+        <Body>
           {t("noResultsFoundForThisArea", "No results found for this area")}
-        </div>
+        </Body>
       );
     } else {
-      return <div></div>;
+      return <div />;
     }
   } else {
     if (filterDisplayName) {
@@ -1228,32 +1235,32 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
             ? selectedDistanceMiles
             : toKilometers(selectedDistanceMiles);
         return (
-          <div>
+          <Body>
             {t("locationsWithinDistanceOf", {
               count: resultCount,
               distance: distance,
               unit: t(unit, { count: distance }),
               name: filterDisplayName,
             })}
-          </div>
+          </Body>
         );
       } else {
         return (
-          <div>
+          <Body>
             {t("locationsNear", {
               count: resultCount,
               name: filterDisplayName,
             })}
-          </div>
+          </Body>
         );
       }
     } else {
       return (
-        <div>
+        <Body>
           {t("locationWithCount", {
             count: resultCount,
           })}
-        </div>
+        </Body>
       );
     }
   }
@@ -1295,9 +1302,9 @@ const Map: React.FC<MapProps> = ({
     return (
       <div className="flex items-center justify-center w-full h-full">
         <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
-          <span className="text-gray-700 text-lg font-medium font-body-fontFamily">
+          <Body className="text-gray-700" variant="lg">
             {t("loadingMap", "Loading Map...")}
-          </span>
+          </Body>
         </div>
       </div>
     );
@@ -1394,9 +1401,9 @@ const FilterModal = (props: FilterModalProps) => {
       ref={popupRef}
     >
       <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
-        <div className="font-bold">
+        <Body className="font-bold">
           {t("refineYourSearch", "Refine Your Search")}
-        </div>
+        </Body>
         <button
           className="text-palette-primary-dark"
           onClick={handleCloseModalClick}
@@ -1430,17 +1437,17 @@ const FilterModal = (props: FilterModalProps) => {
           <Facets
             customCssClasses={{
               divider: "bg-white",
-              titleLabel: "font-bold text-md",
+              titleLabel: "font-bold text-md font-body-fontFamily",
               optionInput: "h-4 w-4 accent-palette-primary-dark",
-              optionLabel: "text-md",
-              option: "space-x-4",
+              optionLabel: "text-md font-body-fontFamily font-body-fontWeight",
+              option: "space-x-4 font-body-fontFamily",
             }}
           />
         </div>
       </div>
       <div className="border-y border-gray-300 justify-center align-middle">
         <button
-          className="w-full py-4 text-center font-bold text-palette-primary-dark"
+          className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
           onClick={handleClearFiltersClick}
         >
           {t("clearAll", "Clear All")}
@@ -1469,10 +1476,10 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center"
+        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
         {...getToggleProps()}
       >
-        <div className="font-bold">{t("hours", "Hours")}</div>
+        {t("hours", "Hours")}
         <FaChevronUp className={iconClassName} />
       </button>
       <div className="flex flex-row gap-1" {...getCollapseProps()}>
@@ -1487,7 +1494,9 @@ const OpenNowFilter = (props: OpenNowFilterProps) => {
             }
             onChange={() => onChange(!isSelected)}
           />
-          <label htmlFor={openNowCheckBoxId}>{t("openNow", "Open Now")}</label>
+          <label htmlFor={openNowCheckBoxId}>
+            <Body>{t("openNow", "Open Now")}</Body>
+          </label>
         </div>
       </div>
     </div>
@@ -1513,10 +1522,10 @@ const DistanceFilter = (props: DistanceFilterProps) => {
   return (
     <div className="flex flex-col gap-4">
       <button
-        className="w-full flex justify-between items-center"
+        className="w-full flex justify-between items-center font-bold font-body-fontFamily text-body-fontSize"
         {...getToggleProps()}
       >
-        <div className="font-bold">{t("distance", "Distance")}</div>
+        {t("distance", "Distance")}
         <FaChevronUp className={iconClassName} />
       </button>
       <div {...getCollapseProps()}>
@@ -1539,9 +1548,9 @@ const DistanceFilter = (props: DistanceFilterProps) => {
                 )}
               </div>
             </button>
-            <div className="inline-flex">
+            <Body className="inline-flex">
               {`< ${distanceMiles} ${t("mile", { count: distanceMiles })}`}
-            </div>
+            </Body>
           </div>
         ))}
       </div>
