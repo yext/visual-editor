@@ -123,7 +123,9 @@ export const InternalLayoutEditor = ({
               ? {
                   host: "http://127.0.0.1:8787/api/puck/chat",
                 }
-              : undefined
+              : {
+                  host: "https://puck-ai-backend.sitescdn-cdntest.workers.dev/api/puck/chat",
+                }
           )
         : undefined,
     [templateMetadata.aiPageGeneration, localDev]
