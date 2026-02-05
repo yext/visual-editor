@@ -14,6 +14,10 @@ import {
   type FontLinkData,
   generateCustomFontLinkData,
 } from "./fonts/visualEditorFonts.ts";
+import {
+  buildFontPreloadTags,
+  getCustomFontPreloads,
+} from "../internal/utils/customFontPreloads.ts";
 import { ThemeConfig } from "./themeResolver.ts";
 import { getContrastingColor } from "./colors.ts";
 import fontFallbackTransformations from "./fonts/fontFallbackTransformations.json" with { type: "json" };
@@ -91,7 +95,13 @@ export const applyTheme = (
   const fontLinkTags = fontLinkDataToHTML(fontLinkData);
 
   if (Object.keys(themeConfig).length > 0) {
-    return `${base ?? ""}${fontLinkTags}<style type="text/css">${fallbackFontFaceDefinitions.join("\n")}</style><style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
+    const customFontPreloads = getCustomFontPreloads(overrides);
+    const preloadTags = buildFontPreloadTags(
+      customFontPreloads,
+      relativePrefixToRoot
+    );
+
+    return `${base ?? ""}${preloadTags}${fontLinkTags}<style type="text/css">${fallbackFontFaceDefinitions.join("\n")}</style><style id="${THEME_STYLE_TAG_ID}" type="text/css">${internalApplyTheme(overrides ?? {}, themeConfig)}</style>`;
   }
   return base ?? "";
 };
@@ -121,6 +131,7 @@ const internalApplyTheme = (
   return (
     `.components{` +
     Object.entries(themeValuesToApply)
+      .filter(([key]) => key.startsWith("--"))
       .map(([key, value]) => `${key}:${value} !important`)
       .join(";") +
     "}"
