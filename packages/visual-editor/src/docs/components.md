@@ -220,9 +220,9 @@ The Events Section component is designed to display a curated list of events. It
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                 | Default |
-| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                  | Description                                                                 | Default |
+| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -290,9 +290,10 @@ The FAQ Section component displays a list of questions and answers in an organiz
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                          | Default              |
-| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 3` |
+| Prop                        | Type              | Description                          | Default              |
+| :-------------------------- | :---------------- | :----------------------------------- | :------------------- |
+| `styles.backgroundColor`    | `BackgroundStyle` | The background color of the section. | `Background Color 3` |
+| `styles.showSectionHeading` | `boolean`         | Whether to show the section heading. | `true`               |
 
 #### Other Props
 
@@ -439,7 +440,12 @@ This object contains properties for customizing the component's appearance.
 | `styles.mobileContentAlignment`   | `"left" \| "center"`                                   | Content alignment for mobile viewports.                                                                                                        | `left`               |
 | `styles.mobileImagePosition`      | `"bottom" \| "top"`                                    | Positions the image to the top or bottom of the hero content on mobile (classic and compact variants).                                         | `top`                |
 | `styles.showAverageReview`        | `boolean`                                              | If 'true', displays the entity's average review rating.                                                                                        | `true`               |
+| `styles.showBusinessName`         | `boolean`                                              |                                                                                                                                                | `true`               |
+| `styles.showGeomodifier`          | `boolean`                                              |                                                                                                                                                | `true`               |
+| `styles.showHoursStatus`          | `boolean`                                              |                                                                                                                                                | `true`               |
 | `styles.showImage`                | `boolean`                                              | Whether to show the hero image (classic and compact variant).                                                                                  | `true`               |
+| `styles.showPrimaryCTA`           | `boolean`                                              |                                                                                                                                                | `true`               |
+| `styles.showSecondaryCTA`         | `boolean`                                              |                                                                                                                                                | `true`               |
 | `styles.variant`                  | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the hero section.                                                                                                       | `classic`            |
 
 #### Other Props
@@ -511,9 +517,9 @@ The Insight Section is used to display a curated list of content such as article
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                 | Default |
-| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                  | Description                                                                 | Default |
+| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -568,9 +574,9 @@ The Nearby Locations Section dynamically finds and displays a list of business l
 
 This object contains extensive properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                           | Default |
-| :------- | :--------------------------------------- | :------------------------------------------------------------------------------------ | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains extensive properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                  | Description                                                                           | Default |
+| :------- | :-------------------------------------------------------------------- | :------------------------------------------------------------------------------------ | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains extensive properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -622,10 +628,11 @@ The Photo Gallery Section is designed to display a collection of images in a vis
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                      | Description                                                           | Default              |
-| :----------------------- | :------------------------ | :-------------------------------------------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`         | The background color for the entire section, selected from the theme. | `Background Color 1` |
-| `styles.variant`         | `"gallery" \| "carousel"` | The layout style for displaying images in the gallery.                | `"gallery"`          |
+| Prop                        | Type                      | Description                                                           | Default              |
+| :-------------------------- | :------------------------ | :-------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor`    | `BackgroundStyle`         | The background color for the entire section, selected from the theme. | `Background Color 1` |
+| `styles.showSectionHeading` | `boolean`                 | Whether to show the section heading                                   | `true`               |
+| `styles.variant`            | `"gallery" \| "carousel"` | The layout style for displaying images in the gallery.                | `"gallery"`          |
 
 #### Other Props
 
@@ -649,9 +656,9 @@ The Product Section is used to display a curated list of products in a dedicated
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                                                                                                                                                                                           | Description                                                                 | Default |
-| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; cardVariant?: ProductSectionVariant; showImage?: boolean; showBrow?: boolean; showTitle?: boolean; showPrice?: boolean; showDescription?: boolean; showCTA?: boolean; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                                                       | Description                                                                 | Default |
+| :------- | :--------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; cardVariant?: ProductSectionVariant; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -730,6 +737,10 @@ This object contains properties for customizing the component's appearance.
 | `styles.desktopImagePosition` | `"left" \| "right"`                                    | Positions the media to the left or right of the promo content on desktop (classic and compact variants).                                    | `right`              |
 | `styles.imageHeight`          | `number`                                               | Image Height for the promo image with Immersive or Spotlight variant Minimum height: content height + Page Section Top/Bottom Padding 500px |                      |
 | `styles.mobileImagePosition`  | `"top" \| "bottom"`                                    | Positions the media to the top or bottom of the promo content on mobile (classic and compact variants).                                     | `top`                |
+| `styles.showCTA`              | `boolean`                                              | Whether to show the CTA. true                                                                                                               |                      |
+| `styles.showDescription`      | `boolean`                                              | Whether to show the description text. true                                                                                                  |                      |
+| `styles.showHeading`          | `boolean`                                              | Whether to show the heading text. true                                                                                                      |                      |
+| `styles.showMedia`            | `boolean`                                              | Whether to show the media content, either image or video. true                                                                              |                      |
 | `styles.variant`              | `"classic" \| "immersive" \| "spotlight" \| "compact"` | The visual variant for the promo section.                                                                                                   | `classic`            |
 
 #### Other Props
@@ -754,9 +765,9 @@ The Reviews Section displays customer reviews fetched dynamically from the Yext 
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                 | Default |
-| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                  | Description                                                                 | Default |
+| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -839,9 +850,9 @@ The Team Section is designed to showcase a list of people, such as employees, ex
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                 | Default |
-| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                  | Description                                                                 | Default |
+| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
@@ -865,9 +876,9 @@ The Testimonial Section is used to display a list of customer testimonials or re
 
 This object contains properties for customizing the component's appearance.
 
-| Prop     | Type                                     | Description                                                                 | Default |
-| :------- | :--------------------------------------- | :-------------------------------------------------------------------------- | :------ |
-| `styles` | `{ backgroundColor?: BackgroundStyle; }` | This object contains properties for customizing the component's appearance. |         |
+| Prop     | Type                                                                  | Description                                                                 | Default |
+| :------- | :-------------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------ |
+| `styles` | `{ backgroundColor?: BackgroundStyle; showSectionHeading: boolean; }` | This object contains properties for customizing the component's appearance. |         |
 
 #### Other Props
 
