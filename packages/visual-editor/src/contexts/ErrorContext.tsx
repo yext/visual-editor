@@ -8,11 +8,20 @@ import React, {
 
 export type ErrorSource = "component" | "metaTitle" | (string & {});
 
+export type ErrorDetail = {
+  missingLocales?: string[];
+  message?: string;
+  [key: string]: unknown;
+};
+
 interface ErrorContextType {
   errorCount: number;
   errorSources: ErrorSource[];
+  errorDetails: Partial<Record<ErrorSource, ErrorDetail>>;
   incrementErrorCount: (source?: ErrorSource) => void;
   decrementErrorCount: (source?: ErrorSource) => void;
+  setErrorDetails: (source: ErrorSource, details: ErrorDetail) => void;
+  clearErrorDetails: (source: ErrorSource) => void;
 }
 
 const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
@@ -22,6 +31,9 @@ export const ErrorProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [errorCounts, setErrorCounts] = useState<
     Partial<Record<ErrorSource, number>>
+  >({});
+  const [errorDetails, setErrorDetailsState] = useState<
+    Partial<Record<ErrorSource, ErrorDetail>>
   >({});
 
   const incrementErrorCount = useCallback(
@@ -50,6 +62,27 @@ export const ErrorProvider: React.FC<{ children: React.ReactNode }> = ({
     []
   );
 
+  const setErrorDetails = useCallback(
+    (source: ErrorSource, details: ErrorDetail) => {
+      setErrorDetailsState((prev) => ({
+        ...prev,
+        [source]: details,
+      }));
+    },
+    []
+  );
+
+  const clearErrorDetails = useCallback((source: ErrorSource) => {
+    setErrorDetailsState((prev) => {
+      if (!prev[source]) {
+        return prev;
+      }
+      const nextDetails = { ...prev };
+      delete nextDetails[source];
+      return nextDetails;
+    });
+  }, []);
+
   const errorSources = useMemo(
     () => Object.keys(errorCounts) as ErrorSource[],
     [errorCounts]
@@ -66,8 +99,11 @@ export const ErrorProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         errorCount,
         errorSources,
+        errorDetails,
         incrementErrorCount,
         decrementErrorCount,
+        setErrorDetails,
+        clearErrorDetails,
       }}
     >
       {children}

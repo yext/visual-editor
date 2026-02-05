@@ -18,6 +18,11 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
   if (!rootProps) {
     return {};
   }
+  const currentLocale = document?.locale ?? document?.meta?.locale ?? "en";
+  const primaryLocale =
+    document?.__?.pathInfo?.primaryLocale ??
+    (document?.__?.isPrimaryLocale ? currentLocale : undefined) ??
+    "en";
   const metadata: RootConfig = {};
 
   if (document.meta?.entityType?.id?.startsWith("dm_")) {
@@ -26,15 +31,32 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
 
   Object.keys(rootProps).forEach((key: string) => {
     metadata[key] = escapeHtml(
-      resolveComponentData(rootProps[key], document.locale, document) ?? ""
+      resolveComponentData(rootProps[key], currentLocale, document) ?? ""
     );
   });
 
-  // For title, fallback to en value if localized value is empty
+  // For title, fallback to primary locale, then en, if localized value is empty
   if (metadata.title === "") {
-    metadata.title = escapeHtml(
-      resolveComponentData(rootProps.title, "en", document) ?? ""
+    const fallbackLocales = Array.from(new Set([primaryLocale, "en"])).filter(
+      (locale): locale is string => typeof locale === "string" && locale !== ""
     );
+
+    for (const fallbackLocale of fallbackLocales) {
+      if (metadata.title !== "") {
+        break;
+      }
+      if (fallbackLocale === currentLocale) {
+        continue;
+      }
+      const fallbackValue =
+        resolveComponentData(rootProps.title, fallbackLocale, document) ?? "";
+      const fallbackTitle =
+        typeof fallbackValue === "string" ? escapeHtml(fallbackValue) : "";
+      if (fallbackTitle.trim() !== "") {
+        metadata.title = fallbackTitle;
+        break;
+      }
+    }
   }
 
   return metadata;

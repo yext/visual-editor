@@ -113,7 +113,7 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
-  const { errorCount, errorSources } = useErrorContext();
+  const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -418,6 +418,7 @@ export const InternalLayoutEditor = ({
               localDev={localDev}
               hasErrors={errorCount > 0}
               errorSources={errorSources}
+              errorDetails={errorDetails}
             />
           ),
           iframe: loadMapboxIntoIframe,

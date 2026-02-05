@@ -16,7 +16,12 @@ export const MetaTitleValidationReporter = () => {
   const appState = usePuck((s) => s.appState);
   const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
-  const { incrementErrorCount, decrementErrorCount } = useErrorContext();
+  const {
+    incrementErrorCount,
+    decrementErrorCount,
+    setErrorDetails,
+    clearErrorDetails,
+  } = useErrorContext();
   const didIncrementRef = React.useRef(false);
 
   const locales = getRelevantLocales(templateMetadata, streamDocument);
@@ -27,6 +32,10 @@ export const MetaTitleValidationReporter = () => {
   const missingLocales = getMetaTitleMissingLocales(titleField, locales);
 
   const hasError = missingLocales.length > 0;
+  const missingLocalesKey = React.useMemo(
+    () => missingLocales.join("|"),
+    [missingLocales]
+  );
 
   React.useEffect(() => {
     if (hasError && !didIncrementRef.current) {
@@ -41,6 +50,14 @@ export const MetaTitleValidationReporter = () => {
       }
     };
   }, [hasError, incrementErrorCount, decrementErrorCount]);
+
+  React.useEffect(() => {
+    if (hasError) {
+      setErrorDetails("metaTitle", { missingLocales });
+      return;
+    }
+    clearErrorDetails("metaTitle");
+  }, [hasError, missingLocalesKey, setErrorDetails, clearErrorDetails]);
 
   return null;
 };

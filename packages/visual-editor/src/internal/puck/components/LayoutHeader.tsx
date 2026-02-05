@@ -36,7 +36,10 @@ import {
 } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { DevLogger } from "../../../utils/devLogger.ts";
-import { type ErrorSource } from "../../../contexts/ErrorContext.tsx";
+import {
+  type ErrorDetail,
+  type ErrorSource,
+} from "../../../contexts/ErrorContext.tsx";
 import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
 
 const usePuck = createUsePuck();
@@ -51,6 +54,7 @@ type LayoutHeaderProps = {
   localDev: boolean;
   hasErrors: boolean;
   errorSources: ErrorSource[];
+  errorDetails: Partial<Record<ErrorSource, ErrorDetail>>;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -63,6 +67,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     localDev,
     hasErrors,
     errorSources,
+    errorDetails,
   } = props;
   const streamDocument = useDocument();
 
@@ -273,7 +278,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                 </TooltipTrigger>
                 {hasErrors && (
                   <TooltipContent>
-                    <p>{getPublishErrorMessage(errorSources)}</p>
+                    <p>{getPublishErrorMessage(errorSources, errorDetails)}</p>
                   </TooltipContent>
                 )}
               </Tooltip>

@@ -53,7 +53,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     streamDocument,
   } = props;
 
-  const { errorCount, errorSources } = useErrorContext();
+  const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   const {
     saveLayoutSaveState,
@@ -93,7 +93,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
 
   const handlePublish = (data?: any) => {
     if (errorCount > 0) {
-      toast.error(getPublishErrorMessage(errorSources));
+      toast.error(getPublishErrorMessage(errorSources, errorDetails));
       return;
     }
     setLayoutSaveState(undefined);

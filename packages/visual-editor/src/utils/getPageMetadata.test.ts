@@ -143,6 +143,74 @@ describe("getPageMetadata", () => {
     });
   });
 
+  it("falls back to the primary locale title before english", async () => {
+    const testDocument = {
+      name: "Test Name",
+      description: "Test Description",
+      locale: "it",
+      __: {
+        pathInfo: {
+          primaryLocale: "fr",
+        },
+        layout: JSON.stringify({
+          root: {
+            props: {
+              title: {
+                field: "name",
+                constantValue: {
+                  en: "English",
+                  fr: "Français",
+                  it: "",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+            },
+          },
+        }),
+      },
+    };
+    const metaData = getPageMetadata(testDocument);
+
+    expect(metaData).toMatchObject({
+      title: "Français",
+    });
+  });
+
+  it("falls back to english when primary locale title is empty", async () => {
+    const testDocument = {
+      name: "Test Name",
+      description: "Test Description",
+      locale: "it",
+      __: {
+        pathInfo: {
+          primaryLocale: "fr",
+        },
+        layout: JSON.stringify({
+          root: {
+            props: {
+              title: {
+                field: "name",
+                constantValue: {
+                  en: "English",
+                  fr: "",
+                  it: "",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+            },
+          },
+        }),
+      },
+    };
+    const metaData = getPageMetadata(testDocument);
+
+    expect(metaData).toMatchObject({
+      title: "English",
+    });
+  });
+
   it("resolves PLACEHOLDER for directory pages", async () => {
     const testDocument = {
       name: "Test Name",
