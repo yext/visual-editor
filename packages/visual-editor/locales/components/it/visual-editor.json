@@ -6,7 +6,7 @@
   "ariaLabelAppStore": "Scarica su {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponibile su {{serviceName}}",
   "ariaLabelGooglePlay": "Ottienilo su {{serviceName}}",
-  "breadcrumb": "Pane",
+  "breadcrumb": "Breadcrumb",
   "businessInformation": "Informazioni commerciali",
   "buttonWithIcon": "Pulsante con icona {{presetImageType}}",
   "callToAction": "Invito all'azione",

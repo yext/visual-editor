@@ -25,7 +25,7 @@
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Nessuna opzione disponibile",
   "body": "Corpo",
-  "breadcrumb": "Pane",
+  "breadcrumb": "Breadcrumb",
   "businessInformation": "Informazioni commerciali",
   "buttonWithIcon": "Pulsante con icona {{presetImageType}}",
   "callToAction": "Invito all'azione",

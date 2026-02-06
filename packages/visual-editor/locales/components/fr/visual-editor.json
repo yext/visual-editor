@@ -51,7 +51,7 @@
   "locationsWithinDistanceOf_other": "{{count}} emplacements dans un rayon de {{distance}} {{unit}} de \"{{name}}\"",
   "logo": "Logo",
   "map": "Carte",
-  "mile_many": "kilomètres",
+  "mile_many": "miles",
   "mile_one": "mile",
   "mile_other": "miles",
   "monday": "Lundi",
