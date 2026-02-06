@@ -497,15 +497,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
 
     // If showMedia is false, remove media-related fields
     if (!data.props.styles.showMedia) {
-      fields = updateFields(
-        fields,
-        [
-          "data.objectFields.media",
-          "data.objectFields.backgroundImage",
-          "styles.objectFields.imageHeight",
-        ],
-        undefined
-      );
+      fields = updateFields(fields, ["data.objectFields.media"], undefined);
     }
 
     return fields;

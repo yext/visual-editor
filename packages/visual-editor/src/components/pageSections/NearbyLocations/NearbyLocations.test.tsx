@@ -683,7 +683,7 @@ describe("NearbyLocationsSection", async () => {
       // wait for locations to load
       if (name.includes("multiple nearby locations")) {
         await waitFor(() => {
-          expect(page.getByText("Washington, DC")).toBeInTheDocument();
+          expect(page.getByText("Galaxy Grill")).toBeInTheDocument();
         });
       } else {
         // block fetch to ensure loading screen
