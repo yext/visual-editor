@@ -242,7 +242,9 @@ const getMismatchDetails = (
   };
 };
 
-const validateInstance = async (instance: Instance): Promise<ValidationResult> => {
+const validateInstance = async (
+  instance: Instance
+): Promise<ValidationResult> => {
   const instanceDir = path.join(ROOT, instance);
   const englishPath = path.join(instanceDir, PRIMARY_LOCALE, NAMESPACE);
   const englishFlat = flatten(await loadJsonSafe(englishPath));
