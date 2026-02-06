@@ -277,7 +277,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   </span>
                 </TooltipTrigger>
                 {hasErrors && (
-                  <TooltipContent className="ve-max-w-[320px] ve-whitespace-normal">
+                  <TooltipContent className="ve-max-w-[320px] ve-whitespace-normal ve-text-center">
                     <p>{getPublishErrorMessage(errorSources, errorDetails)}</p>
                   </TooltipContent>
                 )}
