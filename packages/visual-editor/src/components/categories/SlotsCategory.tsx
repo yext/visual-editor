@@ -279,8 +279,8 @@ export const SlotsCategoryComponents = {
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
-  SearchBarSlot: { ...SearchBarSlot, permission: lockedPermissions },
-  SearchResultsSlot: { ...SearchResultsSlot, permission: lockedPermissions },
+  SearchBarSlot: { ...SearchBarSlot, permissions: lockedPermissions },
+  SearchResultsSlot: { ...SearchResultsSlot, permissions: lockedPermissions },
 };
 
 export const SlotsCategory = Object.keys(
