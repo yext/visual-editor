@@ -20,9 +20,9 @@ import { useDocument } from "../../../hooks/useDocument.tsx";
 import { msg } from "../../../utils/index.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 
-export type VerticalLayout = "Grid" | "Flex" | "Map";
+type VerticalLayout = "Grid" | "Flex" | "Map";
 
-export interface VerticalConfig {
+interface VerticalConfig {
   label: string;
   verticalKey: string;
   layout: VerticalLayout;
@@ -30,11 +30,11 @@ export interface VerticalConfig {
   verticalLimit: number;
 }
 
-export interface SearchProps {
+export interface ClassicSearchProps {
   verticals: VerticalConfig[];
 }
 
-const locatorFields: Fields<SearchProps> = {
+const locatorFields: Fields<ClassicSearchProps> = {
   verticals: {
     label: msg("fields.verticals", "Verticals"),
     type: "array",
@@ -76,7 +76,7 @@ export const searchConfig: SearchConfig = {
   cloudRegion: CloudRegion.US,
   environment: Environment.PROD,
 };
-const SearchWrapper = (props: WithPuckProps<SearchProps>) => {
+const ClassicSearchWrapper = (props: WithPuckProps<ClassicSearchProps>) => {
   const streamDocument = useDocument();
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = provideHeadless(searchConfig);
@@ -160,7 +160,7 @@ export const verticalConfigMap = {
     verticalLimit: 5,
   },
 };
-const SearchInternal = ({ verticals }: WithPuckProps<SearchProps>) => {
+const SearchInternal = ({ verticals }: WithPuckProps<ClassicSearchProps>) => {
   const verticalConfigMap = React.useMemo(
     () => buildVerticalConfigMap(verticals),
     [verticals]
@@ -219,8 +219,10 @@ const SearchLayout = ({
   );
 };
 
-export const SearchComponent: ComponentConfig<{ props: SearchProps }> = {
-  label: msg("components.search", "Search"),
+export const ClassicSearchComponent: ComponentConfig<{
+  props: ClassicSearchProps;
+}> = {
+  label: msg("components.classicSearch", "Classic Search"),
   fields: locatorFields,
 
   defaultProps: {
@@ -249,5 +251,5 @@ export const SearchComponent: ComponentConfig<{ props: SearchProps }> = {
     ],
   },
 
-  render: (props) => <SearchWrapper {...props} />,
+  render: (props) => <ClassicSearchWrapper {...props} />,
 };
