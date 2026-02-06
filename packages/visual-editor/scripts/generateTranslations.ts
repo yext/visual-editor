@@ -35,6 +35,12 @@ interface MaskedVariable {
   original: string;
 }
 
+interface TranslationTarget {
+  key: string;
+  english: string;
+  sourceKey: string;
+}
+
 type GoogleTranslationSegment = [translatedText: string, ...rest: unknown[]];
 type GoogleTranslateResponse = [GoogleTranslationSegment[], ...rest: unknown[]];
 
@@ -72,6 +78,57 @@ const stripPluralSuffix = (
   }
 
   return { withoutPlural: segment, pluralSuffix: null };
+};
+
+/**
+ * Returns candidate English fallback keys for locale-specific plural variants.
+ * Example:
+ * - locationsNear_many -> [locationsNear_other, locationsNear_one, locationsNear]
+ */
+const getPluralFallbackCandidates = (key: string): string[] => {
+  const parts = key.split(".");
+  const leaf = parts[parts.length - 1];
+  const { withoutPlural, pluralSuffix } = stripPluralSuffix(leaf);
+
+  if (!pluralSuffix) {
+    return [];
+  }
+
+  const leafCandidates = [`${withoutPlural}_other`, `${withoutPlural}_one`, withoutPlural];
+  const seen = new Set<string>();
+  const candidates: string[] = [];
+
+  for (const leafCandidate of leafCandidates) {
+    const candidate = [...parts.slice(0, -1), leafCandidate].join(".");
+    if (!seen.has(candidate) && candidate !== key) {
+      seen.add(candidate);
+      candidates.push(candidate);
+    }
+  }
+
+  return candidates;
+};
+
+/**
+ * Resolves the English source text for a translation key.
+ * For locale-specific plural keys not present in English, falls back to the
+ * same key family in English (prefer *_other, then *_one, then base).
+ */
+const resolveEnglishSource = (
+  key: string,
+  defaultJson: FlatTranslations
+): { sourceKey: string; english: string } | null => {
+  if (defaultJson[key] !== undefined) {
+    return { sourceKey: key, english: defaultJson[key] };
+  }
+
+  for (const candidate of getPluralFallbackCandidates(key)) {
+    if (defaultJson[candidate] !== undefined) {
+      return { sourceKey: candidate, english: defaultJson[candidate] };
+    }
+  }
+
+  return null;
 };
 
 /**
@@ -234,26 +291,44 @@ const translateFile = async (type: TranslationType): Promise<void> => {
     const cache = new Map<string, string>(
       Object.entries(targetJson).map(([key, value]) => [key.trim(), value])
     );
-    const keysToTranslate = Object.keys(defaultJson).filter((key) => {
-      const value = cache.get(key.trim());
-      return value === undefined || value === "";
-    });
+    const candidateKeys = new Set<string>([
+      ...Object.keys(defaultJson),
+      ...Object.keys(targetJson),
+    ]);
+    const translationTargets: TranslationTarget[] = [];
 
-    if (keysToTranslate.length === 0) {
+    for (const key of candidateKeys) {
+      const value = cache.get(key.trim());
+      if (value !== undefined && value !== "") {
+        continue;
+      }
+
+      const source = resolveEnglishSource(key, defaultJson);
+      if (!source || source.english.trim() === "") {
+        continue;
+      }
+
+      translationTargets.push({
+        key,
+        english: source.english,
+        sourceKey: source.sourceKey,
+      });
+    }
+
+    if (translationTargets.length === 0) {
       console.log(`No missing translations for [${type}/${locale}].`);
       continue;
     }
 
     console.log(
-      `Translating ${keysToTranslate.length} keys for [${type}/${locale}]...`
+      `Translating ${translationTargets.length} keys for [${type}/${locale}]...`
     );
 
     let successCount = 0;
     let failCount = 0;
 
     await Promise.allSettled(
-      keysToTranslate.map(async (key) => {
-        const english = defaultJson[key];
+      translationTargets.map(async ({ key, english, sourceKey }) => {
         const { maskedText, variables } = maskInterpolationVariables(english);
         let translationInput = maskedText;
         const context = extractContextFromKey(key, defaultKeySet);
@@ -272,7 +347,7 @@ const translateFile = async (type: TranslationType): Promise<void> => {
           cache.set(key.trim(), translated);
           successCount += 1;
           console.log(
-            `[${type}/${locale}] ${key}: "${defaultJson[key]}" -> "${translated}"`
+            `[${type}/${locale}] ${key} (source: ${sourceKey}): "${english}" -> "${translated}"`
           );
         } catch (error) {
           failCount += 1;

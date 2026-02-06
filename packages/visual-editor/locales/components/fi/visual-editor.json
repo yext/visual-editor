@@ -40,7 +40,7 @@
   "loadingMap": "Latauskartta ...",
   "loadingNearbyLocations": "Lataaminen lähellä olevia paikkoja ...",
   "locationWithCount_one": "{{count}} sijainti",
-  "locationWithCount_other": "{{count}} sijainnit",
+  "locationWithCount_other": "{{count}} sijaintia",
   "locationsNear_one": "{{count}} sijainti lähellä \"{{name}}\"",
   "locationsNear_other": "{{count}} sijaintia lähellä kohdetta {{name}}",
   "locationsWithinDistanceOf_one": "{{count}} sijainti {{distance}} {{unit}} päässä kohteesta \"{{name}}\"",

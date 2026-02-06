@@ -49,14 +49,6 @@ export default defineConfig({
     defaultValue: "",
     sort: true,
     indentation: 2,
-    preservePatterns: [
-      "*_zero",
-      "*_one",
-      "*_two",
-      "*_few",
-      "*_many",
-      "*_other",
-    ],
     removeUnusedKeys: true,
   },
   lint: {

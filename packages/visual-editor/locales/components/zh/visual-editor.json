@@ -40,7 +40,7 @@
   "loadingMap": "加载地图...",
   "loadingNearbyLocations": "在附近的位置加载...",
   "locationWithCount_one": "{{count}} 个位置",
-  "locationWithCount_other": "{{count}}位置",
+  "locationWithCount_other": "{{count}} 个位置",
   "locationsNear_one": "“{{name}}”附近有 {{count}} 个位置",
   "locationsNear_other": "“{{name}}”附近有 {{count}} 个地点",
   "locationsWithinDistanceOf_one": "“{{name}}”的 {{distance}} {{unit}} 内有 {{count}} 个位置",

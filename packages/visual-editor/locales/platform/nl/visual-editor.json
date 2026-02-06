@@ -65,7 +65,7 @@
     "ctaGroup": "CTA -groep",
     "customCodeSection": "Aangepaste codesectie",
     "directory": "Directory",
-    "DirectoryGrid": "Directoryraster",
+    "directoryGrid": "Directoryraster",
     "emails": "E -mails",
     "eventCard": "Evenementkaart",
     "eventCardsWrapper": "Gebeurteniskaarten",
@@ -187,7 +187,6 @@
     "ctaField": "CTA -veld",
     "ctaType": "CTA -type",
     "ctaVariant": "CTA -variant",
-    "CTAVariant": "CTA-variant",
     "data": "Gegevens",
     "date": "Datum",
     "dayOfWeekFormat": "Dag van de week formaat",
@@ -320,8 +319,8 @@
       "hide": "Verbergen",
       "hour12": "12 uur",
       "hour24": "24 uur",
-      "HoursStatus": "Urenstatus",
-      "HoursTable": "Urentafel",
+      "hoursStatus": "Uurstatus",
+      "hoursTable": "Uren tabel",
       "image": "Afbeelding",
       "immersive": "Meeslepend",
       "includeOpenNow": "Neem de knop Open nu open",
@@ -608,7 +607,7 @@
     "font": "Lettertype",
     "fontSize": "Lettergrootte",
     "fontWeight": {
-      "fontWeight": "Lettertype"
+      "fontWeight": "Lettergewicht"
     },
     "headers": "Kopteksten",
     "image": "Afbeelding",
