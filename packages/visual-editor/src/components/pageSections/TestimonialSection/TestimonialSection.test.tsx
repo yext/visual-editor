@@ -104,8 +104,8 @@ const version59Props = {
                   index: 0,
                   styles: {
                     backgroundColor: {
-                      bgColor: "bg-white",
-                      textColor: "text-black",
+                      bgColor: "bg-palette-primary-dark",
+                      textColor: "text-white",
                     },
                   },
                   slots: {
@@ -195,8 +195,8 @@ const version59Props = {
                   index: 1,
                   styles: {
                     backgroundColor: {
-                      bgColor: "bg-white",
-                      textColor: "text-black",
+                      bgColor: "bg-palette-primary-dark",
+                      textColor: "text-white",
                     },
                   },
                   slots: {
@@ -286,8 +286,8 @@ const version59Props = {
                   index: 2,
                   styles: {
                     backgroundColor: {
-                      bgColor: "bg-white",
-                      textColor: "text-black",
+                      bgColor: "bg-palette-primary-dark",
+                      textColor: "text-white",
                     },
                   },
                   slots: {

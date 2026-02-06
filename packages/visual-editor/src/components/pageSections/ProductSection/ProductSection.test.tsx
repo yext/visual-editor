@@ -117,7 +117,7 @@ const version59Props = {
       textColor: "text-black",
     },
     cardVariant: "immersive",
-    showSectionHeading: false,
+    showSectionHeading: true,
   },
   slots: {
     SectionHeadingSlot: [

@@ -1679,7 +1679,7 @@ const tests: ComponentTest[] = [
       ...version59Props,
       styles: {
         ...version59Props.styles,
-        showImage: false,
+        showSectionHeading: false,
       },
       slots: {
         ...version59Props.slots,
