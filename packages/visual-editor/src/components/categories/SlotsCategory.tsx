@@ -1,81 +1,53 @@
 import { Address, AddressProps } from "../contentBlocks/Address.tsx";
-import {
-  AboutSectionDetailsColumn,
-  AboutSectionDetailsColumnProps,
-} from "../pageSections/AboutSection/AboutSectionDetailsColumn.tsx";
-import { BodyTextProps, BodyText } from "../contentBlocks/BodyText.tsx";
-import { CTAWrapperProps, CTAWrapper } from "../contentBlocks/CtaWrapper.tsx";
-import {
-  HeadingTextProps,
-  HeadingText,
-} from "../contentBlocks/HeadingText.tsx";
-import { HoursTable, HoursTableProps } from "../contentBlocks/HoursTable.tsx";
-import {
-  ImageWrapperProps,
-  ImageWrapper,
-} from "../contentBlocks/image/Image.tsx";
-import { Video, VideoProps } from "../contentBlocks/Video.tsx";
-import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
-import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
-import {
-  ProductCardsWrapper,
-  ProductCardsWrapperProps,
-} from "../pageSections/ProductSection/ProductCardsWrapper.tsx";
-import {
-  ProductCard,
-  ProductCardProps,
-} from "../pageSections/ProductSection/ProductCard.tsx";
-import {
-  EventCardsWrapper,
-  EventCardsWrapperProps,
-} from "../pageSections/EventSection/EventCardsWrapper.tsx";
-import {
-  EventCard,
-  EventCardProps,
-} from "../pageSections/EventSection/EventCard.tsx";
+import { BodyText, BodyTextProps } from "../contentBlocks/BodyText.tsx";
+import { CTAWrapper, CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
 import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
+import {
+  HeadingText,
+  HeadingTextProps,
+} from "../contentBlocks/HeadingText.tsx";
 import {
   HoursStatus,
   HoursStatusProps,
 } from "../contentBlocks/HoursStatus.tsx";
+import { HoursTable, HoursTableProps } from "../contentBlocks/HoursTable.tsx";
 import {
   HeroImage,
   HeroImageProps,
 } from "../contentBlocks/image/HeroImage.tsx";
+import {
+  ImageWrapper,
+  ImageWrapperProps,
+} from "../contentBlocks/image/Image.tsx";
+import { Phone, PhoneProps } from "../contentBlocks/Phone.tsx";
+import { PhoneList, PhoneListProps } from "../contentBlocks/PhoneList.tsx";
+import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
 import { Timestamp, TimestampProps } from "../contentBlocks/Timestamp.tsx";
+import { Video, VideoProps } from "../contentBlocks/Video.tsx";
 import {
-  NearbyLocationCardsWrapper,
-  NearbyLocationCardsWrapperProps,
-} from "../pageSections/NearbyLocations/NearbyLocationsCardsWrapper.tsx";
+  DirectoryCard,
+  DirectoryCardProps,
+} from "../directory/DirectoryCard.tsx";
 import {
-  InsightCardsWrapper,
-  InsightCardsWrapperProps,
-} from "../pageSections/InsightSection/InsightCardsWrapper.tsx";
+  DirectoryGrid,
+  DirectoryGridProps,
+} from "../directory/DirectoryWrapper.tsx";
 import {
-  InsightCard,
-  InsightCardProps,
-} from "../pageSections/InsightSection/InsightCard.tsx";
+  CopyrightMessageSlot,
+  CopyrightMessageSlotProps,
+} from "../footer/CopyrightMessageSlot.tsx";
 import {
-  PhotoGalleryWrapperProps,
-  PhotoGalleryWrapper,
-} from "../pageSections/PhotoGallerySection/PhotoGalleryWrapper.tsx";
-import { FAQCard, FAQCardProps } from "../pageSections/FAQsSection/FAQCard.tsx";
+  FooterExpandedLinkSectionSlot,
+  FooterExpandedLinkSectionSlotProps,
+} from "../footer/FooterExpandedLinkSectionSlot.tsx";
 import {
-  TeamCardsWrapper,
-  TeamCardsWrapperProps,
-} from "../pageSections/TeamSection/TeamCardsWrapper.tsx";
+  FooterExpandedLinksWrapper,
+  FooterExpandedLinksWrapperProps,
+} from "../footer/FooterExpandedLinksWrapper.tsx";
 import {
-  TeamCard,
-  TeamCardProps,
-} from "../pageSections/TeamSection/TeamCard.tsx";
-import {
-  TestimonialCardsWrapper,
-  TestimonialCardsWrapperProps,
-} from "../pageSections/TestimonialSection/TestimonialCardsWrapper.tsx";
-import {
-  TestimonialCard,
-  TestimonialCardProps,
-} from "../pageSections/TestimonialSection/TestimonialCard.tsx";
+  FooterLinksSlot,
+  FooterLinksSlotProps,
+} from "../footer/FooterLinksSlot.tsx";
 import {
   FooterLogoSlot,
   FooterLogoSlotProps,
@@ -89,38 +61,10 @@ import {
   FooterUtilityImagesSlotProps,
 } from "../footer/FooterUtilityImagesSlot.tsx";
 import {
-  FooterLinksSlot,
-  FooterLinksSlotProps,
-} from "../footer/FooterLinksSlot.tsx";
-import {
-  FooterExpandedLinkSectionSlot,
-  FooterExpandedLinkSectionSlotProps,
-} from "../footer/FooterExpandedLinkSectionSlot.tsx";
-import {
-  FooterExpandedLinksWrapper,
-  FooterExpandedLinksWrapperProps,
-} from "../footer/FooterExpandedLinksWrapper.tsx";
-import {
-  CopyrightMessageSlot,
-  CopyrightMessageSlotProps,
-} from "../footer/CopyrightMessageSlot.tsx";
-import {
   SecondaryFooterSlot,
   SecondaryFooterSlotProps,
 } from "../footer/SecondaryFooterSlot.tsx";
-import {
-  DirectoryCard,
-  DirectoryCardProps,
-} from "../directory/DirectoryCard.tsx";
-import {
-  DirectoryGrid,
-  DirectoryGridProps,
-} from "../directory/DirectoryWrapper.tsx";
-import { Phone, PhoneProps } from "../contentBlocks/Phone.tsx";
-import {
-  BreadcrumbsSection,
-  BreadcrumbsSectionProps,
-} from "../pageSections/Breadcrumbs.tsx";
+import { HeaderLinks, HeaderLinksProps } from "../header/HeaderLinks.tsx";
 import {
   PrimaryHeaderSlot,
   PrimaryHeaderSlotProps,
@@ -129,7 +73,67 @@ import {
   SecondaryHeaderSlot,
   SecondaryHeaderSlotProps,
 } from "../header/SecondaryHeaderSlot.tsx";
-import { HeaderLinks, HeaderLinksProps } from "../header/HeaderLinks.tsx";
+import {
+  AboutSectionDetailsColumn,
+  AboutSectionDetailsColumnProps,
+} from "../pageSections/AboutSection/AboutSectionDetailsColumn.tsx";
+import {
+  BreadcrumbsSection,
+  BreadcrumbsSectionProps,
+} from "../pageSections/Breadcrumbs.tsx";
+import {
+  EventCard,
+  EventCardProps,
+} from "../pageSections/EventSection/EventCard.tsx";
+import {
+  EventCardsWrapper,
+  EventCardsWrapperProps,
+} from "../pageSections/EventSection/EventCardsWrapper.tsx";
+import { FAQCard, FAQCardProps } from "../pageSections/FAQsSection/FAQCard.tsx";
+import {
+  InsightCard,
+  InsightCardProps,
+} from "../pageSections/InsightSection/InsightCard.tsx";
+import {
+  InsightCardsWrapper,
+  InsightCardsWrapperProps,
+} from "../pageSections/InsightSection/InsightCardsWrapper.tsx";
+import {
+  NearbyLocationCardsWrapper,
+  NearbyLocationCardsWrapperProps,
+} from "../pageSections/NearbyLocations/NearbyLocationsCardsWrapper.tsx";
+import {
+  PhotoGalleryWrapper,
+  PhotoGalleryWrapperProps,
+} from "../pageSections/PhotoGallerySection/PhotoGalleryWrapper.tsx";
+import {
+  ProductCard,
+  ProductCardProps,
+} from "../pageSections/ProductSection/ProductCard.tsx";
+import {
+  ProductCardsWrapper,
+  ProductCardsWrapperProps,
+} from "../pageSections/ProductSection/ProductCardsWrapper.tsx";
+import {
+  SearchBarSlot,
+  SearchBarSlotProps,
+} from "../pageSections/SearchSection/SearchBarSlot.tsx";
+import {
+  TeamCard,
+  TeamCardProps,
+} from "../pageSections/TeamSection/TeamCard.tsx";
+import {
+  TeamCardsWrapper,
+  TeamCardsWrapperProps,
+} from "../pageSections/TeamSection/TeamCardsWrapper.tsx";
+import {
+  TestimonialCard,
+  TestimonialCardProps,
+} from "../pageSections/TestimonialSection/TestimonialCard.tsx";
+import {
+  TestimonialCardsWrapper,
+  TestimonialCardsWrapperProps,
+} from "../pageSections/TestimonialSection/TestimonialCardsWrapper.tsx";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;
@@ -174,6 +178,7 @@ export interface SlotsCategoryProps {
   TextListSlot: TextListProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
+  SearchBarSlot: SearchBarSlotProps;
 }
 
 const lockedPermissions = {
@@ -269,6 +274,7 @@ export const SlotsCategoryComponents = {
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
+  SearchBarSlot: { ...SearchBarSlot, permission: lockedPermissions },
 };
 
 export const SlotsCategory = Object.keys(

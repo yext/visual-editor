@@ -90,3 +90,7 @@ export {
   ClassicSearchComponent,
   type ClassicSearchProps,
 } from "./SearchSectionClassic/ClassicSearch.tsx";
+export {
+  SearchComponent,
+  type SearchComponentProps,
+} from "./SearchSection/Search.tsx";

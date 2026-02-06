@@ -68,6 +68,10 @@ import {
   ClassicSearchComponent,
   ClassicSearchProps,
 } from "../pageSections/index.ts";
+import {
+  SearchComponentProps,
+  SearchComponent,
+} from "../pageSections/SearchSection/Search.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -89,6 +93,7 @@ export interface PageSectionCategoryProps {
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
   ClassicSearchComponent: ClassicSearchProps;
+  SearchComponent: SearchComponentProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -111,6 +116,7 @@ export const PageSectionCategoryComponents = {
   TestimonialSection,
   VideoSection,
   ClassicSearchComponent,
+  SearchComponent,
 };
 
 export const PageSectionCategory = Object.keys(
