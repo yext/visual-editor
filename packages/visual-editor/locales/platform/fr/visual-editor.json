@@ -121,7 +121,7 @@
     "testimonialsSection": "Section des témoignages",
     "textList": "Liste de texte",
     "timestamp": "Horodatage",
-    "Video": "Vidéo",
+    "video": "Vidéo",
     "videoSection": "Section vidéo"
   },
   "confirm": "Confirmer",
@@ -478,7 +478,7 @@
   "locationsNear_many": "{{count}} emplacements à proximité de \"{{name}}\"",
   "locationsNear_other": "{{count}} emplacements à proximité de \"{{name}}\"",
   "locationsWithinDistanceOf_one": "{{count}} emplacement à {{distance}} {{unit}} de \"{{name}}\"",
-  "locationsWithinDistanceOf_many": "{{count}} emplacements dans {{distance}} {{unit}} de « {{name}} »",
+  "locationsWithinDistanceOf_many": "{{count}} emplacements dans un rayon de {{distance}} {{unit}} de \"{{name}}\"",
   "locationsWithinDistanceOf_other": "{{count}} emplacements dans un rayon de {{distance}} {{unit}} de \"{{name}}\"",
   "locationWithCount_one": "{{count}} emplacement",
   "locationWithCount_many": "{{count}} emplacements",

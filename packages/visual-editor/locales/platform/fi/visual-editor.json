@@ -25,7 +25,7 @@
   "base": "Pohja",
   "basicSelectorNoOptionsLabel": "Vaihtoehtoja ei ole käytettävissä",
   "body": "Vartalo",
-  "breadcrumb": "Leivänmuru",
+  "breadcrumb": "Murupolku",
   "businessInformation": "Yritystieto",
   "buttonWithIcon": "Painike {{presetImageType}} -kuvakkeella",
   "callToAction": "Toimintakehotus",
@@ -121,7 +121,7 @@
     "testimonialsSection": "Suositusosasto",
     "textList": "Tekstin luettelo",
     "timestamp": "Aikaleima",
-    "Video": "Video",
+    "video": "Video",
     "videoSection": "Videoosasto"
   },
   "confirm": "Vahvistaa",
@@ -270,7 +270,7 @@
         "secondary": "Outline"
       },
       "dark": "Tumma",
-      "default": "Laiminlyönti",
+      "default": "Oletus",
       "domestic": "Koti-",
       "domestic_phone number": "Kotimainen",
       "email": "Sähköposti",
@@ -443,7 +443,7 @@
     "search": "Haku fontit ..."
   },
   "fontSize": "Fontin koko",
-  "fontSizeDefaultLabel": "Laiminlyönti",
+  "fontSizeDefaultLabel": "Oletus",
   "friday": "perjantai",
   "getDirections": "Hanki reittiohjeet",
   "heading": "Otsikko",
@@ -510,7 +510,7 @@
   "primaryHeaderLinks": "Ensisijaiset otsikkolinkit",
   "product": "Tuote",
   "promoBanner": "Promo-banneri",
-  "promoMedia": "Promootio",
+  "promoMedia": "Promootiomedia",
   "readLess": "Lue vähemmän",
   "readMore": "Lue lisää",
   "recommendedColor": "Suositeltu väri",
@@ -560,7 +560,7 @@
     "xLink": "Seuraa meitä X:ssä (Twitter)",
     "youtube": "Tilaa YouTube-kanavamme"
   },
-  "spacingDefaultLabel": "Laiminlyönti",
+  "spacingDefaultLabel": "Oletus",
   "staticContent": "Staattinen sisältö",
   "staticMapEmptyStateAddApiKey": "Lisää API-avain esikatsellaksesi karttaasi",
   "staticMapEmptyStateSectionHidden": "Osio piilotettu kaikille sijainneille",

@@ -46,7 +46,7 @@
   "locationsNear_many": "{{count}} emplacements à proximité de \"{{name}}\"",
   "locationsNear_one": "{{count}} emplacement près de \"{{name}}\"",
   "locationsNear_other": "{{count}} emplacements à proximité de \"{{name}}\"",
-  "locationsWithinDistanceOf_many": "{{count}} emplacements dans {{distance}} {{unit}} de « {{name}} »",
+  "locationsWithinDistanceOf_many": "{{count}} emplacements dans un rayon de {{distance}} {{unit}} de \"{{name}}\"",
   "locationsWithinDistanceOf_one": "{{count}} emplacement à {{distance}} {{unit}} de \"{{name}}\"",
   "locationsWithinDistanceOf_other": "{{count}} emplacements dans un rayon de {{distance}} {{unit}} de \"{{name}}\"",
   "logo": "Logo",

@@ -9,14 +9,14 @@
   "breadcrumb": "Breadcrumb",
   "businessInformation": "Geschäftsinformationen",
   "buttonWithIcon": "Taste mit {{presetImageType}} Symbol",
-  "callToAction": "Aufruf zum Handeln",
+  "callToAction": "Call to Action",
   "callToActions": "Rufen Sie Aktionen an",
   "clearAll": "Alles löschen",
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
   "closed": "Geschlossen",
-  "closesAtTime": "Schließt um {{time}} Uhr",
-  "closesAtTimeWeek": "Schließt um {{time}} Uhr {{dayOfWeek}}",
+  "closesAtTime": "Schließt am Donnerstag um {{time}} Uhr",
+  "closesAtTimeWeek": "Schließt am Donnerstag um {{time}} Uhr {{dayOfWeek}}",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Dienstprogramm-Image {{number}}"
