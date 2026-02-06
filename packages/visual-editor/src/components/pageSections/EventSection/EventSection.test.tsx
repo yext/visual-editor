@@ -2490,7 +2490,7 @@ const tests: ComponentTest[] = [
     version: 59,
   },
   {
-    name: "version 59 with showName, showDateTime, showDescription, showCTA false",
+    name: "version 59 with showDateTime, showDescription, showCTA false",
     document: { locale: "en" },
     props: {
       ...version59Props,
@@ -2503,7 +2503,6 @@ const tests: ComponentTest[] = [
               ...version59Props.slots.CardsWrapperSlot[0].props,
               styles: {
                 ...version59Props.slots.CardsWrapperSlot[0].props.styles,
-                showName: false,
                 showDateTime: false,
                 showDescription: false,
                 showCTA: false,
