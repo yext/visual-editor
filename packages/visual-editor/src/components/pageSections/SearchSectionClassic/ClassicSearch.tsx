@@ -69,8 +69,8 @@ const locatorFields: Fields<ClassicSearchProps> = {
 const EXPERIENCE_VERSION = "PRODUCTION";
 
 export const searchConfig: SearchConfig = {
-  apiKey: "fb73f1bf6a262bc3255bcb938088204f",
-  experienceKey: "ukg-fins",
+  apiKey: "",
+  experienceKey: "",
   locale: "en",
   experienceVersion: EXPERIENCE_VERSION,
   cloudRegion: CloudRegion.US,
