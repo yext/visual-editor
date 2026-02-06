@@ -18,11 +18,6 @@ import React from "react";
 import { YextField } from "../../../editor/YextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { msg } from "../../../utils/index.ts";
-import {
-  DEFAULT_LOCATOR_RESULT_CARD_PROPS,
-  LocatorResultCardFields,
-  LocatorResultCardProps,
-} from "../../LocatorResultCard.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 
 export type VerticalLayout = "Grid" | "Flex" | "Map";
@@ -37,7 +32,6 @@ export interface VerticalConfig {
 
 export interface SearchProps {
   verticals: VerticalConfig[];
-  resultCard: LocatorResultCardProps;
 }
 
 const locatorFields: Fields<SearchProps> = {
@@ -71,7 +65,6 @@ const locatorFields: Fields<SearchProps> = {
     },
     getItemSummary: (item) => item?.label || "Vertical",
   },
-  resultCard: LocatorResultCardFields,
 };
 const EXPERIENCE_VERSION = "PRODUCTION";
 
@@ -254,7 +247,6 @@ export const SearchComponent: ComponentConfig<{ props: SearchProps }> = {
         verticalLimit: 5,
       },
     ],
-    resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
 
   render: (props) => <SearchWrapper {...props} />,
