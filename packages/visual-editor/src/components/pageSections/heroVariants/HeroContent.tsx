@@ -76,31 +76,33 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
           )}
         </header>
       )}
-      <div
-        className={themeManagerCn(
-          "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full flex-wrap sm:items-center ",
-          styles.mobileContentAlignment === "center"
-            ? "items-center"
-            : "items-start",
-          desktopContainerPosition === "center"
-            ? "justify-center"
-            : "justify-start"
-        )}
-        aria-label={t("callToActions", "Call to Actions")}
-      >
-        {styles.showPrimaryCTA && (
-          <slots.PrimaryCTASlot
-            className="sm:!w-fit !w-full h-auto"
-            allow={[]}
-          />
-        )}
-        {styles.showSecondaryCTA && (
-          <slots.SecondaryCTASlot
-            className="sm:!w-fit !w-full h-auto"
-            allow={[]}
-          />
-        )}
-      </div>
+      {(styles.showPrimaryCTA || styles.showSecondaryCTA) && (
+        <div
+          className={themeManagerCn(
+            "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full flex-wrap sm:items-center ",
+            styles.mobileContentAlignment === "center"
+              ? "items-center"
+              : "items-start",
+            desktopContainerPosition === "center"
+              ? "justify-center"
+              : "justify-start"
+          )}
+          aria-label={t("callToActions", "Call to Actions")}
+        >
+          {styles.showPrimaryCTA && (
+            <slots.PrimaryCTASlot
+              className="sm:!w-fit !w-full h-auto"
+              allow={[]}
+            />
+          )}
+          {styles.showSecondaryCTA && (
+            <slots.SecondaryCTASlot
+              className="sm:!w-fit !w-full h-auto"
+              allow={[]}
+            />
+          )}
+        </div>
+      )}
     </>
   );
 };

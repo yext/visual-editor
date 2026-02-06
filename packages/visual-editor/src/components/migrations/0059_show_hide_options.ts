@@ -45,7 +45,7 @@ export const addShowHideOptions: Migration = {
       };
     },
   },
-  FAQsSection: {
+  FAQSection: {
     action: "updated",
     propTransformation: (props) => {
       return {
@@ -67,7 +67,6 @@ export const addShowHideOptions: Migration = {
           showBusinessName: true,
           showGeomodifier: true,
           showHoursStatus: true,
-          showAverageReview: true,
           showPrimaryCTA: true,
           showSecondaryCTA: true,
         },
