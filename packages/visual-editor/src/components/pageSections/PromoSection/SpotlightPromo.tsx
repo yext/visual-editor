@@ -52,12 +52,14 @@ export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
               : "justify-end"
         }`}
       >
-        <Background
-          background={styles.backgroundColor}
-          className={`${promoContentParentCn(styles)} rounded shadow-lg p-6 md:p-10 max-w-[600px]`}
-        >
-          <PromoContent {...props} />
-        </Background>
+        {(styles.showHeading || styles.showDescription || styles.showCTA) && (
+          <Background
+            background={styles.backgroundColor}
+            className={`${promoContentParentCn(styles)} rounded shadow-lg p-6 md:p-10 max-w-[600px]`}
+          >
+            <PromoContent {...props} />
+          </Background>
+        )}
       </PageSection>
     </div>
   );
