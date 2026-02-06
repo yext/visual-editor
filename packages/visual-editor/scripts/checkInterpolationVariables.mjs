@@ -233,7 +233,9 @@ function autoFixSingleVariableMismatch(englishValue, localizedValue) {
 
   const targetIndex = unexpectedIndexes[0];
   const replacementVariable = missing[0];
-  const localizedMatches = Array.from(localizedValue.matchAll(INTERPOLATION_REGEX));
+  const localizedMatches = Array.from(
+    localizedValue.matchAll(INTERPOLATION_REGEX)
+  );
   const replacementExpression = replaceVariableName(
     actualExpressions[targetIndex],
     replacementVariable
@@ -330,7 +332,7 @@ async function validateInstance(instance) {
         expected: details.expectedVariables,
         actual: details.actualVariables,
         mismatchCount: details.mismatchCount,
-      });      
+      });
     }
 
     if (localeChanged) {

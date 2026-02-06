@@ -166,7 +166,9 @@ const getTargetLanguages = async (type: TranslationType): Promise<string[]> => {
   const entries = await getSubdirectoryNames(dir, { suppressMissing: true });
 
   if (entries.length === 0) {
-    console.warn(`Skipping missing or empty locales directory for ${type} at ${dir}.`);
+    console.warn(
+      `Skipping missing or empty locales directory for ${type} at ${dir}.`
+    );
   }
 
   return entries;
@@ -196,7 +198,9 @@ const translateText = async (
     );
   }
 
-  const translatedText = translations.map(([translated]) => translated).join("");
+  const translatedText = translations
+    .map(([translated]) => translated)
+    .join("");
   return translatedText || text;
 };
 
@@ -204,7 +208,12 @@ const translateText = async (
  * Translates missing keys for all non-primary locales of a translation type.
  */
 const translateFile = async (type: TranslationType): Promise<void> => {
-  const defaultPath = path.join(LOCALES_DIR, type, DEFAULT_LANGUAGE, `${NAMESPACE}.json`);
+  const defaultPath = path.join(
+    LOCALES_DIR,
+    type,
+    DEFAULT_LANGUAGE,
+    `${NAMESPACE}.json`
+  );
   const defaultJson = flatten(await loadJsonSafe(defaultPath));
   const defaultKeySet = new Set(Object.keys(defaultJson));
 
@@ -214,7 +223,12 @@ const translateFile = async (type: TranslationType): Promise<void> => {
       continue;
     }
 
-    const targetPath = path.join(LOCALES_DIR, type, locale, `${NAMESPACE}.json`);
+    const targetPath = path.join(
+      LOCALES_DIR,
+      type,
+      locale,
+      `${NAMESPACE}.json`
+    );
     const targetJson = flatten(await loadJsonSafe(targetPath));
 
     const cache = new Map<string, string>(
@@ -230,7 +244,9 @@ const translateFile = async (type: TranslationType): Promise<void> => {
       continue;
     }
 
-    console.log(`Translating ${keysToTranslate.length} keys for [${type}/${locale}]...`);
+    console.log(
+      `Translating ${keysToTranslate.length} keys for [${type}/${locale}]...`
+    );
 
     let successCount = 0;
     let failCount = 0;

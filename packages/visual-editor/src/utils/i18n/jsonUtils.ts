@@ -43,10 +43,7 @@ export const saveJson = async (
 /**
  * Flattens nested objects into dot-delimited key/value pairs.
  */
-export const flatten = (
-  obj: JsonObject,
-  prefix = ""
-): FlatTranslations => {
+export const flatten = (obj: JsonObject, prefix = ""): FlatTranslations => {
   const result: FlatTranslations = {};
 
   for (const key of Object.keys(obj)) {
