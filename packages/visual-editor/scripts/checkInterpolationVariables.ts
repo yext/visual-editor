@@ -1,5 +1,14 @@
 import fs from "fs/promises";
 import path from "path";
+import {
+  flatten,
+  getSubdirectoryNames,
+  loadJsonSafe,
+  saveJson,
+  sortObject,
+  type FlatTranslations,
+  unflatten,
+} from "../src/utils/i18n/jsonUtils.ts";
 
 /**
  * Validates interpolation placeholders ({{...}}) against English source values.
@@ -11,133 +20,77 @@ import path from "path";
  */
 const ROOT = path.resolve(process.cwd(), "locales");
 const NAMESPACE = "visual-editor.json";
-const INSTANCES = ["platform", "components"];
+const INSTANCES = ["platform", "components"] as const;
 const PRIMARY_LOCALE = "en";
 const CHECK_ONLY = process.argv.includes("--check-only");
 const INTERPOLATION_REGEX = /\{\{\s*([^{}]+?)\s*\}\}/g;
 
-/**
- * Loads a JSON file and returns {} when missing or invalid.
- */
-async function loadJsonSafe(filePath) {
-  try {
-    return JSON.parse(await fs.readFile(filePath, "utf-8"));
-  } catch {
-    return {};
-  }
+type Instance = (typeof INSTANCES)[number];
+
+interface MismatchIssue {
+  instance: Instance;
+  locale: string;
+  file: string;
+  line: number;
+  key: string;
+  expected: string[];
+  actual: string[];
+  mismatchCount: number;
 }
 
-/**
- * Writes JSON with deterministic indentation and trailing newline.
- */
-async function saveJson(filePath, data) {
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf-8");
+interface FixedEntry {
+  instance: Instance;
+  locale: string;
+  key: string;
+  file: string;
 }
 
-/**
- * Flattens nested objects into dot-delimited key/value pairs.
- */
-function flatten(obj, prefix = "") {
-  const result = {};
-  for (const key of Object.keys(obj)) {
-    const value = obj[key];
-    const fullKey = prefix ? `${prefix}.${key}` : key;
-    if (value && typeof value === "object" && !Array.isArray(value)) {
-      Object.assign(result, flatten(value, fullKey));
-    } else {
-      result[fullKey] = String(value ?? "");
-    }
-  }
-  return result;
-}
-
-/**
- * Rebuilds nested objects from dot-delimited key/value pairs.
- */
-function unflatten(flat) {
-  const result = {};
-  for (const key of Object.keys(flat)) {
-    const parts = key.split(".");
-    let cursor = result;
-    for (let i = 0; i < parts.length; i += 1) {
-      const part = parts[i];
-      if (i === parts.length - 1) {
-        cursor[part] = flat[key];
-      } else {
-        cursor[part] ??= {};
-        cursor = cursor[part];
-      }
-    }
-  }
-  return result;
-}
-
-/**
- * Recursively sorts object keys for deterministic output.
- */
-function sortObject(obj) {
-  if (!obj || typeof obj !== "object" || Array.isArray(obj)) {
-    return obj;
-  }
-
-  return Object.keys(obj)
-    .sort()
-    .reduce((acc, key) => {
-      acc[key] = sortObject(obj[key]);
-      return acc;
-    }, {});
-}
-
-/**
- * Returns sorted locale directories under the given instance path.
- */
-async function getLocales(instanceDir) {
-  const entries = await fs.readdir(instanceDir, { withFileTypes: true });
-  return entries
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort();
+interface ValidationResult {
+  issues: MismatchIssue[];
+  fixedEntries: FixedEntry[];
 }
 
 /**
  * Extracts interpolation expressions in order.
  * Example: "{{count, number}}" -> "count, number"
  */
-function extractExpressions(value) {
+const extractExpressions = (value: string): string[] => {
   return Array.from(value.matchAll(INTERPOLATION_REGEX), (match) =>
     (match[1] ?? "").trim()
   );
-}
+};
 
 /**
  * Extracts only the interpolation variable name from an expression.
  * Example: "count, number" -> "count".
  */
-function extractVariableName(expression) {
+const extractVariableName = (expression: string): string => {
   const [name] = expression.split(",");
   return (name ?? "").trim();
-}
+};
 
 /**
  * Builds a frequency map for an array of strings.
  */
-function buildCounts(values) {
-  const counts = new Map();
+const buildCounts = (values: string[]): Map<string, number> => {
+  const counts = new Map<string, number>();
   for (const value of values) {
     counts.set(value, (counts.get(value) ?? 0) + 1);
   }
   return counts;
-}
+};
 
 /**
  * Computes multiset differences (expected - actual, actual - expected).
  */
-function getMultisetDiff(expected, actual) {
+const getMultisetDiff = (
+  expected: string[],
+  actual: string[]
+): { missing: string[]; unexpected: string[] } => {
   const expectedCounts = buildCounts(expected);
   const actualCounts = buildCounts(actual);
-  const missing = [];
-  const unexpected = [];
+  const missing: string[] = [];
+  const unexpected: string[] = [];
 
   for (const [name, expectedCount] of expectedCounts.entries()) {
     const actualCount = actualCounts.get(name) ?? 0;
@@ -154,19 +107,19 @@ function getMultisetDiff(expected, actual) {
   }
 
   return { missing, unexpected };
-}
+};
 
 /**
  * Escapes special regex characters in a string.
  */
-function escapeRegex(value) {
+const escapeRegex = (value: string): string => {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
+};
 
 /**
  * Best-effort line lookup for a flattened key in a JSON file.
  */
-function findLineNumberForKey(fileContent, key) {
+const findLineNumberForKey = (fileContent: string, key: string): number => {
   const leafKey = key.split(".").pop() ?? key;
   const keyPattern = new RegExp(`"${escapeRegex(leafKey)}"\\s*:`, "g");
   const match = keyPattern.exec(fileContent);
@@ -176,25 +129,31 @@ function findLineNumberForKey(fileContent, key) {
   }
 
   return fileContent.slice(0, match.index).split("\n").length;
-}
+};
 
 /**
  * Replaces only the variable-name segment of an interpolation expression.
  * Example: "entitytype, number" -> "entityType, number".
  */
-function replaceVariableName(expression, variableName) {
+const replaceVariableName = (
+  expression: string,
+  variableName: string
+): string => {
   const commaIndex = expression.indexOf(",");
   if (commaIndex === -1) {
     return variableName;
   }
   return `${variableName}${expression.slice(commaIndex)}`;
-}
+};
 
 /**
  * Auto-fixes a localized value when exactly one variable name mismatches.
  * Returns null when no safe single-mismatch fix can be applied.
  */
-function autoFixSingleVariableMismatch(englishValue, localizedValue) {
+const autoFixSingleVariableMismatch = (
+  englishValue: string,
+  localizedValue: string
+): string | null => {
   const expectedExpressions = extractExpressions(englishValue);
   const actualExpressions = extractExpressions(localizedValue);
   const expectedVariables = expectedExpressions.map(extractVariableName);
@@ -216,7 +175,7 @@ function autoFixSingleVariableMismatch(englishValue, localizedValue) {
 
   // Identify the specific placeholder occurrence that is "extra" in actual.
   const remainingExpected = buildCounts(expectedVariables);
-  const unexpectedIndexes = [];
+  const unexpectedIndexes: number[] = [];
   for (let i = 0; i < actualVariables.length; i += 1) {
     const variable = actualVariables[i];
     const remaining = remainingExpected.get(variable) ?? 0;
@@ -253,13 +212,20 @@ function autoFixSingleVariableMismatch(englishValue, localizedValue) {
   }
   output += localizedValue.slice(cursor);
   return output;
-}
+};
 
 /**
  * Computes placeholder mismatch details for one key/value pair.
  * Placeholder order differences are considered valid.
  */
-function getMismatchDetails(englishValue, localizedValue) {
+const getMismatchDetails = (
+  englishValue: string,
+  localizedValue: string
+): {
+  expectedVariables: string[];
+  actualVariables: string[];
+  mismatchCount: number;
+} => {
   const expectedExpressions = extractExpressions(englishValue);
   const actualExpressions = extractExpressions(localizedValue);
   const expectedVariables = expectedExpressions.map(extractVariableName);
@@ -270,23 +236,19 @@ function getMismatchDetails(englishValue, localizedValue) {
   );
 
   return {
-    expectedExpressions,
-    actualExpressions,
     expectedVariables,
     actualVariables,
-    missing,
-    unexpected,
     mismatchCount: Math.max(missing.length, unexpected.length),
   };
-}
+};
 
-async function validateInstance(instance) {
+const validateInstance = async (instance: Instance): Promise<ValidationResult> => {
   const instanceDir = path.join(ROOT, instance);
   const englishPath = path.join(instanceDir, PRIMARY_LOCALE, NAMESPACE);
   const englishFlat = flatten(await loadJsonSafe(englishPath));
-  const locales = await getLocales(instanceDir);
-  const issues = [];
-  const fixedEntries = [];
+  const locales = await getSubdirectoryNames(instanceDir);
+  const issues: MismatchIssue[] = [];
+  const fixedEntries: FixedEntry[] = [];
 
   for (const locale of locales) {
     const localePath = path.join(instanceDir, locale, NAMESPACE);
@@ -336,17 +298,17 @@ async function validateInstance(instance) {
     }
 
     if (localeChanged) {
-      const sorted = sortObject(unflatten(localeFlat));
+      const sorted = sortObject(unflatten(localeFlat as FlatTranslations));
       await saveJson(localePath, sorted);
     }
   }
 
   return { issues, fixedEntries };
-}
+};
 
-async function run() {
-  const allIssues = [];
-  const allFixedEntries = [];
+const run = async (): Promise<void> => {
+  const allIssues: MismatchIssue[] = [];
+  const allFixedEntries: FixedEntry[] = [];
 
   for (const instance of INSTANCES) {
     const { issues, fixedEntries } = await validateInstance(instance);
@@ -379,9 +341,9 @@ async function run() {
     );
   }
   process.exit(1);
-}
+};
 
-run().catch((error) => {
+run().catch((error: unknown) => {
   console.error(error);
   process.exit(1);
 });

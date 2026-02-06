@@ -51,7 +51,7 @@
     "i18n:translate:platform": "pnpm exec tsx scripts/generateTranslations.ts --type platform",
     "i18n:translate:platform:dry": "pnpm exec tsx scripts/generateTranslations.ts --type platform --dry-run",
     "i18n:propagate:components": "pnpm exec tsx scripts/propagatePlatformToComponents.ts",
-    "i18n:check:interpolation": "node scripts/checkInterpolationVariables.mjs",
+    "i18n:check:interpolation": "pnpm exec tsx scripts/checkInterpolationVariables.ts",
     "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.components.config.ts --quiet && pnpm run i18n:check:interpolation",
     "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:lint"
   },
