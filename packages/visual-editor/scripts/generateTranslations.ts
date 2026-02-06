@@ -94,7 +94,11 @@ const getPluralFallbackCandidates = (key: string): string[] => {
     return [];
   }
 
-  const leafCandidates = [`${withoutPlural}_other`, `${withoutPlural}_one`, withoutPlural];
+  const leafCandidates = [
+    `${withoutPlural}_other`,
+    `${withoutPlural}_one`,
+    withoutPlural,
+  ];
   const seen = new Set<string>();
   const candidates: string[] = [];
 
