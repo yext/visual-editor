@@ -604,11 +604,13 @@
       "standard": "Standarts (1024 pikseļi)",
       "wide": "Plats (1280 pikseļi)"
     },
+    "defaultFont": "Noklusējuma fonts",
     "font": "Fonts",
     "fontSize": "Fonta lielums",
     "fontWeight": {
       "fontWeight": "Fonta svars"
     },
+    "headers": "Virsraksti",
     "image": "Attēls",
     "includeCaret": "Iekļaujiet Caret",
     "letterSpacing": {

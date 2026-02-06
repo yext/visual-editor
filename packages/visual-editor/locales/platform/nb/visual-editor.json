@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Bred (1280px)"
     },
+    "defaultFont": "Standard font",
     "font": "Font",
     "fontSize": "Fontstørrelse",
     "fontWeight": {
       "fontWeight": "Fontvekt"
     },
+    "headers": "Overskrifter",
     "image": "Bilde",
     "includeCaret": "Inkluderer Caret",
     "letterSpacing": {

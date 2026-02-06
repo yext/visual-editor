@@ -604,11 +604,13 @@
       "standard": "标准（1024px）",
       "wide": "宽（1280px）"
     },
+    "defaultFont": "默认字体",
     "font": "字体",
     "fontSize": "字体大小",
     "fontWeight": {
       "fontWeight": "字体重量"
     },
+    "headers": "标头",
     "image": "图像",
     "includeCaret": "包括商店",
     "letterSpacing": {

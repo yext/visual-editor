@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Wide (1280px)"
     },
+    "defaultFont": "Standardteckensnitt",
     "font": "Font",
     "fontSize": "Fontstorlek",
     "fontWeight": {
       "fontWeight": "Teckensnittsvikt"
     },
+    "headers": "Rubriker",
     "image": "Bild",
     "includeCaret": "Inkludera caret",
     "letterSpacing": {

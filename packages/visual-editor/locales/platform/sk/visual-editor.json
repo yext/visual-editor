@@ -604,11 +604,13 @@
       "standard": "Štandard (1024px)",
       "wide": "Široký (1280px)"
     },
+    "defaultFont": "Predvolené písmo",
     "font": "Písmo",
     "fontSize": "Veľkosť písma",
     "fontWeight": {
       "fontWeight": "Váha"
     },
+    "headers": "Hlavičky",
     "image": "Predstavovať",
     "includeCaret": "Zahrnúť karet",
     "letterSpacing": {

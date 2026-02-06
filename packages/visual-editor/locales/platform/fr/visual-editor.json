@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Large (1280px)"
     },
+    "defaultFont": "Police par défaut",
     "font": "Fonte",
     "fontSize": "Taille de la police",
     "fontWeight": {
       "fontWeight": "Poids de la police"
     },
+    "headers": "En-têtes",
     "image": "Image",
     "includeCaret": "Inclure le care-",
     "letterSpacing": {

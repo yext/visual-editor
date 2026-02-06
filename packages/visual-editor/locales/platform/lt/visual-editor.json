@@ -604,11 +604,13 @@
       "standard": "Standartas (1024 pikselių)",
       "wide": "Platus (1280 pikselių)"
     },
+    "defaultFont": "Numatytasis šriftas",
     "font": "Šriftas",
     "fontSize": "Šrifto dydis",
     "fontWeight": {
       "fontWeight": "Šrifto svoris"
     },
+    "headers": "Antraštės",
     "image": "Vaizdas",
     "includeCaret": "Įtraukite Caret",
     "letterSpacing": {

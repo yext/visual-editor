@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Široký (1280px)"
     },
+    "defaultFont": "Výchozí písmo",
     "font": "Písmo",
     "fontSize": "Velikost písma",
     "fontWeight": {
       "fontWeight": "Hmotnost písma"
     },
+    "headers": "Záhlaví",
     "image": "Obraz",
     "includeCaret": "Zahrnout Caret",
     "letterSpacing": {

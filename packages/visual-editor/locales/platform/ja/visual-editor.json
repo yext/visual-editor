@@ -604,11 +604,13 @@
       "standard": "標準（1024px）",
       "wide": "ワイド（1280px）"
     },
+    "defaultFont": "デフォルトのフォント",
     "font": "フォント",
     "fontSize": "フォントサイズ",
     "fontWeight": {
       "fontWeight": "フォント重量"
     },
+    "headers": "ヘッダー",
     "image": "画像",
     "includeCaret": "CARETを含めます",
     "letterSpacing": {

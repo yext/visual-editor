@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Breit (1280px)"
     },
+    "defaultFont": "Standardschriftart",
     "font": "Schriftart",
     "fontSize": "Schriftgröße",
     "fontWeight": {
       "fontWeight": "Schriftgewicht"
     },
+    "headers": "Überschriften",
     "image": "Bild",
     "includeCaret": "Pflege einbeziehen",
     "letterSpacing": {

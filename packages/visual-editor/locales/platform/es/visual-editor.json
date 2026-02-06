@@ -604,11 +604,13 @@
       "standard": "Estándar (1024px)",
       "wide": "Ancho (1280px)"
     },
+    "defaultFont": "Fuente predeterminada",
     "font": "Fuente",
     "fontSize": "Tamaño de fuente",
     "fontWeight": {
       "fontWeight": "Peso de la fuente"
     },
+    "headers": "Encabezados",
     "image": "Imagen",
     "includeCaret": "Incluir caret",
     "letterSpacing": {

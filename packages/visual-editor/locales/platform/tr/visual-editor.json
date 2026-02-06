@@ -604,11 +604,13 @@
       "standard": "Standart (1024px)",
       "wide": "Geniş (1280px)"
     },
+    "defaultFont": "Varsayılan yazı tipi",
     "font": "Yazı tipi",
     "fontSize": "Yazı tipi boyutu",
     "fontWeight": {
       "fontWeight": "Yazı tipi ağırlığı"
     },
+    "headers": "Başlıklar",
     "image": "İmaj",
     "includeCaret": "Caret dahil",
     "letterSpacing": {

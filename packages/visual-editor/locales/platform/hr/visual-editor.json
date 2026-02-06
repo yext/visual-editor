@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Široko (1280px)"
     },
+    "defaultFont": "Zadani font",
     "font": "Font",
     "fontSize": "Veličina fonta",
     "fontWeight": {
       "fontWeight": "Težina fonta"
     },
+    "headers": "Zaglavlja",
     "image": "Slika",
     "includeCaret": "Uključite Caret",
     "letterSpacing": {

@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Szeroki (1280px)"
     },
+    "defaultFont": "Domyślna czcionka",
     "font": "Chrzcielnica",
     "fontSize": "Rozmiar czcionki",
     "fontWeight": {
       "fontWeight": "Waga czcionki"
     },
+    "headers": "Nagłówki",
     "image": "Obraz",
     "includeCaret": "Uwzględnij CareT",
     "letterSpacing": {

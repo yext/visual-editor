@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Largo (1280px)"
     },
+    "defaultFont": "Carattere predefinito",
     "font": "Font",
     "fontSize": "Dimensione del carattere",
     "fontWeight": {
       "fontWeight": "Peso del carattere"
     },
+    "headers": "Intestazioni",
     "image": "Immagine",
     "includeCaret": "Includi il CULET",
     "letterSpacing": {

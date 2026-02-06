@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Lat (1280px)"
     },
+    "defaultFont": "Font implicit",
     "font": "Font",
     "fontSize": "Dimensiunea fontului",
     "fontWeight": {
       "fontWeight": "Greutatea fontului"
     },
+    "headers": "Anteturi",
     "image": "Imagine",
     "includeCaret": "Include îngrijire",
     "letterSpacing": {

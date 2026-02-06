@@ -604,11 +604,13 @@
       "standard": "Standardi (1024px)",
       "wide": "Leveä (1280px)"
     },
+    "defaultFont": "Oletusfontti",
     "font": "Fontti",
     "fontSize": "Fontin koko",
     "fontWeight": {
       "fontWeight": "Fonttipaino"
     },
+    "headers": "Otsikot",
     "image": "Kuva",
     "includeCaret": "Sisällytä caret",
     "letterSpacing": {

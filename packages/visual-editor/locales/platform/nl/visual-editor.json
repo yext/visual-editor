@@ -604,11 +604,13 @@
       "standard": "Standaard (1024px)",
       "wide": "Breed (1280px)"
     },
+    "defaultFont": "Standaardlettertype",
     "font": "Lettertype",
     "fontSize": "Lettergrootte",
     "fontWeight": {
       "fontWeight": "Lettertype"
     },
+    "headers": "Kopteksten",
     "image": "Afbeelding",
     "includeCaret": "Bevat Caret",
     "letterSpacing": {

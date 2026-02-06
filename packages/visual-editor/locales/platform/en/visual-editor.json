@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Wide (1280px)"
     },
+    "defaultFont": "Default font",
     "font": "Font",
     "fontSize": "Font Size",
     "fontWeight": {
       "fontWeight": "Font Weight"
     },
+    "headers": "Headers",
     "image": "Image",
     "includeCaret": "Include Caret",
     "letterSpacing": {

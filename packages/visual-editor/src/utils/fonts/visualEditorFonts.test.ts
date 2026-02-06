@@ -127,6 +127,29 @@ describe("extractInUseFontFamilies", () => {
     expect(inUseGoogleFonts).toEqual(expected);
     expect(inUseCustomFonts).toEqual(["Custom Font"]);
   });
+
+  it("should resolve var() references to default header font", () => {
+    const themeData: ThemeData = {
+      "--fontFamily-headers-defaultFont": "'Open Sans', sans-serif",
+      "--fontFamily-h1-fontFamily": "var(--fontFamily-headers-defaultFont)",
+    };
+
+    const expected: FontRegistry = {
+      "Open Sans": {
+        italics: true,
+        minWeight: 300,
+        maxWeight: 800,
+        fallback: "sans-serif",
+      },
+    };
+
+    const { inUseGoogleFonts, inUseCustomFonts } = extractInUseFontFamilies(
+      themeData,
+      defaultFonts
+    );
+    expect(inUseGoogleFonts).toEqual(expected);
+    expect(inUseCustomFonts).toEqual([]);
+  });
 });
 
 describe("constructGoogleFontLinkTags", () => {

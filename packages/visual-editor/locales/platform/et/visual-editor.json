@@ -604,11 +604,13 @@
       "standard": "Standard (1024px)",
       "wide": "Lai (1280px)"
     },
+    "defaultFont": "Vaikimisi font",
     "font": "Font",
     "fontSize": "Fondi suurus",
     "fontWeight": {
       "fontWeight": "Fondi kaal"
     },
+    "headers": "Päised",
     "image": "Pilt",
     "includeCaret": "Kaasake Caret",
     "letterSpacing": {
