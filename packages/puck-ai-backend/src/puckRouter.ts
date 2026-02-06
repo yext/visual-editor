@@ -1,6 +1,6 @@
 import { puckHandler, chat } from "@puckeditor/cloud-client";
 import type { Context } from "hono";
-import { enabledAiComponents, puckAiSystemContext } from "./prompts";
+import { enabledAiComponents, puckAiSystemContext } from "./puckAiConfig";
 
 type PuckChatRequestBody = Parameters<typeof chat>[0];
 
@@ -95,6 +95,6 @@ export const puckRouter = async (c: Context) => {
     });
   } catch (error) {
     console.error(error);
-    return c.json({ success: false, error }, 500);
+    return c.json({ success: false, error: "Failed to process request" }, 500);
   }
 };

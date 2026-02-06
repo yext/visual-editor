@@ -1,4 +1,5 @@
 import "@yext/visual-editor/editor.css";
+import "@yext/visual-editor/style.css";
 import {
   GetHeadConfig,
   GetPath,

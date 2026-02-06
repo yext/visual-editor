@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { corsForPuck } from "./cors";
-import { puckRouter } from "./puck";
+import { puckRouter } from "./puckRouter";
 
 const app = new Hono();
 
