@@ -759,6 +759,7 @@
       "standard": "標準（1024px）",
       "wide": "ワイド（1280px）"
     },
+    "defaultFont": "デフォルトのフォント",
     "font": "フォント",
     "fontSize": "フォントサイズ",
     "fontWeight": {
@@ -773,6 +774,7 @@
       "semibold": "セミボルド（600）",
       "thin": "薄い（100）"
     },
+    "headers": "ヘッダー",
     "image": "画像",
     "includeCaret": "CARETを含めます",
     "letterSpacing": {

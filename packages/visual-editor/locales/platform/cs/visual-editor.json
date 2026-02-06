@@ -780,6 +780,7 @@
       "standard": "Standard (1024px)",
       "wide": "Široký (1280px)"
     },
+    "defaultFont": "Výchozí písmo",
     "font": "Písmo",
     "fontSize": "Velikost písma",
     "fontWeight": {
@@ -794,6 +795,7 @@
       "semibold": "Semibold (600)",
       "thin": "Tenký (100)"
     },
+    "headers": "Záhlaví",
     "image": "Obraz",
     "includeCaret": "Zahrnout Caret",
     "letterSpacing": {

@@ -764,6 +764,7 @@
       "standard": "Standart (1024px)",
       "wide": "Geniş (1280px)"
     },
+    "defaultFont": "Varsayılan yazı tipi",
     "font": "Yazı tipi",
     "fontSize": "Yazı tipi boyutu",
     "fontWeight": {
@@ -778,6 +779,7 @@
       "semibold": "Semibold (600)",
       "thin": "İnce (100)"
     },
+    "headers": "Başlıklar",
     "image": "İmaj",
     "includeCaret": "Caret dahil",
     "letterSpacing": {

@@ -775,6 +775,7 @@
       "standard": "Štandard (1024px)",
       "wide": "Široký (1280px)"
     },
+    "defaultFont": "Predvolené písmo",
     "font": "Písmo",
     "fontSize": "Veľkosť písma",
     "fontWeight": {
@@ -789,6 +790,7 @@
       "semibold": "Semibold (600)",
       "thin": "Tenký (100)"
     },
+    "headers": "Hlavičky",
     "image": "Predstavovať",
     "includeCaret": "Zahrnúť karet",
     "letterSpacing": {

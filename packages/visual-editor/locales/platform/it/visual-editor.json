@@ -764,6 +764,7 @@
       "standard": "Standard (1024px)",
       "wide": "Largo (1280px)"
     },
+    "defaultFont": "Carattere predefinito",
     "font": "Font",
     "fontSize": "Dimensione del carattere",
     "fontWeight": {
@@ -778,6 +779,7 @@
       "semibold": "Semibold (600)",
       "thin": "Sottile (100)"
     },
+    "headers": "Intestazioni",
     "image": "Immagine",
     "includeCaret": "Includi il CULET",
     "letterSpacing": {

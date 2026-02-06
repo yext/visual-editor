@@ -764,6 +764,7 @@
       "standard": "Standard (1024px)",
       "wide": "Large (1280px)"
     },
+    "defaultFont": "Police par défaut",
     "font": "Fonte",
     "fontSize": "Taille de la police",
     "fontWeight": {
@@ -778,6 +779,7 @@
       "semibold": "Semibold (600)",
       "thin": "Mince (100)"
     },
+    "headers": "En-têtes",
     "image": "Image",
     "includeCaret": "Inclure le care-",
     "letterSpacing": {
