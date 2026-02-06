@@ -19,7 +19,7 @@
   "closesAtTimeWeek": "Ferme à {{time}} {{dayOfWeek}}",
   "components": {
     "footerUtilityImagesSlot": {
-      "defaultAlt": "Image utilitaire {{numéro}}"
+      "defaultAlt": "Image utilitaire {{number}}"
     }
   },
   "coreInfoSection": "Section d'informations de base",

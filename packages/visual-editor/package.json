@@ -53,7 +53,8 @@
     "i18n:translate:platform": "node scripts/generateTranslations.mjs --type platform",
     "i18n:translate:platform:dry": "node scripts/generateTranslations.mjs --type platform --dry-run",
     "i18n:propagate:components": "node scripts/propagatePlatformToComponents.mjs",
-    "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.components.config.ts --quiet",
+    "i18n:check:interpolation": "node scripts/checkInterpolationVariables.mjs",
+    "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.components.config.ts --quiet && pnpm run i18n:check:interpolation",
     "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:sync:platform && pnpm run i18n:sync:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:lint"
   },
   "dependencies": {
@@ -80,7 +81,7 @@
     "cmdk": "^1.1.1",
     "dompurify": "^3.2.3",
     "handlebars": "^4.7.8",
-    "i18next": "^25.7.3",
+    "i18next": "^25.8.4",
     "lucide-react": "^0.414.0",
     "lz-string": "1.5.0",
     "next-themes": "^0.3.0",

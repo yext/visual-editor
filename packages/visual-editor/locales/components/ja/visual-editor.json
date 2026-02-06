@@ -43,7 +43,7 @@
   "locationWithCount_other": "{{count}}場所",
   "locationsNear_one": "「{{name}}」付近の {{count}} 件の場所",
   "locationsNear_other": "「{{name}}」 付近の {{count}} か所の場所",
-  "locationsWithinDistanceOf_one": "「{{name}}」の{{距離}} {{ユニット}}以内の{{count}}の場所",
+  "locationsWithinDistanceOf_one": "「{{name}}」の{{distance}} {{unit}}以内の{{count}}の場所",
   "locationsWithinDistanceOf_other": "「{{name}}」から {{distance}} {{unit}} 以内にある {{count}} か所の場所",
   "logo": "ロゴ",
   "map": "地図",

@@ -22,8 +22,12 @@ const COMPONENTS_EN_PATH = path.join(COMPONENTS_DIR, "en", NAMESPACE);
 async function loadJsonSafe(filePath) {
   try {
     return JSON.parse(await fs.readFile(filePath, "utf-8"));
-  } catch {
-    return {};
+  } catch (error) {
+    if (error && error.code === "ENOENT") {
+      return {};
+    }
+    console.error(`Failed to read or parse ${filePath}`, error);
+    throw error;
   }
 }
 

@@ -19,6 +19,7 @@ const CONTEXT_SEPARATOR = "_";
 const CONTEXT_MARKER_START = "[[";
 const CONTEXT_MARKER_END = "]]";
 const PLURAL_SUFFIXES = new Set(["zero", "one", "two", "few", "many", "other"]);
+const INTERPOLATION_REGEX = /\{\{\s*([^{}]+?)\s*\}\}/g;
 
 /**
  * Reads and validates the --type argument.
@@ -100,6 +101,34 @@ function embedContextInText(text, context) {
  */
 function removeEmbeddedContext(text) {
   return text.replace(/\[+.*?\]+/g, "").trim();
+}
+
+/**
+ * Replaces interpolation placeholders with stable sentinel tokens before MT.
+ * This reduces the chance providers translate variable names.
+ */
+function maskInterpolationVariables(text) {
+  let index = 0;
+  const variables = [];
+  const maskedText = text.replace(INTERPOLATION_REGEX, (match) => {
+    const token = `__I18N_VAR_${index}__`;
+    variables.push({ token, original: match });
+    index += 1;
+    return token;
+  });
+
+  return { maskedText, variables };
+}
+
+/**
+ * Restores original interpolation placeholders after MT.
+ */
+function unmaskInterpolationVariables(text, variables) {
+  let output = text;
+  for (const { token, original } of variables) {
+    output = output.replaceAll(token, original);
+  }
+  return output;
 }
 
 /**
@@ -245,18 +274,21 @@ async function translateFile(type) {
 
     await Promise.allSettled(
       keysToTranslate.map(async (key) => {
-        let english = defaultJson[key];
+        const english = defaultJson[key];
+        const { maskedText, variables } = maskInterpolationVariables(english);
+        let translationInput = maskedText;
         const context = extractContextFromKey(key, defaultKeySet);
 
         if (context) {
-          english = embedContextInText(english, context);
+          translationInput = embedContextInText(translationInput, context);
         }
 
         try {
-          let translated = await translateText(english, lng);
+          let translated = await translateText(translationInput, lng);
           if (context) {
             translated = removeEmbeddedContext(translated);
           }
+          translated = unmaskInterpolationVariables(translated, variables);
           cache.set(key.trim(), translated);
           successCount++;
           console.log(

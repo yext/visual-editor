@@ -148,7 +148,7 @@
   "distance": "Kaugus",
   "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
-  "entityTypeField": "{{entitytype}} väli",
+  "entityTypeField": "{{entityType}} väli",
   "event": "Sündmus",
   "failedToCopyLayout": "Paigutuse kopeerimine ebaõnnestus.",
   "failedToPasteComponentInvalidData": "Kleepimine ebaõnnestus: komponendi andmed on kehtetud.",

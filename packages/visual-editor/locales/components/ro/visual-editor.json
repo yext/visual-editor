@@ -6,7 +6,7 @@
   "ariaLabelAppStore": "Descărcați de pe {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponibil pe {{serviceName}}",
   "ariaLabelGooglePlay": "Obțineți-l pe {{serviceName}}",
-  "breadcrumb": "Pescăruș",
+  "breadcrumb": "Breadcrumb",
   "businessInformation": "Informații de afaceri",
   "buttonWithIcon": "Buton cu pictograma {{presetImageType}}",
   "callToAction": "Apel la acțiune",

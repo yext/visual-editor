@@ -25,7 +25,7 @@
   "base": "Baza",
   "basicSelectorNoOptionsLabel": "Nu există opțiuni disponibile",
   "body": "Corp",
-  "breadcrumb": "Pescăruș",
+  "breadcrumb": "Breadcrumb",
   "businessInformation": "Informații de afaceri",
   "buttonWithIcon": "Buton cu pictograma {{presetImageType}}",
   "callToAction": "Apel la acțiune",

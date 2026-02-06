@@ -81,7 +81,7 @@
     "footerLogoSlot": "Logotipo",
     "footerSocialLinksSlot": "Links Sociais",
     "footerUtilityImagesSlot": {
-      "defaultAlt": "Imagem utilitária {{número}}"
+      "defaultAlt": "Imagem utilitária {{number}}"
     },
     "footerUtilityImagesSlotLabel": "Imagens utilitárias",
     "gallery": "Galeria",
