@@ -6,11 +6,12 @@ import { msg } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
-import { Image } from "../atoms/image.tsx";
+import { getImageAltText, Image } from "../atoms/image.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { getImageUrl } from "../contentBlocks/image/Image.tsx";
 
 export interface FooterLogoSlotProps {
   data: {
@@ -30,36 +31,25 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const streamDocument = useDocument();
   const { i18n, t } = useTranslation();
 
-  const image: ImageType | undefined = React.useMemo(() => {
-    const resolvedImage = resolveComponentData(
-      data.image,
-      i18n.language,
-      streamDocument
-    );
+  const resolvedImage:
+    | ImageType
+    | ComplexImageType
+    | TranslatableAssetImage
+    | undefined = resolveComponentData(
+    data.image,
+    i18n.language,
+    streamDocument
+  );
+  const simplifiedImage: ImageType | AssetImageType | undefined =
+    resolvedImage && "image" in resolvedImage
+      ? resolvedImage.image
+      : resolvedImage && "hasLocalizedValue" in resolvedImage
+        ? resolvedImage[i18n.language]
+        : resolvedImage;
 
-    if (!resolvedImage) {
-      return undefined;
-    }
+  const imageUrl = getImageUrl(simplifiedImage, i18n.language);
 
-    if ("url" in resolvedImage) {
-      return resolvedImage as ImageType;
-    }
-
-    if ("image" in resolvedImage && resolvedImage.image) {
-      return resolvedImage.image as ImageType;
-    }
-
-    if (
-      "hasLocalizedValue" in resolvedImage &&
-      typeof resolvedImage[i18n.language] === "object"
-    ) {
-      return resolvedImage[i18n.language] as ImageType;
-    }
-
-    return undefined;
-  }, [data.image, i18n.language, streamDocument]);
-
-  if (!image?.url) {
+  if (!simplifiedImage || !imageUrl) {
     return puck.isEditing ? <div className="h-20 w-[100px]" /> : <></>;
   }
 
@@ -68,14 +58,18 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
 
   const imgElement = (
     <Image
-      image={image}
+      image={simplifiedImage}
       aspectRatio={aspectRatio}
       width={width}
       className="object-contain"
     />
   );
 
-  const altText: string | undefined = image?.alternateText;
+  const altText = getImageAltText(
+    simplifiedImage,
+    i18n.language,
+    streamDocument
+  );
   const ariaLabel = altText || t("logo", "Logo");
 
   return (
