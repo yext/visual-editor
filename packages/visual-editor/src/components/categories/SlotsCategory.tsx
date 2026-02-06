@@ -119,6 +119,10 @@ import {
   SearchBarSlotProps,
 } from "../pageSections/SearchSection/SearchBarSlot.tsx";
 import {
+  SearchResultsSlot,
+  SearchResultsSlotProps,
+} from "../pageSections/SearchSection/SearchResultsSlot.tsx";
+import {
   TeamCard,
   TeamCardProps,
 } from "../pageSections/TeamSection/TeamCard.tsx";
@@ -179,6 +183,7 @@ export interface SlotsCategoryProps {
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
   SearchBarSlot: SearchBarSlotProps;
+  SearchResultsSlot: SearchResultsSlotProps;
 }
 
 const lockedPermissions = {
@@ -275,6 +280,7 @@ export const SlotsCategoryComponents = {
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
   SearchBarSlot: { ...SearchBarSlot, permission: lockedPermissions },
+  SearchResultsSlot: { ...SearchResultsSlot, permission: lockedPermissions },
 };
 
 export const SlotsCategory = Object.keys(

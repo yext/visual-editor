@@ -34,6 +34,7 @@ export interface SearchComponentProps {
   /** @internal */
   slots: {
     SearchBarSlot: Slot;
+    SearchResultsSlot: Slot;
   };
 }
 
@@ -73,6 +74,7 @@ const locatorFields: Fields<SearchComponentProps> = {
     visible: false,
     objectFields: {
       SearchBarSlot: { type: "slot" },
+      SearchResultsSlot: { type: "slot" },
     },
   },
 };
@@ -96,7 +98,6 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
     () => buildVerticalConfigMap(verticals),
     [verticals]
   );
-
   console.log(verticalConfigMap);
 
   const streamDocument = useDocument();
@@ -125,6 +126,7 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
       <SearchI18nextProvider searcher={searcher}>
         <PageSection ref={puck.dragRef}>
           <slots.SearchBarSlot style={{ height: "auto" }} allow={[]} />
+          <slots.SearchResultsSlot style={{ height: "auto" }} allow={[]} />
         </PageSection>
       </SearchI18nextProvider>
     </SearchHeadlessProvider>
@@ -272,6 +274,16 @@ export const SearchComponent: ComponentConfig<{
     ],
     slots: {
       SearchBarSlot: [
+        {
+          type: "SearchBarSlot",
+          props: {
+            styles: {
+              showIcon: false,
+            },
+          } satisfies SearchBarSlotProps,
+        },
+      ],
+      SearchResultsSlot: [
         {
           type: "SearchBarSlot",
           props: {
