@@ -45,8 +45,8 @@
   "closed": "Geschlossen",
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
-  "closesAtTime": "Schließt am Donnerstag um {{time}} Uhr",
-  "closesAtTimeWeek": "Schließt am Donnerstag um {{time}} Uhr {{dayOfWeek}}",
+  "closesAtTime": "Schließt um {{time}} Uhr",
+  "closesAtTimeWeek": "Schließt um {{time}} Uhr {{dayOfWeek}}",
   "componentErrorBoundary": {
     "error": "Fehler",
     "message": "Dieser Abschnitt kann nicht gerendert werden. Versuchen Sie, Ihre Komponentenbibliothek zu aktualisieren."
