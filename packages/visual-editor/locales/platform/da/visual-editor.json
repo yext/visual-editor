@@ -129,7 +129,6 @@
   "copyLayout": "Kopier layout",
   "coreInfoSection": "Kerneinfo -sektion",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Få rutevejledning",
     "presetImage": "Forudindstillet billede",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Misligholdelse",
   "friday": "fredag",
   "getDirections": "Få rutevejledning",
-  "Heading": "Overskrift",
+  "heading": "Overskrift",
   "heroBanner": "Heltebanner",
   "heroHeader": "Helt header",
   "heroImage": "Heltebillede",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Videngrafindhold",
   "link": "forbindelse",
-  "Link": "Forbindelse",
   "linkTypes": {
     "clickToWebsite": "Klik på webstedet",
     "drivingDirections": "Kørselsvejledning",

@@ -129,7 +129,6 @@
   "copyLayout": "Kopēt izkārtojumu",
   "coreInfoSection": "Pamatinformācija",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Saņemt norādes",
     "presetImage": "Iepriekš iestatīts attēls",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Nepildīt",
   "friday": "Piektdiena",
   "getDirections": "Saņemt norādes",
-  "Heading": "Virsraksts",
+  "heading": "Virsraksts",
   "heroBanner": "Varoņu reklāmkarogs",
   "heroHeader": "Varoņu galva",
   "heroImage": "Varoņa attēls",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometri",
   "knowledgeGraphContent": "Zināšanu grafika saturs",
   "link": "saite",
-  "Link": "Saite",
   "linkTypes": {
     "clickToWebsite": "Noklikšķiniet uz vietni",
     "drivingDirections": "Braukšanas norādījumi",

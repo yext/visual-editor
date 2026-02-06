@@ -321,18 +321,16 @@ async function validateInstance(instance) {
         }
       }
 
-      if (details.mismatchCount > 1 || CHECK_ONLY) {
-        issues.push({
-          instance,
-          locale,
-          file: localePath,
-          line: findLineNumberForKey(localeRaw, key),
-          key,
-          expected: details.expectedVariables,
-          actual: details.actualVariables,
-          mismatchCount: details.mismatchCount,
-        });
-      }
+      issues.push({
+        instance,
+        locale,
+        file: localePath,
+        line: findLineNumberForKey(localeRaw, key),
+        key,
+        expected: details.expectedVariables,
+        actual: details.actualVariables,
+        mismatchCount: details.mismatchCount,
+      });      
     }
 
     if (localeChanged) {

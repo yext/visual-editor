@@ -129,7 +129,6 @@
   "copyLayout": "复制布局",
   "coreInfoSection": "核心信息部分",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "获取指示",
     "presetImage": "预设图像",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "默认",
   "friday": "星期五",
   "getDirections": "获取指示",
-  "Heading": "标题",
+  "heading": "标题",
   "heroBanner": "英雄横幅",
   "heroHeader": "英雄头",
   "heroImage": "英雄形象",
@@ -464,7 +463,6 @@
   "kilometer_other": "公里",
   "knowledgeGraphContent": "知识图内容",
   "link": "关联",
-  "Link": "关联",
   "linkTypes": {
     "clickToWebsite": "单击网站",
     "drivingDirections": "行驶方向",

@@ -73,7 +73,7 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
   getItemSummary: (item, i) => {
     return (
       resolveComponentData(item.label, i18nComponentsInstance.language) ||
-      pt("Link", "Link") + " " + ((i ?? 0) + 1)
+      pt("link", "Link") + " " + ((i ?? 0) + 1)
     );
   },
 };

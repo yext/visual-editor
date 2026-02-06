@@ -129,7 +129,6 @@
   "copyLayout": "複製佈局",
   "coreInfoSection": "核心信息部分",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "獲取指示",
     "presetImage": "預設圖像",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "預設",
   "friday": "星期五",
   "getDirections": "獲取指示",
-  "Heading": "標題",
+  "heading": "標題",
   "heroBanner": "英雄橫幅",
   "heroHeader": "英雄頭",
   "heroImage": "英雄形象",
@@ -464,7 +463,6 @@
   "kilometer_other": "公里",
   "knowledgeGraphContent": "知識圖內容",
   "link": "關聯",
-  "Link": "關聯",
   "linkTypes": {
     "clickToWebsite": "單擊網站",
     "drivingDirections": "行駛方向",

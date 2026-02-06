@@ -129,7 +129,6 @@
   "copyLayout": "Skopiuj układ",
   "coreInfoSection": "Sekcja informacji podstawowych",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Uzyskaj wskazówki",
     "presetImage": "Wstępnie ustawiony obraz",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Domyślny",
   "friday": "Piątek",
   "getDirections": "Uzyskaj wskazówki",
-  "Heading": "Nagłówek",
+  "heading": "Nagłówek",
   "heroBanner": "Banner bohatera",
   "heroHeader": "Nagłówek bohatera",
   "heroImage": "Obraz bohatera",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometry",
   "knowledgeGraphContent": "Treść wykresu wiedzy",
   "link": "połączyć",
-  "Link": "Połączyć",
   "linkTypes": {
     "clickToWebsite": "Kliknij na stronę internetową",
     "drivingDirections": "Kierunki jazdy",

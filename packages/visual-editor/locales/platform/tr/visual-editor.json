@@ -129,7 +129,6 @@
   "copyLayout": "Düzeni Kopyala",
   "coreInfoSection": "Çekirdek Bilgi Bölümü",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Yol tarifi alın",
     "presetImage": "Önceden ayarlanmış resim",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Varsayılan",
   "friday": "Cuma",
   "getDirections": "Yol tarifi alın",
-  "Heading": "Başlık",
+  "heading": "Başlık",
   "heroBanner": "Kahraman afiş",
   "heroHeader": "Kahraman başlığı",
   "heroImage": "Kahraman görüntüsü",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometre",
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
   "link": "bağlantı",
-  "Link": "Bağlantı",
   "linkTypes": {
     "clickToWebsite": "Web sitesine tıklayın",
     "drivingDirections": "Yol Tarifi",

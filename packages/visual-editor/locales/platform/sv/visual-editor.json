@@ -129,7 +129,6 @@
   "copyLayout": "Kopiera layout",
   "coreInfoSection": "Kärninfo -sektionen",
   "cta": "Cta",
-  "CTA": "Cta",
   "ctaTypes": {
     "getDirections": "Få vägbeskrivning",
     "presetImage": "Förinställning",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Standard",
   "friday": "Fredag",
   "getDirections": "Få vägbeskrivning",
-  "Heading": "Rubrik",
+  "heading": "Rubrik",
   "heroBanner": "Hjältebanner",
   "heroHeader": "Hjältrubrik",
   "heroImage": "Hjältebild",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Kunskapgrafinnehåll",
   "link": "länk",
-  "Link": "Länk",
   "linkTypes": {
     "clickToWebsite": "Klicka på webbplatsen",
     "drivingDirections": "Vägbeskrivning",

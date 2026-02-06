@@ -129,7 +129,6 @@
   "copyLayout": "Kopijuoti išdėstymą",
   "coreInfoSection": "Pagrindinės informacijos skyrius",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Gaukite nurodymus",
     "presetImage": "Iš anksto nustatytas vaizdas",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Numatytasis",
   "friday": "Penktadienis",
   "getDirections": "Gaukite nurodymus",
-  "Heading": "Antraštė",
+  "heading": "Antraštė",
   "heroBanner": "Herojaus antraštė",
   "heroHeader": "Herojaus antraštė",
   "heroImage": "Herojaus įvaizdis",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometrų",
   "knowledgeGraphContent": "Žinių grafiko turinys",
   "link": "nuoroda",
-  "Link": "Nuoroda",
   "linkTypes": {
     "clickToWebsite": "Spustelėkite svetainę",
     "drivingDirections": "Važiavimo kryptys",

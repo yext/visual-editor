@@ -129,7 +129,6 @@
   "copyLayout": "Kopieer lay-out",
   "coreInfoSection": "Core Info -sectie",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Routebeschrijving",
     "presetImage": "Vooraf ingestelde afbeelding",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Standaard",
   "friday": "Vrijdag",
   "getDirections": "Routebeschrijving",
-  "Heading": "Kop",
+  "heading": "Rubriek",
   "heroBanner": "Heldenbanner",
   "heroHeader": "Held koptekst",
   "heroImage": "Heldenbeeld",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometers",
   "knowledgeGraphContent": "Kennisgrafiekinhoud",
   "link": "link",
-  "Link": "Link",
   "linkTypes": {
     "clickToWebsite": "Klik op de website",
     "drivingDirections": "Routebeschrijving",

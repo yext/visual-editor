@@ -129,7 +129,6 @@
   "copyLayout": "Kopioi asettelu",
   "coreInfoSection": "Ydintiedot -osio",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Hanki reittiohjeet",
     "presetImage": "Esiasetettu kuva",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Laiminlyönti",
   "friday": "perjantai",
   "getDirections": "Hanki reittiohjeet",
-  "Heading": "Otsikko",
+  "heading": "Otsikko",
   "heroBanner": "Sankari",
   "heroHeader": "Sankari -otsikko",
   "heroImage": "Sankarikuva",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometriä",
   "knowledgeGraphContent": "Tietokaavion sisältö",
   "link": "linkki",
-  "Link": "Linkki",
   "linkTypes": {
     "clickToWebsite": "Napsauta verkkosivustoa",
     "drivingDirections": "Ajo -ohjeet",

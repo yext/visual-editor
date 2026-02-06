@@ -129,7 +129,6 @@
   "copyLayout": "Kopeeri paigutus",
   "coreInfoSection": "Põhiteabe jaotis",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Hankige juhiseid",
     "presetImage": "Eelseade",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Täitmata jätmine",
   "friday": "Reede",
   "getDirections": "Hankige juhiseid",
-  "Heading": "Pealkiri",
+  "heading": "Pealkiri",
   "heroBanner": "Kangelasriba",
   "heroHeader": "Kangelase päis",
   "heroImage": "Kangelasepilt",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilomeetrit",
   "knowledgeGraphContent": "Teadmiste graafi sisu",
   "link": "link",
-  "Link": "Link",
   "linkTypes": {
     "clickToWebsite": "Klõpsake veebisaidil",
     "drivingDirections": "Juhtimissuunad",

@@ -129,7 +129,6 @@
   "copyLayout": "Elrendezés másolása",
   "coreInfoSection": "Alapvető információ szakasz",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Szerezzen útmutatásokat",
     "presetImage": "Előre beállított kép",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Mulasztás",
   "friday": "péntek",
   "getDirections": "Szerezzen útmutatásokat",
-  "Heading": "Cím",
+  "heading": "Cím",
   "heroBanner": "Hős szalaghirdetés",
   "heroHeader": "Hős fejléc",
   "heroImage": "Hős kép",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilométer",
   "knowledgeGraphContent": "Tudás grafikon tartalma",
   "link": "link",
-  "Link": "Link",
   "linkTypes": {
     "clickToWebsite": "Kattintson a weboldalra",
     "drivingDirections": "Vezetési útmutatások",

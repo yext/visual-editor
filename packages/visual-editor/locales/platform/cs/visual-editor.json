@@ -129,7 +129,6 @@
   "copyLayout": "Kopírovat rozložení",
   "coreInfoSection": "Sekce hlavních informací",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Získejte trasu",
     "presetImage": "Přednastavený obrázek",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Výchozí",
   "friday": "pátek",
   "getDirections": "Získejte pokyny",
-  "Heading": "Záhlaví",
+  "heading": "Záhlaví",
   "heroBanner": "Hrdinový banner",
   "heroHeader": "Hlavní záhlaví",
   "heroImage": "Hrdinový obrázek",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometrů",
   "knowledgeGraphContent": "Obsah grafu znalostí",
   "link": "odkaz",
-  "Link": "Odkaz",
   "linkTypes": {
     "clickToWebsite": "Klikněte na web",
     "drivingDirections": "Směry jízdy",

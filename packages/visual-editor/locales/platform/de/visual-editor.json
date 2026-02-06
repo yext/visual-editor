@@ -129,7 +129,6 @@
   "copyLayout": "Layout kopieren",
   "coreInfoSection": "Kerninfo -Abschnitt",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Wegbeschreibung abrufen",
     "presetImage": "Voreingestelltes Bild",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Standard",
   "friday": "Freitag",
   "getDirections": "Route planen",
-  "Heading": "Überschrift",
+  "heading": "Überschrift",
   "heroBanner": "Heldenbanner",
   "heroHeader": "Heldenkopfzeile",
   "heroImage": "Heldenbild",
@@ -464,7 +463,6 @@
   "kilometer_other": "Kilometer",
   "knowledgeGraphContent": "Knowledge Graph Inhalt",
   "link": "Link",
-  "Link": "Link",
   "linkTypes": {
     "clickToWebsite": "Klicken Sie auf die Website",
     "drivingDirections": "Antriebsanweisungen",

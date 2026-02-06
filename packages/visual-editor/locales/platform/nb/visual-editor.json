@@ -129,7 +129,6 @@
   "copyLayout": "Kopier layout",
   "coreInfoSection": "Kjerneinfo -seksjon",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Få veibeskrivelse",
     "presetImage": "Forhåndsinnstilt bilde",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Misligholde",
   "friday": "fredag",
   "getDirections": "Få veibeskrivelse",
-  "Heading": "Overskrift",
+  "heading": "Overskrift",
   "heroBanner": "Heltebanner",
   "heroHeader": "Hero Header",
   "heroImage": "Heltbilde",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Kunnskapsgrafinnhold",
   "link": "lenke",
-  "Link": "Lenke",
   "linkTypes": {
     "clickToWebsite": "Klikk til nettstedet",
     "drivingDirections": "Veibeskrivelse",

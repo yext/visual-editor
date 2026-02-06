@@ -129,7 +129,6 @@
   "copyLayout": "Copiar diseño",
   "coreInfoSection": "Sección de información central",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Obtener instrucciones",
     "presetImage": "Imagen preestablecida",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Por defecto",
   "friday": "Viernes",
   "getDirections": "Obtener instrucciones",
-  "Heading": "Título",
+  "heading": "Título",
   "heroBanner": "Estandarte",
   "heroHeader": "Encabezado de héroe",
   "heroImage": "Imagen de héroe",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilómetros",
   "knowledgeGraphContent": "Contenido del gráfico de conocimiento",
   "link": "enlace",
-  "Link": "Enlace",
   "linkTypes": {
     "clickToWebsite": "Haga clic en el sitio web",
     "drivingDirections": "Instrucciones de conducción",

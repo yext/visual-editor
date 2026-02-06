@@ -129,7 +129,6 @@
   "copyLayout": "Kopírovať rozloženie",
   "coreInfoSection": "Sekcia",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Získajte pokyny",
     "presetImage": "Predvolený obraz",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Predvolený",
   "friday": "Piatok",
   "getDirections": "Získajte pokyny",
-  "Heading": "Hlavný",
+  "heading": "Smerovanie",
   "heroBanner": "Hlavný banner",
   "heroHeader": "Hlavná hlavička",
   "heroImage": "Obraz",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometrov",
   "knowledgeGraphContent": "Obsah grafov vedomostí",
   "link": "prepojiť",
-  "Link": "Prepojiť",
   "linkTypes": {
     "clickToWebsite": "Kliknite na webovú stránku",
     "drivingDirections": "Riadenie",

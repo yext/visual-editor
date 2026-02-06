@@ -25,7 +25,7 @@
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Aucune option disponible",
   "body": "Corps",
-  "breadcrumb": "Chapelure",
+  "breadcrumb": "Fil d'Ariane",
   "businessInformation": "Informations commerciales",
   "buttonWithIcon": "Bouton avec {{presetImageType}}",
   "callToAction": "Appel à l'action",
@@ -129,7 +129,6 @@
   "copyLayout": "Copier la mise en page",
   "coreInfoSection": "Section d'informations de base",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Obtenir des itinéraires",
     "presetImage": "Image prédéfinie",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Défaut",
   "friday": "Vendredi",
   "getDirections": "Obtenir des itinéraires",
-  "Heading": "Titre",
+  "heading": "Titre",
   "heroBanner": "Bannière de héros",
   "heroHeader": "En-tête principal",
   "heroImage": "Image du héros",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilomètres",
   "knowledgeGraphContent": "Contenu du graphique de connaissances",
   "link": "lien",
-  "Link": "Lien",
   "linkTypes": {
     "clickToWebsite": "Cliquez sur le site Web",
     "drivingDirections": "Itinéraires",

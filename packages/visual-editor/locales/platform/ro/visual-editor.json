@@ -129,7 +129,6 @@
   "copyLayout": "Copiați aspectul",
   "coreInfoSection": "Secțiunea de informații de bază",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Obțineți indicații",
     "presetImage": "Imagine prestabilită",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Implicit",
   "friday": "vineri",
   "getDirections": "Obțineți indicații",
-  "Heading": "Îndreptându -se",
+  "heading": "Titlu",
   "heroBanner": "Banner erou",
   "heroHeader": "Antet erou",
   "heroImage": "Imaginea eroului",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometri",
   "knowledgeGraphContent": "Conținut grafic de cunoștințe",
   "link": "legătură",
-  "Link": "Legătură",
   "linkTypes": {
     "clickToWebsite": "Faceți clic pe site -ul web",
     "drivingDirections": "Direcții de conducere",

@@ -129,7 +129,6 @@
   "copyLayout": "Kopiraj izgled",
   "coreInfoSection": "Odjeljak jezgrenih informacija",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Dobiti upute",
     "presetImage": "Unaprijed postavljena slika",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Zadano",
   "friday": "petak",
   "getDirections": "Dobiti upute",
-  "Heading": "Naslov",
+  "heading": "Naslov",
   "heroBanner": "Baner",
   "heroHeader": "Heroj zaglavlje",
   "heroImage": "Herojska slika",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometara",
   "knowledgeGraphContent": "Sadržaj grafikona znanja",
   "link": "link",
-  "Link": "Link",
   "linkTypes": {
     "clickToWebsite": "Kliknite na web mjesto",
     "drivingDirections": "Upute za vožnju",

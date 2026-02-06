@@ -129,7 +129,6 @@
   "copyLayout": "Copy Layout",
   "coreInfoSection": "Core Info Section",
   "cta": "CTA",
-  "CTA": "CTA",
   "ctaTypes": {
     "getDirections": "Get Directions",
     "presetImage": "Preset Image",
@@ -448,7 +447,7 @@
   "fontSizeDefaultLabel": "Default",
   "friday": "Friday",
   "getDirections": "Get Directions",
-  "Heading": "Heading",
+  "heading": "Heading",
   "heroBanner": "Hero Banner",
   "heroHeader": "Hero Header",
   "heroImage": "Hero Image",
@@ -464,7 +463,6 @@
   "kilometer_other": "kilometres",
   "knowledgeGraphContent": "Knowledge Graph content",
   "link": "link",
-  "Link": "Link",
   "linkTypes": {
     "clickToWebsite": "Click to Website",
     "drivingDirections": "Driving Directions",
