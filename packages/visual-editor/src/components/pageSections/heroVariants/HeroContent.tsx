@@ -37,7 +37,7 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
     styles.showBusinessName ||
     styles.showGeomodifier ||
     showHours ||
-    styles.showAverageReview;
+    (styles.showAverageReview && reviewCount > 0);
 
   return (
     <>

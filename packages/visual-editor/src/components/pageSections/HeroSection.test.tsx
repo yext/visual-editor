@@ -50,7 +50,7 @@ const version59Props = {
     backgroundImage: {
       field: "",
       constantValue: {
-        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max](https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
         width: 640,
         height: 360,
       },
@@ -150,7 +150,7 @@ const version59Props = {
             image: {
               field: "",
               constantValue: {
-                url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max](https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
                 width: 640,
                 height: 360,
               },
@@ -2471,20 +2471,6 @@ const tests: ComponentTest[] = [
       },
     },
     version: 48,
-  },
-  {
-    name: "[classic] version 59 with showBusinessName, showGeomodifier, showHoursStatus false",
-    document: testDocument,
-    props: {
-      ...version59Props,
-      styles: {
-        ...version59Props.styles,
-        showBusinessName: false,
-        showGeomodifier: false,
-        showHoursStatus: false,
-      },
-    },
-    version: 59,
   },
   {
     name: "[classic] version 59 with showBusinessName, showGeomodifier, showHoursStatus false",

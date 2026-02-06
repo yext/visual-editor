@@ -55,7 +55,7 @@ export interface HeroStyles {
   /**
    * Image Height for the hero image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight?: number;
 

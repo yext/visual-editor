@@ -439,7 +439,7 @@ const tests: ComponentTest[] = [
     version: 36,
   },
   {
-    name: "version 59 with showSectionHeading, showHours false",
+    name: "version 59 with multiple nearby locations (showSectionHeading, showHours false)",
     document: {
       locale: "en",
       id: "1101-wilson-blvd",
@@ -534,7 +534,7 @@ const tests: ComponentTest[] = [
     version: 59,
   },
   {
-    name: "version 59 with showPhone, showAddress false",
+    name: "version 59 with multiple nearby locations (showPhone, showAddress false)",
     document: {
       locale: "en",
       id: "1101-wilson-blvd",

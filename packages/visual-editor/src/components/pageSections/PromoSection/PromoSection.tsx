@@ -95,31 +95,31 @@ export interface PromoStyles {
   /**
    * Image Height for the promo image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight: number;
 
   /**
    * Whether to show the media content, either image or video.
-   * @default true
+   * @defaultValue true
    */
   showMedia: boolean;
 
   /**
    * Whether to show the heading text.
-   * @default true
+   * @defaultValue true
    */
   showHeading: boolean;
 
   /**
    * Whether to show the description text.
-   * @default true
+   * @defaultValue true
    */
   showDescription: boolean;
 
   /**
    * Whether to show the CTA.
-   * @default true
+   * @defaultValue true
    */
   showCTA: boolean;
 }
