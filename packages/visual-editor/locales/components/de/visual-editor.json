@@ -15,8 +15,8 @@
   "closeHeaderMenu": "Headermenü schließen",
   "closeMenu": "Menü schließen",
   "closed": "Geschlossen",
-  "closesAtTime": "Schließt am Donnerstag um {{time}} Uhr",
-  "closesAtTimeWeek": "Schließt am Donnerstag um {{time}} Uhr {{dayOfWeek}}",
+  "closesAtTime": "Schließt um {{time}} Uhr",
+  "closesAtTimeWeek": "Schließt um {{time}} Uhr {{dayOfWeek}}",
   "components": {
     "footerUtilityImagesSlot": {
       "defaultAlt": "Dienstprogramm-Image {{number}}"
