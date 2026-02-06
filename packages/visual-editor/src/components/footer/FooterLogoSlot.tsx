@@ -10,10 +10,13 @@ import { Image } from "../atoms/image.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
 
 export interface FooterLogoSlotProps {
   data: {
-    image: YextEntityField<AssetImageType | TranslatableAssetImage>;
+    image: YextEntityField<
+      ImageType | ComplexImageType | AssetImageType | TranslatableAssetImage
+    >;
     linkTarget?: string;
   };
   styles: {
@@ -27,21 +30,36 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const streamDocument = useDocument();
   const { i18n, t } = useTranslation();
 
-  const resolvedImage = resolveComponentData(
-    data.image,
-    i18n.language,
-    streamDocument
-  );
+  const image: ImageType | undefined = React.useMemo(() => {
+    const resolvedImage = resolveComponentData(
+      data.image,
+      i18n.language,
+      streamDocument
+    );
 
-  let imageDataUrl = (
-    typeof resolvedImage === "string" ? { url: resolvedImage } : resolvedImage
-  ) as AssetImageType | TranslatableAssetImage;
+    if (!resolvedImage) {
+      return undefined;
+    }
 
-  if (imageDataUrl && "hasLocalizedValue" in imageDataUrl) {
-    imageDataUrl = imageDataUrl[i18n.language] as AssetImageType;
-  }
+    if ("url" in resolvedImage) {
+      return resolvedImage as ImageType;
+    }
 
-  if (!imageDataUrl?.url) {
+    if ("image" in resolvedImage && resolvedImage.image) {
+      return resolvedImage.image as ImageType;
+    }
+
+    if (
+      "hasLocalizedValue" in resolvedImage &&
+      typeof resolvedImage[i18n.language] === "object"
+    ) {
+      return resolvedImage[i18n.language] as ImageType;
+    }
+
+    return undefined;
+  }, [data.image, i18n.language, streamDocument]);
+
+  if (!image?.url) {
     return puck.isEditing ? <div className="h-20 w-[100px]" /> : <></>;
   }
 
@@ -50,18 +68,14 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
 
   const imgElement = (
     <Image
-      image={imageDataUrl}
+      image={image}
       aspectRatio={aspectRatio}
       width={width}
       className="object-contain"
     />
   );
 
-  const altText = resolveComponentData(
-    imageDataUrl.alternateText ?? "",
-    i18n.language,
-    streamDocument
-  );
+  const altText: string | undefined = image?.alternateText;
   const ariaLabel = altText || t("logo", "Logo");
 
   return (
@@ -85,7 +99,10 @@ export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
       type: "object",
       objectFields: {
         image: YextField(msg("fields.image", "Image"), {
-          type: "image",
+          type: "entityField",
+          filter: {
+            types: ["type.image"],
+          },
         }),
         linkTarget: YextField(msg("fields.linkTarget", "Link Target"), {
           type: "text",
