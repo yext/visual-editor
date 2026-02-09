@@ -175,6 +175,8 @@ export const defaultTeamCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
+                buttonText: { en: "Button", hasLocalizedValue: "true" },
                 entityField: {
                   field: "",
                   constantValue: defaultPerson.cta,

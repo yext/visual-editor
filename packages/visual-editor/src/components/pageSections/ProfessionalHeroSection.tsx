@@ -681,6 +681,8 @@ export const ProfessionalHeroSection: ComponentConfig<{
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {
@@ -709,6 +711,8 @@ export const ProfessionalHeroSection: ComponentConfig<{
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {

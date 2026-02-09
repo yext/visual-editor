@@ -148,11 +148,11 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 Additional CSS classes to apply to the CTA.
 
-| Prop        | Type                                                                               | Description                                 | Default |
-| :---------- | :--------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
-| `className` | `string`                                                                           | Additional CSS classes to apply to the CTA. |         |
-| `data`      | `{ show?: boolean; entityField: YextEntityField<EnhancedTranslatableCTA>; }`       |                                             |         |
-| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: BackgroundStyle; }` |                                             |         |
+| Prop        | Type                                                                                                                                                                                                                                                                             | Description                                 | Default |
+| :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------ | :------ |
+| `className` | `string`                                                                                                                                                                                                                                                                         | Additional CSS classes to apply to the CTA. |         |
+| `data`      | `{ show?: boolean; actionType?: "link" \| "button"; entityField: YextEntityField<EnhancedTranslatableCTA>; buttonText?: TranslatableString; customId?: string; customClass?: string; dataAttributes?: Array<{ key: string; value: string; }>; ariaLabel?: TranslatableString; }` |                                             |         |
+| `styles`    | `{ variant: CTAVariant; presetImage?: PresetImageType; color?: BackgroundStyle; }`                                                                                                                                                                                               |                                             |         |
 
 ---
 
@@ -363,10 +363,10 @@ The background color for the entire footer section.
 
 #### Other Props
 
-| Prop     | Type                                                                                         | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------- | :---------- | :------ |
-| `data`   | `{ image: YextEntityField<AssetImageType \| TranslatableAssetImage>; linkTarget?: string; }` |             |         |
-| `styles` | `{ width?: number; aspectRatio?: number; }`                                                  |             |         |
+| Prop     | Type                                                                                                                          | Description | Default |
+| :------- | :---------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ image: YextEntityField<ImageType \| ComplexImageType \| AssetImageType \| TranslatableAssetImage>; linkTarget?: string; }` |             |         |
+| `styles` | `{ width?: number; aspectRatio?: number; }`                                                                                   |             |         |
 
 ---
 

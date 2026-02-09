@@ -610,6 +610,45 @@ const tests: ComponentTest[] = [
     props: version40Props,
     version: 40,
   },
+  {
+    name: "version 58 - Slotified Address with showGetDirectionsLink",
+    document: cityDocument,
+    props: {
+      ...version40Props,
+      slots: {
+        ...version40Props.slots,
+        DirectoryGrid: [
+          {
+            type: "DirectoryGrid",
+            props: {
+              slots: {
+                CardSlot: [
+                  {
+                    type: "DirectoryCard",
+                    props: {
+                      slots: {
+                        AddressSlot: [
+                          {
+                            type: "AddressSlot",
+                            props: {
+                              styles: {
+                                showGetDirectionsLink: true,
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 58,
+  },
 ];
 
 describe("Directory", async () => {

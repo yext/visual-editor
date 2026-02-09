@@ -479,6 +479,8 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {
@@ -508,6 +510,8 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {
