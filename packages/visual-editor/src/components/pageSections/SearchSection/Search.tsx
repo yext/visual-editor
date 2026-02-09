@@ -19,18 +19,7 @@ import { msg } from "../../../utils/index.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 
-type VerticalLayout = "Grid" | "Flex" | "Map";
-
-interface VerticalConfig {
-  label: string;
-  verticalKey: string;
-  layout: VerticalLayout;
-  universalLimit: number;
-  verticalLimit: number;
-}
-
 export interface SearchComponentProps {
-  verticals: VerticalConfig[];
   /** @internal */
   slots: {
     SearchBarSlot: Slot;
