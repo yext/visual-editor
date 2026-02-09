@@ -8,10 +8,7 @@ import {
 } from "../../../types/types.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
-import {
-  resolveComponentData,
-  resolveComponentTextData,
-} from "../../../utils/resolveComponentData.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { useBackground } from "../../../hooks/useBackground.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
@@ -208,7 +205,9 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
 
   const sourceQuestion = parentData ? parentData?.faq.question : data.question;
   const resolvedQuestion = sourceQuestion
-    ? resolveComponentTextData(sourceQuestion, i18n.language, streamDocument)
+    ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
+        output: "plainText",
+      })
     : "";
 
   const sourceAnswer = parentData ? parentData?.faq.answer : data.answer;

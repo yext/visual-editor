@@ -21,7 +21,7 @@ export const PromoMedia = ({
 }) => {
   const { t } = useTranslation();
 
-  return (
+  return styles.showMedia ? (
     <div
       className={themeManagerCn("w-full", className)}
       role="region"
@@ -50,5 +50,5 @@ export const PromoMedia = ({
         )}
       </EntityField>
     </div>
-  );
+  ) : null;
 };

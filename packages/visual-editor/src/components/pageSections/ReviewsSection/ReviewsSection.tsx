@@ -59,6 +59,12 @@ export interface ReviewsSectionProps {
      * @defaultValue Background Color 1
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   /** @internal */
@@ -130,6 +136,13 @@ const reviewsFields: Fields<ReviewsSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
     },
   }),
   slots: {
@@ -194,7 +207,9 @@ const ReviewsSectionInternal: PuckComponent<ReviewsSectionProps> = (props) => {
       background={styles?.backgroundColor}
     >
       <div className="flex flex-col gap-3">
-        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+        {styles?.showSectionHeading && (
+          <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+        )}
         <ReviewsHeader
           averageRating={averageRating}
           reviewCount={reviewCount}
@@ -519,6 +534,7 @@ export const ReviewsSection: ComponentConfig<{ props: ReviewsSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background1.value,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [

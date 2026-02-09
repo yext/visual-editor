@@ -2,7 +2,7 @@ import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../atoms/body.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentTextData } from "../../utils/resolveComponentData.tsx";
+import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
@@ -95,7 +95,9 @@ const TextComponent: PuckComponent<TextProps> = (props) => {
 
   const sourceData = parentData ? parentData.text : data.text;
   const resolvedData = sourceData
-    ? resolveComponentTextData(sourceData, i18n.language, streamDocument)
+    ? resolveComponentData(sourceData, i18n.language, streamDocument, {
+        output: "plainText",
+      })
     : "";
 
   const dynamicStyle = styles.color?.bgColor

@@ -1050,6 +1050,43 @@ const tests: ComponentTest[] = [
     },
     version: 53,
   },
+  {
+    name: "version 59 with showSectionHeading false",
+    document: {},
+    props: {
+      styles: {
+        backgroundColor: {
+          bgColor: "bg-white",
+          textColor: "text-black",
+        },
+        variant: "gallery",
+        showSectionHeading: false,
+      },
+      slots: {
+        PhotoGalleryWrapper: [
+          {
+            type: "PhotoGalleryWrapper",
+            props: {
+              data: {
+                images: {
+                  field: "",
+                  constantValue: photoGalleryData,
+                  constantValueEnabled: true,
+                },
+              },
+              styles: {
+                image: {
+                  aspectRatio: 1.78,
+                },
+              },
+            },
+          },
+        ],
+      },
+      liveVisibility: true,
+    },
+    version: 59,
+  },
 ];
 
 describe("PhotoGallerySection", async () => {

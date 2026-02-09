@@ -56,7 +56,9 @@ import { productVariants } from "./0054_product_variants.ts";
 import { headerLinksUpdate } from "./0055_header_link_updates.ts";
 import { emptyTitleFix } from "./0056_empty_title_fix.ts";
 import { ctaActionTypeDefaults } from "./0057_cta_action_type_defaults.ts";
-import { textAtomUpdates } from "./0058_text_atom_updates.ts";
+import { fixDirectoryTitleBindingAndSlotifyAddress } from "./0058_dynamic_directory_title_binding_and_slotify_address.ts";
+import { addShowHideOptions } from "./0059_show_hide_options.ts";
+import { textAtomUpdates } from "./0060_text_atom_updates.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -121,5 +123,7 @@ export const migrationRegistry: MigrationRegistry = [
   headerLinksUpdate,
   emptyTitleFix,
   ctaActionTypeDefaults,
+  fixDirectoryTitleBindingAndSlotifyAddress,
+  addShowHideOptions,
   textAtomUpdates,
 ];
