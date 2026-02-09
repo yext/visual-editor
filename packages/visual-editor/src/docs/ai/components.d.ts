@@ -808,14 +808,17 @@ interface HeroStyles {
    */
   mobileImagePosition: "bottom" | "top";
   /**
+   * Whether to show the business name.
    * @defaultValue true
    */
   showBusinessName: boolean;
   /**
+   * Whether to show the geomodifier.
    * @defaultValue true
    */
   showGeomodifier: boolean;
   /**
+   * Whether to show the hours status.
    * @defaultValue true
    */
   showHoursStatus: boolean;
@@ -825,10 +828,12 @@ interface HeroStyles {
    */
   showAverageReview: boolean;
   /**
+   * Whether to show the primary CTA.
    * @defaultValue true
    */
   showPrimaryCTA: boolean;
   /**
+   * Whether to show the secondary CTA.
    * @defaultValue true
    */
   showSecondaryCTA: boolean;
