@@ -4589,7 +4589,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 55,
+      version: 58,
       title: {
         field: "",
         constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
@@ -4945,11 +4945,11 @@ const directoryDefaultLayout = {
                 data: {
                   text: {
                     constantValue: {
-                      en: "[[name]]",
+                      en: "",
                       hasLocalizedValue: "true",
                     },
-                    constantValueEnabled: true,
-                    field: "",
+                    constantValueEnabled: false,
+                    field: "name",
                   },
                 },
                 styles: { level: 2, align: "center" },
@@ -5430,11 +5430,13 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 55,
-      title: {
-        field: "",
-        constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
+      version: 59,
+      pageHeading: {
+        title: {
+          field: "",
+          constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
+          constantValueEnabled: true,
+        },
       },
       description: {
         field: "",

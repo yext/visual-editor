@@ -601,7 +601,7 @@ const tests: ComponentTest[] = [
     version: 24,
   },
   {
-    name: "version 58 custom heading",
+    name: "version 59 custom heading",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -699,10 +699,10 @@ const tests: ComponentTest[] = [
         },
       },
     },
-    version: 58,
+    version: 59,
   },
   {
-    name: "version 58 custom heading with site color 2",
+    name: "version 59 custom heading with site color 2",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -801,10 +801,10 @@ const tests: ComponentTest[] = [
         },
       },
     },
-    version: 58,
+    version: 59,
   },
   {
-    name: "version 58 custom title and result cards with site color 3",
+    name: "version 59 custom title and result cards with site color 3",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -903,7 +903,7 @@ const tests: ComponentTest[] = [
         },
       },
     },
-    version: 58,
+    version: 59,
   },
 ];
 
