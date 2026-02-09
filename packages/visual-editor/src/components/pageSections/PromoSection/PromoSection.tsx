@@ -382,6 +382,8 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {

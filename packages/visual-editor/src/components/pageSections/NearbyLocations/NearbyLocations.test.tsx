@@ -440,7 +440,7 @@ const tests: ComponentTest[] = [
     version: 36,
   },
   {
-    name: "version 57 with multiple nearby locations with site color 3",
+    name: "version 58 with multiple nearby locations with site color 3",
     document: {
       locale: "en",
       id: "1101-wilson-blvd",
@@ -464,7 +464,7 @@ const tests: ComponentTest[] = [
         },
       }),
       yextDisplayCoordinate: {
-        latitude: 38.895566,
+        latitude: 38.895546,
         longitude: -77.069915,
       },
       _yext: { contentDeliveryAPIDomain: "https://cdn.yextapis.com" },
@@ -529,7 +529,7 @@ const tests: ComponentTest[] = [
       },
       liveVisibility: true,
     },
-    version: 57,
+    version: 58,
   },
 ];
 
@@ -609,7 +609,7 @@ describe("NearbyLocationsSection", async () => {
         `NearbyLocationsSection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
       const results = await axe(container);
-      if (version === 57 && results.violations.length) {
+      if (version === 58 && results.violations.length) {
         console.warn(
           `IGNORING axe violations for brand color test: ${name}`,
           results.violations
@@ -626,7 +626,7 @@ describe("NearbyLocationsSection", async () => {
         ).toMatchScreenshot();
 
         const results2 = await axe(container);
-        if (version === 57 && results2.violations.length) {
+        if (version === 58 && results2.violations.length) {
           console.warn(
             `IGNORING axe violations for brand color test: ${name}`,
             results2.violations
