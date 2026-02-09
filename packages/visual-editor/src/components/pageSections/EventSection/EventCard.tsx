@@ -167,6 +167,8 @@ export const defaultEventCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
+                buttonText: { en: "Button", hasLocalizedValue: "true" },
                 entityField: {
                   field: "",
                   constantValue: defaultEvent.cta,

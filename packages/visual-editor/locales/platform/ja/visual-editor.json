@@ -156,6 +156,7 @@
     "textAndLink": "テキストとリンク"
   },
   "customSearchArea": "カスタム検索領域",
+  "dataAttribute": "属性",
   "date": "日付",
   "dateAndTime": "日時",
   "default": "デフォルト",
@@ -181,6 +182,7 @@
   "faq": "よくある質問",
   "fields": {
     "CTAVariant": "CTA バリアント",
+    "actionType": "アクションの種類",
     "address": "住所",
     "alignContent": "コンテンツの整列",
     "alignItems": "アイテムを調整します",
@@ -197,6 +199,7 @@
     "businessLogo": "ビジネスロゴ",
     "businessName": "ビジネス名",
     "businessNameHeadingLevel": "ビジネス名の見出しレベル",
+    "buttonText": "ボタンのテキスト",
     "buttons": "ボタン",
     "callToAction": "行動を促す",
     "cardVariant": "カードのバリエーション",
@@ -222,7 +225,10 @@
     "ctaField": "CTAフィールド",
     "ctaType": "CTAタイプ",
     "ctaVariant": "CTAバリアント",
+    "customClass": "カスタムクラス",
+    "customId": "カスタムID",
     "data": "データ",
+    "dataAttributes": "データの属性",
     "date": "日付",
     "dayOfWeekFormat": "曜日の形式",
     "description": "説明",
@@ -282,6 +288,7 @@
     "instagramLink": "Instagramリンク",
     "javascript": "JavaScript",
     "justifyContent": "コンテンツを正当化します",
+    "key": "キー",
     "label": "ラベル",
     "latitude": "緯度",
     "level": "レベル",
@@ -324,6 +331,7 @@
       "base_text size": "ベース",
       "bottom": "底",
       "bottom_direction": "下",
+      "button": "ボタン",
       "carousel": "カルーセル",
       "center": "中心",
       "center_direction": "センター",
@@ -394,6 +402,7 @@
       "left": "左",
       "left_direction": "左",
       "light": "ライト",
+      "link": "リンク",
       "long": "長さ",
       "mapStartingLocation": "場所の開始場所",
       "matchOtherSections": "他のセクションを一致させる（{{value}}）",
@@ -522,6 +531,7 @@
     "utilityImages": "ユーティリティ画像",
     "utilityImagesStyles": "ユーティリティイメージのスタイル",
     "utilityImagesWidth": "ユーティリティ画像幅",
+    "value": "値",
     "values": "値",
     "variant": "変異体",
     "verticalPadding": "上/下のパディング",
@@ -757,6 +767,7 @@
       "standard": "標準（1024px）",
       "wide": "ワイド（1280px）"
     },
+    "defaultFont": "デフォルトのフォント",
     "font": "フォント",
     "fontSize": "フォントサイズ",
     "fontWeight": {
@@ -771,6 +782,7 @@
       "semibold": "セミボルド（600）",
       "thin": "薄い（100）"
     },
+    "headers": "ヘッダー",
     "image": "画像",
     "includeCaret": "CARETを含めます",
     "letterSpacing": {

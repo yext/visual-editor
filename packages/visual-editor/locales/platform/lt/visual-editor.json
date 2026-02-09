@@ -156,6 +156,7 @@
     "textAndLink": "Tekstas ir nuoroda"
   },
   "customSearchArea": "Pasirinktinė paieškos sritis",
+  "dataAttribute": "Atributas",
   "date": "Data",
   "dateAndTime": "Data ir laikas",
   "default": "Numatytoji",
@@ -181,6 +182,7 @@
   "faq": "DUK",
   "fields": {
     "CTAVariant": "CTA variantas",
+    "actionType": "Veiksmo tipas",
     "address": "Adresas",
     "alignContent": "Sulygiuoti turinį",
     "alignItems": "Lyginkite daiktus",
@@ -197,6 +199,7 @@
     "businessLogo": "Verslo logotipas",
     "businessName": "Verslo pavadinimas",
     "businessNameHeadingLevel": "Įmonės pavadinimo antraštės lygis",
+    "buttonText": "Mygtuko tekstas",
     "buttons": "Mygtukai",
     "callToAction": "Raginimas veikti",
     "cardVariant": "Kortelės variantas",
@@ -222,7 +225,10 @@
     "ctaField": "CTA laukas",
     "ctaType": "CTA tipas",
     "ctaVariant": "CTA variantas",
+    "customClass": "Individualizuota klasė",
+    "customId": "Pasirinktinis ID",
     "data": "Duomenys",
+    "dataAttributes": "Duomenų atributai",
     "date": "Data",
     "dayOfWeekFormat": "Savaitės dienos formatas",
     "description": "Aprašymas",
@@ -282,6 +288,7 @@
     "instagramLink": "„Instagram“ nuoroda",
     "javascript": "„JavaScript“",
     "justifyContent": "Pateisinkite turinį",
+    "key": "Raktas",
     "label": "Etiketė",
     "latitude": "Platuma",
     "level": "Lygis",
@@ -324,6 +331,7 @@
       "base_text size": "Bazė",
       "bottom": "Apačia",
       "bottom_direction": "Apačia",
+      "button": "Mygtukas",
       "carousel": "Karuselė",
       "center": "Centras",
       "center_direction": "Centras",
@@ -394,6 +402,7 @@
       "left": "Kairėje",
       "left_direction": "Kairė",
       "light": "Lengvas",
+      "link": "Nuoroda",
       "long": "Ilgas",
       "mapStartingLocation": "Žemėlapio pradžios vieta",
       "matchOtherSections": "Suderinti kitus skyrius ({{value}})",
@@ -522,6 +531,7 @@
     "utilityImages": "Naudingumo vaizdai",
     "utilityImagesStyles": "Naudingų vaizdų stiliai",
     "utilityImagesWidth": "Naudingumo vaizdų plotis",
+    "value": "Vertė",
     "values": "Vertės",
     "variant": "Variantas",
     "verticalPadding": "Viršutinė/apatinė paminkštinimas",
@@ -772,6 +782,7 @@
       "standard": "Standartas (1024 pikselių)",
       "wide": "Platus (1280 pikselių)"
     },
+    "defaultFont": "Numatytasis šriftas",
     "font": "Šriftas",
     "fontSize": "Šrifto dydis",
     "fontWeight": {
@@ -786,6 +797,7 @@
       "semibold": "Pusiau (600)",
       "thin": "Plonas (100)"
     },
+    "headers": "Antraštės",
     "image": "Vaizdas",
     "includeCaret": "Įtraukite Caret",
     "letterSpacing": {
