@@ -74,6 +74,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
         href={resolvedUrl}
       >
         <Heading
+          color={styles?.color}
           level={styles.headingLevel ?? 4}
           semanticLevelOverride={
             sectionHeadingLevel
