@@ -28,10 +28,7 @@ import {
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
-import {
-  ProductSectionImageConstrain,
-  ProductSectionVariant,
-} from "./ProductSection.tsx";
+import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultProduct = {
@@ -239,7 +236,6 @@ export type ProductCardProps = {
   /** @internal */
   parentStyles?: {
     variant: ProductSectionVariant;
-    imageConstrain: ProductSectionImageConstrain;
     showImage: boolean;
     showBrow: boolean;
     showTitle: boolean;
