@@ -45,6 +45,202 @@ const testDocument = {
   ],
 };
 
+const version59Props = {
+  data: {
+    backgroundImage: {
+      field: "",
+      constantValue: {
+        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+        width: 640,
+        height: 360,
+      },
+      constantValueEnabled: true,
+    },
+  },
+  styles: {
+    variant: "classic",
+    backgroundColor: {
+      bgColor: "bg-white",
+      textColor: "text-black",
+    },
+    imageHeight: 500,
+    desktopImagePosition: "right",
+    desktopContainerPosition: "left",
+    mobileContentAlignment: "left",
+    mobileImagePosition: "bottom",
+    showBusinessName: true,
+    showGeomodifier: true,
+    showHoursStatus: true,
+    showAverageReview: true,
+    showPrimaryCTA: true,
+    showSecondaryCTA: true,
+    showImage: true,
+  },
+  slots: {
+    BusinessNameSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-0ac5062a-45dd-400a-bceb-90d55b5a099d",
+          data: {
+            text: {
+              constantValue: {
+                en: "Business Name",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "",
+            },
+          },
+          styles: {
+            level: 3,
+            align: "left",
+            semanticLevelOverride: 2,
+          },
+        },
+      },
+    ],
+    GeomodifierSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-5fa045d1-7c00-4ded-869e-b391784bc42a",
+          data: {
+            text: {
+              constantValue: {
+                en: "Geomodifier",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "",
+            },
+          },
+          styles: {
+            level: 1,
+            align: "left",
+          },
+        },
+      },
+    ],
+    HoursStatusSlot: [
+      {
+        type: "HoursStatusSlot",
+        props: {
+          id: "HoursStatusSlot-c4d464de-5e78-45ec-bbd7-056add6a60c1",
+          data: {
+            hours: {
+              field: "hours",
+              constantValue: {},
+            },
+          },
+          styles: {
+            dayOfWeekFormat: "long",
+            showDayNames: true,
+            showCurrentStatus: true,
+          },
+        },
+      },
+    ],
+    ImageSlot: [
+      {
+        type: "HeroImageSlot",
+        props: {
+          id: "HeroImageSlot-8b316172-9c60-4c56-a9c7-a221a38b8ae6",
+          data: {
+            image: {
+              field: "",
+              constantValue: {
+                url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                width: 640,
+                height: 360,
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            aspectRatio: 1.78,
+            width: 490,
+          },
+          variant: "classic",
+          className:
+            "mx-auto max-w-full md:max-w-[350px] lg:max-w-[calc(min(calc(100vw-1.5rem),var(--maxWidth-pageSection-contentWidth))-350px)] rounded-image-borderRadius",
+        },
+      },
+    ],
+    PrimaryCTASlot: [
+      {
+        type: "CTASlot",
+        props: {
+          id: "CTASlot-a685a567-076c-402a-85f2-9ba3bf273ec6",
+          data: {
+            entityField: {
+              field: "",
+              constantValue: {
+                label: {
+                  en: "Call To Action",
+                  hasLocalizedValue: "true",
+                },
+                link: {
+                  en: "#",
+                  hasLocalizedValue: "true",
+                },
+                linkType: "URL",
+                ctaType: "textAndLink",
+              },
+            },
+          },
+          eventName: "primaryCta",
+          styles: {
+            variant: "primary",
+            presetImage: "app-store",
+          },
+          parentStyles: {},
+        },
+      },
+    ],
+    SecondaryCTASlot: [
+      {
+        type: "CTASlot",
+        props: {
+          id: "CTASlot-ccb202b8-3639-4428-b8fb-6aca2fddd7d4",
+          data: {
+            entityField: {
+              field: "",
+              constantValue: {
+                label: {
+                  en: "Learn More",
+                  hasLocalizedValue: "true",
+                },
+                link: {
+                  en: "#",
+                  hasLocalizedValue: "true",
+                },
+                linkType: "URL",
+                ctaType: "textAndLink",
+              },
+              selectedType: "textAndLink",
+            },
+          },
+          styles: {
+            variant: "secondary",
+            presetImage: "app-store",
+          },
+          eventName: "secondaryCta",
+          parentStyles: {},
+        },
+      },
+    ],
+  },
+  analytics: {
+    scope: "heroSection",
+  },
+  liveVisibility: true,
+  id: "HeroSection-07863700-e8b5-4326-8a5e-edf7795f0cf9",
+  conditionalRender: {
+    hours: true,
+  },
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with no data",
@@ -2275,6 +2471,65 @@ const tests: ComponentTest[] = [
       },
     },
     version: 48,
+  },
+  {
+    name: "[classic] version 59 with showBusinessName, showGeomodifier, showHoursStatus false",
+    document: testDocument,
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        showBusinessName: false,
+        showGeomodifier: false,
+        showHoursStatus: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[immersive] version 59 with showBusinessName, showGeomodifier, showHoursStatus false",
+    document: testDocument,
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "immersive",
+        showBusinessName: false,
+        showGeomodifier: false,
+        showHoursStatus: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[compact] version 59 with showImage, showPrimaryCTA, showSecondaryCTA false",
+    document: testDocument,
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "compact",
+        showImage: false,
+        showPrimaryCTA: false,
+        showSecondaryCTA: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[spotlight] version 59 with showGeomodifier, showHoursStatus, showSecondaryCTA false",
+    document: testDocument,
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "spotlight",
+        showGeomodifier: false,
+        showHoursStatus: false,
+        showSecondaryCTA: false,
+      },
+    },
+    version: 59,
   },
 ];
 

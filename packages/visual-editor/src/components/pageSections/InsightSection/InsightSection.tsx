@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   BackgroundStyle,
   backgroundColors,
@@ -27,6 +26,12 @@ export interface InsightSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   slots: {
@@ -55,6 +60,13 @@ const insightSectionFields: Fields<InsightSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -96,7 +108,9 @@ const InsightSectionComponent: PuckComponent<InsightSectionProps> = (props) => {
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -112,6 +126,7 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background2.value,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -143,6 +158,13 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
               field: "",
               constantValueEnabled: true,
               constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+            },
+            styles: {
+              showImage: true,
+              showCategory: true,
+              showPublishTime: true,
+              showDescription: true,
+              showCTA: true,
             },
             slots: {
               CardSlot: [
