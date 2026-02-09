@@ -199,6 +199,7 @@
     "businessNameHeadingLevel": "Yrityksen nimi otsikkotaso",
     "buttons": "Painikkeet",
     "callToAction": "Toimintakehotus",
+    "cardTitleColor": "Kortin otsikon väri",
     "cardVariant": "Kortin variantti",
     "cards": "Kortit",
     "carouselImageCount": "Karuselli kuvien määrä",

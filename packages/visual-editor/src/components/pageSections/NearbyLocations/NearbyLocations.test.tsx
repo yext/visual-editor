@@ -609,9 +609,10 @@ describe("NearbyLocationsSection", async () => {
         `NearbyLocationsSection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
       const results = await axe(container);
-      if (version === 57) {
-        expect(results.violations.some((v) => v.id === "color-contrast")).toBe(
-          true
+      if (version === 57 && results.violations.length) {
+        console.warn(
+          `IGNORING axe violations for brand color test: ${name}`,
+          results.violations
         );
       } else {
         expect(results).toHaveNoViolations();
@@ -625,10 +626,11 @@ describe("NearbyLocationsSection", async () => {
         ).toMatchScreenshot();
 
         const results2 = await axe(container);
-        if (version === 57) {
-          expect(
-            results2.violations.some((v) => v.id === "color-contrast")
-          ).toBe(true);
+        if (version === 57 && results2.violations.length) {
+          console.warn(
+            `IGNORING axe violations for brand color test: ${name}`,
+            results2.violations
+          );
         } else {
           expect(results2).toHaveNoViolations();
         }

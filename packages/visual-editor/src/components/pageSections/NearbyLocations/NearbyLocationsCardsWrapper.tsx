@@ -115,7 +115,7 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
           hasSearch: true,
           options: "HEADING_LEVEL",
         }),
-        color: YextField(msg("fields.color", "Color"), {
+        color: YextField(msg("fields.cardTitleColor", "Card Title Color"), {
           type: "select",
           options: "SITE_COLOR",
         }),
