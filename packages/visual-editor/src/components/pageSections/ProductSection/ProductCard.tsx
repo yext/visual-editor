@@ -180,6 +180,8 @@ export const defaultProductCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
+                buttonText: { en: "Button", hasLocalizedValue: "true" },
                 entityField: {
                   field: "",
                   constantValue: defaultProduct.cta,
@@ -380,10 +382,12 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
-  const hasPrice = conditionalRender?.price && showPrice;
-  const hasDescription = conditionalRender?.description && showDescription;
-  const hasCTA = conditionalRender?.cta && showCTA;
-  const hasBrow = conditionalRender?.brow && showBrow;
+  const isEditing = puck.isEditing;
+  const hasPrice = showPrice && (conditionalRender?.price || isEditing);
+  const hasDescription =
+    showDescription && (conditionalRender?.description || isEditing);
+  const hasCTA = showCTA && (conditionalRender?.cta || isEditing);
+  const hasBrow = showBrow && (conditionalRender?.brow || isEditing);
   const bottomPadding = hasCTA ? "pb-8" : "pb-4";
 
   return (

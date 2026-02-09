@@ -15,10 +15,13 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
     const { t: pt } = usePlatformTranslation();
 
     const updateItem = (index: number, value: string) => {
-      const updatedItems = [...localItems];
-      updatedItems[index] = value;
-      setLocalItems(updatedItems);
-      onChange(updatedItems);
+      setLocalItems((currentItems) => {
+        const updatedItems = [...currentItems];
+        updatedItems[index] = value;
+        onChange(updatedItems);
+
+        return updatedItems;
+      });
     };
 
     const removeItem = (index: number) => {
@@ -113,14 +116,21 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
       locale: string,
       localeValue: string | RichText
     ) => {
-      const newItems = [...localItems];
-      const currentItem = newItems[index];
-      newItems[index] =
-        typeof currentItem === "object" && !Array.isArray(currentItem)
-          ? { ...currentItem, [locale]: localeValue, hasLocalizedValue: "true" }
-          : { [locale]: localeValue, hasLocalizedValue: "true" };
-      setLocalItems(newItems);
-      onChange(newItems);
+      setLocalItems((currentItems) => {
+        const newItems = [...currentItems];
+        const currentItem = newItems[index];
+        newItems[index] =
+          typeof currentItem === "object" && !Array.isArray(currentItem)
+            ? {
+                ...currentItem,
+                [locale]: localeValue,
+                hasLocalizedValue: "true",
+              }
+            : { [locale]: localeValue, hasLocalizedValue: "true" };
+
+        onChange(newItems);
+        return newItems;
+      });
     };
 
     const addItem = (e?: MouseEvent) => {
@@ -170,13 +180,15 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
             key={index}
             className="ve-border ve-rounded ve-p-3 ve-mb-3 ve-flex ve-gap-2"
           >
-            <AutoField
-              key={locale}
-              field={{ type: "text" }}
-              id={`${id}-value-${index}`}
-              value={getDisplayValue(item, locale)}
-              onChange={(val) => updateItem(index, locale, val)}
-            />
+            <div className="ve-grow">
+              <AutoField
+                key={locale}
+                field={{ type: "text" }}
+                id={`${id}-value-${index}`}
+                value={getDisplayValue(item, locale)}
+                onChange={(val) => updateItem(index, locale, val)}
+              />
+            </div>
             <div className="ve-flex ve-justify-end">
               <IconButton
                 onClick={() => removeItem(index)}

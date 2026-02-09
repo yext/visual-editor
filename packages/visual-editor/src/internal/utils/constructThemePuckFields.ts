@@ -8,7 +8,7 @@ import { CoreStyle, ThemeConfigSection } from "../../utils/themeResolver.ts";
 import { ColorSelector } from "../puck/components/ColorSelector.tsx";
 import { ThemeData } from "../types/themeData.ts";
 import { FontSelector } from "../puck/components/FontSelector.tsx";
-import { useCallback } from "react";
+import { FontWeightSelector } from "../puck/components/FontWeightSelector.tsx";
 
 type RenderProps = Parameters<CustomField<any>["render"]>[0];
 
@@ -60,36 +60,47 @@ export const convertStyleToPuckField = (
         label: t(style.label),
         type: "number",
       } as NumberField;
-    case "select":
+    case "select": {
+      const optionsFactory = () =>
+        (typeof style.options === "function"
+          ? style.options()
+          : style.options
+        ).map((o) => ({ ...o, label: t(o.label) }));
+
       if (plugin === "fontFamily") {
         return {
           label: t(style.label),
           type: "custom",
           options: style.options,
-          render: useCallback(
-            ({ onChange, value }: RenderProps) =>
-              FontSelector({
-                label: t(style.label),
-                options: (typeof style.options === "function"
-                  ? style.options()
-                  : style.options
-                ).map((o) => ({ ...o, label: t(o.label) })),
-                value,
-                onChange,
-              }),
-            []
-          ),
+          render: ({ onChange, value }: RenderProps) =>
+            FontSelector({
+              label: t(style.label),
+              options: optionsFactory(),
+              value,
+              onChange,
+            }),
+        } as CustomField<string>;
+      } else if (plugin === "fontWeight") {
+        return {
+          label: t(style.label),
+          type: "custom",
+          options: optionsFactory,
+          render: ({ onChange, value }: RenderProps) =>
+            FontWeightSelector({
+              label: t(style.label),
+              options: optionsFactory,
+              value,
+              onChange,
+            }),
         } as CustomField<string>;
       } else {
         return {
           label: t(style.label),
           type: "select",
-          options: (typeof style.options === "function"
-            ? style.options()
-            : style.options
-          ).map((o) => ({ ...o, label: t(o.label) })),
+          options: optionsFactory(),
         } as SelectField;
       }
+    }
     case "color":
       return {
         label: t(style.label),

@@ -91,6 +91,7 @@ describe("buildCssOverridesStyle", () => {
             "'Adamina', 'Adamina Fallback', serif",
           "--fontFamily-h2-fontFamily":
             "'Yext Custom', 'Yext Custom Fallback', serif",
+          __customFontPreloads: ["/y-fonts/yextcustom-bold.woff2"],
         }),
       },
     };
@@ -98,7 +99,8 @@ describe("buildCssOverridesStyle", () => {
     const result = applyTheme(streamDocument, "./", themeConfig);
 
     expect(result).toBe(
-      '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
+      '<link rel="preload" href="/y-fonts/yextcustom-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">\n' +
+        '<link href="./y-fonts/yextcustom.css" rel="stylesheet">\n' +
         '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">\n' +
         '<link href="https://fonts.googleapis.com/css2?family=Adamina:wght@400&display=swap" rel="stylesheet">' +
@@ -114,6 +116,25 @@ describe("buildCssOverridesStyle", () => {
         "--fontFamily-h2-fontFamily:'Yext Custom', 'Yext Custom Fallback', serif !important" +
         "}</style>"
     );
+  });
+
+  it("should not include non-css keys in the theme style tag", () => {
+    const streamDocument: StreamDocument = {
+      siteId: 123,
+      __: {
+        theme: JSON.stringify({
+          "--fontFamily-h1-fontFamily": "'Roboto', sans-serif",
+          __customFontPreloads: ["./y-fonts/roboto-regular.woff2"],
+        }),
+      },
+    };
+
+    const result = applyTheme(streamDocument, "./", themeConfig);
+
+    expect(result).toContain(
+      '<link rel="preload" href="./y-fonts/roboto-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">'
+    );
+    expect(result).not.toContain("__customFontPreloads");
   });
 
   it("should return the base string unmodified when themeConfig is empty", () => {

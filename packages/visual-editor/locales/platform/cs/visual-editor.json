@@ -161,6 +161,7 @@
     "textAndLink": "Text a odkaz"
   },
   "customSearchArea": "Vlastní vyhledávací oblast",
+  "dataAttribute": "Atribut",
   "date": "Datum",
   "dateAndTime": "Datum a čas",
   "default": "Výchozí",
@@ -186,6 +187,7 @@
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Varianta CTA",
+    "actionType": "Typ akce",
     "address": "Adresa",
     "alignContent": "Zarovnat obsah",
     "alignItems": "Zarovnat položky",
@@ -202,6 +204,7 @@
     "businessLogo": "Obchodní logo",
     "businessName": "Obchodní jméno",
     "businessNameHeadingLevel": "Úroveň nadpisu obchodního názvu",
+    "buttonText": "Text tlačítka",
     "buttons": "Tlačítka",
     "callToAction": "Volání k akci",
     "cardVariant": "Varianta karty",
@@ -227,7 +230,10 @@
     "ctaField": "Pole CTA",
     "ctaType": "Typ CTA",
     "ctaVariant": "Varianta CTA",
+    "customClass": "Vlastní třída",
+    "customId": "Vlastní ID",
     "data": "Data",
+    "dataAttributes": "Atributy dat",
     "date": "Datum",
     "dayOfWeekFormat": "Formát dne týdne",
     "description": "Popis",
@@ -288,6 +294,7 @@
     "instagramLink": "Instagram odkaz",
     "javascript": "JavaScript",
     "justifyContent": "Ospravedlnit obsah",
+    "key": "Klíč",
     "label": "Označení",
     "latitude": "Zeměpisná šířka",
     "level": "Úroveň",
@@ -330,6 +337,7 @@
       "base_text size": "Báze",
       "bottom": "Dno",
       "bottom_direction": "Dole",
+      "button": "Tlačítko",
       "carousel": "Kolotoč",
       "center": "Centrum",
       "center_direction": "Centrum",
@@ -400,6 +408,7 @@
       "left": "Vlevo",
       "left_direction": "Vlevo",
       "light": "Světlo",
+      "link": "Odkaz",
       "long": "Dlouho",
       "mapStartingLocation": "Počáteční umístění mapy",
       "matchOtherSections": "Porovnejte jiné sekce ({{value}})",
@@ -528,6 +537,7 @@
     "utilityImages": "Obrazy",
     "utilityImagesStyles": "Styly obslužných obrázků",
     "utilityImagesWidth": "Šířka obslužných obrázků",
+    "value": "Hodnota",
     "values": "Hodnoty",
     "variant": "Varianta",
     "verticalPadding": "Vycpávání horní/dolní",
@@ -769,6 +779,7 @@
       "standard": "Standard (1024px)",
       "wide": "Široký (1280px)"
     },
+    "defaultFont": "Výchozí písmo",
     "font": "Písmo",
     "fontSize": "Velikost písma",
     "fontWeight": {
@@ -783,6 +794,7 @@
       "semibold": "Semibold (600)",
       "thin": "Tenký (100)"
     },
+    "headers": "Záhlaví",
     "image": "Obraz",
     "includeCaret": "Zahrnout Caret",
     "letterSpacing": {

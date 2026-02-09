@@ -160,6 +160,7 @@
     "textAndLink": "Text & Link"
   },
   "customSearchArea": "Benutzerdefinierte Suchbereich",
+  "dataAttribute": "Attribut",
   "date": "Datum",
   "dateAndTime": "Datum und Uhrzeit",
   "default": "Standard",
@@ -185,6 +186,7 @@
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA-Variante",
+    "actionType": "Aktionstyp",
     "address": "Adresse",
     "alignContent": "Inhalte ausrichten",
     "alignItems": "Elemente ausrichten",
@@ -201,6 +203,7 @@
     "businessLogo": "Geschäftslogo",
     "businessName": "Firmenname",
     "businessNameHeadingLevel": "Firmenname Überschrift Level",
+    "buttonText": "Schaltflächentext",
     "buttons": "Knöpfe",
     "callToAction": "Aufruf zum Handeln",
     "cardVariant": "Kartenvariante",
@@ -226,7 +229,10 @@
     "ctaField": "CTA -Feld",
     "ctaType": "CTA -Typ",
     "ctaVariant": "CTA -Variante",
+    "customClass": "Benutzerdefinierte Klasse",
+    "customId": "Benutzerdefinierte ID",
     "data": "Daten",
+    "dataAttributes": "Datenattribute",
     "date": "Datum",
     "dayOfWeekFormat": "Wochentagsformat",
     "description": "Beschreibung",
@@ -287,6 +293,7 @@
     "instagramLink": "Instagram -Link",
     "javascript": "JavaScript",
     "justifyContent": "Inhalt rechtfertigen",
+    "key": "Schlüssel",
     "label": "Etikett",
     "latitude": "Breite",
     "level": "Ebene",
@@ -329,6 +336,7 @@
       "base_text size": "Basis",
       "bottom": "Unten",
       "bottom_direction": "Unten",
+      "button": "Taste",
       "carousel": "Karussell",
       "center": "Center",
       "center_direction": "Zentrum",
@@ -399,6 +407,7 @@
       "left": "Links",
       "left_direction": "Links",
       "light": "Licht",
+      "link": "Link",
       "long": "Lang",
       "mapStartingLocation": "Karte Startort",
       "matchOtherSections": "Übereinstimmen andere Abschnitte ({{value}})",
@@ -527,6 +536,7 @@
     "utilityImages": "Dienstprogrammbilder",
     "utilityImagesStyles": "Dienstprogrammbilder Stile",
     "utilityImagesWidth": "Dienstprogrammbilder Breite",
+    "value": "Wert",
     "values": "Werte",
     "variant": "Variante",
     "verticalPadding": "Ober-/Bodenpolsterung",
@@ -758,6 +768,7 @@
       "standard": "Standard (1024px)",
       "wide": "Breit (1280px)"
     },
+    "defaultFont": "Standardschriftart",
     "font": "Schriftart",
     "fontSize": "Schriftgröße",
     "fontWeight": {
@@ -772,6 +783,7 @@
       "semibold": "Halbfett (600)",
       "thin": "Dünn (100)"
     },
+    "headers": "Überschriften",
     "image": "Bild",
     "includeCaret": "Pflege einbeziehen",
     "letterSpacing": {
