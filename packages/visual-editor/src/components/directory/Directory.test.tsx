@@ -611,7 +611,7 @@ const tests: ComponentTest[] = [
     version: 40,
   },
   {
-    name: "version 57 - Slotified Address with showGetDirectionsLink",
+    name: "version 58 - Slotified Address with showGetDirectionsLink",
     document: cityDocument,
     props: {
       ...version40Props,
@@ -647,7 +647,7 @@ const tests: ComponentTest[] = [
         ],
       },
     },
-    version: 57,
+    version: 58,
   },
 ];
 
