@@ -156,6 +156,7 @@
     "textAndLink": "Testo e collegamento"
   },
   "customSearchArea": "Area di ricerca personalizzata",
+  "dataAttribute": "Attributo",
   "date": "Data",
   "dateAndTime": "Data e ora",
   "default": "Predefinito",
@@ -181,6 +182,7 @@
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "Variante CTA",
+    "actionType": "Tipo di azione",
     "address": "Indirizzo",
     "alignContent": "Allinea contenuto",
     "alignItems": "Allinea gli articoli",
@@ -197,6 +199,7 @@
     "businessLogo": "Logo aziendale",
     "businessName": "Nome aziendale",
     "businessNameHeadingLevel": "Livello di intestazione del nome commerciale",
+    "buttonText": "Testo del pulsante",
     "buttons": "Pulsanti",
     "callToAction": "Invito all'azione",
     "cardVariant": "Variante della carta",
@@ -222,7 +225,10 @@
     "ctaField": "Campo CTA",
     "ctaType": "Tipo CTA",
     "ctaVariant": "Variante CTA",
+    "customClass": "Classe personalizzata",
+    "customId": "ID personalizzato",
     "data": "Dati",
+    "dataAttributes": "Attributi dei dati",
     "date": "Data",
     "dayOfWeekFormat": "Formato giorno della settimana",
     "description": "Descrizione",
@@ -282,6 +288,7 @@
     "instagramLink": "Link Instagram",
     "javascript": "JavaScript",
     "justifyContent": "Giustifica il contenuto",
+    "key": "Chiave",
     "label": "Etichetta",
     "latitude": "Latitudine",
     "level": "Livello",
@@ -324,6 +331,7 @@
       "base_text size": "Base",
       "bottom": "Metter il fondo a",
       "bottom_direction": "In basso",
+      "button": "Pulsante",
       "carousel": "Giostra",
       "center": "Centro",
       "center_direction": "Center",
@@ -394,6 +402,7 @@
       "left": "Sinistra",
       "left_direction": "Left",
       "light": "Leggero",
+      "link": "Collegamento",
       "long": "Lungo",
       "mapStartingLocation": "Posizione di avvio della mappa",
       "matchOtherSections": "Abbina altre sezioni ({{value}})",
@@ -522,6 +531,7 @@
     "utilityImages": "Immagini di utilità",
     "utilityImagesStyles": "Stili di immagini di utilità",
     "utilityImagesWidth": "Larghezza delle immagini dell'utilità",
+    "value": "Valore",
     "values": "Valori",
     "variant": "Variante",
     "verticalPadding": "Imbottitura superiore/inferiore",
@@ -762,6 +772,7 @@
       "standard": "Standard (1024px)",
       "wide": "Largo (1280px)"
     },
+    "defaultFont": "Carattere predefinito",
     "font": "Font",
     "fontSize": "Dimensione del carattere",
     "fontWeight": {
@@ -776,6 +787,7 @@
       "semibold": "Semibold (600)",
       "thin": "Sottile (100)"
     },
+    "headers": "Intestazioni",
     "image": "Immagine",
     "includeCaret": "Includi il CULET",
     "letterSpacing": {

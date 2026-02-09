@@ -431,7 +431,7 @@ export const InternalLayoutEditor = ({
             text: TranslatePuckFieldLabels,
             textarea: TranslatePuckFieldLabels,
           },
-          actionBar: ({ children, label }) => {
+          actionBar: ({ children, label, parentAction }) => {
             const getPuck = useGetPuck();
             const { appState } = getPuck();
             const itemSelectorState = usePuck(
@@ -577,7 +577,11 @@ export const InternalLayoutEditor = ({
             );
 
             return (
-              <ActionBar label={label}>
+              <ActionBar>
+                <ActionBar.Group>
+                  {parentAction}
+                  {label && <ActionBar.Label label={label} />}
+                </ActionBar.Group>
                 <ActionBar.Group>
                   {additionalActions}
                   {children}

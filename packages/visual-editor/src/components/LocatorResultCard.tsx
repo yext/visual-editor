@@ -51,6 +51,11 @@ import {
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { FieldTypeData } from "../internal/types/templateMetadata.ts";
+import {
+  formatDistance,
+  fromMeters,
+  getPreferredDistanceUnit,
+} from "../utils/i18n/distance.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -598,12 +603,12 @@ export const LocatorResultCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const distanceInMiles =
+    const unit = getPreferredDistanceUnit(i18n.language);
+    const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
+    const displayDistance =
       typeof distance === "number"
-        ? (distance / 1609.344).toFixed(1)
+        ? `${formatDistance(fromMeters(distance, unit), i18n.language)} ${unitLabel}`
         : undefined;
-    const distanceInKilometers =
-      typeof distance === "number" ? (distance / 1000).toFixed(1) : undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -672,19 +677,17 @@ export const LocatorResultCard = React.memo(
                   location={location}
                 />
               </div>
-              {typeof distance === "number" && (
+              {displayDistance && (
                 <div
                   className={
                     "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex"
                   }
                 >
-                  {t("distanceInUnit", `${distanceInMiles} mi`, {
-                    distanceInMiles,
-                    distanceInKilometers,
-                  })}
+                  {displayDistance}
                 </div>
               )}
             </div>
+
             <HoursSection
               location={location}
               result={result}
@@ -750,17 +753,14 @@ export const LocatorResultCard = React.memo(
               </div>
             </div>
           </div>
-          {typeof distance === "number" && (
+          {displayDistance && (
             <div
               className={`
               font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
               ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}
               `}
             >
-              {t("distanceInUnit", `${distanceInMiles} mi`, {
-                distanceInMiles,
-                distanceInKilometers,
-              })}
+              {displayDistance}
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">

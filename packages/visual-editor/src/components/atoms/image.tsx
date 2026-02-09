@@ -10,6 +10,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { AssetImageType, TranslatableAssetImage } from "../../types/images.ts";
 import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 export interface ImageProps {
   image: ImageType | ComplexImageType | TranslatableAssetImage;
@@ -20,6 +21,27 @@ export interface ImageProps {
   sizes?: string;
   loading?: "lazy" | "eager";
 }
+
+export const getImageAltText = (
+  image: ImageType | ComplexImageType | AssetImageType | undefined,
+  locale: string,
+  streamDocument: StreamDocument
+): string | undefined => {
+  if (!image) {
+    return undefined;
+  }
+
+  let altTextField: string | TranslatableString | undefined = undefined;
+  if (isComplexImageType(image)) {
+    altTextField = image.image.alternateText;
+  } else if (image?.alternateText) {
+    altTextField = image.alternateText;
+  }
+
+  return typeof altTextField === "object"
+    ? resolveComponentData(altTextField, locale, streamDocument)
+    : altTextField;
+};
 
 export const Image: React.FC<ImageProps> = ({
   image: rawImage,
@@ -60,17 +82,7 @@ export const Image: React.FC<ImageProps> = ({
     ? `overflow-hidden` // No w-full when width is specified
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
-  let altTextField: string | TranslatableString | undefined = undefined;
-  if (isComplexImageType(image)) {
-    altTextField = image.image.alternateText;
-  } else if (image?.alternateText) {
-    altTextField = image.alternateText;
-  }
-
-  const altText =
-    typeof altTextField === "object"
-      ? resolveComponentData(altTextField, i18n.language, streamDocument)
-      : altTextField;
+  const altText = getImageAltText(image, i18n.language, streamDocument);
 
   return (
     <div

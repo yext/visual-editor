@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 55,
+      version: 57,
       title: {
         field: "name",
         constantValue: "",
@@ -110,6 +110,18 @@ const mainDefaultLayout = {
                       props: {
                         id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",
@@ -142,6 +154,18 @@ const mainDefaultLayout = {
                       props: {
                         id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",
@@ -501,6 +525,18 @@ const mainDefaultLayout = {
               props: {
                 id: "CTASlot-46811f58-2779-4c49-a871-26cf27454544",
                 data: {
+                  actionType: "link",
+                  buttonText: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
+                  customId: "",
+                  customClass: "",
+                  dataAttributes: [],
+                  ariaLabel: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
                   entityField: {
                     field: "",
                     constantValue: {
@@ -532,6 +568,18 @@ const mainDefaultLayout = {
               props: {
                 id: "CTASlot-633345f6-c438-400b-bdf7-92dce47746bc",
                 data: {
+                  actionType: "link",
+                  buttonText: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
+                  customId: "",
+                  customClass: "",
+                  dataAttributes: [],
+                  ariaLabel: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
                   entityField: {
                     field: "",
                     constantValue: {
@@ -882,6 +930,18 @@ const mainDefaultLayout = {
               props: {
                 id: "CTASlot-e8531a98-b8ff-4ce1-a299-11fc085eb6c3",
                 data: {
+                  actionType: "link",
+                  buttonText: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
+                  customId: "",
+                  customClass: "",
+                  dataAttributes: [],
+                  ariaLabel: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
                   entityField: {
                     field: "",
                     constantValue: {
@@ -930,7 +990,7 @@ const mainDefaultLayout = {
           showImage: true,
           showBrow: true,
           showTitle: true,
-          showPrice: false,
+          showPrice: true,
           showDescription: true,
           showCTA: true,
         },
@@ -964,7 +1024,7 @@ const mainDefaultLayout = {
                 id: "ProductCardsWrapper-31103b0f-5bfb-4dfe-a4e5-9f18cfd7cfcf",
                 data: {
                   field: "",
-                  constantValueEnabled: false,
+                  constantValueEnabled: true,
                   constantValue: [
                     {
                       id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447",
@@ -1013,6 +1073,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   aspectRatio: 1.78,
                                   width: 640,
+                                  imageConstrain: "fill",
                                 },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
@@ -1074,6 +1135,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -1191,6 +1264,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   aspectRatio: 1.78,
                                   width: 640,
+                                  imageConstrain: "fill",
                                 },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
@@ -1252,6 +1326,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -1369,6 +1455,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   aspectRatio: 1.78,
                                   width: 640,
+                                  imageConstrain: "fill",
                                 },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
@@ -1430,6 +1517,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2214,6 +2313,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "CTASlot-84f00400-c27d-4cd7-aa28-a1632694b359",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2391,6 +2502,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "CTASlot-2f5fcbf5-5f6f-4f18-814d-30b6de491d0a",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2568,6 +2691,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "CTASlot-569564d0-a69a-44f6-b528-d0aacdc875e5",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2817,6 +2952,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "InsightCard-1-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2991,6 +3138,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "InsightCard-2-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3165,6 +3324,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "InsightCard-3-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3478,6 +3649,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "EventCard-92abd8ca-550c-4aee-92d9-4140b4ef53ad-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3638,6 +3821,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "EventCard-b1fd4377-76db-433e-9803-ea5ae0d9f996-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3798,6 +3993,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -4489,6 +4696,18 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",
@@ -4521,6 +4740,18 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",

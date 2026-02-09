@@ -6,7 +6,11 @@ import {
 } from "@puckeditor/core";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant } from "../atoms/cta.tsx";
-import { EnhancedTranslatableCTA, PresetImageType } from "../../types/types.ts";
+import {
+  EnhancedTranslatableCTA,
+  PresetImageType,
+  TranslatableString,
+} from "../../types/types.ts";
 import { EntityField } from "../../editor/EntityField.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
@@ -27,8 +31,20 @@ export interface CTAWrapperProps {
   data: {
     /** Whether to show the CTA */
     show?: boolean;
+    /** Whether CTA renders as a link or a button */
+    actionType?: "link" | "button";
     /** The call to action to display */
     entityField: YextEntityField<EnhancedTranslatableCTA>;
+    /** Static text for the button label */
+    buttonText?: TranslatableString;
+    /** Sets id attribute on the button */
+    customId?: string;
+    /** Sets className attribute on the button */
+    customClass?: string;
+    /** Renders as data-* attributes */
+    dataAttributes?: Array<{ key: string; value: string }>;
+    /** Override for screen reader label */
+    ariaLabel?: TranslatableString;
   };
 
   styles: {
@@ -70,6 +86,13 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
         ],
         visible: false,
       }),
+      actionType: YextField(msg("fields.actionType", "Action Type"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.link", "Link"), value: "link" },
+          { label: msg("fields.options.button", "Button"), value: "button" },
+        ],
+      }),
       entityField: YextField(msg("fields.cta", "CTA"), {
         type: "entityField",
         filter: {
@@ -84,6 +107,38 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
             textAndLink: "type.cta",
           },
         },
+      }),
+      buttonText: YextField(msg("fields.buttonText", "Button Text"), {
+        type: "translatableString",
+        filter: { types: ["type.string"] },
+      }),
+      customId: YextField(msg("fields.customId", "Custom ID"), {
+        type: "text",
+      }),
+      customClass: YextField(msg("fields.customClass", "Custom Class"), {
+        type: "text",
+      }),
+      dataAttributes: YextField(
+        msg("fields.dataAttributes", "Data Attributes"),
+        {
+          type: "array",
+          defaultItemProps: {
+            key: "",
+            value: "",
+          },
+          arrayFields: {
+            key: YextField(msg("fields.key", "Key"), { type: "text" }),
+            value: YextField(msg("fields.value", "Value"), { type: "text" }),
+          },
+          getItemSummary: (item, index) =>
+            item?.key?.trim()
+              ? item.key
+              : `${pt("dataAttribute", "Attribute")} ${(index ?? 0) + 1}`,
+        }
+      ),
+      ariaLabel: YextField(msg("fields.ariaLabel", "Aria Label"), {
+        type: "translatableString",
+        filter: { types: ["type.string"] },
       }),
     },
   },
@@ -113,10 +168,17 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     props;
   const streamDocument = useDocument();
 
-  const cta = parentData
-    ? parentData.cta
-    : resolveComponentData(data.entityField, i18n.language, streamDocument);
-  const { ctaType } = getCTAType(data.entityField);
+  const actionType = data.actionType ?? "link";
+  const cta =
+    actionType === "link"
+      ? parentData
+        ? parentData.cta
+        : resolveComponentData(data.entityField, i18n.language, streamDocument)
+      : undefined;
+  const { ctaType } =
+    actionType === "link"
+      ? getCTAType(data.entityField)
+      : { ctaType: undefined };
 
   let combinedClassName = className;
   if (parentStyles?.classNameFn) {
@@ -126,45 +188,95 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
     );
   }
 
-  let resolvedLabel =
+  let resolvedLinkLabel =
     cta && resolveComponentData(cta.label, i18n.language, streamDocument);
+  const resolvedButtonLabel = data.buttonText
+    ? resolveComponentData(data.buttonText, i18n.language, streamDocument)
+    : "";
+  const resolvedAriaLabel = data.ariaLabel
+    ? resolveComponentData(data.ariaLabel, i18n.language, streamDocument)
+    : "";
   if (
+    actionType === "link" &&
     (parentData || !data.entityField.constantValueEnabled) &&
     ctaType === "getDirections"
   ) {
-    resolvedLabel = t("getDirections", "Get Directions");
+    resolvedLinkLabel = t("getDirections", "Get Directions");
   }
 
   const showCTA =
-    cta && (ctaType === "presetImage" || resolvedLabel) && (data.show ?? true);
+    actionType === "button"
+      ? Boolean(resolvedButtonLabel?.trim()) && (data.show ?? true)
+      : Boolean(
+          cta &&
+            (ctaType === "presetImage" || resolvedLinkLabel) &&
+            (data.show ?? true)
+        );
+
+  const resolvedButtonClassName = themeManagerCn(
+    combinedClassName,
+    actionType === "button" ? data.customClass : undefined
+  );
+
+  const dataAttributeProps =
+    actionType === "button" && data.dataAttributes?.length
+      ? data.dataAttributes.reduce(
+          (acc, { key, value }) => {
+            const trimmedKey = key?.trim();
+            if (!trimmedKey) {
+              return acc;
+            }
+            const normalizedKey = trimmedKey.startsWith("data-")
+              ? trimmedKey
+              : `data-${trimmedKey}`;
+            acc[normalizedKey as `data-${string}`] = value ?? "";
+            return acc;
+          },
+          {} as Record<`data-${string}`, string>
+        )
+      : undefined;
+
+  const ctaElement = (
+    <CTA
+      actionType={actionType}
+      setPadding={true}
+      label={actionType === "button" ? resolvedButtonLabel : resolvedLinkLabel}
+      link={
+        actionType === "link" && cta
+          ? ctaType === "getDirections"
+            ? undefined
+            : resolveComponentData(cta.link, i18n.language, streamDocument)
+          : undefined
+      }
+      linkType={actionType === "link" && cta ? cta.linkType : undefined}
+      ctaType={actionType === "button" ? "textAndLink" : ctaType}
+      presetImageType={actionType === "link" ? styles.presetImage : undefined}
+      variant={styles.variant}
+      className={
+        actionType === "button" ? resolvedButtonClassName : combinedClassName
+      }
+      eventName={eventName}
+      color={styles.color}
+      id={data.customId}
+      ariaLabel={actionType === "button" ? resolvedAriaLabel : undefined}
+      dataAttributes={dataAttributeProps}
+    />
+  );
 
   return showCTA ? (
-    <EntityField
-      displayName={pt("cta", "CTA")}
-      fieldId={parentData ? parentData.field : data.entityField.field}
-      constantValueEnabled={
-        !parentData && data.entityField.constantValueEnabled
-      }
-    >
-      {cta && (
-        <CTA
-          setPadding={true}
-          label={resolvedLabel}
-          link={
-            ctaType === "getDirections"
-              ? undefined
-              : resolveComponentData(cta.link, i18n.language, streamDocument)
-          }
-          linkType={cta.linkType}
-          ctaType={ctaType}
-          presetImageType={styles.presetImage}
-          variant={styles.variant}
-          className={combinedClassName}
-          eventName={eventName}
-          color={styles.color}
-        />
-      )}
-    </EntityField>
+    actionType === "link" ? (
+      <EntityField
+        displayName={pt("cta", "CTA")}
+        fieldId={parentData ? parentData.field : data.entityField.field}
+        constantValueEnabled={
+          !parentData && data.entityField.constantValueEnabled
+        }
+      >
+        {ctaElement}
+      </EntityField>
+    ) : (
+      ctaElement
+    )
   ) : puck.isEditing ? (
     <div className="h-[50px] min-w-[130px]" />
   ) : (
@@ -177,6 +289,7 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   fields: ctaWrapperFields,
   defaultProps: {
     data: {
+      actionType: "link",
       entityField: {
         field: "",
         constantValue: {
@@ -185,6 +298,17 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
           linkType: "URL",
         },
         selectedType: "textAndLink",
+      },
+      buttonText: {
+        en: "Button",
+        hasLocalizedValue: "true",
+      },
+      customId: "",
+      customClass: "",
+      dataAttributes: [],
+      ariaLabel: {
+        en: "Button",
+        hasLocalizedValue: "true",
       },
     },
     styles: {
@@ -195,9 +319,12 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
     const ctaVariant = data.props.styles.variant;
+    const actionType = data.props.data.actionType ?? "link";
     const ctaType = getCTAType(data.props.data.entityField).ctaType;
+    const effectiveCtaType = actionType === "button" ? "textAndLink" : ctaType;
+    const showButtonFields = actionType === "button";
 
-    if (ctaType === "presetImage") {
+    if (effectiveCtaType === "presetImage") {
       setDeep(updatedFields, "styles.objectFields.variant.visible", false);
       setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);
     } else {
@@ -214,8 +341,39 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
 
     const showColor =
       (ctaVariant === "primary" || ctaVariant === "secondary") &&
-      ctaType !== "presetImage";
+      effectiveCtaType !== "presetImage";
     setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
+
+    setDeep(
+      updatedFields,
+      "data.objectFields.entityField.visible",
+      !showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.buttonText.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.customId.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.customClass.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.dataAttributes.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.ariaLabel.visible",
+      showButtonFields
+    );
 
     return updatedFields;
   },

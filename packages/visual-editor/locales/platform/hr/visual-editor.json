@@ -156,6 +156,7 @@
     "textAndLink": "Tekst i veza"
   },
   "customSearchArea": "Područje prilagođenog pretraživanja",
+  "dataAttribute": "Atribut",
   "date": "Datum",
   "dateAndTime": "Datum i vrijeme",
   "default": "Zadano",
@@ -181,6 +182,7 @@
   "faq": "FAQ",
   "fields": {
     "CTAVariant": "CTA varijanta",
+    "actionType": "Vrsta akcije",
     "address": "Adresa",
     "alignContent": "Uskladite sadržaj",
     "alignItems": "Poravnaj predmete",
@@ -197,6 +199,7 @@
     "businessLogo": "Poslovni logotip",
     "businessName": "Naziv tvrtke",
     "businessNameHeadingLevel": "Naziv tvrtke Naziv",
+    "buttonText": "Tekst gumba",
     "buttons": "Gumbi",
     "callToAction": "Poziv na akciju",
     "cardVariant": "Varijanta kartice",
@@ -222,7 +225,10 @@
     "ctaField": "CTA polje",
     "ctaType": "CTA tip",
     "ctaVariant": "CTA varijanta",
+    "customClass": "Prilagođena klasa",
+    "customId": "Prilagođeni ID",
     "data": "Podaci",
+    "dataAttributes": "Atributi podataka",
     "date": "Datum",
     "dayOfWeekFormat": "Format Dana tjedna",
     "description": "Opis",
@@ -282,6 +288,7 @@
     "instagramLink": "Instagram veza",
     "javascript": "JavaScript",
     "justifyContent": "Opravdati sadržaj",
+    "key": "Ključ",
     "label": "Označiti",
     "latitude": "Širina",
     "level": "Nivo",
@@ -324,6 +331,7 @@
       "base_text size": "Baza",
       "bottom": "Dno",
       "bottom_direction": "Dno",
+      "button": "Gumb",
       "carousel": "Karusel",
       "center": "Centar",
       "center_direction": "Centar",
@@ -394,6 +402,7 @@
       "left": "Lijevo",
       "left_direction": "Lijevo",
       "light": "Svjetlo",
+      "link": "Link",
       "long": "Dugačak",
       "mapStartingLocation": "Početna lokacija karte",
       "matchOtherSections": "Uskladite ostale odjeljke ({{value}})",
@@ -522,6 +531,7 @@
     "utilityImages": "Uslužne slike",
     "utilityImagesStyles": "Stilovi uslužnih slika",
     "utilityImagesWidth": "Korisničke slike širina",
+    "value": "Vrijednost",
     "values": "Vrijednosti",
     "variant": "Varijanta",
     "verticalPadding": "Gornji/donji oblog",
@@ -767,6 +777,7 @@
       "standard": "Standard (1024px)",
       "wide": "Široko (1280px)"
     },
+    "defaultFont": "Zadani font",
     "font": "Font",
     "fontSize": "Veličina fonta",
     "fontWeight": {
@@ -781,6 +792,7 @@
       "semibold": "Polubold (600)",
       "thin": "Tanko (100)"
     },
+    "headers": "Zaglavlja",
     "image": "Slika",
     "includeCaret": "Uključite Caret",
     "letterSpacing": {
