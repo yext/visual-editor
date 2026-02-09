@@ -536,6 +536,8 @@
   "filters": "Suodattimet",
   "findALocation": "Etsi sijainti",
   "fixErrorsToPublish": "Virheitä sisältävien osien julkaiseminen, poistaminen tai korjaaminen",
+  "fixErrorsToPublishMultiple": "Julkaise {{toiminnot}}",
+  "fixErrorsToPublishSingle": "Julkaise {{toiminta}}",
   "fontSize": "Fontin koko",
   "fontSizeDefaultLabel": "Laiminlyönti",
   "fonts": {
@@ -585,6 +587,8 @@
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "mediaType": "Mediatyyppi",
+  "metaTitleMissingLocale": "Metaotsikko puuttuu maa-asennosta: {{locale}}",
+  "metaTitleMissingLocales": "Metaotsikko puuttuu kielistä: {{locales}}",
   "mile_one": "maili",
   "mile_other": "mailia",
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
@@ -659,6 +663,11 @@
   "professionalHero": "Ammattimainen sankari",
   "promoBanner": "Promo-banneri",
   "promoMedia": "Promootio",
+  "publishError": {
+    "components": "poistaa tai korjata virheellisiä osia",
+    "metaTitle": "täytä Meta Title kaikille alueille siirtymällä sivukomponentin ylätason asetuksiin",
+    "metaTitleWithLocales": "täytä Meta Title seuraaville alueille siirtymällä sivukomponentin ylätason asetuksiin: {{locales}}"
+  },
   "readLess": "Lue vähemmän",
   "readMore": "Lue lisää",
   "recentReviews": "Viimeaikaiset arvostelut",

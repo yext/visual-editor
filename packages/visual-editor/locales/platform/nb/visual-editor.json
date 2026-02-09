@@ -536,6 +536,8 @@
   "filters": "Filtre",
   "findALocation": "Finn et sted",
   "fixErrorsToPublish": "For å publisere, slette eller fikse deler med feil",
+  "fixErrorsToPublishMultiple": "For å publisere, {{actions}}",
+  "fixErrorsToPublishSingle": "For å publisere, {{action}}",
   "fontSize": "Fontstørrelse",
   "fontSizeDefaultLabel": "Misligholde",
   "fonts": {
@@ -585,6 +587,8 @@
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "mediaType": "Medietype",
+  "metaTitleMissingLocale": "Metatittel mangler for lokalitet: {{locale}}",
+  "metaTitleMissingLocales": "Metatittel mangler for lokaliteter: {{locales}}",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Legg til HTML for å se komponent",
@@ -659,6 +663,11 @@
   "professionalHero": "Profesjonell helt",
   "promoBanner": "Kampanjebanner",
   "promoMedia": "Promo Media",
+  "publishError": {
+    "components": "slette eller fikse deler med feil",
+    "metaTitle": "fyll inn Meta Tittel for alle lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå",
+    "metaTitleWithLocales": "fyll inn Meta Tittel for følgende lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå: {{locales}}"
+  },
   "readLess": "Les mindre",
   "readMore": "Les mer",
   "recentReviews": "Nyere anmeldelser",

@@ -536,6 +536,8 @@
   "filters": "Filtros",
   "findALocation": "Encontre um local",
   "fixErrorsToPublish": "Para publicar, excluir ou corrigir seções com erros",
+  "fixErrorsToPublishMultiple": "Para publicar, {{actions}}",
+  "fixErrorsToPublishSingle": "Para publicar, {{action}}",
   "fontSize": "Tamanho da fonte",
   "fontSizeDefaultLabel": "Padrão",
   "fonts": {
@@ -585,6 +587,8 @@
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "mediaType": "Tipo de mídia",
+  "metaTitleMissingLocale": "O meta título está faltando para a localidade: {{locale}}",
+  "metaTitleMissingLocales": "O meta título está faltando para localidades: {{locales}}",
   "mile_one": "milha",
   "mile_other": "milhas",
   "missingHtmlWidget": "Adicione HTML para visualizar o componente",
@@ -659,6 +663,11 @@
   "professionalHero": "Herói Profissional",
   "promoBanner": "Banner promocional",
   "promoMedia": "Mídia promocional",
+  "publishError": {
+    "components": "exclua ou corrija seções com erros",
+    "metaTitle": "preencha o Meta Title para todas as localidades navegando até as configurações do componente de página de nível superior",
+    "metaTitleWithLocales": "preencha o Meta Title para os seguintes locais navegando até as configurações do componente de página de nível superior: {{locales}}"
+  },
   "readLess": "Leia menos",
   "readMore": "Leia mais",
   "recentReviews": "Revisões recentes",

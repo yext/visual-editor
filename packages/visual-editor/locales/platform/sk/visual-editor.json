@@ -537,6 +537,8 @@
   "filters": "Filtre",
   "findALocation": "Nájdite miesto",
   "fixErrorsToPublish": "Ak chcete zverejniť, odstrániť alebo opraviť sekcie s chybami",
+  "fixErrorsToPublishMultiple": "Ak chcete zverejniť, {{actions}}",
+  "fixErrorsToPublishSingle": "Ak chcete zverejniť, {{action}}",
   "fontSize": "Veľkosť písma",
   "fontSizeDefaultLabel": "Predvolený",
   "fonts": {
@@ -594,6 +596,8 @@
   "map": "Mapa",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "mediaType": "Typ médií",
+  "metaTitleMissingLocale": "Chýba meta názov pre miestne nastavenie: {{locale}}",
+  "metaTitleMissingLocales": "Chýba meta názov pre miestne nastavenia: {{locales}}",
   "mile_few": "míle",
   "mile_many": "míľ",
   "mile_one": "míľa",
@@ -670,6 +674,11 @@
   "professionalHero": "Profesionálny hrdina",
   "promoBanner": "Propagačný banner",
   "promoMedia": "Propagačné médiá",
+  "publishError": {
+    "components": "odstrániť alebo opraviť časti s chybami",
+    "metaTitle": "vyplňte Meta Title pre všetky miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne",
+    "metaTitleWithLocales": "vyplňte Meta Title pre nasledujúce miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne: {{locales}}"
+  },
   "readLess": "Čítajte menej",
   "readMore": "Čítajte viac",
   "recentReviews": "Posledné recenzie",

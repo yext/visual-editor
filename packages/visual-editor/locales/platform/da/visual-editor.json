@@ -543,6 +543,8 @@
   "filters": "Filtre",
   "findALocation": "Find en placering",
   "fixErrorsToPublish": "For at udgive, slette eller rette sektioner med fejl",
+  "fixErrorsToPublishMultiple": "For at udgive, {{actions}}",
+  "fixErrorsToPublishSingle": "For at udgive, {{action}}",
   "fontSize": "Skrifttypestørrelse",
   "fontSizeDefaultLabel": "Misligholdelse",
   "fonts": {
@@ -592,6 +594,8 @@
   "map": "Kort",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "mediaType": "Medietype",
+  "metaTitleMissingLocale": "Metatitel mangler for lokalitet: {{locale}}",
+  "metaTitleMissingLocales": "Metatitel mangler for lokaliteter: {{locales}}",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Tilføj HTML for at se komponent",
@@ -666,6 +670,11 @@
   "professionalHero": "Professionel helt",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo Media",
+  "publishError": {
+    "components": "slet eller ret sektioner med fejl",
+    "metaTitle": "udfyld Meta Title for alle lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau",
+    "metaTitleWithLocales": "udfyld Meta Title for følgende lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau: {{locales}}"
+  },
   "readLess": "Læs mindre",
   "readMore": "Læs mere",
   "recentReviews": "Nylige anmeldelser",

@@ -535,6 +535,8 @@
   "filters": "Filtres",
   "findALocation": "Trouver un emplacement",
   "fixErrorsToPublish": "Pour publier, supprimer ou corriger des sections contenant des erreurs",
+  "fixErrorsToPublishMultiple": "Pour publier, {{actions}}",
+  "fixErrorsToPublishSingle": "Pour publier, {{action}}",
   "fontSize": "Taille de la police",
   "fontSizeDefaultLabel": "Défaut",
   "fonts": {
@@ -585,6 +587,8 @@
   "map": "Carte",
   "maxWidthTip": "Pour l'alignement optimal du contenu, nous vous recommandons de définir la largeur de l'en-tête et du pied de page pour correspondre ou dépasser la grille de contenu de la page.",
   "mediaType": "Type de support",
+  "metaTitleMissingLocale": "Le méta-titre est manquant pour les paramètres régionaux : {{locale}}",
+  "metaTitleMissingLocales": "Le méta-titre est manquant pour les paramètres régionaux : {{locales}}",
   "mile_one": "mile",
   "mile_other": "miles",
   "missingHtmlWidget": "Ajouter HTML pour afficher le composant",
@@ -659,6 +663,11 @@
   "professionalHero": "Héros professionnel",
   "promoBanner": "Bannière promotionnelle",
   "promoMedia": "Médias promotionnels",
+  "publishError": {
+    "components": "supprimer ou corriger les sections contenant des erreurs",
+    "metaTitle": "remplissez le méta-titre pour tous les paramètres régionaux en accédant aux paramètres du composant Page de niveau supérieur",
+    "metaTitleWithLocales": "remplissez le méta-titre pour les paramètres régionaux suivants en accédant aux paramètres du composant Page de niveau supérieur : {{locales}}"
+  },
   "readLess": "Lire moins",
   "readMore": "En savoir plus",
   "recentReviews": "Revues récentes",

@@ -537,6 +537,8 @@
   "filters": "過濾器",
   "findALocation": "找到一個位置",
   "fixErrorsToPublish": "發布、刪除或修復有錯誤的部分",
+  "fixErrorsToPublishMultiple": "要發布，{{actions}}",
+  "fixErrorsToPublishSingle": "要發布，{{action}}",
   "fontSize": "字體大小",
   "fontSizeDefaultLabel": "預設",
   "fonts": {
@@ -582,6 +584,8 @@
   "map": "地圖",
   "maxWidthTip": "對於最佳內容對齊，我們建議將標題和頁腳寬度設置為匹配或超過頁面內容網格。",
   "mediaType": "媒體類型",
+  "metaTitleMissingLocale": "區域設置缺少元標題：{{locale}}",
+  "metaTitleMissingLocales": "語言環境缺少元標題：{{locales}}",
   "mile_other": "英里",
   "missingHtmlWidget": "添加HTML以查看組件",
   "monday": "週一",
@@ -655,6 +659,11 @@
   "professionalHero": "職業英雄",
   "promoBanner": "促銷橫幅",
   "promoMedia": "促銷媒體",
+  "publishError": {
+    "components": "刪除或修復有錯誤的部分",
+    "metaTitle": "通過導航到頂級頁面組件的設置來填寫所有區域設置的元標題",
+    "metaTitleWithLocales": "通過導航到頂級頁面組件的設置來填寫以下區域設置的元標題：{{locales}}"
+  },
   "readLess": "閱讀較少",
   "readMore": "閱讀更多",
   "recentReviews": "最近的評論",

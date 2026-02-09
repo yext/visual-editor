@@ -536,6 +536,8 @@
   "filters": "Filtri",
   "findALocation": "Atrodiet atrašanās vietu",
   "fixErrorsToPublish": "Lai publicētu, dzēstu vai labotu sadaļas ar kļūdām",
+  "fixErrorsToPublishMultiple": "Lai publicētu, {{actions}}",
+  "fixErrorsToPublishSingle": "Lai publicētu, {{action}}",
   "fontSize": "Fonta lielums",
   "fontSizeDefaultLabel": "Nepildīt",
   "fonts": {
@@ -589,6 +591,8 @@
   "map": "Karte",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
   "mediaType": "Multivides tips",
+  "metaTitleMissingLocale": "Trūkst meta virsraksta lokalizācijai: {{locale}}",
+  "metaTitleMissingLocales": "Trūkst meta virsraksta lokalizācijām: {{locales}}",
   "mile_one": "jūdze",
   "mile_other": "jūdzes",
   "mile_zero": "jūdzes",
@@ -664,6 +668,11 @@
   "professionalHero": "Profesionāls varonis",
   "promoBanner": "Reklāmas reklāmkarogs",
   "promoMedia": "Promo Media",
+  "publishError": {
+    "components": "dzēst vai labot sadaļas ar kļūdām",
+    "metaTitle": "aizpildiet Meta Title visām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem",
+    "metaTitleWithLocales": "aizpildiet meta virsrakstu šādām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem: {{locales}}"
+  },
   "readLess": "Lasīt mazāk",
   "readMore": "Lasīt vairāk",
   "recentReviews": "Nesenie pārskati",

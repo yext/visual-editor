@@ -536,6 +536,8 @@
   "filters": "フィルター",
   "findALocation": "場所を見つけます",
   "fixErrorsToPublish": "エラーのあるセクションを公開、削除、または修正するには",
+  "fixErrorsToPublishMultiple": "公開するには、{{アクション}}",
+  "fixErrorsToPublishSingle": "公開するには、{{アクション}}",
   "fontSize": "フォントサイズ",
   "fontSizeDefaultLabel": "デフォルト",
   "fonts": {
@@ -581,6 +583,8 @@
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "mediaType": "メディアタイプ",
+  "metaTitleMissingLocale": "ロケールのメタ タイトルがありません: {{locale}}",
+  "metaTitleMissingLocales": "ロケールのメタ タイトルがありません: {{locales}}",
   "mile_other": "マイル",
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
   "monday": "月曜日",
@@ -654,6 +658,11 @@
   "professionalHero": "プロのヒーロー",
   "promoBanner": "プロモーションバナー",
   "promoMedia": "プロモーションメディア",
+  "publishError": {
+    "components": "エラーのあるセクションを削除または修正する",
+    "metaTitle": "最上位のページコンポーネントの設定に移動して、すべてのロケールのメタタイトルを入力します。",
+    "metaTitleWithLocales": "最上位のページ コンポーネントの設定に移動して、次のロケールのメタ タイトルを入力します: {{locales}}"
+  },
   "readLess": "閉じる",
   "readMore": "続きを読む",
   "recentReviews": "最近のレビュー",

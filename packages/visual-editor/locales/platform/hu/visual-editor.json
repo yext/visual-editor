@@ -536,6 +536,8 @@
   "filters": "Szűrők",
   "findALocation": "Keressen egy helyet",
   "fixErrorsToPublish": "Hibás szakaszok közzététele, törlése vagy javítása",
+  "fixErrorsToPublishMultiple": "A közzétételhez {{actions}}",
+  "fixErrorsToPublishSingle": "A közzétételhez {{action}}",
   "fontSize": "Betűkészlet",
   "fontSizeDefaultLabel": "Mulasztás",
   "fonts": {
@@ -585,6 +587,8 @@
   "map": "Térkép",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
   "mediaType": "Média típus",
+  "metaTitleMissingLocale": "A nyelvi beállításhoz hiányzik a metacím: {{locale}}",
+  "metaTitleMissingLocales": "Hiányzik a metacím a nyelvi beállításokhoz: {{locales}}",
   "mile_one": "mérföld",
   "mile_other": "mérföld",
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
@@ -659,6 +663,11 @@
   "professionalHero": "Profi hős",
   "promoBanner": "Promó banner",
   "promoMedia": "Promóciós média",
+  "publishError": {
+    "components": "törölje vagy javítsa ki a hibás részeket",
+    "metaTitle": "töltse ki a metacímet az összes területhez a legfelső szintű oldal összetevő beállításaihoz navigálva",
+    "metaTitleWithLocales": "töltse ki a metacímet a következő nyelvekhez a legfelső szintű oldal összetevő beállításaihoz navigálva: {{locales}}"
+  },
   "readLess": "Olvasson kevesebbet",
   "readMore": "Olvasson tovább",
   "recentReviews": "Legutóbbi vélemények",

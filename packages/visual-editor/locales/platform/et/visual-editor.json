@@ -536,6 +536,8 @@
   "filters": "Filtrid",
   "findALocation": "Leidke asukoht",
   "fixErrorsToPublish": "Vigadega jaotiste avaldamiseks, kustutamiseks või parandamiseks",
+  "fixErrorsToPublishMultiple": "Avaldamiseks {{actions}}",
+  "fixErrorsToPublishSingle": "Avaldamiseks {{action}}",
   "fontSize": "Fondi suurus",
   "fontSizeDefaultLabel": "Täitmata jätmine",
   "fonts": {
@@ -585,6 +587,8 @@
   "map": "Kaart",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "mediaType": "Meediumitüüp",
+  "metaTitleMissingLocale": "Lokaadi metapealkiri puudub: {{locale}}",
+  "metaTitleMissingLocales": "Lokaatide metapealkiri puudub: {{locales}}",
   "mile_one": "miil",
   "mile_other": "miili",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
@@ -659,6 +663,11 @@
   "professionalHero": "Professionaalne kangelane",
   "promoBanner": "Reklaamibänner",
   "promoMedia": "Promo meedia",
+  "publishError": {
+    "components": "kustutada või parandada vigadega jaotisi",
+    "metaTitle": "täitke metapealkiri kõigi lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse",
+    "metaTitleWithLocales": "täitke metapealkiri järgmiste lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse: {{locales}}"
+  },
   "readLess": "Lugege vähem",
   "readMore": "Lugege rohkem",
   "recentReviews": "Viimased ülevaated",

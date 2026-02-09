@@ -536,6 +536,8 @@
   "filters": "Filtre",
   "findALocation": "Găsiți o locație",
   "fixErrorsToPublish": "Pentru a publica, șterge sau remedia secțiuni cu erori",
+  "fixErrorsToPublishMultiple": "Pentru a publica, {{acțiuni}}",
+  "fixErrorsToPublishSingle": "Pentru a publica, {{acțiune}}",
   "fontSize": "Dimensiunea fontului",
   "fontSizeDefaultLabel": "Implicit",
   "fonts": {
@@ -589,6 +591,8 @@
   "map": "Hartă",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
   "mediaType": "Tip media",
+  "metaTitleMissingLocale": "Meta titlul lipsește pentru local: {{locale}}",
+  "metaTitleMissingLocales": "Meta titlul lipsește pentru localități: {{locales}}",
   "mile_few": "mile",
   "mile_one": "milă",
   "mile_other": "mile",
@@ -664,6 +668,11 @@
   "professionalHero": "Erou profesionist",
   "promoBanner": "Banner promoțional",
   "promoMedia": "Media promo",
+  "publishError": {
+    "components": "ștergeți sau remediați secțiunile cu erori",
+    "metaTitle": "completați Meta Title pentru toate localitățile navigând la setările componentei Pagina de nivel superior",
+    "metaTitleWithLocales": "completați Meta Title pentru următoarele localități navigând la setările componentei de nivel superior de pagină: {{locales}}"
+  },
   "readLess": "Citiți mai puțin",
   "readMore": "Citiți mai mult",
   "recentReviews": "Recenzii recente",

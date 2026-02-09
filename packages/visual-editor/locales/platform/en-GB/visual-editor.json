@@ -535,6 +535,8 @@
   "filters": "Filters",
   "findALocation": "Find a Location",
   "fixErrorsToPublish": "To publish, delete or fix sections with errors",
+  "fixErrorsToPublishMultiple": "To publish, {{actions}}",
+  "fixErrorsToPublishSingle": "To publish, {{action}}",
   "fontSize": "Font Size",
   "fontSizeDefaultLabel": "Default",
   "fonts": {
@@ -584,6 +586,8 @@
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "mediaType": "Media Type",
+  "metaTitleMissingLocale": "Meta title is missing for locale: {{locale}}",
+  "metaTitleMissingLocales": "Meta title is missing for locales: {{locales}}",
   "mile_one": "mile",
   "mile_other": "miles",
   "missingHtmlWidget": "Add HTML to view component",
@@ -658,6 +662,11 @@
   "professionalHero": "Professional Hero",
   "promoBanner": "Promo Banner",
   "promoMedia": "Promo Media",
+  "publishError": {
+    "components": "delete or fix sections with errors",
+    "metaTitle": "fill in Meta Title for all locales by navigating to the top-level Page component's settings",
+    "metaTitleWithLocales": "fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}"
+  },
   "readLess": "Read less",
   "readMore": "Read more",
   "recentReviews": "Recent Reviews",

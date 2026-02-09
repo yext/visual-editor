@@ -536,6 +536,8 @@
   "filters": "Filtrai",
   "findALocation": "Raskite vietą",
   "fixErrorsToPublish": "Jei norite skelbti, ištrinti arba taisyti skyrius su klaidomis",
+  "fixErrorsToPublishMultiple": "Norėdami paskelbti, {{veiksmai}}",
+  "fixErrorsToPublishSingle": "Norėdami paskelbti, {{action}}",
   "fontSize": "Šrifto dydis",
   "fontSizeDefaultLabel": "Numatytasis",
   "fonts": {
@@ -593,6 +595,8 @@
   "map": "Žemėlapis",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
   "mediaType": "Žiniasklaidos tipas",
+  "metaTitleMissingLocale": "Trūksta lokalės meta pavadinimo: {{locale}}",
+  "metaTitleMissingLocales": "Trūksta lokalių meta pavadinimo: {{locales}}",
   "mile_few": "mylios",
   "mile_many": "mylios",
   "mile_one": "mylia",
@@ -669,6 +673,11 @@
   "professionalHero": "Profesionalus herojus",
   "promoBanner": "Reklaminė reklamjuostė",
   "promoMedia": "Promo žiniasklaida",
+  "publishError": {
+    "components": "ištrinti arba ištaisyti skyrius su klaidomis",
+    "metaTitle": "užpildykite metapavadinimą visoms vietoms naršydami į aukščiausio lygio puslapio komponento nustatymus",
+    "metaTitleWithLocales": "užpildykite metapavadinimą šioms vietoms, eidami į aukščiausio lygio puslapio komponento nustatymus: {{locales}}"
+  },
   "readLess": "Skaitykite mažiau",
   "readMore": "Skaityti daugiau",
   "recentReviews": "Naujausios apžvalgos",

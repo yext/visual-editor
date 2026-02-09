@@ -542,6 +542,8 @@
   "filters": "Filtry",
   "findALocation": "Najděte polohu",
   "fixErrorsToPublish": "Chcete-li publikovat, odstranit nebo opravit části s chybami",
+  "fixErrorsToPublishMultiple": "Chcete-li publikovat, {{actions}}",
+  "fixErrorsToPublishSingle": "Chcete-li publikovat, {{action}}",
   "fontSize": "Velikost písma",
   "fontSizeDefaultLabel": "Výchozí",
   "fonts": {
@@ -599,6 +601,8 @@
   "map": "Mapa",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
   "mediaType": "Typ médií",
+  "metaTitleMissingLocale": "Pro národní prostředí chybí metanázev: {{locale}}",
+  "metaTitleMissingLocales": "Metanázev chybí pro národní prostředí: {{locales}}",
   "mile_few": "míle",
   "mile_many": "mil",
   "mile_one": "míle",
@@ -675,6 +679,11 @@
   "professionalHero": "Profesionální hrdina",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo média",
+  "publishError": {
+    "components": "odstranit nebo opravit části s chybami",
+    "metaTitle": "vyplňte název metadat pro všechna národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně",
+    "metaTitleWithLocales": "vyplňte metanázev pro následující národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně: {{locales}}"
+  },
   "readLess": "Číst méně",
   "readMore": "Číst více",
   "recentReviews": "Nedávné recenze",

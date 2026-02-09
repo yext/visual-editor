@@ -46,17 +46,17 @@ export const getPublishErrorMessage = (
   if (actions.length === 0) {
     return pt(
       "fixErrorsToPublish",
-      "To publish, resolve the errors highlighted in the editor."
+      "To publish, resolve the errors highlighted in the editor"
     );
   }
 
   if (actions.length === 1) {
-    return pt("fixErrorsToPublishSingle", "To publish, {{action}}.", {
+    return pt("fixErrorsToPublishSingle", "To publish, {{action}}", {
       action: actions[0],
     });
   }
 
-  return pt("fixErrorsToPublishMultiple", "To publish, {{actions}}.", {
+  return pt("fixErrorsToPublishMultiple", "To publish, {{actions}}", {
     actions: actions.join("; "),
   });
 };

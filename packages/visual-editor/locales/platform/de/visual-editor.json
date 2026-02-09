@@ -541,6 +541,8 @@
   "filters": "Filter",
   "findALocation": "Finde einen Standort",
   "fixErrorsToPublish": "Zum Veröffentlichen, Löschen oder Korrigieren fehlerhafter Abschnitte",
+  "fixErrorsToPublishMultiple": "Zum Veröffentlichen: {{actions}}",
+  "fixErrorsToPublishSingle": "Zum Veröffentlichen: {{action}}",
   "fontSize": "Schriftgröße",
   "fontSizeDefaultLabel": "Standard",
   "fonts": {
@@ -590,6 +592,8 @@
   "map": "Karte",
   "maxWidthTip": "Für eine optimale Inhaltsausrichtung empfehlen wir, die Header- und Fußzeile -Breite so festzulegen, dass sie das Seitenzinhaltsnetz überschreiten oder übertreffen.",
   "mediaType": "Medientyp",
+  "metaTitleMissingLocale": "Für das Gebietsschema fehlt der Metatitel: {{locale}}",
+  "metaTitleMissingLocales": "Für die Locales fehlt der Metatitel: {{locales}}",
   "mile_one": "Meile",
   "mile_other": "Meilen",
   "missingHtmlWidget": "Fügen Sie HTML hinzu, um die Komponente anzuzeigen",
@@ -664,6 +668,11 @@
   "professionalHero": "Professioneller Held",
   "promoBanner": "Werbebanner",
   "promoMedia": "Promo -Medien",
+  "publishError": {
+    "components": "Abschnitte mit Fehlern löschen oder korrigieren",
+    "metaTitle": "Geben Sie den Metatitel für alle Gebietsschemas ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren",
+    "metaTitleWithLocales": "Geben Sie den Metatitel für die folgenden Gebietsschemata ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren: {{locales}}"
+  },
   "readLess": "Weniger lesen",
   "readMore": "Mehr lesen",
   "recentReviews": "Neuere Bewertungen",

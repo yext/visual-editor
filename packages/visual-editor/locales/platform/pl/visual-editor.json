@@ -537,6 +537,8 @@
   "filters": "Filtry",
   "findALocation": "Znajdź lokalizację",
   "fixErrorsToPublish": "Aby opublikować, usunąć lub naprawić sekcje z błędami",
+  "fixErrorsToPublishMultiple": "Aby opublikować, {{actions}}",
+  "fixErrorsToPublishSingle": "Aby opublikować, {{akcja}}",
   "fontSize": "Rozmiar czcionki",
   "fontSizeDefaultLabel": "Domyślny",
   "fonts": {
@@ -594,6 +596,8 @@
   "map": "Mapa",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "mediaType": "Typ mediów",
+  "metaTitleMissingLocale": "Brak tytułu meta dla ustawień regionalnych: {{locale}}",
+  "metaTitleMissingLocales": "Brakuje meta tytułu dla ustawień regionalnych: {{locales}}",
   "mile_few": "mile",
   "mile_many": "mil",
   "mile_one": "mila",
@@ -670,6 +674,11 @@
   "professionalHero": "Profesjonalny bohater",
   "promoBanner": "Baner promocyjny",
   "promoMedia": "Media promocyjne",
+  "publishError": {
+    "components": "usuń lub napraw sekcje z błędami",
+    "metaTitle": "wypełnij metatytuł dla wszystkich ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu",
+    "metaTitleWithLocales": "wypełnij metatytuł dla następujących ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu: {{locales}}"
+  },
   "readLess": "Czytaj mniej",
   "readMore": "Czytaj więcej",
   "recentReviews": "Ostatnie recenzje",
