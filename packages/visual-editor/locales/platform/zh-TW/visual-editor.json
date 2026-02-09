@@ -749,6 +749,7 @@
       "standard": "標準（1024px）",
       "wide": "寬（1280px）"
     },
+    "defaultFont": "預設字體",
     "font": "字體",
     "fontSize": "字體大小",
     "fontWeight": {
@@ -763,6 +764,7 @@
       "semibold": "Semibold（600）",
       "thin": "薄（100）"
     },
+    "headers": "標題",
     "image": "圖像",
     "includeCaret": "包括商店",
     "letterSpacing": {

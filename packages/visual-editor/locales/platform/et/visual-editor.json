@@ -753,6 +753,7 @@
       "standard": "Standard (1024px)",
       "wide": "Lai (1280px)"
     },
+    "defaultFont": "Vaikimisi font",
     "font": "Font",
     "fontSize": "Fondi suurus",
     "fontWeight": {
@@ -767,6 +768,7 @@
       "semibold": "Poolbold (600)",
       "thin": "Õhuke (100)"
     },
+    "headers": "Päised",
     "image": "Pilt",
     "includeCaret": "Kaasake Caret",
     "letterSpacing": {

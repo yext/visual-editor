@@ -758,6 +758,7 @@
       "standard": "Standard (1024px)",
       "wide": "Lat (1280px)"
     },
+    "defaultFont": "Font implicit",
     "font": "Font",
     "fontSize": "Dimensiunea fontului",
     "fontWeight": {
@@ -772,6 +773,7 @@
       "semibold": "Semibold (600)",
       "thin": "Subțire (100)"
     },
+    "headers": "Anteturi",
     "image": "Imagine",
     "includeCaret": "Include îngrijire",
     "letterSpacing": {
