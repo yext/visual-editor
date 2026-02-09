@@ -15,8 +15,7 @@ import {
   blocksPlugin,
   outlinePlugin,
 } from "@puckeditor/core";
-import React from "react";
-import { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useMemo } from "react";
 import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
@@ -36,6 +35,8 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { createAiPlugin } from "@puckeditor/plugin-ai";
+import { preparePuckAiRequest } from "../../utils/ai/prepareRequest.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -45,6 +46,9 @@ const outline = outlinePlugin();
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
   type: "custom" as const,
+  ai: {
+    exclude: true,
+  },
   render: () => {
     const getPuck = useGetPuck();
 
@@ -112,6 +116,23 @@ export const InternalLayoutEditor = ({
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
   const { errorCount } = useErrorContext();
+  const aiPlugin = useMemo(
+    () =>
+      templateMetadata.aiPageGeneration
+        ? createAiPlugin(
+            localDev
+              ? {
+                  host: "http://127.0.0.1:8787/api/puck/chat",
+                  prepareRequest: preparePuckAiRequest,
+                }
+              : {
+                  host: "https://puck-ai-backend.sitescdn-cdntest.workers.dev/api/puck/chat",
+                  prepareRequest: preparePuckAiRequest,
+                }
+          )
+        : undefined,
+    [templateMetadata.aiPageGeneration, localDev]
+  );
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -398,7 +419,11 @@ export const InternalLayoutEditor = ({
         data={{}} // we use puckInitialHistory instead
         initialHistory={puckInitialHistory}
         onChange={change}
-        plugins={[{ ...blocks, label: pt("sections", "Sections") }, outline]}
+        plugins={[
+          { ...blocks, label: pt("sections", "Sections") },
+          outline,
+          ...(aiPlugin ? [aiPlugin] : []),
+        ]}
         overrides={{
           fields: fieldsOverride,
           header: () => (

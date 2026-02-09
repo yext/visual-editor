@@ -21,6 +21,11 @@
       "import": "./dist/visual-editor.js",
       "default": "./dist/visual-editor.js"
     },
+    "./tailwind": {
+      "types": "./dist/tailwind.d.ts",
+      "import": "./dist/tailwind.js",
+      "default": "./dist/tailwind.js"
+    },
     "./plugin": {
       "import": "./dist/plugin/plugin.js",
       "default": "./dist/plugin/plugin.js"
@@ -42,7 +47,7 @@
     "autofix": "pnpm run lint && pnpm run prettier",
     "prepare": "pnpm build",
     "generate-notices": "generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES --overwrite",
-    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs ; tsx scripts/generateComponentTypeDefinitions.ts",
+    "generate-component-docs": "api-extractor run --local ; node generate-docs.mjs",
     "docs:dev": "vitepress dev .",
     "docs:build": "vitepress build .",
     "docs:preview": "vitepress preview .",
@@ -62,7 +67,6 @@
     "@microsoft/api-documenter": "^7.26.29",
     "@microsoft/api-extractor": "^7.52.8",
     "@microsoft/api-extractor-model": "^7.30.6",
-    "@puckeditor/core": "0.21.1",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.13",
@@ -163,6 +167,8 @@
     "@yext/search-ui-react": "^2.0.2",
     "mapbox-gl": "^2.9.2",
     "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+    "react-dom": "^17.0.2 || ^18.2.0",
+    "@puckeditor/core": "0.21.1",
+    "@puckeditor/plugin-ai": "0.6.0"
   }
 }

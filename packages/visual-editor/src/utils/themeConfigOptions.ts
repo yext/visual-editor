@@ -69,14 +69,6 @@ const getSpacingOptions = () => {
 
 /**
  * Applies a theme color as the background of a page section
- * @ai This value MUST be one of the following
- * { bgColor: "bg-white", textColor: "text-black" }
- * { bgColor: "bg-palette-primary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-secondary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-tertiary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-quaternary-light", textColor: "text-black", isDarkBackground: false }
- * { bgColor: "bg-palette-primary-dark", textColor: "text-white", isDarkBackground: true }
- * { bgColor: "bg-palette-secondary-dark", textColor: "text-white", isDarkBackground: true }
  */
 export type BackgroundStyle = {
   /** The tailwind background color class */

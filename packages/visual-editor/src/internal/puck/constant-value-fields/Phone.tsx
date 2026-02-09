@@ -1,6 +1,5 @@
 import { CustomField, FieldLabel } from "@puckeditor/core";
 import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
 import "../ui/puck.css";
 import { pt } from "../../../utils/i18n/platform.ts";
 import React from "react";

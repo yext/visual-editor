@@ -20,6 +20,7 @@ export type TemplateMetadata = {
   layoutTaskApprovals: boolean;
   locatorDisplayFields?: Record<string, FieldTypeData>;
   customFonts?: FontRegistry;
+  aiPageGeneration?: boolean;
 };
 
 export type FieldTypeData = {
@@ -63,6 +64,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
         field_type_id: "type.phone",
       },
     },
+    aiPageGeneration: !!import.meta.env.VITE_ENABLE_AI_PAGE_GENERATION,
   };
 }
 

@@ -1,3 +1,4 @@
 packages:
   - "packages/visual-editor"
+  - "packages/puck-ai-backend"
   - "starter"

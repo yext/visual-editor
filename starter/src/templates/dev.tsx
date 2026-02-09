@@ -1,4 +1,5 @@
 import "@yext/visual-editor/editor.css";
+import "@yext/visual-editor/style.css";
 import {
   GetHeadConfig,
   GetPath,
@@ -23,7 +24,7 @@ import {
 } from "@yext/visual-editor";
 import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
-import React from "react";
+import * as React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
 
 export const config = {

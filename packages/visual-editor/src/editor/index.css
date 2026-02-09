@@ -1,4 +1,7 @@
 @import "@puckeditor/core/no-external.css";
+@import "@puckeditor/plugin-ai/styles.css";
+@import "react-international-phone/style.css";
+@import "../internal/puck/ui/puck.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -189,6 +189,36 @@ export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
 ): Field<YextEntityField<U>> => {
   return {
     type: "custom",
+    // TEMP: basic setup for string fields so that the Puck API doesn't return an error
+    ai:
+      props.filter.types?.[0] === "type.string" &&
+      !props.filter.includeListsOnly
+        ? {
+            schema: {
+              type: "object",
+              properties: {
+                constantValueEnabled: {
+                  type: "boolean",
+                },
+                field: {
+                  type: "string",
+                },
+                constantValue: {
+                  type: "object",
+                  properties: {
+                    hasLocalizedValue: {
+                      type: "string",
+                      enum: ["true"],
+                    },
+                    en: {
+                      type: "string",
+                    },
+                  },
+                },
+              },
+            },
+          }
+        : undefined,
     render: ({ value, onChange }: RenderProps) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({
