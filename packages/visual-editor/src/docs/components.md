@@ -11,10 +11,10 @@ Props for the Address component
 
 #### Other Props
 
-| Prop     | Type                                                                                                          | Description | Default |
-| :------- | :------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
-| `data`   | `{ address: YextEntityField<AddressType>; }`                                                                  |             |         |
-| `styles` | `{ showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: BackgroundStyle; hideCountry?: boolean; }` |             |         |
+| Prop     | Type                                                                                   | Description | Default |
+| :------- | :------------------------------------------------------------------------------------- | :---------- | :------ |
+| `data`   | `{ address: YextEntityField<AddressType>; }`                                           |             |         |
+| `styles` | `{ showGetDirectionsLink: boolean; ctaVariant: CTAVariant; color?: BackgroundStyle; }` |             |         |
 
 ---
 
