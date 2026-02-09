@@ -16,7 +16,7 @@
     "wrangler": "^4.63.0"
   },
   "dependencies": {
-    "@puckeditor/cloud-client": "^0.5.0",
+    "@puckeditor/cloud-client": "0.6.0",
     "hono": "^4.6.12"
   }
 }
