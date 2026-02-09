@@ -128,11 +128,11 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
             data: {
               text: {
                 constantValue: {
-                  en: "[[name]]",
+                  en: "",
                   hasLocalizedValue: "true",
                 },
-                constantValueEnabled: true,
-                field: "",
+                constantValueEnabled: false,
+                field: "name",
               },
             },
             styles: { level: 2, align: "center" },
