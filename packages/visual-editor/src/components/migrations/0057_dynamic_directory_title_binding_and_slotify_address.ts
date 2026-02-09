@@ -45,6 +45,9 @@ export const fixDirectoryTitleBindingAndSlotifyAddress: Migration = {
   Directory: {
     action: "updated",
     propTransformation: (props) => {
+      if (props.slots?.TitleSlot?.length) {
+        return props;
+      }
       let updatedProps = {
         ...props,
         slots: {
