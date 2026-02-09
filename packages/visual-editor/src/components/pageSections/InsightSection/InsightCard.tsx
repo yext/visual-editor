@@ -15,10 +15,14 @@ import { deepMerge } from "../../../utils/themeResolver.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
+import {
+  resolveComponentData,
+  resolveComponentTextData,
+} from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { TextProps } from "../../contentBlocks/Text.tsx";
 
 const defaultInsight = {
   image: {
@@ -28,7 +32,7 @@ const defaultInsight = {
   },
   name: { en: "Article Name", hasLocalizedValue: "true" },
   category: {
-    en: getDefaultRTF("Category"),
+    en: "Category",
     hasLocalizedValue: "true",
   },
   description: {
@@ -115,7 +119,7 @@ export const defaultInsightCardSlotData = (
         ],
         CategorySlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-category` }),
               data: {
@@ -127,8 +131,9 @@ export const defaultInsightCardSlotData = (
               },
               styles: {
                 variant: "base",
+                fontStyle: "regular",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         DescriptionSlot: [
@@ -445,7 +450,7 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
 
       data.props.slots.CategorySlot[0].props.parentData = {
         field: `${field}.category`,
-        richText: insight.category,
+        text: insight.category,
       };
 
       data.props.slots.DescriptionSlot[0].props.parentData = {
@@ -463,8 +468,8 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
         cta: insight.cta,
       };
 
-      const category = resolveComponentData(
-        insight.category as TranslatableRichText,
+      const category = resolveComponentTextData(
+        insight.category,
         locale,
         streamDocument
       );
@@ -481,7 +486,7 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
       data.props.slots.PublishTimeSlot[0].props.parentData = undefined;
       data.props.slots.CTASlot[0].props.parentData = undefined;
 
-      const category = resolveComponentData(
+      const category = resolveComponentTextData(
         data.props.slots.CategorySlot[0]?.props.data
           .text as YextEntityField<TranslatableRichText>,
         locale,

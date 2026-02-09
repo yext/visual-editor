@@ -11,6 +11,11 @@ import {
   resolveEmbeddedFieldsRecursively,
   resolveYextEntityField,
 } from "./resolveYextEntityField.ts";
+import {
+  getLocalizedPlainText,
+  isRichText,
+  richTextToPlainText,
+} from "./plainText.ts";
 
 /**
  * The primary function for resolving all component data. It handles entity
@@ -59,21 +64,7 @@ export function resolveComponentData<T>(
     className?: string;
   }
 ): any {
-  let rawValue;
-
-  // If a document is provided, we can attempt full resolution.
-  if (streamDocument) {
-    if (isYextEntityField(data)) {
-      rawValue = resolveYextEntityField(streamDocument, data, locale);
-    } else {
-      // It's a direct TranslatableString or TranslatableRichText.
-      rawValue = resolveEmbeddedFieldsRecursively(data, streamDocument, locale);
-    }
-  } else {
-    // No document, so we can't resolve entity fields or embedded fields.
-    // If it's a YextEntityField, we can only use its constant value.
-    rawValue = isYextEntityField(data) ? data.constantValue : data;
-  }
+  const rawValue = resolveRawValue(data, locale, streamDocument);
 
   // Fully resolve the resulting value, converting any translatable
   // objects into their final string or React element form.
@@ -96,6 +87,29 @@ export function resolveComponentData<T>(
   }
 
   return resolved;
+}
+
+export function resolveComponentTextData(
+  data:
+    | TranslatableString
+    | TranslatableRichText
+    | YextEntityField<TranslatableString | TranslatableRichText>
+    | undefined,
+  locale: string,
+  streamDocument?: Record<string, any>
+): string {
+  const rawValue = resolveRawValue(data, locale, streamDocument);
+  const resolved = resolveTranslatableTypeToPlainText(rawValue, locale);
+
+  if (typeof resolved === "string") {
+    return resolved;
+  }
+
+  if (typeof resolved === "number" || typeof resolved === "boolean") {
+    return String(resolved);
+  }
+
+  return "";
 }
 
 /**
@@ -147,9 +161,41 @@ const resolveTranslatableType = (
   return newValue;
 };
 
-function isRichText(value: unknown): value is RichText {
-  return typeof value === "object" && value !== null && "html" in value;
-}
+const resolveTranslatableTypeToPlainText = (
+  value: any,
+  locale: string
+): any | string => {
+  if (typeof value !== "object" || value === null) {
+    return value;
+  }
+
+  if (isRichText(value)) {
+    return richTextToPlainText(value);
+  }
+
+  if (
+    value.hasLocalizedValue === "true" &&
+    (typeof value[locale] === "string" || isRichText(value[locale]))
+  ) {
+    return getLocalizedPlainText(value, locale);
+  }
+
+  if (value.hasLocalizedValue === "true" && !value[locale]) {
+    return "";
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) =>
+      resolveTranslatableTypeToPlainText(item, locale)
+    );
+  }
+
+  const newValue: { [key: string]: any } = {};
+  for (const key in value) {
+    newValue[key] = resolveTranslatableTypeToPlainText(value[key], locale);
+  }
+  return newValue;
+};
 
 /**
  * Takes a TranslatableString or TranslatableRichText and a locale and returns the value as a string
@@ -210,4 +256,32 @@ function isYextEntityField(value: any): value is YextEntityField<unknown> {
     "field" in value &&
     "constantValue" in value
   );
+}
+
+function resolveRawValue<T>(
+  data:
+    | YextEntityField<T>
+    | TranslatableString
+    | TranslatableRichText
+    | undefined,
+  locale: string,
+  streamDocument?: Record<string, any>
+) {
+  if (data === undefined || data === null) {
+    return undefined;
+  }
+
+  // If a document is provided, we can attempt full resolution.
+  if (streamDocument) {
+    if (isYextEntityField(data)) {
+      return resolveYextEntityField(streamDocument, data, locale);
+    }
+
+    // It's a direct TranslatableString or TranslatableRichText.
+    return resolveEmbeddedFieldsRecursively(data, streamDocument, locale);
+  }
+
+  // No document, so we can't resolve entity fields or embedded fields.
+  // If it's a YextEntityField, we can only use its constant value.
+  return isYextEntityField(data) ? data.constantValue : data;
 }

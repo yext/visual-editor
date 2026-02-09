@@ -1,6 +1,9 @@
 import React from "react";
 import { describe, it, expect, expectTypeOf, vi } from "vitest";
-import { resolveComponentData } from "./resolveComponentData.tsx";
+import {
+  resolveComponentData,
+  resolveComponentTextData,
+} from "./resolveComponentData.tsx";
 import { TranslatableRichText, TranslatableString } from "../types/types.ts";
 import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 
@@ -325,5 +328,41 @@ describe("resolveComponentData", () => {
         expect(element.props.className).toContain(customClass);
       }
     });
+  });
+});
+
+describe("resolveComponentTextData", () => {
+  it("resolves rich text values into plain text", () => {
+    const field: YextEntityField<TranslatableRichText> = {
+      constantValueEnabled: true,
+      field: "",
+      constantValue: {
+        hasLocalizedValue: "true",
+        en: {
+          html: "<p>Location: <strong>[[c_location]]</strong></p>",
+        },
+      },
+    };
+
+    expect(resolveComponentTextData(field, "en", mockDocument)).toBe(
+      "Location: New York"
+    );
+  });
+
+  it("supports direct rich text values", () => {
+    const value: TranslatableRichText = {
+      hasLocalizedValue: "true",
+      en: {
+        html: "<p>Plain <em>text</em> value</p>",
+      },
+    };
+
+    expect(resolveComponentTextData(value, "en", mockDocument)).toBe(
+      "Plain text value"
+    );
+  });
+
+  it("returns an empty string for missing values", () => {
+    expect(resolveComponentTextData(undefined, "en", mockDocument)).toBe("");
   });
 });

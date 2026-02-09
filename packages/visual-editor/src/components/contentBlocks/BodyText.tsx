@@ -96,7 +96,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
 };
 
 export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
-  label: msg("components.bodyText", "Body Text"),
+  label: msg("components.richText", "Rich Text"),
   fields: bodyTextFields,
   resolveFields: (data) => resolveDataFromParent(bodyTextFields, data),
   defaultProps: {

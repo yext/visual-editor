@@ -17,7 +17,6 @@ import { PersonStruct } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { ImageWrapperProps } from "../../contentBlocks/image/Image.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
-import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { CTAWrapperProps } from "../../contentBlocks/CtaWrapper.tsx";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
@@ -27,11 +26,11 @@ import { EmailsProps } from "../../contentBlocks/Emails.tsx";
 import { PhoneListProps } from "../../contentBlocks/PhoneList.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
+import { TextProps } from "../../contentBlocks/Text.tsx";
 
 const defaultPerson = {
   name: { en: "First Last", hasLocalizedValue: "true" },
-  title: { en: getDefaultRTF("Associate Agent"), hasLocalizedValue: "true" },
+  title: { en: "Associate Agent", hasLocalizedValue: "true" },
   phoneNumber: "+12027706619",
   email: "jkelley@[company].com",
   cta: {
@@ -105,7 +104,7 @@ export const defaultTeamCardSlotData = (
         ],
         TitleSlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-title` }),
               data: {
@@ -117,8 +116,9 @@ export const defaultTeamCardSlotData = (
               },
               styles: {
                 variant: "base",
+                fontStyle: "regular",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         PhoneSlot: [
@@ -436,7 +436,7 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
       | WithId<HeadingTextProps>
       | undefined;
     const titleSlotProps = data.props.slots.TitleSlot?.[0]?.props as
-      | WithId<BodyTextProps>
+      | WithId<TextProps>
       | undefined;
     const phoneSlotProps = data.props.slots.PhoneSlot?.[0]?.props as
       | WithId<any>
@@ -474,7 +474,7 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
     );
     const showTitle = Boolean(
       person?.title ||
-        titleSlotProps?.parentData?.richText ||
+        titleSlotProps?.parentData?.text ||
         (titleSlotProps &&
           resolveYextEntityField(
             params.metadata.streamDocument,
@@ -580,8 +580,8 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
         "props.slots.TitleSlot[0].props.parentData",
         {
           field: field,
-          richText: person.title,
-        } satisfies BodyTextProps["parentData"]
+          text: person.title,
+        } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
         updatedData,

@@ -29,6 +29,7 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { useProductSectionContext } from "./ProductSectionContext.tsx";
+import { TextProps } from "../../contentBlocks/Text.tsx";
 
 const defaultProduct = {
   image: {
@@ -37,12 +38,12 @@ const defaultProduct = {
     width: 640,
   },
   brow: {
-    en: getDefaultRTF("Category", { isBold: true }),
+    en: "Category",
     hasLocalizedValue: "true",
   },
   name: { en: "Product Name", hasLocalizedValue: "true" },
   price: {
-    en: getDefaultRTF("$123.00", { isBold: true }),
+    en: "$123.00",
     hasLocalizedValue: "true",
   },
   description: {
@@ -103,7 +104,7 @@ export const defaultProductCardSlotData = (
         ],
         BrowSlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-brow` }),
               data: {
@@ -115,8 +116,9 @@ export const defaultProductCardSlotData = (
               },
               styles: {
                 variant: "sm",
+                fontStyle: "bold",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         TitleSlot: [
@@ -140,7 +142,7 @@ export const defaultProductCardSlotData = (
         ],
         PriceSlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-price` }),
               data: {
@@ -152,8 +154,9 @@ export const defaultProductCardSlotData = (
               },
               styles: {
                 variant: "base",
+                fontStyle: "bold",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         DescriptionSlot: [
@@ -458,12 +461,12 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   inline: true,
   resolveData: (data, params) => {
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
-      | WithId<BodyTextProps>
+      | WithId<TextProps>
       | undefined;
 
     const resolvedPrice =
       data.props.parentData?.product.price ??
-      priceSlotProps?.parentData?.richText ??
+      priceSlotProps?.parentData?.text ??
       (priceSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
@@ -474,12 +477,12 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     const showPrice = Boolean(resolvedPrice);
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
-      | WithId<BodyTextProps>
+      | WithId<TextProps>
       | undefined;
 
     const resolvedBrow =
       data.props.parentData?.product.brow ??
-      browSlotProps?.parentData?.richText ??
+      browSlotProps?.parentData?.text ??
       (browSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
@@ -581,16 +584,16 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
         "props.slots.BrowSlot[0].props.parentData",
         {
           field: field,
-          richText: product.brow ?? product.category, // will already be resolved
-        } satisfies BodyTextProps["parentData"]
+          text: product.brow ?? product.category, // will already be resolved
+        } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
         updatedData,
         "props.slots.PriceSlot[0].props.parentData",
         {
           field: field,
-          richText: product.price,
-        } satisfies BodyTextProps["parentData"]
+          text: product.price,
+        } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
         updatedData,
