@@ -36,6 +36,7 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { createAiPlugin } from "@puckeditor/plugin-ai";
+import { preparePuckAiRequest } from "../../utils/ai/prepareRequest.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -122,9 +123,11 @@ export const InternalLayoutEditor = ({
             localDev
               ? {
                   host: "http://127.0.0.1:8787/api/puck/chat",
+                  prepareRequest: preparePuckAiRequest,
                 }
               : {
                   host: "https://puck-ai-backend.sitescdn-cdntest.workers.dev/api/puck/chat",
+                  prepareRequest: preparePuckAiRequest,
                 }
           )
         : undefined,

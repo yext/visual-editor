@@ -1,12 +1,9 @@
-import { puckHandler, chat } from "@puckeditor/cloud-client";
+import { puckHandler, ChatParams } from "@puckeditor/cloud-client";
 import type { Context } from "hono";
-import { enabledAiComponents, puckAiSystemContext } from "./puckAiConfig";
 
-type PuckChatRequestBody = Parameters<typeof chat>[0];
+type CustomChatParams = ChatParams & { systemPrompt: string };
 
-const parseBody = async (
-  c: Context,
-): Promise<PuckChatRequestBody | undefined> => {
+const parseBody = async (c: Context): Promise<CustomChatParams | undefined> => {
   const contentType = c.req.header("content-type") ?? "";
   if (contentType.includes("application/json")) {
     try {
@@ -22,7 +19,7 @@ const parseBody = async (
     try {
       const parsedBody = await c.req.parseBody();
       if (typeof parsedBody === "object" && "chatId" in parsedBody) {
-        return parsedBody as unknown as PuckChatRequestBody;
+        return parsedBody as unknown as CustomChatParams;
       }
       return;
     } catch {
@@ -58,22 +55,12 @@ export const puckRouter = async (c: Context) => {
 
     const puckRequest = new Request(url, {
       method: "POST",
-      body: JSON.stringify({
-        ...body,
-        config: {
-          ...body.config,
-          components: Object.fromEntries(
-            Object.entries(body.config.components ?? {}).filter(([component]) =>
-              (enabledAiComponents as string[]).includes(component),
-            ),
-          ),
-        },
-      }),
+      body: JSON.stringify(body),
       headers: { "content-type": "application/json" },
     });
 
     const puckResponse = await puckHandler(puckRequest, {
-      ai: { context: puckAiSystemContext },
+      ai: { context: body.systemPrompt },
       apiKey: puckApiKey,
     });
 
