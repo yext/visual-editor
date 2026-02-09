@@ -268,6 +268,13 @@ export const InternalLayoutEditor = ({
               types: ["type.string"],
             },
           }),
+          version: {
+            type: "number",
+            visible: false,
+            ai: {
+              exclude: true,
+            },
+          },
           ...puckConfig.root?.fields,
           __advancedSettingsLink: createAdvancedSettingsLink(),
         },

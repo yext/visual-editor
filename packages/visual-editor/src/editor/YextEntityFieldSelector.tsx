@@ -46,6 +46,8 @@ import {
   type YextEntityField,
 } from "./yextEntityFieldUtils.ts";
 import { type ComboboxOption } from "../internal/types/combobox.ts";
+import { entityFieldsAiSchema } from "../utils/ai/schemas/entityFields.ts";
+import { entityListFieldsAiSchema } from "../utils/ai/schemas/entityListFields.ts";
 
 const devLogger = new DevLogger();
 
@@ -187,38 +189,16 @@ const returnConstantFieldConfig = (
 export const YextEntityFieldSelector = <T extends Record<string, any>, U>(
   props: RenderYextEntityFieldSelectorProps<T>
 ): Field<YextEntityField<U>> => {
+  const entityType = props.filter.types?.[0];
+  const aiSpecification = entityType
+    ? props.filter.includeListsOnly
+      ? entityListFieldsAiSchema[entityType]
+      : entityFieldsAiSchema[entityType]
+    : undefined;
+
   return {
-    type: "custom",
-    // TEMP: basic setup for string fields so that the Puck API doesn't return an error
-    ai:
-      props.filter.types?.[0] === "type.string" &&
-      !props.filter.includeListsOnly
-        ? {
-            schema: {
-              type: "object",
-              properties: {
-                constantValueEnabled: {
-                  type: "boolean",
-                },
-                field: {
-                  type: "string",
-                },
-                constantValue: {
-                  type: "object",
-                  properties: {
-                    hasLocalizedValue: {
-                      type: "string",
-                      enum: ["true"],
-                    },
-                    en: {
-                      type: "string",
-                    },
-                  },
-                },
-              },
-            },
-          }
-        : undefined,
+    type: "custom" as const,
+    ai: aiSpecification,
     render: ({ value, onChange }: RenderProps) => {
       const toggleConstantValueEnabled = (constantValueEnabled: boolean) => {
         onChange({

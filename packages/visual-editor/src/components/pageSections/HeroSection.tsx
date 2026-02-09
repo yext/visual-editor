@@ -285,12 +285,43 @@ const heroSectionFields: Fields<HeroSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      BusinessNameSlot: { type: "slot" },
-      GeomodifierSlot: { type: "slot" },
-      HoursStatusSlot: { type: "slot" },
-      ImageSlot: { type: "slot" },
-      PrimaryCTASlot: { type: "slot" },
-      SecondaryCTASlot: { type: "slot" },
+      BusinessNameSlot: {
+        type: "slot",
+        ai: {
+          instructions:
+            "This slot should contain exactly one HeadingTextSlot with the name of the business. The text should end with an exclamation mark (!).",
+        },
+      },
+      GeomodifierSlot: {
+        type: "slot",
+        ai: {
+          instructions:
+            "This slot should contain exactly one HeadingTextSlot with the geographical location of the business.",
+        },
+      },
+      HoursStatusSlot: {
+        type: "slot",
+        ai: { instructions: "This slot should exactly one HoursStatusSlot" },
+      },
+      ImageSlot: {
+        type: "slot",
+        ai: {
+          instructions:
+            "This slot should contain exactly one ImageSlot. Unless otherwise specified, always use 'constantValueEnabled: false' with the field set to 'c_exampleHero.image'",
+        },
+      },
+      PrimaryCTASlot: {
+        type: "slot",
+        ai: {
+          instructions: "This slot should contain exactly one CTASlot.",
+        },
+      },
+      SecondaryCTASlot: {
+        type: "slot",
+        ai: {
+          instructions: "This slot should contain exactly one CTASlot.",
+        },
+      },
     },
     visible: false,
   },
@@ -307,6 +338,9 @@ const heroSectionFields: Fields<HeroSectionProps> = {
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
+      ai: {
+        exclude: true,
+      },
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
         { label: msg("fields.options.hide", "Hide"), value: false },

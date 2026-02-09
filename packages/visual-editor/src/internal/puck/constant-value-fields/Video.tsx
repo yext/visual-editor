@@ -17,6 +17,29 @@ type VideoPayload = {
 
 export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
   type: "custom",
+  ai: {
+    instructions:
+      "This should store a valid YouTube video url. The id in the url should be used to generate the embedded url.",
+    stream: false,
+    schema: {
+      type: "object",
+      properties: {
+        video: {
+          type: "object",
+          properties: {
+            url: {
+              type: "string",
+              pattern: "^https:\\/\\/www\\.youtube\\.com\\/watch\\?v=([\\w-]+)",
+            },
+            embeddedUrl: {
+              type: "string",
+              pattern: "^https:\\/\\/www\\.youtube\\.com\\/embed\\/([\\w-]+)",
+            },
+          },
+        },
+      },
+    },
+  },
   render: ({ onChange, value, field }) => {
     const [pendingMessageId, setPendingMessageId] = React.useState<
       string | undefined

@@ -77,6 +77,9 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
   },
   parentValues: {
     type: "object",
+    ai: {
+      exclude: true,
+    },
     objectFields: {
       SecondaryHeaderSlot: { type: "slot", allow: [] },
     },

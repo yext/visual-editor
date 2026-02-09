@@ -100,6 +100,9 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
+      ai: {
+        exclude: true,
+      },
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
         { label: msg("fields.options.hide", "Hide"), value: false },

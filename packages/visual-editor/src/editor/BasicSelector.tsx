@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, FieldLabel } from "@puckeditor/core";
+import { BaseField, Field, FieldLabel } from "@puckeditor/core";
 import { Combobox } from "../internal/puck/ui/Combobox.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 import { Button } from "../internal/puck/ui/button.tsx";
@@ -14,6 +14,7 @@ type BasicSelectorProps = {
   noOptionsPlaceholder?: string;
   noOptionsMessage?: string;
   disableSearch?: boolean;
+  ai?: BaseField["ai"];
 } & (
   | {
       options: ComboboxOption[];
@@ -37,10 +38,12 @@ export const BasicSelector = <T,>(props: BasicSelectorProps): Field<T> => {
     ),
     noOptionsMessage,
     disableSearch,
+    ai,
   } = props;
 
   return {
     type: "custom",
+    ai,
     render: ({
       value,
       onChange,

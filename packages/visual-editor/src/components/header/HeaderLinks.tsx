@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "../atoms/dropdown.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
+import { translatableCtaAiSchema } from "../../utils/ai/schemas/cta.ts";
 
 export type HeaderLinksProps = {
   data: {
@@ -84,6 +85,12 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
     objectFields: {
       links: {
         type: "custom",
+        ai: {
+          schema: {
+            type: "array",
+            items: translatableCtaAiSchema,
+          },
+        },
         render: ({ onChange, value }) => {
           const tooltip = pt(
             "fields.linksTooltip",
@@ -109,7 +116,13 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
       },
       collapsedLinks: YextField(
         msg("fields.collapsedLinks", "Collapsed Links"),
-        linkFieldConfig
+        {
+          ...linkFieldConfig,
+          ai: {
+            instructions:
+              "These links will always be collapsed into the hamburger menu. They are useful for secondary headers where you want some links to be less prominent.",
+          },
+        }
       ),
     },
   }),

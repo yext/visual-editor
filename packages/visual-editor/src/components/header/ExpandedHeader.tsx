@@ -84,8 +84,8 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
   slots: {
     type: "object",
     objectFields: {
-      PrimaryHeaderSlot: { type: "slot", allow: [] },
-      SecondaryHeaderSlot: { type: "slot", allow: [] },
+      PrimaryHeaderSlot: { type: "slot" },
+      SecondaryHeaderSlot: { type: "slot" },
     },
     visible: false,
   },

@@ -14,6 +14,7 @@ import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { DynamicOption } from "./DynamicOptionsSelector.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
+import { translatableStringAiSchema } from "../utils/ai/schemas/baseTypes.ts";
 
 /**
  * Generates a translatable string config
@@ -34,6 +35,9 @@ export function TranslatableStringField<
 ): CustomField<T> {
   return {
     type: "custom",
+    ai: {
+      schema: translatableStringAiSchema,
+    },
     render: ({ onChange, value }) => {
       const { i18n } = useTranslation();
       const locale = i18n.language;

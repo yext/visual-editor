@@ -85,14 +85,49 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
   slots: {
     type: "object",
     objectFields: {
-      CoreInfoHeadingSlot: { type: "slot" },
-      CoreInfoAddressSlot: { type: "slot" },
-      CoreInfoPhoneNumbersSlot: { type: "slot" },
-      CoreInfoEmailsSlot: { type: "slot" },
-      HoursHeadingSlot: { type: "slot" },
-      HoursTableSlot: { type: "slot" },
-      ServicesHeadingSlot: { type: "slot" },
-      TextListSlot: { type: "slot" },
+      CoreInfoHeadingSlot: {
+        type: "slot",
+        ai: {
+          instructions: "Provide a heading for the left (core info) column",
+        },
+      },
+      CoreInfoAddressSlot: {
+        type: "slot",
+        ai: { instructions: "Use an address component" },
+      },
+      CoreInfoPhoneNumbersSlot: {
+        type: "slot",
+        ai: {
+          instructions: "Use a phone component with the mainPhone entity field",
+        },
+      },
+      CoreInfoEmailsSlot: {
+        type: "slot",
+        ai: {
+          instructions: "Use an emails component with the emails entity field",
+        },
+      },
+      HoursHeadingSlot: {
+        type: "slot",
+        ai: { instructions: "Provide a heading for the center (hours) column" },
+      },
+      HoursTableSlot: {
+        type: "slot",
+        ai: { instructions: "Use an hours field" },
+      },
+      ServicesHeadingSlot: {
+        type: "slot",
+        ai: {
+          instructions: "Provide a heading for the right (core info) column",
+        },
+      },
+      TextListSlot: {
+        type: "slot",
+        ai: {
+          instructions:
+            "Provide a list of services offered base on the services entity field",
+        },
+      },
     },
     visible: false,
   },
@@ -109,6 +144,9 @@ const coreInfoSectionFields: Fields<CoreInfoSectionProps> = {
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
+      ai: {
+        exclude: true,
+      },
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
         { label: msg("fields.options.hide", "Hide"), value: false },
@@ -189,6 +227,9 @@ const CoreInfoSectionWrapper: PuckComponent<CoreInfoSectionProps> = (props) => {
 export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
   {
     label: msg("components.coreInfoSection", "Core Info Section"),
+    ai: {
+      instructions: `Make sure every slot field is always filled out with one component.`,
+    },
     fields: coreInfoSectionFields,
     defaultProps: {
       styles: {

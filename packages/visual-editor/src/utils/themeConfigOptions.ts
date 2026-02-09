@@ -1,3 +1,4 @@
+import { BaseField } from "@puckeditor/core";
 import { ComboboxOptionGroup } from "../internal/types/combobox.ts";
 import { msg, pt } from "./i18n/platform.ts";
 import { PresetImageType } from "../types/types.ts";
@@ -489,6 +490,106 @@ export const ThemeOptions = {
   HOURS_OPTIONS: hoursOptions,
   PHONE_OPTIONS: phoneOptions,
   MAX_WIDTH: maxWidthOptions,
+};
+
+export const ThemeFieldsAiConfiguration: Partial<
+  Record<keyof typeof ThemeOptions, BaseField["ai"]>
+> = {
+  HEADING_LEVEL: {
+    schema: { type: "number", maximum: 6, minimum: 1 },
+  },
+  ALIGNMENT: {
+    schema: { type: "string", enum: alignmentOptions.map((opt) => opt.value) },
+  },
+  BACKGROUND_COLOR: {
+    schema: {
+      anyOf: Object.values(backgroundColors).map((curr) => ({
+        type: "object",
+        properties: {
+          bgColor: {
+            type: "string",
+            enum: [curr.value.bgColor],
+          },
+          textColor: {
+            type: "string",
+            enum: [curr.value.textColor],
+          },
+        },
+      })),
+    },
+  },
+  SITE_COLOR: {
+    instructions: `Set all these field to undefined, unless the user specifies a color.`,
+    required: false,
+    schema: {
+      anyOf: [
+        {
+          type: "object",
+          properties: {
+            bgColor: {
+              type: "string",
+              enum: ["bg-palette-primary"],
+            },
+            textColor: {
+              type: "string",
+              enum: ["text-palette-primary-contrast"],
+            },
+          },
+        },
+        {
+          type: "object",
+          properties: {
+            bgColor: {
+              type: "string",
+              enum: ["bg-palette-secondary"],
+            },
+            textColor: {
+              type: "string",
+              enum: ["text-palette-secondary-contrast"],
+            },
+          },
+        },
+        {
+          type: "object",
+          properties: {
+            bgColor: {
+              type: "string",
+              enum: ["bg-palette-tertiary"],
+            },
+            textColor: {
+              type: "string",
+              enum: ["text-palette-tertiary-contrast"],
+            },
+          },
+        },
+        {
+          type: "object",
+          properties: {
+            bgColor: {
+              type: "string",
+              enum: ["bg-palette-quaternary"],
+            },
+            textColor: {
+              type: "string",
+              enum: ["text-palette-quaternary-contrast"],
+            },
+          },
+        },
+      ],
+    },
+  },
+  MAX_WIDTH: {
+    schema: {
+      type: "string",
+      enum: maxWidthOptions.map((opt) => opt.value),
+    },
+  },
+  HOURS_OPTIONS: {
+    schema: {
+      type: "string",
+      enum: hoursOptions.map((opt) => opt.value),
+    },
+  },
 };
 
 // Content path for applying tailwind config to visual-editor components

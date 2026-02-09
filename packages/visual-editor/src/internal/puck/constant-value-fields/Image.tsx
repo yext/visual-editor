@@ -19,6 +19,7 @@ import { TranslatableString } from "../../../types/types.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { TemplateMetadata } from "../../types/templateMetadata.ts";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
+import { translatableAssetImageAiSchema } from "../../../utils/ai/schemas/baseTypes.ts";
 
 export type ImagePayload = {
   id: string;
@@ -30,6 +31,7 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
   TranslatableAssetImage | undefined
 > = {
   type: "custom",
+  ai: { schema: translatableAssetImageAiSchema },
   render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();

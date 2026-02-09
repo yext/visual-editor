@@ -56,19 +56,23 @@ export const puckRouter = async (c: Context) => {
       return c.json({ success: false, error: "Invalid request body" }, 400);
     }
 
+    const newComponents = Object.fromEntries(
+      Object.entries(body.config.components ?? {}).filter(([component]) =>
+        enabledAiComponents.includes(component),
+      ),
+    );
+
+    const newBody = JSON.stringify({
+      ...body,
+      config: {
+        ...body.config,
+        components: newComponents,
+      },
+    });
+
     const puckRequest = new Request(url, {
       method: "POST",
-      body: JSON.stringify({
-        ...body,
-        config: {
-          ...body.config,
-          components: Object.fromEntries(
-            Object.entries(body.config.components ?? {}).filter(([component]) =>
-              (enabledAiComponents as string[]).includes(component),
-            ),
-          ),
-        },
-      }),
+      body: newBody,
       headers: { "content-type": "application/json" },
     });
 
@@ -86,7 +90,6 @@ export const puckRouter = async (c: Context) => {
 
     const headers = new Headers(puckResponse.headers);
     headers.set("Cache-Control", "no-cache");
-    headers.set("Connection", "keep-alive");
 
     return new Response(puckResponse.body, {
       status: puckResponse.status,

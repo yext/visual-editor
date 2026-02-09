@@ -9,7 +9,6 @@ import { TranslatableString } from "../../types/types.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { pt, msg } from "../../utils/i18n/platform.ts";
 import {
-  ThemeOptions,
   HeadingLevel,
   BackgroundStyle,
 } from "../../utils/themeConfigOptions.ts";
@@ -113,7 +112,7 @@ const headingTextFields: Fields<HeadingTextProps> = {
       }),
       align: YextField(msg("fields.headingAlign", "Heading Align"), {
         type: "radio",
-        options: ThemeOptions.ALIGNMENT,
+        options: "ALIGNMENT",
       }),
       color: YextField(msg("fields.color", "Color"), {
         type: "select",

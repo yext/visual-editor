@@ -237,11 +237,42 @@ const promoSectionFields: Fields<PromoSectionProps> = {
     type: "object",
     visible: false,
     objectFields: {
-      HeadingSlot: { type: "slot" },
-      DescriptionSlot: { type: "slot" },
-      ImageSlot: { type: "slot" },
-      VideoSlot: { type: "slot" },
-      CTASlot: { type: "slot" },
+      HeadingSlot: {
+        type: "slot",
+        label: "Heading Slot",
+        ai: { required: true, instructions: "This should contain HeadingText" },
+      },
+      DescriptionSlot: {
+        type: "slot",
+        label: "Description Slot",
+        ai: {
+          required: true,
+          instructions:
+            "This should contain BodyText and be the main content of the promo",
+        },
+      },
+      ImageSlot: {
+        type: "slot",
+        ai: {
+          required: true,
+          instructions:
+            "This should contain an Image related to the promotion.",
+        },
+      },
+      VideoSlot: {
+        type: "slot",
+        ai: {
+          required: true,
+          instructions: "This should contain a Video related to the promotion.",
+        },
+      },
+      CTASlot: {
+        type: "slot",
+        ai: {
+          required: true,
+          instructions: "This should contain a Call To Action button.",
+        },
+      },
     },
   },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
@@ -257,6 +288,9 @@ const promoSectionFields: Fields<PromoSectionProps> = {
     msg("fields.visibleOnLivePage", "Visible on Live Page"),
     {
       type: "radio",
+      ai: {
+        exclude: true,
+      },
       options: [
         { label: msg("fields.options.show", "Show"), value: true },
         { label: msg("fields.options.hide", "Hide"), value: false },

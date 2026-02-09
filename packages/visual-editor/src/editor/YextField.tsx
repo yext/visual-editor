@@ -5,7 +5,10 @@ import {
   NumberField,
   ObjectField,
 } from "@puckeditor/core";
-import { ThemeOptions } from "../utils/themeConfigOptions.ts";
+import {
+  ThemeFieldsAiConfiguration,
+  ThemeOptions,
+} from "../utils/themeConfigOptions.ts";
 import { BasicSelector } from "./BasicSelector.tsx";
 import {
   DynamicOption,
@@ -54,6 +57,7 @@ type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
 type YextBaseField = {
   type: string;
   visible?: boolean;
+  ai?: BaseField["ai"];
 };
 
 // YextArrayField has same functionality as Puck's ArrayField
@@ -211,20 +215,20 @@ export function YextField<T, U>(
   }
 
   if (config.type === "select" && config.options === "BACKGROUND_COLOR") {
-    const options = ThemeOptions[config.options];
     return BasicSelector({
       label: fieldName,
-      optionGroups: options,
+      optionGroups: ThemeOptions["BACKGROUND_COLOR"],
       disableSearch: true,
+      ai: config.ai ?? ThemeFieldsAiConfiguration["BACKGROUND_COLOR"],
     });
   }
 
   if (config.type === "select" && config.options === "SITE_COLOR") {
-    const options = ThemeOptions[config.options];
     return BasicSelector({
       label: fieldName,
-      optionGroups: options,
+      optionGroups: ThemeOptions["SITE_COLOR"],
       disableSearch: true,
+      ai: config.ai ?? ThemeFieldsAiConfiguration["SITE_COLOR"],
     });
   }
 
@@ -234,18 +238,36 @@ export function YextField<T, U>(
       typeof config.options === "string"
         ? ThemeOptions[config.options]
         : config.options;
-    return BasicSelector({ label: fieldName, options: options as any });
+
+    const aiConfig: BaseField["ai"] =
+      config.ai ??
+      (typeof config.options === "string"
+        ? ThemeFieldsAiConfiguration[config.options]
+        : undefined);
+
+    return BasicSelector({
+      label: fieldName,
+      options: options as any,
+      ai: aiConfig,
+    });
   }
 
   if (
     (config.type === "select" || config.type === "radio") &&
     typeof config.options === "string"
   ) {
+    const aiConfig: BaseField["ai"] =
+      config.ai ??
+      (typeof config.options === "string"
+        ? ThemeFieldsAiConfiguration[config.options]
+        : undefined);
+
     return {
       label: fieldName,
       visible: config.visible,
       type: config.type,
       options: ThemeOptions[config.options] as FieldOptions,
+      ai: aiConfig,
     };
   }
 
@@ -254,6 +276,7 @@ export function YextField<T, U>(
       label: fieldName,
       visible: config.visible,
       type: config.isMultiline ? "textarea" : "text",
+      ai: config.ai,
     };
   }
 
@@ -269,6 +292,7 @@ export function YextField<T, U>(
     return BasicSelector({
       label: fieldName,
       disableSearch: true,
+      ai: ThemeFieldsAiConfiguration["MAX_WIDTH"],
       optionGroups: [
         {
           description: msg(

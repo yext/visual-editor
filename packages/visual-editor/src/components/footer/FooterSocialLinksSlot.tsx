@@ -43,27 +43,70 @@ type socialLink = {
 export const FooterSocialLinksSlotFields: Fields<FooterSocialLinksSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
+    ai: {
+      instructions:
+        "Include 2-5 of the most relevant, valid social media links for the business.",
+    },
     objectFields: {
       xLink: YextField(msg("fields.xLink", "X Link"), {
         type: "text",
+        ai: {
+          schema: { type: "string", pattern: validPatterns.xLink.source },
+        },
       }),
       facebookLink: YextField(msg("fields.facebookLink", "Facebook Link"), {
         type: "text",
+        ai: {
+          schema: {
+            type: "string",
+            pattern: validPatterns.facebookLink.source,
+          },
+        },
       }),
       instagramLink: YextField(msg("fields.instagramLink", "Instagram Link"), {
         type: "text",
+        ai: {
+          schema: {
+            type: "string",
+            pattern: validPatterns.instagramLink.source,
+          },
+        },
       }),
       linkedInLink: YextField(msg("fields.linkedInLink", "LinkedIn Link"), {
         type: "text",
+        ai: {
+          schema: {
+            type: "string",
+            pattern: validPatterns.linkedInLink.source,
+          },
+        },
       }),
       pinterestLink: YextField(msg("fields.pinterestLink", "Pinterest Link"), {
         type: "text",
+        ai: {
+          schema: {
+            type: "string",
+            pattern: validPatterns.pinterestLink.source,
+          },
+        },
       }),
       tiktokLink: YextField(msg("fields.tiktokLink", "TikTok Link"), {
         type: "text",
+        ai: {
+          schema: {
+            type: "string",
+            pattern: validPatterns.tiktokLink.source,
+          },
+        },
       }),
       youtubeLink: YextField(msg("fields.youtubeLink", "YouTube Link"), {
         type: "text",
+        ai: {
+          schema: {
+            type: "string",
+            pattern: validPatterns.youtubeLink.source,
+          },
+        },
       }),
     },
   }),
