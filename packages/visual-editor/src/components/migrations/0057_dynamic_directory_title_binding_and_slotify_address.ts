@@ -45,9 +45,6 @@ export const fixDirectoryTitleBindingAndSlotifyAddress: Migration = {
   Directory: {
     action: "updated",
     propTransformation: (props) => {
-      const titleId =
-        props.slots?.TitleSlot?.[0]?.props?.id ??
-        `HeadingTextSlot-${crypto.randomUUID?.() ?? Date.now()}`;
       let updatedProps = {
         ...props,
         slots: {
@@ -56,7 +53,7 @@ export const fixDirectoryTitleBindingAndSlotifyAddress: Migration = {
             {
               type: "HeadingTextSlot",
               props: {
-                id: titleId,
+                id: `${props.id}-TitleSlot`,
                 data: {
                   text: {
                     constantValue: {
