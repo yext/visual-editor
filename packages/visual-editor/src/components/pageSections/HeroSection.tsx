@@ -289,7 +289,7 @@ const heroSectionFields: Fields<HeroSectionProps> = {
         type: "slot",
         ai: {
           instructions:
-            "This slot should contain exactly one HeadingTextSlot with the name of the business. The text should end with an exclamation mark (!).",
+            "This slot should contain exactly one HeadingTextSlot with the name of the business.",
         },
       },
       GeomodifierSlot: {

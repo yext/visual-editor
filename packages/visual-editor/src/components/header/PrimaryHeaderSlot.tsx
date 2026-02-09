@@ -68,10 +68,38 @@ const primaryHeaderSlotFields: Fields<PrimaryHeaderSlotProps> = {
   slots: {
     type: "object",
     objectFields: {
-      PrimaryCTASlot: { type: "slot", allow: [] },
-      SecondaryCTASlot: { type: "slot", allow: [] },
-      LogoSlot: { type: "slot", allow: [] },
-      LinksSlot: { type: "slot", allow: [] },
+      PrimaryCTASlot: {
+        type: "slot",
+        allow: ["CTASlot"],
+        ai: {
+          instructions:
+            "This must contain a CTASlot component, even if it is hidden.",
+        },
+      },
+      SecondaryCTASlot: {
+        type: "slot",
+        allow: ["CTASlot"],
+        ai: {
+          instructions:
+            "This must contain a CTASlot component, even if it is hidden.",
+        },
+      },
+      LogoSlot: {
+        type: "slot",
+        allow: ["ImageSlot"],
+        ai: {
+          instructions:
+            "This should contain the business's logo. Logos typically have an aspect ratio of 1.",
+        },
+      },
+      LinksSlot: {
+        type: "slot",
+        allow: ["HeaderLinks"],
+        ai: {
+          instructions:
+            "This should contain 3-5 main navigation links for the site.",
+        },
+      },
     },
     visible: false,
   },

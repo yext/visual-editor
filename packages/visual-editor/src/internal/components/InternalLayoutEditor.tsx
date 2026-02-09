@@ -36,6 +36,7 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { createAiPlugin } from "@puckeditor/plugin-ai";
+import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -292,6 +293,7 @@ export const InternalLayoutEditor = ({
           schemaMarkup: "",
           ...puckConfig.root?.defaultProps,
           __advancedSettingsLink: null,
+          version: migrationRegistry.length,
         },
       },
     } as Config;

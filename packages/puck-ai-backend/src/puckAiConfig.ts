@@ -15,6 +15,8 @@ You are an AI assistant for Yext Pages, a platform for creating and
  You can also use [[fieldName]] to reference the value of a field on the entity, even if 'constantValueEnabled' is false.
 
  All pages should have a BannerSection, HeroSection, PromoSection, and CoreInfoSection unless the user explicitly says not to include one of those sections.
+
+ All "slot" fields must contain a component; they should never be left empty.
 `;
 
 // The config passed to Puck will only include components listed here

@@ -53,10 +53,9 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
   arrayFields: {
     label: YextField(msg("fields.label", "Label"), {
       type: "translatableString",
-      filter: { types: ["type.string"] },
     }),
     link: YextField(msg("fields.link", "Link"), {
-      type: "text",
+      type: "translatableString",
     }),
     linkType: YextField(msg("fields.linkType", "Link Type"), {
       type: "select",

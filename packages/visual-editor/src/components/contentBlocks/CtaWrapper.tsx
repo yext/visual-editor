@@ -25,8 +25,6 @@ import {
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
-// TODO: ensure CTAwrapper works as expected
-
 export interface CTAWrapperProps {
   data: {
     /** Whether to show the CTA */
@@ -84,10 +82,20 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
           { label: msg("fields.options.show", "Show"), value: true },
           { label: msg("fields.options.hide", "Hide"), value: false },
         ],
+        ai: {
+          instructions:
+            "You should show the CTA unless there is no valuable content.",
+        },
         visible: false,
       }),
       actionType: YextField(msg("fields.actionType", "Action Type"), {
         type: "radio",
+        ai: {
+          schema: {
+            type: "string",
+            enum: ["link"], // always set to link when using AI
+          },
+        },
         options: [
           { label: msg("fields.options.link", "Link"), value: "link" },
           { label: msg("fields.options.button", "Button"), value: "button" },

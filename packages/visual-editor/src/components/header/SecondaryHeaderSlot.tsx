@@ -42,6 +42,10 @@ const secondaryHeaderSlotFields: Fields<SecondaryHeaderSlotProps> = {
         msg("fields.showSecondaryHeader", "Show Secondary Header"),
         {
           type: "radio",
+          ai: {
+            instructions:
+              "You should show the header unless otherwise specified.",
+          },
           options: [
             { label: msg("fields.options.show", "Show"), value: true },
             { label: msg("fields.options.hide", "Hide"), value: false },
@@ -52,6 +56,9 @@ const secondaryHeaderSlotFields: Fields<SecondaryHeaderSlotProps> = {
         msg("fields.showLanguageDropdown", "Show Language Dropdown"),
         {
           type: "radio",
+          ai: {
+            exclude: true,
+          },
           options: [
             { label: msg("fields.options.show", "Show"), value: true },
             { label: msg("fields.options.hide", "Hide"), value: false },
@@ -69,6 +76,10 @@ const secondaryHeaderSlotFields: Fields<SecondaryHeaderSlotProps> = {
           type: "select",
           hasSearch: true,
           options: "BACKGROUND_COLOR",
+          ai: {
+            instructions:
+              "Choose a different background color than the primary header.",
+          },
         }
       ),
     },
@@ -76,7 +87,14 @@ const secondaryHeaderSlotFields: Fields<SecondaryHeaderSlotProps> = {
   slots: {
     type: "object",
     objectFields: {
-      LinksSlot: { type: "slot", allow: [] },
+      LinksSlot: {
+        type: "slot",
+        allow: ["HeaderLinks"],
+        ai: {
+          instructions:
+            "This should always contain a HeaderLinks component, even if it is hidden.",
+        },
+      },
     },
     visible: false,
   },

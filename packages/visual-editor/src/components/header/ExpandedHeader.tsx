@@ -65,6 +65,9 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
     objectFields: {
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
+        ai: {
+          exclude: true,
+        },
       }),
       headerPosition: YextField(
         msg("fields.headerPosition", "Header Position"),
@@ -84,14 +87,31 @@ const expandedHeaderSectionFields: Fields<ExpandedHeaderProps> = {
   slots: {
     type: "object",
     objectFields: {
-      PrimaryHeaderSlot: { type: "slot" },
-      SecondaryHeaderSlot: { type: "slot" },
+      PrimaryHeaderSlot: {
+        type: "slot",
+        allow: ["PrimaryHeaderSlot"],
+        ai: {
+          instructions:
+            "This should always contain a PrimaryHeaderSlot component.",
+        },
+      },
+      SecondaryHeaderSlot: {
+        type: "slot",
+        allow: ["SecondaryHeaderSlot"],
+        ai: {
+          instructions:
+            "This should always contain a SecondaryHeaderSlot component.",
+        },
+      },
     },
     visible: false,
   },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
+    ai: {
+      exclude: true,
+    },
     objectFields: {
       scope: YextField(msg("fields.scope", "Scope"), {
         type: "text",

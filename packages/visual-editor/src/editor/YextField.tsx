@@ -219,7 +219,10 @@ export function YextField<T, U>(
       label: fieldName,
       optionGroups: ThemeOptions["BACKGROUND_COLOR"],
       disableSearch: true,
-      ai: config.ai ?? ThemeFieldsAiConfiguration["BACKGROUND_COLOR"],
+      ai: {
+        ...config?.ai,
+        ...ThemeFieldsAiConfiguration["BACKGROUND_COLOR"],
+      },
     });
   }
 

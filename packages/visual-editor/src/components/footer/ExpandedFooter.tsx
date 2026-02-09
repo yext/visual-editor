@@ -109,6 +109,10 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
             msg("fields.expandFooter", "Expand Footer"),
             {
               type: "radio",
+              ai: {
+                instructions:
+                  "This enables columns of links in the Primary Footer instead of a single row.",
+              },
               options: [
                 { label: msg("fields.options.yes", "Yes"), value: true },
                 { label: msg("fields.options.no", "No"), value: false },
@@ -158,24 +162,64 @@ const expandedFooterSectionFields: Fields<ExpandedFooterProps> = {
       }),
       maxWidth: YextField(msg("fields.maxWidth", "Max Width"), {
         type: "maxWidth",
+        ai: {
+          exclude: true,
+        },
       }),
     },
   }),
   slots: {
     type: "object",
     objectFields: {
-      LogoSlot: { type: "slot" },
-      SocialLinksSlot: { type: "slot" },
-      UtilityImagesSlot: { type: "slot" },
-      PrimaryLinksWrapperSlot: { type: "slot" },
-      ExpandedLinksWrapperSlot: { type: "slot" },
-      SecondaryFooterSlot: { type: "slot" },
+      LogoSlot: {
+        type: "slot",
+        allow: ["FooterLogoSlot"],
+        ai: { instructions: "Put the business's logo here." },
+      },
+      SocialLinksSlot: {
+        type: "slot",
+        allow: ["FooterSocialLinksSlot"],
+        ai: { instructions: "Put the business's social media links here." },
+      },
+      UtilityImagesSlot: {
+        type: "slot",
+        allow: ["FooterUtilityImagesSlot"],
+        ai: {
+          instructions: "Must contain a FooterUtilityImagesSlot.",
+        },
+      },
+      PrimaryLinksWrapperSlot: {
+        type: "slot",
+        allow: ["FooterLinksSlot"],
+        ai: {
+          instructions:
+            "Must contain a FooterLinksSlot. It will show a single row of links in the primary footer when 'Expand Footer' is set to No.",
+        },
+      },
+      ExpandedLinksWrapperSlot: {
+        type: "slot",
+        allow: ["FooterExpandedLinksWrapper"],
+        ai: {
+          instructions:
+            "Must contain a FooterExpandedLinksWrapper. It will show multiple columns of links in the primary footer when 'Expand Footer' is set to Yes.",
+        },
+      },
+      SecondaryFooterSlot: {
+        type: "slot",
+        allow: ["SecondaryFooterSlot"],
+        ai: {
+          instructions: "Must contain a SecondaryFooterSlot.",
+        },
+      },
     },
     visible: false,
   },
   analytics: YextField(msg("fields.analytics", "Analytics"), {
     type: "object",
     visible: false,
+    ai: {
+      exclude: true,
+    },
     objectFields: {
       scope: YextField(msg("fields.scope", "Scope"), {
         type: "text",

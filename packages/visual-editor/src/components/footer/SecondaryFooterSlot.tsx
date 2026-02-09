@@ -110,8 +110,19 @@ const secondaryFooterSlotFields: Fields<SecondaryFooterSlotProps> = {
   slots: {
     type: "object",
     objectFields: {
-      SecondaryLinksWrapperSlot: { type: "slot" },
-      CopyrightSlot: { type: "slot" },
+      SecondaryLinksWrapperSlot: {
+        type: "slot",
+        allow: ["FooterLinksSlot"],
+        ai: {
+          instructions:
+            "Must contain a FooterLinksSlot. Use this for links that should be less prominent than those in the primary footer.",
+        },
+      },
+      CopyrightSlot: {
+        type: "slot",
+        allow: ["CopyrightMessageSlot"],
+        ai: { instructions: "Use this for a copyright message." },
+      },
     },
     visible: false,
   },

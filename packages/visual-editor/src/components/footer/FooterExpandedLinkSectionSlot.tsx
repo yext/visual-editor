@@ -139,6 +139,9 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
     index: {
       type: "number",
       visible: false,
+      ai: {
+        exclude: true,
+      },
     },
   };
 

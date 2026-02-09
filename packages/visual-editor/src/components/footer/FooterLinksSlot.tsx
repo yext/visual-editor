@@ -160,11 +160,17 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
       { label: "Primary", value: "primary" },
       { label: "Secondary", value: "secondary" },
     ],
+    ai: {
+      exclude: true,
+    },
     visible: false,
   },
   eventNamePrefix: {
     type: "text",
     visible: false,
+    ai: {
+      exclude: true,
+    },
   },
   alignment: {
     type: "radio",

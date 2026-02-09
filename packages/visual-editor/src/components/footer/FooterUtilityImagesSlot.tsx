@@ -119,6 +119,10 @@ export const FooterUtilityImagesSlot: ComponentConfig<{
           msg("fields.utilityImages", "Utility Images"),
           {
             type: "array",
+            ai: {
+              instructions:
+                "Optional; additional images to show in the footer.",
+            },
             arrayFields: {
               image: YextField(msg("fields.image", "Image"), {
                 type: "image",
