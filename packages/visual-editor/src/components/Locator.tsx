@@ -561,7 +561,8 @@ const locatorFields: Fields<LocatorProps> = {
     type: "object",
     objectFields: {
       title: YextField(msg("fields.title", "Title"), {
-        type: "text",
+        type: "translatableString",
+        filter: { types: ["type.string"] },
       }),
       color: YextField(msg("fields.color", "Color"), {
         type: "select",
