@@ -15,6 +15,7 @@ export const addDefaultLocatorPageTitle: Migration = {
         pageHeading: {
           ...props.pageHeading,
           title: {
+            ...props.pageHeading?.title,
             en: DEFAULT_TITLE,
             hasLocalizedValue: "true",
           },
