@@ -29,7 +29,6 @@ export const fixDirectoryTitleBindingAndSlotifyAddress: Migration = {
                 styles: {
                   showGetDirectionsLink: false,
                   ctaVariant: "link",
-                  hideCountry: true,
                 },
                 parentData: {
                   field: "profile.address",
@@ -45,10 +44,18 @@ export const fixDirectoryTitleBindingAndSlotifyAddress: Migration = {
   Directory: {
     action: "updated",
     propTransformation: (props) => {
+      const existingTitle = props.slots?.TitleSlot?.[0];
+      if (
+        existingTitle?.type === "HeadingTextSlot" &&
+        existingTitle.props?.data?.text?.field !== "name"
+      ) {
+        return props;
+      }
       if (props.slots?.TitleSlot?.length) {
         return props;
       }
-      let updatedProps = {
+
+      return {
         ...props,
         slots: {
           ...props.slots,
@@ -73,7 +80,6 @@ export const fixDirectoryTitleBindingAndSlotifyAddress: Migration = {
           ],
         },
       };
-      return updatedProps;
     },
   },
 };

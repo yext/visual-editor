@@ -81,9 +81,6 @@ export const defaultDirectoryCardSlotData = (
               ctaVariant:
                 existingSlots?.AddressSlot?.[0]?.props?.styles?.ctaVariant ??
                 "link",
-              hideCountry:
-                existingSlots?.AddressSlot?.[0]?.props?.styles?.hideCountry ??
-                true,
             },
             parentData: {
               field: "profile.address",
