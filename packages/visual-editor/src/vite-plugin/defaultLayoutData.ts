@@ -4589,7 +4589,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 55,
+      version: 58,
       title: {
         field: "",
         constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
