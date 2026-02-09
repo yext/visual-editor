@@ -5,7 +5,7 @@ import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import {
   getMetaTitleMissingLocales,
-  getRelevantLocales,
+  getPageSetLocales,
 } from "../../../utils/metaTitleValidation.ts";
 import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
 import { type TranslatableString } from "../../../types/types.ts";
@@ -24,7 +24,7 @@ export const MetaTitleValidationReporter = () => {
   } = useErrorContext();
   const didIncrementRef = React.useRef(false);
 
-  const locales = getRelevantLocales(templateMetadata, streamDocument);
+  const locales = getPageSetLocales(templateMetadata, streamDocument);
   const titleField = (appState.data.root?.props?.title ??
     appState.data.root?.title) as
     | YextEntityField<TranslatableString>

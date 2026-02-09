@@ -18,7 +18,7 @@ const normalizeLocales = (locales: string[] | undefined): string[] => {
   );
 };
 
-export const getRelevantLocales = (
+export const getPageSetLocales = (
   templateMetadata?: TemplateMetadata,
   streamDocument?: StreamDocument
 ): string[] => {
@@ -49,19 +49,19 @@ export const getMetaTitleMissingLocales = (
   }
 
   const normalizedLocales = normalizeLocales(locales);
-  const relevantLocales =
+  const pageSetLocales =
     normalizedLocales.length > 0 ? normalizedLocales : [DEFAULT_LOCALE];
   const constantValue = titleField.constantValue;
 
   if (typeof constantValue === "string") {
-    return constantValue.trim().length === 0 ? relevantLocales : [];
+    return constantValue.trim().length === 0 ? pageSetLocales : [];
   }
 
   if (!constantValue || typeof constantValue !== "object") {
-    return relevantLocales;
+    return pageSetLocales;
   }
 
-  return relevantLocales.filter((locale) => {
+  return pageSetLocales.filter((locale) => {
     const value = constantValue[locale];
     if (typeof value !== "string") {
       return true;

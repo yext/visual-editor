@@ -5,7 +5,7 @@ import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
 import {
   getMetaTitleMissingLocales,
-  getRelevantLocales,
+  getPageSetLocales,
 } from "../../../utils/metaTitleValidation.ts";
 import {
   type YextEntityField,
@@ -21,7 +21,7 @@ export const MetaTitleField = (): Field<
     render: ({ value, onChange }) => {
       const templateMetadata = useTemplateMetadata();
       const streamDocument = useDocument();
-      const locales = getRelevantLocales(templateMetadata, streamDocument);
+      const locales = getPageSetLocales(templateMetadata, streamDocument);
       const missingLocales = getMetaTitleMissingLocales(value, locales);
 
       const errorMessage =

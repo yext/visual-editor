@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   getMetaTitleMissingLocales,
-  getRelevantLocales,
+  getPageSetLocales,
 } from "./metaTitleValidation.ts";
 import { type TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { type StreamDocument } from "./types/StreamDocument.ts";
@@ -42,7 +42,7 @@ describe("metaTitleValidation", () => {
       _pageset: JSON.stringify({ scope: { locales: ["en", "fr"] } }),
     } as StreamDocument;
 
-    expect(getRelevantLocales(templateMetadata, streamDocument)).toEqual([
+    expect(getPageSetLocales(templateMetadata, streamDocument)).toEqual([
       "en",
       "es",
     ]);
@@ -57,7 +57,7 @@ describe("metaTitleValidation", () => {
       _pageset: JSON.stringify({ scope: { locales: ["en", "fr"] } }),
     } as StreamDocument;
 
-    expect(getRelevantLocales(templateMetadata, streamDocument)).toEqual([
+    expect(getPageSetLocales(templateMetadata, streamDocument)).toEqual([
       "en",
       "fr",
     ]);
@@ -70,9 +70,7 @@ describe("metaTitleValidation", () => {
     };
     const streamDocument = { _pageset: "" } as StreamDocument;
 
-    expect(getRelevantLocales(templateMetadata, streamDocument)).toEqual([
-      "en",
-    ]);
+    expect(getPageSetLocales(templateMetadata, streamDocument)).toEqual(["en"]);
   });
 
   it("requires all locales when constant value is enabled", () => {
