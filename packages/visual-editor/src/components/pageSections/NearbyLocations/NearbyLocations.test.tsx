@@ -616,18 +616,21 @@ describe("NearbyLocationsSection", async () => {
       } else {
         expect(results).toHaveNoViolations();
       }
+
       if (interactions) {
         await interactions(page);
+
         await expect(
           `NearbyLocationsSection/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot();
-        const results = await axe(container);
+
+        const results2 = await axe(container);
         if (version === 57) {
           expect(
-            results.violations.some((v) => v.id === "color-contrast")
+            results2.violations.some((v) => v.id === "color-contrast")
           ).toBe(true);
         } else {
-          expect(results).toHaveNoViolations();
+          expect(results2).toHaveNoViolations();
         }
       }
     }
