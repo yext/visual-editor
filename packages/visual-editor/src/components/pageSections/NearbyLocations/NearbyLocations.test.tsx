@@ -610,7 +610,9 @@ describe("NearbyLocationsSection", async () => {
       ).toMatchScreenshot();
       const results = await axe(container);
       if (version === 57) {
-        console.warn(results);
+        expect(results.violations.some((v) => v.id === "color-contrast")).toBe(
+          true
+        );
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -621,7 +623,9 @@ describe("NearbyLocationsSection", async () => {
         ).toMatchScreenshot();
         const results = await axe(container);
         if (version === 57) {
-          console.warn(results);
+          expect(
+            results.violations.some((v) => v.id === "color-contrast")
+          ).toBe(true);
         } else {
           expect(results).toHaveNoViolations();
         }
