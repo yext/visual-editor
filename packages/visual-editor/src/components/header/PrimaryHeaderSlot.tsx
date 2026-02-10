@@ -207,7 +207,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
       return;
     }
 
-    // Share primary overflow with other header parts (e.g. links).
+    // Share primary overflow with other header parts
     menuContext.setPrimaryOverflow(primaryOverflow);
     return () => menuContext.setPrimaryOverflow(false);
   }, [menuContext, primaryOverflow]);
@@ -218,7 +218,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
     [hamburgerButtonRef.current]
   );
 
-  // If the editor user changes the primary links so they no longer
+  // In the editor if primary links are changed so they no longer
   // overflow, close the desktop/tablet expanded link menu
   React.useEffect(() => {
     if (!puck.isEditing || !containerRef.current?.clientWidth) {
@@ -252,7 +252,6 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
     </HeaderLinksDisplayModeProvider>
   );
 
-  // Shared menu content for mobile/tablet/desktop-expanded variants.
   const renderMenuContent = (variant: "mobile" | "tablet" | "desktop") => {
     const showCtasInMenu = variant === "mobile";
     const showSecondaryInMenu = variant === "mobile" || secondaryOverflow;

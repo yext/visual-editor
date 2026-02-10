@@ -176,7 +176,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const menuContext = useExpandedHeaderMenu();
   const primaryOverflow = menuContext?.primaryOverflow ?? false;
 
-  // Parent slot tells us which header we are rendering for.
   const type = parentData?.type || "Primary";
   const isSecondary = type === "Secondary";
   const validLinks = data.links?.filter((item) => !!item?.link) || [];
@@ -233,7 +232,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     index: number,
     ctaType: string
   ) => {
-    // Links render as CTA elements with header-specific variants.
     return (
       <CTA
         variant={
@@ -257,8 +255,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       return;
     }
 
-    // In inline mode the primary header reports whether it has any
-    // always-collapsed links so the hamburger behavior stays consistent.
     if (!isSecondary) {
       menuContext.setPrimaryHasCollapsedLinks(
         validAlwaysCollapsedLinks.length > 0
@@ -275,17 +271,15 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     validAlwaysCollapsedLinks.length,
   ]);
 
-  // Secondary links always show; primary links may collapse or move to menu.
   const shouldShowLinks =
     !isSecondary || displayMode === "menu" || isMobile || !isOverflow;
 
-  // In menu mode, primary header links can show either all or just collapsed.
+  // Primary header's menu can show all the links or just collapsed links.
   const linksToRender = React.useMemo(() => {
     if (displayMode !== "menu" || isSecondary) {
       return validLinks;
     }
 
-    // Logic for Primary links in Menu mode
     const showAll = isMobile || primaryOverflow;
     return showAll
       ? [...validLinks, ...validAlwaysCollapsedLinks]
