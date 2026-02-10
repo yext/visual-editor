@@ -139,6 +139,10 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
     panelHeight: 0,
   });
 
+  const handleCloseMenu = React.useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
+
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
   const { isTablet, isDesktop } = getHeaderViewport(layout.viewportWidth);
@@ -280,10 +284,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
           background={styles.backgroundColor}
           className="flex flex-row justify-between w-full items-center gap-8"
         >
-          {/* Mobile logo */}
-          <div className="block md:hidden">{LogoSlot}</div>
-          {/* Desktop logo */}
-          <div className="hidden md:block">{LogoSlot}</div>
+          <div className="block">{LogoSlot}</div>
           {/* Desktop Navigation & Mobile Hamburger */}
           {showNavContent && (
             <div
@@ -367,9 +368,10 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
         <div className="hidden md:block lg:hidden">
           <SlidePanel
             isOpen={isMobileMenuOpen}
-            onClose={() => setMobileMenuOpen(false)}
+            onClose={handleCloseMenu}
             top={layout.panelTop}
             height={layout.panelHeight}
+            previewWindow={previewWindow}
           >
             {renderMenuContent("tablet")}
           </SlidePanel>
@@ -384,12 +386,14 @@ const SlidePanel = ({
   onClose,
   top,
   height,
+  previewWindow,
   children,
 }: {
   isOpen: boolean;
   onClose: () => void;
   top: number;
   height: number;
+  previewWindow?: Window | null;
   children: React.ReactNode;
 }) => {
   const { t } = useTranslation();
@@ -399,18 +403,21 @@ const SlidePanel = ({
     if (!isOpen) {
       return;
     }
+
+    const targetWindow = previewWindow || window;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
+    targetWindow.addEventListener("keydown", handleKeyDown);
 
     // Auto-focus the panel when it opens so Screen Readers start there
     panelRef.current?.focus();
 
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+    return () => targetWindow.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose, previewWindow]);
 
   return (
     <>
@@ -437,6 +444,7 @@ const SlidePanel = ({
         ref={panelRef}
         aria-label={t("expandedMenu", "Expanded menu")}
         aria-hidden={!isOpen}
+        {...(!isOpen && { inert: "" })}
         tabIndex={-1}
         className={`fixed right-0 z-50 bg-white transition-transform duration-600 ease-in-out ${
           isOpen ? "translate-x-0 overflow-y-auto" : "translate-x-full"

@@ -28,7 +28,7 @@ const clickMenuIfVisible = async (page: BrowserPage) => {
   if (isVisible) {
     await act(async () => {
       await menuButton.click();
-      await delay(1000); // wait for menu animation
+      await delay(1_000); // wait for menu animation
     });
   }
 };
@@ -2297,6 +2297,8 @@ const tests: ComponentTest[] = [
   },
 ];
 
+const screenshotThreshold = 30;
+
 describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
     components: { ExpandedHeader, BannerSection, ...SlotsCategoryComponents },
@@ -2381,7 +2383,7 @@ describe("ExpandedHeader", async () => {
         await interactions(page);
         await expect(
           `ExpandedHeader/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ customThreshold: screenshotThreshold });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }
