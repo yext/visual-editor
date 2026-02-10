@@ -103,23 +103,13 @@ export const SearchComponent: ComponentConfig<{
             data: {
               verticals: [
                 {
+                  label: "All",
+                  pageType: "universal",
+                },
+                {
                   label: "FAQs",
                   verticalKey: "faq",
                   layout: "Flex",
-                  universalLimit: 3,
-                  verticalLimit: 5,
-                },
-                {
-                  label: "Products",
-                  verticalKey: "product",
-                  layout: "Grid",
-                  universalLimit: 3,
-                  verticalLimit: 5,
-                },
-                {
-                  label: "Locations",
-                  verticalKey: "locations",
-                  layout: "Map",
                   universalLimit: 3,
                   verticalLimit: 5,
                 },
