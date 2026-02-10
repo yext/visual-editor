@@ -1622,8 +1622,8 @@ const tests: ComponentTest[] = [
               id: "PrimaryHeaderSlot-996a93fa-0573-4e85-b7d4-a0557c34de80",
               styles: {
                 backgroundColor: {
-                  bgColor: "bg-white",
-                  textColor: "text-black",
+                  bgColor: "bg-palette-quaternary",
+                  textColor: "text-palette-quaternary-contrast",
                 },
               },
               slots: {
@@ -1950,8 +1950,8 @@ const tests: ComponentTest[] = [
               id: "PrimaryHeaderSlot-996a93fa-0573-4e85-b7d4-a0557c34de80",
               styles: {
                 backgroundColor: {
-                  bgColor: "bg-white",
-                  textColor: "text-black",
+                  bgColor: "bg-palette-primary-dark",
+                  textColor: "text-white",
                 },
               },
               slots: {

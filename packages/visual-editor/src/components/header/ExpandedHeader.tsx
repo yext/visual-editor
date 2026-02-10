@@ -105,22 +105,8 @@ const ExpandedHeaderWrapper: PuckComponent<ExpandedHeaderProps> = ({
   styles,
   slots,
 }) => {
-  const [primaryHasCollapsedLinks, setPrimaryHasCollapsedLinks] =
-    React.useState(false);
-  const [primaryOverflow, setPrimaryOverflow] = React.useState(false);
-  const [secondaryOverflow, setSecondaryOverflow] = React.useState(false);
-
   return (
-    <ExpandedHeaderMenuProvider
-      value={{
-        primaryHasCollapsedLinks,
-        setPrimaryHasCollapsedLinks,
-        primaryOverflow,
-        setPrimaryOverflow,
-        secondaryOverflow,
-        setSecondaryOverflow,
-      }}
-    >
+    <ExpandedHeaderMenuProvider>
       <div className={headerWrapper({ position: styles.headerPosition })}>
         {/* Secondary Header (Top Bar) */}
         <div className="hidden md:flex">
