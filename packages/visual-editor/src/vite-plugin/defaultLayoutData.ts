@@ -5430,7 +5430,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 59,
+      version: 60,
       pageHeading: {
         title: {
           field: "",
