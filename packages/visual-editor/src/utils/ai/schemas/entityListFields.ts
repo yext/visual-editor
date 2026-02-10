@@ -1,10 +1,10 @@
-import { BaseField } from "@puckeditor/core";
+import { FieldAiParams } from "@puckeditor/plugin-ai";
 import { translatableStringAiSchema } from "./baseTypes.ts";
 import { TYPE_TO_CONSTANT_CONFIG } from "../../../editor/YextEntityFieldSelector.tsx";
 
 export const entityListFieldsAiSchema: Record<
   keyof typeof TYPE_TO_CONSTANT_CONFIG,
-  BaseField["ai"]
+  FieldAiParams
 > = {
   "type.string": {
     schema: {

@@ -22,7 +22,7 @@ export const normalizeLink = (
   content?: string,
   linkType?: LinkType
 ): string => {
-  if (!content) {
+  if (!content || typeof content !== "string") {
     return "";
   }
 

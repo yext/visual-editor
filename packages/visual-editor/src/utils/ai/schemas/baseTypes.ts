@@ -1,7 +1,7 @@
-import { BaseField } from "@puckeditor/core";
+import { FieldAiParams } from "@puckeditor/plugin-ai";
 
 export const translatableStringAiSchema: Exclude<
-  Exclude<BaseField["ai"], undefined>["schema"],
+  FieldAiParams["schema"],
   undefined
 > = {
   type: "object",
@@ -14,7 +14,7 @@ export const translatableStringAiSchema: Exclude<
 };
 
 export const translatableRtfAiSchema: Exclude<
-  Exclude<BaseField["ai"], undefined>["schema"],
+  FieldAiParams["schema"],
   undefined
 > = {
   type: "object",
@@ -31,7 +31,7 @@ export const translatableRtfAiSchema: Exclude<
 };
 
 export const translatableAssetImageAiSchema: Exclude<
-  Exclude<BaseField["ai"], undefined>["schema"],
+  FieldAiParams["schema"],
   undefined
 > = {
   type: "object",

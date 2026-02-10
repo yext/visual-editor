@@ -1,4 +1,4 @@
-import { BaseField } from "@puckeditor/core";
+import { FieldAiParams } from "@puckeditor/plugin-ai";
 import { TYPE_TO_CONSTANT_CONFIG } from "../../../editor/YextEntityFieldSelector.tsx";
 import {
   translatableAssetImageAiSchema,
@@ -9,7 +9,7 @@ import { translatableCtaAiSchema } from "./cta.ts";
 
 export const entityFieldsAiSchema: Record<
   keyof typeof TYPE_TO_CONSTANT_CONFIG,
-  BaseField["ai"]
+  FieldAiParams
 > = {
   "type.string": {
     instructions: `Put any data relevant to the business in the constant value for en.

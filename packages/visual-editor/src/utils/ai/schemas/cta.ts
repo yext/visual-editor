@@ -1,8 +1,8 @@
-import { BaseField } from "@puckeditor/core";
+import { FieldAiParams } from "@puckeditor/plugin-ai";
 import { translatableStringAiSchema } from "./baseTypes.ts";
 
 export const translatableCtaAiSchema: Exclude<
-  Exclude<BaseField["ai"], undefined>["schema"],
+  FieldAiParams["schema"],
   undefined
 > = {
   type: "object",
