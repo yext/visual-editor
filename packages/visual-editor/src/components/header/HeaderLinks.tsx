@@ -13,7 +13,6 @@ import { CTA } from "../atoms/cta.tsx";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { themeManagerCn } from "../../utils/cn.ts";
 import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
@@ -161,63 +160,68 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
   }),
 };
 
+const useWindowWidth = (externalWindow?: Window | null) => {
+  const [width, setWidth] = React.useState(externalWindow?.innerWidth ?? 1024);
+
+  React.useLayoutEffect(() => {
+    const win = externalWindow || window;
+    const handleResize = () => setWidth(win.innerWidth);
+    win.addEventListener("resize", handleResize);
+    return () => win.removeEventListener("resize", handleResize);
+  }, [externalWindow]);
+
+  return width;
+};
+
 const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   data,
   styles,
   parentData,
   puck,
 }) => {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const streamDocument = useDocument();
+  const previewWindow = usePreviewWindow();
 
   const navRef = React.useRef<HTMLDivElement | null>(null);
   const measureContainerRef = React.useRef<HTMLUListElement | null>(null);
   const displayMode = useHeaderLinksDisplayMode();
   const menuContext = useExpandedHeaderMenu();
-  const primaryOverflow = menuContext?.primaryOverflow ?? false;
+
+  const windowWidth = useWindowWidth(previewWindow);
+  const { isMobile, isDesktop } = getHeaderViewport(windowWidth);
+  const isOverflow = useOverflow(navRef, measureContainerRef, 0);
 
   const type = parentData?.type || "Primary";
   const isSecondary = type === "Secondary";
-  const validLinks = data.links?.filter((item) => !!item?.link) || [];
-  const validAlwaysCollapsedLinks = isSecondary
-    ? []
-    : data.collapsedLinks?.filter((item) => !!item?.link) || [];
-  const previewWindow = usePreviewWindow();
-  const [windowWidth, setWindowWidth] = React.useState(
-    previewWindow?.innerWidth ?? 1024
-  );
-  const { isMobile, isDesktop } = getHeaderViewport(windowWidth);
+  const primaryOverflow = menuContext?.primaryOverflow ?? false;
 
-  // Keep width in sync with the preview window for menu layout decisions.
-  React.useEffect(() => {
-    if (!previewWindow) {
-      return;
+  const validLinks = React.useMemo(
+    () => data.links?.filter((item) => !!item?.link) || [],
+    [data.links]
+  );
+  const validAlwaysCollapsedLinks = React.useMemo(
+    () =>
+      isSecondary
+        ? []
+        : data.collapsedLinks?.filter((item) => !!item?.link) || [],
+    [isSecondary, data.collapsedLinks]
+  );
+
+  // Derive styles based on display mode and styles props.
+  const justifyClass = React.useMemo(() => {
+    if (displayMode === "menu") {
+      return isDesktop ? "justify-end" : "justify-start";
     }
 
-    const updateWidth = () => setWindowWidth(previewWindow.innerWidth);
-    updateWidth();
-    previewWindow.addEventListener("resize", updateWidth);
-    return () => previewWindow.removeEventListener("resize", updateWidth);
-  }, [previewWindow]);
-
-  const isOverflow = useOverflow(navRef, measureContainerRef, 0);
-
-  // Base alignment. In menu mode we override to match menu UX.
-  let justifyClass = styles?.align
-    ? {
-        left: "justify-start",
-        center: "justify-center",
-        right: "justify-end",
-      }[styles.align]
-    : "justify-end";
-
-  if (displayMode === "menu") {
-    justifyClass = isDesktop ? "justify-end" : "justify-start";
-  }
-
+    const alignmentMap = {
+      left: "justify-start",
+      center: "justify-center",
+      right: "justify-end",
+    };
+    return alignmentMap[styles?.align || "right"];
+  }, [displayMode, isDesktop, styles?.align]);
   const weightClass = styles?.weight === "bold" ? "font-bold" : "font-normal";
-
-  // Size mapping for the link text.
   const sizeClass = styles?.variant
     ? {
         xs: "text-body-xs-fontSize",
@@ -227,46 +231,6 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       }[styles.variant]
     : "text-body-fontSize";
 
-  const renderLink = (
-    item: TranslatableCTA,
-    index: number,
-    ctaType: string
-  ) => {
-    return (
-      <CTA
-        variant={
-          type === "Primary"
-            ? "headerFooterMainLink"
-            : "headerFooterSecondaryLink"
-        }
-        color={styles?.color}
-        openInNewTab={item.openInNewTab}
-        eventName={`cta.${ctaType}.${index}`}
-        label={resolveComponentData(item.label, i18n.language, streamDocument)}
-        linkType={item.linkType}
-        link={resolveComponentData(item.link, i18n.language, streamDocument)}
-        className={`${justifyClass} ${weightClass} ${sizeClass} w-full text-wrap break-words`}
-      />
-    );
-  };
-
-  React.useEffect(() => {
-    if (!menuContext || displayMode !== "inline") {
-      return;
-    }
-
-    if (!isSecondary) {
-      menuContext.setPrimaryHasCollapsedLinks(
-        validAlwaysCollapsedLinks.length > 0
-      );
-      return () => menuContext.setPrimaryHasCollapsedLinks(false);
-    }
-  }, [menuContext, displayMode, isSecondary, validAlwaysCollapsedLinks.length]);
-
-  const shouldShowLinks =
-    !isSecondary || displayMode === "menu" || isMobile || !isOverflow;
-
-  // Primary header's menu can show all the links or just collapsed links.
   const linksToRender = React.useMemo(() => {
     if (displayMode !== "menu" || isSecondary) {
       return validLinks;
@@ -285,74 +249,73 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     validAlwaysCollapsedLinks,
   ]);
 
-  const ariaLabel =
-    displayMode === "menu"
-      ? type === "Primary"
-        ? t("primaryHeaderLinksMenu", "Primary Header Links (Menu)")
-        : t("secondaryHeaderLinksMenu", "Secondary Header Links (Menu)")
-      : type === "Primary"
-        ? t("primaryHeaderLinks", "Primary Header Links")
-        : t("secondaryHeaderLinks", "Secondary Header Links");
-
-  if (validLinks.concat(validAlwaysCollapsedLinks).length === 0) {
-    if (puck.isEditing) {
-      return (
-        <nav aria-label={ariaLabel}>
-          <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
-            <li className="py-4 md:py-0">
-              <div className="h-5 min-w-[100px]" />
-            </li>
-          </ul>
-        </nav>
+  // Update setPrimaryHasCollapsedLinks for menuContext
+  React.useEffect(() => {
+    if (menuContext && displayMode === "inline" && !isSecondary) {
+      menuContext.setPrimaryHasCollapsedLinks(
+        validAlwaysCollapsedLinks.length > 0
       );
+      return () => menuContext.setPrimaryHasCollapsedLinks(false);
     }
-    return <></>;
+  }, [menuContext, displayMode, isSecondary, validAlwaysCollapsedLinks.length]);
+
+  const renderLink = (item: TranslatableCTA, index: number) => (
+    <CTA
+      variant={
+        !isSecondary ? "headerFooterMainLink" : "headerFooterSecondaryLink"
+      }
+      color={styles?.color}
+      openInNewTab={item.openInNewTab}
+      eventName={`cta.${type.toLowerCase()}.${index}`}
+      label={resolveComponentData(item.label, i18n.language, streamDocument)}
+      linkType={item.linkType}
+      link={resolveComponentData(item.link, i18n.language, streamDocument)}
+      className={`${justifyClass} ${weightClass} ${sizeClass} w-full text-wrap break-words`}
+    />
+  );
+
+  // Early return for empty state
+  if (validLinks.length + validAlwaysCollapsedLinks.length === 0) {
+    return puck.isEditing ? (
+      <nav className="h-5 min-w-[100px] opacity-20" />
+    ) : (
+      <></>
+    );
   }
 
   return (
     <nav
       ref={navRef}
       className={`flex md:gap-6 md:items-center ${justifyClass}`}
-      aria-label={ariaLabel}
     >
-      {/* Measure list: offscreen but used for overflow detection. */}
+      {/* Hidden measure list for overflow math */}
       <ul
         ref={measureContainerRef}
-        className="flex flex-col md:flex-row w-fit sm:w-auto gap-0 md:gap-6 md:items-center absolute top-0 left-[-9999px] invisible"
+        className="flex flex-col md:flex-row absolute top-0 left-[-9999px] invisible"
       >
-        {validLinks.map((item, index) => {
-          return (
-            <li
-              key={`${type.toLowerCase()}.${index}`}
-              className={themeManagerCn("py-4 md:py-0")}
-            >
-              {renderLink(item, index, type.toLowerCase())}
-            </li>
-          );
-        })}
+        {validLinks.map((item, i) => (
+          <li key={`measure-${i}`} className="py-4 md:py-0">
+            {renderLink(item, i)}
+          </li>
+        ))}
       </ul>
 
       {/* Visible list */}
-      {shouldShowLinks && (
+      {(!isSecondary || displayMode === "menu" || isMobile || !isOverflow) && (
         <ul
           className={`flex flex-col w-full sm:w-auto gap-0 ${
             displayMode === "menu"
               ? isDesktop
-                ? "justify-end md:flex-row md:gap-6 md:items-center"
+                ? "md:flex-row md:gap-6 md:items-center justify-end"
                 : "justify-start"
               : `${justifyClass} md:flex-row md:gap-6`
           } ${sizeClass} ${weightClass}`}
         >
-          {linksToRender.map((item, index) => {
-            return (
-              <li
-                key={`${type.toLowerCase()}.${index}`}
-                className={`py-4 lg:py-0`}
-              >
-                {renderLink(item, index, type.toLowerCase())}
-              </li>
-            );
-          })}
+          {linksToRender.map((item, i) => (
+            <li key={`visible-${i}`} className="py-4 lg:py-0">
+              {renderLink(item, i)}
+            </li>
+          ))}
         </ul>
       )}
     </nav>

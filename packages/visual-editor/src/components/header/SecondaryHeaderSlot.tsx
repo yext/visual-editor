@@ -98,36 +98,36 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   const streamDocument = useDocument();
   const displayMode = useHeaderLinksDisplayMode();
   const menuContext = useExpandedHeaderMenu();
+
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const isOverflow = useOverflow(containerRef, contentRef, 0);
 
-  const languageDropDownProps =
-    parseDocumentForLanguageDropdown(streamDocument);
-  const showLanguageSelector =
-    languageDropDownProps && languageDropDownProps.locales?.length > 1;
+  const languageDropDownProps = React.useMemo(
+    () => parseDocumentForLanguageDropdown(streamDocument),
+    [streamDocument]
+  );
 
-  const { show } = data;
-  // Hide the secondary header on live pages if it overflows.
-  const hideSecondaryHeader =
-    !puck.isEditing && displayMode === "inline" && isOverflow;
+  const showLanguageSelector =
+    data.showLanguageDropdown &&
+    languageDropDownProps &&
+    languageDropDownProps.locales?.length > 1;
+
+  const isMenuMode = displayMode === "menu";
+  const hideSecondaryHeader = !puck.isEditing && !isMenuMode && isOverflow;
 
   React.useEffect(() => {
-    if (!menuContext || displayMode !== "inline") {
+    if (!menuContext || !isMenuMode) {
       return;
     }
 
-    // Report overflow state to the expanded header menu.
-    if (!show) {
-      menuContext.setSecondaryOverflow(false);
-      return;
-    }
+    // If shown, report actual overflow; if hidden, report false.
+    menuContext.setSecondaryOverflow(data.show ? isOverflow : false);
 
-    menuContext.setSecondaryOverflow(isOverflow);
     return () => menuContext.setSecondaryOverflow(false);
-  }, [menuContext, displayMode, isOverflow, show]);
+  }, [menuContext, isMenuMode, isOverflow, data.show]);
 
-  if (puck.isEditing && !show) {
+  if (puck.isEditing && !data.show) {
     return (
       <div className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer">
         <p className="text-sm text-gray-600">
@@ -140,7 +140,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
     );
   }
 
-  if (!show) {
+  if (!data.show) {
     return <></>;
   }
 
@@ -165,30 +165,32 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
       <div ref={containerRef} className="w-full">
         <div
           className={
-            displayMode === "menu"
+            isMenuMode
               ? "flex flex-col items-start gap-4"
               : "md:flex md:justify-end md:gap-6 md:items-center"
           }
         >
           <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
-          {data.showLanguageDropdown && showLanguageSelector && (
+          {showLanguageSelector && (
             <LanguageDropdown {...languageDropDownProps} />
           )}
         </div>
       </div>
-      {displayMode === "inline" && (
+
+      {/* Measurement Div - Only needed in inline mode */}
+      {!isMenuMode && (
         <div
           ref={contentRef}
-          className="absolute top-0 left-[-9999px] invisible pointer-events-none flex flex-row items-center gap-6 w-max"
+          className="absolute top-0 left-[-9999px] invisible pointer-events-none flex items-center gap-6 w-max"
           aria-hidden="true"
         >
-          {/* Offscreen measurement container for overflow detection. */}
           <div className="flex-shrink-0 w-max">
             <slots.LinksSlot style={{ height: "auto", width: "auto" }} />
           </div>
-          {data.showLanguageDropdown && showLanguageSelector && (
+          {showLanguageSelector && (
             <div className="flex-shrink-0 w-max">
-              <LanguageDropdown {...languageDropDownProps} />
+              <div className="h-5 w-20 bg-gray-200" />{" "}
+              {/* Placeholder for language dropdown */}
             </div>
           )}
         </div>

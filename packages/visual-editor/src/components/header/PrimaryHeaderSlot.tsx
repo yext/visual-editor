@@ -30,6 +30,8 @@ import {
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
 
+const HAMBURGER_RESERVE_PX = 48;
+
 export interface PrimaryHeaderSlotProps {
   styles: {
     backgroundColor?: BackgroundStyle;
@@ -122,114 +124,98 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   puck,
 }) => {
   const { t } = useTranslation();
-
-  const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
-  const [viewportWidth, setViewportWidth] = React.useState<number>(1024);
-  const [panelTop, setPanelTop] = React.useState(0);
-  const [panelHeight, setPanelHeight] = React.useState(0);
   const previewWindow = usePreviewWindow();
+  const menuContext = useExpandedHeaderMenu();
+
+  const headerRef = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const hamburgerButtonRef = React.useRef<HTMLButtonElement>(null);
-  const headerRef = React.useRef<HTMLDivElement>(null);
-  const menuContext = useExpandedHeaderMenu();
-  const primaryHasCollapsedLinks =
-    menuContext?.primaryHasCollapsedLinks ?? false;
-  const secondaryOverflow = menuContext?.secondaryOverflow ?? false;
+
+  const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [layout, setLayout] = React.useState({
+    viewportWidth: 1024,
+    panelTop: 0,
+    panelHeight: 0,
+  });
+
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
-  const HAMBURGER_RESERVE_PX = 48;
+  const { isTablet, isDesktop } = getHeaderViewport(layout.viewportWidth);
+
   const primaryOverflow = useOverflow(
     containerRef,
     contentRef,
     showNavContent ? HAMBURGER_RESERVE_PX : 0
   );
-  const { isTablet, isDesktop } = getHeaderViewport(viewportWidth);
+
+  const primaryHasCollapsedLinks =
+    menuContext?.primaryHasCollapsedLinks ?? false;
+  const secondaryOverflow = menuContext?.secondaryOverflow ?? false;
   const showHamburger =
     primaryOverflow || primaryHasCollapsedLinks || secondaryOverflow;
 
-  // Track viewport size from the previewWindow (or header width in editor).
-  React.useEffect(() => {
-    if (!previewWindow) {
+  // Handles resizing, scrolling, and panel positioning in one place.
+  React.useLayoutEffect(() => {
+    const win = previewWindow || window;
+    const header = headerRef.current;
+    if (!header) {
       return;
     }
 
-    const updateViewport = () => {
-      const headerWidth = headerRef.current?.clientWidth;
-      if (headerWidth && headerWidth > 0) {
-        setViewportWidth(headerWidth);
-      }
+    const updateLayout = () => {
+      const rect = header.getBoundingClientRect();
+      setLayout({
+        viewportWidth: rect.width || win.innerWidth,
+        panelTop: rect.bottom,
+        panelHeight: Math.max(0, win.innerHeight - rect.bottom),
+      });
     };
 
-    updateViewport();
-    previewWindow.addEventListener("resize", updateViewport);
-    const observer = new ResizeObserver(updateViewport);
-    if (headerRef.current) {
-      observer.observe(headerRef.current);
-    }
+    const resizeObserver = new ResizeObserver(updateLayout);
+    resizeObserver.observe(header);
+    win.addEventListener("resize", updateLayout);
+    win.addEventListener("scroll", updateLayout, { passive: true });
+
+    updateLayout();
 
     return () => {
-      previewWindow.removeEventListener("resize", updateViewport);
-      observer.disconnect();
+      resizeObserver.disconnect();
+      win.removeEventListener("resize", updateLayout);
+      win.removeEventListener("scroll", updateLayout);
     };
-  }, [previewWindow]);
+  }, [previewWindow, isMobileMenuOpen]); // Re-sync when menu opens to ensure panel snaps to header
 
-  // Keep the tablet drawer positioned below the header and full height.
+  // Handles external communication (Puck portals and Context updates)
   React.useEffect(() => {
-    if (!previewWindow || !isTablet || !isMobileMenuOpen) {
-      return;
+    const unregisterPortal = registerOverlayPortal(hamburgerButtonRef.current);
+
+    if (menuContext) {
+      menuContext.setPrimaryOverflow(primaryOverflow);
     }
 
-    const updatePanelMetrics = () => {
-      const headerBottom =
-        headerRef.current?.getBoundingClientRect().bottom ?? 0;
-      setPanelTop(headerBottom);
-      setPanelHeight(Math.max(0, previewWindow.innerHeight - headerBottom));
-    };
-
-    updatePanelMetrics();
-    previewWindow.addEventListener("resize", updatePanelMetrics);
-    previewWindow.addEventListener("scroll", updatePanelMetrics, {
-      passive: true,
-    });
-
-    return () => {
-      previewWindow.removeEventListener("resize", updatePanelMetrics);
-      previewWindow.removeEventListener("scroll", updatePanelMetrics);
-    };
-  }, [previewWindow, isTablet, isMobileMenuOpen]);
-
-  React.useEffect(() => {
-    if (!menuContext) {
-      return;
-    }
-
-    // Share primary overflow with other header parts
-    menuContext.setPrimaryOverflow(primaryOverflow);
-    return () => menuContext.setPrimaryOverflow(false);
-  }, [menuContext, primaryOverflow]);
-
-  // Make the hamburger button interactive in the editor.
-  React.useEffect(
-    () => registerOverlayPortal(hamburgerButtonRef.current),
-    [hamburgerButtonRef.current]
-  );
-
-  // In the editor if primary links are changed so they no longer
-  // overflow, close the desktop/tablet expanded link menu
-  React.useEffect(() => {
-    if (!puck.isEditing || !containerRef.current?.clientWidth) {
-      return;
-    }
-
+    // Auto-close menu if overflow disappears
     if (
+      puck.isEditing &&
       !showHamburger &&
       isMobileMenuOpen &&
-      containerRef.current.clientWidth > 360
+      layout.viewportWidth > 360
     ) {
       setMobileMenuOpen(false);
     }
-  }, [puck.isEditing, showHamburger, isMobileMenuOpen, containerRef.current]);
+
+    return () => {
+      unregisterPortal?.();
+      menuContext?.setPrimaryOverflow(false);
+    };
+  }, [
+    primaryOverflow,
+    showHamburger,
+    isMobileMenuOpen,
+    layout.viewportWidth,
+    puck.isEditing,
+    menuContext,
+  ]);
 
   const LogoSlot = (
     <div
@@ -389,8 +375,8 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
           <SlidePanel
             isOpen={isMobileMenuOpen}
             onClose={() => setMobileMenuOpen(false)}
-            top={panelTop}
-            height={panelHeight}
+            top={layout.panelTop}
+            height={layout.panelHeight}
           >
             {renderMenuContent("tablet")}
           </SlidePanel>
@@ -414,6 +400,25 @@ const SlidePanel = ({
   children: React.ReactNode;
 }) => {
   const { t } = useTranslation();
+  const panelRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Auto-focus the panel when it opens so Screen Readers start there
+    panelRef.current?.focus();
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   return (
     <>
       {/* Backdrop blocks content when the panel is open. */}
@@ -435,9 +440,11 @@ const SlidePanel = ({
       {/* Panel holds the expanded header menu content. */}
       <div
         role="dialog"
+        aria-modal="true" // Tells screen readers this is the only interactive content while open
+        ref={panelRef}
         aria-label={t("expandedMenu", "Expanded menu")}
         aria-hidden={!isOpen}
-        tabIndex={isOpen ? 0 : -1}
+        tabIndex={-1}
         className={`fixed right-0 z-50 bg-white transition-transform duration-600 ease-in-out ${
           isOpen ? "translate-x-0 overflow-y-auto" : "translate-x-full"
         }`}
