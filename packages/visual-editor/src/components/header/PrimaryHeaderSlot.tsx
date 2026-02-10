@@ -134,7 +134,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
 
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [layout, setLayout] = React.useState({
-    viewportWidth: 1024,
+    viewportWidth: previewWindow?.innerWidth ?? 1024,
     panelTop: 0,
     panelHeight: 0,
   });
