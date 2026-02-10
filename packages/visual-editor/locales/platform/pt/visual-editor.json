@@ -595,7 +595,7 @@
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "mediaType": "Tipo de mídia",
-  "metaTitleMissingLocales": "O meta título está faltando para localidade(s): {{locales}}",
+  "metaTitleMissingLocales": "O meta título está faltando para locais: {{locales}}",
   "mile_one": "milha",
   "mile_other": "milhas",
   "missingHtmlWidget": "Adicione HTML para visualizar o componente",
@@ -672,7 +672,7 @@
   "promoMedia": "Mídia promocional",
   "publishError": {
     "components": "exclua ou corrija seções com erros",
-    "metaTitle": "preencha o Meta Title para todas as localidades navegando até as configurações do componente de página de nível superior",
+    "metaTitle": "preencha o Meta Title para todos os locais navegando até as configurações do componente de página de nível superior",
     "metaTitleWithLocales": "preencha o Meta Title para os seguintes locais navegando até as configurações do componente de página de nível superior: {{locales}}"
   },
   "readLess": "Leia menos",

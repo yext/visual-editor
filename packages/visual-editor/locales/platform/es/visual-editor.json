@@ -672,7 +672,7 @@
   "publishError": {
     "components": "eliminar o corregir secciones con errores",
     "metaTitle": "complete el metatítulo para todas las configuraciones regionales navegando a la configuración del componente de página de nivel superior",
-    "metaTitleWithLocales": "Complete el metatítulo para las siguientes configuraciones regionales navegando a la configuración del componente de página de nivel superior: {{locales}}"
+    "metaTitleWithLocales": "complete el metatítulo para las siguientes configuraciones regionales navegando a la configuración del componente de página de nivel superior: {{locales}}"
   },
   "readLess": "Leer menos",
   "readMore": "Leer más",

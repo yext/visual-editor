@@ -50,7 +50,9 @@ export const MetaTitleValidationReporter = () => {
   React.useEffect(() => {
     if (hasError) {
       setErrorDetails("metaTitle", { missingLocales });
-      return;
+      return () => {
+        clearErrorDetails("metaTitle");
+      };
     }
     clearErrorDetails("metaTitle");
   }, [hasError, missingLocalesKey, setErrorDetails, clearErrorDetails]);
