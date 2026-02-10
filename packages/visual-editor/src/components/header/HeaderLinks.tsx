@@ -186,7 +186,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const [windowWidth, setWindowWidth] = React.useState(
     previewWindow?.innerWidth ?? 1024
   );
-  const { isMobile, isTablet, isDesktop } = getHeaderViewport(windowWidth);
+  const { isMobile, isDesktop } = getHeaderViewport(windowWidth);
 
   // Keep width in sync with the preview window for menu layout decisions.
   React.useEffect(() => {
@@ -261,15 +261,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       );
       return () => menuContext.setPrimaryHasCollapsedLinks(false);
     }
-  }, [
-    menuContext,
-    displayMode,
-    isSecondary,
-    isOverflow,
-    isTablet,
-    isDesktop,
-    validAlwaysCollapsedLinks.length,
-  ]);
+  }, [menuContext, displayMode, isSecondary, validAlwaysCollapsedLinks.length]);
 
   const shouldShowLinks =
     !isSecondary || displayMode === "menu" || isMobile || !isOverflow;
