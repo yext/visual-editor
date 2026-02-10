@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 59,
+      version: 60,
       title: {
         field: "name",
         constantValue: "",
