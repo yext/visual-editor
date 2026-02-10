@@ -179,7 +179,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   parentData,
   puck,
 }) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
   const previewWindow = usePreviewWindow();
 
@@ -195,6 +195,14 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   const type = parentData?.type || "Primary";
   const isSecondary = type === "Secondary";
   const primaryOverflow = menuContext?.primaryOverflow ?? false;
+  const ariaLabel =
+    displayMode === "menu"
+      ? type === "Primary"
+        ? t("primaryHeaderLinksMenu", "Primary Header Links (Menu)")
+        : t("secondaryHeaderLinksMenu", "Secondary Header Links (Menu)")
+      : type === "Primary"
+        ? t("primaryHeaderLinks", "Primary Header Links")
+        : t("secondaryHeaderLinks", "Secondary Header Links");
 
   const validLinks = React.useMemo(
     () => data.links?.filter((item) => !!item?.link) || [],
@@ -285,6 +293,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
 
   return (
     <nav
+      aria-label={ariaLabel}
       ref={navRef}
       className={`flex md:gap-6 md:items-center ${justifyClass}`}
     >
