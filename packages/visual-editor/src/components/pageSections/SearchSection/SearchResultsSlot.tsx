@@ -95,10 +95,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     }
 
     searchActions.setUniversal();
-    searchActions.setQuery(searchTerm);
-    searchActions.setRestrictVerticals(
-      verticals.filter((v) => v.verticalKey).map((v) => v.verticalKey as string)
-    );
+    // searchActions.setQuery(searchTerm);
+
     searchActions.setUniversalLimit(universalLimit);
     searchActions.executeUniversalQuery();
   }, [verticals, searchTerm, universalLimit, searchActions]);
