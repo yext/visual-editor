@@ -186,15 +186,20 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
     };
   }, [previewWindow, isMobileMenuOpen]); // Re-sync when menu opens to ensure panel snaps to header
 
-  // Handles external communication (Puck portals and Context updates)
+  // Puck portal registration for the hamburger button
+  React.useEffect(
+    () => registerOverlayPortal(hamburgerButtonRef.current),
+    [hamburgerButtonRef.current]
+  );
+
+  // Sync overflow state with parent context
   React.useEffect(() => {
-    const unregisterPortal = registerOverlayPortal(hamburgerButtonRef.current);
+    menuContext?.setPrimaryOverflow(primaryOverflow);
+    return () => menuContext?.setPrimaryOverflow(false);
+  }, [menuContext, primaryOverflow]);
 
-    if (menuContext) {
-      menuContext.setPrimaryOverflow(primaryOverflow);
-    }
-
-    // Auto-close menu if overflow disappears
+  // Auto-close menu when overflow disappears
+  React.useEffect(() => {
     if (
       puck.isEditing &&
       !showHamburger &&
@@ -203,19 +208,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
     ) {
       setMobileMenuOpen(false);
     }
-
-    return () => {
-      unregisterPortal?.();
-      menuContext?.setPrimaryOverflow(false);
-    };
-  }, [
-    primaryOverflow,
-    showHamburger,
-    isMobileMenuOpen,
-    layout.viewportWidth,
-    puck.isEditing,
-    menuContext,
-  ]);
+  }, [puck.isEditing, showHamburger, isMobileMenuOpen, layout.viewportWidth]);
 
   const LogoSlot = (
     <div

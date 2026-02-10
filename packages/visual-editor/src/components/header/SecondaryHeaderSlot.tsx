@@ -117,7 +117,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   const hideSecondaryHeader = !puck.isEditing && !isMenuMode && isOverflow;
 
   React.useEffect(() => {
-    if (!menuContext || !isMenuMode) {
+    if (!menuContext || isMenuMode) {
       return;
     }
 
@@ -125,7 +125,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
     menuContext.setSecondaryOverflow(data.show ? isOverflow : false);
 
     return () => menuContext.setSecondaryOverflow(false);
-  }, [menuContext, isMenuMode, isOverflow, data.show]);
+  }, [menuContext, isMenuMode, data.show]);
 
   if (puck.isEditing && !data.show) {
     return (

@@ -166,6 +166,7 @@ const useWindowWidth = (externalWindow?: Window | null) => {
   React.useLayoutEffect(() => {
     const win = externalWindow || window;
     const handleResize = () => setWidth(win.innerWidth);
+    handleResize();
     win.addEventListener("resize", handleResize);
     return () => win.removeEventListener("resize", handleResize);
   }, [externalWindow]);
