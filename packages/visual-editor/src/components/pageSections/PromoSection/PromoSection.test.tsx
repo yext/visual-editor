@@ -59,6 +59,160 @@ const promoData = {
   title: "Taste the universe!",
 };
 
+const version59Props = {
+  data: {
+    promo: {
+      field: "",
+      constantValue: {},
+      constantValueEnabled: true,
+    },
+    media: "image",
+    backgroundImage: {
+      field: "",
+      constantValue: {
+        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+        width: 550,
+        height: 310,
+      },
+      constantValueEnabled: true,
+    },
+  },
+  styles: {
+    variant: "classic",
+    backgroundColor: {
+      bgColor: "bg-white",
+      textColor: "text-black",
+    },
+    desktopImagePosition: "left",
+    mobileImagePosition: "top",
+    containerAlignment: "left",
+    imageHeight: 500,
+    showMedia: true,
+    showHeading: true,
+    showDescription: true,
+    showCTA: true,
+  },
+  slots: {
+    HeadingSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-dd6b1d6f-a447-45a7-8968-82d06e71abb9",
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                en: "Featured Promotion",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            level: 2,
+            align: "left",
+          },
+        },
+      },
+    ],
+    DescriptionSlot: [
+      {
+        type: "BodyTextSlot",
+        props: {
+          id: "BodyTextSlot-5fed969b-86c8-4a0b-9c02-3060f5e6a43b",
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                en: {
+                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            variant: "base",
+          },
+          parentStyles: {
+            className: "text-left",
+          },
+        },
+      },
+    ],
+    VideoSlot: [
+      {
+        type: "VideoSlot",
+        props: {
+          id: "VideoSlot-e0e945fb-5cb4-4a5c-b5a8-0e0a0d4ed174",
+          data: {},
+        },
+      },
+    ],
+    ImageSlot: [
+      {
+        type: "ImageSlot",
+        props: {
+          id: "ImageSlot-7e5fc723-874b-444d-bdcf-13bb689d3027",
+          data: {
+            image: {
+              field: "",
+              constantValue: {
+                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                width: 640,
+                height: 360,
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            aspectRatio: 1.78,
+            width: 640,
+          },
+          sizes: {
+            base: "calc(100vw - 32px)",
+            md: "min(width, 450px)",
+            lg: "width",
+          },
+          className:
+            "min-w-full lg:min-w-none max-w-full lg:max-w-none rounded-image-borderRadius",
+        },
+      },
+    ],
+    CTASlot: [
+      {
+        type: "CTASlot",
+        props: {
+          id: "CTASlot-7c1a6fdd-e049-423b-b6de-de24b93d2c78",
+          data: {
+            entityField: {
+              field: "",
+              constantValue: {
+                label: "Learn More",
+                link: "#",
+                linkType: "URL",
+                ctaType: "textAndLink",
+              },
+              selectedType: "textAndLink",
+            },
+          },
+          styles: {
+            variant: "primary",
+            presetImage: "app-store",
+          },
+          eventName: "cta",
+        },
+      },
+    ],
+  },
+  analytics: {
+    scope: "promoSection",
+  },
+  liveVisibility: true,
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
@@ -2476,6 +2630,63 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
       id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
     },
+  },
+  {
+    name: "[classic] version 59 with showMedia, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        showMedia: false,
+        showCTA: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[immersive] version 59 with showHeading, showDescription false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "immersive",
+        showHeading: false,
+        showDescription: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[compact] version 59 with showHeading, showDescription, showMedia false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "compact",
+        showHeading: false,
+        showDescription: false,
+        showMedia: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[spotlight] version 59 with showHeading, showDescription, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "spotlight",
+        showHeading: false,
+        showDescription: false,
+        showCTA: false,
+      },
+    },
+    version: 59,
   },
 ];
 
