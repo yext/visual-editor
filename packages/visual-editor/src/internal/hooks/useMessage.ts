@@ -281,7 +281,7 @@ const useListenAndRespondMessage = (
 /**
  * Sets a status based on the incoming message's status.
  * @param setStatus - A React useState hook for setting the status of the
- * original postMessage coming from the parent window or iframe.
+ * original postMessage coming from the parent window.
  */
 const statusSetter = (setStatus: Dispatch<SetStateAction<MessageStatus>>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

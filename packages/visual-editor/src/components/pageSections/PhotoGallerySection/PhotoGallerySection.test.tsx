@@ -729,9 +729,6 @@ describe("PhotoGallerySection", async () => {
         }
       });
 
-      if (name === "version 53 gallery variant with 3 images") {
-      }
-
       await expect(
         `PhotoGallerySection/[${viewportName}] ${name}`
       ).toMatchScreenshot();
