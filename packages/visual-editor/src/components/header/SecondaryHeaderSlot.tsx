@@ -12,7 +12,13 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
+import {
+  useExpandedHeaderMenu,
+  useHeaderLinksDisplayMode,
+} from "./ExpandedHeaderMenuContext.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
+import { useOverflow } from "../../hooks/useOverflow.ts";
+import * as React from "react";
 
 export interface SecondaryHeaderSlotProps {
   data: {
@@ -90,6 +96,11 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   puck,
 }) => {
   const streamDocument = useDocument();
+  const displayMode = useHeaderLinksDisplayMode();
+  const menuContext = useExpandedHeaderMenu();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const isOverflow = useOverflow(containerRef, contentRef, 0);
 
   const languageDropDownProps =
     parseDocumentForLanguageDropdown(streamDocument);
@@ -97,6 +108,24 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
     languageDropDownProps && languageDropDownProps.locales?.length > 1;
 
   const { show } = data;
+  // Hide the secondary header on live pages if it overflows.
+  const hideSecondaryHeader =
+    !puck.isEditing && displayMode === "inline" && isOverflow;
+
+  React.useEffect(() => {
+    if (!menuContext || displayMode !== "inline") {
+      return;
+    }
+
+    // Report overflow state to the expanded header menu.
+    if (!show) {
+      menuContext.setSecondaryOverflow(false);
+      return;
+    }
+
+    menuContext.setSecondaryOverflow(isOverflow);
+    return () => menuContext.setSecondaryOverflow(false);
+  }, [menuContext, displayMode, isOverflow, show]);
 
   if (puck.isEditing && !show) {
     return (
@@ -118,13 +147,51 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   return (
     <PageSection
       maxWidth={parentStyles?.maxWidth}
-      verticalPadding={"sm"}
+      verticalPadding={hideSecondaryHeader ? "none" : "sm"}
       background={styles.backgroundColor}
-      className="md:flex md:justify-end md:gap-6 md:items-center"
+      className="w-full"
+      outerStyle={
+        hideSecondaryHeader
+          ? {
+              height: 0,
+              overflow: "hidden",
+              visibility: "hidden",
+              pointerEvents: "none",
+            }
+          : undefined
+      }
+      aria-hidden={hideSecondaryHeader}
     >
-      <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
-      {data.showLanguageDropdown && showLanguageSelector && (
-        <LanguageDropdown {...languageDropDownProps} />
+      <div ref={containerRef} className="w-full">
+        <div
+          className={
+            displayMode === "menu"
+              ? "flex flex-col items-start gap-4"
+              : "md:flex md:justify-end md:gap-6 md:items-center"
+          }
+        >
+          <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
+          {data.showLanguageDropdown && showLanguageSelector && (
+            <LanguageDropdown {...languageDropDownProps} />
+          )}
+        </div>
+      </div>
+      {displayMode === "inline" && (
+        <div
+          ref={contentRef}
+          className="absolute top-0 left-[-9999px] invisible pointer-events-none flex flex-row items-center gap-6 w-max"
+          aria-hidden="true"
+        >
+          {/* Offscreen measurement container for overflow detection. */}
+          <div className="flex-shrink-0 w-max">
+            <slots.LinksSlot style={{ height: "auto", width: "auto" }} />
+          </div>
+          {data.showLanguageDropdown && showLanguageSelector && (
+            <div className="flex-shrink-0 w-max">
+              <LanguageDropdown {...languageDropDownProps} />
+            </div>
+          )}
+        </div>
       )}
     </PageSection>
   );
@@ -144,6 +211,10 @@ export const defaultSecondaryHeaderProps: SecondaryHeaderSlotProps = {
         type: "HeaderLinks",
         props: {
           ...defaultHeaderLinkProps,
+          styles: {
+            align: "right",
+            variant: "xs",
+          },
           parentData: {
             type: "Secondary",
           },

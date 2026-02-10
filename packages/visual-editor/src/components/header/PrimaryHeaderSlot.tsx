@@ -19,10 +19,16 @@ import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { YextField } from "../../editor/YextField.tsx";
+import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
+import {
+  HeaderLinksDisplayModeProvider,
+  useExpandedHeaderMenu,
+} from "./ExpandedHeaderMenuContext.tsx";
+import { getHeaderViewport } from "./viewport.ts";
 
 export interface PrimaryHeaderSlotProps {
   styles: {
@@ -92,7 +98,7 @@ type CTAContainerProps = {
 };
 
 const CTAContainer: React.FC<CTAContainerProps> = (props) => {
-  const { showCTAs, PrimaryCTASlot, SecondaryCTASlot } = props;
+  const { showCTAs, PrimaryCTASlot, SecondaryCTASlot, showHamburger } = props;
 
   if (!showCTAs) {
     return null;
@@ -100,7 +106,7 @@ const CTAContainer: React.FC<CTAContainerProps> = (props) => {
 
   return (
     <div
-      className={`flex flex-col md:flex-row gap-4 md:gap-2 md:items-center ${props.showHamburger ? "mr-8" : ""}`}
+      className={`flex flex-col md:flex-row gap-4 md:gap-2 md:items-center ${showHamburger ? "mr-8" : ""}`}
     >
       <PrimaryCTASlot style={{ height: "auto" }} />
       <SecondaryCTASlot style={{ height: "auto" }} />
@@ -118,14 +124,95 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
   const { t } = useTranslation();
 
   const [isMobileMenuOpen, setMobileMenuOpen] = React.useState<boolean>(false);
+  const [viewportWidth, setViewportWidth] = React.useState<number>(1024);
+  const [panelTop, setPanelTop] = React.useState(0);
+  const [panelHeight, setPanelHeight] = React.useState(0);
+  const previewWindow = usePreviewWindow();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const hamburgerButtonRef = React.useRef<HTMLButtonElement>(null);
-  const showHamburger = useOverflow(containerRef, contentRef);
+  const headerRef = React.useRef<HTMLDivElement>(null);
+  const menuContext = useExpandedHeaderMenu();
+  const primaryHasCollapsedLinks =
+    menuContext?.primaryHasCollapsedLinks ?? false;
+  const secondaryOverflow = menuContext?.secondaryOverflow ?? false;
   const showCTAs = puck.isEditing || conditionalRender?.CTAs;
   const showNavContent = puck.isEditing || conditionalRender?.navContent;
+  const HAMBURGER_RESERVE_PX = 48;
+  const primaryOverflow = useOverflow(
+    containerRef,
+    contentRef,
+    showNavContent ? HAMBURGER_RESERVE_PX : 0
+  );
+  const { isTablet, isDesktop } = getHeaderViewport(viewportWidth);
+  const showHamburger =
+    primaryOverflow || primaryHasCollapsedLinks || secondaryOverflow;
 
-  // Make the hamburger button interactive in the editor
+  // Track viewport size from the previewWindow (or header width in editor).
+  React.useEffect(() => {
+    if (!previewWindow) {
+      return;
+    }
+
+    const updateViewport = () => {
+      const headerWidth = headerRef.current?.clientWidth;
+      if (headerWidth && headerWidth > 0) {
+        setViewportWidth(headerWidth);
+        return;
+      }
+
+      setViewportWidth(previewWindow.innerWidth);
+    };
+
+    updateViewport();
+    previewWindow.addEventListener("resize", updateViewport);
+    const observer = new ResizeObserver(updateViewport);
+    if (headerRef.current) {
+      observer.observe(headerRef.current);
+    }
+
+    return () => {
+      previewWindow.removeEventListener("resize", updateViewport);
+      observer.disconnect();
+    };
+  }, [previewWindow]);
+
+  // Keep the tablet drawer positioned below the header and full height.
+  React.useEffect(() => {
+    if (!previewWindow || !isTablet || !isMobileMenuOpen) {
+      return;
+    }
+
+    const updatePanelMetrics = () => {
+      const headerBottom =
+        headerRef.current?.getBoundingClientRect().bottom ?? 0;
+      setPanelTop(headerBottom);
+      setPanelHeight(Math.max(0, previewWindow.innerHeight - headerBottom));
+    };
+
+    updatePanelMetrics();
+    previewWindow.addEventListener("resize", updatePanelMetrics);
+    previewWindow.addEventListener("scroll", updatePanelMetrics, {
+      passive: true,
+    });
+
+    return () => {
+      previewWindow.removeEventListener("resize", updatePanelMetrics);
+      previewWindow.removeEventListener("scroll", updatePanelMetrics);
+    };
+  }, [previewWindow, isTablet, isMobileMenuOpen]);
+
+  React.useEffect(() => {
+    if (!menuContext) {
+      return;
+    }
+
+    // Share primary overflow with other header parts (e.g. links).
+    menuContext.setPrimaryOverflow(primaryOverflow);
+    return () => menuContext.setPrimaryOverflow(false);
+  }, [menuContext, primaryOverflow]);
+
+  // Make the hamburger button interactive in the editor.
   React.useEffect(
     () => registerOverlayPortal(hamburgerButtonRef.current),
     [hamburgerButtonRef.current]
@@ -158,11 +245,60 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
     </div>
   );
 
-  const NavContent = <slots.LinksSlot style={{ height: "auto" }} />;
+  // Header links rendered inline within the header bar.
+  const NavContent = (
+    <HeaderLinksDisplayModeProvider value="inline">
+      <slots.LinksSlot style={{ height: "auto" }} />
+    </HeaderLinksDisplayModeProvider>
+  );
+
+  // Shared menu content for mobile/tablet/desktop-expanded variants.
+  const renderMenuContent = (variant: "mobile" | "tablet" | "desktop") => {
+    const showCtasInMenu = variant === "mobile";
+    const showSecondaryInMenu = variant === "mobile" || secondaryOverflow;
+
+    return (
+      <>
+        <PageSection
+          verticalPadding={"sm"}
+          background={styles.backgroundColor}
+          maxWidth={parentValues?.maxWidth}
+        >
+          <HeaderLinksDisplayModeProvider value="menu">
+            <slots.LinksSlot style={{ height: "auto" }} />
+          </HeaderLinksDisplayModeProvider>
+        </PageSection>
+
+        {/* Secondary Header (Menu) */}
+        {parentValues && (
+          <HeaderLinksDisplayModeProvider value="menu">
+            <div className={showSecondaryInMenu ? "flex" : "flex md:hidden"}>
+              <parentValues.SecondaryHeaderSlot
+                style={{ height: "auto", width: "100%" }}
+              />
+            </div>
+          </HeaderLinksDisplayModeProvider>
+        )}
+
+        {showCTAs && showCtasInMenu && (
+          <PageSection
+            verticalPadding={"sm"}
+            background={styles.backgroundColor}
+            maxWidth={parentValues?.maxWidth}
+          >
+            <div className={`flex flex-col gap-4`}>
+              <slots.PrimaryCTASlot style={{ height: "auto" }} />
+              <slots.SecondaryCTASlot style={{ height: "auto" }} />
+            </div>
+          </PageSection>
+        )}
+      </>
+    );
+  };
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col" ref={headerRef}>
         <PageSection
           maxWidth={parentValues?.maxWidth}
           verticalPadding={"header"}
@@ -184,6 +320,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
               <div
                 ref={contentRef}
                 className="flex items-center gap-8 h-0 opacity-0 pointer-events-none absolute top-0 left-[-9999px] invisible"
+                aria-hidden="true"
               >
                 <div>{NavContent}</div>
                 <CTAContainer
@@ -196,7 +333,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
 
               {/* 2. The "Render" Div: Conditionally shown or hidden based on the measurement. */}
               <div className="hidden md:flex items-center gap-8">
-                {!showHamburger && <div>{NavContent}</div>}
+                {!primaryOverflow && <div>{NavContent}</div>}
                 <CTAContainer
                   showCTAs={!!showCTAs}
                   showHamburger={showHamburger}
@@ -216,7 +353,14 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
                 }
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-menu"
-                className={`text-xl z-10 ${showHamburger ? "md:block" : "md:hidden"}`}
+                className={`text-xl z-10 ${showHamburger ? "md:block" : "md:hidden"} ${
+                  showHamburger &&
+                  (isDesktop || isTablet) &&
+                  !primaryOverflow &&
+                  !showCTAs
+                    ? "ml-8"
+                    : ""
+                }`}
               >
                 {isMobileMenuOpen ? (
                   <FaTimes size="1.5rem" />
@@ -233,45 +377,78 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
       {isMobileMenuOpen && (
         <div
           id="mobile-menu"
-          className={`absolute left-0 top-full w-full z-50 transition-all duration-300 ease-in-out ${
+          className={`absolute left-0 top-full w-full z-50 transition-all duration-300 ease-in-out md:hidden lg:block ${
             isMobileMenuOpen
               ? "max-h-[1000px] opacity-100"
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
         >
-          {/* ... Mobile menu sections remain the same ... */}
-          <PageSection
-            verticalPadding={"sm"}
-            background={styles.backgroundColor}
-            maxWidth={parentValues?.maxWidth}
-          >
-            <slots.LinksSlot style={{ height: "auto" }} />
-          </PageSection>
-
-          {/* Secondary Header (Mobile menu) */}
-          {parentValues && (
-            <div className="flex md:hidden">
-              <parentValues.SecondaryHeaderSlot
-                style={{ height: "auto", width: "100%" }}
-              />
-            </div>
-          )}
-
-          {showCTAs && (
-            <PageSection
-              verticalPadding={"sm"}
-              background={styles.backgroundColor}
-              maxWidth={parentValues?.maxWidth}
-              outerClassName="md:hidden"
-            >
-              <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:items-center">
-                <slots.PrimaryCTASlot style={{ height: "auto" }} />
-                <slots.SecondaryCTASlot style={{ height: "auto" }} />
-              </div>
-            </PageSection>
-          )}
+          {renderMenuContent(isDesktop ? "desktop" : "mobile")}
         </div>
       )}
+
+      {/* Tablet slide-out menu */}
+      {isTablet && (
+        <div className="hidden md:block lg:hidden">
+          <SlidePanel
+            isOpen={isMobileMenuOpen}
+            onClose={() => setMobileMenuOpen(false)}
+            top={panelTop}
+            height={panelHeight}
+          >
+            {renderMenuContent("tablet")}
+          </SlidePanel>
+        </div>
+      )}
+    </>
+  );
+};
+
+const SlidePanel = ({
+  isOpen,
+  onClose,
+  top,
+  height,
+  children,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  top: number;
+  height: number;
+  children: React.ReactNode;
+}) => {
+  const { t } = useTranslation();
+  return (
+    <>
+      {/* Backdrop blocks content when the panel is open. */}
+      <div
+        className={`fixed inset-0 z-40 transition-opacity duration-600 ease-in-out ${
+          isOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+        style={{
+          top,
+          height,
+          backdropFilter: "brightness(0.6)",
+          WebkitBackdropFilter: "brightness(0.6)",
+        }}
+        onClick={onClose}
+      />
+
+      {/* Panel holds the expanded header menu content. */}
+      <div
+        role="dialog"
+        aria-label={t("expandedMenu", "Expanded menu")}
+        aria-hidden={!isOpen}
+        tabIndex={isOpen ? 0 : -1}
+        className={`fixed right-0 z-50 bg-white transition-transform duration-600 ease-in-out ${
+          isOpen ? "translate-x-0 overflow-y-auto" : "translate-x-full"
+        }`}
+        style={{ top, height, width: "80vw", maxWidth: "80vw" }}
+      >
+        {children}
+      </div>
     </>
   );
 };
