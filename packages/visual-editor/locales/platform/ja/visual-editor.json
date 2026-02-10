@@ -202,6 +202,7 @@
     "buttonText": "ボタンのテキスト",
     "buttons": "ボタン",
     "callToAction": "行動を促す",
+    "cardTitleColor": "カードタイトルの色",
     "cardVariant": "カードのバリエーション",
     "cards": "カード",
     "carouselImageCount": "カルーセル画像数",
@@ -446,6 +447,7 @@
       "width": "幅",
       "yes": "はい"
     },
+    "pageHeading": "ページ見出し",
     "phone": "電話",
     "phoneFormat": "電話形式",
     "phoneNumber": "電話番号",

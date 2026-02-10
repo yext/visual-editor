@@ -202,6 +202,7 @@
     "buttonText": "Texto do botão",
     "buttons": "Botões",
     "callToAction": "Chamado à ação",
+    "cardTitleColor": "Cor do título do cartão",
     "cardVariant": "Variante de cartão",
     "cards": "Cartões",
     "carouselImageCount": "Contagem de imagens do carrossel",
@@ -446,6 +447,7 @@
       "width": "Largura",
       "yes": "Sim"
     },
+    "pageHeading": "Título da página",
     "phone": "Telefone",
     "phoneFormat": "Formato de telefone",
     "phoneNumber": "Número de telefone",

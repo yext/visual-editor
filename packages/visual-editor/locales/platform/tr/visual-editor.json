@@ -202,6 +202,7 @@
     "buttonText": "Düğme Metni",
     "buttons": "Düğmeler",
     "callToAction": "Harekete geçme çağrısı",
+    "cardTitleColor": "Kart Başlığı Rengi",
     "cardVariant": "Kart Varyantı",
     "cards": "Kart",
     "carouselImageCount": "Atlıkarınca Resim Sayısı",
@@ -446,6 +447,7 @@
       "width": "Genişlik",
       "yes": "Evet"
     },
+    "pageHeading": "Sayfa Başlığı",
     "phone": "Telefon",
     "phoneFormat": "Telefon formatı",
     "phoneNumber": "Telefon numarası",

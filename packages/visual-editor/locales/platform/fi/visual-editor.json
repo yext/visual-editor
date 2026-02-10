@@ -202,6 +202,7 @@
     "buttonText": "Painikkeen teksti",
     "buttons": "Painikkeet",
     "callToAction": "Toimintakehotus",
+    "cardTitleColor": "Kortin otsikon väri",
     "cardVariant": "Kortin variantti",
     "cards": "Kortit",
     "carouselImageCount": "Karuselli kuvien määrä",
@@ -446,6 +447,7 @@
       "width": "Leveys",
       "yes": "Kyllä"
     },
+    "pageHeading": "Sivun otsikko",
     "phone": "Puhelin",
     "phoneFormat": "Puhelinmuoto",
     "phoneNumber": "Puhelinnumero",

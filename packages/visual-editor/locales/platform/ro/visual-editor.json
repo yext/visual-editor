@@ -202,6 +202,7 @@
     "buttonText": "Text buton",
     "buttons": "Butoane",
     "callToAction": "Apel la acțiune",
+    "cardTitleColor": "Culoarea titlului cardului",
     "cardVariant": "Varianta card",
     "cards": "Cărți",
     "carouselImageCount": "Număr de imagini carusel",
@@ -446,6 +447,7 @@
       "width": "Lăţime",
       "yes": "Da"
     },
+    "pageHeading": "Titlul paginii",
     "phone": "Telefon",
     "phoneFormat": "Format telefonic",
     "phoneNumber": "Număr de telefon",

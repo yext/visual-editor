@@ -202,6 +202,7 @@
     "buttonText": "按钮文字",
     "buttons": "按钮",
     "callToAction": "打电话给行动",
+    "cardTitleColor": "卡片标题颜色",
     "cardVariant": "卡片变体",
     "cards": "牌",
     "carouselImageCount": "轮播图像计数",
@@ -446,6 +447,7 @@
       "width": "宽度",
       "yes": "是的"
     },
+    "pageHeading": "页面标题",
     "phone": "电话",
     "phoneFormat": "电话格式",
     "phoneNumber": "电话号码",

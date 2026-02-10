@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 59,
+      version: 60,
       title: {
         field: "name",
         constantValue: "",
@@ -5475,11 +5475,13 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 55,
-      title: {
-        field: "",
-        constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
+      version: 60,
+      pageHeading: {
+        title: {
+          field: "",
+          constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
+          constantValueEnabled: true,
+        },
       },
       description: {
         field: "",

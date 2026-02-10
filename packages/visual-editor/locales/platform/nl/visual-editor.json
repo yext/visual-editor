@@ -202,6 +202,7 @@
     "buttonText": "Knoptekst",
     "buttons": "Knoppen",
     "callToAction": "Oproep tot actie",
+    "cardTitleColor": "Kleur kaarttitel",
     "cardVariant": "Kaartvariant",
     "cards": "Kaarten",
     "carouselImageCount": "Aantal carrouselafbeeldingen",
@@ -446,6 +447,7 @@
       "width": "Breedte",
       "yes": "Ja"
     },
+    "pageHeading": "Paginakop",
     "phone": "Telefoon",
     "phoneFormat": "Telefoonformaat",
     "phoneNumber": "Telefoonnummer",

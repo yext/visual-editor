@@ -202,6 +202,7 @@
     "buttonText": "Tekst gumba",
     "buttons": "Gumbi",
     "callToAction": "Poziv na akciju",
+    "cardTitleColor": "Boja naslova kartice",
     "cardVariant": "Varijanta kartice",
     "cards": "Karata",
     "carouselImageCount": "Broj slika vrtuljka",
@@ -446,6 +447,7 @@
       "width": "Širina",
       "yes": "Da"
     },
+    "pageHeading": "Naslov stranice",
     "phone": "Telefon",
     "phoneFormat": "Format telefona",
     "phoneNumber": "Telefonski broj",
