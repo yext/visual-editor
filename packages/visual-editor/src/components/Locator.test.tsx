@@ -907,7 +907,7 @@ const tests: ComponentTest[] = [
   },
 ];
 
-const screenshotThreshold = 40;
+const screenshotThreshold = 30;
 
 describe("Locator", async () => {
   const puckConfig: Config = {

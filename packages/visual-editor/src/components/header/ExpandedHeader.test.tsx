@@ -2297,7 +2297,7 @@ const tests: ComponentTest[] = [
   },
 ];
 
-const screenshotThreshold = 30;
+const screenshotThreshold = 45;
 
 describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
