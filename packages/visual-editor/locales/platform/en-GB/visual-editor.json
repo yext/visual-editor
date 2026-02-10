@@ -201,6 +201,7 @@
     "buttonText": "Button Text",
     "buttons": "Buttons",
     "callToAction": "Call To Action",
+    "cardTitleColor": "Card Title Color",
     "cardVariant": "Card Variant",
     "cards": "Cards",
     "carouselImageCount": "Carousel Image Count",
@@ -445,6 +446,7 @@
       "width": "Width",
       "yes": "Yes"
     },
+    "pageHeading": "Page Heading",
     "phone": "Phone",
     "phoneFormat": "Phone Format",
     "phoneNumber": "Phone Number",

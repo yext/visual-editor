@@ -202,6 +202,7 @@
     "buttonText": "Pogas teksts",
     "buttons": "Pogas",
     "callToAction": "Aicināt uz rīcību",
+    "cardTitleColor": "Kartes nosaukuma krāsa",
     "cardVariant": "Kartes variants",
     "cards": "Kārtis",
     "carouselImageCount": "Karuseļa attēlu skaits",
@@ -446,6 +447,7 @@
       "width": "Platums",
       "yes": "Jā"
     },
+    "pageHeading": "Lapas virsraksts",
     "phone": "Tālrunis",
     "phoneFormat": "Tālruņa formāts",
     "phoneNumber": "Tālruņa numurs",

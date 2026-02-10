@@ -203,6 +203,7 @@
     "buttonText": "Knapptext",
     "buttons": "Knappar",
     "callToAction": "Uppmaning",
+    "cardTitleColor": "Kortets titelfärg",
     "cardVariant": "Kortvariant",
     "cards": "Kort",
     "carouselImageCount": "Antal karusellbilder",
@@ -447,6 +448,7 @@
       "width": "Bredd",
       "yes": "Ja"
     },
+    "pageHeading": "Sidrubrik",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",

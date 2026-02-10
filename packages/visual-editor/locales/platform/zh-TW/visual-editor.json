@@ -202,6 +202,7 @@
     "buttonText": "按鈕文字",
     "buttons": "按鈕",
     "callToAction": "打電話給行動",
+    "cardTitleColor": "卡片標題顏色",
     "cardVariant": "卡牌變體",
     "cards": "牌",
     "carouselImageCount": "輪播圖像計數",
@@ -447,6 +448,7 @@
       "width": "寬度",
       "yes": "是的"
     },
+    "pageHeading": "頁面標題",
     "phone": "電話",
     "phoneFormat": "電話格式",
     "phoneNumber": "電話號碼",

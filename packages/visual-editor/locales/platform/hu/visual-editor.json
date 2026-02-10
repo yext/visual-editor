@@ -202,6 +202,7 @@
     "buttonText": "Gomb szövege",
     "buttons": "Gombok",
     "callToAction": "Cselekvésre ösztönzés",
+    "cardTitleColor": "Kártya cím színe",
     "cardVariant": "Kártya változat",
     "cards": "Kártyás kártyák",
     "carouselImageCount": "Forgóképek száma",
@@ -446,6 +447,7 @@
       "width": "Szélesség",
       "yes": "Igen"
     },
+    "pageHeading": "Oldalfejléc",
     "phone": "Telefon",
     "phoneFormat": "Telefonformátum",
     "phoneNumber": "Telefonszám",

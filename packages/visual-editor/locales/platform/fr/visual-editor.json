@@ -201,6 +201,7 @@
     "buttonText": "Texte du bouton",
     "buttons": "Boutons",
     "callToAction": "Appel à l'action",
+    "cardTitleColor": "Couleur du titre de la carte",
     "cardVariant": "Variante de carte",
     "cards": "Cartes",
     "carouselImageCount": "Nombre d'images du carrousel",
@@ -445,6 +446,7 @@
       "width": "Largeur",
       "yes": "Oui"
     },
+    "pageHeading": "En-tête de page",
     "phone": "Téléphone",
     "phoneFormat": "Format de téléphone",
     "phoneNumber": "Numéro de téléphone",

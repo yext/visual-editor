@@ -206,6 +206,7 @@
     "buttonText": "Schaltflächentext",
     "buttons": "Knöpfe",
     "callToAction": "Aufruf zum Handeln",
+    "cardTitleColor": "Farbe des Kartentitels",
     "cardVariant": "Kartenvariante",
     "cards": "Karten",
     "carouselImageCount": "Anzahl der Karussellbilder",
@@ -451,6 +452,7 @@
       "width": "Breite",
       "yes": "Ja"
     },
+    "pageHeading": "Seitenüberschrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",

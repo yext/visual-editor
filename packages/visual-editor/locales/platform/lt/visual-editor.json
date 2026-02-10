@@ -202,6 +202,7 @@
     "buttonText": "Mygtuko tekstas",
     "buttons": "Mygtukai",
     "callToAction": "Raginimas veikti",
+    "cardTitleColor": "Kortelės pavadinimo spalva",
     "cardVariant": "Kortelės variantas",
     "cards": "Kortelės",
     "carouselImageCount": "Karuselės vaizdų skaičius",
@@ -446,6 +447,7 @@
       "width": "Plotis",
       "yes": "Taip"
     },
+    "pageHeading": "Puslapio antraštė",
     "phone": "Telefonas",
     "phoneFormat": "Telefono formatas",
     "phoneNumber": "Telefono numeris",

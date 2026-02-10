@@ -50,7 +50,11 @@ export type NearbyLocationCardsWrapperProps = {
 
     /** The heading level for the card title. */
     headingLevel?: HeadingLevel;
-
+    /**
+     * The color applied to the card title
+     * @defaultValue inherited from theme
+     */
+    color?: BackgroundStyle;
     /** Styling for the hours display on each card. */
     hours: {
       /** Whether to display the current status ("Open Now" or "Closed") */
@@ -130,6 +134,10 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
           type: "select",
           hasSearch: true,
           options: "HEADING_LEVEL",
+        }),
+        color: YextField(msg("fields.cardTitleColor", "Card Title Color"), {
+          type: "select",
+          options: "SITE_COLOR",
         }),
         hours: YextField(msg("fields.hours", "Hours"), {
           type: "object",

@@ -207,6 +207,7 @@
     "buttonText": "Text tlačítka",
     "buttons": "Tlačítka",
     "callToAction": "Volání k akci",
+    "cardTitleColor": "Barva názvu karty",
     "cardVariant": "Varianta karty",
     "cards": "Karty",
     "carouselImageCount": "Počet obrázků kolotoče",
@@ -452,6 +453,7 @@
       "width": "Šířka",
       "yes": "Ano"
     },
+    "pageHeading": "Záhlaví stránky",
     "phone": "Telefon",
     "phoneFormat": "Formát telefonu",
     "phoneNumber": "Telefonní číslo",

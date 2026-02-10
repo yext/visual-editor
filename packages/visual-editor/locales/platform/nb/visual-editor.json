@@ -202,6 +202,7 @@
     "buttonText": "Knappetekst",
     "buttons": "Knapper",
     "callToAction": "Ring til handling",
+    "cardTitleColor": "Korttittelfarge",
     "cardVariant": "Kortvariant",
     "cards": "Kort",
     "carouselImageCount": "Antall karusellbilder",
@@ -446,6 +447,7 @@
       "width": "Bredde",
       "yes": "Ja"
     },
+    "pageHeading": "Sideoverskrift",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
