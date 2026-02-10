@@ -28,7 +28,6 @@ const clickMenuIfVisible = async (page: BrowserPage) => {
   if (isVisible) {
     await act(async () => {
       await menuButton.click();
-      await delay(1_000); // wait for menu animation
     });
   }
 };
@@ -2381,6 +2380,9 @@ describe("ExpandedHeader", async () => {
 
       if (interactions) {
         await interactions(page);
+        if (viewportName === "tablet") {
+          await delay(1_500); // wait for animation
+        }
         await expect(
           `ExpandedHeader/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot({ customThreshold: screenshotThreshold });
