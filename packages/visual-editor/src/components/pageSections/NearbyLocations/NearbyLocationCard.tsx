@@ -61,6 +61,9 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
     relativePrefixToRoot ?? ""
   );
 
+  const showPhone = styles.showPhone && mainPhone;
+  const showAddress = styles.showAddress && address;
+
   return (
     <Background
       background={styles.backgroundColor}
@@ -74,6 +77,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
         href={resolvedUrl}
       >
         <Heading
+          color={styles?.color}
           level={styles.headingLevel ?? 4}
           semanticLevelOverride={
             sectionHeadingLevel
@@ -86,8 +90,10 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           {name}
         </Heading>
       </MaybeLink>
-      {hours && (
-        <div className="mb-2 font-semibold font-body-fontFamily text-body-fontSize">
+      {styles.showHours && hours && (
+        <div
+          className={`font-semibold font-body-fontFamily text-body-fontSize ${showPhone || showAddress ? "mb-2" : ""}`}
+        >
           <HoursStatusAtom
             hours={hours}
             className="h-full"
@@ -99,7 +105,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           />
         </div>
       )}
-      {mainPhone && (
+      {showPhone && (
         <PhoneAtom
           eventName={`phone${cardNumber}`}
           phoneNumber={mainPhone}
@@ -108,7 +114,7 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
           includeIcon={false}
         />
       )}
-      {address && (
+      {showAddress && (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
             address={address}

@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 57,
+      version: 60,
       title: {
         field: "name",
         constantValue: "",
@@ -419,6 +419,11 @@ const mainDefaultLayout = {
           },
           showAverageReview: true,
           showImage: true,
+          showBusinessName: true,
+          showGeomodifier: true,
+          showHoursStatus: true,
+          showPrimaryCTA: true,
+          showSecondaryCTA: true,
           imageHeight: 500,
           desktopImagePosition: "right",
           desktopContainerPosition: "left",
@@ -834,6 +839,10 @@ const mainDefaultLayout = {
           mobileImagePosition: "top",
           imageHeight: 500,
           containerAlignment: "left",
+          showMedia: true,
+          showHeading: true,
+          showDescription: true,
+          showCTA: true,
         },
         slots: {
           HeadingSlot: [
@@ -987,12 +996,7 @@ const mainDefaultLayout = {
             textColor: "text-black",
           },
           cardVariant: "immersive",
-          showImage: true,
-          showBrow: true,
-          showTitle: true,
-          showPrice: true,
-          showDescription: true,
-          showCTA: true,
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -1036,6 +1040,14 @@ const mainDefaultLayout = {
                       id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showBrow: true,
+                  showTitle: true,
+                  showPrice: true,
+                  showDescription: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -1633,6 +1645,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -1676,6 +1689,10 @@ const mainDefaultLayout = {
                       id: "TestimonialCard-1898bde5-72bb-4eef-97dc-c6c6aea0ecd5",
                     },
                   ],
+                },
+                styles: {
+                  showName: true,
+                  showDate: true,
                 },
                 slots: {
                   CardSlot: [
@@ -2126,6 +2143,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-secondary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -2169,6 +2187,13 @@ const mainDefaultLayout = {
                       id: "TeamCard-1486b519-8c1a-4e71-9622-eda626ba72ad",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showTitle: true,
+                  showPhone: true,
+                  showEmail: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -2760,6 +2785,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -2803,6 +2829,13 @@ const mainDefaultLayout = {
                       id: "InsightCard-3",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showCategory: true,
+                  showPublishTime: true,
+                  showDescription: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -3386,6 +3419,7 @@ const mainDefaultLayout = {
             bgColor: "bg-white",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           HeadingSlot: [
@@ -3478,6 +3512,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-secondary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -3521,6 +3556,12 @@ const mainDefaultLayout = {
                       id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showDateTime: true,
+                  showDescription: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -4061,6 +4102,7 @@ const mainDefaultLayout = {
             bgColor: "bg-white",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         analytics: {
           scope: "nearbyLocationsSection",
@@ -4113,6 +4155,9 @@ const mainDefaultLayout = {
                     phoneNumberFormat: "domestic",
                     phoneNumberLink: true,
                   },
+                  showHours: true,
+                  showPhone: true,
+                  showAddress: true,
                 },
               },
             },
@@ -5430,11 +5475,13 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 55,
-      title: {
-        field: "",
-        constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
+      version: 60,
+      pageHeading: {
+        title: {
+          field: "",
+          constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
+          constantValueEnabled: true,
+        },
       },
       description: {
         field: "",

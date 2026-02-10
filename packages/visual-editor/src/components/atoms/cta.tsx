@@ -44,7 +44,7 @@ export type CTAProps = {
   openInNewTab?: boolean;
   /**
    * When true and variant is "link", applies vertical padding (py-3) to the CTA.
-   * @default false
+   * @defaultValue false
    */
   setPadding?: boolean;
 };
