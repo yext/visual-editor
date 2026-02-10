@@ -265,7 +265,7 @@ This object contains properties for customizing the appearance of both footer ti
 
 The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector. Available on Location templates.
 
-![Preview of the ExpandedHeader component](../components/testing/screenshots/ExpandedHeader/%5Bdesktop%5D%20default%20props.png)
+![Preview of the ExpandedHeader component](<../components/testing/screenshots/ExpandedHeader/%5Bdesktop%5D%20default%20props%20(after%20interactions).png>)
 
 ### Props
 
