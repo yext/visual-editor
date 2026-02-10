@@ -158,10 +158,7 @@ const PrimaryHeaderSlotWrapper: PuckComponent<PrimaryHeaderSlotProps> = ({
       const headerWidth = headerRef.current?.clientWidth;
       if (headerWidth && headerWidth > 0) {
         setViewportWidth(headerWidth);
-        return;
       }
-
-      setViewportWidth(previewWindow.innerWidth);
     };
 
     updateViewport();

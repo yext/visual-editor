@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { act, render as reactRender, waitFor } from "@testing-library/react";
@@ -27,6 +28,7 @@ const clickMenuIfVisible = async (page: BrowserPage) => {
   if (isVisible) {
     await act(async () => {
       await menuButton.click();
+      await delay(600); // wait for menu animation
     });
   }
 };
