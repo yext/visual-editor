@@ -1,17 +1,14 @@
 import React from "react";
 import { AutoField, type Field } from "@puckeditor/core";
-import { useDocument } from "../../../hooks/useDocument.tsx";
-import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
-import { msg, pt } from "../../../utils/i18n/platform.ts";
-import {
-  getMetaTitleMissingLocales,
-  getPageSetLocales,
-} from "../../../utils/metaTitleValidation.ts";
+import { useDocument } from "../../../../hooks/useDocument.tsx";
+import { msg, pt } from "../../../../utils/i18n/platform.ts";
+import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
 import {
   type YextEntityField,
   YextEntityFieldSelector,
-} from "../../../editor/YextEntityFieldSelector.tsx";
-import { type TranslatableString } from "../../../types/types.ts";
+} from "../../../../editor/YextEntityFieldSelector.tsx";
+import { type TranslatableString } from "../../../../types/types.ts";
+import { getMetaTitleMissingLocales } from "./metaTitleValidation.ts";
 
 export const MetaTitleField = (): Field<
   YextEntityField<TranslatableString>
@@ -19,25 +16,15 @@ export const MetaTitleField = (): Field<
   return {
     type: "custom",
     render: ({ value, onChange }) => {
-      const templateMetadata = useTemplateMetadata();
       const streamDocument = useDocument();
-      const locales = getPageSetLocales(templateMetadata, streamDocument);
+      const locales = getPageSetLocales(streamDocument);
       const missingLocales = getMetaTitleMissingLocales(value, locales);
 
-      const errorMessage =
-        missingLocales.length === 1
-          ? pt(
-              "metaTitleMissingLocale",
-              "Meta title is missing for locale: {{locale}}",
-              {
-                locale: missingLocales[0],
-              }
-            )
-          : pt(
-              "metaTitleMissingLocales",
-              "Meta title is missing for locales: {{locales}}",
-              { locales: missingLocales.join(", ") }
-            );
+      const errorMessage = pt(
+        "metaTitleMissingLocales",
+        "Meta title is missing for locale(s): {{locales}}",
+        { locales: missingLocales.join(", ") }
+      );
 
       const metaTitleField = React.useMemo(
         () =>

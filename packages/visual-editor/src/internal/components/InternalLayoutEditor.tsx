@@ -21,8 +21,8 @@ import { TemplateMetadata } from "../types/templateMetadata.ts";
 import { EntityTooltipsProvider } from "../../editor/EntityField.tsx";
 import { LayoutSaveState } from "../types/saveState.ts";
 import { LayoutHeader } from "../puck/components/LayoutHeader.tsx";
-import { MetaTitleField } from "../puck/components/MetaTitleField.tsx";
-import { MetaTitleValidationReporter } from "../puck/components/MetaTitleValidationReporter.tsx";
+import { MetaTitleField } from "../puck/components/meta-title/MetaTitleField.tsx";
+import { ValidationReporters } from "../puck/components/ValidationReporters.tsx";
 import { DevLogger } from "../../utils/devLogger.ts";
 import { YextEntityFieldSelector } from "../../editor/YextEntityFieldSelector.tsx";
 import { loadMapboxIntoIframe } from "../utils/loadMapboxIntoIframe.tsx";
@@ -307,7 +307,7 @@ export const InternalLayoutEditor = ({
   const puckOverride = React.useCallback(
     (props: { children: React.ReactNode }) => (
       <>
-        <MetaTitleValidationReporter />
+        <ValidationReporters />
         {reloadDataOnDocumentChange(props)}
       </>
     ),

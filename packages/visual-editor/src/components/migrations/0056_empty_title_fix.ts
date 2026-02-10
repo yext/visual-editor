@@ -1,13 +1,6 @@
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { Migration } from "../../utils/migrate.ts";
-
-const getLocales = (streamDocument: any): string[] => {
-  try {
-    return JSON.parse(streamDocument._pageset).scope.locales || ["en"];
-  } catch {
-    return ["en"];
-  }
-};
+import { getPageSetLocales } from "../../utils/pageSetLocales.ts";
 
 /**
  * Empty titles now fail page generation. Ensure the title is not set to
@@ -41,7 +34,7 @@ export const emptyTitleFix: Migration = {
         }
 
         if (typeof props.title.constantValue === "object") {
-          const locales = getLocales(streamDocument);
+          const locales = getPageSetLocales(streamDocument);
           let missingValue = false;
           locales.forEach((locale) => {
             if (!props.title.constantValue?.[locale]) {

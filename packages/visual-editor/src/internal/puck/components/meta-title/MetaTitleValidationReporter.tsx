@@ -1,20 +1,16 @@
 import React from "react";
 import { createUsePuck } from "@puckeditor/core";
-import { useErrorContext } from "../../../contexts/ErrorContext.tsx";
-import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
-import { useDocument } from "../../../hooks/useDocument.tsx";
-import {
-  getMetaTitleMissingLocales,
-  getPageSetLocales,
-} from "../../../utils/metaTitleValidation.ts";
-import { type YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { type TranslatableString } from "../../../types/types.ts";
+import { useErrorContext } from "../../../../contexts/ErrorContext.tsx";
+import { useDocument } from "../../../../hooks/useDocument.tsx";
+import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
+import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
+import { type TranslatableString } from "../../../../types/types.ts";
+import { getMetaTitleMissingLocales } from "./metaTitleValidation.ts";
 
 const usePuck = createUsePuck();
 
 export const MetaTitleValidationReporter = () => {
   const appState = usePuck((s) => s.appState);
-  const templateMetadata = useTemplateMetadata();
   const streamDocument = useDocument();
   const {
     incrementErrorCount,
@@ -24,7 +20,7 @@ export const MetaTitleValidationReporter = () => {
   } = useErrorContext();
   const didIncrementRef = React.useRef(false);
 
-  const locales = getPageSetLocales(templateMetadata, streamDocument);
+  const locales = getPageSetLocales(streamDocument);
   const titleField = (appState.data.root?.props?.title ??
     appState.data.root?.title) as
     | YextEntityField<TranslatableString>

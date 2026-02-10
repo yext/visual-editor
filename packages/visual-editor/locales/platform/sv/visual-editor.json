@@ -546,9 +546,7 @@
   "filter": "Filtrera",
   "filters": "Filter",
   "findALocation": "Hitta en plats",
-  "fixErrorsToPublish": "För att publicera, ta bort eller åtgärda avsnitt med fel",
-  "fixErrorsToPublishMultiple": "För att publicera, {{actions}}",
-  "fixErrorsToPublishSingle": "För att publicera, {{action}}",
+  "fixErrorsToPublish": "För att publicera, {{actions}}",
   "fontSize": "Fontstorlek",
   "fontSizeDefaultLabel": "Standard",
   "fonts": {
@@ -598,8 +596,7 @@
   "map": "Karta",
   "maxWidthTip": "För optimal innehållsinriktning rekommenderar vi att du ställer in huvud- och sidfotbredden för att matcha eller överskrida sidinnehållsnätet.",
   "mediaType": "Medietyp",
-  "metaTitleMissingLocale": "Metatitel saknas för språk: {{locale}}",
-  "metaTitleMissingLocales": "Metatitel saknas för språk: {{locales}}",
+  "metaTitleMissingLocales": "Metatitel saknas för lokal(er): {{locales}}",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",
@@ -677,7 +674,7 @@
   "publishError": {
     "components": "ta bort eller fixa avsnitt med fel",
     "metaTitle": "fyll i Meta Titel för alla språk genom att navigera till inställningarna för den översta sidans komponent",
-    "metaTitleWithLocales": "fyll i Meta Title för följande språk genom att navigera till inställningarna för sidkomponenten på översta nivån: {{locales}}"
+    "metaTitleWithLocales": "fyll i Meta Titel för följande språk genom att navigera till inställningarna för sidkomponenten på översta nivån: {{locales}}"
   },
   "readLess": "Läs mindre",
   "readMore": "Läs mer",
@@ -687,6 +684,7 @@
   "redo": "Göra om",
   "refineYourSearch": "Förfina din sökning",
   "reopenDate": "Öppna datum igen",
+  "resolveErrorsInEditor": "lösa de fel som markerats i editorn",
   "responseFrom": "Svar från {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} har inga förstapartsrecensioner",
   "reviewsEmptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",

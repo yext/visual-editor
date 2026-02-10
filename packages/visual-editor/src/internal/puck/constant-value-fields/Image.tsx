@@ -17,8 +17,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { TranslatableString } from "../../../types/types.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { TemplateMetadata } from "../../types/templateMetadata.ts";
-import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
+import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
 export type ImagePayload = {
   id: string;
@@ -33,25 +32,9 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
   render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
-    const templateMetadata: TemplateMetadata = useTemplateMetadata();
     const locale = i18n.language;
 
-    let locales = templateMetadata?.locales || [];
-    if (locales.length === 0) {
-      try {
-        const parsedPageSet = JSON.parse(streamDocument._pageset);
-        if (
-          parsedPageSet?.scope?.locales &&
-          Array.isArray(parsedPageSet.scope.locales)
-        ) {
-          locales = parsedPageSet.scope.locales;
-        } else {
-          console.warn("Invalid locale structure in page group data");
-        }
-      } catch {
-        console.warn("failed to retrieve locales from page group");
-      }
-    }
+    const locales = getPageSetLocales(streamDocument);
 
     const resolvedValue = React.useMemo(() => {
       if (value && "hasLocalizedValue" in value) {

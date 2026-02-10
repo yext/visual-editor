@@ -1,6 +1,7 @@
 import { setDeep } from "@puckeditor/core";
 import { StreamDocument } from "./types/StreamDocument.ts";
 import { resolveComponentData } from "./resolveComponentData.tsx";
+import { getPageSetLocales } from "./pageSetLocales.ts";
 
 export type RootConfig = {
   title?: string;
@@ -37,8 +38,9 @@ export function getPageMetadata(document: Record<string, any>): RootConfig {
 
   // For title, fallback to primary locale, then en, if localized value is empty
   if (metadata.title === "") {
-    const fallbackLocales = Array.from(new Set([primaryLocale, "en"])).filter(
-      (locale): locale is string => typeof locale === "string" && locale !== ""
+    const pageSetLocales = getPageSetLocales(document);
+    const fallbackLocales = Array.from(
+      new Set([primaryLocale, "en", ...pageSetLocales])
     );
 
     for (const fallbackLocale of fallbackLocales) {

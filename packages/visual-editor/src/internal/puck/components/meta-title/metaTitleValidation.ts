@@ -1,7 +1,5 @@
-import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
-import { StreamDocument } from "./types/StreamDocument.ts";
-import { TranslatableString } from "../types/types.ts";
-import { YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
+import { TranslatableString } from "../../../../types/types.ts";
+import { YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
 
 const DEFAULT_LOCALE = "en";
 
@@ -16,28 +14,6 @@ const normalizeLocales = (locales: string[] | undefined): string[] => {
         .filter((locale) => locale.length > 0)
     )
   );
-};
-
-export const getPageSetLocales = (
-  templateMetadata?: TemplateMetadata,
-  streamDocument?: StreamDocument
-): string[] => {
-  const fromTemplate = normalizeLocales(templateMetadata?.locales);
-  if (fromTemplate.length > 0) {
-    return fromTemplate;
-  }
-
-  try {
-    const parsedPageSet = JSON.parse(streamDocument?._pageset ?? "");
-    const fromPageSet = normalizeLocales(parsedPageSet?.scope?.locales);
-    if (fromPageSet.length > 0) {
-      return fromPageSet;
-    }
-  } catch {
-    // ignore parse issues and fall through to default locale
-  }
-
-  return [DEFAULT_LOCALE];
 };
 
 export const getMetaTitleMissingLocales = (

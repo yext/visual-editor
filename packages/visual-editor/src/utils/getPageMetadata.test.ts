@@ -211,6 +211,46 @@ describe("getPageMetadata", () => {
     });
   });
 
+  it("falls back to another pageset locale when primary and english are empty", async () => {
+    const testDocument = {
+      name: "Test Name",
+      description: "Test Description",
+      locale: "it",
+      _pageset: JSON.stringify({
+        scope: {
+          locales: ["en", "fr", "de", "it"],
+        },
+      }),
+      __: {
+        pathInfo: {
+          primaryLocale: "fr",
+        },
+        layout: JSON.stringify({
+          root: {
+            props: {
+              title: {
+                field: "name",
+                constantValue: {
+                  en: "",
+                  fr: "",
+                  de: "Deutsch",
+                  it: "",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+              },
+            },
+          },
+        }),
+      },
+    };
+    const metaData = getPageMetadata(testDocument);
+
+    expect(metaData).toMatchObject({
+      title: "Deutsch",
+    });
+  });
+
   it("resolves PLACEHOLDER for directory pages", async () => {
     const testDocument = {
       name: "Test Name",
