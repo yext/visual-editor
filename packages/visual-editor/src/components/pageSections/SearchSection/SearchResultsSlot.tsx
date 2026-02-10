@@ -1,7 +1,16 @@
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
-import { StandardCard } from "@yext/search-ui-react";
+import {
+  DefaultRawDataType,
+  StandardCard,
+  StandardSection,
+  UniversalResults,
+  VerticalConfigMap,
+} from "@yext/search-ui-react";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
+import React from "react";
+import { useSearchActions } from "@yext/search-headless-react";
+import { FaEllipsisV } from "react-icons/fa";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfig[] };
@@ -194,23 +203,124 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   }),
 };
 
-const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
-  props
-) => {
-  const { puck } = props;
+export const VerticalConfig = [
+  {
+    label: "All",
+    pageType: "universal",
+  },
+  {
+    label: "FAQs",
+    verticalKey: "faq",
+    pageType: "standard",
+    cardType: StandardCard,
+    universalLimit: 3,
+    verticalLimit: 5,
+  },
+  {
+    label: "Professionals",
+    verticalKey: "financial-professional",
+    pageType: "grid-cols-3",
+    cardType: StandardCard,
+    universalLimit: 3,
+    verticalLimit: 5,
+  },
+  {
+    label: "Locations",
+    verticalKey: "locations",
+    pageType: "map",
+    cardType: StandardCard,
+    universalLimit: 3,
+    verticalLimit: 5,
+  },
+  {
+    label: "Jobs",
+    verticalKey: "jobs",
+    pageType: "standard",
+    cardType: StandardCard,
+    universalLimit: 3,
+    verticalLimit: 5,
+  },
+  {
+    label: "Events",
+    verticalKey: "events",
+    pageType: "standard",
+    cardType: StandardCard,
+    universalLimit: 3,
+    verticalLimit: 5,
+  },
+  {
+    label: "Products",
+    verticalKey: "product",
+    pageType: "grid-cols-3",
+    cardType: StandardCard,
+    universalLimit: 3,
+    verticalLimit: 5,
+    sortFields: ["name"], // ["fieldName, Ascending Label, Descending Label"] examples: ["name, Name (A-Z), Name (Z-A)"] or ["name, Name (A-Z), Name (Z-A)", "price.value, Price (Low - High), Price (High - Low)"]
+  },
+];
+
+export const UniversalConfig: VerticalConfigMap<
+  Record<string, DefaultRawDataType>
+> = VerticalConfig.reduce(
+  (configMap, item) => {
+    if (item.verticalKey) {
+      configMap[item.verticalKey] = {
+        CardComponent: item.cardType,
+        SectionComponent: StandardSection,
+        label: item.label,
+      };
+    }
+    return configMap;
+  },
+  {} as VerticalConfigMap<Record<string, DefaultRawDataType>>
+);
+
+const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = () => {
+  const searchActions = useSearchActions();
+  React.useEffect(() => {
+    searchActions
+      .executeUniversalQuery()
+      .then((res) => console.log(JSON.stringify(res)));
+  }, []);
+
   // const verticalConfigMap = React.useMemo(
   //   () => buildVerticalConfigMap(verticals),
   //   [verticals]
   // );
 
-  if (puck.isEditing) {
-    return (
-      <div className="h-12 border border-dashed text-center flex items-center justify-center">
-        Search Bar
+  return (
+    <div className="relative pt-8">
+      <div className="border-b flex justify-start items-center">
+        <ul className="flex items-center">
+          <li>
+            <a className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0">FAQ</a>
+          </li>
+          <li>
+            <a className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0">FAQ</a>
+          </li>
+          <li>
+            <a className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0">FAQ</a>
+          </li>
+        </ul>
+        <div className="ml-auto relative flex">
+          <button className="px-5 pt-1.5 pb-1 tracking-[1.1px] visible mb-0 flex gap-2 items-center">
+            <FaEllipsisV className="flex my-2.5 mr-[0.4375rem]" />
+            More
+          </button>
+        </div>
       </div>
-    );
-  }
-  return <div className="h-18 border-red-900 border">Search Result</div>;
+      <div>
+        <UniversalResults
+          verticalConfigMap={UniversalConfig}
+          customCssClasses={{
+            sectionHeaderIconContainer: "hidden",
+            sectionHeaderLabel: "!pl-0",
+          }}
+        />
+      </div>
+    </div>
+  );
+  // return <div className="h-18 border-red-900 border">Search Result</div>;
 };
 
 export const SearchResultsSlot: ComponentConfig<{

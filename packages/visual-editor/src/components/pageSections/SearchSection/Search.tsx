@@ -25,7 +25,6 @@ export interface SearchComponentProps {
 const locatorFields: Fields<SearchComponentProps> = {
   slots: {
     type: "object",
-    visible: false,
     objectFields: {
       SearchBarSlot: { type: "slot" },
       SearchResultsSlot: { type: "slot" },
@@ -71,7 +70,7 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <SearchI18nextProvider searcher={searcher}>
-        <PageSection ref={puck.dragRef}>
+        <PageSection ref={puck.dragRef} className="">
           <slots.SearchBarSlot style={{ height: "auto" }} allow={[]} />
           <slots.SearchResultsSlot style={{ height: "auto" }} allow={[]} />
         </PageSection>
