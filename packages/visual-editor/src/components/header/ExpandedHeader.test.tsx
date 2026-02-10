@@ -28,7 +28,7 @@ const clickMenuIfVisible = async (page: BrowserPage) => {
   if (isVisible) {
     await act(async () => {
       await menuButton.click();
-      await delay(600); // wait for menu animation
+      await delay(1000); // wait for menu animation
     });
   }
 };
