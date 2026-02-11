@@ -112,32 +112,7 @@
   font-size: calc(var(--fontSize-body-fontSize) + 2px) !important;
 }
 
-.rtf-light-background h1,
-.rtf-light-background h2,
-.rtf-light-background h3,
-.rtf-light-background h4,
-.rtf-light-background h5,
-.rtf-light-background h6,
-.rtf-light-background p,
-.rtf-light-background li,
-.rtf-light-background a {
-  color: black;
-}
-
 /* Inherit text color from parent, if set */
 .rtf-wrapper * {
   color: inherit !important;
-}
-
-/* If the parent has a dark background, override text color to white. */
-.rtf-dark-background h1,
-.rtf-dark-background h2,
-.rtf-dark-background h3,
-.rtf-dark-background h4,
-.rtf-dark-background h5,
-.rtf-dark-background h6,
-.rtf-dark-background p,
-.rtf-dark-background li,
-.rtf-dark-background a {
-  color: white;
 }

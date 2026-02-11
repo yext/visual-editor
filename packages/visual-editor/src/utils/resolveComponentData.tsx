@@ -85,24 +85,19 @@ export function resolveComponentData<T>(
 
   // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
   if (React.isValidElement(resolved)) {
-    let rtfClass = "rtf-theme rtf-light-background";
-    let rtfStyle;
-    if (options?.isDarkBackground) {
-      rtfClass = "rtf-theme rtf-dark-background";
-    }
+    let rtfClass = "rtf-theme";
     if (options?.variant && options.variant !== "base") {
       rtfClass += ` rtf-body-${options.variant}`;
     }
     if (options?.className) {
       rtfClass += ` ${options.className}`;
     }
-    if (options?.color) {
-      rtfStyle = options?.color?.bgColor
-        ? {
-            color: `var(--colors-${normalizeThemeColor(options.color.bgColor)})`,
-          }
-        : undefined;
-    }
+
+    const rtfStyle = options?.color?.bgColor
+      ? {
+          color: `var(--colors-${normalizeThemeColor(options.color.bgColor)})`,
+        }
+      : undefined;
 
     return (
       <div className={rtfClass} style={rtfStyle}>

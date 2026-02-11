@@ -160,7 +160,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     if (
       sharedCardProps.questionVariant === styles.questionVariant &&
       sharedCardProps.answerVariant === styles.answerVariant &&
-      sharedCardProps.answerColor === styles.answerColor
+      sharedCardProps.answerColor?.bgColor === styles.answerColor?.bgColor
     ) {
       return;
     }
@@ -192,7 +192,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   }, [
     sharedCardProps?.answerVariant,
     sharedCardProps?.questionVariant,
-    sharedCardProps?.answerColor,
+    sharedCardProps?.answerColor?.bgColor,
   ]);
 
   // When the card's shared props change, update the context
@@ -204,7 +204,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     if (
       sharedCardProps?.questionVariant === styles.questionVariant &&
       sharedCardProps?.answerVariant === styles.answerVariant &&
-      sharedCardProps?.answerColor === styles.answerColor
+      sharedCardProps?.answerColor?.bgColor === styles.answerColor?.bgColor
     ) {
       return;
     }
