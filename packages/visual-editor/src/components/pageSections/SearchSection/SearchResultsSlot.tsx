@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  // usePuck,
+} from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
 import { UniversalResults } from "@yext/search-ui-react";
 import React from "react";
@@ -74,6 +79,27 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const {
     data: { verticals },
   } = props;
+  // const { appState } = usePuck();
+  // const arrayState = appState.ui.arrayState;
+
+  // const arrayKey = Object.keys(arrayState || {}).find((key) =>
+  //   key.includes("_object_data_verticals")
+  // );
+
+  // let selectedVerticalIndex: number | null = null;
+
+  // if (arrayKey) {
+  //   const verticalArrayState = arrayState[arrayKey];
+  //   const openId = verticalArrayState?.openId;
+
+  //   const selectedItem = verticalArrayState?.items?.find(
+  //     (item) => item._arrayId === openId
+  //   );
+
+  //   selectedVerticalIndex = selectedItem?._currentIndex ?? null;
+  // }
+
+  // console.log("Selected vertical index:", selectedVerticalIndex);
 
   const searchActions = useSearchActions();
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
@@ -95,8 +121,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     }
 
     searchActions.setUniversal();
-    // searchActions.setQuery(searchTerm);
-
     searchActions.setUniversalLimit(universalLimit);
     searchActions.executeUniversalQuery();
   }, [verticals, searchTerm, universalLimit, searchActions]);

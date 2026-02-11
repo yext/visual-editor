@@ -2,15 +2,16 @@ import { UniversalLimit } from "@yext/search-headless-react";
 import {
   DefaultRawDataType,
   StandardCard,
-  StandardSection,
   VerticalConfigMap,
 } from "@yext/search-ui-react";
+import { LayoutSection } from "./LayoutSections.tsx";
+import { VerticalLayout } from "./propsAndTypes.ts";
 
 export const buildVerticalConfigMap = (
   verticals: {
     label: string;
     verticalKey?: string;
-    layout?: "Grid" | "Flex" | "Map";
+    layout?: VerticalLayout;
   }[]
 ): VerticalConfigMap<Record<string, DefaultRawDataType>> => {
   return verticals.reduce(
@@ -20,7 +21,9 @@ export const buildVerticalConfigMap = (
       acc[v.verticalKey] = {
         label: v.label,
         viewAllButton: true,
-        SectionComponent: StandardSection,
+        SectionComponent: (props) => (
+          <LayoutSection {...props} layoutType={v.layout ?? "Grid"} />
+        ),
         CardComponent: StandardCard,
       };
 
