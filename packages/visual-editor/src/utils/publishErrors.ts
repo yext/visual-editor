@@ -42,15 +42,15 @@ export const getPublishErrorMessage = (
   errorDetails: Partial<Record<ErrorSource, ErrorDetail>> = {}
 ): string => {
   const actions = getPublishErrorActions(errorSources, errorDetails);
-  const actionsText =
-    actions.length > 0
-      ? actions.join("; ")
-      : pt(
-          "resolveErrorsInEditor",
-          "resolve the errors highlighted in the editor"
-        );
+  if (actions.length === 0) {
+    return pt(
+      "resolveErrorsInEditor",
+      "To publish, resolve the errors highlighted in the editor"
+    );
+  }
 
-  return pt("fixErrorsToPublish", "To publish, {{actions}}", {
-    actions: actionsText,
-  });
+  return [
+    pt("toPublishHeading", "To publish resolve the following errors:"),
+    ...actions.map((action) => `- ${action}`),
+  ].join("\n");
 };
