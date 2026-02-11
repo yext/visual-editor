@@ -108,15 +108,21 @@ const tests: ComponentTest[] = [
       resultCard: {
         primaryHeading: {
           field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
           headingLevel: 5,
         },
         secondaryHeading: {
           field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
           variant: "base",
           liveVisibility: false,
         },
         tertiaryHeading: {
           field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
           variant: "base",
           liveVisibility: false,
         },
@@ -159,6 +165,11 @@ const tests: ComponentTest[] = [
         },
         image: {
           field: "headshot",
+          constantValue: {
+            en: { url: "", height: 0, width: 0 },
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: false,
           liveVisibility: false,
         },
       },
@@ -438,7 +449,9 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: "name",
+          field: { selection: { value: "name" } },
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
           headingLevel: 3,
         },
         secondaryHeading: {
@@ -536,7 +549,9 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: "name",
+          field: { selection: { value: "name" } },
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
           headingLevel: 3,
         },
         secondaryHeading: {
@@ -643,7 +658,9 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: "name",
+          field: { selection: { value: "name" } },
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
           headingLevel: 3,
         },
         secondaryHeading: {
@@ -745,7 +762,9 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: "name",
+          field: { selection: { value: "name" } },
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
           headingLevel: 3,
         },
         secondaryHeading: {
@@ -904,6 +923,234 @@ const tests: ComponentTest[] = [
       },
     },
     version: 60,
+  },
+  {
+    name: "version 61 static headings",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: { selection: { value: "name" } },
+          constantValue: { en: "Custom Heading", hasLocalizedValue: "true" },
+          constantValueEnabled: true,
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          constantValue: {
+            en: "Secondary Static",
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: true,
+          variant: "base",
+          liveVisibility: true,
+        },
+        tertiaryHeading: {
+          field: "name",
+          constantValue: { en: "Tertiary Static", hasLocalizedValue: "true" },
+          constantValueEnabled: true,
+          variant: "base",
+          liveVisibility: true,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          constantValue: {
+            en: { url: "", height: 0, width: 0 },
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: false,
+          liveVisibility: false,
+        },
+      },
+    },
+    interactions: async (page) => {
+      expect(page.getByText("Custom Heading")).toBeTruthy();
+    },
+    version: 61,
+  },
+  {
+    name: "version 61 static image",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            source: "accounts/4174974/sites/155048/pagesets/locations",
+            experienceKey: "locator-41",
+            entityType: "location",
+          },
+        },
+        config: {
+          urlTemplate: {
+            primary: "[[address.region]]/[[address.city]]/[[address.line1]]",
+          },
+        },
+      }),
+    },
+    props: {
+      filters: {
+        openNowButton: false,
+        showDistanceOptions: false,
+      },
+      resultCard: {
+        primaryHeading: {
+          field: { selection: { value: "name" } },
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
+          headingLevel: 3,
+        },
+        secondaryHeading: {
+          field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
+          variant: "base",
+          liveVisibility: false,
+        },
+        tertiaryHeading: {
+          field: "name",
+          constantValue: { en: "", hasLocalizedValue: "true" },
+          constantValueEnabled: false,
+          variant: "base",
+          liveVisibility: false,
+        },
+        icons: true,
+        hours: {
+          table: {
+            startOfWeek: "today",
+            collapseDays: false,
+            showAdditionalHoursText: false,
+          },
+          liveVisibility: true,
+        },
+        address: {
+          showGetDirectionsLink: true,
+          liveVisibility: true,
+        },
+        phone: {
+          field: "mainPhone",
+          phoneFormat: "domestic",
+          includePhoneHyperlink: true,
+          liveVisibility: true,
+        },
+        email: {
+          field: "emails",
+          liveVisibility: false,
+        },
+        services: {
+          field: "services",
+          liveVisibility: false,
+        },
+        primaryCTA: {
+          variant: "primary",
+          liveVisibility: true,
+        },
+        secondaryCTA: {
+          label: "Call to Action",
+          link: "#",
+          variant: "secondary",
+          liveVisibility: false,
+        },
+        image: {
+          field: "headshot",
+          constantValue: {
+            en: {
+              url: "https://placehold.co/80x80",
+              height: 80,
+              width: 80,
+            },
+            hasLocalizedValue: "true",
+          },
+          constantValueEnabled: true,
+          liveVisibility: true,
+        },
+      },
+    },
+    version: 61,
   },
 ];
 

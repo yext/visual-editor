@@ -5,6 +5,7 @@ import {
   type TranslatableRichText,
   type TranslatableString,
 } from "../types/types.ts";
+import { TranslatableAssetImage } from "../types/images.ts";
 import { type YextEntityField } from "../editor/YextEntityFieldSelector.tsx";
 import React from "react";
 import {
@@ -48,9 +49,20 @@ export function resolveComponentData<T>(
   streamDocument?: Record<string, any>
 ): T | undefined;
 
+// 4. Handles TranslatableAssetImage directly or via a YextEntityField
+export function resolveComponentData(
+  data: TranslatableAssetImage | YextEntityField<TranslatableAssetImage>,
+  locale: string,
+  streamDocument?: Record<string, any>
+): TranslatableAssetImage | undefined;
+
 // --- Implementation ---
 export function resolveComponentData<T>(
-  data: YextEntityField<T> | TranslatableString | TranslatableRichText,
+  data:
+    | YextEntityField<T>
+    | TranslatableString
+    | TranslatableRichText
+    | TranslatableAssetImage,
   locale: string,
   streamDocument?: Record<string, any>,
   options?: {
