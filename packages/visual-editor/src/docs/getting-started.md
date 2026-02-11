@@ -45,7 +45,6 @@ Now that the Puck component is created we need to make it available for users.
 
 1. Add your component and component props to the appropriate [\_componentCategories](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/_componentCategories.ts).
 2. Update the corresponding index.ts in the components subfolder where your component lives so that it gets exported by the library.
-3. Add your component to the component [registry](https://github.com/yext/visual-editor/blob/main/packages/visual-editor/src/components/registry/components.ts). This makes your component available to locally download via shadcn. See [this](/components/registry/README) for more information.
 
 ## Developing and Testing
 

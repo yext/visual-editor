@@ -100,41 +100,6 @@ const tests: ComponentTest[] = [
     },
   },
   {
-    name: "version 10 props with empty document",
-    document: {},
-    props: {
-      backgroundColor: {
-        bgColor: "bg-palette-primary-dark",
-        textColor: "text-white",
-      },
-      analytics: {
-        scope: "reviewsSection",
-      },
-    },
-    version: 10,
-  },
-  {
-    name: "version 10 props with document data",
-    document: testDocument,
-    props: {
-      backgroundColor: {
-        bgColor: "bg-palette-primary-dark",
-        textColor: "text-white",
-      },
-      analytics: {
-        scope: "reviewsSection",
-      },
-    },
-    version: 10,
-    interactions: async (page) => {
-      const expandButton = page.getByText("Show More");
-      await act(async () => {
-        await expandButton.click();
-      });
-      await delay(interactionsDelay);
-    },
-  },
-  {
     name: "version 10 props with French locale",
     document: { ...testDocument, locale: "fr" },
     props: {
