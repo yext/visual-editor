@@ -1,6 +1,7 @@
 import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
 
 export type VerticalLayout = "Grid" | "Flex" | "Map";
+export type CardTypeProp = "Standard" | "accordion";
 
 export interface VerticalConfig {
   label: string;
@@ -9,6 +10,7 @@ export interface VerticalConfig {
   universalLimit?: number;
   verticalLimit?: number;
   pageType?: "universal" | "vertical";
+  cardType?: CardTypeProp;
 }
 
 export const defaultSearchResultsProps: SearchResultsSlotProps = {
@@ -18,6 +20,7 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
         label: "FAQs",
         verticalKey: "faq",
         layout: "Flex",
+        cardType: "Standard",
         universalLimit: 3,
         verticalLimit: 5,
       },
@@ -25,6 +28,8 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
         label: "Products",
         verticalKey: "product",
         layout: "Grid",
+        cardType: "Standard",
+
         universalLimit: 3,
         verticalLimit: 5,
       },
@@ -32,6 +37,8 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
         label: "Locations",
         verticalKey: "locations",
         layout: "Map",
+        cardType: "Standard",
+
         universalLimit: 3,
         verticalLimit: 5,
       },

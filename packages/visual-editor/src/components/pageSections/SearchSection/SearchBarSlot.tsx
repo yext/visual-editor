@@ -27,11 +27,7 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
 };
 
 const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = (props) => {
-  const {
-    styles: { showIcon = false },
-    puck,
-  } = props;
-  console.log(showIcon);
+  const { puck } = props;
   if (puck.isEditing) {
     return (
       <div className="h-12 border border-dashed text-center flex items-center justify-center">

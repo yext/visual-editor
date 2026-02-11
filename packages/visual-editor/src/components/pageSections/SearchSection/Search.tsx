@@ -13,6 +13,7 @@ import { msg } from "../../../utils/index.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
+import "./search.css";
 
 export interface SearchComponentProps {
   /** @internal */

@@ -16,10 +16,12 @@ import {
   buildVerticalConfigMap,
   isValidVerticalConfig,
 } from "./utils.tsx";
+
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfig[] };
   styles: { showIcon: boolean };
 }
+
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
@@ -29,11 +31,9 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
         type: "array",
         arrayFields: {
           label: YextField(msg("fields.label", "Label"), { type: "text" }),
-
           verticalKey: YextField(msg("fields.verticalKey", "Vertical Key"), {
             type: "text",
           }),
-
           layout: YextField(msg("fields.layout", "Layout"), {
             type: "radio",
             options: [
@@ -42,12 +42,17 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
               { label: "Map", value: "Map" },
             ],
           }),
-
+          cardType: YextField(msg("fields.layout", "Layout"), {
+            type: "radio",
+            options: [
+              { label: "Standard", value: "standard" },
+              { label: "Accordion", value: "accordion" },
+            ],
+          }),
           universalLimit: YextField(
             msg("fields.universalLimit", "Universal Limit"),
             { type: "number" }
           ),
-
           verticalLimit: YextField(
             msg("fields.verticalLimit", "Vertical Limit"),
             {
@@ -118,11 +123,11 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     if (!isValidVerticalConfig(verticals)) {
       console.warn("Skipping search: invalid vertical config", verticals);
       return;
+    } else {
+      searchActions.setUniversal();
+      searchActions.setUniversalLimit(universalLimit);
+      searchActions.executeUniversalQuery();
     }
-
-    searchActions.setUniversal();
-    searchActions.setUniversalLimit(universalLimit);
-    searchActions.executeUniversalQuery();
   }, [verticals, searchTerm, universalLimit, searchActions]);
 
   return (
@@ -131,7 +136,10 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         <ul className="flex items-center">
           {verticals.map((item) => (
             <li key={item.verticalKey ?? item.label}>
-              <a className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0">
+              <a
+                onClick={() => console.log("clicked")}
+                className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0"
+              >
                 {item.label}
               </a>
             </li>
@@ -144,7 +152,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           </button>
         </div>
       </div>
-
+      {isLoading && <div>Loading......</div>}
       {!isLoading && (
         <UniversalResults
           verticalConfigMap={verticalConfigMap}
