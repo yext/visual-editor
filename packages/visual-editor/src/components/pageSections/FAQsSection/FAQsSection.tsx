@@ -202,6 +202,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
               data.props.slots.CardSlot[0].props.styles.questionVariant,
             answerVariant:
               data.props.slots.CardSlot[0].props.styles.answerVariant,
+            answerColor: data.props.slots.CardSlot[0].props.styles.answerColor,
           };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
@@ -234,7 +235,8 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
                   `FAQCard-${crypto.randomUUID()}`,
                   undefined,
                   sharedCardProps?.questionVariant,
-                  sharedCardProps?.answerVariant
+                  sharedCardProps?.answerVariant,
+                  sharedCardProps?.answerColor
                 )
               )
           : [];
@@ -287,7 +289,8 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
             newId,
             i,
             sharedCardProps?.questionVariant,
-            sharedCardProps?.answerVariant
+            sharedCardProps?.answerVariant,
+            sharedCardProps?.answerColor
           );
         }
 
