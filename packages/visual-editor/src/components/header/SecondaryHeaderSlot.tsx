@@ -115,6 +115,9 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
 
   const isMenuMode = displayMode === "menu";
   const hideSecondaryHeader = !puck.isEditing && !isMenuMode && isOverflow;
+  const showLanguageSelectorInMenu =
+    showLanguageSelector && menuContext.secondaryOverflow;
+  const showLanguageSelectorInline = showLanguageSelector && !isMenuMode;
 
   React.useEffect(() => {
     if (!menuContext || isMenuMode) {
@@ -171,7 +174,10 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
           }
         >
           <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
-          {showLanguageSelector && (
+          {showLanguageSelectorInline && (
+            <LanguageDropdown {...languageDropDownProps} />
+          )}
+          {isMenuMode && showLanguageSelectorInMenu && (
             <LanguageDropdown {...languageDropDownProps} />
           )}
         </div>
