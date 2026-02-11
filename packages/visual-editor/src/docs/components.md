@@ -38,10 +38,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                            | Description                           | Default              |
-| :----------------------- | :------------------------------ | :------------------------------------ | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`               | The background color of the section.  | `Background Color 6` |
-| `styles.textAlignment`   | `"left" \| "right" \| "center"` | The horizontal alignment of the text. | `center`             |
+| Prop                     | Type                            | Description                                                                                                               | Default              |
+| :----------------------- | :------------------------------ | :------------------------------------------------------------------------------------------------------------------------ | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`               | The background color of the section.                                                                                      | `Background Color 6` |
+| `styles.textAlignment`   | `"left" \| "right" \| "center"` | The horizontal alignment of the text.                                                                                     | `center`             |
+| `styles.textColor`       | `BackgroundStyle`               | Optional text color for the banner text. If not set, it will default to a color that contrasts with the background color. |                      |
 
 #### Other Props
 
