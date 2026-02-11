@@ -160,7 +160,7 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
   }),
 };
 
-const useWindowWidth = (externalWindow?: Window | null) => {
+export const useWindowWidth = (externalWindow?: Window | null) => {
   const [width, setWidth] = React.useState(externalWindow?.innerWidth ?? 1024);
 
   React.useLayoutEffect(() => {
