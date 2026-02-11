@@ -449,7 +449,7 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: { selection: { value: "name" } },
+          field: "name",
           constantValue: { en: "", hasLocalizedValue: "true" },
           constantValueEnabled: false,
           headingLevel: 3,
@@ -549,7 +549,7 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: { selection: { value: "name" } },
+          field: "name",
           constantValue: { en: "", hasLocalizedValue: "true" },
           constantValueEnabled: false,
           headingLevel: 3,
@@ -658,7 +658,7 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: { selection: { value: "name" } },
+          field: "name",
           constantValue: { en: "", hasLocalizedValue: "true" },
           constantValueEnabled: false,
           headingLevel: 3,
@@ -762,7 +762,7 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: { selection: { value: "name" } },
+          field: "name",
           constantValue: { en: "", hasLocalizedValue: "true" },
           constantValueEnabled: false,
           headingLevel: 3,
@@ -925,7 +925,7 @@ const tests: ComponentTest[] = [
     version: 60,
   },
   {
-    name: "version 61 static headings",
+    name: "version 62 static headings",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -964,7 +964,7 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: { selection: { value: "name" } },
+          field: "name",
           constantValue: { en: "Custom Heading", hasLocalizedValue: "true" },
           constantValueEnabled: true,
           headingLevel: 3,
@@ -1037,10 +1037,10 @@ const tests: ComponentTest[] = [
     interactions: async (page) => {
       expect(page.getByText("Custom Heading")).toBeTruthy();
     },
-    version: 61,
+    version: 62,
   },
   {
-    name: "version 61 static image",
+    name: "version 62 static image",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -1079,7 +1079,7 @@ const tests: ComponentTest[] = [
       },
       resultCard: {
         primaryHeading: {
-          field: { selection: { value: "name" } },
+          field: "name",
           constantValue: { en: "", hasLocalizedValue: "true" },
           constantValueEnabled: false,
           headingLevel: 3,
@@ -1150,7 +1150,7 @@ const tests: ComponentTest[] = [
         },
       },
     },
-    version: 61,
+    version: 62,
   },
 ];
 
