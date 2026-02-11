@@ -11,6 +11,8 @@ import {
   resolveEmbeddedFieldsRecursively,
   resolveYextEntityField,
 } from "./resolveYextEntityField.ts";
+import { BackgroundStyle } from "./themeConfigOptions.ts";
+import { normalizeThemeColor } from "./normalizeThemeColor.ts";
 
 /**
  * The primary function for resolving all component data. It handles entity
@@ -38,6 +40,7 @@ export function resolveComponentData(
     variant?: BodyProps["variant"];
     isDarkBackground?: boolean;
     className?: string;
+    color?: BackgroundStyle;
   }
 ): string | React.ReactElement;
 
@@ -57,6 +60,7 @@ export function resolveComponentData<T>(
     variant?: BodyProps["variant"];
     isDarkBackground?: boolean;
     className?: string;
+    color?: BackgroundStyle;
   }
 ): any {
   let rawValue;
@@ -82,6 +86,7 @@ export function resolveComponentData<T>(
   // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
   if (React.isValidElement(resolved)) {
     let rtfClass = "rtf-theme rtf-light-background";
+    let rtfStyle;
     if (options?.isDarkBackground) {
       rtfClass = "rtf-theme rtf-dark-background";
     }
@@ -91,8 +96,19 @@ export function resolveComponentData<T>(
     if (options?.className) {
       rtfClass += ` ${options.className}`;
     }
+    if (options?.color) {
+      rtfStyle = options?.color?.bgColor
+        ? {
+            color: `var(--colors-${normalizeThemeColor(options.color.bgColor)})`,
+          }
+        : undefined;
+    }
 
-    return <div className={rtfClass}>{resolved}</div>;
+    return (
+      <div className={rtfClass} style={rtfStyle}>
+        {resolved}
+      </div>
+    );
   }
 
   return resolved;

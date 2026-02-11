@@ -35,6 +35,13 @@ export interface BannerStyles {
    * @defaultValue Background Color 6
    */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * Optional text color for the banner text.
+   * If not set, it will default to a color that contrasts with the background color.
+   */
+  textColor?: BackgroundStyle;
+
   /**
    * The horizontal alignment of the text.
    * @defaultValue center
@@ -90,6 +97,10 @@ const bannerSectionFields: Fields<BannerSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      textColor: YextField(msg("fields.textColor", "Text Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
       textAlignment: YextField(msg("fields.textAlignment", "Text Alignment"), {
         type: "radio",
         options: "ALIGNMENT",
@@ -139,7 +150,9 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
     : undefined;
   const isEmpty = isMappedField && isRichTextEmpty(rawValue);
 
-  const resolvedText = resolveComponentData(data.text, locale, streamDocument);
+  const resolvedText = resolveComponentData(data.text, locale, streamDocument, {
+    color: styles.textColor,
+  });
 
   const justifyClass = {
     left: "justify-start",

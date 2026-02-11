@@ -1,6 +1,5 @@
 import { Body, BodyProps } from "./body.tsx";
 import { RichText } from "../../types/types.ts";
-import { useBackground } from "../../hooks/useBackground.tsx";
 import "./maybeRTF.css";
 
 export interface MaybeRTFProps extends Record<string, any> {
@@ -13,8 +12,6 @@ export const MaybeRTF = ({
   bodyVariant = "base",
   ...props
 }: MaybeRTFProps) => {
-  const background = useBackground();
-
   if (!data) {
     return <></>;
   }
@@ -33,7 +30,7 @@ export const MaybeRTF = ({
         <div
           {...props}
           dangerouslySetInnerHTML={{ __html: data.html }}
-          className={`rtf-theme ${background?.isDarkBackground ? "rtf-dark-background" : "rtf-light-background"} ${bodyVariant !== "base" && `rtf-body-${bodyVariant}`}`}
+          className={`rtf-theme rtf-wrapper ${bodyVariant !== "base" && `rtf-body-${bodyVariant}`}`}
         />
       );
     }
