@@ -184,10 +184,8 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
           }
         >
           <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
-          {showLanguageSelectorInline && (
-            <LanguageDropdown {...languageDropDownProps} />
-          )}
-          {isMenuMode && showLanguageSelectorInMenu && (
+          {(showLanguageSelectorInline ||
+            (isMenuMode && showLanguageSelectorInMenu)) && (
             <LanguageDropdown {...languageDropDownProps} />
           )}
         </div>
