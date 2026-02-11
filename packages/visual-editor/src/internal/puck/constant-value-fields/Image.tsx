@@ -318,7 +318,10 @@ const createImageConstantConfig = (options?: {
 
 export const IMAGE_CONSTANT_CONFIG = createImageConstantConfig();
 
-export const LOCATOR_IMAGE_CONSTANT_CONFIG = createImageConstantConfig({
-  getAltTextOptions: (templateMetadata: TemplateMetadata) =>
-    buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
-});
+export const LOCATOR_IMAGE_CONSTANT_CONFIG = {
+  ...createImageConstantConfig({
+    getAltTextOptions: (templateMetadata: TemplateMetadata) =>
+      buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
+  }),
+  label: msg("fields.image", "Image"),
+};

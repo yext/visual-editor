@@ -793,7 +793,7 @@ export const LocatorResultCard = React.memo(
           <div className="w-full flex flex-col gap-4">
             {/** Heading section */}
             <div className="flex flex-row justify-between items-start gap-6">
-              <div className="flex flex-row items-start gap-6">
+              <div className="flex flex-row items-start gap-6 flex-1 min-w-0">
                 <ImageSection image={props.image} location={location} />
                 <HeadingTextSection
                   primaryHeading={props.primaryHeading}
@@ -1017,7 +1017,7 @@ const HeadingTextSection = (props: {
   });
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 flex-1 min-w-0">
       <Heading
         color={primaryHeading?.color}
         className="font-bold text-palette-primary-dark"
@@ -1202,8 +1202,7 @@ const resolveText = (params: {
       ? resolveComponentData(config.constantValue, language, location)
       : undefined;
   const resolvedText =
-    typeof resolvedConstantValue === "string" &&
-    resolvedConstantValue.trim() !== ""
+    typeof resolvedConstantValue === "string"
       ? resolvedConstantValue
       : parseStringFromLocation(location, fieldId);
 
