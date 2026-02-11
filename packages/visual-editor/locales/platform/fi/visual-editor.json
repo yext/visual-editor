@@ -191,6 +191,7 @@
     "alignment": "Linjaus",
     "analytics": "Analytiikka",
     "answer": "Vastaus",
+    "answerColor": "Vastaus Väri",
     "answerVariant": "Vastausvariantti",
     "apiKey": "API -avain",
     "ariaLabel": "Aria -etiketti",

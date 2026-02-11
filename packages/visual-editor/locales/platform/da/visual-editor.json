@@ -197,6 +197,7 @@
     "alignment": "Justering",
     "analytics": "Analytics",
     "answer": "Svar",
+    "answerColor": "Svar farve",
     "answerVariant": "Svarvariant",
     "apiKey": "API -nøgle",
     "ariaLabel": "Aria -etiket",

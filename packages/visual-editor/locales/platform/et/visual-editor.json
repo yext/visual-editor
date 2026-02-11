@@ -191,6 +191,7 @@
     "alignment": "Joondamine",
     "analytics": "Analüütika",
     "answer": "Vastus",
+    "answerColor": "Vastus Värv",
     "answerVariant": "Vastuse variant",
     "apiKey": "API -võti",
     "ariaLabel": "Aria silt",

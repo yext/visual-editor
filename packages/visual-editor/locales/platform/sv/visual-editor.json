@@ -192,6 +192,7 @@
     "alignment": "Inriktning",
     "analytics": "Analys",
     "answer": "Svar",
+    "answerColor": "Svarsfärg",
     "answerVariant": "Svarsvariant",
     "apiKey": "API -nyckel",
     "ariaLabel": "Ariaetikett",

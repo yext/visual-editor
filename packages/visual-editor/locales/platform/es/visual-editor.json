@@ -190,6 +190,7 @@
     "alignment": "Alineación",
     "analytics": "Analítica",
     "answer": "Respuesta",
+    "answerColor": "Color de respuesta",
     "answerVariant": "Variante de respuesta",
     "apiKey": "Llave de API",
     "ariaLabel": "Etiqueta aria",
