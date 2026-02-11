@@ -59,6 +59,7 @@ import { ctaActionTypeDefaults } from "./0057_cta_action_type_defaults.ts";
 import { fixDirectoryTitleBindingAndSlotifyAddress } from "./0058_dynamic_directory_title_binding_and_slotify_address.ts";
 import { addShowHideOptions } from "./0059_show_hide_options.ts";
 import { addDefaultLocatorPageTitle } from "./0060_add_default_locator_title.ts";
+import { expandedHeaderLinks } from "./0061_expanded_header_links.ts";
 import { locatorStaticContentToggles } from "./0061_locator_static_content_toggles.ts";
 
 // To add a migration:
@@ -127,5 +128,6 @@ export const migrationRegistry: MigrationRegistry = [
   fixDirectoryTitleBindingAndSlotifyAddress,
   addShowHideOptions,
   addDefaultLocatorPageTitle,
+  expandedHeaderLinks,
   locatorStaticContentToggles,
 ];

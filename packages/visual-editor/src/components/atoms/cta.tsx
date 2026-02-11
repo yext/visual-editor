@@ -223,6 +223,15 @@ export const CTA = (props: CTAProps) => {
       };
     }
 
+    if (
+      variant === "headerFooterMainLink" ||
+      variant === "headerFooterSecondaryLink"
+    ) {
+      return {
+        color: bg && `var(--colors-${bg})`,
+      };
+    }
+
     return {};
   })();
 
