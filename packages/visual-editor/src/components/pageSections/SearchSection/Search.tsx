@@ -14,6 +14,7 @@ import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
 import "./search.css";
+import { defaultSearchResultsProps } from "./propsAndTypes.ts";
 
 export interface SearchComponentProps {
   /** @internal */
@@ -107,13 +108,7 @@ export const SearchComponent: ComponentConfig<{
                   label: "All",
                   pageType: "universal",
                 },
-                {
-                  label: "FAQs",
-                  verticalKey: "faq",
-                  layout: "Flex",
-                  universalLimit: 3,
-                  verticalLimit: 5,
-                },
+                defaultSearchResultsProps.data.verticals[0],
               ],
             },
             styles: {

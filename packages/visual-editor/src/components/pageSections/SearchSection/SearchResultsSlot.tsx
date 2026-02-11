@@ -1,12 +1,11 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  // usePuck,
-} from "@puckeditor/core";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import { UniversalResults } from "@yext/search-ui-react";
-import React from "react";
+import {
+  StandardCard,
+  UniversalResults,
+  VerticalResults,
+} from "@yext/search-ui-react";
+import React, { useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
@@ -45,11 +44,11 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
               { label: "Map", value: "Map" },
             ],
           }),
-          cardType: YextField(msg("fields.layout", "Layout"), {
+          cardType: YextField(msg("fields.cardType", "Card Type"), {
             type: "radio",
             options: [
-              { label: "Standard", value: "standard" },
-              { label: "Accordion", value: "accordion" },
+              { label: "Standard", value: "Standard" },
+              { label: "Accordion", value: "Accordion" },
             ],
           }),
           universalLimit: YextField(
@@ -112,6 +111,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const searchActions = useSearchActions();
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const searchTerm = useSearchState((s) => s.query.input) ?? " ";
+  const [verticalKey, setVerticalKey] = useState<string | undefined>();
+
   const verticalConfigMap = React.useMemo(
     () => buildVerticalConfigMap(verticals),
     [verticals]
@@ -127,11 +128,20 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       console.warn("Skipping search: invalid vertical config", verticals);
       return;
     } else {
-      searchActions.setUniversal();
-      searchActions.setUniversalLimit(universalLimit);
-      searchActions.executeUniversalQuery();
+      if (verticalKey) {
+        const verticalLimit = verticals.find(
+          (item) => item.verticalKey === verticalKey
+        )?.verticalLimit;
+        searchActions.setVertical(verticalKey);
+        searchActions.setVerticalLimit(verticalLimit!);
+        searchActions.executeVerticalQuery();
+      } else {
+        searchActions.setUniversal();
+        searchActions.setUniversalLimit(universalLimit);
+        searchActions.executeUniversalQuery();
+      }
     }
-  }, [verticals, searchTerm, universalLimit, searchActions]);
+  }, [verticals, searchTerm, universalLimit, searchActions, verticalKey]);
 
   return (
     <div className="relative pt-8">
@@ -140,8 +150,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           {verticals.map((item) => (
             <li key={item.verticalKey ?? item.label}>
               <a
-                onClick={() => console.log("clicked")}
-                className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0"
+                onClick={() => setVerticalKey(item.verticalKey)}
+                className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0 hover:cursor-pointer"
               >
                 {item.label}
               </a>
@@ -156,15 +166,18 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         </div>
       </div>
       {isLoading && <div>Loading......</div>}
-      {!isLoading && (
-        <UniversalResults
-          verticalConfigMap={verticalConfigMap}
-          customCssClasses={{
-            sectionHeaderIconContainer: "hidden",
-            sectionHeaderLabel: "!pl-0",
-          }}
-        />
-      )}
+      {!isLoading &&
+        (verticalKey ? (
+          <VerticalResults CardComponent={StandardCard} />
+        ) : (
+          <UniversalResults
+            verticalConfigMap={verticalConfigMap}
+            customCssClasses={{
+              sectionHeaderIconContainer: "hidden",
+              sectionHeaderLabel: "!pl-0",
+            }}
+          />
+        ))}
     </div>
   );
 };

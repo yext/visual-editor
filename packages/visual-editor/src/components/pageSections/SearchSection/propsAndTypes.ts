@@ -24,24 +24,6 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
         universalLimit: 3,
         verticalLimit: 5,
       },
-      {
-        label: "Products",
-        verticalKey: "product",
-        layout: "Grid",
-        cardType: "Standard",
-
-        universalLimit: 3,
-        verticalLimit: 5,
-      },
-      {
-        label: "Locations",
-        verticalKey: "locations",
-        layout: "Map",
-        cardType: "Standard",
-
-        universalLimit: 3,
-        verticalLimit: 5,
-      },
     ],
   },
   styles: {
