@@ -30,7 +30,7 @@ export const MaybeRTF = ({
         <div
           {...props}
           dangerouslySetInnerHTML={{ __html: data.html }}
-          className={`rtf-theme rtf-wrapper ${bodyVariant !== "base" && `rtf-body-${bodyVariant}`}`}
+          className={`rtf-theme rtf-wrapper ${bodyVariant !== "base" ? `rtf-body-${bodyVariant}` : ""}`}
         />
       );
     }

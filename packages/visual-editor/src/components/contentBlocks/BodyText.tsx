@@ -94,7 +94,9 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
       {React.isValidElement(resolvedData) ? (
         resolvedData
       ) : (
-        <Body variant={styles.variant}>{resolvedData}</Body>
+        <Body variant={styles.variant} color={styles.color}>
+          {resolvedData}
+        </Body>
       )}
     </EntityField>
   ) : puck.isEditing ? (
