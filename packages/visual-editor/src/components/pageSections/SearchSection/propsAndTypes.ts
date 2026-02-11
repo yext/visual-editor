@@ -3,7 +3,7 @@ import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
 export type VerticalLayout = "Grid" | "Flex" | "Map";
 export type CardTypeProp = "Standard" | "accordion";
 
-export interface VerticalConfig {
+export interface VerticalConfigProps {
   label: string;
   verticalKey?: string;
   layout?: VerticalLayout;

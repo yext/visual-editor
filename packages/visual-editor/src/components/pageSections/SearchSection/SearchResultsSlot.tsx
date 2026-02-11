@@ -10,7 +10,10 @@ import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
-import { defaultSearchResultsProps, VerticalConfig } from "./propsAndTypes.ts";
+import {
+  defaultSearchResultsProps,
+  VerticalConfigProps,
+} from "./propsAndTypes.ts";
 import {
   buildUniversalLimit,
   buildVerticalConfigMap,
@@ -18,7 +21,7 @@ import {
 } from "./utils.tsx";
 
 export interface SearchResultsSlotProps {
-  data: { verticals: VerticalConfig[] };
+  data: { verticals: VerticalConfigProps[] };
   styles: { showIcon: boolean };
 }
 

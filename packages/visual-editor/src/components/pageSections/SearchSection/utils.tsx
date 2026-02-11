@@ -1,16 +1,11 @@
 import { UniversalLimit } from "@yext/search-headless-react";
-import { VerticalConfigMap, DefaultRawDataType } from "@yext/search-ui-react";
+import { DefaultRawDataType, VerticalConfigMap } from "@yext/search-ui-react";
 import Cards from "./Cards.tsx";
 import { LayoutSection } from "./LayoutSections.tsx";
-import { VerticalLayout, CardTypeProp } from "./propsAndTypes.ts";
+import { VerticalConfigProps } from "./propsAndTypes.ts";
 
 export const buildVerticalConfigMap = (
-  verticals: {
-    label: string;
-    verticalKey?: string;
-    layout?: VerticalLayout;
-    cardType?: CardTypeProp;
-  }[]
+  verticals: VerticalConfigProps[]
 ): VerticalConfigMap<Record<string, DefaultRawDataType>> => {
   return verticals.reduce(
     (acc, v) => {
@@ -21,11 +16,14 @@ export const buildVerticalConfigMap = (
         label: v.label,
         viewAllButton: true,
         SectionComponent: (props) => (
-          <LayoutSection {...props} layoutType={layoutType} />
+          <LayoutSection
+            resultsCount={v.universalLimit ?? 4}
+            {...props}
+            layoutType={layoutType}
+          />
         ),
         CardComponent: (props) => <Cards {...props} cardType={cardType} />,
       };
-
       return acc;
     },
     {} as VerticalConfigMap<Record<string, DefaultRawDataType>>
@@ -43,8 +41,8 @@ export const buildUniversalLimit = (
     if (!v.verticalKey || typeof v.universalLimit !== "number") {
       return acc;
     }
-
     acc[v.verticalKey] = v.universalLimit;
+    // acc[v.verticalKey] = 50;
     return acc;
   }, {});
 };
