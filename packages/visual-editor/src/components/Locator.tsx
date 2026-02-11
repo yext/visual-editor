@@ -598,52 +598,52 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   },
   label: msg("components.locator", "Locator"),
   resolveFields: (data) => {
-    const updatedFields = { ...locatorFields };
+    let updatedFields = { ...locatorFields };
     const staticEnabled =
       data.props.resultCard?.primaryHeading?.constantValueEnabled ?? false;
 
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.primaryHeading.objectFields.field.visible",
       !staticEnabled
     );
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.primaryHeading.objectFields.constantValue.visible",
       staticEnabled
     );
     const secondaryStaticEnabled =
       data.props.resultCard?.secondaryHeading?.constantValueEnabled ?? false;
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.secondaryHeading.objectFields.field.visible",
       !secondaryStaticEnabled
     );
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.secondaryHeading.objectFields.constantValue.visible",
       secondaryStaticEnabled
     );
     const tertiaryStaticEnabled =
       data.props.resultCard?.tertiaryHeading?.constantValueEnabled ?? false;
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.tertiaryHeading.objectFields.field.visible",
       !tertiaryStaticEnabled
     );
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.tertiaryHeading.objectFields.constantValue.visible",
       tertiaryStaticEnabled
     );
     const imageStaticEnabled =
       data.props.resultCard?.image?.constantValueEnabled ?? false;
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.image.objectFields.field.visible",
       !imageStaticEnabled
     );
-    setDeep(
+    updatedFields = setDeep(
       updatedFields,
       "resultCard.objectFields.image.objectFields.constantValue.visible",
       imageStaticEnabled

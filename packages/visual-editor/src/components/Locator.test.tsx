@@ -700,7 +700,7 @@ const tests: ComponentTest[] = [
       },
     },
     interactions: async (page) => {
-      expect(page.getByText("Custom Heading")).toBeTruthy();
+      await expect.element(page.getByText("Custom Heading")).toBeVisible();
     },
     version: 62,
   },
