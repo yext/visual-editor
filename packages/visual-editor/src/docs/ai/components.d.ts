@@ -695,6 +695,11 @@ interface BannerStyles {
    */
   backgroundColor?: BackgroundStyle;
   /**
+   * Optional text color for the banner text.
+   * If not set, it will default to a color that contrasts with the background color.
+   */
+  textColor?: BackgroundStyle;
+  /**
    * The horizontal alignment of the text.
    * @defaultValue center
    */
