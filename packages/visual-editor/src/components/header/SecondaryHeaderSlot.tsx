@@ -11,19 +11,13 @@ import {
   LanguageDropdown,
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
-import {
-  defaultHeaderLinkProps,
-  HeaderLinksProps,
-  useWindowWidth,
-} from "./HeaderLinks.tsx";
+import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
 import {
   useExpandedHeaderMenu,
   useHeaderLinksDisplayMode,
 } from "./ExpandedHeaderMenuContext.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
 import { useOverflow } from "../../hooks/useOverflow.ts";
-import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
-import { getHeaderViewport } from "./viewport.ts";
 import * as React from "react";
 
 export interface SecondaryHeaderSlotProps {
@@ -104,14 +98,10 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   const streamDocument = useDocument();
   const displayMode = useHeaderLinksDisplayMode();
   const menuContext = useExpandedHeaderMenu();
-  const previewWindow = usePreviewWindow();
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const isOverflow = useOverflow(containerRef, contentRef, 0);
-
-  const windowWidth = useWindowWidth(previewWindow);
-  const { isMobile } = getHeaderViewport(windowWidth);
 
   const languageDropDownProps = React.useMemo(
     () => parseDocumentForLanguageDropdown(streamDocument),
@@ -122,12 +112,8 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
     data.showLanguageDropdown &&
     languageDropDownProps &&
     languageDropDownProps.locales?.length > 1;
-
   const isMenuMode = displayMode === "menu";
   const hideSecondaryHeader = !isMenuMode && isOverflow;
-  const showLanguageSelectorInMenu =
-    showLanguageSelector && (isMobile || menuContext.secondaryOverflow);
-  const showLanguageSelectorInline = showLanguageSelector && !isMenuMode;
 
   React.useEffect(() => {
     if (!menuContext || isMenuMode) {
@@ -184,8 +170,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
           }
         >
           <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
-          {(showLanguageSelectorInline ||
-            (isMenuMode && showLanguageSelectorInMenu)) && (
+          {showLanguageSelector && (
             <LanguageDropdown {...languageDropDownProps} />
           )}
         </div>
