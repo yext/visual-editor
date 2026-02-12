@@ -614,7 +614,7 @@
   "map": "Kaart",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "mediaType": "Meediumitüüp",
-  "metaTitleMissingLocales": "Lokaadi(de) metapealkiri puudub: {{locales}}",
+  "metaTitleMissingLocales": "Metapealkiri puudub järgmiste lokaatide jaoks: {{locales}}",
   "mile_one": "miil",
   "mile_other": "miili",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
