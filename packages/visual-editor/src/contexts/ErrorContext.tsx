@@ -94,20 +94,29 @@ export const ErrorProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   }, [errorCounts]);
 
+  const value = useMemo(
+    () => ({
+      errorCount,
+      errorSources,
+      errorDetails,
+      incrementErrorCount,
+      decrementErrorCount,
+      setErrorDetails,
+      clearErrorDetails,
+    }),
+    [
+      errorCount,
+      errorSources,
+      errorDetails,
+      incrementErrorCount,
+      decrementErrorCount,
+      setErrorDetails,
+      clearErrorDetails,
+    ]
+  );
+
   return (
-    <ErrorContext.Provider
-      value={{
-        errorCount,
-        errorSources,
-        errorDetails,
-        incrementErrorCount,
-        decrementErrorCount,
-        setErrorDetails,
-        clearErrorDetails,
-      }}
-    >
-      {children}
-    </ErrorContext.Provider>
+    <ErrorContext.Provider value={value}>{children}</ErrorContext.Provider>
   );
 };
 

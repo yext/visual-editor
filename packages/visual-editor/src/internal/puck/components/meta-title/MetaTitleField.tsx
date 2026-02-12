@@ -3,10 +3,8 @@ import { AutoField, type Field } from "@puckeditor/core";
 import { useDocument } from "../../../../hooks/useDocument.tsx";
 import { msg, pt } from "../../../../utils/i18n/platform.ts";
 import { getPageSetLocales } from "../../../../utils/pageSetLocales.ts";
-import {
-  type YextEntityField,
-  YextEntityFieldSelector,
-} from "../../../../editor/YextEntityFieldSelector.tsx";
+import { type YextEntityField } from "../../../../editor/YextEntityFieldSelector.tsx";
+import { YextField } from "../../../../editor/YextField.tsx";
 import { type TranslatableString } from "../../../../types/types.ts";
 import { getMetaTitleMissingLocales } from "./metaTitleValidation.ts";
 
@@ -28,8 +26,8 @@ export const MetaTitleField = (): Field<
 
       const metaTitleField = React.useMemo(
         () =>
-          YextEntityFieldSelector<any, TranslatableString>({
-            label: msg("fields.metaTitle", "Meta Title"),
+          YextField(msg("fields.metaTitle", "Meta Title"), {
+            type: "entityField",
             filter: {
               types: ["type.string"],
             },
