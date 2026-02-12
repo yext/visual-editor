@@ -202,10 +202,10 @@ This object contains properties for customizing the component's appearance.
 
 #### Other Props
 
-| Prop     | Type                                   | Description | Default |
-| :------- | :------------------------------------- | :---------- | :------ |
-| `data`   | `{ list: YextEntityField<string[]>; }` |             |         |
-| `styles` | `{ listLength?: number; }`             |             |         |
+| Prop     | Type                                           | Description | Default |
+| :------- | :--------------------------------------------- | :---------- | :------ |
+| `data`   | `{ list: YextEntityField<string[]>; }`         |             |         |
+| `styles` | `{ listLength?: number; showIcon?: boolean; }` |             |         |
 
 ---
 
