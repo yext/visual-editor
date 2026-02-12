@@ -505,7 +505,7 @@
   "loadingNearbyLocations": "Cargando ubicaciones cercanas ...",
   "loadingVE": "Cargando editor visual ...",
   "locationsNear_one": "{{count}} ubicación cerca de \"{{name}}\"",
-  "locationsNear_many": "Ubicaciones {{count}} cerca de \"{{name}}\"",
+  "locationsNear_many": "{{count}} ubicaciones cerca de \"{{name}}\"",
   "locationsNear_other": "{{count}} ubicaciones cerca de \"{{name}}\"",
   "locationsWithinDistanceOf_one": "{{count}} ubicación dentro de {{distance}} {{unit}} de \"{{name}}\"",
   "locationsWithinDistanceOf_many": "{{count}} ubicaciones dentro de {{distance}} {{unit}} de \"{{name}}\"",
