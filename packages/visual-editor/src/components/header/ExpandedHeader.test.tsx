@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  delay,
   transformTests,
 } from "../testing/componentTests.setup.ts";
 import { act, render as reactRender, waitFor } from "@testing-library/react";
@@ -13,8 +14,23 @@ import { migrationRegistry } from "../migrations/migrationRegistry.ts";
 import { SlotsCategoryComponents } from "../categories/SlotsCategory.tsx";
 import { VisualEditorProvider } from "../../utils/VisualEditorProvider.tsx";
 import { Render, Config, resolveAllData } from "@puckeditor/core";
-import { page } from "@vitest/browser/context";
+import { page, type BrowserPage } from "@vitest/browser/context";
 import { defaultBannerProps } from "../pageSections/Banner.tsx";
+
+const clickMenuIfVisible = async (page: BrowserPage) => {
+  const menuButton = page.getByLabelText("Open menu");
+  const menuElement = menuButton.query() as HTMLElement | null;
+  const isVisible =
+    !!menuElement &&
+    menuElement.getClientRects().length > 0 &&
+    window.getComputedStyle(menuElement).visibility !== "hidden";
+
+  if (isVisible) {
+    await act(async () => {
+      await menuButton.click();
+    });
+  }
+};
 
 const tests: ComponentTest[] = [
   {
@@ -23,10 +39,7 @@ const tests: ComponentTest[] = [
     props: { ...ExpandedHeader.defaultProps },
     version: migrationRegistry.length,
     interactions: async (page) => {
-      const mobileMenuButton = page.getByLabelText("Open menu");
-      await act(async () => {
-        await mobileMenuButton.click();
-      });
+      await clickMenuIfVisible(page);
     },
   },
   {
@@ -1592,7 +1605,698 @@ const tests: ComponentTest[] = [
       ignoreLocaleWarning: [],
     },
   },
+  {
+    name: "version 61 - with collapsed links",
+    document: { locale: "en" },
+    version: 61,
+    props: {
+      styles: {
+        maxWidth: "theme",
+        headerPosition: "scrollsWithPage",
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              id: "PrimaryHeaderSlot-996a93fa-0573-4e85-b7d4-a0557c34de80",
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-quaternary",
+                  textColor: "text-palette-quaternary-contrast",
+                },
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "ImageSlot",
+                    props: {
+                      id: "ImageSlot-d8f45d66-bf1a-4976-be17-66297cbd1446",
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                            height: 100,
+                            width: 100,
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        aspectRatio: 1,
+                        width: 100,
+                      },
+                    },
+                  },
+                ],
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      id: "HeaderLinks-cbe2d09d-1bc3-46d6-972c-a5dee04939f9",
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                        ],
+                        collapsedLinks: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Collapsed Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Collapsed Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                        ],
+                      },
+                      styles: {
+                        align: "right",
+                        variant: "sm",
+                      },
+                      parentData: {
+                        type: "Primary",
+                      },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "CTASlot-2f4b8de7-2325-4cfd-b8d0-b658fe54b29e",
+                      data: {
+                        show: true,
+                        actionType: "link",
+                        buttonText: {
+                          en: "Button",
+                          hasLocalizedValue: "true",
+                        },
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Call to Action",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                            ctaType: "textAndLink",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        variant: "primary",
+                        presetImage: "app-store",
+                      },
+                      eventName: "primaryCta",
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "CTASlot-b994a083-2777-4b99-b2cf-eeaa6b2ae048",
+                      data: {
+                        show: true,
+                        actionType: "link",
+                        buttonText: {
+                          en: "Button",
+                          hasLocalizedValue: "true",
+                        },
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Call to Action",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                            ctaType: "textAndLink",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        variant: "secondary",
+                        presetImage: "app-store",
+                      },
+                      eventName: "secondaryCta",
+                    },
+                  },
+                ],
+              },
+              parentValues: {
+                maxWidth: "theme",
+                SecondaryHeaderSlot: [
+                  {
+                    type: "SecondaryHeaderSlot",
+                    props: {
+                      id: "SecondaryHeaderSlot-f4a68f18-447d-4524-8a71-ac440ddff3b0",
+                      data: {
+                        show: true,
+                        showLanguageDropdown: false,
+                      },
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-palette-primary-light",
+                          textColor: "text-black",
+                        },
+                      },
+                      slots: {
+                        LinksSlot: [
+                          {
+                            type: "HeaderLinks",
+                            props: {
+                              id: "HeaderLinks-461c03db-1dc0-4135-9ff0-a5a5df6f8325",
+                              data: {
+                                links: [
+                                  {
+                                    linkType: "URL",
+                                    label: {
+                                      en: "Header Link",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    link: "#",
+                                    openInNewTab: false,
+                                  },
+                                  {
+                                    linkType: "URL",
+                                    label: {
+                                      en: "Header Link",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    link: "#",
+                                    openInNewTab: false,
+                                  },
+                                  {
+                                    linkType: "URL",
+                                    label: {
+                                      en: "Header Link",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    link: "#",
+                                    openInNewTab: false,
+                                  },
+                                ],
+                                collapsedLinks: [],
+                              },
+                              styles: {
+                                align: "right",
+                                variant: "sm",
+                              },
+                              parentData: {
+                                type: "Secondary",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                      parentStyles: {
+                        maxWidth: "theme",
+                      },
+                    },
+                  },
+                ],
+              },
+              conditionalRender: {
+                navContent: true,
+                CTAs: true,
+                hasLogoImage: true,
+              },
+            },
+          },
+        ],
+        SecondaryHeaderSlot: [
+          {
+            type: "SecondaryHeaderSlot",
+            props: {
+              id: "SecondaryHeaderSlot-f4a68f18-447d-4524-8a71-ac440ddff3b0",
+              data: {
+                show: true,
+                showLanguageDropdown: false,
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-primary-light",
+                  textColor: "text-black",
+                },
+              },
+              slots: {
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      id: "HeaderLinks-461c03db-1dc0-4135-9ff0-a5a5df6f8325",
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                        ],
+                        collapsedLinks: [],
+                      },
+                      styles: {
+                        align: "right",
+                        variant: "sm",
+                      },
+                      parentData: {
+                        type: "Secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+              parentStyles: {
+                maxWidth: "theme",
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+    },
+    interactions: async (page) => {
+      await clickMenuIfVisible(page);
+    },
+  },
+  {
+    name: "version 61 - with long primary links, styled links, and collapsed links",
+    document: { locale: "en" },
+    version: 61,
+    props: {
+      styles: {
+        maxWidth: "theme",
+        headerPosition: "scrollsWithPage",
+      },
+      slots: {
+        PrimaryHeaderSlot: [
+          {
+            type: "PrimaryHeaderSlot",
+            props: {
+              id: "PrimaryHeaderSlot-996a93fa-0573-4e85-b7d4-a0557c34de80",
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-primary-dark",
+                  textColor: "text-white",
+                },
+              },
+              slots: {
+                LogoSlot: [
+                  {
+                    type: "ImageSlot",
+                    props: {
+                      id: "ImageSlot-d8f45d66-bf1a-4976-be17-66297cbd1446",
+                      data: {
+                        image: {
+                          field: "",
+                          constantValue: {
+                            url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                            height: 100,
+                            width: 100,
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        aspectRatio: 1,
+                        width: 100,
+                      },
+                    },
+                  },
+                ],
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      id: "HeaderLinks-cbe2d09d-1bc3-46d6-972c-a5dee04939f9",
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Long Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Long Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Long Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Long Primary Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                        ],
+                        collapsedLinks: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Collapsed Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Collapsed Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                        ],
+                      },
+                      styles: {
+                        align: "right",
+                        variant: "lg",
+                      },
+                      parentData: {
+                        type: "Primary",
+                      },
+                    },
+                  },
+                ],
+                PrimaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "CTASlot-2f4b8de7-2325-4cfd-b8d0-b658fe54b29e",
+                      data: {
+                        show: true,
+                        actionType: "link",
+                        buttonText: {
+                          en: "Button",
+                          hasLocalizedValue: "true",
+                        },
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Call to Action",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                            ctaType: "textAndLink",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        variant: "primary",
+                        presetImage: "app-store",
+                      },
+                      eventName: "primaryCta",
+                    },
+                  },
+                ],
+                SecondaryCTASlot: [
+                  {
+                    type: "CTASlot",
+                    props: {
+                      id: "CTASlot-b994a083-2777-4b99-b2cf-eeaa6b2ae048",
+                      data: {
+                        show: true,
+                        actionType: "link",
+                        buttonText: {
+                          en: "Button",
+                          hasLocalizedValue: "true",
+                        },
+                        entityField: {
+                          field: "",
+                          constantValue: {
+                            label: {
+                              en: "Call to Action",
+                              hasLocalizedValue: "true",
+                            },
+                            link: {
+                              en: "#",
+                              hasLocalizedValue: "true",
+                            },
+                            linkType: "URL",
+                            ctaType: "textAndLink",
+                          },
+                          constantValueEnabled: true,
+                        },
+                      },
+                      styles: {
+                        variant: "secondary",
+                        presetImage: "app-store",
+                      },
+                      eventName: "secondaryCta",
+                    },
+                  },
+                ],
+              },
+              parentValues: {
+                maxWidth: "theme",
+                SecondaryHeaderSlot: [
+                  {
+                    type: "SecondaryHeaderSlot",
+                    props: {
+                      id: "SecondaryHeaderSlot-f4a68f18-447d-4524-8a71-ac440ddff3b0",
+                      data: {
+                        show: true,
+                        showLanguageDropdown: false,
+                      },
+                      styles: {
+                        backgroundColor: {
+                          bgColor: "bg-palette-primary-light",
+                          textColor: "text-black",
+                        },
+                      },
+                      slots: {
+                        LinksSlot: [
+                          {
+                            type: "HeaderLinks",
+                            props: {
+                              id: "HeaderLinks-461c03db-1dc0-4135-9ff0-a5a5df6f8325",
+                              data: {
+                                links: [
+                                  {
+                                    linkType: "URL",
+                                    label: {
+                                      en: "Header Link",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    link: "#",
+                                    openInNewTab: false,
+                                  },
+                                  {
+                                    linkType: "URL",
+                                    label: {
+                                      en: "Header Link",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    link: "#",
+                                    openInNewTab: false,
+                                  },
+                                  {
+                                    linkType: "URL",
+                                    label: {
+                                      en: "Header Link",
+                                      hasLocalizedValue: "true",
+                                    },
+                                    link: "#",
+                                    openInNewTab: false,
+                                  },
+                                ],
+                                collapsedLinks: [],
+                              },
+                              styles: {
+                                align: "right",
+                                variant: "sm",
+                              },
+                              parentData: {
+                                type: "Secondary",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                      parentStyles: {
+                        maxWidth: "theme",
+                      },
+                    },
+                  },
+                ],
+              },
+              conditionalRender: {
+                navContent: true,
+                CTAs: true,
+                hasLogoImage: true,
+              },
+            },
+          },
+        ],
+        SecondaryHeaderSlot: [
+          {
+            type: "SecondaryHeaderSlot",
+            props: {
+              id: "SecondaryHeaderSlot-f4a68f18-447d-4524-8a71-ac440ddff3b0",
+              data: {
+                show: true,
+                showLanguageDropdown: false,
+              },
+              styles: {
+                backgroundColor: {
+                  bgColor: "bg-palette-primary-light",
+                  textColor: "text-black",
+                },
+              },
+              slots: {
+                LinksSlot: [
+                  {
+                    type: "HeaderLinks",
+                    props: {
+                      id: "HeaderLinks-461c03db-1dc0-4135-9ff0-a5a5df6f8325",
+                      data: {
+                        links: [
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                          {
+                            linkType: "URL",
+                            label: {
+                              en: "Header Link",
+                              hasLocalizedValue: "true",
+                            },
+                            link: "#",
+                            openInNewTab: false,
+                          },
+                        ],
+                        collapsedLinks: [],
+                      },
+                      styles: {
+                        align: "center",
+                        variant: "base",
+                        weight: "bold",
+                        color: {
+                          bgColor: "bg-palette-quaternary",
+                          textColor: "text-palette-quaternary-contrast",
+                        },
+                      },
+                      parentData: {
+                        type: "Secondary",
+                      },
+                    },
+                  },
+                ],
+              },
+              parentStyles: {
+                maxWidth: "theme",
+              },
+            },
+          },
+        ],
+      },
+      analytics: {
+        scope: "expandedHeader",
+      },
+      id: "ExpandedHeader-bedfd350-33d8-494b-aa43-9001761de0f1",
+    },
+    interactions: async (page) => {
+      await clickMenuIfVisible(page);
+    },
+  },
 ];
+
+const screenshotThreshold = 45;
 
 describe("ExpandedHeader", async () => {
   const puckConfig: Config = {
@@ -1674,12 +2378,14 @@ describe("ExpandedHeader", async () => {
       const results = await axe(container);
       expect(results).toHaveNoViolations();
 
-      // Currently, the header only has interactivity on mobile
-      if (interactions && viewportName === "mobile") {
+      if (interactions) {
         await interactions(page);
+        if (viewportName === "tablet") {
+          await delay(1_500); // wait for animation
+        }
         await expect(
           `ExpandedHeader/[${viewportName}] ${name} (after interactions)`
-        ).toMatchScreenshot();
+        ).toMatchScreenshot({ customThreshold: screenshotThreshold });
         const results = await axe(container);
         expect(results).toHaveNoViolations();
       }

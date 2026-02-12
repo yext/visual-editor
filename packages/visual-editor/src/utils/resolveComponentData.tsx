@@ -16,13 +16,25 @@ import {
   isRichText,
   richTextToPlainText,
 } from "./plainText.ts";
+import { BackgroundStyle } from "./themeConfigOptions.ts";
+import { normalizeThemeColor } from "./normalizeThemeColor.ts";
 
 type ResolveComponentDataOptions = {
   variant?: BodyProps["variant"];
   isDarkBackground?: boolean;
   className?: string;
+  color?: BackgroundStyle;
   output?: "render" | "plainText";
 };
+
+type RenderResolveComponentDataOptions = Omit<
+  ResolveComponentDataOptions,
+  "output"
+> & {
+  output?: "render";
+};
+
+type PlainTextResolveComponentDataOptions = { output: "plainText" };
 
 /**
  * The primary function for resolving all component data. It handles entity
@@ -46,7 +58,7 @@ export function resolveComponentData(
   data: TranslatableRichText | YextEntityField<TranslatableRichText>,
   locale: string,
   streamDocument?: Record<string, any>,
-  options?: ResolveComponentDataOptions
+  options?: RenderResolveComponentDataOptions
 ): string | React.ReactElement;
 
 // 3. Handles text-only output mode for translatable text.
@@ -58,7 +70,7 @@ export function resolveComponentData(
     | undefined,
   locale: string,
   streamDocument: Record<string, any> | undefined,
-  options: ResolveComponentDataOptions & { output: "plainText" }
+  options: PlainTextResolveComponentDataOptions
 ): string;
 
 // 4. Handles a generic YextEntityField
@@ -94,10 +106,7 @@ export function resolveComponentData<T>(
 
   // If the resolved value is a RTF react element, wrap it in a div with tailwind classes
   if (React.isValidElement(resolved)) {
-    let rtfClass = "rtf-theme rtf-light-background";
-    if (options?.isDarkBackground) {
-      rtfClass = "rtf-theme rtf-dark-background";
-    }
+    let rtfClass = "rtf-theme";
     if (options?.variant && options.variant !== "base") {
       rtfClass += ` rtf-body-${options.variant}`;
     }
@@ -105,7 +114,17 @@ export function resolveComponentData<T>(
       rtfClass += ` ${options.className}`;
     }
 
-    return <div className={rtfClass}>{resolved}</div>;
+    const rtfStyle = options?.color?.bgColor
+      ? {
+          color: `var(--colors-${normalizeThemeColor(options.color.bgColor)})`,
+        }
+      : undefined;
+
+    return (
+      <div className={rtfClass} style={rtfStyle}>
+        {resolved}
+      </div>
+    );
   }
 
   return resolved;

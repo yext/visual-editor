@@ -23,6 +23,7 @@ import { useAnalytics } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
 const defaultFAQ = {
   question: {
@@ -41,7 +42,8 @@ export const defaultFAQCardData = (
   id?: string,
   index?: number,
   questionVariant?: BodyProps["variant"],
-  answerVariant?: BodyProps["variant"]
+  answerVariant?: BodyProps["variant"],
+  answerColor?: BackgroundStyle
 ) => ({
   type: "FAQCard",
   props: {
@@ -62,6 +64,7 @@ export const defaultFAQCardData = (
     styles: {
       questionVariant: questionVariant || "base",
       answerVariant: answerVariant || "base",
+      answerColor: answerColor,
     },
   },
 });
@@ -76,6 +79,7 @@ export type FAQCardProps = {
   styles: {
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
+    answerColor?: BackgroundStyle;
   };
 
   /** @internal */
@@ -123,6 +127,10 @@ const FAQCardFields: Fields<FAQCardProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
+      answerColor: YextField(msg("fields.answerColor", "Answer Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   }),
   slots: {
@@ -142,6 +150,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
+    answerColor?: BackgroundStyle;
   }>();
 
   const { getPuck } = useGetCardSlots<FAQCardProps>(props.id);
@@ -154,7 +163,8 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
 
     if (
       sharedCardProps.questionVariant === styles.questionVariant &&
-      sharedCardProps.answerVariant === styles.answerVariant
+      sharedCardProps.answerVariant === styles.answerVariant &&
+      sharedCardProps.answerColor?.bgColor === styles.answerColor?.bgColor
     ) {
       return;
     }
@@ -178,11 +188,16 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
           styles: {
             questionVariant: sharedCardProps.questionVariant,
             answerVariant: sharedCardProps.answerVariant,
+            answerColor: sharedCardProps.answerColor,
           },
         } satisfies FAQCardProps,
       },
     });
-  }, [sharedCardProps?.answerVariant, sharedCardProps?.questionVariant]);
+  }, [
+    sharedCardProps?.answerVariant,
+    sharedCardProps?.questionVariant,
+    sharedCardProps?.answerColor?.bgColor,
+  ]);
 
   // When the card's shared props change, update the context
   React.useEffect(() => {
@@ -192,7 +207,8 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
 
     if (
       sharedCardProps?.questionVariant === styles.questionVariant &&
-      sharedCardProps?.answerVariant === styles.answerVariant
+      sharedCardProps?.answerVariant === styles.answerVariant &&
+      sharedCardProps?.answerColor?.bgColor === styles.answerColor?.bgColor
     ) {
       return;
     }
@@ -200,6 +216,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     setSharedCardProps({
       questionVariant: styles.questionVariant,
       answerVariant: styles.answerVariant,
+      answerColor: styles.answerColor,
     });
   }, [styles]);
 
@@ -215,6 +232,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
         variant: styles.answerVariant,
         isDarkBackground: background?.isDarkBackground,
+        color: styles.answerColor,
       })
     : undefined;
 
