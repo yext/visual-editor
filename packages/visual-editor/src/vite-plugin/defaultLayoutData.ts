@@ -5503,15 +5503,21 @@ const locatorDefaultLayout = {
         resultCard: {
           primaryHeading: {
             field: { selection: { value: "name" } },
+            constantValue: { en: "", hasLocalizedValue: "true" },
+            constantValueEnabled: false,
             headingLevel: 3,
           },
           secondaryHeading: {
             field: { selection: { value: "name" } },
+            constantValue: { en: "", hasLocalizedValue: "true" },
+            constantValueEnabled: false,
             variant: "base",
             liveVisibility: false,
           },
           tertiaryHeading: {
             field: { selection: { value: "name" } },
+            constantValue: { en: "", hasLocalizedValue: "true" },
+            constantValueEnabled: false,
             variant: "base",
             liveVisibility: false,
           },
@@ -5549,6 +5555,11 @@ const locatorDefaultLayout = {
           },
           image: {
             field: { selection: { value: "headshot" } },
+            constantValue: {
+              en: { url: "", height: 0, width: 0 },
+              hasLocalizedValue: "true",
+            },
+            constantValueEnabled: false,
             liveVisibility: false,
           },
         },
