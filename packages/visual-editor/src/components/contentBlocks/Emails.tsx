@@ -11,6 +11,7 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Background } from "../atoms/background.tsx";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { updateFields } from "../pageSections/HeroSection.tsx";
 
 export interface EmailsProps {
   data: {
@@ -19,6 +20,7 @@ export interface EmailsProps {
 
   styles?: {
     listLength?: number;
+    showIcon?: boolean;
   };
 
   /** @internal Event name to be used for click analytics */
@@ -47,12 +49,30 @@ export const EmailsFields: Fields<EmailsProps> = {
       }),
     },
   }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      listLength: YextField(msg("fields.listLength", "List Length"), {
+        type: "number",
+        min: 1,
+        max: 5,
+        visible: false,
+      }),
+      showIcon: YextField(msg("fields.showIcon", "Show Icon"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+    },
+  }),
 };
 
 const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
   const { data, styles, parentData, puck, eventName } = props;
   const { i18n } = useTranslation();
   const streamDocument = useDocument();
+
+  const showEmailIcon = styles?.showIcon ?? true;
+
   let resolvedEmailList = parentData
     ? parentData.list
     : resolveComponentData(data.list, i18n.language, streamDocument);
@@ -81,12 +101,14 @@ const EmailsComponent: PuckComponent<EmailsProps> = (props) => {
       <ul className="list-inside flex flex-col gap-4">
         {filteredEmailList.map((email, index) => (
           <li key={index} className={`flex items-center gap-3`}>
-            <Background
-              background={backgroundColors.background2.value}
-              className={`h-10 w-10 flex justify-center rounded-full items-center`}
-            >
-              <FaRegEnvelope className="w-4 h-4" />
-            </Background>
+            {showEmailIcon && (
+              <Background
+                background={backgroundColors.background2.value}
+                className={`h-10 w-10 flex justify-center rounded-full items-center`}
+              >
+                <FaRegEnvelope className="w-4 h-4" />
+              </Background>
+            )}
             <CTA
               eventName={`${eventName || "email"}${index}`}
               link={email}
@@ -116,19 +138,7 @@ export const Emails: ComponentConfig<EmailsProps> = {
       return updatedFields;
     }
 
-    return {
-      ...updatedFields,
-      styles: YextField(msg("fields.styles", "Styles"), {
-        type: "object",
-        objectFields: {
-          listLength: YextField(msg("fields.listLength", "List Length"), {
-            type: "number",
-            min: 1,
-            max: 5,
-          }),
-        },
-      }),
-    };
+    return updateFields(updatedFields, ["styles.listLength.visible"], true);
   },
   defaultProps: {
     data: {
@@ -139,6 +149,7 @@ export const Emails: ComponentConfig<EmailsProps> = {
     },
     styles: {
       listLength: 3,
+      showIcon: true,
     },
   },
   render: (props) => <EmailsComponent {...props} />,
