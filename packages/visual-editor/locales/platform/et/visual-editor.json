@@ -838,7 +838,7 @@
   },
   "thursday": "Neljapäev",
   "title": "Tiitel",
-  "toPublishHeading": "Avaldamiseks lahendage järgmised vead.",
+  "toPublishHeading": "Avaldamiseks lahendage järgmised vead:",
   "totalReviews_one": "{{count}} arvustus",
   "totalReviews_other": "{{count}} arvustust",
   "tuesday": "Teisipäev",
