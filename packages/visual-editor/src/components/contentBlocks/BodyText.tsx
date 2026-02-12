@@ -11,6 +11,7 @@ import { pt, msg } from "../../utils/i18n/platform.ts";
 import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
+import { BackgroundStyle } from "../../index.ts";
 
 export type BodyTextProps = {
   data: {
@@ -21,6 +22,9 @@ export type BodyTextProps = {
   styles: {
     /** The size of the body text. */
     variant: BodyProps["variant"];
+
+    /** The color of the body text. */
+    color?: BackgroundStyle;
   };
 
   /**
@@ -56,6 +60,10 @@ const bodyTextFields: Fields<BodyTextProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   }),
 };
@@ -73,6 +81,7 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
         variant: styles.variant,
         isDarkBackground: background?.isDarkBackground,
         className: props.parentStyles?.className,
+        color: styles.color,
       })
     : undefined;
 
@@ -85,7 +94,9 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
       {React.isValidElement(resolvedData) ? (
         resolvedData
       ) : (
-        <Body variant={styles.variant}>{resolvedData}</Body>
+        <Body variant={styles.variant} color={styles.color}>
+          {resolvedData}
+        </Body>
       )}
     </EntityField>
   ) : puck.isEditing ? (

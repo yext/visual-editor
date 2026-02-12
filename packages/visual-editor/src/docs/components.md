@@ -38,10 +38,11 @@ This object contains the content to be displayed by the component.
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type                            | Description                           | Default              |
-| :----------------------- | :------------------------------ | :------------------------------------ | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle`               | The background color of the section.  | `Background Color 6` |
-| `styles.textAlignment`   | `"left" \| "right" \| "center"` | The horizontal alignment of the text. | `center`             |
+| Prop                     | Type                            | Description                                                                                                               | Default              |
+| :----------------------- | :------------------------------ | :------------------------------------------------------------------------------------------------------------------------ | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle`               | The background color of the section.                                                                                      | `Background Color 6` |
+| `styles.textAlignment`   | `"left" \| "right" \| "center"` | The horizontal alignment of the text.                                                                                     | `center`             |
+| `styles.textColor`       | `BackgroundStyle`               | Optional text color for the banner text. If not set, it will default to a color that contrasts with the background color. |                      |
 
 #### Other Props
 
@@ -265,7 +266,7 @@ This object contains properties for customizing the appearance of both footer ti
 
 The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector. Available on Location templates.
 
-![Preview of the ExpandedHeader component](../components/testing/screenshots/ExpandedHeader/%5Bdesktop%5D%20default%20props.png)
+![Preview of the ExpandedHeader component](<../components/testing/screenshots/ExpandedHeader/%5Bdesktop%5D%20default%20props%20(after%20interactions).png>)
 
 ### Props
 
@@ -415,7 +416,7 @@ If 'true', displays the language selector dropdown in the header.
 
 ## HeroSection
 
-![Preview of the HeroSection component](../components/testing/screenshots/HeroSection/%5Bdesktop%5D%20%5Bclassic%5D%20version%2017%20props%20using%20constant%20values.png)
+![Preview of the HeroSection component](../components/testing/screenshots/HeroSection/%5Bdesktop%5D%20%5Bclassic%5D%20version%2031%20props%20with%20constant%20values.png)
 
 ### Props
 
