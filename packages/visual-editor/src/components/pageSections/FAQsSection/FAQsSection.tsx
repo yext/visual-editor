@@ -32,6 +32,12 @@ export interface FAQStyles {
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
+
+  /**
+   * Whether to show the section heading.
+   * @defaultValue true
+   */
+  showSectionHeading: boolean;
 }
 
 export interface FAQSectionProps {
@@ -81,6 +87,13 @@ const FAQsSectionFields: Fields<FAQSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
     },
   }),
   slots: {
@@ -121,7 +134,9 @@ const FAQsSectionComponent: PuckComponent<FAQSectionProps> = ({
       background={styles.backgroundColor}
       className="flex flex-col gap-8 md:gap-12"
     >
-      <slots.HeadingSlot style={{ height: "auto" }} />
+      {styles.showSectionHeading && (
+        <slots.HeadingSlot style={{ height: "auto" }} />
+      )}
       <CardContextProvider>
         <slots.CardSlot />
       </CardContextProvider>
@@ -170,6 +185,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
     },
     styles: {
       backgroundColor: backgroundColors.background2.value,
+      showSectionHeading: true,
     },
     liveVisibility: true,
     analytics: {
@@ -186,6 +202,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
               data.props.slots.CardSlot[0].props.styles.questionVariant,
             answerVariant:
               data.props.slots.CardSlot[0].props.styles.answerVariant,
+            answerColor: data.props.slots.CardSlot[0].props.styles.answerColor,
           };
 
     if (!data.props.data.constantValueEnabled && data.props.data.field) {
@@ -218,7 +235,8 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
                   `FAQCard-${crypto.randomUUID()}`,
                   undefined,
                   sharedCardProps?.questionVariant,
-                  sharedCardProps?.answerVariant
+                  sharedCardProps?.answerVariant,
+                  sharedCardProps?.answerColor
                 )
               )
           : [];
@@ -271,7 +289,8 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
             newId,
             i,
             sharedCardProps?.questionVariant,
-            sharedCardProps?.answerVariant
+            sharedCardProps?.answerVariant,
+            sharedCardProps?.answerColor
           );
         }
 

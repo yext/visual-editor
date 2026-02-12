@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 55,
+      version: 60,
       title: {
         field: "name",
         constantValue: "",
@@ -110,6 +110,18 @@ const mainDefaultLayout = {
                       props: {
                         id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",
@@ -142,6 +154,18 @@ const mainDefaultLayout = {
                       props: {
                         id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",
@@ -395,6 +419,11 @@ const mainDefaultLayout = {
           },
           showAverageReview: true,
           showImage: true,
+          showBusinessName: true,
+          showGeomodifier: true,
+          showHoursStatus: true,
+          showPrimaryCTA: true,
+          showSecondaryCTA: true,
           imageHeight: 500,
           desktopImagePosition: "right",
           desktopContainerPosition: "left",
@@ -501,6 +530,18 @@ const mainDefaultLayout = {
               props: {
                 id: "CTASlot-46811f58-2779-4c49-a871-26cf27454544",
                 data: {
+                  actionType: "link",
+                  buttonText: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
+                  customId: "",
+                  customClass: "",
+                  dataAttributes: [],
+                  ariaLabel: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
                   entityField: {
                     field: "",
                     constantValue: {
@@ -532,6 +573,18 @@ const mainDefaultLayout = {
               props: {
                 id: "CTASlot-633345f6-c438-400b-bdf7-92dce47746bc",
                 data: {
+                  actionType: "link",
+                  buttonText: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
+                  customId: "",
+                  customClass: "",
+                  dataAttributes: [],
+                  ariaLabel: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
                   entityField: {
                     field: "",
                     constantValue: {
@@ -786,6 +839,10 @@ const mainDefaultLayout = {
           mobileImagePosition: "top",
           imageHeight: 500,
           containerAlignment: "left",
+          showMedia: true,
+          showHeading: true,
+          showDescription: true,
+          showCTA: true,
         },
         slots: {
           HeadingSlot: [
@@ -882,6 +939,18 @@ const mainDefaultLayout = {
               props: {
                 id: "CTASlot-e8531a98-b8ff-4ce1-a299-11fc085eb6c3",
                 data: {
+                  actionType: "link",
+                  buttonText: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
+                  customId: "",
+                  customClass: "",
+                  dataAttributes: [],
+                  ariaLabel: {
+                    en: "Button",
+                    hasLocalizedValue: "true",
+                  },
                   entityField: {
                     field: "",
                     constantValue: {
@@ -927,12 +996,7 @@ const mainDefaultLayout = {
             textColor: "text-black",
           },
           cardVariant: "immersive",
-          showImage: true,
-          showBrow: true,
-          showTitle: true,
-          showPrice: false,
-          showDescription: true,
-          showCTA: true,
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -964,7 +1028,7 @@ const mainDefaultLayout = {
                 id: "ProductCardsWrapper-31103b0f-5bfb-4dfe-a4e5-9f18cfd7cfcf",
                 data: {
                   field: "",
-                  constantValueEnabled: false,
+                  constantValueEnabled: true,
                   constantValue: [
                     {
                       id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447",
@@ -976,6 +1040,14 @@ const mainDefaultLayout = {
                       id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showBrow: true,
+                  showTitle: true,
+                  showPrice: true,
+                  showDescription: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -1013,6 +1085,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   aspectRatio: 1.78,
                                   width: 640,
+                                  imageConstrain: "fill",
                                 },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
@@ -1074,6 +1147,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -1191,6 +1276,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   aspectRatio: 1.78,
                                   width: 640,
+                                  imageConstrain: "fill",
                                 },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
@@ -1252,6 +1338,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -1369,6 +1467,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   aspectRatio: 1.78,
                                   width: 640,
+                                  imageConstrain: "fill",
                                 },
                                 sizes: {
                                   base: "calc(100vw - 32px)",
@@ -1430,6 +1529,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -1534,6 +1645,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -1577,6 +1689,10 @@ const mainDefaultLayout = {
                       id: "TestimonialCard-1898bde5-72bb-4eef-97dc-c6c6aea0ecd5",
                     },
                   ],
+                },
+                styles: {
+                  showName: true,
+                  showDate: true,
                 },
                 slots: {
                   CardSlot: [
@@ -2027,6 +2143,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-secondary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -2070,6 +2187,13 @@ const mainDefaultLayout = {
                       id: "TeamCard-1486b519-8c1a-4e71-9622-eda626ba72ad",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showTitle: true,
+                  showPhone: true,
+                  showEmail: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -2214,6 +2338,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "CTASlot-84f00400-c27d-4cd7-aa28-a1632694b359",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2391,6 +2527,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "CTASlot-2f5fcbf5-5f6f-4f18-814d-30b6de491d0a",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2568,6 +2716,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "CTASlot-569564d0-a69a-44f6-b528-d0aacdc875e5",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2625,6 +2785,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -2668,6 +2829,13 @@ const mainDefaultLayout = {
                       id: "InsightCard-3",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showCategory: true,
+                  showPublishTime: true,
+                  showDescription: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -2817,6 +2985,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "InsightCard-1-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -2991,6 +3171,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "InsightCard-2-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3165,6 +3357,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "InsightCard-3-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3215,6 +3419,7 @@ const mainDefaultLayout = {
             bgColor: "bg-white",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           HeadingSlot: [
@@ -3307,6 +3512,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-secondary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         slots: {
           SectionHeadingSlot: [
@@ -3350,6 +3556,12 @@ const mainDefaultLayout = {
                       id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea",
                     },
                   ],
+                },
+                styles: {
+                  showImage: true,
+                  showDateTime: true,
+                  showDescription: true,
+                  showCTA: true,
                 },
                 slots: {
                   CardSlot: [
@@ -3478,6 +3690,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "EventCard-92abd8ca-550c-4aee-92d9-4140b4ef53ad-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3638,6 +3862,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "EventCard-b1fd4377-76db-433e-9803-ea5ae0d9f996-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3798,6 +4034,18 @@ const mainDefaultLayout = {
                               props: {
                                 id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea-cta",
                                 data: {
+                                  actionType: "link",
+                                  buttonText: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
+                                  customId: "",
+                                  customClass: "",
+                                  dataAttributes: [],
+                                  ariaLabel: {
+                                    en: "Button",
+                                    hasLocalizedValue: "true",
+                                  },
                                   entityField: {
                                     field: "",
                                     constantValue: {
@@ -3854,6 +4102,7 @@ const mainDefaultLayout = {
             bgColor: "bg-white",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         analytics: {
           scope: "nearbyLocationsSection",
@@ -3906,6 +4155,9 @@ const mainDefaultLayout = {
                     phoneNumberFormat: "domestic",
                     phoneNumberLink: true,
                   },
+                  showHours: true,
+                  showPhone: true,
+                  showAddress: true,
                 },
               },
             },
@@ -4382,7 +4634,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 55,
+      version: 58,
       title: {
         field: "",
         constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
@@ -4489,6 +4741,18 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",
@@ -4521,6 +4785,18 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
+                          actionType: "link",
+                          buttonText: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
+                          customId: "",
+                          customClass: "",
+                          dataAttributes: [],
+                          ariaLabel: {
+                            en: "Button",
+                            hasLocalizedValue: "true",
+                          },
                           show: true,
                           entityField: {
                             field: "",
@@ -4714,11 +4990,11 @@ const directoryDefaultLayout = {
                 data: {
                   text: {
                     constantValue: {
-                      en: "[[name]]",
+                      en: "",
                       hasLocalizedValue: "true",
                     },
-                    constantValueEnabled: true,
-                    field: "",
+                    constantValueEnabled: false,
+                    field: "name",
                   },
                 },
                 styles: { level: 2, align: "center" },
@@ -5199,11 +5475,13 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 55,
-      title: {
-        field: "",
-        constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
-        constantValueEnabled: true,
+      version: 60,
+      pageHeading: {
+        title: {
+          field: "",
+          constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
+          constantValueEnabled: true,
+        },
       },
       description: {
         field: "",

@@ -53,21 +53,9 @@ export interface HeroStyles {
   backgroundColor?: BackgroundStyle;
 
   /**
-   * If 'true', displays the entity's average review rating.
-   * @defaultValue true
-   */
-  showAverageReview: boolean;
-
-  /**
-   * Whether to show the hero image (classic and compact variant).
-   * @defaultValue true
-   */
-  showImage: boolean;
-
-  /**
    * Image Height for the hero image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight?: number;
 
@@ -94,6 +82,48 @@ export interface HeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
+
+  /**
+   * Whether to show the business name.
+   * @defaultValue true
+   */
+  showBusinessName: boolean;
+
+  /**
+   * Whether to show the geomodifier.
+   * @defaultValue true
+   */
+  showGeomodifier: boolean;
+
+  /**
+   * Whether to show the hours status.
+   * @defaultValue true
+   */
+  showHoursStatus: boolean;
+
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+
+  /**
+   * Whether to show the primary CTA.
+   * @defaultValue true
+   */
+  showPrimaryCTA: boolean;
+
+  /**
+   * Whether to show the secondary CTA.
+   * @defaultValue true
+   */
+  showSecondaryCTA: boolean;
+
+  /**
+   * Whether to show the hero image (classic and compact variant).
+   * @defaultValue true
+   */
+  showImage: boolean;
 }
 
 export interface HeroSectionProps {
@@ -186,29 +216,6 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      showAverageReview: YextField(
-        msg("fields.showAverageReview", "Show Average Review"),
-        {
-          type: "radio",
-          options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
-          ],
-        }
-      ),
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
-        type: "radio",
-        options: [
-          {
-            label: msg("fields.options.true", "True"),
-            value: true,
-          },
-          {
-            label: msg("fields.options.false", "False"),
-            value: false,
-          },
-        ],
-      }),
       imageHeight: YextField(msg("fields.imageHeight", "Image Height"), {
         type: "number",
         min: 0,
@@ -280,6 +287,52 @@ const heroSectionFields: Fields<HeroSectionProps> = {
           options: ThemeOptions.VERTICAL_POSITION,
         }
       ),
+      showBusinessName: YextField(
+        msg("fields.showBusinessName", "Show Business Name"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showGeomodifier: YextField(
+        msg("fields.showGeomodifier", "Show Geomodifier"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showHoursStatus: YextField(
+        msg("fields.showHoursStatus", "Show Hours Status"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showAverageReview: YextField(
+        msg("fields.showAverageReview", "Show Average Review"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showPrimaryCTA: YextField(
+        msg("fields.showPrimaryCTA", "Show Primary CTA"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showSecondaryCTA: YextField(
+        msg("fields.showSecondaryCTA", "Show Secondary CTA"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
     },
   }),
   slots: {
@@ -333,13 +386,18 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
     styles: {
       variant: "classic",
       backgroundColor: backgroundColors.background1.value,
-      showAverageReview: true,
-      showImage: true,
       imageHeight: 500,
       desktopImagePosition: "right",
       desktopContainerPosition: "left",
       mobileContentAlignment: "left",
       mobileImagePosition: "bottom",
+      showBusinessName: true,
+      showGeomodifier: true,
+      showHoursStatus: true,
+      showAverageReview: true,
+      showPrimaryCTA: true,
+      showSecondaryCTA: true,
+      showImage: true,
     },
     slots: {
       BusinessNameSlot: [
@@ -426,6 +484,8 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {
@@ -455,6 +515,8 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {

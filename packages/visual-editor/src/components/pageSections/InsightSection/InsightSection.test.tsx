@@ -116,6 +116,606 @@ const insightsData = {
   ],
 };
 
+const version59Props = {
+  styles: {
+    backgroundColor: {
+      bgColor: "bg-palette-primary-light",
+      textColor: "text-black",
+    },
+    showSectionHeading: true,
+  },
+  slots: {
+    SectionHeadingSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-68e62e9e-3fd4-452e-a168-6d422481c723",
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                en: "Insights",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            level: 3,
+            align: "left",
+          },
+        },
+      },
+    ],
+    CardsWrapperSlot: [
+      {
+        type: "InsightCardsWrapper",
+        props: {
+          id: "InsightCardsWrapper-682e60cb-daed-4312-82ed-e375a5db0ea8",
+          data: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: [
+              {
+                id: "InsightCard-e3e717ed-793a-46da-98d1-6a6abecd1776",
+              },
+              {
+                id: "InsightCard-82660844-42e5-474f-b750-ec6dfea5a2ec",
+              },
+              {
+                id: "InsightCard-fdbcb0c4-b721-4afb-a26d-fa0bec666b07",
+              },
+            ],
+          },
+          styles: {
+            showImage: true,
+            showCategory: true,
+            showPublishTime: true,
+            showDescription: true,
+            showCTA: true,
+          },
+          slots: {
+            CardSlot: [
+              {
+                type: "InsightCard",
+                props: {
+                  id: "InsightCard-e3e717ed-793a-46da-98d1-6a6abecd1776",
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                  },
+                  conditionalRender: {
+                    hasCategory: true,
+                    hasPublishTime: true,
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "InsightCard-e3e717ed-793a-46da-98d1-6a6abecd1776-image",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                width: 640,
+                                height: 360,
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1.78,
+                            width: 640,
+                          },
+                          sizes: {
+                            base: "calc(100vw - 32px)",
+                            md: "calc((maxWidth - 32px) / 2)",
+                            lg: "calc((maxWidth - 32px) / 3)",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-cc8e0bdf-0930-49c9-8599-91339356144a",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "Article Name",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 4,
+                            align: "left",
+                            semanticLevelOverride: 4,
+                          },
+                        },
+                      },
+                    ],
+                    CategorySlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "InsightCard-e3e717ed-793a-46da-98d1-6a6abecd1776-category",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                        },
+                      },
+                    ],
+                    DescriptionSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "InsightCard-e3e717ed-793a-46da-98d1-6a6abecd1776-description",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                        },
+                      },
+                    ],
+                    PublishTimeSlot: [
+                      {
+                        type: "Timestamp",
+                        props: {
+                          id: "InsightCard-e3e717ed-793a-46da-98d1-6a6abecd1776-timestamp",
+                          data: {
+                            date: {
+                              field: "",
+                              constantValue: "2022-08-02T14:00:00",
+                              constantValueEnabled: true,
+                            },
+                            endDate: {
+                              field: "",
+                              constantValue: "",
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            includeTime: false,
+                            includeRange: false,
+                          },
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "InsightCard-e3e717ed-793a-46da-98d1-6a6abecd1776-cta",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Read More",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "cta0",
+                        },
+                      },
+                    ],
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showCategory: true,
+                    showPublishTime: true,
+                    showDescription: true,
+                    showCTA: true,
+                  },
+                },
+              },
+              {
+                type: "InsightCard",
+                props: {
+                  id: "InsightCard-82660844-42e5-474f-b750-ec6dfea5a2ec",
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                  },
+                  conditionalRender: {
+                    hasCategory: true,
+                    hasPublishTime: true,
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "InsightCard-82660844-42e5-474f-b750-ec6dfea5a2ec-image",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                width: 640,
+                                height: 360,
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1.78,
+                            width: 640,
+                          },
+                          sizes: {
+                            base: "calc(100vw - 32px)",
+                            md: "calc((maxWidth - 32px) / 2)",
+                            lg: "calc((maxWidth - 32px) / 3)",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-1aa0e42d-03b7-4e47-bd0c-e1f85f80c8cd",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "Article Name",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 4,
+                            align: "left",
+                            semanticLevelOverride: 4,
+                          },
+                        },
+                      },
+                    ],
+                    CategorySlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "InsightCard-82660844-42e5-474f-b750-ec6dfea5a2ec-category",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                        },
+                      },
+                    ],
+                    DescriptionSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "InsightCard-82660844-42e5-474f-b750-ec6dfea5a2ec-description",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                        },
+                      },
+                    ],
+                    PublishTimeSlot: [
+                      {
+                        type: "Timestamp",
+                        props: {
+                          id: "InsightCard-82660844-42e5-474f-b750-ec6dfea5a2ec-timestamp",
+                          data: {
+                            date: {
+                              field: "",
+                              constantValue: "2022-08-02T14:00:00",
+                              constantValueEnabled: true,
+                            },
+                            endDate: {
+                              field: "",
+                              constantValue: "",
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            includeTime: false,
+                            includeRange: false,
+                          },
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "InsightCard-82660844-42e5-474f-b750-ec6dfea5a2ec-cta",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Read More",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "cta1",
+                        },
+                      },
+                    ],
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showCategory: true,
+                    showPublishTime: true,
+                    showDescription: true,
+                    showCTA: true,
+                  },
+                },
+              },
+              {
+                type: "InsightCard",
+                props: {
+                  id: "InsightCard-fdbcb0c4-b721-4afb-a26d-fa0bec666b07",
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                  },
+                  conditionalRender: {
+                    hasCategory: true,
+                    hasPublishTime: true,
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "InsightCard-fdbcb0c4-b721-4afb-a26d-fa0bec666b07-image",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                width: 640,
+                                height: 360,
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1.78,
+                            width: 640,
+                          },
+                          sizes: {
+                            base: "calc(100vw - 32px)",
+                            md: "calc((maxWidth - 32px) / 2)",
+                            lg: "calc((maxWidth - 32px) / 3)",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-c61d9103-1423-4d3d-9e64-b0b233808ce0",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "Article Name",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 4,
+                            align: "left",
+                            semanticLevelOverride: 4,
+                          },
+                        },
+                      },
+                    ],
+                    CategorySlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "InsightCard-fdbcb0c4-b721-4afb-a26d-fa0bec666b07-category",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                        },
+                      },
+                    ],
+                    DescriptionSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "InsightCard-fdbcb0c4-b721-4afb-a26d-fa0bec666b07-description",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                          },
+                        },
+                      },
+                    ],
+                    PublishTimeSlot: [
+                      {
+                        type: "Timestamp",
+                        props: {
+                          id: "InsightCard-fdbcb0c4-b721-4afb-a26d-fa0bec666b07-timestamp",
+                          data: {
+                            date: {
+                              field: "",
+                              constantValue: "2022-08-02T14:00:00",
+                              constantValueEnabled: true,
+                            },
+                            endDate: {
+                              field: "",
+                              constantValue: "",
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            includeTime: false,
+                            includeRange: false,
+                          },
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "InsightCard-fdbcb0c4-b721-4afb-a26d-fa0bec666b07-cta",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Read More",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "cta2",
+                        },
+                      },
+                    ],
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showCategory: true,
+                    showPublishTime: true,
+                    showDescription: true,
+                    showCTA: true,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  },
+  analytics: {
+    scope: "insightsSection",
+  },
+  liveVisibility: true,
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
@@ -128,276 +728,6 @@ const tests: ComponentTest[] = [
     document: { c_insights: insightsData, name: "test name" },
     props: { ...InsightSection.defaultProps },
     version: migrationRegistry.length,
-  },
-  {
-    name: "version 0 props with entity values",
-    document: { c_insights: insightsData, name: "test name" },
-    props: {
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-light",
-          textColor: "text-black",
-        },
-        cardBackgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-        headingLevel: 1,
-      },
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Insights",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        insights: {
-          field: "c_insights",
-          constantValue: { insights: [{}] },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 0 props with constant value",
-    document: { c_insights: insightsData },
-    props: {
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-light",
-          textColor: "text-black",
-        },
-        cardBackgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
-        },
-        headingLevel: 6,
-      },
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Insights",
-          constantValueEnabled: true,
-        },
-        insights: {
-          field: "c_insights",
-          constantValue: {
-            insights: [
-              {
-                name: "Insight 1",
-                category: "Category 1",
-                publishTime: "2025-05-14",
-                description: "Description",
-                cta: { label: "CTA" },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 7 props with entity values",
-    document: { c_insights: insightsData, name: "test name" },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Insights",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        insights: {
-          field: "c_insights",
-          constantValue: { insights: [] },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-light",
-          textColor: "text-black",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 7 props with constant value",
-    document: { c_insights: insightsData },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Insights",
-          constantValueEnabled: true,
-        },
-        insights: {
-          field: "c_insights",
-          constantValue: {
-            insights: [
-              {
-                name: "Insight 1",
-                category: "Category 1",
-                publishTime: "2025-05-14",
-                description: "Description",
-                cta: { label: "CTA" },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-light",
-          textColor: "text-black",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 7 props empty date and category handling",
-    document: { c_insights: insightsData },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Insights",
-          constantValueEnabled: true,
-        },
-        insights: {
-          field: "c_insights",
-          constantValue: {
-            insights: [
-              {
-                name: "Insight with empty date",
-                category: "Category 1",
-                publishTime: "",
-                description: "Description",
-                cta: { label: "CTA" },
-              },
-              {
-                name: "Insight with empty category",
-                category: "",
-                publishTime: "2025-05-14",
-                description: "Description",
-                cta: { label: "CTA" },
-              },
-              {
-                name: "Insight with both empty",
-                category: "",
-                publishTime: "",
-                description: "Description",
-                cta: { label: "CTA" },
-              },
-              {
-                name: "Insight with both filled",
-                category: "Category 2",
-                publishTime: "2025-06-15",
-                description: "Description",
-                cta: { label: "CTA" },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-light",
-          textColor: "text-black",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 15 props with missing ctaType",
-    document: { c_insights: insightsData },
-    props: {
-      data: {
-        insights: {
-          field: "c_insights",
-          constantValue: {
-            insights: [
-              {
-                name: "Insight with missing CTA properties",
-                category: "Category",
-                publishTime: "2025-06-15",
-                description: "Description",
-                cta: {
-                  label: "CTA",
-                  // Missing link, linkType, and ctaType - should be added by migration
-                },
-              },
-              {
-                name: "Insight with partial CTA properties",
-                category: "Category 2",
-                publishTime: "2025-06-15",
-                description: "Description",
-                cta: {
-                  label: "CTA 2",
-                  link: "#",
-                  linkType: "URL",
-                  // Missing ctaType - should be added by migration
-                },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-light",
-          textColor: "text-black",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-          headingLevel: 4,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 15,
   },
   {
     name: "version 33 props with entity values",
@@ -1071,6 +1401,59 @@ const tests: ComponentTest[] = [
       liveVisibility: true,
     },
     version: 33,
+  },
+  {
+    name: "version 59 with showSectionHeading, showImage, showCategory false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        showSectionHeading: false,
+      },
+      slots: {
+        ...version59Props.slots,
+        CardsWrapperSlot: [
+          {
+            ...version59Props.slots.CardsWrapperSlot[0],
+            props: {
+              ...version59Props.slots.CardsWrapperSlot[0].props,
+              styles: {
+                ...version59Props.slots.CardsWrapperSlot[0].props.styles,
+                showImage: false,
+                showCategory: false,
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "version 59 with showPublishTime, showDescription, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      slots: {
+        ...version59Props.slots,
+        CardsWrapperSlot: [
+          {
+            ...version59Props.slots.CardsWrapperSlot[0],
+            props: {
+              ...version59Props.slots.CardsWrapperSlot[0].props,
+              styles: {
+                ...version59Props.slots.CardsWrapperSlot[0].props.styles,
+                showPublishTime: false,
+                showDescription: false,
+                showCTA: false,
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 59,
   },
 ];
 

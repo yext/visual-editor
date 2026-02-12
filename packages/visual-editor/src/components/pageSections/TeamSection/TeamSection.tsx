@@ -1,4 +1,3 @@
-import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   BackgroundStyle,
@@ -27,6 +26,12 @@ export interface TeamSectionProps {
      * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
 
   /** @internal */
@@ -56,6 +61,13 @@ const teamSectionFields: Fields<TeamSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -97,7 +109,9 @@ const TeamSectionWrapper: PuckComponent<TeamSectionProps> = (props) => {
       background={styles?.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -113,6 +127,7 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
   defaultProps: {
     styles: {
       backgroundColor: backgroundColors.background3.value,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -141,6 +156,13 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
               field: "",
               constantValueEnabled: true,
               constantValue: [{}, {}, {}], // leave ids blank to auto-generate
+            },
+            styles: {
+              showImage: true,
+              showTitle: true,
+              showPhone: true,
+              showEmail: true,
+              showCTA: true,
             },
             slots: {
               CardSlot: [

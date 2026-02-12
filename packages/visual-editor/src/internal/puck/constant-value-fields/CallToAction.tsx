@@ -1,8 +1,4 @@
-import { Field } from "@puckeditor/core";
-import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { TranslatableCTA, TranslatableString } from "../../../types/types.ts";
-import React, { useMemo } from "react";
-import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
+import { pt } from "../../../utils/i18n/platform.ts";
 
 export const linkTypeOptions = () => {
   return [
@@ -31,36 +27,4 @@ export const linkTypeOptions = () => {
       value: "OTHER",
     },
   ];
-};
-
-// Fields for TranslatableCTA with labels
-export const translatableCTAFields = (): Field<TranslatableCTA> => {
-  const labelField = useMemo(() => {
-    return TranslatableStringField<TranslatableString>(
-      msg("fields.label", "Label"),
-      { types: ["type.string"] }
-    );
-  }, []);
-
-  const linkField = useMemo(() => {
-    return TranslatableStringField<TranslatableString>(
-      msg("fields.link", "Link"),
-      { types: ["type.string"] },
-      true
-    );
-  }, []);
-
-  return {
-    type: "object",
-    label: pt("fields.callToAction", "Call To Action"),
-    objectFields: {
-      label: labelField,
-      link: linkField,
-      linkType: {
-        label: pt("fields.linkType", "Link Type"),
-        type: "select",
-        options: linkTypeOptions(),
-      },
-    },
-  };
 };
