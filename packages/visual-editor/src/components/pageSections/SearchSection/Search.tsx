@@ -8,13 +8,14 @@ import {
 } from "@yext/search-headless-react";
 import { SearchI18nextProvider } from "@yext/search-ui-react";
 import React from "react";
-import { useDocument } from "../../../hooks/useDocument.tsx";
-import { msg } from "../../../utils/index.ts";
-import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
+//@ts-ignore
 import "./search.css";
 import { defaultSearchResultsProps } from "./propsAndTypes.ts";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { msg } from "../../../utils/index.ts";
 
 export interface SearchComponentProps {
   /** @internal */
@@ -37,7 +38,7 @@ const EXPERIENCE_VERSION = "PRODUCTION";
 
 export const searchConfig: SearchConfig = {
   apiKey: "fb73f1bf6a262bc3255bcb938088204f",
-  experienceKey: "ukg-fins",
+  experienceKey: "ukg-fins-rk-test-dont-touch",
   locale: "en",
   experienceVersion: EXPERIENCE_VERSION,
   cloudRegion: CloudRegion.US,

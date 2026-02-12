@@ -1,55 +1,76 @@
-import { CardProps, DefaultRawDataType } from "@yext/search-ui-react";
+import { CardProps } from "@yext/search-ui-react";
+import { MaybeRTF } from "@yext/visual-editor";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../atoms/accordion.tsx";
 import { CardTypeProp } from "./propsAndTypes.ts";
 
-interface CardsProps extends CardProps<DefaultRawDataType> {
+interface CardsProps extends CardProps<any> {
   cardType?: CardTypeProp;
 }
 
 const Cards = ({ result, cardType = "Standard" }: CardsProps) => {
   // const name =
   //   typeof result.rawData?.name === "string" ? result.rawData.name : "";
-
   return (
-    <div className="flex px-5 py-2.5 items-center w-full">
-      <div className="flex flex-col justify-center text-[#382e2c] gap-2">
-        <h3 className="text-lg font-bold">
-          {(result.rawData?.name as any) ?? "name"}
-        </h3>
-        <div className="w-full flex space-between">
-          <p className="text-sm">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit
-            illo tenetur aut quas, dolor repudiandae dignissimos cumque
-            asperiores doloribus blanditiis molestiae omnis quo. Consequatur
-            accusamus distinctio sint alias dignissimos labore! Lorem ipsum
-            dolor sit amet consectetur, adipisicing elit. Impedit illo tenetur
-            aut quas, dolor repudiandae dignissimos cumque asperiores doloribus
-            blanditiis molestiae omnis quo. Consequatur accusamus distinctio
-            sint alias dignissimos labore! Lorem ipsum dolor sit amet
-            consectetur, adipisicing elit. Impedit illo tenetur aut quas, dolor
-            repudiandae dignissimos cumque asperiores doloribus blanditiis
-            molestiae omnis quo. Consequatur accusamus distinctio sint alias
-            dignissimos labore! Lorem ipsum dolor sit amet consectetur,
-            adipisicing elit. Impedit illo tenetur aut quas, dolor repudiandae
-            dignissimos cumque asperiores doloribus blanditiis molestiae omnis
-            quo. Consequatur accusamus distinctio sint alias dignissimos labore!
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit
-            illo tenetur aut quas, dolor repudiandae dignissimos cumque
-            asperiores doloribus blanditiis molestiae omnis quo. Consequatur
-            accusamus distinctio sint alias dignissimos labore! Lorem ipsum
-            dolor sit amet consectetur, adipisicing elit. Impedit illo tenetur
-            aut quas, dolor repudiandae dignissimos cumque asperiores doloribus
-            blanditiis molestiae omnis quo. Consequatur accusamus distinctio
-            sint alias dignissimos labore!
-          </p>
-          <div className="ml-2.5 flex">
-            <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center item-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
-              {cardType}
-            </a>
+    <div
+      className={`flex items-center w-full ${cardType === "Standard" && `px-5 py-2.5`}`}
+    >
+      {cardType === "Standard" ? (
+        <div className="flex flex-col justify-center text-[#382e2c] gap-2">
+          <h3 className="text-lg font-semibold">
+            {(result.rawData?.name as any) ?? "name"}
+          </h3>
+          <div className="w-full flex space-between">
+            <MaybeRTF
+              data={
+                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam tenetur, quas aspernatur dolorem corrupti, minus obcaecati nemo facilis sunt magni ea sint architecto sed molestiae culpa suscipit perferendis fugiat aliquid?"
+              }
+            />
+            <div className="ml-2.5 flex">
+              <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center item-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
+                {cardType}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Accordion className="w-full">
+          <AccordionItem
+            key={`result-${result.index}-hours`}
+            className="px-5 py-2.5 "
+          >
+            <AccordionTrigger className="justify-between w-full">
+              <h3 className="text-lg font-semibold">
+                {(result.rawData?.name as any) ?? "name"}
+              </h3>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="w-full flex flex-col space-between">
+                <MaybeRTF
+                  data={
+                    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam tenetur, quas aspernatur dolorem corrupti, minus obcaecati nemo facilis sunt magni ea sint architecto sed molestiae culpa suscipit perferendis fugiat aliquid?"
+                  }
+                />
+                <div className="flex">
+                  <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center item-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
+                    {cardType}
+                  </a>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )}
     </div>
   );
 };
 
 export default Cards;
+
+// const isJsonRT = (data: any) => {
+//   <LexicalRichText serializedAST={JSON.stringify(data)} />;
+// };

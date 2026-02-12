@@ -14,10 +14,12 @@ export const LayoutSection = ({
   resultsCount = 4,
 }: LayoutSectionProps) => {
   if (!CardComponent) return null;
+
   const layoutClasses =
     layoutType === "Grid"
       ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       : "flex flex-col w-full";
+
   console.log(resultsCount);
 
   // const filteredResults = results.slice(0, resultsCount);
@@ -25,7 +27,7 @@ export const LayoutSection = ({
   return (
     <div className="flex flex-col mt-12">
       <div className="px-5 py-2.5 flex items-end border rounded-t-md">
-        <h2 className="text-2xl">{header?.props.label}</h2>
+        <h2 className="text-[22px]">{header?.props.label}</h2>
       </div>
       <div className={`${layoutClasses} w-full border rounded-b-md divide-y`}>
         {results.map((result, index) => (

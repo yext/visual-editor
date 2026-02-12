@@ -1,14 +1,9 @@
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import {
-  StandardCard,
-  UniversalResults,
-  VerticalResults,
-} from "@yext/search-ui-react";
+import { UniversalResults, VerticalResults } from "@yext/search-ui-react";
 import React, { useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
-import { YextField } from "../../../editor/YextField.tsx";
-import { msg } from "../../../utils/index.ts";
+import Cards from "./Cards.tsx";
 import {
   defaultSearchResultsProps,
   VerticalConfigProps,
@@ -18,6 +13,8 @@ import {
   buildVerticalConfigMap,
   isValidVerticalConfig,
 } from "./utils.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/index.ts";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -137,6 +134,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         searchActions.executeVerticalQuery();
       } else {
         searchActions.setUniversal();
+        // searchActions.setQuery("faq");
         searchActions.setUniversalLimit(universalLimit);
         searchActions.executeUniversalQuery();
       }
@@ -168,7 +166,21 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       {isLoading && <div>Loading......</div>}
       {!isLoading &&
         (verticalKey ? (
-          <VerticalResults CardComponent={StandardCard} />
+          <VerticalResults
+            CardComponent={(props) => (
+              <Cards
+                {...props}
+                cardType={
+                  verticals.find((item) => item.verticalKey === verticalKey)
+                    ?.cardType
+                }
+              />
+            )}
+            // CardComponent={
+            //   verticals.find((item) => item.verticalKey === verticalKey)
+            //     ?.cardType
+            // }
+          />
         ) : (
           <UniversalResults
             verticalConfigMap={verticalConfigMap}
