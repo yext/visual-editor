@@ -838,7 +838,7 @@
   },
   "thursday": "torstai",
   "title": "Otsikko",
-  "toPublishHeading": "Ratkaise seuraavat virheet julkaistaksesi:",
+  "toPublishHeading": "Korjaa seuraavat virheet julkaistaksesi:",
   "totalReviews_one": "{{count}} arvostelu",
   "totalReviews_other": "{{count}} arvostelua",
   "tuesday": "tiistai",

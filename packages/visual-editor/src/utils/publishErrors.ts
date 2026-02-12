@@ -50,7 +50,7 @@ export const getPublishErrorMessage = (
   }
 
   return [
-    pt("toPublishHeading", "To publish resolve the following errors:"),
+    pt("toPublishHeading", "To publish, resolve the following errors:"),
     ...actions.map((action) => `- ${action}`),
   ].join("\n");
 };

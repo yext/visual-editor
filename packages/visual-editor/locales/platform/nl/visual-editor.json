@@ -614,7 +614,7 @@
   "map": "Kaart",
   "maxWidthTip": "Voor optimale inhouduitlijning raden we aan de koptekst- en voettekstbreedte in te stellen om het pagina -inhoudsnet van de pagina te matchen of te overschrijden.",
   "mediaType": "Type media",
-  "metaTitleMissingLocales": "Metatitel ontbreekt voor land(en): {{locales}}",
+  "metaTitleMissingLocales": "Metatitel ontbreekt voor taalinstelling(en): {{locales}}",
   "mile_one": "mijl",
   "mile_other": "mijlen",
   "missingHtmlWidget": "Voeg HTML toe om component te bekijken",

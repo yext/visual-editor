@@ -845,7 +845,7 @@
   },
   "thursday": "torsdag",
   "title": "Titel",
-  "toPublishHeading": "Løs følgende fejl for at udgive:",
+  "toPublishHeading": "For at udgive skal du løse følgende fejl:",
   "totalReviews_one": "{{count}} anmeldelse",
   "totalReviews_other": "{{count}} anmeldelser",
   "tuesday": "tirsdag",

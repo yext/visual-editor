@@ -839,7 +839,7 @@
   },
   "thursday": "Torsdag",
   "title": "Titel",
-  "toPublishHeading": "Lös följande fel för att publicera:",
+  "toPublishHeading": "För att publicera, åtgärda följande fel:",
   "totalReviews_one": "{{count}} recension",
   "totalReviews_other": "{{count}} recensioner",
   "tuesday": "Tisdag",
