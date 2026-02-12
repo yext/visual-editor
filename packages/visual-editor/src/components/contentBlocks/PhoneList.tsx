@@ -130,7 +130,7 @@ export const PhoneListComponent: PuckComponent<PhoneListProps> = (props) => {
                     phoneNumber={phone.number}
                     format={styles.phoneFormat}
                     includeHyperlink={styles.includePhoneHyperlink}
-                    includeIcon={true}
+                    includeIcon={styles.includeIcon ?? true}
                   />
                 </div>
               </div>
@@ -157,6 +157,7 @@ export const PhoneList: ComponentConfig<{ props: PhoneListProps }> = {
     styles: {
       phoneFormat: "domestic",
       includePhoneHyperlink: true,
+      includeIcon: true,
     },
   },
   render: (props) => <PhoneListComponent {...props} />,
