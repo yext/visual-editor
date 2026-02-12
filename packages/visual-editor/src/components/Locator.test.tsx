@@ -217,8 +217,6 @@ const tests: ComponentTest[] = [
       resultCard: {
         primaryHeading: {
           field: "name",
-          constantValue: { en: "", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
           headingLevel: 3,
         },
         secondaryHeading: {
