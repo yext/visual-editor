@@ -27,15 +27,6 @@ type ResolveComponentDataOptions = {
   output?: "render" | "plainText";
 };
 
-type RenderResolveComponentDataOptions = Omit<
-  ResolveComponentDataOptions,
-  "output"
-> & {
-  output?: "render";
-};
-
-type PlainTextResolveComponentDataOptions = { output: "plainText" };
-
 /**
  * The primary function for resolving all component data. It handles entity
  * fields, constant values, embedded fields, and translatable types.
@@ -58,7 +49,7 @@ export function resolveComponentData(
   data: TranslatableRichText | YextEntityField<TranslatableRichText>,
   locale: string,
   streamDocument?: Record<string, any>,
-  options?: RenderResolveComponentDataOptions
+  options?: Omit<ResolveComponentDataOptions, "output"> & { output?: "render" }
 ): string | React.ReactElement;
 
 // 3. Handles text-only output mode for translatable text.
@@ -70,7 +61,7 @@ export function resolveComponentData(
     | undefined,
   locale: string,
   streamDocument: Record<string, any> | undefined,
-  options: PlainTextResolveComponentDataOptions
+  options: { output: "plainText" }
 ): string;
 
 // 4. Handles a generic YextEntityField
@@ -93,11 +84,7 @@ export function resolveComponentData<T>(
 ): any {
   const rawValue = resolveRawValue(data, locale, streamDocument);
   if (options?.output === "plainText") {
-    const plainTextResolved = resolveTranslatableTypeToPlainText(
-      rawValue,
-      locale
-    );
-    return toPlainTextString(plainTextResolved);
+    return resolveTranslatableTypeToPlainText(rawValue, locale);
   }
 
   // Fully resolve the resulting value, converting any translatable
@@ -182,9 +169,21 @@ const resolveTranslatableType = (
 const resolveTranslatableTypeToPlainText = (
   value: any,
   locale: string
-): any | string => {
-  if (typeof value !== "object" || value === null) {
+): string => {
+  if (value === undefined || value === null) {
+    return "";
+  }
+
+  if (typeof value === "string") {
     return value;
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (typeof value !== "object") {
+    return "";
   }
 
   if (isRichText(value)) {
@@ -202,17 +201,7 @@ const resolveTranslatableTypeToPlainText = (
     return "";
   }
 
-  if (Array.isArray(value)) {
-    return value.map((item) =>
-      resolveTranslatableTypeToPlainText(item, locale)
-    );
-  }
-
-  const newValue: { [key: string]: any } = {};
-  for (const key in value) {
-    newValue[key] = resolveTranslatableTypeToPlainText(value[key], locale);
-  }
-  return newValue;
+  return "";
 };
 
 /**
@@ -302,16 +291,4 @@ function resolveRawValue<T>(
   // No document, so we can't resolve entity fields or embedded fields.
   // If it's a YextEntityField, we can only use its constant value.
   return isYextEntityField(data) ? data.constantValue : data;
-}
-
-function toPlainTextString(value: any): string {
-  if (typeof value === "string") {
-    return value;
-  }
-
-  if (typeof value === "number" || typeof value === "boolean") {
-    return String(value);
-  }
-
-  return "";
 }
