@@ -11,6 +11,12 @@ const mockedGetDirectoryParents = getDirectoryParents as unknown as Mock;
 
 const baseDocument: StreamDocument = {
   name: "123 Test Rd",
+  dm_directoryParents_123_locations: [
+    { name: "Directory Root", slug: "index.html" },
+    { name: "US", slug: "us" },
+    { name: "TS", slug: "ts" },
+    { name: "Testville", slug: "testville" },
+  ],
   address: {
     line1: "123 Test Rd",
     city: "Testville",
@@ -22,12 +28,7 @@ const baseDocument: StreamDocument = {
   __: {
     pathInfo: {
       primaryLocale: "en",
-      breadcrumbTemplates: [
-        "index.html",
-        "[[address.countryCode]]",
-        "[[address.countryCode]]/[[address.region]]",
-        "[[address.countryCode]]/[[address.region]]/[[address.city]]",
-      ],
+      breadcrumbPrefix: "locations",
     },
   },
 };
@@ -45,10 +46,10 @@ describe("resolveBreadcrumbs", () => {
     ]);
 
     expect(resolveBreadcrumbs(documentWithBreadcrumbs)).toEqual([
-      { name: "index.html", slug: "index.html" },
-      { name: "US", slug: "us" },
-      { name: "TS", slug: "us/ts" },
-      { name: "Testville", slug: "us/ts/testville" },
+      { name: "Directory Root", slug: "locations/index.html" },
+      { name: "US", slug: "locations/us" },
+      { name: "TS", slug: "locations/ts" },
+      { name: "Testville", slug: "locations/testville" },
       { name: "123 Test Rd", slug: "" },
     ]);
   });

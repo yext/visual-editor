@@ -4,6 +4,12 @@ import { StreamDocument } from "../types/StreamDocument.ts";
 
 const baseDocument: StreamDocument = {
   name: "123 Test Rd",
+  dm_directoryParents_123_locations: [
+    { name: "Directory Root", slug: "index.html" },
+    { name: "US", slug: "us" },
+    { name: "TS", slug: "ts" },
+    { name: "Testville", slug: "testville" },
+  ],
   address: {
     line1: "123 Test Rd",
     city: "Testville",
@@ -15,25 +21,20 @@ const baseDocument: StreamDocument = {
   __: {
     pathInfo: {
       primaryLocale: "en",
-      breadcrumbTemplates: [
-        "index.html",
-        "[[address.countryCode]]",
-        "[[address.countryCode]]/[[address.region]]",
-        "[[address.countryCode]]/[[address.region]]/[[address.city]]",
-      ],
+      breadcrumbPrefix: "locations",
     },
   },
 };
 
 describe("resolveBreadcrumbsFromPathInfo", () => {
-  it("builds breadcrumbs from templates for the primary locale without prefix", () => {
+  it("builds breadcrumbs from breadcrumbPrefix for the primary locale without locale prefix", () => {
     const englishDocument = baseDocument;
 
     expect(resolveBreadcrumbsFromPathInfo(englishDocument)).toEqual([
-      { name: "index.html", slug: "index.html" },
-      { name: "US", slug: "us" },
-      { name: "TS", slug: "us/ts" },
-      { name: "Testville", slug: "us/ts/testville" },
+      { name: "Directory Root", slug: "locations/index.html" },
+      { name: "US", slug: "locations/us" },
+      { name: "TS", slug: "locations/ts" },
+      { name: "Testville", slug: "locations/testville" },
       { name: "123 Test Rd", slug: "" },
     ]);
   });
@@ -45,10 +46,30 @@ describe("resolveBreadcrumbsFromPathInfo", () => {
     };
 
     expect(resolveBreadcrumbsFromPathInfo(spanishDocument)).toEqual([
-      { name: "index.html", slug: "es/index.html" },
-      { name: "US", slug: "es/us" },
-      { name: "TS", slug: "es/us/ts" },
-      { name: "Testville", slug: "es/us/ts/testville" },
+      { name: "Directory Root", slug: "es/locations/index.html" },
+      { name: "US", slug: "es/locations/us" },
+      { name: "TS", slug: "es/locations/ts" },
+      { name: "Testville", slug: "es/locations/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ]);
+  });
+
+  it("omits the breadcrumb prefix separator when breadcrumbPrefix is empty", () => {
+    const documentWithEmptyPrefix: StreamDocument = {
+      ...baseDocument,
+      __: {
+        pathInfo: {
+          ...baseDocument.__?.pathInfo,
+          breadcrumbPrefix: "",
+        },
+      },
+    };
+
+    expect(resolveBreadcrumbsFromPathInfo(documentWithEmptyPrefix)).toEqual([
+      { name: "Directory Root", slug: "index.html" },
+      { name: "US", slug: "us" },
+      { name: "TS", slug: "ts" },
+      { name: "Testville", slug: "testville" },
       { name: "123 Test Rd", slug: "" },
     ]);
   });
