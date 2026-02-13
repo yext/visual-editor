@@ -266,7 +266,7 @@ This object contains properties for customizing the appearance of both footer ti
 
 The Expanded Header is a two-tiered component for websites with complex navigation needs. It consists of a primary header for the main logo, navigation links, and calls-to-action, plus an optional secondary "top bar" for utility links (like "Contact Us" or "Log In") and a language selector. Available on Location templates.
 
-![Preview of the ExpandedHeader component](../components/testing/screenshots/ExpandedHeader/%5Bdesktop%5D%20default%20props.png)
+![Preview of the ExpandedHeader component](<../components/testing/screenshots/ExpandedHeader/%5Bdesktop%5D%20default%20props%20(after%20interactions).png>)
 
 ### Props
 
@@ -759,7 +759,7 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 The Reviews Section displays customer reviews fetched dynamically from the Yext Reviews API. It features a customizable section heading and shows review details including ratings, content, and timestamps. Available on Location templates.
 
-![Preview of the ReviewsSection component](../components/testing/screenshots/ReviewsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data.png)
+![Preview of the ReviewsSection component](<../components/testing/screenshots/ReviewsSection/%5Bdesktop%5D%20default%20props%20with%20document%20data%20(after%20interactions).png>)
 
 ### Props
 
