@@ -65,10 +65,7 @@ export const resolveBreadcrumbsFromPathInfo = (
       ? `${locale}/${normalizedSlug}`
       : normalizedSlug;
 
-    const name =
-      (typeof parent.name === "string" && parent.name) ||
-      streamDocument.name ||
-      slug;
+    const name = (typeof parent.name === "string" && parent.name) || slug;
 
     crumbs.push({ name, slug });
   }
