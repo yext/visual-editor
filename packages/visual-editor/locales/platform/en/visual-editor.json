@@ -571,7 +571,6 @@
   "filter": "Filter",
   "filters": "Filters",
   "findALocation": "Find a Location",
-  "fixErrorsToPublish": "To publish, delete or fix sections with errors",
   "fontSize": "Font Size",
   "fontSizeDefaultLabel": "Default",
   "fonts": {
@@ -621,6 +620,7 @@
   "map": "Map",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "mediaType": "Media Type",
+  "metaTitleMissingLocales": "Meta title is missing for locale(s): {{locales}}",
   "mile_one": "mile",
   "mile_other": "miles",
   "missingHtmlWidget": "Add HTML to view component",
@@ -696,6 +696,11 @@
   "professionalHero": "Professional Hero",
   "promoBanner": "Promo Banner",
   "promoMedia": "Promo Media",
+  "publishError": {
+    "components": "delete or fix sections with errors",
+    "metaTitle": "fill in Meta Title for all locales by navigating to the top-level Page component's settings",
+    "metaTitleWithLocales": "fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}"
+  },
   "readLess": "Read less",
   "readMore": "Read more",
   "recentReviews": "Recent Reviews",
@@ -704,6 +709,7 @@
   "redo": "Redo",
   "refineYourSearch": "Refine Your Search",
   "reopenDate": "Reopen Date",
+  "resolveErrorsInEditor": "To publish, resolve the errors highlighted in the editor",
   "responseFrom": "Response from {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} has no first party reviews",
   "reviewsEmptyStateSectionHidden": "Section hidden for this {{entityType}}",
@@ -839,6 +845,7 @@
   },
   "thursday": "Thursday",
   "title": "Title",
+  "toPublishHeading": "To publish, resolve the following errors:",
   "totalReviews_one": "{{count}} review",
   "totalReviews_other": "{{count}} reviews",
   "tuesday": "Tuesday",

@@ -573,7 +573,6 @@
   "filter": "Filtr",
   "filters": "Filtry",
   "findALocation": "Znajdź lokalizację",
-  "fixErrorsToPublish": "Aby opublikować, usunąć lub naprawić sekcje z błędami",
   "fontSize": "Rozmiar czcionki",
   "fontSizeDefaultLabel": "Domyślny",
   "fonts": {
@@ -631,6 +630,7 @@
   "map": "Mapa",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "mediaType": "Typ mediów",
+  "metaTitleMissingLocales": "Brak tytułu meta dla ustawień regionalnych: {{locales}}",
   "mile_few": "mile",
   "mile_many": "mil",
   "mile_one": "mila",
@@ -708,6 +708,11 @@
   "professionalHero": "Profesjonalny bohater",
   "promoBanner": "Baner promocyjny",
   "promoMedia": "Media promocyjne",
+  "publishError": {
+    "components": "usuń lub napraw sekcje z błędami",
+    "metaTitle": "wypełnij metatytuł dla wszystkich ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu",
+    "metaTitleWithLocales": "wypełnij metatytuł dla następujących ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu: {{locales}}"
+  },
   "readLess": "Czytaj mniej",
   "readMore": "Czytaj więcej",
   "recentReviews": "Ostatnie recenzje",
@@ -716,6 +721,7 @@
   "redo": "Przerobić",
   "refineYourSearch": "Sprecyzuj wyszukiwanie",
   "reopenDate": "Data ponownego otwarcia",
+  "resolveErrorsInEditor": "Aby opublikować, usuń błędy zaznaczone w edytorze",
   "responseFrom": "Odpowiedź od {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} nie ma żadnych recenzji własnych",
   "reviewsEmptyStateSectionHidden": "Sekcja ukryta dla tego elementu {{entityType}}",
@@ -851,6 +857,7 @@
   },
   "thursday": "Czwartek",
   "title": "Tytuł",
+  "toPublishHeading": "Aby opublikować, usuń następujące błędy:",
   "totalReviews_few": "{{count}} recenzje",
   "totalReviews_many": "{{count}} recenzji",
   "totalReviews_one": "{{count}} recenzja",

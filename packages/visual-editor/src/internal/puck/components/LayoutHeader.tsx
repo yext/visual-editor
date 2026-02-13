@@ -36,6 +36,11 @@ import {
 } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { DevLogger } from "../../../utils/devLogger.ts";
+import {
+  type ErrorDetail,
+  type ErrorSource,
+} from "../../../contexts/ErrorContext.tsx";
+import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
 
 const usePuck = createUsePuck();
 const devLogger = new DevLogger();
@@ -48,6 +53,8 @@ type LayoutHeaderProps = {
   onSendLayoutForApproval: (data: Data, comment: string) => void;
   localDev: boolean;
   hasErrors: boolean;
+  errorSources: ErrorSource[];
+  errorDetails: Partial<Record<ErrorSource, ErrorDetail>>;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -59,6 +66,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onSendLayoutForApproval,
     localDev,
     hasErrors,
+    errorSources,
+    errorDetails,
   } = props;
   const streamDocument = useDocument();
 
@@ -268,13 +277,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   </span>
                 </TooltipTrigger>
                 {hasErrors && (
-                  <TooltipContent>
-                    <p>
-                      {pt(
-                        "fixErrorsToPublish",
-                        "To publish, delete or fix sections with errors"
-                      )}
-                    </p>
+                  <TooltipContent className="ve-max-w-[320px] ve-whitespace-pre-line ve-text-left">
+                    <p>{getPublishErrorMessage(errorSources, errorDetails)}</p>
                   </TooltipContent>
                 )}
               </Tooltip>

@@ -573,7 +573,6 @@
   "filter": "篩選",
   "filters": "過濾器",
   "findALocation": "找到一個位置",
-  "fixErrorsToPublish": "發布、刪除或修復有錯誤的部分",
   "fontSize": "字體大小",
   "fontSizeDefaultLabel": "預設",
   "fonts": {
@@ -619,6 +618,7 @@
   "map": "地圖",
   "maxWidthTip": "對於最佳內容對齊，我們建議將標題和頁腳寬度設置為匹配或超過頁面內容網格。",
   "mediaType": "媒體類型",
+  "metaTitleMissingLocales": "語言環境缺少元標題：{{locales}}",
   "mile_other": "英里",
   "missingHtmlWidget": "添加HTML以查看組件",
   "monday": "週一",
@@ -693,6 +693,11 @@
   "professionalHero": "職業英雄",
   "promoBanner": "促銷橫幅",
   "promoMedia": "促銷媒體",
+  "publishError": {
+    "components": "刪除或修復有錯誤的部分",
+    "metaTitle": "通過導航到頂級頁面組件的設置來填寫所有區域設置的元標題",
+    "metaTitleWithLocales": "通過導航到頂級頁面組件的設置來填寫以下區域設置的元標題：{{locales}}"
+  },
   "readLess": "閱讀較少",
   "readMore": "閱讀更多",
   "recentReviews": "最近的評論",
@@ -701,6 +706,7 @@
   "redo": "重做",
   "refineYourSearch": "優化您的搜索",
   "reopenDate": "重新開放日期",
+  "resolveErrorsInEditor": "要發布，請解決編輯器中突出顯示的錯誤",
   "responseFrom": "{{businessName}}的響應",
   "reviewsEmptyStateNoReviews": "{{entityType}} 沒有第一方評論",
   "reviewsEmptyStateSectionHidden": "此 {{entityType}} 的部分已隱藏",
@@ -836,6 +842,7 @@
   },
   "thursday": "週四",
   "title": "標題",
+  "toPublishHeading": "要發布，請解決以下錯誤：",
   "totalReviews_other": "{{count}} 條評論",
   "tuesday": "週二",
   "undo": "撤消",

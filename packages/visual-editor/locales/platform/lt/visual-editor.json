@@ -572,7 +572,6 @@
   "filter": "Filtruoti",
   "filters": "Filtrai",
   "findALocation": "Raskite vietą",
-  "fixErrorsToPublish": "Jei norite skelbti, ištrinti arba taisyti skyrius su klaidomis",
   "fontSize": "Šrifto dydis",
   "fontSizeDefaultLabel": "Numatytasis",
   "fonts": {
@@ -630,6 +629,7 @@
   "map": "Žemėlapis",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
   "mediaType": "Žiniasklaidos tipas",
+  "metaTitleMissingLocales": "Trūksta lokalės (-ių) meta pavadinimo: {{locales}}",
   "mile_few": "mylios",
   "mile_many": "mylios",
   "mile_one": "mylia",
@@ -707,6 +707,11 @@
   "professionalHero": "Profesionalus herojus",
   "promoBanner": "Reklaminė reklamjuostė",
   "promoMedia": "Promo žiniasklaida",
+  "publishError": {
+    "components": "ištrinti arba ištaisyti skyrius su klaidomis",
+    "metaTitle": "užpildykite metapavadinimą visoms vietoms naršydami į aukščiausio lygio puslapio komponento nustatymus",
+    "metaTitleWithLocales": "užpildykite metapavadinimą šioms vietoms, eidami į aukščiausio lygio puslapio komponento nustatymus: {{locales}}"
+  },
   "readLess": "Skaitykite mažiau",
   "readMore": "Skaityti daugiau",
   "recentReviews": "Naujausios apžvalgos",
@@ -715,6 +720,7 @@
   "redo": "Perdaryti",
   "refineYourSearch": "Patikslinkite savo paiešką",
   "reopenDate": "Atnaujinti datą",
+  "resolveErrorsInEditor": "Norėdami paskelbti, ištaisykite redaktoriuje paryškintas klaidas",
   "responseFrom": "Atsakymas iš {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} neturi pirmosios šalies atsiliepimų",
   "reviewsEmptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
@@ -850,6 +856,7 @@
   },
   "thursday": "Ketvirtadienis",
   "title": "Pavadinimas",
+  "toPublishHeading": "Norėdami paskelbti, ištaisykite šias klaidas:",
   "totalReviews_few": "{{count}} atsiliepimai",
   "totalReviews_many": "{{count}} atsiliepimo",
   "totalReviews_one": "{{count}} atsiliepimas",

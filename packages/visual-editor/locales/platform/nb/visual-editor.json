@@ -572,7 +572,6 @@
   "filter": "Filter",
   "filters": "Filtre",
   "findALocation": "Finn et sted",
-  "fixErrorsToPublish": "For å publisere, slette eller fikse deler med feil",
   "fontSize": "Fontstørrelse",
   "fontSizeDefaultLabel": "Misligholde",
   "fonts": {
@@ -622,6 +621,7 @@
   "map": "Kart",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "mediaType": "Medietype",
+  "metaTitleMissingLocales": "Metatittel mangler for lokal(er): {{locales}}",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Legg til HTML for å se komponent",
@@ -697,6 +697,11 @@
   "professionalHero": "Profesjonell helt",
   "promoBanner": "Kampanjebanner",
   "promoMedia": "Promo Media",
+  "publishError": {
+    "components": "slette eller fikse deler med feil",
+    "metaTitle": "fyll inn Meta Tittel for alle lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå",
+    "metaTitleWithLocales": "fyll inn Meta Tittel for følgende lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå: {{locales}}"
+  },
   "readLess": "Les mindre",
   "readMore": "Les mer",
   "recentReviews": "Nyere anmeldelser",
@@ -705,6 +710,7 @@
   "redo": "Gjøre om",
   "refineYourSearch": "Avgrens søket ditt",
   "reopenDate": "Åpne dato på nytt",
+  "resolveErrorsInEditor": "For å publisere må du løse feilene som er uthevet i redigeringsprogrammet",
   "responseFrom": "Svar fra {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} har ingen førstepartsanmeldelser",
   "reviewsEmptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
@@ -840,6 +846,7 @@
   },
   "thursday": "torsdag",
   "title": "Tittel",
+  "toPublishHeading": "For å publisere må du løse følgende feil:",
   "totalReviews_one": "{{count}} anmeldelse",
   "totalReviews_other": "{{count}} anmeldelser",
   "tuesday": "tirsdag",

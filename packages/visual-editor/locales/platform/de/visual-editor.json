@@ -577,7 +577,6 @@
   "filter": "Filter",
   "filters": "Filter",
   "findALocation": "Finde einen Standort",
-  "fixErrorsToPublish": "Zum Veröffentlichen, Löschen oder Korrigieren fehlerhafter Abschnitte",
   "fontSize": "Schriftgröße",
   "fontSizeDefaultLabel": "Standard",
   "fonts": {
@@ -627,6 +626,7 @@
   "map": "Karte",
   "maxWidthTip": "Für eine optimale Inhaltsausrichtung empfehlen wir, die Header- und Fußzeile -Breite so festzulegen, dass sie das Seitenzinhaltsnetz überschreiten oder übertreffen.",
   "mediaType": "Medientyp",
+  "metaTitleMissingLocales": "Für Gebietsschema(s) fehlt der Metatitel: {{locales}}",
   "mile_one": "Meile",
   "mile_other": "Meilen",
   "missingHtmlWidget": "Fügen Sie HTML hinzu, um die Komponente anzuzeigen",
@@ -702,6 +702,11 @@
   "professionalHero": "Professioneller Held",
   "promoBanner": "Werbebanner",
   "promoMedia": "Promo -Medien",
+  "publishError": {
+    "components": "Abschnitte mit Fehlern löschen oder korrigieren",
+    "metaTitle": "Geben Sie den Metatitel für alle Gebietsschemas ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren",
+    "metaTitleWithLocales": "Geben Sie den Metatitel für die folgenden Gebietsschemata ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren: {{locales}}"
+  },
   "readLess": "Weniger lesen",
   "readMore": "Mehr lesen",
   "recentReviews": "Neuere Bewertungen",
@@ -710,6 +715,7 @@
   "redo": "Wiederholen",
   "refineYourSearch": "Verfeinern Sie Ihre Suche",
   "reopenDate": "Wiedereröffnung Datum",
+  "resolveErrorsInEditor": "Beheben Sie zum Veröffentlichen die im Editor markierten Fehler",
   "responseFrom": "Antwort von {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} hat keine Erstbewertungen",
   "reviewsEmptyStateSectionHidden": "Abschnitt für diesen {{entityType}} ausgeblendet",
@@ -845,6 +851,7 @@
   },
   "thursday": "Donnerstag",
   "title": "Titel",
+  "toPublishHeading": "Beheben Sie zum Veröffentlichen die folgenden Fehler:",
   "totalReviews_one": "{{count}} Rezension",
   "totalReviews_other": "{{count}} Rezensionen",
   "tuesday": "Dienstag",
