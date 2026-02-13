@@ -29,6 +29,7 @@ import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultEvent = {
   image: {
@@ -167,6 +168,8 @@ export const defaultEventCardSlotData = (
             props: {
               ...(id && { id: `${id}-cta` }),
               data: {
+                actionType: "link",
+                buttonText: { en: "Button", hasLocalizedValue: "true" },
                 entityField: {
                   field: "",
                   constantValue: defaultEvent.cta,
@@ -202,6 +205,7 @@ export type EventCardProps = {
     /** Whether to truncate the event description text */
     truncateDescription: boolean;
   };
+
   /** @internal */
   slots: {
     ImageSlot: Slot;
@@ -211,13 +215,21 @@ export type EventCardProps = {
     CTASlot: Slot;
   };
 
-  /** @internal */
+  /** @internal data from parent component */
   parentData?: {
     field: string;
     event: EventStruct;
   };
 
-  /** @internal */
+  /** @internal styles from parent component */
+  parentStyles?: {
+    showImage: boolean;
+    showDateTime: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
+  };
+
+  /** @internal*/
   conditionalRender?: {
     image?: boolean;
     title: boolean;
@@ -267,7 +279,7 @@ const eventCardFields: Fields<EventCardProps> = {
 };
 
 const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender } = props;
+  const { styles, slots, puck, conditionalRender, parentStyles } = props;
 
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardStyles: EventCardProps["styles"];
@@ -278,12 +290,18 @@ const EventCardComponent: PuckComponent<EventCardProps> = (props) => {
     props.id
   );
 
-  const showImage = Boolean(conditionalRender?.image || puck.isEditing);
+  const showImage =
+    parentStyles?.showImage &&
+    Boolean(conditionalRender?.image || puck.isEditing);
   const showTitle = Boolean(conditionalRender?.title || puck.isEditing);
-  const showDateTime = Boolean(conditionalRender?.dateTime || puck.isEditing);
+  const showDateTime =
+    parentStyles?.showDateTime &&
+    Boolean(conditionalRender?.dateTime || puck.isEditing);
   const showDescription =
-    Boolean(conditionalRender?.description) || puck.isEditing;
-  const showCTA = Boolean(conditionalRender?.cta || puck.isEditing);
+    parentStyles?.showDescription &&
+    (Boolean(conditionalRender?.description) || puck.isEditing);
+  const showCTA =
+    parentStyles?.showCTA && Boolean(conditionalRender?.cta || puck.isEditing);
 
   // sharedCardProps useEffect
   // When the context changes, dispatch an update to sync the changes to puck
@@ -534,6 +552,13 @@ export const EventCard: ComponentConfig<{ props: EventCardProps }> = {
         ? "md:line-clamp-2"
         : undefined
     );
+
+    updatedData = syncParentStyles(params, updatedData, [
+      "showImage",
+      "showDateTime",
+      "showDescription",
+      "showCTA",
+    ]);
 
     // Set parentData for all slots if parentData is provided
     if (data.props.parentData) {

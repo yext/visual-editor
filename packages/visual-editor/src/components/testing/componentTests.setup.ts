@@ -136,45 +136,6 @@ export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 // Shared Test Data
-export const testSite = {
-  header: {
-    links: [
-      { label: "Home", link: "index.html", linkType: "OTHER" },
-      {
-        label: "More Info",
-        link: "https://yext.com",
-        linkType: "URL",
-      },
-      { label: "Call Us", link: "+12125550110", linkType: "PHONE" },
-    ],
-  },
-  logo: {
-    image: {
-      alternateText: "The Galaxy Grill Logo",
-      height: 1152,
-      url: "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
-      width: 1152,
-    },
-  },
-  copyrightMessage: "© 2025 Yext",
-  footer: {
-    links: [
-      {
-        label: "Privacy Policy",
-        link: "https://www.yext.com/privacy-policy",
-        linkType: "URL",
-      },
-      {
-        label: "Contact Us",
-        link: "sumo@yext.com",
-        linkType: "EMAIL",
-      },
-    ],
-  },
-  instagramHandle: "yextinc",
-  youTubeChannelUrl: "https://www.youtube.com/c/yext",
-};
-
 export const testHours = {
   friday: {
     openIntervals: [

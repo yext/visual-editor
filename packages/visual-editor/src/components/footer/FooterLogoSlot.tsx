@@ -6,14 +6,18 @@ import { msg } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { MaybeLink } from "../atoms/maybeLink.tsx";
-import { Image } from "../atoms/image.tsx";
+import { getImageAltText, Image } from "../atoms/image.tsx";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
+import { ComplexImageType, ImageType } from "@yext/pages-components";
+import { getImageUrl } from "../contentBlocks/image/Image.tsx";
 
 export interface FooterLogoSlotProps {
   data: {
-    image: YextEntityField<AssetImageType | TranslatableAssetImage>;
+    image: YextEntityField<
+      ImageType | ComplexImageType | AssetImageType | TranslatableAssetImage
+    >;
     linkTarget?: string;
   };
   styles: {
@@ -27,21 +31,25 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const streamDocument = useDocument();
   const { i18n, t } = useTranslation();
 
-  const resolvedImage = resolveComponentData(
+  const resolvedImage:
+    | ImageType
+    | ComplexImageType
+    | TranslatableAssetImage
+    | undefined = resolveComponentData(
     data.image,
     i18n.language,
     streamDocument
   );
+  const simplifiedImage: ImageType | AssetImageType | undefined =
+    resolvedImage && "image" in resolvedImage
+      ? resolvedImage.image
+      : resolvedImage && "hasLocalizedValue" in resolvedImage
+        ? resolvedImage[i18n.language]
+        : resolvedImage;
 
-  let imageDataUrl = (
-    typeof resolvedImage === "string" ? { url: resolvedImage } : resolvedImage
-  ) as AssetImageType | TranslatableAssetImage;
+  const imageUrl = getImageUrl(simplifiedImage, i18n.language);
 
-  if (imageDataUrl && "hasLocalizedValue" in imageDataUrl) {
-    imageDataUrl = imageDataUrl[i18n.language] as AssetImageType;
-  }
-
-  if (!imageDataUrl?.url) {
+  if (!simplifiedImage || !imageUrl) {
     return puck.isEditing ? <div className="h-20 w-[100px]" /> : <></>;
   }
 
@@ -50,15 +58,15 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
 
   const imgElement = (
     <Image
-      image={imageDataUrl}
+      image={simplifiedImage}
       aspectRatio={aspectRatio}
       width={width}
       className="object-contain"
     />
   );
 
-  const altText = resolveComponentData(
-    imageDataUrl.alternateText ?? "",
+  const altText = getImageAltText(
+    simplifiedImage,
     i18n.language,
     streamDocument
   );
@@ -85,7 +93,10 @@ export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
       type: "object",
       objectFields: {
         image: YextField(msg("fields.image", "Image"), {
-          type: "image",
+          type: "entityField",
+          filter: {
+            types: ["type.image"],
+          },
         }),
         linkTarget: YextField(msg("fields.linkTarget", "Link Target"), {
           type: "text",

@@ -98,6 +98,29 @@ export const ImageWrapperFields: Fields<ImageWrapperProps> = {
   ),
 };
 
+export const getImageUrl = (
+  image: ImageType | ComplexImageType | TranslatableAssetImage | undefined,
+  locale: string
+): string | undefined => {
+  if (!image) {
+    return undefined;
+  }
+
+  if ("hasLocalizedValue" in image) {
+    const localized = image[locale];
+    if (localized && typeof localized === "object") {
+      return localized.url;
+    }
+    return undefined;
+  }
+
+  if ("image" in image) {
+    return image.image?.url;
+  }
+
+  return image.url;
+};
+
 const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
   const {
     data,
@@ -122,29 +145,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
       : resolveComponentData(data.image, i18n.language, streamDocument);
   }, [parentData, data.image, i18n.language, streamDocument]);
 
-  const getImageUrl = (
-    image: ImageType | ComplexImageType | TranslatableAssetImage | undefined
-  ): string | undefined => {
-    if (!image) {
-      return undefined;
-    }
-
-    if ("hasLocalizedValue" in image) {
-      const localized = image[i18n.language];
-      if (localized && typeof localized === "object") {
-        return localized.url;
-      }
-      return undefined;
-    }
-
-    if ("image" in image) {
-      return image.image?.url;
-    }
-
-    return image.url;
-  };
-
-  const imageUrl = getImageUrl(resolvedImage);
+  const imageUrl = getImageUrl(resolvedImage, i18n.language);
   const isEmpty =
     !resolvedImage ||
     !imageUrl ||

@@ -18,11 +18,16 @@ export type CTAProps = {
   // Core props
   label: React.ReactNode;
   ctaType?: "textAndLink" | "getDirections" | "presetImage";
+  actionType?: "link" | "button";
 
   // ctaType specific props
   link?: string;
   linkType?: LinkType;
   presetImageType?: PresetImageType;
+
+  // button actionType specific props
+  id?: string;
+  dataAttributes?: Record<`data-${string}`, string>;
 
   // Styling and behavior props
   variant?: ButtonProps["variant"];
@@ -31,13 +36,15 @@ export type CTAProps = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   alwaysHideCaret?: boolean;
   ariaLabel?: string;
-  onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  onClick?: (
+    event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement, MouseEvent>
+  ) => void;
   disabled?: boolean;
   color?: BackgroundStyle;
   openInNewTab?: boolean;
   /**
    * When true and variant is "link", applies vertical padding (py-3) to the CTA.
-   * @default false
+   * @defaultValue false
    */
   setPadding?: boolean;
 };
@@ -187,10 +194,14 @@ export const CTA = (props: CTAProps) => {
     color,
     openInNewTab = false,
     setPadding = false,
+    actionType = "link",
+    id,
+    dataAttributes,
   } = props;
 
   const { t } = useTranslation();
   const resolvedProps = useResolvedCtaProps(props);
+  const isButton = actionType === "button";
   const isDarkBG = useBackground()?.isDarkBackground;
   const dynamicStyle: React.CSSProperties = (() => {
     const bg = normalizeThemeColor(color?.bgColor);
@@ -209,6 +220,15 @@ export const CTA = (props: CTAProps) => {
       return {
         borderColor: border,
         color: border,
+      };
+    }
+
+    if (
+      variant === "headerFooterMainLink" ||
+      variant === "headerFooterSecondaryLink"
+    ) {
+      return {
+        color: bg && `var(--colors-${bg})`,
       };
     }
 
@@ -260,6 +280,7 @@ export const CTA = (props: CTAProps) => {
   if (disabled) {
     return (
       <Button
+        type="button"
         className={buttonClassName}
         variant={buttonVariant}
         onClick={(e) => {
@@ -274,15 +295,21 @@ export const CTA = (props: CTAProps) => {
           e.preventDefault();
           e.stopPropagation();
         }}
-        style={disabledStyle}
+        style={{
+          ...disabledStyle,
+          textTransform: buttonVariant?.toLowerCase().includes("link")
+            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
+            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+        }}
       >
         {linkContent}
       </Button>
     );
   }
 
-  const computedAriaLabel =
-    openInNewTab && ariaLabel && ariaLabel.trim() !== ""
+  const computedAriaLabel = isButton
+    ? ariaLabel || undefined
+    : openInNewTab && ariaLabel && ariaLabel.trim() !== ""
       ? t("aria.opensInNewTab", "{{label}} (opens in a new tab)", {
           label: ariaLabel,
         })
@@ -290,6 +317,29 @@ export const CTA = (props: CTAProps) => {
 
   const linkPadding: ButtonProps["linkPadding"] =
     buttonVariant === "link" && setPadding ? "yOnly" : "none";
+
+  if (isButton) {
+    return (
+      <Button
+        id={id}
+        type="button"
+        style={{
+          ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
+          textTransform: buttonVariant?.toLowerCase().includes("link")
+            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
+            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+        }}
+        className={buttonClassName}
+        variant={buttonVariant}
+        linkPadding={linkPadding}
+        aria-label={computedAriaLabel}
+        onClick={onClick}
+        {...dataAttributes}
+      >
+        {linkContent}
+      </Button>
+    );
+  }
 
   return (
     <Button

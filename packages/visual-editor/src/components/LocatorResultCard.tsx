@@ -7,7 +7,11 @@ import {
   useCardAnalyticsCallback,
 } from "@yext/search-ui-react";
 import { Background } from "./atoms/background.tsx";
-import { backgroundColors, HeadingLevel } from "../utils/themeConfigOptions.ts";
+import {
+  backgroundColors,
+  BackgroundStyle,
+  HeadingLevel,
+} from "../utils/themeConfigOptions.ts";
 import { Body, BodyProps } from "./atoms/body.tsx";
 import { CTA, CTAVariant } from "./atoms/cta.tsx";
 import { Heading } from "./atoms/heading.tsx";
@@ -51,6 +55,11 @@ import {
 } from "react-icons/fa";
 import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
 import { FieldTypeData } from "../internal/types/templateMetadata.ts";
+import {
+  formatDistance,
+  fromMeters,
+  getPreferredDistanceUnit,
+} from "../utils/i18n/distance.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -62,6 +71,11 @@ export interface LocatorResultCardProps {
     field: DynamicOptionsSingleSelectorType<string>;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
+    /**
+     * The color applied to the primary heading text
+     * @defaultValue inherited from theme
+     */
+    color?: BackgroundStyle;
   };
 
   /** Settings for the secondary heading of the card */
@@ -272,6 +286,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           type: "select",
           hasSearch: true,
           options: "HEADING_LEVEL",
+        }),
+        color: YextField(msg("fields.color", "Color"), {
+          type: "select",
+          options: "SITE_COLOR",
         }),
       },
     },
@@ -598,12 +616,12 @@ export const LocatorResultCard = React.memo(
     const location = result.rawData;
     const distance = result.distance;
 
-    const distanceInMiles =
+    const unit = getPreferredDistanceUnit(i18n.language);
+    const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
+    const displayDistance =
       typeof distance === "number"
-        ? (distance / 1609.344).toFixed(1)
+        ? `${formatDistance(fromMeters(distance, unit), i18n.language)} ${unitLabel}`
         : undefined;
-    const distanceInKilometers =
-      typeof distance === "number" ? (distance / 1000).toFixed(1) : undefined;
 
     const handleGetDirectionsClick = useCardAnalyticsCallback(
       result,
@@ -654,7 +672,9 @@ export const LocatorResultCard = React.memo(
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
       >
         <Background
-          background={backgroundColors.background6.value}
+          background={
+            props?.primaryHeading?.color ?? backgroundColors.background6.value
+          }
           className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
         >
           {result.index}
@@ -672,19 +692,17 @@ export const LocatorResultCard = React.memo(
                   location={location}
                 />
               </div>
-              {typeof distance === "number" && (
+              {displayDistance && (
                 <div
                   className={
                     "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex"
                   }
                 >
-                  {t("distanceInUnit", `${distanceInMiles} mi`, {
-                    distanceInMiles,
-                    distanceInKilometers,
-                  })}
+                  {displayDistance}
                 </div>
               )}
             </div>
+
             <HoursSection
               location={location}
               result={result}
@@ -750,17 +768,14 @@ export const LocatorResultCard = React.memo(
               </div>
             </div>
           </div>
-          {typeof distance === "number" && (
+          {displayDistance && (
             <div
               className={`
               font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full flex lg:hidden px-2 py-1 w-fit
               ${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}
               `}
             >
-              {t("distanceInUnit", `${distanceInMiles} mi`, {
-                distanceInMiles,
-                distanceInKilometers,
-              })}
+              {displayDistance}
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
@@ -861,6 +876,7 @@ const HeadingTextSection = (props: {
   return (
     <div className="flex flex-col gap-2">
       <Heading
+        color={primaryHeading?.color}
         className="font-bold text-palette-primary-dark"
         level={primaryHeading.headingLevel}
       >

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { ComponentConfig, Fields, setDeep, Slot } from "@puckeditor/core";
 import { PromoSectionType } from "../../../types/types.ts";
 import {
@@ -96,9 +95,33 @@ export interface PromoStyles {
   /**
    * Image Height for the promo image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight: number;
+
+  /**
+   * Whether to show the media content, either image or video.
+   * @defaultValue true
+   */
+  showMedia: boolean;
+
+  /**
+   * Whether to show the heading text.
+   * @defaultValue true
+   */
+  showHeading: boolean;
+
+  /**
+   * Whether to show the description text.
+   * @defaultValue true
+   */
+  showDescription: boolean;
+
+  /**
+   * Whether to show the CTA.
+   * @defaultValue true
+   */
+  showCTA: boolean;
 }
 
 export interface PromoSectionProps {
@@ -231,6 +254,25 @@ const promoSectionFields: Fields<PromoSectionProps> = {
         type: "number",
         min: 0,
       }),
+      showMedia: YextField(msg("fields.showMedia", "Show Media"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showHeading: YextField(msg("fields.showHeading", "Show Heading"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showDescription: YextField(
+        msg("fields.showDescription", "Show Description"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
     },
   }),
   slots: {
@@ -297,6 +339,10 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       mobileImagePosition: "top",
       containerAlignment: "left",
       imageHeight: 500,
+      showMedia: true,
+      showHeading: true,
+      showDescription: true,
+      showCTA: true,
     },
     slots: {
       HeadingSlot: [
@@ -382,6 +428,8 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           type: "CTASlot",
           props: {
             data: {
+              actionType: "link",
+              buttonText: { en: "Button", hasLocalizedValue: "true" },
               entityField: {
                 field: "",
                 constantValue: {
@@ -438,6 +486,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             "styles.objectFields.mobileImagePosition",
             "styles.objectFields.desktopImagePosition",
             "data.objectFields.media",
+            "styles.objectFields.showMedia",
             data.props.data.promo.constantValueEnabled
               ? undefined
               : "data.objectFields.backgroundImage",
@@ -446,6 +495,11 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
         );
         break;
       }
+    }
+
+    // If showMedia is false, remove media-related fields
+    if (!data.props.styles.showMedia) {
+      fields = updateFields(fields, ["data.objectFields.media"], undefined);
     }
 
     return fields;

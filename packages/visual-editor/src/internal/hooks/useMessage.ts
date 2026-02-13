@@ -1,7 +1,6 @@
 // Inspired by https://github.com/rottitime/react-hook-window-message-event
 
 import {
-  RefObject,
   useState,
   useRef,
   useCallback,
@@ -83,43 +82,6 @@ const postMessage = (
 ) => target?.postMessage(data, { targetOrigin: origin });
 
 /**
- * A hook that allows sending a postMessage from a parent window to an iframe. Additionally,
- * it listens for a response from the iframe (two way communication) to update its status.
- * @param messageName - The message name to listen on
- * @param targetOrigins - The origin urls the message can be posted to and received from
- * @param iframeRef - A MutableRefObject to send postMessages to - usually an iFrame
- */
-export const useSendMessageToIFrame = (
-  messageName: string,
-  targetOrigins: string[],
-  iframeRef: RefObject<HTMLIFrameElement>
-) => {
-  const [status, setStatus] = useState<MessageStatus>("pending");
-
-  useListenAndRespondMessage(
-    messageName,
-    targetOrigins,
-    statusSetter(setStatus)
-  );
-
-  const sendToIFrame = (data?: PostMessage) => {
-    if (iframeRef.current) {
-      setStatus("pending");
-      const originsToUse = getOriginsForSending(targetOrigins);
-      for (const targetOrigin of originsToUse) {
-        postMessage(
-          { ...data, type: messageName },
-          iframeRef.current.contentWindow,
-          targetOrigin
-        );
-      }
-    }
-  };
-
-  return { sendToIFrame, status };
-};
-
-/**
  * A hook that allows sending a postMessage from an iframe to its parent window. Additionally,
  * it listens for a response from the parent (two way communication) to update its status.
  * @param messageName - The message name to listen on
@@ -153,7 +115,7 @@ export const useSendMessageToParent = (
 
 /**
  * A hook to receive a postMessage request, either in a parent window or an iframe. It is
- * the receiving end for both {@link useSendMessageToIFrame} and {@link useSendMessageToParent}.
+ * the receiving end for {@link useSendMessageToParent}.
  * The eventHandler if fired when a message is received, which contains a payload and callback
  * function. The receiver can choose to do something with the payload as well as send a
  * status and payload back to the publisher.
@@ -319,7 +281,7 @@ const useListenAndRespondMessage = (
 /**
  * Sets a status based on the incoming message's status.
  * @param setStatus - A React useState hook for setting the status of the
- * original postMessage coming from the parent window or iframe.
+ * original postMessage coming from the parent window.
  */
 const statusSetter = (setStatus: Dispatch<SetStateAction<MessageStatus>>) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
