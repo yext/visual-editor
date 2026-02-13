@@ -142,7 +142,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   }, [verticals, searchTerm, universalLimit, searchActions, verticalKey]);
 
   return (
-    <div className="relative pt-8">
+    <div className="  pt-8">
       <div className="border-b flex justify-start items-center">
         <ul className="flex items-center">
           {verticals.map((item) => (

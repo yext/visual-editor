@@ -95,6 +95,7 @@ export const SearchComponent: ComponentConfig<{
           props: {
             styles: {
               showIcon: false,
+              voiceSearch: false,
             },
           } satisfies SearchBarSlotProps,
         },
