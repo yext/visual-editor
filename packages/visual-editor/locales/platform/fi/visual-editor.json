@@ -566,7 +566,6 @@
   "filter": "Suodata",
   "filters": "Suodattimet",
   "findALocation": "Etsi sijainti",
-  "fixErrorsToPublish": "Virheitä sisältävien osien julkaiseminen, poistaminen tai korjaaminen",
   "fontSize": "Fontin koko",
   "fontSizeDefaultLabel": "Laiminlyönti",
   "fonts": {
@@ -616,6 +615,7 @@
   "map": "Kartta",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "mediaType": "Mediatyyppi",
+  "metaTitleMissingLocales": "Metaotsikko puuttuu lokaaleilta: {{locales}}",
   "mile_one": "maili",
   "mile_other": "mailia",
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
@@ -691,6 +691,11 @@
   "professionalHero": "Ammattimainen sankari",
   "promoBanner": "Promo-banneri",
   "promoMedia": "Promootio",
+  "publishError": {
+    "components": "poistaa tai korjata virheellisiä osia",
+    "metaTitle": "täytä Meta Title kaikille alueille siirtymällä sivukomponentin ylätason asetuksiin",
+    "metaTitleWithLocales": "täytä Meta Title seuraaville alueille siirtymällä sivukomponentin ylätason asetuksiin: {{locales}}"
+  },
   "readLess": "Lue vähemmän",
   "readMore": "Lue lisää",
   "recentReviews": "Viimeaikaiset arvostelut",
@@ -699,6 +704,7 @@
   "redo": "Tehdä uudelleen",
   "refineYourSearch": "Tarkenna hakuasi",
   "reopenDate": "Avata päivämäärä uudelleen",
+  "resolveErrorsInEditor": "Korjaa editorissa korostetut virheet julkaistaksesi",
   "responseFrom": "Vastaus {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}}:lla ei ole ensimmäisen osapuolen arvosteluja",
   "reviewsEmptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
@@ -833,6 +839,7 @@
   },
   "thursday": "torstai",
   "title": "Otsikko",
+  "toPublishHeading": "Korjaa seuraavat virheet julkaistaksesi:",
   "totalReviews_one": "{{count}} arvostelu",
   "totalReviews_other": "{{count}} arvostelua",
   "tuesday": "tiistai",

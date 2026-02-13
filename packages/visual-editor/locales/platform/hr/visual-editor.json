@@ -566,7 +566,6 @@
   "filter": "Filter",
   "filters": "Filteri",
   "findALocation": "Pronađite lokaciju",
-  "fixErrorsToPublish": "Za objavljivanje, brisanje ili popravljanje odjeljaka s pogreškama",
   "fontSize": "Veličina fonta",
   "fontSizeDefaultLabel": "Zadano",
   "fonts": {
@@ -620,6 +619,7 @@
   "map": "Karta",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
   "mediaType": "Medijska vrsta",
+  "metaTitleMissingLocales": "Nedostaje meta naslov za lokalitet(e): {{locales}}",
   "mile_few": "milje",
   "mile_one": "milja",
   "mile_other": "milja",
@@ -696,6 +696,11 @@
   "professionalHero": "Profesionalni heroj",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo medija",
+  "publishError": {
+    "components": "izbrisati ili popraviti odjeljke s pogreškama",
+    "metaTitle": "ispunite Meta Title za sve jezike tako što ćete otići do postavki komponente stranice najviše razine",
+    "metaTitleWithLocales": "ispunite Meta Title za sljedeće lokalitete dolaskom na postavke komponente stranice najviše razine: {{locales}}"
+  },
   "readLess": "Čitaj manje",
   "readMore": "Pročitaj više",
   "recentReviews": "Nedavne recenzije",
@@ -704,6 +709,7 @@
   "redo": "Ponovno obnavljati",
   "refineYourSearch": "Pročistite svoju pretragu",
   "reopenDate": "Ponovno otvaranje datuma",
+  "resolveErrorsInEditor": "Da biste objavili, riješite pogreške istaknute u uređivaču",
   "responseFrom": "Odgovor od {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} nema recenzije prve strane",
   "reviewsEmptyStateSectionHidden": "Odjeljak skriven za ovaj {{entityType}}",
@@ -838,6 +844,7 @@
   },
   "thursday": "četvrtak",
   "title": "Titula",
+  "toPublishHeading": "Za objavu riješite sljedeće pogreške:",
   "totalReviews_few": "{{count}} recenzije",
   "totalReviews_one": "{{count}} pregled",
   "totalReviews_other": "{{count}} recenzija",

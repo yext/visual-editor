@@ -567,7 +567,6 @@
   "filter": "Filtrera",
   "filters": "Filter",
   "findALocation": "Hitta en plats",
-  "fixErrorsToPublish": "För att publicera, ta bort eller åtgärda avsnitt med fel",
   "fontSize": "Fontstorlek",
   "fontSizeDefaultLabel": "Standard",
   "fonts": {
@@ -617,6 +616,7 @@
   "map": "Karta",
   "maxWidthTip": "För optimal innehållsinriktning rekommenderar vi att du ställer in huvud- och sidfotbredden för att matcha eller överskrida sidinnehållsnätet.",
   "mediaType": "Medietyp",
+  "metaTitleMissingLocales": "Metatitel saknas för lokal(er): {{locales}}",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",
@@ -692,6 +692,11 @@
   "professionalHero": "Professionell hjälte",
   "promoBanner": "Kampanjbanner",
   "promoMedia": "Promo media",
+  "publishError": {
+    "components": "ta bort eller fixa avsnitt med fel",
+    "metaTitle": "fyll i Meta Titel för alla språk genom att navigera till inställningarna för den översta sidans komponent",
+    "metaTitleWithLocales": "fyll i Meta Titel för följande språk genom att navigera till inställningarna för sidkomponenten på översta nivån: {{locales}}"
+  },
   "readLess": "Läs mindre",
   "readMore": "Läs mer",
   "recentReviews": "Senaste recensioner",
@@ -700,6 +705,7 @@
   "redo": "Göra om",
   "refineYourSearch": "Förfina din sökning",
   "reopenDate": "Öppna datum igen",
+  "resolveErrorsInEditor": "För att publicera, åtgärda felen som markerats i redigeraren",
   "responseFrom": "Svar från {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} har inga förstapartsrecensioner",
   "reviewsEmptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
@@ -834,6 +840,7 @@
   },
   "thursday": "Torsdag",
   "title": "Titel",
+  "toPublishHeading": "För att publicera, åtgärda följande fel:",
   "totalReviews_one": "{{count}} recension",
   "totalReviews_other": "{{count}} recensioner",
   "tuesday": "Tisdag",

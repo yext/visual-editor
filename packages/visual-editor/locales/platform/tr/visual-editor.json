@@ -566,7 +566,6 @@
   "filter": "Filtre",
   "filters": "Filtreler",
   "findALocation": "Bir Konum Bul",
-  "fixErrorsToPublish": "Hatalı bölümleri yayınlamak, silmek veya düzeltmek için",
   "fontSize": "Yazı tipi boyutu",
   "fontSizeDefaultLabel": "Varsayılan",
   "fonts": {
@@ -616,6 +615,7 @@
   "map": "Harita",
   "maxWidthTip": "Optimal içerik hizalaması için, sayfa içerik şebekesini eşleştirecek veya aşacak şekilde üstbilgi ve altbilgi genişliğini ayarlamanızı öneririz.",
   "mediaType": "Medya türü",
+  "metaTitleMissingLocales": "Yerel ayarlar için meta başlığı eksik: {{locales}}",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Bileşeni görüntülemek için HTML ekle",
@@ -691,6 +691,11 @@
   "professionalHero": "Profesyonel Kahraman",
   "promoBanner": "Promosyon Banner'ı",
   "promoMedia": "Promosyon medyası",
+  "publishError": {
+    "components": "Hata içeren bölümleri silin veya düzeltin",
+    "metaTitle": "Üst düzey Sayfa bileşeninin ayarlarına giderek tüm yerel ayarlar için Meta Başlığını doldurun",
+    "metaTitleWithLocales": "Üst düzey Sayfa bileşeninin ayarlarına giderek aşağıdaki yerel ayarlar için Meta Başlığını doldurun: {{locales}}"
+  },
   "readLess": "Daha az oku",
   "readMore": "Devamını oku",
   "recentReviews": "Son İncelemeler",
@@ -699,6 +704,7 @@
   "redo": "Yeniden yapmak",
   "refineYourSearch": "Aramanızı hassaslaştırın",
   "reopenDate": "Tarihi Yeniden Aç",
+  "resolveErrorsInEditor": "Yayınlamak için düzenleyicide vurgulanan hataları çözün",
   "responseFrom": "{{businessName}} 'dan yanıt",
   "reviewsEmptyStateNoReviews": "{{entityType}}'ın birinci taraf incelemesi yok",
   "reviewsEmptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
@@ -833,6 +839,7 @@
   },
   "thursday": "Perşembe",
   "title": "Başlık",
+  "toPublishHeading": "Yayınlamak için aşağıdaki hataları çözün:",
   "totalReviews_one": "{{count}} inceleme",
   "totalReviews_other": "{{count}} inceleme",
   "tuesday": "Salı",

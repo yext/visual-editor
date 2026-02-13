@@ -565,7 +565,6 @@
   "filter": "Filtrar",
   "filters": "Filtros",
   "findALocation": "Encuentra una ubicación",
-  "fixErrorsToPublish": "Para publicar, eliminar o corregir secciones con errores",
   "fontSize": "Tamaño de fuente",
   "fontSizeDefaultLabel": "Por defecto",
   "fonts": {
@@ -615,6 +614,7 @@
   "map": "Mapa",
   "maxWidthTip": "Para una alineación de contenido óptimo, recomendamos establecer el ancho del encabezado y el pie de página para que coincidan o excedan la cuadrícula de contenido de la página.",
   "mediaType": "Tipo de medios",
+  "metaTitleMissingLocales": "Falta el metatítulo para las configuraciones regionales: {{locales}}",
   "mile_one": "milla",
   "mile_other": "millas",
   "missingHtmlWidget": "Agregue HTML para ver el componente",
@@ -690,6 +690,11 @@
   "professionalHero": "Héroe profesional",
   "promoBanner": "Banner promocional",
   "promoMedia": "Medios promocionales",
+  "publishError": {
+    "components": "eliminar o corregir secciones con errores",
+    "metaTitle": "complete el metatítulo para todas las configuraciones regionales navegando a la configuración del componente de página de nivel superior",
+    "metaTitleWithLocales": "complete el metatítulo para las siguientes configuraciones regionales navegando a la configuración del componente de página de nivel superior: {{locales}}"
+  },
   "readLess": "Leer menos",
   "readMore": "Leer más",
   "recentReviews": "Revisiones recientes",
@@ -698,6 +703,7 @@
   "redo": "Rehacer",
   "refineYourSearch": "Refina tu búsqueda",
   "reopenDate": "Reabrir fecha",
+  "resolveErrorsInEditor": "Para publicar, resuelve los errores resaltados en el editor.",
   "responseFrom": "Respuesta de {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} no tiene reseñas propias",
   "reviewsEmptyStateSectionHidden": "Sección oculta para este {{entityType}}",
@@ -832,6 +838,7 @@
   },
   "thursday": "Jueves",
   "title": "Título",
+  "toPublishHeading": "Para publicar, resuelva los siguientes errores:",
   "totalReviews_one": "{{count}} reseña",
   "totalReviews_other": "{{count}} reseñas",
   "tuesday": "Martes",

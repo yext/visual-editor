@@ -566,7 +566,6 @@
   "filter": "Filtra",
   "filters": "Filtre",
   "findALocation": "Găsiți o locație",
-  "fixErrorsToPublish": "Pentru a publica, șterge sau remedia secțiuni cu erori",
   "fontSize": "Dimensiunea fontului",
   "fontSizeDefaultLabel": "Implicit",
   "fonts": {
@@ -620,6 +619,7 @@
   "map": "Hartă",
   "maxWidthTip": "Pentru o aliniere optimă a conținutului, vă recomandăm să setați antetul și lățimea subsolului pentru a se potrivi sau a depăși grila de conținut a paginii.",
   "mediaType": "Tip media",
+  "metaTitleMissingLocales": "Lipsește meta titlul pentru localități: {{locales}}",
   "mile_few": "mile",
   "mile_one": "milă",
   "mile_other": "mile",
@@ -696,6 +696,11 @@
   "professionalHero": "Erou profesionist",
   "promoBanner": "Banner promoțional",
   "promoMedia": "Media promo",
+  "publishError": {
+    "components": "ștergeți sau remediați secțiunile cu erori",
+    "metaTitle": "completați Meta Title pentru toate localitățile navigând la setările componentei Pagina de nivel superior",
+    "metaTitleWithLocales": "completați Meta Title pentru următoarele localități navigând la setările componentei Pagina de nivel superior: {{locales}}"
+  },
   "readLess": "Citiți mai puțin",
   "readMore": "Citiți mai mult",
   "recentReviews": "Recenzii recente",
@@ -704,6 +709,7 @@
   "redo": "Redo.",
   "refineYourSearch": "Rafinați-vă căutarea",
   "reopenDate": "Data redeschiderii",
+  "resolveErrorsInEditor": "Pentru a publica, rezolvați erorile evidențiate în editor",
   "responseFrom": "Răspuns de la {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} nu are recenzii de la prima parte",
   "reviewsEmptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
@@ -838,6 +844,7 @@
   },
   "thursday": "joi",
   "title": "Titlu",
+  "toPublishHeading": "Pentru a publica, rezolvați următoarele erori:",
   "totalReviews_few": "{{count}} recenzii",
   "totalReviews_one": "{{count}} recenzie",
   "totalReviews_other": "{{count}} recenzii",

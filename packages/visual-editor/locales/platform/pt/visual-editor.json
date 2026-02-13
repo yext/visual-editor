@@ -566,7 +566,6 @@
   "filter": "Filtro",
   "filters": "Filtros",
   "findALocation": "Encontre um local",
-  "fixErrorsToPublish": "Para publicar, excluir ou corrigir seções com erros",
   "fontSize": "Tamanho da fonte",
   "fontSizeDefaultLabel": "Padrão",
   "fonts": {
@@ -616,6 +615,7 @@
   "map": "Mapa",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "mediaType": "Tipo de mídia",
+  "metaTitleMissingLocales": "O meta título está faltando para locais: {{locales}}",
   "mile_one": "milha",
   "mile_other": "milhas",
   "missingHtmlWidget": "Adicione HTML para visualizar o componente",
@@ -691,6 +691,11 @@
   "professionalHero": "Herói Profissional",
   "promoBanner": "Banner promocional",
   "promoMedia": "Mídia promocional",
+  "publishError": {
+    "components": "exclua ou corrija seções com erros",
+    "metaTitle": "preencha o Meta Title para todos os locais navegando até as configurações do componente de página de nível superior",
+    "metaTitleWithLocales": "preencha o Meta Title para os seguintes locais navegando até as configurações do componente de página de nível superior: {{locales}}"
+  },
   "readLess": "Leia menos",
   "readMore": "Leia mais",
   "recentReviews": "Revisões recentes",
@@ -699,6 +704,7 @@
   "redo": "Refazer",
   "refineYourSearch": "Refine sua pesquisa",
   "reopenDate": "Reabrir data",
+  "resolveErrorsInEditor": "Para publicar, resolva os erros destacados no editor",
   "responseFrom": "Resposta de {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} não tem avaliações próprias",
   "reviewsEmptyStateSectionHidden": "Seção oculta para este {{entityType}}",
@@ -833,6 +839,7 @@
   },
   "thursday": "Quinta-feira",
   "title": "Título",
+  "toPublishHeading": "Para publicar, resolva os seguintes erros:",
   "totalReviews_one": "{{count}} comentário",
   "totalReviews_other": "{{count}} comentários",
   "tuesday": "Terça-feira",

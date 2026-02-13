@@ -566,7 +566,6 @@
   "filter": "フィルター",
   "filters": "フィルター",
   "findALocation": "場所を見つけます",
-  "fixErrorsToPublish": "エラーのあるセクションを公開、削除、または修正するには",
   "fontSize": "フォントサイズ",
   "fontSizeDefaultLabel": "デフォルト",
   "fonts": {
@@ -612,6 +611,7 @@
   "map": "地図",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "mediaType": "メディアタイプ",
+  "metaTitleMissingLocales": "ロケールのメタ タイトルがありません: {{locales}}",
   "mile_other": "マイル",
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
   "monday": "月曜日",
@@ -686,6 +686,11 @@
   "professionalHero": "プロのヒーロー",
   "promoBanner": "プロモーションバナー",
   "promoMedia": "プロモーションメディア",
+  "publishError": {
+    "components": "エラーのあるセクションを削除または修正する",
+    "metaTitle": "最上位のページコンポーネントの設定に移動して、すべてのロケールのメタタイトルを入力します。",
+    "metaTitleWithLocales": "最上位のページ コンポーネントの設定に移動して、次のロケールのメタ タイトルを入力します: {{locales}}"
+  },
   "readLess": "閉じる",
   "readMore": "続きを読む",
   "recentReviews": "最近のレビュー",
@@ -694,6 +699,7 @@
   "redo": "やり直します",
   "refineYourSearch": "検索を絞り込む",
   "reopenDate": "日付を再開します",
+  "resolveErrorsInEditor": "公開するには、エディターで強調表示されたエラーを解決してください",
   "responseFrom": "{{businessName}}からの応答",
   "reviewsEmptyStateNoReviews": "{{entityType}} には自社レビューがありません",
   "reviewsEmptyStateSectionHidden": "この {{entityType}} に対して非表示のセクション",
@@ -828,6 +834,7 @@
   },
   "thursday": "木曜日",
   "title": "タイトル",
+  "toPublishHeading": "公開するには、次のエラーを解決してください。",
   "totalReviews_other": "{{count}} 件のレビュー",
   "tuesday": "火曜日",
   "undo": "元に戻します",

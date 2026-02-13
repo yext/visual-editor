@@ -572,7 +572,6 @@
   "filter": "Filtr",
   "filters": "Filtry",
   "findALocation": "Najděte polohu",
-  "fixErrorsToPublish": "Chcete-li publikovat, odstranit nebo opravit části s chybami",
   "fontSize": "Velikost písma",
   "fontSizeDefaultLabel": "Výchozí",
   "fonts": {
@@ -630,6 +629,7 @@
   "map": "Mapa",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
   "mediaType": "Typ médií",
+  "metaTitleMissingLocales": "Metanázev chybí pro národní prostředí: {{locales}}",
   "mile_few": "míle",
   "mile_many": "mil",
   "mile_one": "míle",
@@ -707,6 +707,11 @@
   "professionalHero": "Profesionální hrdina",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo média",
+  "publishError": {
+    "components": "odstranit nebo opravit části s chybami",
+    "metaTitle": "vyplňte název metadat pro všechna národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně",
+    "metaTitleWithLocales": "vyplňte metanázev pro následující národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně: {{locales}}"
+  },
   "readLess": "Číst méně",
   "readMore": "Číst více",
   "recentReviews": "Nedávné recenze",
@@ -715,6 +720,7 @@
   "redo": "Předělat",
   "refineYourSearch": "Upřesněte své vyhledávání",
   "reopenDate": "Znovu otevřít datum",
+  "resolveErrorsInEditor": "Chcete-li publikovat, vyřešte chyby zvýrazněné v editoru",
   "responseFrom": "Odpověď od {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} nemá žádné recenze první strany",
   "reviewsEmptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
@@ -849,6 +855,7 @@
   },
   "thursday": "čtvrtek",
   "title": "Titul",
+  "toPublishHeading": "Chcete-li publikovat, vyřešte následující chyby:",
   "totalReviews_few": "{{count}} recenze",
   "totalReviews_many": "{{count}} recenzí",
   "totalReviews_one": "{{count}} recenze",

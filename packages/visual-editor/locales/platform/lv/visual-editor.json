@@ -566,7 +566,6 @@
   "filter": "Filtrs",
   "filters": "Filtri",
   "findALocation": "Atrodiet atrašanās vietu",
-  "fixErrorsToPublish": "Lai publicētu, dzēstu vai labotu sadaļas ar kļūdām",
   "fontSize": "Fonta lielums",
   "fontSizeDefaultLabel": "Nepildīt",
   "fonts": {
@@ -620,6 +619,7 @@
   "map": "Karte",
   "maxWidthTip": "Lai iegūtu optimālu satura izlīdzināšanu, mēs iesakām iestatīt galvenes un kājenes platumu, lai tas atbilstu vai pārsniegtu lapas satura režģi.",
   "mediaType": "Multivides tips",
+  "metaTitleMissingLocales": "Trūkst metanosaukuma lokalizācijai(-ām): {{locales}}",
   "mile_one": "jūdze",
   "mile_other": "jūdzes",
   "mile_zero": "jūdzes",
@@ -696,6 +696,11 @@
   "professionalHero": "Profesionāls varonis",
   "promoBanner": "Reklāmas reklāmkarogs",
   "promoMedia": "Promo Media",
+  "publishError": {
+    "components": "dzēst vai labot sadaļas ar kļūdām",
+    "metaTitle": "aizpildiet Meta Title visām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem",
+    "metaTitleWithLocales": "aizpildiet meta virsrakstu šādām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem: {{locales}}"
+  },
   "readLess": "Lasīt mazāk",
   "readMore": "Lasīt vairāk",
   "recentReviews": "Nesenie pārskati",
@@ -704,6 +709,7 @@
   "redo": "Pārtaisīt",
   "refineYourSearch": "Uzlabojiet meklēšanu",
   "reopenDate": "Atkārtoti atvērt datumu",
+  "resolveErrorsInEditor": "Lai publicētu, atrisiniet redaktorā iezīmētās kļūdas",
   "responseFrom": "Atbilde no {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} nav pirmās puses atsauksmju",
   "reviewsEmptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
@@ -838,6 +844,7 @@
   },
   "thursday": "Ceturtdiena",
   "title": "Tituls",
+  "toPublishHeading": "Lai publicētu, atrisiniet tālāk norādītās kļūdas.",
   "totalReviews_one": "{{count}} atsauksme",
   "totalReviews_other": "{{count}} atsauksmes",
   "totalReviews_zero": "{{count}} atsauksmes",

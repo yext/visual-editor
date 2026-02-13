@@ -566,7 +566,6 @@
   "filter": "Filter",
   "filters": "Filters",
   "findALocation": "Vind een locatie",
-  "fixErrorsToPublish": "Om secties met fouten te publiceren, verwijderen of repareren",
   "fontSize": "Lettergrootte",
   "fontSizeDefaultLabel": "Standaard",
   "fonts": {
@@ -616,6 +615,7 @@
   "map": "Kaart",
   "maxWidthTip": "Voor optimale inhouduitlijning raden we aan de koptekst- en voettekstbreedte in te stellen om het pagina -inhoudsnet van de pagina te matchen of te overschrijden.",
   "mediaType": "Type media",
+  "metaTitleMissingLocales": "Metatitel ontbreekt voor taalinstelling(en): {{locales}}",
   "mile_one": "mijl",
   "mile_other": "mijlen",
   "missingHtmlWidget": "Voeg HTML toe om component te bekijken",
@@ -691,6 +691,11 @@
   "professionalHero": "Professionele held",
   "promoBanner": "Promobanner",
   "promoMedia": "Promo media",
+  "publishError": {
+    "components": "verwijder of repareer secties met fouten",
+    "metaTitle": "vul de metatitel in voor alle landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren",
+    "metaTitleWithLocales": "vul de metatitel in voor de volgende landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren: {{locales}}"
+  },
   "readLess": "Lees minder",
   "readMore": "Lees meer",
   "recentReviews": "Recente beoordelingen",
@@ -699,6 +704,7 @@
   "redo": "Opnieuw doen",
   "refineYourSearch": "Verfijn uw zoekopdracht",
   "reopenDate": "Heropen datum",
+  "resolveErrorsInEditor": "Om te publiceren, lost u de fouten op die in de editor zijn gemarkeerd",
   "responseFrom": "Reactie van {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} heeft geen eigen beoordelingen",
   "reviewsEmptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
@@ -833,6 +839,7 @@
   },
   "thursday": "Donderdag",
   "title": "Titel",
+  "toPublishHeading": "Los de volgende fouten op om te publiceren:",
   "totalReviews_one": "{{count}} recensie",
   "totalReviews_other": "{{count}} recensies",
   "tuesday": "Dinsdag",

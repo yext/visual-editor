@@ -567,7 +567,6 @@
   "filter": "Filter",
   "filters": "Filtre",
   "findALocation": "Nájdite miesto",
-  "fixErrorsToPublish": "Ak chcete zverejniť, odstrániť alebo opraviť sekcie s chybami",
   "fontSize": "Veľkosť písma",
   "fontSizeDefaultLabel": "Predvolený",
   "fonts": {
@@ -625,6 +624,7 @@
   "map": "Mapa",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "mediaType": "Typ médií",
+  "metaTitleMissingLocales": "Chýba meta názov pre miestne nastavenia: {{locales}}",
   "mile_few": "míle",
   "mile_many": "míľ",
   "mile_one": "míľa",
@@ -702,6 +702,11 @@
   "professionalHero": "Profesionálny hrdina",
   "promoBanner": "Propagačný banner",
   "promoMedia": "Propagačné médiá",
+  "publishError": {
+    "components": "odstrániť alebo opraviť časti s chybami",
+    "metaTitle": "vyplňte Meta Title pre všetky miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne",
+    "metaTitleWithLocales": "vyplňte Meta Title pre nasledujúce miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne: {{locales}}"
+  },
   "readLess": "Čítajte menej",
   "readMore": "Čítajte viac",
   "recentReviews": "Posledné recenzie",
@@ -710,6 +715,7 @@
   "redo": "Opätovne prekážať",
   "refineYourSearch": "Upravte svoje vyhľadávanie",
   "reopenDate": "Dátum znovuotvorenia",
+  "resolveErrorsInEditor": "Ak chcete publikovať, vyriešte chyby zvýraznené v editore",
   "responseFrom": "Odpoveď od {{businessName}}",
   "reviewsEmptyStateNoReviews": "{{entityType}} nemá žiadne recenzie prvej strany",
   "reviewsEmptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
@@ -844,6 +850,7 @@
   },
   "thursday": "Štvrtok",
   "title": "Názov",
+  "toPublishHeading": "Ak chcete publikovať, vyriešte nasledujúce chyby:",
   "totalReviews_few": "{{count}} recenzie",
   "totalReviews_many": "{{count}} recenzií",
   "totalReviews_one": "{{count}} recenzia",
