@@ -1,8 +1,16 @@
-import { UniversalLimit } from "@yext/search-headless-react";
-import { DefaultRawDataType, VerticalConfigMap } from "@yext/search-ui-react";
+import { UniversalLimit, VerticalResults } from "@yext/search-headless-react";
+import {
+  DefaultRawDataType,
+  FocusedItemData,
+  VerticalConfigMap,
+} from "@yext/search-ui-react";
 import Cards from "./Cards.tsx";
 import { LayoutSection } from "./LayoutSections.tsx";
 import { VerticalConfigProps } from "./propsAndTypes.ts";
+import {
+  entityPreviewSearcher,
+  renderEntityPreviews,
+} from "./searchVisualAutoComplete.tsx";
 
 export const buildVerticalConfigMap = (
   verticals: VerticalConfigProps[]
@@ -67,4 +75,44 @@ export const isValidVerticalConfig = (verticals: any[]): boolean => {
     verticals.length > 0 &&
     verticals.every(isValidVertical)
   );
+};
+
+export const createPreviews = (verticalKey: string) => {
+  return (
+    autocompleteLoading: boolean,
+    verticalKeyToResults: Record<string, VerticalResults>,
+    dropdownItemProps: {
+      onClick: (
+        value: string,
+        _index: number,
+        itemData?: FocusedItemData
+      ) => void;
+      ariaLabel: (value: string) => string;
+    }
+  ) => {
+    return renderEntityPreviews(
+      verticalKey,
+      autocompleteLoading,
+      verticalKeyToResults,
+      dropdownItemProps
+    );
+  };
+};
+
+export const createVisualAutocompleteConfig = (
+  enable: boolean,
+  verticalKey: string,
+  limit: number
+) => {
+  if (!enable || !verticalKey || limit < 1) {
+    return undefined;
+  }
+
+  return {
+    entityPreviewSearcher,
+    includedVerticals: [verticalKey],
+    renderEntityPreviews: createPreviews(verticalKey),
+    universalLimit: { [verticalKey]: limit },
+    entityPreviewsDebouncingTime: 300,
+  };
 };

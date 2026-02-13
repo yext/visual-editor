@@ -50,11 +50,7 @@ const Cards = ({ result, cardType = "Standard" }: CardsProps) => {
             </AccordionTrigger>
             <AccordionContent>
               <div className="w-full flex flex-col space-between">
-                <MaybeRTF
-                  data={
-                    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam tenetur, quas aspernatur dolorem corrupti, minus obcaecati nemo facilis sunt magni ea sint architecto sed molestiae culpa suscipit perferendis fugiat aliquid?"
-                  }
-                />
+                <MaybeRTF data={result?.rawData?.answerV2s} />
                 <div className="flex">
                   <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center item-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
                     {cardType}

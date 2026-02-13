@@ -96,6 +96,8 @@ export const SearchComponent: ComponentConfig<{
             styles: {
               showIcon: false,
               voiceSearch: false,
+              isTypingEffect: false,
+              enableVisualAutoComplete: false,
             },
           } satisfies SearchBarSlotProps,
         },
