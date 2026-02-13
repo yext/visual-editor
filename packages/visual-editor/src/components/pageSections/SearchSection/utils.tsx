@@ -18,7 +18,7 @@ export const buildVerticalConfigMap = (
   return verticals.reduce(
     (acc, v) => {
       if (!v.verticalKey) return acc;
-      const layoutType = v.layout ?? "Grid";
+      const layoutType = v.layout ?? "Flex";
       const cardType = v.cardType ?? "Standard";
       acc[v.verticalKey] = {
         label: v.label,

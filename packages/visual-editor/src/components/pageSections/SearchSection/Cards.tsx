@@ -13,23 +13,21 @@ interface CardsProps extends CardProps<any> {
 }
 
 const Cards = ({ result, cardType = "Standard" }: CardsProps) => {
-  // const name =
-  //   typeof result.rawData?.name === "string" ? result.rawData.name : "";
+  const name = result.rawData.question || result.rawData.name;
+  const description =
+    result.rawData.answerV2 ||
+    result.rawData.richTextDescriptionV2 ||
+    result.rawData.bodyV2 ||
+    result.rawData.description;
   return (
     <div
       className={`flex items-center w-full ${cardType === "Standard" && `px-5 py-2.5`}`}
     >
       {cardType === "Standard" ? (
         <div className="flex flex-col justify-center text-[#382e2c] gap-2">
-          <h3 className="text-lg font-semibold">
-            {(result.rawData?.name as any) ?? "name"}
-          </h3>
+          <h3 className="text-lg font-semibold">{name ?? "name"}</h3>
           <div className="w-full flex space-between">
-            <MaybeRTF
-              data={
-                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam tenetur, quas aspernatur dolorem corrupti, minus obcaecati nemo facilis sunt magni ea sint architecto sed molestiae culpa suscipit perferendis fugiat aliquid?"
-              }
-            />
+            <MaybeRTF data={description} />
             <div className="ml-2.5 flex">
               <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center item-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
                 {cardType}
@@ -50,7 +48,7 @@ const Cards = ({ result, cardType = "Standard" }: CardsProps) => {
             </AccordionTrigger>
             <AccordionContent>
               <div className="w-full flex flex-col space-between">
-                <MaybeRTF data={result?.rawData?.answerV2s} />
+                <MaybeRTF data={description} />
                 <div className="flex">
                   <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center item-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
                     {cardType}

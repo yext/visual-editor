@@ -176,10 +176,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
                 }
               />
             )}
-            // CardComponent={
-            //   verticals.find((item) => item.verticalKey === verticalKey)
-            //     ?.cardType
-            // }
           />
         ) : (
           <UniversalResults
