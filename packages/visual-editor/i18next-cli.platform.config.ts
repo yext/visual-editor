@@ -1,32 +1,5 @@
 import { defineConfig } from "i18next-cli";
-
-const locales = [
-  "cs",
-  "da",
-  "de",
-  "en-GB",
-  "en",
-  "es",
-  "et",
-  "fi",
-  "fr",
-  "hr",
-  "hu",
-  "it",
-  "ja",
-  "lt",
-  "lv",
-  "nb",
-  "nl",
-  "pl",
-  "pt",
-  "ro",
-  "sk",
-  "sv",
-  "tr",
-  "zh",
-  "zh-TW",
-];
+import { locales } from "./src/utils/i18n/locales.ts";
 
 export default defineConfig({
   locales,
