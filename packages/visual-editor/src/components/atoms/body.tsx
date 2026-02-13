@@ -27,6 +27,10 @@ export interface BodyProps
 
 export const Body = React.forwardRef<HTMLParagraphElement, BodyProps>(
   ({ className, variant, style, ...props }, ref) => {
+    if (!React.isValidElement(props.children)) {
+      return <></>;
+    }
+
     return (
       <p
         className={themeManagerCn(

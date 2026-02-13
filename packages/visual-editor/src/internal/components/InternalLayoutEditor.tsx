@@ -32,12 +32,13 @@ import { AdvancedSettings } from "./AdvancedSettings.tsx";
 import { cn } from "../../utils/cn.ts";
 import { removeDuplicateActionBars } from "../utils/removeDuplicateActionBars.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { useEntityFields } from "../../hooks/useEntityFields.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { createAiPlugin } from "@puckeditor/plugin-ai";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
-import { preparePuckAiRequest } from "../../utils/ai/prepareRequest.ts";
+import { createPreparePuckAiRequest } from "../../utils/ai/prepareRequest.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -116,7 +117,16 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+  const entityFields = useEntityFields();
   const { errorCount } = useErrorContext();
+  const preparePuckAiRequest = useMemo(
+    () =>
+      createPreparePuckAiRequest({
+        streamDocument,
+        entityFields,
+      }),
+    [streamDocument, entityFields]
+  );
   const aiPlugin = useMemo(
     () =>
       templateMetadata.aiPageGeneration
@@ -132,7 +142,7 @@ export const InternalLayoutEditor = ({
                 }
           )
         : undefined,
-    [templateMetadata.aiPageGeneration, localDev]
+    [templateMetadata.aiPageGeneration, localDev, preparePuckAiRequest]
   );
 
   /**

@@ -195,7 +195,7 @@ const BannerComponent: PuckComponent<BannerSectionProps> = ({
     return <></>;
   }
 
-  if (!resolvedText) {
+  if (!resolvedText || !React.isValidElement(resolvedText)) {
     return <></>;
   }
 

@@ -43,6 +43,8 @@ export const translatableAssetImageAiSchema: Exclude<
         url: { type: "string" },
         altText: { type: "string" },
         link: { type: "string" },
+        height: { type: "number" },
+        width: { type: "number" },
       },
     },
   },

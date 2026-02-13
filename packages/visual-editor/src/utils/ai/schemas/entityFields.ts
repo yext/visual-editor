@@ -35,8 +35,15 @@ export const entityFieldsAiSchema: Record<
     },
   },
   "type.rich_text_v2": {
-    instructions:
-      "Put any data relevant to the business in the constant value for en.",
+    instructions: `Use this decision rule:
+        - If the entire rich text should come directly from one entity field, set constantValueEnabled to false and set field.
+        - If you need any static text, templating, or mixed content with entity fields, set constantValueEnabled to true and use constantValue.
+        - Embedded references like [[fieldName]] must be placed in constantValue and require constantValueEnabled: true.
+        Use the TranslatableRichText shape for constantValue:
+        { hasLocalizedValue: "true", en: { html: "<p>...</p>", json: "{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"...","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}" } }.
+        Example mixed content:
+        { constantValueEnabled: true, field: "c_exampleRTF", constantValue: { hasLocalizedValue: "true", en: { html: "<p>Static string [[c_exampleRTF]]</p>", json: "{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Static string [[c_exampleRTF]]","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}" } } }
+        `,
     schema: {
       type: "object",
       properties: {

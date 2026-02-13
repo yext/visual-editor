@@ -91,10 +91,7 @@ const ctaWrapperFields: Fields<CTAWrapperProps> = {
       actionType: YextField(msg("fields.actionType", "Action Type"), {
         type: "radio",
         ai: {
-          schema: {
-            type: "string",
-            enum: ["link"], // always set to link when using AI
-          },
+          instructions: "Always choose link",
         },
         options: [
           { label: msg("fields.options.link", "Link"), value: "link" },
