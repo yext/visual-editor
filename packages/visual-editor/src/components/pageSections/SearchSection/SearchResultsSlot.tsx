@@ -133,6 +133,9 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       console.warn("Skipping search: invalid vertical config", verticals);
       return;
     } else {
+      if (searchTerm) {
+        searchActions.setQuery(searchTerm);
+      }
       if (verticalKey) {
         const verticalLimit = verticals.find(
           (item) => item.verticalKey === verticalKey
@@ -142,7 +145,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         searchActions.executeVerticalQuery();
       } else {
         searchActions.setUniversal();
-        // searchActions.setQuery("faq");
         searchActions.setUniversalLimit(universalLimit);
         searchActions.executeUniversalQuery();
       }
