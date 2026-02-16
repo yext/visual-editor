@@ -13,11 +13,9 @@ const SourceCard = (props: CitationProps) => {
   const name = props.searchResult?.name;
 
   return (
-    <div className="your css heree">
+    <div className="border px-5 py-2.5 rounded-md">
       {link ? (
-        <a href={link} className="hover:text-indigo-500">
-          {name}
-        </a>
+        <a href={link}>{name}</a>
       ) : (
         <p>
           {name} <span className="text-xs">(no link available)</span>

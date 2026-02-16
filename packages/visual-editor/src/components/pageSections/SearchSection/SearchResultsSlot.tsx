@@ -118,7 +118,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const searchTerm = useSearchState((s) => s.query.input);
   const [verticalKey, setVerticalKey] = useState<string | undefined>();
   const gdaLoading = useSearchState((s) => s.generativeDirectAnswer.isLoading);
-  const gdaResponse = useSearchState((s) => s.generativeDirectAnswer.response);
   const verticalConfigMap = React.useMemo(
     () => buildVerticalConfigMap(verticals),
     [verticals]
@@ -194,14 +193,50 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           <>
             {props.styles.enableGenerativeDirectAnswer && !!searchTerm && (
               <>
-                {gdaLoading && <div>Loading...</div>}
-
-                {gdaResponse && (
-                  <GenerativeDirectAnswer
-                    CitationCard={SourceCard}
-                    customCssClasses={{ container: "my-4" }}
-                  />
+                {gdaLoading && (
+                  <section
+                    className="p-6 my-8 border border-gray-200 rounded-lg shadow-sm centered-container"
+                    aria-busy="true"
+                    aria-label="Loading content"
+                  >
+                    <div className="animate-pulse flex space-x-4">
+                      <div className="flex-1 space-y-6 py-1">
+                        <div
+                          className="h-4 bg-slate-700 rounded w-1/4"
+                          aria-hidden="true"
+                        ></div>
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-3 gap-4">
+                            <div
+                              className="h-2 bg-slate-700 rounded col-span-3"
+                              aria-hidden="true"
+                            ></div>
+                            <div
+                              className="h-2 bg-slate-700 rounded col-span-3"
+                              aria-hidden="true"
+                            ></div>
+                          </div>
+                          <div
+                            className="h-2 bg-slate-700 rounded"
+                            aria-hidden="true"
+                          ></div>
+                          <div
+                            className="h-2 bg-slate-700 rounded"
+                            aria-hidden="true"
+                          ></div>
+                          <div
+                            className="h-2 bg-slate-700 rounded"
+                            aria-hidden="true"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
                 )}
+                <GenerativeDirectAnswer
+                  CitationCard={SourceCard}
+                  customCssClasses={{ container: "my-4", divider: "!py-5" }}
+                />
               </>
             )}
             <UniversalResults
