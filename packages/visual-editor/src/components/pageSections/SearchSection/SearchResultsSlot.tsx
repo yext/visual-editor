@@ -1,6 +1,10 @@
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import { UniversalResults, VerticalResults } from "@yext/search-ui-react";
+import {
+  GenerativeDirectAnswer,
+  UniversalResults,
+  VerticalResults,
+} from "@yext/search-ui-react";
 import React, { useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import Cards from "./Cards.tsx";
@@ -15,6 +19,7 @@ import {
 } from "./utils.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
+import SourceCard from "./SourceCard.tsx";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -110,9 +115,10 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
 
   const searchActions = useSearchActions();
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
-  const searchTerm = useSearchState((s) => s.query.input) ?? " ";
+  const searchTerm = useSearchState((s) => s.query.input);
   const [verticalKey, setVerticalKey] = useState<string | undefined>();
-
+  const gdaLoading = useSearchState((s) => s.generativeDirectAnswer.isLoading);
+  const gdaResponse = useSearchState((s) => s.generativeDirectAnswer.response);
   const verticalConfigMap = React.useMemo(
     () => buildVerticalConfigMap(verticals),
     [verticals]
@@ -185,13 +191,27 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
             )}
           />
         ) : (
-          <UniversalResults
-            verticalConfigMap={verticalConfigMap}
-            customCssClasses={{
-              sectionHeaderIconContainer: "hidden",
-              sectionHeaderLabel: "!pl-0",
-            }}
-          />
+          <>
+            {props.styles.enableGenerativeDirectAnswer && !!searchTerm && (
+              <>
+                {gdaLoading && <div>Loading...</div>}
+
+                {gdaResponse && (
+                  <GenerativeDirectAnswer
+                    CitationCard={SourceCard}
+                    customCssClasses={{ container: "my-4" }}
+                  />
+                )}
+              </>
+            )}
+            <UniversalResults
+              verticalConfigMap={verticalConfigMap}
+              customCssClasses={{
+                sectionHeaderIconContainer: "hidden",
+                sectionHeaderLabel: "!pl-0",
+              }}
+            />
+          </>
         ))}
     </div>
   );
