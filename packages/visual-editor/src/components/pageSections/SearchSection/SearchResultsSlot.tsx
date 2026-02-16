@@ -2,24 +2,26 @@ import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
 import {
   GenerativeDirectAnswer,
+  StandardCard,
   UniversalResults,
   VerticalResults,
 } from "@yext/search-ui-react";
 import React, { useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
+import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/index.ts";
 import Cards from "./Cards.tsx";
 import {
   defaultSearchResultsProps,
   VerticalConfigProps,
 } from "./propsAndTypes.ts";
+import SourceCard from "./SourceCard.tsx";
 import {
   buildUniversalLimit,
   buildVerticalConfigMap,
   isValidVerticalConfig,
 } from "./utils.tsx";
-import { YextField } from "../../../editor/YextField.tsx";
-import { msg } from "../../../utils/index.ts";
-import SourceCard from "./SourceCard.tsx";
+import { MapComponent } from "./MapComponent.tsx";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -151,6 +153,11 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     }
   }, [verticals, searchTerm, universalLimit, searchActions, verticalKey]);
 
+  const currentVerticalConfig = React.useMemo(() => {
+    if (!verticalKey) return undefined;
+    return verticals.find((v) => v.verticalKey === verticalKey);
+  }, [verticals, verticalKey]);
+
   return (
     <div className="  pt-8">
       <div className="border-b flex justify-start items-center">
@@ -176,21 +183,33 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       {isLoading && <div>Loading......</div>}
       {!isLoading &&
         (verticalKey ? (
-          <VerticalResults
-            customCssClasses={{
-              verticalResultsContainer:
-                "flex flex-col mt-12 border rounded-md divide-y",
-            }}
-            CardComponent={(props) => (
-              <Cards
-                {...props}
-                cardType={
-                  verticals.find((item) => item.verticalKey === verticalKey)
-                    ?.cardType
-                }
+          <>
+            {currentVerticalConfig?.layout === "Map" ? (
+              <>
+                <div className="h-80 mb-4">
+                  <MapComponent />
+                </div>
+
+                <VerticalResults CardComponent={StandardCard} />
+              </>
+            ) : (
+              <VerticalResults
+                customCssClasses={{
+                  verticalResultsContainer:
+                    "flex flex-col mt-12 border rounded-md divide-y",
+                }}
+                CardComponent={(props) => (
+                  <Cards
+                    {...props}
+                    cardType={
+                      verticals.find((item) => item.verticalKey === verticalKey)
+                        ?.cardType
+                    }
+                  />
+                )}
               />
             )}
-          />
+          </>
         ) : (
           <>
             {props.styles.enableGenerativeDirectAnswer && !!searchTerm && (
