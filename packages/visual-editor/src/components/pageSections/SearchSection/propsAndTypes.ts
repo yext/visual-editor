@@ -17,11 +17,11 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
   data: {
     verticals: [
       {
-        label: "FAQs",
-        verticalKey: "faq",
+        label: "Locations",
+        verticalKey: "locations",
         layout: "Flex",
         cardType: "Standard",
-        universalLimit: 3,
+        universalLimit: 5,
         verticalLimit: 5,
       },
     ],
