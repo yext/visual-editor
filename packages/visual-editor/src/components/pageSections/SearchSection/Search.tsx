@@ -116,7 +116,7 @@ export const SearchComponent: ComponentConfig<{
               ],
             },
             styles: {
-              showIcon: false,
+              enableGenerativeDirectAnswer: false,
             },
           } satisfies SearchResultsSlotProps,
         },

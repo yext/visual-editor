@@ -18,7 +18,7 @@ import { msg } from "../../../utils/index.ts";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
-  styles: { showIcon: boolean };
+  styles: { enableGenerativeDirectAnswer: boolean };
 }
 
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
@@ -66,13 +66,16 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
-      showIcon: YextField(msg("fields.showIcon", "Show Icon"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.show", "Show"), value: true },
-          { label: msg("fields.options.hide", "Hide"), value: false },
-        ],
-      }),
+      enableGenerativeDirectAnswer: YextField(
+        msg("fields.enableGenerativeDirectAnswer", "Generative Direct Answer"),
+        {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.show", "Show"), value: true },
+            { label: msg("fields.options.hide", "Hide"), value: false },
+          ],
+        }
+      ),
     },
   }),
 };

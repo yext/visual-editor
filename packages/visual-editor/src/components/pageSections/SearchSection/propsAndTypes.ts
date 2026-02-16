@@ -27,6 +27,6 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
     ],
   },
   styles: {
-    showIcon: false,
+    enableGenerativeDirectAnswer: false,
   },
 };
