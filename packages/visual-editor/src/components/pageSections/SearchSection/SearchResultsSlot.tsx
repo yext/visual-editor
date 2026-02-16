@@ -167,6 +167,10 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       {!isLoading &&
         (verticalKey ? (
           <VerticalResults
+            customCssClasses={{
+              verticalResultsContainer:
+                "flex flex-col mt-12 border rounded-md divide-y",
+            }}
             CardComponent={(props) => (
               <Cards
                 {...props}
