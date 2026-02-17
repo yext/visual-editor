@@ -51,21 +51,22 @@ export const LayoutSection = ({
             iframeId="preview-frame"
             singleZoom={undefined}
             providerOptions={{
-              maxZoom: 12,
+              center: [firstCoord.longitude, firstCoord.latitude],
+              zoom: 10,
+              style: "mapbox://styles/mapbox/streets-v12",
             }}
             className="w-full h-[300px]"
           >
             {results.map((result, index) => {
               const coord: any = result.rawData?.yextDisplayCoordinate;
               if (!coord) return null;
-
               return (
                 <Marker
                   key={result.id ?? index}
                   coordinate={coord}
                   id={index + ""}
                 >
-                  <MapPin size={24} fill="#ef4444" color="#ef4444" />
+                  <LocatorPin key={index + ""} />
                 </Marker>
               );
             })}
@@ -80,4 +81,7 @@ export const LayoutSection = ({
       </div>
     </div>
   );
+};
+const LocatorPin = () => {
+  return <MapPin width={40} height={40} fill={"#0f766e"} color={"#0f766e"} />;
 };
