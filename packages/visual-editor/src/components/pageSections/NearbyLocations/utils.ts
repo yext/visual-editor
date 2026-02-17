@@ -3,6 +3,7 @@ import { getDistance } from "geolib";
 
 const V_PARAM = "20250407";
 const PAGE_SIZE = 50;
+const MAX_PAGES = 100;
 
 type Coordinate = {
   latitude?: number;
@@ -123,6 +124,7 @@ export const fetchNearbyLocations = async ({
   const allDocs: NearbyLocationDoc[] = [];
   let nextPageToken: string | undefined;
   let firstPageMeta: NearbyLocationsResponse["meta"];
+  let pageCount = 0;
 
   do {
     const url = new URL(baseUrl);
@@ -143,6 +145,7 @@ export const fetchNearbyLocations = async ({
     if (!response.ok) {
       throw new Error(response.statusText);
     }
+    pageCount++;
 
     const pageData = (await response.json()) as NearbyLocationsResponse;
     if (!firstPageMeta) {
@@ -151,7 +154,7 @@ export const fetchNearbyLocations = async ({
 
     allDocs.push(...(pageData.response?.docs ?? []));
     nextPageToken = pageData.response?.nextPageToken;
-  } while (nextPageToken);
+  } while (nextPageToken && pageCount < MAX_PAGES);
 
   const origin = { latitude, longitude };
   const nearestDocs = allDocs
@@ -178,10 +181,9 @@ export const fetchNearbyLocations = async ({
 const getDocCoordinate = (
   doc: NearbyLocationDoc
 ): { latitude: number; longitude: number } | null => {
-  const latitude =
-    doc.yextDisplayCoordinate?.latitude ?? doc.geocodedCoordinate?.latitude;
-  const longitude =
-    doc.yextDisplayCoordinate?.longitude ?? doc.geocodedCoordinate?.longitude;
+  const coord = doc.yextDisplayCoordinate ?? doc.geocodedCoordinate;
+  const latitude = coord?.latitude;
+  const longitude = coord?.longitude;
 
   if (latitude === undefined || longitude === undefined) {
     return null;
