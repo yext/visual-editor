@@ -72,6 +72,10 @@ import {
   SearchComponentProps,
   SearchComponent,
 } from "../pageSections/SearchSection/Search.tsx";
+import {
+  CustomDirectoryComponent,
+  CustomDirectoryProps,
+} from "../pageSections/CustomDirectory/CustomDirectory.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -94,6 +98,7 @@ export interface PageSectionCategoryProps {
   VideoSection: VideoSectionProps;
   ClassicSearchComponent: ClassicSearchProps;
   SearchComponent: SearchComponentProps;
+  CustomDirectoryComponent: CustomDirectoryProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -117,6 +122,7 @@ export const PageSectionCategoryComponents = {
   VideoSection,
   ClassicSearchComponent,
   SearchComponent,
+  CustomDirectoryComponent,
 };
 
 export const PageSectionCategory = Object.keys(
