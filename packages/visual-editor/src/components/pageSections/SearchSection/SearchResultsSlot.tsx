@@ -35,6 +35,14 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
       verticals: {
         label: msg("fields.verticals", "Verticals"),
         type: "array",
+        defaultItemProps: {
+          label: "",
+          verticalKey: "",
+          layout: "Flex",
+          cardType: "Standard",
+          universalLimit: 5,
+          verticalLimit: 5,
+        },
         arrayFields: {
           label: YextField(msg("fields.label", "Label"), { type: "text" }),
           verticalKey: YextField(msg("fields.verticalKey", "Vertical Key"), {
@@ -189,7 +197,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
                 <div className="h-80 mb-4">
                   <MapComponent />
                 </div>
-
                 <VerticalResults CardComponent={StandardCard} />
               </>
             ) : (
