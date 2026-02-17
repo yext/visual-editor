@@ -1,6 +1,31 @@
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
 import { getDistance } from "geolib";
 
+const V_PARAM = "20250407";
+const PAGE_SIZE = 50;
+
+type Coordinate = {
+  latitude?: number;
+  longitude?: number;
+};
+
+type NearbyLocationDoc = {
+  yextDisplayCoordinate?: Coordinate;
+  geocodedCoordinate?: Coordinate;
+};
+
+type NearbyLocationsResponse = {
+  meta?: {
+    uuid?: string;
+    errors?: unknown[];
+  };
+  response?: {
+    docs?: NearbyLocationDoc[];
+    count?: number;
+    nextPageToken?: string;
+  };
+};
+
 /** parseDocument parses the streamDocument to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain */
 export const parseDocument = (
   streamDocument: StreamDocument,
@@ -64,58 +89,12 @@ export const parseDocument = (
   };
 };
 
-/** The version of the content endpoint api */
-const V_PARAM = "20250407";
-const PAGE_SIZE = 50;
-
-type Coordinate = {
-  latitude?: number;
-  longitude?: number;
-};
-
-type NearbyLocationDoc = {
-  yextDisplayCoordinate?: Coordinate;
-  geocodedCoordinate?: Coordinate;
-};
-
-type NearbyLocationsResponse = {
-  meta?: {
-    uuid?: string;
-    errors?: unknown[];
-  };
-  response?: {
-    docs?: NearbyLocationDoc[];
-    count?: number;
-    nextPageToken?: string;
-  };
-};
-
-const getDistanceMiles = (
-  origin: { latitude: number; longitude: number },
-  destination: { latitude: number; longitude: number }
-): number => {
-  const meters = getDistance(origin, destination);
-  return meters / 1609.344;
-};
-
-const getDocCoordinate = (
-  doc: NearbyLocationDoc
-): { latitude: number; longitude: number } | null => {
-  const latitude =
-    doc.yextDisplayCoordinate?.latitude ?? doc.geocodedCoordinate?.latitude;
-  const longitude =
-    doc.yextDisplayCoordinate?.longitude ?? doc.geocodedCoordinate?.longitude;
-
-  if (latitude === undefined || longitude === undefined) {
-    return null;
-  }
-
-  return { latitude, longitude };
-};
-
 /**
  * fetchNearbyLocations constructs a nearby locations query based on the provided
  * parameters and fetches from the content endpoint.
+ *
+ * Due to the lack of geo sorting, it fetches all nearby locations in range,
+ * sorts them by distance, and returns the closest ones up to the specified limit.
  */
 export const fetchNearbyLocations = async ({
   businessId,
@@ -180,7 +159,7 @@ export const fetchNearbyLocations = async ({
       const coordinate = getDocCoordinate(doc);
       return {
         doc,
-        distance: coordinate ? getDistanceMiles(origin, coordinate) : Infinity,
+        distance: coordinate ? getDistance(origin, coordinate) : Infinity,
       };
     })
     .sort((a, b) => a.distance - b.distance)
@@ -194,4 +173,19 @@ export const fetchNearbyLocations = async ({
       count: allDocs.length,
     },
   };
+};
+
+const getDocCoordinate = (
+  doc: NearbyLocationDoc
+): { latitude: number; longitude: number } | null => {
+  const latitude =
+    doc.yextDisplayCoordinate?.latitude ?? doc.geocodedCoordinate?.latitude;
+  const longitude =
+    doc.yextDisplayCoordinate?.longitude ?? doc.geocodedCoordinate?.longitude;
+
+  if (latitude === undefined || longitude === undefined) {
+    return null;
+  }
+
+  return { latitude, longitude };
 };
