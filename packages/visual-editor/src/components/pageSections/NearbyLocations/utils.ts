@@ -65,6 +65,66 @@ export const parseDocument = (
 
 /** The version of the content endpoint api */
 const V_PARAM = "20250407";
+const PAGE_SIZE = 50;
+
+type Coordinate = {
+  latitude?: number;
+  longitude?: number;
+};
+
+type NearbyLocationDoc = {
+  yextDisplayCoordinate?: Coordinate;
+  geocodedCoordinate?: Coordinate;
+};
+
+type NearbyLocationsResponse = {
+  meta?: {
+    uuid?: string;
+    errors?: unknown[];
+  };
+  response?: {
+    docs?: NearbyLocationDoc[];
+    count?: number;
+    nextPageToken?: string;
+  };
+};
+
+const toRadians = (degrees: number): number => (degrees * Math.PI) / 180;
+
+const getDistanceMiles = (
+  origin: { latitude: number; longitude: number },
+  destination: { latitude: number; longitude: number }
+): number => {
+  const EARTH_RADIUS_MI = 3958.8;
+  const deltaLat = toRadians(destination.latitude - origin.latitude);
+  const deltaLon = toRadians(destination.longitude - origin.longitude);
+  const originLat = toRadians(origin.latitude);
+  const destinationLat = toRadians(destination.latitude);
+
+  const a =
+    Math.sin(deltaLat / 2) ** 2 +
+    Math.cos(originLat) *
+      Math.cos(destinationLat) *
+      Math.sin(deltaLon / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return EARTH_RADIUS_MI * c;
+};
+
+const getDocCoordinate = (
+  doc: NearbyLocationDoc
+): { latitude: number; longitude: number } | null => {
+  const latitude =
+    doc.yextDisplayCoordinate?.latitude ?? doc.geocodedCoordinate?.latitude;
+  const longitude =
+    doc.yextDisplayCoordinate?.longitude ?? doc.geocodedCoordinate?.longitude;
+
+  if (latitude === undefined || longitude === undefined) {
+    return null;
+  }
+
+  return { latitude, longitude };
+};
 
 /**
  * fetchNearbyLocations constructs a nearby locations query based on the provided
@@ -93,26 +153,58 @@ export const fetchNearbyLocations = async ({
   limit: number;
   locale: string;
 }): Promise<Record<string, any>> => {
-  const url = new URL(
-    `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
-  );
-  url.searchParams.append("api_key", apiKey);
-  url.searchParams.append("v", V_PARAM);
-  url.searchParams.append(
-    "yextDisplayCoordinate__geo",
-    `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
-  );
-  url.searchParams.append("meta.locale", locale);
-  url.searchParams.append("id__neq", entityId);
-  if (limit) {
-    url.searchParams.append("limit", limit.toString());
-  }
+  const baseUrl = `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`;
+  const allDocs: NearbyLocationDoc[] = [];
+  let nextPageToken: string | undefined;
+  let firstPageMeta: NearbyLocationsResponse["meta"];
 
-  const response = await fetch(url);
+  do {
+    const url = new URL(baseUrl);
+    url.searchParams.append("api_key", apiKey);
+    url.searchParams.append("v", V_PARAM);
+    url.searchParams.append(
+      "yextDisplayCoordinate__geo",
+      `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
+    );
+    url.searchParams.append("meta.locale", locale);
+    url.searchParams.append("id__neq", entityId);
+    url.searchParams.append("limit", PAGE_SIZE.toString());
+    if (nextPageToken) {
+      url.searchParams.append("pageToken", nextPageToken);
+    }
 
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
 
-  return await response.json();
+    const pageData = (await response.json()) as NearbyLocationsResponse;
+    if (!firstPageMeta) {
+      firstPageMeta = pageData.meta;
+    }
+
+    allDocs.push(...(pageData.response?.docs ?? []));
+    nextPageToken = pageData.response?.nextPageToken;
+  } while (nextPageToken);
+
+  const origin = { latitude, longitude };
+  const nearestDocs = allDocs
+    .map((doc) => {
+      const coordinate = getDocCoordinate(doc);
+      return {
+        doc,
+        distance: coordinate ? getDistanceMiles(origin, coordinate) : Infinity,
+      };
+    })
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, limit)
+    .map(({ doc }) => doc);
+
+  return {
+    meta: firstPageMeta ?? { errors: [] },
+    response: {
+      docs: nearestDocs,
+      count: allDocs.length,
+    },
+  };
 };
