@@ -1,4 +1,5 @@
 import { StreamDocument } from "../../../utils/types/StreamDocument.ts";
+import { getDistance } from "geolib";
 
 /** parseDocument parses the streamDocument to get the businessId, apiKey, contentEndpointId, and contentDeliveryAPIDomain */
 export const parseDocument = (
@@ -89,26 +90,12 @@ type NearbyLocationsResponse = {
   };
 };
 
-const toRadians = (degrees: number): number => (degrees * Math.PI) / 180;
-
 const getDistanceMiles = (
   origin: { latitude: number; longitude: number },
   destination: { latitude: number; longitude: number }
 ): number => {
-  const EARTH_RADIUS_MI = 3958.8;
-  const deltaLat = toRadians(destination.latitude - origin.latitude);
-  const deltaLon = toRadians(destination.longitude - origin.longitude);
-  const originLat = toRadians(origin.latitude);
-  const destinationLat = toRadians(destination.latitude);
-
-  const a =
-    Math.sin(deltaLat / 2) ** 2 +
-    Math.cos(originLat) *
-      Math.cos(destinationLat) *
-      Math.sin(deltaLon / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return EARTH_RADIUS_MI * c;
+  const meters = getDistance(origin, destination);
+  return meters / 1609.344;
 };
 
 const getDocCoordinate = (
