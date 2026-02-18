@@ -192,7 +192,12 @@ const getDocCoordinate = (
   const latitude = coord?.latitude;
   const longitude = coord?.longitude;
 
-  if (latitude === undefined || longitude === undefined) {
+  if (
+    latitude === undefined ||
+    latitude === null ||
+    longitude === undefined ||
+    longitude === null
+  ) {
     return null;
   }
 
