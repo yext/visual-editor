@@ -653,14 +653,21 @@ describe("Locator", async () => {
         });
       }
 
-      // Hide the distance to each location because it is based on the test runner's IP address
       await act(async () => {
+        // Hide the distance to each location because it is based on the test runner's IP address
         const allDivs = container.querySelectorAll("div");
         allDivs.forEach((div) => {
           if (div.textContent?.includes("mi") && !div.children.length) {
             div.style.backgroundColor = "black";
             div.style.width = "8em";
           }
+        });
+
+        // Hide the map makers because they can appear in different spots
+        const allMarkers =
+          container.querySelectorAll<HTMLDivElement>(".mapboxgl-marker");
+        allMarkers.forEach((marker) => {
+          marker.style.opacity = "0";
         });
       });
 
