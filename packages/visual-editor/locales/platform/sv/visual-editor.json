@@ -56,7 +56,7 @@
     "address": "Adress",
     "bannerSection": "Sektor",
     "breadcrumbs": "Ströbröd",
-    "callToAction": "Uppmaning",
+    "callToAction": "Uppmaning till handling",
     "components": "Komponenter",
     "copyrightMessage": "Upphovsrättsmeddelande",
     "coreInfoSection": "Kärninfo -sektionen",
@@ -91,7 +91,7 @@
     "heroImage": "Hjältebild",
     "heroSection": "Hjältesektion",
     "hoursStatus": "Timmars Status",
-    "hoursTable": "Timmar",
+    "hoursTable": "Timmar Tabell",
     "image": "Bild",
     "insightsSection": "Insiktsavsnitt",
     "locator": "Plats",
@@ -501,7 +501,7 @@
     "email": "E-post",
     "other": "Andra",
     "phone": "Telefon",
-    "url": "Url"
+    "url": "URL"
   },
   "loadingMap": "Laddar karta ...",
   "loadingNearbyLocations": "Laddar närliggande platser ...",

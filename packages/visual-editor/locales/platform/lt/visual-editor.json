@@ -456,7 +456,7 @@
     "timeFormat": "Laiko formatas",
     "title": "Pavadinimas",
     "truncateDescription": "TRUNCATE APRAŠYMAS",
-    "utilityImages": "Naudingumo vaizdai",
+    "utilityImages": "Naudingi vaizdai",
     "value": "Vertė",
     "values": "Vertės",
     "variant": "Variantas",
@@ -618,7 +618,7 @@
   "sunday": "Sekmadienis",
   "teamMember": "Komandos narys",
   "temporarilyClosed": "Laikinai uždarytas",
-  "testimonial": "Liudijimas",
+  "testimonial": "Atsiliepimas",
   "text": "Tekstas",
   "textList": "Teksto sąrašas",
   "theme": {

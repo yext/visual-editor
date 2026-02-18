@@ -456,7 +456,7 @@
     "timeFormat": "Format vremena",
     "title": "Titula",
     "truncateDescription": "Opis skraćenja",
-    "utilityImages": "Uslužne slike",
+    "utilityImages": "Korisne slike",
     "value": "Vrijednost",
     "values": "Vrijednosti",
     "variant": "Varijanta",
@@ -613,7 +613,7 @@
   "sunday": "nedjelja",
   "teamMember": "Član tima",
   "temporarilyClosed": "Privremeno zatvoren",
-  "testimonial": "Svjedočanstvo",
+  "testimonial": "Izjava",
   "text": "Tekst",
   "textList": "Lista teksta",
   "theme": {

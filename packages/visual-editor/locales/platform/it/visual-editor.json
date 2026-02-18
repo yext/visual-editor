@@ -91,7 +91,7 @@
     "heroImage": "Immagine dell'eroe",
     "heroSection": "Sezione di eroi",
     "hoursStatus": "Stato delle ore",
-    "hoursTable": "Tavolo per ore",
+    "hoursTable": "Tabella delle ore",
     "image": "Immagine",
     "insightsSection": "Sezione Insights",
     "locator": "Localizzatore",
@@ -613,7 +613,7 @@
   "sunday": "Domenica",
   "teamMember": "Membro del team",
   "temporarilyClosed": "Temporaneamente chiuso",
-  "testimonial": "Testimonial",
+  "testimonial": "Testimonianza",
   "text": "Testo",
   "textList": "Elenco di testo",
   "theme": {

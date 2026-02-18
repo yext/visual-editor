@@ -22,7 +22,7 @@
   "ariaLabelGalaxyStore": "Beschikbaar op {{serviceName}}",
   "ariaLabelGooglePlay": "Download het op {{serviceName}}",
   "back": "Rug",
-  "base": "Baseren",
+  "base": "Basis",
   "basicSelectorNoOptionsLabel": "Geen opties beschikbaar",
   "body": "Lichaam",
   "breadcrumb": "Broodkruimel",
@@ -91,7 +91,7 @@
     "heroImage": "Heldenbeeld",
     "heroSection": "Heldsectie",
     "hoursStatus": "Urenstatus",
-    "hoursTable": "Urentafel",
+    "hoursTable": "Uren tabel",
     "image": "Afbeelding",
     "insightsSection": "Inzichten sectie",
     "locator": "Locator",
@@ -269,7 +269,7 @@
     "options": {
       "address": "Adres",
       "aspectRatio": "Beeldverhouding",
-      "base_text size": "Base",
+      "base_text size": "Basis",
       "bold": "Vetgedrukt",
       "bottom_direction": "Onder",
       "button": "Knop",
@@ -456,7 +456,7 @@
     "timeFormat": "Tijdformaat",
     "title": "Titel",
     "truncateDescription": "Omgekeerde beschrijving",
-    "utilityImages": "Utility -afbeeldingen",
+    "utilityImages": "Hulpprogramma-afbeeldingen",
     "value": "Waarde",
     "values": "Waarden",
     "variant": "Variant",
@@ -501,7 +501,7 @@
     "email": "E -mail",
     "other": "Ander",
     "phone": "Telefoon",
-    "url": "Url"
+    "url": "URL"
   },
   "loadingMap": "Kaart laden ...",
   "loadingNearbyLocations": "Nabijgelegen locaties laden ...",
@@ -608,7 +608,7 @@
   "sunday": "Zondag",
   "teamMember": "Teamlid",
   "temporarilyClosed": "Tijdelijk gesloten",
-  "testimonial": "Getuigenis-",
+  "testimonial": "Getuigenis",
   "text": "Tekst",
   "textList": "Tekstlijst",
   "theme": {

@@ -91,7 +91,7 @@
     "heroImage": "Imagen de héroe",
     "heroSection": "Sección de héroes",
     "hoursStatus": "Estado de horas",
-    "hoursTable": "Mesa de horas",
+    "hoursTable": "Tabla de horas",
     "image": "Imagen",
     "insightsSection": "Sección de ideas",
     "locator": "Locador",
@@ -502,7 +502,7 @@
     "email": "Correo electrónico",
     "other": "Otro",
     "phone": "Teléfono",
-    "url": "Url"
+    "url": "URL"
   },
   "loadingMap": "Mapa de carga ...",
   "loadingNearbyLocations": "Cargando ubicaciones cercanas ...",
