@@ -66,7 +66,12 @@ import {
   createSearchHeadlessConfig,
 } from "../utils/searchHeadlessConfig.ts";
 import { BackgroundStyle } from "../utils/themeConfigOptions.ts";
-import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import {
+  StreamDocument,
+  LocatorConfig,
+  EntityTypeScope,
+  LocatorSourcePageSetInfo,
+} from "../utils/types/StreamDocument.ts";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
@@ -91,9 +96,9 @@ const INITIAL_LOCATION_KEY = "initialLocation";
 const DEFAULT_TITLE = "Find a Location";
 
 const translateDistanceUnit = (
-  t: (key: string, options?: Record<string, unknown>) => string,
-  unit: "mile" | "kilometer",
-  count: number
+    t: (key: string, options?: Record<string, unknown>) => string,
+    unit: "mile" | "kilometer",
+    count: number
 ) => {
   if (unit === "mile") {
     return t("mile", { count, defaultValue: "mile" });
@@ -102,22 +107,101 @@ const translateDistanceUnit = (
   return t("kilometer", { count, defaultValue: "kilometer" });
 };
 
-const getEntityType = (entityTypeEnvVar?: string) => {
+/**
+ * Retrieves the first applicable entity type for entities indexed by the locator. Reads from:
+ * 1. Puck metadata's entityTypeEnvVar
+ * 2. The typeConfig.locatorConfig.entityType field of _pageset in the stream document
+ * 3. The first element of __.locatorSourcePageSets in the stream document
+ *
+ * Used by the FilterSearch component, since including multiple entity types will result in
+ * duplicate results for builtin.location.
+ */
+const getAnyEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: StreamDocument = useDocument();
   if (!entityDocument._pageset && entityTypeEnvVar) {
     return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
   }
 
+  const pageSet = parseJsonObject(entityDocument?._pageset);
+  const locatorConfig: LocatorConfig = pageSet?.typeConfig?.locatorConfig;
+  const entityType = locatorConfig?.entityType;
+  if (entityType) {
+    return entityType;
+  }
+
+  // there should always be at least one source page set
+  const locatorSourcePageSets = getLocatorSourcePageSets();
+  return locatorSourcePageSets?.[0]?.entityType || DEFAULT_ENTITY_TYPE;
+};
+
+/**
+ * Returns a combined list of (entityTypeId, savedFilterId) pairs from the locator source entity
+ * page sets in __.locatorSourcePageSets and the independent entity type scopes in
+ * typeConfig.locatorConfig.entityTypeScopes of the _pageset field.
+ */
+const getAllEntityTypeScopes = () => {
+  const streamDocument: StreamDocument = useDocument();
+  const pageSet = parseJsonObject(streamDocument?._pageset);
+  const locatorConfig: LocatorConfig = pageSet?.typeConfig?.locatorConfig;
+
+  // legacy support for single page set locators
+  if (locatorConfig?.entityType) {
+    return [
+      {
+        entityType: locatorConfig.entityType,
+        savedFilter: locatorConfig?.savedFilter,
+      },
+    ];
+  }
+
+  const locatorSourcePageSets = getLocatorSourcePageSets();
+  const locatorSourcePageSetScopes = locatorSourcePageSets.map(
+    (v) =>
+      ({
+        entityType: v.entityType,
+        savedFilter: v.savedFilter,
+      }) as EntityTypeScope
+  );
+  const independentConfigScopes = locatorConfig?.entityTypeScopes || [];
+  return [...locatorSourcePageSetScopes, ...independentConfigScopes];
+};
+
+/** Retrieves the parsed JSON object from a string; returns an empty object if parsing fails. */
+const parseJsonObject = (jsonString: string | undefined) => {
+  if (!jsonString) {
+    return {};
+  }
   try {
-    const entityType = JSON.parse(entityDocument._pageset).typeConfig
-      .locatorConfig.entityType;
-    return entityType || DEFAULT_ENTITY_TYPE;
+    return JSON.parse(jsonString);
   } catch {
-    return DEFAULT_ENTITY_TYPE;
+    return {};
   }
 };
 
-function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
+const getLocatorSourcePageSets = () => {
+  const doc: StreamDocument = useDocument();
+  const locatorSourcePageSets: Record<string, LocatorSourcePageSetInfo> =
+    parseJsonObject(doc?.__?.locatorSourcePageSets);
+  return Object.values(locatorSourcePageSets);
+};
+
+function getFacetFieldOptions(entityTypes: string[]): DynamicOption<string>[] {
+  const facetFields: DynamicOption<string>[] = [];
+  const addedValues: Set<string> = new Set<string>();
+  entityTypes.forEach((entityType) =>
+    getFacetFieldOptionsForEntityType(entityType).forEach((option) => {
+      if (option?.value && !addedValues.has(option.value)) {
+        facetFields.push(option);
+        addedValues.add(option.value);
+      }
+    })
+  );
+  return facetFields.sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function getFacetFieldOptionsForEntityType(
+  entityType: string
+): DynamicOption<string>[] {
   let filterOptions: DynamicOption<string>[] = [];
   switch (entityType) {
     case "location":
@@ -435,7 +519,7 @@ function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
     default:
       filterOptions = [];
   }
-  return filterOptions.sort((a, b) => a.label.localeCompare(b.label));
+  return filterOptions;
 }
 
 export interface LocatorProps {
@@ -551,8 +635,11 @@ const locatorFields: Fields<LocatorProps> = {
           type: "dynamicSelect",
           dropdownLabel: msg("fields.field", "Field"),
           getOptions: () => {
-            const entityType = getEntityType();
-            return getFacetFieldOptions(entityType);
+            const entityTypeScopes = getAllEntityTypeScopes();
+            const entityTypes = entityTypeScopes
+              .map((scope) => scope?.entityType)
+              .filter((s) => s !== undefined);
+            return getFacetFieldOptions(entityTypes);
           },
           placeholderOptionLabel: msg(
             "fields.options.selectAField",
@@ -735,7 +822,7 @@ const LocatorInternal = ({
 
   const { t, i18n } = useTranslation();
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
-  const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
+  const entityType = getAnyEntityType(puck.metadata?.entityTypeEnvVar);
   const streamDocument = useDocument();
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
@@ -1011,7 +1098,7 @@ const LocatorInternal = ({
           .executeFilterSearch(queryParam, false, [
             {
               fieldApiName: LOCATION_FIELD,
-              entityType: entityType,
+              entityType: entityType, // only use a single entity type to avoid duplicate results
               fetchEntities: false,
             },
           ])
@@ -1256,6 +1343,7 @@ const LocatorInternal = ({
           </Heading>
           <FilterSearch
             searchFields={[
+              // only use a single entity type to avoid duplicate results
               { fieldApiName: LOCATION_FIELD, entityType: entityType },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
