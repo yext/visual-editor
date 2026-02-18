@@ -1,13 +1,13 @@
-import type { AnchorHTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import { cn } from "../../../utils/cn.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 export const GalaxyStoreButton = ({
   size = "md",
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
+}: HTMLAttributes<HTMLSpanElement> & { size?: "md" | "lg" }) => {
   return (
-    <a
+    <span
       aria-label={pt("ariaLabelGalaxyStore", "Available on {{serviceName}}", {
         serviceName: "Galaxy Store",
       })}
@@ -148,6 +148,6 @@ export const GalaxyStoreButton = ({
           </radialGradient>
         </defs>
       </svg>
-    </a>
+    </span>
   );
 };

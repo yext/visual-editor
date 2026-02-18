@@ -1,13 +1,13 @@
-import type { AnchorHTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import { cn } from "../../../utils/cn.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 export const AppGalleryButton = ({
   size = "md",
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
+}: HTMLAttributes<HTMLSpanElement> & { size?: "md" | "lg" }) => {
   return (
-    <a
+    <span
       aria-label={pt("ariaLabelAppGallery", "Explore it on {{serviceName}}", {
         serviceName: "AppGallery",
       })}
@@ -122,6 +122,6 @@ export const AppGalleryButton = ({
           fill="white"
         />
       </svg>
-    </a>
+    </span>
   );
 };

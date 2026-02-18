@@ -1,13 +1,13 @@
-import type { AnchorHTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 import { cn } from "../../../utils/cn.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 export const AppStoreButton = ({
   size = "md",
   ...props
-}: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
+}: HTMLAttributes<HTMLSpanElement> & { size?: "md" | "lg" }) => {
   return (
-    <a
+    <span
       aria-label={pt("ariaLabelAppStore", "Download on the {{serviceName}}", {
         serviceName: "App Store",
       })}
@@ -113,6 +113,6 @@ export const AppStoreButton = ({
           fill="white"
         />
       </svg>
-    </a>
+    </span>
   );
 };
