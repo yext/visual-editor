@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  logSuppressedWcagViolations,
   transformTests,
 } from "./testing/componentTests.setup.ts";
 import {
@@ -667,9 +668,7 @@ describe("Locator", async () => {
         customThreshold: screenshotThreshold,
       });
       const results = await axe(container);
-      if (results.violations.length) {
-        console.error("WCAG Violations:", results.violations);
-      }
+      logSuppressedWcagViolations(results);
       // TODO: Re-enable WCAG test
       // expect(results).toHaveNoViolations()
 
@@ -679,9 +678,7 @@ describe("Locator", async () => {
           `Locator/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot({ customThreshold: screenshotThreshold });
         const results = await axe(container);
-        if (results.violations.length) {
-          console.error("WCAG Violations:", results.violations);
-        }
+        logSuppressedWcagViolations(results);
       }
     }
   );
