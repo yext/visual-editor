@@ -1,19 +1,19 @@
-import type { HTMLAttributes } from "react";
+import type { AnchorHTMLAttributes } from "react";
 import { cn } from "../../../utils/cn.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
 export const GooglePlayButton = ({
   size = "md",
   ...props
-}: HTMLAttributes<HTMLSpanElement> & { size?: "md" | "lg" }) => {
+}: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
   return (
-    <span
+    <a
       aria-label={pt("ariaLabelGooglePlay", "Get it on {{serviceName}}", {
         serviceName: "Google Play",
       })}
       {...props}
       className={cn(
-        "rounded-[7px] bg-black ring-1 ring-app-store-badge-border ring-inset",
+        "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
         props.className
       )}
     >
@@ -255,6 +255,6 @@ export const GooglePlayButton = ({
           </linearGradient>
         </defs>
       </svg>
-    </span>
+    </a>
   );
 };
