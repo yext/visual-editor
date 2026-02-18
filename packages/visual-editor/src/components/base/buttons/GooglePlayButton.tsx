@@ -13,7 +13,7 @@ export const GooglePlayButton = ({
       })}
       {...props}
       className={cn(
-        "rounded-[7px] bg-black ring-1 ring-app-store-badge-border outline-focus-ring ring-inset focus-visible:outline-2 focus-visible:outline-offset-2",
+        "rounded-[7px] bg-black ring-1 ring-app-store-badge-border ring-inset",
         props.className
       )}
     >

@@ -163,7 +163,8 @@ const useResolvedCtaProps = (props: CTAProps) => {
     "flex",
     {
       // Let preset images determine their natural size - no forced width constraints
-      "w-fit h-[51px] items-center justify-center": ctaType === "presetImage",
+      "w-fit h-[51px] items-center justify-center rounded-[7px] outline-focus-ring focus-visible:outline-2 focus-visible:outline-offset-2":
+        ctaType === "presetImage",
       // Special handling for food delivery services to give them more visual prominence
       "!w-auto":
         ctaType === "presetImage" &&
