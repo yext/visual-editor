@@ -605,9 +605,11 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
+    isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
+    isSelected?: boolean;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
@@ -670,6 +672,7 @@ export const LocatorResultCard = React.memo(
       <Background
         background={backgroundColors.background1.value}
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
+        style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
         <Background
           background={
@@ -779,6 +782,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
+            {/* TODO: Hide primary CTA for standalone locator */}
             {props.primaryCTA.liveVisibility && (
               <CTA
                 link={resolvedUrl}

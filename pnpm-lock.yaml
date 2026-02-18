@@ -79,6 +79,9 @@ importers:
 
   packages/visual-editor:
     dependencies:
+      "@mapbox/maki":
+        specifier: ^8.0.0
+        version: 8.2.0
       "@microsoft/api-documenter":
         specifier: ^7.26.29
         version: 7.26.32(@types/node@20.19.11)
@@ -1902,6 +1905,12 @@ packages:
         integrity: sha512-rY0o9A5ECsTQRVhv7tL/OyDpGAoUB4tTvLiW1DSzQGq4bvTPhNw1VpSNjDJc5GFZ2XuyOtSWSVN05qOtcD71qQ==,
       }
     engines: { node: ">= 0.6" }
+
+  "@mapbox/maki@8.2.0":
+    resolution:
+      {
+        integrity: sha512-sTd/fEBfkBSidVwwtbijHZYJC7NhqvgLrXzSRHgxbLi52x4IciyTVUufqvJr8oIChw7hT7MIBHu5fyqrrpfFdA==,
+      }
 
   "@mapbox/mapbox-gl-supported@2.0.1":
     resolution:
@@ -12064,6 +12073,8 @@ snapshots:
       minimist: 1.2.8
 
   "@mapbox/jsonlint-lines-primitives@2.0.2": {}
+
+  "@mapbox/maki@8.2.0": {}
 
   "@mapbox/mapbox-gl-supported@2.0.1": {}
 
