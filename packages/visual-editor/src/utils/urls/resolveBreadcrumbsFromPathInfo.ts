@@ -29,9 +29,7 @@ export const resolveBreadcrumbsFromPathInfo = (
     !isPrimaryLocale(streamDocument) ||
     streamDocument.__?.pathInfo?.includeLocalePrefixForPrimaryLocale;
 
-  const normalizedPrefix = normalizeSlug(breadcrumbPrefix)
-    .replace(/\/+/g, "/")
-    .replace(/^\/+|\/+$/g, "");
+  const normalizedPrefix = normalizeSlug(breadcrumbPrefix);
 
   const directoryParents = getDirectoryParents(streamDocument);
   if (directoryParents.length === 0) {
@@ -46,11 +44,7 @@ export const resolveBreadcrumbsFromPathInfo = (
     }
 
     const directoryLevelSlug =
-      typeof parent.slug === "string"
-        ? normalizeSlug(parent.slug)
-            .replace(/\/+/g, "/")
-            .replace(/^\/+|\/+$/g, "")
-        : "";
+      typeof parent.slug === "string" ? normalizeSlug(parent.slug) : "";
     if (!directoryLevelSlug) {
       continue;
     }
