@@ -120,11 +120,9 @@ export const fetchNearbyLocations = async ({
   limit: number;
   locale: string;
 }): Promise<Record<string, any>> => {
-  // data to return
   const allDocs: NearbyLocationDoc[] = [];
   let firstPageMeta: NearbyLocationsResponse["meta"];
 
-  // url construction
   const url = new URL(
     `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
   );
@@ -138,10 +136,8 @@ export const fetchNearbyLocations = async ({
   url.searchParams.set("id__neq", entityId);
   url.searchParams.set("limit", PAGE_SIZE.toString());
 
-  // loop params
   let nextPageToken: string | undefined;
   let pageCount = 0;
-
   while (pageCount < MAX_PAGES) {
     if (nextPageToken) {
       url.searchParams.set("pageToken", nextPageToken);
