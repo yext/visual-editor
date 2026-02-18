@@ -94,6 +94,7 @@ describe("fetchNearbyLocations", () => {
               },
             ],
             nextPageToken: "token-2",
+            count: 3,
           },
         },
         {
@@ -111,6 +112,7 @@ describe("fetchNearbyLocations", () => {
                 yextDisplayCoordinate: { latitude: 0, longitude: 0.1 },
               },
             ],
+            count: 3,
           },
         },
       ],
@@ -134,6 +136,7 @@ describe("fetchNearbyLocations", () => {
                 yextDisplayCoordinate: { latitude: 0, longitude: 1 },
               },
             ],
+            count: 2,
           },
         },
       ],

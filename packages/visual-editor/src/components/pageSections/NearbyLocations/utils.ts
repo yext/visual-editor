@@ -122,6 +122,7 @@ export const fetchNearbyLocations = async ({
 }): Promise<Record<string, any>> => {
   const allDocs: NearbyLocationDoc[] = [];
   let firstPageMeta: NearbyLocationsResponse["meta"];
+  let count: number = 0;
 
   const url = new URL(
     `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
@@ -153,12 +154,20 @@ export const fetchNearbyLocations = async ({
     if (!firstPageMeta) {
       firstPageMeta = pageData.meta;
     }
+    if (pageData?.response?.count) {
+      count = pageData.response.count;
+    }
 
     allDocs.push(...(pageData.response?.docs ?? []));
     nextPageToken = pageData.response?.nextPageToken;
 
     if (!nextPageToken) {
       break;
+    }
+    if (pageCount >= MAX_PAGES) {
+      console.warn(
+        `Reached maximum page limit of ${MAX_PAGES}. There may be more nearby locations that were not fetched.`
+      );
     }
   }
 
@@ -180,7 +189,7 @@ export const fetchNearbyLocations = async ({
     meta: firstPageMeta ?? { errors: [] },
     response: {
       docs: nearestDocs,
-      count: allDocs.length,
+      count: count,
     },
   };
 };
