@@ -662,6 +662,12 @@ describe("Locator", async () => {
             div.style.width = "8em";
           }
         });
+
+        const mapContainer =
+          container.querySelector<HTMLDivElement>("#locatorMapDiv");
+        if (mapContainer) {
+          mapContainer.style.opacity = "0";
+        }
       });
 
       await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot({
