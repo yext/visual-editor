@@ -27,6 +27,7 @@ import {
 import { Phone, PhoneProps } from "../contentBlocks/Phone.tsx";
 import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
 import { CTAGroup, CTAGroupProps } from "../contentBlocks/CTAGroup.tsx";
+import { Text, TextProps } from "../contentBlocks/Text.tsx";
 
 export interface AdvancedCoreInfoCategoryProps {
   Grid: GridProps;
@@ -43,6 +44,7 @@ export interface AdvancedCoreInfoCategoryProps {
   MapboxStaticMap: MapboxStaticProps;
   Phone: PhoneProps;
   TextList: TextListProps;
+  Text: TextProps;
 }
 
 export const AdvancedCoreInfoCategoryComponents = {
@@ -60,6 +62,7 @@ export const AdvancedCoreInfoCategoryComponents = {
   MapboxStaticMap,
   Phone,
   TextList,
+  Text,
 };
 
 export const AdvancedCoreInfoCategory = Object.keys(

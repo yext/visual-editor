@@ -23,13 +23,13 @@ export const ComponentErrorBoundary = ({
 
   React.useEffect(() => {
     if (hasError && !didIncrementRef.current) {
-      incrementErrorCount();
+      incrementErrorCount("component");
       didIncrementRef.current = true;
     }
 
     return () => {
       if (didIncrementRef.current) {
-        decrementErrorCount();
+        decrementErrorCount("component");
         didIncrementRef.current = false;
       }
     };

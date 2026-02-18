@@ -11,8 +11,21 @@ import {
   resolveEmbeddedFieldsRecursively,
   resolveYextEntityField,
 } from "./resolveYextEntityField.ts";
+import {
+  getLocalizedPlainText,
+  isRichText,
+  richTextToPlainText,
+} from "./plainText.ts";
 import { BackgroundStyle } from "./themeConfigOptions.ts";
 import { normalizeThemeColor } from "./normalizeThemeColor.ts";
+
+type ResolveComponentDataOptions = {
+  variant?: BodyProps["variant"];
+  isDarkBackground?: boolean;
+  className?: string;
+  color?: BackgroundStyle;
+  output?: "render" | "plainText";
+};
 
 /**
  * The primary function for resolving all component data. It handles entity
@@ -36,15 +49,22 @@ export function resolveComponentData(
   data: TranslatableRichText | YextEntityField<TranslatableRichText>,
   locale: string,
   streamDocument?: Record<string, any>,
-  options?: {
-    variant?: BodyProps["variant"];
-    isDarkBackground?: boolean;
-    className?: string;
-    color?: BackgroundStyle;
-  }
+  options?: Omit<ResolveComponentDataOptions, "output"> & { output?: "render" }
 ): string | React.ReactElement;
 
-// 3. Handles a generic YextEntityField
+// 3. Handles text-only output mode for translatable text.
+export function resolveComponentData(
+  data:
+    | TranslatableString
+    | TranslatableRichText
+    | YextEntityField<TranslatableString | TranslatableRichText>
+    | undefined,
+  locale: string,
+  streamDocument: Record<string, any> | undefined,
+  options: { output: "plainText" }
+): string;
+
+// 4. Handles a generic YextEntityField
 export function resolveComponentData<T>(
   data: YextEntityField<T>,
   locale: string,
@@ -53,30 +73,18 @@ export function resolveComponentData<T>(
 
 // --- Implementation ---
 export function resolveComponentData<T>(
-  data: YextEntityField<T> | TranslatableString | TranslatableRichText,
+  data:
+    | YextEntityField<T>
+    | TranslatableString
+    | TranslatableRichText
+    | undefined,
   locale: string,
   streamDocument?: Record<string, any>,
-  options?: {
-    variant?: BodyProps["variant"];
-    isDarkBackground?: boolean;
-    className?: string;
-    color?: BackgroundStyle;
-  }
+  options?: ResolveComponentDataOptions
 ): any {
-  let rawValue;
-
-  // If a document is provided, we can attempt full resolution.
-  if (streamDocument) {
-    if (isYextEntityField(data)) {
-      rawValue = resolveYextEntityField(streamDocument, data, locale);
-    } else {
-      // It's a direct TranslatableString or TranslatableRichText.
-      rawValue = resolveEmbeddedFieldsRecursively(data, streamDocument, locale);
-    }
-  } else {
-    // No document, so we can't resolve entity fields or embedded fields.
-    // If it's a YextEntityField, we can only use its constant value.
-    rawValue = isYextEntityField(data) ? data.constantValue : data;
+  const rawValue = resolveRawValue(data, locale, streamDocument);
+  if (options?.output === "plainText") {
+    return resolveTranslatableTypeToPlainText(rawValue, locale);
   }
 
   // Fully resolve the resulting value, converting any translatable
@@ -158,9 +166,43 @@ const resolveTranslatableType = (
   return newValue;
 };
 
-function isRichText(value: unknown): value is RichText {
-  return typeof value === "object" && value !== null && "html" in value;
-}
+const resolveTranslatableTypeToPlainText = (
+  value: any,
+  locale: string
+): string => {
+  if (value === undefined || value === null) {
+    return "";
+  }
+
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (typeof value !== "object") {
+    return "";
+  }
+
+  if (isRichText(value)) {
+    return richTextToPlainText(value);
+  }
+
+  if (
+    value.hasLocalizedValue === "true" &&
+    (typeof value[locale] === "string" || isRichText(value[locale]))
+  ) {
+    return getLocalizedPlainText(value, locale);
+  }
+
+  if (value.hasLocalizedValue === "true" && !value[locale]) {
+    return "";
+  }
+
+  return "";
+};
 
 /**
  * Takes a TranslatableString or TranslatableRichText and a locale and returns the value as a string
@@ -221,4 +263,32 @@ function isYextEntityField(value: any): value is YextEntityField<unknown> {
     "field" in value &&
     "constantValue" in value
   );
+}
+
+function resolveRawValue<T>(
+  data:
+    | YextEntityField<T>
+    | TranslatableString
+    | TranslatableRichText
+    | undefined,
+  locale: string,
+  streamDocument?: Record<string, any>
+) {
+  if (data === undefined || data === null) {
+    return undefined;
+  }
+
+  // If a document is provided, we can attempt full resolution.
+  if (streamDocument) {
+    if (isYextEntityField(data)) {
+      return resolveYextEntityField(streamDocument, data, locale);
+    }
+
+    // It's a direct TranslatableString or TranslatableRichText.
+    return resolveEmbeddedFieldsRecursively(data, streamDocument, locale);
+  }
+
+  // No document, so we can't resolve entity fields or embedded fields.
+  // If it's a YextEntityField, we can only use its constant value.
+  return isYextEntityField(data) ? data.constantValue : data;
 }
