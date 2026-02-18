@@ -61,6 +61,7 @@ import { addShowHideOptions } from "./0059_show_hide_options.ts";
 import { addDefaultLocatorPageTitle } from "./0060_add_default_locator_title.ts";
 import { expandedHeaderLinks } from "./0061_expanded_header_links.ts";
 import { addLocatorPrimaryCtaLabel } from "./0062_add_locator_primary_cta_label.ts";
+import { textAtomUpdates } from "./0063_text_atom_updates.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -130,4 +131,5 @@ export const migrationRegistry: MigrationRegistry = [
   addDefaultLocatorPageTitle,
   expandedHeaderLinks,
   addLocatorPrimaryCtaLabel,
+  textAtomUpdates,
 ];
