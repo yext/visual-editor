@@ -1,3 +1,4 @@
+import { getDirectoryParents } from "../schema/helpers.ts";
 import { normalizeSlug } from "../slugifier.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 import { isPrimaryLocale } from "./resolveUrlFromPathInfo.ts";
@@ -16,7 +17,7 @@ export const resolveBreadcrumbsFromPathInfo = (
 ): BreadcrumbLink[] | undefined => {
   const breadcrumbPrefix = streamDocument.__?.pathInfo?.breadcrumbPrefix;
   if (typeof breadcrumbPrefix !== "string") {
-    return undefined;
+    return;
   }
 
   const locale = streamDocument?.locale || streamDocument?.meta?.locale || "";
@@ -32,12 +33,8 @@ export const resolveBreadcrumbsFromPathInfo = (
     .replace(/\/+/g, "/")
     .replace(/^\/+|\/+$/g, "");
 
-  const directoryParentsEntry = Object.entries(streamDocument).find(
-    ([key, value]) =>
-      key.startsWith("dm_directoryParents_") && Array.isArray(value)
-  );
-  const directoryParents = directoryParentsEntry?.[1];
-  if (!Array.isArray(directoryParents) || directoryParents.length === 0) {
+  const directoryParents = getDirectoryParents(streamDocument);
+  if (directoryParents.length === 0) {
     return undefined;
   }
 

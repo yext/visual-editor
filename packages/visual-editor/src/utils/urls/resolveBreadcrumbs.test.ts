@@ -38,11 +38,14 @@ beforeEach(() => {
 });
 
 describe("resolveBreadcrumbs", () => {
-  it("prefers pathInfo breadcrumbs over directory parents", () => {
+  it("uses pathInfo prefix if it exists", () => {
     const documentWithBreadcrumbs: StreamDocument = baseDocument;
 
     mockedGetDirectoryParents.mockReturnValue([
-      { name: "Directory Parent", slug: "directory-parent" },
+      { name: "Directory Root", slug: "index.html" },
+      { name: "US", slug: "us" },
+      { name: "TS", slug: "ts" },
+      { name: "Testville", slug: "testville" },
     ]);
 
     expect(resolveBreadcrumbs(documentWithBreadcrumbs)).toEqual([
