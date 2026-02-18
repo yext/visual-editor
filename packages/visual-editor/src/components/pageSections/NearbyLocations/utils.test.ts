@@ -141,7 +141,9 @@ describe("fetchNearbyLocations", () => {
       expectedCount: 2,
     },
   ])("$name", async ({ limit, pages, expectedIds, expectedCount }) => {
-    const fetchMock = vi.fn().mockImplementation(async () => {
+    const fetchedUrlSnapshots: string[] = [];
+    const fetchMock = vi.fn().mockImplementation(async (url: URL | string) => {
+      fetchedUrlSnapshots.push(String(url));
       const next = pages.shift();
       if (!next) {
         throw new Error("No mock page left");
@@ -170,12 +172,12 @@ describe("fetchNearbyLocations", () => {
     );
 
     expect(fetchMock).toHaveBeenCalled();
-    const firstUrl = new URL(String(fetchMock.mock.calls[0][0]));
+    const firstUrl = new URL(fetchedUrlSnapshots[0]);
     expect(firstUrl.searchParams.get("limit")).toBe("50");
     expect(firstUrl.searchParams.get("pageToken")).toBeNull();
 
-    if (fetchMock.mock.calls.length > 1) {
-      const secondUrl = new URL(String(fetchMock.mock.calls[1][0]));
+    if (fetchedUrlSnapshots.length > 1) {
+      const secondUrl = new URL(fetchedUrlSnapshots[1]);
       expect(secondUrl.searchParams.get("pageToken")).toBe("token-2");
     }
   });

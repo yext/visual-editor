@@ -120,25 +120,31 @@ export const fetchNearbyLocations = async ({
   limit: number;
   locale: string;
 }): Promise<Record<string, any>> => {
-  const baseUrl = `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`;
+  // data to return
   const allDocs: NearbyLocationDoc[] = [];
-  let nextPageToken: string | undefined;
   let firstPageMeta: NearbyLocationsResponse["meta"];
+
+  // url construction
+  const url = new URL(
+    `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
+  );
+  url.searchParams.set("api_key", apiKey);
+  url.searchParams.set("v", V_PARAM);
+  url.searchParams.set(
+    "yextDisplayCoordinate__geo",
+    `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
+  );
+  url.searchParams.set("meta.locale", locale);
+  url.searchParams.set("id__neq", entityId);
+  url.searchParams.set("limit", PAGE_SIZE.toString());
+
+  // loop params
+  let nextPageToken: string | undefined;
   let pageCount = 0;
 
-  do {
-    const url = new URL(baseUrl);
-    url.searchParams.append("api_key", apiKey);
-    url.searchParams.append("v", V_PARAM);
-    url.searchParams.append(
-      "yextDisplayCoordinate__geo",
-      `(lat:${latitude},lon:${longitude},radius:${radiusMi},unit:mi)`
-    );
-    url.searchParams.append("meta.locale", locale);
-    url.searchParams.append("id__neq", entityId);
-    url.searchParams.append("limit", PAGE_SIZE.toString());
+  while (pageCount < MAX_PAGES) {
     if (nextPageToken) {
-      url.searchParams.append("pageToken", nextPageToken);
+      url.searchParams.set("pageToken", nextPageToken);
     }
 
     const response = await fetch(url);
@@ -154,8 +160,13 @@ export const fetchNearbyLocations = async ({
 
     allDocs.push(...(pageData.response?.docs ?? []));
     nextPageToken = pageData.response?.nextPageToken;
-  } while (nextPageToken && pageCount < MAX_PAGES);
 
+    if (!nextPageToken) {
+      break;
+    }
+  }
+
+  // sort allDocs by distance and trim to nearest `limit` locations
   const origin = { latitude, longitude };
   const nearestDocs = allDocs
     .map((doc) => {
