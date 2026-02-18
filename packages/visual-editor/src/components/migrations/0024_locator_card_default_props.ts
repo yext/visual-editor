@@ -72,7 +72,6 @@ const DEFAULT_RESULT_CARD = {
     liveVisibility: false,
   },
   primaryCTA: {
-    label: "Visit Page",
     variant: "primary",
     liveVisibility: true,
   },
