@@ -148,6 +148,7 @@
   "distance": "Distância",
   "emptyStateFieldEmpty": "O campo mapeado de {{entityType}} está vazio",
   "emptyStateSectionHidden": "Seção oculta para este {{entityType}}",
+  "enableCookies": "Habilitar Cookies",
   "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
   "expandedMenu": "Menu expandido",
@@ -682,6 +683,7 @@
     "noTheme": "Entre em contato com seu desenvolvedor para configurar o gerenciamento de temas.",
     "warning": "As alterações afetarão todos os conjuntos de páginas e layouts para todo o site."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Este mapa só pode ser exibido se os cookies estiverem ativados",
   "thursday": "Quinta-feira",
   "toPublishHeading": "Para publicar, resolva os seguintes erros:",
   "totalReviews_one": "{{count}} comentário",

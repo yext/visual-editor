@@ -148,6 +148,7 @@
   "distance": "Kaugus",
   "emptyStateFieldEmpty": "{{entityType}} kaardistatud väli on tühi",
   "emptyStateSectionHidden": "Selle {{entityType}} jaoks peidetud jaotis",
+  "enableCookies": "Luba küpsised",
   "entityTypeField": "{{entityType}} väli",
   "event": "Sündmus",
   "expandedMenu": "Laiendatud menüü",
@@ -677,6 +678,7 @@
     "noTheme": "Teemahalduse seadistamiseks pöörduge oma arendaja poole.",
     "warning": "Muudatused mõjutavad kõiki lehekomplekte ja paigutusi kogu saidi jaoks."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Seda kaarti saab kuvada ainult siis, kui küpsised on lubatud",
   "thursday": "Neljapäev",
   "toPublishHeading": "Avaldamiseks lahendage järgmised vead:",
   "totalReviews_one": "{{count}} arvustus",

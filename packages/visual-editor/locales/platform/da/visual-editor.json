@@ -148,6 +148,7 @@
   "distance": "Afstand",
   "emptyStateFieldEmpty": "Det tilknyttede felt for {{entityType}} er tomt",
   "emptyStateSectionHidden": "Sektion skjult for denne {{entityType}}",
+  "enableCookies": "Aktiver cookies",
   "entityTypeField": "{{entityType}} felt",
   "event": "Tilfælde",
   "expandedMenu": "Udvidet menu",
@@ -677,6 +678,7 @@
     "noTheme": "Kontakt din udvikler for at konfigurere temadministration.",
     "warning": "Ændringer vil påvirke alle sidesæt og layouts for hele webstedet."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Dette kort kan kun vises, hvis cookies er aktiveret",
   "thursday": "torsdag",
   "toPublishHeading": "For at udgive skal du løse følgende fejl:",
   "totalReviews_one": "{{count}} anmeldelse",

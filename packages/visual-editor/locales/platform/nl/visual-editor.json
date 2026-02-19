@@ -148,6 +148,7 @@
   "distance": "Afstand",
   "emptyStateFieldEmpty": "Het toegewezen veld van {{entityType}} is leeg",
   "emptyStateSectionHidden": "Sectie verborgen voor deze {{entityType}}",
+  "enableCookies": "Cookies inschakelen",
   "entityTypeField": "{{entityType}} veld",
   "event": "Evenement",
   "expandedMenu": "Uitgebreid menu",
@@ -677,6 +678,7 @@
     "noTheme": "Neem contact op met uw ontwikkelaar om themabeheer in te stellen.",
     "warning": "Wijzigingen hebben invloed op alle paginasets en lay -outs voor de hele site."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Deze kaart kan alleen worden weergegeven als cookies zijn ingeschakeld",
   "thursday": "Donderdag",
   "toPublishHeading": "Los de volgende fouten op om te publiceren:",
   "totalReviews_one": "{{count}} recensie",

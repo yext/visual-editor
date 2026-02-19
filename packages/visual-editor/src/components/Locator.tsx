@@ -1149,6 +1149,13 @@ const LocatorInternal = ({
     (pageHeading?.title &&
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
     t("findALocation", "Find a Location");
+
+  const requireMapsOptIn: boolean = JSON.parse(
+    streamDocument.__?.visualEditorConfig ?? ""
+  )?.requireMapsOptIn;
+  // If no opt-in is required, the map is already enabled.
+  const [mapEnabled, setMapEnabled] = React.useState(!requireMapsOptIn);
+
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
@@ -1252,7 +1259,31 @@ const LocatorInternal = ({
 
       {/* Right Section: Map. Hidden for small screens */}
       <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
-        <Map {...mapProps} />
+        {mapEnabled && <Map {...mapProps} />}
+        {!mapEnabled && (
+          <div className="flex items-center justify-center w-full h-full bg-gray-100">
+            <div className="p-6">
+              <Body
+                className="text-gray-700 font-bold justify-center"
+                variant="lg"
+              >
+                {t(
+                  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled",
+                  "This map can only be displayed if cookies are enabled"
+                )}
+              </Body>
+              <div className="flex justify-center p-2">
+                <Button
+                  onClick={() => setMapEnabled(true)}
+                  className="py-2 px-4 basis-full sm:w-auto justify-center"
+                  variant="default"
+                >
+                  {t("enableCookies", "Enable Cookies")}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         {showSearchAreaButton && (
           <div className="absolute bottom-10 left-0 right-0 flex justify-center">
             <Button

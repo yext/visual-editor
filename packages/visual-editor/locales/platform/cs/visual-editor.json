@@ -148,6 +148,7 @@
   "distance": "Vzdálenost",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdné",
   "emptyStateSectionHidden": "Sekce skrytá pro tuto {{entityType}}",
+  "enableCookies": "Povolit soubory cookie",
   "entityTypeField": "{{entityType}} pole",
   "event": "Událost",
   "expandedMenu": "Rozšířené menu",
@@ -687,6 +688,7 @@
     "noTheme": "Obraťte se na svého vývojáře a nastavte správu témat.",
     "warning": "Změny ovlivní všechny sady a rozvržení stránek pro celý web."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Tuto mapu lze zobrazit pouze v případě, že jsou povoleny soubory cookie",
   "thursday": "čtvrtek",
   "toPublishHeading": "Chcete-li publikovat, vyřešte následující chyby:",
   "totalReviews_one": "{{count}} recenze",

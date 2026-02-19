@@ -148,6 +148,7 @@
   "distance": "Mesafe",
   "emptyStateFieldEmpty": "{{entityType}}'ın eşlenen alanı boş",
   "emptyStateSectionHidden": "Bu {{entityType}} için bölüm gizlendi",
+  "enableCookies": "Çerezleri Etkinleştir",
   "entityTypeField": "{{entityType}} alanı",
   "event": "Etkinlik",
   "expandedMenu": "Genişletilmiş menü",
@@ -677,6 +678,7 @@
     "noTheme": "Tema yönetimi kurmak için lütfen geliştiricinizle iletişime geçin.",
     "warning": "Değişiklikler, tüm site için tüm sayfa kümelerini ve düzenleri etkileyecektir."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Bu harita yalnızca çerezler etkinse görüntülenebilir",
   "thursday": "Perşembe",
   "toPublishHeading": "Yayınlamak için aşağıdaki hataları çözün:",
   "totalReviews_one": "{{count}} inceleme",

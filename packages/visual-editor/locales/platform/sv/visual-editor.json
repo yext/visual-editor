@@ -148,6 +148,7 @@
   "distance": "Avstånd",
   "emptyStateFieldEmpty": "Det mappade fältet för {{entityType}} är tomt",
   "emptyStateSectionHidden": "Avsnittet är dolt för denna {{entityType}}",
+  "enableCookies": "Aktivera cookies",
   "entityTypeField": "{{entityType}} Fältet",
   "event": "Händelse",
   "expandedMenu": "Utökad meny",
@@ -677,6 +678,7 @@
     "noTheme": "Kontakta din utvecklare för att ställa in temalantering.",
     "warning": "Ändringar kommer att påverka alla siduppsättningar och layouter för hela webbplatsen."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Denna karta kan endast visas om cookies är aktiverade",
   "thursday": "Torsdag",
   "toPublishHeading": "För att publicera, åtgärda följande fel:",
   "totalReviews_one": "{{count}} recension",

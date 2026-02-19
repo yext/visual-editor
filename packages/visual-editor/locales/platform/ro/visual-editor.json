@@ -148,6 +148,7 @@
   "distance": "Distanţă",
   "emptyStateFieldEmpty": "Câmpul mapat al lui {{entityType}} este gol",
   "emptyStateSectionHidden": "Secțiune ascunsă pentru acest {{entityType}}",
+  "enableCookies": "Activați cookie-urile",
   "entityTypeField": "câmp {{entityType}}",
   "event": "Eveniment",
   "expandedMenu": "Meniu extins",
@@ -682,6 +683,7 @@
     "noTheme": "Vă rugăm să contactați dezvoltatorul dvs. pentru a configura gestionarea temelor.",
     "warning": "Modificările vor afecta toate seturile de pagini și machete pentru întregul site."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Această hartă poate fi afișată numai dacă cookie-urile sunt activate",
   "thursday": "joi",
   "toPublishHeading": "Pentru a publica, rezolvați următoarele erori:",
   "totalReviews_one": "{{count}} recenzie",

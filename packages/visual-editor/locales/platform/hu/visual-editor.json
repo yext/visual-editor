@@ -148,6 +148,7 @@
   "distance": "Távolság",
   "emptyStateFieldEmpty": "A(z) {{entityType}} leképezett mezője üres",
   "emptyStateSectionHidden": "A szakasz elrejtve ehhez a(z) {{entityType}}",
+  "enableCookies": "Cookie-k engedélyezése",
   "entityTypeField": "{{entityType}} mező",
   "event": "Esemény",
   "expandedMenu": "Kibővített menü",
@@ -677,6 +678,7 @@
     "noTheme": "Kérjük, vegye fel a kapcsolatot fejlesztőjével a témakezelés beállításához.",
     "warning": "A változások befolyásolják az összes oldalkészletet és elrendezést a teljes webhelyre."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Ez a térkép csak akkor jeleníthető meg, ha a cookie-k engedélyezve vannak",
   "thursday": "csütörtök",
   "toPublishHeading": "A közzétételhez szüntesse meg a következő hibákat:",
   "totalReviews_one": "{{count}} vélemény",

@@ -148,6 +148,7 @@
   "distance": "Etäisyys",
   "emptyStateFieldEmpty": "Kohteen {{entityType}} kartoitettu kenttä on tyhjä",
   "emptyStateSectionHidden": "Osio piilotettu tälle {{entityType}}",
+  "enableCookies": "Ota evästeet käyttöön",
   "entityTypeField": "{{entityType}}kenttä",
   "event": "Tapahtuma",
   "expandedMenu": "Laajennettu valikko",
@@ -677,6 +678,7 @@
     "noTheme": "Ota yhteyttä kehittäjään asettaaksesi teeman hallinnan.",
     "warning": "Muutokset vaikuttavat kaikkiin sivusarjoihin ja asetteluihin koko sivustolle."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Tämä kartta voidaan näyttää vain, jos evästeet ovat käytössä",
   "thursday": "torstai",
   "toPublishHeading": "Korjaa seuraavat virheet julkaistaksesi:",
   "totalReviews_one": "{{count}} arvostelu",

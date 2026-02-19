@@ -148,6 +148,7 @@
   "distance": "Distanz",
   "emptyStateFieldEmpty": "Das zugeordnete Feld von {{entityType}} ist leer",
   "emptyStateSectionHidden": "Modul für diesen {{entityType}} ausgeblendet",
+  "enableCookies": "Cookies aktivieren",
   "entityTypeField": "{{entityType}}-Feld",
   "event": "Event",
   "expandedMenu": "Erweitertes Menü",
@@ -677,6 +678,7 @@
     "noTheme": "Theme-Management nicht konfiguriert. Bitte kontaktieren Sie Ihren Administrator für die Einrichtung.",
     "warning": "Diese Änderungen wirken sich global auf alle Page-Sets und Layouts der gesamten Website aus."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Diese Karte kann nur angezeigt werden, wenn Cookies aktiviert sind",
   "thursday": "Donnerstag",
   "toPublishHeading": "Beheben Sie zum Veröffentlichen die folgenden Fehler:",
   "totalReviews_one": "{{count}} Bewertung",

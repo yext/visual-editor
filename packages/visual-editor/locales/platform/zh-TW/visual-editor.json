@@ -148,6 +148,7 @@
   "distance": "距離",
   "emptyStateFieldEmpty": "{{entityType}} 的映射字段為空",
   "emptyStateSectionHidden": "此 {{entityType}} 的部分已隱藏",
+  "enableCookies": "啟用 Cookie",
   "entityTypeField": "{{entityType}}字段",
   "event": "事件",
   "expandedMenu": "擴展菜單",
@@ -677,6 +678,7 @@
     "noTheme": "請聯繫您的開發人員以設置主題管理。",
     "warning": "更改將影響整個站點的所有頁面集和佈局。"
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "",
   "thursday": "週四",
   "toPublishHeading": "要發布，請解決以下錯誤：",
   "totalReviews_one": "{{count}} 條評論",

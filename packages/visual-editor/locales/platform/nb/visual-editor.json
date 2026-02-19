@@ -148,6 +148,7 @@
   "distance": "Avstand",
   "emptyStateFieldEmpty": "Det kartlagte feltet til {{entityType}} er tomt",
   "emptyStateSectionHidden": "Seksjon skjult for denne {{entityType}}",
+  "enableCookies": "Aktiver informasjonskapsler",
   "entityTypeField": "{{entityType}} felt",
   "event": "Hendelse",
   "expandedMenu": "Utvidet meny",
@@ -677,6 +678,7 @@
     "noTheme": "Kontakt utvikleren din for å sette opp temadyring.",
     "warning": "Endringer vil påvirke alle sidesett og oppsett for hele nettstedet."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Dette kartet kan bare vises hvis informasjonskapsler er aktivert",
   "thursday": "torsdag",
   "toPublishHeading": "For å publisere må du løse følgende feil:",
   "totalReviews_one": "{{count}} anmeldelse",

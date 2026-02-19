@@ -148,6 +148,7 @@
   "distance": "Atstumas",
   "emptyStateFieldEmpty": "{{entityType}} susietas laukas tuščias",
   "emptyStateSectionHidden": "Šio {{entityType}} skyrius paslėptas",
+  "enableCookies": "Įgalinti slapukus",
   "entityTypeField": "{{entityType}} laukas",
   "event": "Įvykis",
   "expandedMenu": "Išplėstas meniu",
@@ -687,6 +688,7 @@
     "noTheme": "Norėdami nustatyti temos valdymą, susisiekite su savo kūrėju.",
     "warning": "Pakeitimai paveiks visus puslapių rinkinius ir visos svetainės išdėstymus."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Šis žemėlapis gali būti rodomas tik įjungus slapukus",
   "thursday": "Ketvirtadienis",
   "toPublishHeading": "Norėdami paskelbti, ištaisykite šias klaidas:",
   "totalReviews_one": "{{count}} atsiliepimas",

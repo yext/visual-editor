@@ -148,6 +148,7 @@
   "distance": "Attālums",
   "emptyStateFieldEmpty": "{{entityType}} kartētais lauks ir tukšs",
   "emptyStateSectionHidden": "Sadaļa paslēpta šim {{entityType}}",
+  "enableCookies": "Iespējot sīkfailus",
   "entityTypeField": "{{entityType}} lauks",
   "event": "Notikums",
   "expandedMenu": "Paplašināta izvēlne",
@@ -682,6 +683,7 @@
     "noTheme": "Lūdzu, sazinieties ar savu izstrādātāju, lai iestatītu motīvu pārvaldību.",
     "warning": "Izmaiņas ietekmēs visas lapu kopas un izkārtojumus visai vietnei."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Šo karti var parādīt tikai tad, ja ir iespējoti sīkfaili",
   "thursday": "Ceturtdiena",
   "toPublishHeading": "Lai publicētu, atrisiniet tālāk norādītās kļūdas.",
   "totalReviews_zero": "{{count}} atsauksmes",

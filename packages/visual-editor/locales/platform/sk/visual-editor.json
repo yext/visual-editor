@@ -148,6 +148,7 @@
   "distance": "Vzdialenosť",
   "emptyStateFieldEmpty": "Mapované pole {{entityType}} je prázdne",
   "emptyStateSectionHidden": "Sekcia skrytá pre túto {{entityType}}",
+  "enableCookies": "Povoliť súbory cookie",
   "entityTypeField": "{{entityType}} pole",
   "event": "Udalosť",
   "expandedMenu": "Rozšírené menu",
@@ -687,6 +688,7 @@
     "noTheme": "Ak chcete nastaviť správu témy, kontaktujte svojho vývojára.",
     "warning": "Zmeny ovplyvnia všetky sady stránok a rozloženia pre celú stránku."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Túto mapu je možné zobraziť iba vtedy, ak sú povolené súbory cookie",
   "thursday": "Štvrtok",
   "toPublishHeading": "Ak chcete publikovať, vyriešte nasledujúce chyby:",
   "totalReviews_one": "{{count}} recenzia",

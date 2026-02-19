@@ -148,6 +148,7 @@
   "distance": "Distance",
   "emptyStateFieldEmpty": "{{entityType}}'s mapped field is empty",
   "emptyStateSectionHidden": "Section hidden for this {{entityType}}",
+  "enableCookies": "Enable Cookies",
   "entityTypeField": "{{entityType}} Field",
   "event": "Event",
   "expandedMenu": "Expanded menu",
@@ -677,6 +678,7 @@
     "noTheme": "Please contact your developer to set up theme management.",
     "warning": "Changes will affect all page sets and layouts for the entire site."
   },
+  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "This map can only be displayed if cookies are enabled",
   "thursday": "Thursday",
   "toPublishHeading": "To publish, resolve the following errors:",
   "totalReviews_one": "{{count}} review",
