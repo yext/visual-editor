@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 import {
   axe,
   ComponentTest,
+  logSuppressedWcagViolations,
   testHours,
   transformTests,
 } from "../testing/componentTests.setup.ts";
@@ -2146,7 +2147,7 @@ describe("Grid", async () => {
 
       const results = await axe(container);
       if (version === 45 || version === 50) {
-        console.warn(results);
+        logSuppressedWcagViolations(results);
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -2157,7 +2158,7 @@ describe("Grid", async () => {
         ).toMatchScreenshot();
         const results2 = await axe(container);
         if (version === 45 || version === 50) {
-          console.warn(results2);
+          logSuppressedWcagViolations(results2);
         } else {
           expect(results2).toHaveNoViolations();
         }
