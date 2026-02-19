@@ -54,21 +54,86 @@ const mockChildProfile = {
   },
 };
 
-describe("resolveUrlTemplate", () => {
-  it("uses pathInfo template before page set template", () => {
-    const documentWithPathInfo: StreamDocument = {
-      ...mockStreamDocument,
-      __: {
-        ...mockStreamDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-        },
-      },
-    };
+const matrixCases = [
+  {
+    breadcrumbPrefix: "stores",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "en/stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "es/stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "es/stores/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "en/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "es/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "es/123",
+  },
+] as const;
 
-    expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe("stores/123");
-  });
+describe("resolveUrlTemplate", () => {
+  it.each(matrixCases)(
+    "prefers pathInfo template matrix case: breadcrumbPrefix=$breadcrumbPrefix locale=$locale includeLocalePrefixForPrimaryLocale=$includeLocalePrefixForPrimaryLocale",
+    ({
+      breadcrumbPrefix,
+      locale,
+      includeLocalePrefixForPrimaryLocale,
+      expected,
+    }) => {
+      const template = breadcrumbPrefix
+        ? `${breadcrumbPrefix}/[[id]]`
+        : "[[id]]";
+
+      const documentWithPathInfo: StreamDocument = {
+        ...mockStreamDocument,
+        locale,
+        __: {
+          ...mockStreamDocument.__,
+          pathInfo: {
+            template,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale,
+          },
+        },
+      };
+
+      expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe(expected);
+    }
+  );
 
   it("falls back to page set template when pathInfo is missing", () => {
     expect(resolveUrlTemplate(mockStreamDocument, "")).toBe(
@@ -104,38 +169,6 @@ describe("resolveUrlTemplate", () => {
     expect(resolveUrlTemplate(alternateLocaleDoc, "")).toBe(
       "zh-hans-hk/ny/new-york/61-9th-ave"
     );
-  });
-
-  it("includes locale prefix for primary locale when pathInfo requires it", () => {
-    const documentWithPathInfo: StreamDocument = {
-      ...mockStreamDocument,
-      __: {
-        ...mockStreamDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-          includeLocalePrefixForPrimaryLocale: true,
-        },
-      },
-    };
-
-    expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe("en/stores/123");
-  });
-
-  it("includes locale prefix for non-primary locale when pathInfo sets primaryLocale", () => {
-    const documentWithPathInfo: StreamDocument = {
-      ...mockStreamDocument,
-      locale: "es",
-      __: {
-        ...mockStreamDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-        },
-      },
-    };
-
-    expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe("es/stores/123");
   });
 
   it("falls back to location path when no templates are available", () => {

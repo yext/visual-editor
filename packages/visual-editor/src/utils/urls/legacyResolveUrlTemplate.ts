@@ -101,7 +101,7 @@ export const buildUrlFromTemplate = (
 ): string | undefined => {
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
-  ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
+  );
 
   if (!normalizedSlug) {
     return;
