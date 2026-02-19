@@ -9,19 +9,31 @@ export const isRichText = (value: unknown): value is RichText => {
 };
 
 const decodeHtmlEntities = (value: string): string => {
-  if (typeof document !== "undefined") {
-    const textarea = document.createElement("textarea");
-    textarea.innerHTML = value;
-    return textarea.value;
-  }
+  const decodeCodePoint = (codePoint: number, fallback: string): string => {
+    if (!Number.isInteger(codePoint) || codePoint < 0 || codePoint > 0x10ffff) {
+      return fallback;
+    }
 
-  return value
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'");
+    try {
+      return String.fromCodePoint(codePoint);
+    } catch {
+      return fallback;
+    }
+  };
+
+  return value.replace(/&#(x?[0-9a-f]+);/gi, (match, numericEntity) => {
+    const normalizedEntity = String(numericEntity).toLowerCase();
+
+    if (normalizedEntity.startsWith("x")) {
+      const codePoint = Number.parseInt(normalizedEntity.slice(1), 16);
+      return Number.isNaN(codePoint)
+        ? match
+        : decodeCodePoint(codePoint, match);
+    }
+
+    const codePoint = Number.parseInt(normalizedEntity, 10);
+    return Number.isNaN(codePoint) ? match : decodeCodePoint(codePoint, match);
+  });
 };
 
 export const richTextHtmlToPlainText = (html?: string): string => {
