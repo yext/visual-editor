@@ -106,9 +106,10 @@ export const createSearchAnalyticsConfig = (document: any) => {
     return;
   }
 
-  const requireAnalyticsOptIn: boolean = document.__?.visualEditorConfig
-    ? JSON.parse(document.__.visualEditorConfig)?.requireAnalyticsOptIn
-    : false;
+  const requireAnalyticsOptIn: boolean =
+    (document.__?.visualEditorConfig
+      ? JSON.parse(document.__.visualEditorConfig)?.requireAnalyticsOptIn
+      : false) ?? false;
 
   // corresponds to @yext/analytics Environment
   const analyticsEnvironment =
