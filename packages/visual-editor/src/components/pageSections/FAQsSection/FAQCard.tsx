@@ -1,7 +1,11 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../../atoms/body.tsx";
-import { FAQStruct, TranslatableRichText } from "../../../types/types.ts";
+import {
+  FAQStruct,
+  TranslatableRichText,
+  TranslatableString,
+} from "../../../types/types.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -23,7 +27,7 @@ import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
 const defaultFAQ = {
   question: {
-    en: getDefaultRTF("Question Lorem ipsum dolor sit amet?"),
+    en: "Question Lorem ipsum dolor sit amet?",
     hasLocalizedValue: "true",
   },
   answer: {
@@ -67,7 +71,7 @@ export const defaultFAQCardData = (
 
 export type FAQCardProps = {
   data: {
-    question: YextEntityField<TranslatableRichText>;
+    question: YextEntityField<TranslatableString | TranslatableRichText>;
     answer: YextEntityField<TranslatableRichText>;
   };
 
@@ -98,7 +102,7 @@ const FAQCardFields: Fields<FAQCardProps> = {
       question: YextField(msg("fields.question", "Question"), {
         type: "entityField",
         filter: {
-          types: ["type.rich_text_v2"],
+          types: ["type.string", "type.rich_text_v2"],
         },
       }),
       answer: YextField(msg("fields.answer", "Answer"), {
@@ -219,10 +223,9 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   const sourceQuestion = parentData ? parentData?.faq.question : data.question;
   const resolvedQuestion = sourceQuestion
     ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
-        variant: styles.questionVariant,
-        isDarkBackground: background?.isDarkBackground,
+        output: "plainText",
       })
-    : undefined;
+    : "";
 
   const sourceAnswer = parentData ? parentData?.faq.answer : data.answer;
   const resolvedAnswer = sourceAnswer

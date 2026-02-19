@@ -24,8 +24,8 @@ import { migrate } from "../../utils/migrate.ts";
 import { migrationRegistry } from "../../components/migrations/migrationRegistry.ts";
 import { Metadata } from "../../editor/Editor.tsx";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { getPublishErrorMessage } from "../../utils/publishErrors.ts";
 import { toast } from "sonner";
-import { pt } from "../../utils/i18n/platform.ts";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
@@ -53,7 +53,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
     streamDocument,
   } = props;
 
-  const { errorCount } = useErrorContext();
+  const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   const {
     saveLayoutSaveState,
@@ -93,12 +93,7 @@ export const LayoutEditor = (props: LayoutEditorProps) => {
 
   const handlePublish = (data?: any) => {
     if (errorCount > 0) {
-      toast.error(
-        pt(
-          "cannotPublishWithErrors",
-          "Cannot publish while components have errors."
-        )
-      );
+      toast.error(getPublishErrorMessage(errorSources, errorDetails));
       return;
     }
     setLayoutSaveState(undefined);

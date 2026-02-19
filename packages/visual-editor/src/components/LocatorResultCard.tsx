@@ -160,6 +160,8 @@ export interface LocatorResultCardProps {
 
   /** Settings for the primary CTA */
   primaryCTA: {
+    /** Label for the primary CTA */
+    label: TranslatableString;
     /** The variant for the primary CTA */
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
@@ -231,6 +233,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: false,
   },
   primaryCTA: {
+    label: "Visit Page",
     variant: "primary",
     liveVisibility: true,
   },
@@ -509,6 +512,13 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.primaryCTA", "Primary CTA"),
       type: "object",
       objectFields: {
+        label: TranslatableStringField<TranslatableString>(
+          msg("fields.label", "Label"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
@@ -782,7 +792,13 @@ export const LocatorResultCard = React.memo(
             {props.primaryCTA.liveVisibility && (
               <CTA
                 link={resolvedUrl}
-                label={t("visitPage", "Visit Page")}
+                label={
+                  resolveComponentData(
+                    props.primaryCTA.label,
+                    i18n.language,
+                    location
+                  ) || t("visitPage", "Visit Page")
+                }
                 variant={props.primaryCTA.variant}
                 onClick={handleVisitPageClick}
                 className="basis-full sm:w-auto justify-center"
