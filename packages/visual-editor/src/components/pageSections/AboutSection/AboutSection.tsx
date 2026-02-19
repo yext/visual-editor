@@ -12,7 +12,7 @@ import {
   HeadingLevel,
 } from "../../../utils/themeConfigOptions.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
-import { Button } from "../../../internal/puck/ui/button.tsx";
+import { Button } from "../../atoms/button.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
