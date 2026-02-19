@@ -173,6 +173,8 @@ export interface SlotsCategoryProps {
   PrimaryHeaderSlot: PrimaryHeaderSlotProps;
   ProductCardsWrapper: ProductCardsWrapperProps;
   ProductCard: ProductCardProps;
+  SearchBarSlot: SearchBarSlotProps;
+  SearchResultsSlot: SearchResultsSlotProps;
   SecondaryFooterSlot: SecondaryFooterSlotProps;
   SecondaryHeaderSlot: SecondaryHeaderSlotProps;
   TeamCard: TeamCardProps;
@@ -182,8 +184,6 @@ export interface SlotsCategoryProps {
   TextListSlot: TextListProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
-  SearchBarSlot: SearchBarSlotProps;
-  SearchResultsSlot: SearchResultsSlotProps;
 }
 
 const lockedPermissions = {
@@ -265,6 +265,8 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   ProductCard: { ...ProductCard, permissions: lockedPermissions },
+  SearchBarSlot: { ...SearchBarSlot, permissions: lockedPermissions },
+  SearchResultsSlot: { ...SearchResultsSlot, permissions: lockedPermissions },
   SecondaryFooterSlot: {
     ...SecondaryFooterSlot,
     permissions: lockedPermissions,
@@ -279,8 +281,6 @@ export const SlotsCategoryComponents = {
   TextListSlot: { ...TextList, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
-  SearchBarSlot: { ...SearchBarSlot, permissions: lockedPermissions },
-  SearchResultsSlot: { ...SearchResultsSlot, permissions: lockedPermissions },
 };
 
 export const SlotsCategory = Object.keys(
