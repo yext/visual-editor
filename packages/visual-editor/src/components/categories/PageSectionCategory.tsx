@@ -99,6 +99,7 @@ export interface PageSectionCategoryProps {
   ClassicSearchComponent: ClassicSearchProps;
   SearchComponent: SearchComponentProps;
   CustomDirectoryComponent: CustomDirectoryProps;
+  // CustomBreadcrumbs: CustomBreadcrumbsProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -106,6 +107,8 @@ export const PageSectionCategoryComponents = {
   BannerSection,
   BreadcrumbsSection,
   CoreInfoSection,
+  // CustomBreadcrumbs,
+  CustomDirectoryComponent,
   EventSection,
   FAQSection,
   HeroSection,
@@ -122,7 +125,6 @@ export const PageSectionCategoryComponents = {
   VideoSection,
   ClassicSearchComponent,
   SearchComponent,
-  CustomDirectoryComponent,
 };
 
 export const PageSectionCategory = Object.keys(
