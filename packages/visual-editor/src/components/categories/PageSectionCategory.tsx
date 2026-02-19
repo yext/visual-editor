@@ -76,6 +76,10 @@ import {
   CustomDirectoryComponent,
   CustomDirectoryProps,
 } from "../pageSections/CustomDirectory/CustomDirectory.tsx";
+import {
+  CustomBreadcrumbs,
+  CustomBreadcrumbsProps,
+} from "../pageSections/CustomBreadcrumbs.tsx";
 
 export interface PageSectionCategoryProps {
   AboutSection: AboutSectionProps;
@@ -99,7 +103,7 @@ export interface PageSectionCategoryProps {
   ClassicSearchComponent: ClassicSearchProps;
   SearchComponent: SearchComponentProps;
   CustomDirectoryComponent: CustomDirectoryProps;
-  // CustomBreadcrumbs: CustomBreadcrumbsProps;
+  CustomBreadcrumbs: CustomBreadcrumbsProps;
 }
 
 export const PageSectionCategoryComponents = {
@@ -107,7 +111,7 @@ export const PageSectionCategoryComponents = {
   BannerSection,
   BreadcrumbsSection,
   CoreInfoSection,
-  // CustomBreadcrumbs,
+  CustomBreadcrumbs,
   CustomDirectoryComponent,
   EventSection,
   FAQSection,

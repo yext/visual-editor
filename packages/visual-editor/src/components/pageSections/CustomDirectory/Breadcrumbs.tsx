@@ -44,10 +44,7 @@ export const Breadcrumbs = ({
           const isLast = index === breadcrumbs.length - 1;
 
           return (
-            <li
-              key={crumb.id}
-              className="contents whitespace-normal break-words"
-            >
+            <li key={index} className="contents whitespace-normal break-words">
               {!isRoot && (
                 <span className="mx-2" aria-hidden>
                   {separator}

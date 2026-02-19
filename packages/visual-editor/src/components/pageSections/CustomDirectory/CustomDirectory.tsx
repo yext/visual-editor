@@ -17,8 +17,6 @@ import { BreadcrumbItem, Breadcrumbs } from "./Breadcrumbs.tsx";
 export interface CustomDirectoryProps {
   data: {
     rootTitle: string;
-    cardTitle: string;
-    cardDescription: string;
   };
   styles: {
     backgroundColor: BackgroundStyle;
@@ -29,12 +27,11 @@ const API_KEY = "d8016f96c913cc8b79931cef51b941f5";
 const API_VERSION = "20250101";
 
 const CustomDirectory = ({
-  data: { rootTitle = "FAQs", cardTitle, cardDescription },
+  data: { rootTitle = "FAQs" },
   styles,
   puck,
 }: WithPuckProps<CustomDirectoryProps>) => {
   const { document: streamDocument } = useTemplateProps();
-  console.log(cardTitle, cardDescription);
 
   const [entities, setEntities] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(false);
@@ -136,6 +133,7 @@ const CustomDirectory = ({
 
               return (
                 <Background
+                  key={index}
                   className="h-full flex flex-col p-1"
                   background={styles.backgroundColor}
                 >
@@ -179,16 +177,6 @@ const customDirectoryFields: Fields<CustomDirectoryProps> = {
         type: "entityField",
         filter: { types: ["type.string"] },
       }),
-
-      cardTitle: YextField(msg("fields.cardTitle", "Card Title"), {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-
-      cardDescription: YextField(msg("fields.description", "Description"), {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
     },
   }),
   styles: YextField(msg("fields.styles", "Styles"), {
@@ -215,8 +203,6 @@ export const CustomDirectoryComponent: ComponentConfig<{
   defaultProps: {
     data: {
       rootTitle: "Directory",
-      cardTitle: "Card Title",
-      cardDescription: "Card Description",
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
