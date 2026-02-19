@@ -419,6 +419,12 @@ const justifyContentOptions = [
 
 const bodyVariantOptions = [
   {
+    label: msg("fields.options.extraSmall", "Extra Small", {
+      context: "text size",
+    }),
+    value: "xs",
+  },
+  {
     label: msg("fields.options.small", "Small", { context: "text size" }),
     value: "sm",
   },

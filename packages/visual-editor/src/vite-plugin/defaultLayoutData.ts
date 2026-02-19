@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 60,
+      version: 63,
       title: {
         field: "name",
         constantValue: "",
@@ -98,6 +98,11 @@ const mainDefaultLayout = {
                           ],
                           collapsedLinks: [],
                         },
+                        styles: {
+                          align: "right",
+                          variant: "sm",
+                          weight: "normal",
+                        },
                         parentData: {
                           type: "Primary",
                         },
@@ -110,19 +115,12 @@ const mainDefaultLayout = {
                       props: {
                         id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
+                          show: true,
                           actionType: "link",
                           buttonText: {
                             en: "Button",
                             hasLocalizedValue: "true",
                           },
-                          customId: "",
-                          customClass: "",
-                          dataAttributes: [],
-                          ariaLabel: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
-                          show: true,
                           entityField: {
                             field: "",
                             constantValue: {
@@ -154,19 +152,12 @@ const mainDefaultLayout = {
                       props: {
                         id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
+                          show: true,
                           actionType: "link",
                           buttonText: {
                             en: "Button",
                             hasLocalizedValue: "true",
                           },
-                          customId: "",
-                          customClass: "",
-                          dataAttributes: [],
-                          ariaLabel: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
-                          show: true,
                           entityField: {
                             field: "",
                             constantValue: {
@@ -248,6 +239,11 @@ const mainDefaultLayout = {
                                   ],
                                   collapsedLinks: [],
                                 },
+                                styles: {
+                                  align: "right",
+                                  variant: "xs",
+                                  weight: "normal",
+                                },
                                 parentData: {
                                   type: "Secondary",
                                 },
@@ -322,6 +318,11 @@ const mainDefaultLayout = {
                             },
                           ],
                           collapsedLinks: [],
+                        },
+                        styles: {
+                          align: "right",
+                          variant: "xs",
+                          weight: "normal",
                         },
                         parentData: {
                           type: "Secondary",
@@ -1183,17 +1184,14 @@ const mainDefaultLayout = {
                           ],
                           BrowSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-category",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
-                                      },
+                                      en: "Category, Pricing, etc",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -1201,23 +1199,21 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "bold",
                                 },
                               },
                             },
                           ],
                           PriceSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "BodyTextSlot-425f0992-8c49-4e62-8eb7-75db2cc2adff",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$123.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700 !important; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$123.00</strong></p>',
-                                      },
+                                      en: "$123.00",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -1225,6 +1221,7 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "bold",
                                 },
                               },
                             },
@@ -1374,17 +1371,14 @@ const mainDefaultLayout = {
                           ],
                           BrowSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-category",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
-                                      },
+                                      en: "Category, Pricing, etc",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -1392,23 +1386,21 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "bold",
                                 },
                               },
                             },
                           ],
                           PriceSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "BodyTextSlot-67ca55b8-2f3b-4c9d-a141-1568946fcdf1",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$123.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700 !important; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$123.00</strong></p>',
-                                      },
+                                      en: "$123.00",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -1416,6 +1408,7 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "bold",
                                 },
                               },
                             },
@@ -1565,17 +1558,14 @@ const mainDefaultLayout = {
                           ],
                           BrowSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-category",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category, Pricing, etc","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category, Pricing, etc</span></p>',
-                                      },
+                                      en: "Category, Pricing, etc",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -1583,23 +1573,21 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "bold",
                                 },
                               },
                             },
                           ],
                           PriceSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "BodyTextSlot-49c146a0-6dcc-4536-ae77-de34d37fd36b",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"$123.00","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 700 !important; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><strong>$123.00</strong></p>',
-                                      },
+                                      en: "$123.00",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -1607,6 +1595,7 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "bold",
                                 },
                               },
                             },
@@ -2035,10 +2024,7 @@ const mainDefaultLayout = {
                   question: {
                     constantValueEnabled: true,
                     constantValue: {
-                      en: {
-                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
-                      },
+                      en: "Question Lorem ipsum dolor sit amet?",
                       hasLocalizedValue: "true",
                     },
                     field: "",
@@ -2070,10 +2056,7 @@ const mainDefaultLayout = {
                   question: {
                     constantValueEnabled: true,
                     constantValue: {
-                      en: {
-                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
-                      },
+                      en: "Question Lorem ipsum dolor sit amet?",
                       hasLocalizedValue: "true",
                     },
                     field: "",
@@ -2105,10 +2088,7 @@ const mainDefaultLayout = {
                   question: {
                     constantValueEnabled: true,
                     constantValue: {
-                      en: {
-                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Question Lorem ipsum dolor sit amet?","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Question Lorem ipsum dolor sit amet?</span></p>',
-                      },
+                      en: "Question Lorem ipsum dolor sit amet?",
                       hasLocalizedValue: "true",
                     },
                     field: "",
@@ -2265,7 +2245,7 @@ const mainDefaultLayout = {
                           ],
                           TitleSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "BodyTextSlot-7bc54a04-147d-4c12-9664-087c2477a60a",
                                 data: {
@@ -2281,6 +2261,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   variant: "base",
                                   semanticLevelOverride: 3,
+                                  fontStyle: "regular",
                                 },
                               },
                             },
@@ -2454,7 +2435,7 @@ const mainDefaultLayout = {
                           ],
                           TitleSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "BodyTextSlot-e84b6fc0-d859-48af-aaf3-c6eff7054c79",
                                 data: {
@@ -2470,6 +2451,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   variant: "base",
                                   semanticLevelOverride: 3,
+                                  fontStyle: "regular",
                                 },
                               },
                             },
@@ -2643,7 +2625,7 @@ const mainDefaultLayout = {
                           ],
                           TitleSlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "BodyTextSlot-b466a56b-0e41-4dac-876d-c1cb0418f6cf",
                                 data: {
@@ -2659,6 +2641,7 @@ const mainDefaultLayout = {
                                 styles: {
                                   variant: "base",
                                   semanticLevelOverride: 3,
+                                  fontStyle: "regular",
                                 },
                               },
                             },
@@ -2909,17 +2892,14 @@ const mainDefaultLayout = {
                           ],
                           CategorySlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "InsightCard-1-category",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category</span></p>',
-                                      },
+                                      en: "Category",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -2927,6 +2907,7 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "regular",
                                 },
                               },
                             },
@@ -3095,17 +3076,14 @@ const mainDefaultLayout = {
                           ],
                           CategorySlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "InsightCard-2-category",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category</span></p>',
-                                      },
+                                      en: "Category",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -3113,6 +3091,7 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "regular",
                                 },
                               },
                             },
@@ -3281,17 +3260,14 @@ const mainDefaultLayout = {
                           ],
                           CategorySlot: [
                             {
-                              type: "BodyTextSlot",
+                              type: "TextSlot",
                               props: {
                                 id: "InsightCard-3-category",
                                 data: {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Category","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Category</span></p>',
-                                      },
+                                      en: "Category",
                                       hasLocalizedValue: "true",
                                     },
                                     constantValueEnabled: true,
@@ -3299,6 +3275,7 @@ const mainDefaultLayout = {
                                 },
                                 styles: {
                                   variant: "base",
+                                  fontStyle: "regular",
                                 },
                               },
                             },
@@ -4634,7 +4611,7 @@ const mainDefaultLayout = {
 const directoryDefaultLayout = {
   root: {
     props: {
-      version: 58,
+      version: 63,
       title: {
         field: "",
         constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
@@ -4678,9 +4655,12 @@ const directoryDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                              height: 100,
-                              width: 100,
+                              hasLocalizedValue: "true",
+                              en: {
+                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                                height: 100,
+                                width: 100,
+                              },
                             },
                             constantValueEnabled: true,
                           },
@@ -4729,6 +4709,11 @@ const directoryDefaultLayout = {
                           ],
                           collapsedLinks: [],
                         },
+                        styles: {
+                          align: "right",
+                          variant: "sm",
+                          weight: "normal",
+                        },
                         parentData: {
                           type: "Primary",
                         },
@@ -4741,19 +4726,12 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CTASlot-fec02241-6b92-4df4-ac15-5c8cc87d02ab",
                         data: {
+                          show: true,
                           actionType: "link",
                           buttonText: {
                             en: "Button",
                             hasLocalizedValue: "true",
                           },
-                          customId: "",
-                          customClass: "",
-                          dataAttributes: [],
-                          ariaLabel: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
-                          show: true,
                           entityField: {
                             field: "",
                             constantValue: {
@@ -4785,19 +4763,12 @@ const directoryDefaultLayout = {
                       props: {
                         id: "CTASlot-c1702f04-47ee-400a-abe3-ebcfefc0fc1a",
                         data: {
+                          show: true,
                           actionType: "link",
                           buttonText: {
                             en: "Button",
                             hasLocalizedValue: "true",
                           },
-                          customId: "",
-                          customClass: "",
-                          dataAttributes: [],
-                          ariaLabel: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
-                          show: true,
                           entityField: {
                             field: "",
                             constantValue: {
@@ -4879,6 +4850,11 @@ const directoryDefaultLayout = {
                                   ],
                                   collapsedLinks: [],
                                 },
+                                styles: {
+                                  align: "right",
+                                  variant: "xs",
+                                  weight: "normal",
+                                },
                                 parentData: {
                                   type: "Secondary",
                                 },
@@ -4953,6 +4929,11 @@ const directoryDefaultLayout = {
                             },
                           ],
                           collapsedLinks: [],
+                        },
+                        styles: {
+                          align: "right",
+                          variant: "xs",
+                          weight: "normal",
                         },
                         parentData: {
                           type: "Secondary",
@@ -5475,13 +5456,11 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 60,
-      pageHeading: {
-        title: {
-          field: "",
-          constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
-          constantValueEnabled: true,
-        },
+      version: 63,
+      title: {
+        field: "",
+        constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
+        constantValueEnabled: true,
       },
       description: {
         field: "",
@@ -5497,6 +5476,12 @@ const locatorDefaultLayout = {
     {
       type: "Locator",
       props: {
+        pageHeading: {
+          title: {
+            en: "Find a Location",
+            hasLocalizedValue: "true",
+          },
+        },
         id: "Locator-2ae506f4-a3ee-46ea-b5f9-e4c3236243a7",
         mapStyle: "mapbox://styles/mapbox/streets-v12",
         filters: { openNowButton: false, showDistanceOptions: false },
@@ -5540,7 +5525,11 @@ const locatorDefaultLayout = {
             field: { selection: { value: "services" } },
             liveVisibility: false,
           },
-          primaryCTA: { variant: "primary", liveVisibility: true },
+          primaryCTA: {
+            label: "Visit Page",
+            variant: "primary",
+            liveVisibility: true,
+          },
           secondaryCTA: {
             label: "Call to Action",
             link: "#",
