@@ -290,6 +290,7 @@
       "email": "电子邮件",
       "emails": "电子邮件",
       "end": "结尾",
+      "extraSmall_text size": "特小号",
       "facets": {
         "acceptingNewPatients": "接受新患者",
         "acceptsReservations": "接受预订",

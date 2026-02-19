@@ -290,6 +290,7 @@
       "email": "E-mail",
       "emails": "E-mails",
       "end": "Fin",
+      "extraSmall_text size": "Très petit",
       "facets": {
         "acceptingNewPatients": "Accepter de nouveaux patients",
         "acceptsReservations": "Accepte les réservations",
