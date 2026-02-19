@@ -215,6 +215,7 @@ export const defaultSecondaryHeaderProps: SecondaryHeaderSlotProps = {
           styles: {
             align: "right",
             variant: "xs",
+            weight: "normal",
           },
           parentData: {
             type: "Secondary",

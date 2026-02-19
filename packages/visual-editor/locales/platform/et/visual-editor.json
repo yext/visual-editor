@@ -290,6 +290,7 @@
       "email": "Meil",
       "emails": "Meilid",
       "end": "Lõpp",
+      "extraSmall_text size": "Eriti väike",
       "facets": {
         "acceptingNewPatients": "Uute patsientide vastuvõtmine",
         "acceptsReservations": "Aktsepteerib broneeringuid",

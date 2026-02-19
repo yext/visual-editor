@@ -290,6 +290,7 @@
       "email": "Email",
       "emails": "E-mailek",
       "end": "Vége",
+      "extraSmall_text size": "Extra kicsi",
       "facets": {
         "acceptingNewPatients": "Új betegek fogadása",
         "acceptsReservations": "Foglalásokat elfogad",
