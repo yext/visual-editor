@@ -4,6 +4,7 @@ import {
   axe,
   ComponentTest,
   delay,
+  logSuppressedWcagViolations,
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
@@ -2036,10 +2037,7 @@ describe("PromoSection", async () => {
       });
       const results = await axe(container);
       if (isBrandColorTest(props) && results.violations.length) {
-        console.warn(
-          `IGNORING axe violations for brand color test: ${name}`,
-          results.violations
-        );
+        logSuppressedWcagViolations(results);
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -2051,10 +2049,7 @@ describe("PromoSection", async () => {
         ).toMatchScreenshot({ customThreshold: 10 });
         const results = await axe(container);
         if (isBrandColorTest(props) && results.violations.length) {
-          console.warn(
-            `IGNORING axe violations for brand color test: ${name}`,
-            results.violations
-          );
+          logSuppressedWcagViolations(results);
         } else {
           expect(results).toHaveNoViolations();
         }

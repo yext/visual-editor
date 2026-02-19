@@ -22,7 +22,18 @@ export const expandedHeaderLinks: Migration = {
         updatedProps,
         "slots.SecondaryHeaderSlot[0].props.slots.LinksSlot[0].props.styles",
         {
+          align: "right",
           variant: "xs",
+          weight: "normal",
+        }
+      );
+      updatedProps = setDeep(
+        updatedProps,
+        "slots.PrimaryHeaderSlot[0].props.slots.LinksSlot[0].props.styles",
+        {
+          align: "right",
+          variant: "sm",
+          weight: "normal",
         }
       );
 

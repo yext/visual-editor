@@ -4,6 +4,7 @@ import {
   axe,
   ComponentTest,
   delay,
+  logSuppressedWcagViolations,
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
@@ -551,10 +552,7 @@ describe("NearbyLocationsSection", async () => {
       ).toMatchScreenshot();
       const results = await axe(container);
       if (version === 60 && results.violations.length) {
-        console.warn(
-          `IGNORING axe violations for brand color test: ${name}`,
-          results.violations
-        );
+        logSuppressedWcagViolations(results);
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -568,10 +566,7 @@ describe("NearbyLocationsSection", async () => {
 
         const results2 = await axe(container);
         if (version === 60 && results2.violations.length) {
-          console.warn(
-            `IGNORING axe violations for brand color test: ${name}`,
-            results2.violations
-          );
+          logSuppressedWcagViolations(results2);
         } else {
           expect(results2).toHaveNoViolations();
         }

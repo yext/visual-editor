@@ -55,6 +55,7 @@ export const removeDuplicateActionBars = (): void => {
 
   const targets = [
     pt("image", "Image"),
+    pt("components.video", "Video"),
     pt("callToAction", "Call To Action"),
     pt("components.secondaryHeader", "Secondary Header"),
     pt("components.headerLinks", "Header Links"),

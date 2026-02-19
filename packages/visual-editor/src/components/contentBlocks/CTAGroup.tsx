@@ -78,7 +78,7 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
         options: "SITE_COLOR",
       }),
     },
-    getItemSummary: (_, i) => pt("CTA", "CTA") + " " + ((i ?? 0) + 1),
+    getItemSummary: (_, i) => pt("cta", "CTA") + " " + ((i ?? 0) + 1),
   }),
 };
 

@@ -94,7 +94,7 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
   getItemSummary: (item, i) => {
     return (
       resolveComponentData(item.label, i18nComponentsInstance.language) ||
-      pt("Link", "Link") + " " + ((i ?? 0) + 1)
+      pt("link", "Link") + " " + ((i ?? 0) + 1)
     );
   },
 };
@@ -340,6 +340,7 @@ export const defaultHeaderLinkProps: HeaderLinksProps = {
   styles: {
     align: "right",
     variant: "sm",
+    weight: "normal",
   },
 };
 
@@ -347,11 +348,21 @@ export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
   resolveFields: (data, params) => {
-    return setDeep(
+    let updatedFields = headerLinksFields;
+
+    updatedFields = setDeep(
       headerLinksFields,
+      "styles.objectFields.align.visible",
+      params.parent?.type !== "PrimaryHeaderSlot"
+    );
+
+    updatedFields = setDeep(
+      updatedFields,
       "data.objectFields.collapsedLinks.visible",
       params.parent?.type === "PrimaryHeaderSlot"
     );
+
+    return updatedFields;
   },
   defaultProps: defaultHeaderLinkProps,
   render: (props) => <HeaderLinksComponent {...props} />,
