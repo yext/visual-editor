@@ -28,7 +28,6 @@ const baseDocument: StreamDocument = {
   __: {
     pathInfo: {
       primaryLocale: "en",
-      breadcrumbPrefix: "locations",
     },
   },
 };
@@ -38,7 +37,7 @@ beforeEach(() => {
 });
 
 describe("resolveBreadcrumbs", () => {
-  it("uses pathInfo prefix if it exists", () => {
+  it("uses pathInfo resolver when available", () => {
     const documentWithBreadcrumbs: StreamDocument = baseDocument;
 
     mockedGetDirectoryParents.mockReturnValue([
@@ -49,10 +48,10 @@ describe("resolveBreadcrumbs", () => {
     ]);
 
     expect(resolveBreadcrumbs(documentWithBreadcrumbs)).toEqual([
-      { name: "Directory Root", slug: "locations/index.html" },
-      { name: "US", slug: "locations/us" },
-      { name: "TS", slug: "locations/ts" },
-      { name: "Testville", slug: "locations/testville" },
+      { name: "Directory Root", slug: "index.html" },
+      { name: "US", slug: "us" },
+      { name: "TS", slug: "ts" },
+      { name: "Testville", slug: "testville" },
       { name: "123 Test Rd", slug: "" },
     ]);
   });
