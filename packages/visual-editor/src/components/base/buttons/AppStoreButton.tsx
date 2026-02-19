@@ -1,14 +1,15 @@
 import type { AnchorHTMLAttributes } from "react";
 import { cn } from "../../../utils/cn.ts";
-import { pt } from "../../../utils/i18n/platform.ts";
+import { useTranslation } from "react-i18next";
 
 export const AppStoreButton = ({
   size = "md",
   ...props
 }: AnchorHTMLAttributes<HTMLAnchorElement> & { size?: "md" | "lg" }) => {
+  const { t } = useTranslation();
   return (
     <a
-      aria-label={pt("ariaLabelAppStore", "Download on the {{serviceName}}", {
+      aria-label={t("ariaLabelAppStore", "Download on the {{serviceName}}", {
         serviceName: "App Store",
       })}
       {...props}

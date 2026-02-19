@@ -104,7 +104,7 @@ const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
 export const DirectoryGrid: ComponentConfig<{
   props: DirectoryGridProps;
 }> = {
-  label: msg("components.DirectoryGrid", "Directory Grid"),
+  label: msg("components.directoryGrid", "Directory Grid"),
   fields: directoryGridFields,
   defaultProps: {
     slots: {

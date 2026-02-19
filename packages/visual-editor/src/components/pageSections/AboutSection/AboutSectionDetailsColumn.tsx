@@ -242,14 +242,14 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
                       options: [
                         {
                           label: msg(
-                            "fields.options.HoursStatus",
+                            "fields.options.hoursStatus",
                             "Hours Status"
                           ),
                           value: "hoursStatus",
                         },
                         {
                           label: msg(
-                            "fields.options.HoursTable",
+                            "fields.options.hoursTable",
                             "Hours Table"
                           ),
                           value: "hoursTable",
