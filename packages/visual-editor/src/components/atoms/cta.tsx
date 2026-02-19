@@ -60,6 +60,35 @@ export type CTAProps = {
  */
 export type CTAVariant = ButtonProps["variant"];
 
+const presetImageTypeToName = (presetImageType: PresetImageType) => {
+  switch (presetImageType) {
+    case "app-store":
+      return "App Store";
+    case "google-play":
+      return "Google Play";
+    case "galaxy-store":
+      return "Galaxy Store";
+    case "app-gallery":
+      return "App Gallery";
+    case "deliveroo":
+      return "Deliveroo";
+    case "doordash":
+      return "DoorDash";
+    case "grubhub":
+      return "Grubhub";
+    case "skip-the-dishes":
+      return "Skip The Dishes";
+    case "postmates":
+      return "Postmates";
+    case "uber-eats":
+      return "Uber Eats";
+    case "ezcater":
+      return "ezCater";
+    default:
+      return presetImageType;
+  }
+};
+
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
 const useResolvedCtaProps = (props: CTAProps) => {
   const {
@@ -131,7 +160,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
           ariaLabel:
             ariaLabel ||
             t("buttonWithIcon", `Button with {{presetImageType}} icon`, {
-              presetImageType: props.presetImageType,
+              presetImageType: presetImageTypeToName(props.presetImageType),
             }),
         };
 
