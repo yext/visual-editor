@@ -8,20 +8,26 @@ export const isRichText = (value: unknown): value is RichText => {
   return typeof value === "object" && value !== null && "html" in value;
 };
 
+/** Replaces HTML encoded values with their unicode equivalents */
 const decodeHtmlEntities = (value: string): string => {
-  if (typeof document !== "undefined") {
-    const textarea = document.createElement("textarea");
-    textarea.innerHTML = value;
-    return textarea.value;
-  }
-
   return value
     .replace(/&nbsp;/gi, " ")
     .replace(/&amp;/gi, "&")
     .replace(/&lt;/gi, "<")
     .replace(/&gt;/gi, ">")
     .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'");
+    .replace(/&#39;/gi, "'")
+    .replace(/&apos;/gi, "'")
+    .replace(/&copy;/gi, "\u00a9")
+    .replace(/&reg;/gi, "\u00ae")
+    .replace(/&trade;/gi, "\u2122")
+    .replace(/&ndash;/gi, "\u2013")
+    .replace(/&mdash;/gi, "\u2014")
+    .replace(/&hellip;/gi, "\u2026")
+    .replace(/&lsquo;/gi, "\u2018")
+    .replace(/&rsquo;/gi, "\u2019")
+    .replace(/&ldquo;/gi, "\u201c")
+    .replace(/&rdquo;/gi, "\u201d");
 };
 
 export const richTextHtmlToPlainText = (html?: string): string => {
