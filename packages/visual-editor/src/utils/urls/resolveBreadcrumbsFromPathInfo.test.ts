@@ -26,51 +26,127 @@ const baseDocument: StreamDocument = {
   },
 };
 
-describe("resolveBreadcrumbsFromPathInfo", () => {
-  it("builds breadcrumbs from breadcrumbPrefix for the primary locale without locale prefix", () => {
-    const englishDocument = baseDocument;
-
-    expect(resolveBreadcrumbsFromPathInfo(englishDocument)).toEqual([
+const matrixCases = [
+  {
+    breadcrumbPrefix: "locations",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: [
+      { name: "Directory Root", slug: "en/locations/index.html" },
+      { name: "US", slug: "en/locations/us" },
+      { name: "TS", slug: "en/locations/ts" },
+      { name: "Testville", slug: "en/locations/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ],
+  },
+  {
+    breadcrumbPrefix: "locations",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: [
       { name: "Directory Root", slug: "locations/index.html" },
       { name: "US", slug: "locations/us" },
       { name: "TS", slug: "locations/ts" },
       { name: "Testville", slug: "locations/testville" },
       { name: "123 Test Rd", slug: "" },
-    ]);
-  });
-
-  it("prefixes breadcrumbs with locale for non-primary locales", () => {
-    const spanishDocument: StreamDocument = {
-      ...baseDocument,
-      locale: "es",
-    };
-
-    expect(resolveBreadcrumbsFromPathInfo(spanishDocument)).toEqual([
+    ],
+  },
+  {
+    breadcrumbPrefix: "locations",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: [
       { name: "Directory Root", slug: "es/locations/index.html" },
       { name: "US", slug: "es/locations/us" },
       { name: "TS", slug: "es/locations/ts" },
       { name: "Testville", slug: "es/locations/testville" },
       { name: "123 Test Rd", slug: "" },
-    ]);
-  });
-
-  it("omits the breadcrumb prefix separator when breadcrumbPrefix is empty", () => {
-    const documentWithEmptyPrefix: StreamDocument = {
-      ...baseDocument,
-      __: {
-        pathInfo: {
-          ...baseDocument.__?.pathInfo,
-          breadcrumbPrefix: "",
-        },
-      },
-    };
-
-    expect(resolveBreadcrumbsFromPathInfo(documentWithEmptyPrefix)).toEqual([
+    ],
+  },
+  {
+    breadcrumbPrefix: "locations",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: [
+      { name: "Directory Root", slug: "es/locations/index.html" },
+      { name: "US", slug: "es/locations/us" },
+      { name: "TS", slug: "es/locations/ts" },
+      { name: "Testville", slug: "es/locations/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ],
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: [
+      { name: "Directory Root", slug: "en/index.html" },
+      { name: "US", slug: "en/us" },
+      { name: "TS", slug: "en/ts" },
+      { name: "Testville", slug: "en/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ],
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: [
       { name: "Directory Root", slug: "index.html" },
       { name: "US", slug: "us" },
       { name: "TS", slug: "ts" },
       { name: "Testville", slug: "testville" },
       { name: "123 Test Rd", slug: "" },
-    ]);
-  });
+    ],
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: [
+      { name: "Directory Root", slug: "es/index.html" },
+      { name: "US", slug: "es/us" },
+      { name: "TS", slug: "es/ts" },
+      { name: "Testville", slug: "es/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ],
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: [
+      { name: "Directory Root", slug: "es/index.html" },
+      { name: "US", slug: "es/us" },
+      { name: "TS", slug: "es/ts" },
+      { name: "Testville", slug: "es/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ],
+  },
+] as const;
+
+describe("resolveBreadcrumbsFromPathInfo", () => {
+  it.each(matrixCases)(
+    "resolves breadcrumbs matrix case: breadcrumbPrefix=$breadcrumbPrefix locale=$locale includeLocalePrefixForPrimaryLocale=$includeLocalePrefixForPrimaryLocale",
+    ({
+      breadcrumbPrefix,
+      locale,
+      includeLocalePrefixForPrimaryLocale,
+      expected,
+    }) => {
+      const doc: StreamDocument = {
+        ...baseDocument,
+        locale,
+        __: {
+          pathInfo: {
+            ...baseDocument.__?.pathInfo,
+            breadcrumbPrefix,
+            includeLocalePrefixForPrimaryLocale,
+          },
+        },
+      };
+
+      expect(resolveBreadcrumbsFromPathInfo(doc)).toEqual(expected);
+    }
+  );
 });
