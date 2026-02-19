@@ -523,6 +523,7 @@
   "locationWithCount_other": "{{count}} umístění",
   "logo": "Logo",
   "map": "Mapa",
+  "mapRequiresOptIn": "Tuto mapu lze zobrazit pouze v případě, že jsou povoleny soubory cookie",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
   "metaTitleMissingLocales": "Metanázev chybí pro národní prostředí: {{locales}}",
   "mile_one": "míle",
@@ -688,7 +689,6 @@
     "noTheme": "Obraťte se na svého vývojáře a nastavte správu témat.",
     "warning": "Změny ovlivní všechny sady a rozvržení stránek pro celý web."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Tuto mapu lze zobrazit pouze v případě, že jsou povoleny soubory cookie",
   "thursday": "čtvrtek",
   "toPublishHeading": "Chcete-li publikovat, vyřešte následující chyby:",
   "totalReviews_one": "{{count}} recenze",

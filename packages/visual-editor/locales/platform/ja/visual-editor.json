@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} 件の場所",
   "logo": "ロゴ",
   "map": "地図",
+  "mapRequiresOptIn": "この地図は Cookie が有効になっている場合にのみ表示できます",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "metaTitleMissingLocales": "ロケールのメタ タイトルがありません: {{locales}}",
   "mile_one": "マイル",
@@ -678,7 +679,6 @@
     "noTheme": "開発者に連絡して、テーマ管理をセットアップしてください。",
     "warning": "変更は、サイト全体のすべてのページセットとレイアウトに影響します。"
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "この地図は Cookie が有効になっている場合にのみ表示できます",
   "thursday": "木曜日",
   "toPublishHeading": "公開するには、次のエラーを解決してください。",
   "totalReviews_one": "{{count}} 件のレビュー",

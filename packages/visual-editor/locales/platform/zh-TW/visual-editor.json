@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} 個位置",
   "logo": "標識",
   "map": "地圖",
+  "mapRequiresOptIn": "該地圖僅在啟用cookies的情況下才能顯示",
   "maxWidthTip": "對於最佳內容對齊，我們建議將標題和頁腳寬度設置為匹配或超過頁面內容網格。",
   "metaTitleMissingLocales": "語言環境缺少元標題：{{locales}}",
   "mile_one": "英里",
@@ -678,7 +679,6 @@
     "noTheme": "請聯繫您的開發人員以設置主題管理。",
     "warning": "更改將影響整個站點的所有頁面集和佈局。"
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "",
   "thursday": "週四",
   "toPublishHeading": "要發布，請解決以下錯誤：",
   "totalReviews_one": "{{count}} 條評論",

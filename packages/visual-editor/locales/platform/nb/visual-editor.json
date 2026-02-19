@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} lokasjoner",
   "logo": "Logo",
   "map": "Kart",
+  "mapRequiresOptIn": "Dette kartet kan bare vises hvis informasjonskapsler er aktivert",
   "maxWidthTip": "For optimal innholdsjustering anbefaler vi å sette overskrift og bunntekstbredde for å matche eller overstige sideinnholdsnettet.",
   "metaTitleMissingLocales": "Metatittel mangler for lokal(er): {{locales}}",
   "mile_one": "mil",
@@ -678,7 +679,6 @@
     "noTheme": "Kontakt utvikleren din for å sette opp temadyring.",
     "warning": "Endringer vil påvirke alle sidesett og oppsett for hele nettstedet."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Dette kartet kan bare vises hvis informasjonskapsler er aktivert",
   "thursday": "torsdag",
   "toPublishHeading": "For å publisere må du løse følgende feil:",
   "totalReviews_one": "{{count}} anmeldelse",

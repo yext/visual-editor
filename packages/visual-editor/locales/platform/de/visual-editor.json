@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} Standorte",
   "logo": "Logo",
   "map": "Karte",
+  "mapRequiresOptIn": "Diese Karte kann nur angezeigt werden, wenn Cookies aktiviert sind",
   "maxWidthTip": "Für eine optimale Ausrichtung des Inhalts empfehlen wir, die Breite von Header und Footer so einzustellen, dass sie dem Content Grid der Seite entspricht oder dieses überschreitet.",
   "metaTitleMissingLocales": "Für Gebietsschema(s) fehlt der Metatitel: {{locales}}",
   "mile_one": "Meile",
@@ -678,7 +679,6 @@
     "noTheme": "Theme-Management nicht konfiguriert. Bitte kontaktieren Sie Ihren Administrator für die Einrichtung.",
     "warning": "Diese Änderungen wirken sich global auf alle Page-Sets und Layouts der gesamten Website aus."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Diese Karte kann nur angezeigt werden, wenn Cookies aktiviert sind",
   "thursday": "Donnerstag",
   "toPublishHeading": "Beheben Sie zum Veröffentlichen die folgenden Fehler:",
   "totalReviews_one": "{{count}} Bewertung",

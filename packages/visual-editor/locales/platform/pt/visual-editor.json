@@ -519,6 +519,7 @@
   "locationWithCount_other": "{{count}} localizações",
   "logo": "Logotipo",
   "map": "Mapa",
+  "mapRequiresOptIn": "Este mapa só pode ser exibido se os cookies estiverem ativados",
   "maxWidthTip": "Para um alinhamento ideal de conteúdo, recomendamos definir a largura do cabeçalho e do rodapé para corresponder ou exceder a grade de conteúdo da página.",
   "metaTitleMissingLocales": "O meta título está faltando para locais: {{locales}}",
   "mile_one": "milha",
@@ -683,7 +684,6 @@
     "noTheme": "Entre em contato com seu desenvolvedor para configurar o gerenciamento de temas.",
     "warning": "As alterações afetarão todos os conjuntos de páginas e layouts para todo o site."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Este mapa só pode ser exibido se os cookies estiverem ativados",
   "thursday": "Quinta-feira",
   "toPublishHeading": "Para publicar, resolva os seguintes erros:",
   "totalReviews_one": "{{count}} comentário",

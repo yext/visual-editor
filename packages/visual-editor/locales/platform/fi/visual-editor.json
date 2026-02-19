@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} sijaintia",
   "logo": "Logo",
   "map": "Kartta",
+  "mapRequiresOptIn": "Tämä kartta voidaan näyttää vain, jos evästeet ovat käytössä",
   "maxWidthTip": "Sisällön optimaalisen kohdistamisen saavuttamiseksi suosittelemme otsikon ja alatunnisteen leveyden asettamista vastaamaan tai ylittämään sivun sisältöverkon.",
   "metaTitleMissingLocales": "Metaotsikko puuttuu lokaaleilta: {{locales}}",
   "mile_one": "maili",
@@ -678,7 +679,6 @@
     "noTheme": "Ota yhteyttä kehittäjään asettaaksesi teeman hallinnan.",
     "warning": "Muutokset vaikuttavat kaikkiin sivusarjoihin ja asetteluihin koko sivustolle."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Tämä kartta voidaan näyttää vain, jos evästeet ovat käytössä",
   "thursday": "torstai",
   "toPublishHeading": "Korjaa seuraavat virheet julkaistaksesi:",
   "totalReviews_one": "{{count}} arvostelu",

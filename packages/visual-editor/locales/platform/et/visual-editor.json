@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} asukohad",
   "logo": "Logo",
   "map": "Kaart",
+  "mapRequiresOptIn": "Seda kaarti saab kuvada ainult siis, kui küpsised on lubatud",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "metaTitleMissingLocales": "Metapealkiri puudub järgmiste lokaatide jaoks: {{locales}}",
   "mile_one": "miil",
@@ -678,7 +679,6 @@
     "noTheme": "Teemahalduse seadistamiseks pöörduge oma arendaja poole.",
     "warning": "Muudatused mõjutavad kõiki lehekomplekte ja paigutusi kogu saidi jaoks."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Seda kaarti saab kuvada ainult siis, kui küpsised on lubatud",
   "thursday": "Neljapäev",
   "toPublishHeading": "Avaldamiseks lahendage järgmised vead:",
   "totalReviews_one": "{{count}} arvustus",

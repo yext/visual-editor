@@ -1150,9 +1150,9 @@ const LocatorInternal = ({
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
     t("findALocation", "Find a Location");
 
-  const requireMapsOptIn: boolean = JSON.parse(
-    streamDocument.__?.visualEditorConfig ?? ""
-  )?.requireMapsOptIn;
+  const requireMapsOptIn: boolean = streamDocument.__?.visualEditorConfig
+    ? JSON.parse(streamDocument.__?.visualEditorConfig)?.requireMapsOptIn
+    : false;
   // If no opt-in is required, the map is already enabled.
   const [mapEnabled, setMapEnabled] = React.useState(!requireMapsOptIn);
 
@@ -1268,7 +1268,7 @@ const LocatorInternal = ({
                 variant="lg"
               >
                 {t(
-                  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled",
+                  "mapRequiresOptIn",
                   "This map can only be displayed if cookies are enabled"
                 )}
               </Body>

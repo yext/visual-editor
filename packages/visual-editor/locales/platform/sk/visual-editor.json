@@ -523,6 +523,7 @@
   "locationWithCount_other": "{{count}} lokality",
   "logo": "Logo",
   "map": "Mapa",
+  "mapRequiresOptIn": "Túto mapu je možné zobraziť iba vtedy, ak sú povolené súbory cookie",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "metaTitleMissingLocales": "Chýba meta názov pre miestne nastavenia: {{locales}}",
   "mile_one": "míľa",
@@ -688,7 +689,6 @@
     "noTheme": "Ak chcete nastaviť správu témy, kontaktujte svojho vývojára.",
     "warning": "Zmeny ovplyvnia všetky sady stránok a rozloženia pre celú stránku."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Túto mapu je možné zobraziť iba vtedy, ak sú povolené súbory cookie",
   "thursday": "Štvrtok",
   "toPublishHeading": "Ak chcete publikovať, vyriešte nasledujúce chyby:",
   "totalReviews_one": "{{count}} recenzia",

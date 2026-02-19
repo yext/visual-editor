@@ -519,6 +519,7 @@
   "locationWithCount_other": "{{count}} lokacija",
   "logo": "Logo",
   "map": "Karta",
+  "mapRequiresOptIn": "Ova se karta može prikazati samo ako su omogućeni kolačići",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
   "metaTitleMissingLocales": "Nedostaje meta naslov za lokalitet(e): {{locales}}",
   "mile_one": "milja",
@@ -683,7 +684,6 @@
     "noTheme": "Molimo kontaktirajte svog programera kako biste postavili upravljanje temama.",
     "warning": "Promjene će utjecati na sve skupove stranica i izgled za cijelu stranicu."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Ova se karta može prikazati samo ako su omogućeni kolačići",
   "thursday": "četvrtak",
   "toPublishHeading": "Za objavu riješite sljedeće pogreške:",
   "totalReviews_one": "{{count}} pregled",

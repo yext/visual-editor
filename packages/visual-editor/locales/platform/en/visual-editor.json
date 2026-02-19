@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} locations",
   "logo": "Logo",
   "map": "Map",
+  "mapRequiresOptIn": "This map can only be displayed if cookies are enabled",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "metaTitleMissingLocales": "Meta title is missing for locale(s): {{locales}}",
   "mile_one": "mile",
@@ -678,7 +679,6 @@
     "noTheme": "Please contact your developer to set up theme management.",
     "warning": "Changes will affect all page sets and layouts for the entire site."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "This map can only be displayed if cookies are enabled",
   "thursday": "Thursday",
   "toPublishHeading": "To publish, resolve the following errors:",
   "totalReviews_one": "{{count}} review",

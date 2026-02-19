@@ -515,6 +515,7 @@
   "locationWithCount_other": "{{count}} placeringer",
   "logo": "Logo",
   "map": "Kort",
+  "mapRequiresOptIn": "Dette kort kan kun vises, hvis cookies er aktiveret",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "metaTitleMissingLocales": "Metatitel mangler for lokalitet(er): {{locales}}",
   "mile_one": "mil",
@@ -678,7 +679,6 @@
     "noTheme": "Kontakt din udvikler for at konfigurere temadministration.",
     "warning": "Ændringer vil påvirke alle sidesæt og layouts for hele webstedet."
   },
-  "thisMapCanOnlyBeDisplayedIfCookiesAreEnabled": "Dette kort kan kun vises, hvis cookies er aktiveret",
   "thursday": "torsdag",
   "toPublishHeading": "For at udgive skal du løse følgende fejl:",
   "totalReviews_one": "{{count}} anmeldelse",
