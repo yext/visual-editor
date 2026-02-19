@@ -122,7 +122,7 @@ export const fetchNearbyLocations = async ({
 }): Promise<Record<string, any>> => {
   const allDocs: NearbyLocationDoc[] = [];
   let firstPageMeta: NearbyLocationsResponse["meta"];
-  let count: number = 0;
+  let count: number = 0; // the total count of entities available given the filter params
 
   const url = new URL(
     `${contentDeliveryAPIDomain}/v2/accounts/${businessId}/content/${contentEndpointId}`
@@ -155,6 +155,7 @@ export const fetchNearbyLocations = async ({
       firstPageMeta = pageData.meta;
     }
     if (pageData?.response?.count) {
+      // set to the latest count as it may change while processing the pages
       count = pageData.response.count;
     }
 
@@ -164,11 +165,12 @@ export const fetchNearbyLocations = async ({
     if (!nextPageToken) {
       break;
     }
-    if (pageCount >= MAX_PAGES) {
-      console.warn(
-        `Reached maximum page limit of ${MAX_PAGES}. There may be more nearby locations that were not fetched.`
-      );
-    }
+  }
+
+  if (nextPageToken) {
+    console.warn(
+      `Reached maximum page limit of ${MAX_PAGES}. There were ${count - allDocs.length} locations that were not fetched.`
+    );
   }
 
   // sort allDocs by distance and trim to nearest `limit` locations
