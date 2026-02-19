@@ -77,7 +77,7 @@ const CustomDirectory = ({
 
       setBreadcrumbs([
         {
-          id: streamDocument.meta?.id,
+          id: streamDocument.meta?.uid,
           name: rootTitle,
           slug: childIds,
         },
@@ -96,22 +96,25 @@ const CustomDirectory = ({
       setBreadcrumbs((prev) => [
         ...prev,
         {
-          id: item.meta?.id,
+          id: item.meta?.uid,
           name: item.name,
           slug: childIds,
         },
       ]);
     }
   };
+
   const handleBreadcrumbClick = (index: number) => {
     const crumb = breadcrumbs[index];
+    if (!crumb) return;
 
-    fetchEntities(crumb.slug!);
+    fetchEntities(crumb.slug);
 
     setPageTitle(crumb.name);
 
     setBreadcrumbs((prev) => prev.slice(0, index + 1));
   };
+
   return (
     <Background background={styles.backgroundColor}>
       {loading && <></>}
@@ -133,11 +136,11 @@ const CustomDirectory = ({
 
               return (
                 <Background
-                  key={index}
+                  key={item.id ?? item.uid}
                   className="h-full flex flex-col p-1"
                   background={styles.backgroundColor}
                 >
-                  <li key={index}>
+                  <li>
                     <MaybeLink
                       variant="directoryLink"
                       eventName={`link${index}`}
