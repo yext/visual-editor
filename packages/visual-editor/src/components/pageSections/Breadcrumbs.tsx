@@ -11,10 +11,10 @@ import {
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { getDirectoryParents } from "../../utils/schema/helpers.ts";
 import { ComponentConfig, Fields } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
 
 export interface BreadcrumbsData {
   /**
@@ -120,14 +120,7 @@ export const BreadcrumbsComponent = ({
   const { t, i18n } = useTranslation();
   const separator = "/";
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
-  let breadcrumbs = getDirectoryParents(streamDocument);
-  if (breadcrumbs?.length > 0 || streamDocument.dm_directoryChildren) {
-    // append the current and filter out missing or malformed data
-    breadcrumbs = [
-      ...breadcrumbs,
-      { name: streamDocument.name, slug: "" },
-    ].filter((b) => b.name);
-  }
+  const breadcrumbs = resolveBreadcrumbs(streamDocument);
   const directoryRoot = resolveComponentData(
     data.directoryRoot,
     i18n.language,
