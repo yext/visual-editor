@@ -291,6 +291,7 @@
       "email": "E-mail",
       "emails": "E-mailuri",
       "end": "Sfârşit",
+      "extraSmall_text size": "Foarte mic",
       "facets": {
         "acceptingNewPatients": "Acceptarea pacienților noi",
         "acceptsReservations": "Acceptă rezervări",

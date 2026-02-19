@@ -291,6 +291,7 @@
       "email": "E-Mail",
       "emails": "E-Mails",
       "end": "Ende",
+      "extraSmall_text size": "Extra klein",
       "facets": {
         "acceptingNewPatients": "Nimmt neue Patienten auf",
         "acceptsReservations": "Reservierung möglich",

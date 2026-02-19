@@ -291,6 +291,7 @@
       "email": "El. paštas",
       "emails": "El. laiškai",
       "end": "Pabaiga",
+      "extraSmall_text size": "Itin mažas",
       "facets": {
         "acceptingNewPatients": "Naujų pacientų priėmimas",
         "acceptsReservations": "Priima rezervacijas",

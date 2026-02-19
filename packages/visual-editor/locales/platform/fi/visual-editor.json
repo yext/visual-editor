@@ -291,6 +291,7 @@
       "email": "Sähköposti",
       "emails": "Sähköpostit",
       "end": "Loppu",
+      "extraSmall_text size": "Erittäin pieni",
       "facets": {
         "acceptingNewPatients": "Uusien potilaiden vastaanotto",
         "acceptsReservations": "Hyväksyy varauksia",

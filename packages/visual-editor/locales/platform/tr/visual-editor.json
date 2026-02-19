@@ -291,6 +291,7 @@
       "email": "E-posta",
       "emails": "E-postalar",
       "end": "Son",
+      "extraSmall_text size": "Ekstra Küçük",
       "facets": {
         "acceptingNewPatients": "Yeni Hasta Kabulü",
         "acceptsReservations": "Rezervasyonları Kabul Ediyorum",

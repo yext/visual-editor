@@ -291,6 +291,7 @@
       "email": "Correo electrónico",
       "emails": "Correos electrónicos",
       "end": "Fin",
+      "extraSmall_text size": "Extra pequeño",
       "facets": {
         "acceptingNewPatients": "Aceptando nuevos pacientes",
         "acceptsReservations": "Acepta Reservas",

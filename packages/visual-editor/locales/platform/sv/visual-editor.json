@@ -291,6 +291,7 @@
       "email": "E-post",
       "emails": "E-postmeddelanden",
       "end": "Avsluta",
+      "extraSmall_text size": "Extra liten",
       "facets": {
         "acceptingNewPatients": "Ta emot nya patienter",
         "acceptsReservations": "Accepterar reservationer",

@@ -291,6 +291,7 @@
       "email": "E-post",
       "emails": "E-poster",
       "end": "Slutt",
+      "extraSmall_text size": "Ekstra liten",
       "facets": {
         "acceptingNewPatients": "Ta imot nye pasienter",
         "acceptsReservations": "Godtar reservasjoner",

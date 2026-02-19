@@ -291,6 +291,7 @@
       "email": "Email",
       "emails": "Emails",
       "end": "End",
+      "extraSmall_text size": "Extra Small",
       "facets": {
         "acceptingNewPatients": "Accepting New Patients",
         "acceptsReservations": "Accepts Reservations",
