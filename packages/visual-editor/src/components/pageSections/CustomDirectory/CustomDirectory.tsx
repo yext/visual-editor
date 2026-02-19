@@ -12,7 +12,7 @@ import { Heading } from "../../atoms/heading.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { Body } from "../../atoms/body.tsx";
-import { BreadcrumbItem, CustomBreadcrumbs } from "../CustomBreadcrumbs.tsx";
+import { BreadcrumbItem, Breadcrumbs } from "./Breadcrumbs.tsx";
 
 export interface CustomDirectoryProps {
   data: {
@@ -119,7 +119,7 @@ const CustomDirectory = ({
     <Background background={styles.backgroundColor}>
       {loading && <></>}
       <PageSection className="flex flex-col items-center gap-2">
-        <CustomBreadcrumbs
+        <Breadcrumbs
           breadcrumbs={breadcrumbs}
           onNavigate={handleBreadcrumbClick}
           puck={puck}

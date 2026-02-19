@@ -1,15 +1,15 @@
 import React from "react";
 import { WithPuckProps } from "@puckeditor/core";
-import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
-import { MaybeLink } from "../atoms/maybeLink.tsx";
-import { PageSection } from "../atoms/pageSection.tsx";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
+import { MaybeLink } from "../../atoms/maybeLink.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
 export interface BreadcrumbItem {
   id: string;
   name: string;
   slug: string[];
 }
 
-export interface CustomBreadcrumbsProps {
+export interface BreadcrumbsProps {
   breadcrumbs: BreadcrumbItem[];
 
   onNavigate: (index: number) => void;
@@ -19,12 +19,12 @@ export interface CustomBreadcrumbsProps {
   };
 }
 
-export const CustomBreadcrumbs = ({
+export const Breadcrumbs = ({
   breadcrumbs,
   onNavigate,
   styles,
   puck,
-}: WithPuckProps<CustomBreadcrumbsProps>) => {
+}: WithPuckProps<BreadcrumbsProps>) => {
   const separator = "/";
 
   if (!breadcrumbs?.length) {
