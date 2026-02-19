@@ -519,7 +519,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
+        variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
         }),
@@ -553,7 +553,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
+        variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
         }),
