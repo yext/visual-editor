@@ -8,6 +8,7 @@ export const isRichText = (value: unknown): value is RichText => {
   return typeof value === "object" && value !== null && "html" in value;
 };
 
+/** Replaces HTML encoded values with their unicode equivalents */
 const decodeHtmlEntities = (value: string): string => {
   return value
     .replace(/&nbsp;/gi, " ")
