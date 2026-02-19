@@ -27,9 +27,10 @@ import {
   PinComponent,
   SearchI18nextProvider,
   VerticalResults,
+  useAnalytics as useSearchAnalytics,
 } from "@yext/search-ui-react";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
-import React from "react";
+import React, { useEffect } from "react";
 import { useCollapse } from "react-collapsed";
 import { useTranslation } from "react-i18next";
 import {
@@ -72,6 +73,7 @@ import {
   LocatorResultCardProps,
 } from "./LocatorResultCard.tsx";
 import { MapPinIcon } from "./MapPinIcon.js";
+import { useAnalytics } from "@yext/pages-components";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -641,6 +643,21 @@ const LocatorInternal = ({
   puck,
   pageHeading,
 }: WithPuckProps<LocatorProps>) => {
+  // Adds a unified enableYextAnalytics to the window for both Pages and Search
+  // analytics. Typically used during consent banner implementation.
+  const searchAnalytics = useSearchAnalytics();
+  const pagesAnalytics = useAnalytics();
+  useEffect(() => {
+    (window as any).enableYextAnalytics = () => {
+      searchAnalytics?.optIn();
+      pagesAnalytics?.optIn();
+    };
+
+    return () => {
+      delete (window as any).enableYextAnalytics;
+    };
+  }, [searchAnalytics, pagesAnalytics]);
+
   const { t, i18n } = useTranslation();
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);

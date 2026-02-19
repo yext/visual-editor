@@ -106,6 +106,10 @@ export const createSearchAnalyticsConfig = (document: any) => {
     return;
   }
 
+  const requireAnalyticsOptIn: boolean = JSON.parse(
+    document.__.visualEditorConfig
+  )?.requireAnalyticsOptIn;
+
   // corresponds to @yext/analytics Environment
   const analyticsEnvironment =
     environment === Environment.SANDBOX
@@ -118,6 +122,7 @@ export const createSearchAnalyticsConfig = (document: any) => {
     apiKey: analyticsApiKey,
     cloudRegion: analyticsRegion,
     environment: analyticsEnvironment,
+    requireOptIn: requireAnalyticsOptIn,
   };
   return analyticsConfig;
 };

@@ -140,8 +140,8 @@ importers:
         specifier: ^2.7.1
         version: 2.7.1(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: ^2.0.5
-        version: 2.0.5(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
+        specifier: ^2.1.0
+        version: 2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -402,8 +402,8 @@ importers:
         specifier: ^2.5.3
         version: 2.6.0(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: ^2.0.5
-        version: 2.0.5(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
+        specifier: ^2.1.0
+        version: 2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
       "@yext/visual-editor":
         specifier: workspace:*
         version: link:../packages/visual-editor
@@ -4321,10 +4321,10 @@ packages:
         integrity: sha512-rexlQR9wJuWxuTXHtw3tuRp93zVZI26sHhok60THsFFm0AQHv7s6tWsyDIcHhAn4dACtsJGrYgcTE2pPyGiiYw==,
       }
 
-  "@yext/search-ui-react@2.0.5":
+  "@yext/search-ui-react@2.1.0":
     resolution:
       {
-        integrity: sha512-Bio5MserUCs9hp9a0lYK4dwrm1+lcY1SsY+7W9nUivLN4vVFlP0TCjOb6eyER65io7g0DkK94UTYhZTyXBGarQ==,
+        integrity: sha512-+Ej4I9HdpbG7DifjPa2M65r/fbkGmIiuSQcAPs1Oge/NEkGBer0Vp3J8iaHHAO5GI1O3PZ7uETagxtyRRz8bNQ==,
       }
     peerDependencies:
       "@yext/search-headless-react": ^2.6.0
@@ -13877,7 +13877,7 @@ snapshots:
       - react
       - react-redux
 
-  "@yext/search-ui-react@2.0.5(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
+  "@yext/search-ui-react@2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.6.0(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
@@ -13909,7 +13909,7 @@ snapshots:
       - tailwindcss
       - typescript
 
-  "@yext/search-ui-react@2.0.5(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
+  "@yext/search-ui-react@2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@20.19.11)(typescript@5.9.2)))
