@@ -12,6 +12,7 @@ import { Body } from "../../atoms/body.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
+import { fetchData } from "./utils.ts";
 
 export interface CustomDirectoryProps {
   slots: {
@@ -28,7 +29,6 @@ const CustomDirectoryFields: Fields<CustomDirectoryProps> = {
     objectFields: {
       HeadingSlot: { type: "slot", allow: [] },
     },
-    visible: false,
   },
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
@@ -45,7 +45,6 @@ const CustomDirectoryFields: Fields<CustomDirectoryProps> = {
 };
 
 const API_KEY = "d8016f96c913cc8b79931cef51b941f5";
-const API_VERSION = "20250101";
 
 const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
   styles,
@@ -62,21 +61,13 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `https://cdn.yextapis.com/v2/accounts/me/entities` +
-          `?entityIds=${entityIds.join(",")}` +
-          `&api_key=${API_KEY}` +
-          `&v=${API_VERSION}`
-      );
+      const res = await fetchData({
+        endpoint: "https://cdn.yextapis.com/v2/accounts/me/entities",
+        apiKey: API_KEY,
+        entityIds: entityIds.join(","),
+      });
 
-      if (!res.ok) {
-        console.error("Failed to fetch entities:", res.status);
-        return;
-      }
-
-      const json = await res.json();
-
-      const fetchedEntities = json.response?.entities ?? [];
+      const fetchedEntities = res?.entities ?? [];
 
       setEntities(fetchedEntities);
     } catch (error) {
@@ -92,7 +83,7 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
     if (childIds?.length) {
       fetchEntities(childIds);
     }
-  }, [streamDocument]);
+  }, [streamDocument?.dm_childEntityIds]);
 
   const handleClick = (item: any) => {
     const childIds = item.dm_childEntityIds;
@@ -106,7 +97,7 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
     <Background background={styles.backgroundColor}>
       {loading && <></>}
       <PageSection className="flex flex-col items-center gap-2">
-        <slots.HeadingSlot style={{ height: "auto" }} />
+        {slots?.HeadingSlot && <slots.HeadingSlot style={{ height: "auto" }} />}{" "}
         <PageSection
           verticalPadding="sm"
           background={backgroundColors.background1.value}

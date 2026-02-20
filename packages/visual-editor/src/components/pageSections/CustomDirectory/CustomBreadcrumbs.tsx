@@ -15,6 +15,7 @@ import {
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
+import { fetchData } from "./utils.ts";
 
 export interface CustomBreadcrumbItem {
   id: string;
@@ -84,7 +85,6 @@ const customBreadcrumbFields: Fields<CustomBreadcrumbsProps> = {
 };
 
 const API_KEY = "d8016f96c913cc8b79931cef51b941f5";
-const API_VERSION = "20250101";
 const contentEndpoint = "blog";
 
 const CustomBreadcrumbsComponent = ({
@@ -105,15 +105,17 @@ const CustomBreadcrumbsComponent = ({
   >([]);
 
   useEffect(() => {
+    if (!streamDocument?.uid) return;
+
     const fetchBreadcrumbs = async () => {
       try {
-        const res = await fetch(
-          `https://cdn.yextapis.com/v2/accounts/me/content/${contentEndpoint}/${streamDocument.uid}?api_key=${API_KEY}&v=${API_VERSION}`
-        );
-        if (!res.ok) return;
-        const json = await res.json();
-        const entities =
-          json.response?.docs?.[0]?.dm_directoryParents_directory ?? [];
+        const json = await fetchData({
+          endpoint: `https://cdn.yextapis.com/v2/accounts/me/content/${contentEndpoint}/${streamDocument.uid}`,
+          apiKey: API_KEY,
+        });
+
+        if (!json) return;
+        const entities = json.docs?.[0]?.dm_directoryParents_directory ?? [];
 
         const mapped: CustomBreadcrumbItem[] = entities.map((entity: any) => ({
           id: entity.uid,
@@ -137,7 +139,7 @@ const CustomBreadcrumbsComponent = ({
     };
 
     fetchBreadcrumbs();
-  }, [streamDocument.uid]);
+  }, [streamDocument?.uid, contentEndpoint]);
 
   if (!fetchedBreadcrumbs?.length) {
     return <PageSection></PageSection>;
