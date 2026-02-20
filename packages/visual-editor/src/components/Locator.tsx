@@ -54,6 +54,7 @@ import {
   toMeters,
   toMiles,
 } from "../utils/i18n/distance.ts";
+import { defaultText } from "../utils/defaultContent.ts";
 import { msg } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import {
@@ -83,7 +84,6 @@ const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New Yor
 const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
-const DEFAULT_TITLE = "Find a Location";
 
 const translateDistanceUnit = (
   t: (key: string, options?: Record<string, unknown>) => string,
@@ -598,10 +598,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       showDistanceOptions: false,
     },
     pageHeading: {
-      title: {
-        en: DEFAULT_TITLE,
-        hasLocalizedValue: "true",
-      },
+      title: defaultText("componentDefaults.findALocation", "Find a Location"),
     },
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
@@ -1166,13 +1163,6 @@ const LocatorInternal = ({
     (pageHeading?.title &&
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
     t("findALocation", "Find a Location");
-
-  const requireMapOptIn: boolean = streamDocument.__?.visualEditorConfig
-    ? JSON.parse(streamDocument.__?.visualEditorConfig)?.requireMapOptIn
-    : false;
-  // If no opt-in is required, the map is already enabled.
-  const [mapEnabled, setMapEnabled] = React.useState(!requireMapOptIn);
-
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
@@ -1276,31 +1266,7 @@ const LocatorInternal = ({
 
       {/* Right Section: Map. Hidden for small screens */}
       <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
-        {mapEnabled && <Map {...mapProps} />}
-        {!mapEnabled && (
-          <div className="flex items-center justify-center w-full h-full bg-gray-100">
-            <div className="p-6">
-              <Body
-                className="text-gray-700 font-bold text-center"
-                variant="lg"
-              >
-                {t(
-                  "mapRequiresOptIn",
-                  "This map can only be displayed if cookies are enabled"
-                )}
-              </Body>
-              <div className="flex justify-center p-2">
-                <Button
-                  onClick={() => setMapEnabled(true)}
-                  className="py-2 px-4 basis-full sm:w-auto justify-center"
-                  variant="default"
-                >
-                  {t("enableCookies", "Enable Cookies")}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        <Map {...mapProps} />
         {showSearchAreaButton && (
           <div className="absolute bottom-10 left-0 right-0 flex justify-center">
             <Button

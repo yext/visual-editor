@@ -4,18 +4,23 @@ import {
   getSubdirectoryNames,
   loadJsonSafe,
   saveJson,
+  sortObject,
   type FlatTranslations,
   unflatten,
 } from "../src/utils/i18n/jsonUtils.ts";
 
 /**
- * Fills missing platform locale values using Google Translate.
+ * Fills missing locale values using Google Translate.
+ *
+ * Supports:
+ * - Platform translation mode: `--type platform`
+ * - Scoped component mode: `--type components --scope componentDefaults`
  *
  * Behavior:
- * - Reads English source strings from locales/platform/en/visual-editor.json.
- * - Translates only missing/empty keys in non-English platform locale files.
+ * - Reads English source strings from `locales/<type>/en/visual-editor.json`.
+ * - Translates only missing/empty keys in non-English locale files.
  * - Adds contextual hints to ambiguous keys and removes them after translation.
- * - Preserves nested object JSON shape on disk.
+ * - Preserves JSON shape on disk.
  */
 const DEFAULT_LANGUAGE = "en";
 const NAMESPACE = "visual-editor";
@@ -28,37 +33,102 @@ const CONTEXT_MARKER_END = "]]";
 const PLURAL_SUFFIXES = new Set(["zero", "one", "two", "few", "many", "other"]);
 const INTERPOLATION_REGEX = /\{\{\s*([^{}]+?)\s*\}\}/g;
 
-type TranslationType = "platform";
+type TranslationType = "platform" | "components";
+type TranslationScope = "componentDefaults";
 
 interface MaskedVariable {
   token: string;
   original: string;
 }
 
-interface TranslationTarget {
+type TranslationTarget = {
   key: string;
   english: string;
   sourceKey: string;
-}
+};
 
 type GoogleTranslationSegment = [translatedText: string, ...rest: unknown[]];
 type GoogleTranslateResponse = [GoogleTranslationSegment[], ...rest: unknown[]];
 
-/**
- * Reads and validates the --type argument.
- * This script intentionally supports "platform" only.
- */
-const getTypeArg = (): TranslationType => {
-  const index = process.argv.findIndex((arg) => arg === "--type");
-  const raw = index >= 0 ? process.argv[index + 1] : "platform";
+type TranslationOptions = {
+  type: TranslationType;
+  scope?: TranslationScope;
+};
 
-  if (raw !== "platform") {
+const getArgValue = (flag: string): string | undefined => {
+  const index = process.argv.findIndex((arg) => arg === flag);
+  if (index < 0 || index + 1 >= process.argv.length) {
+    return undefined;
+  }
+
+  return process.argv[index + 1];
+};
+
+const getTypeArg = (): TranslationType => {
+  const raw = getArgValue("--type") ?? "platform";
+
+  if (raw !== "platform" && raw !== "components") {
     throw new Error(
-      `Unsupported --type "${raw}". This script only supports "--type platform".`
+      `Unsupported --type "${raw}". Supported values are "platform" and "components".`
     );
   }
 
-  return "platform";
+  return raw;
+};
+
+const getScopeArg = (): TranslationScope | undefined => {
+  const raw = getArgValue("--scope");
+  if (!raw) {
+    return undefined;
+  }
+
+  if (raw !== "componentDefaults") {
+    throw new Error(
+      `Unsupported --scope "${raw}". Supported values are "componentDefaults".`
+    );
+  }
+
+  return raw;
+};
+
+const getTranslationOptions = (): TranslationOptions => {
+  const type = getTypeArg();
+  const scope = getScopeArg();
+
+  if (type === "components" && scope !== "componentDefaults") {
+    throw new Error(
+      "When --type components is used, --scope componentDefaults is required."
+    );
+  }
+
+  if (type === "platform" && scope) {
+    throw new Error("--scope is not supported for --type platform.");
+  }
+
+  return {
+    type,
+    scope,
+  };
+};
+
+/**
+ * Returns a key prefix filter for scoped translation runs.
+ */
+const getScopePrefix = (scope?: TranslationScope): string | undefined => {
+  if (scope === "componentDefaults") {
+    return "componentDefaults.";
+  }
+
+  return undefined;
+};
+
+const isKeyInScope = (key: string, scope?: TranslationScope): boolean => {
+  const scopePrefix = getScopePrefix(scope);
+  if (!scopePrefix) {
+    return true;
+  }
+
+  return key.startsWith(scopePrefix);
 };
 
 /**
@@ -187,7 +257,7 @@ const removeEmbeddedContext = (text: string): string => {
 };
 
 /**
- * Replaces interpolation placeholders with stable sentinel tokens before MT.
+ * Replaces interpolation placeholders with sentinel tokens before MT.
  * This reduces the chance providers translate variable names.
  */
 const maskInterpolationVariables = (
@@ -219,9 +289,6 @@ const unmaskInterpolationVariables = (
   return output;
 };
 
-/**
- * Lists locale folders under locales/<type>.
- */
 const getTargetLanguages = async (type: TranslationType): Promise<string[]> => {
   const dir = path.join(LOCALES_DIR, type);
   const entries = await getSubdirectoryNames(dir, { suppressMissing: true });
@@ -266,9 +333,13 @@ const translateText = async (
 };
 
 /**
- * Translates missing keys for all non-primary locales of a translation type.
+ * Translates missing keys for all non-primary locales for a translation mode.
+ * When `scope` is provided, only keys in that scope are considered.
  */
-const translateFile = async (type: TranslationType): Promise<void> => {
+const translateFile = async ({
+  type,
+  scope,
+}: TranslationOptions): Promise<void> => {
   const defaultPath = path.join(
     LOCALES_DIR,
     type,
@@ -276,7 +347,9 @@ const translateFile = async (type: TranslationType): Promise<void> => {
     `${NAMESPACE}.json`
   );
   const defaultJson = flatten(await loadJsonSafe(defaultPath));
-  const defaultKeySet = new Set(Object.keys(defaultJson));
+  const defaultKeySet = new Set(
+    Object.keys(defaultJson).filter((key) => isKeyInScope(key, scope))
+  );
 
   for (const locale of await getTargetLanguages(type)) {
     if (locale === DEFAULT_LANGUAGE) {
@@ -302,6 +375,10 @@ const translateFile = async (type: TranslationType): Promise<void> => {
     const translationTargets: TranslationTarget[] = [];
 
     for (const key of candidateKeys) {
+      if (!isKeyInScope(key, scope)) {
+        continue;
+      }
+
       const value = cache.get(key.trim());
       if (value !== undefined && value !== "") {
         continue;
@@ -320,12 +397,16 @@ const translateFile = async (type: TranslationType): Promise<void> => {
     }
 
     if (translationTargets.length === 0) {
-      console.log(`No missing translations for [${type}/${locale}].`);
+      const scopeLabel = scope ? `/${scope}` : "";
+      console.log(
+        `No missing translations for [${type}${scopeLabel}/${locale}].`
+      );
       continue;
     }
 
+    const scopeLabel = scope ? `/${scope}` : "";
     console.log(
-      `Translating ${translationTargets.length} keys for [${type}/${locale}]...`
+      `Translating ${translationTargets.length} keys for [${type}${scopeLabel}/${locale}]...`
     );
 
     let successCount = 0;
@@ -346,6 +427,7 @@ const translateFile = async (type: TranslationType): Promise<void> => {
           if (context) {
             translated = removeEmbeddedContext(translated);
           }
+
           translated = unmaskInterpolationVariables(translated, variables);
 
           cache.set(key.trim(), translated);
@@ -360,7 +442,9 @@ const translateFile = async (type: TranslationType): Promise<void> => {
       })
     );
 
-    const finalJson = unflatten(Object.fromEntries(cache) as FlatTranslations);
+    const finalJson = sortObject(
+      unflatten(Object.fromEntries(cache) as FlatTranslations)
+    );
     if (!isDryRun) {
       await saveJson(targetPath, finalJson);
     }
@@ -374,8 +458,8 @@ const translateFile = async (type: TranslationType): Promise<void> => {
 /**
  * Script entrypoint.
  */
-const type = getTypeArg();
-translateFile(type).catch((error) => {
+const options = getTranslationOptions();
+translateFile(options).catch((error) => {
   console.error(error);
   process.exit(1);
 });

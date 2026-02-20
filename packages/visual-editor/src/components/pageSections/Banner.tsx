@@ -10,7 +10,6 @@ import { EntityField } from "../../editor/EntityField.tsx";
 import { TranslatableRichText } from "../../types/types.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { Body } from "../atoms/body.tsx";
-import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import {
   backgroundColors,
@@ -20,6 +19,7 @@ import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultRichText } from "../../utils/defaultContent.ts";
 
 export interface BannerData {
   /**
@@ -230,10 +230,10 @@ export const defaultBannerProps: BannerSectionProps = {
   data: {
     text: {
       field: "",
-      constantValue: {
-        en: getDefaultRTF("Banner Text"),
-        hasLocalizedValue: "true",
-      },
+      constantValue: defaultRichText(
+        "componentDefaults.bannerText",
+        "Banner Text"
+      ),
       constantValueEnabled: true,
     },
   },

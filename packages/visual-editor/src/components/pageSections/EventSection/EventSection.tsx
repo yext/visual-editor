@@ -13,6 +13,7 @@ import { defaultEventCardSlotData } from "./EventCard.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { EventCardsWrapperProps } from "./EventCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
+import { defaultText } from "../../../utils/defaultContent.ts";
 
 export interface EventSectionProps {
   /**
@@ -135,10 +136,10 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Upcoming Events",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.upcomingEvents",
+                  "Upcoming Events"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },

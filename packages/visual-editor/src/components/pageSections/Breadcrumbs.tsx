@@ -15,6 +15,7 @@ import { ComponentConfig, Fields } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 export interface BreadcrumbsData {
   /**
@@ -184,10 +185,10 @@ export const BreadcrumbsSection: ComponentConfig<{
   fields: breadcrumbsSectionFields,
   defaultProps: {
     data: {
-      directoryRoot: {
-        en: "Directory Root",
-        hasLocalizedValue: "true",
-      },
+      directoryRoot: defaultText(
+        "componentDefaults.directoryRoot",
+        "Directory Root"
+      ),
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,

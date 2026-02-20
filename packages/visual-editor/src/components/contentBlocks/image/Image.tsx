@@ -152,7 +152,7 @@ const ImageWrapperComponent: PuckComponent<ImageWrapperProps> = (props) => {
     (typeof imageUrl === "string" && imageUrl.trim() === "");
 
   const inputLink = resolveComponentData(
-    data.link ?? { en: DEFAULT_LINK, hasLocalizedValue: "true" as const },
+    data.link ?? DEFAULT_LINK,
     i18n.language,
     streamDocument
   );
@@ -238,7 +238,7 @@ export const imageDefaultProps = {
       },
       constantValueEnabled: true,
     },
-    link: { en: DEFAULT_LINK, hasLocalizedValue: "true" as const },
+    link: DEFAULT_LINK,
   },
   styles: {
     aspectRatio: 1.78,

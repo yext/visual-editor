@@ -25,6 +25,7 @@ import {
   defaultThemeConfig,
   mainConfig,
   getSchema,
+  processTemplateLayoutData,
   injectTranslations,
   getCanonicalUrl,
   resolveUrlTemplate,
@@ -105,16 +106,24 @@ export const getPath: GetPath<TemplateProps> = ({
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
-
-  const migratedData = migrate(
-    JSON.parse(document.__.layout),
-    migrationRegistry,
-    mainConfig,
-    document
-  );
-  const resolvedPuckData = await resolveAllData(migratedData, mainConfig, {
+  const layoutData = JSON.parse(document.__.layout);
+  const resolvedPuckData = await processTemplateLayoutData({
+    layoutData,
     streamDocument: document,
+    templateId: "main",
+    buildProcessedLayout: async () => {
+      const migratedData = migrate(
+        layoutData,
+        migrationRegistry,
+        mainConfig,
+        document
+      );
+      return await resolveAllData(migratedData, mainConfig, {
+        streamDocument: document,
+      });
+    },
   });
+
   document.__.layout = JSON.stringify(resolvedPuckData);
 
   const translations = await injectTranslations(document);

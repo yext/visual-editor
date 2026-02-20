@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { getImageUrl } from "../contentBlocks/image/Image.tsx";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 export interface FooterLogoSlotProps {
   data: {
@@ -120,7 +121,7 @@ export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
           url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
           height: 100,
           width: 100,
-          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          alternateText: defaultText("componentDefaults.logo", "Logo"),
         },
         constantValueEnabled: true,
       },

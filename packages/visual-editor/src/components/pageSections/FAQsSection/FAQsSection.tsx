@@ -25,6 +25,7 @@ import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultFAQCardData, FAQCardProps } from "./FAQCard.tsx";
 import { CardContextProvider } from "../../../hooks/useCardContext.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../../utils/defaultContent.ts";
 
 export interface FAQStyles {
   /**
@@ -160,10 +161,10 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Frequently Asked Questions",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.frequentlyAskedQuestions",
+                  "Frequently Asked Questions"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },
