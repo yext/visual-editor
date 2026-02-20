@@ -1,52 +1,36 @@
 import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
-import { useDocument } from "../../hooks/useDocument.tsx";
-import { StreamDocument } from "../../utils/index.ts";
-import { MaybeLink } from "../atoms/maybeLink.tsx";
-import { PageSection } from "../atoms/pageSection.tsx";
-import { VisibilityWrapper } from "../atoms/visibilityWrapper.tsx";
-import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { YextField } from "../../editor/YextField.tsx";
-import { msg } from "../../utils/i18n/platform.ts";
+import { useEffect, useState } from "react";
+import { YextField } from "../../../editor/YextField.tsx";
+import { useDocument } from "../../../hooks/useDocument.tsx";
+import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
+import { StreamDocument } from "../../../utils/index.ts";
 import {
   BackgroundStyle,
   backgroundColors,
-} from "../../utils/themeConfigOptions.ts";
-import { useEffect, useState } from "react";
+} from "../../../utils/themeConfigOptions.ts";
+import { MaybeLink } from "../../atoms/maybeLink.tsx";
+import { PageSection } from "../../atoms/pageSection.tsx";
+import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 
 export interface CustomBreadcrumbItem {
   id: string;
   name: string;
-  slug: string[];
-}
-
-export interface CustomBreadcrumbsData {}
-
-export interface CustomBreadcrumbsStyles {
-  backgroundColor?: BackgroundStyle;
+  slug?: string[];
 }
 
 export interface CustomBreadcrumbsProps {
-  data: CustomBreadcrumbsData;
-  styles: CustomBreadcrumbsStyles;
+  styles: {
+    backgroundColor?: BackgroundStyle;
+  };
   analytics: {
     scope?: string;
   };
   liveVisibility: boolean;
-
-  /** Optional controlled breadcrumbs from parent slot */
-  breadcrumbs?: CustomBreadcrumbItem[];
-
-  /** Optional navigation handler from parent */
-  onNavigate?: (index: number) => void;
 }
 
 const customBreadcrumbFields: Fields<CustomBreadcrumbsProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {},
-  }),
-
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -88,31 +72,15 @@ const contentEndpoint = "blog";
 
 const CustomBreadcrumbsComponent = ({
   styles,
-  puck,
-  breadcrumbs,
-  onNavigate,
 }: WithPuckProps<CustomBreadcrumbsProps>) => {
   const separator = "/";
   const document = useDocument() as StreamDocument;
-  console.log(onNavigate);
 
   const [fetchedBreadcrumbs, setFetchedBreadcrumbs] = useState<
     CustomBreadcrumbItem[]
   >([]);
 
-  const hasControlledBreadcrumbs =
-    Array.isArray(breadcrumbs) && breadcrumbs.length > 0;
-
-  const list = hasControlledBreadcrumbs ? breadcrumbs : fetchedBreadcrumbs;
-
-  const hasChildren =
-    Array.isArray(document?.dm_childEntityIds) &&
-    document.dm_childEntityIds.length > 0;
-
   useEffect(() => {
-    if (hasControlledBreadcrumbs) return;
-    if (hasChildren || !document?.uid) return;
-
     const fetchBreadcrumbs = async () => {
       try {
         const res = await fetch(
@@ -132,16 +100,23 @@ const CustomBreadcrumbsComponent = ({
           slug: entity.slug,
         }));
 
-        setFetchedBreadcrumbs(mapped);
+        const finalBC: CustomBreadcrumbItem[] = [
+          ...mapped,
+          {
+            id: document.uid,
+            name: document.name,
+            slug: document.slug,
+          },
+        ];
+
+        setFetchedBreadcrumbs(finalBC);
       } catch (error) {
         console.error("Breadcrumb fetch failed:", error);
       }
     };
 
     fetchBreadcrumbs();
-  }, [document?.uid, hasChildren, hasControlledBreadcrumbs]);
-
-  if (!list?.length) return null;
+  }, []);
 
   return (
     <PageSection
@@ -151,10 +126,15 @@ const CustomBreadcrumbsComponent = ({
       aria-label="Breadcrumb"
     >
       <ol className="inline p-0 m-0 list-none">
-        {list.map((crumb, index) => {
+        {fetchedBreadcrumbs.map((crumb, index) => {
           const isRoot = index === 0;
-          const isLast = index === list.length - 1;
+          const isLast = index === fetchedBreadcrumbs.length - 1;
 
+          !isRoot && (
+            <span className="mx-2" aria-hidden>
+              {separator}
+            </span>
+          );
           return (
             <li
               key={crumb.id}
@@ -165,22 +145,15 @@ const CustomBreadcrumbsComponent = ({
                   {separator}
                 </span>
               )}
-
               <wbr />
-
-              {!isLast ? (
-                <MaybeLink
-                  href={`/${crumb.slug}`}
-                  eventName={`breadcrumb${index}`}
-                  disabled={puck?.isEditing}
-                  alwaysHideCaret
-                  className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
-                >
-                  {crumb.name}
-                </MaybeLink>
-              ) : (
-                <span className="text-gray-700">{crumb.name}</span>
-              )}
+              <MaybeLink
+                href={isLast ? "" : `/${crumb.slug}`}
+                eventName={`breadcrumb${index}`}
+                className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
+                alwaysHideCaret
+              >
+                {crumb.name}
+              </MaybeLink>
             </li>
           );
         })}
@@ -197,7 +170,6 @@ export const CustomBreadcrumbs: ComponentConfig<{
   fields: customBreadcrumbFields,
 
   defaultProps: {
-    data: {},
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },

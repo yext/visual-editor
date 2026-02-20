@@ -1,5 +1,5 @@
-import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
-import React, { useState } from "react";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
+import React from "react";
 import { YextField } from "../../../editor/YextField.tsx";
 import { useTemplateProps } from "../../../hooks/useDocument.tsx";
 import {
@@ -8,35 +8,54 @@ import {
   msg,
 } from "../../../utils/index.ts";
 import { Background } from "../../atoms/background.tsx";
-import { Heading } from "../../atoms/heading.tsx";
+import { Body } from "../../atoms/body.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
-import { Body } from "../../atoms/body.tsx";
-import { BreadcrumbItem, Breadcrumbs } from "./Breadcrumbs.tsx";
+import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 
 export interface CustomDirectoryProps {
-  data: {
-    rootTitle: string;
+  slots: {
+    HeadingSlot: Slot;
   };
   styles: {
     backgroundColor: BackgroundStyle;
   };
 }
 
+const CustomDirectoryFields: Fields<CustomDirectoryProps> = {
+  slots: {
+    type: "object",
+    objectFields: {
+      HeadingSlot: { type: "slot", allow: [] },
+    },
+    visible: false,
+  },
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      backgroundColor: YextField(
+        msg("fields.backgroundColor", "Background Color"),
+        {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }
+      ),
+    },
+  }),
+};
+
 const API_KEY = "d8016f96c913cc8b79931cef51b941f5";
 const API_VERSION = "20250101";
 
-const CustomDirectory = ({
-  data: { rootTitle = "FAQs" },
+const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
   styles,
+  slots,
   puck,
-}: WithPuckProps<CustomDirectoryProps>) => {
+}) => {
   const { document: streamDocument } = useTemplateProps();
 
   const [entities, setEntities] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const [pageTitle, setPageTitle] = useState<string>(rootTitle);
-  const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([]);
   const fetchEntities = async (entityIds: string[]) => {
     if (!entityIds?.length) return;
 
@@ -59,8 +78,6 @@ const CustomDirectory = ({
 
       const fetchedEntities = json.response?.entities ?? [];
 
-      console.log("Fetched entities:", fetchedEntities);
-
       setEntities(fetchedEntities);
     } catch (error) {
       console.error("Entity fetch error:", error);
@@ -74,14 +91,6 @@ const CustomDirectory = ({
 
     if (childIds?.length) {
       fetchEntities(childIds);
-
-      setBreadcrumbs([
-        {
-          id: streamDocument.meta?.uid,
-          name: rootTitle,
-          slug: childIds,
-        },
-      ]);
     }
   }, [streamDocument]);
 
@@ -90,41 +99,14 @@ const CustomDirectory = ({
 
     if (childIds?.length) {
       fetchEntities(childIds);
-
-      setPageTitle(item.name);
-
-      setBreadcrumbs((prev) => [
-        ...prev,
-        {
-          id: item.meta?.uid,
-          name: item.name,
-          slug: childIds,
-        },
-      ]);
     }
-  };
-
-  const handleBreadcrumbClick = (index: number) => {
-    const crumb = breadcrumbs[index];
-    if (!crumb) return;
-
-    fetchEntities(crumb.slug);
-
-    setPageTitle(crumb.name);
-
-    setBreadcrumbs((prev) => prev.slice(0, index + 1));
   };
 
   return (
     <Background background={styles.backgroundColor}>
       {loading && <></>}
       <PageSection className="flex flex-col items-center gap-2">
-        <Breadcrumbs
-          breadcrumbs={breadcrumbs}
-          onNavigate={handleBreadcrumbClick}
-          puck={puck}
-        />
-        <Heading level={2}>{pageTitle}</Heading>
+        <slots.HeadingSlot style={{ height: "auto" }} />
         <PageSection
           verticalPadding="sm"
           background={backgroundColors.background1.value}
@@ -154,7 +136,6 @@ const CustomDirectory = ({
                           if (hasChildren) {
                             e.preventDefault();
                             handleClick(item);
-                            setPageTitle(item.name);
                           }
                         }}
                       >
@@ -172,45 +153,37 @@ const CustomDirectory = ({
   );
 };
 
-const customDirectoryFields: Fields<CustomDirectoryProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      rootTitle: YextField(msg("fields.title", "Title"), {
-        type: "entityField",
-        filter: { types: ["type.string"] },
-      }),
-    },
-  }),
-  styles: YextField(msg("fields.styles", "Styles"), {
-    type: "object",
-    objectFields: {
-      backgroundColor: YextField(
-        msg("fields.backgroundColor", "Background Color"),
-        {
-          type: "select",
-          options: "BACKGROUND_COLOR",
-        }
-      ),
-    },
-  }),
-};
-
 export const CustomDirectoryComponent: ComponentConfig<{
   props: CustomDirectoryProps;
 }> = {
-  label: msg("components.customDirectory", "Custom Directory"),
+  label: msg("components.CustomDirectory", "Custom Directory"),
 
-  fields: customDirectoryFields,
+  fields: CustomDirectoryFields,
 
   defaultProps: {
-    data: {
-      rootTitle: "Directory",
+    slots: {
+      HeadingSlot: [
+        {
+          type: "HeadingTextSlot",
+          props: {
+            data: {
+              text: {
+                constantValue: {
+                  en: "Directory",
+                  hasLocalizedValue: "true",
+                },
+                constantValueEnabled: true,
+                field: "",
+              },
+            },
+            styles: { level: 2, align: "center" },
+          } satisfies HeadingTextProps,
+        },
+      ],
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
   },
-
   render: (props) => <CustomDirectory {...props} />,
 };
