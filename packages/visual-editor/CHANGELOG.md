@@ -1,3 +1,9 @@
+#### 1.1.0-alpha.2 (2026-02-20)
+
+##### Bug Fixes
+
+- resolve urls for directory list children ([#1053](https://github.com/yext/visual-editor/pull/1053)) ([d8e99ccf](https://github.com/yext/visual-editor/commit/d8e99ccfb7c5c105442f3542666bf21640fa3f8a))
+
 #### 1.1.0-alpha.1 (2026-02-19)
 
 ##### Chores
