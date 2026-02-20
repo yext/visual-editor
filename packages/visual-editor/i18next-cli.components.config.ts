@@ -17,7 +17,7 @@ export default defineConfig({
     pluralSeparator: "_",
     interpolationPrefix: "{{",
     interpolationSuffix: "}}",
-    functions: ["t", "*.t", "i18next.t"],
+    functions: ["t", "*.t", "i18next.t", "defaultText", "defaultRichText"],
     primaryLanguage: "en",
     defaultValue: "",
     sort: true,

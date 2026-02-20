@@ -12,6 +12,7 @@ import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
@@ -79,7 +80,10 @@ const defaultFooterExpandedLinkSectionProps: FooterExpandedLinkSectionSlotProps 
     data: {
       label: {
         field: "",
-        constantValue: { en: "Footer Label", hasLocalizedValue: "true" },
+        constantValue: defaultText(
+          "componentDefaults.footerLabel",
+          "Footer Label"
+        ),
         constantValueEnabled: true,
       },
       links: defaultLinks,

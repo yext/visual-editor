@@ -274,14 +274,6 @@ describe("resolveComponentData", () => {
       };
       expect(resolveComponentData(data, "fr", mockDocument)).toBe("");
     });
-
-    it("handles a null value from the document gracefully", () => {
-      const field: YextEntityField<null> = {
-        constantValue: null,
-        field: "c_nullField",
-      };
-      expect(resolveComponentData(field, "en", mockDocument)).toBeNull();
-    });
   });
 
   it("handles a direct string value by returning it", () => {
@@ -365,5 +357,13 @@ describe("resolveComponentData plain text output", () => {
         output: "plainText",
       })
     ).toBe("");
+  });
+
+  it("handles a null value from the document gracefully", () => {
+    const field: YextEntityField<null> = {
+      constantValue: null,
+      field: "c_nullField",
+    };
+    expect(resolveComponentData(field, "en", mockDocument)).toBeNull();
   });
 });

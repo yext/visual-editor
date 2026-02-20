@@ -10,16 +10,14 @@ import { Background } from "../atoms/background.tsx";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 const PLACEHOLDER_LOGO_IMAGE: string =
   "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg";
 
 export const defaultLink = {
   linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
+  label: defaultText("componentDefaults.footerLink", "Footer Link"),
   link: "#",
   openInNewTab: false,
 };
@@ -322,7 +320,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   url: PLACEHOLDER_LOGO_IMAGE,
                   height: 100,
                   width: 100,
-                  alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                  alternateText: defaultText("componentDefaults.logo", "Logo"),
                 },
                 constantValueEnabled: true,
               },
@@ -383,19 +381,31 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             data: {
               sections: [
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: defaultText(
+                    "componentDefaults.footerLabel",
+                    "Footer Label"
+                  ),
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: defaultText(
+                    "componentDefaults.footerLabel",
+                    "Footer Label"
+                  ),
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: defaultText(
+                    "componentDefaults.footerLabel",
+                    "Footer Label"
+                  ),
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: defaultText(
+                    "componentDefaults.footerLabel",
+                    "Footer Label"
+                  ),
                   links: defaultLinks,
                 },
               ],

@@ -54,6 +54,7 @@ import {
   toMeters,
   toMiles,
 } from "../utils/i18n/distance.ts";
+import { defaultText } from "../utils/defaultContent.ts";
 import { msg } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import {
@@ -83,7 +84,6 @@ const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New Yor
 const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
-const DEFAULT_TITLE = "Find a Location";
 
 const translateDistanceUnit = (
   t: (key: string, options?: Record<string, unknown>) => string,
@@ -598,10 +598,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       showDistanceOptions: false,
     },
     pageHeading: {
-      title: {
-        en: DEFAULT_TITLE,
-        hasLocalizedValue: "true",
-      },
+      title: defaultText("componentDefaults.findALocation", "Find a Location"),
     },
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },

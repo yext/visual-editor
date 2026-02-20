@@ -28,14 +28,15 @@ import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { defaultRichText, defaultText } from "../../../utils/defaultContent.ts";
 
 const defaultPerson = {
-  name: { en: "First Last", hasLocalizedValue: "true" },
-  title: { en: "Associate Agent", hasLocalizedValue: "true" },
+  name: defaultText("componentDefaults.firstLast", "First Last"),
+  title: defaultRichText("componentDefaults.associateAgent", "Associate Agent"),
   phoneNumber: "+12027706619",
   email: "jkelley@[company].com",
   cta: {
-    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    label: defaultText("componentDefaults.visitProfile", "Visit Profile"),
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -135,10 +136,7 @@ export const defaultTeamCardSlotData = (
                       constantValue: defaultPerson.phoneNumber,
                       constantValueEnabled: true,
                     },
-                    label: {
-                      en: "",
-                      hasLocalizedValue: "true",
-                    },
+                    label: "",
                   },
                 ],
               },
@@ -176,7 +174,7 @@ export const defaultTeamCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: defaultText("componentDefaults.button", "Button"),
                 entityField: {
                   field: "",
                   constantValue: defaultPerson.cta,

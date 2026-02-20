@@ -8,6 +8,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
+import { defaultText } from "../../../utils/defaultContent.ts";
 
 export const ctaTypeOptions = () => {
   return [
@@ -81,17 +82,18 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                   const updatedValue = { ...value, ctaType: newValue };
                   // Set defaults based on CTA type
                   if (newValue === "presetImage") {
-                    updatedValue.label = { en: "", hasLocalizedValue: "true" };
+                    updatedValue.label = "";
                   } else if (newValue === "getDirections") {
-                    updatedValue.label = updatedValue?.label || {
-                      en: "Get Directions",
-                      hasLocalizedValue: "true",
-                    };
+                    updatedValue.label =
+                      updatedValue?.label ||
+                      defaultText(
+                        "componentDefaults.getDirections",
+                        "Get Directions"
+                      );
                   } else if (newValue === "textAndLink") {
-                    updatedValue.label = updatedValue?.label || {
-                      en: "Learn More",
-                      hasLocalizedValue: "true",
-                    };
+                    updatedValue.label =
+                      updatedValue?.label ||
+                      defaultText("componentDefaults.learnMore", "Learn More");
                     updatedValue.link = updatedValue?.link || "#";
                     updatedValue.linkType = updatedValue?.linkType || "URL";
                   }

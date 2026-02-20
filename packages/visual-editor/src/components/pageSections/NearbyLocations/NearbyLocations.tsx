@@ -19,6 +19,7 @@ import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../../utils/defaultContent.ts";
 
 export interface NearbyLocationsSectionProps {
   /**
@@ -204,10 +205,10 @@ export const NearbyLocationsSection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Nearby Locations",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.nearbyLocations",
+                  "Nearby Locations"
+                ),
                 constantValueEnabled: true,
               },
             },

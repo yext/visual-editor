@@ -24,6 +24,7 @@ import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 export interface ProfessionalHeroStyles {
   /**
@@ -560,10 +561,10 @@ export const ProfessionalHeroSection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Business Name",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.businessName",
+                  "Business Name"
+                ),
                 constantValueEnabled: true,
               },
             },
@@ -580,10 +581,10 @@ export const ProfessionalHeroSection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Credentials",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.credentials",
+                  "Credentials"
+                ),
                 constantValueEnabled: true,
               },
             },
@@ -600,10 +601,10 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Professional Name",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.professionalName",
+                  "Professional Name"
+                ),
                 constantValueEnabled: true,
                 field: "name",
               },
@@ -618,10 +619,10 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Professional Title",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.professionalTitle",
+                  "Professional Title"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },
@@ -640,10 +641,10 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Subtitle",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.subtitle",
+                  "Subtitle"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },
@@ -682,18 +683,15 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: defaultText("componentDefaults.button", "Button"),
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Contact Me",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: defaultText(
+                    "componentDefaults.contactMe",
+                    "Contact Me"
+                  ),
+                  link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -712,18 +710,15 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: defaultText("componentDefaults.button", "Button"),
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Learn More",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: defaultText(
+                    "componentDefaults.learnMore",
+                    "Learn More"
+                  ),
+                  link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -747,10 +742,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
                     field: "mainPhone",
                     constantValue: "",
                   },
-                  label: {
-                    en: "Phone",
-                    hasLocalizedValue: "true",
-                  },
+                  label: defaultText("componentDefaults.phone", "Phone"),
                 },
               ],
             },

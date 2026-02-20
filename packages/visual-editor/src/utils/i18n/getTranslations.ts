@@ -1,4 +1,4 @@
-const supportedRegionalLocales = ["en-GB", "zh-TW"];
+import { resolveTranslationLocale } from "./resolveTranslationLocale.ts";
 
 /**
  * Dynamically imports the translation file for the given locale.
@@ -12,13 +12,7 @@ export const getTranslations = async (
     return {};
   }
 
-  let strippedLocale = locale;
-  if (!supportedRegionalLocales.includes(locale)) {
-    strippedLocale = locale.split("-")[0];
-  }
-  if (locale.includes("zh-Hant")) {
-    strippedLocale = "zh-TW";
-  }
+  const strippedLocale = resolveTranslationLocale(locale);
 
   try {
     const module = await import(

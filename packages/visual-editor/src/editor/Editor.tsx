@@ -32,6 +32,7 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import { processTemplateLayoutData } from "../utils/defaultLayoutTranslations.ts";
 
 const devLogger = new DevLogger();
 
@@ -203,7 +204,13 @@ export const Editor = ({
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
   const migratedData = !isLoading
-    ? migrate(layoutData!, migrationRegistry, puckConfig, document)
+    ? processTemplateLayoutData({
+        layoutData: layoutData!,
+        streamDocument: document,
+        templateId: templateMetadata?.templateId ?? "",
+        buildProcessedLayout: () =>
+          migrate(layoutData!, migrationRegistry, puckConfig, document),
+      })
     : undefined;
 
   return (

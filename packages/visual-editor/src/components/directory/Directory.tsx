@@ -13,6 +13,7 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { DirectoryList } from "./DirectoryWrapper.tsx";
 import { isDirectoryGrid } from "../../utils/directory/utils.ts";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 export interface DirectoryStyles {
   /**
@@ -128,10 +129,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "",
                 constantValueEnabled: false,
                 field: "name",
               },
@@ -146,10 +144,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "",
                 constantValueEnabled: true,
                 field: "name",
               },
@@ -163,10 +158,10 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           type: "BreadcrumbsSlot",
           props: {
             data: {
-              directoryRoot: {
-                en: "Directory Root",
-                hasLocalizedValue: "true",
-              },
+              directoryRoot: defaultText(
+                "componentDefaults.directoryRoot",
+                "Directory Root"
+              ),
             },
             styles: {
               backgroundColor: backgroundColors.background1.value,

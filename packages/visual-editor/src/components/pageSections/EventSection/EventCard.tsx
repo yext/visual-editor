@@ -25,11 +25,12 @@ import { ImgSizesByBreakpoint } from "../../atoms/image.tsx";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { defaultText } from "../../../utils/defaultContent.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 const defaultEvent = {
   image: {
@@ -37,16 +38,13 @@ const defaultEvent = {
     height: 360,
     width: 640,
   },
-  title: { en: "Event Title", hasLocalizedValue: "true" },
+  title: defaultText("componentDefaults.eventTitle", "Event Title"),
   dateTime: "2022-12-12T14:00:00",
-  description: {
-    en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    ),
-    hasLocalizedValue: "true",
-  },
+  description: getDefaultRTF(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  ),
   cta: {
-    label: { en: "Learn More", hasLocalizedValue: "true" },
+    label: defaultText("componentDefaults.learnMore", "Learn More"),
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -85,7 +83,10 @@ export const defaultEventCardSlotData = (
                     }),
                     width: 640,
                     height: 360,
-                    alternateText: "Event Image",
+                    alternateText: defaultText(
+                      "componentDefaults.eventImage",
+                      "Event Image"
+                    ),
                   },
                   constantValueEnabled: true,
                 },
@@ -169,7 +170,7 @@ export const defaultEventCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: defaultText("componentDefaults.button", "Button"),
                 entityField: {
                   field: "",
                   constantValue: defaultEvent.cta,

@@ -46,3 +46,5 @@ export {
   type FontRegistry,
 } from "./fonts/visualEditorFonts.ts";
 export { withPropOverrides } from "./withPropOverrides.ts";
+export { defaultText, defaultRichText } from "./defaultContent.ts";
+export { processTemplateLayoutData } from "./defaultLayoutTranslations.ts";

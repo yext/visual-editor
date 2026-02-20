@@ -20,20 +20,18 @@ import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { resolveYextEntityField } from "../../../utils/resolveYextEntityField.ts";
 import { i18nComponentsInstance } from "../../../utils/i18n/components.ts";
-import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { TimestampProps } from "../../contentBlocks/Timestamp.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { defaultText } from "../../../utils/defaultContent.ts";
+import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 
 const defaultTestimonial = {
-  description: {
-    en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-    ),
-    hasLocalizedValue: "true",
-  },
-  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  description: getDefaultRTF(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+  ),
+  contributorName: defaultText("componentDefaults.name", "Name"),
   contributionDate: "2022-08-02T14:00:00",
 } satisfies TestimonialStruct;
 

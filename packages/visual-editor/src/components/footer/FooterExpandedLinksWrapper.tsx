@@ -11,9 +11,10 @@ import { useBackground } from "../../hooks/useBackground.tsx";
 import { Body } from "../atoms/body.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 const defaultSection = {
-  label: { en: "Footer Label", hasLocalizedValue: "true" as const },
+  label: defaultText("componentDefaults.footerLabel", "Footer Label"),
   links: defaultLinks,
 };
 

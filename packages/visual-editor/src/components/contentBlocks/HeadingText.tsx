@@ -15,6 +15,7 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
+import { defaultText } from "../../utils/defaultContent.ts";
 
 export type HeadingTextProps = {
   /** The heading text value */
@@ -131,10 +132,7 @@ export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
     data: {
       text: {
         field: "",
-        constantValue: {
-          en: "Text",
-          hasLocalizedValue: "true",
-        },
+        constantValue: defaultText("componentDefaults.text", "Text"),
         constantValueEnabled: true,
       },
     },
