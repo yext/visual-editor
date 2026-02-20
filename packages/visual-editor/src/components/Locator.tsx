@@ -1150,11 +1150,11 @@ const LocatorInternal = ({
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
     t("findALocation", "Find a Location");
 
-  const requireMapsOptIn: boolean = streamDocument.__?.visualEditorConfig
-    ? JSON.parse(streamDocument.__?.visualEditorConfig)?.requireMapsOptIn
+  const requireMapOptIn: boolean = streamDocument.__?.visualEditorConfig
+    ? JSON.parse(streamDocument.__?.visualEditorConfig)?.requireMapOptIn
     : false;
   // If no opt-in is required, the map is already enabled.
-  const [mapEnabled, setMapEnabled] = React.useState(!requireMapsOptIn);
+  const [mapEnabled, setMapEnabled] = React.useState(!requireMapOptIn);
 
   return (
     <div className="components flex h-screen w-screen mx-auto">
