@@ -1,14 +1,16 @@
 import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { YextField } from "../../../editor/YextField.tsx";
-import { useDocument } from "../../../hooks/useDocument.tsx";
+import { useTemplateProps } from "../../../hooks/useDocument.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { TranslatableString } from "../../../types/types.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
-import { StreamDocument } from "../../../utils/index.ts";
+import { resolveComponentData } from "../../../utils/index.ts";
 import {
-  BackgroundStyle,
   backgroundColors,
+  BackgroundStyle,
 } from "../../../utils/themeConfigOptions.ts";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
@@ -17,10 +19,13 @@ import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 export interface CustomBreadcrumbItem {
   id: string;
   name: string;
-  slug?: string[];
+  slug?: string;
 }
 
 export interface CustomBreadcrumbsProps {
+  data: {
+    directoryRoot: TranslatableString;
+  };
   styles: {
     backgroundColor?: BackgroundStyle;
   };
@@ -31,6 +36,18 @@ export interface CustomBreadcrumbsProps {
 }
 
 const customBreadcrumbFields: Fields<CustomBreadcrumbsProps> = {
+  data: YextField(msg("fields.data", "Data"), {
+    type: "object",
+    objectFields: {
+      directoryRoot: YextField(
+        msg("fields.directoryRootLinkLabel", "Directory Root Link Label"),
+        {
+          type: "translatableString",
+          filter: { types: ["type.string"] },
+        }
+      ),
+    },
+  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -72,10 +89,17 @@ const contentEndpoint = "blog";
 
 const CustomBreadcrumbsComponent = ({
   styles,
+  data,
 }: WithPuckProps<CustomBreadcrumbsProps>) => {
+  const { t, i18n } = useTranslation();
   const separator = "/";
-  const document = useDocument() as StreamDocument;
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
 
+  const directoryRoot = resolveComponentData(
+    data.directoryRoot,
+    i18n.language,
+    streamDocument
+  );
   const [fetchedBreadcrumbs, setFetchedBreadcrumbs] = useState<
     CustomBreadcrumbItem[]
   >([]);
@@ -84,13 +108,10 @@ const CustomBreadcrumbsComponent = ({
     const fetchBreadcrumbs = async () => {
       try {
         const res = await fetch(
-          `https://cdn.yextapis.com/v2/accounts/me/content/${contentEndpoint}/${document.uid}?api_key=${API_KEY}&v=${API_VERSION}`
+          `https://cdn.yextapis.com/v2/accounts/me/content/${contentEndpoint}/${streamDocument.uid}?api_key=${API_KEY}&v=${API_VERSION}`
         );
-
         if (!res.ok) return;
-
         const json = await res.json();
-
         const entities =
           json.response?.docs?.[0]?.dm_directoryParents_directory ?? [];
 
@@ -103,9 +124,9 @@ const CustomBreadcrumbsComponent = ({
         const finalBC: CustomBreadcrumbItem[] = [
           ...mapped,
           {
-            id: document.uid,
-            name: document.name,
-            slug: document.slug,
+            id: streamDocument.uid,
+            name: streamDocument.name,
+            slug: streamDocument.slug,
           },
         ];
 
@@ -116,19 +137,26 @@ const CustomBreadcrumbsComponent = ({
     };
 
     fetchBreadcrumbs();
-  }, []);
+  }, [streamDocument.uid]);
+
+  if (!fetchedBreadcrumbs?.length) {
+    return <PageSection></PageSection>;
+  }
 
   return (
     <PageSection
       as="nav"
       verticalPadding="sm"
       background={styles?.backgroundColor}
-      aria-label="Breadcrumb"
+      aria-label={t("breadcrumb", "Breadcrumb")}
     >
       <ol className="inline p-0 m-0 list-none">
-        {fetchedBreadcrumbs.map((crumb, index) => {
+        {fetchedBreadcrumbs.map(({ name, slug, id }, index) => {
           const isRoot = index === 0;
           const isLast = index === fetchedBreadcrumbs.length - 1;
+          const href = relativePrefixToRoot
+            ? relativePrefixToRoot + slug
+            : slug;
 
           !isRoot && (
             <span className="mx-2" aria-hidden>
@@ -136,10 +164,7 @@ const CustomBreadcrumbsComponent = ({
             </span>
           );
           return (
-            <li
-              key={crumb.id}
-              className="contents whitespace-normal break-words"
-            >
+            <li key={id} className="contents whitespace-normal break-words">
               {!isRoot && (
                 <span className="mx-2" aria-hidden>
                   {separator}
@@ -147,12 +172,12 @@ const CustomBreadcrumbsComponent = ({
               )}
               <wbr />
               <MaybeLink
-                href={isLast ? "" : `/${crumb.slug}`}
+                href={isLast ? "" : href}
                 eventName={`breadcrumb${index}`}
                 className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
                 alwaysHideCaret
               >
-                {crumb.name}
+                {isRoot && directoryRoot ? directoryRoot : name}
               </MaybeLink>
             </li>
           );
@@ -165,11 +190,15 @@ const CustomBreadcrumbsComponent = ({
 export const CustomBreadcrumbs: ComponentConfig<{
   props: CustomBreadcrumbsProps;
 }> = {
-  label: "Custom Breadcrumbs",
-
+  label: msg("components.customBreadcrumbs", "Custom Breadcrumbs"),
   fields: customBreadcrumbFields,
-
   defaultProps: {
+    data: {
+      directoryRoot: {
+        en: "Directory Root",
+        hasLocalizedValue: "true",
+      },
+    },
     styles: {
       backgroundColor: backgroundColors.background1.value,
     },
