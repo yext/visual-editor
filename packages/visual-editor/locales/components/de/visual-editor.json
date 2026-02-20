@@ -45,7 +45,7 @@
     "getDirections": "Wegbeschreibung abrufen",
     "header": "Kopfzeile",
     "headerLink": "Header-Link",
-    "hours": "Std",
+    "hours": "Öffnungszeiten",
     "information": "Information",
     "insights": "Einblicke",
     "learnMore": "Erfahren Sie mehr",
@@ -54,7 +54,7 @@
     "name": "Name",
     "nearbyLocations": "Standorte in der Nähe",
     "phone": "Telefon",
-    "price": "123,00 $",
+    "price": "123,00 €",
     "productName": "Produktname",
     "professionalName": "Berufsname",
     "professionalTitle": "Berufsbezeichnung",
@@ -64,7 +64,7 @@
     "subtitle": "Untertitel",
     "text": "Text",
     "upcomingEvents": "Kommende Veranstaltungen",
-    "visitProfile": "Besuchen Sie Profil"
+    "visitProfile": "Besuchen Sie das Profil"
   },
   "components": {
     "footerUtilityImagesSlot": {
@@ -74,6 +74,7 @@
   "coreInfoSection": "Basisinfo-Modul",
   "customSearchArea": "Benutzerdefinierter Suchbereich",
   "distance": "Distanz",
+  "enableCookies": "Cookies aktivieren",
   "expandedMenu": "Erweitertes Menü",
   "filter": "Filter",
   "findALocation": "Finde einen Standort",
@@ -97,6 +98,7 @@
   "locationsWithinDistanceOf_other": "{{count}} Standorte im Umkreis von {{distance}} {{unit}} von „{{name}}“",
   "logo": "Logo",
   "map": "Karte",
+  "mapRequiresOptIn": "Diese Karte kann nur angezeigt werden, wenn Cookies aktiviert sind",
   "mile_one": "Meile",
   "mile_other": "Meilen",
   "monday": "Montag",

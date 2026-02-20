@@ -324,6 +324,11 @@ export const processTemplateLayoutData: ProcessTemplateLayoutData = <
     templateId
   );
 
+  console.log(
+    "shouldInjectDefaultTranslations:",
+    shouldInjectDefaultTranslations
+  );
+
   const applyInjection = (processedLayout: TLayout): TLayout => {
     if (!shouldInjectDefaultTranslations) {
       return processedLayout;
