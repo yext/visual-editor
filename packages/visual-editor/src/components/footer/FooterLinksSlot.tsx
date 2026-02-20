@@ -57,7 +57,7 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
 
   return (
     <div
-      className={`${
+      className={`${puck.isEditing ? "min-h-[30px]" : ""} ${
         variant === "secondary"
           ? `gap-5 flex flex-col md:flex-row w-full ${secondaryItemsAlignment}`
           : "w-full grid grid-cols-1 md:grid-cols-5 gap-6"
