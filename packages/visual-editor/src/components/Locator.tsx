@@ -1264,7 +1264,7 @@ const LocatorInternal = ({
           <div className="flex items-center justify-center w-full h-full bg-gray-100">
             <div className="p-6">
               <Body
-                className="text-gray-700 font-bold justify-center"
+                className="text-gray-700 font-bold text-center"
                 variant="lg"
               >
                 {t(
