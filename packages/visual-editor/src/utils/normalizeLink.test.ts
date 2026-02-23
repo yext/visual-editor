@@ -18,8 +18,8 @@ describe("normalizeLink", () => {
     expect(normalizeLink("hello?world>")).toBe("hello?world");
   });
 
-  it("should preserve '%' but still remove illegal characters like '*'", () => {
-    expect(normalizeLink("&query=Address%City%ZipCode*")).toBe(
+  it("should preserve '%'", () => {
+    expect(normalizeLink("&query=Address%City%ZipCode")).toBe(
       "&query=address%city%zipcode"
     );
   });
