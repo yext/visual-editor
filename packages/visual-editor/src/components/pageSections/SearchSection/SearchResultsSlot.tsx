@@ -1,6 +1,12 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  usePuck,
+} from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
 import {
+  Facets,
   GenerativeDirectAnswer,
   StandardCard,
   UniversalResults,
@@ -100,34 +106,29 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
 ) => {
   const {
     data: { verticals },
+    puck,
   } = props;
-  // const { appState } = usePuck();
-  // const arrayState = appState.ui.arrayState;
 
-  // const arrayKey = Object.keys(arrayState || {}).find((key) =>
-  //   key.includes("_object_data_verticals")
-  // );
+  const {
+    appState: {
+      ui: { arrayState },
+    },
+  } = usePuck();
 
-  // let selectedVerticalIndex: number | null = null;
-
-  // if (arrayKey) {
-  //   const verticalArrayState = arrayState[arrayKey];
-  //   const openId = verticalArrayState?.openId;
-
-  //   const selectedItem = verticalArrayState?.items?.find(
-  //     (item) => item._arrayId === openId
-  //   );
-
-  //   selectedVerticalIndex = selectedItem?._currentIndex ?? null;
-  // }
-
-  // console.log("Selected vertical index:", selectedVerticalIndex);
+  const arrayKey = React.useMemo(() => {
+    if (!arrayState) return undefined;
+    return Object.keys(arrayState).find((key) =>
+      key.includes("_object_data_verticals")
+    );
+  }, [arrayState]);
 
   const searchActions = useSearchActions();
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const searchTerm = useSearchState((s) => s.query.input);
-  const [verticalKey, setVerticalKey] = useState<string | undefined>();
   const gdaLoading = useSearchState((s) => s.generativeDirectAnswer.isLoading);
+
+  const [verticalKey, setVerticalKey] = useState<string | null>(null);
+
   const verticalConfigMap = React.useMemo(
     () => buildVerticalConfigMap(verticals),
     [verticals]
@@ -136,6 +137,11 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const universalLimit = React.useMemo(
     () => buildUniversalLimit(verticals),
     [verticals]
+  );
+
+  const currentVerticalConfig = React.useMemo(
+    () => verticals.find((v) => v.verticalKey === verticalKey),
+    [verticals, verticalKey]
   );
 
   React.useEffect(() => {
@@ -161,20 +167,54 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     }
   }, [verticals, searchTerm, universalLimit, searchActions, verticalKey]);
 
-  const currentVerticalConfig = React.useMemo(() => {
-    if (!verticalKey) return undefined;
-    return verticals.find((v) => v.verticalKey === verticalKey);
-  }, [verticals, verticalKey]);
+  React.useEffect(() => {
+    if (!arrayKey || !puck.isEditing) return;
+
+    const verticalArrayState = arrayState[arrayKey];
+    const openId = verticalArrayState?.openId;
+
+    const selectedItem = verticalArrayState?.items?.find(
+      (item) => item._arrayId === openId
+    );
+
+    const index = selectedItem?._currentIndex;
+    if (typeof index !== "number") return;
+
+    const selectedConfig = verticals[index];
+
+    const nextKey =
+      selectedConfig?.pageType === "universal"
+        ? null
+        : (selectedConfig?.verticalKey ?? null);
+
+    if (nextKey !== verticalKey) {
+      setVerticalKey(nextKey);
+    }
+  }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
 
   return (
-    <div className="  pt-8">
+    <div className="pt-8">
       <div className="border-b flex justify-start items-center">
         <ul className="flex items-center">
           {verticals.map((item) => (
             <li key={item.verticalKey ?? item.label}>
               <a
-                onClick={() => setVerticalKey(item.verticalKey)}
-                className="px-5 pt-1.5 pb-1 tracking-[1.1px] mb-0 hover:cursor-pointer"
+                onClick={() =>
+                  setVerticalKey(
+                    item.pageType === "universal"
+                      ? null
+                      : (item.verticalKey ?? null)
+                  )
+                }
+                className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
+                  item.pageType === "universal"
+                    ? verticalKey === null
+                      ? "border-b-2 border-black"
+                      : ""
+                    : verticalKey === item.verticalKey
+                      ? "border-b-2 border-black"
+                      : ""
+                }`}
               >
                 {item.label}
               </a>
@@ -200,21 +240,34 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
                 <VerticalResults CardComponent={StandardCard} />
               </>
             ) : (
-              <VerticalResults
-                customCssClasses={{
-                  verticalResultsContainer:
-                    "flex flex-col mt-12 border rounded-md divide-y",
-                }}
-                CardComponent={(props) => (
-                  <Cards
-                    {...props}
-                    cardType={
-                      verticals.find((item) => item.verticalKey === verticalKey)
-                        ?.cardType
-                    }
+              <div className="relative mx-auto flex flex-grow pt-8">
+                <div
+                  className={`mr-6 ${!puck.isEditing && `w-[200px] -ml-[224px]`}`}
+                >
+                  <Facets
+                    customCssClasses={{ facetsContainer: "!text-lg" }}
+                    searchOnChange={true}
                   />
-                )}
-              />
+                </div>
+                <div className="flex-grow">
+                  <VerticalResults
+                    customCssClasses={{
+                      verticalResultsContainer:
+                        "flex flex-col border rounded-md divide-y",
+                    }}
+                    CardComponent={(props) => (
+                      <Cards
+                        {...props}
+                        cardType={
+                          verticals.find(
+                            (item) => item.verticalKey === verticalKey
+                          )?.cardType
+                        }
+                      />
+                    )}
+                  />
+                </div>
+              </div>
             )}
           </>
         ) : (
