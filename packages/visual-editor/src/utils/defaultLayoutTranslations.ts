@@ -200,26 +200,25 @@ const getLocalizedDefaultText = (
 };
 
 /**
- * Extracts text and style metadata from known default rich text HTML.
+ * Extracts text from known default rich text HTML.
  *
- * Only `<strong>...</strong>` and `<span>...</span>` wrappers are supported.
+ * Only `<span>...</span>` wrappers are supported.
  * Non-matching rich text shapes are ignored.
  */
 const extractDefaultRichTextInfo = (
   value: unknown
-): { text: string; isBold: boolean } | undefined => {
+): { text: string } | undefined => {
   if (!isPlainObject(value) || typeof value.html !== "string") {
     return undefined;
   }
 
-  const match = value.html.match(/<(strong|span)>(.*?)<\/\1>/i);
+  const match = value.html.match(/<span>(.*?)<\/span>/i);
   if (!match) {
     return undefined;
   }
 
   return {
-    isBold: match[1].toLowerCase() === "strong",
-    text: match[2],
+    text: match[1],
   };
 };
 
@@ -276,7 +275,7 @@ const injectRichTextDefaultIfEligible = (
     const localizedText = getLocalizedDefaultText(locale, richTextInfo.text);
     return localizedText === undefined
       ? undefined
-      : getDefaultRTF(localizedText, { isBold: richTextInfo.isBold });
+      : getDefaultRTF(localizedText);
   });
 };
 

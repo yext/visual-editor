@@ -21,10 +21,6 @@ const getDefaultTextForLocale = (
   return defaultsForLocale[key] ?? enDefault;
 };
 
-const isBoldRichText = (rtf: RichText): boolean => {
-  return typeof rtf.html === "string" && /<strong>/i.test(rtf.html);
-};
-
 const getPlainTextFromRichText = (rtf: RichText): string => {
   if (typeof rtf.html !== "string") {
     return "";
@@ -84,7 +80,6 @@ export const defaultRichText = (
     baseRichText = enDefault;
   }
   const enFallbackText = getPlainTextFromRichText(baseRichText);
-  const isBold = isBoldRichText(baseRichText);
 
   const localizedDefaults: Record<string, RichText | string> & {
     hasLocalizedValue: "true";
@@ -95,7 +90,7 @@ export const defaultRichText = (
   for (const locale of locales) {
     const fallbackText = locale === "en" ? enFallbackText : "";
     const localizedText = getDefaultTextForLocale(key, locale, fallbackText);
-    localizedDefaults[locale] = getDefaultRTF(localizedText, { isBold });
+    localizedDefaults[locale] = getDefaultRTF(localizedText);
   }
 
   return localizedDefaults;

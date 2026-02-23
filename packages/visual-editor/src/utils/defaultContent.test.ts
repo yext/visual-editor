@@ -3,7 +3,6 @@ import { defaultRichText, defaultText } from "./defaultContent.ts";
 import { componentDefaultRegistry } from "./i18n/componentDefaultRegistry.ts";
 import { locales } from "./i18n/locales.ts";
 import { TranslatableRichText, TranslatableString } from "../types/types.ts";
-import { getDefaultRTF } from "../editor/TranslatableRichTextField.tsx";
 
 type LocalizedStringMap = { hasLocalizedValue: "true" } & Record<
   string,
@@ -62,8 +61,11 @@ describe("defaultContent", () => {
     expect(frValue.json).toContain(expectedFrText);
   });
 
-  it("preserves bold formatting when enDefault rich text is bold", () => {
-    const boldDefault = getDefaultRTF("Banner Text", { isBold: true });
+  it("does not force bold formatting when enDefault rich text is bold", () => {
+    const boldDefault = {
+      html: "<p><strong>Banner Text</strong></p>",
+      json: "",
+    };
     const value = defaultRichText("componentDefaults.bannerText", boldDefault);
     const localizedValue = value as Exclude<TranslatableRichText, string> &
       LocalizedRichTextMap;
@@ -73,6 +75,6 @@ describe("defaultContent", () => {
       throw new Error("Expected rich text object for fr value.");
     }
 
-    expect(frValue.html).toContain("<strong>");
+    expect(frValue.html).not.toContain("<strong>");
   });
 });
