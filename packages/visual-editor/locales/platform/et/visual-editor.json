@@ -551,7 +551,7 @@
   "promoMedia": "Promo meedia",
   "publishError": {
     "components": "kustutada või parandada vigadega jaotisi",
-    "deploymentInProgress": "värskendus on juurutamise ajal keelatud",
+    "deploymentInProgress": "värskendused on juurutamise ajal keelatud",
     "metaTitle": "täitke metapealkiri kõigi lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse",
     "metaTitleWithLocales": "täitke metapealkiri järgmiste lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse: {{locales}}"
   },

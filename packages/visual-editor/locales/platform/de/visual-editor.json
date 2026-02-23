@@ -551,7 +551,7 @@
   "promoMedia": "Promo-Media",
   "publishError": {
     "components": "Abschnitte mit Fehlern löschen oder korrigieren",
-    "deploymentInProgress": "Das Update ist während der Bereitstellung deaktiviert",
+    "deploymentInProgress": "Seite aktualisieren“ ist während der Bereitstellung deaktiviert",
     "metaTitle": "Geben Sie den Metatitel für alle Gebietsschemas ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren",
     "metaTitleWithLocales": "Geben Sie den Metatitel für die folgenden Gebietsschemata ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren: {{locales}}"
   },
