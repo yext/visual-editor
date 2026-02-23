@@ -1,9 +1,4 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  usePuck,
-} from "@puckeditor/core";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
 import {
   Facets,
@@ -17,6 +12,7 @@ import { FaEllipsisV } from "react-icons/fa";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
 import Cards from "./Cards.tsx";
+import { MapComponent } from "./MapComponent.tsx";
 import {
   defaultSearchResultsProps,
   VerticalConfigProps,
@@ -27,7 +23,8 @@ import {
   buildVerticalConfigMap,
   isValidVerticalConfig,
 } from "./utils.tsx";
-import { MapComponent } from "./MapComponent.tsx";
+//@ts-ignore
+import "./search.css";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -109,24 +106,19 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     puck,
   } = props;
 
-  const {
-    appState: {
-      ui: { arrayState },
-    },
-  } = usePuck();
+  // React.useEffect(() => {
+  //   if (!puck?.isEditing) return;
 
-  const arrayKey = React.useMemo(() => {
-    if (!arrayState) return undefined;
-    return Object.keys(arrayState).find((key) =>
-      key.includes("_object_data_verticals")
-    );
-  }, [arrayState]);
+  //   const arrayState = puck.appState?.ui?.arrayState;
+  //   if (!arrayState) return;
 
+  //   // safe logic here
+  // }, [puck]);
   const searchActions = useSearchActions();
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const searchTerm = useSearchState((s) => s.query.input);
   const gdaLoading = useSearchState((s) => s.generativeDirectAnswer.isLoading);
-
+  const facetsLength = useSearchState((s) => s.filters.facets)?.length;
   const [verticalKey, setVerticalKey] = useState<string | null>(null);
 
   const verticalConfigMap = React.useMemo(
@@ -167,30 +159,30 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     }
   }, [verticals, searchTerm, universalLimit, searchActions, verticalKey]);
 
-  React.useEffect(() => {
-    if (!arrayKey || !puck.isEditing) return;
+  // React.useEffect(() => {
+  //   if (!arrayKey || !puck.isEditing) return;
 
-    const verticalArrayState = arrayState[arrayKey];
-    const openId = verticalArrayState?.openId;
+  //   const verticalArrayState = arrayState[arrayKey];
+  //   const openId = verticalArrayState?.openId;
 
-    const selectedItem = verticalArrayState?.items?.find(
-      (item) => item._arrayId === openId
-    );
+  //   const selectedItem = verticalArrayState?.items?.find(
+  //     (item) => item._arrayId === openId
+  //   );
 
-    const index = selectedItem?._currentIndex;
-    if (typeof index !== "number") return;
+  //   const index = selectedItem?._currentIndex;
+  //   if (typeof index !== "number") return;
 
-    const selectedConfig = verticals[index];
+  //   const selectedConfig = verticals[index];
 
-    const nextKey =
-      selectedConfig?.pageType === "universal"
-        ? null
-        : (selectedConfig?.verticalKey ?? null);
+  //   const nextKey =
+  //     selectedConfig?.pageType === "universal"
+  //       ? null
+  //       : (selectedConfig?.verticalKey ?? null);
 
-    if (nextKey !== verticalKey) {
-      setVerticalKey(nextKey);
-    }
-  }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
+  //   if (nextKey !== verticalKey) {
+  //     setVerticalKey(nextKey);
+  //   }
+  // }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
 
   return (
     <div className="pt-8">
@@ -242,10 +234,10 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
             ) : (
               <div className="relative mx-auto flex flex-grow pt-8">
                 <div
-                  className={`mr-6 ${!puck.isEditing && `w-[200px] -ml-[224px]`}`}
+                  className={`mr-6 ${!puck.isEditing && `w-[200px] -ml-[224px]`} ${facetsLength ? `` : `none`}`}
                 >
                   <Facets
-                    customCssClasses={{ facetsContainer: "!text-lg" }}
+                    customCssClasses={{ facetsContainer: "!text-lg w-[200px]" }}
                     searchOnChange={true}
                   />
                 </div>
