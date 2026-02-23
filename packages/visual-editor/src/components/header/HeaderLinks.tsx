@@ -286,7 +286,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   // Early return for empty state
   if (validLinks.length + validAlwaysCollapsedLinks.length === 0) {
     return puck.isEditing ? (
-      <nav className="h-5 min-w-[100px] opacity-20" />
+      <nav className="h-5 min-w-[100px] min-h-[30px] opacity-20" />
     ) : (
       <></>
     );
@@ -296,7 +296,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
     <nav
       aria-label={ariaLabel}
       ref={navRef}
-      className={`flex md:gap-6 md:items-center ${justifyClass}`}
+      className={`flex md:gap-6 md:items-center ${justifyClass} ${puck.isEditing ? " min-w-[100px] min-h-[30px]" : ""}`}
     >
       {/* Hidden measure list for overflow math */}
       <ul
