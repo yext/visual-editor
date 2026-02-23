@@ -6,8 +6,8 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { useTemplateProps } from "../../../hooks/useDocument.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { TranslatableString } from "../../../types/types.ts";
-import { msg } from "../../../utils/i18n/platform.ts";
-import { resolveComponentData } from "../../../utils/index.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { resolveComponentData, themeManagerCn } from "../../../utils/index.ts";
 import {
   backgroundColors,
   BackgroundStyle,
@@ -16,6 +16,7 @@ import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { fetchData } from "./utils.ts";
+import { Body } from "../../atoms/body.tsx";
 
 export interface CustomBreadcrumbItem {
   id: string;
@@ -84,16 +85,60 @@ const customBreadcrumbFields: Fields<CustomBreadcrumbsProps> = {
   ),
 };
 
-const API_KEY = "d8016f96c913cc8b79931cef51b941f5";
-const contentEndpoint = "blog";
-
 const CustomBreadcrumbsComponent = ({
   styles,
   data,
+  puck,
 }: WithPuckProps<CustomBreadcrumbsProps>) => {
   const { t, i18n } = useTranslation();
   const separator = "/";
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const apiKey = streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_API_KEY;
+  const customEndpointName =
+    streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_NAME;
+
+  if (!apiKey || !customEndpointName) {
+    if (puck?.isEditing) {
+      const missingMessages: string[] = [];
+      if (!apiKey) {
+        missingMessages.push(
+          pt(
+            "missingCustomEndpointApiKey",
+            "Add your custom Content endpoint API key to view this section"
+          )
+        );
+      }
+      if (!customEndpointName) {
+        missingMessages.push(
+          pt(
+            "missingCustomEndpointName",
+            "Add your custom Content endpoint name to view this section"
+          )
+        );
+      }
+      return (
+        <div
+          className={themeManagerCn(
+            "relative h-[100px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+          )}
+        >
+          <Body
+            variant="base"
+            className="text-gray-500 font-normal text-center whitespace-pre-line"
+          >
+            {missingMessages.join("\n")}
+          </Body>
+        </div>
+      );
+    }
+
+    console.warn("Missing required configuration for Custom Breadcrumbs", {
+      apiKey: !!apiKey,
+      customEndpointName: !!customEndpointName,
+    });
+
+    return <></>;
+  }
 
   const directoryRoot = resolveComponentData(
     data.directoryRoot,
@@ -110,8 +155,8 @@ const CustomBreadcrumbsComponent = ({
     const fetchBreadcrumbs = async () => {
       try {
         const json = await fetchData({
-          endpoint: `https://cdn.yextapis.com/v2/accounts/me/content/${contentEndpoint}/${streamDocument.uid}`,
-          apiKey: API_KEY,
+          endpoint: `https://cdn.yextapis.com/v2/accounts/me/content/${customEndpointName}/${streamDocument.uid}`,
+          apiKey: apiKey,
         });
 
         if (!json) return;
@@ -139,7 +184,7 @@ const CustomBreadcrumbsComponent = ({
     };
 
     fetchBreadcrumbs();
-  }, [streamDocument?.uid, contentEndpoint]);
+  }, [streamDocument?.uid, customEndpointName]);
 
   if (!fetchedBreadcrumbs?.length) {
     return <PageSection></PageSection>;

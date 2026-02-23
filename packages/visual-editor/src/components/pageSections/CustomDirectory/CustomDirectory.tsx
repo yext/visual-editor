@@ -1,11 +1,13 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { YextField } from "../../../editor/YextField.tsx";
-import { useTemplateProps } from "../../../hooks/useDocument.tsx";
+import { useDocument, useTemplateProps } from "../../../hooks/useDocument.tsx";
 import {
   backgroundColors,
   BackgroundStyle,
   msg,
+  pt,
+  themeManagerCn,
 } from "../../../utils/index.ts";
 import { Background } from "../../atoms/background.tsx";
 import { Body } from "../../atoms/body.tsx";
@@ -44,18 +46,45 @@ const CustomDirectoryFields: Fields<CustomDirectoryProps> = {
   }),
 };
 
-const API_KEY = "d8016f96c913cc8b79931cef51b941f5";
-
 const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
   styles,
   slots,
   puck,
 }) => {
   const { document: streamDocument } = useTemplateProps();
+  console.log(JSON.stringify(streamDocument));
+  const nd = useDocument();
+  console.log(JSON.stringify(nd._env));
+  console.log(JSON.stringify(puck.metadata));
 
-  const [entities, setEntities] = React.useState<any[]>([]);
-  const [loading, setLoading] = React.useState(false);
-  const fetchEntities = async (entityIds: string[]) => {
+  const apiKey = streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_API_KEY;
+  console.log(apiKey);
+
+  const [entities, setEntities] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  if (!apiKey) {
+    if (puck?.isEditing) {
+      return (
+        <div
+          className={themeManagerCn(
+            "relative h-[100px] w-full bg-gray-100 rounded-lg border border-gray-200 flex flex-col items-center justify-center py-8 gap-2.5"
+          )}
+        >
+          <Body variant="base" className="text-gray-500 font-normal">
+            {pt(
+              "missingCustomEndpointApiKey",
+              "Add you custom Content endpoint API key to view this sectiom"
+            )}
+          </Body>
+        </div>
+      );
+    }
+    console.warn("API Key is required for Custom Directory");
+    return <></>;
+  }
+
+  const fetchEntities = useCallback(async (entityIds: string[]) => {
     if (!entityIds?.length) return;
 
     setLoading(true);
@@ -63,45 +92,43 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
     try {
       const res = await fetchData({
         endpoint: "https://cdn.yextapis.com/v2/accounts/me/entities",
-        apiKey: API_KEY,
+        apiKey: apiKey,
         entityIds: entityIds.join(","),
       });
 
       const fetchedEntities = res?.entities ?? [];
-
       setEntities(fetchedEntities);
     } catch (error) {
       console.error("Entity fetch error:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const childIds = streamDocument?.dm_childEntityIds;
+    if (childIds?.length) fetchEntities(childIds);
+  }, [streamDocument?.dm_childEntityIds, fetchEntities]);
 
-    if (childIds?.length) {
-      fetchEntities(childIds);
-    }
-  }, [streamDocument?.dm_childEntityIds]);
-
-  const handleClick = (item: any) => {
-    const childIds = item.dm_childEntityIds;
-
-    if (childIds?.length) {
-      fetchEntities(childIds);
-    }
-  };
+  const handleClick = useCallback(
+    (item: any) => {
+      const childIds = item.dm_childEntityIds;
+      if (childIds?.length) fetchEntities(childIds);
+    },
+    [fetchEntities]
+  );
 
   return (
     <Background background={styles.backgroundColor}>
       {loading && <></>}
+
       <PageSection className="flex flex-col items-center gap-2">
-        {slots?.HeadingSlot && <slots.HeadingSlot style={{ height: "auto" }} />}{" "}
+        {slots?.HeadingSlot && <slots.HeadingSlot style={{ height: "auto" }} />}
+
         <PageSection
           verticalPadding="sm"
           background={backgroundColors.background1.value}
-          className={"flex min-h-0 min-w-0 mx-auto"}
+          className="flex min-h-0 min-w-0 mx-auto"
         >
           <ul className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 w-full">
             {entities.map((item, index) => {
@@ -130,7 +157,7 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
                           }
                         }}
                       >
-                        <Body variant={"lg"}>{item.name}</Body>
+                        <Body variant="lg">{item.name}</Body>
                       </div>
                     </MaybeLink>
                   </li>
@@ -148,9 +175,7 @@ export const CustomDirectoryComponent: ComponentConfig<{
   props: CustomDirectoryProps;
 }> = {
   label: msg("components.CustomDirectory", "Custom Directory"),
-
   fields: CustomDirectoryFields,
-
   defaultProps: {
     slots: {
       HeadingSlot: [
