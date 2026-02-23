@@ -492,7 +492,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
                 constantValue: {
                   label: defaultText(
                     "componentDefaults.callToAction",
-                    "Call To Action"
+                    "Call to Action"
                   ),
                   link: "#",
                   linkType: "URL",

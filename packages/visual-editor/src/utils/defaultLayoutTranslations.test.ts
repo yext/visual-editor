@@ -144,16 +144,18 @@ describe("defaultLayoutTranslations", () => {
     );
   });
 
-  it("processTemplateLayoutData supports sync buildProcessedLayout", () => {
+  it("processTemplateLayoutData supports sync buildProcessedLayout", async () => {
     const layoutData = JSON.parse(defaultLayoutData.main) as Data;
     const processedLayout = asData(buildLabelLayout());
     const streamDocument = asStreamDocument(buildStreamDocument(["fr"]));
-    const processed = processTemplateLayoutData({
+    const processedPromise = processTemplateLayoutData({
       layoutData,
       streamDocument,
       templateId: "main",
       buildProcessedLayout: () => processedLayout,
     });
+    expect(processedPromise).toBeInstanceOf(Promise);
+    const processed = await processedPromise;
 
     expect(processed).toBe(processedLayout);
     expect((processed as TestLayout).root.props.label.fr).toBe(

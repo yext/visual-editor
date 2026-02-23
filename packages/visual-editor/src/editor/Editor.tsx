@@ -3,7 +3,7 @@ import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { type Config } from "@puckeditor/core";
+import { type Config, type Data } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
@@ -203,26 +203,72 @@ export const Editor = ({
   if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
-  const migratedData = !isLoading
-    ? processTemplateLayoutData({
-        layoutData: layoutData!,
-        streamDocument: document,
-        templateId: templateMetadata?.templateId ?? "",
-        buildProcessedLayout: () =>
-          migrate(layoutData!, migrationRegistry, puckConfig, document),
-      })
-    : undefined;
+
+  const [processedLayoutData, setProcessedLayoutData] = useState<Data>();
+  const [processedLayoutReady, setProcessedLayoutReady] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    if (
+      isLoading ||
+      !layoutData ||
+      !puckConfig ||
+      !templateMetadata ||
+      !document
+    ) {
+      setProcessedLayoutData(undefined);
+      setProcessedLayoutReady(false);
+      return;
+    }
+
+    let isCurrent = true;
+    setProcessedLayoutReady(false);
+
+    const buildProcessedLayout = async () => {
+      try {
+        const resolvedLayoutData = await processTemplateLayoutData({
+          layoutData,
+          streamDocument: document,
+          templateId: templateMetadata.templateId,
+          buildProcessedLayout: () =>
+            migrate(layoutData, migrationRegistry, puckConfig, document),
+        });
+
+        if (!isCurrent) {
+          return;
+        }
+
+        setProcessedLayoutData(resolvedLayoutData);
+        setProcessedLayoutReady(true);
+      } catch (error) {
+        console.error("Failed to process template layout data:", error);
+        if (isCurrent) {
+          setProcessedLayoutData(undefined);
+          setProcessedLayoutReady(false);
+        }
+      }
+    };
+
+    buildProcessedLayout();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [isLoading, layoutData, puckConfig, templateMetadata, document]);
+
+  const editorReady = !isLoading && processedLayoutReady;
+  const shouldShowLoading = localDev || parentLoaded;
 
   return (
     <ErrorProvider>
       <TemplateMetadataContext.Provider value={templateMetadata!}>
         <ErrorBoundary fallback={<></>} onError={logError}>
-          {!isLoading ? (
+          {editorReady ? (
             templateMetadata?.isThemeMode || forceThemeMode ? (
               <ThemeEditor
                 puckConfig={puckConfig!}
                 templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
+                layoutData={processedLayoutData!}
                 themeData={themeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}
@@ -232,7 +278,7 @@ export const Editor = ({
               <LayoutEditor
                 puckConfig={puckConfig!}
                 templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
+                layoutData={processedLayoutData!}
                 themeData={themeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}
@@ -241,7 +287,7 @@ export const Editor = ({
               />
             )
           ) : (
-            parentLoaded && (
+            shouldShowLoading && (
               <LoadingScreen
                 progress={progress}
                 platformLanguageIsSet={!!templateMetadata?.platformLocale}
