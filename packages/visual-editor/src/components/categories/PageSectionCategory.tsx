@@ -65,10 +65,6 @@ import {
   ProfessionalHeroSectionProps,
 } from "../pageSections/ProfessionalHeroSection.tsx";
 import {
-  ClassicSearchComponent,
-  ClassicSearchProps,
-} from "../pageSections/index.ts";
-import {
   SearchComponentProps,
   SearchComponent,
 } from "../pageSections/SearchSection/Search.tsx";
@@ -102,7 +98,6 @@ export interface PageSectionCategoryProps {
   TeamSection: TeamSectionProps;
   TestimonialSection: TestimonialSectionProps;
   VideoSection: VideoSectionProps;
-  ClassicSearchComponent: ClassicSearchProps;
   SearchComponent: SearchComponentProps;
 }
 
@@ -127,7 +122,6 @@ export const PageSectionCategoryComponents = {
   TeamSection,
   TestimonialSection,
   VideoSection,
-  ClassicSearchComponent,
   SearchComponent,
 };
 
