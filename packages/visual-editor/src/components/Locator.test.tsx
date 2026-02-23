@@ -589,7 +589,7 @@ const tests: ComponentTest[] = [
     version: 60,
   },
   {
-    name: "version 62 static headings",
+    name: "version 64 static headings",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -701,10 +701,10 @@ const tests: ComponentTest[] = [
     interactions: async (page) => {
       await expect.element(page.getByText("Custom Heading")).toBeVisible();
     },
-    version: 62,
+    version: 64,
   },
   {
-    name: "version 62 static image",
+    name: "version 64 static image",
     document: {
       locale: "en",
       businessId: "4174974",
@@ -814,7 +814,7 @@ const tests: ComponentTest[] = [
         },
       },
     },
-    version: 62,
+    version: 64,
   },
 ];
 

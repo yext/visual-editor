@@ -612,56 +612,60 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   },
   label: msg("components.locator", "Locator"),
   resolveFields: (data) => {
-    let updatedFields = { ...locatorFields };
-    const staticEnabled =
-      data.props.resultCard?.primaryHeading?.constantValueEnabled ?? false;
+    let updatedFields: Fields<LocatorProps> = { ...locatorFields };
+    const setConstantVaueFieldVisibility = (
+      fields: Fields<LocatorProps>,
+      fieldKey:
+        | "primaryHeading"
+        | "secondaryHeading"
+        | "tertiaryHeading"
+        | "image",
+      isConstantValueEnabled: boolean
+    ): Fields<LocatorProps> => {
+      let nextFields = fields;
+      nextFields = setDeep(
+        nextFields,
+        `resultCard.objectFields.${fieldKey}.objectFields.field.visible`,
+        !isConstantValueEnabled
+      );
+      nextFields = setDeep(
+        nextFields,
+        `resultCard.objectFields.${fieldKey}.objectFields.constantValue.visible`,
+        isConstantValueEnabled
+      );
+      return nextFields;
+    };
 
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.primaryHeading.objectFields.field.visible",
-      !staticEnabled
-    );
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.primaryHeading.objectFields.constantValue.visible",
-      staticEnabled
-    );
-    const secondaryStaticEnabled =
-      data.props.resultCard?.secondaryHeading?.constantValueEnabled ?? false;
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.secondaryHeading.objectFields.field.visible",
-      !secondaryStaticEnabled
-    );
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.secondaryHeading.objectFields.constantValue.visible",
-      secondaryStaticEnabled
-    );
-    const tertiaryStaticEnabled =
-      data.props.resultCard?.tertiaryHeading?.constantValueEnabled ?? false;
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.tertiaryHeading.objectFields.field.visible",
-      !tertiaryStaticEnabled
-    );
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.tertiaryHeading.objectFields.constantValue.visible",
-      tertiaryStaticEnabled
-    );
-    const imageStaticEnabled =
-      data.props.resultCard?.image?.constantValueEnabled ?? false;
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.image.objectFields.field.visible",
-      !imageStaticEnabled
-    );
-    updatedFields = setDeep(
-      updatedFields,
-      "resultCard.objectFields.image.objectFields.constantValue.visible",
-      imageStaticEnabled
-    );
+    const constantValueFieldConfigs = [
+      {
+        key: "primaryHeading",
+        enabled:
+          data.props.resultCard?.primaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "secondaryHeading",
+        enabled:
+          data.props.resultCard?.secondaryHeading?.constantValueEnabled ??
+          false,
+      },
+      {
+        key: "tertiaryHeading",
+        enabled:
+          data.props.resultCard?.tertiaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "image",
+        enabled: data.props.resultCard?.image?.constantValueEnabled ?? false,
+      },
+    ] as const;
+
+    constantValueFieldConfigs.forEach(({ key, enabled }) => {
+      updatedFields = setConstantVaueFieldVisibility(
+        updatedFields,
+        key,
+        enabled
+      );
+    });
 
     return updatedFields;
   },
