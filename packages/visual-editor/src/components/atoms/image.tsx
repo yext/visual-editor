@@ -30,7 +30,7 @@ export interface ImageProps {
 export const getImageAltText = (
   image: ImageType | ComplexImageType | AssetImageType | undefined,
   locale: string,
-  entityForAltText: StreamDocument | Record<string, any>
+  altTextEntity: StreamDocument | Record<string, any>
 ): string | undefined => {
   if (!image) {
     return undefined;
@@ -44,7 +44,7 @@ export const getImageAltText = (
   }
 
   return typeof altTextField === "object"
-    ? resolveComponentData(altTextField, locale, entityForAltText)
+    ? resolveComponentData(altTextField, locale, altTextEntity)
     : altTextField;
 };
 

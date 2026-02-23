@@ -212,20 +212,20 @@ export interface LocatorResultCardProps {
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryHeading: {
     field: { selection: { value: "name" } },
-    constantValue: { en: "", hasLocalizedValue: "true" },
+    constantValue: "",
     constantValueEnabled: false,
     headingLevel: 3,
   },
   secondaryHeading: {
     field: { selection: { value: "name" } },
-    constantValue: { en: "", hasLocalizedValue: "true" },
+    constantValue: "",
     constantValueEnabled: false,
     variant: "base",
     liveVisibility: false,
   },
   tertiaryHeading: {
     field: { selection: { value: "name" } },
-    constantValue: { en: "", hasLocalizedValue: "true" },
+    constantValue: "",
     constantValueEnabled: false,
     variant: "base",
     liveVisibility: false,
