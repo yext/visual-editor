@@ -699,7 +699,7 @@ const tests: ComponentTest[] = [
       },
     },
     interactions: async (page) => {
-      await expect.element(page.getByText("Custom Heading")).toBeVisible();
+      await expect.element(page.getByText("Secondary Static")).toBeVisible();
     },
     version: 64,
   },
