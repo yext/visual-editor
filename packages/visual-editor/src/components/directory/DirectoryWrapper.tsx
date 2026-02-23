@@ -43,9 +43,6 @@ export const DirectoryList = ({
           const childSlug = resolveDirectoryListChildren(streamDocument, child);
           let label;
           switch (streamDocument?.dm_directoryChildren?.meta?.entityType?.id) {
-            case "dm_root":
-              label = child.name;
-              break;
             case "dm_country":
               label = child.c_addressCountryDisplayName ?? child.name;
               break;

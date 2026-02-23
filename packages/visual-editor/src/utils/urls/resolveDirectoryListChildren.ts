@@ -1,4 +1,3 @@
-import { normalizeLocalesInObject } from "../normalizeLocale.ts";
 import { normalizeSlug } from "../slugifier.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 import { isPrimaryLocale } from "./resolveUrlFromPathInfo.ts";
@@ -58,8 +57,6 @@ export const resolveDirectoryListChildren = (
   streamDocument: StreamDocument,
   child: { slug?: string }
 ): string | undefined => {
-  streamDocument = normalizeLocalesInObject(streamDocument);
-
   for (const resolve of resolvers) {
     try {
       const result = resolve(streamDocument, child);

@@ -16,11 +16,7 @@ export const resolveBreadcrumbsFromPathInfo = (
   streamDocument: StreamDocument
 ): BreadcrumbLink[] | undefined => {
   const breadcrumbPrefix = streamDocument.__?.pathInfo?.breadcrumbPrefix;
-  if (
-    !streamDocument.__?.pathInfo ||
-    (typeof breadcrumbPrefix !== "string" &&
-      typeof breadcrumbPrefix !== "undefined")
-  ) {
+  if (!streamDocument.__?.pathInfo) {
     return;
   }
 
