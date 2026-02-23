@@ -1,7 +1,7 @@
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
-import React, { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { YextField } from "../../../editor/YextField.tsx";
-import { useDocument, useTemplateProps } from "../../../hooks/useDocument.tsx";
+import { useTemplateProps } from "../../../hooks/useDocument.tsx";
 import {
   backgroundColors,
   BackgroundStyle,
@@ -52,13 +52,8 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
   puck,
 }) => {
   const { document: streamDocument } = useTemplateProps();
-  console.log(JSON.stringify(streamDocument));
-  const nd = useDocument();
-  console.log(JSON.stringify(nd._env));
-  console.log(JSON.stringify(puck.metadata));
 
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_API_KEY;
-  console.log(apiKey);
 
   const [entities, setEntities] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
