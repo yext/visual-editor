@@ -129,7 +129,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     histories.length === 1 || hasErrors || deploymentInProgress;
   const publishTooltipMessage = deploymentInProgress
     ? pt(
-        "publishBlocked.deploymentInProgress",
+        "publishError.deploymentInProgress",
         "update is disabled while deployment is in progress"
       )
     : hasErrors

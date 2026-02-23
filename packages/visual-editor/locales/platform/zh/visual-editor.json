@@ -549,11 +549,9 @@
   "product": "产品",
   "promoBanner": "促销横幅",
   "promoMedia": "促销媒体",
-  "publishBlocked": {
-    "deploymentInProgress": "部署过程中更新被禁用"
-  },
   "publishError": {
     "components": "删除或修复有错误的部分",
+    "deploymentInProgress": "部署过程中更新被禁用",
     "metaTitle": "通过导航到顶级页面组件的设置来填写所有区域设置的元标题",
     "metaTitleWithLocales": "通过导航到顶级页面组件的设置来填写以下区域设置的元标题：{{locales}}"
   },

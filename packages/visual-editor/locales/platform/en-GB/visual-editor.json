@@ -549,11 +549,9 @@
   "product": "Product",
   "promoBanner": "Promo Banner",
   "promoMedia": "Promo Media",
-  "publishBlocked": {
-    "deploymentInProgress": "update is disabled while deployment is in progress"
-  },
   "publishError": {
     "components": "delete or fix sections with errors",
+    "deploymentInProgress": "update is disabled while deployment is in progress",
     "metaTitle": "fill in Meta Title for all locales by navigating to the top-level Page component's settings",
     "metaTitleWithLocales": "fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}"
   },

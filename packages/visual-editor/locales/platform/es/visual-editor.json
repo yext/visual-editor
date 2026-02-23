@@ -554,11 +554,9 @@
   "product": "Producto",
   "promoBanner": "Banner promocional",
   "promoMedia": "Medios promocionales",
-  "publishBlocked": {
-    "deploymentInProgress": "la actualización está deshabilitada mientras la implementación está en progreso"
-  },
   "publishError": {
     "components": "eliminar o corregir secciones con errores",
+    "deploymentInProgress": "la actualización está deshabilitada mientras la implementación está en progreso",
     "metaTitle": "complete el metatítulo para todas las configuraciones regionales navegando a la configuración del componente de página de nivel superior",
     "metaTitleWithLocales": "complete el metatítulo para las siguientes configuraciones regionales navegando a la configuración del componente de página de nivel superior: {{locales}}"
   },

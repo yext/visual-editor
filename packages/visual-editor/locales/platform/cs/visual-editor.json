@@ -559,11 +559,9 @@
   "product": "Produkt",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo média",
-  "publishBlocked": {
-    "deploymentInProgress": "aktualizace je během zavádění zakázána"
-  },
   "publishError": {
     "components": "odstranit nebo opravit části s chybami",
+    "deploymentInProgress": "aktualizace je během zavádění zakázána",
     "metaTitle": "vyplňte název metadat pro všechna národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně",
     "metaTitleWithLocales": "vyplňte metanázev pro následující národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně: {{locales}}"
   },
