@@ -217,7 +217,6 @@ export const Editor = ({
     }
 
     let isCurrent = true;
-    setProcessedLayoutReady(false);
 
     const buildProcessedLayout = async () => {
       try {
