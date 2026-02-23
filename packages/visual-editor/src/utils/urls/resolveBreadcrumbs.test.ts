@@ -9,7 +9,7 @@ vi.mock("../schema/helpers.ts", () => ({
 
 const mockedGetDirectoryParents = getDirectoryParents as unknown as Mock;
 
-const baseDocument: Omit<StreamDocument, "undefined"> = {
+const baseDocument: StreamDocument = {
   name: "123 Test Rd",
   dm_directoryParents_123_locations: [
     { name: "Directory Root", slug: "index.html" },
@@ -60,7 +60,7 @@ describe("resolveBreadcrumbs", () => {
     const documentWithBreadcrumbs: StreamDocument = {
       ...baseDocument,
       __: {
-        pathInfo: { ...baseDocument.__.pathInfo, breadcrumbPrefix: "prefix" },
+        pathInfo: { ...baseDocument.__!.pathInfo, breadcrumbPrefix: "prefix" },
       },
     };
 
