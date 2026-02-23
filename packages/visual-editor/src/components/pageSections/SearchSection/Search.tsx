@@ -1,3 +1,4 @@
+import "./search.css";
 import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   CloudRegion,
@@ -10,8 +11,6 @@ import { SearchI18nextProvider } from "@yext/search-ui-react";
 import React from "react";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
-//@ts-ignore
-import "./search.css";
 import { defaultSearchResultsProps } from "./propsAndTypes.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";

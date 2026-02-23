@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  usePuck,
+} from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
 import {
   Facets,
@@ -12,7 +17,6 @@ import { FaEllipsisV } from "react-icons/fa";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
 import Cards from "./Cards.tsx";
-import { MapComponent } from "./MapComponent.tsx";
 import {
   defaultSearchResultsProps,
   VerticalConfigProps,
@@ -23,8 +27,7 @@ import {
   buildVerticalConfigMap,
   isValidVerticalConfig,
 } from "./utils.tsx";
-//@ts-ignore
-import "./search.css";
+import { MapComponent } from "./MapComponent.tsx";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -105,22 +108,23 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     data: { verticals },
     puck,
   } = props;
+  const puckStore = useOptionalPuckStore();
+  const arrayState = puckStore?.appState?.ui?.arrayState;
 
-  // React.useEffect(() => {
-  //   if (!puck?.isEditing) return;
+  const arrayKey = React.useMemo(() => {
+    if (!arrayState || !puck.isEditing) return undefined;
 
-  //   const arrayState = puck.appState?.ui?.arrayState;
-  //   if (!arrayState) return;
+    return Object.keys(arrayState).find((key) =>
+      key.includes("_object_data_verticals")
+    );
+  }, [arrayState, puck.isEditing]);
 
-  //   // safe logic here
-  // }, [puck]);
   const searchActions = useSearchActions();
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const searchTerm = useSearchState((s) => s.query.input);
   const gdaLoading = useSearchState((s) => s.generativeDirectAnswer.isLoading);
-  const facetsLength = useSearchState((s) => s.filters.facets)?.length;
+  const facetsLength = useSearchState((s) => s.filters.facets);
   const [verticalKey, setVerticalKey] = useState<string | null>(null);
-
   const verticalConfigMap = React.useMemo(
     () => buildVerticalConfigMap(verticals),
     [verticals]
@@ -130,7 +134,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     () => buildUniversalLimit(verticals),
     [verticals]
   );
-
   const currentVerticalConfig = React.useMemo(
     () => verticals.find((v) => v.verticalKey === verticalKey),
     [verticals, verticalKey]
@@ -140,49 +143,59 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     if (!isValidVerticalConfig(verticals)) {
       console.warn("Skipping search: invalid vertical config", verticals);
       return;
-    } else {
-      if (searchTerm) {
-        searchActions.setQuery(searchTerm);
-      }
-      if (verticalKey) {
-        const verticalLimit = verticals.find(
-          (item) => item.verticalKey === verticalKey
-        )?.verticalLimit;
-        searchActions.setVertical(verticalKey);
-        searchActions.setVerticalLimit(verticalLimit!);
-        searchActions.executeVerticalQuery();
-      } else {
-        searchActions.setUniversal();
-        searchActions.setUniversalLimit(universalLimit);
-        searchActions.executeUniversalQuery();
-      }
     }
-  }, [verticals, searchTerm, universalLimit, searchActions, verticalKey]);
 
-  // React.useEffect(() => {
-  //   if (!arrayKey || !puck.isEditing) return;
+    if (searchTerm) {
+      searchActions.setQuery(searchTerm);
+    }
 
-  //   const verticalArrayState = arrayState[arrayKey];
-  //   const openId = verticalArrayState?.openId;
+    if (verticalKey && currentVerticalConfig) {
+      searchActions.setVertical(verticalKey);
 
-  //   const selectedItem = verticalArrayState?.items?.find(
-  //     (item) => item._arrayId === openId
-  //   );
+      if (typeof currentVerticalConfig.verticalLimit === "number") {
+        searchActions.setVerticalLimit(currentVerticalConfig.verticalLimit);
+      }
 
-  //   const index = selectedItem?._currentIndex;
-  //   if (typeof index !== "number") return;
+      searchActions.executeVerticalQuery();
+      return;
+    }
 
-  //   const selectedConfig = verticals[index];
+    searchActions.setUniversal();
+    searchActions.setUniversalLimit(universalLimit);
+    searchActions.executeUniversalQuery();
+  }, [
+    verticals,
+    searchTerm,
+    universalLimit,
+    verticalKey,
+    currentVerticalConfig,
+    searchActions,
+  ]);
 
-  //   const nextKey =
-  //     selectedConfig?.pageType === "universal"
-  //       ? null
-  //       : (selectedConfig?.verticalKey ?? null);
+  React.useEffect(() => {
+    if (!arrayKey || !puck.isEditing || !arrayState) return;
 
-  //   if (nextKey !== verticalKey) {
-  //     setVerticalKey(nextKey);
-  //   }
-  // }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
+    const verticalArrayState = arrayState[arrayKey];
+    const openId = verticalArrayState?.openId;
+
+    const selectedItem = verticalArrayState?.items?.find(
+      (item) => item._arrayId === openId
+    );
+
+    const index = selectedItem?._currentIndex;
+    if (typeof index !== "number") return;
+
+    const selectedConfig = verticals[index];
+
+    const nextKey =
+      selectedConfig?.pageType === "universal"
+        ? null
+        : (selectedConfig?.verticalKey ?? null);
+
+    if (nextKey !== verticalKey) {
+      setVerticalKey(nextKey);
+    }
+  }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
 
   return (
     <div className="pt-8">
@@ -234,7 +247,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
             ) : (
               <div className="relative mx-auto flex flex-grow pt-8">
                 <div
-                  className={`mr-6 ${!puck.isEditing && `w-[200px] -ml-[224px]`} ${facetsLength ? `` : `none`}`}
+                  className={`w-[200px] mr-6 ${!puck.isEditing && `-ml-[224px]`} ${facetsLength ? `` : `none`}`}
                 >
                   <Facets
                     customCssClasses={{ facetsContainer: "!text-lg w-[200px]" }}
@@ -332,4 +345,12 @@ export const SearchResultsSlot: ComponentConfig<{
   fields: SearchResultsSlotFields,
   defaultProps: defaultSearchResultsProps,
   render: (props) => <SearchResultsSlotInternal {...props} />,
+};
+
+const useOptionalPuckStore = () => {
+  try {
+    return usePuck();
+  } catch {
+    return undefined;
+  }
 };
