@@ -205,14 +205,11 @@ export const Editor = ({
   }
 
   const [processedLayoutData, setProcessedLayoutData] = useState<Data>();
-  const [processedLayoutReady, setProcessedLayoutReady] =
-    useState<boolean>(false);
   const templateId = templateMetadata?.templateId ?? "";
 
   useEffect(() => {
     if (isLoading || !layoutData || !puckConfig || !templateId) {
       setProcessedLayoutData(undefined);
-      setProcessedLayoutReady(false);
       return;
     }
 
@@ -233,12 +230,10 @@ export const Editor = ({
         }
 
         setProcessedLayoutData(resolvedLayoutData);
-        setProcessedLayoutReady(true);
       } catch (error) {
         console.error("Failed to process template layout data:", error);
         if (isCurrent) {
           setProcessedLayoutData(undefined);
-          setProcessedLayoutReady(false);
         }
       }
     };
@@ -250,7 +245,7 @@ export const Editor = ({
     };
   }, [isLoading, layoutData, puckConfig, templateId]);
 
-  const editorReady = !isLoading && processedLayoutReady;
+  const editorReady = !isLoading && processedLayoutData !== undefined;
   const shouldShowLoading = localDev || parentLoaded;
 
   return (

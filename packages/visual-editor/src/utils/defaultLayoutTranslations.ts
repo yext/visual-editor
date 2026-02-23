@@ -8,34 +8,30 @@ import {
 } from "./i18n/componentDefaultRegistry.ts";
 import { normalizeLocale } from "./normalizeLocale.ts";
 import type { StreamDocument } from "./types/StreamDocument.ts";
-import { DEFAULT_LOCALE } from "./pageSetLocales.ts";
+import { DEFAULT_LOCALE, getPageSetLocales } from "./pageSetLocales.ts";
 
 type LocalizedObject = {
   hasLocalizedValue: "true";
   [key: string]: unknown;
 };
 
-export type VisualEditorTemplateId = "main" | "directory" | "locator";
+export type VisualEditorTemplateId = keyof typeof defaultLayoutData;
 
-const defaultLayoutsByTemplate: Record<VisualEditorTemplateId, unknown> = {
-  main: JSON.parse(defaultLayoutData.main),
-  directory: JSON.parse(defaultLayoutData.directory),
-  locator: JSON.parse(defaultLayoutData.locator),
-};
+const KNOWN_DEFAULT_RICH_TEXT_REGEX = /<span>(.*?)<\/span>/i;
 
-const enDefaults = componentDefaultRegistry[DEFAULT_LOCALE] ?? {};
-const enValueToKeys = new Map<string, string[]>();
+const defaultLayoutsByTemplate = Object.fromEntries(
+  Object.entries(defaultLayoutData).map(([templateId, layout]) => [
+    templateId,
+    JSON.parse(layout),
+  ])
+) as Record<VisualEditorTemplateId, unknown>;
 
-for (const [key, value] of Object.entries(enDefaults)) {
-  const currentKeys = enValueToKeys.get(value) ?? [];
-  currentKeys.push(key);
-  enValueToKeys.set(value, currentKeys);
-}
-
-const hasOwn = (obj: object, key: string): boolean => {
-  return Object.prototype.hasOwnProperty.call(obj, key);
-};
-
+/**
+ * Recursively removes generated string `id` fields from layout-like objects.
+ *
+ * This normalizes otherwise equivalent layouts so comparisons ignore
+ * non-semantic identifier differences.
+ */
 const stripNonSemanticIds = (node: unknown): unknown => {
   if (Array.isArray(node)) {
     return node.map(stripNonSemanticIds);
@@ -56,6 +52,21 @@ const stripNonSemanticIds = (node: unknown): unknown => {
   return stripped;
 };
 
+const buildEnglishValueToKeysIndex = (): Map<string, string[]> => {
+  const englishDefaults = componentDefaultRegistry[DEFAULT_LOCALE] ?? {};
+  const index = new Map<string, string[]>();
+
+  for (const [key, value] of Object.entries(englishDefaults)) {
+    const existingKeys = index.get(value) ?? [];
+    existingKeys.push(key);
+    index.set(value, existingKeys);
+  }
+
+  return index;
+};
+
+const enValueToKeys = buildEnglishValueToKeysIndex();
+
 const normalizedDefaultLayoutsByTemplate: Record<
   VisualEditorTemplateId,
   unknown
@@ -75,13 +86,6 @@ const isVisualEditorTemplateId = (
   return templateId in defaultLayoutsByTemplate;
 };
 
-const getTemplateLayout = (templateId: string): unknown | undefined => {
-  if (!isVisualEditorTemplateId(templateId)) {
-    return undefined;
-  }
-  return defaultLayoutsByTemplate[templateId];
-};
-
 const getNormalizedTemplateLayout = (
   templateId: string
 ): unknown | undefined => {
@@ -89,27 +93,6 @@ const getNormalizedTemplateLayout = (
     return undefined;
   }
   return normalizedDefaultLayoutsByTemplate[templateId];
-};
-
-/**
- * Parses `_pageset` and returns the raw `scope.locales` array when available.
- *
- * Returns an empty array when locales are missing or not an array.
- * JSON parsing errors are handled by callers.
- */
-const parsePagesetLocales = (streamDocument: StreamDocument): unknown[] => {
-  const parsedPageset = JSON.parse(streamDocument?._pageset ?? "{}");
-  const pagesetLocales = parsedPageset?.scope?.locales;
-  return Array.isArray(pagesetLocales) ? pagesetLocales : [];
-};
-
-/**
- * Filters unknown locale input down to strings and normalizes each locale.
- */
-const normalizeStringLocales = (locales: unknown[]): string[] => {
-  return locales
-    .filter((locale: unknown): locale is string => typeof locale === "string")
-    .map((locale) => normalizeLocale(locale));
 };
 
 /**
@@ -130,30 +113,20 @@ const expandWithBaseLocales = (locales: string[]): string[] => {
 /**
  * Determines target locales for default translation injection.
  *
- * Fallback behavior:
- * - invalid/missing `_pageset` JSON -> `[DEFAULT_LOCALE]`
- * - missing/invalid `scope.locales` -> `[DEFAULT_LOCALE]`
- * - no valid string locales after normalization -> `[DEFAULT_LOCALE]`
+ * Falls back to `[DEFAULT_LOCALE]` when pageset locales are missing/invalid.
  */
 const getTargetLocales = (streamDocument: StreamDocument): string[] => {
-  try {
-    const pagesetLocales = parsePagesetLocales(streamDocument);
-    if (pagesetLocales.length === 0) {
-      return [DEFAULT_LOCALE];
-    }
-
-    const normalizedLocales = normalizeStringLocales(pagesetLocales);
-    if (normalizedLocales.length === 0) {
-      return [DEFAULT_LOCALE];
-    }
-
-    return expandWithBaseLocales(normalizedLocales);
-  } catch {
+  const normalizedLocales = getPageSetLocales(streamDocument).map((locale) =>
+    normalizeLocale(locale)
+  );
+  if (normalizedLocales.length === 0) {
     return [DEFAULT_LOCALE];
   }
+
+  return expandWithBaseLocales(normalizedLocales);
 };
 
-const getLocaleDefaultMap = (locale: string): Record<string, string> => {
+const getDefaultsForLocale = (locale: string): Record<string, string> => {
   const normalizedLocale = normalizeLocale(locale);
   const baseLocale = normalizedLocale.split("-")[0];
 
@@ -170,7 +143,7 @@ const getLocaleDefaultMap = (locale: string): Record<string, string> => {
  * A single English string can map to multiple default keys; injection is skipped
  * if any key is missing in the target locale or if mapped locale values disagree.
  */
-const getLocalizedDefaultText = (
+const resolveDeterministicLocalizedText = (
   locale: string,
   enValue: string
 ): string | undefined => {
@@ -179,7 +152,7 @@ const getLocalizedDefaultText = (
     return undefined;
   }
 
-  const localeDefaults = getLocaleDefaultMap(locale);
+  const localeDefaults = getDefaultsForLocale(locale);
   const candidateValues = new Set<string>();
 
   // One English string may map to multiple default keys.
@@ -205,98 +178,50 @@ const getLocalizedDefaultText = (
  * Only `<span>...</span>` wrappers are supported.
  * Non-matching rich text shapes are ignored.
  */
-const extractDefaultRichTextInfo = (
+const extractKnownDefaultRichTextText = (
   value: unknown
-): { text: string } | undefined => {
+): string | undefined => {
   if (!isPlainObject(value) || typeof value.html !== "string") {
     return undefined;
   }
 
-  const match = value.html.match(/<span>(.*?)<\/span>/i);
+  const match = value.html.match(KNOWN_DEFAULT_RICH_TEXT_REGEX);
   if (!match) {
     return undefined;
   }
 
-  return {
-    text: match[1],
-  };
+  return match[1];
 };
 
 /**
- * Injects missing locale keys into a localized object.
- *
- * Existing locale values are never overwritten.
+ * Resolves an injectable localized value for a locale based on the English value.
+ * Returns `undefined` when the value is ineligible or ambiguous.
  */
-const injectMissingLocaleValues = (
-  node: LocalizedObject,
-  locales: string[],
-  resolveValue: (locale: string) => unknown
-): void => {
-  for (const locale of locales) {
-    if (hasOwn(node, locale)) {
-      continue;
-    }
-
-    const value = resolveValue(locale);
-    if (value !== undefined) {
-      node[locale] = value;
-    }
-  }
-};
-
-/**
- * Injects string defaults for missing locales when a deterministic mapping exists.
- */
-const injectStringDefaultIfEligible = (
-  localizedNode: LocalizedObject,
-  locales: string[],
-  enValue: string
-): void => {
-  injectMissingLocaleValues(localizedNode, locales, (locale) => {
-    return getLocalizedDefaultText(locale, enValue);
-  });
-};
-
-/**
- * Injects rich text defaults for missing locales when the source rich text shape
- * is recognized and the localized plain text mapping is deterministic.
- */
-const injectRichTextDefaultIfEligible = (
-  localizedNode: LocalizedObject,
-  locales: string[],
+const resolveLocalizedDefaultValue = (
+  locale: string,
   enValue: unknown
-): void => {
-  const richTextInfo = extractDefaultRichTextInfo(enValue);
-  if (!richTextInfo) {
-    return;
+): unknown => {
+  if (typeof enValue === "string") {
+    return resolveDeterministicLocalizedText(locale, enValue);
   }
 
-  injectMissingLocaleValues(localizedNode, locales, (locale) => {
-    const localizedText = getLocalizedDefaultText(locale, richTextInfo.text);
-    return localizedText === undefined
-      ? undefined
-      : getDefaultRTF(localizedText);
-  });
+  const enRichTextText = extractKnownDefaultRichTextText(enValue);
+  if (!enRichTextText) {
+    return undefined;
+  }
+
+  const localizedText = resolveDeterministicLocalizedText(
+    locale,
+    enRichTextText
+  );
+  return localizedText === undefined ? undefined : getDefaultRTF(localizedText);
 };
 
 /**
- * Applies locale injection for a single node marked with `hasLocalizedValue`.
+ * Type guard for nodes that use the `{ hasLocalizedValue: "true" }` shape.
  */
-const injectNodeLocalizedValues = (
-  localizedNode: LocalizedObject,
-  locales: string[]
-): void => {
-  if (localizedNode.hasLocalizedValue !== "true") {
-    return;
-  }
-
-  const enValue = localizedNode.en;
-  if (typeof enValue === "string") {
-    injectStringDefaultIfEligible(localizedNode, locales, enValue);
-    return;
-  }
-
-  injectRichTextDefaultIfEligible(localizedNode, locales, enValue);
+const isLocalizedObject = (value: unknown): value is LocalizedObject => {
+  return isPlainObject(value) && value.hasLocalizedValue === "true";
 };
 
 /**
@@ -315,7 +240,18 @@ const injectLocalizedValuesRecursively = (
     return;
   }
 
-  injectNodeLocalizedValues(node as LocalizedObject, locales);
+  if (isLocalizedObject(node)) {
+    for (const locale of locales) {
+      if (Object.prototype.hasOwnProperty.call(node, locale)) {
+        continue;
+      }
+
+      const localizedValue = resolveLocalizedDefaultValue(locale, node.en);
+      if (localizedValue !== undefined) {
+        node[locale] = localizedValue;
+      }
+    }
+  }
 
   for (const value of Object.values(node)) {
     injectLocalizedValuesRecursively(value, locales);
@@ -366,7 +302,7 @@ export const injectTemplateLayoutDefaultTranslations = (
   streamDocument: StreamDocument,
   templateId: string
 ): Data => {
-  if (getTemplateLayout(templateId) === undefined) {
+  if (!isVisualEditorTemplateId(templateId)) {
     return layout;
   }
 

@@ -211,7 +211,7 @@ export type PersonStruct = {
 };
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
-type LocalizedValues = {
+export type LocalizedValues = {
   hasLocalizedValue: "true";
 } & Record<string, string>;
 

@@ -1,15 +1,12 @@
 import { getDefaultRTF } from "../editor/TranslatableRichTextField.tsx";
 import {
+  LocalizedValues,
   RichText,
   TranslatableRichText,
   TranslatableString,
 } from "../types/types.ts";
 import { componentDefaultRegistry } from "./i18n/componentDefaultRegistry.ts";
 import { locales } from "./i18n/locales.ts";
-
-type LocalizedDefaults = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
 
 const getDefaultTextForLocale = (
   key: string,
@@ -43,7 +40,7 @@ export const defaultText = (
   key: string,
   enDefault: string
 ): TranslatableString => {
-  const localizedDefaults: LocalizedDefaults = {
+  const localizedDefaults: LocalizedValues = {
     hasLocalizedValue: "true",
   };
 

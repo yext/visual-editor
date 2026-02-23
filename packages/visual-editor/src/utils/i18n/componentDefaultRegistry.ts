@@ -15,28 +15,29 @@ export const isPlainObject = (
   return typeof value === "object" && value !== null && !Array.isArray(value);
 };
 
+// Flattens nested objects into dot-delimited keys, including only string leaf values.
+// Based on packages/visual-editor/src/utils/i18n/jsonUtils.ts flatten function.
 const flattenStringLeafNodes = (
-  value: unknown,
-  prefix = "",
-  out: Record<string, string> = {}
+  obj: Record<string, unknown>,
+  prefix = ""
 ): Record<string, string> => {
-  if (typeof value === "string") {
-    if (prefix) {
-      out[prefix] = value;
+  const result: Record<string, string> = {};
+
+  for (const key of Object.keys(obj)) {
+    const value = obj[key];
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+
+    if (isPlainObject(value)) {
+      Object.assign(result, flattenStringLeafNodes(value, fullKey));
+      continue;
     }
-    return out;
+
+    if (typeof value === "string") {
+      result[fullKey] = value;
+    }
   }
 
-  if (!isPlainObject(value)) {
-    return out;
-  }
-
-  for (const [key, child] of Object.entries(value)) {
-    const nextPrefix = prefix ? `${prefix}.${key}` : key;
-    flattenStringLeafNodes(child, nextPrefix, out);
-  }
-
-  return out;
+  return result;
 };
 
 const getLocaleFromModulePath = (path: string): string | undefined => {
@@ -59,9 +60,8 @@ export const componentDefaultRegistry = Object.entries(
   }
 
   const namespaceValue = mod.default?.[COMPONENT_DEFAULTS_NAMESPACE];
-  registry[locale] = flattenStringLeafNodes(
-    namespaceValue,
-    COMPONENT_DEFAULTS_NAMESPACE
-  );
+  registry[locale] = isPlainObject(namespaceValue)
+    ? flattenStringLeafNodes(namespaceValue, COMPONENT_DEFAULTS_NAMESPACE)
+    : {};
   return registry;
 }, {});
