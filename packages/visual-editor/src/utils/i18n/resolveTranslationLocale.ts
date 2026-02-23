@@ -15,7 +15,7 @@ export const resolveTranslationLocale = (locale: string): string => {
     return "";
   }
 
-  if (locale.includes("zh-Hant")) {
+  if (locale.startsWith("zh-Hant")) {
     return "zh-TW";
   }
 

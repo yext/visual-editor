@@ -53,8 +53,7 @@
     "i18n:propagate:components": "pnpm exec tsx scripts/propagatePlatformToComponents.ts",
     "i18n:check:interpolation": "pnpm exec tsx scripts/checkInterpolationVariables.ts",
     "i18n:lint": "i18next-cli lint --config i18next-cli.platform.config.ts --quiet && i18next-cli lint --config i18next-cli.components.config.ts --quiet && pnpm run i18n:check:interpolation",
-    "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:translate:components:component-defaults && pnpm run i18n:lint",
-    "i18n:translate:components:component-defaults": "pnpm exec tsx scripts/generateTranslations.ts --type components --scope componentDefaults"
+    "i18n:update": "pnpm run i18n:extract:platform && pnpm run i18n:extract:components && pnpm run i18n:translate:platform && pnpm run i18n:propagate:components && pnpm run i18n:lint"
   },
   "dependencies": {
     "@microsoft/api-documenter": "^7.26.29",
