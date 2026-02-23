@@ -50,7 +50,7 @@ export const Video: ComponentConfig<{
   props: VideoProps;
 }> = {
   fields: videoFields,
-  label: msg("components.Video", "Video"),
+  label: msg("components.video", "Video"),
   inline: true,
   defaultProps: {
     data: {

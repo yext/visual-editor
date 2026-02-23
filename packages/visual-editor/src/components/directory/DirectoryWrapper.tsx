@@ -13,6 +13,8 @@ import { PageSection } from "../atoms/pageSection.tsx";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
 import { sortAlphabetically } from "../../utils/directory/utils.ts";
 import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryListChildren.ts";
 
 export type DirectoryGridProps = {
   slots: {
@@ -21,10 +23,12 @@ export type DirectoryGridProps = {
 };
 
 export const DirectoryList = ({
+  streamDocument,
   directoryChildren,
   relativePrefixToRoot,
   level,
 }: {
+  streamDocument: StreamDocument;
   directoryChildren: any[];
   relativePrefixToRoot: string;
   level: string;
@@ -38,6 +42,7 @@ export const DirectoryList = ({
     >
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => {
+          const childSlug = resolveDirectoryListChildren(streamDocument, child);
           let label;
           switch (level) {
             case "dm_root":
@@ -57,8 +62,8 @@ export const DirectoryList = ({
                 variant="directoryLink"
                 href={
                   relativePrefixToRoot
-                    ? relativePrefixToRoot + child.slug
-                    : child.slug
+                    ? relativePrefixToRoot + childSlug
+                    : childSlug
                 }
               >
                 <Body>{label}</Body>
@@ -104,7 +109,7 @@ const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
 export const DirectoryGrid: ComponentConfig<{
   props: DirectoryGridProps;
 }> = {
-  label: msg("components.DirectoryGrid", "Directory Grid"),
+  label: msg("components.directoryGrid", "Directory Grid"),
   fields: directoryGridFields,
   defaultProps: {
     slots: {

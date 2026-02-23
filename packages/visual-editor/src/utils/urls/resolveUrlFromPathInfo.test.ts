@@ -11,57 +11,90 @@ const baseDocument: StreamDocument = {
   },
 };
 
+const matrixCases = [
+  {
+    breadcrumbPrefix: "stores",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "en/stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "es/stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "es/stores/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "en/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "es/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "es/123",
+  },
+] as const;
+
 describe("resolveUrlFromPathInfo", () => {
   it("returns undefined when pathInfo template is missing", () => {
     expect(resolveUrlFromPathInfo(baseDocument, "")).toBeUndefined();
   });
 
-  it("omits locale prefix for primary locale by default", () => {
-    const docWithPathInfo: StreamDocument = {
-      ...baseDocument,
-      __: {
-        ...baseDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
+  it.each(matrixCases)(
+    "resolves url for matrix case: breadcrumbPrefix=$breadcrumbPrefix locale=$locale includeLocalePrefixForPrimaryLocale=$includeLocalePrefixForPrimaryLocale",
+    ({
+      breadcrumbPrefix,
+      locale,
+      includeLocalePrefixForPrimaryLocale,
+      expected,
+    }) => {
+      const template = breadcrumbPrefix
+        ? `${breadcrumbPrefix}/[[id]]`
+        : "[[id]]";
+
+      const docWithPathInfo: StreamDocument = {
+        ...baseDocument,
+        locale,
+        __: {
+          ...baseDocument.__,
+          pathInfo: {
+            template,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale,
+          },
         },
-      },
-    };
+      };
 
-    expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("stores/123");
-  });
-
-  it("includes locale prefix for primary locale when configured", () => {
-    const docWithPathInfo: StreamDocument = {
-      ...baseDocument,
-      __: {
-        ...baseDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-          includeLocalePrefixForPrimaryLocale: true,
-        },
-      },
-    };
-
-    expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("en/stores/123");
-  });
-
-  it("includes locale prefix for non-primary locale when primaryLocale is set", () => {
-    const docWithPathInfo: StreamDocument = {
-      ...baseDocument,
-      locale: "es",
-      __: {
-        ...baseDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-        },
-      },
-    };
-
-    expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe("es/stores/123");
-  });
+      expect(resolveUrlFromPathInfo(docWithPathInfo, "")).toBe(expected);
+    }
+  );
 
   it("uses meta.locale when locale is missing", () => {
     const docWithPathInfo: StreamDocument = {

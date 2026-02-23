@@ -23,6 +23,7 @@ import {
 } from "../../types/templateMetadata.ts";
 import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
+import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
 export type ImagePayload = {
   id: string;
@@ -60,22 +61,7 @@ const createImageConstantConfig = (options?: {
     const templateMetadata: TemplateMetadata = useTemplateMetadata();
     const locale = i18n.language;
 
-    let locales = templateMetadata?.locales || [];
-    if (locales.length === 0) {
-      try {
-        const parsedPageSet = JSON.parse(streamDocument._pageset);
-        if (
-          parsedPageSet?.scope?.locales &&
-          Array.isArray(parsedPageSet.scope.locales)
-        ) {
-          locales = parsedPageSet.scope.locales;
-        } else {
-          console.warn("Invalid locale structure in page group data");
-        }
-      } catch {
-        console.warn("failed to retrieve locales from page group");
-      }
-    }
+    const locales = getPageSetLocales(streamDocument);
 
     const resolvedValue = React.useMemo(() => {
       if (value && "hasLocalizedValue" in value) {
