@@ -112,8 +112,8 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
         placeholder={isTypingEffect ? placeholder : "Search here...."}
         customCssClasses={{
           searchBarContainer:
-            "w-full h-14 rounded-md [&>div]:border [&>div]:rounded-md !mb-0 relative" +
-            +(isTypingEffect ? "isTypingEffect" : ""),
+            "w-full h-14 rounded-md [&>div]:border [&>div]:rounded-md !mb-0 relative " +
+            (isTypingEffect ? "isTypingEffect" : ""),
           searchButtonContainer: voiceSearch
             ? "ml-14 my-auto"
             : showIcon
