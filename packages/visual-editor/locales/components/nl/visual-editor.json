@@ -34,7 +34,7 @@
     "featuredProducts": "Uitgelichte producten",
     "featuredPromotion": "Uitgelichte promotie",
     "featuredTestimonials": "Uitgelichte getuigenissen",
-    "findALocation": "Zoek een locatie",
+    "findALocation": "Vind een locatie",
     "firstLast": "Eerste Laatste",
     "followUs": "Volg ons",
     "footerLabel": "Voettekstlabel",
@@ -64,7 +64,7 @@
     "subtitle": "Ondertitel",
     "text": "Tekst",
     "upcomingEvents": "Aankomende evenementen",
-    "visitProfile": "Bezoek Profiel"
+    "visitProfile": "Bezoek profiel"
   },
   "components": {
     "footerUtilityImagesSlot": {
