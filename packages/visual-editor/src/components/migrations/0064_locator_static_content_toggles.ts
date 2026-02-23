@@ -1,12 +1,10 @@
 import { Migration } from "../../utils/migrate.ts";
 
-const DEFAULT_PRIMARY_HEADING_CONSTANT_VALUE = {
-  en: "",
-  hasLocalizedValue: "true",
-};
+const DEFAULT_PRIMARY_HEADING_CONSTANT_VALUE = "";
 const DEFAULT_IMAGE_CONSTANT_VALUE = {
-  en: { url: "", height: 0, width: 0 },
-  hasLocalizedValue: "true",
+  url: "",
+  height: 0,
+  width: 0,
 };
 
 export const locatorStaticContentToggles: Migration = {
