@@ -275,17 +275,15 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span
-                    tabIndex={publishTooltipMessage ? 0 : -1}
-                    className={
-                      publishTooltipMessage ? "ve-cursor-not-allowed" : ""
-                    }
+                    tabIndex={publishDisabled ? 0 : -1}
+                    className={publishDisabled ? "ve-cursor-not-allowed" : ""}
                   >
                     <Button
                       variant="secondary"
                       disabled={publishDisabled}
                       onClick={onButtonClick}
                       className={
-                        publishTooltipMessage ? "ve-pointer-events-none" : ""
+                        publishDisabled ? "ve-pointer-events-none" : ""
                       }
                     >
                       {buttonText}
