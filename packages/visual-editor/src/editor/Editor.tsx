@@ -207,15 +207,10 @@ export const Editor = ({
   const [processedLayoutData, setProcessedLayoutData] = useState<Data>();
   const [processedLayoutReady, setProcessedLayoutReady] =
     useState<boolean>(false);
+  const templateId = templateMetadata?.templateId ?? "";
 
   useEffect(() => {
-    if (
-      isLoading ||
-      !layoutData ||
-      !puckConfig ||
-      !templateMetadata ||
-      !document
-    ) {
+    if (isLoading || !layoutData || !puckConfig || !templateId) {
       setProcessedLayoutData(undefined);
       setProcessedLayoutReady(false);
       return;
@@ -229,7 +224,7 @@ export const Editor = ({
         const resolvedLayoutData = await processTemplateLayoutData({
           layoutData,
           streamDocument: document,
-          templateId: templateMetadata.templateId,
+          templateId,
           buildProcessedLayout: () =>
             migrate(layoutData, migrationRegistry, puckConfig, document),
         });
@@ -254,7 +249,7 @@ export const Editor = ({
     return () => {
       isCurrent = false;
     };
-  }, [isLoading, layoutData, puckConfig, templateMetadata, document]);
+  }, [isLoading, layoutData, puckConfig, templateId]);
 
   const editorReady = !isLoading && processedLayoutReady;
   const shouldShowLoading = localDev || parentLoaded;
