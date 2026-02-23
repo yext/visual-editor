@@ -50,7 +50,7 @@ describe("resolveDirectoryListChildren", () => {
   it("always includes locale for non-primary locales", () => {
     const nonPrimaryLocaleDocument: StreamDocument = {
       ...baseDocument,
-      locale: "es",
+      locale: "es-MX",
       __: {
         pathInfo: {
           ...baseDocument.__?.pathInfo,
@@ -60,7 +60,7 @@ describe("resolveDirectoryListChildren", () => {
     };
 
     expect(resolveDirectoryListChildren(nonPrimaryLocaleDocument, child)).toBe(
-      "es/locations/us/va"
+      "es-mx/locations/us/va"
     );
   });
 

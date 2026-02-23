@@ -1,3 +1,4 @@
+import { normalizeLocalesInObject } from "../normalizeLocale.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 import { resolveBreadcrumbsFromDirectory } from "./resolveBreadcrumbsFromDirectory.ts";
 import {
@@ -17,6 +18,8 @@ const resolvers: BreadcrumbResolver[] = [
 export const resolveBreadcrumbs = (
   streamDocument: StreamDocument
 ): BreadcrumbLink[] => {
+  streamDocument = normalizeLocalesInObject(streamDocument);
+
   for (const resolve of resolvers) {
     try {
       const result = resolve(streamDocument);

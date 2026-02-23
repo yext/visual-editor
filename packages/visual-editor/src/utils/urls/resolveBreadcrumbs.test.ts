@@ -9,7 +9,7 @@ vi.mock("../schema/helpers.ts", () => ({
 
 const mockedGetDirectoryParents = getDirectoryParents as unknown as Mock;
 
-const baseDocument: StreamDocument = {
+const baseDocument: Omit<StreamDocument, "undefined"> = {
   name: "123 Test Rd",
   dm_directoryParents_123_locations: [
     { name: "Directory Root", slug: "index.html" },
@@ -24,7 +24,7 @@ const baseDocument: StreamDocument = {
     postalCode: "12345",
     countryCode: "US",
   },
-  locale: "en",
+  locale: "es",
   __: {
     pathInfo: {
       primaryLocale: "en",
@@ -48,10 +48,34 @@ describe("resolveBreadcrumbs", () => {
     ]);
 
     expect(resolveBreadcrumbs(documentWithBreadcrumbs)).toEqual([
+      { name: "Directory Root", slug: "es/index.html" },
+      { name: "US", slug: "es/us" },
+      { name: "TS", slug: "es/ts" },
+      { name: "Testville", slug: "es/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ]);
+  });
+
+  it("uses pathInfo resolver with prefix", () => {
+    const documentWithBreadcrumbs: StreamDocument = {
+      ...baseDocument,
+      __: {
+        pathInfo: { ...baseDocument.__.pathInfo, breadcrumbPrefix: "prefix" },
+      },
+    };
+
+    mockedGetDirectoryParents.mockReturnValue([
       { name: "Directory Root", slug: "index.html" },
       { name: "US", slug: "us" },
       { name: "TS", slug: "ts" },
       { name: "Testville", slug: "testville" },
+    ]);
+
+    expect(resolveBreadcrumbs(documentWithBreadcrumbs)).toEqual([
+      { name: "Directory Root", slug: "es/prefix/index.html" },
+      { name: "US", slug: "es/prefix/us" },
+      { name: "TS", slug: "es/prefix/ts" },
+      { name: "Testville", slug: "es/prefix/testville" },
       { name: "123 Test Rd", slug: "" },
     ]);
   });

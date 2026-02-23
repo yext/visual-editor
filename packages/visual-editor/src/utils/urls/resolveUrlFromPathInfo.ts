@@ -38,7 +38,9 @@ export const resolveUrlFromPathInfo = (
 
   return (
     relativePrefixToRoot +
-    (shouldIncludeLocalePrefix ? `${locale}/${normalizedSlug}` : normalizedSlug)
+    (shouldIncludeLocalePrefix
+      ? `${normalizeSlug(locale)}/${normalizedSlug}`
+      : normalizedSlug)
   );
 };
 

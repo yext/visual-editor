@@ -1,3 +1,4 @@
+import { normalizeLocalesInObject } from "../normalizeLocale.ts";
 import { normalizeSlug } from "../slugifier.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
 import { isPrimaryLocale } from "./resolveUrlFromPathInfo.ts";
@@ -36,7 +37,9 @@ const resolveDirectoryListChildrenFromPathInfo: DirectoryListChildrenResolver =
       ? `${breadcrumbPrefix}/${childSlug}`
       : childSlug;
 
-    return includeLocalePrefix ? `${locale}/${slugWithPrefix}` : slugWithPrefix;
+    return includeLocalePrefix
+      ? `${normalizeSlug(locale)}/${slugWithPrefix}`
+      : slugWithPrefix;
   };
 
 const resolveDirectoryListChildrenFromSlug: DirectoryListChildrenResolver = (
@@ -55,6 +58,8 @@ export const resolveDirectoryListChildren = (
   streamDocument: StreamDocument,
   child: { slug?: string }
 ): string | undefined => {
+  streamDocument = normalizeLocalesInObject(streamDocument);
+
   for (const resolve of resolvers) {
     try {
       const result = resolve(streamDocument, child);

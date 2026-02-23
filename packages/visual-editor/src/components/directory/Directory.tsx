@@ -100,7 +100,6 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
             streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
-            level={streamDocument?.meta?.entityType?.id}
           />
         )}
     </Background>
