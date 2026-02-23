@@ -36,45 +36,40 @@ const locatorFields: Fields<SearchComponentProps> = {
 };
 const EXPERIENCE_VERSION = "PRODUCTION";
 
+export const searchConfig: SearchConfig = {
+  apiKey: "fb73f1bf6a262bc3255bcb938088204f",
+  experienceKey: "ukg-fins-rk-test-dont-touch",
+  locale: "en",
+  experienceVersion: EXPERIENCE_VERSION,
+  cloudRegion: CloudRegion.US,
+  environment: Environment.PROD,
+};
+
 const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   slots,
   puck,
 }) => {
   const streamDocument = useDocument();
-  const searchConfig: SearchConfig = React.useMemo(
-    () => ({
-      apiKey: streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY,
-      experienceKey: streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_EXP_KEY,
-      locale: streamDocument?.locale ?? "en",
-      experienceVersion: EXPERIENCE_VERSION,
-      cloudRegion: CloudRegion.US,
-      environment: Environment.PROD,
-    }),
-    [
-      streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY,
-      streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_EXP_KEY,
-      streamDocument?.locale,
-    ]
-  );
-
-  const searcher = React.useMemo(() => {
-    if (!searchConfig.apiKey || !searchConfig.experienceKey) {
-      return undefined;
+  const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
+    const searchHeadlessConfig = provideHeadless(searchConfig);
+    if (searchHeadlessConfig === undefined) {
+      return { searchAnalyticsConfig: undefined, searcher: undefined };
     }
-    return provideHeadless(searchConfig);
-  }, [searchConfig]);
 
-  React.useEffect(() => {
-    searcher?.setSessionTrackingEnabled(true);
-  }, [searcher]);
+    const searchAnalyticsConfig = provideHeadless(searchConfig);
+    return {
+      searchAnalyticsConfig,
+      searcher: provideHeadless(searchConfig),
+    };
+  }, [streamDocument.id, streamDocument.locale]);
 
-  if (!searcher) {
+  if (searcher === undefined || searchAnalyticsConfig === undefined) {
     console.warn(
-      "Search Headless could not be initialized. Check API key / Experience key."
+      "Could not create Locator component because Search Headless or Search Analytics config is undefined. Please check your environment variables."
     );
     return <></>;
   }
-
+  searcher.setSessionTrackingEnabled(true);
   return (
     <SearchHeadlessProvider searcher={searcher}>
       <SearchI18nextProvider searcher={searcher}>

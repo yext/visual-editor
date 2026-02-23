@@ -1,17 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { Environment } from "@yext/search-headless-react";
 
-interface TypingEffectConfig {
-  apiKey?: string;
-  experienceKey?: string;
-  environment: Environment;
+interface TypeEffectProps {
+  env: "PRODUCTION" | "SANDBOX";
 }
 
-export const useTypingEffect = ({
-  apiKey,
-  experienceKey,
-  environment,
-}: TypingEffectConfig) => {
+export const useTypingEffect = ({ env }: TypeEffectProps) => {
   const [queryPrompts, setQueryPrompts] = useState<string[]>([]);
   const [placeholder, setPlaceholder] = useState("");
 
@@ -20,61 +13,77 @@ export const useTypingEffect = ({
   const isDeletingRef = useRef(false);
   const timerRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (!apiKey || !experienceKey) return;
+  // Fetch prompts
+  const fetchPrompts = async () => {
+    const base = env === "PRODUCTION" ? "cdn" : "sbx-cdn";
 
-    const base = environment === Environment.PROD ? "cdn" : "sbx-cdn";
+    const url = `https://${base}.yextapis.com/v2/accounts/me/search/autocomplete?v=20190101&api_key=fb73f1bf6a262bc3255bcb938088204f&sessionTrackingEnabled=false&experienceKey=ukg-fins-rk-test-dont-touch&input=`;
 
-    const url = `https://${base}.yextapis.com/v2/accounts/me/search/autocomplete?v=20190101&api_key=${apiKey}&sessionTrackingEnabled=false&experienceKey=${experienceKey}&input=`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        const prompts =
-          data?.response?.results?.map((item: any) => item.value) ?? [];
-        setQueryPrompts(prompts);
-      })
-      .catch((err) => console.error("TypingEffect fetch failed:", err));
-  }, [apiKey, experienceKey, environment]);
+      const prompts = data.response.results.map((item: any) => item.value);
 
-  useEffect(() => {
-    if (queryPrompts.length === 0) return;
+      setQueryPrompts(prompts);
+    } catch (err) {
+      console.error("TypingEffect fetch failed:", err);
+    }
+  };
 
-    const runTyping = () => {
-      const currentWord = queryPrompts[indexRef.current];
-      if (!currentWord) return;
+  // Typing loop
+  const runTyping = () => {
+    const currentWord = queryPrompts[indexRef.current];
 
-      if (!isDeletingRef.current) {
-        charIndexRef.current++;
-        setPlaceholder(currentWord.slice(0, charIndexRef.current));
+    if (!currentWord) return;
 
-        if (charIndexRef.current === currentWord.length) {
-          isDeletingRef.current = true;
-          timerRef.current = window.setTimeout(runTyping, 1500);
-          return;
-        }
-      } else {
-        charIndexRef.current--;
-        setPlaceholder(currentWord.slice(0, charIndexRef.current));
+    if (!isDeletingRef.current) {
+      // typing forward
+      charIndexRef.current++;
+      setPlaceholder(currentWord.slice(0, charIndexRef.current));
 
-        if (charIndexRef.current === 0) {
-          isDeletingRef.current = false;
-          indexRef.current = (indexRef.current + 1) % queryPrompts.length;
-        }
+      if (charIndexRef.current === currentWord.length) {
+        isDeletingRef.current = true;
+        timerRef.current = window.setTimeout(runTyping, 1500);
+        return;
       }
+    } else {
+      // deleting backward
+      charIndexRef.current--;
+      setPlaceholder(currentWord.slice(0, charIndexRef.current));
 
-      timerRef.current = window.setTimeout(
-        runTyping,
-        isDeletingRef.current ? 50 : 100
-      );
-    };
+      if (charIndexRef.current === 0) {
+        isDeletingRef.current = false;
+        indexRef.current = (indexRef.current + 1) % queryPrompts.length;
+      }
+    }
 
-    runTyping();
+    timerRef.current = window.setTimeout(
+      runTyping,
+      isDeletingRef.current ? 50 : 100
+    );
+  };
+
+  // Fetch once
+  useEffect(() => {
+    fetchPrompts();
+  }, [env]);
+
+  // Start typing when prompts loaded
+  useEffect(() => {
+    if (queryPrompts.length > 0) {
+      runTyping();
+    }
 
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
     };
   }, [queryPrompts]);
 
-  return { placeholder };
+  return {
+    placeholder,
+    queryPrompts,
+  };
 };
