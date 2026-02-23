@@ -27,7 +27,7 @@ import {
   Slot,
 } from "@puckeditor/core";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 const defaultInsight = {
   image: {

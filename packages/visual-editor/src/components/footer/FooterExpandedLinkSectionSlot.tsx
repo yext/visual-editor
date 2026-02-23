@@ -12,7 +12,7 @@ import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {

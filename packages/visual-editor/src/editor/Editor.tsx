@@ -32,7 +32,7 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
-import { processTemplateLayoutData } from "../utils/defaultLayoutTranslations.ts";
+import { processTemplateLayoutData } from "../utils/i18n/defaultLayoutTranslations.ts";
 
 const devLogger = new DevLogger();
 

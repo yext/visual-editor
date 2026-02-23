@@ -13,7 +13,7 @@ import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { normalizeThemeColor } from "../../utils/normalizeThemeColor.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export type TextProps = {
   data: {

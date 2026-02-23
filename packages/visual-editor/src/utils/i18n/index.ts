@@ -6,3 +6,5 @@ export {
   pt,
 } from "./platform.ts";
 export { getPreferredDistanceUnit, toKilometers } from "./distance.ts";
+export { defaultText, defaultRichText } from "./defaultContent.ts";
+export { processTemplateLayoutData } from "./defaultLayoutTranslations.ts";

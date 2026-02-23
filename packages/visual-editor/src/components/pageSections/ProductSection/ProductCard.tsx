@@ -31,7 +31,7 @@ import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholder
 import { TextProps } from "../../contentBlocks/Text.tsx";
 import { ProductSectionVariant } from "./ProductSection.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 const defaultProduct = {
   image: {

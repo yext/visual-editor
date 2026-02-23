@@ -30,7 +30,7 @@ import {
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
 import { SlidePanel } from "./SlidePanel.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 const HAMBURGER_RESERVE_PX = 48;
 

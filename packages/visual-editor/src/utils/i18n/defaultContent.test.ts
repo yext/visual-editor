@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { defaultRichText, defaultText } from "./defaultContent.ts";
-import { componentDefaultRegistry } from "./i18n/componentDefaultRegistry.ts";
-import { locales } from "./i18n/locales.ts";
-import { TranslatableRichText, TranslatableString } from "../types/types.ts";
+import { componentDefaultRegistry } from "./componentDefaultRegistry.ts";
+import { locales } from "./locales.ts";
+import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 
 type LocalizedStringMap = { hasLocalizedValue: "true" } & Record<
   string,

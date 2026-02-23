@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { defaultLayoutData } from "../vite-plugin/defaultLayoutData.ts";
+import { defaultLayoutData } from "../../vite-plugin/defaultLayoutData.ts";
 import {
   injectTemplateLayoutDefaultTranslations,
   isDefaultTemplateLayout,
   processTemplateLayoutData,
 } from "./defaultLayoutTranslations.ts";
-import { getDefaultRTF } from "../editor/TranslatableRichTextField.tsx";
-import { componentDefaultRegistry } from "./i18n/componentDefaultRegistry.ts";
-import type { StreamDocument } from "./types/StreamDocument.ts";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
+import { componentDefaultRegistry } from "./componentDefaultRegistry.ts";
+import type { StreamDocument } from "../types/StreamDocument.ts";
 import type { Data } from "@puckeditor/core";
 
 type TestLayout = Record<string, any>;
@@ -70,6 +70,21 @@ describe("defaultLayoutTranslations", () => {
     expect(frBody).toBeDefined();
     expect(frBody.html).toContain(expectedText);
     expect(frBody.json).toContain(expectedText);
+  });
+
+  it("injects regional locales using stripped-locale defaults", () => {
+    const layout = buildLabelLayout();
+
+    injectTemplateLayoutDefaultTranslations(
+      asData(layout),
+      asStreamDocument(buildStreamDocument(["fr-CA"])),
+      "main"
+    );
+
+    expect(layout.root.props.label["fr-CA"]).toBe(
+      componentDefaultRegistry.fr["componentDefaults.button"]
+    );
+    expect(layout.root.props.label.fr).toBeUndefined();
   });
 
   it("does not inject english defaults for locales without translations", () => {

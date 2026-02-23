@@ -15,7 +15,7 @@ import {
 } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { useTranslation } from "react-i18next";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export type HeadingTextProps = {
   /** The heading text value */

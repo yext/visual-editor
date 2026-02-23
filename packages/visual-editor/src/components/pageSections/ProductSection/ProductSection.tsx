@@ -20,7 +20,7 @@ import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export type ProductSectionVariant = "immersive" | "classic" | "minimal";
 export type ProductSectionImageConstrain = "fill" | "fixed";

@@ -20,7 +20,7 @@ import { AssetImageType } from "../../../types/images.ts";
 import { PhotoGalleryWrapperProps } from "./PhotoGalleryWrapper.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 // Generate 3 random placeholder images for the gallery
 export const PLACEHOLDER: AssetImageType = {

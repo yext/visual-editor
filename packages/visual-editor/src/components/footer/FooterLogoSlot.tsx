@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { ImageStylingFields } from "../contentBlocks/image/styling.ts";
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import { getImageUrl } from "../contentBlocks/image/Image.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface FooterLogoSlotProps {
   data: {

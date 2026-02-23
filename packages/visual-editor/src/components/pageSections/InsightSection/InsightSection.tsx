@@ -14,7 +14,7 @@ import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLeve
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface InsightSectionProps {
   /**

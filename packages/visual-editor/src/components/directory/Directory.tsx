@@ -13,7 +13,7 @@ import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { DirectoryList } from "./DirectoryWrapper.tsx";
 import { isDirectoryGrid } from "../../utils/directory/utils.ts";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface DirectoryStyles {
   /**

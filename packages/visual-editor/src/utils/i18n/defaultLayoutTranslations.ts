@@ -1,14 +1,10 @@
 import type { Data } from "@puckeditor/core";
-import { getDefaultRTF } from "../editor/TranslatableRichTextField.tsx";
-import { defaultLayoutData } from "../vite-plugin/defaultLayoutData.ts";
-import { isDeepEqual } from "./deepEqual.ts";
-import {
-  componentDefaultRegistry,
-  isPlainObject,
-} from "./i18n/componentDefaultRegistry.ts";
-import { normalizeLocale } from "./normalizeLocale.ts";
-import type { StreamDocument } from "./types/StreamDocument.ts";
-import { DEFAULT_LOCALE, getPageSetLocales } from "./pageSetLocales.ts";
+import { defaultLayoutData } from "../../vite-plugin/defaultLayoutData.ts";
+import { isDeepEqual } from "../deepEqual.ts";
+import { isPlainObject } from "./componentDefaultRegistry.ts";
+import type { StreamDocument } from "../types/StreamDocument.ts";
+import { getPageSetLocales } from "../pageSetLocales.ts";
+import { resolveLocalizedComponentDefaultValue } from "./componentDefaultResolver.ts";
 
 type LocalizedObject = {
   hasLocalizedValue: "true";
@@ -16,8 +12,6 @@ type LocalizedObject = {
 };
 
 export type VisualEditorTemplateId = keyof typeof defaultLayoutData;
-
-const KNOWN_DEFAULT_RICH_TEXT_REGEX = /<span>(.*?)<\/span>/i;
 
 const defaultLayoutsByTemplate = Object.fromEntries(
   Object.entries(defaultLayoutData).map(([templateId, layout]) => [
@@ -52,21 +46,6 @@ const stripNonSemanticIds = (node: unknown): unknown => {
   return stripped;
 };
 
-const buildEnglishValueToKeysIndex = (): Map<string, string[]> => {
-  const englishDefaults = componentDefaultRegistry[DEFAULT_LOCALE] ?? {};
-  const index = new Map<string, string[]>();
-
-  for (const [key, value] of Object.entries(englishDefaults)) {
-    const existingKeys = index.get(value) ?? [];
-    existingKeys.push(key);
-    index.set(value, existingKeys);
-  }
-
-  return index;
-};
-
-const enValueToKeys = buildEnglishValueToKeysIndex();
-
 const normalizedDefaultLayoutsByTemplate: Record<
   VisualEditorTemplateId,
   unknown
@@ -96,128 +75,6 @@ const getNormalizedTemplateLayout = (
 };
 
 /**
- * Expands each locale to include both regional and base locale variants.
- *
- * Example: `es-MX` expands to `es-MX` and `es`.
- */
-const expandWithBaseLocales = (locales: string[]): string[] => {
-  // Include both regional and base locales (for example, "es-MX" and "es").
-  const expandedLocales = new Set<string>();
-  for (const locale of locales) {
-    expandedLocales.add(locale);
-    expandedLocales.add(locale.split("-")[0]);
-  }
-  return [...expandedLocales];
-};
-
-/**
- * Determines target locales for default translation injection.
- *
- * Falls back to `[DEFAULT_LOCALE]` when pageset locales are missing/invalid.
- */
-const getTargetLocales = (streamDocument: StreamDocument): string[] => {
-  const normalizedLocales = getPageSetLocales(streamDocument).map((locale) =>
-    normalizeLocale(locale)
-  );
-  if (normalizedLocales.length === 0) {
-    return [DEFAULT_LOCALE];
-  }
-
-  return expandWithBaseLocales(normalizedLocales);
-};
-
-const getDefaultsForLocale = (locale: string): Record<string, string> => {
-  const normalizedLocale = normalizeLocale(locale);
-  const baseLocale = normalizedLocale.split("-")[0];
-
-  return (
-    componentDefaultRegistry[normalizedLocale] ??
-    componentDefaultRegistry[baseLocale] ??
-    {}
-  );
-};
-
-/**
- * Resolves a localized default string for an English source value.
- *
- * A single English string can map to multiple default keys; injection is skipped
- * if any key is missing in the target locale or if mapped locale values disagree.
- */
-const resolveDeterministicLocalizedText = (
-  locale: string,
-  enValue: string
-): string | undefined => {
-  const keys = enValueToKeys.get(enValue);
-  if (!keys || keys.length === 0) {
-    return undefined;
-  }
-
-  const localeDefaults = getDefaultsForLocale(locale);
-  const candidateValues = new Set<string>();
-
-  // One English string may map to multiple default keys.
-  // If locale values disagree across keys, skip injection to avoid guessing.
-  for (const key of keys) {
-    const value = localeDefaults[key];
-    if (value === undefined) {
-      return undefined;
-    }
-    candidateValues.add(value);
-  }
-
-  if (candidateValues.size !== 1) {
-    return undefined;
-  }
-
-  return candidateValues.values().next().value;
-};
-
-/**
- * Extracts text from known default rich text HTML.
- *
- * Only `<span>...</span>` wrappers are supported.
- * Non-matching rich text shapes are ignored.
- */
-const extractKnownDefaultRichTextText = (
-  value: unknown
-): string | undefined => {
-  if (!isPlainObject(value) || typeof value.html !== "string") {
-    return undefined;
-  }
-
-  const match = value.html.match(KNOWN_DEFAULT_RICH_TEXT_REGEX);
-  if (!match) {
-    return undefined;
-  }
-
-  return match[1];
-};
-
-/**
- * Resolves an injectable localized value for a locale based on the English value.
- * Returns `undefined` when the value is ineligible or ambiguous.
- */
-const resolveLocalizedDefaultValue = (
-  locale: string,
-  enValue: unknown
-): unknown => {
-  if (typeof enValue === "string") {
-    return resolveDeterministicLocalizedText(locale, enValue);
-  }
-
-  const enRichTextText = extractKnownDefaultRichTextText(enValue);
-  if (!enRichTextText) {
-    return undefined;
-  }
-
-  const localizedText = resolveDeterministicLocalizedText(
-    locale,
-    enRichTextText
-  );
-  return localizedText === undefined ? undefined : getDefaultRTF(localizedText);
-};
-
-/**
  * Type guard for nodes that use the `{ hasLocalizedValue: "true" }` shape.
  */
 const isLocalizedObject = (value: unknown): value is LocalizedObject => {
@@ -242,15 +99,18 @@ const injectLocalizedValuesRecursively = (
 
   if (isLocalizedObject(node)) {
     for (const locale of locales) {
-      if (Object.prototype.hasOwnProperty.call(node, locale)) {
-        continue;
-      }
-
-      const localizedValue = resolveLocalizedDefaultValue(locale, node.en);
-      if (localizedValue !== undefined) {
-        node[locale] = localizedValue;
+      if (!(locale in node)) {
+        const localizedValue = resolveLocalizedComponentDefaultValue(
+          locale,
+          node.en
+        );
+        if (localizedValue !== undefined) {
+          node[locale] = localizedValue;
+        }
       }
     }
+    // No nested localizable structures exist inside this node, so we can exit early.
+    return;
   }
 
   for (const value of Object.values(node)) {
@@ -306,7 +166,7 @@ export const injectTemplateLayoutDefaultTranslations = (
     return layout;
   }
 
-  const locales = getTargetLocales(streamDocument);
+  const locales = getPageSetLocales(streamDocument);
   injectLocalizedValuesRecursively(layout, locales);
   return layout;
 };

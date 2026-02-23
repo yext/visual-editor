@@ -10,7 +10,7 @@ import { YextField } from "../../editor/YextField.tsx";
 import { TranslatableString } from "../../types/types.ts";
 import { backgroundColors } from "../../utils/themeConfigOptions.ts";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 /** The props for the Phone component */
 export interface PhoneProps {

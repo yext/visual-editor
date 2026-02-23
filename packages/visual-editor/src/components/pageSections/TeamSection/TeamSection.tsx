@@ -14,7 +14,7 @@ import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface TeamSectionProps {
   /**

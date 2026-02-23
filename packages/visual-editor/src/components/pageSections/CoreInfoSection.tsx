@@ -23,7 +23,7 @@ import {
   resolvePhoneNumbers,
 } from "../contentBlocks/PhoneList.tsx";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface CoreInfoStyles {
   /**

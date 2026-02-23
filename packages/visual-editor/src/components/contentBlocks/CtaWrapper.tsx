@@ -24,7 +24,7 @@ import {
   ctaTypeOptions,
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface CTAWrapperProps {
   data: {
@@ -208,8 +208,8 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
       ? Boolean(resolvedButtonLabel?.trim()) && (data.show ?? true)
       : Boolean(
           cta &&
-            (ctaType === "presetImage" || resolvedLinkLabel) &&
-            (data.show ?? true)
+          (ctaType === "presetImage" || resolvedLinkLabel) &&
+          (data.show ?? true)
         );
 
   const resolvedButtonClassName = themeManagerCn(

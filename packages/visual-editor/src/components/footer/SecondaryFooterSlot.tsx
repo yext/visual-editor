@@ -5,7 +5,7 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 const defaultLink = {
   linkType: "URL" as const,

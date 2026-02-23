@@ -1,12 +1,12 @@
-import { getDefaultRTF } from "../editor/TranslatableRichTextField.tsx";
+import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 import {
   LocalizedValues,
   RichText,
   TranslatableRichText,
   TranslatableString,
-} from "../types/types.ts";
-import { componentDefaultRegistry } from "./i18n/componentDefaultRegistry.ts";
-import { locales } from "./i18n/locales.ts";
+} from "../../types/types.ts";
+import { componentDefaultRegistry } from "./componentDefaultRegistry.ts";
+import { locales } from "./locales.ts";
 
 const getDefaultTextForLocale = (
   key: string,

@@ -38,7 +38,7 @@ import { CompactPromo } from "./CompactPromo.tsx";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface PromoData {
   /**

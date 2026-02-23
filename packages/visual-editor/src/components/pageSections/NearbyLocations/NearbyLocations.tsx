@@ -19,7 +19,7 @@ import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { defaultNearbyLocationsCardsProps } from "./NearbyLocationsCardsWrapper.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface NearbyLocationsSectionProps {
   /**

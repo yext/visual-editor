@@ -8,7 +8,7 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { linkTypeOptions } from "./CallToAction.tsx";
 import { useMemo } from "react";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export const ctaTypeOptions = () => {
   return [

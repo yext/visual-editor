@@ -10,7 +10,7 @@ import { Background } from "../atoms/background.tsx";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 const PLACEHOLDER_LOGO_IMAGE: string =
   "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg";

@@ -54,7 +54,7 @@ import {
   toMeters,
   toMiles,
 } from "../utils/i18n/distance.ts";
-import { defaultText } from "../utils/defaultContent.ts";
+import { defaultText } from "../utils/i18n/defaultContent.ts";
 import { msg } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import {

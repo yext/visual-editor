@@ -15,7 +15,7 @@ import { ComponentConfig, Fields } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface BreadcrumbsData {
   /**

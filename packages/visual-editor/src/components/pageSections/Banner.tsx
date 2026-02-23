@@ -19,7 +19,7 @@ import { CircleSlash2 } from "lucide-react";
 import { useTemplateMetadata } from "../../internal/hooks/useMessageReceivers.ts";
 import { resolveYextEntityField } from "../../utils/resolveYextEntityField.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
-import { defaultRichText } from "../../utils/defaultContent.ts";
+import { defaultRichText } from "../../utils/i18n/defaultContent.ts";
 
 export interface BannerData {
   /**

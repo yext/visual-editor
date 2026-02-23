@@ -52,7 +52,7 @@ import {
   hoursTableFields,
   HoursTable,
 } from "../../contentBlocks/HoursTable.tsx";
-import { defaultText } from "../../../utils/defaultContent.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export type AboutSectionDetailsColumnProps = {
   sections: DetailSection[];

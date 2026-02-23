@@ -12,7 +12,7 @@ import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { BackgroundStyle } from "../../index.ts";
-import { defaultRichText } from "../../utils/defaultContent.ts";
+import { defaultRichText } from "../../utils/i18n/defaultContent.ts";
 
 export type BodyTextProps = {
   data: {

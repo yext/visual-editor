@@ -26,7 +26,7 @@ import {
 import { getHeaderViewport } from "./viewport.ts";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
-import { defaultText } from "../../utils/defaultContent.ts";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export type HeaderLinksProps = {
   data: {
