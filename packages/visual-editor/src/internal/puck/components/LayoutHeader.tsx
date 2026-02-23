@@ -124,6 +124,18 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     }
   };
 
+  const deploymentInProgress = templateMetadata.deploymentInProgress;
+  const publishDisabled =
+    histories.length === 1 || hasErrors || deploymentInProgress;
+  const publishTooltipMessage = deploymentInProgress
+    ? pt(
+        "publishBlocked.deploymentInProgress",
+        "update is disabled while deployment is in progress"
+      )
+    : hasErrors
+      ? getPublishErrorMessage(errorSources, errorDetails)
+      : undefined;
+
   return (
     <>
       <LayoutApprovalModal
@@ -263,22 +275,26 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span
-                    tabIndex={hasErrors ? 0 : -1}
-                    className={hasErrors ? "ve-cursor-not-allowed" : ""}
+                    tabIndex={publishTooltipMessage ? 0 : -1}
+                    className={
+                      publishTooltipMessage ? "ve-cursor-not-allowed" : ""
+                    }
                   >
                     <Button
                       variant="secondary"
-                      disabled={histories.length === 1 || hasErrors}
+                      disabled={publishDisabled}
                       onClick={onButtonClick}
-                      className={hasErrors ? "ve-pointer-events-none" : ""}
+                      className={
+                        publishTooltipMessage ? "ve-pointer-events-none" : ""
+                      }
                     >
                       {buttonText}
                     </Button>
                   </span>
                 </TooltipTrigger>
-                {hasErrors && (
+                {publishTooltipMessage && (
                   <TooltipContent className="ve-max-w-[320px] ve-whitespace-pre-line ve-text-left">
-                    <p>{getPublishErrorMessage(errorSources, errorDetails)}</p>
+                    <p>{publishTooltipMessage}</p>
                   </TooltipContent>
                 )}
               </Tooltip>

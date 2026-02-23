@@ -557,6 +557,9 @@
   "product": "Produktas",
   "promoBanner": "Reklaminė reklamjuostė",
   "promoMedia": "Promo žiniasklaida",
+  "publishBlocked": {
+    "deploymentInProgress": "naujinimas išjungtas, kol vyksta diegimas"
+  },
   "publishError": {
     "components": "ištrinti arba ištaisyti skyrius su klaidomis",
     "metaTitle": "užpildykite metapavadinimą visoms vietoms naršydami į aukščiausio lygio puslapio komponento nustatymus",

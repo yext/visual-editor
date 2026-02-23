@@ -552,6 +552,9 @@
   "product": "Produit",
   "promoBanner": "Bannière promotionnelle",
   "promoMedia": "Médias promotionnels",
+  "publishBlocked": {
+    "deploymentInProgress": "la mise à jour est désactivée pendant le déploiement"
+  },
   "publishError": {
     "components": "supprimer ou corriger les sections contenant des erreurs",
     "metaTitle": "remplissez le méta-titre pour tous les paramètres régionaux en accédant aux paramètres du composant Page de niveau supérieur",

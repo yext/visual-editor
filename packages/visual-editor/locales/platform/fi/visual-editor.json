@@ -547,6 +547,9 @@
   "product": "Tuote",
   "promoBanner": "Promo-banneri",
   "promoMedia": "Promootiomedia",
+  "publishBlocked": {
+    "deploymentInProgress": "päivitys on poistettu käytöstä, kun käyttöönotto on käynnissä"
+  },
   "publishError": {
     "components": "poistaa tai korjata virheellisiä osia",
     "metaTitle": "täytä Meta Title kaikille alueille siirtymällä sivukomponentin ylätason asetuksiin",

@@ -547,6 +547,9 @@
   "product": "Termék",
   "promoBanner": "Promó banner",
   "promoMedia": "Promóciós média",
+  "publishBlocked": {
+    "deploymentInProgress": "a frissítés le van tiltva, amíg a telepítés folyamatban van"
+  },
   "publishError": {
     "components": "törölje vagy javítsa ki a hibás részeket",
     "metaTitle": "töltse ki a metacímet az összes területhez a legfelső szintű oldal összetevő beállításaihoz navigálva",

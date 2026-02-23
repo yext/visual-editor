@@ -547,6 +547,9 @@
   "product": "製品",
   "promoBanner": "プロモーションバナー",
   "promoMedia": "プロモーションメディア",
+  "publishBlocked": {
+    "deploymentInProgress": "デプロイメントの進行中は更新が無効になります"
+  },
   "publishError": {
     "components": "エラーのあるセクションを削除または修正する",
     "metaTitle": "最上位のページコンポーネントの設定に移動して、すべてのロケールのメタタイトルを入力します。",

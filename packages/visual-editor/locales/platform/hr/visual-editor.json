@@ -552,6 +552,9 @@
   "product": "Proizvod",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo medija",
+  "publishBlocked": {
+    "deploymentInProgress": "ažuriranje je onemogućeno dok je implementacija u tijeku"
+  },
   "publishError": {
     "components": "izbrisati ili popraviti odjeljke s pogreškama",
     "metaTitle": "ispunite Meta Title za sve jezike tako što ćete otići do postavki komponente stranice najviše razine",

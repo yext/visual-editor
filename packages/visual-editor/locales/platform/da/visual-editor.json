@@ -547,6 +547,9 @@
   "product": "Produkt",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo Media",
+  "publishBlocked": {
+    "deploymentInProgress": "opdatering er deaktiveret, mens implementering er i gang"
+  },
   "publishError": {
     "components": "slet eller ret sektioner med fejl",
     "metaTitle": "udfyld Meta Title for alle lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau",
