@@ -59,6 +59,7 @@ export const removeDuplicateActionBars = (): void => {
     pt("callToAction", "Call To Action"),
     pt("components.secondaryHeader", "Secondary Header"),
     pt("components.headerLinks", "Header Links"),
+    pt("components.footerSocialLinksSlot", "Social Links"),
   ];
 
   targets.forEach((target) => {

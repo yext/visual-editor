@@ -1937,6 +1937,7 @@ const mainDefaultLayout = {
             bgColor: "bg-palette-primary-light",
             textColor: "text-black",
           },
+          showSectionHeading: true,
         },
         data: {
           field: "",
