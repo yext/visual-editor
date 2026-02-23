@@ -1,6 +1,6 @@
 import { LinkType } from "@yext/pages-components";
 
-// Includes letters, numbers, and: ( ) [ ] _ ~ : @ ; = / $ * - . & ? # %
+// Includes letters, numbers, and: ( ) [ ] _ ~ : @ ; = / $ * + - . & ? # %
 const NON_LINK_CHAR_PATTERN = /[^\p{L}\p{N}()_[\]~:@;=/$*+\-.&?#%]+/gu;
 
 // Replacement Pattern for white spaces in links.
