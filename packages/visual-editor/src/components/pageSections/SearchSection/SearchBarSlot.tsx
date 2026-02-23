@@ -11,8 +11,12 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
 import { useTypingEffect } from "./useTypeEffect.ts";
 import { createVisualAutocompleteConfig } from "./utils.tsx";
+import { Environment } from "@yext/search-headless-react";
 
 export interface SearchBarSlotProps {
+  apiKey?: string;
+  experienceKey?: string;
+  environment?: Environment;
   styles: {
     showIcon: boolean;
     voiceSearch: boolean;
@@ -86,6 +90,9 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
 };
 
 const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
+  apiKey,
+  experienceKey,
+  environment = Environment.PROD,
   styles: {
     showIcon = false,
     voiceSearch = false,
@@ -96,7 +103,9 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   },
 }: SearchBarSlotProps) => {
   const { placeholder } = useTypingEffect({
-    env: "PRODUCTION",
+    apiKey,
+    experienceKey,
+    environment,
   });
 
   const visualAutocompleteConfig = createVisualAutocompleteConfig(
@@ -112,8 +121,8 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
         placeholder={isTypingEffect ? placeholder : "Search here...."}
         customCssClasses={{
           searchBarContainer:
-            "w-full h-14 rounded-md [&>div]:border [&>div]:rounded-md !mb-0 relative" +
-            +(isTypingEffect ? "isTypingEffect" : ""),
+            "w-full h-14 rounded-md [&>div]:border [&>div]:rounded-md !mb-0 relative " +
+            (isTypingEffect ? "isTypingEffect" : ""),
           searchButtonContainer: voiceSearch
             ? "ml-14 my-auto"
             : showIcon
