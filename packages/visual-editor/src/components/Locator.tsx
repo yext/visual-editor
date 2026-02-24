@@ -1267,6 +1267,14 @@ const LocatorInternal = ({
   });
 
   React.useEffect(() => {
+    setMapProps((prev) => ({
+      ...prev,
+      mapStyle,
+      locationStyleConfig: locationStylesConfig,
+    }));
+  }, [mapStyle, locationStylesConfig]);
+
+  React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
       const radius =
         showDistanceOptions && selectedDistanceMeters
@@ -1858,18 +1866,11 @@ const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
     ? locationStyleConfig?.[entityType]
     : undefined;
 
-  const { color, icon } = React.useMemo(() => {
-    return {
-      color: entityLocationStyle?.color,
-      icon: entityLocationStyle?.icon,
-    };
-  }, [entityType, selected]);
-
   return (
     <MapPinIcon
-      color={color}
+      color={entityLocationStyle?.color}
       resultIndex={result.index}
-      icon={icon}
+      icon={entityLocationStyle?.icon}
       selected={selected}
     />
   );

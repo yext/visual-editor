@@ -48,7 +48,7 @@ const resolveContrastColor = (
   return undefined;
 };
 
-// This look like the default Mapbox pin except that it has a number in the center instead of a white circle
+// Renders a Mapbox-style pin with theme-aware fill and contrast-aware icon/number in the center.
 export const MapPinIcon = ({
   color,
   resultIndex,
@@ -67,6 +67,7 @@ export const MapPinIcon = ({
   const centerX = 13.5;
   const centerY = 13.5;
   const iconSize = 14;
+
   // Theme tokens derived from tailwind class names (e.g., bg-palette-primary-light -> palette-primary-light)
   const backgroundToken = normalizeThemeColor(color?.bgColor);
   const textToken = normalizeThemeColor(color?.textColor);
@@ -76,8 +77,7 @@ export const MapPinIcon = ({
   );
 
   React.useLayoutEffect(() => {
-    // Resolve icon/text contrast color using the theme's text token when possible,
-    // otherwise fall back to the computed background contrast variable.
+    // Resolve icon/text contrast color using the theme's text token
     if (svgRef.current && textToken) {
       setContrastColor(resolveContrastColor(svgRef.current, textToken));
     }
@@ -130,7 +130,7 @@ export const MapPinIcon = ({
           filter={contrastColor === "#000000" ? "invert(0)" : "invert(1)"}
         />
       ) : (
-        resultIndex && (
+        !!resultIndex && (
           <text
             textAnchor="middle"
             fontWeight="bold"

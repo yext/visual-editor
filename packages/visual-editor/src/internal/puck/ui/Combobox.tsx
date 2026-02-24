@@ -42,7 +42,8 @@ export const Combobox = ({
                 {selectedOption.icon && (
                   <img
                     src={selectedOption.icon}
-                    alt={selectedOption.label}
+                    alt=""
+                    aria-hidden="true"
                     className="ve-w-4 ve-h-4 ve-mr-2"
                   />
                 )}
@@ -118,7 +119,8 @@ export const Combobox = ({
                         {option.icon && (
                           <img
                             src={option.icon}
-                            alt={option.label}
+                            alt=""
+                            aria-hidden="true"
                             className="ve-w-4 ve-h-4 ve-mr-2"
                           />
                         )}
