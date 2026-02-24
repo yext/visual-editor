@@ -677,7 +677,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
               toggleConstantValueEnabled={(constantValueEnabled) =>
                 onChange(constantValueEnabled)
               }
-              label={pt(msg("fields.image", "Image"))}
+              label={msg("fields.image", "Image")}
               showLocale={true}
             />
           ),
