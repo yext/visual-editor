@@ -1,61 +1,14 @@
 import type { Data, DefaultComponentProps } from "@puckeditor/core";
 import { defaultLayoutData } from "../../vite-plugin/defaultLayoutData.ts";
-import { isPlainObject } from "./componentDefaultRegistry.ts";
-import type { StreamDocument } from "../types/StreamDocument.ts";
-import { getPageSetLocales, normalizeLocales } from "../pageSetLocales.ts";
-import { resolveLocalizedComponentDefaultValue } from "./componentDefaultResolver.ts";
+import { normalizeLocales } from "../pageSetLocales.ts";
+import {
+  normalizeComponentDefaultLocale,
+  preloadComponentDefaultTranslations,
+} from "./componentDefaultResolver.ts";
+import { injectMissingLocalizedValuesRecursively } from "./injectMissingLocalizedValues.ts";
 import { RootProps } from "../migrate.ts";
 
 const SKIP_DEFAULT_TRANSLATIONS_KEY = "skipDefaultTranslations";
-
-type LocalizedObject = {
-  hasLocalizedValue: "true";
-  [key: string]: unknown;
-};
-
-/**
- * Type guard for nodes that use the `{ hasLocalizedValue: "true" }` shape.
- */
-const isLocalizedObject = (value: unknown): value is LocalizedObject => {
-  return isPlainObject(value) && value.hasLocalizedValue === "true";
-};
-
-/**
- * Recursively traverses layout data and mutates eligible localized nodes in place.
- */
-const injectLocalizedValuesRecursively = (
-  node: unknown,
-  locales: string[]
-): void => {
-  if (Array.isArray(node)) {
-    node.forEach((item) => injectLocalizedValuesRecursively(item, locales));
-    return;
-  }
-
-  if (!isPlainObject(node)) {
-    return;
-  }
-
-  if (isLocalizedObject(node)) {
-    for (const locale of locales) {
-      if (!(locale in node)) {
-        const localizedValue = resolveLocalizedComponentDefaultValue(
-          locale,
-          node.en
-        );
-        if (localizedValue !== undefined) {
-          node[locale] = localizedValue;
-        }
-      }
-    }
-    // No nested localizable structures exist inside this node, so we can exit early.
-    return;
-  }
-
-  for (const value of Object.values(node)) {
-    injectLocalizedValuesRecursively(value, locales);
-  }
-};
 
 type SkipDefaultTranslationsState = {
   hasMarker: boolean;
@@ -65,8 +18,12 @@ type SkipDefaultTranslationsState = {
 /**
  * Reads the persisted skip marker state from layout root props.
  *
- * `hasMarker` indicates whether the marker key exists at all, while `locales`
- * contains a normalized locale list (trimmed, deduped, invalid entries removed).
+ * This reads `root.props.skipDefaultTranslations` and separates two concerns:
+ * - `hasMarker`: whether the key exists at all (presence gate for injection)
+ * - `locales`: normalized locale values currently tracked in the marker
+ *
+ * Locale normalization trims whitespace, removes empty values, and de-duplicates
+ * while preserving the first occurrence order.
  */
 const getSkippedDefaultTranslationsState = (
   layout: Data<DefaultComponentProps, RootProps>
@@ -86,7 +43,10 @@ const getSkippedDefaultTranslationsState = (
 };
 
 /**
- * Writes the persisted skip marker, skipDefaultTranslations, to layout root props.
+ * Persists `skipDefaultTranslations` onto `layout.root.props`.
+ *
+ * The marker is written only when root props exist. Input locales are normalized
+ * to keep the marker deterministic and idempotent across repeated writes.
  */
 const writeSkippedDefaultTranslations = (
   layout: Data<DefaultComponentProps, RootProps>,
@@ -103,8 +63,8 @@ type ProcessTemplateLayoutDataOptions<
   TLayout extends Data<DefaultComponentProps, RootProps>,
 > = {
   layoutData: Data<DefaultComponentProps, RootProps>;
-  streamDocument: StreamDocument;
   templateId: string;
+  targetLocale?: string;
   buildProcessedLayout: () => TLayout | Promise<TLayout>;
 };
 
@@ -113,8 +73,8 @@ type ProcessTemplateLayoutDataOptions<
  * based on the `root.props.skipDefaultTranslations` marker.
  *
  * @param options.layoutData - layout before migration/resolution.
- * @param options.streamDocument - Stream document used for scoped locale selection.
  * @param options.templateId - Template id (`main`, `directory`, or `locator`).
+ * @param options.targetLocale - Locale to inject in this run.
  * @param options.buildProcessedLayout - Function that returns the processed layout
  * (sync or async).
  * @returns Promise of processed layout with injected default translations when eligible.
@@ -123,8 +83,8 @@ export const processTemplateLayoutData = async <
   TLayout extends Data<DefaultComponentProps, RootProps>,
 >({
   layoutData,
-  streamDocument,
   templateId,
+  targetLocale,
   buildProcessedLayout,
 }: ProcessTemplateLayoutDataOptions<TLayout>): Promise<TLayout> => {
   const processedLayout = await Promise.resolve(buildProcessedLayout());
@@ -138,19 +98,30 @@ export const processTemplateLayoutData = async <
     return processedLayout;
   }
 
-  const scopedLocales = getPageSetLocales(streamDocument);
-  const skippedLocaleSet = new Set(skippedDefaultTranslations);
-  const unskippedLocales = scopedLocales.filter(
-    (locale) => !skippedLocaleSet.has(locale)
-  );
-
-  if (unskippedLocales.length > 0) {
-    injectLocalizedValuesRecursively(processedLayout, unskippedLocales);
+  const normalizedTargetLocale = normalizeComponentDefaultLocale(targetLocale);
+  if (!normalizedTargetLocale) {
+    return processedLayout;
   }
+
+  if (skippedDefaultTranslations.includes(normalizedTargetLocale)) {
+    return processedLayout;
+  }
+
+  const didPreloadDefaults = await preloadComponentDefaultTranslations(
+    normalizedTargetLocale
+  );
+  if (!didPreloadDefaults) {
+    return processedLayout;
+  }
+
+  injectMissingLocalizedValuesRecursively(
+    processedLayout,
+    normalizedTargetLocale
+  );
 
   writeSkippedDefaultTranslations(processedLayout, [
     ...skippedDefaultTranslations,
-    ...scopedLocales,
+    normalizedTargetLocale,
   ]);
 
   return processedLayout;

@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { defaultRichText, defaultText } from "./defaultContent.ts";
-import { componentDefaultRegistry } from "./componentDefaultRegistry.ts";
-import { locales } from "./locales.ts";
 import { TranslatableRichText, TranslatableString } from "../../types/types.ts";
 
 type LocalizedStringMap = { hasLocalizedValue: "true" } & Record<
@@ -14,19 +12,18 @@ type LocalizedRichTextMap = {
 } & Record<string, string | { html?: string; json?: string }>;
 
 describe("defaultContent", () => {
-  it("builds a localized TranslatableString across all supported locales", () => {
+  it("builds a translatable string seeded only with en", () => {
     const value = defaultText("componentDefaults.text", "Text");
     const localizedValue = value as Exclude<TranslatableString, string> &
       LocalizedStringMap;
 
     expect(typeof value).toBe("object");
     expect(localizedValue.hasLocalizedValue).toBe("true");
-    for (const locale of locales) {
-      expect(typeof localizedValue[locale]).toBe("string");
-    }
+    expect(localizedValue.en).toBe("Text");
+    expect(localizedValue.fr).toBeUndefined();
   });
 
-  it("builds localized rich text defaults with html fallback", () => {
+  it("builds rich text defaults with en html", () => {
     const value = defaultRichText(
       "componentDefaults.bannerText",
       "Banner Text"
@@ -40,41 +37,25 @@ describe("defaultContent", () => {
       throw new Error("Expected rich text object for en value.");
     }
     expect(enValue.html).toContain("Banner Text");
+    expect(enValue.json).toContain("Banner Text");
+    expect(localizedValue.fr).toBeUndefined();
   });
 
-  it("keeps localized rich text html and json in sync", () => {
-    const value = defaultRichText(
-      "componentDefaults.bannerText",
-      "Banner Text"
-    );
-    const localizedValue = value as Exclude<TranslatableRichText, string> &
-      LocalizedRichTextMap;
-    const frValue = localizedValue.fr;
-    const expectedFrText =
-      componentDefaultRegistry.fr["componentDefaults.bannerText"];
-
-    if (typeof frValue === "string") {
-      throw new Error("Expected rich text object for fr value.");
-    }
-
-    expect(frValue.html).toContain(expectedFrText);
-    expect(frValue.json).toContain(expectedFrText);
-  });
-
-  it("does not force bold formatting when enDefault rich text is bold", () => {
+  it("preserves provided en rich text object", () => {
     const boldDefault = {
       html: "<p><strong>Banner Text</strong></p>",
-      json: "",
+      json: '{"root":{}}',
     };
     const value = defaultRichText("componentDefaults.bannerText", boldDefault);
     const localizedValue = value as Exclude<TranslatableRichText, string> &
       LocalizedRichTextMap;
-    const frValue = localizedValue.fr;
+    const enValue = localizedValue.en;
 
-    if (typeof frValue === "string") {
-      throw new Error("Expected rich text object for fr value.");
+    if (typeof enValue === "string") {
+      throw new Error("Expected rich text object for en value.");
     }
 
-    expect(frValue.html).not.toContain("<strong>");
+    expect(enValue.html).toContain("<strong>Banner Text</strong>");
+    expect(enValue.json).toContain('{"root":{}}');
   });
 });

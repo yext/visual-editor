@@ -33,6 +33,7 @@ import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import { processTemplateLayoutData } from "../utils/i18n/defaultLayoutTranslations.ts";
+import { preloadComponentDefaultTranslations } from "../utils/i18n/componentDefaultResolver.ts";
 
 const devLogger = new DevLogger();
 
@@ -217,10 +218,14 @@ export const Editor = ({
 
     const buildProcessedLayout = async () => {
       try {
+        if (typeof document?.locale === "string") {
+          await preloadComponentDefaultTranslations(document.locale);
+        }
+
         const resolvedLayoutData = await processTemplateLayoutData({
           layoutData,
-          streamDocument: document,
           templateId,
+          targetLocale: document?.locale,
           buildProcessedLayout: () =>
             migrate(layoutData, migrationRegistry, puckConfig, document),
         });
@@ -243,7 +248,7 @@ export const Editor = ({
     return () => {
       isCurrent = false;
     };
-  }, [isLoading, layoutData, puckConfig, templateId]);
+  }, [document?.locale, isLoading, layoutData, puckConfig, templateId]);
 
   const editorReady = !isLoading && processedLayoutData !== undefined;
   const shouldShowLoading = localDev || parentLoaded;

@@ -106,8 +106,8 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const layoutData = JSON.parse(document.__.layout);
   const resolvedPuckData = await processTemplateLayoutData({
     layoutData,
-    streamDocument: document,
     templateId: "directory",
+    targetLocale: document.locale,
     buildProcessedLayout: async () => {
       const migratedData = migrate(
         layoutData,

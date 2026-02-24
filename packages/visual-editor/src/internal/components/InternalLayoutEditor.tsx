@@ -38,6 +38,8 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { localizeConfigDefaultsForLocale } from "../utils/localizeConfigDefaults.ts";
+import { preloadComponentDefaultTranslations } from "../../utils/i18n/componentDefaultResolver.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -113,7 +115,30 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
+  const editorLocale = streamDocument?.locale;
   const { errorCount, errorSources, errorDetails } = useErrorContext();
+  const [componentDefaultsReadyVersion, setComponentDefaultsReadyVersion] =
+    useState<number>(0);
+
+  React.useEffect(() => {
+    let isCurrent = true;
+
+    const preloadDefaults = async () => {
+      if (typeof editorLocale !== "string") {
+        return;
+      }
+      const didLoad = await preloadComponentDefaultTranslations(editorLocale);
+      if (isCurrent && didLoad) {
+        setComponentDefaultsReadyVersion((version) => version + 1);
+      }
+    };
+
+    preloadDefaults();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [editorLocale]);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -234,7 +259,7 @@ export const InternalLayoutEditor = ({
       render: () => <></>,
     };
 
-    return {
+    const translatedConfig: Config = {
       categories: puckConfig.categories,
       components: translatedComponents,
       root: {
@@ -267,7 +292,9 @@ export const InternalLayoutEditor = ({
         },
       },
     } as Config;
-  }, [puckConfig, i18n.language]);
+
+    return localizeConfigDefaultsForLocale(translatedConfig, editorLocale);
+  }, [componentDefaultsReadyVersion, editorLocale, puckConfig, i18n.language]);
 
   // Resolve all data and slots when the document changes
   // Implemented as an override so that the getPuck hook is available
