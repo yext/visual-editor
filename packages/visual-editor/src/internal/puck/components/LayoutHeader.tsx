@@ -277,6 +277,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
                   <span
                     tabIndex={publishDisabled ? 0 : -1}
                     className={publishDisabled ? "ve-cursor-not-allowed" : ""}
+                    role={publishDisabled ? "button" : undefined}
+                    aria-disabled={publishDisabled || undefined}
                   >
                     <Button
                       variant="secondary"
