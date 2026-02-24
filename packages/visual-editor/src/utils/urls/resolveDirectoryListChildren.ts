@@ -36,7 +36,9 @@ const resolveDirectoryListChildrenFromPathInfo: DirectoryListChildrenResolver =
       ? `${breadcrumbPrefix}/${childSlug}`
       : childSlug;
 
-    return includeLocalePrefix ? `${locale}/${slugWithPrefix}` : slugWithPrefix;
+    return includeLocalePrefix
+      ? `${normalizeSlug(locale)}/${slugWithPrefix}`
+      : slugWithPrefix;
   };
 
 const resolveDirectoryListChildrenFromSlug: DirectoryListChildrenResolver = (
