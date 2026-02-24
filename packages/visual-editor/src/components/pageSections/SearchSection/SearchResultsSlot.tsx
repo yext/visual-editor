@@ -5,29 +5,21 @@ import {
   usePuck,
 } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import {
-  Facets,
-  GenerativeDirectAnswer,
-  StandardCard,
-  UniversalResults,
-  VerticalResults,
-} from "@yext/search-ui-react";
 import React, { useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
-import Cards from "./Cards.tsx";
 import {
   defaultSearchResultsProps,
   VerticalConfigProps,
 } from "./propsAndTypes.ts";
-import SourceCard from "./SourceCard.tsx";
+import { UniversalResultsSection } from "./UniversalResultsSection.tsx";
 import {
   buildUniversalLimit,
   buildVerticalConfigMap,
   isValidVerticalConfig,
 } from "./utils.tsx";
-import { MapComponent } from "./MapComponent.tsx";
+import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -122,7 +114,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const searchActions = useSearchActions();
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const searchTerm = useSearchState((s) => s.query.input);
-  const gdaLoading = useSearchState((s) => s.generativeDirectAnswer.isLoading);
+  const gdaLoading =
+    useSearchState((s) => s.generativeDirectAnswer.isLoading) || false;
   const facetsLength = useSearchState((s) => s.filters.facets);
   const [verticalKey, setVerticalKey] = useState<string | null>(null);
   const verticalConfigMap = React.useMemo(
@@ -134,6 +127,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     () => buildUniversalLimit(verticals),
     [verticals]
   );
+
   const currentVerticalConfig = React.useMemo(
     () => verticals.find((v) => v.verticalKey === verticalKey),
     [verticals, verticalKey]
@@ -236,103 +230,20 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       {isLoading && <div>Loading......</div>}
       {!isLoading &&
         (verticalKey ? (
-          <>
-            {currentVerticalConfig?.layout === "Map" ? (
-              <>
-                <div className="h-80 mb-4">
-                  <MapComponent />
-                </div>
-                <VerticalResults CardComponent={StandardCard} />
-              </>
-            ) : (
-              <div className="relative mx-auto flex flex-grow pt-8">
-                <div
-                  className={`w-[200px] mr-6 ${!puck.isEditing && `-ml-[224px]`} ${facetsLength ? `` : `none`}`}
-                >
-                  <Facets
-                    customCssClasses={{ facetsContainer: "!text-lg w-[200px]" }}
-                    searchOnChange={true}
-                  />
-                </div>
-                <div className="flex-grow">
-                  <VerticalResults
-                    customCssClasses={{
-                      verticalResultsContainer:
-                        "flex flex-col border rounded-md divide-y",
-                    }}
-                    CardComponent={(props) => (
-                      <Cards
-                        {...props}
-                        cardType={
-                          verticals.find(
-                            (item) => item.verticalKey === verticalKey
-                          )?.cardType
-                        }
-                      />
-                    )}
-                  />
-                </div>
-              </div>
-            )}
-          </>
+          <VerticalResultsSection
+            verticalKey={verticalKey}
+            verticals={verticals}
+            currentVerticalConfig={currentVerticalConfig}
+            puck={puck}
+            facetsLength={facetsLength}
+          />
         ) : (
-          <>
-            {props.styles.enableGenerativeDirectAnswer && !!searchTerm && (
-              <>
-                {gdaLoading && (
-                  <section
-                    className="p-6 my-8 border border-gray-200 rounded-lg shadow-sm centered-container"
-                    aria-busy="true"
-                    aria-label="Loading content"
-                  >
-                    <div className="animate-pulse flex space-x-4">
-                      <div className="flex-1 space-y-6 py-1">
-                        <div
-                          className="h-4 bg-slate-700 rounded w-1/4"
-                          aria-hidden="true"
-                        ></div>
-                        <div className="space-y-3">
-                          <div className="grid grid-cols-3 gap-4">
-                            <div
-                              className="h-2 bg-slate-700 rounded col-span-3"
-                              aria-hidden="true"
-                            ></div>
-                            <div
-                              className="h-2 bg-slate-700 rounded col-span-3"
-                              aria-hidden="true"
-                            ></div>
-                          </div>
-                          <div
-                            className="h-2 bg-slate-700 rounded"
-                            aria-hidden="true"
-                          ></div>
-                          <div
-                            className="h-2 bg-slate-700 rounded"
-                            aria-hidden="true"
-                          ></div>
-                          <div
-                            className="h-2 bg-slate-700 rounded"
-                            aria-hidden="true"
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                )}
-                <GenerativeDirectAnswer
-                  CitationCard={SourceCard}
-                  customCssClasses={{ container: "my-4", divider: "!py-5" }}
-                />
-              </>
-            )}
-            <UniversalResults
-              verticalConfigMap={verticalConfigMap}
-              customCssClasses={{
-                sectionHeaderIconContainer: "hidden",
-                sectionHeaderLabel: "!pl-0",
-              }}
-            />
-          </>
+          <UniversalResultsSection
+            enableGDA={props.styles.enableGenerativeDirectAnswer}
+            searchTerm={searchTerm}
+            gdaLoading={gdaLoading}
+            verticalConfigMap={verticalConfigMap}
+          />
         ))}
     </div>
   );

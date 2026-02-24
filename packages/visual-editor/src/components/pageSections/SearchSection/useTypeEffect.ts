@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 interface TypeEffectProps {
   env: "PRODUCTION" | "SANDBOX";
@@ -7,7 +8,7 @@ interface TypeEffectProps {
 export const useTypingEffect = ({ env }: TypeEffectProps) => {
   const [queryPrompts, setQueryPrompts] = useState<string[]>([]);
   const [placeholder, setPlaceholder] = useState("");
-
+  const document = useDocument();
   const indexRef = useRef(0);
   const charIndexRef = useRef(0);
   const isDeletingRef = useRef(false);
@@ -16,7 +17,7 @@ export const useTypingEffect = ({ env }: TypeEffectProps) => {
     const fetchPrompts = async () => {
       const base = env === "PRODUCTION" ? "cdn" : "sbx-cdn";
 
-      const url = `https://${base}.yextapis.com/v2/accounts/me/search/autocomplete?v=20190101&api_key=fb73f1bf6a262bc3255bcb938088204f&sessionTrackingEnabled=false&experienceKey=ukg-fins-rk-test-dont-touch&input=`;
+      const url = `https://${base}.yextapis.com/v2/accounts/me/search/autocomplete?v=20250101&api_key=${document?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY}&sessionTrackingEnabled=false&experienceKey=${document?._env?.YEXT_PUBLIC_ADV_SEARCH_EXP_KEY}&input=`;
 
       try {
         const res = await fetch(url);

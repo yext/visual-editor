@@ -30,7 +30,9 @@ export const LayoutSection = ({
         <h2 className="text-[22px]">{header?.props.label}</h2>
       </div>
       {layoutType === "Map" && (
-        <MapComponent isUniversal={true} results={results} />
+        <div className="w-full h-[300px] border-x border-t">
+          <MapComponent isUniversal={true} results={results} />
+        </div>
       )}
 
       <div className={`${layoutClasses} w-full border rounded-b-md divide-y`}>

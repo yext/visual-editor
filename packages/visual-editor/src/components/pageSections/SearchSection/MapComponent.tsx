@@ -66,67 +66,58 @@ export const MapComponent = ({
       .filter((coord): coord is Coordinate => Boolean(coord));
 
     return (
-      <div className="w-full h-[300px] border-x border-t">
-        <Map
-          apiKey={mapboxApiKey}
-          controls={false}
-          provider={MapboxMaps}
-          bounds={coordinates}
-          iframeId="preview-frame"
-          providerOptions={{
-            center: [first.longitude, first.latitude],
-            zoom: 10,
-            style: "mapbox://styles/mapbox/streets-v12",
-          }}
-          className="w-full h-[300px]"
-        >
-          {mapResults.map((result, index) => {
-            const coord =
-              result.rawData?.yextDisplayCoordinate ??
-              result.rawData?.coordinate;
-
-            if (!coord) return null;
-
-            return (
-              <Marker
-                key={result.id ?? index}
-                coordinate={coord}
-                id={index + ""}
-              >
-                <MapPin width={40} height={40} fill="#0f766e" color="#0f766e" />
-              </Marker>
-            );
-          })}
-        </Map>
-      </div>
-    );
-  }
-
-  return (
-    <div className="w-full h-[300px]">
-      <MapboxMap
-        key={mapResults.length}
-        mapboxAccessToken={mapboxApiKey}
-        iframeWindow={iframe?.contentWindow ?? undefined}
-        allowUpdates
-        mapboxOptions={{
+      <Map
+        apiKey={mapboxApiKey}
+        controls={false}
+        provider={MapboxMaps}
+        bounds={coordinates}
+        iframeId="preview-frame"
+        providerOptions={{
           center: [first.longitude, first.latitude],
           zoom: 10,
           style: "mapbox://styles/mapbox/streets-v12",
         }}
-        PinComponent={LocatorPin}
-        getCoordinate={(result: any) => {
+        className="w-full h-full"
+      >
+        {mapResults.map((result, index) => {
           const coord =
             result.rawData?.yextDisplayCoordinate ?? result.rawData?.coordinate;
 
-          if (!coord) return undefined;
+          if (!coord) return null;
 
-          return {
-            latitude: coord.latitude,
-            longitude: coord.longitude,
-          };
-        }}
-      />
-    </div>
+          return (
+            <Marker key={result.id ?? index} coordinate={coord} id={index + ""}>
+              <MapPin width={40} height={40} fill="#0f766e" color="#0f766e" />
+            </Marker>
+          );
+        })}
+      </Map>
+    );
+  }
+
+  return (
+    <MapboxMap
+      key={mapResults.length}
+      mapboxAccessToken={mapboxApiKey}
+      iframeWindow={iframe?.contentWindow ?? undefined}
+      allowUpdates
+      mapboxOptions={{
+        center: [first.longitude, first.latitude],
+        zoom: 10,
+        style: "mapbox://styles/mapbox/streets-v12",
+      }}
+      PinComponent={LocatorPin}
+      getCoordinate={(result: any) => {
+        const coord =
+          result.rawData?.yextDisplayCoordinate ?? result.rawData?.coordinate;
+
+        if (!coord) return undefined;
+
+        return {
+          latitude: coord.latitude,
+          longitude: coord.longitude,
+        };
+      }}
+    />
   );
 };
