@@ -549,9 +549,11 @@
   "product": "製品",
   "promoBanner": "プロモーションバナー",
   "promoMedia": "プロモーションメディア",
+  "publishBlocked": {
+    "deploymentInProgress": "デプロイメントの進行中は更新が無効になります"
+  },
   "publishError": {
     "components": "エラーのあるセクションを削除または修正する",
-    "deploymentInProgress": "デプロイメントの進行中は更新が無効になります",
     "metaTitle": "最上位のページコンポーネントの設定に移動して、すべてのロケールのメタタイトルを入力します。",
     "metaTitleWithLocales": "最上位のページ コンポーネントの設定に移動して、次のロケールのメタ タイトルを入力します: {{locales}}"
   },

@@ -549,9 +549,11 @@
   "product": "Ürün",
   "promoBanner": "Promosyon Banner'ı",
   "promoMedia": "Promosyon medyası",
+  "publishBlocked": {
+    "deploymentInProgress": "dağıtım devam ederken güncelleme devre dışı bırakılır"
+  },
   "publishError": {
     "components": "Hata içeren bölümleri silin veya düzeltin",
-    "deploymentInProgress": "dağıtım devam ederken güncelleme devre dışı bırakılır",
     "metaTitle": "Üst düzey Sayfa bileşeninin ayarlarına giderek tüm yerel ayarlar için Meta Başlığını doldurun",
     "metaTitleWithLocales": "Üst düzey Sayfa bileşeninin ayarlarına giderek aşağıdaki yerel ayarlar için Meta Başlığını doldurun: {{locales}}"
   },

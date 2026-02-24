@@ -554,9 +554,11 @@
   "product": "Produkts",
   "promoBanner": "Reklāmas reklāmkarogs",
   "promoMedia": "Promo Media",
+  "publishBlocked": {
+    "deploymentInProgress": "atjauninājums ir atspējots, kamēr notiek izvietošana"
+  },
   "publishError": {
     "components": "dzēst vai labot sadaļas ar kļūdām",
-    "deploymentInProgress": "atjauninājumi ir atspējoti, kamēr notiek izvietošana",
     "metaTitle": "aizpildiet Meta Title visām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem",
     "metaTitleWithLocales": "aizpildiet meta virsrakstu šādām lokalizācijām, pārejot uz augšējā līmeņa lapas komponenta iestatījumiem: {{locales}}"
   },
