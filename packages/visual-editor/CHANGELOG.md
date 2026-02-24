@@ -1,3 +1,17 @@
+#### 1.1.0-alpha.3 (2026-02-24)
+
+##### New Features
+
+- read requireAnalyticsOptIn setting from visual editor config ([#1059](https://github.com/yext/visual-editor/pull/1059)) ([1aafd792](https://github.com/yext/visual-editor/commit/1aafd7929ae2ae80fb68134ae392eb1b07cef636))
+- add Locator Map Opt-In ([#1051](https://github.com/yext/visual-editor/pull/1051)) ([aa1691eb](https://github.com/yext/visual-editor/commit/aa1691eb4ba653424e7e8ea53bdd0ddfc05429d8))
+- add analytics opt-in to the Locator ([#1052](https://github.com/yext/visual-editor/pull/1052)) ([af9dc12a](https://github.com/yext/visual-editor/commit/af9dc12adfa4a987fd5b653c373a6ffc838a56e3))
+
+##### Bug Fixes
+
+- additional locale and directory link handling ([#1056](https://github.com/yext/visual-editor/pull/1056)) ([441f37a3](https://github.com/yext/visual-editor/commit/441f37a3adc172999f9972ee71d8d3be64a8a5ef))
+- allow % in normalizeLink ([#1055](https://github.com/yext/visual-editor/pull/1055)) ([9b77e214](https://github.com/yext/visual-editor/commit/9b77e214e9a40a33c4eae93be866d3f07d23a93a))
+- small default data and empty state fixes ([#1054](https://github.com/yext/visual-editor/pull/1054)) ([7c1e5904](https://github.com/yext/visual-editor/commit/7c1e5904435164d92f1611164aec2ba7b56bab46))
+
 #### 1.1.0-alpha.2 (2026-02-20)
 
 ##### Bug Fixes
