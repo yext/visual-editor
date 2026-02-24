@@ -9,19 +9,19 @@ const formatLocaleList = (locales: string[]) => locales.join(", ");
 const PUBLISH_ERROR_ACTIONS: Record<string, (details?: ErrorDetail) => string> =
   {
     component: () =>
-      pt("publishError.components", "delete or fix sections with errors"),
+      pt("publishError.components", "Delete or fix sections with errors"),
     metaTitle: (details?: ErrorDetail) => {
       const missingLocales = details?.missingLocales ?? [];
       if (missingLocales.length > 0) {
         return pt(
           "publishError.metaTitleWithLocales",
-          "fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}",
+          "Fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}",
           { locales: formatLocaleList(missingLocales) }
         );
       }
       return pt(
         "publishError.metaTitle",
-        "fill in Meta Title for all locales by navigating to the top-level Page component's settings"
+        "Fill in Meta Title for all locales by navigating to the top-level Page component's settings"
       );
     },
   };

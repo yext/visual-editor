@@ -550,12 +550,12 @@
   "promoBanner": "Promobanner",
   "promoMedia": "Promo media",
   "publishBlocked": {
-    "deploymentInProgress": "update is uitgeschakeld terwijl de implementatie bezig is"
+    "deploymentInProgress": "Update is uitgeschakeld terwijl de implementatie bezig is"
   },
   "publishError": {
-    "components": "verwijder of repareer secties met fouten",
-    "metaTitle": "vul de metatitel in voor alle landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren",
-    "metaTitleWithLocales": "vul de metatitel in voor de volgende landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren: {{locales}}"
+    "components": "Verwijder of repareer secties met fouten",
+    "metaTitle": "Vul de metatitel in voor alle landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren",
+    "metaTitleWithLocales": "Vul de metatitel in voor de volgende landinstellingen door naar de instellingen van de paginacomponent op het hoogste niveau te navigeren: {{locales}}"
   },
   "readLess": "Lees minder",
   "readMore": "Lees meer",

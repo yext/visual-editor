@@ -550,12 +550,12 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo Media",
   "publishBlocked": {
-    "deploymentInProgress": "opdatering er deaktiveret, mens implementering er i gang"
+    "deploymentInProgress": "Opdatering er deaktiveret, mens implementering er i gang"
   },
   "publishError": {
-    "components": "slet eller ret sektioner med fejl",
-    "metaTitle": "udfyld Meta Title for alle lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau",
-    "metaTitleWithLocales": "udfyld Meta Title for følgende lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau: {{locales}}"
+    "components": "Slet eller ret sektioner med fejl",
+    "metaTitle": "Udfyld Meta Title for alle lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau",
+    "metaTitleWithLocales": "Udfyld Meta Title for følgende lokaliteter ved at navigere til sidekomponentens indstillinger på øverste niveau: {{locales}}"
   },
   "readLess": "Læs mindre",
   "readMore": "Læs mere",

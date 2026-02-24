@@ -560,12 +560,12 @@
   "promoBanner": "Reklaminė reklamjuostė",
   "promoMedia": "Promo žiniasklaida",
   "publishBlocked": {
-    "deploymentInProgress": "naujinimas išjungtas, kol vyksta diegimas"
+    "deploymentInProgress": "Naujinimas išjungtas, kol vyksta diegimas"
   },
   "publishError": {
-    "components": "ištrinti arba ištaisyti skyrius su klaidomis",
-    "metaTitle": "užpildykite metapavadinimą visoms vietoms naršydami į aukščiausio lygio puslapio komponento nustatymus",
-    "metaTitleWithLocales": "užpildykite metapavadinimą šioms vietoms, eidami į aukščiausio lygio puslapio komponento nustatymus: {{locales}}"
+    "components": "Ištrinti arba ištaisyti skyrius su klaidomis",
+    "metaTitle": "Užpildykite metapavadinimą visoms vietoms naršydami į aukščiausio lygio puslapio komponento nustatymus",
+    "metaTitleWithLocales": "Užpildykite metapavadinimą šioms vietoms, eidami į aukščiausio lygio puslapio komponento nustatymus: {{locales}}"
   },
   "readLess": "Skaitykite mažiau",
   "readMore": "Skaityti daugiau",

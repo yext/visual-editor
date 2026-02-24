@@ -560,12 +560,12 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo média",
   "publishBlocked": {
-    "deploymentInProgress": "aktualizace je během zavádění zakázána"
+    "deploymentInProgress": "Aktualizace je během zavádění zakázána"
   },
   "publishError": {
-    "components": "odstranit nebo opravit části s chybami",
-    "metaTitle": "vyplňte název metadat pro všechna národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně",
-    "metaTitleWithLocales": "vyplňte metanázev pro následující národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně: {{locales}}"
+    "components": "Odstranit nebo opravit části s chybami",
+    "metaTitle": "Vyplňte název metadat pro všechna národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně",
+    "metaTitleWithLocales": "Vyplňte metanázev pro následující národní prostředí tak, že přejdete do nastavení komponenty stránky nejvyšší úrovně: {{locales}}"
   },
   "readLess": "Číst méně",
   "readMore": "Číst více",

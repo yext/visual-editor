@@ -550,12 +550,12 @@
   "promoBanner": "Kampanjebanner",
   "promoMedia": "Promo Media",
   "publishBlocked": {
-    "deploymentInProgress": "oppdateringen er deaktivert mens distribusjon pågår"
+    "deploymentInProgress": "Oppdateringen er deaktivert mens distribusjon pågår"
   },
   "publishError": {
-    "components": "slette eller fikse deler med feil",
-    "metaTitle": "fyll inn Meta Tittel for alle lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå",
-    "metaTitleWithLocales": "fyll inn Meta Tittel for følgende lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå: {{locales}}"
+    "components": "Slette eller fikse deler med feil",
+    "metaTitle": "Fyll inn Meta Tittel for alle lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå",
+    "metaTitleWithLocales": "Fyll inn Meta Tittel for følgende lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå: {{locales}}"
   },
   "readLess": "Les mindre",
   "readMore": "Les mer",
