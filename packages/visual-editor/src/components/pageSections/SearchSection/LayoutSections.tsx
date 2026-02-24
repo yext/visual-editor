@@ -1,7 +1,5 @@
-import { Coordinate, Map, MapboxMaps, Marker } from "@yext/pages-components";
 import { DefaultRawDataType, SectionProps } from "@yext/search-ui-react";
-import { MapPin } from "lucide-react";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { MapComponent } from "./MapComponent.tsx";
 import { VerticalLayout } from "./propsAndTypes.ts";
 
 interface LayoutSectionProps extends SectionProps<DefaultRawDataType> {
@@ -26,52 +24,13 @@ export const LayoutSection = ({
 
   // const filteredResults = results.slice(0, resultsCount);
 
-  const coordinates: Coordinate[] = results
-    .map((result) => result.rawData?.yextDisplayCoordinate)
-    .filter((coord): coord is Coordinate => Boolean(coord));
-
-  const coordinateResults = results.filter(
-    (r) => r.rawData?.yextDisplayCoordinate
-  );
-  const firstCoord: any =
-    coordinateResults[0]?.rawData?.yextDisplayCoordinate ?? undefined;
-
   return (
     <div className="flex flex-col mt-12">
       <div className="px-5 py-2.5 flex items-end border rounded-t-md">
         <h2 className="text-[22px]">{header?.props.label}</h2>
       </div>
-      {layoutType === "Map" && coordinateResults.length > 0 && firstCoord && (
-        <div className="w-full h-[300px] border-x border-t">
-          <Map
-            apiKey={""}
-            controls={false}
-            provider={MapboxMaps}
-            bounds={coordinates}
-            iframeId="preview-frame"
-            singleZoom={undefined}
-            providerOptions={{
-              center: [firstCoord.longitude, firstCoord.latitude],
-              zoom: 10,
-              style: "mapbox://styles/mapbox/streets-v12",
-            }}
-            className="w-full h-[300px]"
-          >
-            {results.map((result, index) => {
-              const coord: any = result.rawData?.yextDisplayCoordinate;
-              if (!coord) return null;
-              return (
-                <Marker
-                  key={result.id ?? index}
-                  coordinate={coord}
-                  id={index + ""}
-                >
-                  <LocatorPin key={index + ""} />
-                </Marker>
-              );
-            })}
-          </Map>
-        </div>
+      {layoutType === "Map" && (
+        <MapComponent isUniversal={true} results={results} />
       )}
 
       <div className={`${layoutClasses} w-full border rounded-b-md divide-y`}>
@@ -81,7 +40,4 @@ export const LayoutSection = ({
       </div>
     </div>
   );
-};
-const LocatorPin = () => {
-  return <MapPin width={40} height={40} fill={"#0f766e"} color={"#0f766e"} />;
 };

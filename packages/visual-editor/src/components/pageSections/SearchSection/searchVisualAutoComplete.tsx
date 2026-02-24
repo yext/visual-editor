@@ -1,14 +1,5 @@
-import {
-  provideHeadless,
-  VerticalResults as VerticalResultsData,
-} from "@yext/search-headless-react";
+import { VerticalResults as VerticalResultsData } from "@yext/search-headless-react";
 import { DropdownItem, FocusedItemData } from "@yext/search-ui-react";
-import { searchConfig } from "./Search.tsx";
-
-export const entityPreviewSearcher = provideHeadless({
-  ...searchConfig,
-  headlessId: "entity-preview-searcher",
-});
 
 export const renderImagePreview = (
   result: any,

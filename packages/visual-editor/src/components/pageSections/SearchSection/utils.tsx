@@ -7,10 +7,7 @@ import {
 import Cards from "./Cards.tsx";
 import { LayoutSection } from "./LayoutSections.tsx";
 import { VerticalConfigProps } from "./propsAndTypes.ts";
-import {
-  entityPreviewSearcher,
-  renderEntityPreviews,
-} from "./searchVisualAutoComplete.tsx";
+import { renderEntityPreviews } from "./searchVisualAutoComplete.tsx";
 
 export const buildVerticalConfigMap = (
   verticals: VerticalConfigProps[]
@@ -102,9 +99,10 @@ export const createPreviews = (verticalKey: string) => {
 export const createVisualAutocompleteConfig = (
   enable: boolean,
   verticalKey: string,
-  limit: number
+  limit: number,
+  entityPreviewSearcher: any
 ) => {
-  if (!enable || !verticalKey || limit < 1) {
+  if (!enable || !verticalKey || limit < 1 || !entityPreviewSearcher) {
     return undefined;
   }
 

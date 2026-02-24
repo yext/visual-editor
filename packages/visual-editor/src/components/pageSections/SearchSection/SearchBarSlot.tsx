@@ -11,6 +11,9 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
 import { useTypingEffect } from "./useTypeEffect.ts";
 import { createVisualAutocompleteConfig } from "./utils.tsx";
+import { useEntityPreviewSearcher } from "./searchConfig.ts";
+import React from "react";
+import { useDocument } from "../../../hooks/useDocument.tsx";
 
 export interface SearchBarSlotProps {
   styles: {
@@ -95,15 +98,26 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     limit = 3,
   },
 }: SearchBarSlotProps) => {
+  const document = useDocument();
   const { placeholder } = useTypingEffect({
     env: "PRODUCTION",
   });
 
-  const visualAutocompleteConfig = createVisualAutocompleteConfig(
+  const entityPreviewSearcher = useEntityPreviewSearcher(document);
+
+  const visualAutocompleteConfig = React.useMemo(() => {
+    return createVisualAutocompleteConfig(
+      enableVisualAutoComplete,
+      visualAutoCompleteVerticalKey,
+      limit,
+      entityPreviewSearcher
+    );
+  }, [
     enableVisualAutoComplete,
     visualAutoCompleteVerticalKey,
-    limit
-  );
+    limit,
+    entityPreviewSearcher,
+  ]);
 
   return (
     <div className="relative w-full border h-14 ">
