@@ -146,6 +146,11 @@ const Locator: Template<TemplateRenderProps> = (props) => {
         apiKey={document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
         templateData={props}
         currency="USD"
+        requireOptIn={
+          document.__?.visualEditorConfig
+            ? JSON.parse(document.__.visualEditorConfig)?.requireAnalyticsOptIn
+            : false
+        }
       >
         <VisualEditorProvider templateProps={props}>
           <Render
