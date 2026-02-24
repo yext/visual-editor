@@ -37,7 +37,7 @@ const getComponentDefaultText = async (
   locale: string,
   key: string
 ): Promise<string> => {
-  const translations = (await getTranslations(locale, "platform")) as Record<
+  const translations = (await getTranslations(locale, "components")) as Record<
     string,
     any
   >;
@@ -58,10 +58,12 @@ describe("defaultLayoutTranslations", () => {
   it("does not inject when skipDefaultTranslations marker is missing", async () => {
     const layoutData = asData({ root: { props: {} }, content: [] });
     const processedLayout = asData(buildLabelLayout());
+    const targetTranslations = await getTranslations("fr", "components");
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "main",
       targetLocale: "fr",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -83,11 +85,13 @@ describe("defaultLayoutTranslations", () => {
         },
       },
     });
+    const targetTranslations = await getTranslations("fr", "components");
 
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "main",
       targetLocale: "fr",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -106,11 +110,13 @@ describe("defaultLayoutTranslations", () => {
   it("injects regional locales using stripped-locale defaults", async () => {
     const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
     const processedLayout = asData(buildLabelLayout());
+    const targetTranslations = await getTranslations("fr", "components");
 
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "main",
       targetLocale: "fr-CA",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -135,9 +141,11 @@ describe("defaultLayoutTranslations", () => {
       },
     });
 
+    const targetTranslations = await getTranslations("fr", "components");
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "main",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -158,10 +166,12 @@ describe("defaultLayoutTranslations", () => {
         },
       },
     });
+    const targetTranslations = await getTranslations("fr", "components");
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "main",
       targetLocale: "zz",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -182,10 +192,12 @@ describe("defaultLayoutTranslations", () => {
         },
       },
     });
+    const targetTranslations = await getTranslations("fr", "components");
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "main",
       targetLocale: "fr",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -211,10 +223,12 @@ describe("defaultLayoutTranslations", () => {
       },
     });
 
+    const targetTranslations = await getTranslations("fr", "components");
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "main",
       targetLocale: "fr",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -229,10 +243,12 @@ describe("defaultLayoutTranslations", () => {
   it("supports sync buildProcessedLayout", async () => {
     const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
     const processedLayout = asData(buildLabelLayout());
+    const targetTranslations = await getTranslations("fr", "components");
     const processedPromise = processTemplateLayoutData({
       layoutData,
       templateId: "main",
       targetLocale: "fr",
+      targetTranslations,
       buildProcessedLayout: () => processedLayout,
     });
 
@@ -250,10 +266,12 @@ describe("defaultLayoutTranslations", () => {
   it("is a no-op for unknown template ids", async () => {
     const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
     const processedLayout = asData(buildLabelLayout());
+    const targetTranslations = await getTranslations("fr", "components");
     const processed = await processTemplateLayoutData({
       layoutData,
       templateId: "unknown-template",
       targetLocale: "fr",
+      targetTranslations,
       buildProcessedLayout: async () => processedLayout,
     });
 
@@ -262,5 +280,31 @@ describe("defaultLayoutTranslations", () => {
     expect((processed as TestLayout).root.props.skipDefaultTranslations).toBe(
       undefined
     );
+  });
+
+  it("skips injection when target translations are missing", async () => {
+    const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
+    const processedLayout = asData({
+      ...buildLabelLayout(),
+      root: {
+        props: {
+          ...buildLabelLayout().root.props,
+          skipDefaultTranslations: ["en"],
+        },
+      },
+    });
+
+    const processed = await processTemplateLayoutData({
+      layoutData,
+      templateId: "main",
+      targetLocale: "fr",
+      targetTranslations: undefined,
+      buildProcessedLayout: async () => processedLayout,
+    });
+
+    expect((processed as TestLayout).root.props.label.fr).toBeUndefined();
+    expect(
+      (processed as TestLayout).root.props.skipDefaultTranslations
+    ).toEqual(["en"]);
   });
 });

@@ -1,57 +1,43 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
-
-const loadResolver = async () => import("./componentDefaultResolver.ts");
+import { getTranslations } from "./getTranslations.ts";
+import {
+  getComponentDefaultsFromTranslations,
+  normalizeComponentDefaultLocale,
+  resolveLocalizedComponentDefaultValue,
+} from "./componentDefaultResolver.ts";
 
 describe("componentDefaultResolver", () => {
-  beforeEach(() => {
-    vi.resetModules();
+  it("normalizes and validates component default locales", () => {
+    expect(normalizeComponentDefaultLocale("fr-CA")).toBe("fr-CA");
+    expect(normalizeComponentDefaultLocale("")).toBeUndefined();
+    expect(normalizeComponentDefaultLocale("zz")).toBeUndefined();
   });
 
-  it("returns false when asked to preload an unsupported locale", async () => {
-    const { preloadComponentDefaultTranslations } = await loadResolver();
-    await expect(preloadComponentDefaultTranslations("zz")).resolves.toBe(
-      false
+  it("extracts flattened component defaults from translations", async () => {
+    const translations = await getTranslations("fr", "components");
+    const defaults = getComponentDefaultsFromTranslations(translations);
+    expect(defaults["componentDefaults.button"]).toBe("Bouton");
+    expect(defaults["componentDefaults.bannerText"]).toBe(
+      "Texte de la bannière"
     );
   });
 
-  it("resolves localized text after preloading a locale", async () => {
-    const {
-      preloadComponentDefaultTranslations,
-      resolveLocalizedComponentDefaultValue,
-    } = await loadResolver();
-
-    await preloadComponentDefaultTranslations("fr");
-
-    expect(resolveLocalizedComponentDefaultValue("fr", "Button")).toBe(
-      "Bouton"
-    );
-  });
-
-  it("resolves regional locales to supported base locale defaults", async () => {
-    const {
-      preloadComponentDefaultTranslations,
-      resolveLocalizedComponentDefaultValue,
-    } = await loadResolver();
-
-    await preloadComponentDefaultTranslations("fr-CA");
-
-    expect(resolveLocalizedComponentDefaultValue("fr-CA", "Button")).toBe(
+  it("resolves localized text using provided component defaults", async () => {
+    const translations = await getTranslations("fr", "components");
+    const defaults = getComponentDefaultsFromTranslations(translations);
+    expect(resolveLocalizedComponentDefaultValue("Button", defaults)).toBe(
       "Bouton"
     );
   });
 
   it("resolves recognized rich text defaults", async () => {
-    const {
-      preloadComponentDefaultTranslations,
-      resolveLocalizedComponentDefaultValue,
-    } = await loadResolver();
-
-    await preloadComponentDefaultTranslations("fr");
+    const translations = await getTranslations("fr", "components");
+    const defaults = getComponentDefaultsFromTranslations(translations);
 
     const localized = resolveLocalizedComponentDefaultValue(
-      "fr",
-      getDefaultRTF("Banner Text")
+      getDefaultRTF("Banner Text"),
+      defaults
     );
 
     if (!localized || typeof localized === "string") {
@@ -62,19 +48,22 @@ describe("componentDefaultResolver", () => {
     expect(localized.json).toContain("Texte de la bannière");
   });
 
-  it("skips rich text defaults with unsupported html shape", async () => {
-    const {
-      preloadComponentDefaultTranslations,
-      resolveLocalizedComponentDefaultValue,
-    } = await loadResolver();
+  it("returns undefined when localized defaults are missing", () => {
+    expect(resolveLocalizedComponentDefaultValue("Button", {})).toBeUndefined();
+  });
 
-    await preloadComponentDefaultTranslations("fr");
+  it("skips rich text defaults with unsupported html shape", async () => {
+    const translations = await getTranslations("fr", "components");
+    const defaults = getComponentDefaultsFromTranslations(translations);
 
     expect(
-      resolveLocalizedComponentDefaultValue("fr", {
-        html: "<p><strong>Banner Text</strong></p>",
-        json: "{}",
-      })
+      resolveLocalizedComponentDefaultValue(
+        {
+          html: "<p><strong>Banner Text</strong></p>",
+          json: "{}",
+        },
+        defaults
+      )
     ).toBeUndefined();
   });
 });

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { Config } from "@puckeditor/core";
 import { localizeConfigDefaultsForLocale } from "./localizeConfigDefaults.ts";
-import { preloadComponentDefaultTranslations } from "../../utils/i18n/componentDefaultResolver.ts";
+import { getTranslations } from "../../utils/i18n/getTranslations.ts";
 
 const buildConfig = (): Config =>
   ({
@@ -40,13 +40,22 @@ const buildConfig = (): Config =>
   }) as unknown as Config;
 
 describe("localizeConfigDefaultsForLocale", () => {
+  let frTranslations: Record<string, unknown>;
+
   beforeEach(async () => {
-    await preloadComponentDefaultTranslations("fr");
+    frTranslations = (await getTranslations("fr", "components")) as Record<
+      string,
+      unknown
+    >;
   });
 
   it("injects missing locale values in component and root defaultProps", () => {
     const config = buildConfig();
-    const localized = localizeConfigDefaultsForLocale(config, "fr");
+    const localized = localizeConfigDefaultsForLocale(
+      config,
+      "fr",
+      frTranslations
+    );
 
     expect((localized.components.Example.defaultProps as any).title.fr).toBe(
       "Bouton"
@@ -59,7 +68,11 @@ describe("localizeConfigDefaultsForLocale", () => {
 
   it("injects missing locale values in nested field defaultItemProps", () => {
     const config = buildConfig();
-    const localized = localizeConfigDefaultsForLocale(config, "fr");
+    const localized = localizeConfigDefaultsForLocale(
+      config,
+      "fr",
+      frTranslations
+    );
     const localizedFieldDefaults = (localized.components.Example.fields as any)
       .items.defaultItemProps.label;
 
@@ -71,10 +84,20 @@ describe("localizeConfigDefaultsForLocale", () => {
     const config = buildConfig();
     (config.components.Example.defaultProps as any).title.fr = "Custom Label";
 
-    const localized = localizeConfigDefaultsForLocale(config, "fr");
+    const localized = localizeConfigDefaultsForLocale(
+      config,
+      "fr",
+      frTranslations
+    );
 
     expect((localized.components.Example.defaultProps as any).title.fr).toBe(
       "Custom Label"
     );
+  });
+
+  it("returns config unchanged when translations are unavailable", () => {
+    const config = buildConfig();
+    const localized = localizeConfigDefaultsForLocale(config, "fr", undefined);
+    expect(localized).toBe(config);
   });
 });

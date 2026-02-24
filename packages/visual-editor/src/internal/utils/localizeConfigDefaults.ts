@@ -1,5 +1,8 @@
 import { Config } from "@puckeditor/core";
-import { normalizeComponentDefaultLocale } from "../../utils/i18n/componentDefaultResolver.ts";
+import {
+  getComponentDefaultsFromTranslations,
+  normalizeComponentDefaultLocale,
+} from "../../utils/i18n/componentDefaultResolver.ts";
 import { injectMissingLocalizedValuesRecursively } from "../../utils/i18n/injectMissingLocalizedValues.ts";
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> => {
@@ -22,9 +25,17 @@ const cloneValue = <T>(value: T): T => {
   return clone as T;
 };
 
-const cloneAndInjectLocaleDefaults = <T>(value: T, locale: string): T => {
+const cloneAndInjectLocaleDefaults = <T>(
+  value: T,
+  locale: string,
+  localizedComponentDefaults: Record<string, string>
+): T => {
   const cloned = cloneValue(value);
-  injectMissingLocalizedValuesRecursively(cloned, locale);
+  injectMissingLocalizedValuesRecursively(
+    cloned,
+    locale,
+    localizedComponentDefaults
+  );
   return cloned;
 };
 
@@ -36,10 +47,17 @@ const cloneAndInjectLocaleDefaults = <T>(value: T, locale: string): T => {
  */
 export const localizeConfigDefaultsForLocale = (
   config: Config,
-  locale: unknown
+  locale: unknown,
+  targetTranslations: unknown
 ): Config => {
   const normalizedLocale = normalizeComponentDefaultLocale(locale);
   if (!normalizedLocale) {
+    return config;
+  }
+
+  const localizedComponentDefaults =
+    getComponentDefaultsFromTranslations(targetTranslations);
+  if (Object.keys(localizedComponentDefaults).length === 0) {
     return config;
   }
 
@@ -51,7 +69,8 @@ export const localizeConfigDefaultsForLocale = (
         ? {
             defaultProps: cloneAndInjectLocaleDefaults(
               component.defaultProps,
-              normalizedLocale
+              normalizedLocale,
+              localizedComponentDefaults
             ),
           }
         : {}),
@@ -59,7 +78,8 @@ export const localizeConfigDefaultsForLocale = (
         ? {
             fields: cloneAndInjectLocaleDefaults(
               component.fields,
-              normalizedLocale
+              normalizedLocale,
+              localizedComponentDefaults
             ),
           }
         : {}),
@@ -73,7 +93,8 @@ export const localizeConfigDefaultsForLocale = (
           ? {
               defaultProps: cloneAndInjectLocaleDefaults(
                 config.root.defaultProps,
-                normalizedLocale
+                normalizedLocale,
+                localizedComponentDefaults
               ),
             }
           : {}),
@@ -81,7 +102,8 @@ export const localizeConfigDefaultsForLocale = (
           ? {
               fields: cloneAndInjectLocaleDefaults(
                 config.root.fields,
-                normalizedLocale
+                normalizedLocale,
+                localizedComponentDefaults
               ),
             }
           : {}),

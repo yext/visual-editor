@@ -69,3 +69,19 @@ export const loadComponentTranslations = async (
     );
   }
 };
+
+/**
+ * Returns component translations currently loaded into the i18n instance for a locale.
+ */
+export const getLoadedComponentTranslations = (
+  locale: string | undefined
+): Record<string, unknown> | undefined => {
+  if (!locale || !i18nComponentsInstance.hasResourceBundle(locale, NAMESPACE)) {
+    return;
+  }
+
+  const bundle = i18nComponentsInstance.getResourceBundle(locale, NAMESPACE);
+  return bundle && typeof bundle === "object"
+    ? (bundle as Record<string, unknown>)
+    : undefined;
+};

@@ -39,7 +39,10 @@ import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { localizeConfigDefaultsForLocale } from "../utils/localizeConfigDefaults.ts";
-import { preloadComponentDefaultTranslations } from "../../utils/i18n/componentDefaultResolver.ts";
+import {
+  getLoadedComponentTranslations,
+  i18nComponentsInstance,
+} from "../../utils/i18n/components.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -117,28 +120,26 @@ export const InternalLayoutEditor = ({
   const streamDocument = useDocument();
   const editorLocale = streamDocument?.locale;
   const { errorCount, errorSources, errorDetails } = useErrorContext();
-  const [componentDefaultsReadyVersion, setComponentDefaultsReadyVersion] =
+  // Bump this when component i18n resources change so config defaults can be
+  // localized after the current locale bundle finishes loading.
+  const [componentTranslationsVersion, setComponentTranslationsVersion] =
     useState<number>(0);
 
   React.useEffect(() => {
-    let isCurrent = true;
-
-    const preloadDefaults = async () => {
-      if (typeof editorLocale !== "string") {
-        return;
-      }
-      const didLoad = await preloadComponentDefaultTranslations(editorLocale);
-      if (isCurrent && didLoad) {
-        setComponentDefaultsReadyVersion((version) => version + 1);
-      }
+    const handleTranslationsChange = () => {
+      setComponentTranslationsVersion((version) => version + 1);
     };
 
-    preloadDefaults();
+    i18nComponentsInstance.on("loaded", handleTranslationsChange);
+    i18nComponentsInstance.on("languageChanged", handleTranslationsChange);
+    i18nComponentsInstance.store?.on?.("added", handleTranslationsChange);
 
     return () => {
-      isCurrent = false;
+      i18nComponentsInstance.off("loaded", handleTranslationsChange);
+      i18nComponentsInstance.off("languageChanged", handleTranslationsChange);
+      i18nComponentsInstance.store?.off?.("added", handleTranslationsChange);
     };
-  }, [editorLocale]);
+  }, []);
 
   /**
    * When the Puck history changes save it to localStorage and send a message
@@ -293,8 +294,13 @@ export const InternalLayoutEditor = ({
       },
     } as Config;
 
-    return localizeConfigDefaultsForLocale(translatedConfig, editorLocale);
-  }, [componentDefaultsReadyVersion, editorLocale, puckConfig, i18n.language]);
+    const targetTranslations = getLoadedComponentTranslations(editorLocale);
+    return localizeConfigDefaultsForLocale(
+      translatedConfig,
+      editorLocale,
+      targetTranslations
+    );
+  }, [componentTranslationsVersion, editorLocale, puckConfig, i18n.language]);
 
   // Resolve all data and slots when the document changes
   // Implemented as an override so that the getPuck hook is available

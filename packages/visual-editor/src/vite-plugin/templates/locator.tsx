@@ -105,10 +105,12 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
   const layoutData = JSON.parse(document.__.layout);
+  const translations = await injectTranslations(document);
   const resolvedPuckData = await processTemplateLayoutData({
     layoutData,
     templateId: "locator",
     targetLocale: document.locale,
+    targetTranslations: translations,
     buildProcessedLayout: async () => {
       const migratedData = migrate(
         layoutData,
@@ -123,8 +125,6 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   });
 
   document.__.layout = JSON.stringify(resolvedPuckData);
-
-  const translations = await injectTranslations(document);
 
   return { ...props, document, translations };
 };

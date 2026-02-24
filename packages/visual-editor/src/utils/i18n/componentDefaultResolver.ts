@@ -1,19 +1,14 @@
 import type { RichText } from "../../types/types.ts";
 import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 import { normalizeLocale } from "../normalizeLocale.ts";
-import { DEFAULT_LOCALE } from "../pageSetLocales.ts";
 import { resolveTranslationLocale } from "./resolveTranslationLocale.ts";
 import { isRichText } from "../plainText.ts";
-import { getTranslations } from "./getTranslations.ts";
 import { locales as supportedLocales } from "./locales.ts";
+import componentDefaultsEnTranslations from "../../../locales/components/en/visual-editor.json" with { type: "json" };
 
 const KNOWN_DEFAULT_RICH_TEXT_REGEX = /<span>(.*?)<\/span>/i;
 const COMPONENT_DEFAULTS_NAMESPACE = "componentDefaults";
 const supportedTranslationLocales = new Set(supportedLocales);
-const localeDefaultsCache = new Map<string, Record<string, string>>();
-const localeLoadPromises = new Map<string, Promise<Record<string, string>>>();
-const enValueToKeys = new Map<string, string[]>();
-let enIndexInitialization: Promise<void> | undefined;
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> => {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -42,66 +37,38 @@ const flattenStringLeafNodes = (
   return result;
 };
 
-const extractComponentDefaults = (
-  translations: Record<string, unknown>
+/**
+ * Extracts and flattens `componentDefaults` values from a translation payload.
+ */
+export const getComponentDefaultsFromTranslations = (
+  translations: unknown
 ): Record<string, string> => {
+  if (!isPlainObject(translations)) {
+    return {};
+  }
+
   const namespaceValue = translations[COMPONENT_DEFAULTS_NAMESPACE];
   if (!isPlainObject(namespaceValue)) {
     return {};
   }
+
   return flattenStringLeafNodes(namespaceValue, COMPONENT_DEFAULTS_NAMESPACE);
 };
 
-const loadLocaleDefaultsByResolvedLocale = async (
-  resolvedLocale: string
-): Promise<Record<string, string>> => {
-  const cached = localeDefaultsCache.get(resolvedLocale);
-  if (cached) {
-    return cached;
+const enValueToKeys = (() => {
+  const enDefaults = getComponentDefaultsFromTranslations(
+    componentDefaultsEnTranslations
+  );
+  const index = new Map<string, string[]>();
+
+  for (const [key, value] of Object.entries(enDefaults)) {
+    const existingKeys = index.get(value) ?? [];
+    existingKeys.push(key);
+    index.set(value, existingKeys);
   }
 
-  const existingPromise = localeLoadPromises.get(resolvedLocale);
-  if (existingPromise) {
-    return existingPromise;
-  }
-
-  const loadPromise = (async () => {
-    const localeTranslations = (await getTranslations(
-      resolvedLocale,
-      "platform"
-    )) as Record<string, unknown>;
-    const localeDefaults = extractComponentDefaults(localeTranslations);
-    localeDefaultsCache.set(resolvedLocale, localeDefaults);
-    localeLoadPromises.delete(resolvedLocale);
-    return localeDefaults;
-  })();
-
-  localeLoadPromises.set(resolvedLocale, loadPromise);
-  return loadPromise;
-};
-
-const initializeEnValueToKeys = async (): Promise<void> => {
-  if (enValueToKeys.size > 0) {
-    return;
-  }
-
-  if (enIndexInitialization) {
-    return enIndexInitialization;
-  }
-
-  enIndexInitialization = (async () => {
-    const enDefaults = await loadLocaleDefaultsByResolvedLocale(DEFAULT_LOCALE);
-    enValueToKeys.clear();
-
-    for (const [key, value] of Object.entries(enDefaults)) {
-      const existingKeys = enValueToKeys.get(value) ?? [];
-      existingKeys.push(key);
-      enValueToKeys.set(value, existingKeys);
-    }
-  })();
-
-  return enIndexInitialization;
-};
+  return index;
+})();
 
 /**
  * Normalizes and validates a locale for component default translation lookup.
@@ -130,58 +97,24 @@ export const normalizeComponentDefaultLocale = (
 };
 
 /**
- * Loads component default translations into the in-memory cache for a locale.
- * Also ensures English defaults are indexed for deterministic reverse lookup.
- */
-export const preloadComponentDefaultTranslations = async (
-  locale: string
-): Promise<boolean> => {
-  const normalizedLocale = normalizeComponentDefaultLocale(locale);
-  if (!normalizedLocale) {
-    return false;
-  }
-
-  await Promise.all([
-    initializeEnValueToKeys(),
-    loadLocaleDefaultsByResolvedLocale(
-      resolveTranslationLocale(normalizedLocale)
-    ),
-  ]);
-
-  return true;
-};
-
-const getLoadedDefaultsForLocale = (locale: string): Record<string, string> => {
-  const normalizedLocale = normalizeComponentDefaultLocale(locale);
-  if (!normalizedLocale) {
-    return {};
-  }
-
-  return (
-    localeDefaultsCache.get(resolveTranslationLocale(normalizedLocale)) ?? {}
-  );
-};
-
-/**
  * Resolves a localized default string for an English source value.
  *
  * A single English string can map to multiple default keys; resolution is
  * skipped when any key is missing in the target locale or mapped values differ.
  */
 const resolveDeterministicLocalizedText = (
-  locale: string,
-  enValue: string
+  enValue: string,
+  localizedComponentDefaults: Record<string, string>
 ): string | undefined => {
   const keys = enValueToKeys.get(enValue);
   if (!keys || keys.length === 0) {
     return;
   }
 
-  const localeDefaults = getLoadedDefaultsForLocale(locale);
   const values: string[] = [];
 
   for (const key of keys) {
-    const value = localeDefaults[key];
+    const value = localizedComponentDefaults[key];
     if (value === undefined) {
       return;
     }
@@ -216,15 +149,18 @@ const extractKnownDefaultRichTextText = (
 };
 
 /**
- * Resolves an injectable localized value for a locale based on the English value.
- * Returns `undefined` when the value is ineligible or ambiguous.
+ * Resolves an injectable localized value for an English default using the
+ * provided locale translation payload.
  */
 export const resolveLocalizedComponentDefaultValue = (
-  locale: string,
-  enValue: unknown
+  enValue: unknown,
+  localizedComponentDefaults: Record<string, string>
 ): string | RichText | undefined => {
   if (typeof enValue === "string") {
-    return resolveDeterministicLocalizedText(locale, enValue);
+    return resolveDeterministicLocalizedText(
+      enValue,
+      localizedComponentDefaults
+    );
   }
 
   const enRichTextText = extractKnownDefaultRichTextText(enValue);
@@ -233,8 +169,8 @@ export const resolveLocalizedComponentDefaultValue = (
   }
 
   const localizedText = resolveDeterministicLocalizedText(
-    locale,
-    enRichTextText
+    enRichTextText,
+    localizedComponentDefaults
   );
   return localizedText === undefined ? undefined : getDefaultRTF(localizedText);
 };

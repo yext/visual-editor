@@ -22,11 +22,16 @@ const isLocalizedObject = (value: unknown): value is LocalizedObject => {
  */
 export const injectMissingLocalizedValuesRecursively = (
   node: unknown,
-  locale: string
+  locale: string,
+  localizedComponentDefaults: Record<string, string>
 ): void => {
   if (Array.isArray(node)) {
     node.forEach((item) =>
-      injectMissingLocalizedValuesRecursively(item, locale)
+      injectMissingLocalizedValuesRecursively(
+        item,
+        locale,
+        localizedComponentDefaults
+      )
     );
     return;
   }
@@ -38,8 +43,8 @@ export const injectMissingLocalizedValuesRecursively = (
   if (isLocalizedObject(node)) {
     if (!(locale in node)) {
       const localizedValue = resolveLocalizedComponentDefaultValue(
-        locale,
-        node.en
+        node.en,
+        localizedComponentDefaults
       );
       if (localizedValue !== undefined) {
         node[locale] = localizedValue as string | RichText;
@@ -49,6 +54,10 @@ export const injectMissingLocalizedValuesRecursively = (
   }
 
   for (const value of Object.values(node)) {
-    injectMissingLocalizedValuesRecursively(value, locale);
+    injectMissingLocalizedValuesRecursively(
+      value,
+      locale,
+      localizedComponentDefaults
+    );
   }
 };

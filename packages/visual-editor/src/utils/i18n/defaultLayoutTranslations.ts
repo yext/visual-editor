@@ -2,8 +2,8 @@ import type { Data, DefaultComponentProps } from "@puckeditor/core";
 import { defaultLayoutData } from "../../vite-plugin/defaultLayoutData.ts";
 import { normalizeLocales } from "../pageSetLocales.ts";
 import {
+  getComponentDefaultsFromTranslations,
   normalizeComponentDefaultLocale,
-  preloadComponentDefaultTranslations,
 } from "./componentDefaultResolver.ts";
 import { injectMissingLocalizedValuesRecursively } from "./injectMissingLocalizedValues.ts";
 import { RootProps } from "../migrate.ts";
@@ -65,6 +65,7 @@ type ProcessTemplateLayoutDataOptions<
   layoutData: Data<DefaultComponentProps, RootProps>;
   templateId: string;
   targetLocale?: string;
+  targetTranslations?: Record<string, unknown>;
   buildProcessedLayout: () => TLayout | Promise<TLayout>;
 };
 
@@ -75,6 +76,7 @@ type ProcessTemplateLayoutDataOptions<
  * @param options.layoutData - layout before migration/resolution.
  * @param options.templateId - Template id (`main`, `directory`, or `locator`).
  * @param options.targetLocale - Locale to inject in this run.
+ * @param options.targetTranslations - Locale translations for `targetLocale`.
  * @param options.buildProcessedLayout - Function that returns the processed layout
  * (sync or async).
  * @returns Promise of processed layout with injected default translations when eligible.
@@ -85,6 +87,7 @@ export const processTemplateLayoutData = async <
   layoutData,
   templateId,
   targetLocale,
+  targetTranslations,
   buildProcessedLayout,
 }: ProcessTemplateLayoutDataOptions<TLayout>): Promise<TLayout> => {
   const processedLayout = await Promise.resolve(buildProcessedLayout());
@@ -107,16 +110,16 @@ export const processTemplateLayoutData = async <
     return processedLayout;
   }
 
-  const didPreloadDefaults = await preloadComponentDefaultTranslations(
-    normalizedTargetLocale
-  );
-  if (!didPreloadDefaults) {
+  const localizedComponentDefaults =
+    getComponentDefaultsFromTranslations(targetTranslations);
+  if (Object.keys(localizedComponentDefaults).length === 0) {
     return processedLayout;
   }
 
   injectMissingLocalizedValuesRecursively(
     processedLayout,
-    normalizedTargetLocale
+    normalizedTargetLocale,
+    localizedComponentDefaults
   );
 
   writeSkippedDefaultTranslations(processedLayout, [
