@@ -50,15 +50,15 @@ const matrixCases = [
   },
   {
     breadcrumbPrefix: "",
-    locale: "es",
+    locale: "zh-Hans",
     includeLocalePrefixForPrimaryLocale: true,
-    expected: "es/123",
+    expected: "zh-hans/123",
   },
   {
     breadcrumbPrefix: "",
-    locale: "es",
+    locale: "es-MX",
     includeLocalePrefixForPrimaryLocale: false,
-    expected: "es/123",
+    expected: "es-mx/123",
   },
 ] as const;
 
