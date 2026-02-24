@@ -9,7 +9,7 @@ import { useDocument } from "../../../hooks/useDocument.tsx";
 import { StreamDocument } from "../../../utils/index.ts";
 
 const LocatorPin: PinComponent<DefaultRawDataType> = ({ selected }) => {
-  const size = selected ? 40 : 28;
+  const size = selected ? 42 : 30;
   const color = selected ? "#0f766e" : "#134e4a";
 
   return <MapPin width={size} height={size} fill={color} color={color} />;
