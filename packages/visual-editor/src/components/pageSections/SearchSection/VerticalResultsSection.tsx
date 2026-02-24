@@ -1,4 +1,8 @@
-import { VerticalResults, StandardCard, Facets } from "@yext/search-ui-react";
+import { Facets, StandardCard, VerticalResults } from "@yext/search-ui-react";
+import { t } from "i18next";
+import React from "react";
+import { FaSlidersH, FaTimes } from "react-icons/fa";
+import { Body } from "../../atoms/body.tsx";
 import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
 import { VerticalConfigProps } from "./propsAndTypes.ts";
@@ -18,14 +22,73 @@ export const VerticalResultsSection = ({
   puck,
   facetsLength,
 }: VerticalResultsSectionProps) => {
+  const popupRef = React.useRef<HTMLDivElement>(null);
+  const [showFilterModal, setShowFilterModal] = React.useState(false);
+
   if (currentVerticalConfig?.layout === "Map") {
     return (
-      <div className="flex gap-6 px-12">
-        <div className="flex-1">
-          <VerticalResults CardComponent={StandardCard} />
-        </div>
+      <div className="components flex h-screen w-full mx-auto">
+        <div className="relative h-screen w-full md:w-2/4 flex flex-col ">
+          <div className="relative flex-1 flex flex-col min-h-0">
+            <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
+              <div className="flex flex-row justify-end">
+                <button
+                  className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
+                  onClick={() => setShowFilterModal((prev) => !prev)}
+                >
+                  {t("filter", "Filter")}
+                  {<FaSlidersH />}
+                </button>
+              </div>
+            </div>
+            <div id="innerDiv" className="overflow-y-auto">
+              <VerticalResults CardComponent={StandardCard} />
+            </div>
+            {facetsLength && showFilterModal && (
+              <div
+                id="popup"
+                className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
+                ref={popupRef}
+              >
+                <div className="inline-flex justify-between items-center px-6 py-4 gap-4">
+                  <Body className="font-bold">
+                    {t("refineYourSearch", "Refine Your Search")}
+                  </Body>
+                  <button
+                    className="text-palette-primary-dark"
+                    onClick={() => setShowFilterModal(false)}
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
 
-        <div className="w-1/2 !h-[800px]">
+                <div className="flex flex-col p-6 gap-6 overflow-y-auto">
+                  <div className="flex flex-col gap-8">
+                    <Facets
+                      customCssClasses={{
+                        divider: "bg-white",
+                        titleLabel: "font-bold text-md font-body-fontFamily",
+                        optionInput: "h-4 w-4 accent-palette-primary-dark",
+                        optionLabel:
+                          "text-md font-body-fontFamily font-body-fontWeight",
+                        option: "space-x-4 font-body-fontFamily",
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="border-y border-gray-300 justify-center align-middle">
+                  <button
+                    className="w-full py-4 text-center text-palette-primary-dark font-bold font-body-fontFamily text-body-fontSize"
+                    onClick={() => {}}
+                  >
+                    {t("clearAll", "Clear All")}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="md:flex-1 md:flex hidden relative">
           <MapComponent />
         </div>
       </div>
