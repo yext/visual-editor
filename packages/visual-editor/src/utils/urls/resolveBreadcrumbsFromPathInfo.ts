@@ -16,7 +16,7 @@ export const resolveBreadcrumbsFromPathInfo = (
   streamDocument: StreamDocument
 ): BreadcrumbLink[] | undefined => {
   const breadcrumbPrefix = streamDocument.__?.pathInfo?.breadcrumbPrefix;
-  if (typeof breadcrumbPrefix !== "string") {
+  if (!streamDocument.__?.pathInfo) {
     return;
   }
 
@@ -29,7 +29,9 @@ export const resolveBreadcrumbsFromPathInfo = (
     !isPrimaryLocale(streamDocument) ||
     streamDocument.__?.pathInfo?.includeLocalePrefixForPrimaryLocale;
 
-  const normalizedPrefix = normalizeSlug(breadcrumbPrefix);
+  const normalizedPrefix = breadcrumbPrefix
+    ? normalizeSlug(breadcrumbPrefix)
+    : "";
 
   const directoryParents = getDirectoryParents(streamDocument);
   if (directoryParents.length === 0) {
@@ -53,7 +55,7 @@ export const resolveBreadcrumbsFromPathInfo = (
       ? `${normalizedPrefix}/${directoryLevelSlug}`
       : directoryLevelSlug;
     const slug = includeLocalePrefix
-      ? `${locale}/${normalizedSlug}`
+      ? `${normalizeSlug(locale)}/${normalizedSlug}`
       : normalizedSlug;
 
     const name = (typeof parent.name === "string" && parent.name) || slug;
