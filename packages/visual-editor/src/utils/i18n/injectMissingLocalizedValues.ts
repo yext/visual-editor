@@ -6,7 +6,9 @@ export type LocalizedObject = {
   [key: string]: unknown;
 };
 
-const isPlainObject = (value: unknown): value is Record<string, unknown> => {
+export const isPlainObject = (
+  value: unknown
+): value is Record<string, unknown> => {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 };
 

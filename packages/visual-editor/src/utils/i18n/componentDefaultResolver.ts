@@ -5,15 +5,14 @@ import { resolveTranslationLocale } from "./resolveTranslationLocale.ts";
 import { isRichText } from "../plainText.ts";
 import { locales as supportedLocales } from "./locales.ts";
 import componentDefaultsEnTranslations from "../../../locales/components/en/visual-editor.json" with { type: "json" };
+import { isPlainObject } from "./injectMissingLocalizedValues.ts";
 
 const KNOWN_DEFAULT_RICH_TEXT_REGEX = /<span>(.*?)<\/span>/i;
 const COMPONENT_DEFAULTS_NAMESPACE = "componentDefaults";
 const supportedTranslationLocales = new Set(supportedLocales);
 
-const isPlainObject = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-};
-
+// Flattens nested objects into dot-delimited keys, including only string leaf values.
+// Based on packages/visual-editor/src/utils/i18n/jsonUtils.ts flatten function.
 const flattenStringLeafNodes = (
   obj: Record<string, unknown>,
   prefix = ""
