@@ -41,6 +41,8 @@ import { useErrorContext } from "../../contexts/ErrorContext.tsx";
 import { getLoadedComponentTranslations } from "../../utils/i18n/components.ts";
 import { useComponentTranslationsVersion } from "../../utils/i18n/useComponentTranslationsVersion.ts";
 import { localizeConfigDefaultsForLocale } from "../../utils/i18n/localizeConfigDefaults.ts";
+import { processTemplateLayoutData } from "../../utils/i18n/defaultLayoutTranslations.ts";
+import { getPageSetLocales } from "../../utils/pageSetLocales.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -116,7 +118,10 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
-  const editorLocale = streamDocument?.locale;
+  const scopedLocales = React.useMemo(
+    () => getPageSetLocales(streamDocument),
+    [streamDocument]
+  );
   const { errorCount, errorSources, errorDetails } = useErrorContext();
   const componentTranslationsVersion = useComponentTranslationsVersion();
 
@@ -273,13 +278,16 @@ export const InternalLayoutEditor = ({
       },
     } as Config;
 
-    const targetTranslations = getLoadedComponentTranslations(editorLocale);
-    return localizeConfigDefaultsForLocale(
-      translatedConfig,
-      editorLocale,
-      targetTranslations
-    );
-  }, [componentTranslationsVersion, editorLocale, puckConfig, i18n.language]);
+    for (const locale of scopedLocales) {
+      localizeConfigDefaultsForLocale(
+        translatedConfig,
+        locale,
+        getLoadedComponentTranslations(locale)
+      );
+    }
+
+    return translatedConfig;
+  }, [componentTranslationsVersion, scopedLocales, puckConfig, i18n.language]);
 
   // Resolve all data and slots when the document changes
   // Implemented as an override so that the getPuck hook is available
@@ -295,25 +303,44 @@ export const InternalLayoutEditor = ({
           const resolvedData = await resolveAllData(appState.data, config, {
             streamDocument,
           });
+          const localeAwareData = await processTemplateLayoutData({
+            layoutData: appState.data as Data,
+            templateId: templateMetadata.templateId ?? "",
+            targets: scopedLocales.map((locale) => ({
+              locale,
+              translations: getLoadedComponentTranslations(locale),
+            })),
+            buildProcessedLayout: () => resolvedData as Data,
+          });
 
-          devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
+          devLogger.logData("RESOLVED_LAYOUT_DATA", localeAwareData);
 
-          if (isDeepEqual(appState.data, resolvedData)) {
+          if (isDeepEqual(appState.data, localeAwareData)) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
             );
             return;
           }
 
-          dispatch({ type: "setData", data: resolvedData });
+          dispatch({ type: "setData", data: localeAwareData });
         };
 
         resolveData();
-      }, [streamDocument]);
+      }, [
+        componentTranslationsVersion,
+        scopedLocales,
+        streamDocument,
+        templateMetadata.templateId,
+      ]);
 
       return <>{props.children}</>;
     },
-    [streamDocument]
+    [
+      componentTranslationsVersion,
+      scopedLocales,
+      streamDocument,
+      templateMetadata.templateId,
+    ]
   );
 
   const puckOverride = React.useCallback(

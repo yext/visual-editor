@@ -110,7 +110,7 @@ describe("defaultLayoutTranslations", () => {
   it("injects regional locales using stripped-locale defaults", async () => {
     const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
     const processedLayout = asData(buildLabelLayout());
-    const targetTranslations = await getTranslations("fr", "components");
+    const targetTranslations = await getTranslations("fr-CA", "components");
 
     const processed = await processTemplateLayoutData({
       layoutData,
@@ -127,6 +127,103 @@ describe("defaultLayoutTranslations", () => {
     expect(
       (processed as TestLayout).root.props.skipDefaultTranslations
     ).toEqual(["en", "fr-CA"]);
+  });
+
+  it("injects multiple locale targets in one pass", async () => {
+    const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
+    const processedLayout = asData(buildLabelLayout());
+    const frTranslations = await getTranslations("fr", "components");
+    const esTranslations = await getTranslations("es", "components");
+
+    const processed = await processTemplateLayoutData({
+      layoutData,
+      templateId: "main",
+      targets: [
+        {
+          locale: "fr",
+          translations: frTranslations as Record<string, unknown>,
+        },
+        {
+          locale: "es",
+          translations: esTranslations as Record<string, unknown>,
+        },
+      ],
+      buildProcessedLayout: async () => processedLayout,
+    });
+
+    expect((processed as TestLayout).root.props.label.fr).toBe(
+      await getComponentDefaultText("fr", "button")
+    );
+    expect((processed as TestLayout).root.props.label.es).toBe(
+      await getComponentDefaultText("es", "button")
+    );
+    expect(
+      (processed as TestLayout).root.props.skipDefaultTranslations
+    ).toEqual(["en", "fr", "es"]);
+  });
+
+  it("does not overwrite existing locale values in multi-target mode", async () => {
+    const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
+    const processedLayout = asData(
+      buildLabelLayout({
+        fr: "Custom Label",
+      })
+    );
+    const frTranslations = await getTranslations("fr", "components");
+    const esTranslations = await getTranslations("es", "components");
+
+    const processed = await processTemplateLayoutData({
+      layoutData,
+      templateId: "main",
+      targets: [
+        {
+          locale: "fr",
+          translations: frTranslations as Record<string, unknown>,
+        },
+        {
+          locale: "es",
+          translations: esTranslations as Record<string, unknown>,
+        },
+      ],
+      buildProcessedLayout: async () => processedLayout,
+    });
+
+    expect((processed as TestLayout).root.props.label.fr).toBe("Custom Label");
+    expect((processed as TestLayout).root.props.label.es).toBe(
+      await getComponentDefaultText("es", "button")
+    );
+    expect(
+      (processed as TestLayout).root.props.skipDefaultTranslations
+    ).toEqual(["en", "fr", "es"]);
+  });
+
+  it("de-dupes marker updates when duplicate locale targets are passed", async () => {
+    const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
+    const processedLayout = asData(buildLabelLayout());
+    const frTranslations = await getTranslations("fr", "components");
+
+    const processed = await processTemplateLayoutData({
+      layoutData,
+      templateId: "main",
+      targets: [
+        {
+          locale: "fr",
+          translations: frTranslations as Record<string, unknown>,
+        },
+        {
+          locale: "fr",
+          translations: frTranslations as Record<string, unknown>,
+        },
+      ],
+      buildProcessedLayout: async () => processedLayout,
+    });
+
+    expect((processed as TestLayout).root.props.label.fr).toBe(
+      await getComponentDefaultText("fr", "button")
+    );
+    expect(
+      (processed as TestLayout).root.props.skipDefaultTranslations
+    ).toEqual(["en", "fr"]);
   });
 
   it("skips injection when target locale is missing", async () => {

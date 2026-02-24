@@ -2,7 +2,11 @@ import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getTranslations } from "./getTranslations.ts";
 import { StreamDocument } from "../types/StreamDocument.ts";
-import { normalizeLocalesInObject } from "../normalizeLocale.ts";
+import {
+  normalizeLocale,
+  normalizeLocalesInObject,
+} from "../normalizeLocale.ts";
+import { normalizeLocales } from "../pageSetLocales.ts";
 
 const NAMESPACE = "visual-editor";
 
@@ -52,7 +56,7 @@ export const injectTranslations = async (
  */
 export const loadComponentTranslations = async (
   locale: string,
-  translations?: Record<string, string>
+  translations?: Record<string, unknown>
 ) => {
   if (i18nComponentsInstance.hasResourceBundle(locale, NAMESPACE)) {
     return;
@@ -68,6 +72,30 @@ export const loadComponentTranslations = async (
       translationsToInject
     );
   }
+};
+
+/**
+ * Loads component translations for multiple locales.
+ *
+ * Locales are normalized and de-duplicated before loading.
+ */
+export const loadComponentTranslationsForLocales = async (
+  locales: string[],
+  translationsByLocale?: Record<string, Record<string, unknown>>
+): Promise<void> => {
+  const normalizedLocales = Array.from(
+    new Set(normalizeLocales(locales).map((locale) => normalizeLocale(locale)))
+  );
+
+  if (normalizedLocales.length === 0) {
+    return;
+  }
+
+  await Promise.all(
+    normalizedLocales.map((locale) =>
+      loadComponentTranslations(locale, translationsByLocale?.[locale])
+    )
+  );
 };
 
 /**

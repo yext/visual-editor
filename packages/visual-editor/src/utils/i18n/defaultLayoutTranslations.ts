@@ -66,6 +66,10 @@ type ProcessTemplateLayoutDataOptions<
   templateId: string;
   targetLocale?: string;
   targetTranslations?: Record<string, unknown>;
+  targets?: Array<{
+    locale: string;
+    translations?: Record<string, unknown>;
+  }>;
   buildProcessedLayout: () => TLayout | Promise<TLayout>;
 };
 
@@ -77,6 +81,8 @@ type ProcessTemplateLayoutDataOptions<
  * @param options.templateId - Template id (`main`, `directory`, or `locator`).
  * @param options.targetLocale - Locale to inject in this run.
  * @param options.targetTranslations - Locale translations for `targetLocale`.
+ * @param options.targets - Optional batch locale/translation targets to inject
+ * in one pass. When present, single-target options are ignored.
  * @param options.buildProcessedLayout - Function that returns the processed layout
  * (sync or async).
  * @returns Promise of processed layout with injected default translations when eligible.
@@ -88,6 +94,7 @@ export const processTemplateLayoutData = async <
   templateId,
   targetLocale,
   targetTranslations,
+  targets,
   buildProcessedLayout,
 }: ProcessTemplateLayoutDataOptions<TLayout>): Promise<TLayout> => {
   const processedLayout = await Promise.resolve(buildProcessedLayout());
@@ -101,31 +108,54 @@ export const processTemplateLayoutData = async <
     return processedLayout;
   }
 
-  const normalizedTargetLocale = normalizeComponentDefaultLocale(targetLocale);
-  if (!normalizedTargetLocale) {
+  const localeTargets =
+    targets && targets.length > 0
+      ? targets
+      : typeof targetLocale === "string"
+        ? [{ locale: targetLocale, translations: targetTranslations }]
+        : [];
+
+  if (localeTargets.length === 0) {
     return processedLayout;
   }
 
-  if (skippedDefaultTranslations.includes(normalizedTargetLocale)) {
+  const nextSkippedLocales = [...skippedDefaultTranslations];
+  let didInjectAnyLocale = false;
+
+  for (const target of localeTargets) {
+    const normalizedTargetLocale = normalizeComponentDefaultLocale(
+      target.locale
+    );
+    if (!normalizedTargetLocale) {
+      continue;
+    }
+
+    if (nextSkippedLocales.includes(normalizedTargetLocale)) {
+      continue;
+    }
+
+    const localizedComponentDefaults = getComponentDefaultsFromTranslations(
+      target.translations
+    );
+    if (Object.keys(localizedComponentDefaults).length === 0) {
+      continue;
+    }
+
+    injectMissingLocalizedValuesRecursively(
+      processedLayout,
+      normalizedTargetLocale,
+      localizedComponentDefaults
+    );
+
+    nextSkippedLocales.push(normalizedTargetLocale);
+    didInjectAnyLocale = true;
+  }
+
+  if (!didInjectAnyLocale) {
     return processedLayout;
   }
 
-  const localizedComponentDefaults =
-    getComponentDefaultsFromTranslations(targetTranslations);
-  if (Object.keys(localizedComponentDefaults).length === 0) {
-    return processedLayout;
-  }
-
-  injectMissingLocalizedValuesRecursively(
-    processedLayout,
-    normalizedTargetLocale,
-    localizedComponentDefaults
-  );
-
-  writeSkippedDefaultTranslations(processedLayout, [
-    ...skippedDefaultTranslations,
-    normalizedTargetLocale,
-  ]);
+  writeSkippedDefaultTranslations(processedLayout, nextSkippedLocales);
 
   return processedLayout;
 };

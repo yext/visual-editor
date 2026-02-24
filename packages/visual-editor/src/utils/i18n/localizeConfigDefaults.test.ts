@@ -41,9 +41,14 @@ const buildConfig = (): Config =>
 
 describe("localizeConfigDefaultsForLocale", () => {
   let frTranslations: Record<string, unknown>;
+  let esTranslations: Record<string, unknown>;
 
   beforeEach(async () => {
     frTranslations = (await getTranslations("fr", "components")) as Record<
+      string,
+      unknown
+    >;
+    esTranslations = (await getTranslations("es", "components")) as Record<
       string,
       unknown
     >;
@@ -100,5 +105,28 @@ describe("localizeConfigDefaultsForLocale", () => {
     const config = buildConfig();
     const localized = localizeConfigDefaultsForLocale(config, "fr", undefined);
     expect(localized).toBe(config);
+  });
+
+  it("supports repeated per-locale localization without overwriting", () => {
+    const config = buildConfig();
+    const localizedFr = localizeConfigDefaultsForLocale(
+      config,
+      "fr",
+      frTranslations
+    );
+    const localizedEs = localizeConfigDefaultsForLocale(
+      localizedFr,
+      "es",
+      esTranslations
+    );
+
+    expect((localizedEs.components.Example.defaultProps as any).title.fr).toBe(
+      "Bouton"
+    );
+    expect((localizedEs.components.Example.defaultProps as any).title.es).toBe(
+      "Botón"
+    );
+    expect((localizedEs.root?.defaultProps as any).rootTitle.fr).toBe("Bouton");
+    expect((localizedEs.root?.defaultProps as any).rootTitle.es).toBe("Botón");
   });
 });

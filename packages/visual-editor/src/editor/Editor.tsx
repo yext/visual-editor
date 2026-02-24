@@ -33,8 +33,12 @@ import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import { processTemplateLayoutData } from "../utils/i18n/defaultLayoutTranslations.ts";
-import { getLoadedComponentTranslations } from "../utils/i18n/components.ts";
+import {
+  getLoadedComponentTranslations,
+  loadComponentTranslationsForLocales,
+} from "../utils/i18n/components.ts";
 import { useComponentTranslationsVersion } from "../utils/i18n/useComponentTranslationsVersion.ts";
+import { getPageSetLocales } from "../utils/pageSetLocales.ts";
 
 const devLogger = new DevLogger();
 
@@ -220,11 +224,16 @@ export const Editor = ({
 
     const buildProcessedLayout = async () => {
       try {
+        const scopedLocales = getPageSetLocales(document);
+        await loadComponentTranslationsForLocales(scopedLocales);
+
         const resolvedLayoutData = await processTemplateLayoutData({
           layoutData,
           templateId,
-          targetLocale: document?.locale,
-          targetTranslations: getLoadedComponentTranslations(document?.locale),
+          targets: scopedLocales.map((locale) => ({
+            locale,
+            translations: getLoadedComponentTranslations(locale),
+          })),
           buildProcessedLayout: () =>
             migrate(layoutData, migrationRegistry, puckConfig, document),
         });
@@ -250,6 +259,7 @@ export const Editor = ({
   }, [
     componentTranslationsVersion,
     document?.locale,
+    document?._pageset,
     isLoading,
     layoutData,
     puckConfig,
