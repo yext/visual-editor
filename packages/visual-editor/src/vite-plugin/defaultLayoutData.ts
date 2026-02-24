@@ -2,6 +2,7 @@ const mainDefaultLayout = {
   root: {
     props: {
       version: 63,
+      skipDefaultTranslations: ["en"],
       title: {
         field: "name",
         constantValue: "",
@@ -4446,6 +4447,7 @@ const directoryDefaultLayout = {
   root: {
     props: {
       version: 63,
+      skipDefaultTranslations: ["en"],
       title: {
         field: "",
         constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
@@ -5282,6 +5284,7 @@ const locatorDefaultLayout = {
   root: {
     props: {
       version: 63,
+      skipDefaultTranslations: ["en"],
       title: {
         field: "",
         constantValue: { en: "Find Locations", hasLocalizedValue: "true" },

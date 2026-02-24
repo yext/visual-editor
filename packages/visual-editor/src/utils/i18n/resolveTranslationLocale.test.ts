@@ -2,10 +2,6 @@ import { describe, expect, it } from "vitest";
 import { resolveTranslationLocale } from "./resolveTranslationLocale.ts";
 
 describe("resolveTranslationLocale", () => {
-  it("returns empty string for empty input", () => {
-    expect(resolveTranslationLocale("")).toBe("");
-  });
-
   it("preserves supported regional locales", () => {
     expect(resolveTranslationLocale("en-GB")).toBe("en-GB");
     expect(resolveTranslationLocale("zh-TW")).toBe("zh-TW");

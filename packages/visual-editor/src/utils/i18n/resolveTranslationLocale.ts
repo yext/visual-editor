@@ -12,7 +12,7 @@ const supportedRegionalLocales = new Set(["en-GB", "zh-TW"]);
  */
 export const resolveTranslationLocale = (locale: string): string => {
   if (!locale) {
-    return "";
+    throw new Error("Locale is required to resolve translation locale.");
   }
 
   if (locale.startsWith("zh-Hant")) {

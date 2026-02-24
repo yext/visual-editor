@@ -3,10 +3,8 @@ import { getDefaultRTF } from "../../editor/TranslatableRichTextField.tsx";
 import { normalizeLocale } from "../normalizeLocale.ts";
 import { DEFAULT_LOCALE } from "../pageSetLocales.ts";
 import { resolveTranslationLocale } from "./resolveTranslationLocale.ts";
-import {
-  componentDefaultRegistry,
-  isPlainObject,
-} from "./componentDefaultRegistry.ts";
+import { componentDefaultRegistry } from "./componentDefaultRegistry.ts";
+import { isRichText } from "../plainText.ts";
 
 const KNOWN_DEFAULT_RICH_TEXT_REGEX = /<span>(.*?)<\/span>/i;
 
@@ -43,7 +41,7 @@ const resolveDeterministicLocalizedText = (
 ): string | undefined => {
   const keys = enValueToKeys.get(enValue);
   if (!keys || keys.length === 0) {
-    return undefined;
+    return;
   }
 
   const localeDefaults = getDefaultsForLocale(locale);
@@ -52,13 +50,13 @@ const resolveDeterministicLocalizedText = (
   for (const key of keys) {
     const value = localeDefaults[key];
     if (value === undefined) {
-      return undefined;
+      return;
     }
     values.push(value);
   }
 
   if (new Set(values).size !== 1) {
-    return undefined;
+    return;
   }
 
   return values[0];
@@ -72,13 +70,13 @@ const resolveDeterministicLocalizedText = (
 const extractKnownDefaultRichTextText = (
   value: unknown
 ): string | undefined => {
-  if (!isPlainObject(value) || typeof value.html !== "string") {
-    return undefined;
+  if (!isRichText(value)) {
+    return;
   }
 
-  const match = value.html.match(KNOWN_DEFAULT_RICH_TEXT_REGEX);
+  const match = value.html?.match(KNOWN_DEFAULT_RICH_TEXT_REGEX);
   if (!match) {
-    return undefined;
+    return;
   }
 
   return match[1];
@@ -98,7 +96,7 @@ export const resolveLocalizedComponentDefaultValue = (
 
   const enRichTextText = extractKnownDefaultRichTextText(enValue);
   if (!enRichTextText) {
-    return undefined;
+    return;
   }
 
   const localizedText = resolveDeterministicLocalizedText(

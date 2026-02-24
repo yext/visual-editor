@@ -1,77 +1,16 @@
-import type { Data } from "@puckeditor/core";
+import type { Data, DefaultComponentProps } from "@puckeditor/core";
 import { defaultLayoutData } from "../../vite-plugin/defaultLayoutData.ts";
-import { isDeepEqual } from "../deepEqual.ts";
 import { isPlainObject } from "./componentDefaultRegistry.ts";
 import type { StreamDocument } from "../types/StreamDocument.ts";
-import { getPageSetLocales } from "../pageSetLocales.ts";
+import { getPageSetLocales, normalizeLocales } from "../pageSetLocales.ts";
 import { resolveLocalizedComponentDefaultValue } from "./componentDefaultResolver.ts";
+import { RootProps } from "../migrate.ts";
+
+const SKIP_DEFAULT_TRANSLATIONS_KEY = "skipDefaultTranslations";
 
 type LocalizedObject = {
   hasLocalizedValue: "true";
   [key: string]: unknown;
-};
-
-export type VisualEditorTemplateId = keyof typeof defaultLayoutData;
-
-const defaultLayoutsByTemplate = Object.fromEntries(
-  Object.entries(defaultLayoutData).map(([templateId, layout]) => [
-    templateId,
-    JSON.parse(layout),
-  ])
-) as Record<VisualEditorTemplateId, unknown>;
-
-/**
- * Recursively removes generated string `id` fields from layout-like objects.
- *
- * This normalizes otherwise equivalent layouts so comparisons ignore
- * non-semantic identifier differences.
- */
-const stripNonSemanticIds = (node: unknown): unknown => {
-  if (Array.isArray(node)) {
-    return node.map(stripNonSemanticIds);
-  }
-
-  if (!isPlainObject(node)) {
-    return node;
-  }
-
-  const stripped: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(node)) {
-    if (key === "id" && typeof value === "string") {
-      continue;
-    }
-    stripped[key] = stripNonSemanticIds(value);
-  }
-
-  return stripped;
-};
-
-const normalizedDefaultLayoutsByTemplate: Record<
-  VisualEditorTemplateId,
-  unknown
-> = Object.fromEntries(
-  Object.entries(defaultLayoutsByTemplate).map(([templateId, layout]) => [
-    templateId,
-    stripNonSemanticIds(layout),
-  ])
-) as Record<VisualEditorTemplateId, unknown>;
-
-/**
- * Ensure templateId is "main" | "directory" | "locator"
- */
-const isVisualEditorTemplateId = (
-  templateId: string
-): templateId is VisualEditorTemplateId => {
-  return templateId in defaultLayoutsByTemplate;
-};
-
-const getNormalizedTemplateLayout = (
-  templateId: string
-): unknown | undefined => {
-  if (!isVisualEditorTemplateId(templateId)) {
-    return undefined;
-  }
-  return normalizedDefaultLayoutsByTemplate[templateId];
 };
 
 /**
@@ -118,96 +57,101 @@ const injectLocalizedValuesRecursively = (
   }
 };
 
-type ProcessTemplateLayoutDataOptions<TLayout extends Data> = {
-  layoutData: Data;
+type SkipDefaultTranslationsState = {
+  hasMarker: boolean;
+  locales: string[];
+};
+
+/**
+ * Reads the persisted skip marker state from layout root props.
+ *
+ * `hasMarker` indicates whether the marker key exists at all, while `locales`
+ * contains a normalized locale list (trimmed, deduped, invalid entries removed).
+ */
+const getSkippedDefaultTranslationsState = (
+  layout: Data<DefaultComponentProps, RootProps>
+): SkipDefaultTranslationsState => {
+  if (!layout.root || !layout.root.props) {
+    return { hasMarker: false, locales: [] };
+  }
+
+  const rootProps = layout.root.props;
+  return {
+    hasMarker: Object.prototype.hasOwnProperty.call(
+      rootProps,
+      SKIP_DEFAULT_TRANSLATIONS_KEY
+    ),
+    locales: normalizeLocales(rootProps[SKIP_DEFAULT_TRANSLATIONS_KEY]),
+  };
+};
+
+/**
+ * Writes the persisted skip marker, skipDefaultTranslations, to layout root props.
+ */
+const writeSkippedDefaultTranslations = (
+  layout: Data<DefaultComponentProps, RootProps>,
+  locales: string[]
+) => {
+  if (!layout.root || !layout.root.props) {
+    return;
+  }
+
+  layout.root.props[SKIP_DEFAULT_TRANSLATIONS_KEY] = normalizeLocales(locales);
+};
+
+type ProcessTemplateLayoutDataOptions<
+  TLayout extends Data<DefaultComponentProps, RootProps>,
+> = {
+  layoutData: Data<DefaultComponentProps, RootProps>;
   streamDocument: StreamDocument;
   templateId: string;
   buildProcessedLayout: () => TLayout | Promise<TLayout>;
 };
 
 /**
- * Checks whether a layout matches the canonical default layout for a template.
- *
- * Differences in generated string `id` fields are ignored.
- *
- * @param layout - Layout data to compare.
- * @param templateId - Template id (`main`, `directory`, or `locator`).
- * @returns `true` when the layout is semantically unchanged from the template default.
- */
-export const isDefaultTemplateLayout = (
-  layout: unknown,
-  templateId: string
-): boolean => {
-  const defaultLayout = getNormalizedTemplateLayout(templateId);
-  if (defaultLayout === undefined) {
-    return false;
-  }
-
-  return isDeepEqual(stripNonSemanticIds(layout), defaultLayout);
-};
-
-/**
- * Injects missing localized values for known default template content.
- *
- * This mutates `layout` in place and also returns the same layout object.
- * Existing locale values are never overwritten.
- *
- * @param layout - Layout data to enrich.
- * @param streamDocument - Stream document used to determine target locales.
- * @param templateId - Template id (`main`, `directory`, or `locator`).
- * @returns The same `layout` object after injection.
- */
-export const injectTemplateLayoutDefaultTranslations = (
-  layout: Data,
-  streamDocument: StreamDocument,
-  templateId: string
-): Data => {
-  if (!isVisualEditorTemplateId(templateId)) {
-    return layout;
-  }
-
-  const locales = getPageSetLocales(streamDocument);
-  injectLocalizedValuesRecursively(layout, locales);
-  return layout;
-};
-
-/**
- * Runs template layout processing and conditionally injects default translations.
- *
- * The default-layout check is performed against `layoutData` before running
- * `buildProcessedLayout`, and injection is applied only when the layout was
- * still untouched at that point.
+ * Runs template layout processing and conditionally injects default translations
+ * based on the `root.props.skipDefaultTranslations` marker.
  *
  * @param options.layoutData - layout before migration/resolution.
- * @param options.streamDocument - Stream document used for locale selection.
+ * @param options.streamDocument - Stream document used for scoped locale selection.
  * @param options.templateId - Template id (`main`, `directory`, or `locator`).
  * @param options.buildProcessedLayout - Function that returns the processed layout
  * (sync or async).
- * @returns Promise of processed layout, with injected default translations when eligible.
+ * @returns Promise of processed layout with injected default translations when eligible.
  */
-export const processTemplateLayoutData = async <TLayout extends Data>({
+export const processTemplateLayoutData = async <
+  TLayout extends Data<DefaultComponentProps, RootProps>,
+>({
   layoutData,
   streamDocument,
   templateId,
   buildProcessedLayout,
 }: ProcessTemplateLayoutDataOptions<TLayout>): Promise<TLayout> => {
-  const shouldInjectDefaultTranslations = isDefaultTemplateLayout(
-    layoutData,
-    templateId
+  const processedLayout = await Promise.resolve(buildProcessedLayout());
+  if (!Object.prototype.hasOwnProperty.call(defaultLayoutData, templateId)) {
+    return processedLayout;
+  }
+
+  const { hasMarker, locales: skippedDefaultTranslations } =
+    getSkippedDefaultTranslationsState(layoutData);
+  if (!hasMarker) {
+    return processedLayout;
+  }
+
+  const scopedLocales = getPageSetLocales(streamDocument);
+  const skippedLocaleSet = new Set(skippedDefaultTranslations);
+  const unskippedLocales = scopedLocales.filter(
+    (locale) => !skippedLocaleSet.has(locale)
   );
 
-  const applyInjection = (processedLayout: TLayout): TLayout => {
-    if (!shouldInjectDefaultTranslations) {
-      return processedLayout;
-    }
+  if (unskippedLocales.length > 0) {
+    injectLocalizedValuesRecursively(processedLayout, unskippedLocales);
+  }
 
-    return injectTemplateLayoutDefaultTranslations(
-      processedLayout,
-      streamDocument,
-      templateId
-    ) as TLayout;
-  };
+  writeSkippedDefaultTranslations(processedLayout, [
+    ...skippedDefaultTranslations,
+    ...scopedLocales,
+  ]);
 
-  const processedLayout = await Promise.resolve(buildProcessedLayout());
-  return applyInjection(processedLayout);
+  return processedLayout;
 };

@@ -36,9 +36,12 @@ export type Migration =
     };
 export type MigrationRegistry = Migration[];
 
-interface RootProps extends DefaultRootProps {
+export interface RootProps extends DefaultRootProps {
   props?: {
+    // Version number to track which migrations have been applied
     version?: number;
+    // Locales for which default translations should be skipped
+    skipDefaultTranslations?: string[];
   };
 }
 
