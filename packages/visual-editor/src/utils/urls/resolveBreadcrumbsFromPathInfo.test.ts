@@ -28,6 +28,18 @@ const baseDocument: StreamDocument = {
 
 const matrixCases = [
   {
+    breadcrumbPrefix: undefined,
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: [
+      { name: "Directory Root", slug: "en/index.html" },
+      { name: "US", slug: "en/us" },
+      { name: "TS", slug: "en/ts" },
+      { name: "Testville", slug: "en/testville" },
+      { name: "123 Test Rd", slug: "" },
+    ],
+  },
+  {
     breadcrumbPrefix: "locations",
     locale: "en",
     includeLocalePrefixForPrimaryLocale: true,
@@ -101,13 +113,13 @@ const matrixCases = [
   },
   {
     breadcrumbPrefix: "",
-    locale: "es",
+    locale: "es-MX",
     includeLocalePrefixForPrimaryLocale: true,
     expected: [
-      { name: "Directory Root", slug: "es/index.html" },
-      { name: "US", slug: "es/us" },
-      { name: "TS", slug: "es/ts" },
-      { name: "Testville", slug: "es/testville" },
+      { name: "Directory Root", slug: "es-mx/index.html" },
+      { name: "US", slug: "es-mx/us" },
+      { name: "TS", slug: "es-mx/ts" },
+      { name: "Testville", slug: "es-mx/testville" },
       { name: "123 Test Rd", slug: "" },
     ],
   },
