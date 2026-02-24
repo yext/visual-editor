@@ -47,7 +47,7 @@ import {
 } from "../editor/DynamicOptionsSelector.tsx";
 import { YextField } from "../editor/YextField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { Button } from "../internal/puck/ui/button.tsx";
+import { Button } from "./atoms/button.tsx";
 import { TranslatableString } from "../types/types.ts";
 import {
   getPreferredDistanceUnit,
@@ -1293,7 +1293,6 @@ const LocatorInternal = ({
                 <Button
                   onClick={() => setMapEnabled(true)}
                   className="py-2 px-4 basis-full sm:w-auto justify-center"
-                  variant="default"
                 >
                   {t("enableCookies", "Enable Cookies")}
                 </Button>
