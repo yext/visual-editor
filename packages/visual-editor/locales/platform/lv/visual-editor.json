@@ -555,7 +555,7 @@
   "promoBanner": "Reklāmas reklāmkarogs",
   "promoMedia": "Promo Media",
   "publishBlocked": {
-    "deploymentInProgress": "atjauninājums ir atspējots, kamēr notiek izvietošana"
+    "deploymentInProgress": "Atjaunināšana ir atspējota, kamēr notiek izvietošana"
   },
   "publishError": {
     "components": "dzēst vai labot sadaļas ar kļūdām",

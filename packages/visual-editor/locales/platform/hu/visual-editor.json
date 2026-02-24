@@ -550,7 +550,7 @@
   "promoBanner": "Promó banner",
   "promoMedia": "Promóciós média",
   "publishBlocked": {
-    "deploymentInProgress": "a frissítés le van tiltva, amíg a telepítés folyamatban van"
+    "deploymentInProgress": "A frissítés le van tiltva, amíg a telepítés folyamatban van"
   },
   "publishError": {
     "components": "törölje vagy javítsa ki a hibás részeket",

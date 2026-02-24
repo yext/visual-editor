@@ -550,7 +550,7 @@
   "promoBanner": "Promo-Banner",
   "promoMedia": "Promo-Media",
   "publishBlocked": {
-    "deploymentInProgress": "Das Update ist während der Bereitstellung deaktiviert"
+    "deploymentInProgress": "Während der Bereitstellung ist die Aktualisierung deaktiviert"
   },
   "publishError": {
     "components": "Abschnitte mit Fehlern löschen oder korrigieren",

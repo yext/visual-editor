@@ -550,7 +550,7 @@
   "promoBanner": "Reklaamibänner",
   "promoMedia": "Promo meedia",
   "publishBlocked": {
-    "deploymentInProgress": "värskendus on juurutamise ajal keelatud"
+    "deploymentInProgress": "Värskendus on juurutamise ajal keelatud"
   },
   "publishError": {
     "components": "kustutada või parandada vigadega jaotisi",

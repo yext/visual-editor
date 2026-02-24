@@ -555,7 +555,7 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo medija",
   "publishBlocked": {
-    "deploymentInProgress": "ažuriranje je onemogućeno dok je implementacija u tijeku"
+    "deploymentInProgress": "Ažuriranje je onemogućeno dok je implementacija u tijeku"
   },
   "publishError": {
     "components": "izbrisati ili popraviti odjeljke s pogreškama",

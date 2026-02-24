@@ -550,7 +550,7 @@
   "promoBanner": "プロモーションバナー",
   "promoMedia": "プロモーションメディア",
   "publishBlocked": {
-    "deploymentInProgress": "デプロイメントの進行中は更新が無効になります"
+    "deploymentInProgress": "導入の進行中は更新が無効になります"
   },
   "publishError": {
     "components": "エラーのあるセクションを削除または修正する",

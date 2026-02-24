@@ -555,7 +555,7 @@
   "promoBanner": "Bannière promotionnelle",
   "promoMedia": "Médias promotionnels",
   "publishBlocked": {
-    "deploymentInProgress": "la mise à jour est désactivée pendant le déploiement"
+    "deploymentInProgress": "La mise à jour est désactivée pendant le déploiement"
   },
   "publishError": {
     "components": "supprimer ou corriger les sections contenant des erreurs",

@@ -130,7 +130,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
   const publishTooltipMessage = deploymentInProgress
     ? pt(
         "publishBlocked.deploymentInProgress",
-        "update is disabled while deployment is in progress"
+        "Update is disabled while deployment is in progress"
       )
     : hasErrors
       ? getPublishErrorMessage(errorSources, errorDetails)

@@ -550,7 +550,7 @@
   "promoBanner": "Promobanner",
   "promoMedia": "Promo media",
   "publishBlocked": {
-    "deploymentInProgress": "update is uitgeschakeld terwijl de implementatie bezig is"
+    "deploymentInProgress": "Update is uitgeschakeld terwijl de implementatie bezig is"
   },
   "publishError": {
     "components": "verwijder of repareer secties met fouten",

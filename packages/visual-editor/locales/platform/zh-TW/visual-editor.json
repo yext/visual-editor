@@ -550,7 +550,7 @@
   "promoBanner": "促銷橫幅",
   "promoMedia": "促銷媒體",
   "publishBlocked": {
-    "deploymentInProgress": "部署過程中更新已停用"
+    "deploymentInProgress": "部署期間禁用更新"
   },
   "publishError": {
     "components": "刪除或修復有錯誤的部分",

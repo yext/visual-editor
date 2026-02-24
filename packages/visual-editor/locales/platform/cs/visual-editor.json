@@ -560,7 +560,7 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo média",
   "publishBlocked": {
-    "deploymentInProgress": "aktualizace je během zavádění zakázána"
+    "deploymentInProgress": "Během nasazování je aktualizace zakázána"
   },
   "publishError": {
     "components": "odstranit nebo opravit části s chybami",

@@ -550,7 +550,7 @@
   "promoBanner": "Promo Banner",
   "promoMedia": "Promo Media",
   "publishBlocked": {
-    "deploymentInProgress": "update is disabled while deployment is in progress"
+    "deploymentInProgress": "Update is disabled while deployment is in progress"
   },
   "publishError": {
     "components": "delete or fix sections with errors",

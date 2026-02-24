@@ -550,7 +550,7 @@
   "promoBanner": "Promo-banneri",
   "promoMedia": "Promootiomedia",
   "publishBlocked": {
-    "deploymentInProgress": "päivitys on poistettu käytöstä, kun käyttöönotto on käynnissä"
+    "deploymentInProgress": "Päivitys on poistettu käytöstä, kun käyttöönotto on käynnissä"
   },
   "publishError": {
     "components": "poistaa tai korjata virheellisiä osia",

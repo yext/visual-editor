@@ -555,7 +555,7 @@
   "promoBanner": "Banner promocional",
   "promoMedia": "Medios promocionales",
   "publishBlocked": {
-    "deploymentInProgress": "la actualización está deshabilitada mientras la implementación está en progreso"
+    "deploymentInProgress": "La actualización está deshabilitada mientras la implementación está en progreso"
   },
   "publishError": {
     "components": "eliminar o corregir secciones con errores",

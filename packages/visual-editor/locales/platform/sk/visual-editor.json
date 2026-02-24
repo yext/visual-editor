@@ -560,7 +560,7 @@
   "promoBanner": "Propagačný banner",
   "promoMedia": "Propagačné médiá",
   "publishBlocked": {
-    "deploymentInProgress": "aktualizácia je počas nasadenia zakázaná"
+    "deploymentInProgress": "Aktualizácia je počas nasadenia zakázaná"
   },
   "publishError": {
     "components": "odstrániť alebo opraviť časti s chybami",

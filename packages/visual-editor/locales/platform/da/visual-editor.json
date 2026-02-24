@@ -550,7 +550,7 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo Media",
   "publishBlocked": {
-    "deploymentInProgress": "opdatering er deaktiveret, mens implementering er i gang"
+    "deploymentInProgress": "Opdatering er deaktiveret, mens implementering er i gang"
   },
   "publishError": {
     "components": "slet eller ret sektioner med fejl",

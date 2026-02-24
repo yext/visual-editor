@@ -550,7 +550,7 @@
   "promoBanner": "Kampanjbanner",
   "promoMedia": "Promo media",
   "publishBlocked": {
-    "deploymentInProgress": "uppdateringen är inaktiverad medan distributionen pågår"
+    "deploymentInProgress": "Uppdateringen är inaktiverad medan distributionen pågår"
   },
   "publishError": {
     "components": "ta bort eller fixa avsnitt med fel",
