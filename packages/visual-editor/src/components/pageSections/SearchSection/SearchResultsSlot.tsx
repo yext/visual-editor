@@ -255,6 +255,43 @@ export const SearchResultsSlot: ComponentConfig<{
   label: msg("components.SearchResultsSlot", "Search Results Slot"),
   fields: SearchResultsSlotFields,
   defaultProps: defaultSearchResultsProps,
+  // resolveFields: (data) => {
+  //   const updatedFields = resolveDataFromParent(SearchResultsSlotFields, data);
+
+  //   const verticals = data.props.data?.verticals ?? [];
+
+  //    const isUniversalSelected = verticals.some(
+  //     (v) => v.pageType === "universal"
+  //   );
+
+  //   if (isUniversalSelected) {
+  //     setDeep(
+  //       updatedFields,
+  //       "data.objectFields.verticals.arrayFields.verticalKey.visible",
+  //       false
+  //     );
+
+  //     setDeep(
+  //       updatedFields,
+  //       "data.objectFields.verticals.arrayFields.layout.visible",
+  //       false
+  //     );
+
+  //     setDeep(
+  //       updatedFields,
+  //       "data.objectFields.verticals.arrayFields.cardType.visible",
+  //       false
+  //     );
+
+  //     setDeep(
+  //       updatedFields,
+  //       "data.objectFields.verticals.arrayFields.verticalLimit.visible",
+  //       false
+  //     );
+  //   }
+
+  //   return updatedFields;
+  // },
   render: (props) => <SearchResultsSlotInternal {...props} />,
 };
 

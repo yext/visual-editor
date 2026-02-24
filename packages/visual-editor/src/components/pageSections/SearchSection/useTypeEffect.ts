@@ -3,12 +3,17 @@ import { useDocument } from "../../../hooks/useDocument.tsx";
 
 interface TypeEffectProps {
   env: "PRODUCTION" | "SANDBOX";
+  enabled?: boolean;
 }
 
-export const useTypingEffect = ({ env }: TypeEffectProps) => {
+export const useTypingEffect = ({ env, enabled = false }: TypeEffectProps) => {
   const [queryPrompts, setQueryPrompts] = useState<string[]>([]);
   const [placeholder, setPlaceholder] = useState("");
   const document = useDocument();
+  useEffect(() => {
+    if (!enabled) return;
+  }, [enabled]);
+
   const indexRef = useRef(0);
   const charIndexRef = useRef(0);
   const isDeletingRef = useRef(false);

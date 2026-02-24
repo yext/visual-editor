@@ -101,6 +101,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   const document = useDocument();
   const { placeholder } = useTypingEffect({
     env: "PRODUCTION",
+    enabled: isTypingEffect,
   });
 
   const entityPreviewSearcher = useEntityPreviewSearcher(document);
