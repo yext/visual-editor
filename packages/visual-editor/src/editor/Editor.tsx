@@ -222,20 +222,24 @@ export const Editor = ({
 
     let isCurrent = true;
 
-    const buildProcessedLayout = async () => {
+    const processLayoutData = async () => {
       try {
         const scopedLocales = getPageSetLocales(document);
         await loadComponentTranslationsForLocales(scopedLocales);
 
         const resolvedLayoutData = await processTemplateLayoutData({
           layoutData,
+          processedLayout: migrate(
+            layoutData,
+            migrationRegistry,
+            puckConfig,
+            document
+          ),
           templateId,
           targets: scopedLocales.map((locale) => ({
             locale,
             translations: getLoadedComponentTranslations(locale),
           })),
-          buildProcessedLayout: () =>
-            migrate(layoutData, migrationRegistry, puckConfig, document),
         });
 
         if (!isCurrent) {
@@ -251,7 +255,7 @@ export const Editor = ({
       }
     };
 
-    buildProcessedLayout();
+    processLayoutData();
 
     return () => {
       isCurrent = false;
@@ -266,8 +270,7 @@ export const Editor = ({
     templateId,
   ]);
 
-  const editorReady = !isLoading && processedLayoutData !== undefined;
-  const shouldShowLoading = localDev || parentLoaded;
+  const editorReady = !isLoading && !processedLayoutData;
 
   return (
     <ErrorProvider>
@@ -297,7 +300,7 @@ export const Editor = ({
               />
             )
           ) : (
-            shouldShowLoading && (
+            parentLoaded && (
               <LoadingScreen
                 progress={progress}
                 platformLanguageIsSet={!!templateMetadata?.platformLocale}

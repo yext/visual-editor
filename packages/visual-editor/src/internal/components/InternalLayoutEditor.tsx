@@ -304,13 +304,13 @@ export const InternalLayoutEditor = ({
             streamDocument,
           });
           const localeAwareData = await processTemplateLayoutData({
-            layoutData: appState.data as Data,
+            layoutData: appState.data,
+            processedLayout: resolvedData,
             templateId: templateMetadata.templateId ?? "",
             targets: scopedLocales.map((locale) => ({
               locale,
               translations: getLoadedComponentTranslations(locale),
             })),
-            buildProcessedLayout: () => resolvedData as Data,
           });
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", localeAwareData);

@@ -18,12 +18,10 @@ type SkipDefaultTranslationsState = {
 /**
  * Reads the persisted skip marker state from layout root props.
  *
- * This reads `root.props.skipDefaultTranslations` and separates two concerns:
- * - `hasMarker`: whether the key exists at all (presence gate for injection)
+ * This reads `root.props.skipDefaultTranslations` and returns an object with:
+ * - `hasMarker`: whether the key exists at all
  * - `locales`: normalized locale values currently tracked in the marker
  *
- * Locale normalization trims whitespace, removes empty values, and de-duplicates
- * while preserving the first occurrence order.
  */
 const getSkippedDefaultTranslationsState = (
   layout: Data<DefaultComponentProps, RootProps>
@@ -45,8 +43,7 @@ const getSkippedDefaultTranslationsState = (
 /**
  * Persists `skipDefaultTranslations` onto `layout.root.props`.
  *
- * The marker is written only when root props exist. Input locales are normalized
- * to keep the marker deterministic and idempotent across repeated writes.
+ * The marker is written only when root props exist.
  */
 const writeSkippedDefaultTranslations = (
   layout: Data<DefaultComponentProps, RootProps>,
@@ -63,6 +60,7 @@ type ProcessTemplateLayoutDataOptions<
   TLayout extends Data<DefaultComponentProps, RootProps>,
 > = {
   layoutData: Data<DefaultComponentProps, RootProps>;
+  processedLayout: TLayout;
   templateId: string;
   targetLocale?: string;
   targetTranslations?: Record<string, unknown>;
@@ -70,7 +68,6 @@ type ProcessTemplateLayoutDataOptions<
     locale: string;
     translations?: Record<string, unknown>;
   }>;
-  buildProcessedLayout: () => TLayout | Promise<TLayout>;
 };
 
 /**
@@ -78,26 +75,26 @@ type ProcessTemplateLayoutDataOptions<
  * based on the `root.props.skipDefaultTranslations` marker.
  *
  * @param options.layoutData - layout before migration/resolution.
- * @param options.templateId - Template id (`main`, `directory`, or `locator`).
- * @param options.targetLocale - Locale to inject in this run.
- * @param options.targetTranslations - Locale translations for `targetLocale`.
- * @param options.targets - Optional batch locale/translation targets to inject
- * in one pass. When present, single-target options are ignored.
- * @param options.buildProcessedLayout - Function that returns the processed layout
- * (sync or async).
- * @returns Promise of processed layout with injected default translations when eligible.
+ * @param options.processedLayout - processed layout (for example after migration
+ * and resolve).
+ * @param options.templateId - `main`, `directory`, or `locator`
+ * @param options.targetLocale - locale to inject
+ * @param options.targetTranslations - locale translations for `targetLocale`.
+ * @param options.targets - optional batch locale/translation targets to inject
+ * in. When present, single-target options are ignored.
+ *
+ * @returns promise of processed layout with injected default translations
  */
 export const processTemplateLayoutData = async <
   TLayout extends Data<DefaultComponentProps, RootProps>,
 >({
   layoutData,
+  processedLayout,
   templateId,
   targetLocale,
   targetTranslations,
   targets,
-  buildProcessedLayout,
 }: ProcessTemplateLayoutDataOptions<TLayout>): Promise<TLayout> => {
-  const processedLayout = await Promise.resolve(buildProcessedLayout());
   if (!Object.prototype.hasOwnProperty.call(defaultLayoutData, templateId)) {
     return processedLayout;
   }
@@ -111,7 +108,7 @@ export const processTemplateLayoutData = async <
   const localeTargets =
     targets && targets.length > 0
       ? targets
-      : typeof targetLocale === "string"
+      : targetLocale
         ? [{ locale: targetLocale, translations: targetTranslations }]
         : [];
 
@@ -126,11 +123,10 @@ export const processTemplateLayoutData = async <
     const normalizedTargetLocale = normalizeComponentDefaultLocale(
       target.locale
     );
-    if (!normalizedTargetLocale) {
-      continue;
-    }
-
-    if (nextSkippedLocales.includes(normalizedTargetLocale)) {
+    if (
+      !normalizedTargetLocale ||
+      nextSkippedLocales.includes(normalizedTargetLocale)
+    ) {
       continue;
     }
 

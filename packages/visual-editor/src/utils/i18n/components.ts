@@ -103,13 +103,10 @@ export const loadComponentTranslationsForLocales = async (
  */
 export const getLoadedComponentTranslations = (
   locale: string | undefined
-): Record<string, unknown> | undefined => {
+): any => {
   if (!locale || !i18nComponentsInstance.hasResourceBundle(locale, NAMESPACE)) {
     return;
   }
 
-  const bundle = i18nComponentsInstance.getResourceBundle(locale, NAMESPACE);
-  return bundle && typeof bundle === "object"
-    ? (bundle as Record<string, unknown>)
-    : undefined;
+  return i18nComponentsInstance.getResourceBundle(locale, NAMESPACE);
 };

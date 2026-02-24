@@ -64,7 +64,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "fr",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.fr).toBeUndefined();
@@ -92,7 +92,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "fr",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     const expectedText = await getComponentDefaultText("fr", "bannerText");
@@ -117,7 +117,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "fr-CA",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label["fr-CA"]).toBe(
@@ -148,7 +148,7 @@ describe("defaultLayoutTranslations", () => {
           translations: esTranslations as Record<string, unknown>,
         },
       ],
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.fr).toBe(
@@ -185,7 +185,7 @@ describe("defaultLayoutTranslations", () => {
           translations: esTranslations as Record<string, unknown>,
         },
       ],
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.fr).toBe("Custom Label");
@@ -215,7 +215,7 @@ describe("defaultLayoutTranslations", () => {
           translations: frTranslations as Record<string, unknown>,
         },
       ],
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.fr).toBe(
@@ -243,7 +243,7 @@ describe("defaultLayoutTranslations", () => {
       layoutData,
       templateId: "main",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.fr).toBeUndefined();
@@ -269,7 +269,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "zz",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.zz).toBeUndefined();
@@ -295,7 +295,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "fr",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.fr).toBeUndefined();
@@ -326,7 +326,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "fr",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect(
@@ -337,7 +337,7 @@ describe("defaultLayoutTranslations", () => {
     ).toEqual(["en", "fr"]);
   });
 
-  it("supports sync buildProcessedLayout", async () => {
+  it("supports direct processedLayout input", async () => {
     const layoutData = buildLayoutDataWithSkippedLocales(["en"]);
     const processedLayout = asData(buildLabelLayout());
     const targetTranslations = await getTranslations("fr", "components");
@@ -346,7 +346,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "fr",
       targetTranslations,
-      buildProcessedLayout: () => processedLayout,
+      processedLayout,
     });
 
     expect(processedPromise).toBeInstanceOf(Promise);
@@ -369,7 +369,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "unknown-template",
       targetLocale: "fr",
       targetTranslations,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect(processed).toBe(processedLayout);
@@ -396,7 +396,7 @@ describe("defaultLayoutTranslations", () => {
       templateId: "main",
       targetLocale: "fr",
       targetTranslations: undefined,
-      buildProcessedLayout: async () => processedLayout,
+      processedLayout,
     });
 
     expect((processed as TestLayout).root.props.label.fr).toBeUndefined();

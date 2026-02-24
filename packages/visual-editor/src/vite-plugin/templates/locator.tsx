@@ -112,15 +112,15 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
     document
   );
   const translations = await injectTranslations(document);
+  const resolvedData = await resolveAllData(migratedData, locatorConfig, {
+    streamDocument: document,
+  });
   const resolvedPuckData = await processTemplateLayoutData({
     layoutData,
+    processedLayout: resolvedData,
     templateId: "locator",
     targetLocale: document.locale,
     targetTranslations: translations,
-    buildProcessedLayout: () =>
-      resolveAllData(migratedData, locatorConfig, {
-        streamDocument: document,
-      }),
   });
 
   document.__.layout = JSON.stringify(resolvedPuckData);
