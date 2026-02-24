@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { Config } from "@puckeditor/core";
 import { localizeConfigDefaultsForLocale } from "./localizeConfigDefaults.ts";
-import { getTranslations } from "../../utils/i18n/getTranslations.ts";
+import { getTranslations } from "./getTranslations.ts";
 
 const buildConfig = (): Config =>
   ({
@@ -57,12 +57,13 @@ describe("localizeConfigDefaultsForLocale", () => {
       frTranslations
     );
 
+    expect(localized).toBe(config);
     expect((localized.components.Example.defaultProps as any).title.fr).toBe(
       "Bouton"
     );
     expect((localized.root?.defaultProps as any).rootTitle.fr).toBe("Bouton");
     expect((config.components.Example.defaultProps as any).title.fr).toBe(
-      undefined
+      "Bouton"
     );
   });
 

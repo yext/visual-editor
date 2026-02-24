@@ -104,23 +104,22 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
   const layoutData = JSON.parse(document.__.layout);
+  const migratedData = migrate(
+    layoutData,
+    migrationRegistry,
+    directoryConfig,
+    document
+  );
   const translations = await injectTranslations(document);
   const resolvedPuckData = await processTemplateLayoutData({
     layoutData,
     templateId: "directory",
     targetLocale: document.locale,
     targetTranslations: translations,
-    buildProcessedLayout: async () => {
-      const migratedData = migrate(
-        layoutData,
-        migrationRegistry,
-        directoryConfig,
-        document
-      );
-      return await resolveAllData(migratedData, directoryConfig, {
+    buildProcessedLayout: () =>
+      resolveAllData(migratedData, directoryConfig, {
         streamDocument: document,
-      });
-    },
+      }),
   });
 
   document.__.layout = JSON.stringify(resolvedPuckData);

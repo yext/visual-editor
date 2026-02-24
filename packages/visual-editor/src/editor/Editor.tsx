@@ -33,10 +33,8 @@ import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
 import { processTemplateLayoutData } from "../utils/i18n/defaultLayoutTranslations.ts";
-import {
-  getLoadedComponentTranslations,
-  i18nComponentsInstance,
-} from "../utils/i18n/components.ts";
+import { getLoadedComponentTranslations } from "../utils/i18n/components.ts";
+import { useComponentTranslationsVersion } from "../utils/i18n/useComponentTranslationsVersion.ts";
 
 const devLogger = new DevLogger();
 
@@ -210,26 +208,7 @@ export const Editor = ({
 
   const [processedLayoutData, setProcessedLayoutData] = useState<Data>();
   const templateId = templateMetadata?.templateId ?? "";
-  // Bump this when component i18n resources change so layout default injection
-  // can re-run once the current locale bundle is available.
-  const [componentTranslationsVersion, setComponentTranslationsVersion] =
-    useState<number>(0);
-
-  useEffect(() => {
-    const handleTranslationsChange = () => {
-      setComponentTranslationsVersion((version) => version + 1);
-    };
-
-    i18nComponentsInstance.on("loaded", handleTranslationsChange);
-    i18nComponentsInstance.on("languageChanged", handleTranslationsChange);
-    i18nComponentsInstance.store?.on?.("added", handleTranslationsChange);
-
-    return () => {
-      i18nComponentsInstance.off("loaded", handleTranslationsChange);
-      i18nComponentsInstance.off("languageChanged", handleTranslationsChange);
-      i18nComponentsInstance.store?.off?.("added", handleTranslationsChange);
-    };
-  }, []);
+  const componentTranslationsVersion = useComponentTranslationsVersion();
 
   useEffect(() => {
     if (isLoading || !layoutData || !puckConfig || !templateId) {

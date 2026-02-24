@@ -38,11 +38,9 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
-import { localizeConfigDefaultsForLocale } from "../utils/localizeConfigDefaults.ts";
-import {
-  getLoadedComponentTranslations,
-  i18nComponentsInstance,
-} from "../../utils/i18n/components.ts";
+import { getLoadedComponentTranslations } from "../../utils/i18n/components.ts";
+import { useComponentTranslationsVersion } from "../../utils/i18n/useComponentTranslationsVersion.ts";
+import { localizeConfigDefaultsForLocale } from "../../utils/i18n/localizeConfigDefaults.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -120,26 +118,7 @@ export const InternalLayoutEditor = ({
   const streamDocument = useDocument();
   const editorLocale = streamDocument?.locale;
   const { errorCount, errorSources, errorDetails } = useErrorContext();
-  // Bump this when component i18n resources change so config defaults can be
-  // localized after the current locale bundle finishes loading.
-  const [componentTranslationsVersion, setComponentTranslationsVersion] =
-    useState<number>(0);
-
-  React.useEffect(() => {
-    const handleTranslationsChange = () => {
-      setComponentTranslationsVersion((version) => version + 1);
-    };
-
-    i18nComponentsInstance.on("loaded", handleTranslationsChange);
-    i18nComponentsInstance.on("languageChanged", handleTranslationsChange);
-    i18nComponentsInstance.store?.on?.("added", handleTranslationsChange);
-
-    return () => {
-      i18nComponentsInstance.off("loaded", handleTranslationsChange);
-      i18nComponentsInstance.off("languageChanged", handleTranslationsChange);
-      i18nComponentsInstance.store?.off?.("added", handleTranslationsChange);
-    };
-  }, []);
+  const componentTranslationsVersion = useComponentTranslationsVersion();
 
   /**
    * When the Puck history changes save it to localStorage and send a message
