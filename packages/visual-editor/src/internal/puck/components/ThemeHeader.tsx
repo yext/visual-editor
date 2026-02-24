@@ -143,7 +143,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   const publishTooltipMessage = deploymentInProgress
     ? pt(
         "publishBlocked.deploymentInProgress",
-        "Update is disabled while deployment is in progress"
+        "update is disabled while deployment is in progress"
       )
     : undefined;
 

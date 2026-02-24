@@ -550,12 +550,12 @@
   "promoBanner": "Reklaamibänner",
   "promoMedia": "Promo meedia",
   "publishBlocked": {
-    "deploymentInProgress": "Värskendus on juurutamise ajal keelatud"
+    "deploymentInProgress": "värskendus on juurutamise ajal keelatud"
   },
   "publishError": {
-    "components": "Kustutada või parandada vigadega jaotisi",
-    "metaTitle": "Täitke metapealkiri kõigi lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse",
-    "metaTitleWithLocales": "Täitke metapealkiri järgmiste lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse: {{locales}}"
+    "components": "kustutada või parandada vigadega jaotisi",
+    "metaTitle": "täitke metapealkiri kõigi lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse",
+    "metaTitleWithLocales": "täitke metapealkiri järgmiste lokaatide jaoks, navigeerides lehe ülataseme komponendi seadetesse: {{locales}}"
   },
   "readLess": "Lugege vähem",
   "readMore": "Lugege rohkem",

@@ -555,12 +555,12 @@
   "promoBanner": "Striscione promozionale",
   "promoMedia": "Media promozionale",
   "publishBlocked": {
-    "deploymentInProgress": "L'aggiornamento è disabilitato mentre la distribuzione è in corso"
+    "deploymentInProgress": "l'aggiornamento è disabilitato mentre la distribuzione è in corso"
   },
   "publishError": {
-    "components": "Eliminare o correggere le sezioni con errori",
-    "metaTitle": "Compila il meta titolo per tutte le impostazioni locali accedendo alle impostazioni del componente Pagina di livello superiore",
-    "metaTitleWithLocales": "Compila il Meta Titolo per le seguenti lingue accedendo alle impostazioni del componente Pagina di livello superiore: {{locales}}"
+    "components": "eliminare o correggere le sezioni con errori",
+    "metaTitle": "compila il meta titolo per tutte le impostazioni locali accedendo alle impostazioni del componente Pagina di livello superiore",
+    "metaTitleWithLocales": "compila il Meta Titolo per le seguenti lingue accedendo alle impostazioni del componente Pagina di livello superiore: {{locales}}"
   },
   "readLess": "Leggi di meno",
   "readMore": "Per saperne di più",

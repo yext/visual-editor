@@ -550,12 +550,12 @@
   "promoBanner": "Kampanjbanner",
   "promoMedia": "Promo media",
   "publishBlocked": {
-    "deploymentInProgress": "Uppdateringen är inaktiverad medan distributionen pågår"
+    "deploymentInProgress": "uppdateringen är inaktiverad medan distributionen pågår"
   },
   "publishError": {
-    "components": "Ta bort eller fixa avsnitt med fel",
-    "metaTitle": "Fyll i Meta Titel för alla språk genom att navigera till inställningarna för den översta sidans komponent",
-    "metaTitleWithLocales": "Fyll i Meta Titel för följande språk genom att navigera till inställningarna för sidkomponenten på översta nivån: {{locales}}"
+    "components": "ta bort eller fixa avsnitt med fel",
+    "metaTitle": "fyll i Meta Titel för alla språk genom att navigera till inställningarna för den översta sidans komponent",
+    "metaTitleWithLocales": "fyll i Meta Titel för följande språk genom att navigera till inställningarna för sidkomponenten på översta nivån: {{locales}}"
   },
   "readLess": "Läs mindre",
   "readMore": "Läs mer",

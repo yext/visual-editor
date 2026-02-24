@@ -550,7 +550,7 @@
   "promoBanner": "Promosyon Banner'ı",
   "promoMedia": "Promosyon medyası",
   "publishBlocked": {
-    "deploymentInProgress": "Dağıtım devam ederken güncelleme devre dışı bırakılır"
+    "deploymentInProgress": "dağıtım devam ederken güncelleme devre dışı bırakılır"
   },
   "publishError": {
     "components": "Hata içeren bölümleri silin veya düzeltin",

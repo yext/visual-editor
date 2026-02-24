@@ -550,12 +550,12 @@
   "promoBanner": "Promo-banneri",
   "promoMedia": "Promootiomedia",
   "publishBlocked": {
-    "deploymentInProgress": "Päivitys on poistettu käytöstä, kun käyttöönotto on käynnissä"
+    "deploymentInProgress": "päivitys on poistettu käytöstä, kun käyttöönotto on käynnissä"
   },
   "publishError": {
-    "components": "Poistaa tai korjata virheellisiä osia",
-    "metaTitle": "Täytä Meta Title kaikille alueille siirtymällä sivukomponentin ylätason asetuksiin",
-    "metaTitleWithLocales": "Täytä Meta Title seuraaville alueille siirtymällä sivukomponentin ylätason asetuksiin: {{locales}}"
+    "components": "poistaa tai korjata virheellisiä osia",
+    "metaTitle": "täytä Meta Title kaikille alueille siirtymällä sivukomponentin ylätason asetuksiin",
+    "metaTitleWithLocales": "täytä Meta Title seuraaville alueille siirtymällä sivukomponentin ylätason asetuksiin: {{locales}}"
   },
   "readLess": "Lue vähemmän",
   "readMore": "Lue lisää",

@@ -560,12 +560,12 @@
   "promoBanner": "Baner promocyjny",
   "promoMedia": "Media promocyjne",
   "publishBlocked": {
-    "deploymentInProgress": "Aktualizacja jest wyłączona w trakcie wdrażania"
+    "deploymentInProgress": "aktualizacja jest wyłączona w trakcie wdrażania"
   },
   "publishError": {
-    "components": "Usuń lub napraw sekcje z błędami",
-    "metaTitle": "Wypełnij metatytuł dla wszystkich ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu",
-    "metaTitleWithLocales": "Wypełnij metatytuł dla następujących ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu: {{locales}}"
+    "components": "usuń lub napraw sekcje z błędami",
+    "metaTitle": "wypełnij metatytuł dla wszystkich ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu",
+    "metaTitleWithLocales": "wypełnij metatytuł dla następujących ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu: {{locales}}"
   },
   "readLess": "Czytaj mniej",
   "readMore": "Czytaj więcej",

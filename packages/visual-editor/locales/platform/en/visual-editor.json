@@ -550,12 +550,12 @@
   "promoBanner": "Promo Banner",
   "promoMedia": "Promo Media",
   "publishBlocked": {
-    "deploymentInProgress": "Update is disabled while deployment is in progress"
+    "deploymentInProgress": "update is disabled while deployment is in progress"
   },
   "publishError": {
-    "components": "Delete or fix sections with errors",
-    "metaTitle": "Fill in Meta Title for all locales by navigating to the top-level Page component's settings",
-    "metaTitleWithLocales": "Fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}"
+    "components": "delete or fix sections with errors",
+    "metaTitle": "fill in Meta Title for all locales by navigating to the top-level Page component's settings",
+    "metaTitleWithLocales": "fill in Meta Title for the following locales by navigating to the top-level Page component's settings: {{locales}}"
   },
   "readLess": "Read less",
   "readMore": "Read more",

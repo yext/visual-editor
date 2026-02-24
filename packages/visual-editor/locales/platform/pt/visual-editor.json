@@ -555,12 +555,12 @@
   "promoBanner": "Banner promocional",
   "promoMedia": "Mídia promocional",
   "publishBlocked": {
-    "deploymentInProgress": "A atualização está desativada enquanto a implantação está em andamento"
+    "deploymentInProgress": "a atualização está desativada enquanto a implantação está em andamento"
   },
   "publishError": {
-    "components": "Exclua ou corrija seções com erros",
-    "metaTitle": "Preencha o Meta Title para todos os locais navegando até as configurações do componente de página de nível superior",
-    "metaTitleWithLocales": "Preencha o Meta Title para os seguintes locais navegando até as configurações do componente de página de nível superior: {{locales}}"
+    "components": "exclua ou corrija seções com erros",
+    "metaTitle": "preencha o Meta Title para todos os locais navegando até as configurações do componente de página de nível superior",
+    "metaTitleWithLocales": "preencha o Meta Title para os seguintes locais navegando até as configurações do componente de página de nível superior: {{locales}}"
   },
   "readLess": "Leia menos",
   "readMore": "Leia mais",

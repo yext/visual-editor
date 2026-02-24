@@ -560,12 +560,12 @@
   "promoBanner": "Propagačný banner",
   "promoMedia": "Propagačné médiá",
   "publishBlocked": {
-    "deploymentInProgress": "Aktualizácia je počas nasadenia zakázaná"
+    "deploymentInProgress": "aktualizácia je počas nasadenia zakázaná"
   },
   "publishError": {
-    "components": "Odstrániť alebo opraviť časti s chybami",
-    "metaTitle": "Vyplňte Meta Title pre všetky miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne",
-    "metaTitleWithLocales": "Vyplňte Meta Title pre nasledujúce miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne: {{locales}}"
+    "components": "odstrániť alebo opraviť časti s chybami",
+    "metaTitle": "vyplňte Meta Title pre všetky miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne",
+    "metaTitleWithLocales": "vyplňte Meta Title pre nasledujúce miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne: {{locales}}"
   },
   "readLess": "Čítajte menej",
   "readMore": "Čítajte viac",
