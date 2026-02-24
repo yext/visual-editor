@@ -17,6 +17,7 @@ import {
 import { Video, VideoProps } from "../contentBlocks/Video.tsx";
 import { TextList, TextListProps } from "../contentBlocks/TextList.tsx";
 import { PhoneListProps, PhoneList } from "../contentBlocks/PhoneList.tsx";
+import { Text, TextProps } from "../contentBlocks/Text.tsx";
 import {
   ProductCardsWrapper,
   ProductCardsWrapperProps,
@@ -172,6 +173,7 @@ export interface SlotsCategoryProps {
   TestimonialCard: TestimonialCardProps;
   TestimonialCardsWrapper: TestimonialCardsWrapperProps;
   TextListSlot: TextListProps;
+  TextSlot: TextProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
 }
@@ -267,6 +269,7 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
+  TextSlot: { ...Text, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
 };

@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  logSuppressedWcagViolations,
   transformTests,
 } from "./testing/componentTests.setup.ts";
 import {
@@ -652,8 +653,8 @@ describe("Locator", async () => {
         });
       }
 
-      // Hide the distance to each location because it is based on the test runner's IP address
       await act(async () => {
+        // Hide the distance to each location because it is based on the test runner's IP address
         const allDivs = container.querySelectorAll("div");
         allDivs.forEach((div) => {
           if (div.textContent?.includes("mi") && !div.children.length) {
@@ -661,15 +662,20 @@ describe("Locator", async () => {
             div.style.width = "8em";
           }
         });
+
+        // Hide the map makers because they can appear in different spots
+        const allMarkers =
+          container.querySelectorAll<HTMLDivElement>(".mapboxgl-marker");
+        allMarkers.forEach((marker) => {
+          marker.style.opacity = "0";
+        });
       });
 
       await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot({
         customThreshold: screenshotThreshold,
       });
       const results = await axe(container);
-      if (results.violations.length) {
-        console.error("WCAG Violations:", results.violations);
-      }
+      logSuppressedWcagViolations(results);
       // TODO: Re-enable WCAG test
       // expect(results).toHaveNoViolations()
 
@@ -679,9 +685,7 @@ describe("Locator", async () => {
           `Locator/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot({ customThreshold: screenshotThreshold });
         const results = await axe(container);
-        if (results.violations.length) {
-          console.error("WCAG Violations:", results.violations);
-        }
+        logSuppressedWcagViolations(results);
       }
     }
   );

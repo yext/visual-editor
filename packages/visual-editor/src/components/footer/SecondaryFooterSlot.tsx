@@ -1,10 +1,9 @@
 import * as React from "react";
 import { ComponentConfig, Fields, Slot, PuckComponent } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
-import { msg } from "../../utils/i18n/platform.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
-import { useTranslation } from "react-i18next";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const defaultLink = {
@@ -126,7 +125,6 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
 }) => {
   const { show } = data;
   const { backgroundColor } = styles;
-  const { t } = useTranslation();
 
   // In edit mode, show minimal clickable placeholder when hidden
   if (puck.isEditing && !show) {
@@ -136,7 +134,7 @@ const SecondaryFooterSlotWrapper: PuckComponent<SecondaryFooterSlotProps> = ({
         className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer"
       >
         <p className="text-sm text-gray-600">
-          {t(
+          {pt(
             "secondaryFooter.hiddenOnLivePage",
             "Secondary Footer (Hidden on live page)"
           )}
