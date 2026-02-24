@@ -21,16 +21,16 @@ export interface ImageProps {
   sizes?: string;
   loading?: "lazy" | "eager";
   /**
-   * Entity data used to resolve embedded fields in alt text.
+   * Entity data used to resolve embedded fields.
    * Defaults to the stream document if not provided.
    */
-  altTextEntity?: Record<string, any>;
+  streamDocumentOverride?: Record<string, any>;
 }
 
 export const getImageAltText = (
   image: ImageType | ComplexImageType | AssetImageType | undefined,
   locale: string,
-  altTextEntity: StreamDocument | Record<string, any>
+  streamDocument: StreamDocument | Record<string, any>
 ): string | undefined => {
   if (!image) {
     return undefined;
@@ -44,7 +44,7 @@ export const getImageAltText = (
   }
 
   return typeof altTextField === "object"
-    ? resolveComponentData(altTextField, locale, altTextEntity)
+    ? resolveComponentData(altTextField, locale, streamDocument)
     : altTextField;
 };
 
@@ -55,10 +55,11 @@ export const Image: React.FC<ImageProps> = ({
   className,
   sizes,
   loading = "lazy",
-  altTextEntity,
+  streamDocumentOverride,
 }) => {
   const { i18n } = useTranslation();
-  const streamDocument = useDocument();
+  const streamDocument: StreamDocument | Record<string, any> =
+    streamDocumentOverride ?? useDocument();
 
   const image = React.useMemo(() => {
     if (
@@ -88,11 +89,7 @@ export const Image: React.FC<ImageProps> = ({
     ? `overflow-hidden` // No w-full when width is specified
     : `overflow-hidden w-full`; // Use w-full when no width specified
 
-  const altText = getImageAltText(
-    image,
-    i18n.language,
-    altTextEntity ?? streamDocument
-  );
+  const altText = getImageAltText(image, i18n.language, streamDocument);
 
   return (
     <div

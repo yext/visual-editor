@@ -969,7 +969,7 @@ const ImageSection = (props: {
       showImageSection && (
         <Image
           image={resolvedImage}
-          altTextEntity={location}
+          streamDocumentOverride={location}
           className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
         />
       )
@@ -991,6 +991,7 @@ const ImageSection = (props: {
     showImageSection && (
       <Image
         image={imageData}
+        streamDocumentOverride={location}
         className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
       />
     )
