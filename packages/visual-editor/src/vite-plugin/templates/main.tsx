@@ -139,16 +139,23 @@ const Location: Template<TemplateRenderProps> = (props) => {
     document?._additionalLayoutCategories
   );
 
+  let requireAnalyticsOptIn = false;
+  if (document.__?.visualEditorConfig) {
+    try {
+      requireAnalyticsOptIn =
+        JSON.parse(document.__.visualEditorConfig)?.requireAnalyticsOptIn ??
+        false;
+    } catch (e) {
+      console.error("Failed to parse visualEditorConfig JSON:", e);
+    }
+  }
+
   return (
     <AnalyticsProvider
       apiKey={document?._env?.YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY}
       templateData={props}
       currency="USD"
-      requireOptIn={
-        document.__?.visualEditorConfig
-          ? JSON.parse(document.__.visualEditorConfig)?.requireAnalyticsOptIn
-          : false
-      }
+      requireOptIn={requireAnalyticsOptIn}
     >
       <VisualEditorProvider templateProps={props}>
         <Render
