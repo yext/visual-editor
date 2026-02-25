@@ -54,7 +54,7 @@ import {
 } from "../editor/DynamicOptionsSelector.tsx";
 import { YextField } from "../editor/YextField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { Button } from "../internal/puck/ui/button.tsx";
+import { Button } from "./atoms/button.tsx";
 import { TranslatableString } from "../types/types.ts";
 import {
   getPreferredDistanceUnit,
@@ -210,16 +210,59 @@ const ResultCardPropsField = ({
     const baseFields = LocatorResultCardFields as {
       objectFields?: Record<string, unknown>;
     };
-    if (!hidePrimaryCta || !baseFields.objectFields) {
-      return LocatorResultCardFields;
+    let nextFields: Record<string, any> = LocatorResultCardFields as Record<
+      string,
+      any
+    >;
+
+    if (baseFields.objectFields) {
+      let objectFields = baseFields.objectFields;
+      if (hidePrimaryCta) {
+        objectFields = { ...objectFields };
+        delete (objectFields as { primaryCTA?: unknown }).primaryCTA;
+        nextFields = {
+          ...LocatorResultCardFields,
+          objectFields,
+        } as Record<string, any>;
+      }
+
+      const resolvedValue = value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS;
+      const constantValueFieldConfigs = [
+        {
+          key: "primaryHeading",
+          enabled: resolvedValue.primaryHeading?.constantValueEnabled ?? false,
+        },
+        {
+          key: "secondaryHeading",
+          enabled:
+            resolvedValue.secondaryHeading?.constantValueEnabled ?? false,
+        },
+        {
+          key: "tertiaryHeading",
+          enabled: resolvedValue.tertiaryHeading?.constantValueEnabled ?? false,
+        },
+        {
+          key: "image",
+          enabled: resolvedValue.image?.constantValueEnabled ?? false,
+        },
+      ] as const;
+
+      constantValueFieldConfigs.forEach(({ key, enabled }) => {
+        nextFields = setDeep(
+          nextFields,
+          `objectFields.${key}.objectFields.field.visible`,
+          !enabled
+        );
+        nextFields = setDeep(
+          nextFields,
+          `objectFields.${key}.objectFields.constantValue.visible`,
+          enabled
+        );
+      });
     }
-    const objectFields = { ...baseFields.objectFields };
-    delete (objectFields as { primaryCTA?: unknown }).primaryCTA;
-    return {
-      ...LocatorResultCardFields,
-      objectFields,
-    };
-  }, [hidePrimaryCta]);
+
+    return nextFields as typeof LocatorResultCardFields;
+  }, [hidePrimaryCta, value]);
 
   return (
     <AutoField
@@ -826,7 +869,7 @@ const locatorFields: Fields<LocatorProps> = {
  */
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
-  resolveFields: (_data, params) => {
+  resolveFields: (data, params) => {
     const entityDocument = params.metadata?.streamDocument;
     const entityTypes = entityDocument
       ? getEntityTypesFromDocument(
@@ -836,12 +879,21 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       : [DEFAULT_ENTITY_TYPE];
     const entityTypeCount = entityTypes.length;
 
-    let fields = locatorFields;
-    fields = setDeep(fields, "locationStyles.min", entityTypeCount);
-    fields = setDeep(fields, "locationStyles.max", entityTypeCount);
-    fields = setDeep(fields, "resultCard.min", entityTypeCount);
-    fields = setDeep(fields, "resultCard.max", entityTypeCount);
-    return fields;
+    let updatedFields: Fields<LocatorProps> = { ...locatorFields };
+    updatedFields = setDeep(
+      updatedFields,
+      "locationStyles.min",
+      entityTypeCount
+    );
+    updatedFields = setDeep(
+      updatedFields,
+      "locationStyles.max",
+      entityTypeCount
+    );
+    updatedFields = setDeep(updatedFields, "resultCard.min", entityTypeCount);
+    updatedFields = setDeep(updatedFields, "resultCard.max", entityTypeCount);
+
+    return updatedFields;
   },
   defaultProps: {
     locationStyles: [],
@@ -1288,6 +1340,7 @@ const LocatorInternal = ({
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
+
   const locationStylesConfig = React.useMemo(() => {
     const config: Record<string, { color?: BackgroundStyle; icon?: string }> =
       {};
@@ -1306,21 +1359,29 @@ const LocatorInternal = ({
     });
     return config;
   }, [locationStyles]);
-  const [mapProps, setMapProps] = React.useState<MapProps>({
-    mapStyle,
-    onDragHandler: handleDrag,
-    scrollToResult: scrollToResult,
-    markerOptionsOverride: markerOptionsOverride,
-    locationStyleConfig: locationStylesConfig,
-  });
 
-  React.useEffect(() => {
-    setMapProps((prev) => ({
-      ...prev,
+  const [centerCoords, setCenterCoords] = React.useState<
+    [number, number] | undefined
+  >();
+
+  const mapProps = React.useMemo(
+    () => ({
       mapStyle,
+      centerCoords,
+      onDragHandler: handleDrag,
+      scrollToResult: scrollToResult,
+      markerOptionsOverride: markerOptionsOverride,
       locationStyleConfig: locationStylesConfig,
-    }));
-  }, [mapStyle, locationStylesConfig]);
+    }),
+    [
+      centerCoords,
+      handleDrag,
+      mapStyle,
+      markerOptionsOverride,
+      scrollToResult,
+      locationStylesConfig,
+    ]
+  );
 
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
@@ -1351,7 +1412,7 @@ const LocatorInternal = ({
             filterValue.lat,
           ];
           if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
-            setMapProps((prev) => ({ ...prev, centerCoords }));
+            setCenterCoords(centerCoords);
             setMapCenter(mapboxgl.LngLat.convert(centerCoords));
           }
         }
@@ -1716,7 +1777,6 @@ const LocatorInternal = ({
                 <Button
                   onClick={() => setMapEnabled(true)}
                   className="py-2 px-4 basis-full sm:w-auto justify-center"
-                  variant="default"
                 >
                   {t("enableCookies", "Enable Cookies")}
                 </Button>

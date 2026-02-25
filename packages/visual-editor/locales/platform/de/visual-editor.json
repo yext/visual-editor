@@ -562,6 +562,9 @@
   "product": "Produkt",
   "promoBanner": "Promo-Banner",
   "promoMedia": "Promo-Media",
+  "publishBlocked": {
+    "deploymentInProgress": "Während der Bereitstellung ist die Aktualisierung deaktiviert"
+  },
   "publishError": {
     "components": "Abschnitte mit Fehlern löschen oder korrigieren",
     "metaTitle": "Geben Sie den Metatitel für alle Gebietsschemas ein, indem Sie zu den Einstellungen der Seitenkomponente der obersten Ebene navigieren",

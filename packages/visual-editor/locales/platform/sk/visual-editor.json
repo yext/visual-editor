@@ -572,6 +572,9 @@
   "product": "Produkt",
   "promoBanner": "Propagačný banner",
   "promoMedia": "Propagačné médiá",
+  "publishBlocked": {
+    "deploymentInProgress": "Aktualizácia je počas nasadenia zakázaná"
+  },
   "publishError": {
     "components": "odstrániť alebo opraviť časti s chybami",
     "metaTitle": "vyplňte Meta Title pre všetky miestne nastavenia tak, že prejdete na nastavenia komponentu stránky najvyššej úrovne",

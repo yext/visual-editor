@@ -42,7 +42,7 @@ export const DirectoryList = ({
         {sortedDirectoryChildren.map((child, idx) => {
           const childSlug = resolveDirectoryListChildren(streamDocument, child);
           let label;
-          switch (streamDocument?.dm_directoryChildren?.meta?.entityType?.id) {
+          switch (child?.meta?.entityType?.id) {
             case "dm_country":
               label = child.c_addressCountryDisplayName ?? child.name;
               break;

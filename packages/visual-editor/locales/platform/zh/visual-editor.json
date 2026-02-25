@@ -562,6 +562,9 @@
   "product": "产品",
   "promoBanner": "促销横幅",
   "promoMedia": "促销媒体",
+  "publishBlocked": {
+    "deploymentInProgress": "部署期间禁用更新"
+  },
   "publishError": {
     "components": "删除或修复有错误的部分",
     "metaTitle": "通过导航到顶级页面组件的设置来填写所有区域设置的元标题",

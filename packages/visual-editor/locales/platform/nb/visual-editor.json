@@ -562,6 +562,9 @@
   "product": "Produkt",
   "promoBanner": "Kampanjebanner",
   "promoMedia": "Promo Media",
+  "publishBlocked": {
+    "deploymentInProgress": "Oppdatering er deaktivert mens distribusjon pågår"
+  },
   "publishError": {
     "components": "slette eller fikse deler med feil",
     "metaTitle": "fyll inn Meta Tittel for alle lokaliteter ved å navigere til sidekomponentens innstillinger på øverste nivå",

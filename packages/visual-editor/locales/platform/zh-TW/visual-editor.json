@@ -562,6 +562,9 @@
   "product": "產品",
   "promoBanner": "促銷橫幅",
   "promoMedia": "促銷媒體",
+  "publishBlocked": {
+    "deploymentInProgress": "部署期間禁用更新"
+  },
   "publishError": {
     "components": "刪除或修復有錯誤的部分",
     "metaTitle": "通過導航到頂級頁面組件的設置來填寫所有區域設置的元標題",
