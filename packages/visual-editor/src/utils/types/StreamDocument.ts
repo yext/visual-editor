@@ -17,6 +17,7 @@ export type StreamDocument = {
     visualEditorConfig?: string;
     isPrimaryLocale?: boolean; // deprecated, use pathInfo.primaryLocale instead
     entityPageSetUrlTemplates?: string;
+    locatorSourcePageSets?: string;
   };
 };
 

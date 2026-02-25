@@ -72,6 +72,7 @@ import {
   backgroundColors,
 } from "../utils/themeConfigOptions.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import { getLocatorSourcePageSetsEntityTypes } from "../utils/locator.ts";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
@@ -183,12 +184,50 @@ const getEntityType = (entityTypeEnvVar?: string) => {
   return getEntityTypeFromDocument(entityDocument, entityTypeEnvVar);
 };
 
-// TODO: use actual entity types from the document once we support multiple entity types per page set
 const getEntityTypesFromDocument = (
   entityDocument: StreamDocument,
   entityTypeEnvVar?: string
 ): string[] => {
-  return [getEntityTypeFromDocument(entityDocument, entityTypeEnvVar)];
+  return (
+    getLocatorSourcePageSetsEntityTypes(entityDocument) ?? [
+      getEntityTypeFromDocument(entityDocument, entityTypeEnvVar),
+    ]
+  );
+};
+
+const ResultCardPropsField = ({
+  value,
+  onChange,
+}: {
+  value?: LocatorResultCardProps;
+  onChange: (nextValue: LocatorResultCardProps) => void;
+}) => {
+  const streamDocument = useDocument();
+  const locatorSourcePageSetsEntityTypes =
+    getLocatorSourcePageSetsEntityTypes(streamDocument);
+  const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
+  const resultCardFields = React.useMemo(() => {
+    const baseFields = LocatorResultCardFields as {
+      objectFields?: Record<string, unknown>;
+    };
+    if (!hidePrimaryCta || !baseFields.objectFields) {
+      return LocatorResultCardFields;
+    }
+    const objectFields = { ...baseFields.objectFields };
+    delete (objectFields as { primaryCTA?: unknown }).primaryCTA;
+    return {
+      ...LocatorResultCardFields,
+      objectFields,
+    };
+  }, [hidePrimaryCta]);
+
+  return (
+    <AutoField
+      field={{ ...resultCardFields, label: "" }}
+      value={value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS}
+      onChange={onChange}
+    />
+  );
 };
 
 function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
@@ -767,7 +806,12 @@ const locatorFields: Fields<LocatorProps> = {
           type: "text",
           visible: false,
         }),
-        props: LocatorResultCardFields,
+        props: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ResultCardPropsField value={value} onChange={onChange} />
+          ),
+        },
       },
       defaultItemProps: {
         entityType: DEFAULT_ENTITY_TYPE,
@@ -972,6 +1016,10 @@ const LocatorInternal = ({
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const streamDocument = useDocument();
+  const entityTypes = getEntityTypesFromDocument(
+    streamDocument,
+    puck.metadata?.entityTypeEnvVar
+  );
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1197,13 +1245,13 @@ const LocatorInternal = ({
     if (resultCardConfigs) {
       return [
         {
-          entityType: DEFAULT_ENTITY_TYPE,
+          entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
           props: resultCardConfigs,
         },
       ];
     }
     return [];
-  }, [resultCardConfigs]);
+  }, [entityTypes, resultCardConfigs]);
 
   const resultCardPropsByEntityType = React.useMemo(() => {
     return resultCardConfigsArray.reduce<

@@ -60,6 +60,7 @@ import {
   fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
+import { getLocatorSourcePageSetsEntityTypes } from "../utils/locator.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -678,6 +679,11 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
+    // TODO: Only show primary CTA if this locator result is associated with a source page that has a URL template defined.
+    const locatorSourcePageSetsEntityTypes =
+      getLocatorSourcePageSetsEntityTypes(streamDocument);
+    const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
+
     return (
       <Background
         background={backgroundColors.background1.value}
@@ -792,8 +798,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {/* TODO: Hide primary CTA for standalone locator */}
-            {props.primaryCTA.liveVisibility && (
+            {props.primaryCTA.liveVisibility && !hidePrimaryCta && (
               <CTA
                 link={resolvedUrl}
                 label={
