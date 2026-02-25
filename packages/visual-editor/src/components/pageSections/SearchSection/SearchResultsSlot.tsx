@@ -20,10 +20,17 @@ import {
   isValidVerticalConfig,
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
+import {
+  headingStyleProps,
+  SearchResultsProvider,
+} from "./SearchResultsContext.tsx";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
-  styles: { enableGenerativeDirectAnswer: boolean };
+  styles: {
+    enableGenerativeDirectAnswer: boolean;
+    headingStyle: headingStyleProps;
+  };
 }
 
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
@@ -89,6 +96,20 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
           ],
         }
       ),
+      headingStyle: {
+        label: msg("fields.headingStyle", "Heading Style"),
+        type: "object",
+        objectFields: {
+          headingLevel: YextField(msg("fields.headingLevel", "Heading Level"), {
+            type: "select",
+            options: "HEADING_LEVEL",
+          }),
+          color: YextField(msg("fields.color", "Color"), {
+            type: "select",
+            options: "SITE_COLOR",
+          }),
+        },
+      },
     },
   }),
 };
@@ -99,6 +120,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const {
     data: { verticals },
     puck,
+    styles,
   } = props;
   const puckStore = useOptionalPuckStore();
   const arrayState = puckStore?.appState?.ui?.arrayState;
@@ -192,60 +214,62 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
 
   return (
-    <div className="pt-8">
-      <div className="border-b flex justify-start items-center">
-        <ul className="flex items-center">
-          {verticals.map((item) => (
-            <li key={item.verticalKey ?? item.label}>
-              <a
-                onClick={() =>
-                  setVerticalKey(
+    <SearchResultsProvider value={{ headingStyle: styles.headingStyle }}>
+      <div className="pt-8">
+        <div className="border-b flex justify-start items-center">
+          <ul className="flex items-center">
+            {verticals.map((item) => (
+              <li key={item.verticalKey ?? item.label}>
+                <a
+                  onClick={() =>
+                    setVerticalKey(
+                      item.pageType === "universal"
+                        ? null
+                        : (item.verticalKey ?? null)
+                    )
+                  }
+                  className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
                     item.pageType === "universal"
-                      ? null
-                      : (item.verticalKey ?? null)
-                  )
-                }
-                className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
-                  item.pageType === "universal"
-                    ? verticalKey === null
-                      ? "border-b-2 border-black"
-                      : ""
-                    : verticalKey === item.verticalKey
-                      ? "border-b-2 border-black"
-                      : ""
-                }`}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <div className="ml-auto relative flex">
-          <button className="px-5 pt-1.5 pb-1 tracking-[1.1px] visible mb-0 flex gap-2 items-center">
-            <FaEllipsisV className="flex my-2.5 mr-[0.4375rem]" />
-            More
-          </button>
+                      ? verticalKey === null
+                        ? "border-b-2 border-black"
+                        : ""
+                      : verticalKey === item.verticalKey
+                        ? "border-b-2 border-black"
+                        : ""
+                  }`}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="ml-auto relative flex">
+            <button className="px-5 pt-1.5 pb-1 tracking-[1.1px] visible mb-0 flex gap-2 items-center">
+              <FaEllipsisV className="flex my-2.5 mr-[0.4375rem]" />
+              More
+            </button>
+          </div>
         </div>
+        {isLoading && <div>Loading......</div>}
+        {!isLoading &&
+          (verticalKey ? (
+            <VerticalResultsSection
+              verticalKey={verticalKey}
+              verticals={verticals}
+              currentVerticalConfig={currentVerticalConfig}
+              puck={puck}
+              facetsLength={facetsLength}
+            />
+          ) : (
+            <UniversalResultsSection
+              enableGDA={styles.enableGenerativeDirectAnswer}
+              searchTerm={searchTerm}
+              gdaLoading={gdaLoading}
+              verticalConfigMap={verticalConfigMap}
+            />
+          ))}
       </div>
-      {isLoading && <div>Loading......</div>}
-      {!isLoading &&
-        (verticalKey ? (
-          <VerticalResultsSection
-            verticalKey={verticalKey}
-            verticals={verticals}
-            currentVerticalConfig={currentVerticalConfig}
-            puck={puck}
-            facetsLength={facetsLength}
-          />
-        ) : (
-          <UniversalResultsSection
-            enableGDA={props.styles.enableGenerativeDirectAnswer}
-            searchTerm={searchTerm}
-            gdaLoading={gdaLoading}
-            verticalConfigMap={verticalConfigMap}
-          />
-        ))}
-    </div>
+    </SearchResultsProvider>
   );
 };
 

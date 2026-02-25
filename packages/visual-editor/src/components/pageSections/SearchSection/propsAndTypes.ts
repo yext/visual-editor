@@ -28,5 +28,8 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
   },
   styles: {
     enableGenerativeDirectAnswer: false,
+    headingStyle: {
+      headingLevel: 5,
+    },
   },
 };

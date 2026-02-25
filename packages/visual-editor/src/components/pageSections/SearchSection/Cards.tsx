@@ -1,5 +1,5 @@
 import { CardProps } from "@yext/search-ui-react";
-import { MaybeRTF } from "@yext/visual-editor";
+import { Heading, MaybeRTF } from "@yext/visual-editor";
 import { CardTypeProp } from "./propsAndTypes.ts";
 import {
   Accordion,
@@ -7,12 +7,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../../atoms/accordion.tsx";
+import { useSearchResultsContext } from "./SearchResultsContext.tsx";
 
 interface CardsProps extends CardProps<any> {
   cardType?: CardTypeProp;
 }
 
 const Cards = ({ result, cardType = "Standard" }: CardsProps) => {
+  const searchResultsContext = useSearchResultsContext();
+
   const name = result.rawData.question || result.rawData.name;
   const description =
     result.rawData.answerV2 ||
@@ -25,7 +28,12 @@ const Cards = ({ result, cardType = "Standard" }: CardsProps) => {
     >
       {cardType === "Standard" ? (
         <div className="w-full flex flex-col justify-center text-[#382e2c] gap-2">
-          <h3 className="text-lg font-semibold">{name ?? "name"}</h3>
+          <Heading
+            level={searchResultsContext.headingStyle?.headingLevel ?? 2}
+            color={searchResultsContext.headingStyle?.color}
+          >
+            {name ?? "name"}
+          </Heading>
           <div className="w-full flex space-between">
             <MaybeRTF data={description} />
             <div className="ml-auto mr-0 flex">
@@ -42,9 +50,12 @@ const Cards = ({ result, cardType = "Standard" }: CardsProps) => {
             className="px-5 py-2.5 "
           >
             <AccordionTrigger className="justify-between w-full">
-              <h3 className="text-lg font-semibold">
-                {(result.rawData?.name as any) ?? "name"}
-              </h3>
+              <Heading
+                level={searchResultsContext.headingStyle?.headingLevel ?? 2}
+                color={searchResultsContext.headingStyle?.color}
+              >
+                {name ?? "name"}
+              </Heading>
             </AccordionTrigger>
             <AccordionContent className="w-full">
               <div className="w-full flex flex-col space-between">

@@ -152,6 +152,9 @@ export const SearchComponent: ComponentConfig<{
             },
             styles: {
               enableGenerativeDirectAnswer: false,
+              headingStyle: {
+                headingLevel: 4,
+              },
             },
           } satisfies SearchResultsSlotProps,
         },
