@@ -28,10 +28,7 @@ export function resolveUrlFromSourcePageSets(
   }
 
   const entityTypeApiName = profile?.type;
-  console.log("streamDocument", streamDocument);
-  console.log("sourcePageSets:", sourcePageSets, "profile:", profile);
   if (!sourcePageSets || sourcePageSets.length === 0 || !entityTypeApiName) {
-    console.log("exit 1 | profile:", profile);
     return;
   }
   // contains the internal saved search IDs that apply to the entity; if no saved search IDs
@@ -47,12 +44,10 @@ export function resolveUrlFromSourcePageSets(
       )
   );
   if (!sourceEntityPageSet) {
-    console.log("exit 2 | profile:", profile);
     return;
   }
   const pathInfo = sourceEntityPageSet?.pathInfo;
   if (!pathInfo) {
-    console.log("exit 3 | profile:", profile);
     return;
   }
 
@@ -63,12 +58,6 @@ export function resolveUrlFromSourcePageSets(
       pathInfo: pathInfo,
     },
   };
-  console.log(
-    "exit 4 | profile:",
-    profile,
-    "docWithPathInfo:",
-    docWithPathInfo
-  );
   return resolveUrlFromPathInfo(
     mergeMeta(profile, docWithPathInfo),
     relativePrefixToRoot,
@@ -82,14 +71,6 @@ const pageSetIncludesEntity = (
   entityTypeApiName: string,
   pageSetInfo: LocatorSourcePageSetInfo
 ): boolean => {
-  console.log(
-    "pageSetIncludesEntity | savedFiltersForEntity:",
-    savedFiltersForEntity,
-    "entityTypeApiName:",
-    entityTypeApiName,
-    "pageSetInfo:",
-    pageSetInfo
-  );
   return (
     pageSetInfo?.entityType === entityTypeApiName &&
     // savedFilter is not present => scope includes all entities of this type

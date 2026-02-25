@@ -766,8 +766,6 @@ export const LocatorResultCard = React.memo(
       relativePrefixToRoot
     );
 
-    console.log("Resolved URL:", resolvedUrl, " for location: ", location);
-
     const getDirectionsLink: string | undefined = (() => {
       const listings = location.ref_listings ?? [];
       const listingsLink = getDirections(
