@@ -52,7 +52,7 @@ const mockLocatorDocument: StreamDocument = {
     codeTemplate: "locator",
     entityPageSetUrlTemplates: JSON.stringify({
       primary: "location/[[address.city]]/[[id]]",
-      includePrimaryLocalePrefixForPrimaryLocale: true,
+      includeLocalePrefixForPrimaryLocale: false,
       primaryLocale: "en",
     }),
   },
@@ -215,7 +215,7 @@ describe("resolveUrlTemplateOfChild", () => {
     ).toBe("location/fairfax/child-profile-1");
   });
 
-  it("resolves locator profile links for primary locale", () => {
+  it("resolves locator profile links for non-primary locale", () => {
     expect(
       resolveUrlTemplateOfChild(
         { ...mockChildProfile, locale: "es" },
@@ -223,5 +223,24 @@ describe("resolveUrlTemplateOfChild", () => {
         ""
       )
     ).toBe("es/location/fairfax/child-profile-1");
+  });
+
+  it("resolves locator profile links for primary locale with includeLocalePrefixForPrimaryLocale", () => {
+    expect(
+      resolveUrlTemplateOfChild(
+        { ...mockChildProfile, locale: "en" },
+        {
+          ...mockLocatorDocument,
+          __: {
+            codeTemplate: "locator",
+            entityPageSetUrlTemplates: JSON.stringify({
+              primary: "location/[[address.city]]/[[id]]",
+              includeLocalePrefixForPrimaryLocale: true,
+              primaryLocale: "en",
+            }),
+          },
+        }
+      )
+    ).toBe("en/location/fairfax/child-profile-1");
   });
 });

@@ -87,7 +87,7 @@ const mockNewLocatorMergedDocument: StreamDocument = {
     codeTemplate: "locator",
     entityPageSetUrlTemplates: JSON.stringify({
       primary: "[[address.region]]/location/[[id]]",
-      includePrimaryLocalePrefixForPrimaryLocale: true,
+      includeLocalePrefixForPrimaryLocale: false,
       primaryLocale: "en",
     }),
   },
@@ -143,7 +143,7 @@ describe("legacyResolveUrlTemplate with isChild flag", () => {
     ).toBe("ny/location/123");
   });
 
-  it("handles primary locale on new locator pages", () => {
+  it("handles non-primary locale on new locator pages", () => {
     expect(
       legacyResolveUrlTemplate(
         { ...mockNewLocatorMergedDocument, locale: "es" },

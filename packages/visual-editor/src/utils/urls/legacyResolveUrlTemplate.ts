@@ -70,10 +70,13 @@ const legacyResolveUrlTemplateWithTemplates = (
   }
 
   const resolvedUrl = buildUrlFromTemplate(urlTemplate, streamDocument, locale);
+  if (!resolvedUrl) {
+    return;
+  }
 
   // On sites with pathInfo, locator links will use the legacy URL template resolution but include the new primary locale handling
   if (
-    "primaryLocale" in urlTemplates &&
+    urlTemplates.primaryLocale &&
     (urlTemplates.primaryLocale !== locale ||
       urlTemplates.includeLocalePrefixForPrimaryLocale)
   ) {
