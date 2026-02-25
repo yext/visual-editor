@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  WithPuckProps,
+  setDeep,
+} from "@puckeditor/core";
 import {
   FieldValueFilter,
   FieldValueStaticFilter,
@@ -606,6 +611,64 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
+  resolveFields: (data) => {
+    let updatedFields: Fields<LocatorProps> = { ...locatorFields };
+    const setConstantVaueFieldVisibility = (
+      fields: Fields<LocatorProps>,
+      fieldKey:
+        | "primaryHeading"
+        | "secondaryHeading"
+        | "tertiaryHeading"
+        | "image",
+      isConstantValueEnabled: boolean
+    ): Fields<LocatorProps> => {
+      let nextFields = fields;
+      nextFields = setDeep(
+        nextFields,
+        `resultCard.objectFields.${fieldKey}.objectFields.field.visible`,
+        !isConstantValueEnabled
+      );
+      nextFields = setDeep(
+        nextFields,
+        `resultCard.objectFields.${fieldKey}.objectFields.constantValue.visible`,
+        isConstantValueEnabled
+      );
+      return nextFields;
+    };
+
+    const constantValueFieldConfigs = [
+      {
+        key: "primaryHeading",
+        enabled:
+          data.props.resultCard?.primaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "secondaryHeading",
+        enabled:
+          data.props.resultCard?.secondaryHeading?.constantValueEnabled ??
+          false,
+      },
+      {
+        key: "tertiaryHeading",
+        enabled:
+          data.props.resultCard?.tertiaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "image",
+        enabled: data.props.resultCard?.image?.constantValueEnabled ?? false,
+      },
+    ] as const;
+
+    constantValueFieldConfigs.forEach(({ key, enabled }) => {
+      updatedFields = setConstantVaueFieldVisibility(
+        updatedFields,
+        key,
+        enabled
+      );
+    });
+
+    return updatedFields;
+  },
   render: (props) => <LocatorWrapper {...props} />,
 };
 
@@ -892,12 +955,19 @@ const LocatorInternal = ({
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
-  const [mapProps, setMapProps] = React.useState<MapProps>({
-    mapStyle,
-    onDragHandler: handleDrag,
-    scrollToResult: scrollToResult,
-    markerOptionsOverride: markerOptionsOverride,
-  });
+  const [centerCoords, setCenterCoords] = React.useState<
+    [number, number] | undefined
+  >();
+  const mapProps = React.useMemo(
+    () => ({
+      mapStyle,
+      centerCoords,
+      onDragHandler: handleDrag,
+      scrollToResult: scrollToResult,
+      markerOptionsOverride: markerOptionsOverride,
+    }),
+    [centerCoords, handleDrag, mapStyle, markerOptionsOverride, scrollToResult]
+  );
 
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
@@ -928,7 +998,7 @@ const LocatorInternal = ({
             filterValue.lat,
           ];
           if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
-            setMapProps((prev) => ({ ...prev, centerCoords }));
+            setCenterCoords(centerCoords);
             setMapCenter(mapboxgl.LngLat.convert(centerCoords));
           }
         }

@@ -20,12 +20,17 @@ export interface ImageProps {
   /** sizes attribute of the underlying img tag */
   sizes?: string;
   loading?: "lazy" | "eager";
+  /**
+   * Entity data used to resolve embedded fields.
+   * Defaults to the stream document if not provided.
+   */
+  streamDocumentOverride?: Record<string, any>;
 }
 
 export const getImageAltText = (
   image: ImageType | ComplexImageType | AssetImageType | undefined,
   locale: string,
-  streamDocument: StreamDocument
+  streamDocument: StreamDocument | Record<string, any>
 ): string | undefined => {
   if (!image) {
     return undefined;
@@ -50,9 +55,11 @@ export const Image: React.FC<ImageProps> = ({
   className,
   sizes,
   loading = "lazy",
+  streamDocumentOverride,
 }) => {
   const { i18n } = useTranslation();
-  const streamDocument = useDocument();
+  const streamDocument: StreamDocument | Record<string, any> =
+    streamDocumentOverride ?? useDocument();
 
   const image = React.useMemo(() => {
     if (

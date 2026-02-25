@@ -193,6 +193,7 @@ export const InternalThemeEditor = ({
               setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
               totalEntityCount={templateMetadata.totalEntityCount}
               localDev={localDev}
+              deploymentInProgress={templateMetadata.deploymentInProgress}
             />
           ),
           actionBar: () => <></>,

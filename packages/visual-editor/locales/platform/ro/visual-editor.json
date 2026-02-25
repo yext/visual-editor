@@ -554,6 +554,9 @@
   "product": "Produs",
   "promoBanner": "Banner promoțional",
   "promoMedia": "Media promo",
+  "publishBlocked": {
+    "deploymentInProgress": "Actualizarea este dezactivată în timp ce implementarea este în curs"
+  },
   "publishError": {
     "components": "ștergeți sau remediați secțiunile cu erori",
     "metaTitle": "completați Meta Title pentru toate localitățile navigând la setările componentei Pagina de nivel superior",

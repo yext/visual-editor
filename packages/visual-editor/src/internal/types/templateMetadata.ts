@@ -18,6 +18,7 @@ export type TemplateMetadata = {
   platformLocale?: string;
   locales: string[];
   layoutTaskApprovals: boolean;
+  deploymentInProgress: boolean;
   locatorDisplayFields?: Record<string, FieldTypeData>;
   customFonts?: FontRegistry;
 };
@@ -47,6 +48,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
     platformLocale: "en",
     locales: ["en", "es", "fr"],
     layoutTaskApprovals: false,
+    deploymentInProgress: false,
     locatorDisplayFields: {
       name: {
         field_id: "name",

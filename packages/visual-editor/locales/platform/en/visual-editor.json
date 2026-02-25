@@ -549,6 +549,9 @@
   "product": "Product",
   "promoBanner": "Promo Banner",
   "promoMedia": "Promo Media",
+  "publishBlocked": {
+    "deploymentInProgress": "Update is disabled while deployment is in progress"
+  },
   "publishError": {
     "components": "delete or fix sections with errors",
     "metaTitle": "fill in Meta Title for all locales by navigating to the top-level Page component's settings",
