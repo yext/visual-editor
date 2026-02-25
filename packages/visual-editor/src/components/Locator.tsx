@@ -96,7 +96,7 @@ const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 const DEFAULT_TITLE = "Find a Location";
 const DEFAULT_LOCATION_STYLE = {
-  pinIcon: { type: "none" as const },
+  pinIcon: { type: "none" },
   pinColor: backgroundColors.background6.value,
 };
 
@@ -122,7 +122,7 @@ const makiIconModules = import.meta.glob(
 
 const makiIconEntries = Object.entries(makiIconModules).map(([path, icon]) => {
   const name = path.split("/").pop()?.replace(".svg", "") || path;
-  return [name, icon] as const;
+  return [name, icon];
 });
 
 const makiIconMap: Record<string, string> = Object.fromEntries(makiIconEntries);
@@ -135,6 +135,8 @@ const makiIconOptions = makiIconEntries.map(([name, icon]) => ({
   value: name,
   icon,
 }));
+
+const DEFAULT_MAKI_ICON_NAME = makiIconOptions[0]?.value;
 
 const getEntityTypeLabel = (entityType: string) => {
   switch (entityType) {
@@ -206,6 +208,11 @@ const ResultCardPropsField = ({
   const locatorSourcePageSetsEntityTypes =
     getLocatorSourcePageSetsEntityTypes(streamDocument);
   const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
+  /**
+   * Builds the field schema for the result card editor, including:
+   * - Conditionally removing the primary CTA section when entity scope is not attached to a page set.
+   * - Toggling constant value vs. field selector visibility per section.
+   */
   const resultCardFields = React.useMemo(() => {
     const baseFields = LocatorResultCardFields as {
       objectFields?: Record<string, unknown>;
@@ -217,9 +224,10 @@ const ResultCardPropsField = ({
 
     if (baseFields.objectFields) {
       let objectFields = baseFields.objectFields;
+      // Remove the primary CTA when entity scope is not attached to a page set.
       if (hidePrimaryCta) {
         objectFields = { ...objectFields };
-        delete (objectFields as { primaryCTA?: unknown }).primaryCTA;
+        delete objectFields.primaryCTA;
         nextFields = {
           ...LocatorResultCardFields,
           objectFields,
@@ -227,6 +235,7 @@ const ResultCardPropsField = ({
       }
 
       const resolvedValue = value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS;
+      // For each section, show either the field selector or the constant value editor.
       const constantValueFieldConfigs = [
         {
           key: "primaryHeading",
@@ -245,7 +254,7 @@ const ResultCardPropsField = ({
           key: "image",
           enabled: resolvedValue.image?.constantValueEnabled ?? false,
         },
-      ] as const;
+      ];
 
       constantValueFieldConfigs.forEach(({ key, enabled }) => {
         nextFields = setDeep(
@@ -736,7 +745,7 @@ const locatorFields: Fields<LocatorProps> = {
                         type: nextType,
                         iconName:
                           nextType === "icon"
-                            ? makiIconOptions[0].value // default to first icon
+                            ? DEFAULT_MAKI_ICON_NAME
                             : undefined,
                       })
                     }
@@ -869,7 +878,11 @@ const locatorFields: Fields<LocatorProps> = {
  */
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
-  resolveFields: (data, params) => {
+  /**
+   * Locks array lengths for `locationStyles` and `resultCard` to the current
+   * locator entity types so each entity type has exactly one entry.
+   */
+  resolveFields: (_data, params) => {
     const entityDocument = params.metadata?.streamDocument;
     const entityTypes = entityDocument
       ? getEntityTypesFromDocument(
@@ -964,14 +977,10 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
 
     if (hasNetChange) {
       const locationStylesByEntityType = new globalThis.Map(
-        (previousLocationStyles ?? []).map(
-          (item) => [item.entityType, item] as const
-        )
+        (previousLocationStyles ?? []).map((item) => [item.entityType, item])
       );
       const resultCardsByEntityType = new globalThis.Map(
-        (previousResultCardsArray ?? []).map(
-          (item) => [item.entityType, item] as const
-        )
+        (previousResultCardsArray ?? []).map((item) => [item.entityType, item])
       );
 
       const newLocationStyles = entityTypes.map((entityType) => {

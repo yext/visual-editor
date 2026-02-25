@@ -13,9 +13,7 @@ export const getLocatorSourcePageSetsEntityTypes = (
       const entityTypes = Object.values(pageSetMap)
         .map((entry) => entry.entityType)
         .filter((entityType): entityType is string => !!entityType);
-      if (entityTypes.length > 0) {
-        return Array.from(new Set(entityTypes));
-      }
+      return Array.from(new Set(entityTypes));
     } catch {
       console.error("Failed to parse locatorSourcePageSets for entity types.");
     }

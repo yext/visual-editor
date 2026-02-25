@@ -789,7 +789,7 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
-    // TODO: Only show primary CTA if this locator result is associated with a source page that has a URL template defined.
+    // Hide primary CTA section when entity scope is not attached to a page set
     const locatorSourcePageSetsEntityTypes =
       getLocatorSourcePageSetsEntityTypes(streamDocument);
     const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
