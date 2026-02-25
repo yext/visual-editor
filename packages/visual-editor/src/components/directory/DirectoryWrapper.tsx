@@ -28,7 +28,18 @@ export const DirectoryList = ({
   relativePrefixToRoot,
 }: {
   streamDocument: StreamDocument;
-  directoryChildren: any[];
+  directoryChildren: {
+    id: string;
+    name: string;
+    slug: string;
+    meta?: {
+      entityType?: {
+        id: "dm_country" | "dm_region" | "dm_city";
+      };
+    };
+    dm_addressCountryDisplayName?: string;
+    dm_addressRegionDisplayName?: string;
+  }[];
   relativePrefixToRoot: string;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
@@ -44,10 +55,10 @@ export const DirectoryList = ({
           let label;
           switch (child?.meta?.entityType?.id) {
             case "dm_country":
-              label = child.c_addressCountryDisplayName ?? child.name;
+              label = child.dm_addressCountryDisplayName ?? child.name;
               break;
             case "dm_region":
-              label = child.c_addressRegionDisplayName ?? child.name;
+              label = child.dm_addressRegionDisplayName ?? child.name;
               break;
             case "dm_city":
               label = child.name;
