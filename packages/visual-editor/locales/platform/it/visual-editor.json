@@ -554,6 +554,9 @@
   "product": "Prodotto",
   "promoBanner": "Striscione promozionale",
   "promoMedia": "Media promozionale",
+  "publishBlocked": {
+    "deploymentInProgress": "L'aggiornamento è disabilitato mentre la distribuzione è in corso"
+  },
   "publishError": {
     "components": "eliminare o correggere le sezioni con errori",
     "metaTitle": "compila il meta titolo per tutte le impostazioni locali accedendo alle impostazioni del componente Pagina di livello superiore",
