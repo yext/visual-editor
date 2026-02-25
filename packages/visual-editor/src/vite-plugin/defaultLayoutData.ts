@@ -5316,15 +5316,21 @@ const locatorDefaultLayout = {
         resultCard: {
           primaryHeading: {
             field: { selection: { value: "name" } },
+            constantValue: "",
+            constantValueEnabled: false,
             headingLevel: 3,
           },
           secondaryHeading: {
             field: { selection: { value: "name" } },
+            constantValue: "",
+            constantValueEnabled: false,
             variant: "base",
             liveVisibility: false,
           },
           tertiaryHeading: {
             field: { selection: { value: "name" } },
+            constantValue: "",
+            constantValueEnabled: false,
             variant: "base",
             liveVisibility: false,
           },
@@ -5366,6 +5372,8 @@ const locatorDefaultLayout = {
           },
           image: {
             field: { selection: { value: "headshot" } },
+            constantValue: { url: "", height: 0, width: 0 },
+            constantValueEnabled: false,
             liveVisibility: false,
           },
         },

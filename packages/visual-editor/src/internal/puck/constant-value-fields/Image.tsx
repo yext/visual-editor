@@ -17,6 +17,12 @@ import { TranslatableStringField } from "../../../editor/TranslatableStringField
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { TranslatableString } from "../../../types/types.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
+import {
+  FieldTypeData,
+  TemplateMetadata,
+} from "../../types/templateMetadata.ts";
+import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
+import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
 export type ImagePayload = {
@@ -25,13 +31,34 @@ export type ImagePayload = {
   locale: string;
 };
 
-export const IMAGE_CONSTANT_CONFIG: CustomField<
-  TranslatableAssetImage | undefined
-> = {
+const buildLocatorDisplayOptions = (
+  locatorDisplayFields?: Record<string, FieldTypeData>
+): DynamicOption<string>[] => {
+  if (!locatorDisplayFields) {
+    return [];
+  }
+
+  return Object.keys(locatorDisplayFields)
+    .filter((key) => locatorDisplayFields[key]?.field_type_id === "type.string")
+    .map((key) => {
+      const fieldData = locatorDisplayFields[key];
+      return {
+        label: fieldData.field_name,
+        value: key,
+      };
+    });
+};
+
+const createImageConstantConfig = (options?: {
+  getAltTextOptions?: (
+    templateMetadata: TemplateMetadata
+  ) => DynamicOption<string>[];
+}): CustomField<TranslatableAssetImage | undefined> => ({
   type: "custom",
   render: ({ onChange, value, field }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
+    const templateMetadata: TemplateMetadata = useTemplateMetadata();
     const locale = i18n.language;
 
     const locales = getPageSetLocales(streamDocument);
@@ -143,12 +170,22 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
       } as TranslatableAssetImage);
     };
 
+    const altTextOptions = options?.getAltTextOptions?.(templateMetadata);
     const altTextField = React.useMemo(() => {
+      if (altTextOptions) {
+        return TranslatableStringField<TranslatableString | undefined>(
+          msg("altText", "Alt Text"),
+          undefined,
+          false,
+          true,
+          () => altTextOptions
+        );
+      }
       return TranslatableStringField<TranslatableString | undefined>(
         msg("altText", "Alt Text"),
         { types: ["type.string"] }
       );
-    }, []);
+    }, [altTextOptions]);
 
     const altText = resolveComponentData(
       resolvedValue?.alternateText ?? "",
@@ -263,4 +300,14 @@ export const IMAGE_CONSTANT_CONFIG: CustomField<
       </>
     );
   },
+});
+
+export const IMAGE_CONSTANT_CONFIG = createImageConstantConfig();
+
+export const LOCATOR_IMAGE_CONSTANT_CONFIG = {
+  ...createImageConstantConfig({
+    getAltTextOptions: (templateMetadata: TemplateMetadata) =>
+      buildLocatorDisplayOptions(templateMetadata?.locatorDisplayFields),
+  }),
+  label: msg("fields.image", "Image"),
 };
