@@ -78,6 +78,7 @@ export const Editor = ({
   metadata,
 }: EditorProps) => {
   if (document) {
+    console.log("test");
     devLogger.logData("DOCUMENT", document);
   }
 
