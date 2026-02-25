@@ -69,12 +69,16 @@ const legacyResolveUrlTemplateWithTemplates = (
     );
   }
 
-  const resolvedUrl = buildUrlFromTemplate(urlTemplate, streamDocument, locale);
+  const resolvedUrl = normalizeSlug(
+    resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
+  );
   if (!resolvedUrl) {
     return;
   }
 
-  // On sites with pathInfo, locator links will use the legacy URL template resolution but include the new primary locale handling
+  // On sites that have an updated entity pageset that sets pathInfo
+  // but the locator pageset does not yet set pathInfo, locator links
+  // will use the legacy URL template resolution but include the new primary locale handling
   if (
     urlTemplates.primaryLocale &&
     (urlTemplates.primaryLocale !== locale ||
@@ -102,23 +106,4 @@ const selectUrlTemplate = (
   } else {
     return urlTemplates.primary || urlTemplates.alternate;
   }
-};
-
-/**
- * Builds a URL from a template string by resolving embedded fields and normalizing the slug.
- */
-export const buildUrlFromTemplate = (
-  urlTemplate: string,
-  streamDocument: StreamDocument,
-  locale: string
-): string | undefined => {
-  const normalizedSlug = normalizeSlug(
-    resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
-  );
-
-  if (!normalizedSlug) {
-    return;
-  }
-
-  return normalizedSlug;
 };
