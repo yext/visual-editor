@@ -1,3 +1,14 @@
+#### 1.1.0-alpha.4 (2026-02-25)
+
+##### New Features
+
+- disable Update Pages button while a deployment is in progress ([#1057](https://github.com/yext/visual-editor/pull/1057)) ([fc48a59c](https://github.com/yext/visual-editor/commit/fc48a59cb77d84ecc027f9053fa05914b295a298))
+- locator static content toggles ([#1040](https://github.com/yext/visual-editor/pull/1040)) ([a5f1196c](https://github.com/yext/visual-editor/commit/a5f1196c318eb3d868cc17bbe0daff6203fc7b30))
+
+##### Bug Fixes
+
+- more 1.1.0-alpha quick fixes ([#1060](https://github.com/yext/visual-editor/pull/1060)) ([caea1661](https://github.com/yext/visual-editor/commit/caea16618f3a943cac8d45cba42469ebcb3e88ce))
+
 #### 1.1.0-alpha.3 (2026-02-24)
 
 ##### New Features
