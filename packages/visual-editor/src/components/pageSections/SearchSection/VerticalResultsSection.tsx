@@ -1,4 +1,9 @@
-import { Facets, StandardCard, VerticalResults } from "@yext/search-ui-react";
+import {
+  Facets,
+  ResultsCount,
+  StandardCard,
+  VerticalResults,
+} from "@yext/search-ui-react";
 import { t } from "i18next";
 import React from "react";
 import { FaSlidersH, FaTimes } from "react-icons/fa";
@@ -27,11 +32,14 @@ export const VerticalResultsSection = ({
 
   if (currentVerticalConfig?.layout === "Map") {
     return (
-      <div className="components flex h-screen w-full mx-auto">
+      <div className="components flex h-screen w-full mx-auto gap-2">
         <div className="relative h-screen w-full md:w-2/4 flex flex-col ">
           <div className="relative flex-1 flex flex-col min-h-0">
-            <div className="px-8 py-4 text-body-fontSize border-y border-gray-300 inline-block">
-              <div className="flex flex-row justify-end">
+            <div className="p-4 text-body-fontSize border-y border-gray-300 inline-block">
+              <div className="flex flex-row justify-between">
+                <ResultsCount
+                  customCssClasses={{ resultsCountContainer: "!-mb-4" }}
+                />
                 <button
                   className="inline-flex justify-between items-center gap-2 bg-white text-palette-primary-dark font-bold font-body-fontFamily text-body-sm-fontSize"
                   onClick={() => setShowFilterModal((prev) => !prev)}
@@ -107,7 +115,6 @@ export const VerticalResultsSection = ({
           searchOnChange
         />
       </div>
-
       <div className="flex-grow">
         <VerticalResults
           customCssClasses={{
