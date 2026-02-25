@@ -44,6 +44,23 @@ const mockDMCityDocument: StreamDocument = {
   }),
 };
 
+const mockLocatorDocument: StreamDocument = {
+  name: "Locator",
+  id: "locator",
+  locale: "en",
+  __: {
+    codeTemplate: "locator",
+    entityPageSetUrlTemplates: JSON.stringify({
+      primary: "location/[[address.city]]/[[id]]",
+      includePrimaryLocalePrefixForPrimaryLocale: true,
+      primaryLocale: "en",
+    }),
+  },
+  _pageset: JSON.stringify({
+    type: "LOCATOR",
+  }),
+};
+
 const mockChildProfile = {
   id: "child-profile-1",
   locale: "en",
@@ -190,5 +207,21 @@ describe("resolveUrlTemplateOfChild", () => {
     expect(
       resolveUrlTemplateOfChild(mockChildProfile, mockDMCityDocument, "")
     ).toBe("va/fairfax/2000-university-dr");
+  });
+
+  it("resolves locator profile links for primary locale", () => {
+    expect(
+      resolveUrlTemplateOfChild(mockChildProfile, mockLocatorDocument, "")
+    ).toBe("location/fairfax/child-profile-1");
+  });
+
+  it("resolves locator profile links for primary locale", () => {
+    expect(
+      resolveUrlTemplateOfChild(
+        { ...mockChildProfile, locale: "es" },
+        mockLocatorDocument,
+        ""
+      )
+    ).toBe("es/location/fairfax/child-profile-1");
   });
 });

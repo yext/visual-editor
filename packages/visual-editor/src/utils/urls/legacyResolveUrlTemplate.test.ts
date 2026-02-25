@@ -73,6 +73,29 @@ const mockLocatorMergedDocument: StreamDocument = {
   }),
 };
 
+const mockNewLocatorMergedDocument: StreamDocument = {
+  name: "Yext",
+  id: "123",
+  locale: "en",
+  address: {
+    line1: "61 9th Ave",
+    city: "New York",
+    region: "NY",
+    country: "USA",
+  },
+  __: {
+    codeTemplate: "locator",
+    entityPageSetUrlTemplates: JSON.stringify({
+      primary: "[[address.region]]/location/[[id]]",
+      includePrimaryLocalePrefixForPrimaryLocale: true,
+      primaryLocale: "en",
+    }),
+  },
+  _pageset: JSON.stringify({
+    type: "LOCATOR",
+  }),
+};
+
 describe("legacyResolveUrlTemplate with isChild flag", () => {
   it("handles primary url template on directory pages", () => {
     expect(
@@ -108,6 +131,22 @@ describe("legacyResolveUrlTemplate with isChild flag", () => {
           __: { ...mockLocatorMergedDocument.__, isPrimaryLocale: false },
           locale: "es",
         },
+        "",
+        true
+      )
+    ).toBe("es/ny/location/123");
+  });
+
+  it("handles primary locale on new locator pages", () => {
+    expect(
+      legacyResolveUrlTemplate(mockNewLocatorMergedDocument, "", true)
+    ).toBe("ny/location/123");
+  });
+
+  it("handles primary locale on new locator pages", () => {
+    expect(
+      legacyResolveUrlTemplate(
+        { ...mockNewLocatorMergedDocument, locale: "es" },
         "",
         true
       )

@@ -48,7 +48,12 @@ export const legacyResolveUrlTemplate = (
 const legacyResolveUrlTemplateWithTemplates = (
   streamDocument: StreamDocument,
   relativePrefixToRoot: string,
-  urlTemplates: { primary?: string; alternate?: string }
+  urlTemplates: {
+    primary?: string;
+    alternate?: string;
+    includeLocalePrefixForPrimaryLocale?: boolean;
+    primaryLocale?: string;
+  }
 ): string | undefined => {
   const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
   if (!locale) {
@@ -64,12 +69,18 @@ const legacyResolveUrlTemplateWithTemplates = (
     );
   }
 
-  return buildUrlFromTemplate(
-    urlTemplate,
-    streamDocument,
-    locale,
-    relativePrefixToRoot
-  );
+  const resolvedUrl = buildUrlFromTemplate(urlTemplate, streamDocument, locale);
+
+  // On sites with pathInfo, locator links will use the legacy URL template resolution but include the new primary locale handling
+  if (
+    "primaryLocale" in urlTemplates &&
+    (urlTemplates.primaryLocale !== locale ||
+      urlTemplates.includeLocalePrefixForPrimaryLocale)
+  ) {
+    return `${relativePrefixToRoot}${normalizeSlug(locale)}/${resolvedUrl}`;
+  }
+
+  return `${relativePrefixToRoot}${resolvedUrl}`;
 };
 
 /**
@@ -96,8 +107,7 @@ const selectUrlTemplate = (
 export const buildUrlFromTemplate = (
   urlTemplate: string,
   streamDocument: StreamDocument,
-  locale: string,
-  relativePrefixToRoot: string
+  locale: string
 ): string | undefined => {
   const normalizedSlug = normalizeSlug(
     resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
@@ -107,5 +117,5 @@ export const buildUrlFromTemplate = (
     return;
   }
 
-  return relativePrefixToRoot + normalizedSlug;
+  return normalizedSlug;
 };
