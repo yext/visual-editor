@@ -559,6 +559,9 @@
   "product": "Produkt",
   "promoBanner": "Baner promocyjny",
   "promoMedia": "Media promocyjne",
+  "publishBlocked": {
+    "deploymentInProgress": "Aktualizacja jest wyłączona w trakcie wdrażania"
+  },
   "publishError": {
     "components": "usuń lub napraw sekcje z błędami",
     "metaTitle": "wypełnij metatytuł dla wszystkich ustawień regionalnych, przechodząc do ustawień komponentu strony najwyższego poziomu",
