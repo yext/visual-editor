@@ -56,7 +56,7 @@ export const injectTranslations = async (
  */
 export const loadComponentTranslations = async (
   locale: string,
-  translations?: Record<string, unknown>
+  translations?: Record<string, string>
 ) => {
   if (i18nComponentsInstance.hasResourceBundle(locale, NAMESPACE)) {
     return;
@@ -81,7 +81,7 @@ export const loadComponentTranslations = async (
  */
 export const loadComponentTranslationsForLocales = async (
   locales: string[],
-  translationsByLocale?: Record<string, Record<string, unknown>>
+  translationsByLocale?: Record<string, Record<string, string>>
 ): Promise<void> => {
   const normalizedLocales = Array.from(
     new Set(normalizeLocales(locales).map((locale) => normalizeLocale(locale)))

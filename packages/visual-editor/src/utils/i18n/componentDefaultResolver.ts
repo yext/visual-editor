@@ -5,7 +5,7 @@ import { resolveTranslationLocale } from "./resolveTranslationLocale.ts";
 import { isRichText } from "../plainText.ts";
 import { locales as supportedLocales } from "./locales.ts";
 import componentDefaultsEnTranslations from "../../../locales/components/en/visual-editor.json" with { type: "json" };
-import { isPlainObject } from "./injectMissingLocalizedValues.ts";
+import { FlatTranslations, isJsonObject, JsonObject } from "./jsonUtils.ts";
 
 const KNOWN_DEFAULT_RICH_TEXT_REGEX = /<span>(.*?)<\/span>/i;
 const COMPONENT_DEFAULTS_NAMESPACE = "componentDefaults";
@@ -14,16 +14,16 @@ const supportedTranslationLocales = new Set(supportedLocales);
 // Flattens nested objects into dot-delimited keys, including only string leaf values.
 // Based on packages/visual-editor/src/utils/i18n/jsonUtils.ts flatten function.
 const flattenStringLeafNodes = (
-  obj: Record<string, unknown>,
+  obj: JsonObject,
   prefix = ""
-): Record<string, string> => {
-  const result: Record<string, string> = {};
+): FlatTranslations => {
+  const result: FlatTranslations = {};
 
   for (const key of Object.keys(obj)) {
     const value = obj[key];
     const fullKey = prefix ? `${prefix}.${key}` : key;
 
-    if (isPlainObject(value)) {
+    if (isJsonObject(value)) {
       Object.assign(result, flattenStringLeafNodes(value, fullKey));
       continue;
     }
@@ -40,14 +40,14 @@ const flattenStringLeafNodes = (
  * Extracts and flattens `componentDefaults` values from a translation payload.
  */
 export const getComponentDefaultsFromTranslations = (
-  translations: unknown
-): Record<string, string> => {
-  if (!isPlainObject(translations)) {
+  translations: JsonObject | undefined
+): FlatTranslations => {
+  if (!isJsonObject(translations)) {
     return {};
   }
 
   const namespaceValue = translations[COMPONENT_DEFAULTS_NAMESPACE];
-  if (!isPlainObject(namespaceValue)) {
+  if (!isJsonObject(namespaceValue)) {
     return {};
   }
 
@@ -76,12 +76,8 @@ const enValueToKeys = (() => {
  * unsupported translation locale.
  */
 export const normalizeComponentDefaultLocale = (
-  locale: unknown
+  locale: string
 ): string | undefined => {
-  if (typeof locale !== "string") {
-    return;
-  }
-
   const normalizedLocale = normalizeLocale(locale).trim();
   if (!normalizedLocale) {
     return;

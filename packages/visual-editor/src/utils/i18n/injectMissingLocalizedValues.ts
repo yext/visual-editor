@@ -1,19 +1,14 @@
 import type { RichText } from "../../types/types.ts";
 import { resolveLocalizedComponentDefaultValue } from "./componentDefaultResolver.ts";
+import { isJsonObject } from "./jsonUtils.ts";
 
 export type LocalizedObject = {
   hasLocalizedValue: "true";
   [key: string]: unknown;
 };
 
-export const isPlainObject = (
-  value: unknown
-): value is Record<string, unknown> => {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-};
-
 const isLocalizedObject = (value: unknown): value is LocalizedObject => {
-  return isPlainObject(value) && value.hasLocalizedValue === "true";
+  return isJsonObject(value) && value.hasLocalizedValue === "true";
 };
 
 /**
@@ -38,7 +33,7 @@ export const injectMissingLocalizedValuesRecursively = (
     return;
   }
 
-  if (!isPlainObject(node)) {
+  if (!isJsonObject(node)) {
     return;
   }
 

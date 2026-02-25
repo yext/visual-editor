@@ -4,6 +4,7 @@ import {
   normalizeComponentDefaultLocale,
 } from "./componentDefaultResolver.ts";
 import { injectMissingLocalizedValuesRecursively } from "./injectMissingLocalizedValues.ts";
+import { JsonObject } from "./jsonUtils.ts";
 
 /**
  * Injects localized default values into config for one locale.
@@ -13,8 +14,8 @@ import { injectMissingLocalizedValuesRecursively } from "./injectMissingLocalize
  */
 export const localizeConfigDefaultsForLocale = (
   config: Config,
-  locale: unknown,
-  targetTranslations: unknown
+  locale: string,
+  targetTranslations: JsonObject
 ): Config => {
   const normalizedLocale = normalizeComponentDefaultLocale(locale);
   if (!normalizedLocale) {
