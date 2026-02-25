@@ -96,9 +96,9 @@ const INITIAL_LOCATION_KEY = "initialLocation";
 const DEFAULT_TITLE = "Find a Location";
 
 const translateDistanceUnit = (
-    t: (key: string, options?: Record<string, unknown>) => string,
-    unit: "mile" | "kilometer",
-    count: number
+  t: (key: string, options?: Record<string, unknown>) => string,
+  unit: "mile" | "kilometer",
+  count: number
 ) => {
   if (unit === "mile") {
     return t("mile", { count, defaultValue: "mile" });
