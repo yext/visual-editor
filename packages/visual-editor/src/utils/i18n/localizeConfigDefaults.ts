@@ -15,7 +15,7 @@ import { JsonObject } from "./jsonUtils.ts";
 export const localizeConfigDefaultsForLocale = (
   config: Config,
   locale: string,
-  targetTranslations: JsonObject
+  targetTranslations: JsonObject | undefined
 ): Config => {
   const normalizedLocale = normalizeComponentDefaultLocale(locale);
   if (!normalizedLocale) {
