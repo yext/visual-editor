@@ -550,8 +550,8 @@
   "promoBanner": "Reklaamibänner",
   "promoMedia": "Promo meedia",
   "publishBlocked": {
-    "deploymentFailed": "Publish is disabled because the latest deployment failed. Parandage probleemid ja proovige uuesti",
-    "deploymentInactive": "",
+    "deploymentFailed": "Avaldamine on keelatud, kuna viimane juurutus ebaõnnestus. Parandage probleemid ja proovige uuesti",
+    "deploymentInactive": "Avaldamine on keelatud, kuna juurutus on passiivne",
     "deploymentInProgress": "Värskendus on juurutamise ajal keelatud"
   },
   "publishError": {
