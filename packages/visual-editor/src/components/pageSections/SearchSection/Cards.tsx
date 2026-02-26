@@ -1,5 +1,4 @@
 import { CardProps } from "@yext/search-ui-react";
-import { MaybeRTF } from "@yext/visual-editor";
 import { CardTypeProp } from "./defaultPropsAndTypes.ts";
 import {
   Accordion,
@@ -7,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../../atoms/accordion.tsx";
+import { MaybeRTF } from "../../atoms/maybeRTF.tsx";
 
 interface CardsProps extends CardProps<any> {
   cardType?: CardTypeProp;

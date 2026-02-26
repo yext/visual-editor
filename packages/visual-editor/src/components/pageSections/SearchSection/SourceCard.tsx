@@ -1,5 +1,5 @@
 import { CitationProps } from "@yext/search-ui-react";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface RawData {
   landingPageUrl?: string;
@@ -12,7 +12,7 @@ const SourceCard = (props: CitationProps) => {
   let rawData: RawData = props.searchResult.rawData;
   let link = rawData?.landingPageUrl || rawData?.c_primaryCTA?.link || "";
   const name = props.searchResult?.name;
-
+  const { t } = useTranslation();
   return (
     <div className="border px-5 py-2.5 rounded-md">
       {link ? (

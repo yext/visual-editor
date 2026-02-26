@@ -5,12 +5,12 @@ import {
   MapboxMap,
   PinComponent,
 } from "@yext/search-ui-react";
-import { t } from "i18next";
 import { MapPin } from "lucide-react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { StreamDocument } from "../../../utils/index.ts";
 import { Body } from "../../atoms/body.tsx";
+import { useTranslation } from "react-i18next";
 
 interface MapComponentProps {
   isUniversal?: boolean;
@@ -30,7 +30,7 @@ export const MapComponent = ({
   const verticalResults = useSearchState((s) => s.vertical.results) ?? [];
 
   const mapResults = isUniversal ? results : verticalResults;
-
+  const { t } = useTranslation();
   const entityDocument: StreamDocument = useDocument();
   const mapboxApiKey =
     entityDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;

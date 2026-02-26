@@ -6,7 +6,6 @@ import {
 import { SearchI18nextProvider } from "@yext/search-ui-react";
 import React from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { msg, pt, themeManagerCn } from "../../../utils/index.ts";
 import { Body } from "../../atoms/body.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
@@ -16,6 +15,8 @@ import {
 } from "./defaultPropsAndTypes.ts";
 import "./search.css";
 import { buildSearchConfigFromDocument } from "./searchConfig.ts";
+import { themeManagerCn } from "../../../utils/cn.ts";
+import { msg, pt } from "../../../utils/i18n/platform.ts";
 
 export interface SearchComponentProps {
   /** @internal */

@@ -8,7 +8,6 @@ import { useSearchActions, useSearchState } from "@yext/search-headless-react";
 import React, { useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { YextField } from "../../../editor/YextField.tsx";
-import { msg } from "../../../utils/index.ts";
 import {
   defaultSearchResultsProps,
   SearchResultsSlotProps,
@@ -20,7 +19,8 @@ import {
   isValidVerticalConfig,
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
+import { msg } from "../../../utils/i18n/platform.ts";
 
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -98,7 +98,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   } = props;
   const puckStore = useOptionalPuckStore();
   const arrayState = puckStore?.appState?.ui?.arrayState;
-
+  const { t } = useTranslation();
   const arrayKey = React.useMemo(() => {
     if (!arrayState || !puck.isEditing) return undefined;
 

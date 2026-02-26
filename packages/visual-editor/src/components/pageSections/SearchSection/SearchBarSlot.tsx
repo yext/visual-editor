@@ -8,12 +8,12 @@ import { SearchBar } from "@yext/search-ui-react";
 import { FaMicrophone } from "react-icons/fa";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { msg } from "../../../utils/index.ts";
 import { useTypingEffect } from "./useTypeEffect.ts";
 import { createVisualAutocompleteConfig } from "./utils.tsx";
 import { useEntityPreviewSearcher } from "./searchConfig.ts";
 import React from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
 
 export interface SearchBarSlotProps {
   styles: {

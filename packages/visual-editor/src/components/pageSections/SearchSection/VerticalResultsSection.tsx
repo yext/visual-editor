@@ -4,13 +4,13 @@ import {
   StandardCard,
   VerticalResults,
 } from "@yext/search-ui-react";
-import { t } from "i18next";
 import React from "react";
 import { FaSlidersH, FaTimes } from "react-icons/fa";
 import { Body } from "../../atoms/body.tsx";
 import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
 import { VerticalConfigProps } from "./defaultPropsAndTypes.ts";
+import { useTranslation } from "react-i18next";
 
 interface VerticalResultsSectionProps {
   verticalKey: string;
@@ -29,7 +29,7 @@ export const VerticalResultsSection = ({
 }: VerticalResultsSectionProps) => {
   const popupRef = React.useRef<HTMLDivElement>(null);
   const [showFilterModal, setShowFilterModal] = React.useState(false);
-
+  const { t } = useTranslation();
   if (currentVerticalConfig?.layout === "Map") {
     return (
       <div className="components flex h-screen w-full mx-auto gap-2">

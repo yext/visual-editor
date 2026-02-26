@@ -3,7 +3,7 @@ import {
   UniversalResults,
 } from "@yext/search-ui-react";
 import SourceCard from "./SourceCard.tsx";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface UniversalResultsSectionProps {
   enableGDA: boolean;
@@ -18,6 +18,7 @@ export const UniversalResultsSection = ({
   gdaLoading,
   verticalConfigMap,
 }: UniversalResultsSectionProps) => {
+  const { t } = useTranslation();
   return (
     <>
       {enableGDA && !!searchTerm && (
