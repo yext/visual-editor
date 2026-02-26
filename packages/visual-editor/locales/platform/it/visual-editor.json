@@ -397,6 +397,7 @@
       "yes": "SÌ"
     },
     "pageHeading": "Intestazione della pagina",
+    "pageType": "Tipo di pagina",
     "phone": "Telefono",
     "phoneFormat": "Formato del telefono",
     "phoneNumber": "Numero di telefono",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Mostra CTA primario",
     "showProfessionalTitle": "Mostra titolo professionale",
     "showPublishTime": "Mostra ora di pubblicazione",
+    "showSearchResultsSection": "Mostra la sezione dei risultati della ricerca",
     "showSecondaryCTA": "Mostra CTA secondario",
     "showSecondaryHeader": "Mostra intestazione secondaria",
     "showSectionHeading": "Mostra l'intestazione della sezione",

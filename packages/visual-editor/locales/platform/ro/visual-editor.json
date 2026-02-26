@@ -397,6 +397,7 @@
       "yes": "Da"
     },
     "pageHeading": "Titlul paginii",
+    "pageType": "Tip pagină",
     "phone": "Telefon",
     "phoneFormat": "Format telefonic",
     "phoneNumber": "Număr de telefon",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Arată CTA primară",
     "showProfessionalTitle": "Afișați titlul profesional",
     "showPublishTime": "Afișează ora publicării",
+    "showSearchResultsSection": "Afișați secțiunea cu rezultatele căutării",
     "showSecondaryCTA": "Arată CTA secundară",
     "showSecondaryHeader": "Afișați antetul secundar",
     "showSectionHeading": "Afișați titlul secțiunii",

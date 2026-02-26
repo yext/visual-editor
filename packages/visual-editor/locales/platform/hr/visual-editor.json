@@ -397,6 +397,7 @@
       "yes": "Da"
     },
     "pageHeading": "Naslov stranice",
+    "pageType": "Vrsta stranice",
     "phone": "Telefon",
     "phoneFormat": "Format telefona",
     "phoneNumber": "Telefonski broj",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Pokažite primarni CTA",
     "showProfessionalTitle": "Prikaži profesionalni naslov",
     "showPublishTime": "Prikaži vrijeme objave",
+    "showSearchResultsSection": "Prikaži odjeljak s rezultatima pretraživanja",
     "showSecondaryCTA": "Pokažite sekundarni CTA",
     "showSecondaryHeader": "Prikaži sekundarno zaglavlje",
     "showSectionHeading": "Prikaži naslov odjeljka",

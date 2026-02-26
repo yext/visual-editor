@@ -397,6 +397,7 @@
       "yes": "Taip"
     },
     "pageHeading": "Puslapio antraštė",
+    "pageType": "Puslapio tipas",
     "phone": "Telefonas",
     "phoneFormat": "Telefono formatas",
     "phoneNumber": "Telefono numeris",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Rodyti pirminę CTA",
     "showProfessionalTitle": "Rodyti profesionalų titulą",
     "showPublishTime": "Rodyti paskelbimo laiką",
+    "showSearchResultsSection": "Rodyti paieškos rezultatų skyrių",
     "showSecondaryCTA": "Parodykite antrinę CTA",
     "showSecondaryHeader": "Rodyti antrinę antraštę",
     "showSectionHeading": "Rodyti skyriaus antraštę",

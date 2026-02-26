@@ -397,6 +397,7 @@
       "yes": "Ja"
     },
     "pageHeading": "Seitenüberschrift",
+    "pageType": "Seitentyp",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Primären CTA zeigen",
     "showProfessionalTitle": "Berufsbezeichnung anzeigen",
     "showPublishTime": "Veröffentlichungszeit anzeigen",
+    "showSearchResultsSection": "Abschnitt „Suchergebnisse“ anzeigen",
     "showSecondaryCTA": "Sekundären CTA zeigen",
     "showSecondaryHeader": "Sekundären Header anzeigen",
     "showSectionHeading": "Abschnittsüberschrift anzeigen",

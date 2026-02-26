@@ -397,6 +397,7 @@
       "yes": "是的"
     },
     "pageHeading": "页面标题",
+    "pageType": "页面类型",
     "phone": "电话",
     "phoneFormat": "电话格式",
     "phoneNumber": "电话号码",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "显示主要CTA",
     "showProfessionalTitle": "显示职称",
     "showPublishTime": "显示发布时间",
+    "showSearchResultsSection": "显示搜索结果部分",
     "showSecondaryCTA": "显示次要CTA",
     "showSecondaryHeader": "显示辅助标题",
     "showSectionHeading": "显示章节标题",

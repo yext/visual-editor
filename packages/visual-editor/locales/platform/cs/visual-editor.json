@@ -397,6 +397,7 @@
       "yes": "Ano"
     },
     "pageHeading": "Záhlaví stránky",
+    "pageType": "Typ stránky",
     "phone": "Telefon",
     "phoneFormat": "Formát telefonu",
     "phoneNumber": "Telefonní číslo",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Zobrazit primární CTA",
     "showProfessionalTitle": "Zobrazit profesionální titul",
     "showPublishTime": "Zobrazit čas zveřejnění",
+    "showSearchResultsSection": "Zobrazit sekci výsledků hledání",
     "showSecondaryCTA": "Zobrazit sekundární CTA",
     "showSecondaryHeader": "Zobrazit sekundární záhlaví",
     "showSectionHeading": "Zobrazit nadpis sekce",

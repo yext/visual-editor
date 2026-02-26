@@ -397,6 +397,7 @@
       "yes": "Ja"
     },
     "pageHeading": "Paginakop",
+    "pageType": "Paginatype",
     "phone": "Telefoon",
     "phoneFormat": "Telefoonformaat",
     "phoneNumber": "Telefoonnummer",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Toon primaire CTA",
     "showProfessionalTitle": "Toon professionele titel",
     "showPublishTime": "Toon publicatietijd",
+    "showSearchResultsSection": "Sectie Zoekresultaten weergeven",
     "showSecondaryCTA": "Toon secundaire CTA",
     "showSecondaryHeader": "Secundaire koptekst weergeven",
     "showSectionHeading": "Sectiekop weergeven",

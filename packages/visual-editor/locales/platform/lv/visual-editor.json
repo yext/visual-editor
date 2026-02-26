@@ -397,6 +397,7 @@
       "yes": "Jā"
     },
     "pageHeading": "Lapas virsraksts",
+    "pageType": "Lapas veids",
     "phone": "Tālrunis",
     "phoneFormat": "Tālruņa formāts",
     "phoneNumber": "Tālruņa numurs",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Rādīt primāro CTA",
     "showProfessionalTitle": "Rādīt profesionālo titulu",
     "showPublishTime": "Rādīt publicēšanas laiku",
+    "showSearchResultsSection": "Rādīt meklēšanas rezultātu sadaļu",
     "showSecondaryCTA": "Rādīt sekundāro CTA",
     "showSecondaryHeader": "Rādīt sekundāro galveni",
     "showSectionHeading": "Rādīt sadaļas virsrakstu",

@@ -397,6 +397,7 @@
       "yes": "Yes"
     },
     "pageHeading": "Page Heading",
+    "pageType": "Page Type",
     "phone": "Phone",
     "phoneFormat": "Phone Format",
     "phoneNumber": "Phone Number",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Show Primary CTA",
     "showProfessionalTitle": "Show Professional Title",
     "showPublishTime": "Show Publish Time",
+    "showSearchResultsSection": "Show Search Results Section",
     "showSecondaryCTA": "Show Secondary CTA",
     "showSecondaryHeader": "Show Secondary Header",
     "showSectionHeading": "Show Section Heading",

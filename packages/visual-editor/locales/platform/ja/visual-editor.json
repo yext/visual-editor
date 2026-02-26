@@ -397,6 +397,7 @@
       "yes": "はい"
     },
     "pageHeading": "ページ見出し",
+    "pageType": "ページの種類",
     "phone": "電話",
     "phoneFormat": "電話形式",
     "phoneNumber": "電話番号",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "プライマリCTAを表示します",
     "showProfessionalTitle": "専門職の肩書を表示",
     "showPublishTime": "公開時間を表示",
+    "showSearchResultsSection": "検索結果セクションを表示",
     "showSecondaryCTA": "二次CTAを表示します",
     "showSecondaryHeader": "セカンダリヘッダーを表示",
     "showSectionHeading": "セクション見出しを表示",

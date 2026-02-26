@@ -397,6 +397,7 @@
       "yes": "Evet"
     },
     "pageHeading": "Sayfa Başlığı",
+    "pageType": "Sayfa Türü",
     "phone": "Telefon",
     "phoneFormat": "Telefon formatı",
     "phoneNumber": "Telefon numarası",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Birincil CTA'yı göster",
     "showProfessionalTitle": "Profesyonel Ünvanı Göster",
     "showPublishTime": "Yayınlama Zamanını Göster",
+    "showSearchResultsSection": "Arama Sonuçları Bölümünü Göster",
     "showSecondaryCTA": "İkincil CTA göster",
     "showSecondaryHeader": "İkincil Başlığı Göster",
     "showSectionHeading": "Bölüm Başlığını Göster",

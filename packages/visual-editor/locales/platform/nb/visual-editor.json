@@ -397,6 +397,7 @@
       "yes": "Ja"
     },
     "pageHeading": "Sideoverskrift",
+    "pageType": "Sidetype",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Vis primær CTA",
     "showProfessionalTitle": "Vis profesjonell tittel",
     "showPublishTime": "Vis publiseringstid",
+    "showSearchResultsSection": "Vis søkeresultatseksjonen",
     "showSecondaryCTA": "Vis sekundær CTA",
     "showSecondaryHeader": "Vis sekundær overskrift",
     "showSectionHeading": "Vis seksjonsoverskrift",

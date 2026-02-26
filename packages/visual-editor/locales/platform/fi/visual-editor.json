@@ -397,6 +397,7 @@
       "yes": "Kyllä"
     },
     "pageHeading": "Sivun otsikko",
+    "pageType": "Sivun tyyppi",
     "phone": "Puhelin",
     "phoneFormat": "Puhelinmuoto",
     "phoneNumber": "Puhelinnumero",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Näytä ensisijainen CTA",
     "showProfessionalTitle": "Näytä ammattinimike",
     "showPublishTime": "Näytä julkaisuaika",
+    "showSearchResultsSection": "Näytä hakutulokset-osio",
     "showSecondaryCTA": "Näytä toissijainen CTA",
     "showSecondaryHeader": "Näytä toissijainen otsikko",
     "showSectionHeading": "Näytä osion otsikko",

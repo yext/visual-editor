@@ -397,6 +397,7 @@
       "yes": "Ja"
     },
     "pageHeading": "Sidrubrik",
+    "pageType": "Sidtyp",
     "phone": "Telefon",
     "phoneFormat": "Telefonformat",
     "phoneNumber": "Telefonnummer",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Visa primär CTA",
     "showProfessionalTitle": "Visa yrkestitel",
     "showPublishTime": "Visa publiceringstid",
+    "showSearchResultsSection": "Visa sökresultatsektionen",
     "showSecondaryCTA": "Visa sekundär CTA",
     "showSecondaryHeader": "Visa sekundär rubrik",
     "showSectionHeading": "Visa avsnittsrubrik",

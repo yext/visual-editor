@@ -397,6 +397,7 @@
       "yes": "Jah"
     },
     "pageHeading": "Lehekülje pealkiri",
+    "pageType": "Lehekülje tüüp",
     "phone": "Telefon",
     "phoneFormat": "Telefonivorming",
     "phoneNumber": "Telefoninumber",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Näita esmast CTA -d",
     "showProfessionalTitle": "Kuva ametinimetus",
     "showPublishTime": "Kuva avaldamisaeg",
+    "showSearchResultsSection": "Kuva otsingutulemuste jaotis",
     "showSecondaryCTA": "Näidake sekundaarset CTA -d",
     "showSecondaryHeader": "Näita teisest päist",
     "showSectionHeading": "Näita jaotise pealkirja",

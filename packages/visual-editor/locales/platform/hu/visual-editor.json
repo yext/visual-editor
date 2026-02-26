@@ -397,6 +397,7 @@
       "yes": "Igen"
     },
     "pageHeading": "Oldalfejléc",
+    "pageType": "Oldal típusa",
     "phone": "Telefon",
     "phoneFormat": "Telefonformátum",
     "phoneNumber": "Telefonszám",
@@ -452,6 +453,7 @@
     "showPrimaryCTA": "Mutassa meg az elsődleges CTA -t",
     "showProfessionalTitle": "Szakmai cím megjelenítése",
     "showPublishTime": "Közzétételi idő megjelenítése",
+    "showSearchResultsSection": "Keresési eredmények szakasz megjelenítése",
     "showSecondaryCTA": "Mutasd meg a másodlagos CTA -t",
     "showSecondaryHeader": "Másodlagos fejléc megjelenítése",
     "showSectionHeading": "A szakasz címsorának megjelenítése",
