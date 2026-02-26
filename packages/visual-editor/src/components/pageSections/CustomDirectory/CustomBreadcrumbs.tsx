@@ -95,7 +95,7 @@ const CustomBreadcrumbsComponent = ({
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_API_KEY;
   const customEndpointName =
-    streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_NAME;
+    streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_URL;
 
   if (!apiKey || !customEndpointName) {
     if (puck?.isEditing) {
