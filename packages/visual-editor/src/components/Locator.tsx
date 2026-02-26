@@ -745,8 +745,8 @@ const locatorFields: Fields<LocatorProps> = {
                         type: nextType,
                         iconName:
                           nextType === "icon"
-                            ? DEFAULT_MAKI_ICON_NAME
-                            : undefined,
+                            ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
+                            : value?.iconName,
                       })
                     }
                   />
