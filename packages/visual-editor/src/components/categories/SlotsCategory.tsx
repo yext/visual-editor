@@ -119,10 +119,7 @@ import {
   SearchBarSlot,
   SearchBarSlotProps,
 } from "../pageSections/SearchSection/SearchBarSlot.tsx";
-import {
-  SearchResultsSlot,
-  SearchResultsSlotProps,
-} from "../pageSections/SearchSection/SearchResultsSlot.tsx";
+import { SearchResultsSlot } from "../pageSections/SearchSection/SearchResultsSlot.tsx";
 import {
   TeamCard,
   TeamCardProps,
@@ -139,6 +136,7 @@ import {
   TestimonialCardsWrapper,
   TestimonialCardsWrapperProps,
 } from "../pageSections/TestimonialSection/TestimonialCardsWrapper.tsx";
+import { SearchResultsSlotProps } from "../pageSections/SearchSection/defaultPropsAndTypes.ts";
 
 export interface SlotsCategoryProps {
   AddressSlot: AddressProps;

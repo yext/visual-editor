@@ -1,6 +1,6 @@
 import { DefaultRawDataType, SectionProps } from "@yext/search-ui-react";
 import { MapComponent } from "./MapComponent.tsx";
-import { VerticalLayout } from "./propsAndTypes.ts";
+import { VerticalLayout } from "./defaultPropsAndTypes.ts";
 
 interface LayoutSectionProps extends SectionProps<DefaultRawDataType> {
   layoutType: VerticalLayout;

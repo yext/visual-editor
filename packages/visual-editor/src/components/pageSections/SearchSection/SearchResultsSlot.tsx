@@ -11,8 +11,8 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/index.ts";
 import {
   defaultSearchResultsProps,
-  VerticalConfigProps,
-} from "./propsAndTypes.ts";
+  SearchResultsSlotProps,
+} from "./defaultPropsAndTypes.ts";
 import { UniversalResultsSection } from "./UniversalResultsSection.tsx";
 import {
   buildUniversalLimit,
@@ -21,11 +21,6 @@ import {
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
 import { t } from "i18next";
-
-export interface SearchResultsSlotProps {
-  data: { verticals: VerticalConfigProps[] };
-  styles: { enableGenerativeDirectAnswer: boolean };
-}
 
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {

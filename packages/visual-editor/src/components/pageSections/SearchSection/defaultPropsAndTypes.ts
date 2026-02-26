@@ -1,5 +1,3 @@
-import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
-
 export type VerticalLayout = "Grid" | "Flex" | "Map";
 export type CardTypeProp = "Standard" | "accordion";
 
@@ -11,6 +9,10 @@ export interface VerticalConfigProps {
   verticalLimit?: number;
   pageType?: "universal" | "vertical";
   cardType?: CardTypeProp;
+}
+export interface SearchResultsSlotProps {
+  data: { verticals: VerticalConfigProps[] };
+  styles: { enableGenerativeDirectAnswer: boolean };
 }
 
 export const defaultSearchResultsProps: SearchResultsSlotProps = {

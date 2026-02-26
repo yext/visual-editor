@@ -6,7 +6,7 @@ import {
 } from "@yext/search-ui-react";
 import Cards from "./Cards.tsx";
 import { LayoutSection } from "./LayoutSections.tsx";
-import { VerticalConfigProps } from "./propsAndTypes.ts";
+import { VerticalConfigProps } from "./defaultPropsAndTypes.ts";
 import { renderEntityPreviews } from "./searchVisualAutoComplete.tsx";
 
 export const buildVerticalConfigMap = (

@@ -10,7 +10,7 @@ import { FaSlidersH, FaTimes } from "react-icons/fa";
 import { Body } from "../../atoms/body.tsx";
 import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
-import { VerticalConfigProps } from "./propsAndTypes.ts";
+import { VerticalConfigProps } from "./defaultPropsAndTypes.ts";
 
 interface VerticalResultsSectionProps {
   verticalKey: string;

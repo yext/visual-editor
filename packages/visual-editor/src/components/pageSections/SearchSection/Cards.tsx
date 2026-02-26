@@ -1,6 +1,6 @@
 import { CardProps } from "@yext/search-ui-react";
 import { MaybeRTF } from "@yext/visual-editor";
-import { CardTypeProp } from "./propsAndTypes.ts";
+import { CardTypeProp } from "./defaultPropsAndTypes.ts";
 import {
   Accordion,
   AccordionContent,

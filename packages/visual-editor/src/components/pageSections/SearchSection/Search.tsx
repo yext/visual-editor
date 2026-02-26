@@ -10,8 +10,10 @@ import { msg, pt, themeManagerCn } from "../../../utils/index.ts";
 import { Body } from "../../atoms/body.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
-import { SearchResultsSlotProps } from "./SearchResultsSlot.tsx";
-import { defaultSearchResultsProps } from "./propsAndTypes.ts";
+import {
+  defaultSearchResultsProps,
+  SearchResultsSlotProps,
+} from "./defaultPropsAndTypes.ts";
 import "./search.css";
 import { buildSearchConfigFromDocument } from "./searchConfig.ts";
 
