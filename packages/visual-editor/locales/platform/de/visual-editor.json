@@ -33,8 +33,6 @@
   "cancel": "Stornieren",
   "categories": {
     "coreInformation": "Basisinformationen",
-    "directory": "Verzeichnis",
-    "locator": "Locator",
     "other": "Sonstiges",
     "standardSections": "Standardmodule",
     "yetiSections": "Yeti-Abschnitte"
