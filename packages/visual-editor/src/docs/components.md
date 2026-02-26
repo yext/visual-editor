@@ -931,3 +931,101 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 | `slots`          | `{ SectionHeadingSlot: Slot; VideoSlot: Slot; }` |                                                                                |         |
 
 ---
+
+## YetiExploreCarouselSection
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                 | Description | Default |
+| :--------------- | :--------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                            |             |         |
+| `slots`          | `{ HeadingSlot: Slot; CardsSlot: Slot; }`                                                            |             |         |
+| `styles`         | `{ backgroundClassName: "bg-white" \| "bg-neutral-100"; showHeading: boolean; showCards: boolean; }` |             |         |
+
+---
+
+## YetiFaqSection
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                   | Description | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                              |             |         |
+| `slots`          | `{ HeadingSlot: Slot; FaqListSlot: Slot; }`                                                            |             |         |
+| `styles`         | `{ backgroundClassName: "bg-white" \| "bg-neutral-100"; showHeading: boolean; showFaqList: boolean; }` |             |         |
+
+---
+
+## YetiFooterSection
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                                                                                                                                                          | Description | Default |
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                                                                                                     |             |         |
+| `slots`          | `{ FooterLayoutSlot: Slot; }`                                                                                                                                                                                                                 |             |         |
+| `styles`         | `{ backgroundClassName: "bg-neutral-100" \| "bg-white" \| "bg-[#0F3658]"; textClassName: "text-neutral-900" \| "text-white"; dividerClassName: "border-black/15" \| "border-white/30"; showTopDivider: boolean; showFooterLayout: boolean; }` |             |         |
+
+---
+
+## YetiHeaderSection
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                                                                                                                                                             | Description | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                                                                                                        |             |         |
+| `slots`          | `{ HeaderLayoutSlot: Slot; }`                                                                                                                                                                                                                    |             |         |
+| `styles`         | `{ backgroundClassName: "bg-neutral-100" \| "bg-white" \| "bg-[#0F3658]"; textClassName: "text-neutral-900" \| "text-white"; dividerClassName: "border-black/15" \| "border-white/30"; showBottomDivider: boolean; showHeaderLayout: boolean; }` |             |         |
+
+---
+
+## YetiLocationHeroSection
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                                      | Description | Default |
+| :--------------- | :------------------------------------------------------------------------------------------------------------------------ | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                 |             |         |
+| `slots`          | `{ HeroImageSlot: Slot; HeroHeadingSlot: Slot; HeroBodySlot: Slot; HeroActionSlot: Slot; }`                               |             |         |
+| `styles`         | `{ contentAlign: "left" \| "center"; showImage: boolean; showHeading: boolean; showBody: boolean; showAction: boolean; }` |             |         |
+
+---
+
+## YetiPromoBannerSection
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                                                                 | Description | Default |
+| :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                            |             |         |
+| `slots`          | `{ PromoImageSlot: Slot; PromoHeadingSlot: Slot; PromoBodySlot: Slot; PromoPrimaryActionSlot: Slot; }`                                               |             |         |
+| `styles`         | `{ contentAlign: "left" \| "center"; showImage: boolean; showHeading: boolean; showBody: boolean; showPrimaryAction: boolean; fullBleed: boolean; }` |             |         |
+
+---
+
+## YetiStoreInfoSection
+
+### Props
+
+#### Other Props
+
+| Prop             | Type                                                                                                                                                               | Description | Default |
+| :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- | :------ |
+| `liveVisibility` | `boolean`                                                                                                                                                          |             |         |
+| `slots`          | `{ HoursSlot: Slot; LocationInfoSlot: Slot; ParkingSlot: Slot; MapSlot: Slot; }`                                                                                   |             |         |
+| `styles`         | `{ backgroundClassName: "bg-white" \| "bg-neutral-50" \| "bg-[#F7F4EE]"; showHours: boolean; showLocationInfo: boolean; showMap: boolean; showParking: boolean; }` |             |         |
+
+---
