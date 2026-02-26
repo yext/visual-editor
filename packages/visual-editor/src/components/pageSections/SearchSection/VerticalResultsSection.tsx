@@ -17,7 +17,7 @@ interface VerticalResultsSectionProps {
   verticals: VerticalConfigProps[];
   currentVerticalConfig?: VerticalConfigProps;
   puck: any;
-  facetsLength: any;
+  facetsLength: number;
 }
 
 export const VerticalResultsSection = ({

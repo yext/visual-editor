@@ -1,13 +1,10 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  usePuck,
-} from "@puckeditor/core";
+import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import React, { useState } from "react";
+import React from "react";
 import { FaEllipsisV } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import { YextField } from "../../../editor/YextField.tsx";
+import { msg } from "../../../utils/i18n/platform.ts";
 import {
   defaultSearchResultsProps,
   SearchResultsSlotProps,
@@ -17,10 +14,10 @@ import {
   buildUniversalLimit,
   buildVerticalConfigMap,
   isValidVerticalConfig,
+  readInitialUrlParams,
+  updateSearchUrl,
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
-import { useTranslation } from "react-i18next";
-import { msg } from "../../../utils/i18n/platform.ts";
 
 const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
@@ -36,9 +33,17 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
           cardType: "Standard",
           universalLimit: 5,
           verticalLimit: 5,
+          pageType: "vertical",
         },
         arrayFields: {
           label: YextField(msg("fields.label", "Label"), { type: "text" }),
+          pageType: YextField(msg("fields.pageType", "Page Type"), {
+            type: "radio",
+            options: [
+              { label: "Universal", value: "universal" },
+              { label: "Vertical", value: "vertical" },
+            ],
+          }),
           verticalKey: YextField(msg("fields.verticalKey", "Vertical Key"), {
             type: "text",
           }),
@@ -63,9 +68,7 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
           ),
           verticalLimit: YextField(
             msg("fields.verticalLimit", "Vertical Limit"),
-            {
-              type: "number",
-            }
+            { type: "number" }
           ),
         },
         getItemSummary: (item) => item?.label || "Vertical",
@@ -80,8 +83,8 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
         {
           type: "radio",
           options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
+            { label: "Show", value: true },
+            { label: "Hide", value: false },
           ],
         }
       ),
@@ -96,24 +99,29 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     data: { verticals },
     puck,
   } = props;
-  const puckStore = useOptionalPuckStore();
-  const arrayState = puckStore?.appState?.ui?.arrayState;
+
   const { t } = useTranslation();
-  const arrayKey = React.useMemo(() => {
-    if (!arrayState || !puck.isEditing) return undefined;
-
-    return Object.keys(arrayState).find((key) =>
-      key.includes("_object_data_verticals")
-    );
-  }, [arrayState, puck.isEditing]);
-
   const searchActions = useSearchActions();
+
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
-  const searchTerm = useSearchState((s) => s.query.input);
-  const gdaLoading =
-    useSearchState((s) => s.generativeDirectAnswer.isLoading) || false;
-  const facetsLength = useSearchState((s) => s.filters.facets);
-  const [verticalKey, setVerticalKey] = useState<string | null>(null);
+  const committedSearchTerm = useSearchState((s) => s.query.input ?? "");
+  const activeVerticalKey = useSearchState(
+    (s: any) => s.vertical?.verticalKey ?? null
+  );
+  const searchType = useSearchState((s: any) => s.meta?.searchType ?? null);
+  const isUniversalActive = searchType
+    ? searchType === "universal"
+    : activeVerticalKey == null;
+
+  const gdaLoading = useSearchState(
+    (s) => s.generativeDirectAnswer.isLoading ?? false
+  );
+
+  const facetsLength = useSearchState((s) => {
+    const facets: unknown = (s as any).filters?.facets;
+    return Array.isArray(facets) ? facets.length : 0;
+  });
+
   const verticalConfigMap = React.useMemo(
     () => buildVerticalConfigMap(verticals),
     [verticals]
@@ -124,98 +132,100 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     [verticals]
   );
 
-  const currentVerticalConfig = React.useMemo(
-    () => verticals.find((v) => v.verticalKey === verticalKey),
-    [verticals, verticalKey]
+  const currentVerticalConfig = React.useMemo(() => {
+    if (!activeVerticalKey) return undefined;
+    return verticals.find((v) => v.verticalKey === activeVerticalKey);
+  }, [verticals, activeVerticalKey]);
+
+  const runSearch = React.useCallback(
+    (nextVerticalKey: string | null) => {
+      if (!isValidVerticalConfig(verticals)) return;
+
+      searchActions.setQuery(committedSearchTerm ?? "");
+
+      if (nextVerticalKey) {
+        searchActions.setVertical(nextVerticalKey);
+        const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
+        if (cfg && typeof cfg.verticalLimit === "number") {
+          searchActions.setVerticalLimit(cfg.verticalLimit);
+        }
+        searchActions.executeVerticalQuery();
+      } else {
+        searchActions.setUniversal();
+        searchActions.setUniversalLimit(universalLimit);
+        searchActions.executeUniversalQuery();
+      }
+
+      updateSearchUrl({
+        vertical: nextVerticalKey,
+        searchTerm: committedSearchTerm,
+      });
+    },
+    [verticals, committedSearchTerm, universalLimit, searchActions]
   );
 
   React.useEffect(() => {
-    if (!isValidVerticalConfig(verticals)) {
-      console.warn("Skipping search: invalid vertical config", verticals);
-      return;
-    }
+    const { vertical, searchTerm } = readInitialUrlParams();
 
-    if (searchTerm) {
-      searchActions.setQuery(searchTerm);
-    }
+    searchActions.setQuery(searchTerm);
 
-    if (verticalKey && currentVerticalConfig) {
-      searchActions.setVertical(verticalKey);
+    const validVertical =
+      vertical && verticals.some((v) => v.verticalKey === vertical);
 
-      if (typeof currentVerticalConfig.verticalLimit === "number") {
-        searchActions.setVerticalLimit(currentVerticalConfig.verticalLimit);
+    if (validVertical) {
+      searchActions.setVertical(vertical!);
+
+      const cfg = verticals.find((v) => v.verticalKey === vertical);
+      if (cfg && typeof cfg.verticalLimit === "number") {
+        searchActions.setVerticalLimit(cfg.verticalLimit);
       }
 
       searchActions.executeVerticalQuery();
+      updateSearchUrl({ vertical, searchTerm });
       return;
     }
 
     searchActions.setUniversal();
     searchActions.setUniversalLimit(universalLimit);
     searchActions.executeUniversalQuery();
-  }, [
-    verticals,
-    searchTerm,
-    universalLimit,
-    verticalKey,
-    currentVerticalConfig,
-    searchActions,
-  ]);
+    updateSearchUrl({ vertical: null, searchTerm });
+  }, [verticals]);
 
   React.useEffect(() => {
-    if (!arrayKey || !puck.isEditing || !arrayState) return;
-
-    const verticalArrayState = arrayState[arrayKey];
-    const openId = verticalArrayState?.openId;
-
-    const selectedItem = verticalArrayState?.items?.find(
-      (item) => item._arrayId === openId
-    );
-
-    const index = selectedItem?._currentIndex;
-    if (typeof index !== "number") return;
-
-    const selectedConfig = verticals[index];
-
-    const nextKey =
-      selectedConfig?.pageType === "universal"
-        ? null
-        : (selectedConfig?.verticalKey ?? null);
-
-    if (nextKey !== verticalKey) {
-      setVerticalKey(nextKey);
-    }
-  }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
+    updateSearchUrl({
+      vertical: isUniversalActive ? null : activeVerticalKey,
+      searchTerm: committedSearchTerm,
+    });
+  }, [activeVerticalKey, committedSearchTerm, isUniversalActive]);
 
   return (
     <div className="pt-8">
       <div className="border-b flex justify-start items-center">
         <ul className="flex items-center">
-          {verticals.map((item) => (
-            <li key={item.verticalKey ?? item.label}>
-              <a
-                onClick={() =>
-                  setVerticalKey(
-                    item.pageType === "universal"
-                      ? null
-                      : (item.verticalKey ?? null)
-                  )
-                }
-                className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
-                  item.pageType === "universal"
-                    ? verticalKey === null
-                      ? "border-b-2 border-black"
-                      : ""
-                    : verticalKey === item.verticalKey
-                      ? "border-b-2 border-black"
-                      : ""
-                }`}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
+          {verticals.map((item, idx) => {
+            const itemVerticalKey =
+              item.pageType === "universal" ? null : (item.verticalKey ?? null);
+
+            const isActive =
+              item.pageType === "universal"
+                ? isUniversalActive
+                : !!item.verticalKey && item.verticalKey === activeVerticalKey;
+
+            return (
+              <li key={`${item.verticalKey ?? "no-key"}:${item.label}:${idx}`}>
+                <a
+                  onClick={() => runSearch(itemVerticalKey)}
+                  className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
+                    isActive ? "border-b-2 border-black" : ""
+                  }`}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
+
         <div className="ml-auto relative flex">
           <button className="px-5 pt-1.5 pb-1 tracking-[1.1px] visible mb-0 flex gap-2 items-center">
             <FaEllipsisV className="flex my-2.5 mr-[0.4375rem]" />
@@ -223,11 +233,13 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           </button>
         </div>
       </div>
+
       {isLoading && <div>{t("loadingResults", "Loading Results...")}</div>}
+
       {!isLoading &&
-        (verticalKey ? (
+        (!isUniversalActive && activeVerticalKey ? (
           <VerticalResultsSection
-            verticalKey={verticalKey}
+            verticalKey={activeVerticalKey}
             verticals={verticals}
             currentVerticalConfig={currentVerticalConfig}
             puck={puck}
@@ -235,8 +247,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           />
         ) : (
           <UniversalResultsSection
-            enableGDA={props.styles.enableGenerativeDirectAnswer}
-            searchTerm={searchTerm}
+            enableGDA={props.styles?.enableGenerativeDirectAnswer ?? true}
+            searchTerm={committedSearchTerm}
             gdaLoading={gdaLoading}
             verticalConfigMap={verticalConfigMap}
           />
@@ -252,12 +264,4 @@ export const SearchResultsSlot: ComponentConfig<{
   fields: SearchResultsSlotFields,
   defaultProps: defaultSearchResultsProps,
   render: (props) => <SearchResultsSlotInternal {...props} />,
-};
-
-const useOptionalPuckStore = () => {
-  try {
-    return usePuck();
-  } catch {
-    return undefined;
-  }
 };

@@ -17,8 +17,10 @@ import "./search.css";
 import { buildSearchConfigFromDocument } from "./searchConfig.ts";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
+import { YextField } from "../../../editor/YextField.tsx";
 
 export interface SearchComponentProps {
+  showSearchResultsSection: boolean;
   /** @internal */
   slots: {
     SearchBarSlot: Slot;
@@ -26,17 +28,29 @@ export interface SearchComponentProps {
   };
 }
 
-const locatorFields: Fields<SearchComponentProps> = {
+const searchFields: Fields<SearchComponentProps> = {
+  showSearchResultsSection: YextField(
+    msg("fields.showSearchResultsSection", "Show Search Results Section"),
+    {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.show", "Show"), value: true },
+        { label: msg("fields.options.hide", "Hide"), value: false },
+      ],
+    }
+  ),
   slots: {
     type: "object",
     objectFields: {
       SearchBarSlot: { type: "slot" },
       SearchResultsSlot: { type: "slot" },
     },
+    visible: false,
   },
 };
 
 const SearchWrapper: PuckComponent<SearchComponentProps> = ({
+  showSearchResultsSection,
   slots,
   puck,
 }) => {
@@ -113,7 +127,9 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
       <SearchI18nextProvider searcher={searcher}>
         <PageSection ref={puck.dragRef} className="">
           <slots.SearchBarSlot style={{ height: "auto" }} allow={[]} />
-          <slots.SearchResultsSlot style={{ height: "auto" }} allow={[]} />
+          {showSearchResultsSection && (
+            <slots.SearchResultsSlot style={{ height: "auto" }} allow={[]} />
+          )}
         </PageSection>
       </SearchI18nextProvider>
     </SearchHeadlessProvider>
@@ -124,8 +140,9 @@ export const SearchComponent: ComponentConfig<{
   props: SearchComponentProps;
 }> = {
   label: msg("components.searchWithSlots", "Search with Slots"),
-  fields: locatorFields,
+  fields: searchFields,
   defaultProps: {
+    showSearchResultsSection: false,
     slots: {
       SearchBarSlot: [
         {
@@ -136,6 +153,9 @@ export const SearchComponent: ComponentConfig<{
               voiceSearch: false,
               isTypingEffect: false,
               enableVisualAutoComplete: false,
+            },
+            parentData: {
+              showSearchResultsSection: false,
             },
           } satisfies SearchBarSlotProps,
         },

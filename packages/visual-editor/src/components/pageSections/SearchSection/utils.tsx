@@ -114,3 +114,42 @@ export const createVisualAutocompleteConfig = (
     entityPreviewsDebouncingTime: 300,
   };
 };
+
+export const updateSearchUrl = (params: {
+  vertical?: string | null;
+  searchTerm?: string;
+}) => {
+  if (typeof window === "undefined") return;
+  const url = new URL(window.location.href);
+
+  if (params.vertical && params.vertical.trim()) {
+    url.searchParams.set("vertical", params.vertical);
+  } else {
+    url.searchParams.delete("vertical");
+  }
+
+  const st = (params.searchTerm ?? "").trim();
+  if (st.length > 0) {
+    url.searchParams.set("searchTerm", st);
+  } else {
+    url.searchParams.delete("searchTerm");
+  }
+
+  window.history.replaceState({}, "", url.toString());
+};
+
+export const readInitialUrlParams = (): {
+  vertical: string | null;
+  searchTerm: string;
+} => {
+  if (typeof window === "undefined") {
+    return { vertical: null, searchTerm: "" };
+  }
+
+  const url = new URL(window.location.href);
+
+  return {
+    vertical: url.searchParams.get("vertical"),
+    searchTerm: url.searchParams.get("searchTerm") ?? "",
+  };
+};

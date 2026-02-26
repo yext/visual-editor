@@ -4,16 +4,17 @@ import {
   PuckComponent,
   setDeep,
 } from "@puckeditor/core";
+import { useSearchActions } from "@yext/search-headless-react";
 import { SearchBar } from "@yext/search-ui-react";
+import React from "react";
 import { FaMicrophone } from "react-icons/fa";
 import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
-import { useTypingEffect } from "./useTypeEffect.ts";
-import { createVisualAutocompleteConfig } from "./utils.tsx";
-import { useEntityPreviewSearcher } from "./searchConfig.ts";
-import React from "react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
+import { useEntityPreviewSearcher } from "./searchConfig.ts";
+import { useTypingEffect } from "./useTypeEffect.ts";
+import { createVisualAutocompleteConfig, updateSearchUrl } from "./utils.tsx";
 
 export interface SearchBarSlotProps {
   styles: {
@@ -23,6 +24,9 @@ export interface SearchBarSlotProps {
     enableVisualAutoComplete: boolean;
     visualAutoCompleteVerticalKey?: string;
     limit?: number;
+  };
+  parentData?: {
+    showSearchResultsSection: boolean;
   };
 }
 const defaultSearchBarProps: SearchBarSlotProps = {
@@ -97,6 +101,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     visualAutoCompleteVerticalKey = "products",
     limit = 3,
   },
+  parentData,
 }: SearchBarSlotProps) => {
   const document = useDocument();
   const { placeholder } = useTypingEffect({
@@ -105,7 +110,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   });
 
   const entityPreviewSearcher = useEntityPreviewSearcher(document);
-
+  const searchActions = useSearchActions();
   const visualAutocompleteConfig = React.useMemo(() => {
     return createVisualAutocompleteConfig(
       enableVisualAutoComplete,
@@ -123,6 +128,20 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   return (
     <div className="relative w-full border h-14 ">
       <SearchBar
+        onSearch={({ query }) => {
+          const trimmed = (query ?? "").trim();
+
+          if (!parentData?.showSearchResultsSection) {
+            const target = `/search.html${
+              trimmed ? `?searchTerm=${encodeURIComponent(trimmed)}` : ""
+            }`;
+            window.location.href = target;
+            return;
+          }
+
+          searchActions.setQuery(trimmed);
+          updateSearchUrl({ vertical: null, searchTerm: trimmed });
+        }}
         visualAutocompleteConfig={visualAutocompleteConfig}
         placeholder={isTypingEffect ? placeholder : "Search here...."}
         customCssClasses={{
