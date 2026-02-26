@@ -560,6 +560,8 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo média",
   "publishBlocked": {
+    "deploymentFailed": "Publikování je zakázáno, protože nejnovější nasazení se nezdařilo. Opravte problémy a zkuste to znovu",
+    "deploymentInactive": "Publikování je zakázáno, protože nasazení je neaktivní",
     "deploymentInProgress": "Během nasazování je aktualizace zakázána"
   },
   "publishError": {
