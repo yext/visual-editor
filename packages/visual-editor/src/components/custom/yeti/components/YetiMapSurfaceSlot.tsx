@@ -70,7 +70,7 @@ const YetiMapSurfaceSlotComponent: PuckComponent<YetiMapSurfaceSlotProps> = ({
   puck,
 }) => {
   const streamDocument = useDocument();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const coordinate = resolveComponentData(
     data.coordinate,
@@ -112,7 +112,7 @@ const YetiMapSurfaceSlotComponent: PuckComponent<YetiMapSurfaceSlotProps> = ({
         >
           <img
             src={mapImageUrl}
-            alt="Map"
+            alt={t("map", "Map")}
             className="h-[360px] w-full border border-black/20 object-cover"
             loading="lazy"
           />
