@@ -550,6 +550,8 @@
   "promoBanner": "Reklaamibänner",
   "promoMedia": "Promo meedia",
   "publishBlocked": {
+    "deploymentFailed": "Publish is disabled because the latest deployment failed. Parandage probleemid ja proovige uuesti",
+    "deploymentInactive": "",
     "deploymentInProgress": "Värskendus on juurutamise ajal keelatud"
   },
   "publishError": {

@@ -560,6 +560,8 @@
   "promoBanner": "Reklaminė reklamjuostė",
   "promoMedia": "Promo žiniasklaida",
   "publishBlocked": {
+    "deploymentFailed": "Paskelbimas išjungtas, nes naujausias diegimas nepavyko. Išspręskite problemas ir bandykite dar kartą",
+    "deploymentInactive": "Paskelbimas išjungtas, nes diegimas neaktyvus",
     "deploymentInProgress": "Atnaujinimas išjungtas, kol vyksta diegimas"
   },
   "publishError": {
