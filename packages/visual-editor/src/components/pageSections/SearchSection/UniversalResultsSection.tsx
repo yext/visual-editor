@@ -3,6 +3,7 @@ import {
   UniversalResults,
 } from "@yext/search-ui-react";
 import SourceCard from "./SourceCard.tsx";
+import { t } from "i18next";
 
 interface UniversalResultsSectionProps {
   enableGDA: boolean;
@@ -23,7 +24,7 @@ export const UniversalResultsSection = ({
         <>
           {gdaLoading && (
             <section className="p-6 my-8 border border-gray-200 rounded-lg shadow-sm centered-container">
-              Loading...
+              {t("loadingResults", "Loading Results...")}
             </section>
           )}
 

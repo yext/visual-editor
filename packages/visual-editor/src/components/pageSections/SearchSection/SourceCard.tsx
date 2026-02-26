@@ -1,4 +1,5 @@
 import { CitationProps } from "@yext/search-ui-react";
+import { t } from "i18next";
 
 interface RawData {
   landingPageUrl?: string;
@@ -18,7 +19,10 @@ const SourceCard = (props: CitationProps) => {
         <a href={link}>{name}</a>
       ) : (
         <p>
-          {name} <span className="text-xs">(no link available)</span>
+          {name}{" "}
+          <span className="text-xs">
+            ({t("noLinkAvailable", "no link available")})
+          </span>
         </p>
       )}
     </div>

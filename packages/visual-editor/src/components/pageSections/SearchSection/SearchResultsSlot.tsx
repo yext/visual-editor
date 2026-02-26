@@ -20,6 +20,7 @@ import {
   isValidVerticalConfig,
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
+import { t } from "i18next";
 
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -223,11 +224,11 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         <div className="ml-auto relative flex">
           <button className="px-5 pt-1.5 pb-1 tracking-[1.1px] visible mb-0 flex gap-2 items-center">
             <FaEllipsisV className="flex my-2.5 mr-[0.4375rem]" />
-            More
+            {t("more", "More")}
           </button>
         </div>
       </div>
-      {isLoading && <div>Loading......</div>}
+      {isLoading && <div>{t("loadingResults", "Loading Results...")}</div>}
       {!isLoading &&
         (verticalKey ? (
           <VerticalResultsSection

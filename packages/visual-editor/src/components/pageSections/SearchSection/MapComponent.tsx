@@ -9,6 +9,7 @@ import { MapPin } from "lucide-react";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { StreamDocument } from "../../../utils/index.ts";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { t } from "i18next";
 
 interface MapComponentProps {
   isUniversal?: boolean;
@@ -41,7 +42,7 @@ export const MapComponent = ({
   if (!mapResults || mapResults.length === 0) {
     return (
       <div className="h-[300px] flex items-center justify-center">
-        Loading map...
+        {t("loadingMap", "Loading Map...")}
       </div>
     );
   }
