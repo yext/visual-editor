@@ -68,7 +68,7 @@ describe("resolveUrlFromEntityTypeScopes", () => {
       resolveUrlFromSourcePageSets(
         {
           type: "ce_location",
-          savedFilterIds: ["1111"],
+          savedFilters: ["1111"],
           id: "2222",
           address: {
             region: "VA",
@@ -86,7 +86,7 @@ describe("resolveUrlFromEntityTypeScopes", () => {
     const streamDocument = createStreamDocument({
       ignored: {
         entityType: "ce_location",
-        savedFilter: 1111,
+        internalSavedFilterId: 1111,
         pathInfo: {
           template:
             "stores/[[address.region]]/[[address.city]]/[[address.line1]]/[[id]]",
@@ -99,7 +99,7 @@ describe("resolveUrlFromEntityTypeScopes", () => {
       resolveUrlFromSourcePageSets(
         {
           type: "ce_location",
-          savedFilterIds: ["1111"],
+          savedFilters: ["1111"],
           id: "2222",
           address: {
             region: "VA",
@@ -117,7 +117,7 @@ describe("resolveUrlFromEntityTypeScopes", () => {
     const streamDocument = createStreamDocument({
       ignored: {
         entityType: "ce_location",
-        savedFilter: 1111,
+        internalSavedFilterId: 1111,
         pathInfo: {
           template:
             "stores/[[address.region]]/[[address.city]]/[[address.line1]]/[[id]]",
@@ -128,7 +128,7 @@ describe("resolveUrlFromEntityTypeScopes", () => {
 
     expect(
       resolveUrlFromSourcePageSets(
-        { type: "ce_location", savedFilterIds: ["2222"] },
+        { type: "ce_location", savedFilters: ["2222"] },
         streamDocument,
         ""
       )
@@ -223,14 +223,14 @@ describe("resolveUrlFromEntityTypeScopes", () => {
     const streamDocument = createStreamDocument({
       ignored: {
         entityType: "ce_location",
-        savedFilter: 1111,
+        internalSavedFilterId: 1111,
         pathInfo: {
           template: "first/[[id]]",
         },
       },
       ignored2: {
         entityType: "ce_location",
-        savedFilter: 2222,
+        internalSavedFilterId: 2222,
         pathInfo: {
           template: "second/[[id]]",
         },
@@ -241,7 +241,7 @@ describe("resolveUrlFromEntityTypeScopes", () => {
       resolveUrlFromSourcePageSets(
         {
           type: "ce_location",
-          savedFilterIds: ["2222"],
+          savedFilters: ["2222"],
           id: "3333",
         },
         streamDocument,

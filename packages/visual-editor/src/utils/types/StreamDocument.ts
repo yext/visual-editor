@@ -48,5 +48,6 @@ export type LocatorSourcePageSetInfo = {
   pathInfo?: PathInfoShape;
   entityType?: string;
   savedFilter?: number;
+  internalSavedFilterId?: number;
   [key: string]: any;
 };

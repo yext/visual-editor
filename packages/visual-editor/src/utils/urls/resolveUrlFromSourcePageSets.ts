@@ -35,6 +35,12 @@ export function resolveUrlFromSourcePageSets(
   // apply, the property is not included in the search response
   const savedFiltersForEntity: string[] = profile?.savedFilters ?? [];
 
+  console.log(
+    "sourcePageSets",
+    sourcePageSets,
+    "savedFiltersForEntity",
+    savedFiltersForEntity
+  );
   const sourceEntityPageSet = sourcePageSets.find(
     (pageSetInfo: LocatorSourcePageSetInfo) =>
       pageSetIncludesEntity(
@@ -43,11 +49,7 @@ export function resolveUrlFromSourcePageSets(
         pageSetInfo
       )
   );
-  if (!sourceEntityPageSet) {
-    return;
-  }
-  const pathInfo = sourceEntityPageSet?.pathInfo;
-  if (!pathInfo) {
+  if (!sourceEntityPageSet || !sourceEntityPageSet?.pathInfo) {
     return;
   }
 
@@ -55,7 +57,7 @@ export function resolveUrlFromSourcePageSets(
     ...streamDocument,
     __: {
       ...streamDocument.__,
-      pathInfo: pathInfo,
+      pathInfo: sourceEntityPageSet.pathInfo,
     },
   };
   return resolveUrlFromPathInfo(
@@ -75,7 +77,9 @@ const pageSetIncludesEntity = (
     pageSetInfo?.entityType === entityTypeApiName &&
     // savedFilter is not present => scope includes all entities of this type
     // savedFilter is present => entity's savedFilterIds must contain the scope's savedFilter
-    (!pageSetInfo?.savedFilter ||
-      savedFiltersForEntity.includes(pageSetInfo.savedFilter.toString()))
+    (!pageSetInfo?.internalSavedFilterId ||
+      savedFiltersForEntity.includes(
+        pageSetInfo.internalSavedFilterId.toString()
+      ))
   );
 };
