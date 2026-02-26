@@ -54,7 +54,8 @@
     "directory": "Adresář",
     "locator": "Lokátor",
     "other": "OSTATNÍ",
-    "standardSections": "Standardní sekce"
+    "standardSections": "Standardní sekce",
+    "yetiSections": "Sekce Yeti"
   },
   "category": "Kategorie",
   "change": "Přeměna",

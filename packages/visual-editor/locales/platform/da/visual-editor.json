@@ -54,7 +54,8 @@
     "directory": "Vejviser",
     "locator": "Locator",
     "other": "ANDRE",
-    "standardSections": "Standard sektioner"
+    "standardSections": "Standard sektioner",
+    "yetiSections": "Yeti sektioner"
   },
   "category": "Kategori",
   "change": "Forandring",

@@ -54,7 +54,8 @@
     "directory": "Verzeichnis",
     "locator": "Locator",
     "other": "ANDERE",
-    "standardSections": "Standardabschnitte"
+    "standardSections": "Standardabschnitte",
+    "yetiSections": "Yeti-Abschnitte"
   },
   "category": "Kategorie",
   "change": "Ändern",

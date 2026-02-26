@@ -52,7 +52,8 @@
   "categories": {
     "coreInformation": "Alapvető információk",
     "other": "MÁS",
-    "standardSections": "Szabványos szakaszok"
+    "standardSections": "Szabványos szakaszok",
+    "yetiSections": "Yeti szakaszok"
   },
   "category": "Kategória",
   "change": "Változás",

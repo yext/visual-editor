@@ -52,7 +52,8 @@
   "categories": {
     "coreInformation": "核心信息",
     "other": "其他",
-    "standardSections": "標準型材"
+    "standardSections": "標準型材",
+    "yetiSections": "雪人部分"
   },
   "category": "類別",
   "change": "改變",

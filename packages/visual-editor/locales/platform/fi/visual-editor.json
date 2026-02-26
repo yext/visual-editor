@@ -52,7 +52,8 @@
   "categories": {
     "coreInformation": "Perustiedot",
     "other": "Muut",
-    "standardSections": "Vakiojaksot"
+    "standardSections": "Vakiojaksot",
+    "yetiSections": "Yeti-osastot"
   },
   "category": "Luokka",
   "change": "Muuttaa",

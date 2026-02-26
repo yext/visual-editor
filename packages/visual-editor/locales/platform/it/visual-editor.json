@@ -52,7 +52,8 @@
   "categories": {
     "coreInformation": "Informazioni fondamentali",
     "other": "ALTRO",
-    "standardSections": "Sezioni standard"
+    "standardSections": "Sezioni standard",
+    "yetiSections": "Sezioni Yeti"
   },
   "category": "Categoria",
   "change": "Modifica",

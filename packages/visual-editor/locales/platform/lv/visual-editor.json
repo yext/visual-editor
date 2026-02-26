@@ -52,7 +52,8 @@
   "categories": {
     "coreInformation": "Pamatinformācija",
     "other": "Cits",
-    "standardSections": "Standarta sadaļas"
+    "standardSections": "Standarta sadaļas",
+    "yetiSections": "Yeti sadaļas"
   },
   "category": "Kategorija",
   "change": "Mainīt",

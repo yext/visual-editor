@@ -52,7 +52,8 @@
   "categories": {
     "coreInformation": "核心信息",
     "other": "其他",
-    "standardSections": "标准区块"
+    "standardSections": "标准区块",
+    "yetiSections": "雪人部分"
   },
   "category": "类别",
   "change": "改变",

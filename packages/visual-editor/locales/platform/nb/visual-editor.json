@@ -52,7 +52,8 @@
   "categories": {
     "coreInformation": "Kjerneinformasjon",
     "other": "ANNEN",
-    "standardSections": "Standard seksjoner"
+    "standardSections": "Standard seksjoner",
+    "yetiSections": "Yeti-seksjoner"
   },
   "category": "Kategori",
   "change": "Endre",
