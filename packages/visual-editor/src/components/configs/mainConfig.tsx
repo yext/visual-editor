@@ -27,7 +27,8 @@ import {
 } from "../categories/SlotsCategory.tsx";
 
 export interface MainConfigProps
-  extends PageSectionCategoryProps,
+  extends
+    PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
     AdvancedCoreInfoCategoryProps,
