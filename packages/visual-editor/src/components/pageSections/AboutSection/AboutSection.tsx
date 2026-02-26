@@ -12,7 +12,7 @@ import {
   HeadingLevel,
 } from "../../../utils/themeConfigOptions.ts";
 import { BodyTextProps } from "../../contentBlocks/BodyText.tsx";
-import { Button } from "../../../internal/puck/ui/button.tsx";
+import { Button } from "../../atoms/button.tsx";
 import { HeadingTextProps } from "../../contentBlocks/HeadingText.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { PageSection } from "../../atoms/pageSection.tsx";
@@ -36,13 +36,6 @@ const placeholderText = {
 
 export type AboutSectionProps = {
   /**
-   * This object contains properties for customizing the component's data.
-   * @propCategory Data Props
-   */
-  data: {
-    showDetailsColumn: boolean;
-  };
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
@@ -52,6 +45,12 @@ export type AboutSectionProps = {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+
+    /**
+     * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
+     * @defaultValue true
+     */
+    showDetailsColumn: boolean;
   };
 
   /** @internal */
@@ -68,27 +67,6 @@ export type AboutSectionProps = {
 };
 
 const aboutSectionFields: Fields<AboutSectionProps> = {
-  data: YextField(msg("fields.data", "Data"), {
-    type: "object",
-    objectFields: {
-      showDetailsColumn: YextField(
-        msg("fields.showDetailsColumn", "Show Details Column"),
-        {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.yes", "Yes"),
-              value: true,
-            },
-            {
-              label: msg("fields.options.no", "No"),
-              value: false,
-            },
-          ],
-        }
-      ),
-    },
-  }),
   styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
@@ -97,6 +75,13 @@ const aboutSectionFields: Fields<AboutSectionProps> = {
         {
           type: "select",
           options: "BACKGROUND_COLOR",
+        }
+      ),
+      showDetailsColumn: YextField(
+        msg("fields.showDetailsColumn", "Show Details Column"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
         }
       ),
     },
@@ -129,7 +114,7 @@ const aboutSectionFields: Fields<AboutSectionProps> = {
 };
 
 const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
-  const { data, styles, slots } = props;
+  const { styles, slots } = props;
   const { t } = useTranslation();
   const [expanded, setExpanded] = React.useState(false);
   const [isDescriptionOverflown, setIsDescriptionOverflown] =
@@ -192,7 +177,7 @@ const AboutComponent: PuckComponent<AboutSectionProps> = (props) => {
           </Button>
         )}
       </div>
-      {data.showDetailsColumn && (
+      {styles.showDetailsColumn && (
         <slots.SidebarSlot
           style={{ height: "auto", width: "100%" }}
           allow={[]}
@@ -206,11 +191,9 @@ export const AboutSection: ComponentConfig<{ props: AboutSectionProps }> = {
   label: msg("components.aboutSection", "About Section"),
   fields: aboutSectionFields,
   defaultProps: {
-    data: {
-      showDetailsColumn: true,
-    },
     styles: {
       backgroundColor: backgroundColors.background2.value,
+      showDetailsColumn: true,
     },
     slots: {
       SectionHeadingSlot: [

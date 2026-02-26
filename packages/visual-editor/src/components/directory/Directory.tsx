@@ -97,9 +97,9 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
       {streamDocument.dm_directoryChildren &&
         !isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryList
+            streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
-            level={streamDocument?.meta?.entityType?.id}
           />
         )}
     </Background>
@@ -128,11 +128,11 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
             data: {
               text: {
                 constantValue: {
-                  en: "[[name]]",
+                  en: "",
                   hasLocalizedValue: "true",
                 },
-                constantValueEnabled: true,
-                field: "",
+                constantValueEnabled: false,
+                field: "name",
               },
             },
             styles: { level: 2, align: "center" },

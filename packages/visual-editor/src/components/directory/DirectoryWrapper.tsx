@@ -13,6 +13,8 @@ import { PageSection } from "../atoms/pageSection.tsx";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
 import { sortAlphabetically } from "../../utils/directory/utils.ts";
 import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
+import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryListChildren.ts";
 
 export type DirectoryGridProps = {
   slots: {
@@ -21,13 +23,24 @@ export type DirectoryGridProps = {
 };
 
 export const DirectoryList = ({
+  streamDocument,
   directoryChildren,
   relativePrefixToRoot,
-  level,
 }: {
-  directoryChildren: any[];
+  streamDocument: StreamDocument;
+  directoryChildren: {
+    id: string;
+    name: string;
+    slug: string;
+    meta?: {
+      entityType?: {
+        id: "dm_country" | "dm_region" | "dm_city";
+      };
+    };
+    dm_addressCountryDisplayName?: string;
+    dm_addressRegionDisplayName?: string;
+  }[];
   relativePrefixToRoot: string;
-  level: string;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
 
@@ -38,13 +51,17 @@ export const DirectoryList = ({
     >
       <ul className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
         {sortedDirectoryChildren.map((child, idx) => {
+          const childSlug = resolveDirectoryListChildren(streamDocument, child);
           let label;
-          switch (level) {
-            case "dm_root":
+          switch (child?.meta?.entityType?.id) {
+            case "dm_country":
               label = child.dm_addressCountryDisplayName ?? child.name;
               break;
-            case "dm_country":
+            case "dm_region":
               label = child.dm_addressRegionDisplayName ?? child.name;
+              break;
+            case "dm_city":
+              label = child.name;
               break;
             default:
               label = child.name;
@@ -57,8 +74,8 @@ export const DirectoryList = ({
                 variant="directoryLink"
                 href={
                   relativePrefixToRoot
-                    ? relativePrefixToRoot + child.slug
-                    : child.slug
+                    ? relativePrefixToRoot + childSlug
+                    : childSlug
                 }
               >
                 <Body>{label}</Body>
@@ -104,7 +121,7 @@ const DirectoryGridWrapper: PuckComponent<DirectoryGridProps> = (props) => {
 export const DirectoryGrid: ComponentConfig<{
   props: DirectoryGridProps;
 }> = {
-  label: msg("components.DirectoryGrid", "Directory Grid"),
+  label: msg("components.directoryGrid", "Directory Grid"),
   fields: directoryGridFields,
   defaultProps: {
     slots: {

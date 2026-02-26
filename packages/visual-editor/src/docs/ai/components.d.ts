@@ -103,13 +103,6 @@ interface ExpandedFooterProps {
 
 type AboutSectionProps = {
   /**
-   * This object contains properties for customizing the component's data.
-   * @propCategory Data Props
-   */
-  data: {
-    showDetailsColumn: boolean;
-  };
-  /**
    * This object contains properties for customizing the component's appearance.
    * @propCategory Style Props
    */
@@ -119,6 +112,11 @@ type AboutSectionProps = {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * If 'true', the sidebar with additional details is shown; if 'false', it's hidden.
+     * @defaultValue true
+     */
+    showDetailsColumn: boolean;
   };
   /** @internal */
   slots: {
@@ -227,6 +225,11 @@ interface EventSectionProps {
      * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -315,6 +318,11 @@ interface InsightSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   slots: {
     SectionHeadingSlot: Slot;
@@ -342,6 +350,11 @@ interface NearbyLocationsSectionProps {
      * @defaultValue Background Color 1
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   analytics: {
@@ -394,35 +407,10 @@ interface ProductSectionProps {
      */
     cardVariant?: ProductSectionVariant;
     /**
-     * Whether to show the product image.
+     * Whether to show the section heading.
      * @defaultValue true
      */
-    showImage?: boolean;
-    /**
-     * Whether to show the product brow text.
-     * @defaultValue true
-     */
-    showBrow?: boolean;
-    /**
-     * Whether to show the product title.
-     * @defaultValue true
-     */
-    showTitle?: boolean;
-    /**
-     * Whether to show the product price.
-     * @defaultValue true
-     */
-    showPrice?: boolean;
-    /**
-     * Whether to show the product description.
-     * @defaultValue true
-     */
-    showDescription?: boolean;
-    /**
-     * Whether to show the product CTA.
-     * @defaultValue true
-     */
-    showCTA?: boolean;
+    showSectionHeading: boolean;
   };
   slots: {
     SectionHeadingSlot: Slot;
@@ -515,6 +503,11 @@ interface ReviewsSectionProps {
      * @defaultValue Background Color 1
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -560,6 +553,11 @@ interface TeamSectionProps {
      * @defaultValue Background Color 3
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -588,6 +586,11 @@ interface TestimonialSectionProps {
      * @defaultValue Background Color 2
      */
     backgroundColor?: BackgroundStyle;
+    /**
+     * Whether to show the section heading.
+     * @defaultValue true
+     */
+    showSectionHeading: boolean;
   };
   /** @internal */
   slots: {
@@ -692,6 +695,11 @@ interface BannerStyles {
    */
   backgroundColor?: BackgroundStyle;
   /**
+   * Optional text color for the banner text.
+   * If not set, it will default to a color that contrasts with the background color.
+   */
+  textColor?: BackgroundStyle;
+  /**
    * The horizontal alignment of the text.
    * @defaultValue center
    */
@@ -753,6 +761,11 @@ interface FAQStyles {
    * @defaultValue Background Color 3
    */
   backgroundColor?: BackgroundStyle;
+  /**
+   * Whether to show the section heading.
+   * @defaultValue true
+   */
+  showSectionHeading: boolean;
 }
 
 interface HeroData {
@@ -774,19 +787,9 @@ interface HeroStyles {
    */
   backgroundColor?: BackgroundStyle;
   /**
-   * If 'true', displays the entity's average review rating.
-   * @defaultValue true
-   */
-  showAverageReview: boolean;
-  /**
-   * Whether to show the hero image (classic and compact variant).
-   * @defaultValue true
-   */
-  showImage: boolean;
-  /**
    * Image Height for the hero image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight?: number;
   /**
@@ -809,6 +812,41 @@ interface HeroStyles {
    * @defaultValue top
    */
   mobileImagePosition: "bottom" | "top";
+  /**
+   * Whether to show the business name.
+   * @defaultValue true
+   */
+  showBusinessName: boolean;
+  /**
+   * Whether to show the geomodifier.
+   * @defaultValue true
+   */
+  showGeomodifier: boolean;
+  /**
+   * Whether to show the hours status.
+   * @defaultValue true
+   */
+  showHoursStatus: boolean;
+  /**
+   * If 'true', displays the entity's average review rating.
+   * @defaultValue true
+   */
+  showAverageReview: boolean;
+  /**
+   * Whether to show the primary CTA.
+   * @defaultValue true
+   */
+  showPrimaryCTA: boolean;
+  /**
+   * Whether to show the secondary CTA.
+   * @defaultValue true
+   */
+  showSecondaryCTA: boolean;
+  /**
+   * Whether to show the hero image (classic and compact variant).
+   * @defaultValue true
+   */
+  showImage: boolean;
 }
 
 interface PhotoGalleryStyles {
@@ -822,6 +860,11 @@ interface PhotoGalleryStyles {
    * @defaultValue "gallery"
    */
   variant: "gallery" | "carousel";
+  /**
+   * Whether to show the section heading
+   * @defaultValue true
+   */
+  showSectionHeading: boolean;
 }
 
 type ProductSectionVariant = "immersive" | "classic" | "minimal";
@@ -948,9 +991,29 @@ interface PromoStyles {
   /**
    * Image Height for the promo image with Immersive or Spotlight variant
    * Minimum height: content height + Page Section Top/Bottom Padding
-   * @default 500px
+   * @defaultValue 500px
    */
   imageHeight: number;
+  /**
+   * Whether to show the media content, either image or video.
+   * @defaultValue true
+   */
+  showMedia: boolean;
+  /**
+   * Whether to show the heading text.
+   * @defaultValue true
+   */
+  showHeading: boolean;
+  /**
+   * Whether to show the description text.
+   * @defaultValue true
+   */
+  showDescription: boolean;
+  /**
+   * Whether to show the CTA.
+   * @defaultValue true
+   */
+  showCTA: boolean;
 }
 
 interface StaticMapData {

@@ -14,11 +14,19 @@ import { InsightStruct, TranslatableRichText } from "../../../types/types.ts";
 import { deepMerge } from "../../../utils/themeResolver.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { YextEntityField } from "../../../editor/YextEntityFieldSelector.tsx";
-import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
+import { TextProps } from "../../contentBlocks/Text.tsx";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+  Slot,
+} from "@puckeditor/core";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultInsight = {
   image: {
@@ -28,7 +36,7 @@ const defaultInsight = {
   },
   name: { en: "Article Name", hasLocalizedValue: "true" },
   category: {
-    en: getDefaultRTF("Category"),
+    en: "Category",
     hasLocalizedValue: "true",
   },
   description: {
@@ -115,7 +123,7 @@ export const defaultInsightCardSlotData = (
         ],
         CategorySlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-category` }),
               data: {
@@ -127,8 +135,9 @@ export const defaultInsightCardSlotData = (
               },
               styles: {
                 variant: "base",
+                fontStyle: "regular",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         DescriptionSlot: [
@@ -209,9 +218,13 @@ export const defaultInsightCardSlotData = (
 };
 
 export type InsightCardProps = {
+  /** Styling for all the cards. */
   styles: {
+    /** The background color of each insight card */
     backgroundColor?: BackgroundStyle;
   };
+
+  /** @internal */
   slots: {
     ImageSlot: Slot;
     TitleSlot: Slot;
@@ -225,6 +238,15 @@ export type InsightCardProps = {
   parentData?: {
     field: string;
     insight: InsightStruct;
+  };
+
+  /** @internal styles from parent component */
+  parentStyles?: {
+    showImage: boolean;
+    showCategory: boolean;
+    showPublishTime: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
   };
 
   /** @internal */
@@ -265,7 +287,7 @@ const insightCardFields: Fields<InsightCardProps> = {
 };
 
 const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
-  const { styles, slots, puck, conditionalRender } = props;
+  const { styles, slots, puck, conditionalRender, parentStyles } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: BackgroundStyle | undefined;
     slotStyles: Record<string, InsightCardProps["styles"]>;
@@ -278,7 +300,7 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
   } = useGetCardSlots<InsightCardProps>(props.id);
 
   React.useEffect(() => {
-    if (!props.puck.isEditing || !sharedCardProps) {
+    if (!puck.isEditing || !sharedCardProps) {
       return;
     }
 
@@ -333,11 +355,11 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
         },
       },
     });
-  }, [sharedCardProps]);
+  }, [sharedCardProps, puck.isEditing]);
 
   // When the card's shared props or the card's slots' shared props change, update the context
   React.useEffect(() => {
-    if (!props.puck.isEditing || !slotsData) {
+    if (!puck.isEditing || !slotsData) {
       return;
     }
 
@@ -353,14 +375,21 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
       cardBackground: styles.backgroundColor,
       slotStyles: slotStyles,
     });
-  }, [styles, slotStyles]);
+  }, [styles, slotStyles, puck.isEditing]);
 
   const mergedStyles = deepMerge(
     { backgroundColor: sharedCardProps?.cardBackground },
     styles
   );
 
-  const isInEditor = props.puck.isEditing;
+  const isInEditor = puck.isEditing;
+
+  const showCategory =
+    parentStyles?.showCategory &&
+    (conditionalRender?.hasCategory || isInEditor);
+  const showPublishTime =
+    parentStyles?.showPublishTime &&
+    (conditionalRender?.hasPublishTime || isInEditor);
 
   return (
     <Background
@@ -368,23 +397,22 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
       background={mergedStyles.backgroundColor}
       ref={puck.dragRef}
     >
-      <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
+      {parentStyles?.showImage && (
+        <slots.ImageSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <div className="flex flex-col gap-4 p-6 flex-grow">
         <div className="flex flex-col gap-2 flex-grow">
-          {(conditionalRender?.hasCategory ||
-            conditionalRender?.hasPublishTime ||
-            isInEditor) && (
+          {(showCategory || showPublishTime) && (
             <div className="flex items-center">
-              {(conditionalRender?.hasCategory || isInEditor) && (
+              {showCategory && (
                 <div className="flex items-center">
                   <slots.CategorySlot style={{ height: "auto" }} allow={[]} />
                 </div>
               )}
-              {conditionalRender?.hasCategory &&
-                conditionalRender?.hasPublishTime && (
-                  <span className="px-3">|</span>
-                )}
-              {(conditionalRender?.hasPublishTime || isInEditor) && (
+              {showCategory && showPublishTime && (
+                <span className="px-3">|</span>
+              )}
+              {showPublishTime && (
                 <div className="flex items-center">
                   <slots.PublishTimeSlot
                     style={{ height: "auto" }}
@@ -395,10 +423,14 @@ const InsightCardComponent: PuckComponent<InsightCardProps> = (props) => {
             </div>
           )}
           <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
-          <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
+          {parentStyles?.showDescription && (
+            <slots.DescriptionSlot style={{ height: "auto" }} allow={[]} />
+          )}
         </div>
         <div className="mt-auto">
-          <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+          {parentStyles?.showCTA && (
+            <slots.CTASlot style={{ height: "auto" }} allow={[]} />
+          )}
         </div>
       </div>
     </Background>
@@ -430,77 +462,153 @@ export const InsightCard: ComponentConfig<{ props: InsightCardProps }> = {
       return data;
     }
 
-    if (data.props.parentData) {
-      const { field, insight } = data.props.parentData;
+    let updatedData = data;
 
-      data.props.slots.ImageSlot[0].props.parentData = {
-        field: `${field}.image`,
-        image: insight.image,
-      };
+    if (updatedData.props.parentData) {
+      const { field, insight } = updatedData.props.parentData;
 
-      data.props.slots.TitleSlot[0].props.parentData = {
-        field: `${field}.name`,
-        text: insight.name,
-      };
-
-      data.props.slots.CategorySlot[0].props.parentData = {
-        field: `${field}.category`,
-        richText: insight.category,
-      };
-
-      data.props.slots.DescriptionSlot[0].props.parentData = {
-        field: `${field}.description`,
-        richText: insight.description,
-      };
-
-      data.props.slots.PublishTimeSlot[0].props.parentData = {
-        field: `${field}.publishTime`,
-        date: insight.publishTime || undefined,
-      };
-
-      data.props.slots.CTASlot[0].props.parentData = {
-        field: `${field}.cta`,
-        cta: insight.cta,
-      };
-
-      const category = resolveComponentData(
-        insight.category as TranslatableRichText,
-        locale,
-        streamDocument
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ImageSlot[0].props.parentData",
+        {
+          field: `${field}.image`,
+          image: insight.image,
+        }
       );
 
-      data.props.conditionalRender = {
-        hasCategory: !!category,
-        hasPublishTime: !!insight.publishTime,
-      };
-    } else {
-      data.props.slots.ImageSlot[0].props.parentData = undefined;
-      data.props.slots.TitleSlot[0].props.parentData = undefined;
-      data.props.slots.CategorySlot[0].props.parentData = undefined;
-      data.props.slots.DescriptionSlot[0].props.parentData = undefined;
-      data.props.slots.PublishTimeSlot[0].props.parentData = undefined;
-      data.props.slots.CTASlot[0].props.parentData = undefined;
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.TitleSlot[0].props.parentData",
+        {
+          field: `${field}.name`,
+          text: insight.name,
+        }
+      );
+
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CategorySlot[0].props.parentData",
+        {
+          field: `${field}.category`,
+          text: insight.category,
+        }
+      );
+
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.DescriptionSlot[0].props.parentData",
+        {
+          field: `${field}.description`,
+          richText: insight.description,
+        }
+      );
+
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.PublishTimeSlot[0].props.parentData",
+        {
+          field: `${field}.publishTime`,
+          date: insight.publishTime || undefined,
+        }
+      );
+
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CTASlot[0].props.parentData",
+        {
+          field: `${field}.cta`,
+          cta: insight.cta,
+        }
+      );
 
       const category = resolveComponentData(
-        data.props.slots.CategorySlot[0]?.props.data
+        insight.category,
+        locale,
+        streamDocument,
+        {
+          output: "plainText",
+        }
+      );
+
+      updatedData = {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: {
+            hasCategory: !!category,
+            hasPublishTime: !!insight.publishTime,
+          },
+        },
+      };
+    } else {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.ImageSlot[0].props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.TitleSlot[0].props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CategorySlot[0].props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.DescriptionSlot[0].props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.PublishTimeSlot[0].props.parentData",
+        undefined
+      );
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CTASlot[0].props.parentData",
+        undefined
+      );
+
+      const category = resolveComponentData(
+        updatedData.props.slots.CategorySlot[0]?.props.data
           .text as YextEntityField<TranslatableRichText>,
         locale,
-        streamDocument
+        streamDocument,
+        {
+          output: "plainText",
+        }
       );
 
       const publishTime = resolveComponentData(
-        data.props.slots.PublishTimeSlot[0]?.props.data.date,
+        updatedData.props.slots.PublishTimeSlot[0]?.props.data.date,
         locale,
         streamDocument
       );
 
-      data.props.conditionalRender = {
-        hasCategory: !!category,
-        hasPublishTime: !!publishTime,
+      updatedData = {
+        ...updatedData,
+        props: {
+          ...updatedData.props,
+          conditionalRender: {
+            hasCategory: !!category,
+            hasPublishTime: !!publishTime,
+          },
+        },
       };
     }
 
-    return data;
+    updatedData = syncParentStyles(params, updatedData, [
+      "showImage",
+      "showCategory",
+      "showPublishTime",
+      "showDescription",
+      "showCTA",
+    ]);
+
+    return updatedData;
   },
   render: (props) => <InsightCardComponent {...props} />,
 };

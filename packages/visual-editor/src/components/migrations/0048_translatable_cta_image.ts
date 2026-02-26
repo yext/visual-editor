@@ -1,13 +1,5 @@
 import { Migration } from "../../utils/migrate.ts";
-
-// Helper to get locales from streamDocument
-const getLocales = (streamDocument: any): string[] => {
-  try {
-    return JSON.parse(streamDocument._pageset).scope.locales || ["en"];
-  } catch {
-    return ["en"];
-  }
-};
+import { getPageSetLocales } from "../../utils/pageSetLocales.ts";
 
 // Helper to migrate Image constant value
 const migrateImage = (image: any, locales: string[]) => {
@@ -74,7 +66,7 @@ export const translatableCTAImageMigration: Migration = {
   PromoSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const locales = getLocales(streamDocument);
+      const locales = getPageSetLocales(streamDocument);
 
       // Migrate ImageSlot
       if (props.slots?.ImageSlot?.[0]?.props?.data?.image?.constantValue) {
@@ -99,7 +91,7 @@ export const translatableCTAImageMigration: Migration = {
   HeroSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const locales = getLocales(streamDocument);
+      const locales = getPageSetLocales(streamDocument);
 
       // Migrate ImageSlot
       if (props.slots?.ImageSlot?.[0]?.props?.data?.image?.constantValue) {
@@ -140,7 +132,7 @@ export const translatableCTAImageMigration: Migration = {
   ExpandedFooter: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const locales = getLocales(streamDocument);
+      const locales = getPageSetLocales(streamDocument);
 
       // Migrate LogoSlot
       if (props.slots?.LogoSlot?.[0]?.props?.data?.image?.constantValue) {
@@ -229,7 +221,7 @@ export const translatableCTAImageMigration: Migration = {
   EventSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const locales = getLocales(streamDocument);
+      const locales = getPageSetLocales(streamDocument);
 
       const cardsWrapper = props.slots?.CardsWrapperSlot?.[0];
       if (cardsWrapper?.props?.slots?.CardSlot) {
@@ -265,7 +257,7 @@ export const translatableCTAImageMigration: Migration = {
   TeamSection: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const locales = getLocales(streamDocument);
+      const locales = getPageSetLocales(streamDocument);
 
       const cardsWrapper = props.slots?.CardsWrapperSlot?.[0];
       if (cardsWrapper?.props?.slots?.CardSlot) {
@@ -301,7 +293,7 @@ export const translatableCTAImageMigration: Migration = {
   ExpandedHeader: {
     action: "updated",
     propTransformation: (props, streamDocument) => {
-      const locales = getLocales(streamDocument);
+      const locales = getPageSetLocales(streamDocument);
 
       const primaryHeader = props.slots?.PrimaryHeaderSlot?.[0];
       if (primaryHeader) {

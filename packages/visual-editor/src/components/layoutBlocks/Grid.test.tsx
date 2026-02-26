@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 import {
   axe,
   ComponentTest,
+  logSuppressedWcagViolations,
   testHours,
   transformTests,
 } from "../testing/componentTests.setup.ts";
@@ -2044,6 +2045,61 @@ const tests: ComponentTest[] = [
     },
     version: 51,
   },
+  {
+    name: "version 61 - Phone and Emails without icons",
+    document: {
+      locale: "en",
+      mainPhone: "+18005551010",
+    },
+    props: {
+      columns: 1,
+      slots: [
+        {
+          Column: [
+            {
+              type: "Phone",
+              props: {
+                data: {
+                  number: {
+                    field: "mainPhone",
+                    constantValue: "",
+                  },
+                  label: {
+                    en: "Phone",
+                    hasLocalizedValue: "true",
+                  },
+                },
+                styles: {
+                  phoneFormat: "domestic",
+                  includePhoneHyperlink: true,
+                  includeIcon: false,
+                },
+                id: "Phone-717f487f-d487-47a1-b78a-6378d8c489e7",
+              },
+            },
+            {
+              type: "Emails",
+              props: {
+                id: "Emails-547941ef-1bc8-4e88-96e6-81b3b65a4f54",
+                data: {
+                  list: {
+                    constantValue: ["foo@example.com", "test@example.com"],
+                    constantValueEnabled: true,
+                    field: "",
+                  },
+                },
+                styles: { listLength: 2, showIcon: false },
+              },
+            },
+          ],
+        },
+      ],
+      backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
+      liveVisibility: true,
+      analytics: { scope: "gridSection" },
+    },
+    version: 61,
+  },
 ];
 
 describe("Grid", async () => {
@@ -2091,7 +2147,7 @@ describe("Grid", async () => {
 
       const results = await axe(container);
       if (version === 45 || version === 50) {
-        console.warn(results);
+        logSuppressedWcagViolations(results);
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -2102,7 +2158,7 @@ describe("Grid", async () => {
         ).toMatchScreenshot();
         const results2 = await axe(container);
         if (version === 45 || version === 50) {
-          console.warn(results2);
+          logSuppressedWcagViolations(results2);
         } else {
           expect(results2).toHaveNoViolations();
         }

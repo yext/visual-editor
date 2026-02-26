@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/yext/visual-editor#readme",
   "devDependencies": {
-    "ts-node": "^10.9.2",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash": "^4.14.202",
     "@types/minimist": "^1.2.5",

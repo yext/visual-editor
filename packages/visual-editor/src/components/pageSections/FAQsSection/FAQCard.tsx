@@ -1,7 +1,11 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { Body, BodyProps } from "../../atoms/body.tsx";
-import { FAQStruct, TranslatableRichText } from "../../../types/types.ts";
+import {
+  FAQStruct,
+  TranslatableRichText,
+  TranslatableString,
+} from "../../../types/types.ts";
 import { getDefaultRTF } from "../../../editor/TranslatableRichTextField.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
@@ -19,10 +23,11 @@ import { useAnalytics } from "@yext/pages-components";
 import { useTranslation } from "react-i18next";
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
+import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
 const defaultFAQ = {
   question: {
-    en: getDefaultRTF("Question Lorem ipsum dolor sit amet?"),
+    en: "Question Lorem ipsum dolor sit amet?",
     hasLocalizedValue: "true",
   },
   answer: {
@@ -37,7 +42,8 @@ export const defaultFAQCardData = (
   id?: string,
   index?: number,
   questionVariant?: BodyProps["variant"],
-  answerVariant?: BodyProps["variant"]
+  answerVariant?: BodyProps["variant"],
+  answerColor?: BackgroundStyle
 ) => ({
   type: "FAQCard",
   props: {
@@ -58,13 +64,14 @@ export const defaultFAQCardData = (
     styles: {
       questionVariant: questionVariant || "base",
       answerVariant: answerVariant || "base",
+      answerColor: answerColor,
     },
   },
 });
 
 export type FAQCardProps = {
   data: {
-    question: YextEntityField<TranslatableRichText>;
+    question: YextEntityField<TranslatableString | TranslatableRichText>;
     answer: YextEntityField<TranslatableRichText>;
   };
 
@@ -72,6 +79,7 @@ export type FAQCardProps = {
   styles: {
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
+    answerColor?: BackgroundStyle;
   };
 
   /** @internal */
@@ -94,7 +102,7 @@ const FAQCardFields: Fields<FAQCardProps> = {
       question: YextField(msg("fields.question", "Question"), {
         type: "entityField",
         filter: {
-          types: ["type.rich_text_v2"],
+          types: ["type.string", "type.rich_text_v2"],
         },
       }),
       answer: YextField(msg("fields.answer", "Answer"), {
@@ -119,6 +127,10 @@ const FAQCardFields: Fields<FAQCardProps> = {
         type: "radio",
         options: "BODY_VARIANT",
       }),
+      answerColor: YextField(msg("fields.answerColor", "Answer Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
     },
   }),
   slots: {
@@ -138,6 +150,7 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     questionVariant: BodyProps["variant"];
     answerVariant: BodyProps["variant"];
+    answerColor?: BackgroundStyle;
   }>();
 
   const { getPuck } = useGetCardSlots<FAQCardProps>(props.id);
@@ -150,7 +163,8 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
 
     if (
       sharedCardProps.questionVariant === styles.questionVariant &&
-      sharedCardProps.answerVariant === styles.answerVariant
+      sharedCardProps.answerVariant === styles.answerVariant &&
+      sharedCardProps.answerColor?.bgColor === styles.answerColor?.bgColor
     ) {
       return;
     }
@@ -174,11 +188,16 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
           styles: {
             questionVariant: sharedCardProps.questionVariant,
             answerVariant: sharedCardProps.answerVariant,
+            answerColor: sharedCardProps.answerColor,
           },
         } satisfies FAQCardProps,
       },
     });
-  }, [sharedCardProps?.answerVariant, sharedCardProps?.questionVariant]);
+  }, [
+    sharedCardProps?.answerVariant,
+    sharedCardProps?.questionVariant,
+    sharedCardProps?.answerColor?.bgColor,
+  ]);
 
   // When the card's shared props change, update the context
   React.useEffect(() => {
@@ -188,7 +207,8 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
 
     if (
       sharedCardProps?.questionVariant === styles.questionVariant &&
-      sharedCardProps?.answerVariant === styles.answerVariant
+      sharedCardProps?.answerVariant === styles.answerVariant &&
+      sharedCardProps?.answerColor?.bgColor === styles.answerColor?.bgColor
     ) {
       return;
     }
@@ -196,22 +216,23 @@ const FAQCardComponent: PuckComponent<FAQCardProps> = (props) => {
     setSharedCardProps({
       questionVariant: styles.questionVariant,
       answerVariant: styles.answerVariant,
+      answerColor: styles.answerColor,
     });
   }, [styles]);
 
   const sourceQuestion = parentData ? parentData?.faq.question : data.question;
   const resolvedQuestion = sourceQuestion
     ? resolveComponentData(sourceQuestion, i18n.language, streamDocument, {
-        variant: styles.questionVariant,
-        isDarkBackground: background?.isDarkBackground,
+        output: "plainText",
       })
-    : undefined;
+    : "";
 
   const sourceAnswer = parentData ? parentData?.faq.answer : data.answer;
   const resolvedAnswer = sourceAnswer
     ? resolveComponentData(sourceAnswer, i18n.language, streamDocument, {
         variant: styles.answerVariant,
         isDarkBackground: background?.isDarkBackground,
+        color: styles.answerColor,
       })
     : undefined;
 

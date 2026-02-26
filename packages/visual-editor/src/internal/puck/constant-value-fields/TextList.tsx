@@ -7,6 +7,19 @@ import { usePlatformTranslation } from "../../../utils/i18n/platform.ts";
 import { useState } from "react";
 
 const TEXT_LIST_BUTTON_COLOR: string = "#969696";
+const getFocusableChild = (
+  fieldsDiv: HTMLElement,
+  itemIndex: number
+): HTMLElement | null => {
+  const fieldContainer = fieldsDiv.children.item(itemIndex);
+  if (!fieldContainer) {
+    return null;
+  }
+
+  return fieldContainer.querySelector<HTMLElement>(
+    'input, textarea, [contenteditable="true"], [tabindex]:not([tabindex="-1"])'
+  );
+};
 
 export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
   type: "custom",
@@ -43,9 +56,7 @@ export const TEXT_LIST_CONSTANT_CONFIG: CustomField<string[]> = {
         const fieldsDiv = document.getElementById(id);
         if (fieldsDiv) {
           const observer = new MutationObserver(() => {
-            const newField = document.getElementById(
-              `${id}-value-${currentLength}`
-            );
+            const newField = getFocusableChild(fieldsDiv, currentLength);
             if (newField) {
               observer.disconnect();
               newField.focus();
@@ -156,9 +167,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
         const fieldsDiv = document.getElementById(id);
         if (fieldsDiv) {
           const observer = new MutationObserver(() => {
-            const newField = document.getElementById(
-              `${id}-value-${currentLength}`
-            );
+            const newField = getFocusableChild(fieldsDiv, currentLength);
             if (newField) {
               observer.disconnect();
               newField.focus();

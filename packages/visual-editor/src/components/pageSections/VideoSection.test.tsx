@@ -23,63 +23,6 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
-    name: "version 23 props with entity heading text and no video",
-    document: { name: "Test Name" },
-    props: {
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 4,
-          align: "center",
-        },
-      },
-      data: {
-        heading: {
-          field: "name",
-          constantValue: { en: "Test Name", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
-        },
-        assetVideo: {},
-      },
-      liveVisibility: true,
-    },
-    version: 23,
-  },
-  {
-    name: "version 23 props with constant heading text and video",
-    document: { name: "Test Name" },
-    props: {
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-white",
-          textColor: "text-black",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-      },
-      data: {
-        heading: {
-          field: "name",
-          constantValue: { en: "Video Heading", hasLocalizedValue: "true" },
-          constantValueEnabled: true,
-        },
-        assetVideo: {
-          video: {
-            embeddedUrl: "https://www.youtube.com/embed/test",
-            title: "Test Video",
-          },
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 23,
-  },
-  {
     name: "version 28 props with entity heading text and no video",
     document: { name: "Test Name" },
     props: {

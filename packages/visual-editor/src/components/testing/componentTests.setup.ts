@@ -12,6 +12,10 @@ import { defaultThemeConfig } from "../DefaultThemeConfig.ts";
 import { applyTheme } from "../../utils/applyTheme.ts";
 import { ThemeData } from "../../internal/types/themeData.ts";
 
+const TEST_CSS_OVERRIDE_TAG_ID = "screenshot-test-overrides";
+const originalConsoleError = console.error.bind(console);
+let hasLoggedActWarning = false;
+
 // Applies the default theme variables and mocks the date
 export const testSetup = (theme: ThemeData) => {
   // July 1, 2025 Noon (month is 0-indexed)
@@ -37,7 +41,50 @@ export const testSetup = (theme: ThemeData) => {
 };
 
 // Run the test setup before each test
-beforeEach(() => testSetup({}));
+beforeEach(() => {
+  testSetup({});
+});
+
+/**
+ * Override console.error to suppress log spam
+ * This will print the wrapped-in-act warning only once per test run, and will print all other errors as normal.
+ */
+console.error = (...args: unknown[]) => {
+  const firstArg = args[0];
+  if (
+    typeof firstArg === "string" &&
+    firstArg.startsWith(
+      "Warning: An update to %s inside a test was not wrapped in act(...)."
+    )
+  ) {
+    if (!hasLoggedActWarning) {
+      hasLoggedActWarning = true;
+      originalConsoleError(
+        "Warning: React emitted not-wrapped-in-act updates during screenshot tests (details suppressed)."
+      );
+    }
+    return;
+  }
+
+  originalConsoleError(...args);
+};
+
+/** Override hover effects to reduce test flakiness */
+const disableHoverEffects = () => {
+  if (document.getElementById(TEST_CSS_OVERRIDE_TAG_ID)) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = TEST_CSS_OVERRIDE_TAG_ID;
+  style.textContent = `
+    .hover\\:no-underline:hover {
+      text-decoration-line: underline !important;
+    }
+  `;
+
+  document.head.appendChild(style);
+};
 
 // Adds the toMatchScreenshot method to vitest's expect.
 // This portion is run in the browser environment while
@@ -51,6 +98,8 @@ expect.extend({
       ignoreExact?: number[];
     }
   ) {
+    disableHoverEffects();
+
     const updatedScreenshotData = await act(async () => {
       // Workaround for vitest not allowing fullPage mobile screenshots
       // See https://github.com/vitest-dev/vitest/discussions/7749
@@ -88,6 +137,25 @@ export const axe = configureAxe({
     rules: [{ id: "color-contrast", enabled: true }],
   },
 });
+
+/** Helper function to log WCAG warnings for tests that are known violations */
+export const logSuppressedWcagViolations = (
+  results: Awaited<ReturnType<typeof axe>>
+) => {
+  if (!results.violations.length) {
+    return;
+  }
+
+  console.warn(
+    [
+      "[warning] Ignoring the following WCAG/axe violations:",
+      ...results.violations.map(
+        (violation, index) =>
+          `${index + 1}. [${violation.impact ?? "none"}] ${violation.id} (${violation.nodes.length} nodes) - ${violation.help}`
+      ),
+    ].join("\n")
+  );
+};
 
 // Each test will run once for each of the following viewports
 export const viewports = {
@@ -136,45 +204,6 @@ export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 // Shared Test Data
-export const testSite = {
-  header: {
-    links: [
-      { label: "Home", link: "index.html", linkType: "OTHER" },
-      {
-        label: "More Info",
-        link: "https://yext.com",
-        linkType: "URL",
-      },
-      { label: "Call Us", link: "+12125550110", linkType: "PHONE" },
-    ],
-  },
-  logo: {
-    image: {
-      alternateText: "The Galaxy Grill Logo",
-      height: 1152,
-      url: "https://a.mktgcdn.com/p-dev/YfHDxOszJCxQZt7PEHtzUWk8sGzV5E_q2BLXYc_fCHo/1152x1152.png",
-      width: 1152,
-    },
-  },
-  copyrightMessage: "© 2025 Yext",
-  footer: {
-    links: [
-      {
-        label: "Privacy Policy",
-        link: "https://www.yext.com/privacy-policy",
-        linkType: "URL",
-      },
-      {
-        label: "Contact Us",
-        link: "sumo@yext.com",
-        linkType: "EMAIL",
-      },
-    ],
-  },
-  instagramHandle: "yextinc",
-  youTubeChannelUrl: "https://www.youtube.com/c/yext",
-};
-
 export const testHours = {
   friday: {
     openIntervals: [

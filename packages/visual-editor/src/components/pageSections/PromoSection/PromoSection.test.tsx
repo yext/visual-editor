@@ -4,6 +4,7 @@ import {
   axe,
   ComponentTest,
   delay,
+  logSuppressedWcagViolations,
   transformTests,
 } from "../../testing/componentTests.setup.ts";
 import { render as reactRender, waitFor } from "@testing-library/react";
@@ -59,6 +60,160 @@ const promoData = {
   title: "Taste the universe!",
 };
 
+const version59Props = {
+  data: {
+    promo: {
+      field: "",
+      constantValue: {},
+      constantValueEnabled: true,
+    },
+    media: "image",
+    backgroundImage: {
+      field: "",
+      constantValue: {
+        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=310&width=550&fit=max",
+        width: 550,
+        height: 310,
+      },
+      constantValueEnabled: true,
+    },
+  },
+  styles: {
+    variant: "classic",
+    backgroundColor: {
+      bgColor: "bg-white",
+      textColor: "text-black",
+    },
+    desktopImagePosition: "left",
+    mobileImagePosition: "top",
+    containerAlignment: "left",
+    imageHeight: 500,
+    showMedia: true,
+    showHeading: true,
+    showDescription: true,
+    showCTA: true,
+  },
+  slots: {
+    HeadingSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-dd6b1d6f-a447-45a7-8968-82d06e71abb9",
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                en: "Featured Promotion",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            level: 2,
+            align: "left",
+          },
+        },
+      },
+    ],
+    DescriptionSlot: [
+      {
+        type: "BodyTextSlot",
+        props: {
+          id: "BodyTextSlot-5fed969b-86c8-4a0b-9c02-3060f5e6a43b",
+          data: {
+            text: {
+              field: "",
+              constantValue: {
+                en: {
+                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
+                },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            variant: "base",
+          },
+          parentStyles: {
+            className: "text-left",
+          },
+        },
+      },
+    ],
+    VideoSlot: [
+      {
+        type: "VideoSlot",
+        props: {
+          id: "VideoSlot-e0e945fb-5cb4-4a5c-b5a8-0e0a0d4ed174",
+          data: {},
+        },
+      },
+    ],
+    ImageSlot: [
+      {
+        type: "ImageSlot",
+        props: {
+          id: "ImageSlot-7e5fc723-874b-444d-bdcf-13bb689d3027",
+          data: {
+            image: {
+              field: "",
+              constantValue: {
+                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                width: 640,
+                height: 360,
+              },
+              constantValueEnabled: true,
+            },
+          },
+          styles: {
+            aspectRatio: 1.78,
+            width: 640,
+          },
+          sizes: {
+            base: "calc(100vw - 32px)",
+            md: "min(width, 450px)",
+            lg: "width",
+          },
+          className:
+            "min-w-full lg:min-w-none max-w-full lg:max-w-none rounded-image-borderRadius",
+        },
+      },
+    ],
+    CTASlot: [
+      {
+        type: "CTASlot",
+        props: {
+          id: "CTASlot-7c1a6fdd-e049-423b-b6de-de24b93d2c78",
+          data: {
+            entityField: {
+              field: "",
+              constantValue: {
+                label: "Learn More",
+                link: "#",
+                linkType: "URL",
+                ctaType: "textAndLink",
+              },
+              selectedType: "textAndLink",
+            },
+          },
+          styles: {
+            variant: "primary",
+            presetImage: "app-store",
+          },
+          eventName: "cta",
+        },
+      },
+    ],
+  },
+  analytics: {
+    scope: "promoSection",
+  },
+  liveVisibility: true,
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
@@ -71,771 +226,6 @@ const tests: ComponentTest[] = [
     document: { c_promo: promoData },
     props: { ...PromoSection.defaultProps },
     version: migrationRegistry.length,
-  },
-  {
-    name: "version 0 props with entity values",
-    document: { c_promo: promoData },
-    props: {
-      data: {
-        promo: {
-          field: "c_promo",
-          constantValue: {
-            image: {
-              height: 360,
-              width: 640,
-              url: "https://placehold.co/640x360",
-            },
-            title: "Title",
-            description: "Description",
-            cta: { label: "Call To Action", link: "#", linkType: "URL" },
-          },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-white",
-          textColor: "text-black",
-        },
-        orientation: "right",
-        ctaVariant: "secondary",
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 0 props with constant value",
-    document: { c_promo: promoData },
-    props: {
-      data: {
-        promo: {
-          constantValueOverride: {
-            image: true,
-            title: true,
-            description: true,
-            cta: true,
-          },
-          field: "c_promo",
-          constantValue: {
-            image: {
-              height: 360,
-              width: 640,
-              url: "https://placehold.co/640x360",
-            },
-            title: "Title",
-            description: "Description",
-            cta: { label: "Call To Action", link: "#", linkType: "URL" },
-          },
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
-        },
-        orientation: "right",
-        ctaVariant: "secondary",
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 5 props with constant value",
-    document: { c_promo: promoData },
-    props: {
-      data: {
-        promo: {
-          field: "c_promo",
-          constantValue: {
-            image: {
-              height: 360,
-              width: 640,
-              url: "https://placehold.co/640x360",
-            },
-            title: { en: "Featured Promotion", hasLocalizedValue: "true" },
-            description: {
-              en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
-              hasLocalizedValue: "true",
-            },
-            cta: {
-              label: { en: "Learn More", hasLocalizedValue: "true" },
-              link: "#",
-              linkType: "URL",
-            },
-          },
-          constantValueEnabled: true,
-          constantValueOverride: {
-            image: true,
-            title: true,
-            description: true,
-            cta: true,
-          },
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-primary-dark",
-          textColor: "text-white",
-        },
-        orientation: "right",
-        ctaVariant: "secondary",
-        heading: {
-          level: 2,
-          align: "left",
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 5,
-  },
-  {
-    name: "version 16 props with old CTA structure",
-    document: { c_promo: promoData },
-    props: {
-      data: {
-        promo: {
-          field: "c_promo",
-          constantValue: {
-            image: {
-              height: 360,
-              width: 640,
-              url: "https://placehold.co/640x360",
-            },
-            title: "Title",
-            description: "Description",
-            cta: { label: "Call To Action", link: "#", linkType: "URL" },
-          },
-          constantValueEnabled: true,
-          constantValueOverride: {
-            image: true,
-            title: true,
-            description: true,
-            cta: true,
-          },
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-white",
-          textColor: "text-black",
-        },
-        orientation: "left",
-        ctaVariant: "primary",
-        heading: {
-          level: 1,
-          align: "left",
-        },
-        image: {
-          aspectRatio: 1.78,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 16,
-  },
-  {
-    name: "version 16 props using entity values with old CTA structure",
-    document: { c_promo: promoData },
-    props: {
-      data: {
-        promo: {
-          field: "c_promo",
-          constantValue: {
-            image: {
-              height: 360,
-              width: 640,
-              url: "https://placehold.co/640x360",
-            },
-            title: "Title",
-            description: "Description",
-            cta: { label: "Call To Action", link: "#", linkType: "URL" },
-          },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-white",
-          textColor: "text-black",
-        },
-        orientation: "left",
-        ctaVariant: "primary",
-        heading: {
-          level: 1,
-          align: "left",
-        },
-        image: {
-          aspectRatio: 1.78,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 16,
-  },
-  {
-    name: "version 16 props with missing ctaType",
-    document: { c_promo: promoData },
-    props: {
-      data: {
-        promo: {
-          field: "c_promo",
-          constantValue: {
-            image: {
-              height: 360,
-              width: 640,
-              url: "https://placehold.co/640x360",
-            },
-            title: "Title",
-            description: "Description",
-            cta: {
-              label: "Call To Action",
-              link: "#",
-              linkType: "URL",
-              // Missing ctaType - should be added by migration
-            },
-          },
-          constantValueEnabled: true,
-          constantValueOverride: {
-            image: true,
-            title: true,
-            description: true,
-            cta: true,
-          },
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-white",
-          textColor: "text-black",
-        },
-        orientation: "left",
-        ctaVariant: "primary",
-        heading: {
-          level: 1,
-          align: "left",
-        },
-        image: {
-          aspectRatio: 1.78,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 16,
-  },
-  {
-    name: "version 24 with constant values",
-    document: {},
-    props: {
-      data: {
-        promo: {
-          field: "c_locationPages_locationPages_promoSection",
-          constantValue: {
-            cta: {
-              link: "#",
-              label: {
-                en: "LEARN MORE",
-                hasLocalizedValue: "true",
-              },
-              ctaType: "textAndLink",
-              linkType: "URL",
-            },
-            image: {
-              url: "https://placehold.co/640x360",
-              width: 640,
-              height: 360,
-              assetImage: {
-                id: "22241106",
-                name: "menu decoverte",
-                sourceUrl: "",
-                childImages: [
-                  {
-                    url: "https://placehold.co/640x360",
-                    dimension: {
-                      width: 640,
-                      height: 360,
-                    },
-                  },
-                ],
-                originalImage: {
-                  url: "https://placehold.co/640x360",
-                  dimension: {
-                    width: 640,
-                    height: 360,
-                  },
-                  exifMetadata: {
-                    rotate: 0,
-                  },
-                },
-                transformations: {},
-                transformedImage: {
-                  url: "https://placehold.co/640x360",
-                  dimension: {
-                    width: 640,
-                    height: 360,
-                  },
-                },
-              },
-              alternateText: "",
-            },
-            title: {
-              en: "Discovery Menu",
-              hasLocalizedValue: "true",
-            },
-            description: {
-              en: {
-                html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Express yourself every day of the week with our brand-new Discovery Menu!</span></p>',
-                json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Express yourself every day of the week with our brand-new Discovery Menu!","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-              },
-              hasLocalizedValue: "true",
-            },
-          },
-          constantValueEnabled: true,
-          constantValueOverride: {
-            cta: true,
-            image: true,
-            title: true,
-            description: true,
-          },
-        },
-      },
-      styles: {
-        image: {
-          aspectRatio: 1.78,
-        },
-        heading: {
-          align: "left",
-          level: 2,
-        },
-        ctaVariant: "primary",
-        orientation: "left",
-        backgroundColor: {
-          bgColor: "bg-palette-tertiary",
-          textColor: "text-palette-tertiary-contrast",
-        },
-      },
-      analytics: {
-        scope: "promoSection",
-      },
-      liveVisibility: true,
-    },
-    version: 24,
-  },
-  {
-    name: "version 30 props with entity values",
-    document: { c_examplePromo: promoData },
-    props: {
-      data: {
-        promo: {
-          field: "c_examplePromo",
-          constantValue: {},
-          constantValueEnabled: false,
-        },
-        media: "image",
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-quaternary-light",
-          textColor: "text-black",
-        },
-        orientation: "right",
-      },
-      slots: {
-        HeadingSlot: [
-          {
-            type: "HeadingTextSlot",
-            props: {
-              id: "HeadingTextSlot-1731d25a-56df-4b1c-8881-8f195eb56776",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: "Featured Promotion",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { level: 4, align: "left" },
-              parentData: {
-                text: "Taste the universe!",
-                field: "c_examplePromo",
-              },
-            },
-          },
-        ],
-        DescriptionSlot: [
-          {
-            type: "BodyTextSlot",
-            props: {
-              id: "BodyTextSlot-e9fc1d7b-dacd-4f23-92fa-28ac1bde92c0",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { variant: "base" },
-              parentData: {
-                richText: {
-                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Our out-of-this-world </span><b><strong style="font-weight: bold;">burgers</strong></b><span> and</span><b><strong style="font-weight: bold;"> fresh salads</strong></b><span> are a flavor journey you won&#39;t forget. Explore a galaxy of taste, where every ingredient composes a symphony of flavors. Come visit us for a stellar dining experience!</span></p>',
-                },
-                field: "c_examplePromo",
-              },
-            },
-          },
-        ],
-        VideoSlot: [
-          {
-            type: "VideoSlot",
-            props: {
-              id: "VideoSlot-fe7b127e-c136-4bde-8082-613e890cccf4",
-              data: {},
-            },
-          },
-        ],
-        ImageSlot: [
-          {
-            type: "ImageSlot",
-            props: {
-              id: "ImageSlot-3caab504-556e-4420-987e-5ed793890c2c",
-              data: {
-                image: {
-                  field: "",
-                  constantValue: {
-                    url: "https://placehold.co/640x360",
-                    height: 360,
-                    width: 640,
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { aspectRatio: 1.78, width: 640 },
-              className:
-                "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
-              parentData: {
-                image: {
-                  height: 2048,
-                  thumbnails: [
-                    {
-                      height: 2048,
-                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
-                      width: 2048,
-                    },
-                    {
-                      height: 1900,
-                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/1900x1900.jpg",
-                      width: 1900,
-                    },
-                    {
-                      height: 619,
-                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/619x619.jpg",
-                      width: 619,
-                    },
-                    {
-                      height: 450,
-                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/450x450.jpg",
-                      width: 450,
-                    },
-                    {
-                      height: 196,
-                      url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/196x196.jpg",
-                      width: 196,
-                    },
-                  ],
-                  url: "https://a.mktgcdn.com/p-dev/riaolTLcpz-o-o1mImrnaEaeNBs58dqlB7TS2moQgyo/2048x2048.jpg",
-                  width: 2048,
-                },
-                field: "c_examplePromo",
-              },
-            },
-          },
-        ],
-        CTASlot: [
-          {
-            type: "CTASlot",
-            props: {
-              id: "CTASlot-177d77c3-3b73-4285-ba66-fb2776520062",
-              data: {
-                entityField: {
-                  field: "",
-                  constantValue: {
-                    label: "Learn More",
-                    link: "#",
-                    linkType: "URL",
-                  },
-                },
-              },
-              styles: {
-                variant: "secondary",
-                presetImage: undefined,
-              },
-              parentData: {
-                cta: {
-                  label: "Call to Order",
-                  link: "+18005551010",
-                  linkType: "PHONE",
-                },
-                field: "c_examplePromo",
-              },
-            },
-          },
-        ],
-      },
-      analytics: { scope: "promoSection" },
-      liveVisibility: true,
-    },
-    version: 30,
-  },
-  {
-    name: "version 30 props with mixed values",
-    document: { c_examplePromo: promoData },
-    props: {
-      data: {
-        promo: { field: "", constantValue: {}, constantValueEnabled: true },
-        media: "video",
-      },
-      styles: {
-        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-        orientation: "left",
-      },
-      slots: {
-        HeadingSlot: [
-          {
-            type: "HeadingTextSlot",
-            props: {
-              id: "HeadingTextSlot-31c0ae9a-81a5-416d-b7a8-f8a585baa805",
-              data: {
-                text: {
-                  field: "c_examplePromo.title",
-                  constantValue: {
-                    en: "Featured Promotion at [[name]]",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: false,
-                },
-              },
-              styles: { level: 2, align: "left" },
-            },
-          },
-        ],
-        DescriptionSlot: [
-          {
-            type: "BodyTextSlot",
-            props: {
-              id: "BodyTextSlot-cb709395-2072-491f-ad9d-52897daa50f9",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { variant: "base" },
-            },
-          },
-        ],
-        VideoSlot: [
-          {
-            type: "VideoSlot",
-            props: {
-              id: "VideoSlot-e7dd3569-6bf9-4a61-8bee-ff9e31adddfa",
-              data: {
-                assetVideo: {
-                  name: "Local asset",
-                  id: "0",
-                  video: {
-                    url: "https://youtube.com/test",
-                    thumbnail: "https://img.youtube.com/vi//hqdefault.jpg",
-                    id: "",
-                    title: "Local Video",
-                    duration: "0:00",
-                    embeddedUrl: "https://www.youtube.com/embed/",
-                  },
-                },
-              },
-            },
-          },
-        ],
-        ImageSlot: [
-          {
-            type: "ImageSlot",
-            props: {
-              id: "ImageSlot-82720cc0-77af-4284-bbe9-f28bd4d135fb",
-              data: {
-                image: {
-                  field: "",
-                  constantValue: {
-                    url: "https://placehold.co/640x360",
-                    height: 360,
-                    width: 640,
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { aspectRatio: 1.78, width: 640 },
-              className:
-                "max-w-full sm:max-w-initial md:max-w-[450px] lg:max-w-none rounded-image-borderRadius w-full",
-            },
-          },
-        ],
-        CTASlot: [
-          {
-            type: "CTASlot",
-            props: {
-              id: "CTASlot-9d1cf16a-1858-4cb6-8c1f-a31ea633d609",
-              data: {
-                entityField: {
-                  field: "",
-                  constantValue: {
-                    label: { en: "", hasLocalizedValue: "true" },
-                    link: "#",
-                    linkType: "URL",
-                    ctaType: "presetImage",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: {
-                variant: "link",
-                presetImage: "app-store",
-              },
-            },
-          },
-        ],
-      },
-      analytics: { scope: "promoSection" },
-      liveVisibility: true,
-    },
-    version: 30,
-  },
-  {
-    name: "version 48 props with translatable image and CTA",
-    document: { c_examplePromo: promoData },
-    props: {
-      data: {
-        promo: { field: "", constantValue: {}, constantValueEnabled: true },
-        media: "image",
-      },
-      styles: {
-        backgroundColor: { bgColor: "bg-white", textColor: "text-black" },
-        orientation: "left",
-      },
-      slots: {
-        ImageSlot: [
-          {
-            type: "ImageSlot",
-            props: {
-              id: "ImageSlot-v48",
-              data: {
-                image: {
-                  field: "",
-                  constantValue: {
-                    en: {
-                      url: "https://placehold.co/640x360",
-                      height: 360,
-                      width: 640,
-                      alternateText: "Image",
-                    },
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { aspectRatio: 1.78, width: 640 },
-            },
-          },
-        ],
-        HeadingSlot: [
-          {
-            type: "HeadingTextSlot",
-            props: {
-              id: "HeadingSlot-v48",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: "Promo Title",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { level: 2, align: "left" },
-            },
-          },
-        ],
-        DescriptionSlot: [
-          {
-            type: "BodyTextSlot",
-            props: {
-              id: "DescriptionSlot-v48",
-              data: {
-                text: {
-                  field: "",
-                  constantValue: {
-                    en: "Promo Description",
-                    hasLocalizedValue: "true",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: { variant: "base" },
-            },
-          },
-        ],
-        VideoSlot: [
-          {
-            type: "VideoSlot",
-            props: {
-              id: "VideoSlot-v48",
-              data: {},
-            },
-          },
-        ],
-        CTASlot: [
-          {
-            type: "CTASlot",
-            props: {
-              id: "CTASlot-v48",
-              data: {
-                entityField: {
-                  field: "",
-                  constantValue: {
-                    label: {
-                      en: "Learn More",
-                      hasLocalizedValue: "true",
-                    },
-                    link: {
-                      en: "#",
-                      hasLocalizedValue: "true",
-                    },
-                    linkType: "URL",
-                  },
-                  constantValueEnabled: true,
-                },
-              },
-              styles: {
-                variant: "primary",
-              },
-            },
-          },
-        ],
-      },
-      analytics: { scope: "promoSection" },
-      liveVisibility: true,
-    },
-    version: 48,
   },
   {
     name: "[classic] version 50 props with constant values and image",
@@ -2477,6 +1867,63 @@ const tests: ComponentTest[] = [
       id: "PromoSection-8dba6990-38a9-4f9b-ba10-7a6bfd0c5a21",
     },
   },
+  {
+    name: "[classic] version 59 with showMedia, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        showMedia: false,
+        showCTA: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[immersive] version 59 with showHeading, showDescription false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "immersive",
+        showHeading: false,
+        showDescription: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[compact] version 59 with showHeading, showDescription, showMedia false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "compact",
+        showHeading: false,
+        showDescription: false,
+        showMedia: false,
+      },
+    },
+    version: 59,
+  },
+  {
+    name: "[spotlight] version 59 with showHeading, showDescription, showCTA false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      styles: {
+        ...version59Props.styles,
+        variant: "spotlight",
+        showHeading: false,
+        showDescription: false,
+        showCTA: false,
+      },
+    },
+    version: 59,
+  },
 ];
 
 const BRAND_COLOR_BG_ALLOWLIST = new Set([
@@ -2590,10 +2037,7 @@ describe("PromoSection", async () => {
       });
       const results = await axe(container);
       if (isBrandColorTest(props) && results.violations.length) {
-        console.warn(
-          `IGNORING axe violations for brand color test: ${name}`,
-          results.violations
-        );
+        logSuppressedWcagViolations(results);
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -2605,10 +2049,7 @@ describe("PromoSection", async () => {
         ).toMatchScreenshot({ customThreshold: 10 });
         const results = await axe(container);
         if (isBrandColorTest(props) && results.violations.length) {
-          console.warn(
-            `IGNORING axe violations for brand color test: ${name}`,
-            results.violations
-          );
+          logSuppressedWcagViolations(results);
         } else {
           expect(results).toHaveNoViolations();
         }

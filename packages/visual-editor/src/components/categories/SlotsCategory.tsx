@@ -1,11 +1,12 @@
 import { Address, AddressProps } from "../contentBlocks/Address.tsx";
 import { BodyText, BodyTextProps } from "../contentBlocks/BodyText.tsx";
 import { CTAWrapper, CTAWrapperProps } from "../contentBlocks/CtaWrapper.tsx";
-import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 import {
   HeadingText,
   HeadingTextProps,
 } from "../contentBlocks/HeadingText.tsx";
+import { Text, TextProps } from "../contentBlocks/Text.tsx";
+import { Emails, EmailsProps } from "../contentBlocks/Emails.tsx";
 import {
   HoursStatus,
   HoursStatusProps,
@@ -182,6 +183,7 @@ export interface SlotsCategoryProps {
   TestimonialCard: TestimonialCardProps;
   TestimonialCardsWrapper: TestimonialCardsWrapperProps;
   TextListSlot: TextListProps;
+  TextSlot: TextProps;
   Timestamp: TimestampProps;
   VideoSlot: VideoProps;
 }
@@ -279,6 +281,7 @@ export const SlotsCategoryComponents = {
     permissions: lockedPermissions,
   },
   TextListSlot: { ...TextList, permissions: lockedPermissions },
+  TextSlot: { ...Text, permissions: lockedPermissions },
   Timestamp: { ...Timestamp, permissions: lockedPermissions },
   VideoSlot: { ...Video, permissions: lockedPermissions },
 };

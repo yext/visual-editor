@@ -108,6 +108,621 @@ const teamData = {
   ],
 };
 
+const version59Props = {
+  styles: {
+    backgroundColor: {
+      bgColor: "bg-palette-secondary-light",
+      textColor: "text-black",
+    },
+    showSectionHeading: true,
+  },
+  slots: {
+    SectionHeadingSlot: [
+      {
+        type: "HeadingTextSlot",
+        props: {
+          id: "HeadingTextSlot-8daa816f-7dfb-40a8-a566-a389b75b20d5",
+          data: {
+            text: {
+              constantValue: {
+                en: "Meet Our Team",
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: true,
+              field: "",
+            },
+          },
+          styles: {
+            level: 2,
+            align: "left",
+          },
+        },
+      },
+    ],
+    CardsWrapperSlot: [
+      {
+        type: "TeamCardsWrapper",
+        props: {
+          id: "TeamCardsWrapper-74fb3b71-a900-4f75-ba53-95791faf4d26",
+          data: {
+            field: "",
+            constantValueEnabled: true,
+            constantValue: [
+              {
+                id: "TeamCard-79d21fd5-ac1b-4eb1-b42b-22a61921d773",
+              },
+              {
+                id: "TeamCard-e95893de-27fc-4dd2-8427-af146daa3acc",
+              },
+              {
+                id: "TeamCard-4068472c-225a-4743-8aa1-b4a3e099b27a",
+              },
+            ],
+          },
+          styles: {
+            showImage: true,
+            showTitle: true,
+            showPhone: true,
+            showEmail: true,
+            showCTA: true,
+          },
+          slots: {
+            CardSlot: [
+              {
+                type: "TeamCard",
+                props: {
+                  id: "TeamCard-79d21fd5-ac1b-4eb1-b42b-22a61921d773",
+                  index: 0,
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "ImageSlot-899584c1-f9c1-4dee-8854-8fdd56c5bcc2",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                height: 80,
+                                width: 80,
+                                alternateText: "Headshot Image",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1,
+                            width: 200,
+                          },
+                          hideWidthProp: true,
+                          className: "max-w-full h-full object-cover",
+                          sizes: {
+                            base: "80px",
+                          },
+                        },
+                      },
+                    ],
+                    NameSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-ee268d3e-6b51-491f-bc5d-97b5fc5b09d0",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "First Last",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 3,
+                            align: "left",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "BodyTextSlot-337960ae-f156-40ab-b6e3-38998c4ba2c4",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Associate Agent","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Associate Agent</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                            semanticLevelOverride: 3,
+                          },
+                        },
+                      },
+                    ],
+                    PhoneSlot: [
+                      {
+                        type: "PhoneNumbersSlot",
+                        props: {
+                          id: "PhoneNumbersSlot-6b15b3f2-fe86-4279-a7fb-79ef829a283f",
+                          data: {
+                            phoneNumbers: [
+                              {
+                                number: {
+                                  field: "",
+                                  constantValue: "+12027706619",
+                                  constantValueEnabled: true,
+                                },
+                                label: {
+                                  en: "",
+                                  hasLocalizedValue: "true",
+                                },
+                              },
+                            ],
+                          },
+                          styles: {
+                            phoneFormat: "domestic",
+                            includePhoneHyperlink: true,
+                          },
+                          eventName: "card0-phone",
+                        },
+                      },
+                    ],
+                    EmailSlot: [
+                      {
+                        type: "EmailsSlot",
+                        props: {
+                          id: "EmailsSlot-b45cff56-6278-4ebb-8d43-d094b07c56f4",
+                          data: {
+                            list: {
+                              field: "",
+                              constantValue: ["jkelley@[company].com"],
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            listLength: 1,
+                          },
+                          eventName: "card0-email",
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "CTASlot-dd89dae9-bca7-4def-8d33-4bece6592105",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Visit Profile",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "card0-cta",
+                        },
+                      },
+                    ],
+                  },
+                  conditionalRender: {
+                    image: true,
+                    name: true,
+                    title: true,
+                    phone: true,
+                    email: true,
+                    cta: true,
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showTitle: true,
+                    showPhone: true,
+                    showEmail: true,
+                    showCTA: true,
+                  },
+                },
+              },
+              {
+                type: "TeamCard",
+                props: {
+                  id: "TeamCard-e95893de-27fc-4dd2-8427-af146daa3acc",
+                  index: 1,
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "ImageSlot-ea5e9dcc-1aaf-4d83-9e61-5fcbeac37e08",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                height: 80,
+                                width: 80,
+                                alternateText: "Headshot Image",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1,
+                            width: 200,
+                          },
+                          hideWidthProp: true,
+                          className: "max-w-full h-full object-cover",
+                          sizes: {
+                            base: "80px",
+                          },
+                        },
+                      },
+                    ],
+                    NameSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-1cc13147-74b7-4938-89ec-fd043ead1f40",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "First Last",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 3,
+                            align: "left",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "BodyTextSlot-3a09212f-4ac9-4263-983d-3148d2dcf15d",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Associate Agent","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Associate Agent</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                            semanticLevelOverride: 3,
+                          },
+                        },
+                      },
+                    ],
+                    PhoneSlot: [
+                      {
+                        type: "PhoneNumbersSlot",
+                        props: {
+                          id: "PhoneNumbersSlot-19de3b67-3ddc-434a-ae9d-3602208a8f50",
+                          data: {
+                            phoneNumbers: [
+                              {
+                                number: {
+                                  field: "",
+                                  constantValue: "+12027706619",
+                                  constantValueEnabled: true,
+                                },
+                                label: {
+                                  en: "",
+                                  hasLocalizedValue: "true",
+                                },
+                              },
+                            ],
+                          },
+                          styles: {
+                            phoneFormat: "domestic",
+                            includePhoneHyperlink: true,
+                          },
+                          eventName: "card1-phone",
+                        },
+                      },
+                    ],
+                    EmailSlot: [
+                      {
+                        type: "EmailsSlot",
+                        props: {
+                          id: "EmailsSlot-0abc31ae-2510-4188-89fa-6fa0d37f84a5",
+                          data: {
+                            list: {
+                              field: "",
+                              constantValue: ["jkelley@[company].com"],
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            listLength: 1,
+                          },
+                          eventName: "card1-email",
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "CTASlot-fe7ac197-3e22-4383-ba46-f3cdc9875750",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Visit Profile",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "card1-cta",
+                        },
+                      },
+                    ],
+                  },
+                  conditionalRender: {
+                    image: true,
+                    name: true,
+                    title: true,
+                    phone: true,
+                    email: true,
+                    cta: true,
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showTitle: true,
+                    showPhone: true,
+                    showEmail: true,
+                    showCTA: true,
+                  },
+                },
+              },
+              {
+                type: "TeamCard",
+                props: {
+                  id: "TeamCard-4068472c-225a-4743-8aa1-b4a3e099b27a",
+                  index: 2,
+                  styles: {
+                    backgroundColor: {
+                      bgColor: "bg-white",
+                      textColor: "text-black",
+                    },
+                  },
+                  slots: {
+                    ImageSlot: [
+                      {
+                        type: "ImageSlot",
+                        props: {
+                          id: "ImageSlot-e266b320-fb93-4377-8392-16475eb860c8",
+                          data: {
+                            image: {
+                              field: "",
+                              constantValue: {
+                                url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                height: 80,
+                                width: 80,
+                                alternateText: "Headshot Image",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            aspectRatio: 1,
+                            width: 200,
+                          },
+                          hideWidthProp: true,
+                          className: "max-w-full h-full object-cover",
+                          sizes: {
+                            base: "80px",
+                          },
+                        },
+                      },
+                    ],
+                    NameSlot: [
+                      {
+                        type: "HeadingTextSlot",
+                        props: {
+                          id: "HeadingTextSlot-d00f5001-9efc-496c-9e90-7a06c23eb3ac",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: "First Last",
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            level: 3,
+                            align: "left",
+                          },
+                        },
+                      },
+                    ],
+                    TitleSlot: [
+                      {
+                        type: "BodyTextSlot",
+                        props: {
+                          id: "BodyTextSlot-9e4d4656-41c1-4164-865c-37cc3670122b",
+                          data: {
+                            text: {
+                              field: "",
+                              constantValue: {
+                                en: {
+                                  json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Associate Agent","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                  html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Associate Agent</span></p>',
+                                },
+                                hasLocalizedValue: "true",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "base",
+                            semanticLevelOverride: 3,
+                          },
+                        },
+                      },
+                    ],
+                    PhoneSlot: [
+                      {
+                        type: "PhoneNumbersSlot",
+                        props: {
+                          id: "PhoneNumbersSlot-e71ec41f-1013-48f8-9a7d-b649cf05f71d",
+                          data: {
+                            phoneNumbers: [
+                              {
+                                number: {
+                                  field: "",
+                                  constantValue: "+12027706619",
+                                  constantValueEnabled: true,
+                                },
+                                label: {
+                                  en: "",
+                                  hasLocalizedValue: "true",
+                                },
+                              },
+                            ],
+                          },
+                          styles: {
+                            phoneFormat: "domestic",
+                            includePhoneHyperlink: true,
+                          },
+                          eventName: "card2-phone",
+                        },
+                      },
+                    ],
+                    EmailSlot: [
+                      {
+                        type: "EmailsSlot",
+                        props: {
+                          id: "EmailsSlot-3932ff63-fbe6-478e-a29a-b1f6011098c2",
+                          data: {
+                            list: {
+                              field: "",
+                              constantValue: ["jkelley@[company].com"],
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            listLength: 1,
+                          },
+                          eventName: "card2-email",
+                        },
+                      },
+                    ],
+                    CTASlot: [
+                      {
+                        type: "CTASlot",
+                        props: {
+                          id: "CTASlot-71d7170b-10fe-4235-92f1-d1bc2dec6101",
+                          data: {
+                            entityField: {
+                              field: "",
+                              constantValue: {
+                                label: {
+                                  en: "Visit Profile",
+                                  hasLocalizedValue: "true",
+                                },
+                                link: "#",
+                                linkType: "URL",
+                                ctaType: "textAndLink",
+                              },
+                              constantValueEnabled: true,
+                            },
+                          },
+                          styles: {
+                            variant: "primary",
+                            presetImage: "app-store",
+                          },
+                          eventName: "card2-cta",
+                        },
+                      },
+                    ],
+                  },
+                  conditionalRender: {
+                    image: true,
+                    name: true,
+                    title: true,
+                    phone: true,
+                    email: true,
+                    cta: true,
+                  },
+                  parentStyles: {
+                    showImage: true,
+                    showTitle: true,
+                    showPhone: true,
+                    showEmail: true,
+                    showCTA: true,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  },
+  analytics: {
+    scope: "teamSection",
+  },
+  liveVisibility: true,
+};
+
 const tests: ComponentTest[] = [
   {
     name: "default props with empty document",
@@ -120,223 +735,6 @@ const tests: ComponentTest[] = [
     document: { c_team: teamData },
     props: { ...TeamSection.defaultProps },
     version: migrationRegistry.length,
-  },
-  {
-    name: "version 0 props with entity values",
-    document: { c_team: teamData, name: "Test Name" },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Meet Our Team",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        people: {
-          field: "c_team",
-          constantValue: { people: [] },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-quaternary-light",
-          textColor: "text-black",
-        },
-        cardBackgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        headingLevel: 2,
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 0 props with constant value",
-    document: { c_team: teamData },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Meet Our Team",
-          constantValueEnabled: true,
-          constantValueOverride: {},
-        },
-        people: {
-          field: "c_team",
-          constantValue: {
-            people: [
-              {
-                name: "Name",
-                title: "Title",
-                phoneNumber: "8888888888",
-                email: "email",
-                cta: { label: "CTA" },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        cardBackgroundColor: {
-          bgColor: "bg-palette-secondary-light",
-          textColor: "text-black",
-        },
-        headingLevel: 2,
-      },
-      liveVisibility: true,
-    },
-    version: 0,
-  },
-  {
-    name: "version 7 props with entity values",
-    document: { c_team: teamData, name: "Test Name" },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Meet Our Team",
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-        people: {
-          field: "c_team",
-          constantValue: { people: [] },
-          constantValueEnabled: false,
-          constantValueOverride: {},
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-secondary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 7 props with constant value",
-    document: { c_team: teamData },
-    props: {
-      data: {
-        heading: {
-          field: "name",
-          constantValue: "Meet Our Team",
-          constantValueEnabled: true,
-          constantValueOverride: {},
-        },
-        people: {
-          field: "c_team",
-          constantValue: {
-            people: [
-              {
-                name: "Name",
-                title: "Title",
-                phoneNumber: "8888888888",
-                email: "email",
-                cta: { label: "CTA" },
-              },
-            ],
-          },
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-secondary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 7,
-  },
-  {
-    name: "version 15 props with missing ctaType",
-    document: { c_team: teamData },
-    props: {
-      data: {
-        people: {
-          field: "c_team",
-          constantValue: [
-            {
-              name: "Name",
-              title: "Title",
-              phoneNumber: "8888888888",
-              email: "email",
-              cta: {
-                label: "CTA",
-                // Missing link, linkType, and ctaType - should be added by migration
-              },
-            },
-            {
-              name: "Name 2",
-              title: "Title 2",
-              phoneNumber: "9999999999",
-              email: "email2",
-              cta: {
-                label: "CTA 2",
-                link: "#",
-                linkType: "URL",
-                // Missing ctaType - should be added by migration
-              },
-            },
-          ],
-          constantValueEnabled: true,
-        },
-      },
-      styles: {
-        backgroundColor: {
-          bgColor: "bg-palette-secondary-dark",
-          textColor: "text-white",
-        },
-        heading: {
-          level: 2,
-          align: "left",
-        },
-        cards: {
-          backgroundColor: {
-            bgColor: "bg-palette-secondary-light",
-            textColor: "text-black",
-          },
-          headingLevel: 3,
-        },
-      },
-      liveVisibility: true,
-    },
-    version: 15,
   },
   {
     name: "version 34 props with entity values",
@@ -1010,107 +1408,58 @@ const tests: ComponentTest[] = [
     },
     version: 34,
   },
-
   {
-    name: "version 48 props",
-    version: 48,
-    document: {},
+    name: "version 59 with showSectionHeading, showImage, showCTA false",
+    document: { locale: "en" },
     props: {
+      ...version59Props,
       styles: {
-        backgroundColor: {
-          bgColor: "bg-white",
-          textColor: "text-black",
-        },
+        ...version59Props.styles,
+        showSectionHeading: false,
       },
       slots: {
-        SectionHeadingSlot: [],
+        ...version59Props.slots,
         CardsWrapperSlot: [
           {
-            type: "TeamCardsWrapper",
+            ...version59Props.slots.CardsWrapperSlot?.[0],
             props: {
-              id: "CardsWrapperSlot-v48",
-              data: {
-                constantValue: [{ id: "card-1" }],
-                constantValueEnabled: true,
-                field: "",
-              },
-              slots: {
-                CardSlot: [
-                  {
-                    type: "TeamCard",
-                    props: {
-                      id: "CardSlot-v48",
-                      data: {},
-                      styles: {
-                        backgroundColor: {
-                          bgColor: "bg-white",
-                          textColor: "text-black",
-                        },
-                      },
-                      slots: {
-                        ImageSlot: [
-                          {
-                            type: "ImageSlot",
-                            props: {
-                              id: "ImageSlot-v48",
-                              data: {
-                                image: {
-                                  field: "",
-                                  constantValue: {
-                                    en: {
-                                      url: "https://placehold.co/150x150",
-                                      height: 150,
-                                      width: 150,
-                                      alternateText: "Logo",
-                                    },
-                                    hasLocalizedValue: "true",
-                                  },
-                                  constantValueEnabled: true,
-                                },
-                              },
-                            },
-                          },
-                        ],
-                        CTASlot: [
-                          {
-                            type: "CTASlot",
-                            props: {
-                              id: "CTASlot-v48",
-                              data: {
-                                entityField: {
-                                  field: "",
-                                  constantValue: {
-                                    label: {
-                                      en: "View Profile",
-                                      hasLocalizedValue: "true",
-                                    },
-                                    link: {
-                                      en: "#",
-                                      hasLocalizedValue: "true",
-                                    },
-                                    linkType: "URL",
-                                    ctaType: "textAndLink",
-                                  },
-                                  constantValueEnabled: true,
-                                },
-                              },
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  },
-                ],
+              ...version59Props.slots.CardsWrapperSlot?.[0].props,
+              styles: {
+                ...version59Props.slots.CardsWrapperSlot?.[0].props.styles,
+                showImage: false,
+                showCTA: false,
               },
             },
           },
         ],
       },
-      analytics: {
-        scope: "teamSection",
-      },
-      liveVisibility: true,
     },
+    version: 59,
+  },
+  {
+    name: "version 59 with showTitle, showPhone, showEmail false",
+    document: { locale: "en" },
+    props: {
+      ...version59Props,
+      slots: {
+        ...version59Props.slots,
+        CardsWrapperSlot: [
+          {
+            ...version59Props.slots.CardsWrapperSlot?.[0],
+            props: {
+              ...version59Props.slots.CardsWrapperSlot?.[0].props,
+              styles: {
+                ...version59Props.slots.CardsWrapperSlot?.[0].props.styles,
+                showTitle: false,
+                showPhone: false,
+                showEmail: false,
+              },
+            },
+          },
+        ],
+      },
+    },
+    version: 59,
   },
 ];
 

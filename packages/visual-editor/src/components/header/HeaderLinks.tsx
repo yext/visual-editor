@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FaBars } from "react-icons/fa6";
 import {
   ArrayField,
   AutoField,
@@ -8,30 +7,52 @@ import {
   FieldLabel,
   Fields,
   PuckComponent,
-  registerOverlayPortal,
   setDeep,
 } from "@puckeditor/core";
 import { CTA } from "../atoms/cta.tsx";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { themeManagerCn } from "../../utils/cn.ts";
 import { TranslatableCTA } from "../../types/types.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { useOverflow } from "../../hooks/useOverflow.ts";
+import { usePreviewWindow } from "../../hooks/usePreviewWindow.ts";
 import { YextField } from "../../editor/YextField.tsx";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../atoms/dropdown.tsx";
 import { linkTypeOptions } from "../../internal/puck/constant-value-fields/CallToAction.tsx";
+import {
+  useExpandedHeaderMenu,
+  useHeaderLinksDisplayMode,
+} from "./ExpandedHeaderMenuContext.tsx";
+import { getHeaderViewport } from "./viewport.ts";
+import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
+import { BodyProps } from "../atoms/body.tsx";
 
 export type HeaderLinksProps = {
   data: {
     links: TranslatableCTA[];
     collapsedLinks: TranslatableCTA[];
+  };
+
+  styles: {
+    /**
+     * Alignment of the header links
+     */
+    align?: "left" | "center" | "right";
+
+    /**
+     * The variant of the header links
+     */
+    variant?: BodyProps["variant"];
+
+    /**
+     * The color of the header links
+     */
+    color?: BackgroundStyle;
+
+    /**
+     * The weight of the header links
+     */
+    weight?: "normal" | "bold";
   };
 
   /** @internal data from the parent section */
@@ -55,7 +76,7 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
       filter: { types: ["type.string"] },
     }),
     link: YextField(msg("fields.link", "Link"), {
-      type: "text",
+      type: "translatableString",
     }),
     linkType: YextField(msg("fields.linkType", "Link Type"), {
       type: "select",
@@ -73,7 +94,7 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
   getItemSummary: (item, i) => {
     return (
       resolveComponentData(item.label, i18nComponentsInstance.language) ||
-      pt("Link", "Link") + " " + ((i ?? 0) + 1)
+      pt("link", "Link") + " " + ((i ?? 0) + 1)
     );
   },
 };
@@ -113,177 +134,200 @@ const headerLinksFields: Fields<HeaderLinksProps> = {
       ),
     },
   }),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      align: YextField(msg("fields.align", "Align"), {
+        type: "radio",
+        options: "ALIGNMENT",
+      }),
+      variant: YextField(msg("fields.variant", "Variant"), {
+        type: "radio",
+        options: "BODY_VARIANT",
+      }),
+      color: YextField(msg("fields.color", "Color"), {
+        type: "select",
+        options: "SITE_COLOR",
+      }),
+      weight: YextField(msg("fields.weight", "Weight"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.normal", "Normal"), value: "normal" },
+          { label: msg("fields.options.bold", "Bold"), value: "bold" },
+        ],
+      }),
+    },
+  }),
 };
 
-const getWindow = (): Window | null => {
-  if (typeof window === "undefined") {
-    return null;
-  }
+const useWindowWidth = (externalWindow?: Window | null) => {
+  const [width, setWidth] = React.useState(externalWindow?.innerWidth ?? 1024);
 
-  const iframe = document.getElementById(
-    "preview-frame"
-  ) as HTMLIFrameElement | null;
-  if (iframe) {
-    return iframe?.contentWindow;
-  }
+  React.useLayoutEffect(() => {
+    const win = externalWindow || window;
+    const handleResize = () => setWidth(win.innerWidth);
+    handleResize();
+    win.addEventListener("resize", handleResize);
+    return () => win.removeEventListener("resize", handleResize);
+  }, [externalWindow]);
 
-  return window;
+  return width;
 };
 
 const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
   data,
+  styles,
   parentData,
   puck,
 }) => {
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument();
+  const previewWindow = usePreviewWindow();
 
   const navRef = React.useRef<HTMLDivElement | null>(null);
   const measureContainerRef = React.useRef<HTMLUListElement | null>(null);
-  const linkRefs = React.useRef<Array<HTMLLIElement | null>>([]);
-  const hamburgerButtonRef = React.useRef<HTMLDivElement | null>(null);
+  const displayMode = useHeaderLinksDisplayMode();
+  const menuContext = useExpandedHeaderMenu();
 
-  React.useEffect(
-    () => registerOverlayPortal(hamburgerButtonRef.current),
-    [hamburgerButtonRef.current]
-  );
+  const windowWidth = useWindowWidth(previewWindow);
+  const { isMobile, isDesktop } = getHeaderViewport(windowWidth);
+  const isOverflow = useOverflow(navRef, measureContainerRef, 0);
 
   const type = parentData?.type || "Primary";
   const isSecondary = type === "Secondary";
-  const validLinks = data.links?.filter((item) => !!item?.link) || [];
-  const validAlwaysCollapsedLinks =
-    data.collapsedLinks?.filter((item) => !!item?.link) || [];
-  const windowWidth = getWindow()?.innerWidth || 1024;
+  const primaryOverflow = menuContext?.primaryOverflow ?? false;
+  const ariaLabel =
+    displayMode === "menu"
+      ? type === "Primary"
+        ? t("primaryHeaderLinksMenu", "Primary Header Links (Menu)")
+        : t("secondaryHeaderLinksMenu", "Secondary Header Links (Menu)")
+      : type === "Primary"
+        ? t("primaryHeaderLinks", "Primary Header Links")
+        : t("secondaryHeaderLinks", "Secondary Header Links");
 
-  const isOverflow = useOverflow(
-    navRef,
-    measureContainerRef,
-    // when there are secondary collapsed links, adjust for the hamburger button width
-    isSecondary && validAlwaysCollapsedLinks.length ? 48 : 0
+  const validLinks = React.useMemo(
+    () => data.links?.filter((item) => !!item?.link) || [],
+    [data.links]
+  );
+  const validAlwaysCollapsedLinks = React.useMemo(
+    () =>
+      isSecondary
+        ? []
+        : data.collapsedLinks?.filter((item) => !!item?.link) || [],
+    [isSecondary, data.collapsedLinks]
   );
 
-  const renderLink = (
-    item: TranslatableCTA,
-    index: number,
-    ctaType: string
-  ) => (
+  // Derive styles based on display mode and styles props.
+  const justifyClass = React.useMemo(() => {
+    if (displayMode === "menu") {
+      return isDesktop ? "justify-end" : "justify-start";
+    }
+
+    const alignmentMap = {
+      left: "justify-start",
+      center: "justify-center",
+      right: "justify-end",
+    };
+    return alignmentMap[styles?.align || "right"];
+  }, [displayMode, isDesktop, styles?.align]);
+  const weightClass = styles?.weight === "bold" ? "font-bold" : "font-normal";
+  const sizeClass = styles?.variant
+    ? {
+        xs: "text-body-xs-fontSize",
+        sm: "text-body-sm-fontSize",
+        base: "text-body-fontSize",
+        lg: "text-body-lg-fontSize",
+      }[styles.variant]
+    : "text-body-fontSize";
+
+  const linksToRender = React.useMemo(() => {
+    if (displayMode !== "menu" || isSecondary) {
+      return validLinks;
+    }
+
+    const showAll = isMobile || primaryOverflow;
+    return showAll
+      ? [...validLinks, ...validAlwaysCollapsedLinks]
+      : validAlwaysCollapsedLinks;
+  }, [
+    displayMode,
+    isSecondary,
+    isMobile,
+    primaryOverflow,
+    validLinks,
+    validAlwaysCollapsedLinks,
+  ]);
+
+  // Update setPrimaryHasCollapsedLinks for menuContext
+  React.useEffect(() => {
+    if (menuContext && displayMode === "inline" && !isSecondary) {
+      menuContext.setPrimaryHasCollapsedLinks(
+        validAlwaysCollapsedLinks.length > 0
+      );
+      return () => menuContext.setPrimaryHasCollapsedLinks(false);
+    }
+  }, [menuContext, displayMode, isSecondary, validAlwaysCollapsedLinks.length]);
+
+  const renderLink = (item: TranslatableCTA, index: number) => (
     <CTA
       variant={
-        type === "Primary"
-          ? "headerFooterMainLink"
-          : "headerFooterSecondaryLink"
+        !isSecondary ? "headerFooterMainLink" : "headerFooterSecondaryLink"
       }
+      color={styles?.color}
       openInNewTab={item.openInNewTab}
-      eventName={`cta.${ctaType}.${index}`}
+      eventName={`cta.${type.toLowerCase()}.${index}`}
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}
       link={resolveComponentData(item.link, i18n.language, streamDocument)}
-      className="justify-start w-full text-left text-wrap break-words"
+      className={`${justifyClass} ${weightClass} ${sizeClass} w-full text-wrap break-words`}
     />
   );
 
-  if (validLinks.concat(validAlwaysCollapsedLinks).length === 0) {
-    if (puck.isEditing) {
-      return (
-        <nav
-          aria-label={
-            type === "Primary"
-              ? pt("primaryHeaderLinks", "Primary Header Links")
-              : pt("secondaryHeaderLinks", "Secondary Header Links")
-          }
-        >
-          <ul className="flex flex-col md:flex-row gap-0 md:gap-6 md:items-center">
-            <li className="py-4 md:py-0">
-              <div className="h-5 min-w-[100px]" />
-            </li>
-          </ul>
-        </nav>
-      );
-    }
-    return <></>;
+  // Early return for empty state
+  if (validLinks.length + validAlwaysCollapsedLinks.length === 0) {
+    return puck.isEditing ? (
+      <nav className="h-5 min-w-[100px] min-h-[30px] opacity-20" />
+    ) : (
+      <></>
+    );
   }
 
   return (
     <nav
+      aria-label={ariaLabel}
       ref={navRef}
-      className="flex md:gap-6 md:items-center justify-end"
-      aria-label={
-        type === "Primary"
-          ? pt("primaryHeaderLinks", "Primary Header Links")
-          : pt("secondaryHeaderLinks", "Secondary Header Links")
-      }
+      className={`flex md:gap-6 md:items-center ${justifyClass} ${puck.isEditing ? " min-w-[100px] min-h-[30px]" : ""}`}
     >
-      {/* Measure div */}
+      {/* Hidden measure list for overflow math */}
       <ul
         ref={measureContainerRef}
-        className="flex flex-col md:flex-row w-fit sm:w-auto gap-0 md:gap-6 md:items-center absolute top-0 left-[-9999px] invisible"
+        className="flex flex-col md:flex-row absolute top-0 left-[-9999px] invisible"
       >
-        {validLinks.map((item, index) => {
-          return (
-            <li
-              key={`${type.toLowerCase()}.${index}`}
-              ref={(el) => (linkRefs.current[index] = el)}
-              className={themeManagerCn("py-4 md:py-0")}
-            >
-              {renderLink(item, index, type.toLowerCase())}
-            </li>
-          );
-        })}
+        {validLinks.map((item, i) => (
+          <li key={`measure-${i}`} className="py-4 md:py-0">
+            {renderLink(item, i)}
+          </li>
+        ))}
       </ul>
 
-      {/* Visible div */}
-      {(!isSecondary || windowWidth <= 360 || !isOverflow) && (
-        <ul className="flex flex-col md:flex-row w-full sm:w-auto gap-0 md:gap-6 md:items-center justify-end">
-          {validLinks
-            .concat(windowWidth <= 360 ? validAlwaysCollapsedLinks : [])
-            .map((item, index) => {
-              return (
-                <li
-                  key={`${type.toLowerCase()}.${index}`}
-                  className={"py-4 md:py-0"}
-                >
-                  {renderLink(item, index, type.toLowerCase())}
-                </li>
-              );
-            })}
+      {/* Visible list */}
+      {(!isSecondary || displayMode === "menu" || isMobile || !isOverflow) && (
+        <ul
+          className={`flex flex-col w-full sm:w-auto gap-0 ${
+            displayMode === "menu"
+              ? isDesktop
+                ? "md:flex-row md:gap-6 md:items-center justify-end"
+                : "justify-start"
+              : `${justifyClass} md:flex-row md:gap-6`
+          } ${sizeClass} ${weightClass}`}
+        >
+          {linksToRender.map((item, i) => (
+            <li key={`visible-${i}`} className="py-4 lg:py-0">
+              {renderLink(item, i)}
+            </li>
+          ))}
         </ul>
       )}
-
-      {isSecondary &&
-        (isOverflow || validAlwaysCollapsedLinks.length > 0) &&
-        windowWidth > 360 && (
-          <div className="hidden md:block py-4 md:py-0">
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                className="flex flex-row md:items-center gap-4 justify-between w-full"
-                aria-label={t(
-                  "showAdditionalHeaderLinks",
-                  "Show additional header links"
-                )}
-              >
-                <div
-                  ref={hamburgerButtonRef}
-                  className="flex gap-4 items-center"
-                >
-                  <FaBars />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white border rounded shadow-md p-2 min-w-[200px] z-[9999]">
-                {([] as typeof validLinks)
-                  .concat(isOverflow ? validLinks : [])
-                  .concat(validAlwaysCollapsedLinks)
-                  .map((item, index) => (
-                    <DropdownMenuItem
-                      key={`overflow-${index}`}
-                      className={`cursor-pointer p-2 text-body-sm-fontSize hover:bg-gray-100 ${puck.isEditing ? "pointer-events-none" : "pointer-events-auto"}`}
-                    >
-                      {renderLink(item, index, "overflow")}
-                    </DropdownMenuItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        )}
     </nav>
   );
 };
@@ -293,17 +337,32 @@ export const defaultHeaderLinkProps: HeaderLinksProps = {
     links: [defaultLink, defaultLink, defaultLink],
     collapsedLinks: [],
   },
+  styles: {
+    align: "right",
+    variant: "sm",
+    weight: "normal",
+  },
 };
 
 export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
   label: msg("components.headerLinks", "Header Links"),
   fields: headerLinksFields,
   resolveFields: (data, params) => {
-    return setDeep(
+    let updatedFields = headerLinksFields;
+
+    updatedFields = setDeep(
       headerLinksFields,
-      "data.objectFields.collapsedLinks.visible",
-      params.parent?.type === "SecondaryHeaderSlot"
+      "styles.objectFields.align.visible",
+      params.parent?.type !== "PrimaryHeaderSlot"
     );
+
+    updatedFields = setDeep(
+      updatedFields,
+      "data.objectFields.collapsedLinks.visible",
+      params.parent?.type === "PrimaryHeaderSlot"
+    );
+
+    return updatedFields;
   },
   defaultProps: defaultHeaderLinkProps,
   render: (props) => <HeaderLinksComponent {...props} />,

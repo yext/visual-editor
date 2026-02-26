@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   BackgroundStyle,
   backgroundColors,
@@ -21,10 +20,9 @@ import { defaultProductCardSlotData } from "./ProductCard.tsx";
 import { ProductCardsWrapperProps } from "./ProductCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
-import {
-  ProductSectionProvider,
-  ProductSectionVariant,
-} from "./ProductSectionContext.tsx";
+
+export type ProductSectionVariant = "immersive" | "classic" | "minimal";
+export type ProductSectionImageConstrain = "fill" | "fixed";
 
 export interface ProductSectionProps {
   /**
@@ -45,40 +43,10 @@ export interface ProductSectionProps {
     cardVariant?: ProductSectionVariant;
 
     /**
-     * Whether to show the product image.
+     * Whether to show the section heading.
      * @defaultValue true
      */
-    showImage?: boolean;
-
-    /**
-     * Whether to show the product brow text.
-     * @defaultValue true
-     */
-    showBrow?: boolean;
-
-    /**
-     * Whether to show the product title.
-     * @defaultValue true
-     */
-    showTitle?: boolean;
-
-    /**
-     * Whether to show the product price.
-     * @defaultValue true
-     */
-    showPrice?: boolean;
-
-    /**
-     * Whether to show the product description.
-     * @defaultValue true
-     */
-    showDescription?: boolean;
-
-    /**
-     * Whether to show the product CTA.
-     * @defaultValue true
-     */
-    showCTA?: boolean;
+    showSectionHeading: boolean;
   };
 
   slots: {
@@ -120,51 +88,13 @@ const productSectionFields: Fields<ProductSectionProps> = {
           { label: msg("fields.options.minimal", "Minimal"), value: "minimal" },
         ],
       }),
-      showImage: YextField(msg("fields.showImage", "Show Image"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.show", "Show"), value: true },
-          { label: msg("fields.options.hide", "Hide"), value: false },
-        ],
-      }),
-      showBrow: YextField(msg("fields.showBrow", "Show Brow Text"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.show", "Show"), value: true },
-          { label: msg("fields.options.hide", "Hide"), value: false },
-        ],
-      }),
-      showTitle: YextField(msg("fields.showTitle", "Show Title"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.show", "Show"), value: true },
-          { label: msg("fields.options.hide", "Hide"), value: false },
-        ],
-      }),
-      showPrice: YextField(msg("fields.showPrice", "Show Price"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.show", "Show"), value: true },
-          { label: msg("fields.options.hide", "Hide"), value: false },
-        ],
-      }),
-      showDescription: YextField(
-        msg("fields.showDescription", "Show Description"),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
         {
           type: "radio",
-          options: [
-            { label: msg("fields.options.show", "Show"), value: true },
-            { label: msg("fields.options.hide", "Hide"), value: false },
-          ],
+          options: "SHOW_HIDE",
         }
       ),
-      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
-        type: "radio",
-        options: [
-          { label: msg("fields.options.show", "Show"), value: true },
-          { label: msg("fields.options.hide", "Hide"), value: false },
-        ],
-      }),
     },
   }),
   slots: {
@@ -200,25 +130,15 @@ const ProductSectionComponent: PuckComponent<ProductSectionProps> = (props) => {
   const { slots, styles } = props;
 
   return (
-    <ProductSectionProvider
-      value={{
-        variant: styles.cardVariant ?? "immersive",
-        showImage: styles.showImage ?? true,
-        showBrow: styles.showBrow ?? true,
-        showTitle: styles.showTitle ?? true,
-        showPrice: styles.showPrice ?? true,
-        showDescription: styles.showDescription ?? true,
-        showCTA: styles.showCTA ?? true,
-      }}
+    <PageSection
+      background={styles?.backgroundColor}
+      className="flex flex-col gap-8"
     >
-      <PageSection
-        background={styles?.backgroundColor}
-        className="flex flex-col gap-8"
-      >
+      {styles.showSectionHeading && (
         <slots.SectionHeadingSlot style={{ height: "auto" }} allow={[]} />
-        <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
-      </PageSection>
-    </ProductSectionProvider>
+      )}
+      <slots.CardsWrapperSlot style={{ height: "auto" }} allow={[]} />
+    </PageSection>
   );
 };
 
@@ -233,12 +153,7 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
     styles: {
       backgroundColor: backgroundColors.background2.value,
       cardVariant: "immersive",
-      showImage: true,
-      showBrow: true,
-      showTitle: true,
-      showPrice: true,
-      showDescription: true,
-      showCTA: true,
+      showSectionHeading: true,
     },
     slots: {
       SectionHeadingSlot: [
@@ -271,6 +186,14 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
               constantValueEnabled: true,
               constantValue: [{}, {}, {}], // leave ids blank to auto-generate
             },
+            styles: {
+              showImage: true,
+              showBrow: true,
+              showTitle: true,
+              showPrice: true,
+              showDescription: true,
+              showCTA: true,
+            },
             slots: {
               CardSlot: [
                 defaultProductCardSlotData(),
@@ -289,6 +212,17 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
   },
   resolveData: (data) => {
     let updatedData = forwardHeadingLevel(data, "TitleSlot");
+
+    if (
+      data.props.slots.CardsWrapperSlot?.[0]?.props.styles?.variant !==
+      data.props.styles.cardVariant
+    ) {
+      updatedData = setDeep(
+        updatedData,
+        "props.slots.CardsWrapperSlot[0].props.styles.variant",
+        updatedData.props.styles.cardVariant
+      );
+    }
 
     const isImmersive = updatedData.props.styles.cardVariant === "immersive";
     const showImageConstrain = !isImmersive;

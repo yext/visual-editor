@@ -12,7 +12,13 @@ import {
   parseDocumentForLanguageDropdown,
 } from "./languageDropdown.tsx";
 import { defaultHeaderLinkProps, HeaderLinksProps } from "./HeaderLinks.tsx";
+import {
+  useExpandedHeaderMenu,
+  useHeaderLinksDisplayMode,
+} from "./ExpandedHeaderMenuContext.tsx";
 import { pt } from "../../utils/i18n/platform.ts";
+import { useOverflow } from "../../hooks/useOverflow.ts";
+import * as React from "react";
 
 export interface SecondaryHeaderSlotProps {
   data: {
@@ -90,15 +96,37 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
   puck,
 }) => {
   const streamDocument = useDocument();
+  const displayMode = useHeaderLinksDisplayMode();
+  const menuContext = useExpandedHeaderMenu();
 
-  const languageDropDownProps =
-    parseDocumentForLanguageDropdown(streamDocument);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const isOverflow = useOverflow(containerRef, contentRef, 0);
+
+  const languageDropDownProps = React.useMemo(
+    () => parseDocumentForLanguageDropdown(streamDocument),
+    [streamDocument]
+  );
+
   const showLanguageSelector =
-    languageDropDownProps && languageDropDownProps.locales?.length > 1;
+    data.showLanguageDropdown &&
+    languageDropDownProps &&
+    languageDropDownProps.locales?.length > 1;
+  const isMenuMode = displayMode === "menu";
+  const hideSecondaryHeader = !isMenuMode && isOverflow;
 
-  const { show } = data;
+  React.useEffect(() => {
+    if (!menuContext || isMenuMode) {
+      return;
+    }
 
-  if (puck.isEditing && !show) {
+    // If shown, report actual overflow; if hidden, report false.
+    menuContext.setSecondaryOverflow(data.show ? isOverflow : false);
+
+    return () => menuContext.setSecondaryOverflow(false);
+  }, [menuContext, isMenuMode, data.show, isOverflow]);
+
+  if (puck.isEditing && !data.show) {
     return (
       <div className="border-2 border-dashed border-gray-400 bg-gray-100 p-4 opacity-50 min-h-[60px] flex items-center justify-center cursor-pointer">
         <p className="text-sm text-gray-600">
@@ -111,20 +139,60 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
     );
   }
 
-  if (!show) {
+  if (!data.show) {
     return <></>;
   }
 
   return (
     <PageSection
       maxWidth={parentStyles?.maxWidth}
-      verticalPadding={"sm"}
+      verticalPadding={hideSecondaryHeader ? "none" : "sm"}
       background={styles.backgroundColor}
-      className="md:flex md:justify-end md:gap-6 md:items-center"
+      className="w-full"
+      outerStyle={
+        hideSecondaryHeader
+          ? {
+              height: 0,
+              overflow: "hidden",
+              visibility: "hidden",
+              pointerEvents: "none",
+            }
+          : undefined
+      }
+      aria-hidden={hideSecondaryHeader}
     >
-      <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
-      {data.showLanguageDropdown && showLanguageSelector && (
-        <LanguageDropdown {...languageDropDownProps} />
+      <div ref={containerRef} className="w-full">
+        <div
+          className={
+            isMenuMode
+              ? "flex flex-col items-start gap-4"
+              : "md:flex md:justify-end md:gap-6 md:items-center"
+          }
+        >
+          <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
+          {showLanguageSelector && (
+            <LanguageDropdown {...languageDropDownProps} />
+          )}
+        </div>
+      </div>
+
+      {/* Measurement Div - Only needed in inline mode */}
+      {!isMenuMode && (
+        <div
+          ref={contentRef}
+          className="absolute top-0 left-[-9999px] invisible pointer-events-none flex items-center gap-6 w-max"
+          aria-hidden="true"
+        >
+          <div className="flex-shrink-0 w-max">
+            <slots.LinksSlot style={{ height: "auto", width: "auto" }} />
+          </div>
+          {showLanguageSelector && (
+            <div className="flex-shrink-0 w-max">
+              <div className="h-5 w-20 bg-gray-200" />{" "}
+              {/* Placeholder for language dropdown */}
+            </div>
+          )}
+        </div>
       )}
     </PageSection>
   );
@@ -144,6 +212,11 @@ export const defaultSecondaryHeaderProps: SecondaryHeaderSlotProps = {
         type: "HeaderLinks",
         props: {
           ...defaultHeaderLinkProps,
+          styles: {
+            align: "right",
+            variant: "xs",
+            weight: "normal",
+          },
           parentData: {
             type: "Secondary",
           },

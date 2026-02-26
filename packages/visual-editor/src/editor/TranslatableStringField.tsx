@@ -10,10 +10,9 @@ import {
   EmbeddedFieldStringInputFromOptions,
 } from "./EmbeddedFieldStringInput.tsx";
 import { Button } from "../internal/puck/ui/button.tsx";
-import { useTemplateMetadata } from "../internal/hooks/useMessageReceivers.ts";
-import { TemplateMetadata } from "../internal/types/templateMetadata.ts";
 import { DynamicOption } from "./DynamicOptionsSelector.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
+import { getPageSetLocales } from "../utils/pageSetLocales.ts";
 
 /**
  * Generates a translatable string config
@@ -38,25 +37,9 @@ export function TranslatableStringField<
       const { i18n } = useTranslation();
       const locale = i18n.language;
       const resolvedValue = value && resolveComponentData(value, locale);
-      const templateMetadata: TemplateMetadata = useTemplateMetadata();
       const streamDocument = useDocument();
 
-      let locales = templateMetadata?.locales || [];
-      if (locales.length === 0) {
-        try {
-          const parsedPageSet = JSON.parse(streamDocument._pageset);
-          if (
-            parsedPageSet?.scope?.locales &&
-            Array.isArray(parsedPageSet.scope.locales)
-          ) {
-            locales = parsedPageSet.scope.locales;
-          } else {
-            console.warn("Invalid locale structure in page group data");
-          }
-        } catch {
-          console.warn("failed to retrieve locales from page group");
-        }
-      }
+      const locales = getPageSetLocales(streamDocument);
 
       const applyAllButton =
         showApplyAllOption && locales.length > 1 ? (

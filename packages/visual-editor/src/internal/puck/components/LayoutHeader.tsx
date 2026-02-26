@@ -36,6 +36,11 @@ import {
 } from "../../../utils/i18n/platform.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { DevLogger } from "../../../utils/devLogger.ts";
+import {
+  type ErrorDetail,
+  type ErrorSource,
+} from "../../../contexts/ErrorContext.tsx";
+import { getPublishErrorMessage } from "../../../utils/publishErrors.ts";
 
 const usePuck = createUsePuck();
 const devLogger = new DevLogger();
@@ -48,6 +53,8 @@ type LayoutHeaderProps = {
   onSendLayoutForApproval: (data: Data, comment: string) => void;
   localDev: boolean;
   hasErrors: boolean;
+  errorSources: ErrorSource[];
+  errorDetails: Partial<Record<ErrorSource, ErrorDetail>>;
 };
 
 export const LayoutHeader = (props: LayoutHeaderProps) => {
@@ -59,6 +66,8 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     onSendLayoutForApproval,
     localDev,
     hasErrors,
+    errorSources,
+    errorDetails,
   } = props;
   const streamDocument = useDocument();
 
@@ -114,6 +123,18 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
       ]);
     }
   };
+
+  const deploymentInProgress = templateMetadata.deploymentInProgress;
+  const publishDisabled =
+    histories.length === 1 || hasErrors || deploymentInProgress;
+  const publishTooltipMessage = deploymentInProgress
+    ? pt(
+        "publishBlocked.deploymentInProgress",
+        "Update is disabled while deployment is in progress"
+      )
+    : hasErrors
+      ? getPublishErrorMessage(errorSources, errorDetails)
+      : undefined;
 
   return (
     <>
@@ -254,27 +275,26 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span
-                    tabIndex={hasErrors ? 0 : -1}
-                    className={hasErrors ? "ve-cursor-not-allowed" : ""}
+                    tabIndex={publishDisabled ? 0 : -1}
+                    className={publishDisabled ? "ve-cursor-not-allowed" : ""}
+                    role={publishDisabled ? "button" : undefined}
+                    aria-disabled={publishDisabled || undefined}
                   >
                     <Button
                       variant="secondary"
-                      disabled={histories.length === 1 || hasErrors}
+                      disabled={publishDisabled}
                       onClick={onButtonClick}
-                      className={hasErrors ? "ve-pointer-events-none" : ""}
+                      className={
+                        publishDisabled ? "ve-pointer-events-none" : ""
+                      }
                     >
                       {buttonText}
                     </Button>
                   </span>
                 </TooltipTrigger>
-                {hasErrors && (
-                  <TooltipContent>
-                    <p>
-                      {pt(
-                        "fixErrorsToPublish",
-                        "To publish, delete or fix sections with errors"
-                      )}
-                    </p>
+                {publishTooltipMessage && (
+                  <TooltipContent className="ve-max-w-[320px] ve-whitespace-pre-line ve-text-left">
+                    <p>{publishTooltipMessage}</p>
                   </TooltipContent>
                 )}
               </Tooltip>
