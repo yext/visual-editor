@@ -575,6 +575,8 @@
   "promoBanner": "促销横幅",
   "promoMedia": "促销媒体",
   "publishBlocked": {
+    "deploymentFailed": "由于最新部署失败，发布被禁用。请修复问题并重试",
+    "deploymentInactive": "由于部署处于非活动状态，发布被禁用",
     "deploymentInProgress": "部署期间禁用更新"
   },
   "publishError": {

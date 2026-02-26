@@ -575,6 +575,8 @@
   "promoBanner": "Promosyon Banner'ı",
   "promoMedia": "Promosyon medyası",
   "publishBlocked": {
+    "deploymentFailed": "En son dağıtım başarısız olduğundan yayınlama devre dışı bırakıldı. Lütfen sorunları düzeltip tekrar deneyin",
+    "deploymentInactive": "Dağıtım etkin olmadığından yayınlama devre dışı bırakıldı",
     "deploymentInProgress": "Dağıtım devam ederken güncelleme devre dışı bırakılır"
   },
   "publishError": {

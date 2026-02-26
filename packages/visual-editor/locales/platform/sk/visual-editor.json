@@ -585,6 +585,8 @@
   "promoBanner": "Propagačný banner",
   "promoMedia": "Propagačné médiá",
   "publishBlocked": {
+    "deploymentFailed": "Publikovanie je zakázané, pretože najnovšie nasadenie zlyhalo. Opravte problémy a skúste to znova",
+    "deploymentInactive": "Publikovanie je zakázané, pretože nasadenie je neaktívne",
     "deploymentInProgress": "Aktualizácia je počas nasadenia zakázaná"
   },
   "publishError": {

@@ -575,6 +575,8 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo Media",
   "publishBlocked": {
+    "deploymentFailed": "Udgiv er deaktiveret, fordi den seneste implementering mislykkedes. Løs problemerne, og prøv igen",
+    "deploymentInactive": "Udgiv er deaktiveret, fordi implementeringen er inaktiv",
     "deploymentInProgress": "Opdatering er deaktiveret, mens implementering er i gang"
   },
   "publishError": {
