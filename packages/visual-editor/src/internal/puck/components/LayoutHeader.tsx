@@ -130,12 +130,10 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
     hasErrors ||
     templateMetadata.headDeployStatus !== "ACTIVE";
   const publishTooltipMessage =
+    (hasErrors ?? getPublishErrorMessage(errorSources, errorDetails)) ||
     getPublishTooltipMessageFromHeadDeployStatus(
       templateMetadata.headDeployStatus
-    ) ||
-    (hasErrors
-      ? getPublishErrorMessage(errorSources, errorDetails)
-      : undefined);
+    );
 
   return (
     <>
