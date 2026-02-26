@@ -1,8 +1,10 @@
 import {
+  AutoField,
   ComponentConfig,
+  FieldLabel,
   Fields,
-  WithPuckProps,
   setDeep,
+  WithPuckProps,
 } from "@puckeditor/core";
 import {
   FieldValueFilter,
@@ -29,7 +31,7 @@ import {
   OnDragHandler,
   OnSelectParams,
   Pagination,
-  PinComponent,
+  PinComponentProps,
   SearchI18nextProvider,
   VerticalResults,
   useAnalytics as useSearchAnalytics,
@@ -59,14 +61,18 @@ import {
   toMeters,
   toMiles,
 } from "../utils/i18n/distance.ts";
-import { msg } from "../utils/i18n/platform.ts";
+import { msg, pt } from "../utils/i18n/platform.ts";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import {
   createSearchAnalyticsConfig,
   createSearchHeadlessConfig,
 } from "../utils/searchHeadlessConfig.ts";
-import { BackgroundStyle } from "../utils/themeConfigOptions.ts";
+import {
+  BackgroundStyle,
+  backgroundColors,
+} from "../utils/themeConfigOptions.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import { getLocatorSourcePageSetsEntityTypes } from "../utils/locator.ts";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
@@ -89,6 +95,10 @@ const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 const DEFAULT_TITLE = "Find a Location";
+const DEFAULT_LOCATION_STYLE = {
+  pinIcon: { type: "none" },
+  pinColor: backgroundColors.background6.value,
+};
 
 const translateDistanceUnit = (
   t: (key: string, options?: Record<string, unknown>) => string,
@@ -102,8 +112,62 @@ const translateDistanceUnit = (
   return t("kilometer", { count, defaultValue: "kilometer" });
 };
 
-const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: StreamDocument = useDocument();
+const makiIconModules = import.meta.glob(
+  "../../node_modules/@mapbox/maki/icons/*.svg",
+  {
+    eager: true,
+    import: "default",
+  }
+) as Record<string, string>;
+
+const makiIconEntries = Object.entries(makiIconModules).map(([path, icon]) => {
+  const name = path.split("/").pop()?.replace(".svg", "") || path;
+  return [name, icon];
+});
+
+const makiIconMap: Record<string, string> = Object.fromEntries(makiIconEntries);
+
+const formatMakiIconLabel = (name: string) =>
+  name.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
+const makiIconOptions = makiIconEntries.map(([name, icon]) => ({
+  label: formatMakiIconLabel(name),
+  value: name,
+  icon,
+}));
+
+const DEFAULT_MAKI_ICON_NAME = makiIconOptions[0]?.value;
+
+const getEntityTypeLabel = (entityType: string) => {
+  switch (entityType) {
+    case "restaurant":
+      return pt(msg("fields.options.restaurants", "Restaurants"));
+    case "healthcareFacility":
+      return pt(
+        msg("fields.options.healthcareFacilities", "Healthcare Facilities")
+      );
+    case "healthcareProfessional":
+      return pt(
+        msg(
+          "fields.options.healthcareProfessionals",
+          "Healthcare Professionals"
+        )
+      );
+    case "hotel":
+      return pt(msg("fields.options.hotels", "Hotels"));
+    case "financialProfessional":
+      return pt(
+        msg("fields.options.financialProfessionals", "Financial Professionals")
+      );
+    default:
+      return pt(msg("fields.options.locations", "Locations"));
+  }
+};
+
+const getEntityTypeFromDocument = (
+  entityDocument: StreamDocument,
+  entityTypeEnvVar?: string
+) => {
   if (!entityDocument._pageset && entityTypeEnvVar) {
     return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
   }
@@ -115,6 +179,107 @@ const getEntityType = (entityTypeEnvVar?: string) => {
   } catch {
     return DEFAULT_ENTITY_TYPE;
   }
+};
+
+const getEntityType = (entityTypeEnvVar?: string) => {
+  const entityDocument: StreamDocument = useDocument();
+  return getEntityTypeFromDocument(entityDocument, entityTypeEnvVar);
+};
+
+const getEntityTypesFromDocument = (
+  entityDocument: StreamDocument,
+  entityTypeEnvVar?: string
+): string[] => {
+  return (
+    getLocatorSourcePageSetsEntityTypes(entityDocument) ?? [
+      getEntityTypeFromDocument(entityDocument, entityTypeEnvVar),
+    ]
+  );
+};
+
+const ResultCardPropsField = ({
+  value,
+  onChange,
+}: {
+  value?: LocatorResultCardProps;
+  onChange: (nextValue: LocatorResultCardProps) => void;
+}) => {
+  const streamDocument = useDocument();
+  const locatorSourcePageSetsEntityTypes =
+    getLocatorSourcePageSetsEntityTypes(streamDocument);
+  const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
+  /**
+   * Builds the field schema for the result card editor, including:
+   * - Conditionally removing the primary CTA section when entity scope is not attached to a page set.
+   * - Toggling constant value vs. field selector visibility per section.
+   */
+  const resultCardFields = React.useMemo(() => {
+    const baseFields = LocatorResultCardFields as {
+      objectFields?: Record<string, unknown>;
+    };
+    let nextFields: Record<string, any> = LocatorResultCardFields as Record<
+      string,
+      any
+    >;
+
+    if (baseFields.objectFields) {
+      let objectFields = baseFields.objectFields;
+      // Remove the primary CTA when entity scope is not attached to a page set.
+      if (hidePrimaryCta) {
+        objectFields = { ...objectFields };
+        delete objectFields.primaryCTA;
+        nextFields = {
+          ...LocatorResultCardFields,
+          objectFields,
+        } as Record<string, any>;
+      }
+
+      const resolvedValue = value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS;
+      // For each section, show either the field selector or the constant value editor.
+      const constantValueFieldConfigs = [
+        {
+          key: "primaryHeading",
+          enabled: resolvedValue.primaryHeading?.constantValueEnabled ?? false,
+        },
+        {
+          key: "secondaryHeading",
+          enabled:
+            resolvedValue.secondaryHeading?.constantValueEnabled ?? false,
+        },
+        {
+          key: "tertiaryHeading",
+          enabled: resolvedValue.tertiaryHeading?.constantValueEnabled ?? false,
+        },
+        {
+          key: "image",
+          enabled: resolvedValue.image?.constantValueEnabled ?? false,
+        },
+      ];
+
+      constantValueFieldConfigs.forEach(({ key, enabled }) => {
+        nextFields = setDeep(
+          nextFields,
+          `objectFields.${key}.objectFields.field.visible`,
+          !enabled
+        );
+        nextFields = setDeep(
+          nextFields,
+          `objectFields.${key}.objectFields.constantValue.visible`,
+          enabled
+        );
+      });
+    }
+
+    return nextFields as typeof LocatorResultCardFields;
+  }, [hidePrimaryCta, value]);
+
+  return (
+    <AutoField
+      field={{ ...resultCardFields, label: "" }}
+      value={value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS}
+      onChange={onChange}
+    />
+  );
 };
 
 function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
@@ -446,6 +611,23 @@ export interface LocatorProps {
   mapStyle?: string;
 
   /**
+   * Location styles per entity type.
+   * The number of entries is locked to the locator entity types for the page set.
+   */
+  locationStyles: Array<{
+    /** The entity type this style applies to. */
+    entityType: string;
+    /** Whether to render an icon in the pin. */
+    pinIcon?: {
+      type: "none" | "icon";
+      /** Defaults to the first available Maki icon when type is 'icon'. */
+      iconName?: string;
+    };
+    /** The color applied to the pin. */
+    pinColor?: BackgroundStyle;
+  }>;
+
+  /**
    * Configuration for the filters available in the locator search experience.
    */
   filters: {
@@ -485,10 +667,15 @@ export interface LocatorProps {
     color?: BackgroundStyle;
   };
   /**
-   * Props to customize the locator result card component.
-   * Controls which fields are displayed and their styling.
+   * Result card properties per entity type.
+   * The number of entries is locked to the locator entity types for the page set.
    */
-  resultCard: LocatorResultCardProps;
+  resultCard: Array<{
+    /** The entity type this result card applies to. */
+    entityType: string;
+    /** Props to customize the locator result card component. */
+    props: LocatorResultCardProps;
+  }>;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -521,6 +708,78 @@ const locatorFields: Fields<LocatorProps> = {
       },
     ],
   }),
+  locationStyles: YextField<LocatorProps["locationStyles"]>(
+    msg("fields.pinStyles", "Location styles"),
+    {
+      type: "array",
+      getItemSummary: (item) => getEntityTypeLabel(item.entityType),
+      arrayFields: {
+        entityType: YextField(msg("fields.entityType", "Entity Type"), {
+          type: "text",
+          visible: false,
+        }),
+        pinIcon: {
+          type: "custom",
+          render: ({ value, onChange }) => {
+            const selectedType = value?.type ?? "none";
+            return (
+              <div className="flex flex-col gap-3">
+                <FieldLabel label={pt(msg("fields.pinIcon", "Pin Icon"))}>
+                  <AutoField
+                    field={BasicSelector<"none" | "icon">({
+                      options: [
+                        {
+                          label: msg("fields.options.none", "None"),
+                          value: "none",
+                        },
+                        {
+                          label: msg("fields.options.icon", "Icon"),
+                          value: "icon",
+                        },
+                      ],
+                      disableSearch: true,
+                    })}
+                    value={selectedType}
+                    onChange={(nextType) =>
+                      onChange({
+                        type: nextType,
+                        iconName:
+                          nextType === "icon"
+                            ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
+                            : value?.iconName,
+                      })
+                    }
+                  />
+                </FieldLabel>
+                {selectedType === "icon" && (
+                  <FieldLabel label={pt(msg("fields.icon", "Icon"))}>
+                    <AutoField
+                      field={BasicSelector<string | undefined>({
+                        options: makiIconOptions,
+                      })}
+                      value={value?.iconName}
+                      onChange={(iconName) =>
+                        onChange({ type: "icon", iconName })
+                      }
+                    />
+                  </FieldLabel>
+                )}
+              </div>
+            );
+          },
+        },
+        pinColor: YextField(msg("fields.pinColor", "Pin Color"), {
+          type: "select",
+          options: "BACKGROUND_COLOR",
+        }),
+      },
+      defaultItemProps: {
+        entityType: DEFAULT_ENTITY_TYPE,
+        pinIcon: { type: "none" },
+        pinColor: backgroundColors.background6.value,
+      },
+    }
+  ),
   filters: {
     label: msg("fields.filters", "Filters"),
     type: "object",
@@ -589,7 +848,29 @@ const locatorFields: Fields<LocatorProps> = {
       }),
     },
   }),
-  resultCard: LocatorResultCardFields,
+  resultCard: YextField<LocatorProps["resultCard"]>(
+    msg("fields.resultCard", "Result Card"),
+    {
+      type: "array",
+      getItemSummary: (item) => getEntityTypeLabel(item.entityType),
+      arrayFields: {
+        entityType: YextField(msg("fields.entityType", "Entity Type"), {
+          type: "text",
+          visible: false,
+        }),
+        props: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ResultCardPropsField value={value} onChange={onChange} />
+          ),
+        },
+      },
+      defaultItemProps: {
+        entityType: DEFAULT_ENTITY_TYPE,
+        props: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+      },
+    }
+  ),
 };
 
 /**
@@ -597,7 +878,39 @@ const locatorFields: Fields<LocatorProps> = {
  */
 export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   fields: locatorFields,
+  /**
+   * Locks array lengths for `locationStyles` and `resultCard` to the current
+   * locator entity types so each entity type has exactly one entry.
+   */
+  resolveFields: (_data, params) => {
+    const entityDocument = params.metadata?.streamDocument;
+    const entityTypes = entityDocument
+      ? getEntityTypesFromDocument(
+          entityDocument,
+          params.metadata?.entityTypeEnvVar
+        )
+      : [DEFAULT_ENTITY_TYPE];
+    const entityTypeCount = entityTypes.length;
+
+    let updatedFields: Fields<LocatorProps> = { ...locatorFields };
+    updatedFields = setDeep(
+      updatedFields,
+      "locationStyles.min",
+      entityTypeCount
+    );
+    updatedFields = setDeep(
+      updatedFields,
+      "locationStyles.max",
+      entityTypeCount
+    );
+    updatedFields = setDeep(updatedFields, "resultCard.min", entityTypeCount);
+    updatedFields = setDeep(updatedFields, "resultCard.max", entityTypeCount);
+
+    return updatedFields;
+  },
   defaultProps: {
+    locationStyles: [],
+    resultCard: [],
     filters: {
       openNowButton: false,
       showDistanceOptions: false,
@@ -608,66 +921,92 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
         hasLocalizedValue: "true",
       },
     },
-    resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
-  resolveFields: (data) => {
-    let updatedFields: Fields<LocatorProps> = { ...locatorFields };
-    const setConstantVaueFieldVisibility = (
-      fields: Fields<LocatorProps>,
-      fieldKey:
-        | "primaryHeading"
-        | "secondaryHeading"
-        | "tertiaryHeading"
-        | "image",
-      isConstantValueEnabled: boolean
-    ): Fields<LocatorProps> => {
-      let nextFields = fields;
-      nextFields = setDeep(
-        nextFields,
-        `resultCard.objectFields.${fieldKey}.objectFields.field.visible`,
-        !isConstantValueEnabled
-      );
-      nextFields = setDeep(
-        nextFields,
-        `resultCard.objectFields.${fieldKey}.objectFields.constantValue.visible`,
-        isConstantValueEnabled
-      );
-      return nextFields;
-    };
+  /**
+   * Normalizes `props.locationStyles` and `props.resultCard` to align with the
+   * current locator entity types. If no styles or cards are set, defaults are
+   * generated; otherwise, existing values are preserved unless the set of entity
+   * types changes, in which case values are re-keyed by `entityType` and filled
+   * with defaults as needed.
+   */
+  resolveData: (data, params) => {
+    const entityDocument = params.metadata?.streamDocument;
+    const entityTypes = entityDocument
+      ? getEntityTypesFromDocument(
+          entityDocument,
+          params.metadata?.entityTypeEnvVar
+        )
+      : [DEFAULT_ENTITY_TYPE];
+    const previousLocationStyles = data.props.locationStyles;
+    if (!previousLocationStyles || previousLocationStyles.length === 0) {
+      const newLocationStyles = entityTypes.map((entityType) => ({
+        ...DEFAULT_LOCATION_STYLE,
+        entityType,
+      }));
+      data = setDeep(data, "props.locationStyles", newLocationStyles);
+    }
 
-    const constantValueFieldConfigs = [
-      {
-        key: "primaryHeading",
-        enabled:
-          data.props.resultCard?.primaryHeading?.constantValueEnabled ?? false,
-      },
-      {
-        key: "secondaryHeading",
-        enabled:
-          data.props.resultCard?.secondaryHeading?.constantValueEnabled ??
-          false,
-      },
-      {
-        key: "tertiaryHeading",
-        enabled:
-          data.props.resultCard?.tertiaryHeading?.constantValueEnabled ?? false,
-      },
-      {
-        key: "image",
-        enabled: data.props.resultCard?.image?.constantValueEnabled ?? false,
-      },
-    ] as const;
+    const previousResultCards = data.props.resultCard as
+      | LocatorProps["resultCard"]
+      | LocatorResultCardProps;
+    const legacyResultCardProps = Array.isArray(previousResultCards)
+      ? undefined
+      : previousResultCards;
+    const previousResultCardsArray = Array.isArray(previousResultCards)
+      ? previousResultCards
+      : undefined;
 
-    constantValueFieldConfigs.forEach(({ key, enabled }) => {
-      updatedFields = setConstantVaueFieldVisibility(
-        updatedFields,
-        key,
-        enabled
+    if (!previousResultCardsArray || previousResultCardsArray.length === 0) {
+      const newResultCards = entityTypes.map((entityType) => ({
+        entityType,
+        props: legacyResultCardProps ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+      }));
+      data = setDeep(data, "props.resultCard", newResultCards);
+    }
+
+    const previousEntityTypes = (previousLocationStyles ?? []).map(
+      (item) => item.entityType
+    );
+    const hasNetChange =
+      previousEntityTypes.length > 0 &&
+      (previousEntityTypes.length !== entityTypes.length ||
+        !entityTypes.every((entityType) =>
+          previousEntityTypes.includes(entityType)
+        ));
+
+    if (hasNetChange) {
+      const locationStylesByEntityType = new globalThis.Map(
+        (previousLocationStyles ?? []).map((item) => [item.entityType, item])
       );
-    });
+      const resultCardsByEntityType = new globalThis.Map(
+        (previousResultCardsArray ?? []).map((item) => [item.entityType, item])
+      );
 
-    return updatedFields;
+      const newLocationStyles = entityTypes.map((entityType) => {
+        const existing = locationStylesByEntityType.get(entityType);
+        return {
+          ...DEFAULT_LOCATION_STYLE,
+          ...existing,
+          entityType,
+        };
+      });
+      const newResultCards = entityTypes.map((entityType) => {
+        const existing = resultCardsByEntityType.get(entityType);
+        return {
+          entityType,
+          props:
+            existing?.props ??
+            legacyResultCardProps ??
+            DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+        };
+      });
+
+      data = setDeep(data, "props.locationStyles", newLocationStyles);
+      data = setDeep(data, "props.resultCard", newResultCards);
+    }
+
+    return data;
   },
   render: (props) => <LocatorWrapper {...props} />,
 };
@@ -712,9 +1051,10 @@ type SearchState = "not started" | "loading" | "complete";
 
 const LocatorInternal = ({
   mapStyle,
+  locationStyles,
   filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
-  resultCard: resultCardProps,
+  resultCard: resultCardConfigs,
   puck,
   pageHeading,
 }: WithPuckProps<LocatorProps>) => {
@@ -737,6 +1077,10 @@ const LocatorInternal = ({
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const streamDocument = useDocument();
+  const entityTypes = getEntityTypesFromDocument(
+    streamDocument,
+    puck.metadata?.entityTypeEnvVar
+  );
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -909,6 +1253,10 @@ const LocatorInternal = ({
 
   const resultsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const resultsContainer = React.useRef<HTMLDivElement>(null);
+  // Tracks the selected pin index to highlight the corresponding result card.
+  const [selectedResultIndex, setSelectedResultIndex] = React.useState<
+    number | null
+  >(null);
 
   const setResultsRef = React.useCallback((index: number) => {
     if (!resultsRef?.current) return null;
@@ -918,6 +1266,9 @@ const LocatorInternal = ({
   const scrollToResult = React.useCallback(
     (result: Result | undefined) => {
       if (result) {
+        if (typeof result.index === "number") {
+          setSelectedResultIndex(result.index);
+        }
         let scrollPos = 0;
         // the search results that are listed above this result
         const previousResultsRef = resultsRef.current.filter(
@@ -935,6 +1286,8 @@ const LocatorInternal = ({
           top: scrollPos,
           behavior: "smooth",
         });
+      } else {
+        setSelectedResultIndex(null);
       }
     },
     [resultsContainer]
@@ -946,18 +1299,80 @@ const LocatorInternal = ({
     } as MarkerOptions;
   }, []);
 
+  const resultCardConfigsArray = React.useMemo(() => {
+    if (Array.isArray(resultCardConfigs)) {
+      return resultCardConfigs;
+    }
+    if (resultCardConfigs) {
+      return [
+        {
+          entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
+          props: resultCardConfigs,
+        },
+      ];
+    }
+    return [];
+  }, [entityTypes, resultCardConfigs]);
+
+  const resultCardPropsByEntityType = React.useMemo(() => {
+    return resultCardConfigsArray.reduce<
+      Record<string, LocatorResultCardProps>
+    >((acc, item) => {
+      acc[item.entityType] = item.props;
+      return acc;
+    }, {});
+  }, [resultCardConfigsArray]);
+
+  const getResultCardProps = React.useCallback(
+    (entityType?: string) => {
+      if (entityType && resultCardPropsByEntityType[entityType]) {
+        return resultCardPropsByEntityType[entityType];
+      }
+      if (resultCardPropsByEntityType[DEFAULT_ENTITY_TYPE]) {
+        return resultCardPropsByEntityType[DEFAULT_ENTITY_TYPE];
+      }
+      return DEFAULT_LOCATOR_RESULT_CARD_PROPS;
+    },
+    [resultCardPropsByEntityType]
+  );
+
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => (
-      <LocatorResultCard {...result} resultCardProps={resultCardProps} />
+      <LocatorResultCard
+        {...result}
+        resultCardProps={getResultCardProps(result.result.entityType)}
+        isSelected={result.result.index === selectedResultIndex}
+      />
     ),
-    [resultCardProps]
+    [getResultCardProps, selectedResultIndex]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
+
+  const locationStylesConfig = React.useMemo(() => {
+    const config: Record<string, { color?: BackgroundStyle; icon?: string }> =
+      {};
+    (locationStyles ?? []).forEach((locationStyle) => {
+      const entityType = locationStyle.entityType;
+      if (!entityType) return;
+      const iconValue =
+        locationStyle.pinIcon?.type === "icon"
+          ? locationStyle.pinIcon.iconName
+          : undefined;
+      config[entityType] = {
+        color: locationStyle.pinColor,
+        icon:
+          typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
+      };
+    });
+    return config;
+  }, [locationStyles]);
+
   const [centerCoords, setCenterCoords] = React.useState<
     [number, number] | undefined
   >();
+
   const mapProps = React.useMemo(
     () => ({
       mapStyle,
@@ -965,8 +1380,16 @@ const LocatorInternal = ({
       onDragHandler: handleDrag,
       scrollToResult: scrollToResult,
       markerOptionsOverride: markerOptionsOverride,
+      locationStyleConfig: locationStylesConfig,
     }),
-    [centerCoords, handleDrag, mapStyle, markerOptionsOverride, scrollToResult]
+    [
+      centerCoords,
+      handleDrag,
+      mapStyle,
+      markerOptionsOverride,
+      scrollToResult,
+      locationStylesConfig,
+    ]
   );
 
   React.useEffect(() => {
@@ -1462,6 +1885,10 @@ interface MapProps {
   onDragHandler?: OnDragHandler;
   scrollToResult?: (result: Result | undefined) => void;
   markerOptionsOverride?: (selected: boolean) => MarkerOptions;
+  locationStyleConfig?: Record<
+    string,
+    { color?: BackgroundStyle; icon?: string }
+  >;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -1470,6 +1897,7 @@ const Map: React.FC<MapProps> = ({
   onDragHandler,
   scrollToResult,
   markerOptionsOverride,
+  locationStyleConfig,
 }) => {
   const { t } = useTranslation();
   const entityDocument: StreamDocument = useDocument();
@@ -1527,7 +1955,12 @@ const Map: React.FC<MapProps> = ({
       mapboxAccessToken={mapboxApiKey || ""}
       mapboxOptions={mapboxOptions}
       onDrag={onDragHandler}
-      PinComponent={LocatorMapPin}
+      PinComponent={(pinProps) => (
+        <LocatorMapPin
+          {...pinProps}
+          locationStyleConfig={locationStyleConfig}
+        />
+      )}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
       onPinClick={scrollToResult}
@@ -1536,31 +1969,26 @@ const Map: React.FC<MapProps> = ({
   );
 };
 
-const LocatorMapPin: PinComponent<Record<string, unknown>> = (props) => {
-  const { result, selected } = props;
+type LocatorMapPinProps<T> = PinComponentProps<T> & {
+  locationStyleConfig?: Record<
+    string,
+    { color?: BackgroundStyle; icon?: string }
+  >;
+};
 
-  const { width, height, color } = React.useMemo(() => {
-    return selected
-      ? {
-          // zoomed in pin stylings
-          height: "61.5px",
-          width: "40.5px",
-          color: "text-palette-secondary-dark",
-        }
-      : {
-          // default pin stylings
-          height: "41px",
-          width: "27px",
-          color: "text-palette-primary-dark",
-        };
-  }, [selected]);
+const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
+  const { result, selected, locationStyleConfig } = props;
+  const entityType = result.entityType;
+  const entityLocationStyle = entityType
+    ? locationStyleConfig?.[entityType]
+    : undefined;
 
   return (
     <MapPinIcon
-      height={height}
-      width={width}
-      color={color}
+      color={entityLocationStyle?.color}
       resultIndex={result.index}
+      icon={entityLocationStyle?.icon}
+      selected={selected}
     />
   );
 };

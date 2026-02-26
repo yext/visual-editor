@@ -2,6 +2,7 @@ export type ComboboxOption = {
   label: string;
   value: any;
   color?: string; // ex. "bg-palette-primary-light"
+  icon?: string;
 };
 
 export type ComboboxOptionGroup = {

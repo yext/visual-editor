@@ -64,6 +64,7 @@ import {
   fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
+import { getLocatorSourcePageSetsEntityTypes } from "../utils/locator.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -725,9 +726,11 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
+    isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
+    isSelected?: boolean;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
@@ -786,10 +789,16 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
+    // Hide primary CTA section when entity scope is not attached to a page set
+    const locatorSourcePageSetsEntityTypes =
+      getLocatorSourcePageSetsEntityTypes(streamDocument);
+    const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
+
     return (
       <Background
         background={backgroundColors.background1.value}
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
+        style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
         <Background
           background={
@@ -899,7 +908,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && (
+            {props.primaryCTA.liveVisibility && !hidePrimaryCta && (
               <CTA
                 link={resolvedUrl}
                 label={
