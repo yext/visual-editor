@@ -1,15 +1,16 @@
+import { Coordinate, Map, MapboxMaps, Marker } from "@yext/pages-components";
 import { useSearchState } from "@yext/search-headless-react";
 import {
-  PinComponent,
   DefaultRawDataType,
   MapboxMap,
+  PinComponent,
 } from "@yext/search-ui-react";
-import { Coordinate, Map, MapboxMaps, Marker } from "@yext/pages-components";
+import { t } from "i18next";
 import { MapPin } from "lucide-react";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { StreamDocument } from "../../../utils/index.ts";
-import "mapbox-gl/dist/mapbox-gl.css";
-import { t } from "i18next";
+import { Body } from "../../atoms/body.tsx";
 
 interface MapComponentProps {
   isUniversal?: boolean;
@@ -50,7 +51,12 @@ export const MapComponent = ({
   if (!mapboxApiKey) {
     return (
       <div className="h-[300px] flex items-center justify-center border text-gray-500">
-        Missing Mapbox API Key
+        <Body variant="base" className="text-gray-500 font-normal">
+          {t(
+            "staticMapEmptyStateAddApiKey",
+            "Add an API key to preview your map"
+          )}
+        </Body>
       </div>
     );
   }
