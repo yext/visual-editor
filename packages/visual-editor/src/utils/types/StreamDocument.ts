@@ -47,7 +47,7 @@ export type EntityTypeScope = {
 export type LocatorSourcePageSetInfo = {
   pathInfo?: PathInfoShape;
   entityType?: string;
-  savedFilter?: number;
+  savedFilter?: string;
   internalSavedFilterId?: number;
   [key: string]: any;
 };
