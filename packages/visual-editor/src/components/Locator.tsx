@@ -109,7 +109,7 @@ const translateDistanceUnit = (
 
 /**
  * Retrieves the first applicable entity type for entities indexed by the locator. Reads from:
- * 1. Puck metadata's entityTypeEnvVar
+ * 1. If _pageset doesn't exist, the Puck metadata's entityTypeEnvVar
  * 2. The typeConfig.locatorConfig.entityType field of _pageset in the stream document
  * 3. The first element of __.locatorSourcePageSets in the stream document
  *
