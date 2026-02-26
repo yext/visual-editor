@@ -23,7 +23,8 @@ import {
 import { pt } from "../../utils/i18n/platform.ts";
 
 export interface LocatorConfigProps
-  extends LocatorCategoryProps,
+  extends
+    LocatorCategoryProps,
     SlotsCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps {
