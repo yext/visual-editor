@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Põhiteave",
     "other": "Teine",
-    "standardSections": "Standardsektsioonid"
+    "standardSections": "Standardsektsioonid",
+    "yetiSections": "Yeti sektsioonid"
   },
   "change": "Vahetus",
   "chooseImage": "Valige pilt",

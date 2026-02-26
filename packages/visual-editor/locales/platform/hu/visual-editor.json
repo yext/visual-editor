@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Alapvető információk",
     "other": "MÁS",
-    "standardSections": "Szabványos szakaszok"
+    "standardSections": "Szabványos szakaszok",
+    "yetiSections": "Yeti szakaszok"
   },
   "change": "Változás",
   "chooseImage": "Válassza ki a képet",

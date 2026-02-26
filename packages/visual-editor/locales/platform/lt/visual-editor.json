@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Pagrindinė informacija",
     "other": "Kita",
-    "standardSections": "Standartiniai skyriai"
+    "standardSections": "Standartiniai skyriai",
+    "yetiSections": "Yeti skyriai"
   },
   "change": "Pakeisti",
   "chooseImage": "Pasirinkite vaizdą",

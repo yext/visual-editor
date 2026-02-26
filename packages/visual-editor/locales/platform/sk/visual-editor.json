@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Základné informácie",
     "other": "Druhý",
-    "standardSections": "Štandardné sekcie"
+    "standardSections": "Štandardné sekcie",
+    "yetiSections": "Sekcie Yeti"
   },
   "change": "Zmena",
   "chooseImage": "Vyberte obrázok",

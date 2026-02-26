@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Informații de bază",
     "other": "ALTE",
-    "standardSections": "Secțiuni standard"
+    "standardSections": "Secțiuni standard",
+    "yetiSections": "Secțiuni Yeti"
   },
   "change": "Schimba",
   "chooseImage": "Alege Imagine",

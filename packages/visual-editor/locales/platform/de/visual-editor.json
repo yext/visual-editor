@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Basisinformationen",
     "other": "Sonstiges",
-    "standardSections": "Standardmodule"
+    "standardSections": "Standardmodule",
+    "yetiSections": "Yeti-Abschnitte"
   },
   "change": "Ändern",
   "chooseImage": "Bild auswählen",

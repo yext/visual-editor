@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Informacje podstawowe",
     "other": "INNY",
-    "standardSections": "Sekcje standardowe"
+    "standardSections": "Sekcje standardowe",
+    "yetiSections": "Sekcje Yeti"
   },
   "change": "Zmiana",
   "chooseImage": "Wybierz obraz",

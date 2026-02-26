@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Kerneoplysninger",
     "other": "ANDRE",
-    "standardSections": "Standard sektioner"
+    "standardSections": "Standard sektioner",
+    "yetiSections": "Yeti sektioner"
   },
   "change": "Forandring",
   "chooseImage": "Vælg billede",

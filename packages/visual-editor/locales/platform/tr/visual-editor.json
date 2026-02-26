@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Temel Bilgiler",
     "other": "DİĞER",
-    "standardSections": "Standart Bölümler"
+    "standardSections": "Standart Bölümler",
+    "yetiSections": "Yeti Bölümleri"
   },
   "change": "Değiştirmek",
   "chooseImage": "Resmi Seçin",

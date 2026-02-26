@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Core Information",
     "other": "OTHER",
-    "standardSections": "Standard Sections"
+    "standardSections": "Standard Sections",
+    "yetiSections": "Yeti Sections"
   },
   "change": "Change",
   "chooseImage": "Choose Image",
