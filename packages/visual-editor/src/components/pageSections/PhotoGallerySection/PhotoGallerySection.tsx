@@ -43,6 +43,12 @@ export interface PhotoGalleryStyles {
    * @defaultValue "gallery"
    */
   variant: "gallery" | "carousel";
+
+  /**
+   * Whether to show the section heading
+   * @defaultValue true
+   */
+  showSectionHeading: boolean;
 }
 
 export interface PhotoGallerySectionProps {
@@ -86,6 +92,13 @@ const photoGallerySectionFields: Fields<PhotoGallerySectionProps> = {
           },
         ],
       }),
+      showSectionHeading: YextField(
+        msg("fields.showSectionHeading", "Show Section Heading"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
     },
   }),
   slots: {
@@ -120,7 +133,9 @@ const PhotoGallerySectionComponent: PuckComponent<PhotoGallerySectionProps> = ({
       background={styles.backgroundColor}
       className="flex flex-col gap-8"
     >
-      <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
+      {styles.showSectionHeading && (
+        <slots.HeadingSlot style={{ height: "auto" }} allow={[]} />
+      )}
       <slots.PhotoGalleryWrapper style={{ height: "auto" }} allow={[]} />
     </PageSection>
   );
@@ -139,6 +154,7 @@ export const PhotoGallerySection: ComponentConfig<{
     styles: {
       variant: "gallery",
       backgroundColor: backgroundColors.background1.value,
+      showSectionHeading: true,
     },
     slots: {
       HeadingSlot: [

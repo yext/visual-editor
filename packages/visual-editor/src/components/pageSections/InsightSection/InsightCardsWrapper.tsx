@@ -1,4 +1,3 @@
-import * as React from "react";
 import { InsightSectionType } from "../../../types/types.ts";
 import { ComponentFields } from "../../../types/fields.ts";
 import { msg } from "../../../utils/i18n/platform.ts";
@@ -20,13 +19,55 @@ import {
   InsightCardProps,
 } from "./InsightCard.tsx";
 import { gatherSlotStyles } from "../../../hooks/useGetCardSlots.tsx";
+import { YextField } from "../../../editor/YextField.tsx";
 
-export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType>;
+export type InsightCardsWrapperProps = CardWrapperType<InsightSectionType> & {
+  styles: {
+    showImage: boolean;
+    showCategory: boolean;
+    showPublishTime: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
+  };
+};
 
-const insightCardsWrapperFields = cardWrapperFields<InsightCardsWrapperProps>(
-  msg("fields.insights", "Insights"),
-  ComponentFields.InsightSection.type
-);
+const insightCardsWrapperFields = {
+  ...cardWrapperFields<InsightCardsWrapperProps>(
+    msg("fields.insights", "Insights"),
+    ComponentFields.InsightSection.type
+  ),
+  styles: YextField(msg("fields.styles", "Styles"), {
+    type: "object",
+    objectFields: {
+      showImage: YextField(msg("fields.showImage", "Show Image"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showCategory: YextField(msg("fields.showCategory", "Show Category"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+      showPublishTime: YextField(
+        msg("fields.showPublishTime", "Show Publish Time"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showDescription: YextField(
+        msg("fields.showDescription", "Show Description"),
+        {
+          type: "radio",
+          options: "SHOW_HIDE",
+        }
+      ),
+      showCTA: YextField(msg("fields.showCTA", "Show CTA"), {
+        type: "radio",
+        options: "SHOW_HIDE",
+      }),
+    },
+  }),
+};
 
 const InsightCardsWrapperComponent: PuckComponent<InsightCardsWrapperProps> = (
   props
@@ -53,6 +94,13 @@ export const InsightCardsWrapper: ComponentConfig<{
       field: "",
       constantValueEnabled: true,
       constantValue: [],
+    },
+    styles: {
+      showImage: true,
+      showCategory: true,
+      showPublishTime: true,
+      showDescription: true,
+      showCTA: true,
     },
     slots: {
       CardSlot: [],

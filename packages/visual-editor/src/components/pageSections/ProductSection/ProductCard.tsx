@@ -28,7 +28,9 @@ import {
 import { useCardContext } from "../../../hooks/useCardContext.tsx";
 import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { getRandomPlaceholderImageObject } from "../../../utils/imagePlaceholders.ts";
-import { useProductSectionContext } from "./ProductSectionContext.tsx";
+import { TextProps } from "../../contentBlocks/Text.tsx";
+import { ProductSectionVariant } from "./ProductSection.tsx";
+import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultProduct = {
   image: {
@@ -37,12 +39,12 @@ const defaultProduct = {
     width: 640,
   },
   brow: {
-    en: getDefaultRTF("Category", { isBold: true }),
+    en: "Category",
     hasLocalizedValue: "true",
   },
   name: { en: "Product Name", hasLocalizedValue: "true" },
   price: {
-    en: getDefaultRTF("$123.00", { isBold: true }),
+    en: "$123.00",
     hasLocalizedValue: "true",
   },
   description: {
@@ -103,7 +105,7 @@ export const defaultProductCardSlotData = (
         ],
         BrowSlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-brow` }),
               data: {
@@ -115,8 +117,9 @@ export const defaultProductCardSlotData = (
               },
               styles: {
                 variant: "sm",
+                fontStyle: "bold",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         TitleSlot: [
@@ -140,7 +143,7 @@ export const defaultProductCardSlotData = (
         ],
         PriceSlot: [
           {
-            type: "BodyTextSlot",
+            type: "TextSlot",
             props: {
               ...(id && { id: `${id}-price` }),
               data: {
@@ -152,8 +155,9 @@ export const defaultProductCardSlotData = (
               },
               styles: {
                 variant: "base",
+                fontStyle: "bold",
               },
-            } satisfies BodyTextProps,
+            } satisfies TextProps,
           },
         ],
         DescriptionSlot: [
@@ -233,6 +237,17 @@ export type ProductCardProps = {
   };
 
   /** @internal */
+  parentStyles?: {
+    variant: ProductSectionVariant;
+    showImage: boolean;
+    showBrow: boolean;
+    showTitle: boolean;
+    showPrice: boolean;
+    showDescription: boolean;
+    showCTA: boolean;
+  };
+
+  /** @internal */
   conditionalRender?: {
     price?: boolean;
     brow?: boolean;
@@ -278,22 +293,13 @@ const ProductCardFields: Fields<ProductCardProps> = {
 };
 
 const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
-  const { styles, puck, conditionalRender, slots, imageStyles } = props;
+  const { styles, puck, conditionalRender, slots, parentStyles } = props;
   const { sharedCardProps, setSharedCardProps } = useCardContext<{
     cardBackground: BackgroundStyle | undefined;
     slotStyles: Record<string, ProductCardProps["styles"]>;
   }>();
 
-  const sectionContext = useProductSectionContext();
-  const variant = sectionContext?.variant ?? "immersive";
-  const imageConstrain = sectionContext?.imageConstrain ?? "fill";
-
-  const showImage = sectionContext?.showImage ?? true;
-  const showBrow = sectionContext?.showBrow ?? true;
-  const showTitle = sectionContext?.showTitle ?? true;
-  const showPrice = sectionContext?.showPrice ?? true;
-  const showDescription = sectionContext?.showDescription ?? true;
-  const showCTA = sectionContext?.showCTA ?? true;
+  const variant = props.parentStyles?.variant ?? "immersive";
 
   const { slotStyles, getPuck, slotProps } = useGetCardSlots<ProductCardProps>(
     props.id
@@ -382,12 +388,15 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
     });
   }, [styles, slotStyles]);
 
-  const isEditing = puck.isEditing;
-  const hasPrice = showPrice && (conditionalRender?.price || isEditing);
+  const hasPrice =
+    parentStyles?.showPrice && (conditionalRender?.price || puck.isEditing);
   const hasDescription =
-    showDescription && (conditionalRender?.description || isEditing);
-  const hasCTA = showCTA && (conditionalRender?.cta || isEditing);
-  const hasBrow = showBrow && (conditionalRender?.brow || isEditing);
+    parentStyles?.showDescription &&
+    (conditionalRender?.description || puck.isEditing);
+  const hasCTA =
+    parentStyles?.showCTA && (conditionalRender?.cta || puck.isEditing);
+  const hasBrow =
+    parentStyles?.showBrow && (conditionalRender?.brow || puck.isEditing);
   const bottomPadding = hasCTA ? "pb-8" : "pb-4";
 
   return (
@@ -399,21 +408,9 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
       background={variant === "minimal" ? undefined : styles.backgroundColor}
       ref={puck.dragRef}
     >
-      {showImage && (
+      {parentStyles?.showImage && (
         <div className={variant === "classic" ? "px-8 pt-8" : ""}>
-          <div
-            className={themeManagerCn(
-              imageConstrain === "fixed" ? "w-fit mx-auto" : "w-full"
-            )}
-            style={
-              {
-                width:
-                  imageConstrain === "fixed" && imageStyles?.width
-                    ? `${imageStyles.width}px`
-                    : undefined,
-              } as React.CSSProperties
-            }
-          >
+          <div className={"w-full"}>
             <slots.ImageSlot style={{ height: "fit-content" }} allow={[]} />
           </div>
         </div>
@@ -426,16 +423,17 @@ const ProductCardComponent: PuckComponent<ProductCardProps> = (props) => {
         )}
       >
         <div className="gap-4 flex flex-col flex-grow">
-          <div className="flex flex-col">
-            {hasBrow && (
-              <slots.BrowSlot style={{ height: "auto" }} allow={[]} />
-            )}
+          {(hasBrow || parentStyles?.showTitle) && (
+            <div className="flex flex-col">
+              {hasBrow && (
+                <slots.BrowSlot style={{ height: "auto" }} allow={[]} />
+              )}
 
-            {showTitle && (
-              <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
-            )}
-          </div>
-
+              {parentStyles?.showTitle && (
+                <slots.TitleSlot style={{ height: "auto" }} allow={[]} />
+              )}
+            </div>
+          )}
           {hasPrice && (
             <div className="flex gap-4 border-l-2 border-primary-200 pl-4 items-center">
               <slots.PriceSlot style={{ height: "auto" }} allow={[]} />
@@ -458,12 +456,12 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
   inline: true,
   resolveData: (data, params) => {
     const priceSlotProps = data.props.slots.PriceSlot?.[0]?.props as
-      | WithId<BodyTextProps>
+      | WithId<TextProps>
       | undefined;
 
     const resolvedPrice =
       data.props.parentData?.product.price ??
-      priceSlotProps?.parentData?.richText ??
+      priceSlotProps?.parentData?.text ??
       (priceSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
@@ -474,12 +472,12 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
     const showPrice = Boolean(resolvedPrice);
 
     const browSlotProps = data.props.slots.BrowSlot?.[0]?.props as
-      | WithId<BodyTextProps>
+      | WithId<TextProps>
       | undefined;
 
     const resolvedBrow =
       data.props.parentData?.product.brow ??
-      browSlotProps?.parentData?.richText ??
+      browSlotProps?.parentData?.text ??
       (browSlotProps
         ? resolveYextEntityField(
             params.metadata.streamDocument,
@@ -542,6 +540,16 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
       } satisfies ProductCardProps,
     };
 
+    updatedData = syncParentStyles(params, updatedData, [
+      "variant",
+      "showImage",
+      "showBrow",
+      "showTitle",
+      "showPrice",
+      "showDescription",
+      "showCTA",
+    ]);
+
     // Set the image's sizes attribute
     updatedData = setDeep(updatedData, "props.slots.ImageSlot[0].props.sizes", {
       base: "calc(100vw - 32px)",
@@ -581,16 +589,16 @@ export const ProductCard: ComponentConfig<{ props: ProductCardProps }> = {
         "props.slots.BrowSlot[0].props.parentData",
         {
           field: field,
-          richText: product.brow ?? product.category, // will already be resolved
-        } satisfies BodyTextProps["parentData"]
+          text: product.brow ?? product.category, // will already be resolved
+        } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
         updatedData,
         "props.slots.PriceSlot[0].props.parentData",
         {
           field: field,
-          richText: product.price,
-        } satisfies BodyTextProps["parentData"]
+          text: product.price,
+        } satisfies TextProps["parentData"]
       );
       updatedData = setDeep(
         updatedData,

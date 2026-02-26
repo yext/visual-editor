@@ -70,6 +70,10 @@ export const PhoneStyleFields = {
       ],
     }
   ),
+  includeIcon: YextField(msg("fields.showIcon", "Show Icon"), {
+    type: "radio",
+    options: "SHOW_HIDE",
+  }),
 };
 
 export const defaultPhoneDataProps: PhoneProps["data"] = {
@@ -134,6 +138,7 @@ export const Phone: ComponentConfig<{ props: PhoneProps }> = {
     styles: {
       phoneFormat: "domestic",
       includePhoneHyperlink: true,
+      includeIcon: true,
     },
   },
   resolveFields: (data) => resolveDataFromParent(PhoneFields, data),

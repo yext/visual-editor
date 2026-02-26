@@ -314,20 +314,31 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   value,
   disallowTranslation,
 }: InputProps<T>) => {
-  const constantFieldConfig = returnConstantFieldConfig(
+  const isSingleStringField =
+    filter.types?.includes("type.string") && !filter.includeListsOnly;
+
+  let constantFieldConfig = returnConstantFieldConfig(
     filter.types,
     !!filter.includeListsOnly,
     !!disallowTranslation
   );
+
+  if (!constantFieldConfig && isSingleStringField) {
+    // Support mixed string/rich-text field filters while keeping a plain
+    // text constant input experience for components that opt into both.
+    constantFieldConfig = getConstantConfigFromType(
+      "type.string",
+      false,
+      !!disallowTranslation
+    );
+  }
+
   const { i18n } = useTranslation();
   const locale = i18n.language;
 
   if (!constantFieldConfig) {
     return;
   }
-
-  const isSingleStringField =
-    filter.types?.includes("type.string") && !filter.includeListsOnly;
 
   const fieldEditor = isSingleStringField ? (
     <div className="ve-pt-3">

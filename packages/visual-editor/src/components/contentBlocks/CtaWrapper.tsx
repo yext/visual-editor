@@ -25,8 +25,6 @@ import {
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 
-// TODO: ensure CTAwrapper works as expected
-
 export interface CTAWrapperProps {
   data: {
     /** Whether to show the CTA */

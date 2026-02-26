@@ -327,3 +327,43 @@ describe("resolveComponentData", () => {
     });
   });
 });
+
+describe("resolveComponentData plain text output", () => {
+  it("resolves rich text values into plain text", () => {
+    const field: YextEntityField<TranslatableRichText> = {
+      constantValueEnabled: true,
+      field: "",
+      constantValue: {
+        hasLocalizedValue: "true",
+        en: {
+          html: "<p>Location: <strong>[[c_location]]</strong></p>",
+        },
+      },
+    };
+
+    expect(
+      resolveComponentData(field, "en", mockDocument, { output: "plainText" })
+    ).toBe("Location: New York");
+  });
+
+  it("supports direct rich text values", () => {
+    const value: TranslatableRichText = {
+      hasLocalizedValue: "true",
+      en: {
+        html: "<p>Plain <em>text</em> value</p>",
+      },
+    };
+
+    expect(
+      resolveComponentData(value, "en", mockDocument, { output: "plainText" })
+    ).toBe("Plain text value");
+  });
+
+  it("returns an empty string for missing values", () => {
+    expect(
+      resolveComponentData(undefined as any, "en", mockDocument, {
+        output: "plainText",
+      })
+    ).toBe("");
+  });
+});

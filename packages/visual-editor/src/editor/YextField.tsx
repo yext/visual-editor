@@ -47,7 +47,8 @@ type radioOptions =
   | "ALIGNMENT"
   | "BODY_VARIANT"
   | "JUSTIFY_CONTENT"
-  | "CTA_VARIANT";
+  | "CTA_VARIANT"
+  | "SHOW_HIDE";
 
 type selectOptions = keyof Omit<typeof ThemeOptions, radioOptions>;
 

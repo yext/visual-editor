@@ -30,57 +30,79 @@ export const HeroContent: PuckComponent<HeroVariantProps> = ({
       ? styles.desktopContainerPosition
       : "left";
 
-  const showHours = conditionalRender?.hours || puck.isEditing;
+  const showHours =
+    styles.showHoursStatus && (conditionalRender?.hours || puck.isEditing);
+
+  const showHeader =
+    styles.showBusinessName ||
+    styles.showGeomodifier ||
+    showHours ||
+    (styles.showAverageReview && reviewCount > 0);
 
   return (
     <>
-      <header
-        className="flex flex-col gap-y-4 w-full sm:w-initial"
-        aria-label={t("heroHeader", "Hero Header")}
-      >
-        <section
-          className="flex flex-col gap-y-0"
-          aria-label={t("businessInformation", "Business Information")}
+      {showHeader && (
+        <header
+          className="flex flex-col gap-y-4 w-full sm:w-initial"
+          aria-label={t("heroHeader", "Hero Header")}
         >
-          <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
-          <slots.GeomodifierSlot style={{ height: "auto" }} allow={[]} />
-        </section>
-        {showHours && (
-          <slots.HoursStatusSlot style={{ height: "auto" }} allow={[]} />
-        )}
-        {reviewCount > 0 && styles.showAverageReview && (
-          <ReviewStars
-            averageRating={averageRating}
-            reviewCount={reviewCount}
-            className={themeManagerCn(
-              styles.mobileContentAlignment === "left"
-                ? "justify-start"
-                : "justify-center",
-              desktopContainerPosition === "left"
-                ? "sm:justify-start"
-                : "sm:justify-center"
+          <section
+            className="flex flex-col gap-y-0"
+            aria-label={t("businessInformation", "Business Information")}
+          >
+            {styles.showBusinessName && (
+              <slots.BusinessNameSlot style={{ height: "auto" }} allow={[]} />
             )}
-          />
-        )}
-      </header>
-      <div
-        className={themeManagerCn(
-          "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full flex-wrap sm:items-center ",
-          styles.mobileContentAlignment === "center"
-            ? "items-center"
-            : "items-start",
-          desktopContainerPosition === "center"
-            ? "justify-center"
-            : "justify-start"
-        )}
-        aria-label={t("callToActions", "Call to Actions")}
-      >
-        <slots.PrimaryCTASlot className="sm:!w-fit !w-full h-auto" allow={[]} />
-        <slots.SecondaryCTASlot
-          className="sm:!w-fit !w-full h-auto"
-          allow={[]}
-        />
-      </div>
+            {styles.showGeomodifier && (
+              <slots.GeomodifierSlot style={{ height: "auto" }} allow={[]} />
+            )}
+          </section>
+          {showHours && (
+            <slots.HoursStatusSlot style={{ height: "auto" }} allow={[]} />
+          )}
+          {reviewCount > 0 && styles.showAverageReview && (
+            <ReviewStars
+              averageRating={averageRating}
+              reviewCount={reviewCount}
+              className={themeManagerCn(
+                styles.mobileContentAlignment === "left"
+                  ? "justify-start"
+                  : "justify-center",
+                desktopContainerPosition === "left"
+                  ? "sm:justify-start"
+                  : "sm:justify-center"
+              )}
+            />
+          )}
+        </header>
+      )}
+      {(styles.showPrimaryCTA || styles.showSecondaryCTA) && (
+        <div
+          className={themeManagerCn(
+            "flex flex-col gap-y-4 md:gap-x-4 md:flex-row w-full flex-wrap sm:items-center ",
+            styles.mobileContentAlignment === "center"
+              ? "items-center"
+              : "items-start",
+            desktopContainerPosition === "center"
+              ? "justify-center"
+              : "justify-start"
+          )}
+          aria-label={t("callToActions", "Call to Actions")}
+        >
+          {styles.showPrimaryCTA && (
+            <slots.PrimaryCTASlot
+              className="sm:!w-fit !w-full h-auto"
+              allow={[]}
+            />
+          )}
+          {styles.showSecondaryCTA && (
+            <slots.SecondaryCTASlot
+              className="sm:!w-fit !w-full h-auto"
+              allow={[]}
+            />
+          )}
+        </div>
+      )}
     </>
   );
 };

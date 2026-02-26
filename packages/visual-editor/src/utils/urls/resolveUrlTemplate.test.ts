@@ -44,6 +44,23 @@ const mockDMCityDocument: StreamDocument = {
   }),
 };
 
+const mockLocatorDocument: StreamDocument = {
+  name: "Locator",
+  id: "locator",
+  locale: "en",
+  __: {
+    codeTemplate: "locator",
+    entityPageSetUrlTemplates: JSON.stringify({
+      primary: "location/[[address.city]]/[[id]]",
+      includeLocalePrefixForPrimaryLocale: false,
+      primaryLocale: "en",
+    }),
+  },
+  _pageset: JSON.stringify({
+    type: "LOCATOR",
+  }),
+};
+
 const mockChildProfile = {
   id: "child-profile-1",
   locale: "en",
@@ -54,21 +71,86 @@ const mockChildProfile = {
   },
 };
 
-describe("resolveUrlTemplate", () => {
-  it("uses pathInfo template before page set template", () => {
-    const documentWithPathInfo: StreamDocument = {
-      ...mockStreamDocument,
-      __: {
-        ...mockStreamDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-        },
-      },
-    };
+const matrixCases = [
+  {
+    breadcrumbPrefix: "stores",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "en/stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "es/stores/123",
+  },
+  {
+    breadcrumbPrefix: "stores",
+    locale: "es",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "es/stores/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "en/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "en",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "zh-Hans",
+    includeLocalePrefixForPrimaryLocale: true,
+    expected: "zh-hans/123",
+  },
+  {
+    breadcrumbPrefix: "",
+    locale: "es-MX",
+    includeLocalePrefixForPrimaryLocale: false,
+    expected: "es-mx/123",
+  },
+] as const;
 
-    expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe("stores/123");
-  });
+describe("resolveUrlTemplate", () => {
+  it.each(matrixCases)(
+    "prefers pathInfo template matrix case: breadcrumbPrefix=$breadcrumbPrefix locale=$locale includeLocalePrefixForPrimaryLocale=$includeLocalePrefixForPrimaryLocale",
+    ({
+      breadcrumbPrefix,
+      locale,
+      includeLocalePrefixForPrimaryLocale,
+      expected,
+    }) => {
+      const template = breadcrumbPrefix
+        ? `${breadcrumbPrefix}/[[id]]`
+        : "[[id]]";
+
+      const documentWithPathInfo: StreamDocument = {
+        ...mockStreamDocument,
+        locale,
+        __: {
+          ...mockStreamDocument.__,
+          pathInfo: {
+            template,
+            primaryLocale: "en",
+            includeLocalePrefixForPrimaryLocale,
+          },
+        },
+      };
+
+      expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe(expected);
+    }
+  );
 
   it("falls back to page set template when pathInfo is missing", () => {
     expect(resolveUrlTemplate(mockStreamDocument, "")).toBe(
@@ -106,38 +188,6 @@ describe("resolveUrlTemplate", () => {
     );
   });
 
-  it("includes locale prefix for primary locale when pathInfo requires it", () => {
-    const documentWithPathInfo: StreamDocument = {
-      ...mockStreamDocument,
-      __: {
-        ...mockStreamDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-          includeLocalePrefixForPrimaryLocale: true,
-        },
-      },
-    };
-
-    expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe("en/stores/123");
-  });
-
-  it("includes locale prefix for non-primary locale when pathInfo sets primaryLocale", () => {
-    const documentWithPathInfo: StreamDocument = {
-      ...mockStreamDocument,
-      locale: "es",
-      __: {
-        ...mockStreamDocument.__,
-        pathInfo: {
-          template: "stores/[[id]]",
-          primaryLocale: "en",
-        },
-      },
-    };
-
-    expect(resolveUrlTemplate(documentWithPathInfo, "")).toBe("es/stores/123");
-  });
-
   it("falls back to location path when no templates are available", () => {
     const documentWithoutTemplates: StreamDocument = {
       id: "location1",
@@ -157,5 +207,40 @@ describe("resolveUrlTemplateOfChild", () => {
     expect(
       resolveUrlTemplateOfChild(mockChildProfile, mockDMCityDocument, "")
     ).toBe("va/fairfax/2000-university-dr");
+  });
+
+  it("resolves locator profile links for primary locale", () => {
+    expect(
+      resolveUrlTemplateOfChild(mockChildProfile, mockLocatorDocument, "")
+    ).toBe("location/fairfax/child-profile-1");
+  });
+
+  it("resolves locator profile links for non-primary locale", () => {
+    expect(
+      resolveUrlTemplateOfChild(
+        { ...mockChildProfile, locale: "es" },
+        mockLocatorDocument,
+        ""
+      )
+    ).toBe("es/location/fairfax/child-profile-1");
+  });
+
+  it("resolves locator profile links for primary locale with includeLocalePrefixForPrimaryLocale", () => {
+    expect(
+      resolveUrlTemplateOfChild(
+        { ...mockChildProfile, locale: "en" },
+        {
+          ...mockLocatorDocument,
+          __: {
+            codeTemplate: "locator",
+            entityPageSetUrlTemplates: JSON.stringify({
+              primary: "location/[[address.city]]/[[id]]",
+              includeLocalePrefixForPrimaryLocale: true,
+              primaryLocale: "en",
+            }),
+          },
+        }
+      )
+    ).toBe("en/location/fairfax/child-profile-1");
   });
 });

@@ -360,17 +360,20 @@ const presetImageTypeOptions: {
   label: string;
   value: PresetImageType;
 }[] = [
-  { label: msg("presetImages.appStore", "App Store"), value: "app-store" },
   {
-    label: msg("presetImages.googlePlay", "Google Play"),
+    label: "App Store",
+    value: "app-store",
+  },
+  {
+    label: "Google Play",
     value: "google-play",
   },
   {
-    label: msg("presetImages.galaxyStore", "Galaxy Store"),
+    label: "Galaxy Store",
     value: "galaxy-store",
   },
   {
-    label: msg("presetImages.appGallery", "App Gallery"),
+    label: "App Gallery",
     value: "app-gallery",
   },
   { label: "Deliveroo", value: "deliveroo" },
@@ -415,6 +418,12 @@ const justifyContentOptions = [
 ];
 
 const bodyVariantOptions = [
+  {
+    label: msg("fields.options.extraSmall", "Extra Small", {
+      context: "text size",
+    }),
+    value: "xs",
+  },
   {
     label: msg("fields.options.small", "Small", { context: "text size" }),
     value: "sm",
@@ -478,6 +487,11 @@ const maxWidthOptions = [
   },
 ];
 
+const showHideOptions = [
+  { label: msg("fields.options.show", "Show"), value: true },
+  { label: msg("fields.options.hide", "Hide"), value: false },
+];
+
 export const ThemeOptions = {
   HEADING_LEVEL: headingLevelOptions,
   TEXT_TRANSFORM: textTransformOptions,
@@ -497,6 +511,7 @@ export const ThemeOptions = {
   HOURS_OPTIONS: hoursOptions,
   PHONE_OPTIONS: phoneOptions,
   MAX_WIDTH: maxWidthOptions,
+  SHOW_HIDE: showHideOptions,
 };
 
 // Content path for applying tailwind config to visual-editor components
