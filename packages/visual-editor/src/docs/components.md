@@ -785,6 +785,12 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ### Props
 
+#### Other Props
+
+| Prop                       | Type      | Description | Default |
+| :------------------------- | :-------- | :---------- | :------ |
+| `showSearchResultsSection` | `boolean` |             |         |
+
 ---
 
 ## SecondaryFooterSlot

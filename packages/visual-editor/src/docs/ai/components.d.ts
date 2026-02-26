@@ -657,6 +657,7 @@ interface VideoSectionProps {
 }
 
 interface SearchComponentProps {
+  showSearchResultsSection: boolean;
   /** @internal */
   slots: {
     SearchBarSlot: Slot;
