@@ -16,7 +16,7 @@ import { Body, BodyProps } from "./atoms/body.tsx";
 import { CTA, CTAVariant } from "./atoms/cta.tsx";
 import { Heading } from "./atoms/heading.tsx";
 import { Image } from "./atoms/image.tsx";
-import { msg } from "../utils/i18n/platform.ts";
+import { msg, pt } from "../utils/i18n/platform.ts";
 import { PhoneAtom } from "./atoms/phone.tsx";
 import { useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
@@ -24,11 +24,14 @@ import { resolveUrlTemplateOfChild } from "../utils/urls/resolveUrlTemplate.ts";
 import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
 import { HoursTableAtom } from "./atoms/hoursTable.tsx";
 import { YextField } from "../editor/YextField.tsx";
+import { ConstantValueModeToggler } from "../editor/YextEntityFieldSelector.tsx";
+import { LOCATOR_IMAGE_CONSTANT_CONFIG } from "../internal/puck/constant-value-fields/Image.tsx";
 import {
   DynamicOption,
   DynamicOptionsSingleSelectorType,
 } from "../editor/DynamicOptionsSelector.tsx";
 import { TranslatableString } from "../types/types.ts";
+import { TranslatableAssetImage } from "../types/images.ts";
 import {
   Address,
   AddressType,
@@ -41,6 +44,7 @@ import {
   HoursTableStyleFields,
 } from "./contentBlocks/HoursTable.tsx";
 import { TranslatableStringField } from "../editor/TranslatableStringField.tsx";
+import { getImageUrl } from "./contentBlocks/image/Image.tsx";
 import {
   Accordion,
   AccordionContent,
@@ -69,6 +73,10 @@ export interface LocatorResultCardProps {
      * @defaultValue "name"
      */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the primary heading */
+    constantValue?: TranslatableString;
+    /** Whether to use the static value for the primary heading */
+    constantValueEnabled?: boolean;
     /** The heading level for the primary heading */
     headingLevel: HeadingLevel;
     /**
@@ -82,6 +90,10 @@ export interface LocatorResultCardProps {
   secondaryHeading: {
     /** The field from the data to use for the secondary heading */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the secondary heading */
+    constantValue?: TranslatableString;
+    /** Whether to use the static value for the secondary heading */
+    constantValueEnabled?: boolean;
     /** The variant for the secondary heading */
     variant: BodyProps["variant"];
     /** Whether the secondary heading is visible in live mode */
@@ -92,6 +104,10 @@ export interface LocatorResultCardProps {
   tertiaryHeading: {
     /** The field from the data to use for the tertiary heading */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the tertiary heading */
+    constantValue?: TranslatableString;
+    /** Whether to use the static value for the tertiary heading */
+    constantValueEnabled?: boolean;
     /** The variant for the tertiary heading */
     variant: BodyProps["variant"];
     /** Whether the tertiary heading is visible in live mode */
@@ -184,6 +200,10 @@ export interface LocatorResultCardProps {
   image: {
     /** The field from the data to use for the image */
     field: DynamicOptionsSingleSelectorType<string>;
+    /** Static value for the image */
+    constantValue?: TranslatableAssetImage;
+    /** Whether to use the static value for the image */
+    constantValueEnabled?: boolean;
     /** Whether the image block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -192,15 +212,21 @@ export interface LocatorResultCardProps {
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryHeading: {
     field: { selection: { value: "name" } },
+    constantValue: "",
+    constantValueEnabled: false,
     headingLevel: 3,
   },
   secondaryHeading: {
     field: { selection: { value: "name" } },
+    constantValue: "",
+    constantValueEnabled: false,
     variant: "base",
     liveVisibility: false,
   },
   tertiaryHeading: {
     field: { selection: { value: "name" } },
+    constantValue: "",
+    constantValueEnabled: false,
     variant: "base",
     liveVisibility: false,
   },
@@ -245,6 +271,12 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
   image: {
     field: { selection: { value: "headshot" } },
+    constantValue: {
+      url: "",
+      height: 0,
+      width: 0,
+    },
+    constantValueEnabled: false,
     liveVisibility: false,
   },
 };
@@ -277,6 +309,27 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.string"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={pt(msg("fields.primaryHeading", "Primary Heading"))}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: TranslatableStringField<TranslatableString | undefined>(
+          undefined,
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -300,6 +353,27 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.secondaryHeading", "Secondary Heading"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.string"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={pt(msg("fields.secondaryHeading", "Secondary Heading"))}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: TranslatableStringField<TranslatableString | undefined>(
+          undefined,
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -328,6 +402,27 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.tertiaryHeading", "Tertiary Heading"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.string"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={pt(msg("fields.tertiaryHeading", "Tertiary Heading"))}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: TranslatableStringField<TranslatableString | undefined>(
+          undefined,
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -519,7 +614,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
+        variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
         }),
@@ -553,7 +648,7 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
-        variant: YextField(msg("fields.CTAVariant", "CTA Variant"), {
+        variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
           options: "CTA_VARIANT",
         }),
@@ -573,6 +668,21 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.image", "Image"),
       type: "object",
       objectFields: {
+        constantValueEnabled: {
+          type: "custom",
+          render: ({ value, onChange }) => (
+            <ConstantValueModeToggler
+              fieldTypeFilter={["type.image"]}
+              constantValueEnabled={value ?? false}
+              toggleConstantValueEnabled={(constantValueEnabled) =>
+                onChange(constantValueEnabled)
+              }
+              label={msg("fields.image", "Image")}
+              showLocale={true}
+            />
+          ),
+        },
+        constantValue: LOCATOR_IMAGE_CONSTANT_CONFIG,
         field: YextField<DynamicOptionsSingleSelectorType<string>, string>(
           msg("fields.field", "Field"),
           {
@@ -693,7 +803,7 @@ export const LocatorResultCard = React.memo(
           <div className="w-full flex flex-col gap-4">
             {/** Heading section */}
             <div className="flex flex-row justify-between items-start gap-6">
-              <div className="flex flex-row items-start gap-6">
+              <div className="flex flex-row items-start gap-6 flex-1 min-w-0">
                 <ImageSection image={props.image} location={location} />
                 <HeadingTextSection
                   primaryHeading={props.primaryHeading}
@@ -705,7 +815,7 @@ export const LocatorResultCard = React.memo(
               {displayDistance && (
                 <div
                   className={
-                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex"
+                    "font-body-fontFamily font-body-sm-fontWeight text-body-sm-fontSize rounded-full hidden lg:flex min-w-fit"
                   }
                 >
                   {displayDistance}
@@ -846,8 +956,27 @@ const ImageSection = (props: {
   location: Location;
 }) => {
   const { image, location } = props;
+  const { i18n } = useTranslation();
 
-  const fieldId = image.field?.selection?.value;
+  if (image.constantValueEnabled) {
+    const resolvedImage = image.constantValue
+      ? resolveComponentData(image.constantValue, i18n.language, location)
+      : undefined;
+    const imageUrl = getImageUrl(resolvedImage, i18n.language);
+    const showImageSection =
+      !!imageUrl && image.liveVisibility && !!resolvedImage;
+    return (
+      showImageSection && (
+        <Image
+          image={resolvedImage}
+          streamDocumentOverride={location}
+          className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
+        />
+      )
+    );
+  }
+
+  const fieldId = getSelectedFieldId(image.field);
   const imageRecord = parseRecordFromLocation(location, fieldId);
   const imageData = {
     url: imageRecord?.url,
@@ -862,7 +991,8 @@ const ImageSection = (props: {
     showImageSection && (
       <Image
         image={imageData}
-        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius"
+        streamDocumentOverride={location}
+        className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 object-cover rounded-image-borderRadius min-w-fit"
       />
     )
   );
@@ -875,22 +1005,36 @@ const HeadingTextSection = (props: {
   location: Location;
 }) => {
   const { primaryHeading, secondaryHeading, tertiaryHeading, location } = props;
+  const { i18n } = useTranslation();
 
-  const primaryHeadingText =
-    parseStringFromLocation(location, primaryHeading.field?.selection?.value) ??
-    location.name;
+  const primaryFieldId = getSelectedFieldId(primaryHeading.field);
+  const secondaryFieldId = getSelectedFieldId(secondaryHeading.field);
+  const tertiaryFieldId = getSelectedFieldId(tertiaryHeading.field);
 
-  const secondaryHeadingText = parseStringFromLocation(
+  const primaryHeadingText = resolveText({
+    config: primaryHeading,
     location,
-    secondaryHeading.field?.selection?.value
-  );
-  const tertiaryHeadingText = parseStringFromLocation(
+    language: i18n.language,
+    fieldId: primaryFieldId,
+    fallback: location.name,
+  });
+
+  const secondaryHeadingText = resolveText({
+    config: secondaryHeading,
     location,
-    tertiaryHeading.field?.selection?.value
-  );
+    language: i18n.language,
+    fieldId: secondaryFieldId,
+  });
+
+  const tertiaryHeadingText = resolveText({
+    config: tertiaryHeading,
+    location,
+    language: i18n.language,
+    fieldId: tertiaryFieldId,
+  });
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 flex-1 min-w-0">
       <Heading
         color={primaryHeading?.color}
         className="font-bold text-palette-primary-dark"
@@ -918,7 +1062,7 @@ const HoursSection = (props: {
 }) => {
   const { location, result, hoursProps, showIcons } = props;
 
-  const hoursField = hoursProps.field?.selection?.value;
+  const hoursField = getSelectedFieldId(hoursProps.field);
   const hoursData = parseHoursFromLocation(location, hoursField);
   const showHoursSection = hoursData && hoursProps.liveVisibility;
   return (
@@ -975,7 +1119,7 @@ const PhoneSection = (props: {
   const { phone, handlePhoneNumberClick, location, icons, index } = props;
   const { t } = useTranslation();
 
-  const phoneFieldId = phone.field?.selection?.value;
+  const phoneFieldId = getSelectedFieldId(phone.field);
   const phoneNumber = parseStringFromLocation(location, phoneFieldId);
   const showPhoneNumber = phoneFieldId && phone.liveVisibility && phoneNumber;
   return (
@@ -1002,7 +1146,7 @@ const EmailSection = (props: {
 }) => {
   const { email, location, index, icons } = props;
 
-  const emailFieldId = email.field?.selection?.value;
+  const emailFieldId = getSelectedFieldId(email.field);
   const emailAddresses = parseArrayFromLocation(location, emailFieldId);
   const showEmailSection =
     email.liveVisibility &&
@@ -1036,7 +1180,7 @@ const ServicesSection = (props: {
   const { services, location } = props;
   const { t } = useTranslation();
 
-  const fieldId = services.field?.selection?.value;
+  const fieldId = getSelectedFieldId(services.field);
   const servicesList = parseArrayFromLocation(location, fieldId);
   const showServicesSection =
     services.liveVisibility &&
@@ -1053,6 +1197,33 @@ const ServicesSection = (props: {
       </div>
     )
   );
+};
+
+/**
+ * Resolves the text for a text element based on the constant value, field value, and fallback.
+ */
+const resolveText = (params: {
+  config: {
+    constantValue?: TranslatableString;
+    constantValueEnabled?: boolean;
+  };
+  location: Location;
+  language: string;
+  fieldId: string | undefined;
+  fallback?: string;
+}): string | undefined => {
+  const { config, location, language, fieldId, fallback } = params;
+
+  const resolvedConstantValue =
+    config.constantValueEnabled && config.constantValue
+      ? resolveComponentData(config.constantValue, language, location)
+      : undefined;
+  const resolvedText =
+    typeof resolvedConstantValue === "string"
+      ? resolvedConstantValue
+      : parseStringFromLocation(location, fieldId);
+
+  return resolvedText ?? fallback;
 };
 
 /** Parses a string from the given location using the provided field ID. */
@@ -1093,6 +1264,18 @@ const parseHoursFromLocation = (
   hoursFieldId: string | undefined
 ): HoursType | undefined => {
   return resolveProjectedField(location, hoursFieldId) as HoursType;
+};
+
+const getSelectedFieldId = (
+  field: DynamicOptionsSingleSelectorType<string> | string | undefined
+): string | undefined => {
+  if (!field) {
+    return undefined;
+  }
+  if (typeof field === "string") {
+    return field;
+  }
+  return field.selection?.value;
 };
 
 /**

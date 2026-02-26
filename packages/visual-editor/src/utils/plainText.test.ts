@@ -37,6 +37,28 @@ describe("richTextHtmlToPlainText", () => {
       "Hello World\nSecond line & more\nOne\nTwo"
     );
   });
+
+  it("decodes original named and numeric replacements", () => {
+    const html =
+      "<p>Tom &amp; Jerry &#39;quote&#39; &quot;double&quot; &lt;3 &gt;2</p>";
+
+    expect(richTextHtmlToPlainText(html)).toBe(
+      `Tom & Jerry 'quote' "double" <3 >2`
+    );
+  });
+
+  it("decodes common extended named entities", () => {
+    const html =
+      "<p>&apos;x&apos; &copy; &reg; &trade; &ndash; &mdash; &hellip; &lsquo;y&rsquo; &ldquo;z&rdquo;</p>";
+
+    expect(richTextHtmlToPlainText(html)).toBe(`'x' © ® ™ – — … ‘y’ “z”`);
+  });
+
+  it("preserves uncommon unicode characters in rich text", () => {
+    const html = "<p>© ® é —</p>";
+
+    expect(richTextHtmlToPlainText(html)).toBe("© ® é —");
+  });
 });
 
 describe("richTextToPlainText", () => {

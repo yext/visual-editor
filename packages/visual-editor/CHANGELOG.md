@@ -1,3 +1,84 @@
+#### 1.1.0-alpha.5 (2026-02-25)
+
+##### Bug Fixes
+
+- dm display field name ([#1062](https://github.com/yext/visual-editor/pull/1062)) ([223b6034](https://github.com/yext/visual-editor/commit/223b6034fbbb1408353c1e4a4a812f73de66ded4))
+
+#### 1.1.0-alpha.4 (2026-02-25)
+
+##### New Features
+
+- disable Update Pages button while a deployment is in progress ([#1057](https://github.com/yext/visual-editor/pull/1057)) ([fc48a59c](https://github.com/yext/visual-editor/commit/fc48a59cb77d84ecc027f9053fa05914b295a298))
+- locator static content toggles ([#1040](https://github.com/yext/visual-editor/pull/1040)) ([a5f1196c](https://github.com/yext/visual-editor/commit/a5f1196c318eb3d868cc17bbe0daff6203fc7b30))
+
+##### Bug Fixes
+
+- more 1.1.0-alpha quick fixes ([#1060](https://github.com/yext/visual-editor/pull/1060)) ([caea1661](https://github.com/yext/visual-editor/commit/caea16618f3a943cac8d45cba42469ebcb3e88ce))
+
+#### 1.1.0-alpha.3 (2026-02-24)
+
+##### New Features
+
+- read requireAnalyticsOptIn setting from visual editor config ([#1059](https://github.com/yext/visual-editor/pull/1059)) ([1aafd792](https://github.com/yext/visual-editor/commit/1aafd7929ae2ae80fb68134ae392eb1b07cef636))
+- add Locator Map Opt-In ([#1051](https://github.com/yext/visual-editor/pull/1051)) ([aa1691eb](https://github.com/yext/visual-editor/commit/aa1691eb4ba653424e7e8ea53bdd0ddfc05429d8))
+- add analytics opt-in to the Locator ([#1052](https://github.com/yext/visual-editor/pull/1052)) ([af9dc12a](https://github.com/yext/visual-editor/commit/af9dc12adfa4a987fd5b653c373a6ffc838a56e3))
+
+##### Bug Fixes
+
+- additional locale and directory link handling ([#1056](https://github.com/yext/visual-editor/pull/1056)) ([441f37a3](https://github.com/yext/visual-editor/commit/441f37a3adc172999f9972ee71d8d3be64a8a5ef))
+- allow % in normalizeLink ([#1055](https://github.com/yext/visual-editor/pull/1055)) ([9b77e214](https://github.com/yext/visual-editor/commit/9b77e214e9a40a33c4eae93be866d3f07d23a93a))
+- small default data and empty state fixes ([#1054](https://github.com/yext/visual-editor/pull/1054)) ([7c1e5904](https://github.com/yext/visual-editor/commit/7c1e5904435164d92f1611164aec2ba7b56bab46))
+
+#### 1.1.0-alpha.2 (2026-02-20)
+
+##### Bug Fixes
+
+- resolve urls for directory list children ([#1053](https://github.com/yext/visual-editor/pull/1053)) ([d8e99ccf](https://github.com/yext/visual-editor/commit/d8e99ccfb7c5c105442f3542666bf21640fa3f8a))
+
+#### 1.1.0-alpha.1 (2026-02-19)
+
+##### Chores
+
+- swap to i18next-cli ([#1033](https://github.com/yext/visual-editor/pull/1033)) ([8d261533](https://github.com/yext/visual-editor/commit/8d2615335896f7f34eb0544ac5bbc1c15ff55f68))
+- bump search-ui-react version to 2.0.5 ([#1045](https://github.com/yext/visual-editor/pull/1045)) ([1370e128](https://github.com/yext/visual-editor/commit/1370e128a47e27e7818b962a647bb2cb6f8de781))
+- update screenshots batch 2 ([#1039](https://github.com/yext/visual-editor/pull/1039)) ([d5aa996e](https://github.com/yext/visual-editor/commit/d5aa996e78e8298358660139fc632aa3e4fdc529))
+- remove shadcn registry and use relative imports ([#1013](https://github.com/yext/visual-editor/pull/1013)) ([e8ec46c2](https://github.com/yext/visual-editor/commit/e8ec46c2d72b5eb36a1cfcd62da645cfb774931d))
+
+##### New Features
+
+- use breadcrumbPrefix for breadcrumb urls ([#1006](https://github.com/yext/visual-editor/pull/1006)) ([4d09dfb6](https://github.com/yext/visual-editor/commit/4d09dfb6e704bbce7f19b60a680ced622ad942c8))
+- add text atom ([#1037](https://github.com/yext/visual-editor/pull/1037)) ([ecaa59f5](https://github.com/yext/visual-editor/commit/ecaa59f5f0112324dbcfe8e5c61db05f09b55a55))
+- customizable primary CTA label in locator result cards ([#1047](https://github.com/yext/visual-editor/pull/1047)) ([f2152d6f](https://github.com/yext/visual-editor/commit/f2152d6f05f70c112d26e0400620e3a46ceb4d96))
+- allow show/hide for email and phone icons ([#1043](https://github.com/yext/visual-editor/pull/1043)) ([8868102d](https://github.com/yext/visual-editor/commit/8868102db709e3c27630ef357459c598a8d51e43))
+- add color prop to RTF fields ([#1041](https://github.com/yext/visual-editor/pull/1041)) ([25e39042](https://github.com/yext/visual-editor/commit/25e390420dc7d9dc7c2dad5a4111160b2372dd90))
+- allow styling of Expanded Header links and adjust hamburger logic ([#1038](https://github.com/yext/visual-editor/pull/1038)) ([dcc64922](https://github.com/yext/visual-editor/commit/dcc649226b9cd9fc8f93335f4f9bc7be64db5782))
+- locator's page title is editable and set to h1, color selection added to locator's page title, locator cards and nearby locations cards ([#1035](https://github.com/yext/visual-editor/pull/1035)) ([e50207ae](https://github.com/yext/visual-editor/commit/e50207ae79558990ec228bce3ed24dcdc2635ea5))
+- add show/hide options ([#1032](https://github.com/yext/visual-editor/pull/1032)) ([54ac44db](https://github.com/yext/visual-editor/commit/54ac44dbe364e77d7338303c5274fdf157a06137))
+- dynamic directory title and address converted to slots ([#1036](https://github.com/yext/visual-editor/pull/1036)) ([a56d6f69](https://github.com/yext/visual-editor/commit/a56d6f6938ba4114b723cb0e6d6e1f51fa8ba6f1))
+- add custom button functionality to cta ([#1023](https://github.com/yext/visual-editor/pull/1023)) ([5146c54a](https://github.com/yext/visual-editor/commit/5146c54a8ce711161c065ec13b82f72a41cdda9d))
+- actionBar add parent arrow ([#1031](https://github.com/yext/visual-editor/pull/1031)) ([e7948d28](https://github.com/yext/visual-editor/commit/e7948d28f15a1efdf0f8caf28ba6b0113fa42d0f))
+- add default header font option ([#1027](https://github.com/yext/visual-editor/pull/1027)) ([5187cd25](https://github.com/yext/visual-editor/commit/5187cd254797417ce5788a673ffc9ab9d20ecba1))
+- preload fonts ([#1024](https://github.com/yext/visual-editor/pull/1024)) ([ecc91559](https://github.com/yext/visual-editor/commit/ecc9155931993a9be746ecfbef36620274d9c626))
+- show custom fonts first ([#1019](https://github.com/yext/visual-editor/pull/1019)) ([f8eabe8a](https://github.com/yext/visual-editor/commit/f8eabe8a0a33a1b03e3b866f8802ebe5b8a464d1))
+
+##### Bug Fixes
+
+- default layout and qa nits ([#1049](https://github.com/yext/visual-editor/pull/1049)) ([fc4fa5f3](https://github.com/yext/visual-editor/commit/fc4fa5f3eaa3065d49ed2a2f34d91b2be13598c4))
+- rtf to plain text conversion vuln ([#1050](https://github.com/yext/visual-editor/pull/1050)) ([6409dd90](https://github.com/yext/visual-editor/commit/6409dd90612581af98fcb439ff25df34f9a58131))
+- about section show more button and test improvements ([#1048](https://github.com/yext/visual-editor/pull/1048)) ([93cba48b](https://github.com/yext/visual-editor/commit/93cba48b63fc2c26467978e158002b742d07f751))
+- sort NearbyLocations results by proximity ([#1046](https://github.com/yext/visual-editor/pull/1046)) ([6e9cfb80](https://github.com/yext/visual-editor/commit/6e9cfb804e2327b3d9c3ffdd25a4b89325d63edb))
+- block empty meta titles ([#1030](https://github.com/yext/visual-editor/pull/1030)) ([5baef471](https://github.com/yext/visual-editor/commit/5baef471eb116b9ecb91989b0fce13e9d63dee58))
+- handle language dropdown in ExpandedHeader ([#1042](https://github.com/yext/visual-editor/pull/1042)) ([63fe6154](https://github.com/yext/visual-editor/commit/63fe615409fecdfb17343de0a20e5a1dcd358e68))
+- footer logo field ([#1034](https://github.com/yext/visual-editor/pull/1034)) ([1e8a0534](https://github.com/yext/visual-editor/commit/1e8a05343740a1ffe3a5e91351eab96a9116205c))
+- memoize mapboxOptions for locator ([#1028](https://github.com/yext/visual-editor/pull/1028)) ([95be9ef3](https://github.com/yext/visual-editor/commit/95be9ef31ee824e8ed9843354f941eff38ba03ba))
+- convert to km in locator component ([#1026](https://github.com/yext/visual-editor/pull/1026)) ([7fa2fe22](https://github.com/yext/visual-editor/commit/7fa2fe220e88ff9c76ddc4d209a58d14c46d80f9))
+- text list constant value input ([#1029](https://github.com/yext/visual-editor/pull/1029)) ([e1432060](https://github.com/yext/visual-editor/commit/e1432060c59b711604e2c3a7753ab949d534f00d))
+- font weight updates on font family change ([#1020](https://github.com/yext/visual-editor/pull/1020)) ([f6ce8b7b](https://github.com/yext/visual-editor/commit/f6ce8b7b8a24faedcbc4c552f48b0ce7bb3c1f60))
+- make empty product card slots visible in editor ([#1025](https://github.com/yext/visual-editor/pull/1025)) ([76e0daa6](https://github.com/yext/visual-editor/commit/76e0daa6ba112b6c882c6f42538431829523223f))
+- theme in locator ([#1017](https://github.com/yext/visual-editor/pull/1017)) ([307e451c](https://github.com/yext/visual-editor/commit/307e451c7e10ab1effc877229e01d337e6aaad3a))
+- auto focus on search when opening font dropdown ([#1018](https://github.com/yext/visual-editor/pull/1018)) ([0f60e5a0](https://github.com/yext/visual-editor/commit/0f60e5a0fdb1647fd7c0297d68f3175c181b0a71))
+- case where address.region doesn't exist and add support for sourceEntityPageSetTemplate ([#1016](https://github.com/yext/visual-editor/pull/1016)) ([d2d5b8ae](https://github.com/yext/visual-editor/commit/d2d5b8aedcc7c43ef7ce4c34b747b510395eaad4))
+
 #### 1.0.8 (2026-01-30)
 
 ##### Bug Fixes

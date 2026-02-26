@@ -48,7 +48,12 @@ export const legacyResolveUrlTemplate = (
 const legacyResolveUrlTemplateWithTemplates = (
   streamDocument: StreamDocument,
   relativePrefixToRoot: string,
-  urlTemplates: { primary?: string; alternate?: string }
+  urlTemplates: {
+    primary?: string;
+    alternate?: string;
+    includeLocalePrefixForPrimaryLocale?: boolean;
+    primaryLocale?: string;
+  }
 ): string | undefined => {
   const locale = streamDocument.locale || streamDocument?.meta?.locale || "";
   if (!locale) {
@@ -64,12 +69,25 @@ const legacyResolveUrlTemplateWithTemplates = (
     );
   }
 
-  return buildUrlFromTemplate(
-    urlTemplate,
-    streamDocument,
-    locale,
-    relativePrefixToRoot
+  const resolvedUrl = normalizeSlug(
+    resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
   );
+  if (!resolvedUrl) {
+    return;
+  }
+
+  // On sites that have an updated entity pageset that sets pathInfo
+  // but the locator pageset does not yet set pathInfo, locator links
+  // will use the legacy URL template resolution but include the new primary locale handling
+  if (
+    urlTemplates.primaryLocale &&
+    (urlTemplates.primaryLocale !== locale ||
+      urlTemplates.includeLocalePrefixForPrimaryLocale)
+  ) {
+    return `${relativePrefixToRoot}${normalizeSlug(locale)}/${resolvedUrl}`;
+  }
+
+  return `${relativePrefixToRoot}${resolvedUrl}`;
 };
 
 /**
@@ -88,24 +106,4 @@ const selectUrlTemplate = (
   } else {
     return urlTemplates.primary || urlTemplates.alternate;
   }
-};
-
-/**
- * Builds a URL from a template string by resolving embedded fields and normalizing the slug.
- */
-export const buildUrlFromTemplate = (
-  urlTemplate: string,
-  streamDocument: StreamDocument,
-  locale: string,
-  relativePrefixToRoot: string
-): string | undefined => {
-  const normalizedSlug = normalizeSlug(
-    resolveEmbeddedFieldsInString(urlTemplate, streamDocument, locale)
-  ).replace(/\/+/g, "/"); // replace multiple slashes with a single slash
-
-  if (!normalizedSlug) {
-    return;
-  }
-
-  return relativePrefixToRoot + normalizedSlug;
 };

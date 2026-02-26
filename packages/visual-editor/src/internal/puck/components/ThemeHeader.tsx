@@ -12,6 +12,12 @@ import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 import { LocalDevOverrideButtons } from "./LayoutHeader.tsx";
 import { pt } from "../../../utils/i18n/platform.ts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/Tooltip.tsx";
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -25,6 +31,7 @@ type ThemeHeaderProps = {
   setClearLocalChangesModalOpen: (newValue: boolean) => void;
   totalEntityCount: number;
   localDev: boolean;
+  deploymentInProgress: boolean;
 };
 
 export const ThemeHeader = (props: ThemeHeaderProps) => {
@@ -40,6 +47,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     setClearLocalChangesModalOpen,
     totalEntityCount,
     localDev,
+    deploymentInProgress,
   } = props;
 
   const getPuck = useGetPuck();
@@ -130,6 +138,15 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     });
   }, []);
 
+  const publishDisabled =
+    themeHistories?.histories?.length === 1 || deploymentInProgress;
+  const publishTooltipMessage = deploymentInProgress
+    ? pt(
+        "publishBlocked.deploymentInProgress",
+        "Update is disabled while deployment is in progress"
+      )
+    : undefined;
+
   return (
     <header className="puck-header">
       <div className="header-left">
@@ -187,18 +204,37 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           }}
         />
         {!isDevMode && (
-          <Button
-            variant="secondary"
-            disabled={themeHistories?.histories?.length === 1}
-            onClick={async () => {
-              await onPublishTheme();
-            }}
-          >
-            {
-              // TODO: translation concatenation
-              `${pt("update", "Update")} ${totalEntityCount} ${totalEntityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
-            }
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span
+                  tabIndex={publishDisabled ? 0 : -1}
+                  className={publishDisabled ? "ve-cursor-not-allowed" : ""}
+                  role={publishDisabled ? "button" : undefined}
+                  aria-disabled={publishDisabled || undefined}
+                >
+                  <Button
+                    variant="secondary"
+                    disabled={publishDisabled}
+                    onClick={async () => {
+                      await onPublishTheme();
+                    }}
+                    className={publishDisabled ? "ve-pointer-events-none" : ""}
+                  >
+                    {
+                      // TODO: translation concatenation
+                      `${pt("update", "Update")} ${totalEntityCount} ${totalEntityCount === 1 ? pt("page", "Page") : pt("pages", "Pages")}`
+                    }
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              {publishTooltipMessage && (
+                <TooltipContent className="ve-max-w-[320px] ve-whitespace-pre-line ve-text-left">
+                  <p>{publishTooltipMessage}</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
         )}
       </div>
     </header>

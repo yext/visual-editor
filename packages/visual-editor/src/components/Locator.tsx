@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  WithPuckProps,
+  setDeep,
+} from "@puckeditor/core";
 import {
   FieldValueFilter,
   FieldValueStaticFilter,
@@ -27,9 +32,10 @@ import {
   PinComponent,
   SearchI18nextProvider,
   VerticalResults,
+  useAnalytics as useSearchAnalytics,
 } from "@yext/search-ui-react";
 import mapboxgl, { LngLat, LngLatBounds, MarkerOptions } from "mapbox-gl";
-import React from "react";
+import React, { useEffect } from "react";
 import { useCollapse } from "react-collapsed";
 import { useTranslation } from "react-i18next";
 import {
@@ -46,7 +52,7 @@ import {
 } from "../editor/DynamicOptionsSelector.tsx";
 import { YextField } from "../editor/YextField.tsx";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { Button } from "../internal/puck/ui/button.tsx";
+import { Button } from "./atoms/button.tsx";
 import { TranslatableString } from "../types/types.ts";
 import {
   getPreferredDistanceUnit,
@@ -72,6 +78,7 @@ import {
   LocatorResultCardProps,
 } from "./LocatorResultCard.tsx";
 import { MapPinIcon } from "./MapPinIcon.js";
+import { useAnalytics } from "@yext/pages-components";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -82,6 +89,18 @@ const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 const DEFAULT_TITLE = "Find a Location";
+
+const translateDistanceUnit = (
+  t: (key: string, options?: Record<string, unknown>) => string,
+  unit: "mile" | "kilometer",
+  count: number
+) => {
+  if (unit === "mile") {
+    return t("mile", { count, defaultValue: "mile" });
+  }
+
+  return t("kilometer", { count, defaultValue: "kilometer" });
+};
 
 const getEntityType = (entityTypeEnvVar?: string) => {
   const entityDocument: StreamDocument = useDocument();
@@ -592,6 +611,64 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
+  resolveFields: (data) => {
+    let updatedFields: Fields<LocatorProps> = { ...locatorFields };
+    const setConstantVaueFieldVisibility = (
+      fields: Fields<LocatorProps>,
+      fieldKey:
+        | "primaryHeading"
+        | "secondaryHeading"
+        | "tertiaryHeading"
+        | "image",
+      isConstantValueEnabled: boolean
+    ): Fields<LocatorProps> => {
+      let nextFields = fields;
+      nextFields = setDeep(
+        nextFields,
+        `resultCard.objectFields.${fieldKey}.objectFields.field.visible`,
+        !isConstantValueEnabled
+      );
+      nextFields = setDeep(
+        nextFields,
+        `resultCard.objectFields.${fieldKey}.objectFields.constantValue.visible`,
+        isConstantValueEnabled
+      );
+      return nextFields;
+    };
+
+    const constantValueFieldConfigs = [
+      {
+        key: "primaryHeading",
+        enabled:
+          data.props.resultCard?.primaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "secondaryHeading",
+        enabled:
+          data.props.resultCard?.secondaryHeading?.constantValueEnabled ??
+          false,
+      },
+      {
+        key: "tertiaryHeading",
+        enabled:
+          data.props.resultCard?.tertiaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "image",
+        enabled: data.props.resultCard?.image?.constantValueEnabled ?? false,
+      },
+    ] as const;
+
+    constantValueFieldConfigs.forEach(({ key, enabled }) => {
+      updatedFields = setConstantVaueFieldVisibility(
+        updatedFields,
+        key,
+        enabled
+      );
+    });
+
+    return updatedFields;
+  },
   render: (props) => <LocatorWrapper {...props} />,
 };
 
@@ -641,6 +718,21 @@ const LocatorInternal = ({
   puck,
   pageHeading,
 }: WithPuckProps<LocatorProps>) => {
+  // Adds a unified enableYextAnalytics to the window for both Pages and Search
+  // analytics. Typically used during consent banner implementation.
+  const searchAnalytics = useSearchAnalytics();
+  const pagesAnalytics = useAnalytics();
+  useEffect(() => {
+    (window as any).enableYextAnalytics = () => {
+      searchAnalytics?.optIn();
+      pagesAnalytics?.optIn();
+    };
+
+    return () => {
+      delete (window as any).enableYextAnalytics;
+    };
+  }, [searchAnalytics, pagesAnalytics]);
+
   const { t, i18n } = useTranslation();
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
@@ -863,12 +955,19 @@ const LocatorInternal = ({
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
-  const [mapProps, setMapProps] = React.useState<MapProps>({
-    mapStyle,
-    onDragHandler: handleDrag,
-    scrollToResult: scrollToResult,
-    markerOptionsOverride: markerOptionsOverride,
-  });
+  const [centerCoords, setCenterCoords] = React.useState<
+    [number, number] | undefined
+  >();
+  const mapProps = React.useMemo(
+    () => ({
+      mapStyle,
+      centerCoords,
+      onDragHandler: handleDrag,
+      scrollToResult: scrollToResult,
+      markerOptionsOverride: markerOptionsOverride,
+    }),
+    [centerCoords, handleDrag, mapStyle, markerOptionsOverride, scrollToResult]
+  );
 
   React.useEffect(() => {
     const resolveLocationAndSearch = async () => {
@@ -899,7 +998,7 @@ const LocatorInternal = ({
             filterValue.lat,
           ];
           if (areValidCoordinates(centerCoords[1], centerCoords[0])) {
-            setMapProps((prev) => ({ ...prev, centerCoords }));
+            setCenterCoords(centerCoords);
             setMapCenter(mapboxgl.LngLat.convert(centerCoords));
           }
         }
@@ -1137,6 +1236,13 @@ const LocatorInternal = ({
     (pageHeading?.title &&
       resolveComponentData(pageHeading.title, i18n.language, streamDocument)) ||
     t("findALocation", "Find a Location");
+
+  const requireMapOptIn: boolean = streamDocument.__?.visualEditorConfig
+    ? JSON.parse(streamDocument.__?.visualEditorConfig)?.requireMapOptIn
+    : false;
+  // If no opt-in is required, the map is already enabled.
+  const [mapEnabled, setMapEnabled] = React.useState(!requireMapOptIn);
+
   return (
     <div className="components flex h-screen w-screen mx-auto">
       {/* Left Section: FilterSearch + Results. Full width for small screens */}
@@ -1240,7 +1346,30 @@ const LocatorInternal = ({
 
       {/* Right Section: Map. Hidden for small screens */}
       <div id="locatorMapDiv" className="md:flex-1 md:flex hidden relative">
-        <Map {...mapProps} />
+        {mapEnabled && <Map {...mapProps} />}
+        {!mapEnabled && (
+          <div className="flex items-center justify-center w-full h-full bg-gray-100">
+            <div className="p-6">
+              <Body
+                className="text-gray-700 font-bold text-center"
+                variant="lg"
+              >
+                {t(
+                  "mapRequiresOptIn",
+                  "This map can only be displayed if cookies are enabled"
+                )}
+              </Body>
+              <div className="flex justify-center p-2">
+                <Button
+                  onClick={() => setMapEnabled(true)}
+                  className="py-2 px-4 basis-full sm:w-auto justify-center"
+                >
+                  {t("enableCookies", "Enable Cookies")}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
         {showSearchAreaButton && (
           <div className="absolute bottom-10 left-0 right-0 flex justify-center">
             <Button
@@ -1300,7 +1429,7 @@ const ResultsCountSummary = (props: ResultsCountSummaryProps) => {
             {t("locationsWithinDistanceOf", {
               count: resultCount,
               distance: selectedDistanceOption,
-              unit: t(unit, { count: selectedDistanceOption }),
+              unit: translateDistanceUnit(t, unit, selectedDistanceOption),
               name: filterDisplayName,
             })}
           </Body>
@@ -1611,7 +1740,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
             <button
               className="inline-flex bg-white"
               onClick={() => onChange(distanceOption, unit)}
-              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${t(unit, { count: distanceOption })}`}
+              aria-label={`${t("selectDistanceLessThan", "Select distance less than")} ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             >
               <div className="text-palette-primary-dark">
                 {selectedDistanceOption === distanceOption ? (
@@ -1622,9 +1751,7 @@ const DistanceFilter = (props: DistanceFilterProps) => {
               </div>
             </button>
             <Body className="inline-flex">
-              {`< ${distanceOption} ${t(unit, {
-                count: distanceOption,
-              })}`}
+              {`< ${distanceOption} ${translateDistanceUnit(t, unit, distanceOption)}`}
             </Body>
           </div>
         ))}

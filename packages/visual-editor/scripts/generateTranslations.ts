@@ -1,109 +1,257 @@
-import fs from "fs/promises";
 import path from "path";
+import {
+  flatten,
+  getSubdirectoryNames,
+  loadJsonSafe,
+  saveJson,
+  type FlatTranslations,
+  unflatten,
+} from "../src/utils/i18n/jsonUtils.ts";
 
-/** Default source language used for translation */
-const defaultLng = "en";
-
-/** i18next namespace to operate on */
-const ns = "visual-editor";
-
-/** Path to the root locales directory */
-const localesDir = "./locales";
-
-/** Whether to perform a dry run (simulate only, no file writes) */
+/**
+ * Fills missing platform locale values using Google Translate.
+ *
+ * Behavior:
+ * - Reads English source strings from locales/platform/en/visual-editor.json.
+ * - Translates only missing/empty keys in non-English platform locale files.
+ * - Adds contextual hints to ambiguous keys and removes them after translation.
+ * - Preserves nested object JSON shape on disk.
+ */
+const DEFAULT_LANGUAGE = "en";
+const NAMESPACE = "visual-editor";
+const LOCALES_DIR = "./locales";
 const isDryRun = process.argv.includes("--dry-run");
 
-/** Represents one translation segment from the Google Translate API */
-type TranslationSegment = [
-  translatedText: string,
-  originalText: string,
-  ...rest: unknown[],
-];
-
-/** Structured response from the Google Translate API */
-type GoogleTranslateRawResponse = [TranslationSegment[], unknown, string];
-
-// Context separator used by i18next-scanner
 const CONTEXT_SEPARATOR = "_";
-
-// Unique markers for embedding context into the text for translation
 const CONTEXT_MARKER_START = "[[";
 const CONTEXT_MARKER_END = "]]";
+const PLURAL_SUFFIXES = new Set(["zero", "one", "two", "few", "many", "other"]);
+const INTERPOLATION_REGEX = /\{\{\s*([^{}]+?)\s*\}\}/g;
 
-// Google Translate API very rarely removes/adds [ or ]
-// Matches one or more opening "[", then any characters (non-greedy), then one or more closing "]"
-const CONTEXT_EMBED_REGEX = new RegExp(`\\[+.*?\\]+`, "g");
+type TranslationType = "platform";
 
-/**
- * Extracts context from a key if it uses the i18next context separator.
- */
-function extractContextFromKey(key: string): string | null {
-  const parts = key.split(CONTEXT_SEPARATOR);
-  if (parts.length > 1) {
-    return parts[parts.length - 1];
-  }
-  return null;
+interface MaskedVariable {
+  token: string;
+  original: string;
 }
 
-/**
- * Inserts context into text to be translated using unique markers.
- * Ex. "Left" with context "direction" becomes "Left [[direction]]"
- */
-function embedContextInText(text: string, context: string): string {
-  return `${text} ${CONTEXT_MARKER_START}${context}${CONTEXT_MARKER_END}`;
+interface TranslationTarget {
+  key: string;
+  english: string;
+  sourceKey: string;
 }
 
-/**
- * Removes embedded context from the translated text using the unique markers.
- * Ex. "Gauche [[direction]]" becomes "Gauche"
- */
-function removeEmbeddedContext(text: string): string {
-  return text.replace(CONTEXT_EMBED_REGEX, "").trim();
-}
+type GoogleTranslationSegment = [translatedText: string, ...rest: unknown[]];
+type GoogleTranslateResponse = [GoogleTranslationSegment[], ...rest: unknown[]];
 
 /**
- * Reads all directories under localesDir and returns them as target languages.
+ * Reads and validates the --type argument.
+ * This script intentionally supports "platform" only.
  */
-async function getTargetLanguages(
-  type: "components" | "platform"
-): Promise<string[]> {
-  const dir = path.join(localesDir, type);
-  let entries;
-  try {
-    entries = await fs.readdir(dir, { withFileTypes: true });
-  } catch (err) {
-    const error = err as NodeJS.ErrnoException;
-    if (error.code === "ENOENT") {
-      console.warn(`Skipping missing locales directory for ${type} at ${dir}.`);
-      return [];
-    }
-    throw err;
-  }
-  // Filter directories only
-  return entries.filter((entry) => entry.isDirectory()).map((dir) => dir.name);
-}
+const getTypeArg = (): TranslationType => {
+  const index = process.argv.findIndex((arg) => arg === "--type");
+  const raw = index >= 0 ? process.argv[index + 1] : "platform";
 
-/**
- * Translates a string of text using the unofficial Google Translate API
- * @param text - The original English text to translate
- * @param targetLang - The target locale code (e.g., "fr_FR")
- * @returns The translated string, or the original text if translation fails
- */
-async function translateText(
-  text: string,
-  targetLang: string
-): Promise<string> {
-  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${defaultLng}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-  const res = await fetch(url);
-
-  if (!res.ok) {
+  if (raw !== "platform") {
     throw new Error(
-      `Google Translate API error: ${res.status} for text: "${text}"`
+      `Unsupported --type "${raw}". This script only supports "--type platform".`
     );
   }
 
-  const data = (await res.json()) as GoogleTranslateRawResponse;
+  return "platform";
+};
 
+/**
+ * Removes an i18next plural suffix from the final key segment when present.
+ */
+const stripPluralSuffix = (
+  segment: string
+): { withoutPlural: string; pluralSuffix: string | null } => {
+  const parts = segment.split(CONTEXT_SEPARATOR);
+  const last = parts[parts.length - 1];
+
+  if (PLURAL_SUFFIXES.has(last)) {
+    return {
+      withoutPlural: parts.slice(0, -1).join(CONTEXT_SEPARATOR),
+      pluralSuffix: last,
+    };
+  }
+
+  return { withoutPlural: segment, pluralSuffix: null };
+};
+
+/**
+ * Returns candidate English fallback keys for locale-specific plural variants.
+ * Example:
+ * - locationsNear_many -> [locationsNear_other, locationsNear_one, locationsNear]
+ */
+const getPluralFallbackCandidates = (key: string): string[] => {
+  const parts = key.split(".");
+  const leaf = parts[parts.length - 1];
+  const { withoutPlural, pluralSuffix } = stripPluralSuffix(leaf);
+
+  if (!pluralSuffix) {
+    return [];
+  }
+
+  const leafCandidates = [
+    `${withoutPlural}_other`,
+    `${withoutPlural}_one`,
+    withoutPlural,
+  ];
+  const seen = new Set<string>();
+  const candidates: string[] = [];
+
+  for (const leafCandidate of leafCandidates) {
+    const candidate = [...parts.slice(0, -1), leafCandidate].join(".");
+    if (!seen.has(candidate) && candidate !== key) {
+      seen.add(candidate);
+      candidates.push(candidate);
+    }
+  }
+
+  return candidates;
+};
+
+/**
+ * Resolves the English source text for a translation key.
+ * For locale-specific plural keys not present in English, falls back to the
+ * same key family in English (prefer *_other, then *_one, then base).
+ */
+const resolveEnglishSource = (
+  key: string,
+  defaultJson: FlatTranslations
+): { sourceKey: string; english: string } | null => {
+  if (defaultJson[key] !== undefined) {
+    return { sourceKey: key, english: defaultJson[key] };
+  }
+
+  for (const candidate of getPluralFallbackCandidates(key)) {
+    if (defaultJson[candidate] !== undefined) {
+      return { sourceKey: candidate, english: defaultJson[candidate] };
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Attempts to infer semantic context from a key suffix.
+ * Example: fields.options.left_direction -> "direction".
+ * Plural suffixes are excluded from context inference.
+ */
+const extractContextFromKey = (
+  key: string,
+  allDefaultKeys: Set<string>
+): string | null => {
+  const parts = key.split(".");
+  const leaf = parts[parts.length - 1];
+  const { withoutPlural } = stripPluralSuffix(leaf);
+
+  if (!withoutPlural.includes(CONTEXT_SEPARATOR)) {
+    return null;
+  }
+
+  const leafParts = withoutPlural.split(CONTEXT_SEPARATOR);
+
+  for (let i = leafParts.length - 1; i >= 1; i -= 1) {
+    const baseLeaf = leafParts.slice(0, i).join(CONTEXT_SEPARATOR);
+    const contextSuffix = leafParts.slice(i).join(CONTEXT_SEPARATOR);
+    const baseKey = [...parts.slice(0, -1), baseLeaf].join(".");
+
+    if (allDefaultKeys.has(baseKey)) {
+      return contextSuffix.replaceAll(CONTEXT_SEPARATOR, " ").trim();
+    }
+  }
+
+  const fallback = leafParts.slice(1).join(CONTEXT_SEPARATOR).trim();
+  if (!fallback || PLURAL_SUFFIXES.has(fallback)) {
+    return null;
+  }
+
+  return fallback.replaceAll(CONTEXT_SEPARATOR, " ");
+};
+
+/**
+ * Appends a context marker that is passed to machine translation.
+ */
+const embedContextInText = (text: string, context: string): string => {
+  return `${text} ${CONTEXT_MARKER_START}context: ${context}${CONTEXT_MARKER_END}`;
+};
+
+/**
+ * Removes translation-time context markers from translated output.
+ */
+const removeEmbeddedContext = (text: string): string => {
+  return text.replace(/\s*\[\[\s*context:\s*[\s\S]*?\]\]/gi, "").trim();
+};
+
+/**
+ * Replaces interpolation placeholders with stable sentinel tokens before MT.
+ * This reduces the chance providers translate variable names.
+ */
+const maskInterpolationVariables = (
+  text: string
+): { maskedText: string; variables: MaskedVariable[] } => {
+  let index = 0;
+  const variables: MaskedVariable[] = [];
+  const maskedText = text.replace(INTERPOLATION_REGEX, (match) => {
+    const token = `__I18N_VAR_${index}__`;
+    variables.push({ token, original: match });
+    index += 1;
+    return token;
+  });
+
+  return { maskedText, variables };
+};
+
+/**
+ * Restores original interpolation placeholders after MT.
+ */
+const unmaskInterpolationVariables = (
+  text: string,
+  variables: MaskedVariable[]
+): string => {
+  let output = text;
+  for (const { token, original } of variables) {
+    output = output.replaceAll(token, original);
+  }
+  return output;
+};
+
+/**
+ * Lists locale folders under locales/<type>.
+ */
+const getTargetLanguages = async (type: TranslationType): Promise<string[]> => {
+  const dir = path.join(LOCALES_DIR, type);
+  const entries = await getSubdirectoryNames(dir, { suppressMissing: true });
+
+  if (entries.length === 0) {
+    console.warn(
+      `Skipping missing or empty locales directory for ${type} at ${dir}.`
+    );
+  }
+
+  return entries;
+};
+
+/**
+ * Translates a single string from English to a target language via Google.
+ */
+const translateText = async (
+  text: string,
+  targetLang: string
+): Promise<string> => {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${DEFAULT_LANGUAGE}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(
+      `Google Translate API error: ${response.status} for text: "${text}"`
+    );
+  }
+
+  const data = (await response.json()) as GoogleTranslateResponse;
   const translations = data[0];
   if (!translations || !Array.isArray(translations)) {
     throw new Error(
@@ -112,162 +260,122 @@ async function translateText(
   }
 
   const translatedText = translations
-    .map(([translatedText]: TranslationSegment) => translatedText)
+    .map(([translated]) => translated)
     .join("");
-
   return translatedText || text;
-}
+};
 
 /**
- * Reads a JSON file safely, returning an empty object if the file doesn't exist or is invalid
- * @param filePath - Full path to the JSON file
- * @returns Parsed JSON object or an empty object if reading fails
+ * Translates missing keys for all non-primary locales of a translation type.
  */
-async function loadJsonSafe(filePath: string): Promise<Record<string, any>> {
-  try {
-    const raw = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(raw);
-  } catch {
-    return {};
-  }
-}
-
-/**
- * Writes a JSON object to the specified path
- * @param filePath - Full path to the output file
- * @param data - JSON data to write
- */
-async function saveJson(
-  filePath: string,
-  data: Record<string, string>
-): Promise<void> {
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
-}
-
-/**
- * Flattens a nested JSON object into a dot-separated key-value structure
- * @param obj - The object to flatten
- * @param prefix - Prefix for nested keys (used internally)
- * @returns A flat object with dot-separated keys
- */
-function flatten(
-  obj: Record<string, any>,
-  prefix = ""
-): Record<string, string> {
-  const result: Record<string, string> = {};
-  for (const key in obj) {
-    const value = obj[key];
-    const newKey = prefix ? `${prefix}.${key}` : key;
-    if (typeof value === "object" && value !== null) {
-      Object.assign(result, flatten(value, newKey));
-    } else {
-      result[newKey] = String(value ?? "");
-    }
-  }
-  return result;
-}
-
-/**
- * Reconstructs a nested JSON object from a flat dot-separated key structure
- * @param obj - Flat object with dot-separated keys
- * @returns A nested object
- */
-function unflatten(obj: Record<string, string>): Record<string, any> {
-  const result: Record<string, any> = {};
-  for (const flatKey in obj) {
-    const parts = flatKey.split(".");
-    let cur = result;
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      if (i === parts.length - 1) {
-        cur[part] = obj[flatKey];
-      } else {
-        cur[part] ??= {};
-        cur = cur[part];
-      }
-    }
-  }
-  return result;
-}
-
-/**
- * Loads the base English translation file, compares it to each target language file,
- * translates missing or empty keys using Google Translate, and optionally writes them back.
- */
-async function translateFile(type: "components" | "platform"): Promise<void> {
-  const defaultPath = path.join(localesDir, type, defaultLng, `${ns}.json`);
+const translateFile = async (type: TranslationType): Promise<void> => {
+  const defaultPath = path.join(
+    LOCALES_DIR,
+    type,
+    DEFAULT_LANGUAGE,
+    `${NAMESPACE}.json`
+  );
   const defaultJson = flatten(await loadJsonSafe(defaultPath));
+  const defaultKeySet = new Set(Object.keys(defaultJson));
 
-  for (const lng of await getTargetLanguages(type)) {
-    if (lng === defaultLng) {
-      console.log(`Skipping default language [${lng}].`);
+  for (const locale of await getTargetLanguages(type)) {
+    if (locale === DEFAULT_LANGUAGE) {
+      console.log(`Skipping default language [${locale}].`);
       continue;
     }
 
-    const targetPath = path.join(localesDir, type, lng, `${ns}.json`);
+    const targetPath = path.join(
+      LOCALES_DIR,
+      type,
+      locale,
+      `${NAMESPACE}.json`
+    );
     const targetJson = flatten(await loadJsonSafe(targetPath));
 
     const cache = new Map<string, string>(
-      Object.entries(targetJson).map(([k, v]) => [k.trim(), v])
+      Object.entries(targetJson).map(([key, value]) => [key.trim(), value])
     );
-    const keysToTranslate = Object.keys(defaultJson).filter((key) => {
-      const val = cache.get(key.trim());
-      return val === undefined || val === "";
-    });
+    const candidateKeys = new Set<string>([
+      ...Object.keys(defaultJson),
+      ...Object.keys(targetJson),
+    ]);
+    const translationTargets: TranslationTarget[] = [];
 
-    if (keysToTranslate.length === 0) {
-      console.log(`✅ No missing translations for [${type}/${lng}].`);
+    for (const key of candidateKeys) {
+      const value = cache.get(key.trim());
+      if (value !== undefined && value !== "") {
+        continue;
+      }
+
+      const source = resolveEnglishSource(key, defaultJson);
+      if (!source || source.english.trim() === "") {
+        continue;
+      }
+
+      translationTargets.push({
+        key,
+        english: source.english,
+        sourceKey: source.sourceKey,
+      });
+    }
+
+    if (translationTargets.length === 0) {
+      console.log(`No missing translations for [${type}/${locale}].`);
       continue;
     }
 
     console.log(
-      `🔄 Translating ${keysToTranslate.length} keys for [${type}/${lng}]...`
+      `Translating ${translationTargets.length} keys for [${type}/${locale}]...`
     );
 
     let successCount = 0;
     let failCount = 0;
 
-    // Allow all translations to attempt.
-    // Even if some fail, we still have partial results.
     await Promise.allSettled(
-      keysToTranslate.map(async (key) => {
-        let english = defaultJson[key];
-        const context = extractContextFromKey(key);
+      translationTargets.map(async ({ key, english, sourceKey }) => {
+        const { maskedText, variables } = maskInterpolationVariables(english);
+        let translationInput = maskedText;
+        const context = extractContextFromKey(key, defaultKeySet);
 
-        // If context exists, embed it for translation
         if (context) {
-          english = embedContextInText(english, context);
+          translationInput = embedContextInText(translationInput, context);
         }
 
         try {
-          let translated = await translateText(english, lng);
-          // If context was embedded, remove it from the translated text
+          let translated = await translateText(translationInput, locale);
           if (context) {
             translated = removeEmbeddedContext(translated);
           }
+          translated = unmaskInterpolationVariables(translated, variables);
+
           cache.set(key.trim(), translated);
-          successCount++;
+          successCount += 1;
           console.log(
-            `[${type}/${lng}] ${key}: "${defaultJson[key]}" -> "${translated}"`
+            `[${type}/${locale}] ${key} (source: ${sourceKey}): "${english}" -> "${translated}"`
           );
-        } catch (e) {
-          failCount++;
-          console.error(`[${lng}] ❌ Failed to translate key "${key}":`, e);
+        } catch (error) {
+          failCount += 1;
+          console.error(`[${locale}] Failed to translate key "${key}":`, error);
         }
       })
     );
 
-    const finalJson = unflatten(Object.fromEntries(cache));
+    const finalJson = unflatten(Object.fromEntries(cache) as FlatTranslations);
     if (!isDryRun) {
       await saveJson(targetPath, finalJson);
     }
 
     console.log(
-      `✅ [${type}/${lng}] Done. Translated: ${successCount}, Failed: ${failCount}, Saved to: ${targetPath} ${isDryRun ? "(dry run, not written)" : ""}`
+      `[${type}/${locale}] Done. Translated: ${successCount}, Failed: ${failCount}, Saved to: ${targetPath} ${isDryRun ? "(dry run, not written)" : ""}`
     );
   }
-}
+};
 
-// Kick off the translation process
-translateFile("platform").catch(console.error);
+/**
+ * Script entrypoint.
+ */
+const type = getTypeArg();
+translateFile(type).catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

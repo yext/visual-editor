@@ -97,9 +97,9 @@ const DirectoryComponent: PuckComponent<DirectoryProps> = ({
       {streamDocument.dm_directoryChildren &&
         !isDirectoryGrid(streamDocument.dm_directoryChildren) && (
           <DirectoryList
+            streamDocument={streamDocument}
             directoryChildren={streamDocument.dm_directoryChildren}
             relativePrefixToRoot={relativePrefixToRoot ?? ""}
-            level={streamDocument?.meta?.entityType?.id}
           />
         )}
     </Background>

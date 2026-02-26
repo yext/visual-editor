@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   axe,
   ComponentTest,
+  logSuppressedWcagViolations,
   testHours,
   transformTests,
 } from "../testing/componentTests.setup.ts";
@@ -1671,10 +1672,7 @@ describe("HeroSection", async () => {
       await expect(`HeroSection/[${viewportName}] ${name}`).toMatchScreenshot();
       const results = await axe(container);
       if (isBrandColorTest(props) && results.violations.length) {
-        console.warn(
-          `IGNORING axe violations for brand color test: ${name}`,
-          results.violations
-        );
+        logSuppressedWcagViolations(results);
       } else {
         expect(results).toHaveNoViolations();
       }
@@ -1686,10 +1684,7 @@ describe("HeroSection", async () => {
         ).toMatchScreenshot();
         const results = await axe(container);
         if (isBrandColorTest(props) && results.violations.length) {
-          console.warn(
-            `IGNORING axe violations for brand color test: ${name}`,
-            results.violations
-          );
+          logSuppressedWcagViolations(results);
         } else {
           expect(results).toHaveNoViolations();
         }
