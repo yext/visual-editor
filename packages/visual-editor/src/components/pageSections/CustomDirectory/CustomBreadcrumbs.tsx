@@ -95,7 +95,7 @@ const CustomBreadcrumbsComponent = ({
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_API_KEY;
   const customEndpointName =
-    streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_NAME;
+    streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_URL;
 
   if (!apiKey || !customEndpointName) {
     if (puck?.isEditing) {
@@ -155,7 +155,7 @@ const CustomBreadcrumbsComponent = ({
     const fetchBreadcrumbs = async () => {
       try {
         const json = await fetchData({
-          endpoint: `https://cdn.yextapis.com/v2/accounts/me/content/${customEndpointName}/${streamDocument.uid}`,
+          endpoint: `${customEndpointName}/${streamDocument.uid}`,
           apiKey: apiKey,
         });
 
