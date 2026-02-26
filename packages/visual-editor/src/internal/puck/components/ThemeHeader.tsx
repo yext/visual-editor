@@ -49,6 +49,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     setClearLocalChangesModalOpen,
     totalEntityCount,
     localDev,
+    headDeployStatus,
   } = props;
 
   const getPuck = useGetPuck();
@@ -140,12 +141,10 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, []);
 
   const publishDisabled =
-    themeHistories?.histories?.length === 1 ||
-    props.headDeployStatus !== "ACTIVE";
+    themeHistories?.histories?.length === 1 || headDeployStatus !== "ACTIVE";
 
-  const publishTooltipMessage = getPublishTooltipMessageFromHeadDeployStatus(
-    props.headDeployStatus
-  );
+  const publishTooltipMessage =
+    getPublishTooltipMessageFromHeadDeployStatus(headDeployStatus);
 
   return (
     <header className="puck-header">
