@@ -550,6 +550,8 @@
   "promoBanner": "プロモーションバナー",
   "promoMedia": "プロモーションメディア",
   "publishBlocked": {
+    "deploymentFailed": "最新のデプロイメントが失敗したため、公開は無効になっています。問題を修正して再試行してください",
+    "deploymentInactive": "デプロイメントが非アクティブであるため、公開は無効になっています",
     "deploymentInProgress": "導入の進行中は更新が無効になります"
   },
   "publishError": {

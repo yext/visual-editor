@@ -842,15 +842,8 @@ export const LocatorResultCard = React.memo(
                       </CardIcon>
                     )}
                     <div className="flex flex-col gap-1 w-full">
-                      <div className="font-body-fontFamily font-body-fontWeight text-body-md-fontSize gap-4">
-                        <Address
-                          address={location.address}
-                          lines={[
-                            ["line1"],
-                            ["line2"],
-                            ["city", "region", "postalCode"],
-                          ]}
-                        />
+                      <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
+                        <Address address={location.address} />
                       </div>
                       {getDirectionsLink &&
                         props.address.showGetDirectionsLink && (

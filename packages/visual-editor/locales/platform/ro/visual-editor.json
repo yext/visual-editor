@@ -555,6 +555,8 @@
   "promoBanner": "Banner promoțional",
   "promoMedia": "Media promo",
   "publishBlocked": {
+    "deploymentFailed": "Publicarea este dezactivată deoarece cea mai recentă implementare a eșuat. Remediați problemele și încercați din nou",
+    "deploymentInactive": "Publicarea este dezactivată deoarece implementarea este inactivă",
     "deploymentInProgress": "Actualizarea este dezactivată în timp ce implementarea este în curs"
   },
   "publishError": {

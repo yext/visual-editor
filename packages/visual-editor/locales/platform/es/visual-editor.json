@@ -555,6 +555,8 @@
   "promoBanner": "Banner promocional",
   "promoMedia": "Medios promocionales",
   "publishBlocked": {
+    "deploymentFailed": "La publicación está deshabilitada porque falló la última implementación. Soluciona los problemas y vuelve a intentarlo.",
+    "deploymentInactive": "La publicación está deshabilitada porque la implementación está inactiva",
     "deploymentInProgress": "La actualización está deshabilitada mientras la implementación está en progreso"
   },
   "publishError": {

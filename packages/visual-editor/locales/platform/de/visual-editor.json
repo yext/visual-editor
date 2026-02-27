@@ -550,6 +550,8 @@
   "promoBanner": "Promo-Banner",
   "promoMedia": "Promo-Media",
   "publishBlocked": {
+    "deploymentFailed": "Die Veröffentlichung ist deaktiviert, da die letzte Bereitstellung fehlgeschlagen ist. Bitte beheben Sie die Probleme und versuchen Sie es erneut",
+    "deploymentInactive": "Die Veröffentlichung ist deaktiviert, da die Bereitstellung inaktiv ist",
     "deploymentInProgress": "Während der Bereitstellung ist die Aktualisierung deaktiviert"
   },
   "publishError": {

@@ -555,6 +555,8 @@
   "promoBanner": "Promo banner",
   "promoMedia": "Promo medija",
   "publishBlocked": {
+    "deploymentFailed": "Objava je onemogućena jer posljednja implementacija nije uspjela. Riješite probleme i pokušajte ponovno",
+    "deploymentInactive": "Objavljivanje je onemogućeno jer je implementacija neaktivna",
     "deploymentInProgress": "Ažuriranje je onemogućeno dok je implementacija u tijeku"
   },
   "publishError": {

@@ -555,6 +555,8 @@
   "promoBanner": "Striscione promozionale",
   "promoMedia": "Media promozionale",
   "publishBlocked": {
+    "deploymentFailed": "La pubblicazione è disabilitata perché l'ultima distribuzione non è riuscita. Risolvi i problemi e riprova",
+    "deploymentInactive": "La pubblicazione è disabilitata perché la distribuzione è inattiva",
     "deploymentInProgress": "L'aggiornamento è disabilitato mentre la distribuzione è in corso"
   },
   "publishError": {
