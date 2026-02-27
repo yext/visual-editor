@@ -35,12 +35,6 @@ export function resolveUrlFromSourcePageSets(
   // apply, the property is not included in the search response
   const savedFiltersForEntity: string[] = profile?.savedFilters ?? [];
 
-  console.log(
-    "sourcePageSets",
-    sourcePageSets,
-    "savedFiltersForEntity",
-    savedFiltersForEntity
-  );
   const sourceEntityPageSet = sourcePageSets.find(
     (pageSetInfo: LocatorSourcePageSetInfo) =>
       pageSetIncludesEntity(

@@ -68,6 +68,76 @@ const tests: ComponentTest[] = [
     version: migrationRegistry.length,
   },
   {
+    name: "latest version multi-pageset default props",
+    document: {
+      locale: "en",
+      businessId: "4174974",
+      __: {
+        isPrimaryLocale: true,
+        locatorSourcePageSets: {
+          "accounts/4174974/sites/155048/pagesets/locations": {
+            pathInfo: {
+              template:
+                "locations/[[address.region]]/[[address.city]]/[[address.line1]]",
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+            entityType: "location",
+            savedFilter: "location-filter",
+            internalSavedSearchId: 11111,
+          },
+          "accounts/4174974/sites/155048/pagesets/restaurants": {
+            pathInfo: {
+              template:
+                "restaurants/[[address.region]]/[[address.city]]/[[address.line1]]",
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+            entityType: "restaurant",
+            savedFilter: "restaurant-filter",
+            internalSavedSearchId: 22222,
+          },
+          "accounts/4174974/sites/155048/pagesets/hotels": {
+            pathInfo: {
+              template:
+                "hotels/[[address.region]]/[[address.city]]/[[address.line1]]",
+              primaryLocale: "en",
+              includeLocalePrefixForPrimaryLocale: false,
+            },
+            entityType: "hotel",
+          },
+        },
+      },
+      _env: {
+        YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
+          .COMPONENT_TESTS_VISUAL_EDITOR_APP_API_KEY,
+        YEXT_CLOUD_CHOICE: "GLOBAL-MULTI",
+        YEXT_CLOUD_REGION: "US",
+        YEXT_ENVIRONMENT: "PROD",
+        YEXT_MAPBOX_API_KEY: import.meta.env.COMPONENT_TESTS_MAPBOX_API_KEY,
+        YEXT_SEARCH_API_KEY: import.meta.env.COMPONENT_TESTS_SEARCH_API_KEY,
+      },
+      _pageset: JSON.stringify({
+        type: "LOCATOR",
+        typeConfig: {
+          locatorConfig: {
+            experienceKey: "locator-41",
+            sources: [
+              "accounts/4174974/sites/155048/pagesets/locations",
+              "accounts/4174974/sites/155048/pagesets/restaurants",
+              "accounts/4174974/sites/155048/pagesets/hotels",
+            ],
+            entityTypeScopes: [
+              { entityType: "atms", savedFilter: "atm-filter" },
+            ],
+          },
+        },
+      }),
+    },
+    props: { ...LocatorComponent.defaultProps },
+    version: migrationRegistry.length,
+  },
+  {
     name: "latest version non-default props",
     document: {
       locale: "en",
