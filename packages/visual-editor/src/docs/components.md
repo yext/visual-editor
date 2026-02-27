@@ -781,6 +781,18 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 ---
 
+## SearchComponent
+
+### Props
+
+#### Other Props
+
+| Prop                       | Type      | Description | Default |
+| :------------------------- | :-------- | :---------- | :------ |
+| `showSearchResultsSection` | `boolean` |             |         |
+
+---
+
 ## SecondaryFooterSlot
 
 The Secondary Footer Slot is a sub-section of the Expanded Footer that contains copyright information and secondary links.
