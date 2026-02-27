@@ -21,6 +21,7 @@ import {
   defaultThemeConfig,
   locatorConfig,
   getSchema,
+  processTemplateLayoutData,
   injectTranslations,
   getCanonicalUrl,
   migrate,
@@ -103,19 +104,26 @@ export const getPath: GetPath<TemplateProps> = ({
 
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
-
+  const layoutData = JSON.parse(document.__.layout);
   const migratedData = migrate(
-    JSON.parse(document.__.layout),
+    layoutData,
     migrationRegistry,
     locatorConfig,
     document
   );
-  const resolvedPuckData = await resolveAllData(migratedData, locatorConfig, {
+  const translations = await injectTranslations(document);
+  const resolvedData = await resolveAllData(migratedData, locatorConfig, {
     streamDocument: document,
   });
-  document.__.layout = JSON.stringify(resolvedPuckData);
+  const resolvedPuckData = await processTemplateLayoutData({
+    layoutData,
+    processedLayout: resolvedData,
+    templateId: "locator",
+    targetLocale: document.locale,
+    targetTranslations: translations,
+  });
 
-  const translations = await injectTranslations(document);
+  document.__.layout = JSON.stringify(resolvedPuckData);
 
   return { ...props, document, translations };
 };

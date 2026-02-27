@@ -23,6 +23,7 @@ import {
   resolvePhoneNumbers,
 } from "../contentBlocks/PhoneList.tsx";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface CoreInfoStyles {
   /**
@@ -201,10 +202,10 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Information",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultText(
+                    "componentDefaults.information",
+                    "Information"
+                  ),
                   constantValueEnabled: true,
                   field: "",
                 },
@@ -246,10 +247,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                       field: "mainPhone",
                       constantValue: "",
                     },
-                    label: {
-                      en: "Phone",
-                      hasLocalizedValue: "true",
-                    },
+                    label: defaultText("componentDefaults.phone", "Phone"),
                   },
                 ],
               },
@@ -282,10 +280,10 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Hours",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultText(
+                    "componentDefaults.hours",
+                    "Hours"
+                  ),
                   constantValueEnabled: true,
                   field: "",
                 },
@@ -319,10 +317,10 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Services",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: defaultText(
+                    "componentDefaults.services",
+                    "Services"
+                  ),
                   constantValueEnabled: true,
                   field: "",
                 },

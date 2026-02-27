@@ -14,6 +14,7 @@ import { defaultTeamCardSlotData } from "./TeamCard.tsx";
 import { TeamCardsWrapperProps } from "./TeamCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface TeamSectionProps {
   /**
@@ -136,10 +137,10 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Meet Our Team",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.meetOurTeam",
+                  "Meet Our Team"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },

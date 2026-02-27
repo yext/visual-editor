@@ -12,6 +12,7 @@ import { TranslatableRichText } from "../../types/types.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { resolveDataFromParent } from "../../editor/ParentData.tsx";
 import { BackgroundStyle } from "../../index.ts";
+import { defaultRichText } from "../../utils/i18n/defaultContent.ts";
 
 export type BodyTextProps = {
   data: {
@@ -114,10 +115,7 @@ export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
     data: {
       text: {
         field: "",
-        constantValue: {
-          en: "Text",
-          hasLocalizedValue: "true",
-        },
+        constantValue: defaultRichText("componentDefaults.text", "Text"),
         constantValueEnabled: true,
       },
     },

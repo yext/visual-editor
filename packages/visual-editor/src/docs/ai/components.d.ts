@@ -1,8 +1,8 @@
 import {
-  Config,
   Data,
   DefaultComponentProps,
   DefaultRootProps,
+  Config,
   Field,
   ComponentConfig,
   CustomField,

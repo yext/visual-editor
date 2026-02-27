@@ -31,6 +31,7 @@ import { SpotlightHero } from "./heroVariants/SpotlightHero.js";
 import { ImmersiveHero } from "./heroVariants/ImmersiveHero.js";
 import { getRandomPlaceholderImageObject } from "../../utils/imagePlaceholders.ts";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface HeroData {
   backgroundImage: YextEntityField<
@@ -406,10 +407,10 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Business Name",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.businessName",
+                  "Business Name"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },
@@ -424,10 +425,10 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Geomodifier",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.geomodifier",
+                  "Geomodifier"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },
@@ -485,18 +486,15 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: defaultText("componentDefaults.button", "Button"),
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Call To Action",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: defaultText(
+                    "componentDefaults.callToAction",
+                    "Call to Action"
+                  ),
+                  link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -516,18 +514,15 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: defaultText("componentDefaults.button", "Button"),
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Learn More",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: defaultText(
+                    "componentDefaults.learnMore",
+                    "Learn More"
+                  ),
+                  link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },

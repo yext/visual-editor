@@ -12,7 +12,7 @@ import {
  * Fills missing platform locale values using Google Translate.
  *
  * Behavior:
- * - Reads English source strings from locales/platform/en/visual-editor.json.
+ * - Reads English source strings from `locales/platform/en/visual-editor.json`.
  * - Translates only missing/empty keys in non-English platform locale files.
  * - Adds contextual hints to ambiguous keys and removes them after translation.
  * - Preserves nested object JSON shape on disk.
@@ -35,11 +35,11 @@ interface MaskedVariable {
   original: string;
 }
 
-interface TranslationTarget {
+type TranslationTarget = {
   key: string;
   english: string;
   sourceKey: string;
-}
+};
 
 type GoogleTranslationSegment = [translatedText: string, ...rest: unknown[]];
 type GoogleTranslateResponse = [GoogleTranslationSegment[], ...rest: unknown[]];
@@ -51,13 +51,11 @@ type GoogleTranslateResponse = [GoogleTranslationSegment[], ...rest: unknown[]];
 const getTypeArg = (): TranslationType => {
   const index = process.argv.findIndex((arg) => arg === "--type");
   const raw = index >= 0 ? process.argv[index + 1] : "platform";
-
   if (raw !== "platform") {
     throw new Error(
       `Unsupported --type "${raw}". This script only supports "--type platform".`
     );
   }
-
   return "platform";
 };
 
@@ -346,6 +344,7 @@ const translateFile = async (type: TranslationType): Promise<void> => {
           if (context) {
             translated = removeEmbeddedContext(translated);
           }
+
           translated = unmaskInterpolationVariables(translated, variables);
 
           cache.set(key.trim(), translated);

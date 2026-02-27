@@ -24,6 +24,7 @@ import {
   ctaTypeOptions,
   getCTAType,
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export interface CTAWrapperProps {
   data: {
@@ -297,17 +298,11 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
         },
         selectedType: "textAndLink",
       },
-      buttonText: {
-        en: "Button",
-        hasLocalizedValue: "true",
-      },
+      buttonText: defaultText("componentDefaults.button", "Button"),
       customId: "",
       customClass: "",
       dataAttributes: [],
-      ariaLabel: {
-        en: "Button",
-        hasLocalizedValue: "true",
-      },
+      ariaLabel: defaultText("componentDefaults.button", "Button"),
     },
     styles: {
       variant: "primary",

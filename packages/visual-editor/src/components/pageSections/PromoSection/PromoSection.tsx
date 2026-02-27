@@ -38,6 +38,7 @@ import { CompactPromo } from "./CompactPromo.tsx";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface PromoData {
   /**
@@ -352,10 +353,10 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Featured Promotion",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.featuredPromotion",
+                  "Featured Promotion"
+                ),
                 constantValueEnabled: true,
               },
             },
@@ -370,12 +371,9 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: getDefaultRTF(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
-                  ),
-                  hasLocalizedValue: "true",
-                },
+                constantValue: getDefaultRTF(
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
+                ),
                 constantValueEnabled: true,
               },
             },
@@ -429,11 +427,14 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: defaultText("componentDefaults.button", "Button"),
               entityField: {
                 field: "",
                 constantValue: {
-                  label: "Learn More",
+                  label: defaultText(
+                    "componentDefaults.learnMore",
+                    "Learn More"
+                  ),
                   link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",

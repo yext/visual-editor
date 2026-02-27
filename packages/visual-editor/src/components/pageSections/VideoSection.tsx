@@ -98,10 +98,7 @@ export const VideoSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "",
                 constantValueEnabled: true,
                 field: "",
               },

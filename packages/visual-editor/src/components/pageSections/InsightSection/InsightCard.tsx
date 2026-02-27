@@ -27,6 +27,7 @@ import {
   Slot,
 } from "@puckeditor/core";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 const defaultInsight = {
   image: {
@@ -34,20 +35,14 @@ const defaultInsight = {
     width: 640,
     height: 360,
   },
-  name: { en: "Article Name", hasLocalizedValue: "true" },
-  category: {
-    en: "Category",
-    hasLocalizedValue: "true",
-  },
-  description: {
-    en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters"
-    ),
-    hasLocalizedValue: "true",
-  },
+  name: defaultText("componentDefaults.articleName", "Article Name"),
+  category: defaultText("componentDefaults.category", "Category"),
+  description: getDefaultRTF(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters"
+  ),
   publishTime: "2022-08-02T14:00:00",
   cta: {
-    label: { en: "Read More", hasLocalizedValue: "true" },
+    label: defaultText("componentDefaults.readMore", "Read More"),
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -189,7 +184,7 @@ export const defaultInsightCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: defaultText("componentDefaults.button", "Button"),
                 entityField: {
                   field: "",
                   constantValue: defaultInsight.cta,

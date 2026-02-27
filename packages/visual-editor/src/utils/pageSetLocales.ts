@@ -2,7 +2,7 @@ import { StreamDocument } from "./types/StreamDocument.ts";
 
 export const DEFAULT_LOCALE = "en";
 
-const normalizeLocales = (locales: string[] | undefined): string[] => {
+export const normalizeLocales = (locales: string[] | undefined): string[] => {
   if (!locales || locales.length === 0) {
     return [];
   }

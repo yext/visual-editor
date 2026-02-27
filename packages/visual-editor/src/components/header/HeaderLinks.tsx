@@ -26,6 +26,7 @@ import {
 import { getHeaderViewport } from "./viewport.ts";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 export type HeaderLinksProps = {
   data: {
@@ -63,7 +64,7 @@ export type HeaderLinksProps = {
 
 const defaultLink: TranslatableCTA = {
   linkType: "URL",
-  label: { en: "Header Link", hasLocalizedValue: "true" },
+  label: defaultText("componentDefaults.headerLink", "Header Link"),
   link: "#",
   openInNewTab: false,
 };

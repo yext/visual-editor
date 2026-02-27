@@ -14,6 +14,7 @@ import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLeve
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
 import { defaultInsightCardSlotData } from "./InsightCard.tsx";
 import { InsightCardsWrapperProps } from "./InsightCardsWrapper.tsx";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface InsightSectionProps {
   /**
@@ -136,10 +137,10 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Insights",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.insights",
+                  "Insights"
+                ),
                 constantValueEnabled: true,
               },
             },

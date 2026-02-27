@@ -3,7 +3,7 @@ import React, { ErrorInfo, useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingScreen } from "../internal/puck/components/LoadingScreen.tsx";
 import { Toaster } from "../internal/puck/ui/Toaster.tsx";
-import { type Config } from "@puckeditor/core";
+import { type Config, type Data } from "@puckeditor/core";
 import { useEntityFields } from "../hooks/useEntityFields.tsx";
 import { DevLogger } from "../utils/devLogger.ts";
 import { ThemeConfig } from "../utils/themeResolver.ts";
@@ -32,6 +32,13 @@ import {
 import { migrate } from "../utils/migrate.ts";
 import { migrationRegistry } from "../components/migrations/migrationRegistry.ts";
 import { ErrorProvider } from "../contexts/ErrorContext.tsx";
+import { processTemplateLayoutData } from "../utils/i18n/defaultLayoutTranslations.ts";
+import {
+  getLoadedComponentTranslations,
+  loadComponentTranslationsForLocales,
+} from "../utils/i18n/components.ts";
+import { useComponentTranslationsVersion } from "../utils/i18n/useComponentTranslationsVersion.ts";
+import { getPageSetLocales } from "../utils/pageSetLocales.ts";
 
 const devLogger = new DevLogger();
 
@@ -202,20 +209,79 @@ export const Editor = ({
   if (themeConfig === defaultThemeConfig && templateMetadata?.customFonts) {
     finalThemeConfig = createDefaultThemeConfig(templateMetadata?.customFonts);
   }
-  const migratedData = !isLoading
-    ? migrate(layoutData!, migrationRegistry, puckConfig, document)
-    : undefined;
+
+  const [processedLayoutData, setProcessedLayoutData] = useState<Data>();
+  const templateId = templateMetadata?.templateId ?? "";
+  const componentTranslationsVersion = useComponentTranslationsVersion();
+
+  useEffect(() => {
+    if (isLoading || !layoutData || !puckConfig || !templateId) {
+      setProcessedLayoutData(undefined);
+      return;
+    }
+
+    let isCurrent = true;
+
+    const processLayoutData = async () => {
+      try {
+        const scopedLocales = getPageSetLocales(document);
+        await loadComponentTranslationsForLocales(scopedLocales);
+
+        const resolvedLayoutData = await processTemplateLayoutData({
+          layoutData,
+          processedLayout: migrate(
+            layoutData,
+            migrationRegistry,
+            puckConfig,
+            document
+          ),
+          templateId,
+          targets: scopedLocales.map((locale) => ({
+            locale,
+            translations: getLoadedComponentTranslations(locale),
+          })),
+        });
+
+        if (!isCurrent) {
+          return;
+        }
+
+        setProcessedLayoutData(resolvedLayoutData);
+      } catch (error) {
+        console.error("Failed to process template layout data:", error);
+        if (isCurrent) {
+          setProcessedLayoutData(undefined);
+        }
+      }
+    };
+
+    processLayoutData();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [
+    componentTranslationsVersion,
+    document?.locale,
+    document?._pageset,
+    isLoading,
+    layoutData,
+    puckConfig,
+    templateId,
+  ]);
+
+  const editorReady = !isLoading && !processedLayoutData;
 
   return (
     <ErrorProvider>
       <TemplateMetadataContext.Provider value={templateMetadata!}>
         <ErrorBoundary fallback={<></>} onError={logError}>
-          {!isLoading ? (
+          {editorReady ? (
             templateMetadata?.isThemeMode || forceThemeMode ? (
               <ThemeEditor
                 puckConfig={puckConfig!}
                 templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
+                layoutData={processedLayoutData!}
                 themeData={themeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}
@@ -225,7 +291,7 @@ export const Editor = ({
               <LayoutEditor
                 puckConfig={puckConfig!}
                 templateMetadata={templateMetadata!}
-                layoutData={migratedData!}
+                layoutData={processedLayoutData!}
                 themeData={themeData!}
                 themeConfig={finalThemeConfig}
                 localDev={!!localDev}

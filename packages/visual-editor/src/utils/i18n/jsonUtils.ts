@@ -4,6 +4,10 @@ import path from "path";
 export type FlatTranslations = Record<string, string>;
 export type JsonObject = Record<string, unknown>;
 
+export const isJsonObject = (value: unknown): value is JsonObject => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
 /**
  * Loads JSON from disk. Missing files return {} by default.
  * Invalid JSON throws with file context.

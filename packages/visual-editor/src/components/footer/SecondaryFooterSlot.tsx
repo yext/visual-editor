@@ -5,13 +5,11 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { PageSection, PageSectionProps } from "../atoms/pageSection.tsx";
 import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 const defaultLink = {
   linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
+  label: defaultText("componentDefaults.footerLink", "Footer Link"),
   link: "#",
   openInNewTab: false,
 };

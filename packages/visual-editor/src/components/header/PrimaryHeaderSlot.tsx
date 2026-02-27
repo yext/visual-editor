@@ -30,6 +30,7 @@ import {
 } from "./ExpandedHeaderMenuContext.tsx";
 import { getHeaderViewport } from "./viewport.ts";
 import { SlidePanel } from "./SlidePanel.tsx";
+import { defaultText } from "../../utils/i18n/defaultContent.ts";
 
 const HAMBURGER_RESERVE_PX = 48;
 
@@ -424,12 +425,15 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
-            buttonText: { en: "Button", hasLocalizedValue: "true" },
+            buttonText: defaultText("componentDefaults.button", "Button"),
             entityField: {
               field: "",
               constantValue: {
-                label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: { en: "#", hasLocalizedValue: "true" },
+                label: defaultText(
+                  "componentDefaults.callToAction",
+                  "Call to Action"
+                ),
+                link: "#",
                 linkType: "URL",
                 ctaType: "textAndLink",
               },
@@ -451,12 +455,15 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
-            buttonText: { en: "Button", hasLocalizedValue: "true" },
+            buttonText: defaultText("componentDefaults.button", "Button"),
             entityField: {
               field: "",
               constantValue: {
-                label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: { en: "#", hasLocalizedValue: "true" },
+                label: defaultText(
+                  "componentDefaults.callToAction",
+                  "Call to Action"
+                ),
+                link: "#",
                 linkType: "URL",
                 ctaType: "textAndLink",
               },

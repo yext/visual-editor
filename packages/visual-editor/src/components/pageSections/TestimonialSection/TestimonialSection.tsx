@@ -14,6 +14,7 @@ import { defaultTestimonialCardSlotData } from "./TestimonialCard.tsx";
 import { TestimonialCardsWrapperProps } from "./TestimonialCardsWrapper.tsx";
 import { forwardHeadingLevel } from "../../../utils/cardSlots/forwardHeadingLevel.ts";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { defaultText } from "../../../utils/i18n/defaultContent.ts";
 
 export interface TestimonialSectionProps {
   /**
@@ -140,10 +141,10 @@ export const TestimonialSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Featured Testimonials",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: defaultText(
+                  "componentDefaults.featuredTestimonials",
+                  "Featured Testimonials"
+                ),
                 constantValueEnabled: true,
                 field: "",
               },
