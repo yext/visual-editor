@@ -575,8 +575,6 @@
   "promoBanner": "Promobanner",
   "promoMedia": "Promo media",
   "publishBlocked": {
-    "deploymentFailed": "Publiceren is uitgeschakeld omdat de laatste implementatie is mislukt. Los de problemen op en probeer het opnieuw",
-    "deploymentInactive": "Publiceren is uitgeschakeld omdat de implementatie inactief is",
     "deploymentInProgress": "Update is uitgeschakeld terwijl de implementatie bezig is"
   },
   "publishError": {

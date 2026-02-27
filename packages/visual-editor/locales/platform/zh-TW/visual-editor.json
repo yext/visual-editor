@@ -575,8 +575,6 @@
   "promoBanner": "促銷橫幅",
   "promoMedia": "促銷媒體",
   "publishBlocked": {
-    "deploymentFailed": "由於最新部署失敗，發布被停用。請修復問題並重試",
-    "deploymentInactive": "由於部署處於非活動狀態，因此發布被禁用",
     "deploymentInProgress": "部署期間禁用更新"
   },
   "publishError": {

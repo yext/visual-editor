@@ -580,8 +580,6 @@
   "promoBanner": "Bannière promotionnelle",
   "promoMedia": "Médias promotionnels",
   "publishBlocked": {
-    "deploymentFailed": "La publication est désactivée car le dernier déploiement a échoué. Veuillez résoudre les problèmes et réessayer",
-    "deploymentInactive": "La publication est désactivée car le déploiement est inactif",
     "deploymentInProgress": "La mise à jour est désactivée pendant le déploiement"
   },
   "publishError": {

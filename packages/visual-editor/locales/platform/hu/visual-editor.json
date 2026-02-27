@@ -575,8 +575,6 @@
   "promoBanner": "Promó banner",
   "promoMedia": "Promóciós média",
   "publishBlocked": {
-    "deploymentFailed": "A közzététel le van tiltva, mert a legutóbbi telepítés meghiúsult. Kérjük, javítsa a problémákat, és próbálja újra",
-    "deploymentInactive": "A közzététel le van tiltva, mert a központi telepítés inaktív",
     "deploymentInProgress": "A frissítés le van tiltva, amíg a telepítés folyamatban van"
   },
   "publishError": {
