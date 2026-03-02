@@ -70,13 +70,45 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, [puckInitialHistory]);
 
   useEffect(() => {
-    // Hide the components list and fields list titles
-    const fieldListTitle = document.querySelector<HTMLElement>(
-      "[class*='PuckLayout-rightSideBar'] > div[class*='SidebarSection--noBorderTop'] > div[class*='SidebarSection-title']"
-    );
-    if (fieldListTitle) {
-      fieldListTitle.style.display = "none";
+    const styleId = "yext-theme-hide-sidebar-breadcrumbs";
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.innerHTML = `
+        [class*='SidebarSection-breadcrumbs'] {
+          display: none !important;
+        }
+        [class*='SidebarSection-title'] {
+          display: none !important;
+        }
+      `;
+      document.head.appendChild(style);
     }
+
+    const hideRightSidebarChrome = () => {
+      document
+        .querySelectorAll<HTMLElement>("[class*='SidebarSection-breadcrumbs']")
+        .forEach((el) => {
+          el.style.setProperty("display", "none", "important");
+          const title = el.closest<HTMLElement>(
+            "[class*='SidebarSection-title']"
+          );
+          title?.style.setProperty("display", "none", "important");
+        });
+    };
+
+    hideRightSidebarChrome();
+
+    // Puck re-renders the right sidebar on selection changes, so keep hiding
+    // breadcrumbs/title as DOM nodes are replaced.
+    const observer = new MutationObserver(() => {
+      hideRightSidebarChrome();
+    });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
     const puckPreview =
       document.querySelector<HTMLIFrameElement>("#preview-frame");
     if (
@@ -96,6 +128,11 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       `;
       puckPreview.contentDocument.head.appendChild(style);
     }
+
+    return () => {
+      observer.disconnect();
+      document.getElementById(styleId)?.remove();
+    };
   }, []);
 
   const canUndo = (): boolean => {
