@@ -72,6 +72,7 @@ import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  DistanceDisplayOption,
   Location,
   LocatorResultCard,
   LocatorResultCardFields,
@@ -484,6 +485,8 @@ export interface LocatorProps {
      */
     color?: BackgroundStyle;
   };
+  /** Controls which distance value to display on each locator result card. */
+  distanceDisplay?: DistanceDisplayOption;
   /**
    * Props to customize the locator result card component.
    * Controls which fields are displayed and their styling.
@@ -589,6 +592,23 @@ const locatorFields: Fields<LocatorProps> = {
       }),
     },
   }),
+  distanceDisplay: BasicSelector<LocatorProps["distanceDisplay"]>({
+    label: msg("fields.distanceDisplay", "Distance Display"),
+    options: [
+      {
+        label: msg("fields.options.distanceFromUser", "Distance from User"),
+        value: "distanceFromUser",
+      },
+      {
+        label: msg("fields.options.distanceFromSearch", "Distance from Search"),
+        value: "distanceFromSearch",
+      },
+      {
+        label: msg("fields.options.hidden", "Hidden"),
+        value: "hidden",
+      },
+    ],
+  }),
   resultCard: LocatorResultCardFields,
 };
 
@@ -608,6 +628,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
         hasLocalizedValue: "true",
       },
     },
+    distanceDisplay: "distanceFromUser",
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
@@ -715,6 +736,7 @@ const LocatorInternal = ({
   filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
   resultCard: resultCardProps,
+  distanceDisplay,
   puck,
   pageHeading,
 }: WithPuckProps<LocatorProps>) => {
@@ -948,9 +970,13 @@ const LocatorInternal = ({
 
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => (
-      <LocatorResultCard {...result} resultCardProps={resultCardProps} />
+      <LocatorResultCard
+        {...result}
+        resultCardProps={resultCardProps}
+        distanceDisplay={distanceDisplay}
+      />
     ),
-    [resultCardProps]
+    [distanceDisplay, resultCardProps]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
@@ -1371,7 +1397,7 @@ const LocatorInternal = ({
           </div>
         )}
         {showSearchAreaButton && (
-          <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+          <div className="absolute top-10 left-0 right-0 flex justify-center">
             <Button
               onClick={handleSearchAreaClick}
               className="py-2 px-4 shadow-xl"
