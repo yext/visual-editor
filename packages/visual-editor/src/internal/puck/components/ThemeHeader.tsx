@@ -73,8 +73,8 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     });
   }, [puckInitialHistory]);
 
-  // Prevents the page title/breadcrumb from appearing over the right sidebar
   useEffect(() => {
+    // Prevents the "Page" / breadcrumb from appearing over the right sidebar
     if (!document.getElementById(SIDEBAR_HIDE_STYLE_ID)) {
       const style = document.createElement("style");
       style.id = SIDEBAR_HIDE_STYLE_ID;
@@ -96,7 +96,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
 
   useEffect(() => {
     // Keep theme mode in interactive preview so links/buttons are clickable
-    // and Puck block selection is disabled.
+    // and Puck component selection is disabled.
     if (previewMode !== "interactive") {
       const { dispatch } = getPuck();
       dispatch({
@@ -105,30 +105,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       });
     }
   }, [previewMode]);
-
-  useEffect(() => {
-    // Prevent Puck's built-in Cmd/Ctrl+I toggle from switching to edit mode.
-    const onKeyDown = (event: KeyboardEvent) => {
-      const isPreviewToggle =
-        (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "i";
-      if (!isPreviewToggle) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopPropagation();
-      const { dispatch } = getPuck();
-      dispatch({
-        type: "setUi",
-        ui: { previewMode: "interactive" },
-      });
-    };
-
-    window.addEventListener("keydown", onKeyDown, true);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown, true);
-    };
-  }, []);
 
   const canUndo = (): boolean => {
     if (!themeHistories) {
