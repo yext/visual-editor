@@ -6,7 +6,7 @@ import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import { InitialHistory, useGetPuck } from "@puckeditor/core";
+import { InitialHistory, createUsePuck, useGetPuck } from "@puckeditor/core";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
@@ -22,7 +22,7 @@ import {
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
 const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
-const PREVIEW_DISABLE_POINTER_STYLE_ID = "yext-preview-disable-pointer-events";
+const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -56,6 +56,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   } = props;
 
   const getPuck = useGetPuck();
+  const previewMode = usePuck((s) => s.appState.ui.previewMode);
 
   useEffect(() => {
     const {
@@ -72,6 +73,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
     });
   }, [puckInitialHistory]);
 
+  // Prevents the page title/breadcrumb from appearing over the right sidebar
   useEffect(() => {
     if (!document.getElementById(SIDEBAR_HIDE_STYLE_ID)) {
       const style = document.createElement("style");
@@ -93,25 +95,39 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, []);
 
   useEffect(() => {
-    const puckPreview =
-      document.querySelector<HTMLIFrameElement>("#preview-frame");
-    if (
-      puckPreview?.contentDocument?.head &&
-      !puckPreview?.contentDocument.getElementById(
-        PREVIEW_DISABLE_POINTER_STYLE_ID
-      )
-    ) {
-      // add this style to preview iFrame to prevent clicking or hover effects.
-      const style = puckPreview.contentDocument.createElement("style");
-      style.id = PREVIEW_DISABLE_POINTER_STYLE_ID;
-      style.innerHTML = `
-        * {
-          cursor: default !important;
-          pointer-events: none !important;
-        }
-      `;
-      puckPreview.contentDocument.head.appendChild(style);
+    // Keep theme mode in interactive preview so links/buttons are clickable
+    // and Puck block selection is disabled.
+    if (previewMode !== "interactive") {
+      const { dispatch } = getPuck();
+      dispatch({
+        type: "setUi",
+        ui: { previewMode: "interactive" },
+      });
     }
+  }, [previewMode]);
+
+  useEffect(() => {
+    // Prevent Puck's built-in Cmd/Ctrl+I toggle from switching to edit mode.
+    const onKeyDown = (event: KeyboardEvent) => {
+      const isPreviewToggle =
+        (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "i";
+      if (!isPreviewToggle) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      const { dispatch } = getPuck();
+      dispatch({
+        type: "setUi",
+        ui: { previewMode: "interactive" },
+      });
+    };
+
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown, true);
+    };
   }, []);
 
   const canUndo = (): boolean => {
