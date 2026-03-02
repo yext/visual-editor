@@ -21,6 +21,9 @@ import {
 } from "../ui/Tooltip.tsx";
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
+const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
+const PREVIEW_DISABLE_POINTER_STYLE_ID = "yext-preview-disable-pointer-events";
+
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
   isDevMode: boolean;
@@ -70,10 +73,9 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, [puckInitialHistory]);
 
   useEffect(() => {
-    const styleId = "yext-theme-hide-sidebar-breadcrumbs";
-    if (!document.getElementById(styleId)) {
+    if (!document.getElementById(SIDEBAR_HIDE_STYLE_ID)) {
       const style = document.createElement("style");
-      style.id = styleId;
+      style.id = SIDEBAR_HIDE_STYLE_ID;
       style.innerHTML = `
         [class*='SidebarSection-breadcrumbs'] {
           display: none !important;
@@ -85,41 +87,23 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       document.head.appendChild(style);
     }
 
-    const hideRightSidebarChrome = () => {
-      document
-        .querySelectorAll<HTMLElement>("[class*='SidebarSection-breadcrumbs']")
-        .forEach((el) => {
-          el.style.setProperty("display", "none", "important");
-          const title = el.closest<HTMLElement>(
-            "[class*='SidebarSection-title']"
-          );
-          title?.style.setProperty("display", "none", "important");
-        });
+    return () => {
+      document.getElementById(SIDEBAR_HIDE_STYLE_ID)?.remove();
     };
+  }, []);
 
-    hideRightSidebarChrome();
-
-    // Puck re-renders the right sidebar on selection changes, so keep hiding
-    // breadcrumbs/title as DOM nodes are replaced.
-    const observer = new MutationObserver(() => {
-      hideRightSidebarChrome();
-    });
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
+  useEffect(() => {
     const puckPreview =
       document.querySelector<HTMLIFrameElement>("#preview-frame");
     if (
       puckPreview?.contentDocument?.head &&
       !puckPreview?.contentDocument.getElementById(
-        "yext-preview-disable-pointer-events"
+        PREVIEW_DISABLE_POINTER_STYLE_ID
       )
     ) {
       // add this style to preview iFrame to prevent clicking or hover effects.
       const style = puckPreview.contentDocument.createElement("style");
-      style.id = "yext-preview-disable-pointer-events";
+      style.id = PREVIEW_DISABLE_POINTER_STYLE_ID;
       style.innerHTML = `
         * {
           cursor: default !important;
@@ -128,11 +112,6 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       `;
       puckPreview.contentDocument.head.appendChild(style);
     }
-
-    return () => {
-      observer.disconnect();
-      document.getElementById(styleId)?.remove();
-    };
   }, []);
 
   const canUndo = (): boolean => {
