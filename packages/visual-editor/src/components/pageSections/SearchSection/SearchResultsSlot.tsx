@@ -1,6 +1,11 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  usePuck,
+} from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import React from "react";
+import React, { useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -43,6 +48,7 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
               { label: "Universal", value: "universal" },
               { label: "Vertical", value: "vertical" },
             ],
+            visible: false,
           }),
           verticalKey: YextField(msg("fields.verticalKey", "Vertical Key"), {
             type: "text",
@@ -99,10 +105,20 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     data: { verticals },
     puck,
   } = props;
+  const puckStore = useOptionalPuckStore();
+  const arrayState = puckStore?.appState?.ui?.arrayState;
+
+  const arrayKey = React.useMemo(() => {
+    if (!arrayState || !puck.isEditing) return undefined;
+
+    return Object.keys(arrayState).find((key) =>
+      key.includes("_object_data_verticals")
+    );
+  }, [arrayState, puck.isEditing]);
 
   const { t } = useTranslation();
   const searchActions = useSearchActions();
-
+  const [verticalKey, setVerticalKey] = useState<string | null>(null);
   const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const committedSearchTerm = useSearchState((s) => s.query.input ?? "");
   const activeVerticalKey = useSearchState(
@@ -165,6 +181,11 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   );
 
   React.useEffect(() => {
+    if (!isValidVerticalConfig(verticals)) return;
+    runSearch(verticalKey);
+  }, [verticalKey, runSearch, verticals]);
+
+  React.useEffect(() => {
     const { vertical, searchTerm } = readInitialUrlParams();
 
     searchActions.setQuery(searchTerm);
@@ -172,49 +193,54 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     const validVertical =
       vertical && verticals.some((v) => v.verticalKey === vertical);
 
-    if (validVertical) {
-      searchActions.setVertical(vertical!);
-
-      const cfg = verticals.find((v) => v.verticalKey === vertical);
-      if (cfg && typeof cfg.verticalLimit === "number") {
-        searchActions.setVerticalLimit(cfg.verticalLimit);
-      }
-
-      searchActions.executeVerticalQuery();
-      updateSearchUrl({ vertical, searchTerm });
-      return;
-    }
-
-    searchActions.setUniversal();
-    searchActions.setUniversalLimit(universalLimit);
-    searchActions.executeUniversalQuery();
-    updateSearchUrl({ vertical: null, searchTerm });
-  }, [verticals]);
+    setVerticalKey(validVertical ? vertical! : null);
+  }, [verticals, searchActions]);
 
   React.useEffect(() => {
-    updateSearchUrl({
-      vertical: isUniversalActive ? null : activeVerticalKey,
-      searchTerm: committedSearchTerm,
-    });
-  }, [activeVerticalKey, committedSearchTerm, isUniversalActive]);
+    if (!arrayKey || !puck.isEditing || !arrayState) return;
+
+    const verticalArrayState = arrayState[arrayKey];
+    const openId = verticalArrayState?.openId;
+
+    const selectedItem = verticalArrayState?.items?.find(
+      (item) => item._arrayId === openId
+    );
+
+    const index = selectedItem?._currentIndex;
+    if (typeof index !== "number") return;
+
+    const selectedConfig = verticals[index];
+
+    const nextKey =
+      selectedConfig?.pageType === "universal"
+        ? null
+        : (selectedConfig?.verticalKey ?? null);
+
+    if (nextKey !== verticalKey) {
+      setVerticalKey(nextKey);
+    }
+  }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
 
   return (
     <div className="pt-8">
       <div className="border-b flex justify-start items-center">
         <ul className="flex items-center">
           {verticals.map((item, idx) => {
-            const itemVerticalKey =
-              item.pageType === "universal" ? null : (item.verticalKey ?? null);
-
             const isActive =
               item.pageType === "universal"
-                ? isUniversalActive
-                : !!item.verticalKey && item.verticalKey === activeVerticalKey;
+                ? verticalKey === null
+                : item.verticalKey === verticalKey;
 
             return (
               <li key={`${item.verticalKey ?? "no-key"}:${item.label}:${idx}`}>
                 <a
-                  onClick={() => runSearch(itemVerticalKey)}
+                  onClick={() =>
+                    setVerticalKey(
+                      item.pageType === "universal"
+                        ? null
+                        : (item.verticalKey ?? null)
+                    )
+                  }
                   className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
                     isActive ? "border-b-2 border-black" : ""
                   }`}
@@ -264,4 +290,12 @@ export const SearchResultsSlot: ComponentConfig<{
   fields: SearchResultsSlotFields,
   defaultProps: defaultSearchResultsProps,
   render: (props) => <SearchResultsSlotInternal {...props} />,
+};
+
+const useOptionalPuckStore = () => {
+  try {
+    return usePuck();
+  } catch {
+    return undefined;
+  }
 };
