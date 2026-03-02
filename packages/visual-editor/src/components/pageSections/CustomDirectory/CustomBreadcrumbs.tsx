@@ -1,6 +1,6 @@
 import { ComponentConfig, Fields, WithPuckProps } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { YextField } from "../../../editor/YextField.tsx";
 import { useTemplateProps } from "../../../hooks/useDocument.tsx";
@@ -149,42 +149,39 @@ const CustomBreadcrumbsComponent = ({
     CustomBreadcrumbItem[]
   >([]);
 
-  useEffect(() => {
+  const fetchBreadcrumbs = useCallback(async () => {
     if (!streamDocument?.uid) return;
 
-    const fetchBreadcrumbs = async () => {
-      try {
-        const json = await fetchData({
-          endpoint: `https://cdn.yextapis.com/v2/accounts/me/content/${customEndpointName}/${streamDocument.uid}`,
-          apiKey: apiKey,
-        });
+    try {
+      const json = await fetchData({
+        endpoint: `https://cdn.yextapis.com/v2/accounts/me/content/${customEndpointName}/${streamDocument.uid}`,
+        apiKey,
+      });
 
-        if (!json) return;
-        const entities = json.docs?.[0]?.dm_directoryParents_directory ?? [];
+      const entities = json?.docs?.[0]?.dm_directoryParents_directory ?? [];
 
-        const mapped: CustomBreadcrumbItem[] = entities.map((entity: any) => ({
-          id: entity.uid,
-          name: entity.name,
-          slug: entity.slug,
-        }));
+      const mapped = entities.map((entity: any) => ({
+        id: entity.uid,
+        name: entity.name,
+        slug: entity.slug,
+      }));
 
-        const finalBC: CustomBreadcrumbItem[] = [
-          ...mapped,
-          {
-            id: streamDocument.uid,
-            name: streamDocument.name,
-            slug: streamDocument.slug,
-          },
-        ];
+      setFetchedBreadcrumbs([
+        ...mapped,
+        {
+          id: streamDocument.uid,
+          name: streamDocument.name,
+          slug: streamDocument.slug,
+        },
+      ]);
+    } catch (error) {
+      console.error("Breadcrumb fetch failed:", error);
+    }
+  }, [streamDocument, customEndpointName, apiKey]);
 
-        setFetchedBreadcrumbs(finalBC);
-      } catch (error) {
-        console.error("Breadcrumb fetch failed:", error);
-      }
-    };
-
+  useEffect(() => {
     fetchBreadcrumbs();
-  }, [streamDocument?.uid, customEndpointName]);
+  }, [streamDocument]);
 
   if (!fetchedBreadcrumbs?.length) {
     return <PageSection></PageSection>;
