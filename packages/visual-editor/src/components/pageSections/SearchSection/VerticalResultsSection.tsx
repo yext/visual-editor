@@ -106,9 +106,9 @@ export const VerticalResultsSection = ({
   return (
     <div className="relative mx-auto flex flex-grow pt-8">
       <div
-        className={`w-[200px] mr-6 ${
+        className={`${
           !puck.isEditing ? "-ml-[224px]" : ""
-        } ${facetsLength ? "" : "none"}`}
+        } ${facetsLength ? "w-[200px] mr-6" : "hidden"}`}
       >
         <Facets
           customCssClasses={{ facetsContainer: "!text-lg w-[200px]" }}

@@ -94,10 +94,10 @@ const CustomBreadcrumbsComponent = ({
   const separator = "/";
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_API_KEY;
-  const customEndpointName =
+  const customEndpointURL =
     streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_URL;
 
-  if (!apiKey || !customEndpointName) {
+  if (!apiKey || !customEndpointURL) {
     if (puck?.isEditing) {
       const missingMessages: string[] = [];
       if (!apiKey) {
@@ -108,11 +108,11 @@ const CustomBreadcrumbsComponent = ({
           )
         );
       }
-      if (!customEndpointName) {
+      if (!customEndpointURL) {
         missingMessages.push(
           pt(
-            "missingCustomEndpointName",
-            "Add your custom Content endpoint name to view this section"
+            "missingCustomEndpointURL",
+            "Add your custom Content endpoint url to view this section"
           )
         );
       }
@@ -134,7 +134,7 @@ const CustomBreadcrumbsComponent = ({
 
     console.warn("Missing required configuration for Custom Breadcrumbs", {
       apiKey: !!apiKey,
-      customEndpointName: !!customEndpointName,
+      customEndpointURL: !!customEndpointURL,
     });
 
     return <></>;
@@ -154,7 +154,7 @@ const CustomBreadcrumbsComponent = ({
 
     try {
       const json = await fetchData({
-        endpoint: `https://cdn.yextapis.com/v2/accounts/me/content/${customEndpointName}/${streamDocument.uid}`,
+        endpoint: `${customEndpointURL}/${streamDocument.uid}`,
         apiKey,
       });
 
@@ -177,7 +177,7 @@ const CustomBreadcrumbsComponent = ({
     } catch (error) {
       console.error("Breadcrumb fetch failed:", error);
     }
-  }, [streamDocument, customEndpointName, apiKey]);
+  }, [streamDocument, customEndpointURL, apiKey]);
 
   useEffect(() => {
     fetchBreadcrumbs();
