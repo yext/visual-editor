@@ -67,6 +67,9 @@ import {
 import { getLocatorSourcePageSetsEntityTypes } from "../utils/locator.ts";
 
 export interface LocatorResultCardProps {
+  /** The entity type this result card applies to. */
+  entityType: string;
+
   /** Settings for the main heading of the card */
   primaryHeading: {
     /**
@@ -210,7 +213,10 @@ export interface LocatorResultCardProps {
   };
 }
 
+export const DEFAULT_ENTITY_TYPE = "location";
+
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
+  entityType: DEFAULT_ENTITY_TYPE,
   primaryHeading: {
     field: { selection: { value: "name" } },
     constantValue: "",
@@ -306,6 +312,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
   type: "object",
   objectFields: {
+    entityType: YextField(msg("fields.entityType", "Entity Type"), {
+      type: "text",
+      visible: false,
+    }),
     primaryHeading: {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
@@ -789,10 +799,12 @@ export const LocatorResultCard = React.memo(
       return listingsLink || coordinateLink;
     })();
 
-    // Hide primary CTA section when entity scope is not attached to a page set
+    // Show primary CTA only when the entity scope is backed by an entity page set.
     const locatorSourcePageSetsEntityTypes =
       getLocatorSourcePageSetsEntityTypes(streamDocument);
-    const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
+    const showPrimaryCta =
+      !!result.entityType &&
+      !!locatorSourcePageSetsEntityTypes?.includes(result.entityType);
 
     return (
       <Background
@@ -908,7 +920,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && !hidePrimaryCta && (
+            {props.primaryCTA.liveVisibility && showPrimaryCta && (
               <CTA
                 link={resolvedUrl}
                 label={

@@ -77,6 +77,7 @@ import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
 import {
+  DEFAULT_ENTITY_TYPE,
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   Location,
   LocatorResultCard,
@@ -89,7 +90,6 @@ import { useAnalytics } from "@yext/pages-components";
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
 const COUNTRY_CODE_FIELD = "address.countryCode";
-const DEFAULT_ENTITY_TYPE = "location";
 const DEFAULT_MAP_CENTER: [number, number] = [-74.005371, 40.741611]; // New York City ([lng, lat])
 const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
@@ -202,80 +202,66 @@ const ResultCardPropsField = ({
   onChange,
 }: {
   value?: LocatorResultCardProps;
-  onChange: (nextValue: LocatorResultCardProps) => void;
+  onChange: (value: LocatorResultCardProps) => void;
 }) => {
   const streamDocument = useDocument();
   const locatorSourcePageSetsEntityTypes =
     getLocatorSourcePageSetsEntityTypes(streamDocument);
-  const hidePrimaryCta = locatorSourcePageSetsEntityTypes?.length === 0;
   /**
    * Builds the field schema for the result card editor, including:
    * - Conditionally removing the primary CTA section when entity scope is not attached to a page set.
    * - Toggling constant value vs. field selector visibility per section.
    */
   const resultCardFields = React.useMemo(() => {
-    const baseFields = LocatorResultCardFields as {
-      objectFields?: Record<string, unknown>;
-    };
-    let nextFields: Record<string, any> = LocatorResultCardFields as Record<
-      string,
-      any
-    >;
+    if (!value?.entityType) return LocatorResultCardFields;
+    let fields = LocatorResultCardFields;
+    const showPrimaryCta = locatorSourcePageSetsEntityTypes?.includes(
+      value.entityType
+    );
 
-    if (baseFields.objectFields) {
-      let objectFields = baseFields.objectFields;
-      // Remove the primary CTA when entity scope is not attached to a page set.
-      if (hidePrimaryCta) {
-        objectFields = { ...objectFields };
-        delete objectFields.primaryCTA;
-        nextFields = {
-          ...LocatorResultCardFields,
-          objectFields,
-        } as Record<string, any>;
-      }
-
-      const resolvedValue = value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS;
-      // For each section, show either the field selector or the constant value editor.
-      const constantValueFieldConfigs = [
-        {
-          key: "primaryHeading",
-          enabled: resolvedValue.primaryHeading?.constantValueEnabled ?? false,
-        },
-        {
-          key: "secondaryHeading",
-          enabled:
-            resolvedValue.secondaryHeading?.constantValueEnabled ?? false,
-        },
-        {
-          key: "tertiaryHeading",
-          enabled: resolvedValue.tertiaryHeading?.constantValueEnabled ?? false,
-        },
-        {
-          key: "image",
-          enabled: resolvedValue.image?.constantValueEnabled ?? false,
-        },
-      ];
-
-      constantValueFieldConfigs.forEach(({ key, enabled }) => {
-        nextFields = setDeep(
-          nextFields,
-          `objectFields.${key}.objectFields.field.visible`,
-          !enabled
-        );
-        nextFields = setDeep(
-          nextFields,
-          `objectFields.${key}.objectFields.constantValue.visible`,
-          enabled
-        );
-      });
+    if (!showPrimaryCta) {
+      fields = setDeep(fields, `objectFields.primaryCTA.visible`, false);
     }
 
-    return nextFields as typeof LocatorResultCardFields;
-  }, [hidePrimaryCta, value]);
+    // For each section, show either the field selector or the constant value editor.
+    const constantValueFieldConfigs = [
+      {
+        key: "primaryHeading",
+        enabled: value.primaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "secondaryHeading",
+        enabled: value.secondaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "tertiaryHeading",
+        enabled: value.tertiaryHeading?.constantValueEnabled ?? false,
+      },
+      {
+        key: "image",
+        enabled: value.image?.constantValueEnabled ?? false,
+      },
+    ];
+
+    constantValueFieldConfigs.forEach(({ key, enabled }) => {
+      fields = setDeep(
+        fields,
+        `objectFields.${key}.objectFields.field.visible`,
+        !enabled
+      );
+      fields = setDeep(
+        fields,
+        `objectFields.${key}.objectFields.constantValue.visible`,
+        enabled
+      );
+    });
+
+    return fields;
+  }, [value]);
 
   return (
     <AutoField
-      field={{ ...resultCardFields, label: "" }}
+      field={resultCardFields}
       value={value ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS}
       onChange={onChange}
     />
@@ -671,8 +657,6 @@ export interface LocatorProps {
    * The number of entries is locked to the locator entity types for the page set.
    */
   resultCard: Array<{
-    /** The entity type this result card applies to. */
-    entityType: string;
     /** Props to customize the locator result card component. */
     props: LocatorResultCardProps;
   }>;
@@ -740,11 +724,11 @@ const locatorFields: Fields<LocatorProps> = {
                       disableSearch: true,
                     })}
                     value={selectedType}
-                    onChange={(nextType) =>
+                    onChange={(type) =>
                       onChange({
-                        type: nextType,
+                        type,
                         iconName:
-                          nextType === "icon"
+                          type === "icon"
                             ? (value?.iconName ?? DEFAULT_MAKI_ICON_NAME)
                             : value?.iconName,
                       })
@@ -852,12 +836,8 @@ const locatorFields: Fields<LocatorProps> = {
     msg("fields.resultCard", "Result Card"),
     {
       type: "array",
-      getItemSummary: (item) => getEntityTypeLabel(item.entityType),
+      getItemSummary: (item) => getEntityTypeLabel(item.props.entityType),
       arrayFields: {
-        entityType: YextField(msg("fields.entityType", "Entity Type"), {
-          type: "text",
-          visible: false,
-        }),
         props: {
           type: "custom",
           render: ({ value, onChange }) => (
@@ -866,7 +846,6 @@ const locatorFields: Fields<LocatorProps> = {
         },
       },
       defaultItemProps: {
-        entityType: DEFAULT_ENTITY_TYPE,
         props: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
       },
     }
@@ -960,10 +939,24 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     if (!previousResultCardsArray || previousResultCardsArray.length === 0) {
       const newResultCards = entityTypes.map((entityType) => ({
         entityType,
-        props: legacyResultCardProps ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+        props: {
+          ...(legacyResultCardProps ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS),
+          entityType,
+        },
       }));
       data = setDeep(data, "props.resultCard", newResultCards);
     }
+
+    // if (previousResultCardsArray && previousResultCardsArray.length > 0) {
+    //   const normalizedResultCards = previousResultCardsArray.map((item) => ({
+    //     ...item,
+    //     props: {
+    //       ...item.props,
+    //       entityType: item.entityType,
+    //     },
+    //   }));
+    //   data = setDeep(data, "props.resultCard", normalizedResultCards);
+    // }
 
     const previousEntityTypes = (previousLocationStyles ?? []).map(
       (item) => item.entityType
@@ -980,7 +973,10 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
         (previousLocationStyles ?? []).map((item) => [item.entityType, item])
       );
       const resultCardsByEntityType = new globalThis.Map(
-        (previousResultCardsArray ?? []).map((item) => [item.entityType, item])
+        (previousResultCardsArray ?? []).map((item) => [
+          item.props.entityType,
+          item,
+        ])
       );
 
       const newLocationStyles = entityTypes.map((entityType) => {
@@ -995,10 +991,12 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
         const existing = resultCardsByEntityType.get(entityType);
         return {
           entityType,
-          props:
-            existing?.props ??
-            legacyResultCardProps ??
-            DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+          props: {
+            ...(existing?.props ??
+              legacyResultCardProps ??
+              DEFAULT_LOCATOR_RESULT_CARD_PROPS),
+            entityType,
+          },
         };
       });
 
@@ -1318,7 +1316,7 @@ const LocatorInternal = ({
     return resultCardConfigsArray.reduce<
       Record<string, LocatorResultCardProps>
     >((acc, item) => {
-      acc[item.entityType] = item.props;
+      acc[item.props.entityType] = item.props;
       return acc;
     }, {});
   }, [resultCardConfigsArray]);
@@ -1327,9 +1325,6 @@ const LocatorInternal = ({
     (entityType?: string) => {
       if (entityType && resultCardPropsByEntityType[entityType]) {
         return resultCardPropsByEntityType[entityType];
-      }
-      if (resultCardPropsByEntityType[DEFAULT_ENTITY_TYPE]) {
-        return resultCardPropsByEntityType[DEFAULT_ENTITY_TYPE];
       }
       return DEFAULT_LOCATOR_RESULT_CARD_PROPS;
     },
