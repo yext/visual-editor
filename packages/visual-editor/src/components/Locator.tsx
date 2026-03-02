@@ -72,12 +72,10 @@ import {
   backgroundColors,
 } from "../utils/themeConfigOptions.ts";
 import { StreamDocument } from "../utils/types/StreamDocument.ts";
-import { getLocatorSourcePageSetsEntityTypes } from "../utils/locator.ts";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
 import {
-  DEFAULT_ENTITY_TYPE,
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   Location,
   LocatorResultCard,
@@ -86,6 +84,11 @@ import {
 } from "./LocatorResultCard.tsx";
 import { MapPinIcon } from "./MapPinIcon.js";
 import { useAnalytics } from "@yext/pages-components";
+import {
+  DEFAULT_ENTITY_TYPE,
+  getLocatorEntityTypeSourceMap,
+  getEntityTypeLabel,
+} from "../utils/locatorEntityTypes.ts";
 
 const RESULTS_LIMIT = 20;
 const LOCATION_FIELD = "builtin.location";
@@ -138,65 +141,6 @@ const makiIconOptions = makiIconEntries.map(([name, icon]) => ({
 
 const DEFAULT_MAKI_ICON_NAME = makiIconOptions[0]?.value;
 
-const getEntityTypeLabel = (entityType: string) => {
-  switch (entityType) {
-    case "restaurant":
-      return pt(msg("fields.options.restaurants", "Restaurants"));
-    case "healthcareFacility":
-      return pt(
-        msg("fields.options.healthcareFacilities", "Healthcare Facilities")
-      );
-    case "healthcareProfessional":
-      return pt(
-        msg(
-          "fields.options.healthcareProfessionals",
-          "Healthcare Professionals"
-        )
-      );
-    case "hotel":
-      return pt(msg("fields.options.hotels", "Hotels"));
-    case "financialProfessional":
-      return pt(
-        msg("fields.options.financialProfessionals", "Financial Professionals")
-      );
-    default:
-      return pt(msg("fields.options.locations", "Locations"));
-  }
-};
-
-const getEntityTypeFromDocument = (
-  entityDocument: StreamDocument,
-  entityTypeEnvVar?: string
-) => {
-  if (!entityDocument._pageset && entityTypeEnvVar) {
-    return entityDocument._env?.[entityTypeEnvVar] || DEFAULT_ENTITY_TYPE;
-  }
-
-  try {
-    const entityType = JSON.parse(entityDocument._pageset).typeConfig
-      .locatorConfig.entityType;
-    return entityType || DEFAULT_ENTITY_TYPE;
-  } catch {
-    return DEFAULT_ENTITY_TYPE;
-  }
-};
-
-const getEntityType = (entityTypeEnvVar?: string) => {
-  const entityDocument: StreamDocument = useDocument();
-  return getEntityTypeFromDocument(entityDocument, entityTypeEnvVar);
-};
-
-const getEntityTypesFromDocument = (
-  entityDocument: StreamDocument,
-  entityTypeEnvVar?: string
-): string[] => {
-  return (
-    getLocatorSourcePageSetsEntityTypes(entityDocument) ?? [
-      getEntityTypeFromDocument(entityDocument, entityTypeEnvVar),
-    ]
-  );
-};
-
 const ResultCardPropsField = ({
   value,
   onChange,
@@ -204,9 +148,7 @@ const ResultCardPropsField = ({
   value?: LocatorResultCardProps;
   onChange: (value: LocatorResultCardProps) => void;
 }) => {
-  const streamDocument = useDocument();
-  const locatorSourcePageSetsEntityTypes =
-    getLocatorSourcePageSetsEntityTypes(streamDocument);
+  const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
   /**
    * Builds the field schema for the result card editor, including:
    * - Conditionally removing the primary CTA section when entity scope is not attached to a page set.
@@ -215,13 +157,9 @@ const ResultCardPropsField = ({
   const resultCardFields = React.useMemo(() => {
     if (!value?.entityType) return LocatorResultCardFields;
     let fields = LocatorResultCardFields;
-    const showPrimaryCta = locatorSourcePageSetsEntityTypes?.includes(
-      value.entityType
-    );
+    const showPrimaryCta = !!entityTypeSourceMap[value.entityType];
 
-    if (!showPrimaryCta) {
-      fields = setDeep(fields, `objectFields.primaryCTA.visible`, false);
-    }
+    fields = setDeep(fields, `objectFields.primaryCTA.visible`, showPrimaryCta);
 
     // For each section, show either the field selector or the constant value editor.
     const constantValueFieldConfigs = [
@@ -257,7 +195,7 @@ const ResultCardPropsField = ({
     });
 
     return fields;
-  }, [value]);
+  }, [entityTypeSourceMap, value]);
 
   return (
     <AutoField
@@ -794,8 +732,10 @@ const locatorFields: Fields<LocatorProps> = {
           type: "dynamicSelect",
           dropdownLabel: msg("fields.field", "Field"),
           getOptions: () => {
-            const entityType = getEntityType();
-            return getFacetFieldOptions(entityType);
+            const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
+            return getFacetFieldOptions(
+              Object.keys(entityTypeSourceMap)[0] ?? DEFAULT_ENTITY_TYPE
+            );
           },
           placeholderOptionLabel: msg(
             "fields.options.selectAField",
@@ -863,12 +803,11 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
    */
   resolveFields: (_data, params) => {
     const entityDocument = params.metadata?.streamDocument;
-    const entityTypes = entityDocument
-      ? getEntityTypesFromDocument(
-          entityDocument,
-          params.metadata?.entityTypeEnvVar
-        )
-      : [DEFAULT_ENTITY_TYPE];
+    const entityTypes = Object.keys(
+      entityDocument
+        ? getLocatorEntityTypeSourceMap(entityDocument)
+        : { [DEFAULT_ENTITY_TYPE]: undefined }
+    );
     const entityTypeCount = entityTypes.length;
 
     let updatedFields: Fields<LocatorProps> = { ...locatorFields };
@@ -903,104 +842,70 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   },
   label: msg("components.locator", "Locator"),
   /**
-   * Normalizes `props.locationStyles` and `props.resultCard` to align with the
-   * current locator entity types. If no styles or cards are set, defaults are
-   * generated; otherwise, existing values are preserved unless the set of entity
-   * types changes, in which case values are re-keyed by `entityType` and filled
-   * with defaults as needed.
+   * Reconciles `props.locationStyles` and `props.resultCard` so
+   * each list has exactly one entry per current locator entity type.
+   * Missing or mismatched entries are rebuilt from existing
+   * values and backfilled with defaults.
    */
   resolveData: (data, params) => {
     const entityDocument = params.metadata?.streamDocument;
-    const entityTypes = entityDocument
-      ? getEntityTypesFromDocument(
-          entityDocument,
-          params.metadata?.entityTypeEnvVar
-        )
-      : [DEFAULT_ENTITY_TYPE];
-    const previousLocationStyles = data.props.locationStyles;
-    if (!previousLocationStyles || previousLocationStyles.length === 0) {
+    const entityTypes = Object.keys(
+      entityDocument
+        ? getLocatorEntityTypeSourceMap(entityDocument)
+        : { [DEFAULT_ENTITY_TYPE]: undefined }
+    );
+    const previousLocationStyles = data.props.locationStyles ?? [];
+    const previousResultCard = data.props.resultCard ?? [];
+    const hasSameEntityTypes = (currentEntityTypes: string[]) =>
+      currentEntityTypes.length === entityTypes.length &&
+      entityTypes.every((entityType) =>
+        currentEntityTypes.includes(entityType)
+      );
+
+    const locationStylesByEntityType = new globalThis.Map(
+      previousLocationStyles
+        .filter((item) => !!item?.entityType)
+        .map((item) => [item.entityType, item] as const)
+    );
+    const resultCardsByEntityType = new globalThis.Map(
+      previousResultCard
+        .filter((item) => !!item?.props?.entityType)
+        .map((item) => [item.props.entityType, item] as const)
+    );
+
+    const locationStyleEntityTypes = previousLocationStyles
+      .map((item) => item.entityType)
+      .filter((entityType): entityType is string => !!entityType);
+    const resultCardEntityTypes = previousResultCard
+      .map((item) => item?.props?.entityType)
+      .filter((entityType): entityType is string => !!entityType);
+
+    const shouldReconcileLocationStyles =
+      previousLocationStyles.length === 0 ||
+      !hasSameEntityTypes(locationStyleEntityTypes);
+    const shouldReconcileResultCards =
+      previousResultCard.length === 0 ||
+      !hasSameEntityTypes(resultCardEntityTypes);
+
+    if (shouldReconcileLocationStyles) {
       const newLocationStyles = entityTypes.map((entityType) => ({
         ...DEFAULT_LOCATION_STYLE,
+        ...locationStylesByEntityType.get(entityType),
         entityType,
       }));
       data = setDeep(data, "props.locationStyles", newLocationStyles);
     }
 
-    const previousResultCards = data.props.resultCard as
-      | LocatorProps["resultCard"]
-      | LocatorResultCardProps;
-    const legacyResultCardProps = Array.isArray(previousResultCards)
-      ? undefined
-      : previousResultCards;
-    const previousResultCardsArray = Array.isArray(previousResultCards)
-      ? previousResultCards
-      : undefined;
-
-    if (!previousResultCardsArray || previousResultCardsArray.length === 0) {
-      const newResultCards = entityTypes.map((entityType) => ({
-        entityType,
-        props: {
-          ...(legacyResultCardProps ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS),
-          entityType,
-        },
-      }));
-      data = setDeep(data, "props.resultCard", newResultCards);
-    }
-
-    // if (previousResultCardsArray && previousResultCardsArray.length > 0) {
-    //   const normalizedResultCards = previousResultCardsArray.map((item) => ({
-    //     ...item,
-    //     props: {
-    //       ...item.props,
-    //       entityType: item.entityType,
-    //     },
-    //   }));
-    //   data = setDeep(data, "props.resultCard", normalizedResultCards);
-    // }
-
-    const previousEntityTypes = (previousLocationStyles ?? []).map(
-      (item) => item.entityType
-    );
-    const hasNetChange =
-      previousEntityTypes.length > 0 &&
-      (previousEntityTypes.length !== entityTypes.length ||
-        !entityTypes.every((entityType) =>
-          previousEntityTypes.includes(entityType)
-        ));
-
-    if (hasNetChange) {
-      const locationStylesByEntityType = new globalThis.Map(
-        (previousLocationStyles ?? []).map((item) => [item.entityType, item])
-      );
-      const resultCardsByEntityType = new globalThis.Map(
-        (previousResultCardsArray ?? []).map((item) => [
-          item.props.entityType,
-          item,
-        ])
-      );
-
-      const newLocationStyles = entityTypes.map((entityType) => {
-        const existing = locationStylesByEntityType.get(entityType);
-        return {
-          ...DEFAULT_LOCATION_STYLE,
-          ...existing,
-          entityType,
-        };
-      });
+    if (shouldReconcileResultCards) {
       const newResultCards = entityTypes.map((entityType) => {
         const existing = resultCardsByEntityType.get(entityType);
         return {
-          entityType,
           props: {
-            ...(existing?.props ??
-              legacyResultCardProps ??
-              DEFAULT_LOCATOR_RESULT_CARD_PROPS),
+            ...(existing?.props ?? DEFAULT_LOCATOR_RESULT_CARD_PROPS),
             entityType,
           },
         };
       });
-
-      data = setDeep(data, "props.locationStyles", newLocationStyles);
       data = setDeep(data, "props.resultCard", newResultCards);
     }
 
@@ -1053,7 +958,6 @@ const LocatorInternal = ({
   filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
   resultCard: resultCardConfigs,
-  puck,
   pageHeading,
 }: WithPuckProps<LocatorProps>) => {
   // Adds a unified enableYextAnalytics to the window for both Pages and Search
@@ -1073,12 +977,12 @@ const LocatorInternal = ({
 
   const { t, i18n } = useTranslation();
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
-  const entityType = getEntityType(puck.metadata?.entityTypeEnvVar);
   const streamDocument = useDocument();
-  const entityTypes = getEntityTypesFromDocument(
-    streamDocument,
-    puck.metadata?.entityTypeEnvVar
+  const locatorEntityTypeSourceMap = React.useMemo(
+    () => getLocatorEntityTypeSourceMap(streamDocument),
+    [streamDocument]
   );
+  const entityTypes = Object.keys(locatorEntityTypeSourceMap);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1297,49 +1201,37 @@ const LocatorInternal = ({
     } as MarkerOptions;
   }, []);
 
-  const resultCardConfigsArray = React.useMemo(() => {
-    if (Array.isArray(resultCardConfigs)) {
-      return resultCardConfigs;
-    }
-    if (resultCardConfigs) {
-      return [
-        {
-          entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
-          props: resultCardConfigs,
-        },
-      ];
-    }
-    return [];
-  }, [entityTypes, resultCardConfigs]);
-
-  const resultCardPropsByEntityType = React.useMemo(() => {
-    return resultCardConfigsArray.reduce<
-      Record<string, LocatorResultCardProps>
-    >((acc, item) => {
-      acc[item.props.entityType] = item.props;
-      return acc;
-    }, {});
-  }, [resultCardConfigsArray]);
-
   const getResultCardProps = React.useCallback(
     (entityType?: string) => {
-      if (entityType && resultCardPropsByEntityType[entityType]) {
-        return resultCardPropsByEntityType[entityType];
+      const existingConfig = (resultCardConfigs ?? []).find(
+        (item) => item.props.entityType === entityType
+      );
+      if (existingConfig) {
+        return existingConfig.props;
       }
       return DEFAULT_LOCATOR_RESULT_CARD_PROPS;
     },
-    [resultCardPropsByEntityType]
+    [resultCardConfigs]
   );
 
   const CardComponent = React.useCallback(
-    (result: CardProps<Location>) => (
-      <LocatorResultCard
-        {...result}
-        resultCardProps={getResultCardProps(result.result.entityType)}
-        isSelected={result.result.index === selectedResultIndex}
-      />
-    ),
-    [getResultCardProps, selectedResultIndex]
+    (result: CardProps<Location>) => {
+      const resultCardProps = getResultCardProps(result.result.entityType);
+      // Show primary CTA when the liveVisibility is true and entity scope is backed by an entity page set.
+      const showPrimaryCta =
+        resultCardProps.primaryCTA.liveVisibility &&
+        !!result.result.entityType &&
+        !!locatorEntityTypeSourceMap[result.result.entityType];
+      return (
+        <LocatorResultCard
+          {...result}
+          resultCardProps={resultCardProps}
+          isSelected={result.result.index === selectedResultIndex}
+          showPrimaryCta={showPrimaryCta}
+        />
+      );
+    },
+    [getResultCardProps, locatorEntityTypeSourceMap, selectedResultIndex]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
@@ -1429,7 +1321,7 @@ const LocatorInternal = ({
           .executeFilterSearch(queryParam, false, [
             {
               fieldApiName: LOCATION_FIELD,
-              entityType: entityType,
+              entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
               fetchEntities: false,
             },
           ])
@@ -1674,7 +1566,10 @@ const LocatorInternal = ({
           </Heading>
           <FilterSearch
             searchFields={[
-              { fieldApiName: LOCATION_FIELD, entityType: entityType },
+              {
+                fieldApiName: LOCATION_FIELD,
+                entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
+              },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
             placeholder={t("searchHere", "Search here...")}

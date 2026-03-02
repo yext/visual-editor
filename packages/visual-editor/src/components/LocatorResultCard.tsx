@@ -64,7 +64,7 @@ import {
   fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
-import { getLocatorSourcePageSetsEntityTypes } from "../utils/locator.ts";
+import { DEFAULT_ENTITY_TYPE } from "../utils/locatorEntityTypes.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
@@ -212,8 +212,6 @@ export interface LocatorResultCardProps {
     liveVisibility: boolean;
   };
 }
-
-export const DEFAULT_ENTITY_TYPE = "location";
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   entityType: DEFAULT_ENTITY_TYPE,
@@ -737,10 +735,12 @@ export const LocatorResultCard = React.memo(
     result,
     resultCardProps: props,
     isSelected,
+    showPrimaryCta,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
     isSelected?: boolean;
+    showPrimaryCta?: boolean;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
@@ -798,13 +798,6 @@ export const LocatorResultCard = React.memo(
 
       return listingsLink || coordinateLink;
     })();
-
-    // Show primary CTA only when the entity scope is backed by an entity page set.
-    const locatorSourcePageSetsEntityTypes =
-      getLocatorSourcePageSetsEntityTypes(streamDocument);
-    const showPrimaryCta =
-      !!result.entityType &&
-      !!locatorSourcePageSetsEntityTypes?.includes(result.entityType);
 
     return (
       <Background
@@ -920,7 +913,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && showPrimaryCta && (
+            {showPrimaryCta && (
               <CTA
                 link={resolvedUrl}
                 label={

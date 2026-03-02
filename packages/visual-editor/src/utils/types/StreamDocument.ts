@@ -8,6 +8,7 @@ export type StreamDocument = {
     };
   };
   __certified_facts?: any;
+  _pageset?: string;
   __?: {
     pathInfo?: PathInfoShape;
     layout?: string;
