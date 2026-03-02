@@ -100,7 +100,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     visualAutoCompleteVerticalKey = "products",
     limit = 3,
   },
-  // parentData,
+  parentData,
 }: SearchBarSlotProps) => {
   const document = useDocument();
   const { placeholder } = useTypingEffect({
@@ -127,20 +127,20 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   return (
     <div className="relative w-full border h-14 ">
       <SearchBar
-        // onSearch={({ query }) => {
-        //   const trimmed = (query ?? "").trim();
+        onSearch={({ query }) => {
+          const trimmed = (query ?? "").trim();
 
-        //   if (!parentData?.showSearchResultsSection) {
-        //     const target = `/search.html${
-        //       trimmed ? `?searchTerm=${encodeURIComponent(trimmed)}` : ""
-        //     }`;
-        //     window.location.href = target;
-        //     return;
-        //   }
+          if (!parentData?.showSearchResultsSection) {
+            const target = `/search.html${
+              trimmed ? `?searchTerm=${encodeURIComponent(trimmed)}` : ""
+            }`;
+            window.location.href = target;
+            return;
+          }
 
-        //   searchActions.setQuery(trimmed);
-        //   updateSearchUrl({ vertical: null, searchTerm: trimmed });
-        // }}
+          // searchActions.setQuery(trimmed);
+          // updateSearchUrl({ vertical: null, searchTerm: trimmed });
+        }}
         visualAutocompleteConfig={visualAutocompleteConfig}
         placeholder={isTypingEffect ? placeholder : "Search here...."}
         customCssClasses={{
