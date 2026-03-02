@@ -74,7 +74,7 @@ const tests: ComponentTest[] = [
       businessId: "4174974",
       __: {
         isPrimaryLocale: true,
-        locatorSourcePageSets: {
+        locatorSourcePageSets: JSON.stringify({
           "accounts/4174974/sites/163770/pagesets/locations": {
             pathInfo: {
               template:
@@ -106,7 +106,7 @@ const tests: ComponentTest[] = [
             },
             entityType: "atm",
           },
-        },
+        }),
       },
       _env: {
         YEXT_PUBLIC_VISUAL_EDITOR_APP_API_KEY: import.meta.env
