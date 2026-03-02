@@ -11,7 +11,10 @@ import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
-import { sortAlphabetically } from "../../utils/directory/utils.ts";
+import {
+  isDirectoryGrid,
+  sortAlphabetically,
+} from "../../utils/directory/utils.ts";
 import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryListChildren.ts";
@@ -131,7 +134,10 @@ export const DirectoryGrid: ComponentConfig<{
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
 
-    if (!streamDocument?.dm_directoryChildren) {
+    if (
+      !streamDocument?.dm_directoryChildren ||
+      !isDirectoryGrid(streamDocument.dm_directoryChildren)
+    ) {
       return data;
     }
 
