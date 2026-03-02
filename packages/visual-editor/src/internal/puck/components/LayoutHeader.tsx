@@ -270,7 +270,7 @@ export const LayoutHeader = (props: LayoutHeaderProps) => {
             }}
           />
           {!templateMetadata.isDevMode && (
-            <TooltipProvider>
+            <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span
