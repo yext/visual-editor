@@ -710,7 +710,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
   label: msg("components.locator", "Locator"),
   resolveFields: (data) => {
     let updatedFields: Fields<LocatorProps> = { ...locatorFields };
-    const setConstantVaueFieldVisibility = (
+    const setConstantValueFieldVisibility = (
       fields: Fields<LocatorProps>,
       fieldKey:
         | "primaryHeading"
@@ -757,12 +757,22 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     ] as const;
 
     constantValueFieldConfigs.forEach(({ key, enabled }) => {
-      updatedFields = setConstantVaueFieldVisibility(
+      updatedFields = setConstantValueFieldVisibility(
         updatedFields,
         key,
         enabled
       );
     });
+
+    // if primary CTA is derived from the entity, do not render the link property since it
+    // doesn't apply
+    const primaryDestination =
+      data.props.resultCard?.primaryCTA?.destination ?? "entityPage";
+    updatedFields = setDeep(
+      updatedFields,
+      "resultCard.objectFields.primaryCTA.objectFields.link.visible",
+      primaryDestination === "custom"
+    );
 
     return updatedFields;
   },

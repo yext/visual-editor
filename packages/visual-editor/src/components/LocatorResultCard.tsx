@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Field } from "@puckeditor/core";
+import { AutoField, Field, FieldLabel } from "@puckeditor/core";
 import {
   CardProps,
   Coordinate,
@@ -18,7 +18,7 @@ import { Heading } from "./atoms/heading.tsx";
 import { Image } from "./atoms/image.tsx";
 import { msg, pt } from "../utils/i18n/platform.ts";
 import { PhoneAtom } from "./atoms/phone.tsx";
-import { useTemplateProps } from "../hooks/useDocument.tsx";
+import { useDocument, useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
 import { HoursTableAtom } from "./atoms/hoursTable.tsx";
@@ -182,6 +182,13 @@ export interface LocatorResultCardProps {
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
+    /**
+     * Whether to derive the primary CTA URL from an source entity page set or from a static
+     * template
+     */
+    destination: PrimaryCtaDestinationOption;
+    /** Static URL to use for primary CTA when destination is Custom */
+    link?: TranslatableString;
   };
 
   /** Settings for the secondary CTA */
@@ -208,6 +215,8 @@ export interface LocatorResultCardProps {
     liveVisibility: boolean;
   };
 }
+
+type PrimaryCtaDestinationOption = "entityPage" | "custom";
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryHeading: {
@@ -262,6 +271,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     label: "Visit Page",
     variant: "primary",
     liveVisibility: true,
+    destination: "entityPage",
   },
   secondaryCTA: {
     label: "Call to Action",
@@ -300,6 +310,67 @@ const getDisplayFieldOptions = (
       };
     });
 };
+
+const getLocatorConfig = () => {
+  const streamDocument = useDocument();
+  let pageSet: any;
+  try {
+    pageSet = JSON.parse(streamDocument._pageset);
+  } catch {
+    return {};
+  }
+  return pageSet?.typeConfig?.locatorConfig ?? {};
+};
+
+/**
+ * If the locator has a source page set, returns a selector for the destination prop. Otherwise,
+ * returns an empty element.
+ */
+const PrimaryCtaDestinationField = (): Field<PrimaryCtaDestinationOption> => ({
+  type: "custom",
+  render: ({ value, onChange }) => {
+    const locatorConfig = getLocatorConfig();
+    const showDestinationSelector =
+      locatorConfig?.sources?.length > 0 || !!locatorConfig?.source;
+    const destinationField = React.useMemo(
+      () =>
+        YextField(msg("", ""), {
+          type: "radio",
+          options: [
+            {
+              label: msg("fields.options.entityPage", "Entity Page"),
+              value: "entityPage",
+            },
+            {
+              label: msg("fields.options.custom", "Custom"),
+              value: "custom",
+            },
+          ],
+        }),
+      []
+    );
+
+    React.useEffect(() => {
+      if (!showDestinationSelector && value !== "custom") {
+        onChange("custom");
+      }
+    }, [onChange, showDestinationSelector, value]);
+
+    if (!showDestinationSelector) {
+      return <></>;
+    }
+
+    return (
+      <FieldLabel label={pt(msg("fields.destination", "Destination"))}>
+        <AutoField
+          field={destinationField}
+          value={value ?? "entityPage"}
+          onChange={onChange}
+        />
+      </FieldLabel>
+    );
+  },
+});
 
 export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
@@ -628,6 +699,14 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
             ],
           }
         ),
+        destination: PrimaryCtaDestinationField(),
+        link: TranslatableStringField<TranslatableString | undefined>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
       },
     },
     secondaryCTA: {
@@ -729,8 +808,6 @@ export const LocatorResultCard = React.memo(
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
   }): React.JSX.Element => {
-    const { document: streamDocument, relativePrefixToRoot } =
-      useTemplateProps();
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
@@ -747,10 +824,6 @@ export const LocatorResultCard = React.memo(
       result,
       "DRIVING_DIRECTIONS"
     );
-    const handleVisitPageClick = useCardAnalyticsCallback(
-      result,
-      "VIEW_WEBSITE"
-    );
     const handleSecondaryCTAClick = useCardAnalyticsCallback(
       result,
       "CTA_CLICK"
@@ -758,12 +831,6 @@ export const LocatorResultCard = React.memo(
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
       "TAP_TO_CALL"
-    );
-
-    const resolvedUrl = resolveLocatorResultUrl(
-      location,
-      streamDocument,
-      relativePrefixToRoot
     );
 
     const getDirectionsLink: string | undefined = (() => {
@@ -891,22 +958,9 @@ export const LocatorResultCard = React.memo(
               {displayDistance}
             </div>
           )}
+          {/** CTA section */}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && resolvedUrl && (
-              <CTA
-                link={resolvedUrl}
-                label={
-                  resolveComponentData(
-                    props.primaryCTA.label,
-                    i18n.language,
-                    location
-                  ) || t("visitPage", "Visit Page")
-                }
-                variant={props.primaryCTA.variant}
-                onClick={handleVisitPageClick}
-                className="basis-full sm:w-auto justify-center"
-              />
-            )}
+            <PrimaryCTA primaryCTA={props.primaryCTA} result={result} />
             {props.secondaryCTA.liveVisibility && (
               <CTA
                 link={resolveComponentData(
@@ -932,6 +986,58 @@ export const LocatorResultCard = React.memo(
     );
   }
 );
+
+const PrimaryCTA = (props: {
+  primaryCTA: LocatorResultCardProps["primaryCTA"];
+  result: CardProps<Location>["result"];
+}) => {
+  const { primaryCTA, result } = props;
+  const location = result.rawData;
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const { t, i18n } = useTranslation();
+
+  let resolvedUrl: string | undefined;
+  switch (primaryCTA.destination) {
+    case "custom":
+      resolvedUrl =
+        primaryCTA?.link !== undefined
+          ? resolveComponentData(primaryCTA.link, i18n.language, location)
+          : undefined;
+      break;
+    case "entityPage":
+    default:
+      resolvedUrl = resolveLocatorResultUrl(
+        location,
+        streamDocument,
+        relativePrefixToRoot
+      );
+      break;
+  }
+  const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl !== undefined;
+
+  const handlePrimaryCtaClick = useCardAnalyticsCallback(
+    result,
+    "VIEW_WEBSITE"
+  );
+
+  return (
+    showPrimaryCta && (
+      <CTA
+        link={resolvedUrl}
+        label={
+          resolveComponentData(
+            props.primaryCTA.label,
+            i18n.language,
+            location
+          ) || t("visitPage", "Visit Page")
+        }
+        variant={primaryCTA.variant}
+        onClick={handlePrimaryCtaClick}
+        className="basis-full sm:w-auto justify-center"
+      />
+    )
+  );
+};
 
 const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorClasses = `${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`;

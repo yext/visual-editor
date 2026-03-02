@@ -5536,6 +5536,7 @@ const locatorDefaultLayout = {
             label: "Visit Page",
             variant: "primary",
             liveVisibility: true,
+            destination: "entityPage",
           },
           secondaryCTA: {
             label: "Call to Action",
