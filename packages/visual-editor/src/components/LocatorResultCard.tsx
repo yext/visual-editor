@@ -311,7 +311,7 @@ const getDisplayFieldOptions = (
     });
 };
 
-const getLocatorConfig = () => {
+const useLocatorConfig = () => {
   const streamDocument = useDocument();
   let pageSet: any;
   try {
@@ -329,7 +329,7 @@ const getLocatorConfig = () => {
 const PrimaryCtaDestinationField = (): Field<PrimaryCtaDestinationOption> => ({
   type: "custom",
   render: ({ value, onChange }) => {
-    const locatorConfig = getLocatorConfig();
+    const locatorConfig = useLocatorConfig();
     const showDestinationSelector =
       locatorConfig?.sources?.length > 0 || !!locatorConfig?.source;
     const destinationField = React.useMemo(
