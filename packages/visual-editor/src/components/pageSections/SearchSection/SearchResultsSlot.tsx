@@ -88,10 +88,7 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
         msg("fields.enableGenerativeDirectAnswer", "Generative Direct Answer"),
         {
           type: "radio",
-          options: [
-            { label: "Show", value: true },
-            { label: "Hide", value: false },
-          ],
+          options: "SHOW_HIDE",
         }
       ),
     },

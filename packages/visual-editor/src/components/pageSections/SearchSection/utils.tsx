@@ -6,7 +6,13 @@ import {
 } from "@yext/search-ui-react";
 import Cards from "./Cards.tsx";
 import { LayoutSection } from "./LayoutSections.tsx";
-import { VerticalConfigProps } from "./defaultPropsAndTypes.ts";
+import {
+  SearchBarAlignProps,
+  SearchBarHeightProps,
+  SearchBarRoundedProps,
+  SearchBarWidthProps,
+  VerticalConfigProps,
+} from "./defaultPropsAndTypes.ts";
 import { renderEntityPreviews } from "./searchVisualAutoComplete.tsx";
 
 export const buildVerticalConfigMap = (
@@ -152,4 +158,55 @@ export const readInitialUrlParams = (): {
     vertical: url.searchParams.get("vertical"),
     searchTerm: url.searchParams.get("searchTerm") ?? "",
   };
+};
+
+export const getRounded = (val: SearchBarRoundedProps) => {
+  switch (val) {
+    case "small":
+      return "[&>div]:rounded-sm";
+    case "medium":
+      return "[&>div]:rounded-md";
+
+    case "large":
+      return "[&>div]:rounded-xl";
+
+    case "pill":
+      return "[&>div]:rounded-3xl";
+
+    default:
+      return "[&>div]:rounded-none";
+  }
+};
+
+export const getWidth = (val: SearchBarWidthProps) => {
+  switch (val) {
+    case "quarter":
+      return "w-3/4";
+    case "half":
+      return "w-1/2";
+    default:
+      return "w-full";
+  }
+};
+
+export const getHeight = (val: SearchBarHeightProps) => {
+  switch (val) {
+    case "large":
+      return "h-24";
+    case "extraLarge":
+      return "h-48";
+    default:
+      return "h-14";
+  }
+};
+
+export const getAlignment = (val: SearchBarAlignProps) => {
+  switch (val) {
+    case "center":
+      return "mx-auto";
+    case "right":
+      return "ml-auto mr-0";
+    default:
+      return "ml-0 mr-auto";
+  }
 };
