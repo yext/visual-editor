@@ -109,10 +109,10 @@ const translateDistanceUnit = (
 
 /**
  * Retrieves the first applicable entity type for entities indexed by the locator. Reads from:
- * 1. If _pageset doesn't exist, the Puck metadata's entityTypeEnvVar
- * 2. The typeConfig.locatorConfig.entityType field of _pageset in the stream document
- * 3. The first element of __.locatorSourcePageSets in the stream document
- * 4. The first scope's type from typeConfig.locatorConfig.entityTypeScopes in the stream document
+ * 1. Puck Metadata: Uses 'entityTypeEnvVar' if '_pageset' is missing.
+ * 2. Pageset Config: 'typeConfig.locatorConfig.entityType' within '_pageset'.
+ * 3. Sources Page Sets: The first entry in '__.locatorSourcePageSets'.
+ * 4. Entity Types Scopes: The first scope's type in 'typeConfig.locatorConfig.entityTypeScopes'.
  *
  * Used by the FilterSearch component, since including multiple entity types will result in
  * duplicate results for builtin.location.
