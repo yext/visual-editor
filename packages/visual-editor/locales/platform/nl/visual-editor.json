@@ -541,7 +541,7 @@
   "mile_one": "mijl",
   "mile_other": "mijlen",
   "missingCustomEndpointApiKey": "Voeg uw aangepaste Content-eindpunt-API-sleutel toe om deze sectie te bekijken",
-  "missingCustomEndpointName": "Voeg uw aangepaste inhoudseindpuntnaam toe om deze sectie te bekijken",
+  "missingCustomEndpointURL": "Voeg uw aangepaste inhoudseindpunt-URL toe om deze sectie te bekijken",
   "missingHtmlWidget": "Voeg HTML toe om component te bekijken",
   "missingSearchApiKey": "Voeg uw zoek-API-sleutel toe om deze sectie te bekijken",
   "missingSearchExperienceKey": "Voeg uw zoekervaringsleutel toe om deze sectie te bekijken",

@@ -541,7 +541,7 @@
   "mile_one": "マイル",
   "mile_other": "マイル",
   "missingCustomEndpointApiKey": "このセクションを表示するには、カスタム コンテンツ エンドポイント API キーを追加してください",
-  "missingCustomEndpointName": "このセクションを表示するには、カスタム コンテンツ エンドポイント名を追加します",
+  "missingCustomEndpointURL": "このセクションを表示するには、カスタム コンテンツ エンドポイント URL を追加してください",
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
   "missingSearchApiKey": "このセクションを表示するには、検索 API キーを追加してください",
   "missingSearchExperienceKey": "このセクションを表示するには、検索エクスペリエンス キーを追加してください",

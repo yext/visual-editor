@@ -546,7 +546,7 @@
   "mile_many": "miles",
   "mile_other": "miles",
   "missingCustomEndpointApiKey": "Ajoutez votre clé API de point de terminaison de contenu personnalisée pour afficher cette section",
-  "missingCustomEndpointName": "Ajoutez votre nom de point de terminaison de contenu personnalisé pour afficher cette section",
+  "missingCustomEndpointURL": "Ajoutez votre URL de point de terminaison de contenu personnalisée pour afficher cette section",
   "missingHtmlWidget": "Ajouter HTML pour afficher le composant",
   "missingSearchApiKey": "Ajoutez votre clé API de recherche pour afficher cette section",
   "missingSearchExperienceKey": "Ajoutez votre clé d'expérience de recherche pour afficher cette section",

@@ -541,7 +541,7 @@
   "mile_one": "mil",
   "mile_other": "mil",
   "missingCustomEndpointApiKey": "Tilføj din tilpassede Content endpoint API-nøgle for at se denne sektion",
-  "missingCustomEndpointName": "Tilføj dit tilpassede indholdsslutpunktnavn for at se dette afsnit",
+  "missingCustomEndpointURL": "Tilføj din tilpassede indholdsslutpunkts-url for at se dette afsnit",
   "missingHtmlWidget": "Tilføj HTML for at se komponent",
   "missingSearchApiKey": "Tilføj din søge-API-nøgle for at se dette afsnit",
   "missingSearchExperienceKey": "Tilføj din søgeoplevelsesnøgle for at se dette afsnit",

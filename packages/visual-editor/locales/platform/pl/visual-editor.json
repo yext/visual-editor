@@ -551,7 +551,7 @@
   "mile_many": "mil",
   "mile_other": "mili",
   "missingCustomEndpointApiKey": "Dodaj niestandardowy klucz API punktu końcowego treści, aby wyświetlić tę sekcję",
-  "missingCustomEndpointName": "Dodaj niestandardową nazwę punktu końcowego treści, aby wyświetlić tę sekcję",
+  "missingCustomEndpointURL": "Dodaj niestandardowy adres URL punktu końcowego treści, aby wyświetlić tę sekcję",
   "missingHtmlWidget": "Dodaj HTML, aby wyświetlić komponent",
   "missingSearchApiKey": "Dodaj klucz API wyszukiwania, aby wyświetlić tę sekcję",
   "missingSearchExperienceKey": "Dodaj klucz do wyszukiwania, aby wyświetlić tę sekcję",

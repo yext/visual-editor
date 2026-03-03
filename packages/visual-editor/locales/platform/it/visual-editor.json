@@ -546,7 +546,7 @@
   "mile_many": "miglia",
   "mile_other": "miglia",
   "missingCustomEndpointApiKey": "Aggiungi la chiave API dell'endpoint di contenuto personalizzata per visualizzare questa sezione",
-  "missingCustomEndpointName": "Aggiungi il nome dell'endpoint di contenuto personalizzato per visualizzare questa sezione",
+  "missingCustomEndpointURL": "Aggiungi l'URL dell'endpoint di contenuto personalizzato per visualizzare questa sezione",
   "missingHtmlWidget": "Aggiungi HTML al componente Visualizza",
   "missingSearchApiKey": "Aggiungi la tua chiave API di ricerca per visualizzare questa sezione",
   "missingSearchExperienceKey": "Aggiungi la tua chiave di esperienza di ricerca per visualizzare questa sezione",

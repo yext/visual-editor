@@ -541,7 +541,7 @@
   "mile_one": "mil",
   "mile_other": "mil",
   "missingCustomEndpointApiKey": "Bu bölümü görüntülemek için size özel İçerik uç noktası API anahtarı ekleyin",
-  "missingCustomEndpointName": "Bu bölümü görüntülemek için özel İçerik uç noktası adınızı ekleyin",
+  "missingCustomEndpointURL": "Bu bölümü görüntülemek için özel İçerik uç noktası URL'nizi ekleyin",
   "missingHtmlWidget": "Bileşeni görüntülemek için HTML ekle",
   "missingSearchApiKey": "Bu bölümü görüntülemek için Arama API anahtarınızı ekleyin",
   "missingSearchExperienceKey": "Bu bölümü görüntülemek için Arama Deneyimi anahtarınızı ekleyin",

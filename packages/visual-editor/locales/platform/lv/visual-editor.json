@@ -546,7 +546,7 @@
   "mile_one": "jūdze",
   "mile_other": "jūdzes",
   "missingCustomEndpointApiKey": "Pievienojiet pielāgotu satura galapunkta API atslēgu, lai skatītu šo sadaļu",
-  "missingCustomEndpointName": "Lai skatītu šo sadaļu, pievienojiet pielāgotā satura galapunkta nosaukumu",
+  "missingCustomEndpointURL": "Pievienojiet savu pielāgotā satura galapunkta URL, lai skatītu šo sadaļu",
   "missingHtmlWidget": "Pievienojiet HTML, lai skatītu komponentu",
   "missingSearchApiKey": "Pievienojiet savu Search API atslēgu, lai skatītu šo sadaļu",
   "missingSearchExperienceKey": "Pievienojiet savu meklēšanas pieredzes atslēgu, lai skatītu šo sadaļu",
