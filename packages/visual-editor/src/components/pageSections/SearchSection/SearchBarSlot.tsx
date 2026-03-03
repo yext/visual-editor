@@ -245,7 +245,7 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
       isVisualAutoEnabled
     );
     const isShowResultsSection =
-      !!data?.props?.parentData?.showSearchResultsSection;
+      !!!data?.props?.parentData?.showSearchResultsSection;
     setDeep(
       updatedFields,
       "styles.objectFields.height.visible",
