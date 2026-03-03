@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 from pathlib import Path
 from shutil import copyfile
 
@@ -12,6 +13,21 @@ from shutil import copyfile
 def to_pascal_case(value: str) -> str:
     parts = [part for part in value.replace("_", "-").split("-") if part]
     return "".join(part[:1].upper() + part[1:] for part in parts)
+
+
+def slug_to_camel_identifier(value: str) -> str:
+    parts = [part for part in re.split(r"[^A-Za-z0-9]+", value) if part]
+    if not parts:
+        candidate = "client"
+    else:
+        first = parts[0]
+        candidate = first[:1].lower() + first[1:]
+        candidate += "".join(part[:1].upper() + part[1:] for part in parts[1:])
+
+    if not re.match(r"^[A-Za-z_]", candidate):
+        candidate = f"_{candidate}"
+
+    return candidate
 
 
 def normalize_import_path(from_file: Path, to_file: Path) -> str:
@@ -103,7 +119,8 @@ def main() -> int:
 
     config_import = normalize_import_path(output_path, config_path)
     source_import = normalize_import_path(output_path, source_copy_path) + "?raw"
-    config_symbol = f"{client_slug}Config"
+    sanitized_slug = slug_to_camel_identifier(client_slug)
+    config_symbol = f"{sanitized_slug}Config"
 
     test_content_template = """import * as React from "react";
 import { describe, it, expect } from "vitest";

@@ -292,35 +292,26 @@ const collectSourceSections = (): SourceSection[] => {
 const getSectionKeywords = (sectionType: string): string[] => {
   const type = sectionType.toLowerCase();
   if (type.includes("header")) {
-    return ["terms", "top links", "menu", "actions", "find your restaurant"];
+    return ["menu", "navigation", "orders", "locations", "sign in"];
   }
   if (type.includes("locationhero")) {
-    return [
-      "order now",
-      "get directions",
-      "set as my preferred location",
-      "deliciousness",
-      "westminster",
-    ];
+    return ["order", "directions", "preferred location", "pickup", "delivery"];
   }
-  if (type.includes("operations")) {
-    return ["store hours", "map", "nearby stores", "drive thru"];
+  if (
+    type.includes("operations") ||
+    type.includes("storeinfo") ||
+    type.includes("locationsummary")
+  ) {
+    return ["hours", "store hours", "map", "nearby", "drive thru"];
   }
   if (type.includes("amenities") || type.includes("faq")) {
-    return ["services available", "question & answers", "mcdelivery", "wi-fi"];
+    return ["amenities", "services", "faq", "questions", "answers", "wi-fi"];
   }
   if (type.includes("about")) {
-    return ["about this location", "careers", "apply for a job"];
+    return ["about", "careers", "jobs", "team", "story"];
   }
   if (type.includes("footer")) {
-    return [
-      "explore mcdonald",
-      "social",
-      "download app",
-      "legal",
-      "all rights reserved",
-      "privacy",
-    ];
+    return ["social", "download", "app", "legal", "privacy", "copyright"];
   }
   return [];
 };
@@ -368,6 +359,7 @@ const pairSections = (
     sourceSection: SourceSection;
     generated: [string, unknown];
   }> = [];
+  const usedSourceIndices = new Set<number>();
 
   generatedSections.forEach((generated) => {
     const [sectionType] = generated;
@@ -375,6 +367,9 @@ const pairSections = (
     let bestScore = Number.NEGATIVE_INFINITY;
 
     sourceSections.forEach((sourceSection, index) => {
+      if (usedSourceIndices.has(index)) {
+        return;
+      }
       const score = scoreSectionMatch(sectionType, sourceSection);
       if (score > bestScore) {
         bestScore = score;
@@ -386,6 +381,7 @@ const pairSections = (
       return;
     }
 
+    usedSourceIndices.add(bestIndex);
     pairs.push({
       sourceIndex: bestIndex,
       sourceSection: sourceSections[bestIndex],

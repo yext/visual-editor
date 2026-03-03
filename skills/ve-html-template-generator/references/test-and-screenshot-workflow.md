@@ -15,7 +15,7 @@ Use this on every generation as the default post-generation parity workflow.
 Run:
 
 ```bash
-python3 scripts/scaffold_client_template_smoke_test.py \
+python3 skills/ve-html-template-generator/scripts/scaffold_client_template_smoke_test.py \
   --client-slug <client> \
   --template-path starter/src/templates/<client>/<client>-template.tsx \
   --config-path starter/src/templates/<client>/<client>-config.tsx

@@ -75,7 +75,7 @@ curl -L "<url>" -o /tmp/<client>-page.html
 Create a first-pass section breakdown from the HTML:
 
 ```bash
-python3 scripts/extract_page_sections.py \
+python3 skills/ve-html-template-generator/scripts/extract_page_sections.py \
   --input /tmp/<client>-page.html \
   --output /tmp/<client>-sections.json
 ```

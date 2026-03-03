@@ -688,9 +688,8 @@ def main() -> int:
     location_hardcoded_map_urls: list[str] = []
     for source_file in [*section_files, *slot_files]:
         text = read_text(source_file)
-        if 'types: ["type.hours"]' in text or 'types: ["type.hours"]' in text.replace(
-            " ", ""
-        ):
+        text_no_spaces = text.replace(" ", "")
+        if 'types:["type.hours"]' in text_no_spaces:
             has_hours_field_binding = True
         if 'field: "hours"' in text and (
             "constantValueEnabled: false" in text or "constantValueEnabled:false" in text

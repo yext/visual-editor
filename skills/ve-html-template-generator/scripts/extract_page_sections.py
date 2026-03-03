@@ -59,7 +59,7 @@ def to_slug(text: str) -> str:
 
 def to_pascal_case(text: str) -> str:
     parts = [part for part in to_slug(text).split("-") if part]
-    return "".join(part.capitalize() for part in parts) or "Section"
+    return "".join(part[:1].upper() + part[1:] for part in parts) or "Section"
 
 
 def classify_section(tag: str, attrs: str, title: str, preview: str) -> str:

@@ -66,7 +66,7 @@ In `starter/src/templates/<client>/<client>-config.tsx`:
 
 In `packages/visual-editor/src/components/categories/<Client>SectionsCategory.tsx` and `<Client>SlotsCategory.tsx`:
 
-- Import section/slot components from `../generated/<client>/components/...`.
+- Import section/slot components from `../custom/<client>/components/...`.
 - Export props interfaces and `<Client>...CategoryComponents` maps.
 - Export category arrays from `Object.keys(<Client>...CategoryComponents)`.
 

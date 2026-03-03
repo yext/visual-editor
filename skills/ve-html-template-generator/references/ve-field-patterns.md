@@ -153,7 +153,7 @@ hours: {
 
 ## URL Field Pattern
 
-Use URL fields directly for links/background URLs:
+Use URL text fields directly for simple link controls:
 
 ```ts
 ctaUrl: YextField("CTA URL", { type: "text" });
@@ -161,7 +161,9 @@ ctaUrl: YextField("CTA URL", { type: "text" });
 
 If localization is required, use a translatable-string field strategy rather than `entityField` with `type.url`.
 
-Do not use URL text fields for core map/image sources (background images, map embeds, directions source URLs) when entity-backed/shared patterns are available.
+Do not use `entityField` with `type.url` in generated client templates.
+
+Do not use plain text URL fields for core background media/map sources (background images, map embeds, directions source URLs). Use entity-backed/shared patterns for those cases.
 
 ## Location Stream Dynamic Data Pattern
 
