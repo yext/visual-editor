@@ -90,6 +90,7 @@ const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 const DEFAULT_TITLE = "Find a Location";
+const DEFAULT_DISTANCE_DISPLAY = "distanceFromUser";
 
 const translateDistanceUnit = (
   t: (key: string, options?: Record<string, unknown>) => string,
@@ -628,7 +629,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
         hasLocalizedValue: "true",
       },
     },
-    distanceDisplay: "distanceFromUser",
+    distanceDisplay: DEFAULT_DISTANCE_DISPLAY,
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },
   label: msg("components.locator", "Locator"),
