@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Položaj kontejnera radne površine",
     "desktopImagePosition": "Položaj slike radne površine",
     "desktopMediaPosition": "Položaj medija na stolnom računalu",
+    "destination": "Odredište",
     "direction": "Smjer",
     "directoryRootLinkLabel": "Oznaka korijenske veze direktorija",
     "dynamicFilters": "Dinamički filtri",
@@ -284,6 +285,7 @@
         "primary": "Čvrsto",
         "secondary": "Obris"
       },
+      "custom": "Običaj",
       "dark": "Tamna",
       "default": "Zadano",
       "domestic": "Domaći",
@@ -291,6 +293,7 @@
       "email": "E-mail",
       "emails": "E-pošta",
       "end": "Kraj",
+      "entityPage": "Stranica entiteta",
       "extraSmall_text size": "Iznimno mali",
       "facets": {
         "acceptingNewPatients": "Primamo nove pacijente",

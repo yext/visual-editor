@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Desktop Container Position",
     "desktopImagePosition": "Desktop bildeposisjon",
     "desktopMediaPosition": "Desktop Media Posisjon",
+    "destination": "Destinasjon",
     "direction": "Retning",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "dynamicFilters": "Dynamiske filtre",
@@ -284,6 +285,7 @@
         "primary": "Fast",
         "secondary": "Disposisjon"
       },
+      "custom": "Skikk",
       "dark": "Mørk",
       "default": "Misligholde",
       "domestic": "Innenlands",
@@ -291,6 +293,7 @@
       "email": "E-post",
       "emails": "E-poster",
       "end": "Slutt",
+      "entityPage": "Enhetsside",
       "extraSmall_text size": "Ekstra liten",
       "facets": {
         "acceptingNewPatients": "Ta imot nye pasienter",

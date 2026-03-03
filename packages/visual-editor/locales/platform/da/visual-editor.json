@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Placering af skrivebordscontainer",
     "desktopImagePosition": "Placering af skrivebordsbillede",
     "desktopMediaPosition": "Desktop medieposition",
+    "destination": "Bestemmelsessted",
     "direction": "Retning",
     "directoryRootLinkLabel": "Directory Root Link Label",
     "dynamicFilters": "Dynamiske filtre",
@@ -284,6 +285,7 @@
         "primary": "Solid",
         "secondary": "Disposition"
       },
+      "custom": "Skik",
       "dark": "Mørk",
       "default": "Misligholdelse",
       "domestic": "Domestol",
@@ -291,6 +293,7 @@
       "email": "E-mail",
       "emails": "E-mails",
       "end": "Ende",
+      "entityPage": "Enhedsside",
       "extraSmall_text size": "Ekstra lille",
       "facets": {
         "acceptingNewPatients": "Accept af nye patienter",

@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Asztali tartály helyzete",
     "desktopImagePosition": "Asztali képpozíció",
     "desktopMediaPosition": "Asztali média pozíciója",
+    "destination": "Rendeltetési hely",
     "direction": "Irány",
     "directoryRootLinkLabel": "Directory Root Link címke",
     "dynamicFilters": "Dinamikus szűrők",
@@ -284,6 +285,7 @@
         "primary": "Szilárd",
         "secondary": "Vázlat"
       },
+      "custom": "Szokás",
       "dark": "Sötét",
       "default": "Mulasztás",
       "domestic": "Háztartási",
@@ -291,6 +293,7 @@
       "email": "Email",
       "emails": "E-mailek",
       "end": "Vége",
+      "entityPage": "Entitásoldal",
       "extraSmall_text size": "Extra kicsi",
       "facets": {
         "acceptingNewPatients": "Új betegek fogadása",

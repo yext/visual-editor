@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Darbvirsmas konteinera pozīcija",
     "desktopImagePosition": "Darbvirsmas attēla pozīcija",
     "desktopMediaPosition": "Darbvirsmas multivides pozīcija",
+    "destination": "Galamērķis",
     "direction": "Vadība",
     "directoryRootLinkLabel": "Direktorija sakņu saites etiķete",
     "dynamicFilters": "Dinamiskie filtri",
@@ -284,6 +285,7 @@
         "primary": "Ciets",
         "secondary": "Kontūra"
       },
+      "custom": "Pielāgots",
       "dark": "Tumšs",
       "default": "Nepildīt",
       "domestic": "Iekšzemes",
@@ -291,6 +293,7 @@
       "email": "E-pasts",
       "emails": "E-pasti",
       "end": "Beigas",
+      "entityPage": "Entītijas lapa",
       "extraSmall_text size": "Īpaši mazs",
       "facets": {
         "acceptingNewPatients": "Jaunu pacientu pieņemšana",

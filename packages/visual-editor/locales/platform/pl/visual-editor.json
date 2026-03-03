@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Pozycja pojemnika na komputery stacjonarne",
     "desktopImagePosition": "Pozycja obrazu stacjonarnego",
     "desktopMediaPosition": "Stanowisko multimedialne na komputerze stacjonarnym",
+    "destination": "Miejsce docelowe",
     "direction": "Kierunek",
     "directoryRootLinkLabel": "Director Count Link",
     "dynamicFilters": "Filtry dynamiczne",
@@ -284,6 +285,7 @@
         "primary": "Solidny",
         "secondary": "Zarys"
       },
+      "custom": "Zwyczaj",
       "dark": "Ciemny",
       "default": "Domyślny",
       "domestic": "Domowy",
@@ -291,6 +293,7 @@
       "email": "E-mail",
       "emails": "E-maile",
       "end": "Koniec",
+      "entityPage": "Strona podmiotu",
       "extraSmall_text size": "Bardzo mały",
       "facets": {
         "acceptingNewPatients": "Przyjmowanie nowych pacjentów",

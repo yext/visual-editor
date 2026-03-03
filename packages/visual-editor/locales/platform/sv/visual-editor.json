@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Skrivbordsbehållare",
     "desktopImagePosition": "Skrivbordsbilden",
     "desktopMediaPosition": "Desktop Media Position",
+    "destination": "Destination",
     "direction": "Riktning",
     "directoryRootLinkLabel": "Katalogrotlänketikett",
     "dynamicFilters": "Dynamiska filter",
@@ -284,6 +285,7 @@
         "primary": "Fast",
         "secondary": "Skissera"
       },
+      "custom": "Beställnings",
       "dark": "Mörk",
       "default": "Standard",
       "domestic": "Inhemsk",
@@ -291,6 +293,7 @@
       "email": "E-post",
       "emails": "E-postmeddelanden",
       "end": "Avsluta",
+      "entityPage": "Enhetssida",
       "extraSmall_text size": "Extra liten",
       "facets": {
         "acceptingNewPatients": "Ta emot nya patienter",
