@@ -535,7 +535,8 @@ export interface LocatorProps {
   mapStyle?: string;
 
   /**
-   * Location styles per entity type.
+   * Props to customize the locator map pin styles.
+   * Controls map pin appearance depending on the result's entity type.
    * The number of entries is locked to the locator entity types for the page set.
    */
   locationStyles: Array<{
@@ -591,7 +592,8 @@ export interface LocatorProps {
     color?: BackgroundStyle;
   };
   /**
-   * Result card properties per entity type.
+   * Props to customize the locator result card component.
+   * Controls which fields are displayed and their styling depending on the result's entity type.
    * The number of entries is locked to the locator entity types for the page set.
    */
   resultCard: Array<{
