@@ -657,7 +657,10 @@ interface VideoSectionProps {
 }
 
 interface SearchComponentProps {
-  showSearchResultsSection: boolean;
+  styles: {
+    showSearchResultsSection: boolean;
+    backgroundColor?: BackgroundStyle;
+  };
   /** @internal */
   slots: {
     SearchBarSlot: Slot;
