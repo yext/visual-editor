@@ -63,7 +63,7 @@ import { expandedHeaderLinks } from "./0061_expanded_header_links.ts";
 import { addLocatorPrimaryCtaLabel } from "./0062_add_locator_primary_cta_label.ts";
 import { textAtomUpdates } from "./0063_text_atom_updates.ts";
 import { locatorStaticContentToggles } from "./0064_locator_static_content_toggles.ts";
-import { addLocatorPrimaryCtaDestination } from "./0065_add_locator_primary_cta_destination";
+import { addLocatorPrimaryCtaDestination } from "./0065_add_locator_primary_cta_destination.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
