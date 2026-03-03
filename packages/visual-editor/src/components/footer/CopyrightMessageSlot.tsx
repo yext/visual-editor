@@ -56,10 +56,7 @@ const CopyrightMessageSlotInternal: PuckComponent<CopyrightMessageSlotProps> = (
 
 export const defaultCopyrightMessageSlotProps: CopyrightMessageSlotProps = {
   data: {
-    text: {
-      en: "",
-      hasLocalizedValue: "true",
-    },
+    text: "",
   },
 };
 

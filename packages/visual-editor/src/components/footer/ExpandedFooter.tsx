@@ -16,10 +16,7 @@ const PLACEHOLDER_LOGO_IMAGE: string =
 
 export const defaultLink = {
   linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
+  label: "Footer Link",
   link: "#",
   openInNewTab: false,
 };
@@ -322,7 +319,7 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
                   url: PLACEHOLDER_LOGO_IMAGE,
                   height: 100,
                   width: 100,
-                  alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                  alternateText: "Logo",
                 },
                 constantValueEnabled: true,
               },
@@ -383,19 +380,19 @@ export const ExpandedFooter: ComponentConfig<{ props: ExpandedFooterProps }> = {
             data: {
               sections: [
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: "Footer Label",
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: "Footer Label",
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: "Footer Label",
                   links: defaultLinks,
                 },
                 {
-                  label: { en: "Footer Label", hasLocalizedValue: "true" },
+                  label: "Footer Label",
                   links: defaultLinks,
                 },
               ],

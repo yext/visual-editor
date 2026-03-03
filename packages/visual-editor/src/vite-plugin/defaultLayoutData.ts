@@ -44,12 +44,9 @@ const mainDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              hasLocalizedValue: "true",
-                              en: {
-                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                                height: 100,
-                                width: 100,
-                              },
+                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                              height: 100,
+                              width: 100,
                             },
                             constantValueEnabled: true,
                           },
@@ -70,28 +67,19 @@ const mainDefaultLayout = {
                           links: [
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
@@ -117,21 +105,12 @@ const mainDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
-                          buttonText: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
+                          buttonText: "Button",
                           entityField: {
                             field: "",
                             constantValue: {
-                              label: {
-                                en: "Call to Action",
-                                hasLocalizedValue: "true",
-                              },
-                              link: {
-                                en: "#",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Call to Action",
+                              link: "#",
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -154,21 +133,12 @@ const mainDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
-                          buttonText: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
+                          buttonText: "Button",
                           entityField: {
                             field: "",
                             constantValue: {
-                              label: {
-                                en: "Call to Action",
-                                hasLocalizedValue: "true",
-                              },
-                              link: {
-                                en: "#",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Call to Action",
+                              link: "#",
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -211,28 +181,19 @@ const mainDefaultLayout = {
                                   links: [
                                     {
                                       linkType: "URL",
-                                      label: {
-                                        en: "Header Link",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Header Link",
                                       link: "#",
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
-                                      label: {
-                                        en: "Header Link",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Header Link",
                                       link: "#",
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
-                                      label: {
-                                        en: "Header Link",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Header Link",
                                       link: "#",
                                       openInNewTab: false,
                                     },
@@ -291,28 +252,19 @@ const mainDefaultLayout = {
                           links: [
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
@@ -352,11 +304,8 @@ const mainDefaultLayout = {
           text: {
             field: "",
             constantValue: {
-              en: {
-                json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Banner Text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Banner Text</span></p>',
-              },
-              hasLocalizedValue: "true",
+              json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Banner Text","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+              html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Banner Text</span></p>',
             },
             constantValueEnabled: true,
           },
@@ -377,10 +326,7 @@ const mainDefaultLayout = {
       type: "BreadcrumbsSection",
       props: {
         data: {
-          directoryRoot: {
-            en: "Directory Root",
-            hasLocalizedValue: "true",
-          },
+          directoryRoot: "Directory Root",
         },
         styles: {
           backgroundColor: {
@@ -402,12 +348,9 @@ const mainDefaultLayout = {
           backgroundImage: {
             field: "",
             constantValue: {
-              hasLocalizedValue: "true",
-              en: {
-                url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
-                height: 360,
-                width: 640,
-              },
+              url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
+              height: 360,
+              width: 640,
             },
             constantValueEnabled: true,
           },
@@ -439,10 +382,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-bb2ccf6e-ab98-4fb4-9e9b-fdcd5c6834e6",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Business Name",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Business Name",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -462,10 +402,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-8905a32e-da1c-42a6-b1b4-98630e328236",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Geomodifier",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Geomodifier",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -505,12 +442,9 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      hasLocalizedValue: "true",
-                      en: {
-                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
-                        height: 360,
-                        width: 640,
-                      },
+                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&width=640&height=360&fit=max",
+                      height: 360,
+                      width: 640,
                     },
                     constantValueEnabled: true,
                   },
@@ -532,28 +466,16 @@ const mainDefaultLayout = {
                 id: "CTASlot-46811f58-2779-4c49-a871-26cf27454544",
                 data: {
                   actionType: "link",
-                  buttonText: {
-                    en: "Button",
-                    hasLocalizedValue: "true",
-                  },
+                  buttonText: "Button",
                   customId: "",
                   customClass: "",
                   dataAttributes: [],
-                  ariaLabel: {
-                    en: "Button",
-                    hasLocalizedValue: "true",
-                  },
+                  ariaLabel: "Button",
                   entityField: {
                     field: "",
                     constantValue: {
-                      label: {
-                        en: "Call To Action",
-                        hasLocalizedValue: "true",
-                      },
-                      link: {
-                        en: "#",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Call to Action",
+                      link: "#",
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
@@ -575,28 +497,16 @@ const mainDefaultLayout = {
                 id: "CTASlot-633345f6-c438-400b-bdf7-92dce47746bc",
                 data: {
                   actionType: "link",
-                  buttonText: {
-                    en: "Button",
-                    hasLocalizedValue: "true",
-                  },
+                  buttonText: "Button",
                   customId: "",
                   customClass: "",
                   dataAttributes: [],
-                  ariaLabel: {
-                    en: "Button",
-                    hasLocalizedValue: "true",
-                  },
+                  ariaLabel: "Button",
                   entityField: {
                     field: "",
                     constantValue: {
-                      label: {
-                        en: "Learn More",
-                        hasLocalizedValue: "true",
-                      },
-                      link: {
-                        en: "#",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Learn More",
+                      link: "#",
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
@@ -640,10 +550,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-53d6582f-3f69-4224-b172-31f7ecac6824",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Information",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Information",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -690,10 +597,7 @@ const mainDefaultLayout = {
                         field: "mainPhone",
                         constantValue: "",
                       },
-                      label: {
-                        en: "Phone",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Phone",
                     },
                   ],
                 },
@@ -728,10 +632,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-05556e7b-c4ef-4251-8d94-1f57cbebb8be",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Hours",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Hours",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -770,10 +671,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-febfb175-cce0-4d5c-8d79-f58784bf0277",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Services",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Services",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -823,10 +721,8 @@ const mainDefaultLayout = {
           media: "image",
           backgroundImage: {
             field: "",
-            constantValue: {
-              en: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=900&width=1440&fit=max",
-              hasLocalizedValue: "true",
-            },
+            constantValue:
+              "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=900&width=1440&fit=max",
             constantValueEnabled: true,
           },
         },
@@ -854,10 +750,7 @@ const mainDefaultLayout = {
                 data: {
                   text: {
                     field: "",
-                    constantValue: {
-                      en: "Featured Promotion",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Featured Promotion",
                     constantValueEnabled: true,
                   },
                 },
@@ -877,11 +770,8 @@ const mainDefaultLayout = {
                   text: {
                     field: "",
                     constantValue: {
-                      en: {
-                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
-                      },
-                      hasLocalizedValue: "true",
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters</span></p>',
                     },
                     constantValueEnabled: true,
                   },
@@ -910,12 +800,9 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
-                      hasLocalizedValue: "true",
-                      en: {
-                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                        height: 360,
-                        width: 640,
-                      },
+                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                      height: 360,
+                      width: 640,
                     },
                     constantValueEnabled: true,
                   },
@@ -941,28 +828,16 @@ const mainDefaultLayout = {
                 id: "CTASlot-e8531a98-b8ff-4ce1-a299-11fc085eb6c3",
                 data: {
                   actionType: "link",
-                  buttonText: {
-                    en: "Button",
-                    hasLocalizedValue: "true",
-                  },
+                  buttonText: "Button",
                   customId: "",
                   customClass: "",
                   dataAttributes: [],
-                  ariaLabel: {
-                    en: "Button",
-                    hasLocalizedValue: "true",
-                  },
+                  ariaLabel: "Button",
                   entityField: {
                     field: "",
                     constantValue: {
-                      label: {
-                        hasLocalizedValue: "true",
-                        en: "Learn More",
-                      },
-                      link: {
-                        en: "#",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Learn More",
+                      link: "#",
                       linkType: "URL",
                       ctaType: "textAndLink",
                     },
@@ -1008,10 +883,7 @@ const mainDefaultLayout = {
                 data: {
                   text: {
                     field: "",
-                    constantValue: {
-                      en: "Featured Products",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Featured Products",
                     constantValueEnabled: true,
                   },
                 },
@@ -1073,12 +945,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                      },
+                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1104,10 +973,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Product Title",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Product Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1127,11 +993,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1149,25 +1012,16 @@ const mainDefaultLayout = {
                                 id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -1190,10 +1044,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Category, Pricing, etc",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Category",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1212,10 +1063,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "$123.00",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "$123.00",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1260,12 +1108,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                      },
+                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1291,10 +1136,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Product Title",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Product Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1314,11 +1156,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1336,25 +1175,16 @@ const mainDefaultLayout = {
                                 id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -1377,10 +1207,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Category, Pricing, etc",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Category, Pricing, etc",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1399,10 +1226,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "$123.00",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "$123.00",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1447,12 +1271,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                      },
+                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1478,10 +1299,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Product Title",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Product Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1501,11 +1319,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -1523,25 +1338,16 @@ const mainDefaultLayout = {
                                 id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
                                       label: "Learn More",
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -1564,10 +1370,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Category, Pricing, etc",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Category, Pricing, etc",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1586,10 +1389,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "$123.00",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "$123.00",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1644,10 +1444,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-b4d5c262-ef79-450e-ab4b-17982eea39b2",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Featured Testimonials",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Featured Testimonials",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -1705,10 +1502,8 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue:
+                                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1726,10 +1521,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Name",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1793,10 +1585,9 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue:
+                                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1814,10 +1605,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Name",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1881,10 +1669,8 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue:
+                                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -1902,10 +1688,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Name",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2000,10 +1783,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-c85952bc-d30c-44a8-a17c-0eff090cc35e",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Frequently Asked Questions",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Frequently Asked Questions",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -2024,20 +1804,14 @@ const mainDefaultLayout = {
                 data: {
                   question: {
                     constantValueEnabled: true,
-                    constantValue: {
-                      en: "Question Lorem ipsum dolor sit amet?",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Question Lorem ipsum dolor sit amet?",
                     field: "",
                   },
                   answer: {
                     constantValueEnabled: true,
                     constantValue: {
-                      en: {
-                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
-                      },
-                      hasLocalizedValue: "true",
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
                     },
                     field: "",
                   },
@@ -2056,20 +1830,14 @@ const mainDefaultLayout = {
                 data: {
                   question: {
                     constantValueEnabled: true,
-                    constantValue: {
-                      en: "Question Lorem ipsum dolor sit amet?",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Question Lorem ipsum dolor sit amet?",
                     field: "",
                   },
                   answer: {
                     constantValueEnabled: true,
                     constantValue: {
-                      en: {
-                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
-                      },
-                      hasLocalizedValue: "true",
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
                     },
                     field: "",
                   },
@@ -2088,20 +1856,14 @@ const mainDefaultLayout = {
                 data: {
                   question: {
                     constantValueEnabled: true,
-                    constantValue: {
-                      en: "Question Lorem ipsum dolor sit amet?",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Question Lorem ipsum dolor sit amet?",
                     field: "",
                   },
                   answer: {
                     constantValueEnabled: true,
                     constantValue: {
-                      en: {
-                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
-                      },
-                      hasLocalizedValue: "true",
+                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></p>',
                     },
                     field: "",
                   },
@@ -2134,10 +1896,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-a976e584-6a55-40c4-9ce7-6193135a059d",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Meet Our Team",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Meet Our Team",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -2199,12 +1958,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
-                                        height: 80,
-                                        width: 80,
-                                      },
+                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                      height: 80,
+                                      width: 80,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2230,10 +1986,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "First Last",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "First Last",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2252,10 +2005,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Associate Agent",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Associate Agent",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2280,10 +2030,7 @@ const mainDefaultLayout = {
                                         constantValue: "+12027706619",
                                         constantValueEnabled: true,
                                       },
-                                      label: {
-                                        en: "",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "",
                                     },
                                   ],
                                 },
@@ -2321,28 +2068,16 @@ const mainDefaultLayout = {
                                 id: "CTASlot-84f00400-c27d-4cd7-aa28-a1632694b359",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        en: "Visit Profile",
-                                        hasLocalizedValue: "true",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Visit Profile",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2389,12 +2124,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
-                                        height: 80,
-                                        width: 80,
-                                      },
+                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                      height: 80,
+                                      width: 80,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2420,10 +2152,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "First Last",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "First Last",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2442,10 +2171,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Associate Agent",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Associate Agent",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2470,10 +2196,7 @@ const mainDefaultLayout = {
                                         constantValue: "+12027706619",
                                         constantValueEnabled: true,
                                       },
-                                      label: {
-                                        en: "",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "",
                                     },
                                   ],
                                 },
@@ -2511,28 +2234,16 @@ const mainDefaultLayout = {
                                 id: "CTASlot-2f5fcbf5-5f6f-4f18-814d-30b6de491d0a",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        en: "Visit Profile",
-                                        hasLocalizedValue: "true",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Visit Profile",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2579,12 +2290,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
-                                        height: 80,
-                                        width: 80,
-                                      },
+                                      url: "https://a.mktgcdn.com/p/EQRaOZG5zFlcbEHYaH16EV6WmkzV8kd6vMd73Myg4AA/196x196.jpg",
+                                      height: 80,
+                                      width: 80,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2610,10 +2318,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "First Last",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "First Last",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2632,10 +2337,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Associate Agent",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Associate Agent",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2660,10 +2362,7 @@ const mainDefaultLayout = {
                                         constantValue: "+12027706619",
                                         constantValueEnabled: true,
                                       },
-                                      label: {
-                                        en: "",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "",
                                     },
                                   ],
                                 },
@@ -2701,28 +2400,16 @@ const mainDefaultLayout = {
                                 id: "CTASlot-569564d0-a69a-44f6-b528-d0aacdc875e5",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        en: "Visit Profile",
-                                        hasLocalizedValue: "true",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Visit Profile",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -2780,10 +2467,7 @@ const mainDefaultLayout = {
                 data: {
                   text: {
                     field: "",
-                    constantValue: {
-                      en: "Insights",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Insights",
                     constantValueEnabled: true,
                   },
                 },
@@ -2847,12 +2531,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                      },
+                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2877,10 +2558,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Article Name",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Article Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2899,10 +2577,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Category",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Category",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -2922,11 +2597,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -2968,28 +2640,16 @@ const mainDefaultLayout = {
                                 id: "InsightCard-1-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        en: "Read More",
-                                        hasLocalizedValue: "true",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Read More",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3031,12 +2691,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                      },
+                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3061,10 +2718,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Article Name",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Article Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -3083,10 +2737,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Category",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Category",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -3106,11 +2757,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3152,28 +2800,16 @@ const mainDefaultLayout = {
                                 id: "InsightCard-2-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        en: "Read More",
-                                        hasLocalizedValue: "true",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Read More",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3215,12 +2851,9 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                      },
+                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3245,10 +2878,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Article Name",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Article Name",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -3267,10 +2897,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Category",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Category",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -3290,11 +2917,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3336,28 +2960,16 @@ const mainDefaultLayout = {
                                 id: "InsightCard-3-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        en: "Read More",
-                                        hasLocalizedValue: "true",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Read More",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3408,10 +3020,7 @@ const mainDefaultLayout = {
                 data: {
                   text: {
                     field: "",
-                    constantValue: {
-                      en: "Gallery",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Gallery",
                     constantValueEnabled: true,
                   },
                 },
@@ -3500,10 +3109,7 @@ const mainDefaultLayout = {
                 id: "HeadingTextSlot-31ae80c9-1679-427b-bb96-6d77526bac3e",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "Upcoming Events",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Upcoming Events",
                     constantValueEnabled: true,
                     field: "",
                   },
@@ -3565,13 +3171,10 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                        alternateText: "Event Image",
-                                      },
+                                      url: "https://images.unsplash.com/photo-1504548840739-580b10ae7715?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
+                                      alternateText: "Event Image",
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3597,10 +3200,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Event Title",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Event Title",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -3644,11 +3244,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3669,28 +3266,16 @@ const mainDefaultLayout = {
                                 id: "EventCard-92abd8ca-550c-4aee-92d9-4140b4ef53ad-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        hasLocalizedValue: "true",
-                                        en: "Learn More",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Learn More",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3737,13 +3322,10 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                        alternateText: "Event Image",
-                                      },
+                                      url: "https://images.unsplash.com/photo-1502252430442-aac78f397426?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
+                                      alternateText: "Event Image",
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3769,10 +3351,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Event Title",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Event Title",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -3816,11 +3395,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3841,28 +3417,16 @@ const mainDefaultLayout = {
                                 id: "EventCard-b1fd4377-76db-433e-9803-ea5ae0d9f996-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        hasLocalizedValue: "true",
-                                        en: "Learn More",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Learn More",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -3909,13 +3473,10 @@ const mainDefaultLayout = {
                                   image: {
                                     field: "",
                                     constantValue: {
-                                      hasLocalizedValue: "true",
-                                      en: {
-                                        url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
-                                        height: 360,
-                                        width: 640,
-                                        alternateText: "Event Image",
-                                      },
+                                      url: "https://images.unsplash.com/photo-1755745360285-0633c972b0fd?ixlib=rb-4.1.0&q=85&fm=jpg&crop=entropy&cs=srgb&height=360&width=640&fit=max",
+                                      height: 360,
+                                      width: 640,
+                                      alternateText: "Event Image",
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -3941,10 +3502,7 @@ const mainDefaultLayout = {
                                 data: {
                                   text: {
                                     field: "",
-                                    constantValue: {
-                                      en: "Event Title",
-                                      hasLocalizedValue: "true",
-                                    },
+                                    constantValue: "Event Title",
                                     constantValueEnabled: true,
                                   },
                                 },
@@ -3988,11 +3546,8 @@ const mainDefaultLayout = {
                                   text: {
                                     field: "",
                                     constantValue: {
-                                      en: {
-                                        json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
-                                        html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; color: rgb(0, 0, 0); margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
-                                      },
-                                      hasLocalizedValue: "true",
+                                      json: '{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}',
+                                      html: '<p dir="ltr" style="font-size: 14.67px; font-weight: 400; line-height: 18.67px; margin: 0; padding: 3px 2px 3px 2px; position: relative;"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></p>',
                                     },
                                     constantValueEnabled: true,
                                   },
@@ -4013,28 +3568,16 @@ const mainDefaultLayout = {
                                 id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea-cta",
                                 data: {
                                   actionType: "link",
-                                  buttonText: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  buttonText: "Button",
                                   customId: "",
                                   customClass: "",
                                   dataAttributes: [],
-                                  ariaLabel: {
-                                    en: "Button",
-                                    hasLocalizedValue: "true",
-                                  },
+                                  ariaLabel: "Button",
                                   entityField: {
                                     field: "",
                                     constantValue: {
-                                      label: {
-                                        hasLocalizedValue: "true",
-                                        en: "Learn More",
-                                      },
-                                      link: {
-                                        en: "#",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Learn More",
+                                      link: "#",
                                       linkType: "URL",
                                       ctaType: "textAndLink",
                                     },
@@ -4094,10 +3637,7 @@ const mainDefaultLayout = {
                 data: {
                   text: {
                     field: "",
-                    constantValue: {
-                      en: "Nearby Locations",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "Nearby Locations",
                     constantValueEnabled: true,
                   },
                 },
@@ -4163,22 +3703,10 @@ const mainDefaultLayout = {
                   image: {
                     field: "",
                     constantValue: {
+                      url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                       height: 100,
                       width: 100,
-                      alternateText: {
-                        en: "Logo",
-                        hasLocalizedValue: "true",
-                      },
-                      hasLocalizedValue: "true",
-                      en: {
-                        url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                        height: 100,
-                        width: 100,
-                        alternateText: {
-                          en: "Logo",
-                          hasLocalizedValue: "true",
-                        },
-                      },
+                      alternateText: "Logo",
                     },
                     constantValueEnabled: true,
                   },
@@ -4231,58 +3759,28 @@ const mainDefaultLayout = {
                   links: [
                     {
                       linkType: "URL",
-                      label: {
-                        en: "Footer Link",
-                        hasLocalizedValue: "true",
-                      },
-                      link: {
-                        hasLocalizedValue: "true",
-                        en: "#",
-                      },
+                      label: "Footer Link",
+                      link: "#",
                     },
                     {
                       linkType: "URL",
-                      label: {
-                        en: "Footer Link",
-                        hasLocalizedValue: "true",
-                      },
-                      link: {
-                        hasLocalizedValue: "true",
-                        en: "#",
-                      },
+                      label: "Footer Link",
+                      link: "#",
                     },
                     {
                       linkType: "URL",
-                      label: {
-                        en: "Footer Link",
-                        hasLocalizedValue: "true",
-                      },
-                      link: {
-                        hasLocalizedValue: "true",
-                        en: "#",
-                      },
+                      label: "Footer Link",
+                      link: "#",
                     },
                     {
                       linkType: "URL",
-                      label: {
-                        en: "Footer Link",
-                        hasLocalizedValue: "true",
-                      },
-                      link: {
-                        hasLocalizedValue: "true",
-                        en: "#",
-                      },
+                      label: "Footer Link",
+                      link: "#",
                     },
                     {
                       linkType: "URL",
-                      label: {
-                        en: "Footer Link",
-                        hasLocalizedValue: "true",
-                      },
-                      link: {
-                        hasLocalizedValue: "true",
-                        en: "#",
-                      },
+                      label: "Footer Link",
+                      link: "#",
                     },
                   ],
                 },
@@ -4299,193 +3797,121 @@ const mainDefaultLayout = {
                 data: {
                   sections: [
                     {
-                      label: {
-                        en: "Footer Label",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                       ],
                     },
                     {
-                      label: {
-                        en: "Footer Label",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                       ],
                     },
                     {
-                      label: {
-                        en: "Footer Label",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                       ],
                     },
                     {
-                      label: {
-                        en: "Footer Label",
-                        hasLocalizedValue: "true",
-                      },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                         },
                       ],
@@ -4514,42 +3940,27 @@ const mainDefaultLayout = {
                           links: [
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                             },
                           ],
@@ -4566,10 +3977,7 @@ const mainDefaultLayout = {
                       props: {
                         id: "CopyrightMessageSlot-e0142469-df41-4ed7-9213-6a1ae84433e0",
                         data: {
-                          text: {
-                            en: "",
-                            hasLocalizedValue: "true",
-                          },
+                          text: "",
                         },
                         alignment: "left",
                       },
@@ -4615,12 +4023,12 @@ const directoryDefaultLayout = {
       version: 63,
       title: {
         field: "",
-        constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
+        constantValue: "PLACEHOLDER",
         constantValueEnabled: true,
       },
       description: {
         field: "",
-        constantValue: { en: "PLACEHOLDER", hasLocalizedValue: "true" },
+        constantValue: "PLACEHOLDER",
         constantValueEnabled: true,
       },
     },
@@ -4656,12 +4064,9 @@ const directoryDefaultLayout = {
                           image: {
                             field: "",
                             constantValue: {
-                              hasLocalizedValue: "true",
-                              en: {
-                                url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
-                                height: 100,
-                                width: 100,
-                              },
+                              url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
+                              height: 100,
+                              width: 100,
                             },
                             constantValueEnabled: true,
                           },
@@ -4682,28 +4087,19 @@ const directoryDefaultLayout = {
                           links: [
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
@@ -4729,21 +4125,12 @@ const directoryDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
-                          buttonText: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
+                          buttonText: "Button",
                           entityField: {
                             field: "",
                             constantValue: {
-                              label: {
-                                en: "Call to Action",
-                                hasLocalizedValue: "true",
-                              },
-                              link: {
-                                en: "#",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Call to Action",
+                              link: "#",
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -4766,21 +4153,12 @@ const directoryDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
-                          buttonText: {
-                            en: "Button",
-                            hasLocalizedValue: "true",
-                          },
+                          buttonText: "Button",
                           entityField: {
                             field: "",
                             constantValue: {
-                              label: {
-                                en: "Call to Action",
-                                hasLocalizedValue: "true",
-                              },
-                              link: {
-                                en: "#",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Call to Action",
+                              link: "#",
                               linkType: "URL",
                               ctaType: "textAndLink",
                             },
@@ -4823,28 +4201,19 @@ const directoryDefaultLayout = {
                                   links: [
                                     {
                                       linkType: "URL",
-                                      label: {
-                                        en: "Header Link",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Header Link",
                                       link: "#",
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
-                                      label: {
-                                        en: "Header Link",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Header Link",
                                       link: "#",
                                       openInNewTab: false,
                                     },
                                     {
                                       linkType: "URL",
-                                      label: {
-                                        en: "Header Link",
-                                        hasLocalizedValue: "true",
-                                      },
+                                      label: "Header Link",
                                       link: "#",
                                       openInNewTab: false,
                                     },
@@ -4903,28 +4272,19 @@ const directoryDefaultLayout = {
                           links: [
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Header Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Header Link",
                               link: "#",
                               openInNewTab: false,
                             },
@@ -4971,10 +4331,7 @@ const directoryDefaultLayout = {
                 id: "HeadingTextSlot-1a871989-a34d-426c-b24a-a1888c1a46ea",
                 data: {
                   text: {
-                    constantValue: {
-                      en: "",
-                      hasLocalizedValue: "true",
-                    },
+                    constantValue: "",
                     constantValueEnabled: false,
                     field: "name",
                   },
@@ -4990,7 +4347,7 @@ const directoryDefaultLayout = {
                 id: "HeadingTextSlot-9a120ff6-d494-4ec8-9ab8-e43017d77c03",
                 data: {
                   text: {
-                    constantValue: { en: "", hasLocalizedValue: "true" },
+                    constantValue: "",
                     constantValueEnabled: true,
                     field: "name",
                   },
@@ -5005,10 +4362,7 @@ const directoryDefaultLayout = {
               props: {
                 id: "BreadcrumbsSlot-13dba298-abd1-4f75-a7e9-b19779a4fc5b",
                 data: {
-                  directoryRoot: {
-                    en: "Directory Root",
-                    hasLocalizedValue: "true",
-                  },
+                  directoryRoot: "Directory Root",
                 },
                 styles: {
                   backgroundColor: {
@@ -5052,7 +4406,7 @@ const directoryDefaultLayout = {
                       url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
                       height: 100,
                       width: 100,
-                      alternateText: { en: "Logo", hasLocalizedValue: "true" },
+                      alternateText: "Logo",
                     },
                     constantValueEnabled: true,
                   },
@@ -5097,31 +4451,31 @@ const directoryDefaultLayout = {
                   links: [
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
+                      label: "Footer Link",
                       link: "#",
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
+                      label: "Footer Link",
                       link: "#",
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
+                      label: "Footer Link",
                       link: "#",
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
+                      label: "Footer Link",
                       link: "#",
                       openInNewTab: false,
                     },
                     {
                       linkType: "URL",
-                      label: { en: "Footer Link", hasLocalizedValue: "true" },
+                      label: "Footer Link",
                       link: "#",
                       openInNewTab: false,
                     },
@@ -5140,200 +4494,140 @@ const directoryDefaultLayout = {
                 data: {
                   sections: [
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                       ],
                     },
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                       ],
                     },
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                       ],
                     },
                     {
-                      label: { en: "Footer Label", hasLocalizedValue: "true" },
+                      label: "Footer Label",
                       links: [
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
                         {
                           linkType: "URL",
-                          label: {
-                            en: "Footer Link",
-                            hasLocalizedValue: "true",
-                          },
+                          label: "Footer Link",
                           link: "#",
                           openInNewTab: false,
                         },
@@ -5368,46 +4662,31 @@ const directoryDefaultLayout = {
                           links: [
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                               openInNewTab: false,
                             },
                             {
                               linkType: "URL",
-                              label: {
-                                en: "Footer Link",
-                                hasLocalizedValue: "true",
-                              },
+                              label: "Footer Link",
                               link: "#",
                               openInNewTab: false,
                             },
@@ -5424,7 +4703,7 @@ const directoryDefaultLayout = {
                       type: "CopyrightMessageSlot",
                       props: {
                         id: "CopyrightMessageSlot-65eda140-da7c-4ad5-9bb7-f017a433277b",
-                        data: { text: { en: "", hasLocalizedValue: "true" } },
+                        data: { text: "" },
                         alignment: "left",
                       },
                     },
@@ -5460,15 +4739,12 @@ const locatorDefaultLayout = {
       version: 63,
       title: {
         field: "",
-        constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
+        constantValue: "Find Locations",
         constantValueEnabled: true,
       },
       description: {
         field: "",
-        constantValue: {
-          en: "Find the right location for you.",
-          hasLocalizedValue: "true",
-        },
+        constantValue: "Find the right location for you.",
         constantValueEnabled: true,
       },
     },
@@ -5478,10 +4754,7 @@ const locatorDefaultLayout = {
       type: "Locator",
       props: {
         pageHeading: {
-          title: {
-            en: "Find a Location",
-            hasLocalizedValue: "true",
-          },
+          title: "Find a Location",
         },
         id: "Locator-2ae506f4-a3ee-46ea-b5f9-e4c3236243a7",
         mapStyle: "mapbox://styles/mapbox/streets-v12",

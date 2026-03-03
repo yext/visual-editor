@@ -30,12 +30,12 @@ import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultPerson = {
-  name: { en: "First Last", hasLocalizedValue: "true" },
-  title: { en: "Associate Agent", hasLocalizedValue: "true" },
+  name: "First Last",
+  title: "Associate Agent",
   phoneNumber: "+12027706619",
   email: "jkelley@[company].com",
   cta: {
-    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    label: "Visit Profile",
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -135,10 +135,7 @@ export const defaultTeamCardSlotData = (
                       constantValue: defaultPerson.phoneNumber,
                       constantValueEnabled: true,
                     },
-                    label: {
-                      en: "",
-                      hasLocalizedValue: "true",
-                    },
+                    label: "",
                   },
                 ],
               },
@@ -176,7 +173,7 @@ export const defaultTeamCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: "Button",
                 entityField: {
                   field: "",
                   constantValue: defaultPerson.cta,
@@ -483,62 +480,62 @@ export const TeamCard: ComponentConfig<{ props: TeamCardProps }> = {
 
     const showImage = Boolean(
       person?.headshot ||
-        imageSlotProps?.parentData?.image ||
-        (imageSlotProps &&
-          (imageSlotProps?.data.image.field ||
-            (imageSlotProps.data.image.constantValue &&
-              "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
-            (imageSlotProps.data.image.constantValue &&
-              "url" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.url) ||
-            (imageSlotProps.data.image.constantValue &&
-              "image" in imageSlotProps.data.image.constantValue &&
-              imageSlotProps.data.image.constantValue.image?.url)))
+      imageSlotProps?.parentData?.image ||
+      (imageSlotProps &&
+        (imageSlotProps?.data.image.field ||
+          (imageSlotProps.data.image.constantValue &&
+            "hasLocalizedValue" in imageSlotProps.data.image.constantValue) ||
+          (imageSlotProps.data.image.constantValue &&
+            "url" in imageSlotProps.data.image.constantValue &&
+            imageSlotProps.data.image.constantValue.url) ||
+          (imageSlotProps.data.image.constantValue &&
+            "image" in imageSlotProps.data.image.constantValue &&
+            imageSlotProps.data.image.constantValue.image?.url)))
     );
     const showName = Boolean(
       person?.name ||
-        nameSlotProps?.parentData?.text ||
-        (nameSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            nameSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      nameSlotProps?.parentData?.text ||
+      (nameSlotProps &&
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          nameSlotProps.data.text,
+          i18nComponentsInstance.language || "en"
+        ))
     );
     const showTitle = Boolean(
       person?.title ||
-        titleSlotProps?.parentData?.text ||
-        (titleSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            titleSlotProps.data.text,
-            i18nComponentsInstance.language || "en"
-          ))
+      titleSlotProps?.parentData?.text ||
+      (titleSlotProps &&
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          titleSlotProps.data.text,
+          i18nComponentsInstance.language || "en"
+        ))
     );
     const showPhone = Boolean(
       person?.phoneNumber ||
-        phoneSlotProps?.parentData?.phoneNumbers?.length ||
-        (phoneSlotProps?.data?.phoneNumbers?.length &&
-          phoneSlotProps.data.phoneNumbers.some(
-            (phone: any) => phone.number?.constantValue || phone.number?.field
-          ))
+      phoneSlotProps?.parentData?.phoneNumbers?.length ||
+      (phoneSlotProps?.data?.phoneNumbers?.length &&
+        phoneSlotProps.data.phoneNumbers.some(
+          (phone: any) => phone.number?.constantValue || phone.number?.field
+        ))
     );
     const showEmail = Boolean(
       person?.email ||
-        emailSlotProps?.parentData?.list?.length ||
-        emailSlotProps?.data?.list?.constantValue?.length ||
-        emailSlotProps?.data?.list?.field
+      emailSlotProps?.parentData?.list?.length ||
+      emailSlotProps?.data?.list?.constantValue?.length ||
+      emailSlotProps?.data?.list?.field
     );
     const showCTA = Boolean(
       person?.cta?.label ||
-        ctaSlotProps?.parentData?.cta?.label ||
-        ctaSlotProps?.data?.entityField?.constantValue?.label ||
-        ctaSlotProps?.data?.entityField?.field ||
-        (ctaSlotProps &&
-          resolveYextEntityField(
-            params.metadata.streamDocument,
-            ctaSlotProps.data.entityField
-          )?.label)
+      ctaSlotProps?.parentData?.cta?.label ||
+      ctaSlotProps?.data?.entityField?.constantValue?.label ||
+      ctaSlotProps?.data?.entityField?.field ||
+      (ctaSlotProps &&
+        resolveYextEntityField(
+          params.metadata.streamDocument,
+          ctaSlotProps.data.entityField
+        )?.label)
     );
 
     let updatedData = {

@@ -204,10 +204,7 @@ export const NearbyLocationsSection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Nearby Locations",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "Nearby Locations",
                 constantValueEnabled: true,
               },
             },

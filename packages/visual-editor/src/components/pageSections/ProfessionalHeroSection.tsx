@@ -560,10 +560,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Business Name",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "Business Name",
                 constantValueEnabled: true,
               },
             },
@@ -580,10 +577,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Credentials",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "Credentials",
                 constantValueEnabled: true,
               },
             },
@@ -600,10 +594,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Professional Name",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "Professional Name",
                 constantValueEnabled: true,
                 field: "name",
               },
@@ -618,10 +609,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Professional Title",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "Professional Title",
                 constantValueEnabled: true,
                 field: "",
               },
@@ -640,10 +628,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Subtitle",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "Subtitle",
                 constantValueEnabled: true,
                 field: "",
               },
@@ -682,18 +667,12 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: "Button",
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Contact Me",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: "Contact Me",
+                  link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -712,18 +691,12 @@ export const ProfessionalHeroSection: ComponentConfig<{
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: "Button",
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Learn More",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: "Learn More",
+                  link: "#",
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -747,10 +720,7 @@ export const ProfessionalHeroSection: ComponentConfig<{
                     field: "mainPhone",
                     constantValue: "",
                   },
-                  label: {
-                    en: "Phone",
-                    hasLocalizedValue: "true",
-                  },
+                  label: "Phone",
                 },
               ],
             },

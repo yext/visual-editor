@@ -160,10 +160,7 @@ export const FAQSection: ComponentConfig<{ props: FAQSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Frequently Asked Questions",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: "Frequently Asked Questions",
                 constantValueEnabled: true,
                 field: "",
               },

@@ -603,10 +603,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       showDistanceOptions: false,
     },
     pageHeading: {
-      title: {
-        en: DEFAULT_TITLE,
-        hasLocalizedValue: "true",
-      },
+      title: DEFAULT_TITLE,
     },
     resultCard: DEFAULT_LOCATOR_RESULT_CARD_PROPS,
   },

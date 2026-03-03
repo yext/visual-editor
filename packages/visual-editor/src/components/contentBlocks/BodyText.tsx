@@ -115,10 +115,7 @@ export const BodyText: ComponentConfig<{ props: BodyTextProps }> = {
     data: {
       text: {
         field: "",
-        constantValue: {
-          en: "Text",
-          hasLocalizedValue: "true",
-        },
+        constantValue: "Text",
         constantValueEnabled: true,
       },
     },

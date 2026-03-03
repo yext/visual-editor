@@ -207,8 +207,8 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
       ? Boolean(resolvedButtonLabel?.trim()) && (data.show ?? true)
       : Boolean(
           cta &&
-            (ctaType === "presetImage" || resolvedLinkLabel) &&
-            (data.show ?? true)
+          (ctaType === "presetImage" || resolvedLinkLabel) &&
+          (data.show ?? true)
         );
 
   const resolvedButtonClassName = themeManagerCn(
@@ -297,17 +297,11 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
         },
         selectedType: "textAndLink",
       },
-      buttonText: {
-        en: "Button",
-        hasLocalizedValue: "true",
-      },
+      buttonText: "Button",
       customId: "",
       customClass: "",
       dataAttributes: [],
-      ariaLabel: {
-        en: "Button",
-        hasLocalizedValue: "true",
-      },
+      ariaLabel: "Button",
     },
     styles: {
       variant: "primary",

@@ -79,7 +79,7 @@ const defaultFooterExpandedLinkSectionProps: FooterExpandedLinkSectionSlotProps 
     data: {
       label: {
         field: "",
-        constantValue: { en: "Footer Label", hasLocalizedValue: "true" },
+        constantValue: "Footer Label",
         constantValueEnabled: true,
       },
       links: defaultLinks,

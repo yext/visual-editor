@@ -137,10 +137,7 @@ export const defaultAboutSectionProps: Omit<DetailSection["content"], "type"> =
           constantValue: "",
           constantValueEnabled: false,
         },
-        label: {
-          en: "Phone",
-          hasLocalizedValue: "true",
-        },
+        label: "Phone",
       },
       styles: {
         phoneFormat: "domestic",
@@ -301,7 +298,7 @@ const aboutSectionDetailsColumnFields: Fields<AboutSectionDetailsColumnProps> =
       defaultItemProps: {
         header: {
           field: "",
-          constantValue: { en: "Header", hasLocalizedValue: "true" },
+          constantValue: "Header",
           constantValueEnabled: true,
         },
         content: {

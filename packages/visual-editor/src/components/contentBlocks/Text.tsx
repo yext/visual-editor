@@ -136,10 +136,7 @@ export const Text: ComponentConfig<{ props: TextProps }> = {
     data: {
       text: {
         field: "",
-        constantValue: {
-          en: "Text",
-          hasLocalizedValue: "true",
-        },
+        constantValue: "Text",
         constantValueEnabled: true,
       },
     },

@@ -184,10 +184,7 @@ export const BreadcrumbsSection: ComponentConfig<{
   fields: breadcrumbsSectionFields,
   defaultProps: {
     data: {
-      directoryRoot: {
-        en: "Directory Root",
-        hasLocalizedValue: "true",
-      },
+      directoryRoot: "Directory Root",
     },
     styles: {
       backgroundColor: backgroundColors.background1.value,

@@ -120,7 +120,7 @@ export const FooterLogoSlot: ComponentConfig<{ props: FooterLogoSlotProps }> = {
           url: "https://a.mktgcdn.com/p/wa83C1O1lvtxHI9cGqEdP2HILyUzbD0jvtzwWpOAJfE/196x196.jpg",
           height: 100,
           width: 100,
-          alternateText: { en: "Logo", hasLocalizedValue: "true" },
+          alternateText: "Logo",
         },
         constantValueEnabled: true,
       },

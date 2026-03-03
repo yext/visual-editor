@@ -201,10 +201,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Information",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: "Information",
                   constantValueEnabled: true,
                   field: "",
                 },
@@ -246,10 +243,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
                       field: "mainPhone",
                       constantValue: "",
                     },
-                    label: {
-                      en: "Phone",
-                      hasLocalizedValue: "true",
-                    },
+                    label: "Phone",
                   },
                 ],
               },
@@ -282,10 +276,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Hours",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: "Hours",
                   constantValueEnabled: true,
                   field: "",
                 },
@@ -319,10 +310,7 @@ export const CoreInfoSection: ComponentConfig<{ props: CoreInfoSectionProps }> =
             props: {
               data: {
                 text: {
-                  constantValue: {
-                    en: "Services",
-                    hasLocalizedValue: "true",
-                  },
+                  constantValue: "Services",
                   constantValueEnabled: true,
                   field: "",
                 },

@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 
 const defaultSection = {
-  label: { en: "Footer Label", hasLocalizedValue: "true" as const },
+  label: "Footer Label",
   links: defaultLinks,
 };
 

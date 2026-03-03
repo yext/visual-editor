@@ -38,23 +38,14 @@ const defaultProduct = {
     height: 360,
     width: 640,
   },
-  brow: {
-    en: "Category",
-    hasLocalizedValue: "true",
-  },
-  name: { en: "Product Name", hasLocalizedValue: "true" },
-  price: {
-    en: "$123.00",
-    hasLocalizedValue: "true",
-  },
-  description: {
-    en: getDefaultRTF(
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    ),
-    hasLocalizedValue: "true",
-  },
+  brow: "Category",
+  name: "Product Name",
+  price: "$123.00",
+  description: getDefaultRTF(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  ),
   cta: {
-    label: { en: "Learn More", hasLocalizedValue: "true" },
+    label: "Learn More",
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -185,7 +176,7 @@ export const defaultProductCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: "Button",
                 entityField: {
                   field: "",
                   constantValue: defaultProduct.cta,
