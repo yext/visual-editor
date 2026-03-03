@@ -64,11 +64,14 @@ import {
   fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
-import { DEFAULT_ENTITY_TYPE } from "../utils/locatorEntityTypes.ts";
+import {
+  DEFAULT_ENTITY_TYPE,
+  EntityType,
+} from "../utils/locatorEntityTypes.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
-  entityType: string;
+  entityType: EntityType;
 
   /** Settings for the main heading of the card */
   primaryHeading: {

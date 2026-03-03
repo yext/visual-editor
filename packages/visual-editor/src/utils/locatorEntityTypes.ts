@@ -1,21 +1,40 @@
 import { StreamDocument } from "./types/StreamDocument.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
-import { msg, pt } from "../utils/i18n/platform.ts";
+import { pt } from "../utils/i18n/platform.ts";
 
 export const DEFAULT_ENTITY_TYPE = "location";
+export type EntityType =
+  | "location"
+  | "healthcareProfessional"
+  | "healthcareFacility"
+  | "restaurant"
+  | "hotel"
+  | "financialProfessional";
+
+export function isEntityType(value: string): value is EntityType {
+  return (
+    value === "location" ||
+    value === "healthcareProfessional" ||
+    value === "healthcareFacility" ||
+    value === "restaurant" ||
+    value === "hotel" ||
+    value === "financialProfessional"
+  );
+}
 
 export const getLocatorEntityTypeSourceMap = (
   streamDocument?: StreamDocument
-): Record<string, string | undefined> => {
+): Partial<Record<EntityType, string | undefined>> => {
   const entityDocument: StreamDocument = streamDocument ?? useDocument();
-  const entityTypeSourceMap: Record<string, string | undefined> = {};
+  const entityTypeSourceMap: Partial<Record<EntityType, string | undefined>> =
+    {};
 
   const locatorSourcePageSets = entityDocument.__?.locatorSourcePageSets;
   if (locatorSourcePageSets) {
     try {
       const pageSetMap = JSON.parse(locatorSourcePageSets) as Record<
         string,
-        { entityType?: string }
+        { entityType?: EntityType }
       >;
       for (const [source, entry] of Object.entries(pageSetMap)) {
         if (entry.entityType) {
@@ -36,8 +55,8 @@ export const getLocatorEntityTypeSourceMap = (
       const locatorConfig = JSON.parse(pageset)?.typeConfig?.locatorConfig as
         | {
             source?: string;
-            entityType?: string;
-            entityTypeScope?: Array<{ entityType?: string }>;
+            entityType?: EntityType;
+            entityTypeScope?: Array<{ entityType?: EntityType }>;
           }
         | undefined;
 
@@ -62,28 +81,19 @@ export const getLocatorEntityTypeSourceMap = (
   return entityTypeSourceMap;
 };
 
-export const getEntityTypeLabel = (entityType: string) => {
+export const getEntityTypeLabel = (entityType: EntityType) => {
   switch (entityType) {
-    case "restaurant":
-      return pt(msg("fields.options.restaurants", "Restaurants"));
-    case "healthcareFacility":
-      return pt(
-        msg("fields.options.healthcareFacilities", "Healthcare Facilities")
-      );
     case "healthcareProfessional":
-      return pt(
-        msg(
-          "fields.options.healthcareProfessionals",
-          "Healthcare Professionals"
-        )
-      );
+      return pt("healthcareProfessionals", "Healthcare Professionals");
+    case "healthcareFacility":
+      return pt("healthcareFacilities", "Healthcare Facilities");
+    case "restaurant":
+      return pt("restaurants", "Restaurants");
     case "hotel":
-      return pt(msg("fields.options.hotels", "Hotels"));
+      return pt("hotels", "Hotels");
     case "financialProfessional":
-      return pt(
-        msg("fields.options.financialProfessionals", "Financial Professionals")
-      );
+      return pt("financialProfessionals", "Financial Professionals");
     default:
-      return pt(msg("fields.options.locations", "Locations"));
+      return pt("locations", "Locations");
   }
 };

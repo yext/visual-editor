@@ -86,6 +86,8 @@ import { MapPinIcon } from "./MapPinIcon.js";
 import { useAnalytics } from "@yext/pages-components";
 import {
   DEFAULT_ENTITY_TYPE,
+  EntityType,
+  isEntityType,
   getLocatorEntityTypeSourceMap,
   getEntityTypeLabel,
 } from "../utils/locatorEntityTypes.ts";
@@ -155,7 +157,9 @@ const ResultCardPropsField = ({
    * - Toggling constant value vs. field selector visibility per section.
    */
   const resultCardFields = React.useMemo(() => {
-    if (!value?.entityType) return LocatorResultCardFields;
+    if (!value?.entityType) {
+      return LocatorResultCardFields;
+    }
     let fields = LocatorResultCardFields;
     const showPrimaryCta = !!entityTypeSourceMap[value.entityType];
 
@@ -206,7 +210,7 @@ const ResultCardPropsField = ({
   );
 };
 
-function getFacetFieldOptions(entityType: string): DynamicOption<string>[] {
+function getFacetFieldOptions(entityType: EntityType): DynamicOption<string>[] {
   let filterOptions: DynamicOption<string>[] = [];
   switch (entityType) {
     case "location":
@@ -541,7 +545,7 @@ export interface LocatorProps {
    */
   locationStyles: Array<{
     /** The entity type this style applies to. */
-    entityType: string;
+    entityType: EntityType;
     /** Whether to render an icon in the pin. */
     pinIcon?: {
       type: "none" | "icon";
@@ -648,7 +652,7 @@ const locatorFields: Fields<LocatorProps> = {
             const selectedType = value?.type ?? "none";
             return (
               <div className="flex flex-col gap-3">
-                <FieldLabel label={pt(msg("fields.pinIcon", "Pin Icon"))}>
+                <FieldLabel label={pt("fields.pinIcon", "Pin Icon")}>
                   <AutoField
                     field={BasicSelector<"none" | "icon">({
                       options: [
@@ -676,7 +680,7 @@ const locatorFields: Fields<LocatorProps> = {
                   />
                 </FieldLabel>
                 {selectedType === "icon" && (
-                  <FieldLabel label={pt(msg("fields.icon", "Icon"))}>
+                  <FieldLabel label={pt("fields.icon", "Icon")}>
                     <AutoField
                       field={BasicSelector<string | undefined>({
                         options: makiIconOptions,
@@ -735,9 +739,10 @@ const locatorFields: Fields<LocatorProps> = {
           dropdownLabel: msg("fields.field", "Field"),
           getOptions: () => {
             const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
-            return getFacetFieldOptions(
-              Object.keys(entityTypeSourceMap)[0] ?? DEFAULT_ENTITY_TYPE
-            );
+            const entityTypes = Object.keys(
+              entityTypeSourceMap
+            ) as (keyof typeof entityTypeSourceMap)[];
+            return getFacetFieldOptions(entityTypes[0] ?? DEFAULT_ENTITY_TYPE);
           },
           placeholderOptionLabel: msg(
             "fields.options.selectAField",
@@ -805,11 +810,12 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
    */
   resolveFields: (_data, params) => {
     const entityDocument = params.metadata?.streamDocument;
+    const entityTypeSourceMap = entityDocument
+      ? getLocatorEntityTypeSourceMap(entityDocument)
+      : { [DEFAULT_ENTITY_TYPE]: undefined };
     const entityTypes = Object.keys(
-      entityDocument
-        ? getLocatorEntityTypeSourceMap(entityDocument)
-        : { [DEFAULT_ENTITY_TYPE]: undefined }
-    );
+      entityTypeSourceMap
+    ) as (keyof typeof entityTypeSourceMap)[];
     const entityTypeCount = entityTypes.length;
 
     let updatedFields: Fields<LocatorProps> = { ...locatorFields };
@@ -851,11 +857,13 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
    */
   resolveData: (data, params) => {
     const entityDocument = params.metadata?.streamDocument;
+    const entityTypeSourceMap = entityDocument
+      ? getLocatorEntityTypeSourceMap(entityDocument)
+      : { [DEFAULT_ENTITY_TYPE]: undefined };
     const entityTypes = Object.keys(
-      entityDocument
-        ? getLocatorEntityTypeSourceMap(entityDocument)
-        : { [DEFAULT_ENTITY_TYPE]: undefined }
-    );
+      entityTypeSourceMap
+    ) as (keyof typeof entityTypeSourceMap)[];
+
     const previousLocationStyles = data.props.locationStyles ?? [];
     const previousResultCard = data.props.resultCard ?? [];
     const hasSameEntityTypes = (currentEntityTypes: string[]) =>
@@ -866,7 +874,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
 
     const locationStylesByEntityType = new globalThis.Map(
       previousLocationStyles
-        .filter((item) => !!item?.entityType)
+        .filter((item) => !!item.entityType)
         .map((item) => [item.entityType, item] as const)
     );
     const resultCardsByEntityType = new globalThis.Map(
@@ -875,19 +883,19 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
         .map((item) => [item.props.entityType, item] as const)
     );
 
-    const locationStyleEntityTypes = previousLocationStyles
-      .map((item) => item.entityType)
-      .filter((entityType): entityType is string => !!entityType);
-    const resultCardEntityTypes = previousResultCard
-      .map((item) => item?.props?.entityType)
-      .filter((entityType): entityType is string => !!entityType);
+    const previouslocationStyleEntityTypes = previousLocationStyles.map(
+      (item) => item.entityType
+    );
+    const previousresultCardEntityTypes = previousResultCard.map(
+      (item) => item.props?.entityType
+    );
 
     const shouldReconcileLocationStyles =
       previousLocationStyles.length === 0 ||
-      !hasSameEntityTypes(locationStyleEntityTypes);
+      !hasSameEntityTypes(previouslocationStyleEntityTypes);
     const shouldReconcileResultCards =
       previousResultCard.length === 0 ||
-      !hasSameEntityTypes(resultCardEntityTypes);
+      !hasSameEntityTypes(previousresultCardEntityTypes);
 
     if (shouldReconcileLocationStyles) {
       const newLocationStyles = entityTypes.map((entityType) => ({
@@ -980,11 +988,10 @@ const LocatorInternal = ({
   const { t, i18n } = useTranslation();
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const streamDocument = useDocument();
-  const locatorEntityTypeSourceMap = React.useMemo(
-    () => getLocatorEntityTypeSourceMap(streamDocument),
-    [streamDocument]
-  );
-  const entityTypes = Object.keys(locatorEntityTypeSourceMap);
+  const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
+  const entityTypes = Object.keys(
+    entityTypeSourceMap
+  ) as (keyof typeof entityTypeSourceMap)[];
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1204,7 +1211,7 @@ const LocatorInternal = ({
   }, []);
 
   const getResultCardProps = React.useCallback(
-    (entityType?: string) => {
+    (entityType?: EntityType) => {
       const existingConfig = (resultCardConfigs ?? []).find(
         (item) => item.props.entityType === entityType
       );
@@ -1218,12 +1225,22 @@ const LocatorInternal = ({
 
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => {
-      const resultCardProps = getResultCardProps(result.result.entityType);
-      // Show primary CTA when the liveVisibility is true and entity scope is backed by an entity page set.
-      const showPrimaryCta =
-        resultCardProps.primaryCTA.liveVisibility &&
-        !!result.result.entityType &&
-        !!locatorEntityTypeSourceMap[result.result.entityType];
+      let resultCardProps = DEFAULT_LOCATOR_RESULT_CARD_PROPS;
+      let showPrimaryCta;
+      const resultEntityType = result.result.entityType;
+      if (resultEntityType && isEntityType(resultEntityType)) {
+        resultCardProps = getResultCardProps(resultEntityType);
+        // Show primary CTA when the liveVisibility is true and entity scope is backed by an entity page set.
+        showPrimaryCta =
+          resultCardProps.primaryCTA.liveVisibility &&
+          !!resultEntityType &&
+          !!entityTypeSourceMap[resultEntityType];
+      } else {
+        console.warn(
+          "Unexpected entityType from search result: ",
+          resultEntityType
+        );
+      }
       return (
         <LocatorResultCard
           {...result}
@@ -1233,7 +1250,7 @@ const LocatorInternal = ({
         />
       );
     },
-    [getResultCardProps, locatorEntityTypeSourceMap, selectedResultIndex]
+    [getResultCardProps, entityTypeSourceMap, selectedResultIndex]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =

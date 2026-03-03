@@ -8,7 +8,7 @@ export type StreamDocument = {
     };
   };
   __certified_facts?: any;
-  _pageset?: string;
+  _pageset?: string; // JSON-stringified page set dataa
   __?: {
     pathInfo?: PathInfoShape;
     layout?: string;
@@ -18,7 +18,7 @@ export type StreamDocument = {
     visualEditorConfig?: string;
     isPrimaryLocale?: boolean; // deprecated, use pathInfo.primaryLocale instead
     entityPageSetUrlTemplates?: string;
-    locatorSourcePageSets?: string;
+    locatorSourcePageSets?: string; //JSON-stringified locator source page sets
   };
 };
 
