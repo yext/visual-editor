@@ -97,25 +97,39 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, []);
 
   useEffect(() => {
-    const puckPreview =
-      document.querySelector<HTMLIFrameElement>("#preview-frame");
-    if (
-      puckPreview?.contentDocument?.head &&
-      !puckPreview?.contentDocument.getElementById(
-        PREVIEW_DISABLE_POINTER_STYLE_ID
-      )
-    ) {
-      // add this style to preview iFrame to prevent clicking or hover effects.
+    const applyPointerBlock = () => {
+      const puckPreview =
+        document.querySelector<HTMLIFrameElement>("#preview-frame");
+      if (
+        !puckPreview?.contentDocument?.head ||
+        puckPreview.contentDocument.getElementById(
+          PREVIEW_DISABLE_POINTER_STYLE_ID
+        )
+      ) {
+        return;
+      }
+
       const style = puckPreview.contentDocument.createElement("style");
       style.id = PREVIEW_DISABLE_POINTER_STYLE_ID;
-      style.innerHTML = `
-        * {
-          cursor: default !important;
-          pointer-events: none !important;
-        }
-      `;
+      style.textContent = `
+     * {
+        cursor: default !important;
+        pointer-events: none !important;
+      }
+    `;
       puckPreview.contentDocument.head.appendChild(style);
-    }
+    };
+
+    applyPointerBlock();
+    window.addEventListener("load", applyPointerBlock);
+
+    return () => {
+      window.removeEventListener("load", applyPointerBlock);
+      document
+        .querySelector<HTMLIFrameElement>("#preview-frame")
+        ?.contentDocument?.getElementById(PREVIEW_DISABLE_POINTER_STYLE_ID)
+        ?.remove();
+    };
   }, []);
 
   useEffect(() => {
@@ -128,7 +142,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
         ui: { previewMode: "interactive" },
       });
     }
-  }, [previewMode]);
+  }, [previewMode, getPuck]);
 
   const canUndo = (): boolean => {
     if (!themeHistories) {
