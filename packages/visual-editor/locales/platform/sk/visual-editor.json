@@ -551,7 +551,7 @@
   "mile_many": "míľ",
   "mile_other": "míľ",
   "missingCustomEndpointApiKey": "Ak chcete zobraziť túto časť, pridajte si vlastný kľúč API koncového bodu obsahu",
-  "missingCustomEndpointName": "Ak chcete zobraziť túto sekciu, pridajte svoj vlastný názov koncového bodu obsahu",
+  "missingCustomEndpointURL": "Ak chcete zobraziť túto sekciu, pridajte svoju vlastnú webovú adresu koncového bodu obsahu",
   "missingHtmlWidget": "Pridajte HTML na Zobraziť komponent",
   "missingSearchApiKey": "Ak chcete zobraziť túto sekciu, pridajte kľúč rozhrania Search API",
   "missingSearchExperienceKey": "Ak chcete zobraziť túto sekciu, pridajte svoj kľúč vyhľadávania",

@@ -541,7 +541,7 @@
   "mile_one": "mile",
   "mile_other": "miles",
   "missingCustomEndpointApiKey": "Add you custom Content endpoint API key to view this sectiom",
-  "missingCustomEndpointName": "Add your custom Content endpoint name to view this section",
+  "missingCustomEndpointURL": "Add your custom Content endpoint url to view this section",
   "missingHtmlWidget": "Add HTML to view component",
   "missingSearchApiKey": "Add your Search API key to view this section",
   "missingSearchExperienceKey": "Add your Search Experience key to view this section",

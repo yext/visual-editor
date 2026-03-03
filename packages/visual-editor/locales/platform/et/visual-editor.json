@@ -541,7 +541,7 @@
   "mile_one": "miil",
   "mile_other": "miili",
   "missingCustomEndpointApiKey": "Selle jaotise vaatamiseks lisage kohandatud sisu lõpp-punkti API võti",
-  "missingCustomEndpointName": "Selle jaotise vaatamiseks lisage oma kohandatud sisu lõpp-punkti nimi",
+  "missingCustomEndpointURL": "Selle jaotise vaatamiseks lisage oma kohandatud sisu lõpp-punkti URL",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",
   "missingSearchApiKey": "Selle jaotise vaatamiseks lisage oma Search API võti",
   "missingSearchExperienceKey": "Selle jaotise vaatamiseks lisage oma otsingukogemuse võti",

@@ -546,7 +546,7 @@
   "mile_many": "millas",
   "mile_other": "millas",
   "missingCustomEndpointApiKey": "Agregue su clave API de punto final de contenido personalizada para ver esta sección",
-  "missingCustomEndpointName": "Agregue su nombre de extremo de contenido personalizado para ver esta sección",
+  "missingCustomEndpointURL": "Agregue su URL de extremo de contenido personalizada para ver esta sección",
   "missingHtmlWidget": "Agregue HTML para ver el componente",
   "missingSearchApiKey": "Agregue su clave de API de búsqueda para ver esta sección",
   "missingSearchExperienceKey": "Agregue su clave de experiencia de búsqueda para ver esta sección",

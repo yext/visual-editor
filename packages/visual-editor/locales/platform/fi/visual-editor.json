@@ -541,7 +541,7 @@
   "mile_one": "maili",
   "mile_other": "mailia",
   "missingCustomEndpointApiKey": "Lisää mukautettu sisällön päätepisteen API-avain nähdäksesi tämän osion",
-  "missingCustomEndpointName": "Lisää mukautettu sisällön päätepisteen nimi nähdäksesi tämän osion",
+  "missingCustomEndpointURL": "Lisää mukautettu sisällön päätepisteen URL-osoite nähdäksesi tämän osion",
   "missingHtmlWidget": "Lisää HTML katsomaan komponenttia",
   "missingSearchApiKey": "Lisää Search API -avain nähdäksesi tämän osion",
   "missingSearchExperienceKey": "Lisää hakukokemusavaimesi nähdäksesi tämän osion",

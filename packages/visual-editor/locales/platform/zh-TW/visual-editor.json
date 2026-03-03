@@ -541,7 +541,7 @@
   "mile_one": "英里",
   "mile_other": "英里",
   "missingCustomEndpointApiKey": "新增自訂內容端點 API 金鑰以查看此部分",
-  "missingCustomEndpointName": "新增您的自訂內容端點名稱以查看此部分",
+  "missingCustomEndpointURL": "新增您的自訂內容端點 URL 以查看此部分",
   "missingHtmlWidget": "添加HTML以查看組件",
   "missingSearchApiKey": "新增您的搜尋 API 金鑰以查看此部分",
   "missingSearchExperienceKey": "新增您的搜尋體驗金鑰以查看此部分",

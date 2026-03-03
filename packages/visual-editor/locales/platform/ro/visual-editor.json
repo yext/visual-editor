@@ -546,7 +546,7 @@
   "mile_few": "mile",
   "mile_other": "mile",
   "missingCustomEndpointApiKey": "Adăugați-vă cheia API pentru punctul final de conținut pentru a vedea această secțiune",
-  "missingCustomEndpointName": "Adăugați numele personalizat al punctului final de conținut pentru a vedea această secțiune",
+  "missingCustomEndpointURL": "Adăugați adresa URL personalizată a punctului final de conținut pentru a vedea această secțiune",
   "missingHtmlWidget": "Adăugați HTML pentru a vizualiza componenta",
   "missingSearchApiKey": "Adăugați cheia API de căutare pentru a vedea această secțiune",
   "missingSearchExperienceKey": "Adăugați cheia dvs. de experiență de căutare pentru a vedea această secțiune",

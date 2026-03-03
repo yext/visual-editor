@@ -541,7 +541,7 @@
   "mile_one": "mérföld",
   "mile_other": "mérföld",
   "missingCustomEndpointApiKey": "Adjon hozzá egyéni tartalomvégpont API-kulcsot a szakasz megtekintéséhez",
-  "missingCustomEndpointName": "Adja hozzá az egyéni tartalomvégpont nevét a szakasz megtekintéséhez",
+  "missingCustomEndpointURL": "A szakasz megtekintéséhez adja hozzá egyéni tartalom-végpont URL-jét",
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",
   "missingSearchApiKey": "Ennek a szakasznak a megtekintéséhez adja hozzá Search API-kulcsát",
   "missingSearchExperienceKey": "A szakasz megtekintéséhez adja hozzá a Search Experience kulcsát",

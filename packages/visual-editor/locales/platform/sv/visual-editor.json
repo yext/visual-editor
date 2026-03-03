@@ -541,7 +541,7 @@
   "mile_one": "mil",
   "mile_other": "mil",
   "missingCustomEndpointApiKey": "Lägg till din anpassade Content endpoint API-nyckel för att se det här avsnittet",
-  "missingCustomEndpointName": "Lägg till ditt anpassade innehållsändpunktsnamn för att se det här avsnittet",
+  "missingCustomEndpointURL": "Lägg till din anpassade innehållsändpunkts-url för att se det här avsnittet",
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",
   "missingSearchApiKey": "Lägg till din sök-API-nyckel för att se det här avsnittet",
   "missingSearchExperienceKey": "Lägg till din sökupplevelsenyckel för att se det här avsnittet",

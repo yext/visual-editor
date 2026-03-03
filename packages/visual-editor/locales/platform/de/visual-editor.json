@@ -541,7 +541,7 @@
   "mile_one": "Meile",
   "mile_other": "Meilen",
   "missingCustomEndpointApiKey": "Fügen Sie Ihren benutzerdefinierten Content-Endpunkt-API-Schlüssel hinzu, um diesen Abschnitt anzuzeigen",
-  "missingCustomEndpointName": "Fügen Sie den Namen Ihres benutzerdefinierten Inhaltsendpunkts hinzu, um diesen Abschnitt anzuzeigen",
+  "missingCustomEndpointURL": "Fügen Sie Ihre benutzerdefinierte Content-Endpunkt-URL hinzu, um diesen Abschnitt anzuzeigen",
   "missingHtmlWidget": "HTML hinzufügen, um Komponente anzuzeigen",
   "missingSearchApiKey": "Fügen Sie Ihren Such-API-Schlüssel hinzu, um diesen Abschnitt anzuzeigen",
   "missingSearchExperienceKey": "Fügen Sie Ihren Search Experience-Schlüssel hinzu, um diesen Abschnitt anzuzeigen",

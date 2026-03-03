@@ -546,7 +546,7 @@
   "mile_few": "milje",
   "mile_other": "milja",
   "missingCustomEndpointApiKey": "Dodajte prilagođeni API ključ krajnje točke sadržaja da biste vidjeli ovaj odjeljak",
-  "missingCustomEndpointName": "Dodajte svoj prilagođeni naziv krajnje točke sadržaja da biste vidjeli ovaj odjeljak",
+  "missingCustomEndpointURL": "Dodajte svoj prilagođeni url krajnje točke sadržaja da biste vidjeli ovaj odjeljak",
   "missingHtmlWidget": "Dodajte HTML za pregled komponente",
   "missingSearchApiKey": "Dodajte svoj API ključ pretraživanja da biste vidjeli ovaj odjeljak",
   "missingSearchExperienceKey": "Dodajte svoj ključ iskustva pretraživanja da biste vidjeli ovaj odjeljak",

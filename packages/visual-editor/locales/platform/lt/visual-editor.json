@@ -551,7 +551,7 @@
   "mile_many": "mylios",
   "mile_other": "mylių",
   "missingCustomEndpointApiKey": "Pridėkite tinkintą turinio galutinio taško API raktą, kad peržiūrėtumėte šį skyrių",
-  "missingCustomEndpointName": "Norėdami peržiūrėti šį skyrių, pridėkite pasirinktinį turinio pabaigos taško pavadinimą",
+  "missingCustomEndpointURL": "Pridėkite tinkintą turinio pabaigos taško URL, kad peržiūrėtumėte šį skyrių",
   "missingHtmlWidget": "Pridėkite HTML, kad peržiūrėtumėte komponentą",
   "missingSearchApiKey": "Norėdami peržiūrėti šią skiltį, pridėkite paieškos API raktą",
   "missingSearchExperienceKey": "Norėdami peržiūrėti šią skiltį, pridėkite paieškos patirties raktą",
