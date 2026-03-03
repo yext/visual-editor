@@ -85,18 +85,19 @@ const BodyTextComponent: PuckComponent<BodyTextProps> = (props) => {
       })
     : undefined;
 
-  return resolvedData ? (
+  return React.isValidElement(resolvedData) ||
+    typeof resolvedData === "string" ? (
     <EntityField
       displayName={pt("body", "Body")}
       fieldId={parentData ? parentData.field : data.text.field}
       constantValueEnabled={data.text.constantValueEnabled}
     >
-      {React.isValidElement(resolvedData) ? (
-        resolvedData
-      ) : (
+      {typeof resolvedData === "string" ? (
         <Body variant={styles.variant} color={styles.color}>
           {resolvedData}
         </Body>
+      ) : (
+        resolvedData
       )}
     </EntityField>
   ) : puck.isEditing ? (
