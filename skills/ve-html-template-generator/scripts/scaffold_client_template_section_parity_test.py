@@ -24,7 +24,7 @@ def normalize_import_path(from_file: Path, to_file: Path) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--client-slug", required=True, help="Client slug (example: yeti)")
+    parser.add_argument("--client-slug", required=True, help="Client slug (example: galaxy-grill)")
     parser.add_argument(
         "--html-path",
         required=True,

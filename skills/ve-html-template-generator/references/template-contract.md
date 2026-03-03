@@ -32,7 +32,7 @@ starter/src/templates/<client>/
 - Suffix generated section components with `Section`.
 - Suffix slot components with `Slot`.
 - Keep component names stable after first generation; update implementation instead of renaming unless required.
-- Prefix client-branded header/footer names with client context (`YetiHeaderSection`, `YetiFooterSection`).
+- Prefix client-branded header/footer names with client context (`GalaxyGrillHeaderSection`, `GalaxyGrillFooterSection`).
 
 ## Isolation Rules
 

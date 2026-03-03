@@ -41,7 +41,7 @@ Assume these defaults unless the user explicitly overrides them:
 
 Treat these as the only required user inputs:
 
-- `client`: client slug (example: `yeti`)
+- `client`: client slug (example: `galaxy-grill`)
 - `html`: local HTML file path or URL
 
 If the user provides only `client` and `html`, proceed with all defaults in this skill and do not ask for additional setup questions.
@@ -50,15 +50,15 @@ Example minimal invocation:
 
 ```text
 Use $ve-html-template-generator.
-client: yeti
-html: /path/to/yeti-homepage.html
+client: galaxy-grill
+html: /path/to/galaxy-grill-homepage.html
 ```
 
 ## Collect Inputs
 
 Gather these inputs before coding:
 
-- Client slug (example: `yeti`)
+- Client slug (example: `galaxy-grill`)
 - Source HTML file path (preferred) or page URL
 - Custom implementation root (`packages/visual-editor/src/components/custom/<client>`) unless overridden
 - Starter wrapper root (`starter/src/templates/<client>`) unless overridden
@@ -203,7 +203,7 @@ Required conventions:
 - If a section exposes `styles.textColor`, avoid hardcoded slot text color classes (for example `text-white`) that neutralize that control; use inherited color or slot-level style props.
 - For header/footer slots, avoid hardcoded white/light text and border utility classes (`text-white`, `text-white/..`, `text-neutral-100`, `border-white/...`) that can conflict with section backgrounds; use inherited color or explicit style props.
 - Header/footer section defaults should match source-site chrome (dark or light) and preserve readable contrast in the default state.
-- Header/footer background controls should include source-theme options (for example source brand blue for Yeti-like dark chrome), not only neutral/white options.
+- Header/footer background controls should include source-theme options (for example source brand blue for Galaxy Grill-like dark chrome), not only neutral/white options.
 - When source has stacked store-info content (hours/location/map/parking), preserve source order in section structure. Default to `Hours -> Location -> Map -> Parking` when all four are present.
 - Hero/promo bands should use full-bleed shell wrappers (`className="px-0 md:px-0 py-0 md:py-0"` + `contentClassName="max-w-none"`) only when the source band is edge-to-edge.
 - Hero/promo media slots should not apply rounded corner classes unless the source design explicitly uses rounded media.

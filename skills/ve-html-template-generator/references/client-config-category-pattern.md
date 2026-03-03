@@ -21,28 +21,28 @@ Pattern:
 
 ```tsx
 import {
-  YetiHeaderSection,
-  YetiHeaderSectionProps,
-} from "../custom/yeti/components/YetiHeaderSection.tsx";
+  GalaxyGrillHeaderSection,
+  GalaxyGrillHeaderSectionProps,
+} from "../custom/galaxy-grill/components/GalaxyGrillHeaderSection.tsx";
 
-export interface YetiSectionsCategoryProps {
-  YetiHeaderSection: YetiHeaderSectionProps;
+export interface GalaxyGrillSectionsCategoryProps {
+  GalaxyGrillHeaderSection: GalaxyGrillHeaderSectionProps;
 }
 
-export const YetiSectionsCategoryComponents = {
-  YetiHeaderSection,
+export const GalaxyGrillSectionsCategoryComponents = {
+  GalaxyGrillHeaderSection,
 };
 
-export const YetiSectionsCategory = Object.keys(
-  YetiSectionsCategoryComponents,
-) as (keyof YetiSectionsCategoryProps)[];
+export const GalaxyGrillSectionsCategory = Object.keys(
+  GalaxyGrillSectionsCategoryComponents,
+) as (keyof GalaxyGrillSectionsCategoryProps)[];
 ```
 
 Apply the same shape for slots category files.
 
 Slot registration rule:
 
-- If a section default uses `type: "YetiHoursSlot"`, then `YetiHoursSlot` must be included in `YetiSlotsCategoryComponents`.
+- If a section default uses `type: "GalaxyGrillHoursSlot"`, then `GalaxyGrillHoursSlot` must be included in `GalaxyGrillSlotsCategoryComponents`.
 
 ## Starter Client Config Example
 
@@ -51,30 +51,30 @@ Slot registration rule:
 ```tsx
 import { Config, DropZone } from "@puckeditor/core";
 import {
-  YetiSectionsCategory,
-  YetiSectionsCategoryComponents,
-  YetiSectionsCategoryProps,
-  YetiSlotsCategory,
-  YetiSlotsCategoryComponents,
-  YetiSlotsCategoryProps,
+  GalaxyGrillSectionsCategory,
+  GalaxyGrillSectionsCategoryComponents,
+  GalaxyGrillSectionsCategoryProps,
+  GalaxyGrillSlotsCategory,
+  GalaxyGrillSlotsCategoryComponents,
+  GalaxyGrillSlotsCategoryProps,
 } from "@yext/visual-editor";
 
-export interface YetiTemplateProps
-  extends YetiSectionsCategoryProps,
-    YetiSlotsCategoryProps {}
+export interface GalaxyGrillTemplateProps
+  extends GalaxyGrillSectionsCategoryProps,
+    GalaxyGrillSlotsCategoryProps {}
 
-export const yetiConfig: Config<YetiTemplateProps> = {
+export const galaxyGrillConfig: Config<GalaxyGrillTemplateProps> = {
   components: {
-    ...YetiSectionsCategoryComponents,
-    ...YetiSlotsCategoryComponents,
+    ...GalaxyGrillSectionsCategoryComponents,
+    ...GalaxyGrillSlotsCategoryComponents,
   },
   categories: {
-    yetiSections: {
-      title: "Yeti Sections",
-      components: YetiSectionsCategory,
+    galaxyGrillSections: {
+      title: "Galaxy Grill Sections",
+      components: GalaxyGrillSectionsCategory,
     },
-    yetiSlots: {
-      components: YetiSlotsCategory,
+    galaxyGrillSlots: {
+      components: GalaxyGrillSlotsCategory,
       visible: false,
     },
   },
@@ -111,5 +111,5 @@ Do not add slot categories to visible starter nav categories.
 ## Notes
 
 - Keep category IDs deterministic (`<client>Sections`, `<client>Slots`).
-- Keep section category titles human-readable (`Yeti Sections`).
+- Keep section category titles human-readable (`Galaxy Grill Sections`).
 - Include header and footer sections in the visible section category.

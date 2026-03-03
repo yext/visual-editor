@@ -68,9 +68,9 @@ Each section must define `defaultProps.slots` with client-owned slot types.
 ```tsx
 defaultProps: {
   slots: {
-    HeadingSlot: [{ type: "YetiHeadingSlot", props: { ... } }],
-    BodySlot: [{ type: "YetiBodySlot", props: { ... } }],
-    PrimaryCTASlot: [{ type: "YetiCTASlot", props: { ... } }],
+    HeadingSlot: [{ type: "GalaxyGrillHeadingSlot", props: { ... } }],
+    BodySlot: [{ type: "GalaxyGrillBodySlot", props: { ... } }],
+    PrimaryCTASlot: [{ type: "GalaxyGrillCTASlot", props: { ... } }],
   },
 }
 ```
@@ -108,10 +108,10 @@ styles: {
 Example:
 
 ```tsx
-import { defaultYetiFaqListSlotProps } from "./YetiFaqListSlot";
+import { defaultGalaxyGrillFaqListSlotProps } from "./GalaxyGrillFaqListSlot";
 
 slots: {
-  FaqListSlot: [{ type: "YetiFaqListSlot", props: defaultYetiFaqListSlotProps }],
+  FaqListSlot: [{ type: "GalaxyGrillFaqListSlot", props: defaultGalaxyGrillFaqListSlotProps }],
 }
 ```
 
@@ -122,7 +122,7 @@ When a section includes hours, route through a client slot component and default
 ```tsx
 HoursSlot: [
   {
-    type: "YetiHoursSlot",
+    type: "GalaxyGrillHoursSlot",
     props: {
       data: {
         hours: {

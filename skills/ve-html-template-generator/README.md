@@ -6,15 +6,15 @@ Quick guide for using `ve-html-template-generator`.
 
 Minimum required inputs:
 
-- `client`: client slug (example: `yeti`)
+- `client`: client slug (example: `galaxy-grill`)
 - `html`: local HTML path (preferred) or URL
 
 Minimal prompt:
 
 ```text
 Use $ve-html-template-generator.
-client: yeti
-html: /Users/you/Downloads/yeti-location-source.html
+client: galaxy-grill
+html: /Users/you/Downloads/galaxy-grill-location-source.html
 ```
 
 ## Optional inputs

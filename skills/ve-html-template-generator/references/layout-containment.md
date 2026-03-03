@@ -18,7 +18,7 @@ Use these rules to prevent slot content from spilling into neighboring sections 
 ## Two-Column Details Pattern
 
 ```tsx
-<YetiSection backgroundColor={styles.backgroundColor}>
+<GalaxyGrillSection backgroundColor={styles.backgroundColor}>
   <div className="mx-auto grid w-full max-w-6xl gap-8 overflow-hidden px-6 py-12 lg:grid-cols-2">
     <div
       className="min-w-0 flex flex-col gap-8"
@@ -32,7 +32,7 @@ Use these rules to prevent slot content from spilling into neighboring sections 
       <slots.MapEmbedSlot style={{ height: "auto" }} allow={[]} />
     </div>
   </div>
-</YetiSection>
+</GalaxyGrillSection>
 ```
 
 ## Pre-Ship Checks
@@ -52,7 +52,7 @@ For hero/promo sections that should match full-width source media:
 Example pattern:
 
 ```tsx
-<YetiSectionShell
+<GalaxyGrillSectionShell
   background={styles.backgroundColor}
   className="px-0 md:px-0"
   contentClassName="max-w-none"
@@ -65,5 +65,5 @@ Example pattern:
       </div>
     </div>
   </section>
-</YetiSectionShell>
+</GalaxyGrillSectionShell>
 ```

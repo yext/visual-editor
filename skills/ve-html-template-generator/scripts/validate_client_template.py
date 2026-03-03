@@ -16,8 +16,8 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help=(
             "Path to client slug directory. Prefer starter wrapper path "
-            "(e.g. starter/src/templates/yeti); package custom path "
-            "(packages/visual-editor/src/components/custom/yeti) is also supported."
+            "(e.g. starter/src/templates/galaxy-grill); package custom path "
+            "(packages/visual-editor/src/components/custom/galaxy-grill) is also supported."
         ),
     )
     return parser.parse_args()
