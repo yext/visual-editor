@@ -233,7 +233,7 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
       JSON.stringify(data?.props?.parentData)
     );
 
-    const isVisualAutoEnabled = data.props.styles.enableVisualAutoComplete;
+    const isVisualAutoEnabled = !!data?.props?.styles?.enableVisualAutoComplete;
     setDeep(
       updatedFields,
       "styles.objectFields.visualAutoCompleteVerticalKey.visible",
@@ -245,7 +245,7 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
       isVisualAutoEnabled
     );
     const isShowResultsSection =
-      data.props.parentData?.showSearchResultsSection ?? false;
+      !!data?.props?.parentData?.showSearchResultsSection;
     setDeep(
       updatedFields,
       "styles.objectFields.height.visible",

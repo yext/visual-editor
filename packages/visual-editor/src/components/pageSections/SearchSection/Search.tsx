@@ -199,7 +199,7 @@ export const SearchComponent: ComponentConfig<{
   },
 
   resolveData: (data) => {
-    const show = data.props?.styles?.showSearchResultsSection ?? false;
+    const show = data?.props?.styles?.showSearchResultsSection ?? false;
     let next = setDeep(
       data,
       "props.slots.SearchBarSlot.0.props.parentData.showSearchResultsSection",
