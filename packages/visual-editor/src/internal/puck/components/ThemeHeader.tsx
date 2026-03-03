@@ -249,7 +249,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
           }}
         />
         {!isDevMode && (
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <span
