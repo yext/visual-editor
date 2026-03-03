@@ -22,6 +22,8 @@ import {
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
 const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
+const PREVIEW_DISABLE_POINTER_STYLE_ID = "yext-preview-disable-pointer-events";
+
 const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
@@ -95,7 +97,29 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, []);
 
   useEffect(() => {
-    // Keep theme mode in interactive preview so links/buttons are clickable
+    const puckPreview =
+      document.querySelector<HTMLIFrameElement>("#preview-frame");
+    if (
+      puckPreview?.contentDocument?.head &&
+      !puckPreview?.contentDocument.getElementById(
+        PREVIEW_DISABLE_POINTER_STYLE_ID
+      )
+    ) {
+      // add this style to preview iFrame to prevent clicking or hover effects.
+      const style = puckPreview.contentDocument.createElement("style");
+      style.id = PREVIEW_DISABLE_POINTER_STYLE_ID;
+      style.innerHTML = `
+        * {
+          cursor: default !important;
+          pointer-events: none !important;
+        }
+      `;
+      puckPreview.contentDocument.head.appendChild(style);
+    }
+  }, []);
+
+  useEffect(() => {
+    // Keep theme mode in interactive preview so links/buttons are hoverable
     // and Puck component selection is disabled.
     if (previewMode !== "interactive") {
       const { dispatch } = getPuck();
