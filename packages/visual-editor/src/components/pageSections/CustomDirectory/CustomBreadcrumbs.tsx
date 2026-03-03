@@ -181,8 +181,7 @@ const CustomBreadcrumbsComponent = ({
 
   useEffect(() => {
     fetchBreadcrumbs();
-  }, [streamDocument]);
-
+  }, [fetchBreadcrumbs]);
   if (!fetchedBreadcrumbs?.length) {
     return <PageSection></PageSection>;
   }
@@ -202,11 +201,6 @@ const CustomBreadcrumbsComponent = ({
             ? relativePrefixToRoot + slug
             : slug;
 
-          !isRoot && (
-            <span className="mx-2" aria-hidden>
-              {separator}
-            </span>
-          );
           return (
             <li key={id} className="contents whitespace-normal break-words">
               {!isRoot && (
@@ -216,7 +210,7 @@ const CustomBreadcrumbsComponent = ({
               )}
               <wbr />
               <MaybeLink
-                href={isLast ? "" : href}
+                href={isLast ? undefined : href}
                 eventName={`breadcrumb${index}`}
                 className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
                 alwaysHideCaret

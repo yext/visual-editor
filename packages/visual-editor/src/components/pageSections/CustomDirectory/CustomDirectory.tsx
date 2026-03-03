@@ -79,39 +79,34 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
     return <></>;
   }
 
-  const fetchEntities = useCallback(async (entityIds: string[]) => {
-    if (!entityIds?.length) return;
+  const fetchEntities = useCallback(
+    async (entityIds: string[]) => {
+      if (!entityIds?.length) return;
 
-    setLoading(true);
+      setLoading(true);
 
-    try {
-      const res = await fetchData({
-        endpoint: "https://cdn.yextapis.com/v2/accounts/me/entities",
-        apiKey: apiKey,
-        entityIds: entityIds.join(","),
-      });
+      try {
+        const res = await fetchData({
+          endpoint: "https://cdn.yextapis.com/v2/accounts/me/entities",
+          apiKey: apiKey,
+          entityIds: entityIds.join(","),
+        });
 
-      const fetchedEntities = res?.entities ?? [];
-      setEntities(fetchedEntities);
-    } catch (error) {
-      console.error("Entity fetch error:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        const fetchedEntities = res?.entities ?? [];
+        setEntities(fetchedEntities);
+      } catch (error) {
+        console.error("Entity fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [apiKey]
+  );
 
   useEffect(() => {
     const childIds = streamDocument?.dm_childEntityIds;
     if (childIds?.length) fetchEntities(childIds);
   }, [streamDocument?.dm_childEntityIds, fetchEntities]);
-
-  const handleClick = useCallback(
-    (item: any) => {
-      const childIds = item.dm_childEntityIds;
-      if (childIds?.length) fetchEntities(childIds);
-    },
-    [fetchEntities]
-  );
 
   return (
     <Background background={styles.backgroundColor}>
@@ -127,8 +122,6 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
         >
           <ul className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 w-full">
             {entities.map((item, index) => {
-              const hasChildren = item.dm_childEntityIds?.length > 0;
-
               return (
                 <Background
                   key={item.id ?? item.uid}
@@ -139,19 +132,11 @@ const CustomDirectory: PuckComponent<CustomDirectoryProps> = ({
                     <MaybeLink
                       variant="directoryLink"
                       eventName={`link${index}`}
-                      href={hasChildren ? "#" : `/${item.meta.id}`}
+                      href={`/${item.meta?.id}`}
                       className="text-wrap break-words block w-full flex items-center"
                       disabled={puck.isEditing}
                     >
-                      <div
-                        key={item.meta?.id}
-                        onClick={(e) => {
-                          if (hasChildren) {
-                            e.preventDefault();
-                            handleClick(item);
-                          }
-                        }}
-                      >
+                      <div key={item.meta?.id}>
                         <Body variant="lg">{item.name}</Body>
                       </div>
                     </MaybeLink>
