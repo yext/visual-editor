@@ -787,9 +787,9 @@ If 'true', the component is visible on the live page; if 'false', it's hidden.
 
 #### Other Props
 
-| Prop                       | Type      | Description | Default |
-| :------------------------- | :-------- | :---------- | :------ |
-| `showSearchResultsSection` | `boolean` |             |         |
+| Prop     | Type                                                                        | Description | Default |
+| :------- | :-------------------------------------------------------------------------- | :---------- | :------ |
+| `styles` | `{ showSearchResultsSection: boolean; backgroundColor?: BackgroundStyle; }` |             |         |
 
 ---
 
