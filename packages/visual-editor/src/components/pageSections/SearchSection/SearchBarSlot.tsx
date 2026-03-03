@@ -153,10 +153,10 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
 
 const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
   styles: {
-    showIcon = false,
-    voiceSearch = false,
-    isTypingEffect = false,
-    enableVisualAutoComplete = false,
+    showIcon,
+    voiceSearch,
+    isTypingEffect,
+    enableVisualAutoComplete,
     visualAutoCompleteVerticalKey = "products",
     limit = 3,
     height = "base",
@@ -259,11 +259,6 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
     setDeep(
       updatedFields,
       "styles.objectFields.align.visible",
-      isShowResultsSection
-    );
-    setDeep(
-      updatedFields,
-      "styles.objectFields.rounded.visible",
       isShowResultsSection
     );
 
