@@ -194,12 +194,10 @@ const CustomBreadcrumbsComponent = ({
       aria-label={t("breadcrumb", "Breadcrumb")}
     >
       <ol className="inline p-0 m-0 list-none">
-        {fetchedBreadcrumbs.map(({ name, slug, id }, index) => {
+        {fetchedBreadcrumbs.map(({ name, id }, index) => {
           const isRoot = index === 0;
           const isLast = index === fetchedBreadcrumbs.length - 1;
-          const href = relativePrefixToRoot
-            ? relativePrefixToRoot + slug
-            : slug;
+          const href = relativePrefixToRoot ? relativePrefixToRoot + id : id;
 
           return (
             <li key={id} className="contents whitespace-normal break-words">

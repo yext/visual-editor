@@ -1,5 +1,16 @@
+import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
+
 export type VerticalLayout = "Grid" | "Flex" | "Map";
 export type CardTypeProp = "Standard" | "accordion";
+export type SearchBarHeightProps = "base" | "large" | "extraLarge";
+export type SearchBarWidthProps = "quarter" | "half" | "full";
+export type SearchBarAlignProps = "left" | "center" | "right";
+export type SearchBarRoundedProps =
+  | "none"
+  | "small"
+  | "medium"
+  | "large"
+  | "pill";
 
 export interface VerticalConfigProps {
   label: string;
@@ -30,5 +41,19 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
   },
   styles: {
     enableGenerativeDirectAnswer: false,
+  },
+};
+
+export const defaultSearchData: SearchBarSlotProps = {
+  styles: {
+    showIcon: false,
+    voiceSearch: false,
+    isTypingEffect: false,
+    enableVisualAutoComplete: false,
+    limit: 3,
+    height: "base",
+    width: "full",
+    rounded: "none",
+    align: "left",
   },
 };
