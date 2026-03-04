@@ -4,8 +4,6 @@ import {
   InitialHistory,
   FieldLabel,
   legacySideBarPlugin,
-  createUsePuck,
-  useGetPuck,
 } from "@puckeditor/core";
 import React, { useCallback, useEffect, useRef } from "react";
 import { useState } from "react";
@@ -26,26 +24,6 @@ import { createPreviewFrameLinkBlocker } from "../utils/previewFrameLinkBlocker.
 const devLogger = new DevLogger();
 // Used because we want the sidebar to be hidden
 const legacySidebar = legacySideBarPlugin();
-const usePuck = createUsePuck();
-
-const ThemePreviewModeController = () => {
-  const getPuck = useGetPuck();
-  const previewMode = usePuck((s) => s.appState.ui.previewMode);
-
-  useEffect(() => {
-    // Keep theme mode in interactive preview so links/buttons are hoverable
-    // and Puck component selection is disabled.
-    if (previewMode !== "interactive") {
-      const { dispatch } = getPuck();
-      dispatch({
-        type: "setUi",
-        ui: { previewMode: "interactive" },
-      });
-    }
-  }, [previewMode, getPuck]);
-
-  return null;
-};
 
 type InternalThemeEditorProps = {
   puckConfig: Config;
@@ -209,23 +187,20 @@ export const InternalThemeEditor = ({
         plugins={[legacySidebar]}
         overrides={{
           header: () => (
-            <>
-              <ThemePreviewModeController />
-              <ThemeHeader
-                themeConfig={themeConfig}
-                themeHistories={themeHistories}
-                onPublishTheme={handlePublishTheme}
-                isDevMode={templateMetadata.isDevMode}
-                setThemeHistories={setThemeHistories}
-                clearThemeHistory={clearThemeHistory}
-                puckInitialHistory={puckInitialHistory}
-                clearLocalChangesModalOpen={clearLocalChangesModalOpen}
-                setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
-                totalEntityCount={templateMetadata.totalEntityCount}
-                localDev={localDev}
-                headDeployStatus={templateMetadata.headDeployStatus}
-              />
-            </>
+            <ThemeHeader
+              themeConfig={themeConfig}
+              themeHistories={themeHistories}
+              onPublishTheme={handlePublishTheme}
+              isDevMode={templateMetadata.isDevMode}
+              setThemeHistories={setThemeHistories}
+              clearThemeHistory={clearThemeHistory}
+              puckInitialHistory={puckInitialHistory}
+              clearLocalChangesModalOpen={clearLocalChangesModalOpen}
+              setClearLocalChangesModalOpen={setClearLocalChangesModalOpen}
+              totalEntityCount={templateMetadata.totalEntityCount}
+              localDev={localDev}
+              headDeployStatus={templateMetadata.headDeployStatus}
+            />
           ),
           actionBar: () => <></>,
           drawer: () => <></>,

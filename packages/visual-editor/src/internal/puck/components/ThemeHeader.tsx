@@ -6,7 +6,7 @@ import { ThemeConfig } from "../../../utils/themeResolver.ts";
 import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
-import { InitialHistory, useGetPuck } from "@puckeditor/core";
+import { InitialHistory, createUsePuck, useGetPuck } from "@puckeditor/core";
 import { ThemeData, ThemeHistories } from "../../types/themeData.ts";
 import { RotateCcw, RotateCw } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
@@ -22,6 +22,7 @@ import {
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
 const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
+const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
   onPublishTheme: () => Promise<void>;
@@ -55,6 +56,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   } = props;
 
   const getPuck = useGetPuck();
+  const previewMode = usePuck((s) => s.appState.ui.previewMode);
   useEffect(() => {
     // Initialize Puck history and set preview mode to "interactive" on mount
     const {
@@ -91,6 +93,18 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
       document.getElementById(SIDEBAR_HIDE_STYLE_ID)?.remove();
     };
   }, []);
+
+  useEffect(() => {
+    // Keep theme mode in interactive preview so links/buttons are hoverable
+    // and Puck component selection is disabled.
+    if (previewMode !== "interactive") {
+      const { dispatch } = getPuck();
+      dispatch({
+        type: "setUi",
+        ui: { previewMode: "interactive" },
+      });
+    }
+  }, [previewMode, getPuck]);
 
   const canUndo = (): boolean => {
     if (!themeHistories) {
