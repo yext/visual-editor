@@ -21,11 +21,14 @@ export const buildVerticalConfigMap = (
   return verticals.reduce(
     (acc, v) => {
       if (!v.verticalKey) return acc;
+
       const layoutType = v.layout ?? "Flex";
       const cardType = v.cardType ?? "Standard";
+
       acc[v.verticalKey] = {
         label: v.label,
         viewAllButton: true,
+
         SectionComponent: (props) => (
           <LayoutSection
             resultsCount={v.universalLimit ?? 4}
@@ -33,10 +36,17 @@ export const buildVerticalConfigMap = (
             layoutType={layoutType}
           />
         ),
+
         CardComponent: (props) => (
-          <Cards {...props} cardType={cardType} layout={layoutType} />
+          <Cards
+            {...props}
+            cardType={cardType}
+            layout={layoutType}
+            index={props.result.index}
+          />
         ),
       };
+
       return acc;
     },
     {} as VerticalConfigMap<Record<string, DefaultRawDataType>>

@@ -5,22 +5,38 @@ import {
   MapboxMap,
   PinComponent,
 } from "@yext/search-ui-react";
-import { MapPin } from "lucide-react";
 import "mapbox-gl/dist/mapbox-gl.css";
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { StreamDocument } from "../../../utils/index.ts";
 import { Body } from "../../atoms/body.tsx";
-import { useTranslation } from "react-i18next";
+import { MapPinIcon } from "../../MapPinIcon.tsx";
 
 interface MapComponentProps {
   isUniversal?: boolean;
   results?: any[];
 }
 
-const LocatorPin: PinComponent<DefaultRawDataType> = ({ selected }) => {
-  const size = selected ? 42 : 30;
-  const color = selected ? "#0f766e" : "#134e4a";
-  return <MapPin width={size} height={size} fill={color} color={color} />;
+const LocatorPin: PinComponent<DefaultRawDataType> = (props) => {
+  const { result } = props;
+
+  const { width, height, color } = React.useMemo(() => {
+    return {
+      height: "41px",
+      width: "27px",
+      color: "text-palette-primary-dark",
+    };
+  }, []);
+
+  return (
+    <MapPinIcon
+      height={height}
+      width={width}
+      color={color}
+      resultIndex={result.index}
+    />
+  );
 };
 
 export const MapComponent = ({
@@ -93,8 +109,17 @@ export const MapComponent = ({
           if (!coord) return null;
 
           return (
-            <Marker key={result.id ?? index} coordinate={coord} id={index + ""}>
-              <MapPin width={40} height={40} fill="#0f766e" color="#0f766e" />
+            <Marker
+              key={result.id ?? index}
+              coordinate={coord}
+              id={String(index)}
+            >
+              <MapPinIcon
+                height="41px"
+                width="27px"
+                color="text-palette-primary-dark"
+                resultIndex={index}
+              />
             </Marker>
           );
         })}
