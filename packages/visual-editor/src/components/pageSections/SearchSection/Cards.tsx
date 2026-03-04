@@ -34,14 +34,20 @@ const Cards = ({
     result.rawData.description;
 
   let content;
+  const unitLabel = "mi"; // Abbreviations do not need translation
 
   if (layout === "Map") {
+    const displayDistance =
+      typeof result.distance === "number"
+        ? `${result.distance} ${unitLabel}`
+        : undefined;
+
     content = (
       <div className="flex flex-col w-full">
         <div className="flex justify-between">
           <h3 className="text-xl font-semibold">{name}</h3>
-          {result.distance && (
-            <div className="font-light">{result.distance} mi</div>
+          {displayDistance && (
+            <div className="font-light">{displayDistance} </div>
           )}
         </div>
         <div
