@@ -175,78 +175,93 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
+      locationStyles: [
+        {
+          entityType: "location",
+          pinIcon: {
+            type: "none",
+          },
+          pinColor: backgroundColors.background6.value,
+        },
+      ],
       filters: {
         openNowButton: true,
         showDistanceOptions: true,
       },
-      resultCard: {
-        primaryHeading: {
-          field: "name",
-          constantValue: { en: "", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
-          headingLevel: 5,
-        },
-        secondaryHeading: {
-          field: "name",
-          constantValue: { en: "", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
-          variant: "base",
-          liveVisibility: false,
-        },
-        tertiaryHeading: {
-          field: "name",
-          constantValue: { en: "", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
-          variant: "base",
-          liveVisibility: false,
-        },
-        icons: true,
-        hours: {
-          table: {
-            startOfWeek: "monday",
-            collapseDays: true,
-            showAdditionalHoursText: false,
+      resultCard: [
+        {
+          props: {
+            entityType: "location",
+            primaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              headingLevel: 5,
+            },
+            secondaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            tertiaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            icons: true,
+            hours: {
+              table: {
+                startOfWeek: "monday",
+                collapseDays: true,
+                showAdditionalHoursText: false,
+              },
+              liveVisibility: true,
+            },
+            address: {
+              showGetDirectionsLink: true,
+              liveVisibility: true,
+            },
+            phone: {
+              field: "mainPhone",
+              phoneFormat: "domestic",
+              includePhoneHyperlink: true,
+              liveVisibility: false,
+            },
+            email: {
+              field: "emails",
+              liveVisibility: false,
+            },
+            services: {
+              field: "services",
+              liveVisibility: false,
+            },
+            primaryCTA: {
+              label: "Visit Page",
+              variant: "primary",
+              liveVisibility: true,
+            },
+            secondaryCTA: {
+              label: "Call to Action",
+              link: "https://www.yext.com",
+              variant: "secondary",
+              liveVisibility: true,
+            },
+            image: {
+              field: "headshot",
+              constantValue: {
+                en: { url: "", height: 0, width: 0 },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: false,
+              liveVisibility: false,
+            },
           },
-          liveVisibility: true,
         },
-        address: {
-          showGetDirectionsLink: true,
-          liveVisibility: true,
-        },
-        phone: {
-          field: "mainPhone",
-          phoneFormat: "domestic",
-          includePhoneHyperlink: true,
-          liveVisibility: false,
-        },
-        email: {
-          field: "emails",
-          liveVisibility: false,
-        },
-        services: {
-          field: "services",
-          liveVisibility: false,
-        },
-        primaryCTA: {
-          variant: "primary",
-          liveVisibility: true,
-        },
-        secondaryCTA: {
-          label: "Call to Action",
-          link: "https://www.yext.com",
-          variant: "secondary",
-          liveVisibility: true,
-        },
-        image: {
-          field: "headshot",
-          constantValue: {
-            en: { url: "", height: 0, width: 0 },
-            hasLocalizedValue: "true",
-          },
-          constantValueEnabled: false,
-          liveVisibility: false,
-        },
-      },
+      ],
     },
     version: migrationRegistry.length,
   },
