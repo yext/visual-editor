@@ -71,10 +71,12 @@ const searchFields: Fields<SearchComponentProps> = {
 };
 
 const SearchWrapper: PuckComponent<SearchComponentProps> = ({
-  styles: { showSearchResultsSection, backgroundColor },
+  styles,
   slots,
   puck,
 }) => {
+  const showSearchResultsSection = styles?.showSearchResultsSection ?? false;
+  const backgroundColor = styles?.backgroundColor;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY || "";
   const experienceKey =

@@ -12,21 +12,25 @@ import { HoursStatusAtom } from "../../atoms/hoursStatus.tsx";
 import { MaybeRTF } from "../../atoms/maybeRTF.tsx";
 import { PhoneAtom } from "../../atoms/phone.tsx";
 import { CardTypeProp, VerticalLayout } from "./defaultPropsAndTypes.ts";
+import { Background } from "../../atoms/background.tsx";
+import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
 
 interface CardsProps extends CardProps<any> {
   cardType?: CardTypeProp;
   layout?: VerticalLayout;
   isVertical?: boolean;
+  index?: number;
 }
 const Cards = ({
   result,
   cardType = "Standard",
   layout,
   isVertical = false,
+  index = 0,
 }: CardsProps) => {
   const name = result.rawData.question || result.rawData.name;
   const { t } = useTranslation();
-
+  const nIndex = result.index ?? index;
   const description =
     result.rawData.answerV2 ||
     result.rawData.richTextDescriptionV2 ||
@@ -34,7 +38,7 @@ const Cards = ({
     result.rawData.description;
 
   let content;
-  const unitLabel = "mi"; // Abbreviations do not need translation
+  const unitLabel = "mi";
 
   if (layout === "Map") {
     const displayDistance =
@@ -45,7 +49,15 @@ const Cards = ({
     content = (
       <div className="flex flex-col w-full">
         <div className="flex justify-between">
-          <h3 className="text-xl font-semibold">{name}</h3>
+          <div className="flex items-center gap-2">
+            <Background
+              background={backgroundColors.background6.value}
+              className="flex-shrink-0 w-6 h-6 rounded-full font-bold hidden md:flex items-center justify-center text-body-sm-fontSize"
+            >
+              {nIndex}
+            </Background>
+            <h3 className="text-xl font-semibold">{name}</h3>
+          </div>
           {displayDistance && (
             <div className="font-light">{displayDistance} </div>
           )}
@@ -138,11 +150,6 @@ const Cards = ({
   }
 
   return (
-    // <div
-    //   className={`flex items-center w-full ${
-    //     cardType === "Standard" ? "px-5 py-2.5" : ""
-    //   }`}
-    // >
     <div className={`flex items-center w-full px-5 py-2.5`}>{content}</div>
   );
 };
