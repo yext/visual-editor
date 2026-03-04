@@ -244,7 +244,7 @@ export function getDisplayValue(
     return richTextToString(localizedValue);
   }
 
-  return localizedValue;
+  return localizedValue ?? "";
 }
 
 function richTextToString(rtf: RichText): string {

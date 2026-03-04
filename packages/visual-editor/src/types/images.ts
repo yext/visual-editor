@@ -65,8 +65,39 @@ export type AssetImageType = Omit<ImageType, "alternateText"> & {
 export type LocalizedAssetImage = {
   hasLocalizedValue?: "true";
   defaultValue?: AssetImageType;
-} & {
-  [key: string]: AssetImageType | undefined;
 };
 
 export type TranslatableAssetImage = AssetImageType | LocalizedAssetImage;
+
+export const isLocalizedAssetImage = (
+  value: unknown
+): value is LocalizedAssetImage => {
+  return (
+    !!value &&
+    typeof value === "object" &&
+    !("url" in value) &&
+    ("hasLocalizedValue" in value || "defaultValue" in value)
+  );
+};
+
+export const resolveLocalizedAssetImage = (
+  value: TranslatableAssetImage | ImageType | undefined,
+  locale: string
+): AssetImageType | undefined => {
+  if (!value) {
+    return undefined;
+  }
+
+  if (isLocalizedAssetImage(value)) {
+    return (
+      (value as Record<string, AssetImageType | undefined>)[locale] ??
+      value.defaultValue
+    );
+  }
+
+  if ("url" in value) {
+    return value;
+  }
+
+  return undefined;
+};

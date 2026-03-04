@@ -1,7 +1,12 @@
 import * as React from "react";
 import { ComponentConfig, PuckComponent } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
-import { AssetImageType, TranslatableAssetImage } from "../../types/images.ts";
+import {
+  AssetImageType,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+  TranslatableAssetImage,
+} from "../../types/images.ts";
 import { msg } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
@@ -43,8 +48,8 @@ const FooterLogoSlotInternal: PuckComponent<FooterLogoSlotProps> = (props) => {
   const simplifiedImage: ImageType | AssetImageType | undefined =
     resolvedImage && "image" in resolvedImage
       ? resolvedImage.image
-      : resolvedImage && "hasLocalizedValue" in resolvedImage
-        ? resolvedImage[i18n.language]
+      : resolvedImage && isLocalizedAssetImage(resolvedImage)
+        ? resolveLocalizedAssetImage(resolvedImage, i18n.language)
         : resolvedImage;
 
   const imageUrl = getImageUrl(simplifiedImage, i18n.language);

@@ -7,6 +7,8 @@ import {
 import { ComplexImageType, ImageType } from "@yext/pages-components";
 import {
   AssetImageType,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
 import { EntityField } from "../../../editor/EntityField.tsx";
@@ -106,12 +108,8 @@ export const getImageUrl = (
     return undefined;
   }
 
-  if ("hasLocalizedValue" in image) {
-    const localized = image[locale];
-    if (localized && typeof localized === "object") {
-      return localized.url;
-    }
-    return undefined;
+  if (isLocalizedAssetImage(image)) {
+    return resolveLocalizedAssetImage(image, locale)?.url;
   }
 
   if ("image" in image) {
