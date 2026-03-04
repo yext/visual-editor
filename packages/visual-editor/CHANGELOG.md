@@ -1,3 +1,9 @@
+#### 1.1.0-alpha.5 (2026-02-25)
+
+##### Bug Fixes
+
+- dm display field name ([#1062](https://github.com/yext/visual-editor/pull/1062)) ([223b6034](https://github.com/yext/visual-editor/commit/223b6034fbbb1408353c1e4a4a812f73de66ded4))
+
 #### 1.1.0-alpha.4 (2026-02-25)
 
 ##### New Features

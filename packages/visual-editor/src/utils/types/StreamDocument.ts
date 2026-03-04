@@ -30,3 +30,25 @@ export type PathInfoShape = {
   sourceEntityPageSetTemplate?: string;
   [key: string]: any; // allow any other fields
 };
+
+export type LocatorConfig = {
+  source?: string;
+  experienceKey?: string;
+  entityType?: string; // deprecated
+  savedFilter?: string; // deprecated
+  entityTypeScopes?: EntityTypeScope[];
+  [key: string]: any; // allow any other fields
+};
+
+export type EntityTypeScope = {
+  entityType?: string;
+  savedFilter?: string;
+};
+
+export type LocatorSourcePageSetInfo = {
+  pathInfo?: PathInfoShape;
+  entityType?: string;
+  savedFilter?: string;
+  internalSavedFilterId?: number;
+  [key: string]: any;
+};

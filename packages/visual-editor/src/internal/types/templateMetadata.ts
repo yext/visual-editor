@@ -1,6 +1,8 @@
 import { FontRegistry } from "../../utils/fonts/visualEditorFonts.ts";
 import DOMPurify from "dompurify";
 
+export type HeadDeployStatus = "RUNNING" | "INACTIVE" | "FAILED" | "ACTIVE";
+
 export type TemplateMetadata = {
   siteId: number;
   templateId: string;
@@ -18,9 +20,9 @@ export type TemplateMetadata = {
   platformLocale?: string;
   locales: string[];
   layoutTaskApprovals: boolean;
-  deploymentInProgress: boolean;
   locatorDisplayFields?: Record<string, FieldTypeData>;
   customFonts?: FontRegistry;
+  headDeployStatus: HeadDeployStatus;
 };
 
 export type FieldTypeData = {
@@ -48,7 +50,7 @@ export function generateTemplateMetadata(): TemplateMetadata {
     platformLocale: "en",
     locales: ["en", "es", "fr"],
     layoutTaskApprovals: false,
-    deploymentInProgress: false,
+    headDeployStatus: "ACTIVE",
     locatorDisplayFields: {
       name: {
         field_id: "name",

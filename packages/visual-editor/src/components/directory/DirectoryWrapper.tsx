@@ -11,7 +11,10 @@ import { MaybeLink } from "../atoms/maybeLink.tsx";
 import { msg } from "../../utils/i18n/platform.ts";
 import { PageSection } from "../atoms/pageSection.tsx";
 import { CardContextProvider } from "../../hooks/useCardContext.tsx";
-import { sortAlphabetically } from "../../utils/directory/utils.ts";
+import {
+  isDirectoryGrid,
+  sortAlphabetically,
+} from "../../utils/directory/utils.ts";
 import { defaultDirectoryCardSlotData } from "./DirectoryCard.tsx";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 import { resolveDirectoryListChildren } from "../../utils/urls/resolveDirectoryListChildren.ts";
@@ -28,7 +31,18 @@ export const DirectoryList = ({
   relativePrefixToRoot,
 }: {
   streamDocument: StreamDocument;
-  directoryChildren: any[];
+  directoryChildren: {
+    id: string;
+    name: string;
+    slug: string;
+    meta?: {
+      entityType?: {
+        id: "dm_country" | "dm_region" | "dm_city";
+      };
+    };
+    dm_addressCountryDisplayName?: string;
+    dm_addressRegionDisplayName?: string;
+  }[];
   relativePrefixToRoot: string;
 }) => {
   const sortedDirectoryChildren = sortAlphabetically(directoryChildren, "name");
@@ -44,10 +58,10 @@ export const DirectoryList = ({
           let label;
           switch (child?.meta?.entityType?.id) {
             case "dm_country":
-              label = child.c_addressCountryDisplayName ?? child.name;
+              label = child.dm_addressCountryDisplayName ?? child.name;
               break;
             case "dm_region":
-              label = child.c_addressRegionDisplayName ?? child.name;
+              label = child.dm_addressRegionDisplayName ?? child.name;
               break;
             case "dm_city":
               label = child.name;
@@ -120,7 +134,10 @@ export const DirectoryGrid: ComponentConfig<{
   resolveData: (data, params) => {
     const streamDocument = params.metadata.streamDocument;
 
-    if (!streamDocument?.dm_directoryChildren) {
+    if (
+      !streamDocument?.dm_directoryChildren ||
+      !isDirectoryGrid(streamDocument.dm_directoryChildren)
+    ) {
       return data;
     }
 

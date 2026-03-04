@@ -210,7 +210,25 @@ const ResultCardPropsField = ({
   );
 };
 
-function getFacetFieldOptions(entityType: EntityType): DynamicOption<string>[] {
+function getFacetFieldOptions(
+  entityTypes: EntityType[]
+): DynamicOption<string>[] {
+  const facetFields: DynamicOption<string>[] = [];
+  const addedValues: Set<string> = new Set<string>();
+  entityTypes.forEach((entityType) =>
+    getFacetFieldOptionsForEntityType(entityType).forEach((option) => {
+      if (option?.value && !addedValues.has(option.value)) {
+        facetFields.push(option);
+        addedValues.add(option.value);
+      }
+    })
+  );
+  return facetFields.sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function getFacetFieldOptionsForEntityType(
+  entityType: EntityType
+): DynamicOption<string>[] {
   let filterOptions: DynamicOption<string>[] = [];
   switch (entityType) {
     case "location":
@@ -528,7 +546,7 @@ function getFacetFieldOptions(entityType: EntityType): DynamicOption<string>[] {
     default:
       filterOptions = [];
   }
-  return filterOptions.sort((a, b) => a.label.localeCompare(b.label));
+  return filterOptions;
 }
 
 export interface LocatorProps {
@@ -739,10 +757,9 @@ const locatorFields: Fields<LocatorProps> = {
           dropdownLabel: msg("fields.field", "Field"),
           getOptions: () => {
             const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
-            const entityTypes = Object.keys(
-              entityTypeSourceMap
-            ) as (keyof typeof entityTypeSourceMap)[];
-            return getFacetFieldOptions(entityTypes[0] ?? DEFAULT_ENTITY_TYPE);
+            const entityTypes =
+              Object.keys(entityTypeSourceMap).filter(isEntityType);
+            return getFacetFieldOptions(entityTypes);
           },
           placeholderOptionLabel: msg(
             "fields.options.selectAField",
@@ -989,9 +1006,7 @@ const LocatorInternal = ({
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
-  const entityTypes = Object.keys(
-    entityTypeSourceMap
-  ) as (keyof typeof entityTypeSourceMap)[];
+  const entityTypes = Object.keys(entityTypeSourceMap).filter(isEntityType);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1587,7 +1602,7 @@ const LocatorInternal = ({
             searchFields={[
               {
                 fieldApiName: LOCATION_FIELD,
-                entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
+                entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE, // only use a single entity type to avoid duplicate results
               },
             ]}
             onSelect={(params) => handleFilterSelect(params)}
