@@ -267,12 +267,25 @@ describe("resolveComponentData", () => {
       expect(resolveComponentData(data, "fr")).toBe("");
     });
 
+    it("falls back to defaultValue when locale is missing from a TranslatableString", () => {
+      const data: TranslatableString = { defaultValue: "Hi" };
+      expect(resolveComponentData(data, "fr", mockDocument)).toBe("Hi");
+    });
+
     it("returns an empty string if the locale is missing from a TranslatableRichText", () => {
       const data: TranslatableRichText = {
         hasLocalizedValue: "true",
         en: { html: "Hi" },
       };
       expect(resolveComponentData(data, "fr", mockDocument)).toBe("");
+    });
+
+    it("falls back to defaultValue when locale is missing from a TranslatableRichText", () => {
+      const data: TranslatableRichText = {
+        defaultValue: { html: "<p>Hi</p>" },
+      };
+      const result = resolveComponentData(data, "fr", mockDocument);
+      expect(React.isValidElement(result)).toBe(true);
     });
 
     it("handles a null value from the document gracefully", () => {

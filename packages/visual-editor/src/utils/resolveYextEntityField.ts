@@ -110,34 +110,46 @@ export const resolveEmbeddedFieldsRecursively = (
   }
 
   // First, check if the object itself is a translatable shape that needs resolution.
-  if (data.hasLocalizedValue === "true") {
-    if (locale && data[locale]) {
+  if (data.hasLocalizedValue === "true" || "defaultValue" in data) {
+    if (locale) {
+      const localizedValue = data[locale] ?? data.defaultValue;
       // Handle TranslatableString
-      if (typeof data[locale] === "string") {
+      if (typeof localizedValue === "string") {
         const resolvedString = resolveEmbeddedFieldsInString(
-          data[locale],
+          localizedValue,
           streamDocument,
           locale
         );
+        if ("defaultValue" in data && data.defaultValue === localizedValue) {
+          return { ...data, defaultValue: resolvedString };
+        }
         return { ...data, [locale]: resolvedString };
       }
 
       // Handle TranslatableRichText
       if (
-        typeof data[locale] === "object" &&
-        data[locale] !== null &&
-        typeof data[locale].html === "string"
+        typeof localizedValue === "object" &&
+        localizedValue !== null &&
+        typeof localizedValue.html === "string"
       ) {
         const resolvedHtml = resolveEmbeddedFieldsInString(
-          data[locale].html,
+          localizedValue.html,
           streamDocument,
           locale
         );
+        if ("defaultValue" in data && data.defaultValue === localizedValue) {
+          return {
+            ...data,
+            defaultValue: { ...localizedValue, html: resolvedHtml },
+          };
+        }
         return {
           ...data,
-          [locale]: { ...data[locale], html: resolvedHtml },
+          [locale]: { ...localizedValue, html: resolvedHtml },
         };
       }
+
+      return "";
     } else {
       // If it's a translatable string but missing the locale,
       // we return an empty string.

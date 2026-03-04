@@ -150,4 +150,20 @@ describe("getLocalizedPlainText", () => {
 
     expect(getLocalizedPlainText(value, "de")).toBe("");
   });
+
+  it("falls back to defaultValue when locale is missing", () => {
+    const value: TranslatableString = {
+      defaultValue: "Hello",
+    };
+
+    expect(getLocalizedPlainText(value, "de")).toBe("Hello");
+  });
+
+  it("falls back to rich text defaultValue when locale is missing", () => {
+    const value: TranslatableRichText = {
+      defaultValue: { html: "<p>Hello <strong>there</strong></p>" },
+    };
+
+    expect(getLocalizedPlainText(value, "de")).toBe("Hello there");
+  });
 });

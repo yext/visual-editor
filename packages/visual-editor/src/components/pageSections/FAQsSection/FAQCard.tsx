@@ -26,15 +26,11 @@ import { useGetCardSlots } from "../../../hooks/useGetCardSlots.tsx";
 import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
 
 const defaultFAQ = {
-  question: {
-    en: "Question Lorem ipsum dolor sit amet?",
-    hasLocalizedValue: "true",
-  },
+  question: { defaultValue: "Question Lorem ipsum dolor sit amet?" },
   answer: {
-    en: getDefaultRTF(
+    defaultValue: getDefaultRTF(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     ),
-    hasLocalizedValue: "true",
   },
 } satisfies FAQStruct;
 

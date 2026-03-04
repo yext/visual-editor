@@ -215,4 +215,21 @@ describe("resolveYextEntityField with embedded fields", () => {
       }
     );
   });
+
+  it("resolves embedded fields in defaultValue when locale key is missing", () => {
+    assert.deepEqual(
+      resolveYextEntityField(
+        document,
+        {
+          field: "",
+          constantValue: {
+            defaultValue: "Welcome to [[name]]!",
+          },
+          constantValueEnabled: true,
+        },
+        "fr"
+      ),
+      { defaultValue: "Welcome to Yext!" }
+    );
+  });
 });

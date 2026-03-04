@@ -148,18 +148,23 @@ const resolveTranslatableType = (
     return toStringOrElement(value);
   }
 
-  // Handle TranslatableString
-  if (value.hasLocalizedValue === "true" && typeof value[locale] === "string") {
-    return value[locale];
+  const localizedValue = value[locale] ?? value.defaultValue;
+
+  // Handle TranslatableString with locale/default fallback
+  if (typeof localizedValue === "string") {
+    return localizedValue;
   }
 
-  // Handle TranslatableRichText
-  if (value.hasLocalizedValue === "true" && isRichText(value[locale])) {
-    return toStringOrElement(value[locale]);
+  // Handle TranslatableRichText with locale/default fallback
+  if (isRichText(localizedValue)) {
+    return toStringOrElement(localizedValue);
   }
 
-  // Handle missing translation
-  if (value.hasLocalizedValue === "true" && !value[locale]) {
+  // Handle missing translation/default
+  if (
+    value.hasLocalizedValue === "true" ||
+    (typeof value === "object" && value !== null && "defaultValue" in value)
+  ) {
     return "";
   }
 
@@ -199,14 +204,15 @@ const resolveTranslatableTypeToPlainText = (
     return richTextToPlainText(value);
   }
 
-  if (
-    value.hasLocalizedValue === "true" &&
-    (typeof value[locale] === "string" || isRichText(value[locale]))
-  ) {
+  const localizedValue = value[locale] ?? value.defaultValue;
+  if (typeof localizedValue === "string" || isRichText(localizedValue)) {
     return getLocalizedPlainText(value, locale);
   }
 
-  if (value.hasLocalizedValue === "true" && !value[locale]) {
+  if (
+    value.hasLocalizedValue === "true" ||
+    (typeof value === "object" && value !== null && "defaultValue" in value)
+  ) {
     return "";
   }
 
@@ -231,7 +237,8 @@ export function getDisplayValue(
     return richTextToString(translatableText);
   }
 
-  const localizedValue = translatableText[locale];
+  const localizedValue =
+    translatableText[locale] ?? translatableText.defaultValue;
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);
