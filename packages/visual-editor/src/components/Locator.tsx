@@ -690,23 +690,29 @@ const locatorFields: Fields<LocatorProps> = {
       }),
     },
   }),
-  distanceDisplay: BasicSelector<LocatorProps["distanceDisplay"]>({
-    label: msg("fields.distanceDisplay", "Distance Display"),
-    options: [
-      {
-        label: msg("fields.options.distanceFromUser", "Distance from User"),
-        value: "distanceFromUser",
-      },
-      {
-        label: msg("fields.options.distanceFromSearch", "Distance from Search"),
-        value: "distanceFromSearch",
-      },
-      {
-        label: msg("fields.options.hidden", "Hidden"),
-        value: "hidden",
-      },
-    ],
-  }),
+  distanceDisplay: YextField(
+    msg("fields.distanceDisplay", "Distance Display"),
+    {
+      type: "select",
+      options: [
+        {
+          label: msg("fields.options.distanceFromUser", "Distance from User"),
+          value: "distanceFromUser",
+        },
+        {
+          label: msg(
+            "fields.options.distanceFromSearch",
+            "Distance from Search"
+          ),
+          value: "distanceFromSearch",
+        },
+        {
+          label: msg("fields.options.hidden", "Hidden"),
+          value: "hidden",
+        },
+      ],
+    }
+  ),
   resultCard: LocatorResultCardFields,
 };
 
