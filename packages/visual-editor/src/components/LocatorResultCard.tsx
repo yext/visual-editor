@@ -16,7 +16,7 @@ import { Body, BodyProps } from "./atoms/body.tsx";
 import { CTA, CTAVariant } from "./atoms/cta.tsx";
 import { Heading } from "./atoms/heading.tsx";
 import { Image } from "./atoms/image.tsx";
-import { msg, pt } from "../utils/i18n/platform.ts";
+import { msg, MsgString, pt } from "../utils/i18n/platform.ts";
 import { PhoneAtom } from "./atoms/phone.tsx";
 import { useDocument, useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
@@ -311,7 +311,7 @@ const getDisplayFieldOptions = (
     });
 };
 
-const useLocatorConfig = () => {
+const getLocatorConfig = () => {
   const streamDocument = useDocument();
   let pageSet: any;
   try {
@@ -329,12 +329,12 @@ const useLocatorConfig = () => {
 const PrimaryCtaDestinationField = (): Field<PrimaryCtaDestinationOption> => ({
   type: "custom",
   render: ({ value, onChange }) => {
-    const locatorConfig = useLocatorConfig();
+    const locatorConfig = getLocatorConfig();
     const showDestinationSelector =
       locatorConfig?.sources?.length > 0 || !!locatorConfig?.source;
     const destinationField = React.useMemo(
       () =>
-        YextField(msg("", ""), {
+        YextField("" as MsgString, {
           type: "radio",
           options: [
             {
