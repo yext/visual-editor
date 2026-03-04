@@ -3,7 +3,10 @@ import React, { useEffect } from "react";
 import { Button } from "../ui/button.tsx";
 import "../../../editor/index.css";
 import { ThemeConfig } from "../../../utils/themeResolver.ts";
-import { updateThemeInEditor } from "../../../utils/applyTheme.ts";
+import {
+  PUCK_PREVIEW_IFRAME_ID,
+  updateThemeInEditor,
+} from "../../../utils/applyTheme.ts";
 import { UIButtonsToggle } from "../ui/UIButtonsToggle.tsx";
 import { ClearLocalChangesButton } from "../ui/ClearLocalChangesButton.tsx";
 import { InitialHistory, createUsePuck, useGetPuck } from "@puckeditor/core";
@@ -22,8 +25,6 @@ import {
 import { getPublishTooltipMessageFromHeadDeployStatus } from "../../utils/getPublishTooltipMessageFromHeadDeployStatus.ts";
 
 const SIDEBAR_HIDE_STYLE_ID = "yext-theme-hide-sidebar-breadcrumbs";
-const PREVIEW_DISABLE_POINTER_STYLE_ID = "yext-preview-disable-pointer-events";
-
 const usePuck = createUsePuck();
 
 type ThemeHeaderProps = {
@@ -61,6 +62,7 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   const previewMode = usePuck((s) => s.appState.ui.previewMode);
 
   useEffect(() => {
+    // Initialize Puck history and set preview mode to "interactive" on mount
     const {
       dispatch,
       history: { setHistories },
@@ -97,38 +99,178 @@ export const ThemeHeader = (props: ThemeHeaderProps) => {
   }, []);
 
   useEffect(() => {
-    const applyPointerBlock = () => {
-      const puckPreview =
-        document.querySelector<HTMLIFrameElement>("#preview-frame");
-      if (
-        !puckPreview?.contentDocument?.head ||
-        puckPreview.contentDocument.getElementById(
-          PREVIEW_DISABLE_POINTER_STYLE_ID
-        )
-      ) {
+    // Prevent user from clicking links, but allow hover/focus
+    let detachLinkNavigationBlock: (() => void) | undefined;
+    let activeFrame: HTMLIFrameElement | null = null;
+
+    const attachLinkNavigationBlock = (previewDocument: Document) => {
+      const previewWindow = previewDocument.defaultView;
+
+      const isLinkLikeTarget = (event: Event) => {
+        const targetElement = event.target;
+        if (!(targetElement instanceof Element)) {
+          return false;
+        }
+
+        return !!targetElement.closest("a, area, [role='link']");
+      };
+
+      const preventLinkNavigation = (event: Event) => {
+        if (!isLinkLikeTarget(event)) {
+          return;
+        }
+
+        if (event instanceof KeyboardEvent) {
+          if (event.key !== "Enter" && event.key !== " ") {
+            return;
+          }
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+      };
+
+      const disableAnchorNavigationAttributes = () => {
+        previewDocument
+          .querySelectorAll("a[href], area[href]")
+          .forEach((el) => {
+            if (!el.hasAttribute("data-ve-original-href")) {
+              el.setAttribute(
+                "data-ve-original-href",
+                el.getAttribute("href") ?? ""
+              );
+            }
+
+            el.removeAttribute("href");
+
+            if (el.hasAttribute("target")) {
+              el.setAttribute(
+                "data-ve-original-target",
+                el.getAttribute("target") ?? ""
+              );
+              el.removeAttribute("target");
+            }
+          });
+      };
+
+      disableAnchorNavigationAttributes();
+      const anchorObserver = new MutationObserver(() => {
+        disableAnchorNavigationAttributes();
+      });
+      anchorObserver.observe(previewDocument.documentElement, {
+        childList: true,
+        subtree: true,
+      });
+
+      const eventTypes = [
+        "click",
+        "auxclick",
+        "mousedown",
+        "mouseup",
+        "pointerdown",
+        "pointerup",
+        "touchstart",
+        "keydown",
+      ] as const;
+
+      eventTypes.forEach((eventType) => {
+        previewDocument.addEventListener(
+          eventType,
+          preventLinkNavigation,
+          true
+        );
+        previewWindow?.addEventListener(eventType, preventLinkNavigation, true);
+      });
+
+      return () => {
+        anchorObserver.disconnect();
+
+        previewDocument
+          .querySelectorAll(
+            "a[data-ve-original-href], area[data-ve-original-href]"
+          )
+          .forEach((el) => {
+            const originalHref = el.getAttribute("data-ve-original-href");
+            if (originalHref !== null) {
+              el.setAttribute("href", originalHref);
+            }
+            el.removeAttribute("data-ve-original-href");
+
+            if (el.hasAttribute("data-ve-original-target")) {
+              const originalTarget = el.getAttribute("data-ve-original-target");
+              if (originalTarget !== null) {
+                el.setAttribute("target", originalTarget);
+              }
+              el.removeAttribute("data-ve-original-target");
+            }
+          });
+
+        eventTypes.forEach((eventType) => {
+          previewDocument.removeEventListener(
+            eventType,
+            preventLinkNavigation,
+            true
+          );
+          previewWindow?.removeEventListener(
+            eventType,
+            preventLinkNavigation,
+            true
+          );
+        });
+      };
+    };
+
+    const attachToPreviewFrame = (frame: HTMLIFrameElement) => {
+      if (activeFrame === frame) {
         return;
       }
 
-      const style = puckPreview.contentDocument.createElement("style");
-      style.id = PREVIEW_DISABLE_POINTER_STYLE_ID;
-      style.textContent = `
-     * {
-        cursor: default !important;
-        pointer-events: none !important;
+      activeFrame?.removeEventListener("load", onPreviewFrameLoad);
+      detachLinkNavigationBlock?.();
+
+      activeFrame = frame;
+      activeFrame.addEventListener("load", onPreviewFrameLoad);
+      if (activeFrame.contentDocument) {
+        detachLinkNavigationBlock = attachLinkNavigationBlock(
+          activeFrame.contentDocument
+        );
       }
-    `;
-      puckPreview.contentDocument.head.appendChild(style);
     };
 
-    applyPointerBlock();
-    window.addEventListener("load", applyPointerBlock);
+    const onPreviewFrameLoad = () => {
+      detachLinkNavigationBlock?.();
+      if (activeFrame?.contentDocument) {
+        detachLinkNavigationBlock = attachLinkNavigationBlock(
+          activeFrame.contentDocument
+        );
+      }
+    };
+
+    const syncPreviewFrame = () => {
+      const previewFrame = document.getElementById(
+        PUCK_PREVIEW_IFRAME_ID
+      ) as HTMLIFrameElement | null;
+      if (!previewFrame) {
+        return;
+      }
+
+      attachToPreviewFrame(previewFrame);
+    };
+
+    const iframeObserver = new MutationObserver(syncPreviewFrame);
+    iframeObserver.observe(document, {
+      childList: true,
+      subtree: true,
+    });
+
+    syncPreviewFrame();
 
     return () => {
-      window.removeEventListener("load", applyPointerBlock);
-      document
-        .querySelector<HTMLIFrameElement>("#preview-frame")
-        ?.contentDocument?.getElementById(PREVIEW_DISABLE_POINTER_STYLE_ID)
-        ?.remove();
+      iframeObserver.disconnect();
+      activeFrame?.removeEventListener("load", onPreviewFrameLoad);
+      detachLinkNavigationBlock?.();
+      activeFrame = null;
     };
   }, []);
 
