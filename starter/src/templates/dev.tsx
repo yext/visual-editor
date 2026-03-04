@@ -25,6 +25,7 @@ import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 export const config = {
   name: "dev-location",
@@ -169,19 +170,21 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         </button>
       </div>
       <div>
-        <VisualEditorProvider
-          templateProps={props}
-          entityFields={{ fields: entityFields, displayNames: displayNames }}
-          tailwindConfig={tailwindConfig}
-        >
-          <Editor
-            document={document}
-            componentRegistry={componentRegistry}
-            themeConfig={defaultThemeConfig}
-            localDev={true}
-            forceThemeMode={themeMode}
-          />
-        </VisualEditorProvider>
+        <ChakraProvider value={defaultSystem}>
+          <VisualEditorProvider
+            templateProps={props}
+            entityFields={{ fields: entityFields, displayNames: displayNames }}
+            tailwindConfig={tailwindConfig}
+          >
+            <Editor
+              document={document}
+              componentRegistry={componentRegistry}
+              themeConfig={defaultThemeConfig}
+              localDev={true}
+              forceThemeMode={themeMode}
+            />
+          </VisualEditorProvider>
+        </ChakraProvider>
       </div>
     </div>
   );
