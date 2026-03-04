@@ -288,6 +288,23 @@ describe("resolveComponentData", () => {
       expect(React.isValidElement(result)).toBe(true);
     });
 
+    it("preserves object defaultValue containers", () => {
+      const data = {
+        defaultValue: {
+          url: "https://example.com/image.jpg",
+          width: 100,
+          height: 100,
+        },
+      };
+      expect(resolveComponentData(data, "fr", mockDocument)).toEqual({
+        defaultValue: {
+          url: "https://example.com/image.jpg",
+          width: 100,
+          height: 100,
+        },
+      });
+    });
+
     it("handles a null value from the document gracefully", () => {
       const field: YextEntityField<null> = {
         constantValue: null,

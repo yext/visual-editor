@@ -160,10 +160,18 @@ const resolveTranslatableType = (
     return toStringOrElement(localizedValue);
   }
 
-  // Handle missing translation/default
+  const hasDefaultValue = "defaultValue" in value;
+  const defaultValue = hasDefaultValue ? value.defaultValue : undefined;
+  const defaultValueIsTextLike =
+    defaultValue === undefined ||
+    defaultValue === null ||
+    typeof defaultValue === "string" ||
+    isRichText(defaultValue);
+
+  // Handle missing translation/default for text-like translatable values.
   if (
     value.hasLocalizedValue === "true" ||
-    (typeof value === "object" && value !== null && "defaultValue" in value)
+    (hasDefaultValue && defaultValueIsTextLike)
   ) {
     return "";
   }

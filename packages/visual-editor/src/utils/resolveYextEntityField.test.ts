@@ -232,4 +232,31 @@ describe("resolveYextEntityField with embedded fields", () => {
       { defaultValue: "Welcome to Yext!" }
     );
   });
+
+  it("preserves non-text defaultValue objects", () => {
+    assert.deepEqual(
+      resolveYextEntityField(
+        document,
+        {
+          field: "",
+          constantValue: {
+            defaultValue: {
+              url: "https://example.com/[[id]].jpg",
+              width: 100,
+              height: 100,
+            },
+          },
+          constantValueEnabled: true,
+        },
+        "fr"
+      ),
+      {
+        defaultValue: {
+          url: "https://example.com/123.jpg",
+          width: 100,
+          height: 100,
+        },
+      }
+    );
+  });
 });

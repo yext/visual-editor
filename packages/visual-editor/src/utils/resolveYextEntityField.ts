@@ -149,7 +149,21 @@ export const resolveEmbeddedFieldsRecursively = (
         };
       }
 
-      return "";
+      // Preserve non-text default containers (e.g. localized image values)
+      // by resolving nested embedded fields recursively.
+      if (localizedValue !== undefined && localizedValue !== null) {
+        const resolvedNonTextValue = resolveEmbeddedFieldsRecursively(
+          localizedValue,
+          streamDocument,
+          locale
+        );
+        if ("defaultValue" in data && data.defaultValue === localizedValue) {
+          return { ...data, defaultValue: resolvedNonTextValue };
+        }
+        return { ...data, [locale]: resolvedNonTextValue };
+      }
+
+      return data.hasLocalizedValue === "true" ? "" : data;
     } else {
       // If it's a translatable string but missing the locale,
       // we return an empty string.
