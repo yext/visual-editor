@@ -672,19 +672,22 @@ const locatorFields: Fields<LocatorProps> = {
               <div className="flex flex-col gap-3">
                 <FieldLabel label={pt("fields.pinIcon", "Pin Icon")}>
                   <AutoField
-                    field={BasicSelector<"none" | "icon">({
-                      options: [
-                        {
-                          label: msg("fields.options.none", "None"),
-                          value: "none",
-                        },
-                        {
-                          label: msg("fields.options.icon", "Icon"),
-                          value: "icon",
-                        },
-                      ],
-                      disableSearch: true,
-                    })}
+                    field={YextField<"none" | "icon">(
+                      msg("fields.pinIcon", "Pin Icon"),
+                      {
+                        type: "select",
+                        options: [
+                          {
+                            label: msg("fields.options.none", "None"),
+                            value: "none",
+                          },
+                          {
+                            label: msg("fields.options.icon", "Icon"),
+                            value: "icon",
+                          },
+                        ],
+                      }
+                    )}
                     value={selectedType}
                     onChange={(type) =>
                       onChange({
@@ -698,17 +701,20 @@ const locatorFields: Fields<LocatorProps> = {
                   />
                 </FieldLabel>
                 {selectedType === "icon" && (
-                  <FieldLabel label={pt("fields.icon", "Icon")}>
-                    <AutoField
-                      field={BasicSelector<string | undefined>({
+                  <AutoField
+                    field={YextField<string | undefined>(
+                      msg("fields.icon", "Icon"),
+                      {
+                        type: "select",
+                        hasSearch: true,
                         options: makiIconOptions,
-                      })}
-                      value={value?.iconName}
-                      onChange={(iconName) =>
-                        onChange({ type: "icon", iconName })
                       }
-                    />
-                  </FieldLabel>
+                    )}
+                    value={value?.iconName}
+                    onChange={(iconName) =>
+                      onChange({ type: "icon", iconName })
+                    }
+                  />
                 )}
               </div>
             );
