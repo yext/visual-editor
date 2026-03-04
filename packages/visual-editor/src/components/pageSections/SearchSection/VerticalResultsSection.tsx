@@ -1,16 +1,11 @@
-import {
-  Facets,
-  ResultsCount,
-  StandardCard,
-  VerticalResults,
-} from "@yext/search-ui-react";
+import { Facets, ResultsCount, VerticalResults } from "@yext/search-ui-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaSlidersH, FaTimes } from "react-icons/fa";
 import { Body } from "../../atoms/body.tsx";
 import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
 import { VerticalConfigProps } from "./defaultPropsAndTypes.ts";
-import { useTranslation } from "react-i18next";
 
 interface VerticalResultsSectionProps {
   verticalKey: string;
@@ -50,7 +45,23 @@ export const VerticalResultsSection = ({
               </div>
             </div>
             <div id="innerDiv" className="overflow-y-auto">
-              <VerticalResults CardComponent={StandardCard} />
+              <VerticalResults
+                customCssClasses={{
+                  verticalResultsContainer:
+                    "flex flex-col border rounded-md divide-y divide-gray-300",
+                }}
+                CardComponent={(props) => (
+                  <Cards
+                    isVertical={true}
+                    layout="Map"
+                    {...props}
+                    cardType={
+                      verticals.find((v) => v.verticalKey === verticalKey)
+                        ?.cardType
+                    }
+                  />
+                )}
+              />
             </div>
             {facetsLength && showFilterModal && (
               <div
@@ -116,13 +127,21 @@ export const VerticalResultsSection = ({
         />
       </div>
       <div className="flex-grow">
+        <div className="p-4 text-body-fontSize border-y border-gray-300 inline-block">
+          <div className="flex flex-row justify-between">
+            <ResultsCount
+              customCssClasses={{ resultsCountContainer: "!-mb-4" }}
+            />
+          </div>
+        </div>
         <VerticalResults
           customCssClasses={{
             verticalResultsContainer:
-              "flex flex-col border rounded-md divide-y",
+              "flex flex-col border rounded-md divide-y divide-gray-300",
           }}
           CardComponent={(props) => (
             <Cards
+              isVertical={true}
               {...props}
               cardType={
                 verticals.find((v) => v.verticalKey === verticalKey)?.cardType
