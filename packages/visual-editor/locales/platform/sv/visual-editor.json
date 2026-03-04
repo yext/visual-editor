@@ -212,6 +212,7 @@
     "emails": "E -postmeddelanden",
     "enableLanguageSelector": "Aktivera språkväljare",
     "endDate": "Slutdatum",
+    "entityType": "Enhetstyp",
     "expandedFooterLinks": "Utvidgade sidlänkar",
     "expandFooter": "Expandera sidfot",
     "facebookLink": "Facebook -länk",
@@ -327,7 +328,7 @@
         "yearsOfExperience": "År av erfarenhet"
       },
       "fillContainer": "Fyll behållare",
-      "financialProfessionals": "Finansiella proffs",
+      "financialProfessionals": "Finansiella yrkesverksamma",
       "fixed": "Fast",
       "fixedWidth": "Fast bredd",
       "friday": "Fredag",
