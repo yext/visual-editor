@@ -40,7 +40,7 @@ export interface SearchBarSlotProps {
     height?: SearchBarHeightProps;
     width?: SearchBarWidthProps;
     align?: SearchBarAlignProps;
-    rounded?: SearchBarRoundedProps;
+    rounded: SearchBarRoundedProps;
   };
   parentData?: {
     showSearchResultsSection: boolean;
@@ -48,7 +48,7 @@ export interface SearchBarSlotProps {
 }
 
 const searchBarSlotFields: Fields<SearchBarSlotProps> = {
-  styles: {
+  styles: YextField(msg("fields.styles", "Styles"), {
     type: "object",
     objectFields: {
       showIcon: YextField(msg("fields.showIcon", "Show Icon"), {
@@ -70,6 +70,31 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
           options: "SHOW_HIDE",
         }
       ),
+      rounded: YextField(msg("fields.borderRadius", "Border Radius"), {
+        type: "select",
+        options: [
+          {
+            label: msg("fields.none", "None"),
+            value: "none",
+          },
+          {
+            label: msg("fields.small", "Small"),
+            value: "small",
+          },
+          {
+            label: msg("fields.medium", "Medium"),
+            value: "medium",
+          },
+          {
+            label: msg("fields.large", "Large"),
+            value: "large",
+          },
+          {
+            label: msg("fields.pill", "Pill"),
+            value: "pill",
+          },
+        ],
+      }),
       visualAutoCompleteVerticalKey: YextField(
         msg(
           "fields.visualAutoCompleteVerticalKey",
@@ -122,33 +147,8 @@ const searchBarSlotFields: Fields<SearchBarSlotProps> = {
         type: "radio",
         options: ThemeOptions.ALIGNMENT,
       }),
-      rounded: YextField(msg("fields.borderRadius", "Border Radius"), {
-        type: "select",
-        options: [
-          {
-            label: msg("fields.none", "None"),
-            value: "none",
-          },
-          {
-            label: msg("fields.small", "Small"),
-            value: "small",
-          },
-          {
-            label: msg("fields.medium", "Medium"),
-            value: "medium",
-          },
-          {
-            label: msg("fields.large", "Large"),
-            value: "large",
-          },
-          {
-            label: msg("fields.pill", "Pill"),
-            value: "pill",
-          },
-        ],
-      }),
     },
-  },
+  }),
 };
 
 const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
@@ -173,6 +173,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     enabled: isTypingEffect,
   });
   const entityPreviewSearcher = useEntityPreviewSearcher(document);
+  const showResults = parentData?.showSearchResultsSection ?? false;
   const visualAutocompleteConfig = React.useMemo(() => {
     return createVisualAutocompleteConfig(
       enableVisualAutoComplete,
@@ -186,16 +187,20 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     limit,
     entityPreviewSearcher,
   ]);
+  const heightClass = !showResults ? getHeight(height) : "";
 
+  const layoutClasses = !showResults
+    ? `${getWidth(width)} ${getAlignment(align)}`
+    : "w-full";
   return (
     <div
-      className={`relative w-full flex my-2 items-center ${getHeight(height)} ${puck.isEditing && `pt-4`}`}
+      className={`relative w-full flex my-2 items-center ${heightClass} ${puck.isEditing ? "pt-4" : ""}`}
     >
       <SearchBar
         onSearch={({ query }) => {
           const trimmed = (query ?? "").trim();
 
-          if (!parentData?.showSearchResultsSection) {
+          if (!showResults) {
             const target = `/search.html${
               trimmed ? `?searchTerm=${encodeURIComponent(trimmed)}` : ""
             }`;
@@ -206,7 +211,9 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
         visualAutocompleteConfig={visualAutocompleteConfig}
         placeholder={isTypingEffect ? placeholder : "Search here...."}
         customCssClasses={{
-          searchBarContainer: `h-16 ${getRounded(rounded)} !mb-0 relative ${isTypingEffect ? `isTypingEffect` : ``} ${getWidth(width)} ${getAlignment(align)}`,
+          searchBarContainer: `h-16 ${getRounded(rounded)} !mb-0 relative ${
+            isTypingEffect ? "isTypingEffect" : ""
+          } ${layoutClasses}`,
           searchButtonContainer: `${voiceSearch ? `ml-14 my-auto` : showIcon ? `` : `none`}`,
           searchButton: `${showIcon ? `h-8 w-8` : ``}`,
           inputElement: `text-lg h-12 outline-none focus:outline-none focus:ring-0 focus:border-none px-5 py-2.5 rounded-[inherit]`,
@@ -227,12 +234,6 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
   defaultProps: defaultSearchData,
   resolveFields: (data) => {
     const updatedFields = resolveDataFromParent(searchBarSlotFields, data);
-    console.log("SearchBarSlot resolveFields data:", JSON.stringify(data));
-    console.log(
-      "SearchBarSlot resolveFields parentData:",
-      JSON.stringify(data?.props?.parentData)
-    );
-
     const isVisualAutoEnabled = !!data?.props?.styles?.enableVisualAutoComplete;
     setDeep(
       updatedFields,
@@ -244,24 +245,28 @@ export const SearchBarSlot: ComponentConfig<{ props: SearchBarSlotProps }> = {
       "styles.objectFields.limit.visible",
       isVisualAutoEnabled
     );
-    const isShowResultsSection =
-      !!!data?.props?.parentData?.showSearchResultsSection;
+
+    const showResults =
+      data?.props?.parentData?.showSearchResultsSection ?? false;
+
+    const showLayoutControls = !showResults;
+
     setDeep(
       updatedFields,
       "styles.objectFields.height.visible",
-      isShowResultsSection
+      showLayoutControls
     );
     setDeep(
       updatedFields,
       "styles.objectFields.width.visible",
-      isShowResultsSection
+      showLayoutControls
     );
     setDeep(
       updatedFields,
       "styles.objectFields.align.visible",
-      isShowResultsSection
+      showLayoutControls
     );
-
+    setDeep(updatedFields, "data", false);
     return updatedFields;
   },
   render: (props) => <SearchBarSlotInternal {...props} />,

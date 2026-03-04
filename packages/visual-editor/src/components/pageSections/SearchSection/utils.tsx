@@ -33,7 +33,9 @@ export const buildVerticalConfigMap = (
             layoutType={layoutType}
           />
         ),
-        CardComponent: (props) => <Cards {...props} cardType={cardType} />,
+        CardComponent: (props) => (
+          <Cards {...props} cardType={cardType} layout={layoutType} />
+        ),
       };
       return acc;
     },

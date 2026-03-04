@@ -33,7 +33,7 @@ export const MapComponent = ({
   const { t } = useTranslation();
   const entityDocument: StreamDocument = useDocument();
   const mapboxApiKey =
-    entityDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY;
+    entityDocument._env?.YEXT_EDIT_LAYOUT_MODE_MAPBOX_API_KEY || "";
 
   const iframe =
     typeof document === "undefined"
