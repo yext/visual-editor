@@ -20,7 +20,6 @@ import { msg, pt } from "../utils/i18n/platform.ts";
 import { PhoneAtom } from "./atoms/phone.tsx";
 import { useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
-import { resolveUrlTemplateOfChild } from "../utils/urls/resolveUrlTemplate.ts";
 import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
 import { HoursTableAtom } from "./atoms/hoursTable.tsx";
 import { YextField } from "../editor/YextField.tsx";
@@ -64,6 +63,7 @@ import {
   fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
+import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
@@ -760,7 +760,7 @@ export const LocatorResultCard = React.memo(
       "TAP_TO_CALL"
     );
 
-    const resolvedUrl = resolveUrlTemplateOfChild(
+    const resolvedUrl = resolveLocatorResultUrl(
       location,
       streamDocument,
       relativePrefixToRoot
@@ -892,7 +892,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && (
+            {props.primaryCTA.liveVisibility && resolvedUrl && (
               <CTA
                 link={resolvedUrl}
                 label={
