@@ -16,11 +16,14 @@ export const createPreviewDocumentLinkBlocker = (previewDocument: Document) => {
    */
   const isLinkLikeTarget = (event: Event) => {
     const targetElement = event.target;
-    if (!(targetElement instanceof Element)) {
+    if (
+      !targetElement ||
+      typeof (targetElement as Element).closest !== "function"
+    ) {
       return false;
     }
 
-    return !!targetElement.closest("a, area, [role='link']");
+    return !!(targetElement as Element).closest("a, area, [role='link']");
   };
 
   /**
@@ -32,8 +35,9 @@ export const createPreviewDocumentLinkBlocker = (previewDocument: Document) => {
       return;
     }
 
-    if (event instanceof KeyboardEvent) {
-      if (event.key !== "Enter" && event.key !== " ") {
+    if (event.type === "keydown") {
+      const key = (event as KeyboardEvent).key;
+      if (key !== "Enter" && key !== " ") {
         return;
       }
     }
@@ -187,6 +191,8 @@ export const createPreviewFrameLinkBlocker = () => {
   iframeObserver.observe(document, {
     childList: true,
     subtree: true,
+    attributes: true,
+    attributeFilter: ["href", "target"],
   });
 
   syncPreviewFrame();
