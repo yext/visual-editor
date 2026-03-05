@@ -79,6 +79,7 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   const backgroundColor = styles?.backgroundColor;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY || "";
+
   const experienceKey =
     streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_EXP_KEY || "";
   if (!apiKey || !experienceKey) {
@@ -133,15 +134,22 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   const searcher = React.useMemo(() => {
     const searcher = provideHeadless(searchConfig);
 
-    const params = new URLSearchParams(window.location.search);
-    const searchTerm = params.get("searchTerm");
-    const verticalKey = params.get("verticalKey");
+    // Only run in browser (avoid SSR error: window is not defined)
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
 
-    if (searchTerm) {
-      searcher.setQuery(searchTerm);
+      const searchTerm = params.get("searchTerm");
+      const verticalKey = params.get("verticalKey");
 
-      if (verticalKey) {
-        searcher.setVertical(verticalKey);
+      if (searchTerm) {
+        searcher.setQuery(searchTerm);
+
+        if (verticalKey) {
+          searcher.setVertical(verticalKey);
+          searcher.executeVerticalQuery();
+        } else {
+          searcher.executeUniversalQuery();
+        }
       }
     }
 
