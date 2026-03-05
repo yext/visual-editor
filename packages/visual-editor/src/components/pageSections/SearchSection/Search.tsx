@@ -1,10 +1,4 @@
-import {
-  ComponentConfig,
-  Fields,
-  PuckComponent,
-  setDeep,
-  Slot,
-} from "@puckeditor/core";
+import { ComponentConfig, Fields, PuckComponent, Slot } from "@puckeditor/core";
 import {
   provideHeadless,
   SearchHeadlessProvider,
@@ -15,7 +9,10 @@ import { YextField } from "../../../editor/YextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { themeManagerCn } from "../../../utils/cn.ts";
 import { msg, pt } from "../../../utils/i18n/platform.ts";
-import { BackgroundStyle } from "../../../utils/themeConfigOptions.ts";
+import {
+  backgroundColors,
+  BackgroundStyle,
+} from "../../../utils/themeConfigOptions.ts";
 import { Body } from "../../atoms/body.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
@@ -29,7 +26,6 @@ import { buildSearchConfigFromDocument } from "./searchConfig.ts";
 
 export interface SearchComponentProps {
   styles: {
-    showSearchResultsSection: boolean;
     backgroundColor?: BackgroundStyle;
   };
   /** @internal */
@@ -51,13 +47,6 @@ const searchFields: Fields<SearchComponentProps> = {
           options: "BACKGROUND_COLOR",
         }
       ),
-      showSearchResultsSection: YextField(
-        msg("fields.showSearchResultsSection", "Show Search Results Section"),
-        {
-          type: "radio",
-          options: "SHOW_HIDE",
-        }
-      ),
     },
   }),
   slots: {
@@ -75,7 +64,6 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   slots,
   puck,
 }) => {
-  const showSearchResultsSection = styles?.showSearchResultsSection ?? false;
   const backgroundColor = styles?.backgroundColor;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY || "";
@@ -151,9 +139,7 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
       <SearchI18nextProvider searcher={searcher}>
         <PageSection ref={puck.dragRef} background={backgroundColor}>
           <slots.SearchBarSlot style={{ height: "auto" }} allow={[]} />
-          {showSearchResultsSection && (
-            <slots.SearchResultsSlot style={{ height: "auto" }} allow={[]} />
-          )}
+          <slots.SearchResultsSlot style={{ height: "auto" }} allow={[]} />
         </PageSection>
       </SearchI18nextProvider>
     </SearchHeadlessProvider>
@@ -167,7 +153,7 @@ export const SearchComponent: ComponentConfig<{
   fields: searchFields,
   defaultProps: {
     styles: {
-      showSearchResultsSection: false,
+      backgroundColor: backgroundColors.background1.value,
     },
     slots: {
       SearchBarSlot: [
@@ -175,9 +161,6 @@ export const SearchComponent: ComponentConfig<{
           type: "SearchBarSlot",
           props: {
             ...defaultSearchData,
-            parentData: {
-              showSearchResultsSection: false,
-            },
           } satisfies SearchBarSlotProps,
         },
       ],
@@ -199,16 +182,5 @@ export const SearchComponent: ComponentConfig<{
       ],
     },
   },
-
-  resolveData: (data) => {
-    const show = data?.props?.styles?.showSearchResultsSection ?? false;
-    let next = setDeep(
-      data,
-      "props.slots.SearchBarSlot.0.props.parentData.showSearchResultsSection",
-      show
-    );
-    return next;
-  },
-
   render: (props) => <SearchWrapper {...props} />,
 };

@@ -1,71 +1,12 @@
-import { UniversalLimit, VerticalResults } from "@yext/search-headless-react";
+import { FocusedItemData } from "@yext/search-ui-react";
 import {
-  DefaultRawDataType,
-  FocusedItemData,
-  VerticalConfigMap,
-} from "@yext/search-ui-react";
-import Cards from "./Cards.tsx";
-import { LayoutSection } from "./LayoutSections.tsx";
-import {
+  SearchBarAlignProps,
+  SearchBarHeightProps,
   SearchBarRoundedProps,
-  VerticalConfigProps,
+  SearchBarWidthProps,
 } from "./defaultPropsAndTypes.ts";
 import { renderEntityPreviews } from "./searchVisualAutoComplete.tsx";
-
-export const buildVerticalConfigMap = (
-  verticals: VerticalConfigProps[]
-): VerticalConfigMap<Record<string, DefaultRawDataType>> => {
-  return verticals.reduce(
-    (acc, v) => {
-      if (!v.verticalKey) return acc;
-
-      const layoutType = v.layout ?? "Flex";
-      const cardType = v.cardType ?? "Standard";
-
-      acc[v.verticalKey] = {
-        label: v.label,
-        viewAllButton: true,
-
-        SectionComponent: (props) => (
-          <LayoutSection
-            resultsCount={v.universalLimit ?? 4}
-            {...props}
-            layoutType={layoutType}
-          />
-        ),
-
-        CardComponent: (props) => (
-          <Cards
-            {...props}
-            cardType={cardType}
-            layout={layoutType}
-            index={props.result.index}
-          />
-        ),
-      };
-
-      return acc;
-    },
-    {} as VerticalConfigMap<Record<string, DefaultRawDataType>>
-  );
-};
-
-export const buildUniversalLimit = (
-  verticals: {
-    label: string;
-    verticalKey?: string;
-    universalLimit?: number;
-  }[]
-): UniversalLimit => {
-  return verticals.reduce<UniversalLimit>((acc, v) => {
-    if (!v.verticalKey || typeof v.universalLimit !== "number") {
-      return acc;
-    }
-    acc[v.verticalKey] = v.universalLimit;
-    // acc[v.verticalKey] = 50;
-    return acc;
-  }, {});
-};
+import { VerticalResults } from "@yext/search-headless-react";
 
 const isValidVertical = (v: any): boolean => {
   if (!v || typeof v !== "object") return false;
@@ -184,5 +125,38 @@ export const getRounded = (val: SearchBarRoundedProps) => {
 
     default:
       return "[&>div]:rounded-none";
+  }
+};
+
+export const getWidth = (val: SearchBarWidthProps) => {
+  switch (val) {
+    case "quarter":
+      return "w-3/4";
+    case "half":
+      return "w-1/2";
+    default:
+      return "w-full";
+  }
+};
+
+export const getHeight = (val: SearchBarHeightProps) => {
+  switch (val) {
+    case "large":
+      return "h-24";
+    case "extraLarge":
+      return "h-48";
+    default:
+      return "h-14";
+  }
+};
+
+export const getAlignment = (val: SearchBarAlignProps) => {
+  switch (val) {
+    case "center":
+      return "mx-auto";
+    case "right":
+      return "ml-auto mr-0";
+    default:
+      return "ml-0 mr-auto";
   }
 };

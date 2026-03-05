@@ -11,6 +11,10 @@ export { ImageWrapper, type ImageWrapperProps } from "./image/Image.tsx";
 export { MapboxStaticMap, type MapboxStaticProps } from "./MapboxStaticMap.tsx";
 export { Phone, type PhoneProps } from "./Phone.tsx";
 export { PhoneList, type PhoneListProps } from "./PhoneList.tsx";
+export {
+  SearchbarComponent,
+  type SearchbarProps,
+} from "./search/SearchBar.tsx";
 export { TextList, type TextListProps } from "./TextList.tsx";
 export { Text, type TextProps } from "./Text.tsx";
 export { Timestamp, type TimestampProps } from "./Timestamp.tsx";
