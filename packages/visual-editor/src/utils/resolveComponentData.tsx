@@ -149,6 +149,7 @@ const resolveTranslatableType = (
   }
 
   const localizedValue = value[locale] ?? value.defaultValue;
+  const hasDefaultValue = "defaultValue" in value;
 
   // Handle TranslatableString with locale/default fallback
   if (typeof localizedValue === "string") {
@@ -160,13 +161,22 @@ const resolveTranslatableType = (
     return toStringOrElement(localizedValue);
   }
 
-  const hasDefaultValue = "defaultValue" in value;
   const defaultValue = hasDefaultValue ? value.defaultValue : undefined;
   const defaultValueIsTextLike =
     defaultValue === undefined ||
     defaultValue === null ||
     typeof defaultValue === "string" ||
     isRichText(defaultValue);
+
+  // For non-text translatable containers (e.g. localized image objects),
+  // unwrap to the localized/default payload so consumers receive the value.
+  if (
+    (value.hasLocalizedValue === "true" || hasDefaultValue) &&
+    localizedValue !== undefined &&
+    localizedValue !== null
+  ) {
+    return resolveTranslatableType(localizedValue, locale);
+  }
 
   // Handle missing translation/default for text-like translatable values.
   if (

@@ -288,7 +288,7 @@ describe("resolveComponentData", () => {
       expect(React.isValidElement(result)).toBe(true);
     });
 
-    it("preserves object defaultValue containers", () => {
+    it("resolves object defaultValue containers to their payload", () => {
       const data = {
         defaultValue: {
           url: "https://example.com/image.jpg",
@@ -297,11 +297,9 @@ describe("resolveComponentData", () => {
         },
       };
       expect(resolveComponentData(data, "fr", mockDocument)).toEqual({
-        defaultValue: {
-          url: "https://example.com/image.jpg",
-          width: 100,
-          height: 100,
-        },
+        url: "https://example.com/image.jpg",
+        width: 100,
+        height: 100,
       });
     });
 

@@ -123,5 +123,5 @@ export const getLocalizedPlainText = (
 
   const localeValue = value[locale];
   const resolvedValue = localeValue ?? value.defaultValue;
-  return richTextToPlainText(resolvedValue as string | RichText | undefined);
+  return richTextToPlainText(resolvedValue);
 };
