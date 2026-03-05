@@ -237,14 +237,13 @@ export function getDisplayValue(
     return richTextToString(translatableText);
   }
 
-  const localizedValue =
-    translatableText[locale] ?? translatableText.defaultValue;
+  const localizedValue = translatableText[locale];
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);
   }
 
-  return localizedValue ?? "";
+  return localizedValue;
 }
 
 function richTextToString(rtf: RichText): string {
