@@ -49,8 +49,7 @@ export function TranslatableRichTextField<
         setPendingMessageId(messageId);
         const valueForCurrentLocale =
           typeof value === "object" && value !== null && !Array.isArray(value)
-            ? ((value as Record<string, any>)[locale] ??
-              (value as Record<string, any>).defaultValue)
+            ? (value as Record<string, any>)[locale]
             : undefined;
 
         const initialValue = React.isValidElement(resolvedValue)
