@@ -12,6 +12,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 12px;
   height: 80px;
   margin-bottom: -80px;
 
