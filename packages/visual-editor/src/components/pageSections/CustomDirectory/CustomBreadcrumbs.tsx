@@ -158,7 +158,14 @@ const CustomBreadcrumbsComponent = ({
         apiKey,
       });
 
-      const entities = json?.docs?.[0]?.dm_directoryParents_directory ?? [];
+      const doc = json?.docs?.[0];
+
+      const parentKey = Object.keys(doc || {}).find(
+        (key) =>
+          key.startsWith("dm_directoryParents") && key.endsWith("_directory")
+      );
+
+      const entities = parentKey ? (doc[parentKey] ?? []) : [];
 
       const mapped = entities.map((entity: any) => ({
         id: entity.uid,
@@ -230,7 +237,7 @@ export const CustomBreadcrumbs: ComponentConfig<{
   defaultProps: {
     data: {
       directoryRoot: {
-        en: "Directory Root",
+        "en-GB": "Directory Root",
         hasLocalizedValue: "true",
       },
     },
