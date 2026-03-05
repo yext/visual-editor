@@ -149,41 +149,21 @@ const resolveTranslatableType = (
   }
 
   const localizedValue = value[locale] ?? value.defaultValue;
-  const hasDefaultValue = "defaultValue" in value;
-
-  // Handle TranslatableString with locale/default fallback
-  if (typeof localizedValue === "string") {
-    return localizedValue;
-  }
-
-  // Handle TranslatableRichText with locale/default fallback
-  if (isRichText(localizedValue)) {
-    return toStringOrElement(localizedValue);
-  }
-
-  const defaultValue = hasDefaultValue ? value.defaultValue : undefined;
-  const defaultValueIsTextLike =
-    defaultValue === undefined ||
-    defaultValue === null ||
-    typeof defaultValue === "string" ||
-    isRichText(defaultValue);
-
-  // For non-text translatable containers (e.g. localized image objects),
-  // unwrap to the localized/default payload so consumers receive the value.
-  if (
-    (value.hasLocalizedValue === "true" || hasDefaultValue) &&
-    localizedValue !== undefined &&
-    localizedValue !== null
-  ) {
+  const isTranslatableContainer =
+    value.hasLocalizedValue === "true" || "defaultValue" in value;
+  if (isTranslatableContainer) {
+    if (localizedValue === undefined || localizedValue === null) {
+      return "";
+    }
+    if (typeof localizedValue === "string") {
+      return localizedValue;
+    }
+    if (isRichText(localizedValue)) {
+      return toStringOrElement(localizedValue);
+    }
+    // For non-text translatable containers (e.g. localized image objects),
+    // unwrap to the localized/default payload so consumers receive the value.
     return resolveTranslatableType(localizedValue, locale);
-  }
-
-  // Handle missing translation/default for text-like translatable values.
-  if (
-    value.hasLocalizedValue === "true" ||
-    (hasDefaultValue && defaultValueIsTextLike)
-  ) {
-    return "";
   }
 
   if (Array.isArray(value)) {

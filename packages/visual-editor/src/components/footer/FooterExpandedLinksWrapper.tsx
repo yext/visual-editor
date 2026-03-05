@@ -5,7 +5,10 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import {
+  getDisplayValue,
+  resolveComponentData,
+} from "../../utils/resolveComponentData.tsx";
 import { CTA } from "../atoms/cta.tsx";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { Body } from "../atoms/body.tsx";
@@ -147,10 +150,7 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
                 defaultItemProps: defaultLink,
                 getItemSummary: (item, index) => {
                   const locale = i18nComponentsInstance.language || "en";
-                  const label =
-                    typeof item.label === "string"
-                      ? item.label
-                      : (item.label?.[locale] ?? item.label?.defaultValue);
+                  const label = getDisplayValue(item.label, locale);
                   return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
                 },
               }),
@@ -158,10 +158,7 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
             defaultItemProps: defaultSection,
             getItemSummary: (item, index) => {
               const locale = i18nComponentsInstance.language || "en";
-              const label =
-                typeof item.label === "string"
-                  ? item.label
-                  : (item.label?.[locale] ?? item.label?.defaultValue);
+              const label = getDisplayValue(item.label, locale);
               return (
                 label || pt("section", "Section") + " " + ((index ?? 0) + 1)
               );
