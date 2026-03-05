@@ -157,8 +157,12 @@ const resolveTranslatableType = (
       return toStringOrElement(localizedValue);
     }
 
-    if (typeof localizedValue === "string") {
-      return localizedValue;
+    if (
+      typeof localizedValue === "string" ||
+      localizedValue === null ||
+      localizedValue === undefined
+    ) {
+      return localizedValue ?? "";
     }
 
     // Non-text translatable payloads (e.g. localized image objects)
