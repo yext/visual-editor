@@ -1124,6 +1124,8 @@ type ImageContentData = {
 type LocalizedAssetImage = {
   hasLocalizedValue?: "true";
   defaultValue?: AssetImageType;
+} & {
+  [locale: string]: AssetImageType | undefined;
 };
 
 type AssetVideo = {
