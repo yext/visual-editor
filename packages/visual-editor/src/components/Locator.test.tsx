@@ -175,79 +175,94 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
+      locationStyles: [
+        {
+          entityType: "location",
+          pinIcon: {
+            type: "none",
+          },
+          pinColor: backgroundColors.background6.value,
+        },
+      ],
       distanceDisplay: "distanceFromSearch",
       filters: {
         openNowButton: true,
         showDistanceOptions: true,
       },
-      resultCard: {
-        primaryHeading: {
-          field: "name",
-          constantValue: { en: "", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
-          headingLevel: 5,
-        },
-        secondaryHeading: {
-          field: "name",
-          constantValue: { en: "", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
-          variant: "base",
-          liveVisibility: false,
-        },
-        tertiaryHeading: {
-          field: "name",
-          constantValue: { en: "", hasLocalizedValue: "true" },
-          constantValueEnabled: false,
-          variant: "base",
-          liveVisibility: false,
-        },
-        icons: true,
-        hours: {
-          table: {
-            startOfWeek: "monday",
-            collapseDays: true,
-            showAdditionalHoursText: false,
+      resultCard: [
+        {
+          props: {
+            entityType: "location",
+            primaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              headingLevel: 5,
+            },
+            secondaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            tertiaryHeading: {
+              field: "name",
+              constantValue: { en: "", hasLocalizedValue: "true" },
+              constantValueEnabled: false,
+              variant: "base",
+              liveVisibility: false,
+            },
+            icons: true,
+            hours: {
+              table: {
+                startOfWeek: "monday",
+                collapseDays: true,
+                showAdditionalHoursText: false,
+              },
+              liveVisibility: true,
+            },
+            address: {
+              showGetDirectionsLink: true,
+              liveVisibility: true,
+            },
+            phone: {
+              field: "mainPhone",
+              phoneFormat: "domestic",
+              includePhoneHyperlink: true,
+              liveVisibility: false,
+            },
+            email: {
+              field: "emails",
+              liveVisibility: false,
+            },
+            services: {
+              field: "services",
+              liveVisibility: false,
+            },
+            primaryCTA: {
+              label: "Visit Page",
+              variant: "primary",
+              liveVisibility: true,
+            },
+            secondaryCTA: {
+              label: "Call to Action",
+              link: "https://www.yext.com",
+              variant: "secondary",
+              liveVisibility: true,
+            },
+            image: {
+              field: "headshot",
+              constantValue: {
+                en: { url: "", height: 0, width: 0 },
+                hasLocalizedValue: "true",
+              },
+              constantValueEnabled: false,
+              liveVisibility: false,
+            },
           },
-          liveVisibility: true,
         },
-        address: {
-          showGetDirectionsLink: true,
-          liveVisibility: true,
-        },
-        phone: {
-          field: "mainPhone",
-          phoneFormat: "domestic",
-          includePhoneHyperlink: true,
-          liveVisibility: false,
-        },
-        email: {
-          field: "emails",
-          liveVisibility: false,
-        },
-        services: {
-          field: "services",
-          liveVisibility: false,
-        },
-        primaryCTA: {
-          variant: "primary",
-          liveVisibility: true,
-        },
-        secondaryCTA: {
-          label: "Call to Action",
-          link: "https://www.yext.com",
-          variant: "secondary",
-          liveVisibility: true,
-        },
-        image: {
-          field: "headshot",
-          constantValue: {
-            en: { url: "", height: 0, width: 0 },
-            hasLocalizedValue: "true",
-          },
-          constantValueEnabled: false,
-          liveVisibility: false,
-        },
-      },
+      ],
     },
     version: migrationRegistry.length,
   },
@@ -968,23 +983,27 @@ describe("Locator", async () => {
         });
       }
 
-      await act(async () => {
-        // Hide the distance to each location because it is based on the test runner's IP address
-        const allDivs = container.querySelectorAll("div");
-        allDivs.forEach((div) => {
-          if (div.textContent?.includes("mi") && !div.children.length) {
-            div.style.backgroundColor = "black";
-            div.style.width = "8em";
-          }
-        });
+      const hideDistance = async () => {
+        await act(async () => {
+          // Hide the distance to each location because it is based on the test runner's IP address
+          const allDivs = container.querySelectorAll("div");
+          allDivs.forEach((div) => {
+            if (div.textContent?.includes("mi") && !div.children.length) {
+              div.style.backgroundColor = "black";
+              div.style.width = "8em";
+            }
+          });
 
-        // Hide the map makers because they can appear in different spots
-        const allMarkers =
-          container.querySelectorAll<HTMLDivElement>(".mapboxgl-marker");
-        allMarkers.forEach((marker) => {
-          marker.style.opacity = "0";
+          // Hide the map makers because they can appear in different spots
+          const allMarkers =
+            container.querySelectorAll<HTMLDivElement>(".mapboxgl-marker");
+          allMarkers.forEach((marker) => {
+            marker.style.opacity = "0";
+          });
         });
-      });
+      };
+
+      await hideDistance();
 
       await expect(`Locator/[${viewportName}] ${name}`).toMatchScreenshot({
         customThreshold: screenshotThreshold,
@@ -996,6 +1015,7 @@ describe("Locator", async () => {
 
       if (interactions) {
         await interactions(page);
+        await hideDistance();
         await expect(
           `Locator/[${viewportName}] ${name} (after interactions)`
         ).toMatchScreenshot({ customThreshold: screenshotThreshold });

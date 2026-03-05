@@ -148,26 +148,19 @@ const resolveTranslatableType = (
     return toStringOrElement(value);
   }
 
-  const localizedValue = value[locale] ?? value.defaultValue;
-  const isTranslatableContainer =
-    value.hasLocalizedValue === "true" || "defaultValue" in value;
+  // Handle TranslatableString
+  if (value.hasLocalizedValue === "true" && typeof value[locale] === "string") {
+    return value[locale];
+  }
 
-  if (isTranslatableContainer) {
-    if (isRichText(localizedValue)) {
-      return toStringOrElement(localizedValue);
-    }
+  // Handle TranslatableRichText
+  if (value.hasLocalizedValue === "true" && isRichText(value[locale])) {
+    return toStringOrElement(value[locale]);
+  }
 
-    if (
-      typeof localizedValue === "string" ||
-      localizedValue === null ||
-      localizedValue === undefined
-    ) {
-      return localizedValue ?? "";
-    }
-
-    // Non-text translatable payloads (e.g. localized image objects)
-    // should resolve to their localized/default value.
-    return resolveTranslatableType(localizedValue, locale);
+  // Handle missing translation
+  if (value.hasLocalizedValue === "true" && !value[locale]) {
+    return "";
   }
 
   if (Array.isArray(value)) {
@@ -238,14 +231,13 @@ export function getDisplayValue(
     return richTextToString(translatableText);
   }
 
-  const localizedValue =
-    translatableText[locale] ?? translatableText.defaultValue;
+  const localizedValue = translatableText[locale];
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);
   }
 
-  return localizedValue ?? "";
+  return localizedValue;
 }
 
 function richTextToString(rtf: RichText): string {
