@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Kjerneinformasjon",
     "other": "ANNEN",
-    "standardSections": "Standard seksjoner"
+    "standardSections": "Standard seksjoner",
+    "yetiSections": "Yeti-seksjoner"
   },
   "change": "Endre",
   "chooseImage": "Velg bilde",

@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "核心信息",
     "other": "其他",
-    "standardSections": "标准区块"
+    "standardSections": "标准区块",
+    "yetiSections": "雪人部分"
   },
   "change": "改变",
   "chooseImage": "选择图像",

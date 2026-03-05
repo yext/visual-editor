@@ -8,6 +8,7 @@ import {
   MainConfigProps,
   mainConfig,
 } from "@yext/visual-editor";
+import { yetiConfig } from "./templates/yeti/yeti-config";
 
 interface DevProps extends MainConfigProps, DirectoryCategoryProps {}
 
@@ -28,6 +29,7 @@ export const devConfig: Config<DevProps> = {
   root: mainConfig.root,
 };
 
-export const componentRegistry: Record<string, Config<DevProps>> = {
+export const componentRegistry: Record<string, Config<any>> = {
   dev: devConfig,
+  "yeti-location": yetiConfig,
 };

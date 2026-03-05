@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "コア情報",
     "other": "他の",
-    "standardSections": "標準セクション"
+    "standardSections": "標準セクション",
+    "yetiSections": "イエティセクション"
   },
   "change": "変化",
   "chooseImage": "画像を選択します",

@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Perustiedot",
     "other": "Muut",
-    "standardSections": "Vakiojaksot"
+    "standardSections": "Vakiojaksot",
+    "yetiSections": "Yeti-osastot"
   },
   "change": "Muuttaa",
   "chooseImage": "Valitse kuva",

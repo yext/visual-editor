@@ -5,3 +5,5 @@ export * from "./OtherCategory.tsx";
 export * from "./PageSectionCategory.tsx";
 export * from "./DeprecatedCategory.tsx";
 export * from "./SlotsCategory.tsx";
+export * from "./YetiSectionsCategory.tsx";
+export * from "./YetiSlotsCategory.tsx";

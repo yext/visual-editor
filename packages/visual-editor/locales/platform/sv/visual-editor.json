@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Kärninformation",
     "other": "ANDRA",
-    "standardSections": "Standardsektioner"
+    "standardSections": "Standardsektioner",
+    "yetiSections": "Yeti-sektioner"
   },
   "change": "Ändra",
   "chooseImage": "Välj bild",

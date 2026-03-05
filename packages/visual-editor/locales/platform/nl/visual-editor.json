@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Kerninformatie",
     "other": "ANDER",
-    "standardSections": "Standaard secties"
+    "standardSections": "Standaard secties",
+    "yetiSections": "Yeti-secties"
   },
   "change": "Wijziging",
   "chooseImage": "Kies afbeelding",

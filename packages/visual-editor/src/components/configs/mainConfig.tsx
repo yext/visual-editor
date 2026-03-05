@@ -25,20 +25,34 @@ import {
   SlotsCategoryComponents,
   SlotsCategoryProps,
 } from "../categories/SlotsCategory.tsx";
+import {
+  YetiSectionsCategory,
+  YetiSectionsCategoryComponents,
+  type YetiSectionsCategoryProps,
+} from "../categories/YetiSectionsCategory.tsx";
+import {
+  YetiSlotsCategory,
+  YetiSlotsCategoryComponents,
+  type YetiSlotsCategoryProps,
+} from "../categories/YetiSlotsCategory.tsx";
 
 export interface MainConfigProps
   extends PageSectionCategoryProps,
     DeprecatedCategoryProps,
     OtherCategoryProps,
     AdvancedCoreInfoCategoryProps,
-    SlotsCategoryProps {}
+    SlotsCategoryProps,
+    YetiSectionsCategoryProps,
+    YetiSlotsCategoryProps {}
 
 const components: Config<MainConfigProps>["components"] = {
   ...PageSectionCategoryComponents,
+  ...YetiSectionsCategoryComponents,
   ...DeprecatedCategoryComponents,
   ...OtherCategoryComponents,
   ...AdvancedCoreInfoCategoryComponents,
   ...SlotsCategoryComponents,
+  ...YetiSlotsCategoryComponents,
 };
 
 // The config used for base entities (locations, financial professionals, etc.)
@@ -48,6 +62,10 @@ export const mainConfig: Config<MainConfigProps> = {
     pageSections: {
       title: pt("categories.standardSections", "Standard Sections"),
       components: PageSectionCategory,
+    },
+    yetiSections: {
+      title: pt("categories.yetiSections", "Yeti Sections"),
+      components: YetiSectionsCategory,
     },
     coreInformation: {
       title: pt("categories.coreInformation", "Core Information"),
@@ -59,6 +77,10 @@ export const mainConfig: Config<MainConfigProps> = {
     },
     slots: {
       components: SlotsCategory,
+      visible: false,
+    },
+    yetiSlots: {
+      components: YetiSlotsCategory,
       visible: false,
     },
     // deprecated components are hidden in the sidebar but still render if used in the page

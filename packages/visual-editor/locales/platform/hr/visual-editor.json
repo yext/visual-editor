@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Osnovne informacije",
     "other": "Drugi",
-    "standardSections": "Standardni odjeljci"
+    "standardSections": "Standardni odjeljci",
+    "yetiSections": "Yeti sekcije"
   },
   "change": "Promijeniti",
   "chooseImage": "Odaberite sliku",

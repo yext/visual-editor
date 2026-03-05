@@ -34,7 +34,8 @@
   "categories": {
     "coreInformation": "Základní informace",
     "other": "OSTATNÍ",
-    "standardSections": "Standardní sekce"
+    "standardSections": "Standardní sekce",
+    "yetiSections": "Sekce Yeti"
   },
   "change": "Přeměna",
   "chooseImage": "Vyberte obrázek",
