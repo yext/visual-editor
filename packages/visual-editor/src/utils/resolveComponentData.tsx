@@ -151,18 +151,20 @@ const resolveTranslatableType = (
   const localizedValue = value[locale] ?? value.defaultValue;
   const isTranslatableContainer =
     value.hasLocalizedValue === "true" || "defaultValue" in value;
+
   if (isTranslatableContainer) {
-    if (localizedValue === undefined || localizedValue === null) {
-      return "";
-    }
-    if (typeof localizedValue === "string") {
-      return localizedValue;
-    }
     if (isRichText(localizedValue)) {
       return toStringOrElement(localizedValue);
     }
-    // For non-text translatable containers (e.g. localized image objects),
-    // unwrap to the localized/default payload so consumers receive the value.
+
+    if (
+      typeof localizedValue === "string" ||
+      localizedValue === null ||
+      localizedValue === undefined
+    ) {
+      return localizedValue ?? "";
+    }
+
     return resolveTranslatableType(localizedValue, locale);
   }
 
