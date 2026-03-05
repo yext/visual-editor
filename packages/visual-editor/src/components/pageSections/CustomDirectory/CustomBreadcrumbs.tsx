@@ -12,11 +12,11 @@ import {
   backgroundColors,
   BackgroundStyle,
 } from "../../../utils/themeConfigOptions.ts";
+import { Body } from "../../atoms/body.tsx";
 import { MaybeLink } from "../../atoms/maybeLink.tsx";
 import { PageSection } from "../../atoms/pageSection.tsx";
 import { VisibilityWrapper } from "../../atoms/visibilityWrapper.tsx";
 import { fetchData } from "./utils.ts";
-import { Body } from "../../atoms/body.tsx";
 
 export interface CustomBreadcrumbItem {
   id: string;
@@ -92,7 +92,7 @@ const CustomBreadcrumbsComponent = ({
 }: WithPuckProps<CustomBreadcrumbsProps>) => {
   const { t, i18n } = useTranslation();
   const separator = "/";
-  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const { document: streamDocument } = useTemplateProps();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_API_KEY;
   const customEndpointURL =
     streamDocument?._env?.YEXT_PUBLIC_CUSTOM_CONTENT_URL;
@@ -182,6 +182,7 @@ const CustomBreadcrumbsComponent = ({
   useEffect(() => {
     fetchBreadcrumbs();
   }, [fetchBreadcrumbs]);
+
   if (!fetchedBreadcrumbs?.length) {
     return <PageSection></PageSection>;
   }
@@ -190,30 +191,28 @@ const CustomBreadcrumbsComponent = ({
     <PageSection
       as="nav"
       verticalPadding="sm"
-      background={styles?.backgroundColor}
+      background={styles.backgroundColor}
       aria-label={t("breadcrumb", "Breadcrumb")}
     >
       <ol className="inline p-0 m-0 list-none">
-        {fetchedBreadcrumbs.map(({ name, id }, index) => {
-          const isRoot = index === 0;
-          const isLast = index === fetchedBreadcrumbs.length - 1;
-          const href = relativePrefixToRoot ? relativePrefixToRoot + id : id;
-
+        {fetchedBreadcrumbs.map((b, i) => {
+          const isLast = i === fetchedBreadcrumbs.length - 1;
+          const href = `/${b.id}`;
           return (
-            <li key={id} className="contents whitespace-normal break-words">
-              {!isRoot && (
+            <li key={b.id} className="contents whitespace-normal break-words">
+              {i ? (
                 <span className="mx-2" aria-hidden>
                   {separator}
                 </span>
+              ) : (
+                ""
               )}
-              <wbr />
               <MaybeLink
-                href={isLast ? undefined : href}
-                eventName={`breadcrumb${index}`}
-                className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
                 alwaysHideCaret
+                href={isLast ? "" : href}
+                className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
               >
-                {isRoot && directoryRoot ? directoryRoot : name}
+                {i === 0 ? directoryRoot : b.name}
               </MaybeLink>
             </li>
           );
