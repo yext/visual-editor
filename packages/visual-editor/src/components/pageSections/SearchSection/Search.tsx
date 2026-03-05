@@ -8,7 +8,6 @@ import {
 import {
   provideHeadless,
   SearchHeadlessProvider,
-  useSearchActions,
 } from "@yext/search-headless-react";
 import { SearchI18nextProvider } from "@yext/search-ui-react";
 import React from "react";
@@ -80,7 +79,6 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   const backgroundColor = styles?.backgroundColor;
   const streamDocument = useDocument();
   const apiKey = streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY || "";
-  const hydrated = React.useRef(false);
   const experienceKey =
     streamDocument?._env?.YEXT_PUBLIC_ADV_SEARCH_EXP_KEY || "";
   if (!apiKey || !experienceKey) {
@@ -133,35 +131,22 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   );
 
   const searcher = React.useMemo(() => {
-    return provideHeadless(searchConfig);
-  }, [searchConfig]);
-
-  React.useEffect(() => {
-    if (!searcher) return;
-    searcher.setSessionTrackingEnabled(true);
-  }, [searcher]);
-
-  React.useEffect(() => {
-    if (!searcher || hydrated.current) return;
-    hydrated.current = true;
+    const searcher = provideHeadless(searchConfig);
 
     const params = new URLSearchParams(window.location.search);
     const searchTerm = params.get("searchTerm");
     const verticalKey = params.get("verticalKey");
 
     if (searchTerm) {
-      const searchActions = useSearchActions();
-
-      searchActions.setQuery(searchTerm);
+      searcher.setQuery(searchTerm);
 
       if (verticalKey) {
-        searchActions.setVertical(verticalKey);
-        searchActions.executeVerticalQuery();
-      } else {
-        searchActions.executeUniversalQuery();
+        searcher.setVertical(verticalKey);
       }
     }
-  }, [searcher]);
+
+    return searcher;
+  }, [searchConfig]);
 
   if (!searcher) {
     console.warn(
