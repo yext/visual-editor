@@ -112,7 +112,9 @@ export const resolveEmbeddedFieldsRecursively = (
   // First, check if the object itself is a translatable shape that needs resolution.
   if (data.hasLocalizedValue === "true" || "defaultValue" in data) {
     if (locale) {
-      const localizedValue = data[locale] ?? data.defaultValue;
+      const localeValue = data[locale];
+      const usesDefaultValue = localeValue === undefined;
+      const localizedValue = usesDefaultValue ? data.defaultValue : localeValue;
       // Handle TranslatableString
       if (typeof localizedValue === "string") {
         const resolvedString = resolveEmbeddedFieldsInString(
@@ -120,7 +122,7 @@ export const resolveEmbeddedFieldsRecursively = (
           streamDocument,
           locale
         );
-        if ("defaultValue" in data && data.defaultValue === localizedValue) {
+        if ("defaultValue" in data && usesDefaultValue) {
           return { ...data, defaultValue: resolvedString };
         }
         return { ...data, [locale]: resolvedString };
@@ -137,7 +139,7 @@ export const resolveEmbeddedFieldsRecursively = (
           streamDocument,
           locale
         );
-        if ("defaultValue" in data && data.defaultValue === localizedValue) {
+        if ("defaultValue" in data && usesDefaultValue) {
           return {
             ...data,
             defaultValue: { ...localizedValue, html: resolvedHtml },
@@ -157,7 +159,7 @@ export const resolveEmbeddedFieldsRecursively = (
           streamDocument,
           locale
         );
-        if ("defaultValue" in data && data.defaultValue === localizedValue) {
+        if ("defaultValue" in data && usesDefaultValue) {
           return { ...data, defaultValue: resolvedNonTextValue };
         }
         return { ...data, [locale]: resolvedNonTextValue };

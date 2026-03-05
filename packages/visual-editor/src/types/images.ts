@@ -65,6 +65,7 @@ export type AssetImageType = Omit<ImageType, "alternateText"> & {
 export type LocalizedAssetImage = {
   hasLocalizedValue?: "true";
   defaultValue?: AssetImageType;
+  [locale: string]: AssetImageType | "true" | undefined;
 };
 
 export type TranslatableAssetImage = AssetImageType | LocalizedAssetImage;

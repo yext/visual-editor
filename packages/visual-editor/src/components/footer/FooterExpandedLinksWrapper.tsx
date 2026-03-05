@@ -145,23 +145,23 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
                   ),
                 },
                 defaultItemProps: defaultLink,
-                getItemSummary: (item: any, index?: number) => {
+                getItemSummary: (item, index) => {
                   const locale = i18nComponentsInstance.language || "en";
                   const label =
                     typeof item.label === "string"
                       ? item.label
-                      : item.label?.[locale];
+                      : (item.label?.[locale] ?? item.label?.defaultValue);
                   return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
                 },
               }),
             },
             defaultItemProps: defaultSection,
-            getItemSummary: (item: any, index?: number) => {
+            getItemSummary: (item, index) => {
               const locale = i18nComponentsInstance.language || "en";
               const label =
                 typeof item.label === "string"
                   ? item.label
-                  : item.label?.[locale];
+                  : (item.label?.[locale] ?? item.label?.defaultValue);
               return (
                 label || pt("section", "Section") + " " + ((index ?? 0) + 1)
               );

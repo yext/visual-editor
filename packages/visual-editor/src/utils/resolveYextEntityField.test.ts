@@ -216,6 +216,27 @@ describe("resolveYextEntityField with embedded fields", () => {
     );
   });
 
+  it("resolves locale value even when it matches defaultValue text", () => {
+    assert.deepEqual(
+      resolveYextEntityField(
+        document,
+        {
+          field: "",
+          constantValue: {
+            fr: "Welcome to [[name]]!",
+            defaultValue: "Welcome to [[name]]!",
+          },
+          constantValueEnabled: true,
+        },
+        "fr"
+      ),
+      {
+        fr: "Welcome to Yext!",
+        defaultValue: "Welcome to [[name]]!",
+      }
+    );
+  });
+
   it("resolves embedded fields in defaultValue when locale key is missing", () => {
     assert.deepEqual(
       resolveYextEntityField(
