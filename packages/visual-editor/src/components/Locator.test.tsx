@@ -175,7 +175,6 @@ const tests: ComponentTest[] = [
     },
     props: {
       mapStyle: "mapbox://styles/mapbox/dark-v11",
-      distanceDisplay: "distanceFromSearch",
       filters: {
         openNowButton: true,
         showDistanceOptions: true,

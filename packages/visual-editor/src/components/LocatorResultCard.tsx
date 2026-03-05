@@ -209,11 +209,6 @@ export interface LocatorResultCardProps {
   };
 }
 
-export type DistanceDisplayOption =
-  | "distanceFromUser"
-  | "distanceFromSearch"
-  | "hidden";
-
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryHeading: {
     field: { selection: { value: "name" } },
@@ -730,23 +725,16 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
-    distanceDisplay = "distanceFromUser",
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
-    distanceDisplay?: DistanceDisplayOption;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
-    const distance =
-      distanceDisplay === "distanceFromUser"
-        ? result.distance
-        : distanceDisplay === "distanceFromSearch"
-          ? result.distanceFromFilter
-          : undefined;
+    const distance = result.distance;
 
     const unit = getPreferredDistanceUnit(i18n.language);
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
