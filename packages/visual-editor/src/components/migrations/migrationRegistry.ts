@@ -64,6 +64,7 @@ import { addLocatorPrimaryCtaLabel } from "./0062_add_locator_primary_cta_label.
 import { textAtomUpdates } from "./0063_text_atom_updates.ts";
 import { locatorStaticContentToggles } from "./0064_locator_static_content_toggles.ts";
 import { addLocatorPrimaryCtaDestination } from "./0065_add_locator_primary_cta_destination.ts";
+import { locatorDistanceDisplay } from "./0065_locator_distance_display.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -136,4 +137,5 @@ export const migrationRegistry: MigrationRegistry = [
   textAtomUpdates,
   locatorStaticContentToggles,
   addLocatorPrimaryCtaDestination,
+  locatorDistanceDisplay,
 ];

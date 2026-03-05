@@ -541,10 +541,11 @@ Available on Locator templates.
 
 #### Other Props
 
-Configuration for the filters available in the locator search experience.
+Controls which distance value to display on each locator result card.
 
 | Prop                          | Type                                                                                                                                                                               | Description                                                                                  | Default                                |
 | :---------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------- | :------------------------------------- |
+| `distanceDisplay`             | `DistanceDisplayOption`                                                                                                                                                            | Controls which distance value to display on each locator result card.                        |                                        |
 | `filters`                     | `{ openNowButton: boolean; showDistanceOptions: boolean; facetFields?: DynamicOptionsSelectorType<string>; }`                                                                      | Configuration for the filters available in the locator search experience.                    |                                        |
 | `mapStartingLocation`         | `{ latitude: string; longitude: string; }`                                                                                                                                         | The starting location for the map.                                                           |                                        |
 | `mapStyle`                    | `string`                                                                                                                                                                           | The visual theme for the map tiles, chosen from a predefined list of Mapbox styles.          | `'mapbox://styles/mapbox/streets-v12'` |

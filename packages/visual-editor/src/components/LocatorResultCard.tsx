@@ -65,6 +65,8 @@ import {
 } from "../utils/i18n/distance.ts";
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
+type PrimaryCtaDestinationOption = "entityPage" | "custom";
+
 export interface LocatorResultCardProps {
   /** Settings for the main heading of the card */
   primaryHeading: {
@@ -216,7 +218,10 @@ export interface LocatorResultCardProps {
   };
 }
 
-type PrimaryCtaDestinationOption = "entityPage" | "custom";
+export type DistanceDisplayOption =
+  | "distanceFromUser"
+  | "distanceFromSearch"
+  | "hidden";
 
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   primaryHeading: {
@@ -804,14 +809,21 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
+    distanceDisplay = "distanceFromUser",
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
+    distanceDisplay?: DistanceDisplayOption;
   }): React.JSX.Element => {
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
-    const distance = result.distance;
+    const distance =
+      distanceDisplay === "distanceFromUser"
+        ? result.distance
+        : distanceDisplay === "distanceFromSearch"
+          ? result.distanceFromFilter
+          : undefined;
 
     const unit = getPreferredDistanceUnit(i18n.language);
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
