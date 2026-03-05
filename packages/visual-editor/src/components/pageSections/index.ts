@@ -86,3 +86,7 @@ export {
   type ProfessionalHeroSectionProps,
   type ProfessionalHeroStyles,
 } from "./ProfessionalHeroSection.tsx";
+export {
+  SearchComponent,
+  type SearchComponentProps,
+} from "./SearchSection/Search.tsx";
