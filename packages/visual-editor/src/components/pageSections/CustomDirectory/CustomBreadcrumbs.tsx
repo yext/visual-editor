@@ -168,7 +168,7 @@ const CustomBreadcrumbsComponent = ({
       const entities = parentKey ? (doc[parentKey] ?? []) : [];
 
       const mapped = entities.map((entity: any) => ({
-        id: entity.uid,
+        id: entity.id,
         name: entity.name,
         slug: entity.slug,
       }));
