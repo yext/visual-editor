@@ -4,9 +4,14 @@ import { useDocument } from "../../../hooks/useDocument.tsx";
 interface TypeEffectProps {
   env: "PRODUCTION" | "SANDBOX";
   enabled?: boolean;
+  locale?: string;
 }
 
-export const useTypingEffect = ({ env, enabled = false }: TypeEffectProps) => {
+export const useTypingEffect = ({
+  env,
+  enabled = false,
+  locale = "en",
+}: TypeEffectProps) => {
   const [queryPrompts, setQueryPrompts] = useState<string[]>([]);
   const [placeholder, setPlaceholder] = useState("");
   const document = useDocument();
@@ -22,7 +27,7 @@ export const useTypingEffect = ({ env, enabled = false }: TypeEffectProps) => {
     const fetchPrompts = async () => {
       const base = env === "PRODUCTION" ? "cdn" : "sbx-cdn";
 
-      const url = `https://${base}.yextapis.com/v2/accounts/me/search/autocomplete?v=20250101&api_key=${document?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY}&sessionTrackingEnabled=false&experienceKey=${document?._env?.YEXT_PUBLIC_ADV_SEARCH_EXP_KEY}&input=`;
+      const url = `https://${base}.yextapis.com/v2/accounts/me/search/autocomplete?v=20250101&api_key=${document?._env?.YEXT_PUBLIC_ADV_SEARCH_API_KEY}&sessionTrackingEnabled=false&experienceKey=${document?._env?.YEXT_PUBLIC_ADV_SEARCH_EXP_KEY}&locale=${locale}&input=`;
 
       try {
         const res = await fetch(url);
