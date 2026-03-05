@@ -176,7 +176,7 @@ const CustomBreadcrumbsComponent = ({
       setFetchedBreadcrumbs([
         ...mapped,
         {
-          id: streamDocument.uid,
+          id: streamDocument.id,
           name: streamDocument.name,
           slug: streamDocument.slug,
         },
