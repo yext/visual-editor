@@ -136,6 +136,6 @@ export const migrationRegistry: MigrationRegistry = [
   addLocatorPrimaryCtaLabel,
   textAtomUpdates,
   locatorStaticContentToggles,
-  addLocatorPrimaryCtaDestination,
   locatorDistanceDisplay,
+  addLocatorPrimaryCtaDestination,
 ];
