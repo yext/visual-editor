@@ -118,7 +118,7 @@ export const MapComponent = ({
                 height="41px"
                 width="27px"
                 color="text-palette-primary-dark"
-                resultIndex={index}
+                resultIndex={isUniversal ? index + 1 : index}
               />
             </Marker>
           );
