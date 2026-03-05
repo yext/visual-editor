@@ -237,7 +237,8 @@ export function getDisplayValue(
     return richTextToString(translatableText);
   }
 
-  const localizedValue = translatableText[locale];
+  const localizedValue =
+    translatableText[locale] ?? translatableText.defaultValue;
 
   if (isRichText(localizedValue)) {
     return richTextToString(localizedValue);
