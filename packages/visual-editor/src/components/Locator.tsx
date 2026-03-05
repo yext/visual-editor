@@ -77,6 +77,7 @@ import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
 import {
   DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+  DistanceDisplayOption,
   Location,
   LocatorResultCard,
   LocatorResultCardFields,
@@ -100,6 +101,7 @@ const DEFAULT_RADIUS = 25;
 const HOURS_FIELD = "builtin.hours";
 const INITIAL_LOCATION_KEY = "initialLocation";
 const DEFAULT_TITLE = "Find a Location";
+const DEFAULT_DISTANCE_DISPLAY = "distanceFromUser";
 const DEFAULT_LOCATION_STYLE = {
   pinIcon: { type: "none" },
   pinColor: backgroundColors.background6.value,
@@ -622,6 +624,8 @@ export interface LocatorProps {
     /** Props to customize the locator result card component. */
     props: LocatorResultCardProps;
   }>;
+  /** Controls which distance value to display on each locator result card. */
+  distanceDisplay?: DistanceDisplayOption;
 }
 
 const locatorFields: Fields<LocatorProps> = {
@@ -820,6 +824,29 @@ const locatorFields: Fields<LocatorProps> = {
       },
     }
   ),
+  distanceDisplay: YextField(
+    msg("fields.distanceDisplay", "Distance Display"),
+    {
+      type: "select",
+      options: [
+        {
+          label: msg("fields.options.distanceFromUser", "Distance from User"),
+          value: "distanceFromUser",
+        },
+        {
+          label: msg(
+            "fields.options.distanceFromSearch",
+            "Distance from Search"
+          ),
+          value: "distanceFromSearch",
+        },
+        {
+          label: msg("fields.options.hidden", "Hidden"),
+          value: "hidden",
+        },
+      ],
+    }
+  ),
 };
 
 /**
@@ -870,6 +897,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
         hasLocalizedValue: "true",
       },
     },
+    distanceDisplay: DEFAULT_DISTANCE_DISPLAY,
   },
   label: msg("components.locator", "Locator"),
   /**
@@ -991,8 +1019,9 @@ const LocatorInternal = ({
   filters: { openNowButton, showDistanceOptions, facetFields },
   mapStartingLocation,
   resultCard: resultCardConfigs,
+  distanceDisplay,
   pageHeading,
-}: WithPuckProps<LocatorProps>) => {
+}: LocatorProps) => {
   // Adds a unified enableYextAnalytics to the window for both Pages and Search
   // analytics. Typically used during consent banner implementation.
   const searchAnalytics = useSearchAnalytics();
@@ -1268,10 +1297,16 @@ const LocatorInternal = ({
           resultCardProps={resultCardProps}
           isSelected={result.result.index === selectedResultIndex}
           showPrimaryCta={showPrimaryCta}
+          distanceDisplay={distanceDisplay}
         />
       );
     },
-    [getResultCardProps, entityTypeSourceMap, selectedResultIndex]
+    [
+      distanceDisplay,
+      getResultCardProps,
+      entityTypeSourceMap,
+      selectedResultIndex,
+    ]
   );
 
   const [userLocationRetrieved, setUserLocationRetrieved] =
@@ -1724,7 +1759,7 @@ const LocatorInternal = ({
           </div>
         )}
         {showSearchAreaButton && (
-          <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+          <div className="absolute top-10 left-0 right-0 flex justify-center">
             <Button
               onClick={handleSearchAreaClick}
               className="py-2 px-4 shadow-xl"

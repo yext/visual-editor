@@ -184,6 +184,7 @@ const tests: ComponentTest[] = [
           pinColor: backgroundColors.background6.value,
         },
       ],
+      distanceDisplay: "distanceFromSearch",
       filters: {
         openNowButton: true,
         showDistanceOptions: true,
