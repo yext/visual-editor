@@ -5457,7 +5457,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 66,
+      version: 67,
       title: {
         field: "",
         constantValue: { en: "Find Locations", hasLocalizedValue: "true" },
