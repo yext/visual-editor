@@ -8,7 +8,7 @@ Use this contract for every generated component.
 - Always match font families, font sizes, font colors, font weight, and background colors 1:1 with the source page
 - Always add a Google font equivalent as the fallback for any non-web safe fonts (for example: `'Client Specific Font', 'Open Sans', sans-serif`)
 - Everything needed for each component must be contained in a single file (excluding npm imports)
-- Use Chakra components wherever possible
+- Use Chakra components wherever possible, but do not use the `sx` prop.
 
 ## Required Directory Layout
 
@@ -71,20 +71,16 @@ In each `starter/src/components/custom/<client>/components/ExampleSection.tsx`:
 - Hero/promo sections should use full-bleed shell wrappers (`px-0 md:px-0` outer padding, `max-w-none` content wrapper) when source parity expects media to reach section edges.
 - Call To Action and Links should always pair with actionable href/link/CTA data, not just plain text spans.
 - Headers and Footers:
-  - Implement mega menus or hidden content if found in the input HTML
+  - You should implement mega menus or hidden content if found in the input HTML
   - Use nested arrays in Puck (`ArrayField`) for navigational links.
   - `defaultProps` must include every source link from the input HTML.
-  - Link parity is strict 1:1 and must match source HTML for:
-    - group/band placement
-    - order within each group/band
-    - visible label text
-    - href destination
+  - Link parity is strict 1:1. Use `references/visual-parity-checklist.md` for required parity columns and checks.
   - Do not collapse, merge, or reorder distinct source links even when labels repeat.
 
 ## Minimum Completion Checklist
 
 - Every major visual band has exactly one section component.
-- All header and footer links from the input `html` are included in the `defaultProps` of the header Puck Component with strict 1:1 parity.
+- All header links from the input `html` are included in header component `defaultProps`, and all footer links are included in footer component `defaultProps`, with strict 1:1 parity.
 - CTA labels are actionable (link/href/cta), not plain text.
 - The output is easy to iterate component-by-component in follow-up prompts.
 

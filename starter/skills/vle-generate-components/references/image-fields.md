@@ -38,6 +38,8 @@ const ExampleLogoImageFields: Fields<ExampleLogoImageProps> = {
 
 - Resolve with `streamDocument.locale ?? "en"` to keep locale behavior consistent with translatable strings.
 - Use `Image` from `@yext/visual-editor`.
+  - `Image` from `@yext/visual-editor` applies some styling. You may want to override this styling via a wrapper
+    so that the image behavior matches the input html/screenshot.
 - Resolve the image once with `resolveComponentData`.
 - Do not add a custom `resolveImage` helper when using the visual-editor `Image` component.
 

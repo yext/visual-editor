@@ -113,3 +113,29 @@ export const ExampleLink = () => {
   );
 };
 ```
+
+## `ArrayField` from `@puckeditor/core`
+
+Use an `ArrayField` when a component has repeated editor-managed items like nav links, FAQs, cards, or social links.
+
+```ts
+{
+  type: "array",
+  arrayFields: {
+    label: { type: "text" },
+    link: { type: "text" },
+  },
+  defaultItemProps: {
+    label: "Link",
+    link: "#",
+  },
+  getItemSummary: (item) => item.label,
+}
+```
+
+Notes for generation:
+
+- `arrayFields` defines the fields available on each item in the array.
+- `defaultItemProps` is required so newly added rows in the editor start with valid values.
+- `getItemSummary` should return a short label so the editor can show a readable item name.
+- In component `defaultProps`, initialize the array itself with the right number of items based on the input html

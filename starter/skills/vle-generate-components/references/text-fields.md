@@ -3,6 +3,7 @@
 - Use this rule for **every text prop/field** in generated Puck components.
 - See YextEntityField in `references/common-atoms.md`
 - Do not use for links/CTAs.
+- Use this for all heading text and body text.
 
 ## Required Shape
 
