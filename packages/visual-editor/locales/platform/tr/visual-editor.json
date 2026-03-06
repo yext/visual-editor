@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Masaüstü konteyner konumu",
     "desktopImagePosition": "Masaüstü görüntü konumu",
     "desktopMediaPosition": "Masaüstü Medya Konumu",
+    "destination": "Varış noktası",
     "direction": "Yön",
     "directoryRootLinkLabel": "Dizin kök bağlantı etiketi",
     "distanceDisplay": "Mesafe Göstergesi",
@@ -287,6 +288,7 @@
         "primary": "Sağlam",
         "secondary": "Taslak"
       },
+      "custom": "Özel",
       "dark": "Karanlık",
       "default": "Varsayılan",
       "distanceFromSearch": "Aramaya Uzaklık",
@@ -296,6 +298,7 @@
       "email": "E-posta",
       "emails": "E-postalar",
       "end": "Son",
+      "entityPage": "Varlık Sayfası",
       "extraSmall_text size": "Ekstra Küçük",
       "facets": {
         "acceptingNewPatients": "Yeni Hasta Kabulü",

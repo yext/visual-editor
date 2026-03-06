@@ -204,6 +204,7 @@
     "desktopContainerPosition": "デスクトップコンテナ位置",
     "desktopImagePosition": "デスクトップ画像位置",
     "desktopMediaPosition": "デスクトップメディアの位置",
+    "destination": "行き先",
     "direction": "方向",
     "directoryRootLinkLabel": "ディレクトリルートリンクラベル",
     "distanceDisplay": "距離表示",
@@ -287,6 +288,7 @@
         "primary": "固体",
         "secondary": "概要"
       },
+      "custom": "カスタム",
       "dark": "暗い",
       "default": "デフォルト",
       "distanceFromSearch": "検索からの距離",
@@ -296,6 +298,7 @@
       "email": "電子メール",
       "emails": "メール",
       "end": "終わり",
+      "entityPage": "エンティティページ",
       "extraSmall_text size": "極小",
       "facets": {
         "acceptingNewPatients": "新規患者の受け入れ",

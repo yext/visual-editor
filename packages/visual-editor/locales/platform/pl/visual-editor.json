@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Pozycja pojemnika na komputery stacjonarne",
     "desktopImagePosition": "Pozycja obrazu stacjonarnego",
     "desktopMediaPosition": "Stanowisko multimedialne na komputerze stacjonarnym",
+    "destination": "Miejsce docelowe",
     "direction": "Kierunek",
     "directoryRootLinkLabel": "Director Count Link",
     "distanceDisplay": "Wyświetlanie odległości",
@@ -287,6 +288,7 @@
         "primary": "Solidny",
         "secondary": "Zarys"
       },
+      "custom": "Niestandardowe",
       "dark": "Ciemny",
       "default": "Domyślny",
       "distanceFromSearch": "Odległość od wyszukiwania",
@@ -296,6 +298,7 @@
       "email": "E-mail",
       "emails": "E-maile",
       "end": "Koniec",
+      "entityPage": "Strona podmiotu",
       "extraSmall_text size": "Bardzo mały",
       "facets": {
         "acceptingNewPatients": "Przyjmowanie nowych pacjentów",

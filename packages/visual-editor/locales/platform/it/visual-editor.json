@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Posizione del contenitore desktop",
     "desktopImagePosition": "Posizione dell'immagine desktop",
     "desktopMediaPosition": "Posizione multimediale sul desktop",
+    "destination": "Destinazione",
     "direction": "Direzione",
     "directoryRootLinkLabel": "Etichetta del collegamento root directory",
     "distanceDisplay": "Visualizzazione della distanza",
@@ -287,6 +288,7 @@
         "primary": "Solido",
         "secondary": "Contorno"
       },
+      "custom": "Costume",
       "dark": "Buio",
       "default": "Predefinito",
       "distanceFromSearch": "Distanza dalla ricerca",
@@ -296,6 +298,7 @@
       "email": "E-mail",
       "emails": "E-mail",
       "end": "FINE",
+      "entityPage": "Pagina Entità",
       "extraSmall_text size": "Extra piccolo",
       "facets": {
         "acceptingNewPatients": "Accettare nuovi pazienti",

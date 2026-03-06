@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Lauaarvuti konteineri asend",
     "desktopImagePosition": "Töölaua pildipositsioon",
     "desktopMediaPosition": "Töölaua meediumipositsioon",
+    "destination": "Sihtkoht",
     "direction": "Suund",
     "directoryRootLinkLabel": "Kataloogi juurte lingi silt",
     "distanceDisplay": "Kauguse kuvamine",
@@ -287,6 +288,7 @@
         "primary": "Tahke",
         "secondary": "Kontuur"
       },
+      "custom": "Kohandatud",
       "dark": "Tume",
       "default": "Täitmata jätmine",
       "distanceFromSearch": "Kaugus otsingust",
@@ -296,6 +298,7 @@
       "email": "Meil",
       "emails": "Meilid",
       "end": "Lõpp",
+      "entityPage": "Olemi leht",
       "extraSmall_text size": "Eriti väike",
       "facets": {
         "acceptingNewPatients": "Uute patsientide vastuvõtmine",

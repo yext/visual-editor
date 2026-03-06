@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Pozice kontejneru pro stolní počítače",
     "desktopImagePosition": "Pozice obrázku na plochu",
     "desktopMediaPosition": "Pozice média na ploše",
+    "destination": "Cíl",
     "direction": "Směr",
     "directoryRootLinkLabel": "Štítek kořenového odkazu na adresář",
     "distanceDisplay": "Zobrazení vzdálenosti",
@@ -287,6 +288,7 @@
         "primary": "Solidní",
         "secondary": "Obrys"
       },
+      "custom": "Vlastní",
       "dark": "Tma",
       "default": "Výchozí",
       "distanceFromSearch": "Vzdálenost od vyhledávání",
@@ -296,6 +298,7 @@
       "email": "E-mail",
       "emails": "E-maily",
       "end": "Konec",
+      "entityPage": "Stránka entity",
       "extraSmall_text size": "Extra malý",
       "facets": {
         "acceptingNewPatients": "Přijímání nových pacientů",

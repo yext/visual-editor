@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Bureaubladcontainerpositie",
     "desktopImagePosition": "De bureaubladafbeeldingspositie",
     "desktopMediaPosition": "Desktopmediapositie",
+    "destination": "Bestemming",
     "direction": "Richting",
     "directoryRootLinkLabel": "Directory root link label",
     "distanceDisplay": "Afstandsweergave",
@@ -287,6 +288,7 @@
         "primary": "Stevig",
         "secondary": "Overzicht"
       },
+      "custom": "Aangepast",
       "dark": "Donker",
       "default": "Standaard",
       "distanceFromSearch": "Afstand vanaf zoeken",
@@ -296,6 +298,7 @@
       "email": "E-mail",
       "emails": "E-mails",
       "end": "Einde",
+      "entityPage": "Entiteitspagina",
       "extraSmall_text size": "Extra klein",
       "facets": {
         "acceptingNewPatients": "Nieuwe patiënten accepteren",

@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Stalinio konteinerio padėtis",
     "desktopImagePosition": "Darbalaukio vaizdo padėtis",
     "desktopMediaPosition": "Stalinio kompiuterio laikmenos padėtis",
+    "destination": "Paskirties vieta",
     "direction": "Kryptis",
     "directoryRootLinkLabel": "Katalogo šaknies nuorodų etiketė",
     "distanceDisplay": "Atstumo ekranas",
@@ -287,6 +288,7 @@
         "primary": "Tvirtas",
         "secondary": "Kontūras"
       },
+      "custom": "Pasirinktinis",
       "dark": "Tamsu",
       "default": "Numatytasis",
       "distanceFromSearch": "Atstumas nuo paieškos",
@@ -296,6 +298,7 @@
       "email": "El. paštas",
       "emails": "El. laiškai",
       "end": "Pabaiga",
+      "entityPage": "Subjekto puslapis",
       "extraSmall_text size": "Itin mažas",
       "facets": {
         "acceptingNewPatients": "Naujų pacientų priėmimas",

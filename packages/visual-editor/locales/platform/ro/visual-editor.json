@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Poziția containerului desktop",
     "desktopImagePosition": "Poziția imaginii desktop",
     "desktopMediaPosition": "Poziție media desktop",
+    "destination": "Destinaţie",
     "direction": "Direcţie",
     "directoryRootLinkLabel": "Etichetă de legătură rădăcină directoare",
     "distanceDisplay": "Afișarea distanței",
@@ -287,6 +288,7 @@
         "primary": "Solid",
         "secondary": "Contur"
       },
+      "custom": "Personalizat",
       "dark": "Întuneric",
       "default": "Implicit",
       "distanceFromSearch": "Distanța de la Căutare",
@@ -296,6 +298,7 @@
       "email": "E-mail",
       "emails": "E-mailuri",
       "end": "Sfârşit",
+      "entityPage": "Pagina de entitate",
       "extraSmall_text size": "Foarte mic",
       "facets": {
         "acceptingNewPatients": "Acceptarea pacienților noi",

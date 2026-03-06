@@ -204,6 +204,7 @@
     "desktopContainerPosition": "Työpöydän säiliön sijainti",
     "desktopImagePosition": "Työpöydän kuvan sijainti",
     "desktopMediaPosition": "Työpöytämedian sijainti",
+    "destination": "Kohde",
     "direction": "Suunta",
     "directoryRootLinkLabel": "Hakemistojuurilinkin tarra",
     "distanceDisplay": "Etäisyyden näyttö",
@@ -287,6 +288,7 @@
         "primary": "Kiinteä",
         "secondary": "Outline"
       },
+      "custom": "Mukautettu",
       "dark": "Tumma",
       "default": "Oletus",
       "distanceFromSearch": "Etäisyys hausta",
@@ -296,6 +298,7 @@
       "email": "Sähköposti",
       "emails": "Sähköpostit",
       "end": "Loppu",
+      "entityPage": "Kokonaisuuden sivu",
       "extraSmall_text size": "Erittäin pieni",
       "facets": {
         "acceptingNewPatients": "Uusien potilaiden vastaanotto",

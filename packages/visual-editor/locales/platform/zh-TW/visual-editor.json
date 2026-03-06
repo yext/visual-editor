@@ -204,6 +204,7 @@
     "desktopContainerPosition": "桌面容器位置",
     "desktopImagePosition": "桌面圖像位置",
     "desktopMediaPosition": "桌面媒體位置",
+    "destination": "目的地",
     "direction": "方向",
     "directoryRootLinkLabel": "目錄根鏈接標籤",
     "distanceDisplay": "距離顯示",
@@ -287,6 +288,7 @@
         "primary": "堅硬的",
         "secondary": "大綱"
       },
+      "custom": "自訂",
       "dark": "黑暗的",
       "default": "預設",
       "distanceFromSearch": "與搜尋的距離",
@@ -296,6 +298,7 @@
       "email": "電子郵件",
       "emails": "電子郵件",
       "end": "結尾",
+      "entityPage": "實體頁面",
       "extraSmall_text size": "特小",
       "facets": {
         "acceptingNewPatients": "接受新患者",

@@ -204,6 +204,7 @@
     "desktopContainerPosition": "桌面容器位置",
     "desktopImagePosition": "桌面图像位置",
     "desktopMediaPosition": "桌面媒体位置",
+    "destination": "目的地",
     "direction": "方向",
     "directoryRootLinkLabel": "目录根链接标签",
     "distanceDisplay": "距离显示",
@@ -287,6 +288,7 @@
         "primary": "坚硬的",
         "secondary": "大纲"
       },
+      "custom": "自定义",
       "dark": "黑暗的",
       "default": "默认",
       "distanceFromSearch": "与搜索的距离",
@@ -296,6 +298,7 @@
       "email": "电子邮件",
       "emails": "电子邮件",
       "end": "结尾",
+      "entityPage": "实体页面",
       "extraSmall_text size": "特小号",
       "facets": {
         "acceptingNewPatients": "接受新患者",
