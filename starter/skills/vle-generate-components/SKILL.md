@@ -80,12 +80,23 @@ Optional:
 - Verify header/footer link parity with an exact row-by-row comparison between:
   - source parity table from the plan step
   - resulting header/footer `defaultProps` link arrays
+- Ensure YextEntityField was used for images and text fields in every component. If not, go back and add it.
 
 ## Follow the requirements:
 
 - `references/visual-parity-checklist.md`
 
-4. Output Step
+4. Review Step
+
+Treat this step as independent from the previous steps. The goal is to fix common implementation problems.
+
+- Implement any mega-menus or complex sections that were skipped in previous steps
+- Ensure all max widths, margins, and padding in the generated components match the input html
+  - Particularly important to check for full-width image hero sections
+- Ensure all text is aligned to match the input html/screenshot
+- Ensure all images have a transparent overlay if present in the original html
+
+5. Output Step
 
 - Do not overwrite existing component registration in `starter/src/ve.config.tsx`.
   Append new component registrations and imports for the generated client components.
