@@ -16,6 +16,7 @@ import {
 import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
+import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export interface ImageProps {
   image: ImageType | ComplexImageType | TranslatableAssetImage;
@@ -153,37 +154,12 @@ export const imgSizesHelper = (
 ): string => {
   const streamDocument = useDocument();
 
-  let maxWidth = undefined;
-
-  // Get the page section max width from the CSS variables (editor)
-  // or the published theme (live page)
-  try {
-    if (
-      typeof window !== "undefined" &&
-      document?.getElementById("preview-frame")
-    ) {
-      const previewFrame = document.getElementById(
-        "preview-frame"
-      ) as HTMLIFrameElement;
-      const el =
-        previewFrame?.contentDocument?.getElementsByClassName(
-          "components"
-        )?.[0];
-
-      if (el) {
-        maxWidth = window
-          .getComputedStyle(el)
-          ?.getPropertyValue("--maxWidth-pageSection-contentWidth")
-          ?.replace("!important", "");
-      }
-    } else if (streamDocument?.__?.theme) {
-      maxWidth =
-        JSON.parse(streamDocument.__.theme)?.[
-          "--maxWidth-pageSection-contentWidth"
-        ] ?? "1024px";
-    }
-  } catch {
-    // use fallback max width
+  let maxWidth = getThemeValue(
+    "--maxWidth-pageSection-contentWidth",
+    streamDocument
+  );
+  if (!maxWidth && streamDocument?.__?.theme) {
+    maxWidth = "1024px";
   }
 
   const updatedBreakpointSizes = Object.fromEntries(

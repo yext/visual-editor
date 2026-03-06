@@ -13,6 +13,7 @@ import { getDirections } from "@yext/pages-components";
 import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
+import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 const LINK_TEXT_TRANSFORM_CSS_VAR =
   "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
@@ -274,6 +275,7 @@ export const CTA = (props: CTAProps) => {
   } = props;
 
   const { t } = useTranslation();
+  const streamDocument = useDocument();
   const resolvedProps = useResolvedCtaProps(props);
   const isButton = actionType === "button";
   const isDarkBG = useBackground()?.isDarkBackground;
@@ -329,14 +331,9 @@ export const CTA = (props: CTAProps) => {
     showCaret,
   } = resolvedProps;
 
-  const linkTextTransformValue =
-    typeof window !== "undefined"
-      ? window
-          .getComputedStyle(document.documentElement)
-          .getPropertyValue("--textTransform-link-textTransform")
-          .trim()
-          .toLowerCase()
-      : "";
+  const linkTextTransformValue = (
+    getThemeValue("--textTransform-link-textTransform", streamDocument) ?? ""
+  ).toLowerCase();
 
   const shouldTitleCaseDirectoryLink =
     variant === "directoryLink" &&
