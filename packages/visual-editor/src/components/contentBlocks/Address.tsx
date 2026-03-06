@@ -33,10 +33,18 @@ export interface AddressProps {
   };
 
   styles: {
+    /** Whether to include the region in the Address */
+    showRegion: boolean;
+
+    /** Whether to include the country in the Address */
+    showCountry: boolean;
+
     /** Whether to include a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
+
     /** The variant of the get directions button */
     ctaVariant: CTAVariant;
+
     color?: BackgroundStyle;
   };
 
@@ -58,6 +66,20 @@ export const AddressDataField = YextField<any, AddressType>(
 
 // Address style fields used in Address and CoreInfoSection
 export const AddressStyleFields: Fields<AddressProps["styles"]> = {
+  showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  }),
+  showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+    type: "radio",
+    options: [
+      { label: msg("fields.options.yes", "Yes"), value: true },
+      { label: msg("fields.options.no", "No"), value: false },
+    ],
+  }),
   showGetDirectionsLink: YextField<boolean>(
     msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
     {
@@ -140,7 +162,11 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
         fieldId={data.address.field}
         constantValueEnabled={!parentData && data.address.constantValueEnabled}
       >
-        <RenderAddress address={address} />
+        <RenderAddress
+          address={address}
+          showRegion={styles.showRegion}
+          showCountry={styles.showCountry}
+        />
       </EntityField>
       {(useAddressLink ? !!addressLink : !!listingsLink) &&
         styles.showGetDirectionsLink && (
@@ -207,6 +233,8 @@ export const Address: ComponentConfig<{
       },
     },
     styles: {
+      showRegion: true,
+      showCountry: true,
       showGetDirectionsLink: true,
       ctaVariant: "link",
       color: backgroundColors.color1.value,

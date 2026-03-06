@@ -136,8 +136,15 @@ export interface LocatorResultCardProps {
 
   /** Settings for the address block */
   address: {
+    /** Whether to include the region in the Address */
+    showRegion: boolean;
+
+    /** Whether to include the country in the Address */
+    showCountry: boolean;
+
     /** Whether to show the "Get Directions" link */
     showGetDirectionsLink: boolean;
+
     /** Whether the address block is visible in live mode */
     liveVisibility: boolean;
   };
@@ -254,6 +261,8 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     liveVisibility: true,
   },
   address: {
+    showRegion: true,
+    showCountry: true,
     showGetDirectionsLink: true,
     liveVisibility: true,
   },
@@ -503,6 +512,20 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
       label: msg("fields.address", "Address"),
       type: "object",
       objectFields: {
+        showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
+        showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+          type: "radio",
+          options: [
+            { label: msg("fields.options.yes", "Yes"), value: true },
+            { label: msg("fields.options.no", "No"), value: false },
+          ],
+        }),
         showGetDirectionsLink: YextField(
           msg("fields.showGetDirectionsLink", "Show Get Directions Link"),
           {
@@ -872,7 +895,11 @@ export const LocatorResultCard = React.memo(
                     )}
                     <div className="flex flex-col gap-1 w-full">
                       <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize gap-4">
-                        <Address address={location.address} />
+                        <Address
+                          address={location.address}
+                          showRegion={props.address.showRegion}
+                          showCountry={props.address.showCountry}
+                        />
                       </div>
                       {getDirectionsLink &&
                         props.address.showGetDirectionsLink && (
