@@ -33,11 +33,17 @@ export interface AddressProps {
   };
 
   styles: {
-    /** Whether to include the region in the Address */
-    showRegion: boolean;
+    /**
+     * Whether to include the region in the Address
+     * @defaultValue true
+     */
+    showRegion?: boolean;
 
-    /** Whether to include the country in the Address */
-    showCountry: boolean;
+    /**
+     * Whether to include the country in the Address
+     * @defaultValue true
+     */
+    showCountry?: boolean;
 
     /** Whether to include a "Get Directions" CTA to Google Maps */
     showGetDirectionsLink: boolean;
