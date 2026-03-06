@@ -230,10 +230,7 @@ export const defaultBannerProps: BannerSectionProps = {
   data: {
     text: {
       field: "",
-      constantValue: {
-        en: getDefaultRTF("Banner Text"),
-        hasLocalizedValue: "true",
-      },
+      constantValue: { defaultValue: getDefaultRTF("Banner Text") },
       constantValueEnabled: true,
     },
   },

@@ -127,10 +127,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "" },
                 constantValueEnabled: false,
                 field: "name",
               },
@@ -145,10 +142,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "" },
                 constantValueEnabled: true,
                 field: "name",
               },
@@ -162,10 +156,7 @@ export const Directory: ComponentConfig<{ props: DirectoryProps }> = {
           type: "BreadcrumbsSlot",
           props: {
             data: {
-              directoryRoot: {
-                en: "Directory Root",
-                hasLocalizedValue: "true",
-              },
+              directoryRoot: { defaultValue: "Directory Root" },
             },
             styles: {
               backgroundColor: backgroundColors.background1.value,

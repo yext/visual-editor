@@ -148,7 +148,7 @@ export const TRANSLATABLE_TEXT_LIST_CONSTANT_CONFIG: CustomField<
       e?.preventDefault();
       const newItems = [
         ...localItems,
-        { [locale]: "", hasLocalizedValue: "true" },
+        { [locale]: "", hasLocalizedValue: "true" as const },
       ];
       setLocalItems(newItems);
       onChange(newItems);

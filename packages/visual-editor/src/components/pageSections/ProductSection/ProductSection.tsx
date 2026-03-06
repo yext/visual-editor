@@ -163,10 +163,7 @@ export const ProductSection: ComponentConfig<{ props: ProductSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Featured Products",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Featured Products" },
                 constantValueEnabled: true,
               },
             },
