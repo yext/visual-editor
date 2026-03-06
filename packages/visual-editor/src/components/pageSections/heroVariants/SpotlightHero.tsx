@@ -7,6 +7,10 @@ import { getImageUrl } from "@yext/pages-components";
 import { HeroVariantProps } from "../HeroSection.tsx";
 import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
 import { PuckComponent } from "@puckeditor/core";
+import {
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+} from "../../../types/images.ts";
 
 export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
   const { data, styles } = props;
@@ -21,10 +25,8 @@ export const SpotlightHero: PuckComponent<HeroVariantProps> = (props) => {
   );
 
   const localizedImage =
-    resolvedBackgroundImage &&
-    typeof resolvedBackgroundImage === "object" &&
-    "hasLocalizedValue" in resolvedBackgroundImage
-      ? resolvedBackgroundImage[locale]
+    resolvedBackgroundImage && isLocalizedAssetImage(resolvedBackgroundImage)
+      ? resolveLocalizedAssetImage(resolvedBackgroundImage, locale)
       : resolvedBackgroundImage;
 
   return (

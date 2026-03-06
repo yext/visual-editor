@@ -28,12 +28,11 @@ import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultTestimonial = {
   description: {
-    en: getDefaultRTF(
+    defaultValue: getDefaultRTF(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     ),
-    hasLocalizedValue: "true",
   },
-  contributorName: { en: "Name", hasLocalizedValue: "true" },
+  contributorName: { defaultValue: "Name" },
   contributionDate: "2022-08-02T14:00:00",
 } satisfies TestimonialStruct;
 

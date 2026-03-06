@@ -335,6 +335,17 @@ export const ConstantValueInput = <T extends Record<string, any>>({
 
   const { i18n } = useTranslation();
   const locale = i18n.language;
+  const constantValue = value?.constantValue;
+  const localizedConstantValue =
+    typeof constantValue === "string"
+      ? constantValue
+      : constantValue &&
+          typeof constantValue === "object" &&
+          !Array.isArray(constantValue)
+        ? (constantValue[locale] ?? constantValue.defaultValue ?? "")
+        : "";
+  const singleStringInputValue =
+    typeof localizedConstantValue === "string" ? localizedConstantValue : "";
 
   if (!constantFieldConfig) {
     return;
@@ -343,7 +354,7 @@ export const ConstantValueInput = <T extends Record<string, any>>({
   const fieldEditor = isSingleStringField ? (
     <div className="ve-pt-3">
       <EmbeddedFieldStringInputFromEntity
-        value={value?.constantValue?.[locale] ?? ""}
+        value={singleStringInputValue}
         onChange={(newInputValue) => {
           onChange({
             ...value,
