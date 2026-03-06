@@ -14,6 +14,51 @@ import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
 
+const LINK_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
+const BUTTON_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"];
+
+const toTitleCase = (value: string): string =>
+  value.replace(/\b([A-Za-z][A-Za-z']*)\b/g, (word) => {
+    // Only promote fully-lowercase words so acronyms/mixed-case labels (e.g. "USA", "iOS") are preserved.
+    if (!/^[a-z][a-z']*$/.test(word)) {
+      return word;
+    }
+    return `${word[0].toUpperCase()}${word.slice(1)}`;
+  });
+
+/**
+ * Normalizes directory-link label content so nested text (e.g. inside <Body>)
+ * uses link text-transform instead of body text-transform.
+ *
+ * When shouldTitleCase is true, it title-cases plain lowercase string words
+ * while preserving acronyms/mixed case.
+ */
+const normalizeDirectoryLinkLabel = (
+  node: React.ReactNode,
+  shouldTitleCase: boolean
+): React.ReactNode => {
+  if (typeof node === "string") {
+    return shouldTitleCase ? toTitleCase(node) : node;
+  }
+
+  if (!React.isValidElement(node)) {
+    return node;
+  }
+
+  const props = node.props as any;
+  return React.cloneElement(node, {
+    style: {
+      ...props.style,
+      textTransform: LINK_TEXT_TRANSFORM_CSS_VAR,
+    },
+    children: React.Children.map(props.children, (child) =>
+      normalizeDirectoryLinkLabel(child, shouldTitleCase)
+    ),
+  });
+};
+
 export type CTAProps = {
   // Core props
   label: React.ReactNode;
@@ -284,9 +329,27 @@ export const CTA = (props: CTAProps) => {
     showCaret,
   } = resolvedProps;
 
+  const linkTextTransformValue =
+    typeof window !== "undefined"
+      ? window
+          .getComputedStyle(document.documentElement)
+          .getPropertyValue("--textTransform-link-textTransform")
+          .trim()
+          .toLowerCase()
+      : "";
+
+  const shouldTitleCaseDirectoryLink =
+    variant === "directoryLink" &&
+    (linkTextTransformValue === "none" || linkTextTransformValue === "normal");
+
+  const normalizedLabel =
+    variant === "directoryLink"
+      ? normalizeDirectoryLinkLabel(label, shouldTitleCaseDirectoryLink)
+      : label;
+
   const linkContent = (
     <>
-      {label}
+      {normalizedLabel}
       {ctaType !== "presetImage" && (
         <FaAngleRight
           size="12px"
@@ -327,8 +390,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           ...disabledStyle,
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
-            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
       >
         {linkContent}
@@ -355,8 +418,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
-            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
         className={buttonClassName}
         variant={buttonVariant}
@@ -389,8 +452,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? "var(--textTransform-link-textTransform)"
-            : "var(--textTransform-button-textTransform)",
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
       >
         {linkContent}
