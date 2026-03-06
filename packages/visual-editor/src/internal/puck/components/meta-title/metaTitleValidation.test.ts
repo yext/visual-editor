@@ -67,4 +67,18 @@ describe("metaTitleValidation", () => {
 
     expect(getMetaTitleMissingLocales(titleField, ["en"])).toEqual([]);
   });
+
+  it("uses defaultValue fallback for missing locales", () => {
+    const titleField = makeTitleField({
+      constantValueEnabled: true,
+      constantValue: {
+        defaultValue: "Hello",
+        es: "",
+      },
+    });
+
+    expect(getMetaTitleMissingLocales(titleField, ["en", "fr", "es"])).toEqual([
+      "es",
+    ]);
+  });
 });

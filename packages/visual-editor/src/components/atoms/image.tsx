@@ -7,7 +7,12 @@ import {
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { AssetImageType, TranslatableAssetImage } from "../../types/images.ts";
+import {
+  AssetImageType,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+  TranslatableAssetImage,
+} from "../../types/images.ts";
 import { TranslatableString } from "../../types/types.ts";
 import { useTranslation } from "react-i18next";
 import { StreamDocument } from "../../utils/types/StreamDocument.ts";
@@ -62,16 +67,8 @@ export const Image: React.FC<ImageProps> = ({
     streamDocumentOverride ?? useDocument();
 
   const image = React.useMemo(() => {
-    if (
-      rawImage &&
-      typeof rawImage === "object" &&
-      "hasLocalizedValue" in rawImage
-    ) {
-      const localized = rawImage[i18n.language];
-      if (typeof localized === "object") {
-        return localized as AssetImageType;
-      }
-      return undefined;
+    if (rawImage && isLocalizedAssetImage(rawImage)) {
+      return resolveLocalizedAssetImage(rawImage, i18n.language);
     }
     return rawImage as ImageType | ComplexImageType | AssetImageType;
   }, [rawImage, i18n.language]);

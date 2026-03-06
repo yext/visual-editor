@@ -7,6 +7,10 @@ import { HeroContent, heroContentParentCn } from "./HeroContent.tsx";
 import { useTranslation } from "react-i18next";
 import { getImageUrl } from "@yext/pages-components";
 import { PuckComponent } from "@puckeditor/core";
+import {
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+} from "../../../types/images.ts";
 
 export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
   const { data, styles } = props;
@@ -20,10 +24,8 @@ export const ImmersiveHero: PuckComponent<HeroVariantProps> = (props) => {
   );
 
   const localizedImage =
-    resolvedBackgroundImage &&
-    typeof resolvedBackgroundImage === "object" &&
-    "hasLocalizedValue" in resolvedBackgroundImage
-      ? resolvedBackgroundImage[locale]
+    resolvedBackgroundImage && isLocalizedAssetImage(resolvedBackgroundImage)
+      ? resolveLocalizedAssetImage(resolvedBackgroundImage, locale)
       : resolvedBackgroundImage;
 
   return (

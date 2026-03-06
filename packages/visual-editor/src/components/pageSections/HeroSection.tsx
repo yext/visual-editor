@@ -406,10 +406,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Business Name",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Business Name" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -424,10 +421,7 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Geomodifier",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Geomodifier" },
                 constantValueEnabled: true,
                 field: "",
               },
@@ -485,18 +479,12 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Call To Action",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: { defaultValue: "Call To Action" },
+                  link: { defaultValue: "#" },
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },
@@ -516,18 +504,12 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
                 constantValue: {
-                  label: {
-                    en: "Learn More",
-                    hasLocalizedValue: "true",
-                  },
-                  link: {
-                    en: "#",
-                    hasLocalizedValue: "true",
-                  },
+                  label: { defaultValue: "Learn More" },
+                  link: { defaultValue: "#" },
                   linkType: "URL",
                   ctaType: "textAndLink",
                 },

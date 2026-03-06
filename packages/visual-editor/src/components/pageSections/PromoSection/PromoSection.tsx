@@ -352,10 +352,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Featured Promotion",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Featured Promotion" },
                 constantValueEnabled: true,
               },
             },
@@ -371,10 +368,9 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
               text: {
                 field: "",
                 constantValue: {
-                  en: getDefaultRTF(
+                  defaultValue: getDefaultRTF(
                     "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 100 characters"
                   ),
-                  hasLocalizedValue: "true",
                 },
                 constantValueEnabled: true,
               },
@@ -429,7 +425,7 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
           props: {
             data: {
               actionType: "link",
-              buttonText: { en: "Button", hasLocalizedValue: "true" },
+              buttonText: { defaultValue: "Button" },
               entityField: {
                 field: "",
                 constantValue: {

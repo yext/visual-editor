@@ -140,10 +140,7 @@ export const TestimonialSection: ComponentConfig<{
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Featured Testimonials",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Featured Testimonials" },
                 constantValueEnabled: true,
                 field: "",
               },

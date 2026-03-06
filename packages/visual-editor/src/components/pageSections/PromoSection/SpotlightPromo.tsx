@@ -7,6 +7,10 @@ import { getImageUrl } from "@yext/pages-components";
 import { PromoContent, promoContentParentCn } from "./PromoContent.tsx";
 import { PuckComponent } from "@puckeditor/core";
 import { PromoVariantProps } from "./PromoSection.tsx";
+import {
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
+} from "../../../types/images.ts";
 
 export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
   const { data, styles } = props;
@@ -21,10 +25,8 @@ export const SpotlightPromo: PuckComponent<PromoVariantProps> = (props) => {
   );
 
   const localizedImage =
-    resolvedBackgroundImage &&
-    typeof resolvedBackgroundImage === "object" &&
-    "hasLocalizedValue" in resolvedBackgroundImage
-      ? resolvedBackgroundImage[locale]
+    resolvedBackgroundImage && isLocalizedAssetImage(resolvedBackgroundImage)
+      ? resolveLocalizedAssetImage(resolvedBackgroundImage, locale)
       : resolvedBackgroundImage;
 
   return (
