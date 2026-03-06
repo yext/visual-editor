@@ -1,3 +1,4 @@
+import { PUCK_PREVIEW_IFRAME_ID } from "./applyTheme.ts";
 import { StreamDocument } from "./types/StreamDocument.ts";
 
 /**
@@ -12,7 +13,7 @@ export const getThemeValue = (
       let themedRoot: Element | null = null;
 
       const previewFrame = document.getElementById(
-        "preview-frame"
+        PUCK_PREVIEW_IFRAME_ID
       ) as HTMLIFrameElement | null;
       if (previewFrame?.contentDocument) {
         themedRoot =
