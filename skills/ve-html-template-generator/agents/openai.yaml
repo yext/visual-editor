@@ -1,0 +1,4 @@
+interface:
+  display_name: "VE HTML Template Generator"
+  short_description: "Generate slot-based client templates"
+  default_prompt: "Use $ve-html-template-generator with `client: <slug>` and `html: <path-or-url>` to generate isolated, slot-based client component files under `packages/visual-editor/src/components/custom/<client>` plus starter wrapper config/template files under `starter/src/templates/<client>`, then run section screenshot parity as the default post-generation QA step."
