@@ -53,14 +53,6 @@ export const DirectoryList = ({
   const shouldTitleCase =
     linkTextTransformValue === "none" || linkTextTransformValue === "normal";
 
-  const toTitleCase = (value: string): string =>
-    value.replace(/\b([A-Za-z][A-Za-z']*)\b/g, (word) => {
-      if (!/^[a-z][a-z']*$/.test(word)) {
-        return word;
-      }
-      return `${word[0].toUpperCase()}${word.slice(1)}`;
-    });
-
   return (
     <PageSection
       verticalPadding="sm"
@@ -83,7 +75,6 @@ export const DirectoryList = ({
             default:
               label = child.name;
           }
-          const displayLabel = shouldTitleCase ? toTitleCase(label) : label;
 
           return (
             <li key={idx}>
@@ -98,11 +89,12 @@ export const DirectoryList = ({
               >
                 <Body
                   style={{
-                    textTransform:
-                      "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"],
+                    textTransform: shouldTitleCase
+                      ? ("capitalize" as React.CSSProperties["textTransform"])
+                      : ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"]),
                   }}
                 >
-                  {displayLabel}
+                  {label}
                 </Body>
               </MaybeLink>
             </li>

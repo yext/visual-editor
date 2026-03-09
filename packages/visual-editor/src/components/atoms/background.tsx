@@ -6,6 +6,7 @@ import {
 import { BackgroundProvider } from "../../hooks/useBackground.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
+import { getThemeValue } from "../../utils/getThemeValue.ts";
 
 export interface BackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: BackgroundStyle;
@@ -17,31 +18,6 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
     const streamDocument = useDocument();
     const Component = as ?? "div";
     const selectedBackground = background ?? backgroundColors.background1.value;
-    let publishedTheme: Record<string, string> | undefined;
-    let cssVariables: string | undefined;
-
-    // In the editor, we must get the colors from the CSS variables because
-    // that is where they are updated. However, during page generation, we must
-    // we must get the colors from streamDocument.__.theme because the CSS variables do not exist.
-    // On the hydrated live page, either will work; this uses the CSS variables.
-    if (
-      typeof window !== "undefined" &&
-      typeof window.document !== "undefined"
-    ) {
-      const styleTag = window.document.getElementById(
-        "visual-editor-theme"
-      ) as HTMLStyleElement;
-      cssVariables = styleTag?.innerText ?? "";
-    } else if (streamDocument?.__?.theme) {
-      try {
-        publishedTheme = JSON.parse(streamDocument.__.theme) as Record<
-          string,
-          string
-        >;
-      } catch {
-        // continue
-      }
-    }
 
     const backgroundValue: Required<BackgroundStyle> = React.useMemo(() => {
       // Our built-in backgrounds are always light or dark
@@ -61,64 +37,44 @@ export const Background = React.forwardRef<HTMLDivElement, BackgroundProps>(
       // of the form `--colors-palette-x-contrast`
       const paletteColorContrastCSSVariable = `--colors-${paletteColor}-contrast`;
 
-      // Handle page generation
-      if (publishedTheme) {
-        let isDarkBackground;
-        const contrastColor = publishedTheme[paletteColorContrastCSSVariable];
-
-        if (contrastColor) {
-          isDarkBackground = contrastColor === "#FFFFFF";
-        } else {
-          // Handle color palette defaults
-          switch (paletteColorContrastCSSVariable) {
-            case "--colors-palette-primary-contrast":
-              isDarkBackground = true;
-              break;
-            case "--colors-palette-secondary-contrast":
-              isDarkBackground = true;
-              break;
-            case "--colors-palette-tertiary-contrast":
-              isDarkBackground = false;
-              break;
-            case "--colors-palette-quaternary-contrast":
-              isDarkBackground = true;
-              break;
-            default:
-              isDarkBackground = false;
-              break;
-          }
-        }
-
+      const contrastColor = getThemeValue(
+        paletteColorContrastCSSVariable,
+        streamDocument
+      );
+      if (contrastColor) {
         return {
           bgColor: selectedBackground.bgColor,
           textColor: selectedBackground.textColor,
-          isDarkBackground,
+          isDarkBackground: contrastColor.toUpperCase() === "#FFFFFF",
         };
       }
 
-      // Handle editor and hydrated live page
-      if (cssVariables) {
-        // Get value for contrast color from `--colors-palette-x-contrast:#xxxxxx!important;`
-        const regex = new RegExp(
-          `${paletteColorContrastCSSVariable}\\s*:\\s*([^;!]+)`,
-          "i"
-        );
-        const match = cssVariables.match(regex);
-
-        return {
-          bgColor: selectedBackground.bgColor,
-          textColor: selectedBackground.textColor,
-          isDarkBackground: Boolean(match && match[1].trim() === "#FFFFFF"),
-        };
+      // Handle color palette defaults and fallback.
+      let isDarkBackground;
+      switch (paletteColorContrastCSSVariable) {
+        case "--colors-palette-primary-contrast":
+          isDarkBackground = true;
+          break;
+        case "--colors-palette-secondary-contrast":
+          isDarkBackground = true;
+          break;
+        case "--colors-palette-tertiary-contrast":
+          isDarkBackground = false;
+          break;
+        case "--colors-palette-quaternary-contrast":
+          isDarkBackground = true;
+          break;
+        default:
+          isDarkBackground = false;
+          break;
       }
 
-      // Fall back
       return {
         bgColor: selectedBackground.bgColor,
         textColor: selectedBackground.textColor,
-        isDarkBackground: false,
+        isDarkBackground,
       };
-    }, [selectedBackground, publishedTheme, cssVariables]);
+    }, [selectedBackground, streamDocument]);
 
     return (
       <BackgroundProvider value={backgroundValue}>
