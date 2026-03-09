@@ -212,8 +212,9 @@ export type PersonStruct = {
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
 type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
+  hasLocalizedValue?: "true";
+  defaultValue?: string;
+} & Record<string, string | undefined>;
 
 /**
  * A string that can be translated for different locales.
@@ -227,7 +228,10 @@ export type TranslatableString = string | LocalizedValues;
  */
 export type TranslatableRichText =
   | (string | RichText)
-  | Record<string, string | RichText>;
+  | ({
+      hasLocalizedValue?: "true";
+      defaultValue?: string | RichText;
+    } & Record<string, string | RichText | undefined>);
 
 /**
  * A rich text object with HTML and JSON (LexicalRichText) representations.

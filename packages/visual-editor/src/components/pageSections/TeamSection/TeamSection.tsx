@@ -136,10 +136,7 @@ export const TeamSection: ComponentConfig<{ props: TeamSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Meet Our Team",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Meet Our Team" },
                 constantValueEnabled: true,
                 field: "",
               },

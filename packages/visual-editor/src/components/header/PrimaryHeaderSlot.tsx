@@ -424,12 +424,12 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
-            buttonText: { en: "Button", hasLocalizedValue: "true" },
+            buttonText: { defaultValue: "Button" },
             entityField: {
               field: "",
               constantValue: {
-                label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: { en: "#", hasLocalizedValue: "true" },
+                label: { defaultValue: "Call to Action" },
+                link: { defaultValue: "#" },
                 linkType: "URL",
                 ctaType: "textAndLink",
               },
@@ -451,12 +451,12 @@ export const defaultPrimaryHeaderProps: PrimaryHeaderSlotProps = {
           data: {
             show: true,
             actionType: "link",
-            buttonText: { en: "Button", hasLocalizedValue: "true" },
+            buttonText: { defaultValue: "Button" },
             entityField: {
               field: "",
               constantValue: {
-                label: { en: "Call to Action", hasLocalizedValue: "true" },
-                link: { en: "#", hasLocalizedValue: "true" },
+                label: { defaultValue: "Call to Action" },
+                link: { defaultValue: "#" },
                 linkType: "URL",
                 ctaType: "textAndLink",
               },

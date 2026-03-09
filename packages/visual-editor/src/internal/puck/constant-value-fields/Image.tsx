@@ -11,6 +11,9 @@ import {
   ImageContentData,
   TranslatableAssetImage,
   AssetImageType,
+  LocalizedAssetImage,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
 } from "../../../types/images.ts";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { TranslatableStringField } from "../../../editor/TranslatableStringField.tsx";
@@ -63,15 +66,13 @@ const createImageConstantConfig = (options?: {
 
     const locales = getPageSetLocales(streamDocument);
 
-    const resolvedValue = React.useMemo(() => {
-      if (value && "hasLocalizedValue" in value) {
-        const localizedValue = value[locale];
-        if (typeof localizedValue === "object") {
-          return localizedValue;
-        }
-        return undefined;
-      }
-      return value;
+    const localizedContainer = React.useMemo<LocalizedAssetImage | undefined>(
+      () => (isLocalizedAssetImage(value) ? value : undefined),
+      [value]
+    );
+
+    const resolvedValue = React.useMemo<AssetImageType | undefined>(() => {
+      return resolveLocalizedAssetImage(value, locale);
     }, [value, locale]);
 
     const [pendingMessageId, setPendingMessageId] = React.useState<
@@ -109,7 +110,7 @@ const createImageConstantConfig = (options?: {
           };
 
           onChange({
-            ...(value && "hasLocalizedValue" in value ? value : {}),
+            ...localizedContainer,
             [locale]: newValue,
             hasLocalizedValue: "true",
           } as TranslatableAssetImage);
@@ -134,7 +135,7 @@ const createImageConstantConfig = (options?: {
           width: 1,
         };
         onChange({
-          ...(value && "hasLocalizedValue" in value ? value : {}),
+          ...localizedContainer,
           [locale]: newValue,
           hasLocalizedValue: "true",
         } as TranslatableAssetImage);
@@ -164,7 +165,7 @@ const createImageConstantConfig = (options?: {
       };
 
       onChange({
-        ...(value && "hasLocalizedValue" in value ? value : {}),
+        ...localizedContainer,
         [locale]: newValue,
         hasLocalizedValue: "true",
       } as TranslatableAssetImage);
@@ -260,10 +261,11 @@ const createImageConstantConfig = (options?: {
                 hasLocalizedValue: "true",
                 ...locales.reduce(
                   (acc, l) => {
-                    const existingLocaleData =
-                      value && "hasLocalizedValue" in value
-                        ? (value[l] as AssetImageType | undefined)
-                        : undefined;
+                    const existingLocaleData = (
+                      localizedContainer as
+                        | Record<string, AssetImageType | undefined>
+                        | undefined
+                    )?.[l];
 
                     acc[l] = {
                       ...resolvedValue,
@@ -291,7 +293,7 @@ const createImageConstantConfig = (options?: {
               ? { ...resolvedValue, alternateText: newValue }
               : undefined;
             onChange({
-              ...(value && "hasLocalizedValue" in value ? value : {}),
+              ...localizedContainer,
               [locale]: updatedImage,
               hasLocalizedValue: "true",
             } as TranslatableAssetImage);

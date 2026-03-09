@@ -63,6 +63,8 @@ import { expandedHeaderLinks } from "./0061_expanded_header_links.ts";
 import { addLocatorPrimaryCtaLabel } from "./0062_add_locator_primary_cta_label.ts";
 import { textAtomUpdates } from "./0063_text_atom_updates.ts";
 import { locatorStaticContentToggles } from "./0064_locator_static_content_toggles.ts";
+import { locatorDistanceDisplay } from "./0065_locator_distance_display.ts";
+import { normalizeLocatorResultCard } from "./0066_normalize_locator_result_card.ts";
 
 // To add a migration:
 // Create a new file in this directory that exports a Migration
@@ -134,4 +136,6 @@ export const migrationRegistry: MigrationRegistry = [
   addLocatorPrimaryCtaLabel,
   textAtomUpdates,
   locatorStaticContentToggles,
+  locatorDistanceDisplay,
+  normalizeLocatorResultCard,
 ];

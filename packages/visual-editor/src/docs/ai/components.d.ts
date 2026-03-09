@@ -1053,7 +1053,10 @@ interface PageSectionProps
  */
 type TranslatableRichText =
   | (string | RichText)
-  | Record<string, string | RichText>;
+  | ({
+      hasLocalizedValue?: "true";
+      defaultValue?: string | RichText;
+    } & Record<string, string | RichText | undefined>);
 
 /**
  * A string that can be translated for different locales.
@@ -1103,8 +1106,9 @@ type RichText = {
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
 type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
+  hasLocalizedValue?: "true";
+  defaultValue?: string;
+} & Record<string, string | undefined>;
 
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
@@ -1118,9 +1122,10 @@ type ImageContentData = {
 };
 
 type LocalizedAssetImage = {
-  hasLocalizedValue: "true";
+  hasLocalizedValue?: "true";
+  defaultValue?: AssetImageType;
 } & {
-  [key: string]: AssetImageType | undefined;
+  [locale: string]: AssetImageType | undefined;
 };
 
 type AssetVideo = {

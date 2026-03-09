@@ -81,10 +81,7 @@ export const defaultPhoneDataProps: PhoneProps["data"] = {
     field: "mainPhone",
     constantValue: "",
   },
-  label: {
-    en: "Phone",
-    hasLocalizedValue: "true",
-  },
+  label: { defaultValue: "Phone" },
 };
 
 export const PhoneFields: Fields<PhoneProps> = {

@@ -14,6 +14,8 @@ import { msg, pt } from "../../../utils/i18n/platform.ts";
 import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 import {
   AssetImageType,
+  isLocalizedAssetImage,
+  resolveLocalizedAssetImage,
   TranslatableAssetImage,
 } from "../../../types/images.ts";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
@@ -477,11 +479,8 @@ const PhotoGalleryWrapperComponent: PuckComponent<PhotoGalleryWrapperProps> = ({
       let altText = "";
 
       if ("assetImage" in rawImage) {
-        if (
-          typeof rawImage.assetImage === "object" &&
-          "hasLocalizedValue" in rawImage.assetImage
-        ) {
-          image = rawImage.assetImage[locale];
+        if (isLocalizedAssetImage(rawImage.assetImage)) {
+          image = resolveLocalizedAssetImage(rawImage.assetImage, locale);
           altText = resolveComponentData(
             image?.alternateText ?? "",
             locale,

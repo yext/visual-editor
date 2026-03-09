@@ -63,9 +63,16 @@ import {
   fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
+import {
+  DEFAULT_ENTITY_TYPE,
+  EntityType,
+} from "../utils/locatorEntityTypes.ts";
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
 export interface LocatorResultCardProps {
+  /** The entity type this result card applies to. */
+  entityType: EntityType;
+
   /** Settings for the main heading of the card */
   primaryHeading: {
     /**
@@ -209,7 +216,13 @@ export interface LocatorResultCardProps {
   };
 }
 
+export type DistanceDisplayOption =
+  | "distanceFromUser"
+  | "distanceFromSearch"
+  | "hidden";
+
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
+  entityType: DEFAULT_ENTITY_TYPE,
   primaryHeading: {
     field: { selection: { value: "name" } },
     constantValue: "",
@@ -305,6 +318,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
   type: "object",
   objectFields: {
+    entityType: YextField(msg("fields.entityType", "Entity Type"), {
+      type: "text",
+      visible: false,
+    }),
     primaryHeading: {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
@@ -725,16 +742,27 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
+    distanceDisplay = "distanceFromUser",
+    isSelected,
+    showPrimaryCta,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
+    distanceDisplay?: DistanceDisplayOption;
+    isSelected?: boolean;
+    showPrimaryCta?: boolean;
   }): React.JSX.Element => {
     const { document: streamDocument, relativePrefixToRoot } =
       useTemplateProps();
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
-    const distance = result.distance;
+    const distance =
+      distanceDisplay === "distanceFromUser"
+        ? result.distance
+        : distanceDisplay === "distanceFromSearch"
+          ? result.distanceFromFilter
+          : undefined;
 
     const unit = getPreferredDistanceUnit(i18n.language);
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
@@ -790,6 +818,7 @@ export const LocatorResultCard = React.memo(
       <Background
         background={backgroundColors.background1.value}
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
+        style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
         <Background
           background={
@@ -892,7 +921,7 @@ export const LocatorResultCard = React.memo(
             </div>
           )}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && resolvedUrl && (
+            {showPrimaryCta && resolvedUrl && (
               <CTA
                 link={resolvedUrl}
                 label={
