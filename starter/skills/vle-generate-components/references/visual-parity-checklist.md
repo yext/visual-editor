@@ -3,7 +3,7 @@
 ## Main Rule
 
 - The output components should preserve the source page's layout contract, not just its general appearance.
-- Validate against the input HTML first and the screenshot second.
+- Validate against captured `page.html` first and `screenshot.png` second.
 - Do not accept "close enough" when spacing, containment, or alignment relationships differ.
 
 ## Validation Method

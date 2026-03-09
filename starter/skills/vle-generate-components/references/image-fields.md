@@ -39,7 +39,7 @@ const ExampleLogoImageFields: Fields<ExampleLogoImageProps> = {
 - Resolve with `streamDocument.locale ?? "en"` to keep locale behavior consistent with translatable strings.
 - Use `Image` from `@yext/visual-editor`.
   - `Image` from `@yext/visual-editor` applies some styling. You may want to override this styling via a wrapper
-    so that the image behavior matches the input html/screenshot.
+    so that the image behavior matches the captured HTML/screenshot artifacts.
 - Resolve the image once with `resolveComponentData`.
 - Do not add a custom `resolveImage` helper when using the visual-editor `Image` component.
 
@@ -64,7 +64,7 @@ return <Image image={resolvedLogoImage} />;
 ## defaultProps Rules
 
 - `defaultProps.logoImage.constantValue` must be a mocked `TranslatableAssetImage`.
-- Use the source image URL from the input HTML.
+- Use the source image URL from the captured HTML.
 - For type safety, prefer the plain image object shape (`{ url, width, height }`), which is valid because `TranslatableAssetImage` is a union.
 - Set `constantValueEnabled` to `true`.
 - Copy width/height from the source image when available.

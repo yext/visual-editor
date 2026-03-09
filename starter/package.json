@@ -11,6 +11,7 @@
     "prod": "pages prod",
     "build": "pages build",
     "typecheck": "tsc",
+    "capture-page-artifacts": "node --import tsx ./skills/vle-generate-components/scripts/capturePageArtifacts.ts",
     "generate-default-layout-data": "node --import tsx ./skills/vle-generate-components/scripts/generateDefaultLayoutData.ts"
   },
   "engines": {
@@ -59,6 +60,7 @@
     "@yext/pages": "1.2.9",
     "@yext/pages-components": "^2.0.0",
     "@yext/visual-editor": "workspace:*",
+    "playwright": "^1.55.1",
     "autoprefixer": "^10.4.8",
     "postcss": "^8.4.32",
     "prettier": "^3.3.2",

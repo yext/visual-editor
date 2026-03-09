@@ -8,23 +8,24 @@ Use this contract for every generated component.
 - Always match font families, font sizes, font colors, font weight, and background colors 1:1 with the source page
 - Always add a Google font equivalent as the fallback for any non-web safe fonts (for example: `'Client Specific Font', 'Open Sans', sans-serif`)
 - Everything needed for each component must be contained in a single file (excluding npm imports)
-- Use Chakra components wherever possible, but do not use the `sx` prop.
+- Use Chakra components wherever possible, but do not use the `sx` prop. Verify the installed interface before generation.
 
 ## Required Directory Layout
 
 ```text
 starter/src/components/custom/<client>/
   components/
-    <SectionName>Section.tsx
+    <section-name>.tsx
     ...
 ```
 
 ## Naming Rules
 
-- Puck Components files should end in `Section.tsx`
-- Use lowercase client slug for generated folder.
+- Display names shown to users should use capitalized words with spaces (for example: `Galaxy Grill`).
+- Directory names and file names should be lowercase (prefer kebab-case).
+- Component symbols, const/var names, and exported config names should be PascalCase.
 - Keep component names stable after first generation; update implementation instead of renaming unless required.
-- Prefix client-branded header/footer names with client context (`GalaxyGrillHeaderSection`, `GalaxyGrillFooterSection`).
+- Prefix client-branded header/footer component symbols with client context (`GalaxyGrillHeaderSection`, `GalaxyGrillFooterSection`).
 
 ## Isolation Rules
 
@@ -39,11 +40,11 @@ starter/src/components/custom/<client>/
 - Use Chakra components wherever possible
 - ALWAYS use `Address`, `HoursTable`, `HoursStatus`, and `Link` from `@yext/pages-components` when rendering
   any address, hours, ctas, or links. However, they MUST be augmented with CSS/classes to match
-  the input HTML/screenshot
+  the captured page artifacts
 
 ## Puck Section Component Responsibilities
 
-In each `starter/src/components/custom/<client>/components/ExampleSection.tsx`:
+In each `starter/src/components/custom/<client>/components/example-section.tsx`:
 
 - There should be a `ExampleSectionProps` type with the props that will be user-editable in Puck
 - There should be a `ExampleSectionFields` of type `Fields<ExampleSectionProps>` that defines
@@ -59,7 +60,7 @@ In each `starter/src/components/custom/<client>/components/ExampleSection.tsx`:
 - Any links on the page should be an object field with Label and Link (href) subfields.
 - Repeated items (for example FAQs, cards, header links, footer links) must use an `ArrayField` in Puck and render with `.map(...)` in the component render function.
 - All ArrayFields should have a defaultItemProps for adding new items to the array in the editor.
-- For repeated item arrays, `defaultProps` must initialize the array length to match the number of items present in the provided HTML/screenshot.
+- For repeated item arrays, `defaultProps` must initialize the array length to match the number of items present in `page.html`/`screenshot.png`.
 - Hours, Phone, and Address should never be fields. Use the stream document.
 - Do not create any style-control fields other than those listed in `text-fields.md` and `image-fields.md`.
 
@@ -68,19 +69,18 @@ In each `starter/src/components/custom/<client>/components/ExampleSection.tsx`:
 - Hours should always use streamDocument.hours
 - Address should always use streamDocument.address
 - FAQ/Q&A sections should keep interaction behavior such as show/hide.
-- Hero/promo sections should use full-bleed shell wrappers (`px-0 md:px-0` outer padding, `max-w-none` content wrapper) when source parity expects media to reach section edges.
+- Hero/promo sections should use Chakra-based full-bleed shell wrappers when source parity expects media to reach section edges
+  (for example: outer container horizontal padding `0`, content wrapper `maxW="none"`).
 - Call To Action and Links should always pair with actionable href/link/CTA data, not just plain text spans.
 - Headers and Footers:
-  - You should implement mega menus or hidden content if found in the input HTML
+  - You should implement mega menus or hidden content if found in the captured HTML
   - Use nested arrays in Puck (`ArrayField`) for navigational links.
-  - `defaultProps` must include every source link from the input HTML.
-  - Link parity is strict 1:1. Use `references/visual-parity-checklist.md` for required parity columns and checks.
-  - Do not collapse, merge, or reorder distinct source links even when labels repeat.
+  - Validate strict 1:1 link parity using `references/visual-parity-checklist.md`.
 
 ## Minimum Completion Checklist
 
 - Every major visual band has exactly one section component.
-- All header links from the input `html` are included in header component `defaultProps`, and all footer links are included in footer component `defaultProps`, with strict 1:1 parity.
+- Header/footer parity has been validated against `references/visual-parity-checklist.md`.
 - CTA labels are actionable (link/href/cta), not plain text.
 - The output is easy to iterate component-by-component in follow-up prompts.
 

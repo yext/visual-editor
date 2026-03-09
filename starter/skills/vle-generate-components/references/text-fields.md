@@ -106,7 +106,7 @@ return (
 
 ## defaultProps Rules
 
-- `defaultProps` for each text object field must be set from the provided HTML/screenshot.
+- `defaultProps` for each text object field must be set from the captured HTML/screenshot artifacts.
 - The text content from the HTML should be placed in `constantValue.en`. `constantValueEnabled` should be true.
 - Copy visible values as closely as possible (text content, size, color, weight).
 - Do not include `\n` in the defaultProps. If the text should break lines, use CSS.
@@ -131,7 +131,7 @@ Example:
 
 ## Other Font Properties
 
-If the provided HTML/screenshot includes additional font styling not in this schema (for example `fontFamily`, `lineHeight`, `letterSpacing`, etc.):
+If the captured HTML/screenshot includes additional font styling not in this schema (for example `fontFamily`, `lineHeight`, `letterSpacing`, etc.):
 
 - Do **not** add extra editable subproperties to the text object field.
 - Hardcode those additional font styles directly in render to preserve visual parity.

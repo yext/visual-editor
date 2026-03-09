@@ -138,4 +138,4 @@ Notes for generation:
 - `arrayFields` defines the fields available on each item in the array.
 - `defaultItemProps` is required so newly added rows in the editor start with valid values.
 - `getItemSummary` should return a short label so the editor can show a readable item name.
-- In component `defaultProps`, initialize the array itself with the right number of items based on the input html
+- In component `defaultProps`, initialize the array itself with the right number of items based on the captured HTML

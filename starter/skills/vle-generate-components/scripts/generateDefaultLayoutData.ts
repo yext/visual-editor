@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { randomUUID } from "node:crypto";
 import { Data, DefaultComponentProps } from "@puckeditor/core";
-import { YextEntityField } from "../../../../packages/visual-editor/dist";
+import type { YextEntityField } from "@yext/visual-editor";
 
 type DefaultLayoutEntry = {
   type: string;
@@ -16,11 +16,42 @@ type DefaultLayoutData = Data<
 >;
 
 const usage = `Usage:
-  tsx starter/skills/vle-generate-components/scripts/generateDefaultLayoutData.ts <clientName> <componentName1> [componentName2 ...]
+  pnpm run generate-default-layout-data <clientName> <componentName1> [componentName2 ...]
 
 Example:
-  tsx starter/skills/vle-generate-components/scripts/generateDefaultLayoutData.ts GalaxyGrill GalaxyGrillHeroSection GalaxyGrillFooterSection
-  tsx starter/skills/vle-generate-components/scripts/generateDefaultLayoutData.ts GalaxyGrill "GalaxyGrillHeroSection,GalaxyGrillFooterSection"`;
+  pnpm run generate-default-layout-data galaxy-grill GalaxyGrillHeroSection GalaxyGrillFooterSection
+  pnpm run generate-default-layout-data galaxy-grill "GalaxyGrillHeroSection,GalaxyGrillFooterSection"`;
+
+function sanitizeClientName(clientName: string): string {
+  return clientName
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "-");
+}
+
+function toDisplayName(value: string): string {
+  const withWordBoundaries = value
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return withWordBoundaries
+    .split(" ")
+    .filter(Boolean)
+    .map(
+      (word) => `${word[0]?.toUpperCase() ?? ""}${word.slice(1).toLowerCase()}`,
+    )
+    .join(" ");
+}
+
+function toKebabCase(value: string): string {
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/[_\s]+/g, "-")
+    .replace(/-+/g, "-")
+    .toLowerCase();
+}
 
 function parseArgs(argv: string[]): {
   clientName: string;
@@ -28,10 +59,15 @@ function parseArgs(argv: string[]): {
 } {
   const args = argv.slice(2);
   const normalizedArgs = args[0] === "--" ? args.slice(1) : args;
-  const [clientName, ...componentArgs] = normalizedArgs;
+  const [rawClientName, ...componentArgs] = normalizedArgs;
 
-  if (!clientName || componentArgs.length === 0) {
+  if (!rawClientName || componentArgs.length === 0) {
     throw new Error(usage);
+  }
+
+  const clientName = sanitizeClientName(rawClientName);
+  if (!clientName) {
+    throw new Error(`Invalid clientName: ${rawClientName}`);
   }
 
   const componentNames = componentArgs
@@ -62,7 +98,9 @@ function getModulePathCandidates(
 
   return [
     path.join(basePath, `${componentName}.tsx`),
+    path.join(basePath, `${toKebabCase(componentName)}.tsx`),
     path.join(basePath, "components", `${componentName}.tsx`),
+    path.join(basePath, "components", `${toKebabCase(componentName)}.tsx`),
   ];
 }
 
@@ -152,7 +190,7 @@ async function main() {
       props: {
         title: {
           field: "name",
-          constantValue: `${clientName} Pages`,
+          constantValue: `${toDisplayName(clientName)} Pages`,
           constantValueEnabled: false,
         },
         description: {
