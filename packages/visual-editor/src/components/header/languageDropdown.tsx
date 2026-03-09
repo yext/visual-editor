@@ -29,6 +29,7 @@ export interface LanguageDropdownProps {
   locales: string[];
   currentLocale: string;
   background?: BackgroundStyle;
+  isActionable?: boolean;
 }
 
 export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
@@ -41,6 +42,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   locales,
   currentLocale,
   background,
+  isActionable = true,
 }) => {
   const streamDocument = useDocument();
   const scopedLocales = new Set<string>(locales);
@@ -101,6 +103,9 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   };
 
   const handleLocaleSelected = (locale: string, path: string) => {
+    if (!isActionable) {
+      return;
+    }
     if (locale === selected) {
       return;
     }
