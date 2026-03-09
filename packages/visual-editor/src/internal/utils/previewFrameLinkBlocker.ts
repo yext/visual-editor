@@ -1,5 +1,6 @@
 import { PUCK_PREVIEW_IFRAME_ID } from "../../utils/applyTheme.ts";
 
+// Selector for interactive elements that should have their default navigation behavior blocked in preview mode, while still allowing hover/focus styles to apply.
 const NON_ACTIONABLE_SELECTOR = [
   "a",
   "area",
