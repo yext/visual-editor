@@ -758,7 +758,6 @@ export const LocatorResultCard = React.memo(
     resultCardProps: LocatorResultCardProps;
     distanceDisplay?: DistanceDisplayOption;
     isSelected?: boolean;
-    showPrimaryCta?: boolean;
   }): React.JSX.Element => {
     const { t, i18n } = useTranslation();
 

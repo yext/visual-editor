@@ -1304,15 +1304,9 @@ const LocatorInternal = ({
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => {
       let resultCardProps = DEFAULT_LOCATOR_RESULT_CARD_PROPS;
-      let showPrimaryCta;
       const resultEntityType = result.result.entityType;
       if (resultEntityType && isLocatorEntityType(resultEntityType)) {
         resultCardProps = getResultCardProps(resultEntityType);
-        // Show primary CTA when the liveVisibility is true and entity scope is backed by an entity page set.
-        showPrimaryCta =
-          resultCardProps.primaryCTA.liveVisibility &&
-          !!resultEntityType &&
-          !!entityTypeSourceMap[resultEntityType];
       } else {
         console.warn(
           "Unexpected entityType from search result: ",
@@ -1324,7 +1318,6 @@ const LocatorInternal = ({
           {...result}
           resultCardProps={resultCardProps}
           isSelected={result.result.index === selectedResultIndex}
-          showPrimaryCta={showPrimaryCta}
           distanceDisplay={distanceDisplay}
         />
       );
