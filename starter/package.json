@@ -10,7 +10,8 @@
     "dev:stackblitz": "pages dev --local --no-prod-url --noInit",
     "prod": "pages prod",
     "build": "pages build",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "generate-default-layout-data": "node --import tsx ./skills/vle-generate-components/scripts/generateDefaultLayoutData.ts"
   },
   "engines": {
     "node": "^20.6.0 || ^22 || ^24"

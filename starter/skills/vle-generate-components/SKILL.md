@@ -71,35 +71,39 @@ Optional:
 - `references/generation-requirements.md`, `references/text-fields.md`, and `references/image-fields.md` were followed.
 - Run `pnpm run typecheck` in `starter` incrementally after meaningful batches of edits (not after every single file write).
 - If typecheck fails, address errors in small batches. Actually fix the issue, don't just relax the typecheck.
+- Verify header/footer link parity with an exact row-by-row comparison between:
+  - source parity table from the plan step
+  - resulting header/footer `defaultProps` link arrays
+- Ensure YextEntityField was used for images and text fields in every component. If not, go back and add it.
 - Perform a mandatory parity self-audit before finishing. Pick the three sections with the highest risk of visual regression
   (for example: utility/subnav bands, hero overlays, carousels, accordions, header/footer groupings) and for each one:
   - cite the source HTML/CSS evidence used for layout decisions
   - restate the planned layout signature
   - confirm the implementation matches that signature for background, alignment, spacing ownership, and interaction chrome
   - if any item does not match, fix it before producing the final answer
-- Verify header/footer link parity with an exact row-by-row comparison between:
-  - source parity table from the plan step
-  - resulting header/footer `defaultProps` link arrays
-- Ensure YextEntityField was used for images and text fields in every component. If not, go back and add it.
+- After self-audit, perform a full-page final sweep across every generated section for:
+  - skipped hidden or interactive content such as mega-menus and other complex sections
+  - shell and content-wrapper max-width parity, including full-width image hero behavior
+  - per-edge margin and padding parity
+  - text alignment parity
+  - required media overlays and transparency treatment
+  - if any item does not match, fix it
 
 ## Follow the requirements:
 
 - `references/visual-parity-checklist.md`
 
-4. Review Step
-
-Treat this step as independent from the previous steps. The goal is to fix common implementation problems.
-
-- Implement any mega-menus or complex sections that were skipped in previous steps
-- Ensure all max widths, margins, and padding in the generated components match the input html
-  - Particularly important to check for full-width image hero sections
-- Ensure all text is aligned to match the input html/screenshot
-- Ensure all images have a transparent overlay if present in the original html
-
-5. Output Step
+4. Output Step
 
 - Do not overwrite existing component registration in `starter/src/ve.config.tsx`.
   Append new component registrations and imports for the generated client components.
   If generated registrations duplicate existing keys/imports, stop and ask the user which resolution strategy to use
   (for example: keep existing, replace existing, or rename the new component key).
 - Update the imports of `starter/src/ve.config.tsx` accordingly
+
+5. Default Layout Data Step
+
+- Run the layout data generator script via pnpm:
+  - `pnpm run generate-default-layout-data -- <clientName> <ComponentName1> <ComponentName2> ...`
+- Pass the client name and the generated components in the exact order they appear on the page (top-to-bottom visual order).
+- Ensure the ordered component list matches the final plan and generated component set.
