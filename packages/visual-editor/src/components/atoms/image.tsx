@@ -31,6 +31,7 @@ export interface ImageProps {
    * Defaults to the stream document if not provided.
    */
   streamDocumentOverride?: Record<string, any>;
+  style?: React.CSSProperties;
 }
 
 export const getImageAltText = (
@@ -62,6 +63,7 @@ export const Image: React.FC<ImageProps> = ({
   sizes,
   loading = "lazy",
   streamDocumentOverride,
+  style,
 }) => {
   const { i18n } = useTranslation();
   const streamDocument: StreamDocument | Record<string, any> =
@@ -102,6 +104,7 @@ export const Image: React.FC<ImageProps> = ({
           className="object-cover w-full h-full"
           imgOverrides={{ sizes }}
           loading={loading}
+          style={style}
         />
       ) : !!width && !!calculatedHeight ? (
         <ImageComponent
@@ -112,6 +115,7 @@ export const Image: React.FC<ImageProps> = ({
           className="object-cover"
           imgOverrides={{ sizes }}
           loading={loading}
+          style={style}
         />
       ) : (
         <img
@@ -119,6 +123,7 @@ export const Image: React.FC<ImageProps> = ({
           alt={altText}
           className="object-cover w-full h-full"
           loading={loading}
+          style={style}
         />
       )}
     </div>
