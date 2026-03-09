@@ -961,7 +961,7 @@ const PrimaryCTA = (props: {
     streamDocument,
     relativePrefixToRoot
   );
-  if (resolvedUrl === undefined && primaryCTA.link !== undefined) {
+  if (resolvedUrl === undefined && primaryCTA?.link) {
     resolvedUrl = resolveComponentData(
       primaryCTA.link,
       i18n.language,
@@ -969,7 +969,7 @@ const PrimaryCTA = (props: {
     );
   }
 
-  const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl !== undefined;
+  const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl;
 
   const handlePrimaryCtaClick = useCardAnalyticsCallback(
     result,

@@ -169,12 +169,9 @@ const ResultCardPropsField = ({
 }) => {
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
-  const hasEntityTypeScopes = React.useMemo(() => {
+  const entityTypeScopes = React.useMemo(() => {
     const locatorConfig = getLocatorConfigFromPageSet(streamDocument?._pageset);
-    return (
-      locatorConfig?.entityTypeScopes !== undefined &&
-      locatorConfig.entityTypeScopes.length > 0
-    );
+    return locatorConfig.entityTypeScope ?? [];
   }, [streamDocument]);
 
   /**
@@ -187,13 +184,15 @@ const ResultCardPropsField = ({
       return LocatorResultCardFields;
     }
     let fields = LocatorResultCardFields;
-    const showPrimaryCta = !!entityTypeSourceMap[value.entityType];
+    const entityTypeHasSourcePageSet = !!entityTypeSourceMap[value.entityType];
+    const scopeExistsForEntityType =
+      entityTypeScopes.filter((scope) => scope.entityType === value.entityType)
+        .length > 0;
 
-    fields = setDeep(fields, `objectFields.primaryCTA.visible`, showPrimaryCta);
     fields = setDeep(
       fields,
       `objectFields.primaryCTA.objectFields.link.visible`,
-      showPrimaryCta && hasEntityTypeScopes
+      !entityTypeHasSourcePageSet && scopeExistsForEntityType
     );
 
     // For each section, show either the field selector or the constant value editor.
@@ -230,7 +229,7 @@ const ResultCardPropsField = ({
     });
 
     return fields;
-  }, [entityTypeSourceMap, hasEntityTypeScopes, value]);
+  }, [entityTypeSourceMap, entityTypeScopes, value]);
 
   return (
     <AutoField
@@ -995,9 +994,6 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       });
       data = setDeep(data, "props.resultCard", newResultCards);
     }
-
-    // const locatorConfig: LocatorConfig = JSON.parse(entityDocument?._pageset ?? '{}')?.typeConfig?.locatorConfig;
-    // const hasEntityTypeScopes = locatorConfig?.entityTypeScopes && locatorConfig.entityTypeScopes.length > 0;
 
     return data;
   },

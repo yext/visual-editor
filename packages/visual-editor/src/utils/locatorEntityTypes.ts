@@ -66,7 +66,7 @@ export const getLocatorEntityTypeSourceMap = (
         entityTypeSourceMap[locatorConfig.entityType] = locatorConfig.source;
       }
 
-      for (const entityTypeScope of locatorConfig?.entityTypeScopes ?? []) {
+      for (const entityTypeScope of locatorConfig?.entityTypeScope ?? []) {
         if (
           entityTypeScope?.entityType &&
           isLocatorEntityType(entityTypeScope.entityType)
