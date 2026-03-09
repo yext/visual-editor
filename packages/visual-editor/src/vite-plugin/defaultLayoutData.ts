@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 66,
+      version: 63,
       title: {
         field: "name",
         constantValue: "",
@@ -4851,7 +4851,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 67,
+      version: 66,
       title: {
         field: "",
         constantValue: { defaultValue: "Find Locations" },
