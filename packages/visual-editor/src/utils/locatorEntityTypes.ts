@@ -6,24 +6,22 @@ import {
 import { useDocument } from "../hooks/useDocument.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 
-export const DEFAULT_ENTITY_TYPE = "location";
-export type LocatorEntityType =
-  | "location"
-  | "healthcareProfessional"
-  | "healthcareFacility"
-  | "restaurant"
-  | "hotel"
-  | "financialProfessional";
+const LOCATOR_ENTITY_TYPES = [
+  "location",
+  "healthcareProfessional",
+  "healthcareFacility",
+  "restaurant",
+  "hotel",
+  "financialProfessional",
+] as const;
+
+export type LocatorEntityType = (typeof LOCATOR_ENTITY_TYPES)[number];
+export const DEFAULT_ENTITY_TYPE: LocatorEntityType = "location";
+
+const VALID_ENTITY_TYPES = new Set<string>(LOCATOR_ENTITY_TYPES);
 
 export function isLocatorEntityType(value: string): value is LocatorEntityType {
-  return (
-    value === "location" ||
-    value === "healthcareProfessional" ||
-    value === "healthcareFacility" ||
-    value === "restaurant" ||
-    value === "hotel" ||
-    value === "financialProfessional"
-  );
+  return VALID_ENTITY_TYPES.has(value);
 }
 
 export const getLocatorEntityTypeSourceMap = (

@@ -118,6 +118,7 @@ const getLocatorConfigFromPageSet = (pageSet?: string): LocatorConfig => {
   try {
     return JSON.parse(pageSet)?.typeConfig?.locatorConfig ?? {};
   } catch {
+    console.error("Failed to parse locator config from page set");
     return {};
   }
 };
@@ -186,8 +187,9 @@ const ResultCardPropsField = ({
     let fields = LocatorResultCardFields;
     const entityTypeHasSourcePageSet = !!entityTypeSourceMap[value.entityType];
     const scopeExistsForEntityType =
-      entityTypeScopes.filter((scope) => scope.entityType === value.entityType)
-        .length > 0;
+      entityTypeScopes.find(
+        (scope) => scope.entityType === value.entityType
+      ) !== undefined;
 
     fields = setDeep(
       fields,
