@@ -1,7 +1,7 @@
 const mainDefaultLayout = {
   root: {
     props: {
-      version: 63,
+      version: 66,
       title: {
         field: "name",
         constantValue: "",
@@ -4925,7 +4925,6 @@ const locatorDefaultLayout = {
             label: "Visit Page",
             variant: "primary",
             liveVisibility: true,
-            destination: "entityPage",
           },
           secondaryCTA: {
             label: "Call to Action",

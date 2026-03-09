@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { AutoField, Field, FieldLabel } from "@puckeditor/core";
+import { Field } from "@puckeditor/core";
 import {
   CardProps,
   Coordinate,
@@ -16,9 +16,9 @@ import { Body, BodyProps } from "./atoms/body.tsx";
 import { CTA, CTAVariant } from "./atoms/cta.tsx";
 import { Heading } from "./atoms/heading.tsx";
 import { Image } from "./atoms/image.tsx";
-import { msg, MsgString, pt } from "../utils/i18n/platform.ts";
+import { msg, pt } from "../utils/i18n/platform.ts";
 import { PhoneAtom } from "./atoms/phone.tsx";
-import { useDocument, useTemplateProps } from "../hooks/useDocument.tsx";
+import { useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
 import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
 import { HoursTableAtom } from "./atoms/hoursTable.tsx";
@@ -65,15 +65,13 @@ import {
 } from "../utils/i18n/distance.ts";
 import {
   DEFAULT_ENTITY_TYPE,
-  EntityType,
+  LocatorEntityType,
 } from "../utils/locatorEntityTypes.ts";
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
-type PrimaryCtaDestinationOption = "entityPage" | "custom";
-
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
-  entityType: EntityType;
+  entityType: LocatorEntityType;
 
   /** Settings for the main heading of the card */
   primaryHeading: {
@@ -191,12 +189,7 @@ export interface LocatorResultCardProps {
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
-    /**
-     * Whether to derive the primary CTA URL from an source entity page set or from a static
-     * template
-     */
-    destination: PrimaryCtaDestinationOption;
-    /** Static URL to use for primary CTA when destination is Custom */
+    /** Static URL to use for primary CTA when an entity page URL is not found */
     link?: TranslatableString;
   };
 
@@ -284,7 +277,6 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
     label: "Visit Page",
     variant: "primary",
     liveVisibility: true,
-    destination: "entityPage",
   },
   secondaryCTA: {
     label: "Call to Action",
@@ -323,67 +315,6 @@ const getDisplayFieldOptions = (
       };
     });
 };
-
-const getLocatorConfig = () => {
-  const streamDocument = useDocument();
-  let pageSet: any;
-  try {
-    pageSet = JSON.parse(streamDocument._pageset);
-  } catch {
-    return {};
-  }
-  return pageSet?.typeConfig?.locatorConfig ?? {};
-};
-
-/**
- * If the locator has a source page set, returns a selector for the destination prop. Otherwise,
- * returns an empty element.
- */
-const PrimaryCtaDestinationField = (): Field<PrimaryCtaDestinationOption> => ({
-  type: "custom",
-  render: ({ value, onChange }) => {
-    const locatorConfig = getLocatorConfig();
-    const showDestinationSelector =
-      locatorConfig?.sources?.length > 0 || !!locatorConfig?.source;
-    const destinationField = React.useMemo(
-      () =>
-        YextField("" as MsgString, {
-          type: "radio",
-          options: [
-            {
-              label: msg("fields.options.entityPage", "Entity Page"),
-              value: "entityPage",
-            },
-            {
-              label: msg("fields.options.custom", "Custom"),
-              value: "custom",
-            },
-          ],
-        }),
-      []
-    );
-
-    React.useEffect(() => {
-      if (!showDestinationSelector && value !== "custom") {
-        onChange("custom");
-      }
-    }, [onChange, showDestinationSelector, value]);
-
-    if (!showDestinationSelector) {
-      return <></>;
-    }
-
-    return (
-      <FieldLabel label={pt(msg("fields.destination", "Destination"))}>
-        <AutoField
-          field={destinationField}
-          value={value ?? "entityPage"}
-          onChange={onChange}
-        />
-      </FieldLabel>
-    );
-  },
-});
 
 export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
@@ -716,7 +647,6 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
             ],
           }
         ),
-        destination: PrimaryCtaDestinationField(),
         link: TranslatableStringField<TranslatableString | undefined>(
           msg("fields.link", "Link"),
           undefined,
@@ -1024,23 +954,21 @@ const PrimaryCTA = (props: {
   const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
   const { t, i18n } = useTranslation();
 
-  let resolvedUrl: string | undefined;
-  switch (primaryCTA.destination) {
-    case "custom":
-      resolvedUrl =
-        primaryCTA?.link !== undefined
-          ? resolveComponentData(primaryCTA.link, i18n.language, location)
-          : undefined;
-      break;
-    case "entityPage":
-    default:
-      resolvedUrl = resolveLocatorResultUrl(
-        location,
-        streamDocument,
-        relativePrefixToRoot
-      );
-      break;
+  // Always uses the entity page link if one exists. If not, tries to resolve URL from the static
+  // template in the Link prop, and if that also fails, doesn't render at all.
+  let resolvedUrl = resolveLocatorResultUrl(
+    location,
+    streamDocument,
+    relativePrefixToRoot
+  );
+  if (resolvedUrl === undefined && primaryCTA.link !== undefined) {
+    resolvedUrl = resolveComponentData(
+      primaryCTA.link,
+      i18n.language,
+      location
+    );
   }
+
   const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl !== undefined;
 
   const handlePrimaryCtaClick = useCardAnalyticsCallback(
