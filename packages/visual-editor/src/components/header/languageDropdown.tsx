@@ -129,8 +129,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                   onSelect={() => handleLocaleSelected(locale, path)}
                   className={themeManagerCn(
                     "components font-body-fontFamily font-normal bg-white py-4 px-6 text-body-sm-fontSize",
-                    "hover:bg-[#EDEDED] active:bg-[#EDEDED] data-[highlighted]:outline-none data-[highlighted]:shadow-none",
-                    "cursor-pointer",
+                    "hover:bg-[#EDEDED] active:bg-[#EDEDED] cursor-pointer data-[highlighted]:outline-none data-[highlighted]:shadow-none",
                     selected === locale && "font-bold"
                   )}
                 >
@@ -164,11 +163,9 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                   Object.entries(validLocalesToPaths).map(([locale, path]) => (
                     <button
                       key={locale}
-                      type="button"
                       onClick={() => handleLocaleSelected(locale, path)}
                       className={themeManagerCn(
                         "text-left py-3 px-2 rounded text-body-sm-fontSize",
-                        "cursor-pointer",
                         selected === locale && "font-body-fontWeight"
                       )}
                     >
