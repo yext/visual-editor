@@ -118,6 +118,16 @@ describe("translatableToPlainText", () => {
 });
 
 describe("getLocalizedPlainText", () => {
+  it("prefers explicit empty locale value over defaultValue", () => {
+    const value: TranslatableString = {
+      hasLocalizedValue: "true",
+      fr: "",
+      defaultValue: "Hello",
+    };
+
+    expect(getLocalizedPlainText(value, "fr")).toBe("");
+  });
+
   it("handles direct string and rich text values", () => {
     expect(getLocalizedPlainText("Hello", "en")).toBe("Hello");
     expect(getLocalizedPlainText({ html: "<p>Hello</p>" }, "en")).toBe("Hello");
@@ -149,5 +159,21 @@ describe("getLocalizedPlainText", () => {
     };
 
     expect(getLocalizedPlainText(value, "de")).toBe("");
+  });
+
+  it("falls back to defaultValue when locale is missing", () => {
+    const value: TranslatableString = {
+      defaultValue: "Hello",
+    };
+
+    expect(getLocalizedPlainText(value, "de")).toBe("Hello");
+  });
+
+  it("falls back to rich text defaultValue when locale is missing", () => {
+    const value: TranslatableRichText = {
+      defaultValue: { html: "<p>Hello <strong>there</strong></p>" },
+    };
+
+    expect(getLocalizedPlainText(value, "de")).toBe("Hello there");
   });
 });

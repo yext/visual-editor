@@ -81,16 +81,14 @@ export const ENHANCED_CTA_CONSTANT_CONFIG: CustomField<EnhancedTranslatableCTA> 
                   const updatedValue = { ...value, ctaType: newValue };
                   // Set defaults based on CTA type
                   if (newValue === "presetImage") {
-                    updatedValue.label = { en: "", hasLocalizedValue: "true" };
+                    updatedValue.label = { defaultValue: "" };
                   } else if (newValue === "getDirections") {
                     updatedValue.label = updatedValue?.label || {
-                      en: "Get Directions",
-                      hasLocalizedValue: "true",
+                      defaultValue: "Get Directions",
                     };
                   } else if (newValue === "textAndLink") {
                     updatedValue.label = updatedValue?.label || {
-                      en: "Learn More",
-                      hasLocalizedValue: "true",
+                      defaultValue: "Learn More",
                     };
                     updatedValue.link = updatedValue?.link || "#";
                     updatedValue.linkType = updatedValue?.linkType || "URL";

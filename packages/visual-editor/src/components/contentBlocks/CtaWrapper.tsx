@@ -297,17 +297,11 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
         },
         selectedType: "textAndLink",
       },
-      buttonText: {
-        en: "Button",
-        hasLocalizedValue: "true",
-      },
+      buttonText: { defaultValue: "Button" },
       customId: "",
       customClass: "",
       dataAttributes: [],
-      ariaLabel: {
-        en: "Button",
-        hasLocalizedValue: "true",
-      },
+      ariaLabel: { defaultValue: "Button" },
     },
     styles: {
       variant: "primary",

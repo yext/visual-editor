@@ -37,16 +37,15 @@ const defaultEvent = {
     height: 360,
     width: 640,
   },
-  title: { en: "Event Title", hasLocalizedValue: "true" },
+  title: { defaultValue: "Event Title" },
   dateTime: "2022-12-12T14:00:00",
   description: {
-    en: getDefaultRTF(
+    defaultValue: getDefaultRTF(
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     ),
-    hasLocalizedValue: "true",
   },
   cta: {
-    label: { en: "Learn More", hasLocalizedValue: "true" },
+    label: { defaultValue: "Learn More" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -169,7 +168,7 @@ export const defaultEventCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",
                   constantValue: defaultEvent.cta,

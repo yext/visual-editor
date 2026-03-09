@@ -135,10 +135,7 @@ export const EventSection: ComponentConfig<{ props: EventSectionProps }> = {
           props: {
             data: {
               text: {
-                constantValue: {
-                  en: "Upcoming Events",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Upcoming Events" },
                 constantValueEnabled: true,
                 field: "",
               },

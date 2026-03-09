@@ -164,10 +164,7 @@ export const PhotoGallerySection: ComponentConfig<{
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Gallery",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Gallery" },
                 constantValueEnabled: true,
               },
             },

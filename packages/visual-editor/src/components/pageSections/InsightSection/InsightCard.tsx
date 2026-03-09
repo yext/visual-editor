@@ -34,20 +34,16 @@ const defaultInsight = {
     width: 640,
     height: 360,
   },
-  name: { en: "Article Name", hasLocalizedValue: "true" },
-  category: {
-    en: "Category",
-    hasLocalizedValue: "true",
-  },
+  name: { defaultValue: "Article Name" },
+  category: { defaultValue: "Category" },
   description: {
-    en: getDefaultRTF(
+    defaultValue: getDefaultRTF(
       "Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo.Lorem ipsum dolor sit amet, consectetur adipiscing. Maecenas finibus placerat justo. 300 characters"
     ),
-    hasLocalizedValue: "true",
   },
   publishTime: "2022-08-02T14:00:00",
   cta: {
-    label: { en: "Read More", hasLocalizedValue: "true" },
+    label: { defaultValue: "Read More" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -189,7 +185,7 @@ export const defaultInsightCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",
                   constantValue: defaultInsight.cta,
