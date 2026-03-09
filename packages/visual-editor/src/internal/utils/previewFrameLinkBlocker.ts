@@ -1,5 +1,14 @@
 import { PUCK_PREVIEW_IFRAME_ID } from "../../utils/applyTheme.ts";
 
+const NON_ACTIONABLE_SELECTOR = [
+  "a",
+  "area",
+  "[role='link']",
+  "[role='menuitem']",
+  "[data-slot='dropdown-menu-trigger']",
+  "[data-slot='dropdown-menu-item']",
+].join(", ");
+
 /**
  * Installs link-navigation blocking in a specific preview document while
  * preserving hover and focus behavior.
@@ -11,10 +20,10 @@ export const createPreviewDocumentLinkBlocker = (previewDocument: Document) => {
   const previewWindow = previewDocument.defaultView;
 
   /**
-   * Returns true when the event target is an anchor/area element or lives within
-   * an element that semantically acts like a link.
+   * Returns true when the event target (or one of its ancestors) is a link-like
+   * element or a dropdown menu item/trigger that should not be actionable in preview.
    */
-  const isLinkLikeTarget = (event: Event) => {
+  const isBlockedTarget = (event: Event) => {
     const targetElement = event.target;
     if (
       !targetElement ||
@@ -23,15 +32,15 @@ export const createPreviewDocumentLinkBlocker = (previewDocument: Document) => {
       return false;
     }
 
-    return !!(targetElement as Element).closest("a, area, [role='link']");
+    return !!(targetElement as Element).closest(NON_ACTIONABLE_SELECTOR);
   };
 
   /**
-   * Cancels navigation-triggering events for link-like targets.
+   * Cancels action-triggering events for blocked interactive targets.
    * Keyboard events are only blocked for activation keys.
    */
   const preventLinkNavigation = (event: Event) => {
-    if (!isLinkLikeTarget(event)) {
+    if (!isBlockedTarget(event)) {
       return;
     }
 

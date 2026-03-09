@@ -29,7 +29,6 @@ export interface LanguageDropdownProps {
   locales: string[];
   currentLocale: string;
   background?: BackgroundStyle;
-  isActionable?: boolean;
 }
 
 export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
@@ -42,7 +41,6 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   locales,
   currentLocale,
   background,
-  isActionable = true,
 }) => {
   const streamDocument = useDocument();
   const scopedLocales = new Set<string>(locales);
@@ -103,9 +101,6 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   };
 
   const handleLocaleSelected = (locale: string, path: string) => {
-    if (!isActionable) {
-      return;
-    }
     if (locale === selected) {
       return;
     }
@@ -134,7 +129,8 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                   onSelect={() => handleLocaleSelected(locale, path)}
                   className={themeManagerCn(
                     "components font-body-fontFamily font-normal bg-white py-4 px-6 text-body-sm-fontSize",
-                    "hover:bg-[#EDEDED] active:bg-[#EDEDED] cursor-pointer data-[highlighted]:outline-none data-[highlighted]:shadow-none",
+                    "hover:bg-[#EDEDED] active:bg-[#EDEDED] data-[highlighted]:outline-none data-[highlighted]:shadow-none",
+                    "cursor-pointer",
                     selected === locale && "font-bold"
                   )}
                 >
@@ -168,9 +164,11 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
                   Object.entries(validLocalesToPaths).map(([locale, path]) => (
                     <button
                       key={locale}
+                      type="button"
                       onClick={() => handleLocaleSelected(locale, path)}
                       className={themeManagerCn(
                         "text-left py-3 px-2 rounded text-body-sm-fontSize",
+                        "cursor-pointer",
                         selected === locale && "font-body-fontWeight"
                       )}
                     >

@@ -171,10 +171,7 @@ const SecondaryHeaderSlotWrapper: PuckComponent<SecondaryHeaderSlotProps> = ({
         >
           <slots.LinksSlot style={{ height: "auto", width: "100%" }} />
           {showLanguageSelector && (
-            <LanguageDropdown
-              {...languageDropDownProps}
-              isActionable={!puck.isEditing}
-            />
+            <LanguageDropdown {...languageDropDownProps} />
           )}
         </div>
       </div>
