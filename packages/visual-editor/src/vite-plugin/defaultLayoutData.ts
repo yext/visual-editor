@@ -587,6 +587,8 @@ const mainDefaultLayout = {
                   },
                 },
                 styles: {
+                  showRegion: true,
+                  showCountry: false,
                   showGetDirectionsLink: true,
                   ctaVariant: "link",
                 },
@@ -3784,6 +3786,10 @@ const mainDefaultLayout = {
                     phoneNumberFormat: "domestic",
                     phoneNumberLink: true,
                   },
+                  address: {
+                    showRegion: true,
+                    showCountry: false,
+                  },
                   showHours: true,
                   showPhone: true,
                   showAddress: true,
@@ -4905,7 +4911,12 @@ const locatorDefaultLayout = {
             },
             liveVisibility: true,
           },
-          address: { showGetDirectionsLink: true, liveVisibility: true },
+          address: {
+            showGetDirectionsLink: true,
+            showRegion: true,
+            showCountry: false,
+            liveVisibility: true,
+          },
           phone: {
             field: { selection: { value: "mainPhone" } },
             phoneFormat: "domestic",

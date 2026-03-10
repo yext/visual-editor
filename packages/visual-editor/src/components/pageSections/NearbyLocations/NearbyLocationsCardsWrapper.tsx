@@ -81,6 +81,15 @@ export type NearbyLocationCardsWrapperProps = {
       phoneNumberLink: boolean;
     };
 
+    /** Styling for the address on each card */
+    address?: {
+      /** Whether to include the region in the Address */
+      showRegion: boolean;
+
+      /** Whether to include the country in the Address */
+      showCountry: boolean;
+    };
+
     /**
      * Whether to show the location's hours on the card.
      * @defaultValue true
@@ -213,6 +222,25 @@ const nearbyLocationCardsWrapperFields: Fields<NearbyLocationCardsWrapperProps> 
                 ],
               }
             ),
+          },
+        }),
+        address: YextField(msg("fields.address", "Address"), {
+          type: "object",
+          objectFields: {
+            showRegion: YextField(msg("fields.showRegion", "Show Region"), {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }),
+            showCountry: YextField(msg("fields.showCountry", "Show Country"), {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }),
           },
         }),
         showHours: YextField(msg("fields.showHours", "Show Hours"), {
@@ -377,6 +405,10 @@ export const defaultNearbyLocationsCardsProps: NearbyLocationCardsWrapperProps =
         phoneNumberFormat: "domestic",
         phoneNumberLink: true,
       },
+      address: {
+        showRegion: true,
+        showCountry: false,
+      },
       showHours: true,
       showPhone: true,
       showAddress: true,
@@ -399,6 +431,11 @@ export const NearbyLocationCardsWrapper: ComponentConfig<{
     if (!data.props.styles.showPhone) {
       fields = updateFields(fields, ["styles.phone.visible"], false);
     }
+
+    if (!data.props.styles.showAddress && !!data.props.styles.address) {
+      fields = updateFields(fields, ["styles.address.visible"], false);
+    }
+
     return fields;
   },
   render: (props) => <NearbyLocationCardsWrapperComponent {...props} />,

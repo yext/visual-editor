@@ -118,11 +118,8 @@ export const NearbyLocationCard: React.FC<NearbyLocationCardProps> = (
         <div className="font-body-fontFamily font-body-fontWeight text-body-fontSize">
           <Address
             address={address}
-            lines={[
-              ["line1"],
-              ["line2"],
-              ["city", ",", "region", "postalCode"],
-            ]}
+            showRegion={styles.address?.showRegion}
+            showCountry={styles.address?.showCountry}
           />
         </div>
       )}
