@@ -8,10 +8,7 @@ import { defaultCopyrightMessageSlotProps } from "./CopyrightMessageSlot.tsx";
 
 const defaultLink = {
   linkType: "URL" as const,
-  label: {
-    en: "Footer Link",
-    hasLocalizedValue: "true" as const,
-  },
+  label: { defaultValue: "Footer Link" },
   link: "#",
   openInNewTab: false,
 };

@@ -30,12 +30,12 @@ import { TextProps } from "../../contentBlocks/Text.tsx";
 import { syncParentStyles } from "../../../utils/cardSlots/syncParentStyles.ts";
 
 const defaultPerson = {
-  name: { en: "First Last", hasLocalizedValue: "true" },
-  title: { en: "Associate Agent", hasLocalizedValue: "true" },
+  name: { defaultValue: "First Last" },
+  title: { defaultValue: "Associate Agent" },
   phoneNumber: "+12027706619",
   email: "jkelley@[company].com",
   cta: {
-    label: { en: "Visit Profile", hasLocalizedValue: "true" },
+    label: { defaultValue: "Visit Profile" },
     link: "#",
     linkType: "URL",
     ctaType: "textAndLink",
@@ -135,10 +135,7 @@ export const defaultTeamCardSlotData = (
                       constantValue: defaultPerson.phoneNumber,
                       constantValueEnabled: true,
                     },
-                    label: {
-                      en: "",
-                      hasLocalizedValue: "true",
-                    },
+                    label: { defaultValue: "" },
                   },
                 ],
               },
@@ -176,7 +173,7 @@ export const defaultTeamCardSlotData = (
               ...(id && { id: `${id}-cta` }),
               data: {
                 actionType: "link",
-                buttonText: { en: "Button", hasLocalizedValue: "true" },
+                buttonText: { defaultValue: "Button" },
                 entityField: {
                   field: "",
                   constantValue: defaultPerson.cta,

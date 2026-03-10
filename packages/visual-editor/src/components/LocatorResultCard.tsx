@@ -20,7 +20,6 @@ import { msg, pt } from "../utils/i18n/platform.ts";
 import { PhoneAtom } from "./atoms/phone.tsx";
 import { useTemplateProps } from "../hooks/useDocument.tsx";
 import { resolveComponentData } from "../utils/resolveComponentData.tsx";
-import { resolveUrlTemplateOfChild } from "../utils/urls/resolveUrlTemplate.ts";
 import { HoursStatusAtom } from "./atoms/hoursStatus.tsx";
 import { HoursTableAtom } from "./atoms/hoursTable.tsx";
 import { YextField } from "../editor/YextField.tsx";
@@ -64,8 +63,16 @@ import {
   fromMeters,
   getPreferredDistanceUnit,
 } from "../utils/i18n/distance.ts";
+import {
+  DEFAULT_ENTITY_TYPE,
+  LocatorEntityType,
+} from "../utils/locatorEntityTypes.ts";
+import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
 export interface LocatorResultCardProps {
+  /** The entity type this result card applies to. */
+  entityType: LocatorEntityType;
+
   /** Settings for the main heading of the card */
   primaryHeading: {
     /**
@@ -182,6 +189,8 @@ export interface LocatorResultCardProps {
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
+    /** Static URL to use for primary CTA when an entity page URL is not found */
+    link?: TranslatableString;
   };
 
   /** Settings for the secondary CTA */
@@ -209,7 +218,13 @@ export interface LocatorResultCardProps {
   };
 }
 
+export type DistanceDisplayOption =
+  | "distanceFromUser"
+  | "distanceFromSearch"
+  | "hidden";
+
 export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
+  entityType: DEFAULT_ENTITY_TYPE,
   primaryHeading: {
     field: { selection: { value: "name" } },
     constantValue: "",
@@ -305,6 +320,10 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
   label: msg("fields.resultCard", "Result Card"),
   type: "object",
   objectFields: {
+    entityType: YextField(msg("fields.entityType", "Entity Type"), {
+      type: "text",
+      visible: false,
+    }),
     primaryHeading: {
       label: msg("fields.primaryHeading", "Primary Heading"),
       type: "object",
@@ -628,6 +647,13 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
             ],
           }
         ),
+        link: TranslatableStringField<TranslatableString | undefined>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
       },
     },
     secondaryCTA: {
@@ -725,16 +751,23 @@ export const LocatorResultCard = React.memo(
   ({
     result,
     resultCardProps: props,
+    distanceDisplay = "distanceFromUser",
+    isSelected,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
+    distanceDisplay?: DistanceDisplayOption;
+    isSelected?: boolean;
   }): React.JSX.Element => {
-    const { document: streamDocument, relativePrefixToRoot } =
-      useTemplateProps();
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
-    const distance = result.distance;
+    const distance =
+      distanceDisplay === "distanceFromUser"
+        ? result.distance
+        : distanceDisplay === "distanceFromSearch"
+          ? result.distanceFromFilter
+          : undefined;
 
     const unit = getPreferredDistanceUnit(i18n.language);
     const unitLabel = unit === "mile" ? "mi" : "km"; // Abbreviations do not need translation
@@ -747,10 +780,6 @@ export const LocatorResultCard = React.memo(
       result,
       "DRIVING_DIRECTIONS"
     );
-    const handleVisitPageClick = useCardAnalyticsCallback(
-      result,
-      "VIEW_WEBSITE"
-    );
     const handleSecondaryCTAClick = useCardAnalyticsCallback(
       result,
       "CTA_CLICK"
@@ -758,12 +787,6 @@ export const LocatorResultCard = React.memo(
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
       "TAP_TO_CALL"
-    );
-
-    const resolvedUrl = resolveUrlTemplateOfChild(
-      location,
-      streamDocument,
-      relativePrefixToRoot
     );
 
     const getDirectionsLink: string | undefined = (() => {
@@ -790,6 +813,7 @@ export const LocatorResultCard = React.memo(
       <Background
         background={backgroundColors.background1.value}
         className="container flex flex-row border-b border-gray-300 p-4 md:p-6 lg:p-8 gap-4"
+        style={isSelected ? { backgroundColor: "#F9F9F9" } : undefined}
       >
         <Background
           background={
@@ -891,22 +915,9 @@ export const LocatorResultCard = React.memo(
               {displayDistance}
             </div>
           )}
+          {/** CTA section */}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {props.primaryCTA.liveVisibility && (
-              <CTA
-                link={resolvedUrl}
-                label={
-                  resolveComponentData(
-                    props.primaryCTA.label,
-                    i18n.language,
-                    location
-                  ) || t("visitPage", "Visit Page")
-                }
-                variant={props.primaryCTA.variant}
-                onClick={handleVisitPageClick}
-                className="basis-full sm:w-auto justify-center"
-              />
-            )}
+            <PrimaryCTA primaryCTA={props.primaryCTA} result={result} />
             {props.secondaryCTA.liveVisibility && (
               <CTA
                 link={resolveComponentData(
@@ -932,6 +943,56 @@ export const LocatorResultCard = React.memo(
     );
   }
 );
+
+const PrimaryCTA = (props: {
+  primaryCTA: LocatorResultCardProps["primaryCTA"];
+  result: CardProps<Location>["result"];
+}) => {
+  const { primaryCTA, result } = props;
+  const location = result.rawData;
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const { t, i18n } = useTranslation();
+
+  // Always uses the entity page link if one exists. If not, tries to resolve URL from the static
+  // template in the Link prop, and if that also fails, doesn't render at all.
+  let resolvedUrl = resolveLocatorResultUrl(
+    location,
+    streamDocument,
+    relativePrefixToRoot
+  );
+  if (resolvedUrl === undefined && primaryCTA?.link) {
+    resolvedUrl = resolveComponentData(
+      primaryCTA.link,
+      i18n.language,
+      location
+    );
+  }
+
+  const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl;
+
+  const handlePrimaryCtaClick = useCardAnalyticsCallback(
+    result,
+    "VIEW_WEBSITE"
+  );
+
+  return (
+    showPrimaryCta && (
+      <CTA
+        link={resolvedUrl}
+        label={
+          resolveComponentData(
+            props.primaryCTA.label,
+            i18n.language,
+            location
+          ) || t("visitPage", "Visit Page")
+        }
+        variant={primaryCTA.variant}
+        onClick={handlePrimaryCtaClick}
+        className="basis-full sm:w-auto justify-center"
+      />
+    )
+  );
+};
 
 const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorClasses = `${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`;

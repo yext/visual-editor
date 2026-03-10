@@ -93,7 +93,7 @@ export const MapboxStaticMapComponent: PuckComponent<MapboxStaticProps> = ({
   const { t, i18n } = useTranslation();
   const streamDocument = useDocument<any>();
 
-  const coordinate = resolveComponentData(
+  const coordinate = resolveComponentData<Coordinate>(
     coordinateField,
     i18n.language,
     streamDocument
