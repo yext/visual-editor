@@ -131,28 +131,13 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
   );
 
   const searcher = React.useMemo(() => {
-    const searcher = provideHeadless(searchConfig);
-
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-
-      const searchTerm = params.get("searchTerm");
-      const verticalKey = params.get("vertical");
-
-      if (searchTerm) {
-        searcher.setQuery(searchTerm);
-
-        if (verticalKey) {
-          searcher.setVertical(verticalKey);
-          searcher.executeVerticalQuery();
-        } else {
-          searcher.executeUniversalQuery();
-        }
-      }
-    }
-
-    return searcher;
+    return provideHeadless(searchConfig);
   }, [searchConfig]);
+
+  React.useEffect(() => {
+    if (!searcher) return;
+    searcher.setSessionTrackingEnabled(true);
+  }, [searcher]);
 
   if (!searcher) {
     console.warn(

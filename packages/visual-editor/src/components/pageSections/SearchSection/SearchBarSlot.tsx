@@ -198,17 +198,6 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
       className={`relative w-full flex my-2 items-center ${heightClass} ${puck.isEditing ? "pt-4" : ""}`}
     >
       <SearchBar
-        onSearch={({ query }) => {
-          const trimmed = (query ?? "").trim();
-
-          if (!showResults) {
-            const target = `/search.html${
-              trimmed ? `?searchTerm=${encodeURIComponent(trimmed)}` : ""
-            }`;
-            window.location.href = target;
-            return;
-          }
-        }}
         visualAutocompleteConfig={visualAutocompleteConfig}
         placeholder={isTypingEffect ? placeholder : "Search here...."}
         customCssClasses={{

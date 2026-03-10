@@ -115,7 +115,7 @@ export const VerticalResultsSection = ({
   }
 
   return (
-    <div className="relative mx-auto flex flex-grow pt-8">
+    <div className="relative mx-auto flex flex-grow pt-4">
       <div
         className={`${
           !puck.isEditing ? "-ml-[224px]" : ""
@@ -127,7 +127,7 @@ export const VerticalResultsSection = ({
         />
       </div>
       <div className="flex-grow">
-        <div className="p-4 text-body-fontSize border-y border-gray-300 inline-block">
+        <div className="text-body-fontSize inline-block w-full pl-4">
           <div className="flex flex-row justify-between">
             <ResultsCount
               customCssClasses={{ resultsCountContainer: "!-mb-4" }}

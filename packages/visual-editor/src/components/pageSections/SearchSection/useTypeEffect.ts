@@ -15,15 +15,13 @@ export const useTypingEffect = ({
   const [queryPrompts, setQueryPrompts] = useState<string[]>([]);
   const [placeholder, setPlaceholder] = useState("");
   const document = useDocument();
-  useEffect(() => {
-    if (!enabled) return;
-  }, [enabled]);
 
   const indexRef = useRef(0);
   const charIndexRef = useRef(0);
   const isDeletingRef = useRef(false);
 
   useEffect(() => {
+    if (!enabled) return;
     const fetchPrompts = async () => {
       const base = env === "PRODUCTION" ? "cdn" : "sbx-cdn";
 
@@ -39,7 +37,7 @@ export const useTypingEffect = ({
     };
 
     fetchPrompts();
-  }, [env]);
+  }, [env, enabled]);
 
   useEffect(() => {
     if (queryPrompts.length === 0) return;

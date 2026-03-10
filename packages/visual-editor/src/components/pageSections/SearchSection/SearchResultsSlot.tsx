@@ -5,7 +5,7 @@ import {
   usePuck,
 } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { YextField } from "../../../editor/YextField.tsx";
@@ -116,7 +116,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const { t } = useTranslation();
   const searchActions = useSearchActions();
   const [verticalKey, setVerticalKey] = useState<string | null>(null);
-  const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const committedSearchTerm = useSearchState((s) => s.query.input ?? "");
   const activeVerticalKey = useSearchState(
     (s: any) => s.vertical?.verticalKey ?? null
@@ -150,40 +149,42 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     return verticals.find((v) => v.verticalKey === activeVerticalKey);
   }, [verticals, activeVerticalKey]);
 
-  const runSearch = React.useCallback(
-    (nextVerticalKey: string | null) => {
-      if (!isValidVerticalConfig(verticals)) return;
+  const runSearch = (nextVerticalKey: string | null) => {
+    if (!isValidVerticalConfig(verticals)) return;
 
-      searchActions.setQuery(committedSearchTerm ?? "");
+    const query = committedSearchTerm ?? "";
 
-      if (nextVerticalKey) {
-        searchActions.setVertical(nextVerticalKey);
-        const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
-        if (cfg && typeof cfg.verticalLimit === "number") {
-          searchActions.setVerticalLimit(cfg.verticalLimit);
-        }
-        searchActions.executeVerticalQuery();
-      } else {
-        searchActions.setUniversal();
-        searchActions.setUniversalLimit(universalLimit);
-        searchActions.executeUniversalQuery();
+    searchActions.setQuery(query);
+
+    if (nextVerticalKey) {
+      searchActions.setVertical(nextVerticalKey);
+
+      const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
+
+      if (cfg?.verticalLimit) {
+        searchActions.setVerticalLimit(cfg.verticalLimit);
       }
 
-      updateSearchUrl({
-        vertical: nextVerticalKey,
-        searchTerm: committedSearchTerm,
-      });
-    },
-    [verticals, committedSearchTerm, universalLimit, searchActions]
-  );
+      searchActions.executeVerticalQuery();
+    } else {
+      searchActions.setUniversal();
+      searchActions.setUniversalLimit(universalLimit);
+      searchActions.executeUniversalQuery();
+    }
 
-  React.useEffect(() => {
+    updateSearchUrl({
+      vertical: nextVerticalKey,
+      searchTerm: query,
+    });
+  };
+
+  useEffect(() => {
     if (!isValidVerticalConfig(verticals)) return;
     runSearch(verticalKey);
-  }, [verticalKey, runSearch, verticals]);
-
+  }, [verticalKey]);
   React.useEffect(() => {
     const { vertical, searchTerm } = readInitialUrlParams();
+    console.log(vertical, searchTerm);
 
     searchActions.setQuery(searchTerm);
 
@@ -257,25 +258,22 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         </div>
       </div>
 
-      {isLoading && <div>{t("loadingResults", "Loading Results...")}</div>}
-
-      {!isLoading &&
-        (!isUniversalActive && activeVerticalKey ? (
-          <VerticalResultsSection
-            verticalKey={activeVerticalKey}
-            verticals={verticals}
-            currentVerticalConfig={currentVerticalConfig}
-            puck={puck}
-            facetsLength={facetsLength}
-          />
-        ) : (
-          <UniversalResultsSection
-            enableGDA={props.styles?.enableGenerativeDirectAnswer ?? true}
-            searchTerm={committedSearchTerm}
-            gdaLoading={gdaLoading}
-            verticalConfigMap={verticalConfigMap}
-          />
-        ))}
+      {!isUniversalActive && activeVerticalKey ? (
+        <VerticalResultsSection
+          verticalKey={activeVerticalKey}
+          verticals={verticals}
+          currentVerticalConfig={currentVerticalConfig}
+          puck={puck}
+          facetsLength={facetsLength}
+        />
+      ) : (
+        <UniversalResultsSection
+          enableGDA={props.styles?.enableGenerativeDirectAnswer ?? true}
+          searchTerm={committedSearchTerm}
+          gdaLoading={gdaLoading}
+          verticalConfigMap={verticalConfigMap}
+        />
+      )}
     </div>
   );
 };
