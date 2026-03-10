@@ -1951,6 +1951,52 @@ describe("PromoSection", async () => {
       },
     },
   };
+
+  it("resolves mapped translatable promo titles to plain heading text", async () => {
+    const document = {
+      c_examplePromo: {
+        ...promoData,
+        title: {
+          en: "Taste the universe!",
+          hasLocalizedValue: "true",
+        },
+      },
+    };
+
+    const data = {
+      root: {
+        props: {
+          version: migrationRegistry.length,
+        },
+      },
+      content: [
+        {
+          type: "PromoSection",
+          props: {
+            ...PromoSection.defaultProps,
+            data: {
+              ...PromoSection.defaultProps.data,
+              promo: {
+                field: "c_examplePromo",
+                constantValue: {},
+                constantValueEnabled: false,
+              },
+            },
+          },
+        },
+      ],
+    };
+
+    const resolvedData = await resolveAllData(data as any, puckConfig, {
+      streamDocument: document,
+    });
+
+    expect(
+      resolvedData.content[0]?.props?.slots?.HeadingSlot?.[0]?.props?.parentData
+        ?.text
+    ).toBe("Taste the universe!");
+  });
+
   it.each(transformTests(tests))(
     "$viewport.name $name",
     async ({

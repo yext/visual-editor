@@ -38,6 +38,7 @@ import { CompactPromo } from "./CompactPromo.tsx";
 import { useTranslation } from "react-i18next";
 import { PromoEmptyState } from "./PromoEmptyState.tsx";
 import { ComponentErrorBoundary } from "../../../internal/components/ComponentErrorBoundary.tsx";
+import { resolveComponentData } from "../../../utils/resolveComponentData.tsx";
 
 export interface PromoData {
   /**
@@ -580,12 +581,20 @@ export const PromoSection: ComponentConfig<{ props: PromoSectionProps }> = {
       return { ...data, readOnly: { [mediaSubfield]: false } };
     }
 
+    const resolvedTitle = resolvedPromo.title
+      ? resolveComponentData(
+          resolvedPromo.title,
+          i18nComponentsInstance.language || "en",
+          params.metadata.streamDocument
+        )
+      : "";
+
     updatedData = setDeep(updatedData, "props.data.media", "image");
     updatedData = setDeep(
       updatedData,
       "props.slots.HeadingSlot[0].props.parentData",
       {
-        text: resolvedPromo.title || "",
+        text: resolvedTitle,
         field: data.props?.data?.promo.field || "",
       }
     );
