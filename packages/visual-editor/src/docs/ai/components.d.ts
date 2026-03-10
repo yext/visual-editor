@@ -1104,8 +1104,9 @@ type TranslatableRichText =
 
 /** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
 type LocalizedValues = {
-  hasLocalizedValue: "true";
-} & Record<string, string>;
+  hasLocalizedValue?: "true";
+  defaultValue?: string;
+} & Record<string, string | undefined>;
 
 /** An individual FAQ */
 type FAQStruct = {
@@ -1146,12 +1147,6 @@ type RichText = {
   html?: string;
   json?: string;
 };
-
-/** Represents a translatable string. The key is the locale (en, es, fr), and the value is the localized string. */
-type LocalizedValues = {
-  hasLocalizedValue?: "true";
-  defaultValue?: string;
-} & Record<string, string | undefined>;
 
 /** Describes the data corresponding to a piece of image content. */
 type ImageContentData = {
