@@ -5,9 +5,9 @@ import {
   usePuck,
 } from "@puckeditor/core";
 import { useSearchActions, useSearchState } from "@yext/search-headless-react";
-import React, { useEffect, useState } from "react";
-import { FaEllipsisV } from "react-icons/fa";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { FaEllipsisV } from "react-icons/fa";
 import { YextField } from "../../../editor/YextField.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
 import {
@@ -149,10 +149,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     return verticals.find((v) => v.verticalKey === activeVerticalKey);
   }, [verticals, activeVerticalKey]);
 
-  const runSearch = (nextVerticalKey: string | null) => {
+  const runSearch = (nextVerticalKey: string | null, query: string) => {
     if (!isValidVerticalConfig(verticals)) return;
-
-    const query = committedSearchTerm ?? "";
 
     searchActions.setQuery(query);
 
@@ -178,21 +176,92 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     });
   };
 
-  useEffect(() => {
-    if (!isValidVerticalConfig(verticals)) return;
-    runSearch(verticalKey);
-  }, [verticalKey]);
+  // const runSearch = (nextVerticalKey: string | null) => {
+  //   if (!isValidVerticalConfig(verticals)) return;
+
+  //   const query = committedSearchTerm ?? "";
+
+  //   searchActions.setQuery(query);
+
+  //   if (nextVerticalKey) {
+  //     searchActions.setVertical(nextVerticalKey);
+
+  //     const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
+
+  //     if (cfg?.verticalLimit) {
+  //       searchActions.setVerticalLimit(cfg.verticalLimit);
+  //     }
+
+  //     searchActions.executeVerticalQuery();
+  //   } else {
+  //     searchActions.setUniversal();
+  //     searchActions.setUniversalLimit(universalLimit);
+  //     searchActions.executeUniversalQuery();
+  //   }
+
+  //   updateSearchUrl({
+  //     vertical: nextVerticalKey,
+  //     searchTerm: query,
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   if (!isValidVerticalConfig(verticals)) return;
+  //   runSearch(verticalKey);
+  // }, [verticalKey]);
+
+  // React.useEffect(() => {
+  //   if (!verticals?.length) return;
+
+  //   const { vertical, searchTerm } = readInitialUrlParams();
+  //   console.log(vertical, searchTerm);
+
+  //   searchActions.setQuery(searchTerm);
+
+  //   const validVertical =
+  //     vertical && verticals.some((v) => v.verticalKey === vertical);
+
+  //   setVerticalKey(validVertical ? vertical : null);
+  // }, [verticals]);
+
   React.useEffect(() => {
+    if (!verticals?.length) return;
+
     const { vertical, searchTerm } = readInitialUrlParams();
     console.log(vertical, searchTerm);
-
-    searchActions.setQuery(searchTerm);
 
     const validVertical =
       vertical && verticals.some((v) => v.verticalKey === vertical);
 
-    setVerticalKey(validVertical ? vertical! : null);
-  }, [verticals, searchActions]);
+    const nextVertical = validVertical ? vertical : null;
+
+    // Update local state
+    setVerticalKey(nextVertical);
+
+    // Set query immediately
+    searchActions.setQuery(searchTerm);
+
+    // Run search using URL query (avoid relying on state)
+    if (nextVertical) {
+      searchActions.setVertical(nextVertical);
+
+      const cfg = verticals.find((v) => v.verticalKey === nextVertical);
+      if (cfg?.verticalLimit) {
+        searchActions.setVerticalLimit(cfg.verticalLimit);
+      }
+
+      searchActions.executeVerticalQuery();
+    } else {
+      searchActions.setUniversal();
+      searchActions.setUniversalLimit(universalLimit);
+      searchActions.executeUniversalQuery();
+    }
+
+    updateSearchUrl({
+      vertical: nextVertical,
+      searchTerm,
+    });
+  }, [verticals]);
 
   React.useEffect(() => {
     if (!arrayKey || !puck.isEditing || !arrayState) return;
@@ -232,13 +301,22 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
             return (
               <li key={`${item.verticalKey ?? "no-key"}:${item.label}:${idx}`}>
                 <a
-                  onClick={() =>
-                    setVerticalKey(
+                  // onClick={() =>
+                  //   setVerticalKey(
+                  //     item.pageType === "universal"
+                  //       ? null
+                  //       : (item.verticalKey ?? null)
+                  //   )
+                  // }
+                  onClick={() => {
+                    const nextVertical =
                       item.pageType === "universal"
                         ? null
-                        : (item.verticalKey ?? null)
-                    )
-                  }
+                        : (item.verticalKey ?? null);
+
+                    setVerticalKey(nextVertical);
+                    runSearch(nextVertical, committedSearchTerm);
+                  }}
                   className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
                     isActive ? "border-b-2 border-black" : ""
                   }`}
