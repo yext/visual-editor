@@ -19,8 +19,6 @@ import {
   applyAnalytics,
   applyHeaderScript,
   applyCertifiedFacts,
-  migrate,
-  migrationRegistry,
   defaultThemeConfig,
   getSchema,
   injectTranslations,
@@ -28,6 +26,7 @@ import {
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 const baseConfig: Config = {};
 
@@ -106,15 +105,13 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
-  const migratedData = migrate(
+  const resolvedPuckData = await resolveAllData(
     JSON.parse(document.__.layout),
-    migrationRegistry,
     baseConfig,
-    document
+    {
+      streamDocument: document,
+    }
   );
-  const resolvedPuckData = await resolveAllData(migratedData, baseConfig, {
-    streamDocument: document,
-  });
   document.__.layout = JSON.stringify(resolvedPuckData);
 
   const translations = await injectTranslations(document);
@@ -151,13 +148,15 @@ const Base: Template<TemplateRenderProps> = (props) => {
       currency="USD"
       requireOptIn={requireAnalyticsOptIn}
     >
-      <VisualEditorProvider templateProps={props}>
-        <Render
-          config={baseConfig}
-          data={data}
-          metadata={{ streamDocument: document }}
-        />
-      </VisualEditorProvider>
+      <ChakraProvider value={defaultSystem}>
+        <VisualEditorProvider templateProps={props}>
+          <Render
+            config={baseConfig}
+            data={data}
+            metadata={{ streamDocument: document }}
+          />
+        </VisualEditorProvider>
+      </ChakraProvider>
     </AnalyticsProvider>
   );
 };

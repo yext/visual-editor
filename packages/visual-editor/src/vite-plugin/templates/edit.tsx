@@ -21,6 +21,7 @@ import {
 } from "@yext/pages";
 import { type Config } from "@puckeditor/core";
 import tailwindConfig from "../../tailwind.config";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 const baseConfig: Config = {};
 
@@ -54,19 +55,21 @@ const Edit: () => JSX.Element = () => {
   const entityFields = usePlatformBridgeEntityFields();
 
   return (
-    <VisualEditorProvider
-      templateProps={{
-        document: entityDocument,
-      }}
-      entityFields={entityFields}
-      tailwindConfig={tailwindConfig}
-    >
-      <Editor
-        document={entityDocument}
-        componentRegistry={componentRegistry}
-        themeConfig={defaultThemeConfig}
-      />
-    </VisualEditorProvider>
+    <ChakraProvider value={defaultSystem}>
+      <VisualEditorProvider
+        templateProps={{
+          document: entityDocument,
+        }}
+        entityFields={entityFields}
+        tailwindConfig={tailwindConfig}
+      >
+        <Editor
+          document={entityDocument}
+          componentRegistry={componentRegistry}
+          themeConfig={defaultThemeConfig}
+        />
+      </VisualEditorProvider>
+    </ChakraProvider>
   );
 };
 
