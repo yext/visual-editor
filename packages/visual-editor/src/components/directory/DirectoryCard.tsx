@@ -80,7 +80,7 @@ export const defaultDirectoryCardSlotData = (
                 true,
               showCountry:
                 existingSlots?.AddressSlot?.[0]?.props?.styles?.showCountry ??
-                true,
+                false,
               showGetDirectionsLink:
                 existingSlots?.AddressSlot?.[0]?.props?.styles
                   ?.showGetDirectionsLink ?? false,

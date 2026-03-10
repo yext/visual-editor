@@ -144,7 +144,7 @@ export interface LocatorResultCardProps {
 
     /**
      * Whether to include the country in the Address
-     * @defaultValue true
+     * @defaultValue false
      */
     showCountry?: boolean;
 
@@ -268,7 +268,7 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
   address: {
     showRegion: true,
-    showCountry: true,
+    showCountry: false,
     showGetDirectionsLink: true,
     liveVisibility: true,
   },

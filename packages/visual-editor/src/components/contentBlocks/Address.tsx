@@ -41,7 +41,7 @@ export interface AddressProps {
 
     /**
      * Whether to include the country in the Address
-     * @defaultValue true
+     * @defaultValue false
      */
     showCountry?: boolean;
 
@@ -240,7 +240,7 @@ export const Address: ComponentConfig<{
     },
     styles: {
       showRegion: true,
-      showCountry: true,
+      showCountry: false,
       showGetDirectionsLink: true,
       ctaVariant: "link",
       color: backgroundColors.color1.value,
