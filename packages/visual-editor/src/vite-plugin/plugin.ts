@@ -1,11 +1,11 @@
 import path from "node:path";
 import fs from "fs-extra";
 import { Plugin } from "vite";
-import mainTemplate from "./templates/main.tsx?raw";
+import baseTemplate from "./templates/base.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
-import { ComponentField, ComponentFields } from "../types/fields.ts";
+import { ComponentField } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
 
 type TemplateManifestEntry = {
@@ -31,24 +31,15 @@ type VirtualFile = {
  */
 const virtualFiles: VirtualFile[] = [
   {
-    filepath: "src/templates/main.tsx",
-    content: mainTemplate,
+    filepath: "temp/base.tsx",
+    content: baseTemplate,
     templateManifestEntry: {
-      name: "main",
+      name: "base",
       description:
-        "Use this template to generate pages for each of your Locations.",
+        "Use this template to generate pages for each of your entities.",
       exampleSiteUrl: "",
       layoutRequired: true,
-      defaultLayoutData: defaultLayoutData.main,
-      componentFields: [
-        ComponentFields.PromoSection,
-        ComponentFields.ProductSection,
-        ComponentFields.EventSection,
-        ComponentFields.FAQSection,
-        ComponentFields.TestimonialSection,
-        ComponentFields.InsightSection,
-        ComponentFields.TeamSection,
-      ],
+      defaultLayoutData: {},
     },
   },
   {

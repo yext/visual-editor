@@ -11,7 +11,7 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Render, resolveAllData } from "@puckeditor/core";
+import { Config, Render, resolveAllData } from "@puckeditor/core";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -21,15 +21,15 @@ import {
   applyCertifiedFacts,
   migrate,
   migrationRegistry,
-  filterComponentsFromConfig,
   defaultThemeConfig,
-  mainConfig,
   getSchema,
   injectTranslations,
   getCanonicalUrl,
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
+
+const baseConfig: Config = {};
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
@@ -109,10 +109,10 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const migratedData = migrate(
     JSON.parse(document.__.layout),
     migrationRegistry,
-    mainConfig,
+    baseConfig,
     document
   );
-  const resolvedPuckData = await resolveAllData(migratedData, mainConfig, {
+  const resolvedPuckData = await resolveAllData(migratedData, baseConfig, {
     streamDocument: document,
   });
   document.__.layout = JSON.stringify(resolvedPuckData);
@@ -122,7 +122,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   return { ...props, document, translations };
 };
 
-const Location: Template<TemplateRenderProps> = (props) => {
+const Base: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
 
   const layoutString = document.__.layout;
@@ -132,12 +132,6 @@ const Location: Template<TemplateRenderProps> = (props) => {
   } catch (e) {
     console.error("Failed to parse layout JSON:", e);
   }
-
-  const filteredConfig = filterComponentsFromConfig(
-    mainConfig,
-    document?._additionalLayoutComponents,
-    document?._additionalLayoutCategories
-  );
 
   let requireAnalyticsOptIn = false;
   if (document.__?.visualEditorConfig) {
@@ -159,7 +153,7 @@ const Location: Template<TemplateRenderProps> = (props) => {
     >
       <VisualEditorProvider templateProps={props}>
         <Render
-          config={filteredConfig}
+          config={baseConfig}
           data={data}
           metadata={{ streamDocument: document }}
         />
@@ -168,4 +162,4 @@ const Location: Template<TemplateRenderProps> = (props) => {
   );
 };
 
-export default Location;
+export default Base;

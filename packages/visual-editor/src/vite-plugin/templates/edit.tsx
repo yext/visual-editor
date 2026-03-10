@@ -7,7 +7,6 @@ import {
   directoryConfig,
   Editor,
   locatorConfig,
-  mainConfig,
   usePlatformBridgeDocument,
   usePlatformBridgeEntityFields,
   VisualEditorProvider,
@@ -23,8 +22,10 @@ import {
 import { type Config } from "@puckeditor/core";
 import tailwindConfig from "../../tailwind.config";
 
+const baseConfig: Config = {};
+
 const componentRegistry: Record<string, Config<any>> = {
-  main: mainConfig,
+  base: baseConfig,
   directory: directoryConfig,
   locator: locatorConfig,
 };
