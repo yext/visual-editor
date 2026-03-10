@@ -7,6 +7,16 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> => {
   return prototype === Object.prototype || prototype === null;
 };
 
+/**
+ * Clones resolved Puck editor data before rerunning `resolveAllData` on entity
+ * switches.
+ *
+ * This is intentionally narrower than a generic deep clone. Resolved editor
+ * state can contain function props injected by component `resolveData`
+ * implementations, which cause `structuredClone` to throw. Plain objects and
+ * arrays are cloned deeply, while functions and other non-plain objects are
+ * preserved by reference.
+ */
 export const clonePuckResolveData = <T>(
   value: T,
   seen = new WeakMap<object, unknown>()
