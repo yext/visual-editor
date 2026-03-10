@@ -30,14 +30,16 @@ starter/src/components/custom/<client>/
 ## Isolation Rules
 
 - Do not import, reference, or adapt sibling client templates under `starter/src/components/custom/<other-client>`.
-- Do not infer any repo-specific conventions or try to match other files in this repo.
+- Do not read unrelated files in `starter/src` or `packages/visual-editor` to learn conventions or copy implementation patterns.
+- Exception: you may read and update `starter/src/ve.config.tsx` so generated components are registered. Registration only needs to work; matching its formatting or conventions is optional.
 - Do not read files under `packages/visual-editor/src/components`.
 - Only use files in `starter/src/components/custom/<client>/...` within the custom components tree.
 
 ## Dependency Rules
 
-- You can use any dependencies in the package.json. DO NOT use any other dependencies.
-- Use Chakra components wherever possible
+- Prefer `@chakra-ui/react`, `@yext/visual-editor`, `@yext/pages-components`, and `@puckeditor/core`.
+- Only use another installed library when Chakra cannot match the required behavior cleanly.
+- Do not add or use dependencies outside the existing `package.json`.
 - ALWAYS use `Address`, `HoursTable`, `HoursStatus`, and `Link` from `@yext/pages-components` when rendering
   any address, hours, ctas, or links. However, they MUST be augmented with CSS/classes to match
   the captured page artifacts
@@ -72,6 +74,7 @@ In each `starter/src/components/custom/<client>/components/example-section.tsx`:
 - Hero/promo sections should use Chakra-based full-bleed shell wrappers when source parity expects media to reach section edges
   (for example: outer container horizontal padding `0`, content wrapper `maxW="none"`).
 - Call To Action and Links should always pair with actionable href/link/CTA data, not just plain text spans.
+- Render `Link` from `@yext/pages-components` with visible child text or child markup, not as a self-closing element.
 - Headers and Footers:
   - You should implement mega menus or hidden content if found in the captured HTML
   - Use nested arrays in Puck (`ArrayField`) for navigational links.

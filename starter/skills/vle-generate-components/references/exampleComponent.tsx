@@ -129,10 +129,11 @@ export const ExampleBannerComponent: PuckComponent<
       <Link
         cta={{
           link: props.cta.link,
-          label: props.cta.label,
           linkType: "URL",
         }}
-      />
+      >
+        {props.cta.label}
+      </Link>
     </Box>
   );
 };

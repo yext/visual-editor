@@ -88,7 +88,7 @@ export const ExampleHoursStatus = () => {
 
 ## `<Link />` from `@yext/pages-components`
 
-Use `Link` (not raw `<a>`) for typed CTA links. Common pattern is `cta={{ link, linkType }}` plus optional analytics/event props.
+Use `Link` (not raw `<a>`) for typed CTA links. Render the visible label as child text or child markup. Common pattern is `cta={{ link linkType }}` plus optional analytics/event props.
 
 ```tsx
 import { useDocument } from "@yext/visual-editor";
@@ -103,7 +103,10 @@ export const ExampleLink = () => {
 
   return (
     <Link
-      cta={{ link: streamDocument.websiteUrl, linkType: "URL" }}
+      cta={{
+        link: streamDocument.websiteUrl,
+        linkType: "URL",
+      }}
       eventName="websiteCTA"
       target="_blank"
       rel="noopener noreferrer"

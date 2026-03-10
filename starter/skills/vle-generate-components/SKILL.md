@@ -20,15 +20,16 @@ Required:
 
 ## Restrictions
 
+- Do read:
+  - files in this skill directory, including `references/**` and `scripts/**`
+  - `starter/src/ve.config.tsx` only as needed for component registration and import updates. Do not use it as an implementation template.
 - Do not read:
   - `packages/visual-editor/src/components/**`
   - `starter/dist/**`
   - `starter/localData**`
   - files in node_modules (unless absolutely necessary)
-- Do not read or adapt files from any other directory under `starter/src/components/custom`.
-  - Exception: read `starter/src/ve.config.tsx` as needed for component registration and import updates.
-- Do not try to use `BeautifulSoup`, it is not installed.
-- Do not modify files under `starter/skills/scripts`. If the scripts fail, stop and report the error to the user.
+  - any directory under `starter/src/components/custom` other than the current client's directory
+- Do not modify files under `starter/skills/vle-generate-components/scripts`. If the scripts fail, stop and report the error to the user.
 
 ## Discovery
 
