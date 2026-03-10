@@ -116,7 +116,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   const { t } = useTranslation();
   const searchActions = useSearchActions();
   const [verticalKey, setVerticalKey] = useState<string | null>(null);
-  const isLoading = useSearchState((s) => s.searchStatus.isLoading);
   const committedSearchTerm = useSearchState((s) => s.query.input ?? "");
   const activeVerticalKey = useSearchState(
     (s: any) => s.vertical?.verticalKey ?? null
@@ -258,25 +257,22 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
         </div>
       </div>
 
-      {isLoading && <div>{t("loadingResults", "Loading Results...")}</div>}
-
-      {!isLoading &&
-        (!isUniversalActive && activeVerticalKey ? (
-          <VerticalResultsSection
-            verticalKey={activeVerticalKey}
-            verticals={verticals}
-            currentVerticalConfig={currentVerticalConfig}
-            puck={puck}
-            facetsLength={facetsLength}
-          />
-        ) : (
-          <UniversalResultsSection
-            enableGDA={props.styles?.enableGenerativeDirectAnswer ?? true}
-            searchTerm={committedSearchTerm}
-            gdaLoading={gdaLoading}
-            verticalConfigMap={verticalConfigMap}
-          />
-        ))}
+      {!isUniversalActive && activeVerticalKey ? (
+        <VerticalResultsSection
+          verticalKey={activeVerticalKey}
+          verticals={verticals}
+          currentVerticalConfig={currentVerticalConfig}
+          puck={puck}
+          facetsLength={facetsLength}
+        />
+      ) : (
+        <UniversalResultsSection
+          enableGDA={props.styles?.enableGenerativeDirectAnswer ?? true}
+          searchTerm={committedSearchTerm}
+          gdaLoading={gdaLoading}
+          verticalConfigMap={verticalConfigMap}
+        />
+      )}
     </div>
   );
 };
