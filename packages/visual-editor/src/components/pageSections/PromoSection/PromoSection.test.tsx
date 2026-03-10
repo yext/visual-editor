@@ -1943,6 +1943,7 @@ const isBrandColorTest = (props: any) => {
 };
 
 describe("PromoSection", async () => {
+  const promoSectionDefaultProps = PromoSection.defaultProps!;
   const puckConfig: Config = {
     components: { PromoSection, ...SlotsCategoryComponents },
     root: {
@@ -1973,9 +1974,9 @@ describe("PromoSection", async () => {
         {
           type: "PromoSection",
           props: {
-            ...PromoSection.defaultProps,
+            ...promoSectionDefaultProps,
             data: {
-              ...PromoSection.defaultProps.data,
+              ...promoSectionDefaultProps.data,
               promo: {
                 field: "c_examplePromo",
                 constantValue: {},
