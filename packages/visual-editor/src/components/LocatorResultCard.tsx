@@ -65,13 +65,13 @@ import {
 } from "../utils/i18n/distance.ts";
 import {
   DEFAULT_ENTITY_TYPE,
-  EntityType,
+  LocatorEntityType,
 } from "../utils/locatorEntityTypes.ts";
 import { resolveLocatorResultUrl } from "../utils/urls/resolveLocatorResultUrl.ts";
 
 export interface LocatorResultCardProps {
   /** The entity type this result card applies to. */
-  entityType: EntityType;
+  entityType: LocatorEntityType;
 
   /** Settings for the main heading of the card */
   primaryHeading: {
@@ -189,6 +189,8 @@ export interface LocatorResultCardProps {
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
     liveVisibility: boolean;
+    /** Static URL to use for primary CTA when an entity page URL is not found */
+    link?: TranslatableString;
   };
 
   /** Settings for the secondary CTA */
@@ -645,6 +647,13 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
             ],
           }
         ),
+        link: TranslatableStringField<TranslatableString | undefined>(
+          msg("fields.link", "Link"),
+          undefined,
+          false,
+          true,
+          () => getDisplayFieldOptions("type.string")
+        ),
       },
     },
     secondaryCTA: {
@@ -744,16 +753,12 @@ export const LocatorResultCard = React.memo(
     resultCardProps: props,
     distanceDisplay = "distanceFromUser",
     isSelected,
-    showPrimaryCta,
   }: {
     result: CardProps<Location>["result"];
     resultCardProps: LocatorResultCardProps;
     distanceDisplay?: DistanceDisplayOption;
     isSelected?: boolean;
-    showPrimaryCta?: boolean;
   }): React.JSX.Element => {
-    const { document: streamDocument, relativePrefixToRoot } =
-      useTemplateProps();
     const { t, i18n } = useTranslation();
 
     const location = result.rawData;
@@ -775,10 +780,6 @@ export const LocatorResultCard = React.memo(
       result,
       "DRIVING_DIRECTIONS"
     );
-    const handleVisitPageClick = useCardAnalyticsCallback(
-      result,
-      "VIEW_WEBSITE"
-    );
     const handleSecondaryCTAClick = useCardAnalyticsCallback(
       result,
       "CTA_CLICK"
@@ -786,12 +787,6 @@ export const LocatorResultCard = React.memo(
     const handlePhoneNumberClick = useCardAnalyticsCallback(
       result,
       "TAP_TO_CALL"
-    );
-
-    const resolvedUrl = resolveLocatorResultUrl(
-      location,
-      streamDocument,
-      relativePrefixToRoot
     );
 
     const getDirectionsLink: string | undefined = (() => {
@@ -920,22 +915,9 @@ export const LocatorResultCard = React.memo(
               {displayDistance}
             </div>
           )}
+          {/** CTA section */}
           <div className="flex flex-col lg:flex-row gap-2 lg:gap-4 w-full items-center md:items-stretch lg:items-center">
-            {showPrimaryCta && resolvedUrl && (
-              <CTA
-                link={resolvedUrl}
-                label={
-                  resolveComponentData(
-                    props.primaryCTA.label,
-                    i18n.language,
-                    location
-                  ) || t("visitPage", "Visit Page")
-                }
-                variant={props.primaryCTA.variant}
-                onClick={handleVisitPageClick}
-                className="basis-full sm:w-auto justify-center"
-              />
-            )}
+            <PrimaryCTA primaryCTA={props.primaryCTA} result={result} />
             {props.secondaryCTA.liveVisibility && (
               <CTA
                 link={resolveComponentData(
@@ -961,6 +943,56 @@ export const LocatorResultCard = React.memo(
     );
   }
 );
+
+const PrimaryCTA = (props: {
+  primaryCTA: LocatorResultCardProps["primaryCTA"];
+  result: CardProps<Location>["result"];
+}) => {
+  const { primaryCTA, result } = props;
+  const location = result.rawData;
+  const { document: streamDocument, relativePrefixToRoot } = useTemplateProps();
+  const { t, i18n } = useTranslation();
+
+  // Always uses the entity page link if one exists. If not, tries to resolve URL from the static
+  // template in the Link prop, and if that also fails, doesn't render at all.
+  let resolvedUrl = resolveLocatorResultUrl(
+    location,
+    streamDocument,
+    relativePrefixToRoot
+  );
+  if (resolvedUrl === undefined && primaryCTA?.link) {
+    resolvedUrl = resolveComponentData(
+      primaryCTA.link,
+      i18n.language,
+      location
+    );
+  }
+
+  const showPrimaryCta = primaryCTA.liveVisibility && resolvedUrl;
+
+  const handlePrimaryCtaClick = useCardAnalyticsCallback(
+    result,
+    "VIEW_WEBSITE"
+  );
+
+  return (
+    showPrimaryCta && (
+      <CTA
+        link={resolvedUrl}
+        label={
+          resolveComponentData(
+            props.primaryCTA.label,
+            i18n.language,
+            location
+          ) || t("visitPage", "Visit Page")
+        }
+        variant={primaryCTA.variant}
+        onClick={handlePrimaryCtaClick}
+        className="basis-full sm:w-auto justify-center"
+      />
+    )
+  );
+};
 
 const CardIcon: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const colorClasses = `${backgroundColors.background2.value.bgColor} ${backgroundColors.background2.value.textColor}`;

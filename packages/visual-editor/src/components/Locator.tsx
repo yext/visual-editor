@@ -71,7 +71,10 @@ import {
   BackgroundStyle,
   backgroundColors,
 } from "../utils/themeConfigOptions.ts";
-import { StreamDocument } from "../utils/types/StreamDocument.ts";
+import {
+  LocatorConfig,
+  StreamDocument,
+} from "../utils/types/StreamDocument.ts";
 import { getValueFromQueryString } from "../utils/urlQueryString.tsx";
 import { Body } from "./atoms/body.tsx";
 import { Heading } from "./atoms/heading.tsx";
@@ -87,8 +90,8 @@ import { MapPinIcon } from "./MapPinIcon.js";
 import { useAnalytics } from "@yext/pages-components";
 import {
   DEFAULT_ENTITY_TYPE,
-  EntityType,
-  isEntityType,
+  LocatorEntityType,
+  isLocatorEntityType,
   getLocatorEntityTypeSourceMap,
   getEntityTypeLabel,
 } from "../utils/locatorEntityTypes.ts";
@@ -105,6 +108,19 @@ const DEFAULT_DISTANCE_DISPLAY = "distanceFromUser";
 const DEFAULT_LOCATION_STYLE = {
   pinIcon: { type: "none" },
   pinColor: backgroundColors.background6.value,
+};
+
+const getLocatorConfigFromPageSet = (pageSet?: string): LocatorConfig => {
+  if (!pageSet) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(pageSet)?.typeConfig?.locatorConfig ?? {};
+  } catch {
+    console.error("Failed to parse locator config from page set");
+    return {};
+  }
 };
 
 const translateDistanceUnit = (
@@ -152,7 +168,13 @@ const ResultCardPropsField = ({
   value?: LocatorResultCardProps;
   onChange: (value: LocatorResultCardProps) => void;
 }) => {
+  const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
+  const entityTypeScopes = React.useMemo(() => {
+    const locatorConfig = getLocatorConfigFromPageSet(streamDocument?._pageset);
+    return locatorConfig.entityTypeScope ?? [];
+  }, [streamDocument]);
+
   /**
    * Builds the field schema for the result card editor, including:
    * - Conditionally removing the primary CTA section when entity scope is not attached to a page set.
@@ -163,9 +185,17 @@ const ResultCardPropsField = ({
       return LocatorResultCardFields;
     }
     let fields = LocatorResultCardFields;
-    const showPrimaryCta = !!entityTypeSourceMap[value.entityType];
+    const entityTypeHasSourcePageSet = !!entityTypeSourceMap[value.entityType];
+    const scopeExistsForEntityType =
+      entityTypeScopes.find(
+        (scope) => scope.entityType === value.entityType
+      ) !== undefined;
 
-    fields = setDeep(fields, `objectFields.primaryCTA.visible`, showPrimaryCta);
+    fields = setDeep(
+      fields,
+      `objectFields.primaryCTA.objectFields.link.visible`,
+      !entityTypeHasSourcePageSet && scopeExistsForEntityType
+    );
 
     // For each section, show either the field selector or the constant value editor.
     const constantValueFieldConfigs = [
@@ -201,7 +231,7 @@ const ResultCardPropsField = ({
     });
 
     return fields;
-  }, [entityTypeSourceMap, value]);
+  }, [entityTypeSourceMap, entityTypeScopes, value]);
 
   return (
     <AutoField
@@ -213,7 +243,7 @@ const ResultCardPropsField = ({
 };
 
 function getFacetFieldOptions(
-  entityTypes: EntityType[]
+  entityTypes: LocatorEntityType[]
 ): DynamicOption<string>[] {
   const facetFields: DynamicOption<string>[] = [];
   const addedValues: Set<string> = new Set<string>();
@@ -229,7 +259,7 @@ function getFacetFieldOptions(
 }
 
 function getFacetFieldOptionsForEntityType(
-  entityType: EntityType
+  entityType: LocatorEntityType
 ): DynamicOption<string>[] {
   let filterOptions: DynamicOption<string>[] = [];
   switch (entityType) {
@@ -565,7 +595,7 @@ export interface LocatorProps {
    */
   locationStyles: Array<{
     /** The entity type this style applies to. */
-    entityType: EntityType;
+    entityType: LocatorEntityType;
     /** Whether to render an icon in the pin. */
     pinIcon?: {
       type: "none" | "icon";
@@ -768,7 +798,7 @@ const locatorFields: Fields<LocatorProps> = {
           getOptions: () => {
             const entityTypeSourceMap = getLocatorEntityTypeSourceMap();
             const entityTypes =
-              Object.keys(entityTypeSourceMap).filter(isEntityType);
+              Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
             return getFacetFieldOptions(entityTypes);
           },
           placeholderOptionLabel: msg(
@@ -1038,7 +1068,8 @@ const LocatorInternal = ({
   const preferredUnit = getPreferredDistanceUnit(i18n.language);
   const streamDocument = useDocument();
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
-  const entityTypes = Object.keys(entityTypeSourceMap).filter(isEntityType);
+  const entityTypes =
+    Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1258,7 +1289,7 @@ const LocatorInternal = ({
   }, []);
 
   const getResultCardProps = React.useCallback(
-    (entityType?: EntityType) => {
+    (entityType?: LocatorEntityType) => {
       const existingConfig = (resultCardConfigs ?? []).find(
         (item) => item.props.entityType === entityType
       );
@@ -1273,15 +1304,9 @@ const LocatorInternal = ({
   const CardComponent = React.useCallback(
     (result: CardProps<Location>) => {
       let resultCardProps = DEFAULT_LOCATOR_RESULT_CARD_PROPS;
-      let showPrimaryCta;
       const resultEntityType = result.result.entityType;
-      if (resultEntityType && isEntityType(resultEntityType)) {
+      if (resultEntityType && isLocatorEntityType(resultEntityType)) {
         resultCardProps = getResultCardProps(resultEntityType);
-        // Show primary CTA when the liveVisibility is true and entity scope is backed by an entity page set.
-        showPrimaryCta =
-          resultCardProps.primaryCTA.liveVisibility &&
-          !!resultEntityType &&
-          !!entityTypeSourceMap[resultEntityType];
       } else {
         console.warn(
           "Unexpected entityType from search result: ",
@@ -1293,7 +1318,6 @@ const LocatorInternal = ({
           {...result}
           resultCardProps={resultCardProps}
           isSelected={result.result.index === selectedResultIndex}
-          showPrimaryCta={showPrimaryCta}
           distanceDisplay={distanceDisplay}
         />
       );

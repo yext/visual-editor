@@ -4851,7 +4851,7 @@ const directoryDefaultLayout = {
 const locatorDefaultLayout = {
   root: {
     props: {
-      version: 63,
+      version: 66,
       title: {
         field: "",
         constantValue: { defaultValue: "Find Locations" },
@@ -4874,6 +4874,7 @@ const locatorDefaultLayout = {
         id: "Locator-2ae506f4-a3ee-46ea-b5f9-e4c3236243a7",
         mapStyle: "mapbox://styles/mapbox/streets-v12",
         filters: { openNowButton: false, showDistanceOptions: false },
+        distanceDisplay: "distanceFromUser",
         resultCard: {
           primaryHeading: {
             field: { selection: { value: "name" } },

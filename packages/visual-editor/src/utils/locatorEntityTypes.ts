@@ -1,43 +1,45 @@
-import { StreamDocument } from "./types/StreamDocument.ts";
+import {
+  LocatorConfig,
+  LocatorSourcePageSetInfo,
+  StreamDocument,
+} from "./types/StreamDocument.ts";
 import { useDocument } from "../hooks/useDocument.tsx";
 import { pt } from "../utils/i18n/platform.ts";
 
-export const DEFAULT_ENTITY_TYPE = "location";
-export type EntityType =
-  | "location"
-  | "healthcareProfessional"
-  | "healthcareFacility"
-  | "restaurant"
-  | "hotel"
-  | "financialProfessional";
+const LOCATOR_ENTITY_TYPES = [
+  "location",
+  "healthcareProfessional",
+  "healthcareFacility",
+  "restaurant",
+  "hotel",
+  "financialProfessional",
+] as const;
 
-export function isEntityType(value: string): value is EntityType {
-  return (
-    value === "location" ||
-    value === "healthcareProfessional" ||
-    value === "healthcareFacility" ||
-    value === "restaurant" ||
-    value === "hotel" ||
-    value === "financialProfessional"
-  );
+export type LocatorEntityType = (typeof LOCATOR_ENTITY_TYPES)[number];
+export const DEFAULT_ENTITY_TYPE: LocatorEntityType = "location";
+
+const VALID_ENTITY_TYPES = new Set<string>(LOCATOR_ENTITY_TYPES);
+
+export function isLocatorEntityType(value: string): value is LocatorEntityType {
+  return VALID_ENTITY_TYPES.has(value);
 }
 
 export const getLocatorEntityTypeSourceMap = (
   streamDocument?: StreamDocument
-): Partial<Record<EntityType, string | undefined>> => {
+): Partial<Record<LocatorEntityType, string | undefined>> => {
   const entityDocument: StreamDocument = streamDocument ?? useDocument();
-  const entityTypeSourceMap: Partial<Record<EntityType, string | undefined>> =
-    {};
+  const entityTypeSourceMap: Partial<
+    Record<LocatorEntityType, string | undefined>
+  > = {};
 
   const locatorSourcePageSets = entityDocument.__?.locatorSourcePageSets;
   if (locatorSourcePageSets) {
     try {
-      const pageSetMap = JSON.parse(locatorSourcePageSets) as Record<
-        string,
-        { entityType?: EntityType }
-      >;
+      const pageSetMap: Record<string, LocatorSourcePageSetInfo> = JSON.parse(
+        locatorSourcePageSets
+      );
       for (const [source, entry] of Object.entries(pageSetMap)) {
-        if (entry.entityType) {
+        if (entry?.entityType && isLocatorEntityType(entry.entityType)) {
           entityTypeSourceMap[entry.entityType] = source;
         }
       }
@@ -52,20 +54,21 @@ export const getLocatorEntityTypeSourceMap = (
   const pageset = entityDocument._pageset;
   if (pageset) {
     try {
-      const locatorConfig = JSON.parse(pageset)?.typeConfig?.locatorConfig as
-        | {
-            source?: string;
-            entityType?: EntityType;
-            entityTypeScope?: Array<{ entityType?: EntityType }>;
-          }
-        | undefined;
+      const locatorConfig: LocatorConfig =
+        JSON.parse(pageset)?.typeConfig?.locatorConfig;
 
-      if (locatorConfig?.entityType) {
+      if (
+        locatorConfig?.entityType &&
+        isLocatorEntityType(locatorConfig.entityType)
+      ) {
         entityTypeSourceMap[locatorConfig.entityType] = locatorConfig.source;
       }
 
       for (const entityTypeScope of locatorConfig?.entityTypeScope ?? []) {
-        if (entityTypeScope.entityType) {
+        if (
+          entityTypeScope?.entityType &&
+          isLocatorEntityType(entityTypeScope.entityType)
+        ) {
           entityTypeSourceMap[entityTypeScope.entityType] = undefined;
         }
       }
@@ -81,7 +84,7 @@ export const getLocatorEntityTypeSourceMap = (
   return entityTypeSourceMap;
 };
 
-export const getEntityTypeLabel = (entityType: EntityType) => {
+export const getEntityTypeLabel = (entityType: LocatorEntityType) => {
   switch (entityType) {
     case "healthcareProfessional":
       return pt("healthcareProfessionals", "Healthcare Professionals");
