@@ -184,6 +184,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   }, [verticalKey]);
   React.useEffect(() => {
     const { vertical, searchTerm } = readInitialUrlParams();
+    console.log(vertical, searchTerm);
 
     searchActions.setQuery(searchTerm);
 
