@@ -280,7 +280,9 @@ export const InternalLayoutEditor = ({
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
 
-          const resolvedData = await resolveAllData(appState.data, config, {
+          const dataToResolve = structuredClone(appState.data);
+
+          const resolvedData = await resolveAllData(dataToResolve, config, {
             streamDocument,
           });
 
