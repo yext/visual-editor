@@ -133,12 +133,41 @@ export const createVisualAutocompleteConfig = (
   };
 };
 
+// export const updateSearchUrl = (params: {
+//   vertical?: string | null;
+//   searchTerm?: string;
+// }) => {
+//   if (typeof window === "undefined") return;
+//   const url = new URL(window.location.href);
+
+//   if (params.vertical && params.vertical.trim()) {
+//     url.searchParams.set("vertical", params.vertical);
+//   } else {
+//     url.searchParams.delete("vertical");
+//   }
+
+//   const st = (params.searchTerm ?? "").trim();
+//   if (st.length > 0) {
+//     url.searchParams.set("searchTerm", st);
+//   } else {
+//     url.searchParams.delete("searchTerm");
+//   }
+
+//   window.history.replaceState({}, "", url.toString());
+// };
+
 export const updateSearchUrl = (params: {
   vertical?: string | null;
   searchTerm?: string;
 }) => {
   if (typeof window === "undefined") return;
+
   const url = new URL(window.location.href);
+
+  const st = (params.searchTerm ?? "").trim();
+
+  // Prevent wiping URL on initial load
+  if (!st && !params.vertical) return;
 
   if (params.vertical && params.vertical.trim()) {
     url.searchParams.set("vertical", params.vertical);
@@ -146,11 +175,8 @@ export const updateSearchUrl = (params: {
     url.searchParams.delete("vertical");
   }
 
-  const st = (params.searchTerm ?? "").trim();
   if (st.length > 0) {
     url.searchParams.set("searchTerm", st);
-  } else {
-    url.searchParams.delete("searchTerm");
   }
 
   window.history.replaceState({}, "", url.toString());
