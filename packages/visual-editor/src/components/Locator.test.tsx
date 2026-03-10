@@ -127,7 +127,7 @@ const tests: ComponentTest[] = [
               "accounts/4174974/sites/163770/pagesets/restaurants",
               "accounts/4174974/sites/163770/pagesets/atms",
             ],
-            entityTypeScopes: [
+            entityTypeScope: [
               {
                 entityType: "financialProfessional",
                 savedFilter: "1491722104",
