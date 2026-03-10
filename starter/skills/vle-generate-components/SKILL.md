@@ -3,11 +3,11 @@ name: vle-generate-components
 description: Generate Visual Editor components from a reference URL by capturing page artifacts with Playwright and translating them into Puck sections.
 ---
 
-# Vle Generate Components
+# VLE Generate Components
 
 ## Overview
 
-This skill generates and validates Puck components using the @yext/visual-editor, @puckeditor/core, @chakra-ui/react,
+This skill generates and validates Puck Components using the @yext/visual-editor, @puckeditor/core, @chakra-ui/react,
 and @yext/pages-components libraries. The goal is to transform a reference page into Puck Components
 using captured HTML, CSS, and screenshot artifacts.
 
@@ -15,7 +15,7 @@ using captured HTML, CSS, and screenshot artifacts.
 
 Required:
 
-- `clientName`: client slug (example: `galaxy-grill`)
+- `templateName`: template slug (kebab case), Often a client name (example: `galaxy-grill`)
 - `url`: fully qualified URL to capture
 
 ## Restrictions
@@ -26,27 +26,27 @@ Required:
 - Do not read:
   - `packages/visual-editor/src/components/**`
   - `starter/dist/**`
-  - `starter/localData**`
+  - `starter/localData/**`
   - files in node_modules (unless absolutely necessary)
-  - any directory under `starter/src/components/custom` other than the current client's directory
+  - any directory under `starter/src/registry` other than the current template's directory
 - Do not modify files under `starter/skills/vle-generate-components/scripts`. If the scripts fail, stop and report the error to the user.
 
 ## Discovery
 
 - Read common-atoms.md instead of the package type definitions for @yext/pages-components
-- Only read files under `starter/src/components/custom/<clientName>/...` for the current client being generated.
+- Only read files under `starter/src/registry/<templateName>/...` for the current template being generated.
 
 ## Workflow
 
 1. Capture Step: Open the URL and save page artifacts
 
 - Run the capture script:
-  - `pnpm run capture-page-artifacts <clientName> <url>`
-  - If the site serves a bot challenge, rerun with `pnpm run capture-page-artifacts --manual-on-block <clientName> <url>`.
+  - `pnpm run capture-page-artifacts <templateName> <url>`
+  - If the site serves a bot challenge, rerun with `pnpm run capture-page-artifacts --manual-on-block <templateName> <url>`.
     This opens a headed browser, lets the user manually complete the challenge or load the destination page,
     then resumes capture after terminal confirmation.
 - The capture output is written to:
-  - `starter/src/components/custom/<clientName>/.captured-artifact/`
+  - `starter/src/registry/<templateName>/.captured-artifact/`
 - Required capture artifacts:
   - `page.html`: rendered HTML
   - `combined.css`: all linked + inline CSS merged into one file (primary input)
@@ -72,7 +72,7 @@ Required:
     horizontal bands or groupings of links in the header and footer.
   - Build a header/footer parity table using the required columns from `references/visual-parity-checklist.md`.
 - Write the full plan to:
-  - `starter/src/components/custom/<clientName>/.captured-artifact/plan.md`
+  - `starter/src/registry/<templateName>/.captured-artifact/plan.md`
 - `plan.md` should include:
   - page metadata (url/title/captured timestamp)
   - ordered section list (top-to-bottom)
@@ -93,7 +93,7 @@ Required:
 
 4. Validate Step
 
-- There is one component in `starter/src/components/custom/<clientName>/components` for each component in the plan.
+- There is one component in `starter/src/registry/<templateName>/components` for each component in the plan.
 - `references/generation-requirements.md`, `references/text-fields.md`, and `references/image-fields.md` were followed.
 - Run `pnpm run typecheck` in `starter` incrementally after meaningful batches of edits (not after every single file write).
 - If typecheck fails, address errors in small batches. Actually fix the issue, don't just relax the typecheck.
@@ -120,7 +120,7 @@ Required:
 5. Output Step
 
 - Do not overwrite existing component registration in `starter/src/ve.config.tsx`.
-  Append new component registrations and imports for the generated client components.
+  Append new component registrations and imports for the generated template components.
   If generated registrations duplicate existing keys/imports, stop and ask the user which resolution strategy to use
   (for example: keep existing, replace existing, or rename the new component key).
 - Update the imports of `starter/src/ve.config.tsx` accordingly
@@ -128,6 +128,6 @@ Required:
 6. Default Layout Data Step
 
 - Run the layout data generator script via pnpm:
-  - `pnpm run generate-default-layout-data <clientName> <ComponentName1> <ComponentName2> ...`
-- Pass the client name and the generated components in the exact order they appear on the page (top-to-bottom visual order).
+  - `pnpm run generate-default-layout-data <templateName> <ComponentName1> <ComponentName2> ...`
+- Pass the template name and the generated components in the exact order they appear on the page (top-to-bottom visual order).
 - Ensure the ordered component list matches the final plan and generated component set.

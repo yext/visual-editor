@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { chromium, type Page } from "playwright";
 
 type CaptureArgs = {
-  clientName: string;
+  templateName: string;
   url: string;
   headed: boolean;
   manualOnBlock: boolean;
@@ -17,7 +17,7 @@ type SkippedStylesheetRecord = {
 };
 
 type CaptureManifest = {
-  clientName: string;
+  templateName: string;
   requestedUrl: string;
   finalUrl: string;
   title: string;
@@ -41,7 +41,7 @@ const BOT_REJECTION_PATTERN =
   /captcha|verify(?:ing)?(?:\s+that)?\s+(?:you(?:'re| are)?\s+)?human|are you human|checking (?:your )?browser|access denied|unusual traffic|security check|attention required|press (?:and|&) hold|cf[-_ ]challenge|enable javascript and cookies/i;
 
 const usage = `Usage:
-  pnpm run capture-page-artifacts [--headed] [--manual-on-block] <clientName> <url>
+  pnpm run capture-page-artifacts [--headed] [--manual-on-block] <templateName> <url>
 
 Example:
   pnpm run capture-page-artifacts galaxy-grill https://www.galaxygrill.com
@@ -69,9 +69,9 @@ function parseArgs(argv: string[]): CaptureArgs {
     positionalArgs.push(arg);
   }
 
-  const [clientName, url] = positionalArgs;
+  const [templateName, url] = positionalArgs;
 
-  if (!clientName || !url || positionalArgs.length !== 2) {
+  if (!templateName || !url || positionalArgs.length !== 2) {
     throw new Error(usage);
   }
 
@@ -81,11 +81,11 @@ function parseArgs(argv: string[]): CaptureArgs {
     throw new Error(`Invalid URL: ${url}`);
   }
 
-  return { clientName, url, headed, manualOnBlock };
+  return { templateName, url, headed, manualOnBlock };
 }
 
-function sanitizeClientName(clientName: string): string {
-  return clientName
+function sanitizeTemplateName(templateName: string): string {
+  return templateName
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9-]/g, "-");
@@ -234,11 +234,11 @@ async function waitForManualClearance(
 }
 
 async function main() {
-  const { clientName, url, headed, manualOnBlock } = parseArgs(process.argv);
-  const sanitizedClientName = sanitizeClientName(clientName);
+  const { templateName, url, headed, manualOnBlock } = parseArgs(process.argv);
+  const sanitizedTemplateName = sanitizeTemplateName(templateName);
 
-  if (!sanitizedClientName) {
-    throw new Error(`Invalid clientName: ${clientName}`);
+  if (!sanitizedTemplateName) {
+    throw new Error(`Invalid templateName: ${templateName}`);
   }
 
   const scriptPath = fileURLToPath(import.meta.url);
@@ -254,9 +254,8 @@ async function main() {
     repoRoot,
     "starter",
     "src",
-    "components",
-    "custom",
-    sanitizedClientName,
+    "registry",
+    sanitizedTemplateName,
     ".captured-artifact",
   );
   await mkdir(baseOutputDir, { recursive: true });
@@ -433,7 +432,7 @@ async function main() {
     );
 
     const manifest: CaptureManifest = {
-      clientName: sanitizedClientName,
+      templateName: sanitizedTemplateName,
       requestedUrl: url,
       finalUrl,
       title,

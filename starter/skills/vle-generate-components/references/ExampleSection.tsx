@@ -15,7 +15,7 @@ import {
 import { Box, Text } from "@chakra-ui/react";
 import { Link, ImageType, ComplexImageType } from "@yext/pages-components";
 
-export type ExampleBannerSectionProps = {
+export type ExampleSectionProps = {
   logoImage: YextEntityField<
     ImageType | ComplexImageType | TranslatableAssetImage
   >;
@@ -32,7 +32,7 @@ export type ExampleBannerSectionProps = {
   };
 };
 
-const ExampleBannerFields: Fields<ExampleBannerSectionProps> = {
+const ExampleSectionFields: Fields<ExampleSectionProps> = {
   logoImage: YextEntityFieldSelector<
     any,
     ImageType | ComplexImageType | TranslatableAssetImage
@@ -94,9 +94,9 @@ const ExampleBannerFields: Fields<ExampleBannerSectionProps> = {
   },
 };
 
-export const ExampleBannerComponent: PuckComponent<
-  ExampleBannerSectionProps
-> = (props) => {
+export const ExampleSectionComponent: PuckComponent<ExampleSectionProps> = (
+  props,
+) => {
   const streamDocument = useDocument();
   const locale = streamDocument.locale ?? "en";
 
@@ -138,9 +138,9 @@ export const ExampleBannerComponent: PuckComponent<
   );
 };
 
-export const ExampleBanner: ComponentConfig<ExampleBannerSectionProps> = {
-  label: "Example Banner",
-  fields: ExampleBannerFields,
+export const ExampleSection: ComponentConfig<ExampleSectionProps> = {
+  label: "Example Section",
+  fields: ExampleSectionFields,
   defaultProps: {
     logoImage: {
       field: "",
@@ -170,5 +170,5 @@ export const ExampleBanner: ComponentConfig<ExampleBannerSectionProps> = {
       link: "https://www.yext.com/",
     },
   },
-  render: ExampleBannerComponent,
+  render: ExampleSectionComponent,
 };

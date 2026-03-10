@@ -6,34 +6,35 @@ Use this contract for every generated component.
 
 - Match sections visually as close as possible to 1:1 with the source page (match CSS, layouts, fonts, colors, border-radius, etc.)
 - Always match font families, font sizes, font colors, font weight, and background colors 1:1 with the source page
-- Always add a Google font equivalent as the fallback for any non-web safe fonts (for example: `'Client Specific Font', 'Open Sans', sans-serif`)
+- Always add a Google font equivalent as the fallback for any non-web safe fonts (for example: `'Template Specific Font', 'Open Sans', sans-serif`)
 - Everything needed for each component must be contained in a single file (excluding npm imports)
 - Use Chakra components wherever possible, but do not use the `sx` prop. Verify the installed interface before generation.
 
 ## Required Directory Layout
 
 ```text
-starter/src/components/custom/<client>/
+starter/src/registry/<template>/
   components/
-    <section-name>.tsx
+    <SectionName>.tsx
     ...
 ```
 
 ## Naming Rules
 
 - Display names shown to users should use capitalized words with spaces (for example: `Galaxy Grill`).
-- Directory names and file names should be lowercase (prefer kebab-case).
+- Directory names should be lowercase.
+- Component `.tsx` file names should be PascalCase.
 - Component symbols, const/var names, and exported config names should be PascalCase.
 - Keep component names stable after first generation; update implementation instead of renaming unless required.
-- Prefix client-branded header/footer component symbols with client context (`GalaxyGrillHeaderSection`, `GalaxyGrillFooterSection`).
+- Prefix template-branded header/footer component symbols with template context (`GalaxyGrillHeaderSection`, `GalaxyGrillFooterSection`).
 
 ## Isolation Rules
 
-- Do not import, reference, or adapt sibling client templates under `starter/src/components/custom/<other-client>`.
+- Do not import, reference, or adapt sibling templates under `starter/src/registry/<other-template>`.
 - Do not read unrelated files in `starter/src` or `packages/visual-editor` to learn conventions or copy implementation patterns.
 - Exception: you may read and update `starter/src/ve.config.tsx` so generated components are registered. Registration only needs to work; matching its formatting or conventions is optional.
 - Do not read files under `packages/visual-editor/src/components`.
-- Only use files in `starter/src/components/custom/<client>/...` within the custom components tree.
+- Only use files in `starter/src/registry/<template>/...` within the template registry tree.
 
 ## Dependency Rules
 
@@ -46,13 +47,13 @@ starter/src/components/custom/<client>/
 
 ## Puck Section Component Responsibilities
 
-In each `starter/src/components/custom/<client>/components/example-section.tsx`:
+In each `starter/src/registry/<template>/components/ExampleSection.tsx`:
 
 - There should be a `ExampleSectionProps` type with the props that will be user-editable in Puck
 - There should be a `ExampleSectionFields` of type `Fields<ExampleSectionProps>` that defines
   the Puck fields for the props
-- There should be a `ExampleComponent` of type `PuckComponent` that defines rendering for the component.
-- There should be a `Example` of type `ComponentConfig`.
+- There should be a `ExampleSectionComponent` of type `PuckComponent` that defines rendering for the component.
+- There should be a `ExampleSection` of type `ComponentConfig`.
 
 ## Puck Fields Rules
 
@@ -89,6 +90,6 @@ In each `starter/src/components/custom/<client>/components/example-section.tsx`:
 
 ## Example
 
-See `references/exampleComponent.tsx` for a basic Banner Section starter.
+See `references/ExampleSection.tsx` for an example section starter.
 It is a non-authoritative demo only.
 When conflicts exist, rules in `*.md` files (especially `generation-requirements.md`, `text-fields.md`, and `image-fields.md`) take precedence.

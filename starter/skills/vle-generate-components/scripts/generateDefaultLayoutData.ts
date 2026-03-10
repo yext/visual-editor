@@ -16,14 +16,14 @@ type DefaultLayoutData = Data<
 >;
 
 const usage = `Usage:
-  pnpm run generate-default-layout-data <clientName> <componentName1> [componentName2 ...]
+  pnpm run generate-default-layout-data <templateName> <componentName1> [componentName2 ...]
 
 Example:
   pnpm run generate-default-layout-data galaxy-grill GalaxyGrillHeroSection GalaxyGrillFooterSection
   pnpm run generate-default-layout-data galaxy-grill "GalaxyGrillHeroSection,GalaxyGrillFooterSection"`;
 
-function sanitizeClientName(clientName: string): string {
-  return clientName
+function sanitizeTemplateName(templateName: string): string {
+  return templateName
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9-]/g, "-");
@@ -45,29 +45,21 @@ function toDisplayName(value: string): string {
     .join(" ");
 }
 
-function toKebabCase(value: string): string {
-  return value
-    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-    .replace(/[_\s]+/g, "-")
-    .replace(/-+/g, "-")
-    .toLowerCase();
-}
-
 function parseArgs(argv: string[]): {
-  clientName: string;
+  templateName: string;
   componentNames: string[];
 } {
   const args = argv.slice(2);
   const normalizedArgs = args[0] === "--" ? args.slice(1) : args;
-  const [rawClientName, ...componentArgs] = normalizedArgs;
+  const [rawTemplateName, ...componentArgs] = normalizedArgs;
 
-  if (!rawClientName || componentArgs.length === 0) {
+  if (!rawTemplateName || componentArgs.length === 0) {
     throw new Error(usage);
   }
 
-  const clientName = sanitizeClientName(rawClientName);
-  if (!clientName) {
-    throw new Error(`Invalid clientName: ${rawClientName}`);
+  const templateName = sanitizeTemplateName(rawTemplateName);
+  if (!templateName) {
+    throw new Error(`Invalid templateName: ${rawTemplateName}`);
   }
 
   const componentNames = componentArgs
@@ -79,39 +71,34 @@ function parseArgs(argv: string[]): {
     throw new Error("At least one component name is required.");
   }
 
-  return { clientName, componentNames };
+  return { templateName, componentNames };
 }
 
 function getModulePathCandidates(
   repoRoot: string,
-  clientName: string,
+  templateName: string,
   componentName: string,
 ): string[] {
-  const basePath = path.join(
+  const componentsPath = path.join(
     repoRoot,
     "starter",
     "src",
+    "registry",
+    templateName,
     "components",
-    "custom",
-    clientName,
   );
 
-  return [
-    path.join(basePath, `${componentName}.tsx`),
-    path.join(basePath, `${toKebabCase(componentName)}.tsx`),
-    path.join(basePath, "components", `${componentName}.tsx`),
-    path.join(basePath, "components", `${toKebabCase(componentName)}.tsx`),
-  ];
+  return [path.join(componentsPath, `${componentName}.tsx`)];
 }
 
 async function loadComponentDefaultProps(
   repoRoot: string,
-  clientName: string,
+  templateName: string,
   componentName: string,
 ): Promise<Record<string, unknown>> {
   const candidates = getModulePathCandidates(
     repoRoot,
-    clientName,
+    templateName,
     componentName,
   );
   let lastError: unknown;
@@ -142,14 +129,14 @@ async function loadComponentDefaultProps(
   }
 
   throw new Error(
-    `Unable to load "${componentName}" for client "${clientName}". Tried:\n- ${candidates.join(
+    `Unable to load "${componentName}" for template "${templateName}". Tried:\n- ${candidates.join(
       "\n- ",
     )}\nLast error: ${String(lastError)}`,
   );
 }
 
 async function main() {
-  const { clientName, componentNames } = parseArgs(process.argv);
+  const { templateName, componentNames } = parseArgs(process.argv);
   const scriptPath = fileURLToPath(import.meta.url);
   const repoRoot = path.resolve(
     path.dirname(scriptPath),
@@ -163,9 +150,8 @@ async function main() {
     repoRoot,
     "starter",
     "src",
-    "components",
-    "custom",
-    clientName,
+    "registry",
+    templateName,
   );
   const outputPath = path.join(outputDir, "defaultLayout.json");
 
@@ -173,7 +159,7 @@ async function main() {
   for (const componentName of componentNames) {
     const defaultProps = await loadComponentDefaultProps(
       repoRoot,
-      clientName,
+      templateName,
       componentName,
     );
     content.push({
@@ -190,7 +176,7 @@ async function main() {
       props: {
         title: {
           field: "name",
-          constantValue: `${toDisplayName(clientName)} Pages`,
+          constantValue: `${toDisplayName(templateName)} Pages`,
           constantValueEnabled: false,
         },
         description: {
