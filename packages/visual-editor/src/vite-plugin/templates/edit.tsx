@@ -23,10 +23,7 @@ import { type Config } from "@puckeditor/core";
 import tailwindConfig from "../../tailwind.config";
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
-const baseConfig: Config = {};
-
 const componentRegistry: Record<string, Config<any>> = {
-  base: baseConfig,
   directory: directoryConfig,
   locator: locatorConfig,
 };

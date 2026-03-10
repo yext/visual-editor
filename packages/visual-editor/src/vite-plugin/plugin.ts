@@ -33,14 +33,6 @@ const virtualFiles: VirtualFile[] = [
   {
     filepath: "temp/base.tsx",
     content: baseTemplate,
-    templateManifestEntry: {
-      name: "base",
-      description:
-        "Use this template to generate pages for each of your entities.",
-      exampleSiteUrl: "",
-      layoutRequired: true,
-      defaultLayoutData: {},
-    },
   },
   {
     filepath: "src/templates/directory.tsx",
