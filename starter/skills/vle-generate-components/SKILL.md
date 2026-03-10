@@ -85,13 +85,24 @@ Required:
 - Generate one Puck Component per component planned in the previous step
 - Use `page.html`, `combined.css`, `screenshot.png`, and `plan.md` to guide component creation
 
-## Follow the requirements:
+Follow the requirements:
 
 - `references/generation-requirements.md`
 - `references/text-fields.md`
 - `references/image-fields.md`
 
-4. Validate Step
+4. Theming Step
+
+Goal: extract styling properties shared between the components into global variables
+
+After generating the first 2–3 sections, identify any styling (including color and typography) values already repeated across those components.
+If a value is reused in at least two components and is likely to be edited globally, create a theme variable for it according to the requirements.
+
+Follow the requirements:
+
+- `references/theme.md`
+
+5. Validate Step
 
 - There is one component in `starter/src/registry/<templateName>/components` for each component in the plan.
 - `references/generation-requirements.md`, `references/text-fields.md`, and `references/image-fields.md` were followed.
@@ -113,11 +124,11 @@ Required:
   - required media overlays and transparency treatment
   - if any item does not match, fix it
 
-## Follow the requirements:
+Follow the requirements:
 
 - `references/visual-parity-checklist.md`
 
-5. Output Step
+6. Output Step
 
 - Do not overwrite existing component registration in `starter/src/ve.config.tsx`.
   Append new component registrations and imports for the generated template components.
@@ -125,7 +136,7 @@ Required:
   (for example: keep existing, replace existing, or rename the new component key).
 - Update the imports of `starter/src/ve.config.tsx` accordingly
 
-6. Default Layout Data Step
+7. Default Layout Data Step
 
 - Run the layout data generator script via pnpm:
   - `pnpm run generate-default-layout-data <templateName> <ComponentName1> <ComponentName2> ...`
