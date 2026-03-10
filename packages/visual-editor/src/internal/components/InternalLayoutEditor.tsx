@@ -38,6 +38,7 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
+import { clonePuckResolveData } from "../utils/clonePuckResolveData.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
@@ -280,7 +281,8 @@ export const InternalLayoutEditor = ({
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
 
-          const dataToResolve = structuredClone(appState.data);
+          // Clone Puck data to ensure entity fields get updated on entity selection
+          const dataToResolve = clonePuckResolveData(appState.data);
 
           const resolvedData = await resolveAllData(dataToResolve, config, {
             streamDocument,
