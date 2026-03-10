@@ -37,7 +37,7 @@ export const getMetaTitleMissingLocales = (
   }
 
   return pageSetLocales.filter((locale) => {
-    const value = constantValue[locale];
+    const value = constantValue[locale] ?? constantValue.defaultValue;
     if (typeof value !== "string") {
       return true;
     }

@@ -136,10 +136,7 @@ export const InsightSection: ComponentConfig<{ props: InsightSectionProps }> = {
             data: {
               text: {
                 field: "",
-                constantValue: {
-                  en: "Insights",
-                  hasLocalizedValue: "true",
-                },
+                constantValue: { defaultValue: "Insights" },
                 constantValueEnabled: true,
               },
             },

@@ -5,7 +5,10 @@ import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
-import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
+import {
+  getDisplayValue,
+  resolveComponentData,
+} from "../../utils/resolveComponentData.tsx";
 import { CTA } from "../atoms/cta.tsx";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { Body } from "../atoms/body.tsx";
@@ -13,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
 
 const defaultSection = {
-  label: { en: "Footer Label", hasLocalizedValue: "true" as const },
+  label: { defaultValue: "Footer Label" },
   links: defaultLinks,
 };
 
@@ -145,23 +148,17 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
                   ),
                 },
                 defaultItemProps: defaultLink,
-                getItemSummary: (item: any, index?: number) => {
+                getItemSummary: (item, index) => {
                   const locale = i18nComponentsInstance.language || "en";
-                  const label =
-                    typeof item.label === "string"
-                      ? item.label
-                      : item.label?.[locale];
+                  const label = getDisplayValue(item.label, locale);
                   return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
                 },
               }),
             },
             defaultItemProps: defaultSection,
-            getItemSummary: (item: any, index?: number) => {
+            getItemSummary: (item, index) => {
               const locale = i18nComponentsInstance.language || "en";
-              const label =
-                typeof item.label === "string"
-                  ? item.label
-                  : item.label?.[locale];
+              const label = getDisplayValue(item.label, locale);
               return (
                 label || pt("section", "Section") + " " + ((index ?? 0) + 1)
               );

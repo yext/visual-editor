@@ -131,10 +131,7 @@ export const HeadingText: ComponentConfig<{ props: HeadingTextProps }> = {
     data: {
       text: {
         field: "",
-        constantValue: {
-          en: "Text",
-          hasLocalizedValue: "true",
-        },
+        constantValue: { defaultValue: "Text" },
         constantValueEnabled: true,
       },
     },
