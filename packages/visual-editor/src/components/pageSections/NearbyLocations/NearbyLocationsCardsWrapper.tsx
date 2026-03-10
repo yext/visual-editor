@@ -432,7 +432,7 @@ export const NearbyLocationCardsWrapper: ComponentConfig<{
       fields = updateFields(fields, ["styles.phone.visible"], false);
     }
 
-    if (!data.props.styles.showAddress && !!data.props.styles.address) {
+    if (!data.props.styles.showAddress) {
       fields = updateFields(fields, ["styles.address.visible"], false);
     }
 
