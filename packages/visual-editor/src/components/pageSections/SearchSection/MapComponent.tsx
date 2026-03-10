@@ -6,10 +6,9 @@ import {
   PinComponent,
 } from "@yext/search-ui-react";
 import "mapbox-gl/dist/mapbox-gl.css";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { useDocument } from "../../../hooks/useDocument.tsx";
-import { StreamDocument } from "../../../utils/index.ts";
+import { backgroundColors, StreamDocument } from "../../../utils/index.ts";
 import { Body } from "../../atoms/body.tsx";
 import { MapPinIcon } from "../../MapPinIcon.tsx";
 
@@ -21,19 +20,9 @@ interface MapComponentProps {
 const LocatorPin: PinComponent<DefaultRawDataType> = (props) => {
   const { result } = props;
 
-  const { width, height, color } = React.useMemo(() => {
-    return {
-      height: "41px",
-      width: "27px",
-      color: "text-palette-primary-dark",
-    };
-  }, []);
-
   return (
     <MapPinIcon
-      height={height}
-      width={width}
-      color={color}
+      color={backgroundColors.background6.value}
       resultIndex={result.index}
     />
   );
@@ -115,9 +104,7 @@ export const MapComponent = ({
               id={String(index)}
             >
               <MapPinIcon
-                height="41px"
-                width="27px"
-                color="text-palette-primary-dark"
+                color={backgroundColors.background6.value}
                 resultIndex={isUniversal ? index + 1 : index}
               />
             </Marker>
