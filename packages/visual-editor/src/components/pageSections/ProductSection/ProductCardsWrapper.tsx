@@ -168,13 +168,14 @@ export const ProductCardsWrapper: ComponentConfig<{
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot.map((card, i) => {
-          card.props.index = i;
-          return setDeep(card, "props.parentData", {
-            field: data.props.data.field,
-            product: resolvedProducts[i],
-          } satisfies ProductCardProps["parentData"]);
-        })
+        updatedCardSlot
+          .map((card, i) => setDeep(card, "props.index", i))
+          .map((card, i) =>
+            setDeep(card, "props.parentData", {
+              field: data.props.data.field,
+              product: resolvedProducts[i],
+            } satisfies ProductCardProps["parentData"])
+          )
       );
     } else {
       // STATIC VALUES
