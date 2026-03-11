@@ -943,7 +943,17 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     ) as (keyof typeof entityTypeSourceMap)[];
 
     const previousLocationStyles = data.props.locationStyles ?? [];
-    const previousResultCard = data.props.resultCard ?? [];
+
+    let previousResultCard: Array<{
+      /** Props to customize the locator result card component. */
+      props: LocatorResultCardProps;
+    }> = [];
+    if (Array.isArray(data.props.resultCard)) {
+      previousResultCard = data.props.resultCard;
+    } else {
+      console.error("Unexpected resultCard: ", data.props.resultCard);
+    }
+
     const hasSameEntityTypes = (currentEntityTypes: string[]) =>
       currentEntityTypes.length === entityTypes.length &&
       entityTypes.every((entityType) =>
