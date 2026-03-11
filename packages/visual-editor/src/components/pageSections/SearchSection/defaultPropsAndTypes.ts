@@ -12,6 +12,11 @@ export type SearchBarRoundedProps =
   | "large"
   | "pill";
 
+export const UNIT_LABEL = "mi";
+export const GRID_LAYOUT_CLASSES =
+  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
+export const FLEX_LAYOUT_CLASSES = "flex flex-col w-full";
+
 export interface VerticalConfigProps {
   label: string;
   verticalKey?: string;

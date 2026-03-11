@@ -1,6 +1,10 @@
 import { DefaultRawDataType, SectionProps } from "@yext/search-ui-react";
 import { MapComponent } from "./MapComponent.tsx";
-import { VerticalLayout } from "./defaultPropsAndTypes.ts";
+import {
+  FLEX_LAYOUT_CLASSES,
+  GRID_LAYOUT_CLASSES,
+  VerticalLayout,
+} from "./defaultPropsAndTypes.ts";
 
 interface LayoutSectionProps extends SectionProps<DefaultRawDataType> {
   layoutType: VerticalLayout;
@@ -18,9 +22,7 @@ export const LayoutSection = ({
   console.log(resultsCount);
 
   const layoutClasses =
-    layoutType === "Grid"
-      ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      : "flex flex-col w-full";
+    layoutType === "Grid" ? GRID_LAYOUT_CLASSES : FLEX_LAYOUT_CLASSES;
 
   return (
     <div className="flex flex-col mt-12">

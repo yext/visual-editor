@@ -11,6 +11,14 @@ import { resolveDataFromParent } from "../../../editor/ParentData.tsx";
 import { YextField } from "../../../editor/YextField.tsx";
 import { useDocument } from "../../../hooks/useDocument.tsx";
 import { msg } from "../../../utils/i18n/platform.ts";
+import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
+import {
+  defaultSearchData,
+  SearchBarAlignProps,
+  SearchBarHeightProps,
+  SearchBarRoundedProps,
+  SearchBarWidthProps,
+} from "./defaultPropsAndTypes.ts";
 import { useEntityPreviewSearcher } from "./searchConfig.ts";
 import { useTypingEffect } from "./useTypeEffect.ts";
 import {
@@ -20,14 +28,6 @@ import {
   getRounded,
   getWidth,
 } from "./utils.tsx";
-import { ThemeOptions } from "../../../utils/themeConfigOptions.ts";
-import {
-  defaultSearchData,
-  SearchBarAlignProps,
-  SearchBarHeightProps,
-  SearchBarRoundedProps,
-  SearchBarWidthProps,
-} from "./defaultPropsAndTypes.ts";
 
 export interface SearchBarSlotProps {
   styles: {
@@ -189,10 +189,10 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
     entityPreviewSearcher,
   ]);
   const heightClass = !showResults ? getHeight(height) : "";
-
   const layoutClasses = !showResults
     ? `${getWidth(width)} ${getAlignment(align)}`
     : "w-full";
+
   return (
     <div
       className={`relative w-full flex my-2 items-center ${heightClass} ${puck.isEditing ? "pt-4" : ""}`}

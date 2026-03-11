@@ -19,8 +19,8 @@ import {
   buildUniversalLimit,
   buildVerticalConfigMap,
   isValidVerticalConfig,
-  readInitialUrlParams,
   updateSearchUrl,
+  useSearchUrlParams,
 } from "./utils.tsx";
 import { VerticalResultsSection } from "./VerticalResultsSection.tsx";
 
@@ -104,6 +104,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   } = props;
   const puckStore = useOptionalPuckStore();
   const arrayState = puckStore?.appState?.ui?.arrayState;
+  const urlParams = useSearchUrlParams();
 
   const arrayKey = React.useMemo(() => {
     if (!arrayState || !puck.isEditing) return undefined;
@@ -112,6 +113,7 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
       key.includes("_object_data_verticals")
     );
   }, [arrayState, puck.isEditing]);
+  const hasInitialized = React.useRef(false);
 
   const { t } = useTranslation();
   const searchActions = useSearchActions();
@@ -150,19 +152,18 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   }, [verticals, activeVerticalKey]);
 
   const runSearch = (nextVerticalKey: string | null, query: string) => {
-    if (!isValidVerticalConfig(verticals)) return;
+    if (!isValidVerticalConfig(verticals)) {
+      return;
+    }
 
     searchActions.setQuery(query);
 
     if (nextVerticalKey) {
       searchActions.setVertical(nextVerticalKey);
-
       const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
-
       if (cfg?.verticalLimit) {
         searchActions.setVerticalLimit(cfg.verticalLimit);
       }
-
       searchActions.executeVerticalQuery();
     } else {
       searchActions.setUniversal();
@@ -176,92 +177,20 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     });
   };
 
-  // const runSearch = (nextVerticalKey: string | null) => {
-  //   if (!isValidVerticalConfig(verticals)) return;
-
-  //   const query = committedSearchTerm ?? "";
-
-  //   searchActions.setQuery(query);
-
-  //   if (nextVerticalKey) {
-  //     searchActions.setVertical(nextVerticalKey);
-
-  //     const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
-
-  //     if (cfg?.verticalLimit) {
-  //       searchActions.setVerticalLimit(cfg.verticalLimit);
-  //     }
-
-  //     searchActions.executeVerticalQuery();
-  //   } else {
-  //     searchActions.setUniversal();
-  //     searchActions.setUniversalLimit(universalLimit);
-  //     searchActions.executeUniversalQuery();
-  //   }
-
-  //   updateSearchUrl({
-  //     vertical: nextVerticalKey,
-  //     searchTerm: query,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   if (!isValidVerticalConfig(verticals)) return;
-  //   runSearch(verticalKey);
-  // }, [verticalKey]);
-
-  // React.useEffect(() => {
-  //   if (!verticals?.length) return;
-
-  //   const { vertical, searchTerm } = readInitialUrlParams();
-  //   console.log(vertical, searchTerm);
-
-  //   searchActions.setQuery(searchTerm);
-
-  //   const validVertical =
-  //     vertical && verticals.some((v) => v.verticalKey === vertical);
-
-  //   setVerticalKey(validVertical ? vertical : null);
-  // }, [verticals]);
-
   React.useEffect(() => {
+    if (typeof window === "undefined") return;
     if (!verticals?.length) return;
 
-    const { vertical, searchTerm } = readInitialUrlParams();
-    console.log(vertical, searchTerm);
+    const { vertical, searchTerm } = urlParams;
 
     const validVertical =
       vertical && verticals.some((v) => v.verticalKey === vertical);
-
     const nextVertical = validVertical ? vertical : null;
 
-    // Update local state
     setVerticalKey(nextVertical);
-
-    // Set query immediately
-    searchActions.setQuery(searchTerm);
-
-    // Run search using URL query (avoid relying on state)
-    if (nextVertical) {
-      searchActions.setVertical(nextVertical);
-
-      const cfg = verticals.find((v) => v.verticalKey === nextVertical);
-      if (cfg?.verticalLimit) {
-        searchActions.setVerticalLimit(cfg.verticalLimit);
-      }
-
-      searchActions.executeVerticalQuery();
-    } else {
-      searchActions.setUniversal();
-      searchActions.setUniversalLimit(universalLimit);
-      searchActions.executeUniversalQuery();
-    }
-
-    updateSearchUrl({
-      vertical: nextVertical,
-      searchTerm,
-    });
-  }, [verticals]);
+    runSearch(nextVertical, searchTerm);
+    hasInitialized.current = true;
+  }, [verticals, urlParams]);
 
   React.useEffect(() => {
     if (!arrayKey || !puck.isEditing || !arrayState) return;
@@ -288,6 +217,17 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     }
   }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
 
+  React.useEffect(() => {
+    if (!hasInitialized.current) return;
+    const currentSearchTerm = committedSearchTerm;
+
+    if (currentSearchTerm) {
+      updateSearchUrl({
+        vertical: activeVerticalKey,
+        searchTerm: currentSearchTerm,
+      });
+    }
+  }, [committedSearchTerm, activeVerticalKey]);
   return (
     <div className="pt-8">
       <div className="border-b flex justify-start items-center">
@@ -301,13 +241,6 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
             return (
               <li key={`${item.verticalKey ?? "no-key"}:${item.label}:${idx}`}>
                 <a
-                  // onClick={() =>
-                  //   setVerticalKey(
-                  //     item.pageType === "universal"
-                  //       ? null
-                  //       : (item.verticalKey ?? null)
-                  //   )
-                  // }
                   onClick={() => {
                     const nextVertical =
                       item.pageType === "universal"
