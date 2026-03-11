@@ -14,6 +14,7 @@ import {
   VerticalConfigProps,
 } from "./defaultPropsAndTypes.ts";
 import { renderEntityPreviews } from "./searchVisualAutoComplete.tsx";
+import React from "react";
 
 export const buildVerticalConfigMap = (
   verticals: VerticalConfigProps[]
@@ -133,29 +134,6 @@ export const createVisualAutocompleteConfig = (
   };
 };
 
-// export const updateSearchUrl = (params: {
-//   vertical?: string | null;
-//   searchTerm?: string;
-// }) => {
-//   if (typeof window === "undefined") return;
-//   const url = new URL(window.location.href);
-
-//   if (params.vertical && params.vertical.trim()) {
-//     url.searchParams.set("vertical", params.vertical);
-//   } else {
-//     url.searchParams.delete("vertical");
-//   }
-
-//   const st = (params.searchTerm ?? "").trim();
-//   if (st.length > 0) {
-//     url.searchParams.set("searchTerm", st);
-//   } else {
-//     url.searchParams.delete("searchTerm");
-//   }
-
-//   window.history.replaceState({}, "", url.toString());
-// };
-
 export const updateSearchUrl = (params: {
   vertical?: string | null;
   searchTerm?: string;
@@ -163,10 +141,8 @@ export const updateSearchUrl = (params: {
   if (typeof window === "undefined") return;
 
   const url = new URL(window.location.href);
-
   const st = (params.searchTerm ?? "").trim();
 
-  // Prevent wiping URL on initial load
   if (!st && !params.vertical) return;
 
   if (params.vertical && params.vertical.trim()) {
@@ -180,6 +156,21 @@ export const updateSearchUrl = (params: {
   }
 
   window.history.replaceState({}, "", url.toString());
+};
+
+export const useSearchUrlParams = () => {
+  const [params, setParams] = React.useState(() => readInitialUrlParams());
+
+  React.useEffect(() => {
+    const handlePopState = () => {
+      setParams(readInitialUrlParams());
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  return React.useMemo(() => params, [params.vertical, params.searchTerm]);
 };
 
 export const readInitialUrlParams = (): {

@@ -11,7 +11,12 @@ import { CTA } from "../../atoms/cta.tsx";
 import { HoursStatusAtom } from "../../atoms/hoursStatus.tsx";
 import { MaybeRTF } from "../../atoms/maybeRTF.tsx";
 import { PhoneAtom } from "../../atoms/phone.tsx";
-import { CardTypeProp, VerticalLayout } from "./defaultPropsAndTypes.ts";
+import {
+  CardTypeProp,
+  FLEX_LAYOUT_CLASSES,
+  UNIT_LABEL,
+  VerticalLayout,
+} from "./defaultPropsAndTypes.ts";
 import { Background } from "../../atoms/background.tsx";
 import { backgroundColors } from "../../../utils/themeConfigOptions.ts";
 
@@ -38,16 +43,15 @@ const Cards = ({
     result.rawData.description;
 
   let content;
-  const unitLabel = "mi";
 
   if (layout === "Map") {
     const displayDistance =
       typeof result.distance === "number"
-        ? `${result.distance} ${unitLabel}`
+        ? `${result.distance} ${UNIT_LABEL}`
         : undefined;
 
     content = (
-      <div className="flex flex-col w-full">
+      <div className={FLEX_LAYOUT_CLASSES}>
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <Background
@@ -89,7 +93,7 @@ const Cards = ({
             </div>
           </div>
           <div
-            className={`flex flex-col gap-2 w-full ${isVertical ? `items-start` : `items-end`}`}
+            className={`${FLEX_LAYOUT_CLASSES} gap-2 ${isVertical ? `items-start` : `items-end`}`}
           >
             <CTA
               link={result.rawData.slug}
@@ -109,7 +113,9 @@ const Cards = ({
     );
   } else if (cardType === "Standard") {
     content = (
-      <div className="w-full flex flex-col justify-center text-[#382e2c] gap-2">
+      <div
+        className={`${FLEX_LAYOUT_CLASSES} justify-center text-[#382e2c] gap-2`}
+      >
         <h3 className="text-lg font-semibold">{name ?? "name"}</h3>
 
         <div className="w-full flex space-between">
@@ -134,7 +140,7 @@ const Cards = ({
           </AccordionTrigger>
 
           <AccordionContent className="w-full">
-            <div className="w-full flex flex-col space-between">
+            <div className={`${FLEX_LAYOUT_CLASSES} space-between`}>
               <MaybeRTF data={description} />
 
               <div className="flex">

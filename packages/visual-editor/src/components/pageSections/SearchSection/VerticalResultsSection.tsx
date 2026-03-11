@@ -130,7 +130,7 @@ export const VerticalResultsSection = ({
         <div className="text-body-fontSize inline-block w-full pl-4">
           <div className="flex flex-row justify-between">
             <ResultsCount
-              customCssClasses={{ resultsCountContainer: "!-mb-4" }}
+              customCssClasses={{ resultsCountContainer: "!mb-2" }}
             />
           </div>
         </div>
