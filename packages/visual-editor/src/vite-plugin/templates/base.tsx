@@ -11,7 +11,7 @@ import {
   TagType,
   TransformProps,
 } from "@yext/pages";
-import { Render, resolveAllData } from "@puckeditor/core";
+import { Config, Render, resolveAllData } from "@puckeditor/core";
 import {
   applyTheme,
   VisualEditorProvider,
@@ -19,17 +19,16 @@ import {
   applyAnalytics,
   applyHeaderScript,
   applyCertifiedFacts,
-  migrate,
-  migrationRegistry,
-  filterComponentsFromConfig,
   defaultThemeConfig,
-  mainConfig,
   getSchema,
   injectTranslations,
   getCanonicalUrl,
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+
+const baseConfig: Config = {};
 
 export const getHeadConfig: GetHeadConfig<TemplateRenderProps> = (
   data: TemplateRenderProps
@@ -106,15 +105,13 @@ export const getPath: GetPath<TemplateProps> = ({
 export const transformProps: TransformProps<TemplateProps> = async (props) => {
   const { document } = props;
 
-  const migratedData = migrate(
+  const resolvedPuckData = await resolveAllData(
     JSON.parse(document.__.layout),
-    migrationRegistry,
-    mainConfig,
-    document
+    baseConfig,
+    {
+      streamDocument: document,
+    }
   );
-  const resolvedPuckData = await resolveAllData(migratedData, mainConfig, {
-    streamDocument: document,
-  });
   document.__.layout = JSON.stringify(resolvedPuckData);
 
   const translations = await injectTranslations(document);
@@ -122,7 +119,7 @@ export const transformProps: TransformProps<TemplateProps> = async (props) => {
   return { ...props, document, translations };
 };
 
-const Location: Template<TemplateRenderProps> = (props) => {
+const Base: Template<TemplateRenderProps> = (props) => {
   const { document } = props;
 
   const layoutString = document.__.layout;
@@ -132,12 +129,6 @@ const Location: Template<TemplateRenderProps> = (props) => {
   } catch (e) {
     console.error("Failed to parse layout JSON:", e);
   }
-
-  const filteredConfig = filterComponentsFromConfig(
-    mainConfig,
-    document?._additionalLayoutComponents,
-    document?._additionalLayoutCategories
-  );
 
   let requireAnalyticsOptIn = false;
   if (document.__?.visualEditorConfig) {
@@ -157,15 +148,17 @@ const Location: Template<TemplateRenderProps> = (props) => {
       currency="USD"
       requireOptIn={requireAnalyticsOptIn}
     >
-      <VisualEditorProvider templateProps={props}>
-        <Render
-          config={filteredConfig}
-          data={data}
-          metadata={{ streamDocument: document }}
-        />
-      </VisualEditorProvider>
+      <ChakraProvider value={defaultSystem}>
+        <VisualEditorProvider templateProps={props}>
+          <Render
+            config={baseConfig}
+            data={data}
+            metadata={{ streamDocument: document }}
+          />
+        </VisualEditorProvider>
+      </ChakraProvider>
     </AnalyticsProvider>
   );
 };
 
-export default Location;
+export default Base;
