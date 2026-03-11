@@ -942,8 +942,27 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
       entityTypeSourceMap
     ) as (keyof typeof entityTypeSourceMap)[];
 
+    let previousResultCard: Array<{
+      /** Props to customize the locator result card component. */
+      props: LocatorResultCardProps;
+    }> = [];
     const previousLocationStyles = data.props.locationStyles ?? [];
-    const previousResultCard = data.props.resultCard ?? [];
+    const resultCardObj = data.props.resultCard;
+    if (Array.isArray(resultCardObj)) {
+      previousResultCard = resultCardObj;
+    } else if (resultCardObj && typeof resultCardObj === "object") {
+      // Backward compatibility: migrate legacy single-object shape to array shape.
+      const legacyResultCard = resultCardObj as Partial<LocatorResultCardProps>;
+      previousResultCard = [
+        {
+          props: {
+            ...legacyResultCard,
+            entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
+          } as LocatorResultCardProps,
+        },
+      ];
+    }
+
     const hasSameEntityTypes = (currentEntityTypes: string[]) =>
       currentEntityTypes.length === entityTypes.length &&
       entityTypes.every((entityType) =>
