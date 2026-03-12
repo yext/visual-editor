@@ -148,14 +148,13 @@ export const TestimonialCardsWrapper: ComponentConfig<{
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot
-          .map((card, i) => setDeep(card, "props.index", i))
-          .map((card, i) =>
-            setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              testimonial: resolvedTestimonials[i],
-            } satisfies TestimonialCardProps["parentData"])
-          )
+        updatedCardSlot.map((card, i) => {
+          card.props.index = i;
+          return setDeep(card, "props.parentData", {
+            field: data.props.data.field,
+            testimonial: resolvedTestimonials[i],
+          } satisfies TestimonialCardProps["parentData"]);
+        })
       );
     } else {
       let updatedData = data;

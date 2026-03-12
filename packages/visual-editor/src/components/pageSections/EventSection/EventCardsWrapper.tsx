@@ -149,14 +149,13 @@ export const EventCardsWrapper: ComponentConfig<{
       return setDeep(
         data,
         "props.slots.CardSlot",
-        updatedCardSlot
-          .map((card, i) => setDeep(card, "props.index", i))
-          .map((card, i) =>
-            setDeep(card, "props.parentData", {
-              field: data.props.data.field,
-              event: resolvedEvents[i],
-            } satisfies EventCardProps["parentData"])
-          )
+        updatedCardSlot.map((card, i) => {
+          card.props.index = i;
+          return setDeep(card, "props.parentData", {
+            field: data.props.data.field,
+            event: resolvedEvents[i],
+          } satisfies EventCardProps["parentData"]);
+        })
       );
     } else {
       // STATIC VALUES
