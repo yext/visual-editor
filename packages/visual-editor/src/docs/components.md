@@ -68,17 +68,19 @@ Defines the complete set of properties for the BreadcrumbsSection component.
 
 This object contains the content used by the component.
 
-| Prop                 | Type                 | Description                                                                                  | Default            |
-| :------------------- | :------------------- | :------------------------------------------------------------------------------------------- | :----------------- |
-| `data.directoryRoot` | `TranslatableString` | The display label for the first link in the breadcrumb trail (the top-level directory page). | `"Directory Root"` |
+| Prop                 | Type                                  | Description                                                                                  | Default            |
+| :------------------- | :------------------------------------ | :------------------------------------------------------------------------------------------- | :----------------- |
+| `data.currentPage`   | `YextEntityField<TranslatableString>` | The display label for the last link in the breadcrumb trail (the current page).              | `Name`             |
+| `data.directoryRoot` | `TranslatableString`                  | The display label for the first link in the breadcrumb trail (the top-level directory page). | `"Directory Root"` |
 
 #### Style Props
 
 This object contains properties for customizing the component's appearance.
 
-| Prop                     | Type              | Description                          | Default              |
-| :----------------------- | :---------------- | :----------------------------------- | :------------------- |
-| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section. | `Background Color 1` |
+| Prop                     | Type              | Description                                                                  | Default              |
+| :----------------------- | :---------------- | :--------------------------------------------------------------------------- | :------------------- |
+| `styles.backgroundColor` | `BackgroundStyle` | The background color of the section.                                         | `Background Color 1` |
+| `styles.showCurrentPage` | `boolean`         | Whether to show the current page's link in the breadcrumb trail (last link). | `true`               |
 
 #### Other Props
 
