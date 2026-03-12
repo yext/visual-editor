@@ -136,23 +136,23 @@ export const createVisualAutocompleteConfig = (
 
 export const updateSearchUrl = (params: {
   vertical?: string | null;
-  searchTerm?: string;
+  searchTerm?: string | null;
 }) => {
   if (typeof window === "undefined") return;
 
   const url = new URL(window.location.href);
-  const st = (params.searchTerm ?? "").trim();
 
-  if (!st && !params.vertical) return;
+  if (!params.searchTerm && !params.vertical) return;
 
   if (params.vertical && params.vertical.trim()) {
     url.searchParams.set("vertical", params.vertical);
   } else {
     url.searchParams.delete("vertical");
   }
-
-  if (st.length > 0) {
-    url.searchParams.set("searchTerm", st);
+  if (params.searchTerm && params.searchTerm.trim()) {
+    url.searchParams.set("searchTerm", params.searchTerm);
+  } else {
+    url.searchParams.delete("searchTerm");
   }
 
   window.history.replaceState({}, "", url.toString());

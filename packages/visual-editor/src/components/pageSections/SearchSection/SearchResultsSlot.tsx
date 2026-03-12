@@ -151,36 +151,41 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     return verticals.find((v) => v.verticalKey === activeVerticalKey);
   }, [verticals, activeVerticalKey]);
 
-  const runSearch = (nextVerticalKey: string | null, query: string) => {
-    if (!isValidVerticalConfig(verticals)) {
-      return;
-    }
-
-    searchActions.setQuery(query);
-
-    if (nextVerticalKey) {
-      searchActions.setVertical(nextVerticalKey);
-      const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
-      if (cfg?.verticalLimit) {
-        searchActions.setVerticalLimit(cfg.verticalLimit);
+  const runSearch = React.useCallback(
+    (nextVerticalKey: string | null, query: string) => {
+      if (!isValidVerticalConfig(verticals)) {
+        return;
       }
-      searchActions.executeVerticalQuery();
-    } else {
-      searchActions.setUniversal();
-      searchActions.setUniversalLimit(universalLimit);
-      searchActions.executeUniversalQuery();
-    }
 
-    updateSearchUrl({
-      vertical: nextVerticalKey,
-      searchTerm: query,
-    });
-  };
+      searchActions.setQuery(query);
+
+      if (nextVerticalKey) {
+        searchActions.setVertical(nextVerticalKey);
+        const cfg = verticals.find((v) => v.verticalKey === nextVerticalKey);
+        if (cfg?.verticalLimit) {
+          searchActions.setVerticalLimit(cfg.verticalLimit);
+        }
+        searchActions.executeVerticalQuery();
+      } else {
+        searchActions.setUniversal();
+        searchActions.setUniversalLimit(universalLimit);
+        searchActions.executeUniversalQuery();
+      }
+
+      if (!puck.isEditing) {
+        updateSearchUrl({
+          vertical: nextVerticalKey,
+          searchTerm: query,
+        });
+      }
+    },
+    [verticals, universalLimit, searchActions, puck.isEditing]
+  );
 
   React.useEffect(() => {
+    if (puck.isEditing) return;
     if (typeof window === "undefined") return;
     if (!verticals?.length) return;
-
     const { vertical, searchTerm } = urlParams;
 
     const validVertical =
@@ -218,16 +223,22 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
   }, [arrayKey, arrayState, verticals, verticalKey, puck.isEditing]);
 
   React.useEffect(() => {
-    if (!hasInitialized.current) return;
-    const currentSearchTerm = committedSearchTerm;
+    if (puck.isEditing) {
+      runSearch(verticalKey, "");
+    }
+  }, [verticalKey, puck.isEditing]);
 
-    if (currentSearchTerm) {
+  React.useEffect(() => {
+    if (puck.isEditing) return;
+    if (!hasInitialized.current) return;
+    if (committedSearchTerm) {
       updateSearchUrl({
         vertical: activeVerticalKey,
-        searchTerm: currentSearchTerm,
+        searchTerm: committedSearchTerm,
       });
     }
   }, [committedSearchTerm, activeVerticalKey]);
+
   return (
     <div className="pt-8">
       <div className="border-b flex justify-start items-center">
@@ -248,7 +259,8 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
                         : (item.verticalKey ?? null);
 
                     setVerticalKey(nextVertical);
-                    runSearch(nextVertical, committedSearchTerm);
+                    !puck.isEditing &&
+                      runSearch(nextVertical, committedSearchTerm);
                   }}
                   className={`px-5 pt-1.5 pb-3 tracking-[1.1px] mb-0 hover:cursor-pointer ${
                     isActive ? "border-b-2 border-black" : ""
