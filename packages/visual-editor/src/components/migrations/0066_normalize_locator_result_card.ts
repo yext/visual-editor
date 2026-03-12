@@ -84,6 +84,11 @@ export const normalizeLocatorResultCard: Migration = {
     action: "updated",
     propTransformation: (props, streamDocument) => {
       const currentResultCard = props.resultCard;
+      console.log("Debug migration 0066:", {
+        type: typeof currentResultCard,
+        isArray: Array.isArray(currentResultCard),
+        currentResultCard,
+      });
       if (Array.isArray(currentResultCard)) {
         return props;
       }
@@ -96,17 +101,22 @@ export const normalizeLocatorResultCard: Migration = {
       const entityTypes =
         Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
 
+      const migratedResultCard = [
+        {
+          props: {
+            ...DEFAULT_LOCATOR_RESULT_CARD_PROPS,
+            ...(currentResultCard as Partial<LocatorResultCardProps>),
+            entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
+          } as LocatorResultCardProps,
+        },
+      ];
+      console.log("Debug migration 0066:", {
+        migratedResultCard,
+      });
+
       return {
         ...props,
-        resultCard: [
-          {
-            props: {
-              ...DEFAULT_LOCATOR_RESULT_CARD_PROPS,
-              ...(currentResultCard as Partial<LocatorResultCardProps>),
-              entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
-            } as LocatorResultCardProps,
-          },
-        ],
+        resultCard: migratedResultCard,
       };
     },
   },
