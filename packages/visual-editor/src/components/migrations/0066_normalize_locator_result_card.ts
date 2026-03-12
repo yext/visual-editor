@@ -84,14 +84,11 @@ export const normalizeLocatorResultCard: Migration = {
     action: "updated",
     propTransformation: (props, streamDocument) => {
       const currentResultCard = props.resultCard;
-      if (Array.isArray(currentResultCard)) {
+      if (typeof currentResultCard !== "object") {
         return props;
       }
 
-      if (!currentResultCard || typeof currentResultCard !== "object") {
-        return props;
-      }
-
+      // only apply migration if resultCard has legacy shape
       const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
       const entityTypes =
         Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
