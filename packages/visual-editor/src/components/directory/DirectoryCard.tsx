@@ -75,6 +75,12 @@ export const defaultDirectoryCardSlotData = (
               },
             },
             styles: {
+              showRegion:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.showRegion ??
+                true,
+              showCountry:
+                existingSlots?.AddressSlot?.[0]?.props?.styles?.showCountry ??
+                true,
               showGetDirectionsLink:
                 existingSlots?.AddressSlot?.[0]?.props?.styles
                   ?.showGetDirectionsLink ?? false,

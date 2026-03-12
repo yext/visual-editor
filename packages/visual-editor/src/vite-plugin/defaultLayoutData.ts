@@ -587,6 +587,8 @@ const mainDefaultLayout = {
                   },
                 },
                 styles: {
+                  showRegion: true,
+                  showCountry: false,
                   showGetDirectionsLink: true,
                   ctaVariant: "link",
                 },
@@ -3783,6 +3785,10 @@ const mainDefaultLayout = {
                   phone: {
                     phoneNumberFormat: "domestic",
                     phoneNumberLink: true,
+                  },
+                  address: {
+                    showRegion: true,
+                    showCountry: false,
                   },
                   showHours: true,
                   showPhone: true,
