@@ -178,9 +178,9 @@ export const BreadcrumbsComponent = ({
       background={styles?.backgroundColor}
     >
       <ol className="inline p-0 m-0 list-none">
-        {breadcrumbsToRender.map(({ name, slug, idx }) => {
-          const isRoot = idx === 0;
-          const isCurrentPage = idx === breadcrumbs.length - 1;
+        {breadcrumbsToRender.map(({ name, slug, index }) => {
+          const isRoot = index === 0;
+          const isCurrentPage = index === breadcrumbs.length - 1;
           const href = relativePrefixToRoot
             ? relativePrefixToRoot + slug
             : slug;
@@ -192,7 +192,7 @@ export const BreadcrumbsComponent = ({
                 : name;
 
           return (
-            <li key={idx} className="contents whitespace-normal break-words">
+            <li key={index} className="contents whitespace-normal break-words">
               {!isRoot && (
                 <span className="mx-2" aria-hidden>
                   {separator}
@@ -203,7 +203,7 @@ export const BreadcrumbsComponent = ({
               <wbr />
 
               <MaybeLink
-                eventName={`link${idx}`}
+                eventName={`link${index}`}
                 href={isCurrentPage ? "" : href}
                 className="inline text-body-sm-fontSize font-link-fontWeight font-link-fontFamily whitespace-normal break-words"
                 alwaysHideCaret
