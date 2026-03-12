@@ -1,4 +1,10 @@
-import { Facets, ResultsCount, VerticalResults } from "@yext/search-ui-react";
+import {
+  Facets,
+  Geolocation,
+  Pagination,
+  ResultsCount,
+  VerticalResults,
+} from "@yext/search-ui-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaSlidersH, FaTimes } from "react-icons/fa";
@@ -44,7 +50,7 @@ export const VerticalResultsSection = ({
                 </button>
               </div>
             </div>
-            <div id="innerDiv" className="overflow-y-auto">
+            <div id="innerDiv" className="overflow-y-auto flex flex-col">
               <VerticalResults
                 customCssClasses={{
                   verticalResultsContainer:
@@ -62,8 +68,20 @@ export const VerticalResultsSection = ({
                   />
                 )}
               />
+              <div className=" border-gray-300 pt-4">
+                <Pagination
+                  paginateAllOnNoResults={true}
+                  customCssClasses={{
+                    selectedLabel:
+                      "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+                    leftIconContainer: "!-rotate-90",
+                    rightIconContainer: "!rotate-90",
+                  }}
+                />
+              </div>
+              <Geolocation />
             </div>
-            {facetsLength && showFilterModal && (
+            {Boolean(facetsLength) && showFilterModal && (
               <div
                 id="popup"
                 className="absolute md:top-4 -top-20 z-50 md:w-80 w-full flex flex-col bg-white md:left-full md:ml-2 rounded-md shadow-lg max-h-[calc(100%-2rem)]"
@@ -134,21 +152,35 @@ export const VerticalResultsSection = ({
             />
           </div>
         </div>
-        <VerticalResults
-          customCssClasses={{
-            verticalResultsContainer:
-              "flex flex-col border rounded-md divide-y divide-gray-300",
-          }}
-          CardComponent={(props) => (
-            <Cards
-              isVertical={true}
-              {...props}
-              cardType={
-                verticals.find((v) => v.verticalKey === verticalKey)?.cardType
-              }
+        <div className="flex-flex-col">
+          <VerticalResults
+            customCssClasses={{
+              verticalResultsContainer:
+                "flex flex-col border rounded-md divide-y divide-gray-300",
+            }}
+            CardComponent={(props) => (
+              <Cards
+                isVertical={true}
+                {...props}
+                cardType={
+                  verticals.find((v) => v.verticalKey === verticalKey)?.cardType
+                }
+              />
+            )}
+          />
+          <div className=" border-gray-300 pt-4">
+            <Pagination
+              paginateAllOnNoResults={true}
+              customCssClasses={{
+                selectedLabel:
+                  "bg-palette-primary text-palette-primary-contrast border-palette-primary",
+                leftIconContainer: "!-rotate-90",
+                rightIconContainer: "!rotate-90",
+              }}
             />
-          )}
-        />
+          </div>
+          <Geolocation />
+        </div>
       </div>
     </div>
   );
