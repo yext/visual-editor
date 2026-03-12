@@ -14,6 +14,11 @@ import { PresetImageType, FOOD_DELIVERY_SERVICES } from "../../types/types.ts";
 import { presetImageIcons } from "../../utils/presetImageIcons.tsx";
 import { normalizeThemeColor } from "../../utils/normalizeThemeColor.js";
 
+const LINK_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"];
+const BUTTON_TEXT_TRANSFORM_CSS_VAR =
+  "var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"];
+
 export type CTAProps = {
   // Core props
   label: React.ReactNode;
@@ -327,8 +332,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           ...disabledStyle,
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
-            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
       >
         {linkContent}
@@ -355,8 +360,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           ...(ctaType !== "presetImage" ? dynamicStyle : undefined),
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? ("var(--textTransform-link-textTransform)" as React.CSSProperties["textTransform"])
-            : ("var(--textTransform-button-textTransform)" as React.CSSProperties["textTransform"]),
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
         className={buttonClassName}
         variant={buttonVariant}
@@ -389,8 +394,8 @@ export const CTA = (props: CTAProps) => {
         style={{
           // @ts-ignore: the css variable here resolves to a valid enum value
           textTransform: buttonVariant?.toLowerCase().includes("link")
-            ? "var(--textTransform-link-textTransform)"
-            : "var(--textTransform-button-textTransform)",
+            ? LINK_TEXT_TRANSFORM_CSS_VAR
+            : BUTTON_TEXT_TRANSFORM_CSS_VAR,
         }}
       >
         {linkContent}
