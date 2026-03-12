@@ -11,7 +11,7 @@ import {
   backgroundColors,
 } from "../../utils/themeConfigOptions.ts";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
-import { ComponentConfig, Fields } from "@puckeditor/core";
+import { ComponentConfig, Fields, setDeep } from "@puckeditor/core";
 import { AnalyticsScopeProvider } from "@yext/pages-components";
 import { ComponentErrorBoundary } from "../../internal/components/ComponentErrorBoundary.tsx";
 import { resolveBreadcrumbs } from "../../utils/urls/resolveBreadcrumbs.ts";
@@ -181,15 +181,18 @@ export const BreadcrumbsComponent = ({
         {breadcrumbsToRender.map(({ name, slug, index }) => {
           const isRoot = index === 0;
           const isCurrentPage = index === breadcrumbs.length - 1;
+          // Root pages have a single breadcrumb, so the first and last crumb are the same item.
+          const isRootPage = isRoot && isCurrentPage;
           const href = relativePrefixToRoot
             ? relativePrefixToRoot + slug
             : slug;
-          const label =
-            isCurrentPage && currentPage
-              ? currentPage
-              : isRoot && directoryRoot
-                ? directoryRoot
-                : name;
+          let label = name;
+          if (isCurrentPage && currentPage) {
+            label = currentPage;
+          }
+          if ((isRootPage || isRoot) && directoryRoot) {
+            label = directoryRoot;
+          }
 
           return (
             <li key={index} className="contents whitespace-normal break-words">
@@ -227,6 +230,20 @@ export const BreadcrumbsSection: ComponentConfig<{
 }> = {
   label: msg("components.breadcrumbs", "Breadcrumbs"),
   fields: breadcrumbsSectionFields,
+  resolveFields: (_data, params) => {
+    const streamDocument = params.metadata?.streamDocument;
+    if (!streamDocument) {
+      return breadcrumbsSectionFields;
+    }
+
+    // On root pages there is only one breadcrumb, so "currentPage" duplicates "directoryRoot".
+    const breadcrumbCount = resolveBreadcrumbs(streamDocument).length;
+    return setDeep(
+      breadcrumbsSectionFields,
+      "data.objectFields.currentPage.visible",
+      breadcrumbCount !== 1
+    );
+  },
   defaultProps: {
     data: {
       directoryRoot: { defaultValue: "Directory Root" },
