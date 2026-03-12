@@ -110,16 +110,6 @@ const DEFAULT_LOCATION_STYLE = {
   pinColor: backgroundColors.background6.value,
 };
 
-export const getLocatorSearchConfigDependencyKey = (
-  streamDocument: StreamDocument
-) =>
-  JSON.stringify({
-    id: streamDocument?.id,
-    locale: streamDocument?.locale,
-    pageSet: streamDocument?._pageset,
-    locatorSourcePageSets: streamDocument?.__?.locatorSourcePageSets,
-  });
-
 const getLocatorConfigFromPageSet = (pageSet?: string): LocatorConfig => {
   if (!pageSet) {
     return {};
@@ -1014,10 +1004,6 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
 
 const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
-  const searchConfigDependencyKey = React.useMemo(
-    () => getLocatorSearchConfigDependencyKey(streamDocument),
-    [streamDocument]
-  );
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
       streamDocument,
@@ -1032,7 +1018,7 @@ const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
       searchAnalyticsConfig,
       searcher: provideHeadless(searchHeadlessConfig),
     };
-  }, [searchConfigDependencyKey, streamDocument]);
+  }, [streamDocument.id, streamDocument.locale]);
 
   if (searcher === undefined || searchAnalyticsConfig === undefined) {
     console.warn(
