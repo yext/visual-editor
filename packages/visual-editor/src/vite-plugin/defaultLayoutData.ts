@@ -4875,70 +4875,75 @@ const locatorDefaultLayout = {
         mapStyle: "mapbox://styles/mapbox/streets-v12",
         filters: { openNowButton: false, showDistanceOptions: false },
         distanceDisplay: "distanceFromUser",
-        resultCard: {
-          primaryHeading: {
-            field: { selection: { value: "name" } },
-            constantValue: "",
-            constantValueEnabled: false,
-            headingLevel: 3,
-          },
-          secondaryHeading: {
-            field: { selection: { value: "name" } },
-            constantValue: "",
-            constantValueEnabled: false,
-            variant: "base",
-            liveVisibility: false,
-          },
-          tertiaryHeading: {
-            field: { selection: { value: "name" } },
-            constantValue: "",
-            constantValueEnabled: false,
-            variant: "base",
-            liveVisibility: false,
-          },
-          icons: false,
-          hours: {
-            field: { selection: { value: "hours" } },
-            table: {
-              startOfWeek: "today",
-              collapseDays: false,
-              showAdditionalHoursText: false,
+        resultCard: [
+          {
+            entityType: "",
+            props: {
+              primaryHeading: {
+                field: { selection: { value: "name" } },
+                constantValue: "",
+                constantValueEnabled: false,
+                headingLevel: 3,
+              },
+              secondaryHeading: {
+                field: { selection: { value: "name" } },
+                constantValue: "",
+                constantValueEnabled: false,
+                variant: "base",
+                liveVisibility: false,
+              },
+              tertiaryHeading: {
+                field: { selection: { value: "name" } },
+                constantValue: "",
+                constantValueEnabled: false,
+                variant: "base",
+                liveVisibility: false,
+              },
+              icons: false,
+              hours: {
+                field: { selection: { value: "hours" } },
+                table: {
+                  startOfWeek: "today",
+                  collapseDays: false,
+                  showAdditionalHoursText: false,
+                },
+                liveVisibility: true,
+              },
+              address: { showGetDirectionsLink: true, liveVisibility: true },
+              phone: {
+                field: { selection: { value: "mainPhone" } },
+                phoneFormat: "domestic",
+                includePhoneHyperlink: true,
+                liveVisibility: true,
+              },
+              email: {
+                field: { selection: { value: "emails" } },
+                liveVisibility: false,
+              },
+              services: {
+                field: { selection: { value: "services" } },
+                liveVisibility: false,
+              },
+              primaryCTA: {
+                label: "Visit Page",
+                variant: "primary",
+                liveVisibility: true,
+              },
+              secondaryCTA: {
+                label: "Call to Action",
+                link: "#",
+                variant: "secondary",
+                liveVisibility: false,
+              },
+              image: {
+                field: { selection: { value: "headshot" } },
+                constantValue: { url: "", height: 0, width: 0 },
+                constantValueEnabled: false,
+                liveVisibility: false,
+              },
             },
-            liveVisibility: true,
           },
-          address: { showGetDirectionsLink: true, liveVisibility: true },
-          phone: {
-            field: { selection: { value: "mainPhone" } },
-            phoneFormat: "domestic",
-            includePhoneHyperlink: true,
-            liveVisibility: true,
-          },
-          email: {
-            field: { selection: { value: "emails" } },
-            liveVisibility: false,
-          },
-          services: {
-            field: { selection: { value: "services" } },
-            liveVisibility: false,
-          },
-          primaryCTA: {
-            label: "Visit Page",
-            variant: "primary",
-            liveVisibility: true,
-          },
-          secondaryCTA: {
-            label: "Call to Action",
-            link: "#",
-            variant: "secondary",
-            liveVisibility: false,
-          },
-          image: {
-            field: { selection: { value: "headshot" } },
-            constantValue: { url: "", height: 0, width: 0 },
-            constantValueEnabled: false,
-            liveVisibility: false,
-          },
-        },
+        ],
       },
     },
   ],
