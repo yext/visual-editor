@@ -1,12 +1,11 @@
 import { Migration } from "../../utils/migrate.ts";
-import { LocatorResultCardProps } from "../LocatorResultCard.tsx";
 import {
   getLocatorEntityTypeSourceMap,
   isLocatorEntityType,
 } from "../../utils/locatorEntityTypes.ts";
 
 const DEFAULT_ENTITY_TYPE = "location";
-const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
+const DEFAULT_LOCATOR_RESULT_CARD_PROPS = {
   entityType: DEFAULT_ENTITY_TYPE,
   primaryHeading: {
     field: { selection: { value: "name" } },
@@ -99,9 +98,9 @@ export const normalizeLocatorResultCard: Migration = {
           {
             props: {
               ...DEFAULT_LOCATOR_RESULT_CARD_PROPS,
-              ...(currentResultCard as Partial<LocatorResultCardProps>),
+              ...currentResultCard,
               entityType: entityTypes[0] ?? DEFAULT_ENTITY_TYPE,
-            } as LocatorResultCardProps,
+            },
           },
         ],
       };
