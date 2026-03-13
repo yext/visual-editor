@@ -270,6 +270,7 @@
     "mobileContentAlignment": "Zarovnání mobilního obsahu",
     "mobileImagePosition": "Pozice mobilního obrazu",
     "mobileMediaPosition": "Pozice mobilních médií",
+    "normalizeLink": "Normalizovat odkaz",
     "openInNewTab": "Otevřít na nové kartě",
     "options": {
       "address": "Adresa",
@@ -512,6 +513,7 @@
   "informationSection": "Sekce informací",
   "inheritedDataMsg": "Data jsou zděděna z nadřazené části.",
   "insight": "Vhled",
+  "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",
   "kilometer_many": "kilometrů",
@@ -547,6 +549,7 @@
   "mapRequiresOptIn": "Tuto mapu lze zobrazit pouze v případě, že jsou povoleny soubory cookie",
   "maxWidthTip": "Pro optimální zarovnání obsahu doporučujeme nastavit šířku záhlaví a zápatí tak, aby odpovídala nebo překročila mřížku obsahu stránky.",
   "metaTitleMissingLocales": "Metanázev chybí pro národní prostředí: {{locales}}",
+  "mile_zero": "míle",
   "mile_one": "míle",
   "mile_few": "míle",
   "mile_many": "mil",

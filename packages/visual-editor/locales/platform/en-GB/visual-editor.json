@@ -270,6 +270,7 @@
     "mobileContentAlignment": "Mobile Content Alignment",
     "mobileImagePosition": "Mobile Image Position",
     "mobileMediaPosition": "Mobile Media Position",
+    "normalizeLink": "Normalize Link",
     "openInNewTab": "Open in new tab",
     "options": {
       "address": "Address",
@@ -512,6 +513,7 @@
   "informationSection": "Information Section",
   "inheritedDataMsg": "Data is inherited from the parent section.",
   "insight": "Insight",
+  "kilometer_zero": "kilometer",
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometres",
   "knowledgeGraphContent": "Knowledge Graph content",
@@ -539,6 +541,7 @@
   "mapRequiresOptIn": "This map can only be displayed if cookies are enabled",
   "maxWidthTip": "For optimal content alignment, we recommend setting the header and footer width to match or exceed the page content grid.",
   "metaTitleMissingLocales": "Meta title is missing for locale(s): {{locales}}",
+  "mile_zero": "mile",
   "mile_one": "mile",
   "mile_other": "miles",
   "missingHtmlWidget": "Add HTML to view component",

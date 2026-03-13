@@ -270,6 +270,7 @@
     "mobileContentAlignment": "Mobiilse sisu joondamine",
     "mobileImagePosition": "Mobiilse pildipositsioon",
     "mobileMediaPosition": "Mobiilse meedia positsioon",
+    "normalizeLink": "Normaliseeri link",
     "openInNewTab": "Ava uuel vahelehel",
     "options": {
       "address": "Aadress",
@@ -512,6 +513,7 @@
   "informationSection": "Infosektsioon",
   "inheritedDataMsg": "Andmed päritakse emasektsioonist.",
   "insight": "Ülevaade",
+  "kilometer_zero": "kilomeetrit",
   "kilometer_one": "kilomeeter",
   "kilometer_other": "kilomeetrit",
   "knowledgeGraphContent": "Teadmiste graafi sisu",
@@ -539,6 +541,7 @@
   "mapRequiresOptIn": "Seda kaarti saab kuvada ainult siis, kui küpsised on lubatud",
   "maxWidthTip": "Sisu optimaalse joondamise tagamiseks soovitame seada päise ja jaluse laiuse, et see vastaks lehe sisuvõrgule või ületada.",
   "metaTitleMissingLocales": "Metapealkiri puudub järgmiste lokaatide jaoks: {{locales}}",
+  "mile_zero": "miil",
   "mile_one": "miil",
   "mile_other": "miili",
   "missingHtmlWidget": "Komponendi kuvamiseks lisage HTML",

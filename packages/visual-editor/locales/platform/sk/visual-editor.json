@@ -270,6 +270,7 @@
     "mobileContentAlignment": "Zarovnanie mobilného obsahu",
     "mobileImagePosition": "Pozícia mobilného obrazu",
     "mobileMediaPosition": "Pozícia mobilného média",
+    "normalizeLink": "Normalizovať odkaz",
     "openInNewTab": "Otvoriť na novej karte",
     "options": {
       "address": "Adresa",
@@ -512,6 +513,7 @@
   "informationSection": "Sekcia",
   "inheritedDataMsg": "Údaje sa dedia z nadradenej sekcie.",
   "insight": "Nahliadnutie",
+  "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_few": "kilometre",
   "kilometer_many": "kilometrov",
@@ -547,6 +549,7 @@
   "mapRequiresOptIn": "Túto mapu je možné zobraziť iba vtedy, ak sú povolené súbory cookie",
   "maxWidthTip": "Pre optimálne zarovnanie obsahu odporúčame nastaviť šírku hlavičky a päty tak, aby zodpovedala alebo prekročila mriežku obsahu stránky.",
   "metaTitleMissingLocales": "Chýba meta názov pre miestne nastavenia: {{locales}}",
+  "mile_zero": "míľa",
   "mile_one": "míľa",
   "mile_few": "míle",
   "mile_many": "míľ",

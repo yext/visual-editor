@@ -270,6 +270,7 @@
     "mobileContentAlignment": "Mobilindholdsjustering",
     "mobileImagePosition": "Mobil billedposition",
     "mobileMediaPosition": "Mobil medieposition",
+    "normalizeLink": "Normaliser link",
     "openInNewTab": "Åbn i ny fane",
     "options": {
       "address": "Adresse",
@@ -512,6 +513,7 @@
   "informationSection": "Informationsafsnit",
   "inheritedDataMsg": "Data er arvet fra overordnede sektion.",
   "insight": "Indsigt",
+  "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometer",
   "knowledgeGraphContent": "Videngrafindhold",
@@ -539,6 +541,7 @@
   "mapRequiresOptIn": "Dette kort kan kun vises, hvis cookies er aktiveret",
   "maxWidthTip": "For optimal indholdsjustering anbefaler vi at indstille overskriften og sidefodbredden for at matche eller overskride sideindholdsnettet.",
   "metaTitleMissingLocales": "Metatitel mangler for lokalitet(er): {{locales}}",
+  "mile_zero": "mil",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Tilføj HTML for at se komponent",

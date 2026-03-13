@@ -270,6 +270,7 @@
     "mobileContentAlignment": "モバイルコンテンツアライメント",
     "mobileImagePosition": "モバイルイメージの位置",
     "mobileMediaPosition": "モバイルメディアのポジション",
+    "normalizeLink": "リンクの正規化",
     "openInNewTab": "新しいタブで開く",
     "options": {
       "address": "住所",
@@ -512,6 +513,7 @@
   "informationSection": "情報セクション",
   "inheritedDataMsg": "データは親セクションから継承されます。",
   "insight": "洞察力",
+  "kilometer_zero": "キロメートル",
   "kilometer_one": "キロメートル",
   "kilometer_other": "キロメートル",
   "knowledgeGraphContent": "ナレッジグラフコンテンツ",
@@ -539,6 +541,7 @@
   "mapRequiresOptIn": "この地図は Cookie が有効になっている場合にのみ表示できます",
   "maxWidthTip": "最適なコンテンツアラインメントについては、ページコンテンツグリッドに一致またはそれを超えるように、ヘッダーとフッターの幅を設定することをお勧めします。",
   "metaTitleMissingLocales": "ロケールのメタ タイトルがありません: {{locales}}",
+  "mile_zero": "マイル",
   "mile_one": "マイル",
   "mile_other": "マイル",
   "missingHtmlWidget": "HTMLを追加してコンポーネントを表示します",
