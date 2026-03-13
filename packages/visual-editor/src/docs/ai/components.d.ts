@@ -1194,6 +1194,8 @@ type TranslatableCTA = Omit<CTA$1, "label" | "link"> & {
   label: TranslatableString;
   /** The link the for the CTA */
   link: TranslatableString;
+  /** Whether the link should be normalized before rendering */
+  normalizeLink?: boolean;
   openInNewTab?: boolean;
 };
 
