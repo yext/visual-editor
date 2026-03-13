@@ -13,7 +13,6 @@ const LOCATOR_ENTITY_TYPES = [
   "restaurant",
   "hotel",
   "financialProfessional",
-  "atm",
 ] as const;
 
 export type LocatorEntityType = (typeof LOCATOR_ENTITY_TYPES)[number];
@@ -97,8 +96,6 @@ export const getEntityTypeLabel = (entityType: LocatorEntityType) => {
       return pt("hotels", "Hotels");
     case "financialProfessional":
       return pt("financialProfessionals", "Financial Professionals");
-    case "atm":
-      return pt("ATMs", "ATMs");
     default:
       return pt("locations", "Locations");
   }
