@@ -97,6 +97,8 @@ export const getEntityTypeLabel = (entityType: LocatorEntityType) => {
       return pt("hotels", "Hotels");
     case "financialProfessional":
       return pt("financialProfessionals", "Financial Professionals");
+    case "atm":
+      return pt("ATMs", "ATMs");
     default:
       return pt("locations", "Locations");
   }
