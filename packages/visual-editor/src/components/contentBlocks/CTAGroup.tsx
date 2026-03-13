@@ -19,6 +19,8 @@ import { CTAWrapperProps } from "./CtaWrapper.tsx";
 type BasicCTAProps = {
   /** The CTA entity field or static value */
   entityField: CTAWrapperProps["data"]["entityField"];
+  /** Whether CTA links should be normalized before rendering */
+  normalizeLink: boolean;
   /** The visual style of the CTA. */
   variant: CTAVariant;
   /** The image to use if the CTA is set to preset image */
@@ -36,6 +38,7 @@ const defaultButton: BasicCTAProps = {
       link: "#",
     },
   },
+  normalizeLink: true,
   variant: "primary",
   presetImage: "app-store",
 };
@@ -64,6 +67,13 @@ const ctaGroupFields: Fields<CTAGroupProps> = {
             textAndLink: "type.cta",
           },
         },
+      }),
+      normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+        type: "radio",
+        options: [
+          { label: msg("fields.options.yes", "Yes"), value: true },
+          { label: msg("fields.options.no", "No"), value: false },
+        ],
       }),
       variant: YextField(msg("fields.variant", "Variant"), {
         type: "radio",
@@ -131,6 +141,7 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
                     : resolveComponentData(cta.link, locale, streamDocument)
                 }
                 linkType={cta.linkType}
+                normalizeLink={button.normalizeLink}
                 variant={button.variant}
                 ctaType={ctaType}
                 presetImageType={button.presetImage}

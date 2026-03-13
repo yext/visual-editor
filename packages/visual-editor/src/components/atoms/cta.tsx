@@ -28,6 +28,7 @@ export type CTAProps = {
   // ctaType specific props
   link?: string;
   linkType?: LinkType;
+  normalizeLink: boolean;
   presetImageType?: PresetImageType;
 
   // button actionType specific props
@@ -94,6 +95,18 @@ const presetImageTypeToName = (presetImageType: PresetImageType) => {
   }
 };
 
+const getResolvedLink = (
+  link: string | undefined,
+  linkType: LinkType | undefined,
+  shouldNormalizeLink: boolean
+) => {
+  if (!shouldNormalizeLink) {
+    return link ?? "";
+  }
+
+  return normalizeLink(link, linkType);
+};
+
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
 const useResolvedCtaProps = (props: CTAProps) => {
   const {
@@ -102,6 +115,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
     className,
     alwaysHideCaret,
     ariaLabel,
+    normalizeLink: shouldNormalizeLink,
   } = props;
   const { t } = useTranslation();
   const streamDocument = useDocument();
@@ -129,7 +143,10 @@ const useResolvedCtaProps = (props: CTAProps) => {
         // User settable link props should not be used for get directions
         return {
           link:
-            normalizeLink(props.link) || listingsLink || coordinateLink || "#",
+            getResolvedLink(props.link, props.linkType, shouldNormalizeLink) ||
+            listingsLink ||
+            coordinateLink ||
+            "#",
           linkType: "DRIVING_DIRECTIONS" as const,
           label: props.label || t("getDirections", "Get Directions"),
           ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
@@ -159,7 +176,9 @@ const useResolvedCtaProps = (props: CTAProps) => {
         }
 
         return {
-          link: normalizeLink(props.link, props.linkType) || "#",
+          link:
+            getResolvedLink(props.link, props.linkType, shouldNormalizeLink) ||
+            "#",
           linkType: props.linkType ?? "URL",
           label,
           ariaLabel:
@@ -172,13 +191,15 @@ const useResolvedCtaProps = (props: CTAProps) => {
       case "textAndLink":
       default:
         return {
-          link: normalizeLink(props.link, props.linkType) || "#",
+          link:
+            getResolvedLink(props.link, props.linkType, shouldNormalizeLink) ||
+            "#",
           linkType: props.linkType ?? "URL",
           label: props.label,
           ariaLabel: ariaLabel ?? "",
         };
     }
-  }, [props, streamDocument, background]);
+  }, [props, streamDocument, background, shouldNormalizeLink, ariaLabel, t]);
 
   if (!resolvedDynamicProps) {
     return null;

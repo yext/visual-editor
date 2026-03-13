@@ -65,6 +65,7 @@ const defaultLink: TranslatableCTA = {
   linkType: "URL",
   label: { defaultValue: "Header Link" },
   link: "#",
+  normalizeLink: true,
   openInNewTab: false,
 };
 
@@ -81,6 +82,13 @@ const linkFieldConfig: ArrayField<TranslatableCTA[]> = {
     linkType: YextField(msg("fields.linkType", "Link Type"), {
       type: "select",
       options: linkTypeOptions(),
+    }),
+    normalizeLink: YextField(msg("fields.normalizeLink", "Normalize Link"), {
+      type: "radio",
+      options: [
+        { label: msg("fields.options.yes", "Yes"), value: true },
+        { label: msg("fields.options.no", "No"), value: false },
+      ],
     }),
     openInNewTab: YextField(msg("fields.openInNewTab", "Open in new tab"), {
       type: "radio",
@@ -279,6 +287,7 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}
       link={resolveComponentData(item.link, i18n.language, streamDocument)}
+      normalizeLink={item.normalizeLink ?? true}
       className={`${justifyClass} ${weightClass} ${sizeClass} w-full text-wrap break-words`}
     />
   );

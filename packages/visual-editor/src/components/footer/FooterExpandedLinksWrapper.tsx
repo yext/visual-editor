@@ -80,6 +80,7 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
                     label={linkLabel}
                     linkType={linkData.linkType}
                     link={link}
+                    normalizeLink={linkData.normalizeLink ?? true}
                     className="justify-center md:justify-start block break-words whitespace-normal"
                   />
                 );
@@ -133,6 +134,22 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
                   link: YextField(msg("fields.link", "Link"), {
                     type: "text",
                   }),
+                  normalizeLink: YextField(
+                    msg("fields.normalizeLink", "Normalize Link"),
+                    {
+                      type: "radio",
+                      options: [
+                        {
+                          label: msg("fields.options.yes", "Yes"),
+                          value: true,
+                        },
+                        {
+                          label: msg("fields.options.no", "No"),
+                          value: false,
+                        },
+                      ],
+                    }
+                  ),
                   openInNewTab: YextField(
                     msg("fields.openInNewTab", "Open in new tab"),
                     {

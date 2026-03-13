@@ -30,6 +30,7 @@ export const MaybeLink = (props: MaybeLinkProps) => {
         link={href}
         label={children}
         linkType="URL"
+        normalizeLink={false}
         eventName={eventName}
         variant={variant}
         className={className}

@@ -107,6 +107,7 @@ const mainDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",
@@ -135,6 +136,7 @@ const mainDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",
@@ -474,6 +476,7 @@ const mainDefaultLayout = {
                 id: "CTASlot-46811f58-2779-4c49-a871-26cf27454544",
                 data: {
                   actionType: "link",
+                  normalizeLink: true,
                   buttonText: { defaultValue: "Button" },
                   customId: "",
                   customClass: "",
@@ -505,6 +508,7 @@ const mainDefaultLayout = {
                 id: "CTASlot-633345f6-c438-400b-bdf7-92dce47746bc",
                 data: {
                   actionType: "link",
+                  normalizeLink: true,
                   buttonText: { defaultValue: "Button" },
                   customId: "",
                   customClass: "",
@@ -844,6 +848,7 @@ const mainDefaultLayout = {
                 id: "CTASlot-e8531a98-b8ff-4ce1-a299-11fc085eb6c3",
                 data: {
                   actionType: "link",
+                  normalizeLink: true,
                   buttonText: { defaultValue: "Button" },
                   customId: "",
                   customClass: "",
@@ -1034,6 +1039,7 @@ const mainDefaultLayout = {
                                 id: "ProductCard-4ddddc07-d36d-4ed3-90e8-1ca3ca2e8447-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -1205,6 +1211,7 @@ const mainDefaultLayout = {
                                 id: "ProductCard-996096bf-bc44-4827-ab79-21e9106abf53-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -1376,6 +1383,7 @@ const mainDefaultLayout = {
                                 id: "ProductCard-a7549442-809c-489f-9f73-4cd5c6038f51-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2133,6 +2141,7 @@ const mainDefaultLayout = {
                                 id: "CTASlot-84f00400-c27d-4cd7-aa28-a1632694b359",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2305,6 +2314,7 @@ const mainDefaultLayout = {
                                 id: "CTASlot-2f5fcbf5-5f6f-4f18-814d-30b6de491d0a",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2477,6 +2487,7 @@ const mainDefaultLayout = {
                                 id: "CTASlot-569564d0-a69a-44f6-b528-d0aacdc875e5",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2723,6 +2734,7 @@ const mainDefaultLayout = {
                                 id: "InsightCard-1-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -2889,6 +2901,7 @@ const mainDefaultLayout = {
                                 id: "InsightCard-2-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3055,6 +3068,7 @@ const mainDefaultLayout = {
                                 id: "InsightCard-3-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3367,6 +3381,7 @@ const mainDefaultLayout = {
                                 id: "EventCard-92abd8ca-550c-4aee-92d9-4140b4ef53ad-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3524,6 +3539,7 @@ const mainDefaultLayout = {
                                 id: "EventCard-b1fd4377-76db-433e-9803-ea5ae0d9f996-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -3681,6 +3697,7 @@ const mainDefaultLayout = {
                                 id: "EventCard-90968d53-5878-4459-b3dc-0b9b75e028ea-cta",
                                 data: {
                                   actionType: "link",
+                                  normalizeLink: true,
                                   buttonText: { defaultValue: "Button" },
                                   customId: "",
                                   customClass: "",
@@ -4246,6 +4263,7 @@ const directoryDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",
@@ -4274,6 +4292,7 @@ const directoryDefaultLayout = {
                         data: {
                           show: true,
                           actionType: "link",
+                          normalizeLink: true,
                           buttonText: { defaultValue: "Button" },
                           entityField: {
                             field: "",

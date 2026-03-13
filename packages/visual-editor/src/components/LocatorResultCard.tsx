@@ -198,6 +198,8 @@ export interface LocatorResultCardProps {
   primaryCTA: {
     /** Label for the primary CTA */
     label: TranslatableString;
+    /** Whether the primary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the primary CTA */
     variant: CTAVariant;
     /** Whether the primary CTA is visible in live mode */
@@ -212,6 +214,8 @@ export interface LocatorResultCardProps {
     label: TranslatableString;
     /** Template for the secondary CTA link, which can contain entity field references */
     link: TranslatableString;
+    /** Whether the secondary CTA link should be normalized before rendering */
+    normalizeLink: boolean;
     /** The variant for the secondary CTA */
     variant: CTAVariant;
     /** Whether the secondary CTA is visible in live mode */
@@ -290,12 +294,14 @@ export const DEFAULT_LOCATOR_RESULT_CARD_PROPS: LocatorResultCardProps = {
   },
   primaryCTA: {
     label: "Visit Page",
+    normalizeLink: true,
     variant: "primary",
     liveVisibility: true,
   },
   secondaryCTA: {
     label: "Call to Action",
     link: "#",
+    normalizeLink: true,
     variant: "secondary",
     liveVisibility: false,
   },
@@ -683,6 +689,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           true,
           () => getDisplayFieldOptions("type.string")
         ),
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          }
+        ),
       },
     },
     secondaryCTA: {
@@ -702,6 +718,16 @@ export const LocatorResultCardFields: Field<LocatorResultCardProps, {}> = {
           false,
           true,
           () => getDisplayFieldOptions("type.string")
+        ),
+        normalizeLink: YextField(
+          msg("fields.normalizeLink", "Normalize Link"),
+          {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.yes", "Yes"), value: true },
+              { label: msg("fields.options.no", "No"), value: false },
+            ],
+          }
         ),
         variant: YextField(msg("fields.ctaVariant", "CTA Variant"), {
           type: "radio",
@@ -966,6 +992,7 @@ export const LocatorResultCard = React.memo(
                   ) || t("callToAction", "Call to Action")
                 }
                 variant={props.secondaryCTA.variant}
+                normalizeLink={props.secondaryCTA.normalizeLink}
                 onClick={handleSecondaryCTAClick}
                 className="basis-full sm:w-auto justify-center"
               />
@@ -1020,6 +1047,7 @@ const PrimaryCTA = (props: {
           ) || t("visitPage", "Visit Page")
         }
         variant={primaryCTA.variant}
+        normalizeLink={primaryCTA.normalizeLink}
         onClick={handlePrimaryCtaClick}
         className="basis-full sm:w-auto justify-center"
       />
@@ -1253,6 +1281,7 @@ const EmailSection = (props: {
           link={emailAddresses[0]}
           label={emailAddresses[0]}
           linkType="EMAIL"
+          normalizeLink={false}
           variant="link"
         />
       </div>
