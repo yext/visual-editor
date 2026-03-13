@@ -974,23 +974,12 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     const shouldReconcileResultCards =
       previousResultCard.length === 0 ||
       !hasSameEntityTypes(previousresultCardEntityTypes);
-    console.log("DEBUG entityTypeSourceMap: ", entityTypeSourceMap);
-    console.log("DEBUG entityTypes: ", entityTypes);
-    console.log(
-      "DEBUG shouldReconcileLocationStyles: ",
-      shouldReconcileLocationStyles
-    );
-    console.log(
-      "DEBUG previouslocationStyleEntityTypes: ",
-      previouslocationStyleEntityTypes
-    );
     if (shouldReconcileLocationStyles) {
       const newLocationStyles = entityTypes.map((entityType) => ({
         ...DEFAULT_LOCATION_STYLE,
         ...locationStylesByEntityType.get(entityType),
         entityType,
       }));
-      console.log("DEBUG newLocationStyles: ", newLocationStyles);
       data = setDeep(data, "props.locationStyles", newLocationStyles);
     }
 
@@ -1014,20 +1003,6 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
 
 const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
-  React.useEffect(() => {
-    console.log("DEBUG LocatorWrapper streamDocument snapshot:", {
-      id: streamDocument.id,
-      locale: streamDocument.locale,
-      pageSet: streamDocument._pageset,
-      locatorSourcePageSets: streamDocument.__?.locatorSourcePageSets,
-    });
-  }, [
-    streamDocument.id,
-    streamDocument.locale,
-    streamDocument._pageset,
-    streamDocument.__?.locatorSourcePageSets,
-  ]);
-
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
       streamDocument,
@@ -1094,10 +1069,6 @@ const LocatorInternal = ({
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
   const entityTypes =
     Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
-  const providedLocationStyleEntityTypes = React.useMemo(
-    () => (locationStyles ?? []).map((style) => style.entityType),
-    [locationStyles]
-  );
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1361,38 +1332,22 @@ const LocatorInternal = ({
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
 
-  const locationStylesConfig = React.useMemo(() => {
-    const config: Record<string, { color?: BackgroundStyle; icon?: string }> =
-      {};
-    (locationStyles ?? []).forEach((locationStyle) => {
-      const entityType = locationStyle.entityType;
-      if (!entityType) return;
-      const iconValue =
-        locationStyle.pinIcon?.type === "icon"
-          ? locationStyle.pinIcon.iconName
-          : undefined;
-      config[entityType] = {
-        color: locationStyle.pinColor,
-        icon:
-          typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
-      };
-    });
-    return config;
-  }, [locationStyles]);
-
-  React.useEffect(() => {
-    console.log("DEBUG LocatorInternal config snapshot:", {
-      entityTypeSourceMap,
-      entityTypes,
-      providedLocationStyleEntityTypes,
-      locationStylesConfigKeys: Object.keys(locationStylesConfig),
-    });
-  }, [
-    entityTypeSourceMap,
-    entityTypes,
-    providedLocationStyleEntityTypes,
-    locationStylesConfig,
-  ]);
+  const locationStylesConfig: Record<
+    string,
+    { color?: BackgroundStyle; icon?: string }
+  > = {};
+  (locationStyles ?? []).forEach((locationStyle) => {
+    const entityType = locationStyle.entityType;
+    if (!entityType) return;
+    const iconValue =
+      locationStyle.pinIcon?.type === "icon"
+        ? locationStyle.pinIcon.iconName
+        : undefined;
+    locationStylesConfig[entityType] = {
+      color: locationStyle.pinColor,
+      icon: typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
+    };
+  });
 
   const [centerCoords, setCenterCoords] = React.useState<
     [number, number] | undefined
@@ -2010,14 +1965,6 @@ const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
   const entityLocationStyle = entityType
     ? locationStyleConfig?.[entityType]
     : undefined;
-  React.useEffect(() => {
-    console.log("DEBUG LocatorMapPin mapping:", {
-      resultId: result.id,
-      resultEntityType: entityType,
-      hasStyle: !!entityLocationStyle,
-      availableLocationStyleEntityTypes: Object.keys(locationStyleConfig ?? {}),
-    });
-  }, [entityLocationStyle, entityType, locationStyleConfig, result.id]);
 
   return (
     <MapPinIcon
