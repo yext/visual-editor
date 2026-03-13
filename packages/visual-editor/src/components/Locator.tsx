@@ -1014,6 +1014,20 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
 
 const LocatorWrapper = (props: WithPuckProps<LocatorProps>) => {
   const streamDocument = useDocument();
+  React.useEffect(() => {
+    console.log("DEBUG LocatorWrapper streamDocument snapshot:", {
+      id: streamDocument.id,
+      locale: streamDocument.locale,
+      pageSet: streamDocument._pageset,
+      locatorSourcePageSets: streamDocument.__?.locatorSourcePageSets,
+    });
+  }, [
+    streamDocument.id,
+    streamDocument.locale,
+    streamDocument._pageset,
+    streamDocument.__?.locatorSourcePageSets,
+  ]);
+
   const { searchAnalyticsConfig, searcher } = React.useMemo(() => {
     const searchHeadlessConfig = createSearchHeadlessConfig(
       streamDocument,
@@ -1080,6 +1094,19 @@ const LocatorInternal = ({
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
   const entityTypes =
     Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
+  const providedLocationStyleEntityTypes = React.useMemo(
+    () => (locationStyles ?? []).map((style) => style.entityType),
+    [locationStyles]
+  );
+  const providedResultCardEntityTypes = React.useMemo(
+    () => (resultCardConfigs ?? []).map((card) => card.props?.entityType),
+    [resultCardConfigs]
+  );
+  const searchResultEntityTypes = useSearchState((state) =>
+    (state.vertical.results ?? [])
+      .map((result) => result.entityType)
+      .filter((value): value is string => typeof value === "string")
+  );
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1306,9 +1333,13 @@ const LocatorInternal = ({
       if (existingConfig) {
         return existingConfig.props;
       }
+      console.warn("DEBUG getResultCardProps fallback to default:", {
+        requestedEntityType: entityType,
+        availableEntityTypes: providedResultCardEntityTypes,
+      });
       return DEFAULT_LOCATOR_RESULT_CARD_PROPS;
     },
-    [resultCardConfigs]
+    [providedResultCardEntityTypes, resultCardConfigs]
   );
 
   const CardComponent = React.useCallback(
@@ -1361,6 +1392,24 @@ const LocatorInternal = ({
     });
     return config;
   }, [locationStyles]);
+
+  React.useEffect(() => {
+    console.log("DEBUG LocatorInternal config snapshot:", {
+      entityTypeSourceMap,
+      entityTypes,
+      providedLocationStyleEntityTypes,
+      providedResultCardEntityTypes,
+      locationStylesConfigKeys: Object.keys(locationStylesConfig),
+      searchResultEntityTypes,
+    });
+  }, [
+    entityTypeSourceMap,
+    entityTypes,
+    providedLocationStyleEntityTypes,
+    providedResultCardEntityTypes,
+    locationStylesConfig,
+    searchResultEntityTypes,
+  ]);
 
   const [centerCoords, setCenterCoords] = React.useState<
     [number, number] | undefined
