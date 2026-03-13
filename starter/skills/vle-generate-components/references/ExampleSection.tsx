@@ -12,7 +12,6 @@ import {
   YextEntityFieldSelector,
   Image,
 } from "@yext/visual-editor";
-import { Box, Text } from "@chakra-ui/react";
 import { Link, ImageType, ComplexImageType } from "@yext/pages-components";
 
 export type ExampleSectionProps = {
@@ -114,18 +113,21 @@ export const ExampleSectionComponent: PuckComponent<ExampleSectionProps> = (
   // End text resolution step
 
   return (
-    <Box bg="#FFFFFF">
+    <section className="bg-white">
       {resolvedLogoImage && <Image image={resolvedLogoImage} />}
-      <Box bg="#ffffff28" borderRadius={"16px"}>
-        <Text
-          fontSize={`${props.bannerText.fontSize}px`}
-          color={props.bannerText.fontColor}
-          fontWeight={props.bannerText.fontWeight}
-          textTransform={props.bannerText.textTransform}
+      <div className="rounded-2xl bg-white/15">
+        <p
+          style={{
+            fontSize: `${props.bannerText.fontSize}px`,
+            color: props.bannerText.fontColor,
+            fontWeight: props.bannerText.fontWeight,
+            textTransform: props.bannerText.textTransform,
+          }}
+          className="m-0"
         >
           {resolvedBannerText}
-        </Text>
-      </Box>
+        </p>
+      </div>
       <Link
         cta={{
           link: props.cta.link,
@@ -134,7 +136,7 @@ export const ExampleSectionComponent: PuckComponent<ExampleSectionProps> = (
       >
         {props.cta.label}
       </Link>
-    </Box>
+    </section>
   );
 };
 
