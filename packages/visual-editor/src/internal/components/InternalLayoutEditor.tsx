@@ -44,6 +44,19 @@ const usePuck = createUsePuck();
 const blocks = blocksPlugin();
 const outline = outlinePlugin();
 
+const getLocatorStateSnapshot = (data: Data | undefined) =>
+  data?.content
+    ?.filter((item) => item?.type === "Locator")
+    .map((item, index) => ({
+      index,
+      locationStyleEntityTypes:
+        item?.props?.locationStyles?.map((style: any) => style?.entityType) ??
+        [],
+      resultCardEntityTypes:
+        item?.props?.resultCard?.map((card: any) => card?.props?.entityType) ??
+        [],
+    })) ?? [];
+
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
   type: "custom" as const,
@@ -283,10 +296,19 @@ export const InternalLayoutEditor = ({
           const resolvedData = await resolveAllData(appState.data, config, {
             streamDocument,
           });
+          const locatorStateBefore = getLocatorStateSnapshot(appState.data);
+          const locatorStateAfter = getLocatorStateSnapshot(resolvedData);
+          const deepEqualResult = isDeepEqual(appState.data, resolvedData);
+          console.log("DEBUG reloadDataOnDocumentChange compare:", {
+            deepEqualResult,
+            sameReference: appState.data === resolvedData,
+            locatorStateBefore,
+            locatorStateAfter,
+          });
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
 
-          if (isDeepEqual(appState.data, resolvedData)) {
+          if (deepEqualResult) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
             );
