@@ -13,6 +13,7 @@ const LOCATOR_ENTITY_TYPES = [
   "restaurant",
   "hotel",
   "financialProfessional",
+  "atm",
 ] as const;
 
 export type LocatorEntityType = (typeof LOCATOR_ENTITY_TYPES)[number];
