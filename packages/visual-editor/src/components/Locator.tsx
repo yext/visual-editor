@@ -1098,15 +1098,6 @@ const LocatorInternal = ({
     () => (locationStyles ?? []).map((style) => style.entityType),
     [locationStyles]
   );
-  const providedResultCardEntityTypes = React.useMemo(
-    () => (resultCardConfigs ?? []).map((card) => card.props?.entityType),
-    [resultCardConfigs]
-  );
-  const searchResultEntityTypes = useSearchState((state) =>
-    (state.vertical.results ?? [])
-      .map((result) => result.entityType)
-      .filter((value): value is string => typeof value === "string")
-  );
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1333,13 +1324,9 @@ const LocatorInternal = ({
       if (existingConfig) {
         return existingConfig.props;
       }
-      console.warn("DEBUG getResultCardProps fallback to default:", {
-        requestedEntityType: entityType,
-        availableEntityTypes: providedResultCardEntityTypes,
-      });
       return DEFAULT_LOCATOR_RESULT_CARD_PROPS;
     },
-    [providedResultCardEntityTypes, resultCardConfigs]
+    [resultCardConfigs]
   );
 
   const CardComponent = React.useCallback(
@@ -1398,17 +1385,13 @@ const LocatorInternal = ({
       entityTypeSourceMap,
       entityTypes,
       providedLocationStyleEntityTypes,
-      providedResultCardEntityTypes,
       locationStylesConfigKeys: Object.keys(locationStylesConfig),
-      searchResultEntityTypes,
     });
   }, [
     entityTypeSourceMap,
     entityTypes,
     providedLocationStyleEntityTypes,
-    providedResultCardEntityTypes,
     locationStylesConfig,
-    searchResultEntityTypes,
   ]);
 
   const [centerCoords, setCenterCoords] = React.useState<
@@ -2027,6 +2010,14 @@ const LocatorMapPin = <T,>(props: LocatorMapPinProps<T>) => {
   const entityLocationStyle = entityType
     ? locationStyleConfig?.[entityType]
     : undefined;
+  React.useEffect(() => {
+    console.log("DEBUG LocatorMapPin mapping:", {
+      resultId: result.id,
+      resultEntityType: entityType,
+      hasStyle: !!entityLocationStyle,
+      availableLocationStyleEntityTypes: Object.keys(locationStyleConfig ?? {}),
+    });
+  }, [entityLocationStyle, entityType, locationStyleConfig, result.id]);
 
   return (
     <MapPinIcon
