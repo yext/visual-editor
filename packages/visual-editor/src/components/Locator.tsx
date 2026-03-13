@@ -974,13 +974,23 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     const shouldReconcileResultCards =
       previousResultCard.length === 0 ||
       !hasSameEntityTypes(previousresultCardEntityTypes);
-
+    console.log("DEBUG entityTypeSourceMap: ", entityTypeSourceMap);
+    console.log("DEBUG entityTypes: ", entityTypes);
+    console.log(
+      "DEBUG shouldReconcileLocationStyles: ",
+      shouldReconcileLocationStyles
+    );
+    console.log(
+      "DEBUG previouslocationStyleEntityTypes: ",
+      previouslocationStyleEntityTypes
+    );
     if (shouldReconcileLocationStyles) {
       const newLocationStyles = entityTypes.map((entityType) => ({
         ...DEFAULT_LOCATION_STYLE,
         ...locationStylesByEntityType.get(entityType),
         entityType,
       }));
+      console.log("DEBUG newLocationStyles: ", newLocationStyles);
       data = setDeep(data, "props.locationStyles", newLocationStyles);
     }
 

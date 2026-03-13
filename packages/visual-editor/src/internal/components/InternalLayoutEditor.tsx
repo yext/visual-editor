@@ -38,19 +38,11 @@ import { useDocument } from "../../hooks/useDocument.tsx";
 import { fieldsOverride } from "../puck/components/FieldsOverride.tsx";
 import { isDeepEqual } from "../../utils/deepEqual.ts";
 import { useErrorContext } from "../../contexts/ErrorContext.tsx";
-import { StreamDocument } from "../../utils/types/StreamDocument.ts";
 
 const devLogger = new DevLogger();
 const usePuck = createUsePuck();
 const blocks = blocksPlugin();
 const outline = outlinePlugin();
-
-export const getDocumentResolveKey = (streamDocument: StreamDocument) =>
-  JSON.stringify({
-    locale: streamDocument?.locale,
-    pageSet: streamDocument?._pageset,
-    locatorSourcePageSets: streamDocument?.__?.locatorSourcePageSets,
-  });
 
 // Advanced Settings link configuration
 const createAdvancedSettingsLink = () => ({
@@ -121,7 +113,6 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
-  const documentResolveKey = getDocumentResolveKey(streamDocument);
   const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   /**
@@ -306,11 +297,11 @@ export const InternalLayoutEditor = ({
         };
 
         resolveData();
-      }, [documentResolveKey, streamDocument]);
+      }, [streamDocument]);
 
       return <>{props.children}</>;
     },
-    [documentResolveKey, streamDocument]
+    [streamDocument]
   );
 
   const puckOverride = React.useCallback(
