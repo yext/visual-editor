@@ -314,11 +314,9 @@ export const InternalLayoutEditor = ({
 
           if (deepEqualResult) {
             devLogger.log(
-              "reloadDataOnDocumentChange - no layout changes detected"
+              "reloadDataOnDocumentChange - forcing setData due to document-triggered resolve"
             );
-            return;
           }
-
           dispatch({ type: "setData", data: resolvedData });
         };
 
