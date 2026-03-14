@@ -292,10 +292,6 @@ export const InternalLayoutEditor = ({
             typeof structuredClone === "function"
               ? structuredClone(appState.data)
               : JSON.parse(JSON.stringify(appState.data));
-
-          const resolvedData = await resolveAllData(dataSnapshot, config, {
-            streamDocument,
-          });
           const getLocatorLocationStyleTypes = (data: Data | undefined) =>
             data?.content
               ?.filter((item) => item?.type === "Locator")
@@ -306,6 +302,10 @@ export const InternalLayoutEditor = ({
                   ) ?? []
               ) ?? [];
           const beforeTypes = getLocatorLocationStyleTypes(dataSnapshot);
+
+          const resolvedData = await resolveAllData(dataSnapshot, config, {
+            streamDocument,
+          });
           const afterTypes = getLocatorLocationStyleTypes(resolvedData);
           const deepEqualResult = isDeepEqual(dataSnapshot, resolvedData);
           console.log("DEBUG reloadDataOnDocumentChange data compare:", {
