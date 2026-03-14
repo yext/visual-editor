@@ -113,10 +113,6 @@ export const InternalLayoutEditor = ({
   const historyIndex = useRef<number>(0);
   const { i18n } = usePlatformTranslation();
   const streamDocument = useDocument();
-  const documentResolvePageSet = streamDocument?._pageset;
-  const documentResolveLocatorSourcePageSets =
-    streamDocument?.__?.locatorSourcePageSets;
-  const documentResolveLocale = streamDocument?.locale;
   const { errorCount, errorSources, errorDetails } = useErrorContext();
 
   /**
@@ -282,11 +278,6 @@ export const InternalLayoutEditor = ({
       React.useEffect(() => {
         const resolveData = async () => {
           devLogger.logFunc("reloadDataOnDocumentChange");
-          console.log("DEBUG reloadDataOnDocumentChange trigger snapshot:", {
-            locale: documentResolveLocale,
-            pageSet: documentResolvePageSet,
-            locatorSourcePageSets: documentResolveLocatorSourcePageSets,
-          });
           const { appState, config, dispatch } = getPuck();
           const dataSnapshot: Data = structuredClone(appState.data);
           const getLocatorLocationStyleTypes = (data: Data | undefined) =>
@@ -321,21 +312,11 @@ export const InternalLayoutEditor = ({
         };
 
         resolveData();
-      }, [
-        streamDocument,
-        documentResolvePageSet,
-        documentResolveLocatorSourcePageSets,
-        documentResolveLocale,
-      ]);
+      }, [streamDocument]);
 
       return <>{props.children}</>;
     },
-    [
-      streamDocument,
-      documentResolvePageSet,
-      documentResolveLocatorSourcePageSets,
-      documentResolveLocale,
-    ]
+    [streamDocument]
   );
 
   const puckOverride = React.useCallback(

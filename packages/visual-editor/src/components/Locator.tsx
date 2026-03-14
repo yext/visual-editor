@@ -974,6 +974,7 @@ export const LocatorComponent: ComponentConfig<{ props: LocatorProps }> = {
     const shouldReconcileResultCards =
       previousResultCard.length === 0 ||
       !hasSameEntityTypes(previousresultCardEntityTypes);
+
     if (shouldReconcileLocationStyles) {
       const newLocationStyles = entityTypes.map((entityType) => ({
         ...DEFAULT_LOCATION_STYLE,
@@ -1332,22 +1333,24 @@ const LocatorInternal = ({
   const [userLocationRetrieved, setUserLocationRetrieved] =
     React.useState<boolean>(false);
 
-  const locationStylesConfig: Record<
-    string,
-    { color?: BackgroundStyle; icon?: string }
-  > = {};
-  (locationStyles ?? []).forEach((locationStyle) => {
-    const entityType = locationStyle.entityType;
-    if (!entityType) return;
-    const iconValue =
-      locationStyle.pinIcon?.type === "icon"
-        ? locationStyle.pinIcon.iconName
-        : undefined;
-    locationStylesConfig[entityType] = {
-      color: locationStyle.pinColor,
-      icon: typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
-    };
-  });
+  const locationStylesConfig = React.useMemo(() => {
+    const config: Record<string, { color?: BackgroundStyle; icon?: string }> =
+      {};
+    (locationStyles ?? []).forEach((locationStyle) => {
+      const entityType = locationStyle.entityType;
+      if (!entityType) return;
+      const iconValue =
+        locationStyle.pinIcon?.type === "icon"
+          ? locationStyle.pinIcon.iconName
+          : undefined;
+      config[entityType] = {
+        color: locationStyle.pinColor,
+        icon:
+          typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
+      };
+    });
+    return config;
+  }, [locationStyles]);
 
   const [centerCoords, setCenterCoords] = React.useState<
     [number, number] | undefined
