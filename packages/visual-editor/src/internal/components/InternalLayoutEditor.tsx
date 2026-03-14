@@ -307,7 +307,7 @@ export const InternalLayoutEditor = ({
             streamDocument,
           });
           const afterTypes = getLocatorLocationStyleTypes(resolvedData);
-          const deepEqualResult = isDeepEqual(dataSnapshot, resolvedData);
+          const deepEqualResult = isDeepEqual(appState.data, resolvedData);
           console.log("DEBUG reloadDataOnDocumentChange data compare:", {
             deepEqualResult,
             beforeTypes,
