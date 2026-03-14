@@ -288,8 +288,12 @@ export const InternalLayoutEditor = ({
             locatorSourcePageSets: documentResolveLocatorSourcePageSets,
           });
           const { appState, config, dispatch } = getPuck();
+          const dataSnapshot: Data =
+            typeof structuredClone === "function"
+              ? structuredClone(appState.data)
+              : JSON.parse(JSON.stringify(appState.data));
 
-          const resolvedData = await resolveAllData(appState.data, config, {
+          const resolvedData = await resolveAllData(dataSnapshot, config, {
             streamDocument,
           });
           const getLocatorLocationStyleTypes = (data: Data | undefined) =>
@@ -301,9 +305,9 @@ export const InternalLayoutEditor = ({
                     (style: { entityType?: string }) => style?.entityType
                   ) ?? []
               ) ?? [];
-          const beforeTypes = getLocatorLocationStyleTypes(appState.data);
+          const beforeTypes = getLocatorLocationStyleTypes(dataSnapshot);
           const afterTypes = getLocatorLocationStyleTypes(resolvedData);
-          const deepEqualResult = isDeepEqual(appState.data, resolvedData);
+          const deepEqualResult = isDeepEqual(dataSnapshot, resolvedData);
           console.log("DEBUG reloadDataOnDocumentChange data compare:", {
             deepEqualResult,
             beforeTypes,
@@ -314,8 +318,9 @@ export const InternalLayoutEditor = ({
 
           if (deepEqualResult) {
             devLogger.log(
-              "reloadDataOnDocumentChange - forcing setData due to document-triggered resolve"
+              "reloadDataOnDocumentChange - no layout changes detected"
             );
+            return;
           }
           dispatch({ type: "setData", data: resolvedData });
         };

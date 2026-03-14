@@ -1069,28 +1069,6 @@ const LocatorInternal = ({
   const entityTypeSourceMap = getLocatorEntityTypeSourceMap(streamDocument);
   const entityTypes =
     Object.keys(entityTypeSourceMap).filter(isLocatorEntityType);
-  const normalizedLocationStyles = React.useMemo(() => {
-    const currentLocationStyles = locationStyles ?? [];
-    const hasSameEntityTypes =
-      currentLocationStyles.length === entityTypes.length &&
-      entityTypes.every((entityType) =>
-        currentLocationStyles.some((item) => item.entityType === entityType)
-      );
-    if (hasSameEntityTypes) {
-      return currentLocationStyles;
-    }
-
-    const locationStylesByEntityType = new globalThis.Map(
-      currentLocationStyles
-        .filter((item) => !!item.entityType)
-        .map((item) => [item.entityType, item] as const)
-    );
-    return entityTypes.map((entityType) => ({
-      ...DEFAULT_LOCATION_STYLE,
-      ...locationStylesByEntityType.get(entityType),
-      entityType,
-    }));
-  }, [entityTypes, locationStyles]);
   const resultCount = useSearchState(
     (state) => state.vertical.resultsCount || 0
   );
@@ -1358,12 +1336,11 @@ const LocatorInternal = ({
     string,
     { color?: BackgroundStyle; icon?: string }
   > = {};
-  normalizedLocationStyles.forEach((locationStyle) => {
+  (locationStyles ?? []).forEach((locationStyle) => {
     const entityType = locationStyle.entityType;
     if (!entityType) return;
     const iconValue =
-      locationStyle.pinIcon?.type === "icon" &&
-      "iconName" in locationStyle.pinIcon
+      locationStyle.pinIcon?.type === "icon"
         ? locationStyle.pinIcon.iconName
         : undefined;
     locationStylesConfig[entityType] = {
@@ -1371,24 +1348,6 @@ const LocatorInternal = ({
       icon: typeof iconValue === "string" ? makiIconMap[iconValue] : undefined,
     };
   });
-
-  React.useEffect(() => {
-    console.log("DEBUG LocatorInternal location styles snapshot:", {
-      entityTypes,
-      providedLocationStyleEntityTypes: (locationStyles ?? []).map(
-        (style) => style.entityType
-      ),
-      normalizedLocationStyleEntityTypes: normalizedLocationStyles.map(
-        (style) => style.entityType
-      ),
-      locationStylesConfigKeys: Object.keys(locationStylesConfig),
-    });
-  }, [
-    entityTypes,
-    locationStyles,
-    locationStylesConfig,
-    normalizedLocationStyles,
-  ]);
 
   const [centerCoords, setCenterCoords] = React.useState<
     [number, number] | undefined
