@@ -288,10 +288,7 @@ export const InternalLayoutEditor = ({
             locatorSourcePageSets: documentResolveLocatorSourcePageSets,
           });
           const { appState, config, dispatch } = getPuck();
-          const dataSnapshot: Data =
-            typeof structuredClone === "function"
-              ? structuredClone(appState.data)
-              : JSON.parse(JSON.stringify(appState.data));
+          const dataSnapshot: Data = structuredClone(appState.data);
           const getLocatorLocationStyleTypes = (data: Data | undefined) =>
             data?.content
               ?.filter((item) => item?.type === "Locator")
@@ -301,17 +298,15 @@ export const InternalLayoutEditor = ({
                     (style: { entityType?: string }) => style?.entityType
                   ) ?? []
               ) ?? [];
-          const beforeTypes = getLocatorLocationStyleTypes(dataSnapshot);
 
-          const resolvedData = await resolveAllData(dataSnapshot, config, {
+          const resolvedData = await resolveAllData(appState.data, config, {
             streamDocument,
           });
-          const afterTypes = getLocatorLocationStyleTypes(resolvedData);
-          const deepEqualResult = isDeepEqual(appState.data, resolvedData);
+          const deepEqualResult = isDeepEqual(dataSnapshot, resolvedData);
           console.log("DEBUG reloadDataOnDocumentChange data compare:", {
             deepEqualResult,
-            beforeTypes,
-            afterTypes,
+            before: getLocatorLocationStyleTypes(dataSnapshot),
+            after: getLocatorLocationStyleTypes(resolvedData),
           });
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
