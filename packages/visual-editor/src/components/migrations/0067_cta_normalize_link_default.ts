@@ -1,16 +1,18 @@
 import { Migration } from "../../utils/migrate.ts";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 const applyNormalizeLinkDefault = (value: any) => {
   if (!value || typeof value !== "object") {
     return value;
   }
 
-  const shouldNormalizeByDefault =
-    value.linkType !== "Email" && value.linkType !== "Phone";
+  const shouldNormalizeByDefault = !isNonNormalizableLinkType(value.linkType);
 
   return {
     ...value,
-    normalizeLink: value.normalizeLink ?? shouldNormalizeByDefault,
+    normalizeLink: shouldNormalizeByDefault
+      ? (value.normalizeLink ?? true)
+      : false,
   };
 };
 
@@ -56,13 +58,15 @@ const applyCtaNormalizeLinkDefault = (
   const shouldNormalizeByDefault =
     actionType === "button"
       ? false
-      : constantCta?.linkType !== "Email" && constantCta?.linkType !== "Phone";
+      : !isNonNormalizableLinkType(constantCta?.linkType);
 
   return {
     ...props,
     data: {
       ...data,
-      normalizeLink: data.normalizeLink ?? shouldNormalizeByDefault,
+      normalizeLink: shouldNormalizeByDefault
+        ? (data.normalizeLink ?? true)
+        : false,
     },
   };
 };

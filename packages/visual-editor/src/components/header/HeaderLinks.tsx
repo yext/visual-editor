@@ -26,6 +26,7 @@ import {
 import { getHeaderViewport } from "./viewport.ts";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { BodyProps } from "../atoms/body.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 export type HeaderLinksProps = {
   data: {
@@ -287,7 +288,11 @@ const HeaderLinksComponent: PuckComponent<HeaderLinksProps> = ({
       label={resolveComponentData(item.label, i18n.language, streamDocument)}
       linkType={item.linkType}
       link={resolveComponentData(item.link, i18n.language, streamDocument)}
-      normalizeLink={item.normalizeLink ?? true}
+      normalizeLink={
+        isNonNormalizableLinkType(item.linkType)
+          ? false
+          : (item.normalizeLink ?? true)
+      }
       className={`${justifyClass} ${weightClass} ${sizeClass} w-full text-wrap break-words`}
     />
   );
@@ -369,6 +374,24 @@ export const HeaderLinks: ComponentConfig<{ props: HeaderLinksProps }> = {
       updatedFields,
       "data.objectFields.collapsedLinks.visible",
       params.parent?.type === "PrimaryHeaderSlot"
+    );
+
+    updatedFields = setDeep(
+      updatedFields,
+      "data.objectFields.links.arrayFields.normalizeLink.visible",
+      !data.props.data.links?.length ||
+        data.props.data.links.some(
+          (link) => !isNonNormalizableLinkType(link?.linkType)
+        )
+    );
+
+    updatedFields = setDeep(
+      updatedFields,
+      "data.objectFields.collapsedLinks.arrayFields.normalizeLink.visible",
+      !data.props.data.collapsedLinks?.length ||
+        data.props.data.collapsedLinks.some(
+          (link) => !isNonNormalizableLinkType(link?.linkType)
+        )
     );
 
     return updatedFields;

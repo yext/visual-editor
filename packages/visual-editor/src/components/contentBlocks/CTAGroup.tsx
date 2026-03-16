@@ -13,6 +13,7 @@ import {
 } from "../../internal/puck/constant-value-fields/EnhancedCallToAction.tsx";
 import { CTAVariant } from "../atoms/cta.tsx";
 import { CTAWrapperProps } from "./CtaWrapper.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 // TODO: re-enable CTA Group
 
@@ -159,6 +160,23 @@ const CTAGroupComponent: PuckComponent<CTAGroupProps> = ({ buttons }) => {
 export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   label: msg("components.ctaGroup", "CTA Group"),
   fields: ctaGroupFields,
+  resolveFields: (data) => {
+    let updatedFields = ctaGroupFields;
+    const shouldShowNormalizeLink = !data.props.buttons?.length
+      ? true
+      : data.props.buttons.some((button) => {
+          const linkType = button.entityField.constantValueEnabled
+            ? button.entityField.constantValue?.linkType
+            : undefined;
+
+          return !isNonNormalizableLinkType(linkType);
+        });
+
+    updatedFields.buttons.arrayFields.normalizeLink.visible =
+      shouldShowNormalizeLink;
+
+    return updatedFields;
+  },
   defaultProps: {
     buttons: [defaultButton, defaultButton],
   },

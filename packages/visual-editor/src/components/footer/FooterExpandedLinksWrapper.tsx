@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ComponentConfig, PuckComponent } from "@puckeditor/core";
+import { ComponentConfig, PuckComponent, setDeep } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { TranslatableString, TranslatableCTA } from "../../types/types.ts";
@@ -14,6 +14,7 @@ import { useBackground } from "../../hooks/useBackground.tsx";
 import { Body } from "../atoms/body.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 const defaultSection = {
   label: { defaultValue: "Footer Label" },
@@ -42,11 +43,11 @@ const footerExpandedLinksWrapperFields = {
                     { label: msg("fields.options.url", "URL"), value: "URL" },
                     {
                       label: msg("fields.options.phone", "Phone"),
-                      value: "Phone",
+                      value: "PHONE",
                     },
                     {
                       label: msg("fields.options.email", "Email"),
-                      value: "Email",
+                      value: "EMAIL",
                     },
                   ],
                 }),
@@ -116,6 +117,19 @@ export interface FooterExpandedLinksWrapperProps {
   };
 }
 
+const shouldShowNormalizeLinkField = (
+  sections?: FooterExpandedLinksWrapperProps["data"]["sections"]
+) => {
+  return (
+    !sections?.length ||
+    sections.some(
+      (section) =>
+        !section.links?.length ||
+        section.links.some((link) => !isNonNormalizableLinkType(link?.linkType))
+    )
+  );
+};
+
 const FooterExpandedLinksWrapperInternal: PuckComponent<
   FooterExpandedLinksWrapperProps
 > = (props) => {
@@ -168,9 +182,9 @@ const FooterExpandedLinksWrapperInternal: PuckComponent<
                     linkType={linkData.linkType}
                     link={link}
                     normalizeLink={
-                      linkData.linkType === "URL"
-                        ? (linkData.normalizeLink ?? true)
-                        : false
+                      isNonNormalizableLinkType(linkData.linkType)
+                        ? false
+                        : (linkData.normalizeLink ?? true)
                     }
                     className="justify-center md:justify-start block break-words whitespace-normal"
                   />
@@ -189,6 +203,12 @@ export const FooterExpandedLinksWrapper: ComponentConfig<{
 }> = {
   label: msg("components.expandedLinks", "Expanded Links"),
   fields: footerExpandedLinksWrapperFields,
+  resolveFields: (data) =>
+    setDeep(
+      footerExpandedLinksWrapperFields,
+      "data.objectFields.sections.arrayFields.links.arrayFields.normalizeLink.visible",
+      shouldShowNormalizeLinkField(data.props.data.sections)
+    ),
   defaultProps: {
     data: {
       sections: [

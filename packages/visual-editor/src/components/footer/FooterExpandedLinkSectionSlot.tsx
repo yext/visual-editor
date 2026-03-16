@@ -1,5 +1,10 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -12,6 +17,7 @@ import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 export interface FooterExpandedLinkSectionSlotProps {
   data: {
@@ -65,9 +71,9 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
                   linkType={linkData.linkType}
                   link={link}
                   normalizeLink={
-                    linkData.linkType === "URL"
-                      ? (linkData.normalizeLink ?? true)
-                      : false
+                    isNonNormalizableLinkType(linkData.linkType)
+                      ? false
+                      : (linkData.normalizeLink ?? true)
                   }
                   className="justify-center md:justify-start block break-words whitespace-normal"
                 />
@@ -91,6 +97,13 @@ const defaultFooterExpandedLinkSectionProps: FooterExpandedLinkSectionSlotProps 
     },
   };
 
+const shouldShowNormalizeLinkField = (links?: TranslatableCTA[]) => {
+  return (
+    !links?.length ||
+    links.some((link) => !isNonNormalizableLinkType(link?.linkType))
+  );
+};
+
 const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotProps> =
   {
     data: YextField(msg("fields.data", "Data"), {
@@ -107,8 +120,8 @@ const footerExpandedLinkSectionSlotFields: Fields<FooterExpandedLinkSectionSlotP
               type: "radio",
               options: [
                 { label: msg("fields.options.url", "URL"), value: "URL" },
-                { label: msg("fields.options.phone", "Phone"), value: "Phone" },
-                { label: msg("fields.options.email", "Email"), value: "Email" },
+                { label: msg("fields.options.phone", "Phone"), value: "PHONE" },
+                { label: msg("fields.options.email", "Email"), value: "EMAIL" },
               ],
             }),
             label: YextField(msg("fields.label", "Label"), {
@@ -165,6 +178,12 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
     "Expanded Link Section"
   ),
   fields: footerExpandedLinkSectionSlotFields,
+  resolveFields: (data) =>
+    setDeep(
+      footerExpandedLinkSectionSlotFields,
+      "data.objectFields.links.arrayFields.normalizeLink.visible",
+      shouldShowNormalizeLinkField(data.props.data.links)
+    ),
   defaultProps: defaultFooterExpandedLinkSectionProps,
   render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
 };
