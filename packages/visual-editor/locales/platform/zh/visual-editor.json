@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "在 {{serviceName}} 上下载",
   "ariaLabelGalaxyStore": "在 {{serviceName}} 上可用",
   "ariaLabelGooglePlay": "在 {{serviceName}} 上获取",
+  "atms": "自动取款机",
   "back": "后退",
   "base": "基础",
   "basicSelectorNoOptionsLabel": "没有可用的选项",
@@ -151,6 +152,7 @@
   "enableCookies": "启用 Cookie",
   "entityTypeField": "{{entityType}}字段",
   "event": "事件",
+  "events": "活动",
   "expandedMenu": "扩展菜单",
   "failedToCopyLayout": "复制布局失败。",
   "failedToPasteComponentInvalidData": "粘贴失败：组件数据无效。",
@@ -569,6 +571,7 @@
   "product": "产品",
   "promoBanner": "促销横幅",
   "promoMedia": "促销媒体",
+  "providerFacilities": "服务提供商设施",
   "publishBlocked": {
     "deploymentFailed": "由于最新部署失败，发布被禁用。请修复问题并重试",
     "deploymentInactive": "由于部署处于非活动状态，发布被禁用",

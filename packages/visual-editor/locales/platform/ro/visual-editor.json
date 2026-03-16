@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Descărcați de pe {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponibil pe {{serviceName}}",
   "ariaLabelGooglePlay": "Obțineți-l pe {{serviceName}}",
+  "atms": "Bancomate",
   "back": "Spate",
   "base": "Bază",
   "basicSelectorNoOptionsLabel": "Nu există opțiuni disponibile",
@@ -151,6 +152,7 @@
   "enableCookies": "Activați cookie-urile",
   "entityTypeField": "câmp {{entityType}}",
   "event": "Eveniment",
+  "events": "Evenimente",
   "expandedMenu": "Meniu extins",
   "failedToCopyLayout": "Nu s-a putut copia aspectul.",
   "failedToPasteComponentInvalidData": "Lipirea eșuată: date ale componentelor nevalide.",
@@ -574,6 +576,7 @@
   "product": "Produs",
   "promoBanner": "Banner promoțional",
   "promoMedia": "Media promo",
+  "providerFacilities": "Unități ale furnizorului",
   "publishBlocked": {
     "deploymentFailed": "Publicarea este dezactivată deoarece cea mai recentă implementare a eșuat. Remediați problemele și încercați din nou",
     "deploymentInactive": "Publicarea este dezactivată deoarece implementarea este inactivă",
