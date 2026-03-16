@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Lataa palvelusta {{serviceName}}",
   "ariaLabelGalaxyStore": "Saatavilla palvelussa {{serviceName}}",
   "ariaLabelGooglePlay": "Hanki se palvelusta {{serviceName}}",
+  "atms": "Pankkiautomaatit",
   "back": "Takaisin",
   "base": "Pohja",
   "basicSelectorNoOptionsLabel": "Vaihtoehtoja ei ole käytettävissä",
@@ -151,6 +152,7 @@
   "enableCookies": "Ota evästeet käyttöön",
   "entityTypeField": "{{entityType}}kenttä",
   "event": "Tapahtuma",
+  "events": "Tapahtumat",
   "expandedMenu": "Laajennettu valikko",
   "failedToCopyLayout": "Asettelun kopioiminen epäonnistui.",
   "failedToPasteComponentInvalidData": "Liitäminen epäonnistui: virheelliset komponenttitiedot.",
@@ -572,6 +574,7 @@
   "product": "Tuote",
   "promoBanner": "Promo-banneri",
   "promoMedia": "Promootiomedia",
+  "providerFacilities": "Palveluntarjoajan toimipaikat",
   "publishBlocked": {
     "deploymentFailed": "Julkaiseminen on poistettu käytöstä, koska viimeisin käyttöönotto epäonnistui. Korjaa ongelmat ja yritä uudelleen",
     "deploymentInactive": "Julkaiseminen on poistettu käytöstä, koska käyttöönotto ei ole aktiivinen",

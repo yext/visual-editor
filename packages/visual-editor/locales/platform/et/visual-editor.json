@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Laadige alla teenusest {{serviceName}}",
   "ariaLabelGalaxyStore": "Saadaval teenuses {{serviceName}}",
   "ariaLabelGooglePlay": "Hankige see teenusest {{serviceName}}",
+  "atms": "Sularahaautomaadid",
   "back": "Tagurpidi",
   "base": "Alus",
   "basicSelectorNoOptionsLabel": "Valikuid pole saadaval",
@@ -151,6 +152,7 @@
   "enableCookies": "Luba küpsised",
   "entityTypeField": "{{entityType}} väli",
   "event": "Sündmus",
+  "events": "Sündmused",
   "expandedMenu": "Laiendatud menüü",
   "failedToCopyLayout": "Paigutuse kopeerimine ebaõnnestus.",
   "failedToPasteComponentInvalidData": "Kleepimine ebaõnnestus: komponendi andmed on kehtetud.",
@@ -572,6 +574,7 @@
   "product": "Toode",
   "promoBanner": "Reklaamibänner",
   "promoMedia": "Promo meedia",
+  "providerFacilities": "Teenusepakkuja asutused",
   "publishBlocked": {
     "deploymentFailed": "Avaldamine on keelatud, kuna viimane juurutus ebaõnnestus. Parandage probleemid ja proovige uuesti",
     "deploymentInactive": "Avaldamine on keelatud, kuna juurutus on passiivne",

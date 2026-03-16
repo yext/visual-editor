@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Letöltés a(z) {{serviceName}} webhelyről",
   "ariaLabelGalaxyStore": "Elérhető itt: {{serviceName}}",
   "ariaLabelGooglePlay": "Szerezd meg a(z) {{serviceName}} webhelyen",
+  "atms": "ATM-ek",
   "back": "Vissza",
   "base": "Alap",
   "basicSelectorNoOptionsLabel": "Nincsenek lehetőségek",
@@ -151,6 +152,7 @@
   "enableCookies": "Cookie-k engedélyezése",
   "entityTypeField": "{{entityType}} mező",
   "event": "Esemény",
+  "events": "Események",
   "expandedMenu": "Kibővített menü",
   "failedToCopyLayout": "Nem sikerült másolni az elrendezést.",
   "failedToPasteComponentInvalidData": "Nem sikerült beilleszteni: Érvénytelen összetevőadatok.",
@@ -572,6 +574,7 @@
   "product": "Termék",
   "promoBanner": "Promó banner",
   "promoMedia": "Promóciós média",
+  "providerFacilities": "Szolgáltatói létesítmények",
   "publishBlocked": {
     "deploymentFailed": "A közzététel le van tiltva, mert a legutóbbi telepítés meghiúsult. Kérjük, javítsa a problémákat, és próbálja újra",
     "deploymentInactive": "A közzététel le van tiltva, mert a központi telepítés inaktív",

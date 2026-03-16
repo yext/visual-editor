@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "{{serviceName}} でダウンロード",
   "ariaLabelGalaxyStore": "{{serviceName}} で利用可能",
   "ariaLabelGooglePlay": "{{serviceName}} で入手",
+  "atms": "ATM",
   "back": "戻る",
   "base": "ベース",
   "basicSelectorNoOptionsLabel": "利用可能なオプションはありません",
@@ -151,6 +152,7 @@
   "enableCookies": "Cookieを有効にする",
   "entityTypeField": "{{entityType}}フィールド",
   "event": "イベント",
+  "events": "イベント",
   "expandedMenu": "拡張メニュー",
   "failedToCopyLayout": "レイアウトのコピーに失敗しました。",
   "failedToPasteComponentInvalidData": "貼り付けに失敗しました: コンポーネント データが無効です。",
@@ -572,6 +574,7 @@
   "product": "製品",
   "promoBanner": "プロモーションバナー",
   "promoMedia": "プロモーションメディア",
+  "providerFacilities": "プロバイダー施設",
   "publishBlocked": {
     "deploymentFailed": "最新のデプロイメントが失敗したため、公開は無効になっています。問題を修正して再試行してください",
     "deploymentInactive": "デプロイメントが非アクティブであるため、公開は無効になっています",

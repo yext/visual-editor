@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Last ned på {{serviceName}}",
   "ariaLabelGalaxyStore": "Tilgjengelig på {{serviceName}}",
   "ariaLabelGooglePlay": "Få den på {{serviceName}}",
+  "atms": "Minibanker",
   "back": "Tilbake",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Ingen alternativer tilgjengelig",
@@ -151,6 +152,7 @@
   "enableCookies": "Aktiver informasjonskapsler",
   "entityTypeField": "{{entityType}} felt",
   "event": "Hendelse",
+  "events": "Hendelser",
   "expandedMenu": "Utvidet meny",
   "failedToCopyLayout": "Kunne ikke kopiere layout.",
   "failedToPasteComponentInvalidData": "Kunne ikke lime inn: Ugyldige komponentdata.",
@@ -572,6 +574,7 @@
   "product": "Produkt",
   "promoBanner": "Kampanjebanner",
   "promoMedia": "Promo Media",
+  "providerFacilities": "Leverandørfasiliteter",
   "publishBlocked": {
     "deploymentFailed": "Publisering er deaktivert fordi den siste distribusjonen mislyktes. Løs problemene og prøv igjen",
     "deploymentInactive": "Publisering er deaktivert fordi distribusjonen er inaktiv",

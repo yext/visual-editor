@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Download på {{serviceName}}",
   "ariaLabelGalaxyStore": "Tilgængelig på {{serviceName}}",
   "ariaLabelGooglePlay": "Hent det på {{serviceName}}",
+  "atms": "Hæveautomater",
   "back": "Tilbage",
   "base": "Basis",
   "basicSelectorNoOptionsLabel": "Ingen muligheder tilgængelige",
@@ -151,6 +152,7 @@
   "enableCookies": "Aktiver cookies",
   "entityTypeField": "{{entityType}} felt",
   "event": "Tilfælde",
+  "events": "Begivenheder",
   "expandedMenu": "Udvidet menu",
   "failedToCopyLayout": "Kunne ikke kopiere layout.",
   "failedToPasteComponentInvalidData": "Kunne ikke indsætte: Ugyldige komponentdata.",
@@ -572,6 +574,7 @@
   "product": "Produkt",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo Media",
+  "providerFacilities": "Udbyderfaciliteter",
   "publishBlocked": {
     "deploymentFailed": "Udgiv er deaktiveret, fordi den seneste implementering mislykkedes. Løs problemerne, og prøv igen",
     "deploymentInactive": "Udgiv er deaktiveret, fordi implementeringen er inaktiv",

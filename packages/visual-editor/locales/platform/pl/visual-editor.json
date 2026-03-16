@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Pobierz na {{serviceName}}",
   "ariaLabelGalaxyStore": "Dostępne w {{serviceName}}",
   "ariaLabelGooglePlay": "Pobierz to na {{serviceName}}",
+  "atms": "Bankomaty",
   "back": "Z powrotem",
   "base": "Baza",
   "basicSelectorNoOptionsLabel": "Brak dostępnych opcji",
@@ -151,6 +152,7 @@
   "enableCookies": "Włącz pliki cookie",
   "entityTypeField": "Pole {{entityType}}",
   "event": "Wydarzenie",
+  "events": "Wydarzenia",
   "expandedMenu": "Rozbudowane menu",
   "failedToCopyLayout": "Nie udało się skopiować układu.",
   "failedToPasteComponentInvalidData": "Nie udało się wkleić: nieprawidłowe dane komponentu.",
@@ -582,6 +584,7 @@
   "product": "Produkt",
   "promoBanner": "Baner promocyjny",
   "promoMedia": "Media promocyjne",
+  "providerFacilities": "Placówki dostawcy",
   "publishBlocked": {
     "deploymentFailed": "Publikowanie jest wyłączone, ponieważ najnowsze wdrożenie nie powiodło się. Rozwiąż problemy i spróbuj ponownie",
     "deploymentInactive": "Publikowanie jest wyłączone, ponieważ wdrożenie jest nieaktywne",

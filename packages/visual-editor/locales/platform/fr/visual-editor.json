@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Télécharger sur le {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponible sur {{serviceName}}",
   "ariaLabelGooglePlay": "Obtenez-le sur {{serviceName}}",
+  "atms": "Distributeurs automatiques",
   "back": "Dos",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Aucune option disponible",
@@ -151,6 +152,7 @@
   "enableCookies": "Activer les cookies",
   "entityTypeField": "Champ de {{entityType}}",
   "event": "Événement",
+  "events": "Événements",
   "expandedMenu": "Menu développé",
   "failedToCopyLayout": "Échec de la copie de la mise en page.",
   "failedToPasteComponentInvalidData": "Échec du collage : données de composant non valides.",
@@ -577,6 +579,7 @@
   "product": "Produit",
   "promoBanner": "Bannière promotionnelle",
   "promoMedia": "Médias promotionnels",
+  "providerFacilities": "Établissements du prestataire",
   "publishBlocked": {
     "deploymentFailed": "La publication est désactivée car le dernier déploiement a échoué. Veuillez résoudre les problèmes et réessayer",
     "deploymentInactive": "La publication est désactivée car le déploiement est inactif",

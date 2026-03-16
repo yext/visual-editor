@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Scarica su {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponibile su {{serviceName}}",
   "ariaLabelGooglePlay": "Ottienilo su {{serviceName}}",
+  "atms": "Bancomat",
   "back": "Indietro",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Nessuna opzione disponibile",
@@ -151,6 +152,7 @@
   "enableCookies": "Abilita i cookie",
   "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
+  "events": "Eventi",
   "expandedMenu": "Menù ampliato",
   "failedToCopyLayout": "Impossibile copiare il layout.",
   "failedToPasteComponentInvalidData": "Impossibile incollare: dati del componente non validi.",
@@ -577,6 +579,7 @@
   "product": "Prodotto",
   "promoBanner": "Striscione promozionale",
   "promoMedia": "Media promozionale",
+  "providerFacilities": "Strutture del fornitore",
   "publishBlocked": {
     "deploymentFailed": "La pubblicazione è disabilitata perché l'ultima distribuzione non è riuscita. Risolvi i problemi e riprova",
     "deploymentInactive": "La pubblicazione è disabilitata perché la distribuzione è inattiva",

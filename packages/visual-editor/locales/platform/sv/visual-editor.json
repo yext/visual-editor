@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Ladda ner på {{serviceName}}",
   "ariaLabelGalaxyStore": "Tillgänglig på {{serviceName}}",
   "ariaLabelGooglePlay": "Skaffa det på {{serviceName}}",
+  "atms": "Bankomater",
   "back": "Tillbaka",
   "base": "Bas",
   "basicSelectorNoOptionsLabel": "Inga alternativ tillgängliga",
@@ -151,6 +152,7 @@
   "enableCookies": "Aktivera cookies",
   "entityTypeField": "{{entityType}} Fältet",
   "event": "Händelse",
+  "events": "Händelser",
   "expandedMenu": "Utökad meny",
   "failedToCopyLayout": "Det gick inte att kopiera layouten.",
   "failedToPasteComponentInvalidData": "Det gick inte att klistra in: Ogiltig komponentdata.",
@@ -572,6 +574,7 @@
   "product": "Produkt",
   "promoBanner": "Kampanjbanner",
   "promoMedia": "Promo media",
+  "providerFacilities": "Leverantörsanläggningar",
   "publishBlocked": {
     "deploymentFailed": "Publicera är inaktiverat eftersom den senaste distributionen misslyckades. Åtgärda problemen och försök igen",
     "deploymentInactive": "Publicera är inaktiverat eftersom distributionen är inaktiv",

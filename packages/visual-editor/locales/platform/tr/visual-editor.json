@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "{{serviceName}} üzerinden indirin",
   "ariaLabelGalaxyStore": "{{serviceName}} üzerinde mevcut",
   "ariaLabelGooglePlay": "{{serviceName}} üzerinden edinin",
+  "atms": "ATMler",
   "back": "Geri",
   "base": "Temel",
   "basicSelectorNoOptionsLabel": "Seçenek yok",
@@ -151,6 +152,7 @@
   "enableCookies": "Çerezleri Etkinleştir",
   "entityTypeField": "{{entityType}} alanı",
   "event": "Etkinlik",
+  "events": "Olaylar",
   "expandedMenu": "Genişletilmiş menü",
   "failedToCopyLayout": "Düzen kopyalanamadı.",
   "failedToPasteComponentInvalidData": "Yapıştırılamadı: Geçersiz bileşen verileri.",
@@ -572,6 +574,7 @@
   "product": "Ürün",
   "promoBanner": "Promosyon Banner'ı",
   "promoMedia": "Promosyon medyası",
+  "providerFacilities": "Sağlayıcı Tesisleri",
   "publishBlocked": {
     "deploymentFailed": "En son dağıtım başarısız olduğundan yayınlama devre dışı bırakıldı. Lütfen sorunları düzeltip tekrar deneyin",
     "deploymentInactive": "Dağıtım etkin olmadığından yayınlama devre dışı bırakıldı",

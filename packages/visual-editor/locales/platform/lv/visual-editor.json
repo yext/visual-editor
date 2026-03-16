@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Lejupielādēt pakalpojumā {{serviceName}}",
   "ariaLabelGalaxyStore": "Pieejams pakalpojumā {{serviceName}}",
   "ariaLabelGooglePlay": "Iegūstiet to pakalpojumā {{serviceName}}",
+  "atms": "Bankomāti",
   "back": "Aizmugure",
   "base": "Bāze",
   "basicSelectorNoOptionsLabel": "Nav pieejamas iespējas",
@@ -151,6 +152,7 @@
   "enableCookies": "Iespējot sīkfailus",
   "entityTypeField": "{{entityType}} lauks",
   "event": "Notikums",
+  "events": "Pasākumi",
   "expandedMenu": "Paplašināta izvēlne",
   "failedToCopyLayout": "Neizdevās kopēt izkārtojumu.",
   "failedToPasteComponentInvalidData": "Neizdevās ielīmēt: nederīgi komponenta dati.",
@@ -575,6 +577,7 @@
   "product": "Produkts",
   "promoBanner": "Reklāmas reklāmkarogs",
   "promoMedia": "Promo Media",
+  "providerFacilities": "Pakalpojumu sniedzēja iestādes",
   "publishBlocked": {
     "deploymentFailed": "Publicēšana ir atspējota, jo pēdējā izvietošana neizdevās. Lūdzu, novērsiet problēmas un mēģiniet vēlreiz",
     "deploymentInactive": "Publicēšana ir atspējota, jo izvietošana ir neaktīva",
