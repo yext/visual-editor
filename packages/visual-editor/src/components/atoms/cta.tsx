@@ -4,10 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, LinkType } from "@yext/pages-components";
 import { Button, ButtonProps } from "./button.js";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
-import {
-  isNonNormalizableLinkType,
-  normalizeLink,
-} from "../../utils/normalizeLink.ts";
+import { normalizeLink } from "../../utils/normalizeLink.ts";
 import { themeManagerCn } from "../../utils/cn.ts";
 import { useBackground } from "../../hooks/useBackground.tsx";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -214,7 +211,8 @@ const useResolvedCtaProps = (props: CTAProps) => {
     !alwaysHideCaret &&
     ctaType !== "presetImage" &&
     variant === "link" &&
-    !isNonNormalizableLinkType(resolvedDynamicProps.linkType);
+    resolvedDynamicProps.linkType !== "EMAIL" &&
+    resolvedDynamicProps.linkType !== "PHONE";
 
   const buttonClassName = themeManagerCn(
     "flex",
