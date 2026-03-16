@@ -25,7 +25,6 @@ import tailwindConfig from "../../tailwind.config";
 import { devTemplateStream } from "../dev.config";
 import React from "react";
 import { SchemaWrapper } from "@yext/pages-components";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { Data, Render } from "@puckeditor/core";
 import * as lzstring from "lz-string";
 
@@ -296,29 +295,27 @@ const Dev: Template<TemplateRenderProps> = (props) => {
         )}
       </div>
       <div>
-        <ChakraProvider value={defaultSystem}>
-          <VisualEditorProvider
-            templateProps={props}
-            entityFields={{ fields: entityFields, displayNames: displayNames }}
-            tailwindConfig={tailwindConfig}
-          >
-            {isPreviewMode ? (
-              <Render
-                config={puckConfig}
-                data={currentPuckData}
-                metadata={{ streamDocument: document }}
-              />
-            ) : (
-              <Editor
-                document={document}
-                componentRegistry={componentRegistry}
-                themeConfig={defaultThemeConfig}
-                localDev={true}
-                forceThemeMode={themeMode}
-              />
-            )}
-          </VisualEditorProvider>
-        </ChakraProvider>
+        <VisualEditorProvider
+          templateProps={props}
+          entityFields={{ fields: entityFields, displayNames: displayNames }}
+          tailwindConfig={tailwindConfig}
+        >
+          {isPreviewMode ? (
+            <Render
+              config={puckConfig}
+              data={currentPuckData}
+              metadata={{ streamDocument: document }}
+            />
+          ) : (
+            <Editor
+              document={document}
+              componentRegistry={componentRegistry}
+              themeConfig={defaultThemeConfig}
+              localDev={true}
+              forceThemeMode={themeMode}
+            />
+          )}
+        </VisualEditorProvider>
       </div>
     </div>
   );

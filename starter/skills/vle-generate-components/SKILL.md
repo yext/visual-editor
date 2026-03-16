@@ -7,9 +7,9 @@ description: Generate Visual Editor components from a reference URL by capturing
 
 ## Overview
 
-This skill generates and validates Puck Components using the @yext/visual-editor, @puckeditor/core, @chakra-ui/react,
-and @yext/pages-components libraries. The goal is to transform a reference page into Puck Components
-using captured HTML, CSS, and screenshot artifacts.
+This skill generates and validates Puck Components using @yext/visual-editor, @puckeditor/core,
+and @yext/pages-components. Generated sections should use plain JSX elements and Tailwind utility classes.
+The goal is to transform a reference page into Puck Components using captured HTML, CSS, and screenshot artifacts.
 
 ## Inputs
 

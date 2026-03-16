@@ -8,7 +8,7 @@ Use this contract for every generated component.
 - Always match font families, font sizes, font colors, font weight, and background colors 1:1 with the source page
 - Always add a Google font equivalent as the fallback for any non-web safe fonts (for example: `'Template Specific Font', 'Open Sans', sans-serif`)
 - Everything needed for each component must be contained in a single file (excluding npm imports)
-- Use Chakra components wherever possible, but do not use the `sx` prop. Verify the installed interface before generation.
+- Use plain JSX elements and Tailwind utility classes for layout and styling.
 
 ## Required Directory Layout
 
@@ -38,8 +38,8 @@ starter/src/registry/<template>/
 
 ## Dependency Rules
 
-- Prefer `@chakra-ui/react`, `@yext/visual-editor`, `@yext/pages-components`, and `@puckeditor/core`.
-- Only use another installed library when Chakra cannot match the required behavior cleanly.
+- Prefer `@yext/visual-editor`, `@yext/pages-components`, and `@puckeditor/core`, plus plain React/JSX and Tailwind classes.
+- Do not introduce another UI library for generated components unless the user explicitly requests it.
 - Do not add or use dependencies outside the existing `package.json`.
 - ALWAYS use `Address`, `HoursTable`, `HoursStatus`, and `Link` from `@yext/pages-components` when rendering
   any address, hours, ctas, or links. However, they MUST be augmented with CSS/classes to match
@@ -72,8 +72,8 @@ In each `starter/src/registry/<template>/components/ExampleSection.tsx`:
 - Hours should always use streamDocument.hours
 - Address should always use streamDocument.address
 - FAQ/Q&A sections should keep interaction behavior such as show/hide.
-- Hero/promo sections should use Chakra-based full-bleed shell wrappers when source parity expects media to reach section edges
-  (for example: outer container horizontal padding `0`, content wrapper `maxW="none"`).
+- Hero/promo sections should use plain JSX full-bleed shell wrappers when source parity expects media to reach section edges
+  (for example: outer container classes like `px-0`, content wrapper classes like `max-w-none`).
 - Call To Action and Links should always pair with actionable href/link/CTA data, not just plain text spans.
 - Render `Link` from `@yext/pages-components` with visible child text or child markup, not as a self-closing element.
 - Headers and Footers:
