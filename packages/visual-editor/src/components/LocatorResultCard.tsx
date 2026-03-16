@@ -1063,6 +1063,8 @@ const ImageSection = (props: {
     );
   }
 
+  console.log("test");
+
   const fieldId = getSelectedFieldId(image.field);
   const imageRecord = parseRecordFromLocation(location, fieldId);
   const imageData = {
