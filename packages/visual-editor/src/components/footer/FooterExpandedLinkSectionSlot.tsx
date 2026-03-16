@@ -1,5 +1,10 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -64,7 +69,11 @@ const FooterExpandedLinkSectionSlotInternal: PuckComponent<
                   label={linkLabel}
                   linkType={linkData.linkType}
                   link={link}
-                  normalizeLink={linkData.normalizeLink ?? true}
+                  normalizeLink={
+                    linkData.linkType === "URL"
+                      ? (linkData.normalizeLink ?? true)
+                      : false
+                  }
                   className="justify-center md:justify-start block break-words whitespace-normal"
                 />
               );
@@ -161,6 +170,14 @@ export const FooterExpandedLinkSectionSlot: ComponentConfig<{
     "Expanded Link Section"
   ),
   fields: footerExpandedLinkSectionSlotFields,
+  resolveFields: (data) =>
+    setDeep(
+      footerExpandedLinkSectionSlotFields,
+      "data.objectFields.links.arrayFields.normalizeLink.visible",
+      !!data.props.data.links?.some(
+        (link: TranslatableCTA) => link.linkType === "URL"
+      )
+    ),
   defaultProps: defaultFooterExpandedLinkSectionProps,
   render: (props) => <FooterExpandedLinkSectionSlotInternal {...props} />,
 };

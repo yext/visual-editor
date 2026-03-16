@@ -1,5 +1,10 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -89,7 +94,11 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
             label={label}
             linkType={linkData.linkType}
             link={link}
-            normalizeLink={linkData.normalizeLink ?? true}
+            normalizeLink={
+              linkData.linkType === "URL"
+                ? (linkData.normalizeLink ?? true)
+                : false
+            }
             className={`justify-center block break-words whitespace-normal`}
           />
         );
@@ -192,6 +201,14 @@ export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
   {
     label: msg("components.footerLinksSlot", "Links"),
     fields: footerLinksSlotFields,
+    resolveFields: (data) =>
+      setDeep(
+        footerLinksSlotFields,
+        "data.objectFields.links.arrayFields.normalizeLink.visible",
+        !!data.props.data.links?.some(
+          (link: TranslatableCTA) => link.linkType === "URL"
+        )
+      ),
     defaultProps: defaultFooterLinkProps,
     render: (props) => <FooterLinksSlotInternal {...props} />,
   };

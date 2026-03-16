@@ -5,9 +5,12 @@ const applyNormalizeLinkDefault = (value: any) => {
     return value;
   }
 
+  const shouldNormalizeByDefault =
+    value.linkType !== "Email" && value.linkType !== "Phone";
+
   return {
     ...value,
-    normalizeLink: value.normalizeLink ?? true,
+    normalizeLink: value.normalizeLink ?? shouldNormalizeByDefault,
   };
 };
 

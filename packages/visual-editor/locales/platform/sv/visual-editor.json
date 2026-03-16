@@ -541,7 +541,7 @@
   "mapRequiresOptIn": "Denna karta kan endast visas om cookies är aktiverade",
   "maxWidthTip": "För optimal innehållsinriktning rekommenderar vi att du ställer in huvud- och sidfotbredden för att matcha eller överskrida sidinnehållsnätet.",
   "metaTitleMissingLocales": "Metatitel saknas för lokal(er): {{locales}}",
-  "mile_zero": "mile",
+  "mile_zero": "mil",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Lägg till HTML för att visa komponent",
