@@ -282,12 +282,7 @@ export const InternalLayoutEditor = ({
           const { appState, config, dispatch } = getPuck();
 
           // Clone Puck data to ensure entity fields get updated on entity selection
-          const cloneStart = performance.now();
           const dataToResolve = clonePuckResolveData(appState.data);
-          const cloneDurationMs = performance.now() - cloneStart;
-          console.info(
-            `[visual-editor] clonePuckResolveData took ${cloneDurationMs.toFixed(2)}ms`
-          );
 
           const resolvedData = await resolveAllData(dataToResolve, config, {
             streamDocument,
