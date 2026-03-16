@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Stáhnout na {{serviceName}}",
   "ariaLabelGalaxyStore": "Dostupné na {{serviceName}}",
   "ariaLabelGooglePlay": "Získejte to na {{serviceName}}",
+  "atms": "Bankomaty",
   "back": "Zadní",
   "base": "Báze",
   "basicSelectorNoOptionsLabel": "Žádné možnosti",
@@ -151,6 +152,7 @@
   "enableCookies": "Povolit soubory cookie",
   "entityTypeField": "{{entityType}} pole",
   "event": "Událost",
+  "events": "Události",
   "expandedMenu": "Rozšířené menu",
   "failedToCopyLayout": "Kopírování rozvržení se nezdařilo.",
   "failedToPasteComponentInvalidData": "Vložení se nezdařilo: Neplatná data komponenty.",
@@ -579,6 +581,7 @@
   "product": "Produkt",
   "promoBanner": "Promo banner",
   "promoMedia": "Promo média",
+  "providerFacilities": "Poskytovatelská zařízení",
   "publishBlocked": {
     "deploymentFailed": "Publikování je zakázáno, protože nejnovější nasazení se nezdařilo. Opravte problémy a zkuste to znovu",
     "deploymentInactive": "Publikování je zakázáno, protože nasazení je neaktivní",

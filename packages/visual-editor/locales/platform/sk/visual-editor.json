@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Stiahnite si na {{serviceName}}",
   "ariaLabelGalaxyStore": "Dostupné na {{serviceName}}",
   "ariaLabelGooglePlay": "Získajte to na {{serviceName}}",
+  "atms": "Bankomaty",
   "back": "Chrbát",
   "base": "Základňa",
   "basicSelectorNoOptionsLabel": "Nie sú k dispozícii žiadne možnosti",
@@ -151,6 +152,7 @@
   "enableCookies": "Povoliť súbory cookie",
   "entityTypeField": "{{entityType}} pole",
   "event": "Udalosť",
+  "events": "Udalosti",
   "expandedMenu": "Rozšírené menu",
   "failedToCopyLayout": "Kopírovanie rozloženia zlyhalo.",
   "failedToPasteComponentInvalidData": "Prilepenie zlyhalo: Neplatné údaje komponentu.",
@@ -579,6 +581,7 @@
   "product": "Produkt",
   "promoBanner": "Propagačný banner",
   "promoMedia": "Propagačné médiá",
+  "providerFacilities": "Zariadenia poskytovateľa",
   "publishBlocked": {
     "deploymentFailed": "Publikovanie je zakázané, pretože najnovšie nasadenie zlyhalo. Opravte problémy a skúste to znova",
     "deploymentInactive": "Publikovanie je zakázané, pretože nasadenie je neaktívne",

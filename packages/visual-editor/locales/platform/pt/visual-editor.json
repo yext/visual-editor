@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Baixe no {{serviceName}}",
   "ariaLabelGalaxyStore": "Disponível em {{serviceName}}",
   "ariaLabelGooglePlay": "Obtenha em {{serviceName}}",
+  "atms": "Caixas eletrônicos",
   "back": "Voltar",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Sem opções disponíveis",
@@ -151,6 +152,7 @@
   "enableCookies": "Habilitar Cookies",
   "entityTypeField": "{{entityType}} campo",
   "event": "Evento",
+  "events": "Eventos",
   "expandedMenu": "Menu expandido",
   "failedToCopyLayout": "Falha ao copiar o layout.",
   "failedToPasteComponentInvalidData": "Falha ao colar: dados de componente inválidos.",
@@ -574,6 +576,7 @@
   "product": "Produto",
   "promoBanner": "Banner promocional",
   "promoMedia": "Mídia promocional",
+  "providerFacilities": "Instalações do prestador",
   "publishBlocked": {
     "deploymentFailed": "A publicação está desabilitada porque a implantação mais recente falhou. Corrija os problemas e tente novamente",
     "deploymentInactive": "A publicação está desabilitada porque a implantação está inativa",

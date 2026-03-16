@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Atsisiųskite iš {{serviceName}}",
   "ariaLabelGalaxyStore": "Galima {{serviceName}}",
   "ariaLabelGooglePlay": "Gaukite jį iš {{serviceName}}",
+  "atms": "Bankomatai",
   "back": "Atgal",
   "base": "Bazė",
   "basicSelectorNoOptionsLabel": "Nėra galimybių",
@@ -151,6 +152,7 @@
   "enableCookies": "Įgalinti slapukus",
   "entityTypeField": "{{entityType}} laukas",
   "event": "Įvykis",
+  "events": "Renginiai",
   "expandedMenu": "Išplėstas meniu",
   "failedToCopyLayout": "Nepavyko nukopijuoti išdėstymo.",
   "failedToPasteComponentInvalidData": "Nepavyko įklijuoti: neteisingi komponento duomenys.",
@@ -579,6 +581,7 @@
   "product": "Produktas",
   "promoBanner": "Reklaminė reklamjuostė",
   "promoMedia": "Promo žiniasklaida",
+  "providerFacilities": "Paslaugų teikėjo įstaigos",
   "publishBlocked": {
     "deploymentFailed": "Paskelbimas išjungtas, nes naujausias diegimas nepavyko. Išspręskite problemas ir bandykite dar kartą",
     "deploymentInactive": "Paskelbimas išjungtas, nes diegimas neaktyvus",
