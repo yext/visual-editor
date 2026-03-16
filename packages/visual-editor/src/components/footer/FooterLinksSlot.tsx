@@ -1,14 +1,14 @@
 import * as React from "react";
 import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
-import { msg } from "../../utils/i18n/platform.ts";
+import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
 import { resolveComponentData } from "../../utils/resolveComponentData.tsx";
 import { CTA } from "../atoms/cta.tsx";
 import { TranslatableCTA } from "../../types/types.ts";
+import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
-import { FooterLinkArrayField } from "./footerLinkEditorField.tsx";
 
 export interface FooterLinksSlotProps {
   data: {
@@ -114,11 +114,59 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
   data: YextField(msg("fields.data", "Data"), {
     type: "object",
     objectFields: {
-      links: FooterLinkArrayField(
-        msg("fields.links", "Links"),
-        msg("fields.label", "Label"),
-        defaultLink
-      ),
+      links: YextField(msg("fields.links", "Links"), {
+        type: "array",
+        arrayFields: {
+          linkType: YextField(msg("fields.linkType", "Link Type"), {
+            type: "radio",
+            options: [
+              { label: msg("fields.options.url", "URL"), value: "URL" },
+              {
+                label: msg("fields.options.phone", "Phone"),
+                value: "Phone",
+              },
+              {
+                label: msg("fields.options.email", "Email"),
+                value: "Email",
+              },
+            ],
+          }),
+          label: YextField(msg("fields.label", "Label"), {
+            type: "translatableString",
+            filter: { types: ["type.string"] },
+          }),
+          link: YextField(msg("fields.link", "Link"), {
+            type: "text",
+          }),
+          normalizeLink: YextField(
+            msg("fields.normalizeLink", "Normalize Link"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+          openInNewTab: YextField(
+            msg("fields.openInNewTab", "Open in new tab"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
+        },
+        defaultItemProps: defaultLink,
+        getItemSummary: (item: any, index?: number) => {
+          const locale = i18nComponentsInstance.language || "en";
+          const label =
+            typeof item.label === "string" ? item.label : item.label?.[locale];
+          return label || pt("link", "Link") + " " + ((index ?? 0) + 1);
+        },
+      }),
     },
   }),
   variant: {
