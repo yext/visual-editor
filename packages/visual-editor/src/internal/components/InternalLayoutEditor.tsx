@@ -279,30 +279,15 @@ export const InternalLayoutEditor = ({
         const resolveData = async () => {
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
-          const dataSnapshot: Data = structuredClone(appState.data);
-          const getLocatorLocationStyleTypes = (data: Data | undefined) =>
-            data?.content
-              ?.filter((item) => item?.type === "Locator")
-              .map(
-                (item) =>
-                  item?.props?.locationStyles?.map(
-                    (style: { entityType?: string }) => style?.entityType
-                  ) ?? []
-              ) ?? [];
+          const dataSnapshot = structuredClone(appState.data);
 
           const resolvedData = await resolveAllData(appState.data, config, {
             streamDocument,
           });
-          const deepEqualResult = isDeepEqual(dataSnapshot, resolvedData);
-          console.log("DEBUG reloadDataOnDocumentChange data compare:", {
-            deepEqualResult,
-            before: getLocatorLocationStyleTypes(dataSnapshot),
-            after: getLocatorLocationStyleTypes(resolvedData),
-          });
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
 
-          if (deepEqualResult) {
+          if (isDeepEqual(dataSnapshot, resolvedData)) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
             );

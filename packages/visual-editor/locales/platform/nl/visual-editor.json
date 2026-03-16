@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Downloaden op de {{serviceName}}",
   "ariaLabelGalaxyStore": "Beschikbaar op {{serviceName}}",
   "ariaLabelGooglePlay": "Download het op {{serviceName}}",
+  "atms": "Geldautomaten",
   "back": "Rug",
   "base": "Basis",
   "basicSelectorNoOptionsLabel": "Geen opties beschikbaar",
@@ -151,6 +152,7 @@
   "enableCookies": "Cookies inschakelen",
   "entityTypeField": "{{entityType}} veld",
   "event": "Evenement",
+  "events": "Evenementen",
   "expandedMenu": "Uitgebreid menu",
   "failedToCopyLayout": "Kan de lay-out niet kopiëren.",
   "failedToPasteComponentInvalidData": "Kan niet plakken: ongeldige componentgegevens.",
@@ -569,6 +571,7 @@
   "product": "Product",
   "promoBanner": "Promobanner",
   "promoMedia": "Promo media",
+  "providerFacilities": "Aanbiederfaciliteiten",
   "publishBlocked": {
     "deploymentFailed": "Publiceren is uitgeschakeld omdat de laatste implementatie is mislukt. Los de problemen op en probeer het opnieuw",
     "deploymentInactive": "Publiceren is uitgeschakeld omdat de implementatie inactief is",

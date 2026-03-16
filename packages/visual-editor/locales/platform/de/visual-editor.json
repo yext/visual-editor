@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Im {{serviceName}} herunterladen",
   "ariaLabelGalaxyStore": "Im {{serviceName}} herunterladen",
   "ariaLabelGooglePlay": "Bei {{serviceName}} herunterladen",
+  "atms": "Geldautomaten",
   "back": "Zurück",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "Keine Optionen verfügbar",
@@ -151,6 +152,7 @@
   "enableCookies": "Cookies aktivieren",
   "entityTypeField": "{{entityType}}-Feld",
   "event": "Event",
+  "events": "Veranstaltungen",
   "expandedMenu": "Erweitertes Menü",
   "failedToCopyLayout": "Layout konnte nicht kopiert werden.",
   "failedToPasteComponentInvalidData": "Einfügen fehlgeschlagen: Ungültige Komponentendaten.",
@@ -569,6 +571,7 @@
   "product": "Produkt",
   "promoBanner": "Promo-Banner",
   "promoMedia": "Promo-Media",
+  "providerFacilities": "Anbietereinrichtungen",
   "publishBlocked": {
     "deploymentFailed": "Die Veröffentlichung ist deaktiviert, da die letzte Bereitstellung fehlgeschlagen ist. Bitte beheben Sie die Probleme und versuchen Sie es erneut",
     "deploymentInactive": "Die Veröffentlichung ist deaktiviert, da die Bereitstellung inaktiv ist",

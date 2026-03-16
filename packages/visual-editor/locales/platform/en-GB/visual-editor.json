@@ -21,6 +21,7 @@
   "ariaLabelAppStore": "Download on the {{serviceName}}",
   "ariaLabelGalaxyStore": "Available on {{serviceName}}",
   "ariaLabelGooglePlay": "Get it on {{serviceName}}",
+  "atms": "ATMs",
   "back": "Back",
   "base": "Base",
   "basicSelectorNoOptionsLabel": "No options available",
@@ -151,6 +152,7 @@
   "enableCookies": "Enable Cookies",
   "entityTypeField": "{{entityType}} Field",
   "event": "Event",
+  "events": "Events",
   "expandedMenu": "Expanded menu",
   "failedToCopyLayout": "Failed to copy layout.",
   "failedToPasteComponentInvalidData": "Failed to paste: Invalid component data.",
@@ -569,6 +571,7 @@
   "product": "Product",
   "promoBanner": "Promo Banner",
   "promoMedia": "Promo Media",
+  "providerFacilities": "Provider Facilities",
   "publishBlocked": {
     "deploymentFailed": "Publish is disabled because the latest deployment failed. Please fix the issues and try again",
     "deploymentInactive": "Publish is disabled because the deployment is inactive",
