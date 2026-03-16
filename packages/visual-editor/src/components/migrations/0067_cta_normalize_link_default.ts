@@ -14,6 +14,31 @@ const applyNormalizeLinkDefault = (value: any) => {
 const mapLinks = (links: any) =>
   Array.isArray(links) ? links.map(applyNormalizeLinkDefault) : links;
 
+const normalizeLocatorResultCard = (resultCard: any) => {
+  if (Array.isArray(resultCard)) {
+    return resultCard.map((item) => ({
+      ...item,
+      props: item?.props
+        ? {
+            ...item.props,
+            primaryCTA: applyNormalizeLinkDefault(item.props.primaryCTA),
+            secondaryCTA: applyNormalizeLinkDefault(item.props.secondaryCTA),
+          }
+        : item?.props,
+    }));
+  }
+
+  if (resultCard && typeof resultCard === "object") {
+    return {
+      ...resultCard,
+      primaryCTA: applyNormalizeLinkDefault(resultCard.primaryCTA),
+      secondaryCTA: applyNormalizeLinkDefault(resultCard.secondaryCTA),
+    };
+  }
+
+  return resultCard;
+};
+
 const applyCtaNormalizeLinkDefault = (
   props: { id: string } & Record<string, any>
 ) => {
@@ -96,15 +121,7 @@ export const ctaNormalizeLinkDefault: Migration = {
     action: "updated",
     propTransformation: (props) => ({
       ...props,
-      resultCard: props.resultCard
-        ? {
-            ...props.resultCard,
-            primaryCTA: applyNormalizeLinkDefault(props.resultCard.primaryCTA),
-            secondaryCTA: applyNormalizeLinkDefault(
-              props.resultCard.secondaryCTA
-            ),
-          }
-        : props.resultCard,
+      resultCard: normalizeLocatorResultCard(props.resultCard),
     }),
   },
 };
