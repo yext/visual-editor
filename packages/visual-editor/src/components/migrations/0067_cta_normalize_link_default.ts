@@ -11,8 +11,9 @@ const applyNormalizeLinkDefault = (value: any) => {
   };
 };
 
-const mapLinks = (links: any) =>
-  Array.isArray(links) ? links.map(applyNormalizeLinkDefault) : links;
+const mapLinks = (links: any) => {
+  return Array.isArray(links) ? links.map(applyNormalizeLinkDefault) : links;
+};
 
 const normalizeLocatorResultCard = (resultCard: any) => {
   if (Array.isArray(resultCard)) {
