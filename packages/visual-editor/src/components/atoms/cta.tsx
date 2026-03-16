@@ -95,18 +95,6 @@ const presetImageTypeToName = (presetImageType: PresetImageType) => {
   }
 };
 
-const getResolvedLink = (
-  link: string | undefined,
-  linkType: LinkType | undefined,
-  shouldNormalizeLink: boolean
-) => {
-  if (!shouldNormalizeLink) {
-    return link ?? "";
-  }
-
-  return normalizeLink(link, linkType);
-};
-
 // useResolvedCtaProps resolves the CTA props based on the current context and ctaType
 const useResolvedCtaProps = (props: CTAProps) => {
   const {
@@ -122,6 +110,10 @@ const useResolvedCtaProps = (props: CTAProps) => {
   const background = useBackground();
 
   const resolvedDynamicProps = useMemo(() => {
+    const resolvedLink = shouldNormalizeLink
+      ? normalizeLink(props.link, props.linkType)
+      : (props.link ?? "");
+
     switch (ctaType) {
       case "getDirections": {
         const listings = streamDocument.ref_listings ?? [];
@@ -142,11 +134,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
         // Prefer hardcoded link, then listings link, then coordinate link
         // User settable link props should not be used for get directions
         return {
-          link:
-            getResolvedLink(props.link, props.linkType, shouldNormalizeLink) ||
-            listingsLink ||
-            coordinateLink ||
-            "#",
+          link: resolvedLink || listingsLink || coordinateLink || "#",
           linkType: "DRIVING_DIRECTIONS" as const,
           label: props.label || t("getDirections", "Get Directions"),
           ariaLabel: ariaLabel || t("getDirections", "Get Directions"),
@@ -176,9 +164,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
         }
 
         return {
-          link:
-            getResolvedLink(props.link, props.linkType, shouldNormalizeLink) ||
-            "#",
+          link: resolvedLink || "#",
           linkType: props.linkType ?? "URL",
           label,
           ariaLabel:
@@ -191,9 +177,7 @@ const useResolvedCtaProps = (props: CTAProps) => {
       case "textAndLink":
       default:
         return {
-          link:
-            getResolvedLink(props.link, props.linkType, shouldNormalizeLink) ||
-            "#",
+          link: resolvedLink || "#",
           linkType: props.linkType ?? "URL",
           label: props.label,
           ariaLabel: ariaLabel ?? "",
