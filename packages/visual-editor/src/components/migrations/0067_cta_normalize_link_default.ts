@@ -47,12 +47,22 @@ const applyCtaNormalizeLinkDefault = (
   props: { id: string } & Record<string, any>
 ) => {
   const data = props.data ?? {};
+  const actionType = data.actionType ?? "link";
+  const entityField = data.entityField;
+  const constantCta =
+    entityField?.constantValueEnabled && entityField?.constantValue
+      ? entityField.constantValue
+      : undefined;
+  const shouldNormalizeByDefault =
+    actionType === "button"
+      ? false
+      : constantCta?.linkType !== "Email" && constantCta?.linkType !== "Phone";
 
   return {
     ...props,
     data: {
       ...data,
-      normalizeLink: data.normalizeLink ?? true,
+      normalizeLink: data.normalizeLink ?? shouldNormalizeByDefault,
     },
   };
 };
