@@ -8,7 +8,7 @@ Use this contract for every generated component.
 - Always match font families, font sizes, font colors, font weight, and background colors 1:1 with the source page
 - Always add a Google font equivalent as the fallback for any non-web safe fonts (for example: `'Template Specific Font', 'Open Sans', sans-serif`)
 - Everything needed for each component must be contained in a single file (excluding npm imports)
-- Use plain JSX elements and Tailwind utility classes for layout and styling. Do not use other component libraries besides pages-components.
+- Use plain JSX elements and Tailwind utility classes for layout and styling.
 
 ## Required Directory Layout
 
