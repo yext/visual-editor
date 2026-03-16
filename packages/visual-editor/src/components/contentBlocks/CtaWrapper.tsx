@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { CTA, CTAVariant } from "../atoms/cta.tsx";
 import {
@@ -317,7 +322,7 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
     },
   },
   resolveFields: (data) => {
-    let updatedFields = resolveDataFromParent(ctaWrapperFields, data);
+    const updatedFields = resolveDataFromParent(ctaWrapperFields, data);
     const ctaVariant = data.props.styles.variant;
     const actionType = data.props.data.actionType ?? "link";
     const ctaType = getCTAType(data.props.data.entityField).ctaType;
@@ -330,37 +335,64 @@ export const CTAWrapper: ComponentConfig<{ props: CTAWrapperProps }> = {
       !showButtonFields && !isNonNormalizableLinkType(constantLinkType);
 
     if (effectiveCtaType === "presetImage") {
-      updatedFields.styles.objectFields.variant.visible = false;
-      updatedFields.styles.objectFields.presetImage.visible = true;
+      setDeep(updatedFields, "styles.objectFields.variant.visible", false);
+      setDeep(updatedFields, "styles.objectFields.presetImage.visible", true);
     } else {
-      updatedFields.styles.objectFields.variant.visible = true;
-      updatedFields.styles.objectFields.presetImage.visible = false;
+      setDeep(updatedFields, "styles.objectFields.variant.visible", true);
+      setDeep(updatedFields, "styles.objectFields.presetImage.visible", false);
     }
 
     // If the show field exists, make it visible in the editor
     if (data.props.data.show !== undefined) {
-      updatedFields.data.objectFields.show.visible = true;
+      setDeep(updatedFields, "data.objectFields.show.visible", true);
     } else {
-      updatedFields.data.objectFields.show.visible = false;
+      setDeep(updatedFields, "data.objectFields.show.visible", false);
     }
 
     const showColor =
       (ctaVariant === "primary" || ctaVariant === "secondary") &&
       effectiveCtaType !== "presetImage";
-    updatedFields.styles.objectFields.color.visible = showColor;
+    setDeep(updatedFields, "styles.objectFields.color.visible", showColor);
 
     if (data.props.parentData) {
       return updatedFields;
     }
 
-    updatedFields.data.objectFields.entityField.visible = !showButtonFields;
-    updatedFields.data.objectFields.normalizeLink.visible =
-      showNormalizeLinkField;
-    updatedFields.data.objectFields.buttonText.visible = showButtonFields;
-    updatedFields.data.objectFields.customId.visible = showButtonFields;
-    updatedFields.data.objectFields.customClass.visible = showButtonFields;
-    updatedFields.data.objectFields.dataAttributes.visible = showButtonFields;
-    updatedFields.data.objectFields.ariaLabel.visible = showButtonFields;
+    setDeep(
+      updatedFields,
+      "data.objectFields.entityField.visible",
+      !showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.normalizeLink.visible",
+      showNormalizeLinkField
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.buttonText.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.customId.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.customClass.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.dataAttributes.visible",
+      showButtonFields
+    );
+    setDeep(
+      updatedFields,
+      "data.objectFields.ariaLabel.visible",
+      showButtonFields
+    );
 
     return updatedFields;
   },

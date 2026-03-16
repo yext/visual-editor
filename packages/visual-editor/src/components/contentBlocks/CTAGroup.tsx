@@ -1,4 +1,9 @@
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
 import { BackgroundStyle } from "../../utils/themeConfigOptions.ts";
 import { CTA } from "../atoms/cta.tsx";
 import { PresetImageType } from "../../types/types.ts";
@@ -161,7 +166,7 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   label: msg("components.ctaGroup", "CTA Group"),
   fields: ctaGroupFields,
   resolveFields: (data) => {
-    let updatedFields = ctaGroupFields;
+    const updatedFields = ctaGroupFields;
     const shouldShowNormalizeLink = !data.props.buttons?.length
       ? true
       : data.props.buttons.some((button) => {
@@ -172,8 +177,11 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
           return !isNonNormalizableLinkType(linkType);
         });
 
-    updatedFields.buttons.arrayFields.normalizeLink.visible =
-      shouldShowNormalizeLink;
+    setDeep(
+      updatedFields,
+      "buttons.arrayFields.normalizeLink.visible",
+      shouldShowNormalizeLink
+    );
 
     return updatedFields;
   },
