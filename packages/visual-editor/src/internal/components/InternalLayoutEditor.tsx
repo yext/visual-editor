@@ -279,6 +279,7 @@ export const InternalLayoutEditor = ({
         const resolveData = async () => {
           devLogger.logFunc("reloadDataOnDocumentChange");
           const { appState, config, dispatch } = getPuck();
+          const dataSnapshot = structuredClone(appState.data);
 
           const resolvedData = await resolveAllData(appState.data, config, {
             streamDocument,
@@ -286,7 +287,7 @@ export const InternalLayoutEditor = ({
 
           devLogger.logData("RESOLVED_LAYOUT_DATA", resolvedData);
 
-          if (isDeepEqual(appState.data, resolvedData)) {
+          if (isDeepEqual(dataSnapshot, resolvedData)) {
             devLogger.log(
               "reloadDataOnDocumentChange - no layout changes detected"
             );
