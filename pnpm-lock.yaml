@@ -143,8 +143,8 @@ importers:
         specifier: ^2.7.1
         version: 2.7.1(encoding@0.1.13)(react@18.3.1)
       "@yext/search-ui-react":
-        specifier: ^2.1.2
-        version: 2.2.0(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
+        specifier: ^2.1.0
+        version: 2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -4696,16 +4696,6 @@ packages:
     resolution:
       {
         integrity: sha512-+Ej4I9HdpbG7DifjPa2M65r/fbkGmIiuSQcAPs1Oge/NEkGBer0Vp3J8iaHHAO5GI1O3PZ7uETagxtyRRz8bNQ==,
-      }
-    peerDependencies:
-      "@yext/search-headless-react": ^2.6.0
-      react: ^16.14 || ^17 || ^18 || ^19
-      react-dom: ^16.14 || ^17 || ^18 || ^19
-
-  "@yext/search-ui-react@2.2.0":
-    resolution:
-      {
-        integrity: sha512-diNVT+kKu3K02xV/zHI3iD17RWZDBLL8Zu4GXC1dbaLdKOdUU3oQSqJZu/yXkR7lACI2igdNEJtc2EkIRDW0Rg==,
       }
     peerDependencies:
       "@yext/search-headless-react": ^2.6.0
@@ -13412,7 +13402,7 @@ snapshots:
 
   "@restart/ui@1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)":
     dependencies:
-      "@babel/runtime": 7.28.6
+      "@babel/runtime": 7.28.3
       "@popperjs/core": 2.11.8
       "@react-aria/ssr": 3.9.10(react@18.3.1)
       "@restart/hooks": 0.5.1(react@18.3.1)
@@ -14483,7 +14473,7 @@ snapshots:
       - tailwindcss
       - typescript
 
-  "@yext/search-ui-react@2.2.0(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
+  "@yext/search-ui-react@2.1.0(@types/react@18.3.24)(@yext/search-headless-react@2.7.1(encoding@0.1.13)(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))(typescript@5.9.2)":
     dependencies:
       "@restart/ui": 1.9.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tailwindcss/forms": 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.15.11(@swc/helpers@0.5.17))(@types/node@20.19.11)(typescript@5.9.2)))
@@ -15192,7 +15182,7 @@ snapshots:
 
   dom-helpers@5.2.1:
     dependencies:
-      "@babel/runtime": 7.28.6
+      "@babel/runtime": 7.28.3
       csstype: 3.1.3
 
   domain-browser@4.22.0: {}
