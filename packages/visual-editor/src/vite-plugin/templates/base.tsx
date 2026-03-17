@@ -26,7 +26,6 @@ import {
   resolveUrlTemplate,
 } from "@yext/visual-editor";
 import { AnalyticsProvider, SchemaWrapper } from "@yext/pages-components";
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 const baseConfig: Config = {};
 
@@ -148,15 +147,13 @@ const Base: Template<TemplateRenderProps> = (props) => {
       currency="USD"
       requireOptIn={requireAnalyticsOptIn}
     >
-      <ChakraProvider value={defaultSystem}>
-        <VisualEditorProvider templateProps={props}>
-          <Render
-            config={baseConfig}
-            data={data}
-            metadata={{ streamDocument: document }}
-          />
-        </VisualEditorProvider>
-      </ChakraProvider>
+      <VisualEditorProvider templateProps={props}>
+        <Render
+          config={baseConfig}
+          data={data}
+          metadata={{ streamDocument: document }}
+        />
+      </VisualEditorProvider>
     </AnalyticsProvider>
   );
 };
