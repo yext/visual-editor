@@ -18,6 +18,7 @@ export const defaultLink = {
   linkType: "URL" as const,
   label: { defaultValue: "Footer Link" },
   link: "#",
+  normalizeLink: true,
   openInNewTab: false,
 };
 

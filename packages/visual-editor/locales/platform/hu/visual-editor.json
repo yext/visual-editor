@@ -272,6 +272,7 @@
     "mobileContentAlignment": "Mobil tartalom igazítása",
     "mobileImagePosition": "Mobil képpozíció",
     "mobileMediaPosition": "Mobil média pozíció",
+    "normalizeLink": "Link normalizálása",
     "openInNewTab": "Megnyitás új lapon",
     "options": {
       "address": "Cím",
@@ -514,6 +515,7 @@
   "informationSection": "Információs szakasz",
   "inheritedDataMsg": "Az adatok a szülő szakaszból származnak.",
   "insight": "Betekintés",
+  "kilometer_zero": "kilométer",
   "kilometer_one": "kilométer",
   "kilometer_other": "kilométer",
   "knowledgeGraphContent": "Tudás grafikon tartalma",
@@ -541,6 +543,7 @@
   "mapRequiresOptIn": "Ez a térkép csak akkor jeleníthető meg, ha a cookie-k engedélyezve vannak",
   "maxWidthTip": "Az optimális tartalom igazításához azt javasoljuk, hogy a fejléc és a lábléc szélességét beállítsuk az oldal tartalomrácsának megegyezésére vagy túllépésére.",
   "metaTitleMissingLocales": "Hiányzik a metacím a nyelvi beállításokhoz: {{locales}}",
+  "mile_zero": "mérföld",
   "mile_one": "mérföld",
   "mile_other": "mérföld",
   "missingHtmlWidget": "Adjon hozzá HTML -t az összetevő megtekintéséhez",

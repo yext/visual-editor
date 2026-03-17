@@ -272,6 +272,7 @@
     "mobileContentAlignment": "Mobiliojo turinio suderinimas",
     "mobileImagePosition": "Mobiliojo vaizdo padėtis",
     "mobileMediaPosition": "Mobiliosios medijos padėtis",
+    "normalizeLink": "Normalizuokite nuorodą",
     "openInNewTab": "Atidaryti naujame skirtuke",
     "options": {
       "address": "Adresas",
@@ -514,6 +515,7 @@
   "informationSection": "Informacijos skyrius",
   "inheritedDataMsg": "Duomenys paveldimi iš pirminės sekcijos.",
   "insight": "Įžvalga",
+  "kilometer_zero": "kilometrų",
   "kilometer_one": "kilometras",
   "kilometer_few": "kilometrų",
   "kilometer_many": "kilometrų",
@@ -549,6 +551,7 @@
   "mapRequiresOptIn": "Šis žemėlapis gali būti rodomas tik įjungus slapukus",
   "maxWidthTip": "Siekdami optimalaus turinio suderinimo, mes rekomenduojame nustatyti antraštės ir poraštės plotį, kad jis atitiktų arba viršytų puslapio turinio tinklą.",
   "metaTitleMissingLocales": "Trūksta lokalės (-ių) meta pavadinimo: {{locales}}",
+  "mile_zero": "mylia",
   "mile_one": "mylia",
   "mile_few": "mylios",
   "mile_many": "mylios",

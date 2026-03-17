@@ -183,6 +183,7 @@ const AddressComponent: PuckComponent<AddressProps> = (props) => {
             link={useAddressLink ? addressLink : listingsLink}
             label={t("getDirections", "Get Directions")}
             linkType="DRIVING_DIRECTIONS"
+            normalizeLink={false}
             target="_blank"
             variant={styles.ctaVariant}
             color={resolvedColor}

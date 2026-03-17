@@ -13,6 +13,17 @@ const REPEATED_HYPHEN_CHAR_REPLACEMENT_PATTERN = /(--+)/g;
 const DANGLING_HYPHEN_CHAR_REPLACEMENT_PATTERN =
   /(?<=[\p{L}\p{N}])-+(?=($|\/))/gu;
 
+const NON_NORMALIZABLE_LINK_TYPES = new Set(["EMAIL", "PHONE"]);
+
+export const isNonNormalizableLinkType = (
+  linkType?: LinkType | string | null
+): boolean => {
+  return (
+    typeof linkType === "string" &&
+    NON_NORMALIZABLE_LINK_TYPES.has(linkType.toUpperCase())
+  );
+};
+
 /**
  * Normalizes the provided content by converting upper-case ones to lower case,
  * replacing white spaces with a "-" and stripping all other illegal characters.
@@ -26,7 +37,7 @@ export const normalizeLink = (
     return "";
   }
 
-  if (linkType === "EMAIL" || linkType === "PHONE") {
+  if (isNonNormalizableLinkType(linkType)) {
     return content;
   }
 

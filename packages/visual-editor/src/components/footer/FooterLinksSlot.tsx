@@ -1,5 +1,10 @@
 import * as React from "react";
-import { ComponentConfig, Fields, PuckComponent } from "@puckeditor/core";
+import {
+  ComponentConfig,
+  Fields,
+  PuckComponent,
+  setDeep,
+} from "@puckeditor/core";
 import { YextField } from "../../editor/YextField.tsx";
 import { msg, pt } from "../../utils/i18n/platform.ts";
 import { useDocument } from "../../hooks/useDocument.tsx";
@@ -9,6 +14,7 @@ import { TranslatableCTA } from "../../types/types.ts";
 import { i18nComponentsInstance } from "../../utils/i18n/components.ts";
 import { useTranslation } from "react-i18next";
 import { defaultLink, defaultLinks } from "./ExpandedFooter.tsx";
+import { isNonNormalizableLinkType } from "../../utils/normalizeLink.ts";
 
 export interface FooterLinksSlotProps {
   data: {
@@ -89,11 +95,23 @@ const FooterLinksSlotInternal: PuckComponent<FooterLinksSlotProps> = (
             label={label}
             linkType={linkData.linkType}
             link={link}
+            normalizeLink={
+              isNonNormalizableLinkType(linkData.linkType)
+                ? false
+                : (linkData.normalizeLink ?? true)
+            }
             className={`justify-center block break-words whitespace-normal`}
           />
         );
       })}
     </div>
+  );
+};
+
+const shouldShowNormalizeLinkField = (links?: TranslatableCTA[]) => {
+  return (
+    !links?.length ||
+    links.some((link) => !isNonNormalizableLinkType(link?.linkType))
   );
 };
 
@@ -118,11 +136,11 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
               { label: msg("fields.options.url", "URL"), value: "URL" },
               {
                 label: msg("fields.options.phone", "Phone"),
-                value: "Phone",
+                value: "PHONE",
               },
               {
                 label: msg("fields.options.email", "Email"),
-                value: "Email",
+                value: "EMAIL",
               },
             ],
           }),
@@ -133,6 +151,16 @@ const footerLinksSlotFields: Fields<FooterLinksSlotProps> = {
           link: YextField(msg("fields.link", "Link"), {
             type: "text",
           }),
+          normalizeLink: YextField(
+            msg("fields.normalizeLink", "Normalize Link"),
+            {
+              type: "radio",
+              options: [
+                { label: msg("fields.options.yes", "Yes"), value: true },
+                { label: msg("fields.options.no", "No"), value: false },
+              ],
+            }
+          ),
           openInNewTab: YextField(
             msg("fields.openInNewTab", "Open in new tab"),
             {
@@ -181,6 +209,12 @@ export const FooterLinksSlot: ComponentConfig<{ props: FooterLinksSlotProps }> =
   {
     label: msg("components.footerLinksSlot", "Links"),
     fields: footerLinksSlotFields,
+    resolveFields: (data) =>
+      setDeep(
+        footerLinksSlotFields,
+        "data.objectFields.links.arrayFields.normalizeLink.visible",
+        shouldShowNormalizeLinkField(data.props.data.links)
+      ),
     defaultProps: defaultFooterLinkProps,
     render: (props) => <FooterLinksSlotInternal {...props} />,
   };

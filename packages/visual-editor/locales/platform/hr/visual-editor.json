@@ -272,6 +272,7 @@
     "mobileContentAlignment": "Poravnavanje mobilnog sadržaja",
     "mobileImagePosition": "Položaj mobilne slike",
     "mobileMediaPosition": "Položaj mobilnih medija",
+    "normalizeLink": "Normaliziraj vezu",
     "openInNewTab": "Otvori u novoj kartici",
     "options": {
       "address": "Adresa",
@@ -514,6 +515,7 @@
   "informationSection": "Odjeljak s informacijama",
   "inheritedDataMsg": "Podaci se nasljeđuju iz nadređenog odjeljka.",
   "insight": "Uvid",
+  "kilometer_zero": "kilometar",
   "kilometer_one": "kilometar",
   "kilometer_few": "kilometra",
   "kilometer_other": "kilometara",
@@ -545,6 +547,7 @@
   "mapRequiresOptIn": "Ova se karta može prikazati samo ako su omogućeni kolačići",
   "maxWidthTip": "Za optimalno poravnavanje sadržaja, preporučujemo postavljanje širine zaglavlja i podnožja kako bi se podudarala ili premašila rešetku sadržaja stranice.",
   "metaTitleMissingLocales": "Nedostaje meta naslov za lokalitet(e): {{locales}}",
+  "mile_zero": "milja",
   "mile_one": "milja",
   "mile_few": "milje",
   "mile_other": "milja",

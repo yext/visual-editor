@@ -272,6 +272,7 @@
     "mobileContentAlignment": "Wyrównanie treści mobilnych",
     "mobileImagePosition": "Pozycja obrazu mobilnego",
     "mobileMediaPosition": "Pozycja w mediach mobilnych",
+    "normalizeLink": "Normalizuj łącze",
     "openInNewTab": "Otwórz w nowej karcie",
     "options": {
       "address": "Adres",
@@ -514,6 +515,7 @@
   "informationSection": "Sekcja informacji",
   "inheritedDataMsg": "Dane są dziedziczone z sekcji nadrzędnej.",
   "insight": "Wgląd",
+  "kilometer_zero": "kilometr",
   "kilometer_one": "kilometr",
   "kilometer_few": "kilometry",
   "kilometer_many": "kilometry",
@@ -549,6 +551,7 @@
   "mapRequiresOptIn": "Ta mapa może być wyświetlana tylko wtedy, gdy włączona jest obsługa plików cookie",
   "maxWidthTip": "Aby uzyskać optymalne dostosowanie treści, zalecamy ustawienie szerokości nagłówka i stopki w celu dopasowania lub przekroczenia sieci treści strony.",
   "metaTitleMissingLocales": "Brak tytułu meta dla ustawień regionalnych: {{locales}}",
+  "mile_zero": "mila",
   "mile_one": "mila",
   "mile_few": "mile",
   "mile_many": "mil",

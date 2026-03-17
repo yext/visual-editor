@@ -272,6 +272,7 @@
     "mobileContentAlignment": "Allineamento dei contenuti mobili",
     "mobileImagePosition": "Posizione dell'immagine mobile",
     "mobileMediaPosition": "Posizione sui media mobili",
+    "normalizeLink": "Normalizza collegamento",
     "openInNewTab": "Apri in una nuova scheda",
     "options": {
       "address": "Indirizzo",
@@ -514,6 +515,7 @@
   "informationSection": "Sezione di informazioni",
   "inheritedDataMsg": "I dati vengono ereditati dalla sezione principale.",
   "insight": "Intuizione",
+  "kilometer_zero": "chilometri",
   "kilometer_one": "chilometro",
   "kilometer_many": "chilometri",
   "kilometer_other": "chilometri",
@@ -545,6 +547,7 @@
   "mapRequiresOptIn": "Questa mappa può essere visualizzata solo se i cookie sono abilitati",
   "maxWidthTip": "Per un allineamento ottimale dei contenuti, si consiglia di impostare la larghezza di intestazione e piè di pagina per abbinare o superare la griglia di contenuto della pagina.",
   "metaTitleMissingLocales": "Manca il meta titolo per le impostazioni locali: {{locales}}",
+  "mile_zero": "miglio",
   "mile_one": "miglio",
   "mile_many": "miglia",
   "mile_other": "miglia",

@@ -272,6 +272,7 @@
     "mobileContentAlignment": "Mobiele inhoud afstemming",
     "mobileImagePosition": "Mobiele afbeeldingspositie",
     "mobileMediaPosition": "Mobiele mediapositie",
+    "normalizeLink": "Normaliseer koppeling",
     "openInNewTab": "Openen in nieuw tabblad",
     "options": {
       "address": "Adres",
@@ -514,6 +515,7 @@
   "informationSection": "Informatiegedeelte",
   "inheritedDataMsg": "Gegevens worden overgenomen van de bovenliggende sectie.",
   "insight": "Inzicht",
+  "kilometer_zero": "kilometer",
   "kilometer_one": "kilometer",
   "kilometer_other": "kilometers",
   "knowledgeGraphContent": "Kennisgrafiekinhoud",
@@ -541,6 +543,7 @@
   "mapRequiresOptIn": "Deze kaart kan alleen worden weergegeven als cookies zijn ingeschakeld",
   "maxWidthTip": "Voor optimale inhouduitlijning raden we aan de koptekst- en voettekstbreedte in te stellen om het pagina -inhoudsnet van de pagina te matchen of te overschrijden.",
   "metaTitleMissingLocales": "Metatitel ontbreekt voor taalinstelling(en): {{locales}}",
+  "mile_zero": "mijl",
   "mile_one": "mijl",
   "mile_other": "mijlen",
   "missingHtmlWidget": "Voeg HTML toe om component te bekijken",

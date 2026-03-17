@@ -272,6 +272,7 @@
     "mobileContentAlignment": "Mobil içerik hizalaması",
     "mobileImagePosition": "Mobil Görüntü Pozisyonu",
     "mobileMediaPosition": "Mobil Medya Konumu",
+    "normalizeLink": "Bağlantıyı Normalleştir",
     "openInNewTab": "Yeni sekmede aç",
     "options": {
       "address": "Adres",
@@ -514,6 +515,7 @@
   "informationSection": "Bilgi bölümü",
   "inheritedDataMsg": "Veriler üst bölümden devralınır.",
   "insight": "İç yüzü",
+  "kilometer_zero": "kilometre",
   "kilometer_one": "kilometre",
   "kilometer_other": "kilometre",
   "knowledgeGraphContent": "Bilgi Grafik İçeriği",
@@ -541,6 +543,7 @@
   "mapRequiresOptIn": "Bu harita yalnızca çerezler etkinse görüntülenebilir",
   "maxWidthTip": "Optimal içerik hizalaması için, sayfa içerik şebekesini eşleştirecek veya aşacak şekilde üstbilgi ve altbilgi genişliğini ayarlamanızı öneririz.",
   "metaTitleMissingLocales": "Yerel ayarlar için meta başlığı eksik: {{locales}}",
+  "mile_zero": "mil",
   "mile_one": "mil",
   "mile_other": "mil",
   "missingHtmlWidget": "Bileşeni görüntülemek için HTML ekle",
