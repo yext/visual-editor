@@ -1852,6 +1852,18 @@ const Map: React.FC<MapProps> = ({
     }),
     [centerCoords, mapPadding, mapStyle]
   );
+  const PinComponent = React.useMemo(
+    () =>
+      function PinComponent<T>(pinProps: PinComponentProps<T>) {
+        return (
+          <LocatorMapPin
+            {...pinProps}
+            locationStyleConfig={locationStyleConfig}
+          />
+        );
+      },
+    [locationStyleConfig]
+  );
 
   // During page generation we don't exist in a browser context
   //@ts-expect-error MapboxGL is not loaded in the iframe content window
@@ -1882,12 +1894,7 @@ const Map: React.FC<MapProps> = ({
       mapboxAccessToken={mapboxApiKey || ""}
       mapboxOptions={mapboxOptions}
       onDrag={onDragHandler}
-      PinComponent={(pinProps) => (
-        <LocatorMapPin
-          {...pinProps}
-          locationStyleConfig={locationStyleConfig}
-        />
-      )}
+      PinComponent={PinComponent}
       iframeWindow={iframe?.contentWindow ?? undefined}
       allowUpdates={!!iframe?.contentDocument}
       onPinClick={scrollToResult}
