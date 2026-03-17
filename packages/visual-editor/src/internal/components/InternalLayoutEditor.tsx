@@ -293,6 +293,7 @@ export const InternalLayoutEditor = ({
             );
             return;
           }
+
           dispatch({ type: "setData", data: resolvedData });
         };
 
