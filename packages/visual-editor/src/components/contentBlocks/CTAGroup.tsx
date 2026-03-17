@@ -167,7 +167,8 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
   fields: ctaGroupFields,
   resolveFields: (data) => {
     const updatedFields = ctaGroupFields;
-    const shouldShowNormalizeLink = !data.props.buttons?.length
+    // show normalize link field if any of the linkTypes are normalizable (not PHONE or EMAIL)
+    const showNormalizeLinkField = !data.props.buttons?.length
       ? true
       : data.props.buttons.some((button) => {
           const linkType = button.entityField.constantValueEnabled
@@ -180,7 +181,7 @@ export const CTAGroup: ComponentConfig<{ props: CTAGroupProps }> = {
     setDeep(
       updatedFields,
       "buttons.arrayFields.normalizeLink.visible",
-      shouldShowNormalizeLink
+      showNormalizeLinkField
     );
 
     return updatedFields;
