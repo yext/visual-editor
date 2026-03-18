@@ -28,6 +28,8 @@ import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
+let pendingImageMessageId: string | undefined;
+
 export type ImagePayload = {
   id: string;
   value: ImageContentData;
@@ -75,10 +77,6 @@ const createImageConstantConfig = (options?: {
       return resolveLocalizedAssetImage(value, locale);
     }, [value, locale]);
 
-    const [pendingMessageId, setPendingMessageId] = React.useState<
-      string | undefined
-    >();
-
     const { sendToParent: openImageAssetSelector } = useSendMessageToParent(
       "constantValueEditorOpened",
       TARGET_ORIGINS
@@ -89,10 +87,14 @@ const createImageConstantConfig = (options?: {
       TARGET_ORIGINS,
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
-        if (pendingMessageId && pendingMessageId === imagePayload.id) {
+        if (
+          pendingImageMessageId &&
+          pendingImageMessageId === imagePayload.id
+        ) {
           const imageData =
             imagePayload.value.transformedImage ??
             imagePayload.value.originalImage;
+          pendingImageMessageId = undefined;
           if (!imageData) {
             return;
           }
@@ -139,10 +141,11 @@ const createImageConstantConfig = (options?: {
           [locale]: newValue,
           hasLocalizedValue: "true",
         } as TranslatableAssetImage);
+        pendingImageMessageId = undefined;
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingImageMessageId = messageId;
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",

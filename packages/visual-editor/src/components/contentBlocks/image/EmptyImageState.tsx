@@ -12,6 +12,8 @@ import {
 } from "../../../internal/hooks/useMessage.ts";
 import { ImagePayload } from "../../../internal/puck/constant-value-fields/Image.tsx";
 
+let pendingEmptyImageMessageId: string | undefined;
+
 interface EmptyImageStateProps {
   isEmpty: boolean;
   isEditing: boolean;
@@ -43,10 +45,6 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
     TARGET_ORIGINS
   );
 
-  const [pendingMessageId, setPendingMessageId] = React.useState<
-    string | undefined
-  >();
-
   // Listen for image selection response
   useReceiveMessage(
     "constantValueEditorClosed",
@@ -55,13 +53,14 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
         if (
-          pendingMessageId &&
-          pendingMessageId === imagePayload.id &&
+          pendingEmptyImageMessageId &&
+          pendingEmptyImageMessageId === imagePayload.id &&
           onImageSelected
         ) {
           const imageData =
             imagePayload.value.transformedImage ??
             imagePayload.value.originalImage;
+          pendingEmptyImageMessageId = undefined;
           if (!imageData) {
             return;
           }
@@ -79,7 +78,7 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
           } as AssetImageType);
         }
       },
-      [pendingMessageId, onImageSelected]
+      [onImageSelected]
     )
   );
 
@@ -97,10 +96,11 @@ export const EmptyImageState: React.FC<EmptyImageStateProps> = ({
             width: 1,
             alternateText: "",
           } as AssetImageType);
+          pendingEmptyImageMessageId = undefined;
         }
       } else {
         const messageId = `ImageAsset-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingEmptyImageMessageId = messageId;
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",

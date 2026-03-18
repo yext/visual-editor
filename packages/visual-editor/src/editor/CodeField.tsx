@@ -7,6 +7,8 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { pt } from "../utils/i18n/platform.ts";
 
+let pendingCodeMessageId: string | undefined;
+
 export type codeLanguageOptions =
   | "html"
   | "css"
@@ -30,10 +32,6 @@ export const CodeField = ({
   return {
     type: "custom",
     render: ({ onChange, value }) => {
-      const [pendingMessageId, setPendingMessageId] = React.useState<
-        string | undefined
-      >();
-
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
         TARGET_ORIGINS
@@ -43,15 +41,16 @@ export const CodeField = ({
         "constantValueEditorClosed",
         TARGET_ORIGINS,
         (_, payload) => {
-          if (pendingMessageId && pendingMessageId === payload?.id) {
+          if (pendingCodeMessageId && pendingCodeMessageId === payload?.id) {
             onChange(payload.value);
+            pendingCodeMessageId = undefined;
           }
         }
       );
 
       const handleClick = () => {
         const messageId = `CodeBlock-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingCodeMessageId = messageId;
 
         openConstantValueEditor({
           payload: {
@@ -69,6 +68,7 @@ export const CodeField = ({
         ) {
           const userInput = prompt("Enter Code:");
           onChange(userInput ?? "");
+          pendingCodeMessageId = undefined;
         }
       };
 

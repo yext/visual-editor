@@ -10,6 +10,8 @@ import {
 } from "../internal/hooks/useMessage.ts";
 import { useTranslation } from "react-i18next";
 
+let pendingRichTextMessageId: string | undefined;
+
 /**
  * Generates a translatableRichText field config
  * @param label optional label. Takes in a value from msg
@@ -25,10 +27,6 @@ export function TranslatableRichTextField<
       const resolvedValue = value && resolveComponentData(value, locale);
       const fieldLabel = label ? `${pt(label)} (${locale})` : "";
 
-      const [pendingMessageId, setPendingMessageId] = React.useState<
-        string | undefined
-      >();
-
       const { sendToParent: openConstantValueEditor } = useSendMessageToParent(
         "constantValueEditorOpened",
         TARGET_ORIGINS
@@ -38,15 +36,19 @@ export function TranslatableRichTextField<
         "constantValueEditorClosed",
         TARGET_ORIGINS,
         (_, payload) => {
-          if (pendingMessageId && pendingMessageId === payload?.id) {
+          if (
+            pendingRichTextMessageId &&
+            pendingRichTextMessageId === payload?.id
+          ) {
             handleNewValue(payload.value, payload.locale);
+            pendingRichTextMessageId = undefined;
           }
         }
       );
 
       const handleClick = () => {
         const messageId = `RichText-${Date.now()}`;
-        setPendingMessageId(messageId);
+        pendingRichTextMessageId = messageId;
         const valueForCurrentLocale =
           typeof value === "object" && value !== null && !Array.isArray(value)
             ? ((value as Record<string, any>)[locale] ??
@@ -73,6 +75,7 @@ export function TranslatableRichTextField<
         ) {
           const userInput = prompt("Enter Rich Text (HTML):");
           handleNewValue({ json: "", html: userInput ?? "" }, locale);
+          pendingRichTextMessageId = undefined;
         }
       };
 
