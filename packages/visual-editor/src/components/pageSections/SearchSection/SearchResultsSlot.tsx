@@ -39,6 +39,7 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
           universalLimit: 5,
           verticalLimit: 5,
           pageType: "vertical",
+          enableGenerativeDirectAnswer: false,
         },
         arrayFields: {
           label: YextField(msg("fields.label", "Label"), { type: "text" }),
@@ -75,6 +76,16 @@ const SearchResultsSlotFields: Fields<SearchResultsSlotProps> = {
           verticalLimit: YextField(
             msg("fields.verticalLimit", "Vertical Limit"),
             { type: "number" }
+          ),
+          enableGenerativeDirectAnswer: YextField(
+            msg(
+              "fields.enableGenerativeDirectAnswer",
+              "Generative Direct Answer"
+            ),
+            {
+              type: "radio",
+              options: "SHOW_HIDE",
+            }
           ),
         },
         getItemSummary: (item) => item?.label || "Vertical",
@@ -150,6 +161,13 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     if (!activeVerticalKey) return undefined;
     return verticals.find((v) => v.verticalKey === activeVerticalKey);
   }, [verticals, activeVerticalKey]);
+  const firstVerticalKey = React.useMemo(() => {
+    return (
+      verticals.find(
+        (v) => v.pageType !== "universal" && Boolean(v.verticalKey)
+      )?.verticalKey ?? null
+    );
+  }, [verticals]);
 
   const runSearch = React.useCallback(
     (nextVerticalKey: string | null, query: string) => {
@@ -187,15 +205,20 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
     if (typeof window === "undefined") return;
     if (!verticals?.length) return;
     const { vertical, searchTerm } = urlParams;
+    const hasUniversalTab = verticals.some((v) => v.pageType === "universal");
 
     const validVertical =
       vertical && verticals.some((v) => v.verticalKey === vertical);
-    const nextVertical = validVertical ? vertical : null;
+    const nextVertical = validVertical
+      ? vertical
+      : hasUniversalTab
+        ? null
+        : firstVerticalKey;
 
     setVerticalKey(nextVertical);
     runSearch(nextVertical, searchTerm);
     hasInitialized.current = true;
-  }, [verticals, urlParams]);
+  }, [verticals, urlParams, firstVerticalKey]);
 
   React.useEffect(() => {
     if (!arrayKey || !puck.isEditing || !arrayState) return;
@@ -288,6 +311,11 @@ const SearchResultsSlotInternal: PuckComponent<SearchResultsSlotProps> = (
           currentVerticalConfig={currentVerticalConfig}
           puck={puck}
           facetsLength={facetsLength}
+          enableGDA={
+            currentVerticalConfig?.enableGenerativeDirectAnswer ?? false
+          }
+          searchTerm={committedSearchTerm}
+          gdaLoading={gdaLoading}
         />
       ) : (
         <UniversalResultsSection
