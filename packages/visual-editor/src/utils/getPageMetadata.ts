@@ -121,19 +121,15 @@ export const resolveDirectoryRootProps = (
   }
 
   // Update Title
-  if (props?.title?.constantValue?.en === "PLACEHOLDER") {
-    updatedProps = setDeep(
-      updatedProps,
-      "title.constantValue.en",
-      defaultValues.title
-    );
+  if (props?.title?.constantValue?.defaultValue === "PLACEHOLDER") {
+    updatedProps = setDeep(updatedProps, "defaultValue", defaultValues.title);
   }
 
   // Update Description
-  if (props?.description?.constantValue?.en === "PLACEHOLDER") {
+  if (props?.description?.constantValue?.defaultValue === "PLACEHOLDER") {
     updatedProps = setDeep(
       updatedProps,
-      "description.constantValue.en",
+      "description.constantValue.defaultValue",
       defaultValues.description
     );
   }
