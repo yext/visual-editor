@@ -67,7 +67,8 @@ export interface CTAWrapperProps {
 
   /** @internal Controlled style from the parent section */
   parentStyles?: {
-    classNameFn?: (variant: CTAVariant) => string;
+    className?: string;
+    classNameByVariant?: Partial<Record<NonNullable<CTAVariant>, string>>;
   };
 
   /** @internal Event name to be used for click analytics */
@@ -189,13 +190,16 @@ const CTAWrapperComponent: PuckComponent<CTAWrapperProps> = (props) => {
       ? getCTAType(data.entityField)
       : { ctaType: undefined };
 
-  let combinedClassName = className;
-  if (parentStyles?.classNameFn) {
-    combinedClassName = themeManagerCn(
-      parentStyles.classNameFn(styles.variant),
-      className
-    );
-  }
+  const variantClassName =
+    styles.variant && parentStyles?.classNameByVariant
+      ? parentStyles.classNameByVariant[styles.variant]
+      : undefined;
+
+  const combinedClassName = themeManagerCn(
+    parentStyles?.className,
+    variantClassName,
+    className
+  );
 
   let resolvedLinkLabel =
     cta && resolveComponentData(cta.label, i18n.language, streamDocument);

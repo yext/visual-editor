@@ -18,7 +18,6 @@ import { msg } from "../../utils/i18n/platform.ts";
 import { getAnalyticsScopeHash } from "../../utils/applyAnalytics.ts";
 import { YextEntityField } from "../../editor/YextEntityFieldSelector.tsx";
 import { themeManagerCn } from "../../utils/cn.ts";
-import { CTAVariant } from "../atoms/cta.tsx";
 import { HeadingTextProps } from "../contentBlocks/HeadingText.tsx";
 import { HoursStatusProps } from "../contentBlocks/HoursStatus.tsx";
 import { ImageWrapperProps } from "../contentBlocks/image/Image.tsx";
@@ -539,30 +538,22 @@ export const HeroSection: ComponentConfig<{ props: HeroSectionProps }> = {
       data.props.styles.variant
     );
 
-    const ctaClassNameFn = (variant: CTAVariant): string => {
-      switch (variant) {
-        case "link":
-          return (
-            "py-3 border-2 border-transparent w-fit " +
-            (data.props.styles.mobileContentAlignment === "center"
-              ? " mx-auto sm:m-0"
-              : "")
-          );
-        default:
-          return "";
-      }
-    };
+    const ctaLinkClassName =
+      "py-3 border-2 border-transparent w-fit " +
+      (data.props.styles.mobileContentAlignment === "center"
+        ? " mx-auto sm:m-0"
+        : "");
 
     data = setDeep(
       data,
-      "props.slots.PrimaryCTASlot[0].props.parentStyles.classNameFn",
-      ctaClassNameFn
+      "props.slots.PrimaryCTASlot[0].props.parentStyles.classNameByVariant",
+      { link: ctaLinkClassName }
     );
 
     data = setDeep(
       data,
-      "props.slots.SecondaryCTASlot[0].props.parentStyles.classNameFn",
-      ctaClassNameFn
+      "props.slots.SecondaryCTASlot[0].props.parentStyles.classNameByVariant",
+      { link: ctaLinkClassName }
     );
 
     const geomodifierLevel =
