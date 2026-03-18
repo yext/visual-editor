@@ -5,6 +5,18 @@ import mainTemplate from "./templates/main.tsx?raw";
 import editTemplate from "./templates/edit.tsx?raw";
 import directoryTemplate from "./templates/directory.tsx?raw";
 import locatorTemplate from "./templates/locator.tsx?raw";
+import loadTestTemplate01 from "./templates/loadTestTemplate01.tsx?raw";
+import loadTestTemplate02 from "./templates/loadTestTemplate02.tsx?raw";
+import loadTestTemplate03 from "./templates/loadTestTemplate03.tsx?raw";
+import loadTestTemplate04 from "./templates/loadTestTemplate04.tsx?raw";
+import loadTestTemplate05 from "./templates/loadTestTemplate05.tsx?raw";
+import loadTestTemplate06 from "./templates/loadTestTemplate06.tsx?raw";
+import loadTestTemplate07 from "./templates/loadTestTemplate07.tsx?raw";
+import loadTestTemplate08 from "./templates/loadTestTemplate08.tsx?raw";
+import loadTestTemplate09 from "./templates/loadTestTemplate09.tsx?raw";
+import loadTestTemplate10 from "./templates/loadTestTemplate10.tsx?raw";
+import loadTestTemplate11 from "./templates/loadTestTemplate11.tsx?raw";
+import loadTestTemplate12 from "./templates/loadTestTemplate12.tsx?raw";
 import { ComponentField, ComponentFields } from "../types/fields.ts";
 import { defaultLayoutData } from "./defaultLayoutData.ts";
 
@@ -22,6 +34,35 @@ type VirtualFile = {
   content: any;
   templateManifestEntry?: TemplateManifestEntry;
 };
+
+const syntheticTemplates: VirtualFile[] = [
+  loadTestTemplate01,
+  loadTestTemplate02,
+  loadTestTemplate03,
+  loadTestTemplate04,
+  loadTestTemplate05,
+  loadTestTemplate06,
+  loadTestTemplate07,
+  loadTestTemplate08,
+  loadTestTemplate09,
+  loadTestTemplate10,
+  loadTestTemplate11,
+  loadTestTemplate12,
+].map((content, index) => {
+  const templateNumber = String(index + 1).padStart(2, "0");
+
+  return {
+    filepath: `src/templates/loadTestTemplate${templateNumber}.tsx`,
+    content,
+    templateManifestEntry: {
+      name: `loadTestTemplate${templateNumber}`,
+      description:
+        "Synthetic load-test template generated to stress bundle size, config registration, and template manifest growth.",
+      exampleSiteUrl: "",
+      layoutRequired: true,
+    },
+  };
+});
 
 /**
  * virtualFiles defines the template files that are to be generated and inserted into
@@ -80,6 +121,7 @@ const virtualFiles: VirtualFile[] = [
     filepath: "src/templates/edit.tsx",
     content: editTemplate,
   },
+  ...syntheticTemplates,
 ];
 
 export const yextVisualEditorPlugin = (): Plugin => {
