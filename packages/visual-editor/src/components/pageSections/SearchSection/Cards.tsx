@@ -122,9 +122,12 @@ const Cards = ({
           <MaybeRTF data={description} />
 
           <div className="ml-auto mr-0 flex">
-            <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center items-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
-              {cardType}
-            </a>
+            <CTA
+              link={result.rawData.slug}
+              label={t("learnMore", "Learn more")}
+              variant={"primary"}
+              className="!w-52 justify-center"
+            />
           </div>
         </div>
       </div>
@@ -144,9 +147,12 @@ const Cards = ({
               <MaybeRTF data={description} />
 
               <div className="flex">
-                <a className="text-sm p-2.5 w-44 mt-2.5 rounded-[10px] justify-center items-center ve-bg-red-500 hover:cursor-pointer h-fit flex text-white font-bold">
-                  {cardType}
-                </a>
+                <CTA
+                  link={result.rawData.slug}
+                  label={t("learnMore", "Learn more")}
+                  variant={"primary"}
+                  className="!w-52 justify-center"
+                />
               </div>
             </div>
           </AccordionContent>

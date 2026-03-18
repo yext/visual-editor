@@ -207,6 +207,7 @@ const SearchBarSlotInternal: PuckComponent<SearchBarSlotProps> = ({
           searchButtonContainer: `${voiceSearch ? `ml-14 my-auto` : showIcon ? `` : `none`}`,
           searchButton: `${showIcon ? `h-8 w-8` : ``}`,
           inputElement: `text-lg h-12 outline-none focus:outline-none focus:ring-0 focus:border-none px-5 py-2.5 rounded-[inherit]`,
+          icon: `text-palette-primary-dark `,
         }}
       />
       {voiceSearch && (
