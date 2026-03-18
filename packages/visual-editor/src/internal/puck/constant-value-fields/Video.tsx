@@ -9,7 +9,7 @@ import { Button } from "../ui/button.tsx";
 import { AssetVideo } from "../../../types/videos.ts";
 import { pt } from "../../../utils/i18n/platform.ts";
 
-let pendingVideoMessageId: string | undefined;
+const pendingMessageIdsByFieldId = new Map<string, string>();
 
 type VideoPayload = {
   id: string;
@@ -19,7 +19,7 @@ type VideoPayload = {
 
 export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
   type: "custom",
-  render: ({ onChange, value, field }) => {
+  render: ({ onChange, value, field, id }) => {
     const { sendToParent: openVideoAssetSelector } = useSendMessageToParent(
       "constantValueEditorOpened",
       TARGET_ORIGINS
@@ -30,11 +30,9 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
       TARGET_ORIGINS,
       (_, payload) => {
         const videoPayload = payload as VideoPayload;
-        if (
-          pendingVideoMessageId &&
-          pendingVideoMessageId === videoPayload.id
-        ) {
-          pendingVideoMessageId = undefined;
+        const pendingMessageId = pendingMessageIdsByFieldId.get(id);
+        if (pendingMessageId && pendingMessageId === videoPayload.id) {
+          pendingMessageIdsByFieldId.delete(id);
           if (!videoPayload?.value) {
             return;
           }
@@ -56,25 +54,25 @@ export const VIDEO_CONSTANT_CONFIG: CustomField<AssetVideo | undefined> = {
         }
         const url = new URL(userInput);
         const searchParams = new URLSearchParams(url.search);
-        const id = searchParams.get("v") ?? "";
+        const videoId = searchParams.get("v") ?? "";
 
         onChange({
           name: "Local asset",
           id: "0",
           video: {
             url: userInput,
-            thumbnail: `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
-            id: id,
+            thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+            id: videoId,
             title: "Local Video",
             duration: "0:00",
-            embeddedUrl: `https://www.youtube.com/embed/${id}`,
+            embeddedUrl: `https://www.youtube.com/embed/${videoId}`,
           },
         });
-        pendingVideoMessageId = undefined;
+        pendingMessageIdsByFieldId.delete(id);
       } else {
         /** Instructs Storm to open the video asset selector drawer */
         const messageId = `VideoAsset-${Date.now()}`;
-        pendingVideoMessageId = messageId;
+        pendingMessageIdsByFieldId.set(id, messageId);
         openVideoAssetSelector({
           payload: {
             type: "VideoAsset",

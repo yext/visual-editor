@@ -28,7 +28,7 @@ import { DynamicOption } from "../../../editor/DynamicOptionsSelector.tsx";
 import { useTemplateMetadata } from "../../hooks/useMessageReceivers.ts";
 import { getPageSetLocales } from "../../../utils/pageSetLocales.ts";
 
-let pendingImageMessageId: string | undefined;
+const pendingMessageIdsByFieldId = new Map<string, string>();
 
 export type ImagePayload = {
   id: string;
@@ -60,7 +60,7 @@ const createImageConstantConfig = (options?: {
   ) => DynamicOption<string>[];
 }): CustomField<TranslatableAssetImage | undefined> => ({
   type: "custom",
-  render: ({ onChange, value, field }) => {
+  render: ({ onChange, value, field, id }) => {
     const { i18n } = useTranslation();
     const streamDocument = useDocument();
     const templateMetadata: TemplateMetadata = useTemplateMetadata();
@@ -87,14 +87,12 @@ const createImageConstantConfig = (options?: {
       TARGET_ORIGINS,
       (_, payload) => {
         const imagePayload = payload as ImagePayload;
-        if (
-          pendingImageMessageId &&
-          pendingImageMessageId === imagePayload.id
-        ) {
+        const pendingMessageId = pendingMessageIdsByFieldId.get(id);
+        if (pendingMessageId && pendingMessageId === imagePayload.id) {
           const imageData =
             imagePayload.value.transformedImage ??
             imagePayload.value.originalImage;
-          pendingImageMessageId = undefined;
+          pendingMessageIdsByFieldId.delete(id);
           if (!imageData) {
             return;
           }
@@ -141,11 +139,11 @@ const createImageConstantConfig = (options?: {
           [locale]: newValue,
           hasLocalizedValue: "true",
         } as TranslatableAssetImage);
-        pendingImageMessageId = undefined;
+        pendingMessageIdsByFieldId.delete(id);
       } else {
         /** Instructs Storm to open the image asset selector drawer */
         const messageId = `ImageAsset-${Date.now()}`;
-        pendingImageMessageId = messageId;
+        pendingMessageIdsByFieldId.set(id, messageId);
         openImageAssetSelector({
           payload: {
             type: "ImageAsset",

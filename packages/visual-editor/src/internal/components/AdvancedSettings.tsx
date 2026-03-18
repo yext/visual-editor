@@ -10,7 +10,7 @@ import {
 } from "../hooks/useMessage.ts";
 import { getSchemaTemplate } from "../../utils/schema/defaultSchemas.ts";
 
-let pendingSchemaMarkupMessageId: string | undefined;
+const pendingMessageIdsByFieldId = new Map<string, string>();
 
 export interface AdvancedSettingsProps {
   /**
@@ -26,7 +26,7 @@ export interface AdvancedSettingsProps {
 
 const SCHEMA_MARKUP_FIELD: CustomField<string> = {
   type: "custom",
-  render: ({ onChange, value }) => {
+  render: ({ onChange, value, id }) => {
     const streamDocument = useDocument();
 
     const { sendToParent: openSchemaMarkupDrawer } = useSendMessageToParent(
@@ -38,12 +38,10 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       "constantValueEditorClosed",
       TARGET_ORIGINS,
       (_, payload) => {
-        if (
-          pendingSchemaMarkupMessageId &&
-          pendingSchemaMarkupMessageId === payload?.id
-        ) {
+        const pendingMessageId = pendingMessageIdsByFieldId.get(id);
+        if (pendingMessageId && pendingMessageId === payload?.id) {
           onChange(String(payload.value || ""));
-          pendingSchemaMarkupMessageId = undefined;
+          pendingMessageIdsByFieldId.delete(id);
         }
       }
     );
@@ -71,7 +69,7 @@ const SCHEMA_MARKUP_FIELD: CustomField<string> = {
       } else {
         /** Instructs Storm to open the schema markup drawer */
         const messageId = `SchemaMarkup-${Date.now()}`;
-        pendingSchemaMarkupMessageId = messageId;
+        pendingMessageIdsByFieldId.set(id, messageId);
 
         const payload = {
           type: "SchemaMarkup",
