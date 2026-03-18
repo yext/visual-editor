@@ -46,11 +46,24 @@ export const clonePuckResolveData = <T>(
     return seen.get(value) as T;
   }
 
-  const clonedObject: Record<string, unknown> = {};
+  const clonedObject = Object.create(Object.getPrototypeOf(value)) as Record<
+    PropertyKey,
+    unknown
+  >;
   seen.set(value, clonedObject);
 
-  Object.entries(value).forEach(([key, entryValue]) => {
-    clonedObject[key] = clonePuckResolveData(entryValue, seen);
+  Reflect.ownKeys(value).forEach((key) => {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+
+    if (!descriptor) {
+      return;
+    }
+
+    if ("value" in descriptor) {
+      descriptor.value = clonePuckResolveData(descriptor.value, seen);
+    }
+
+    Object.defineProperty(clonedObject, key, descriptor);
   });
 
   return clonedObject as T;

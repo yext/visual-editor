@@ -58,4 +58,35 @@ describe("clonePuckResolveData", () => {
     expect(cloned.self).toBe(cloned);
     expect(cloned.first).not.toBe(shared);
   });
+
+  it("preserves null prototypes and own __proto__ properties", () => {
+    const original = Object.create(null) as Record<string, unknown>;
+
+    Object.defineProperty(original, "__proto__", {
+      value: { nested: { value: "safe" } },
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    });
+
+    Object.defineProperty(original, "hidden", {
+      value: { value: "still here" },
+      enumerable: false,
+      writable: true,
+      configurable: true,
+    });
+
+    const cloned = clonePuckResolveData(original);
+
+    expect(Object.getPrototypeOf(cloned)).toBeNull();
+    expect(Object.prototype.hasOwnProperty.call(cloned, "__proto__")).toBe(
+      true
+    );
+    expect(Object.prototype.hasOwnProperty.call(cloned, "hidden")).toBe(true);
+    expect(cloned.__proto__).not.toBe(original.__proto__);
+    expect(cloned.__proto__).toEqual(original.__proto__);
+    expect(Object.getOwnPropertyDescriptor(cloned, "hidden")?.enumerable).toBe(
+      false
+    );
+  });
 });
