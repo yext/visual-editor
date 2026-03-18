@@ -107,7 +107,6 @@ export const resolveDirectoryRootProps = (
   props: Record<string, any>,
   streamDocument: StreamDocument
 ) => {
-  console.log("props", props);
   let updatedProps = { ...props };
 
   const entityType = streamDocument?.meta?.entityType?.id;
@@ -138,8 +137,6 @@ export const resolveDirectoryRootProps = (
       defaultValues.description
     );
   }
-
-  console.log("returning updatedProps", updatedProps);
 
   return updatedProps;
 };
