@@ -1,5 +1,6 @@
 import {
   Facets,
+  GenerativeDirectAnswer,
   Geolocation,
   Pagination,
   ResultsCount,
@@ -11,6 +12,7 @@ import { FaSlidersH, FaTimes } from "react-icons/fa";
 import { Body } from "../../atoms/body.tsx";
 import Cards from "./Cards.tsx";
 import { MapComponent } from "./MapComponent.tsx";
+import SourceCard from "./SourceCard.tsx";
 import { VerticalConfigProps } from "./defaultPropsAndTypes.ts";
 
 interface VerticalResultsSectionProps {
@@ -19,6 +21,9 @@ interface VerticalResultsSectionProps {
   currentVerticalConfig?: VerticalConfigProps;
   puck: any;
   facetsLength: number;
+  enableGDA: boolean;
+  searchTerm?: string;
+  gdaLoading: boolean;
 }
 
 export const VerticalResultsSection = ({
@@ -27,6 +32,9 @@ export const VerticalResultsSection = ({
   currentVerticalConfig,
   puck,
   facetsLength,
+  enableGDA,
+  searchTerm,
+  gdaLoading,
 }: VerticalResultsSectionProps) => {
   const popupRef = React.useRef<HTMLDivElement>(null);
   const [showFilterModal, setShowFilterModal] = React.useState(false);
@@ -51,6 +59,19 @@ export const VerticalResultsSection = ({
               </div>
             </div>
             <div id="innerDiv" className="overflow-y-auto flex flex-col">
+              {enableGDA && !!searchTerm && (
+                <>
+                  {gdaLoading && (
+                    <section className="p-6 my-8 border border-gray-200 rounded-lg shadow-sm centered-container">
+                      {t("loadingResults", "Loading Results...")}
+                    </section>
+                  )}
+                  <GenerativeDirectAnswer
+                    CitationCard={SourceCard}
+                    customCssClasses={{ container: "my-4", divider: "!py-5" }}
+                  />
+                </>
+              )}
               <VerticalResults
                 customCssClasses={{
                   verticalResultsContainer:
@@ -153,6 +174,19 @@ export const VerticalResultsSection = ({
           </div>
         </div>
         <div className="flex-flex-col">
+          {enableGDA && !!searchTerm && (
+            <>
+              {gdaLoading && (
+                <section className="p-6 my-8 border border-gray-200 rounded-lg shadow-sm centered-container">
+                  {t("loadingResults", "Loading Results...")}
+                </section>
+              )}
+              <GenerativeDirectAnswer
+                CitationCard={SourceCard}
+                customCssClasses={{ container: "my-4", divider: "!py-5" }}
+              />
+            </>
+          )}
           <VerticalResults
             customCssClasses={{
               verticalResultsContainer:

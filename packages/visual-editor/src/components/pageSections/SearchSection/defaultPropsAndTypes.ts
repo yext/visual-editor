@@ -1,7 +1,7 @@
 import { SearchBarSlotProps } from "./SearchBarSlot.tsx";
 
 export type VerticalLayout = "Grid" | "Flex" | "Map";
-export type CardTypeProp = "Standard" | "accordion";
+export type CardTypeProp = "Standard" | "Accordion";
 export type SearchBarHeightProps = "base" | "large" | "extraLarge";
 export type SearchBarWidthProps = "quarter" | "half" | "full";
 export type SearchBarAlignProps = "left" | "center" | "right";
@@ -25,6 +25,7 @@ export interface VerticalConfigProps {
   verticalLimit?: number;
   pageType?: "universal" | "vertical";
   cardType?: CardTypeProp;
+  enableGenerativeDirectAnswer?: boolean;
 }
 export interface SearchResultsSlotProps {
   data: { verticals: VerticalConfigProps[] };
@@ -41,6 +42,7 @@ export const defaultSearchResultsProps: SearchResultsSlotProps = {
         cardType: "Standard",
         universalLimit: 5,
         verticalLimit: 5,
+        enableGenerativeDirectAnswer: false,
       },
     ],
   },

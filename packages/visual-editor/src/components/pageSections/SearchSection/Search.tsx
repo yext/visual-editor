@@ -163,7 +163,7 @@ const SearchWrapper: PuckComponent<SearchComponentProps> = ({
 export const SearchComponent: ComponentConfig<{
   props: SearchComponentProps;
 }> = {
-  label: msg("components.searchWithSlots", "Search with Slots"),
+  label: msg("components.searchWithSlots", "Search Section"),
   fields: searchFields,
   defaultProps: {
     styles: {
